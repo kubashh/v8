@@ -1,0 +1,226 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3df187a5_71d2af4c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "Please add some explanation of the random-number approach taken here. I think that\u0027s unusual enough for js-perf-test to warrant a few words.",
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5df1428_09ed5231",
+        "filename": "test/js-perf-test/BigInt/add.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "Is this just a random number? A comment would be good to point out the (in-)significance of the value.",
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d4d2cbf_9da6acb6",
+        "filename": "test/js-perf-test/BigInt/add.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "Please cut at 80 columns.",
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e556836_2e0ab530",
+        "filename": "test/js-perf-test/BigInt/add.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "Hmm, why the asymmetry here?",
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1133747_cdfe1212",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "This is still architecture specific.",
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccdd953c_cf3dd38a",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "Another magic constant?",
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96a4bcb5_2d632c8c",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "Let\u0027s write 2**31-1 etc. to make this more readable.",
+      "range": {
+        "startLine": 15,
+        "startChar": 22,
+        "endLine": 15,
+        "endChar": 32
+      },
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce4af48c_560e0c13",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "I don\u0027t understand why we need so many magic numbers.",
+      "range": {
+        "startLine": 23,
+        "startChar": 35,
+        "endLine": 23,
+        "endChar": 40
+      },
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b42d8947_1f34c5d3",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "Here and below, I\u0027m wondering if it wouldn\u0027t be nicer to just let the caller do the negation if desired (and get rid of the neg argument).",
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d80b15ec_11c3ade3",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "Please negate and rename this to something like allow_zero to avoid double negation.",
+      "range": {
+        "startLine": 45,
+        "startChar": 24,
+        "endLine": 45,
+        "endChar": 30
+      },
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "491e7fcc_bb3cb45f",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "Why do we need these paths?",
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8594ff10_8f2a4758",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-04T00:06:51Z",
+      "side": 1,
+      "message": "Please add a comment explaining in what sense these are small and why we care about them.",
+      "revId": "66f8a219aba1a0c1f032de24fff7f7caeeb2eedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
