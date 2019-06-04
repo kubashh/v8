@@ -540,9 +540,13 @@ size_t MemoryChunkLayout::AllocatableMemoryInMemoryChunk(
   return AllocatableMemoryInDataPage();
 }
 
-Heap* MemoryChunk::synchronized_heap() {
-  return reinterpret_cast<Heap*>(
-      base::Acquire_Load(reinterpret_cast<base::AtomicWord*>(&heap_)));
+void MemoryChunk::SynchronizedHeapLoad() {
+  // Perform a dummy acquire load to tell TSAN that there is no data race
+  // in mark-bit initialization. See MemoryChunk::Initialize for the
+  // corresponding release store.
+  CHECK(reinterpret_cast<Heap*>(base::Acquire_Load(
+            reinterpret_cast<base::AtomicWord*>(&heap_))) != nullptr ||
+        InReadOnlySpace());
 }
 
 void MemoryChunk::InitializationMemoryFence() {
