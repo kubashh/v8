@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d61219bb_6ea96b77",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-04T14:08:57Z",
+      "side": 1,
+      "message": "Can you express this in terms of bits?",
+      "range": {
+        "startLine": 16,
+        "startChar": 15,
+        "endLine": 16,
+        "endChar": 20
+      },
+      "revId": "8f302f2520e132f9257fb9fb7278c13cf8f0d1d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
