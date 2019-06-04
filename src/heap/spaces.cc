@@ -540,9 +540,10 @@ size_t MemoryChunkLayout::AllocatableMemoryInMemoryChunk(
   return AllocatableMemoryInDataPage();
 }
 
-Heap* MemoryChunk::synchronized_heap() {
-  return reinterpret_cast<Heap*>(
-      base::Acquire_Load(reinterpret_cast<base::AtomicWord*>(&heap_)));
+void MemoryChunk::SynchronizedHeapLoad() {
+  CHECK(reinterpret_cast<Heap*>(base::Acquire_Load(
+            reinterpret_cast<base::AtomicWord*>(&heap_))) != nullptr ||
+        InReadOnlySpace());
 }
 
 void MemoryChunk::InitializationMemoryFence() {
