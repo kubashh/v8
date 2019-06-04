@@ -504,7 +504,10 @@ class MemoryChunk {
     return heap_;
   }
 
-  Heap* synchronized_heap();
+  // Perform a dummy acquire load to tell TSAN that there is no data race in
+  // mark-bit initialization. See MemoryChunk::Initialize for the corresponding
+  // release store.
+  void SynchronizedHeapLoad();
 
   template <RememberedSetType type>
   bool ContainsSlots() {
