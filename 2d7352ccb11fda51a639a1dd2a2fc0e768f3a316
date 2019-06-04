@@ -65,6 +65,75 @@
     },
     {
       "key": {
+        "uuid": "fb91d9d4_2cc0323b",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "This is implied by the MutableBigIntAbsoluteCompare check on the next line.",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 31
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d54247b9_43f4db6d",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "Would it be possible to specify CppAbsoluteSubAndMakeImmutable to return BigInt instead of void? You could then combine this with the next line into simply:\n\n  return CppAbsolute...(result, x, y);",
+      "range": {
+        "startLine": 86,
+        "startChar": 4,
+        "endLine": 86,
+        "endChar": 49
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5271f1b_0beab761",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "nit: Proper capitalization and punctuation please. \"Swap x and y so that x is longer.\"",
+      "range": {
+        "startLine": 99,
+        "startChar": 9,
+        "endLine": 99,
+        "endChar": 41
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0f7d617f_63a6ea82",
         "filename": "src/builtins/bigint.tq",
         "patchSetId": 4
@@ -88,6 +157,138 @@
     },
     {
       "key": {
+        "uuid": "57a975c9_57bdc86d",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "Hmm... you could save a bunch of complexity here if you kept all this logic in C++. AFAICS the only nontrivial issue is skipping allocation if the result can reuse one of the inputs. I think the following logic should cover it:\n\n  if (x.length \u003d\u003d 0) return y;\n  if (y.length \u003d\u003d 0) return x;\n  result \u003d AllocateBigInt(max(x.length, y.length) + 1);\n  return CppBigIntAdd(result, x, y);\n\nThen you can keep all the AbsoluteCompare/AbsoluteAdd/AbsoluteSub/UnaryMinus business on the C++ side, wrapped by a single call. WDYT?",
+      "range": {
+        "startLine": 153,
+        "startChar": 6,
+        "endLine": 153,
+        "endChar": 38
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d48f42d6_b2bcb25e",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "nit: I\u0027d drop this empty line to make it clearer that the next line belongs to the previous block. Could even write it with an explicit \"else\" (I\u0027m aware that the style guide frowns on \"else-after-return\", but IMHO that construct sometimes has readability value.)",
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6223d037_e0b46d8f",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "nit: Capitalization and punctuation please.",
+      "range": {
+        "startLine": 177,
+        "startChar": 7,
+        "endLine": 177,
+        "endChar": 22
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba0b0b1c_05cc014f",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "This call is unnecessary, right? Assuming the input was in canonicalized form (i.e. no leading zero-digits), the result is also guaranteed to be canonicalized at this point.",
+      "range": {
+        "startLine": 187,
+        "startChar": 11,
+        "endLine": 187,
+        "endChar": 24
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce95366c_8fbcd721",
+        "filename": "src/builtins/builtins-bigint-gen.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "Please add a STATIC_ASSERT(BigIntBase::SignBits::kShift \u003d\u003d 0)",
+      "range": {
+        "startLine": 35,
+        "startChar": 59,
+        "endLine": 35,
+        "endChar": 74
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3d02e3a_79fcad89",
+        "filename": "src/builtins/builtins-bigint-gen.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "If you drop bigint::MakeImmutable, you can also drop this.",
+      "range": {
+        "startLine": 39,
+        "startChar": 7,
+        "endLine": 39,
+        "endChar": 27
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "af8e44b1_e6f6edf9",
         "filename": "src/builtins/data-view.tq",
         "patchSetId": 4
@@ -99,6 +300,30 @@
       "writtenOn": "2019-06-04T09:14:43Z",
       "side": 1,
       "message": "Will this have performance impact? I like it because it is more uniform. From inspecting MakeImmutable, it is probably not doing anything expensive here.",
+      "range": {
+        "startLine": 226,
+        "startChar": 13,
+        "endLine": 226,
+        "endChar": 34
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0614c15_ff28fffb",
+        "filename": "src/builtins/data-view.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "I would drop all the MakeImmutable calls in this file. AFAICS they\u0027re all guaranteed to be no-ops because we check the required BigInt length beforehand. I think that means you don\u0027t need bigint::MakeImmutable at all. If you want, you can replace it with a debug-only bigint::AssertIsCanonicalized checker to be used in CSA_ASSERTs.\n\nThe point of this CL is performance optimization, so adding no-op calls seems counter-productive ;-)",
+      "parentUuid": "af8e44b1_e6f6edf9",
       "range": {
         "startLine": 226,
         "startChar": 13,
@@ -196,6 +421,213 @@
         "startChar": 2,
         "endLine": 3156,
         "endChar": 8
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c43c6d1_ad30d7b5",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3227,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "nit: if you keep these two functions, please put them right next to their respective \"intptr_t digit_index\" consuming overload. (If you end up dropping the TQ version of UnaryMinus as I suggested elsewhere, you can drop these too.)",
+      "range": {
+        "startLine": 3227,
+        "startChar": 35,
+        "endLine": 3227,
+        "endChar": 50
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4556995f_9710da85",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "why is this needed?",
+      "range": {
+        "startLine": 1138,
+        "startChar": 2,
+        "endLine": 1138,
+        "endChar": 41
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1206f541_1d414833",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "why is this needed?",
+      "range": {
+        "startLine": 1143,
+        "startChar": 18,
+        "endLine": 1143,
+        "endChar": 33
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8175175d_ae6caa2a",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "why is this needed?",
+      "range": {
+        "startLine": 1144,
+        "startChar": 10,
+        "endLine": 1144,
+        "endChar": 25
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16bfae97_ee0eacc2",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "why is this needed?",
+      "range": {
+        "startLine": 1150,
+        "startChar": 18,
+        "endLine": 1150,
+        "endChar": 33
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dc1b6b8_d916671f",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "why is this needed?",
+      "range": {
+        "startLine": 1174,
+        "startChar": 2,
+        "endLine": 1174,
+        "endChar": 17
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c1ebea3_45b34fe0",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2699,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "Why is this an unchecked cast? Given that this function is exposed outside this file (to generated code even!), I think it should contain a DCHECK that the address getting passed in is valid.",
+      "range": {
+        "startLine": 2699,
+        "startChar": 40,
+        "endLine": 2699,
+        "endChar": 54
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19c14d74_62221191",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2716,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 2716,
+        "startChar": 21,
+        "endLine": 2716,
+        "endChar": 35
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ab6a7f2_c2768fb5",
+        "filename": "src/objects/bigint.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T12:23:00Z",
+      "side": 1,
+      "message": "nit: friend declarations go into the \"private:\" section.",
+      "range": {
+        "startLine": 33,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 13
       },
       "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
