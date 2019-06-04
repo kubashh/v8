@@ -366,6 +366,30 @@
     },
     {
       "key": {
+        "uuid": "e876ffa6_93172009",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-04T16:18:18Z",
+      "side": 1,
+      "message": "My snippet above was supposed to be Torque pseudo-code: yes, we need to allocate in Torque, and we have to conservatively add 1 to the bigger length.",
+      "parentUuid": "51029f92_30ed243e",
+      "range": {
+        "startLine": 153,
+        "startChar": 6,
+        "endLine": 153,
+        "endChar": 38
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d48f42d6_b2bcb25e",
         "filename": "src/builtins/bigint.tq",
         "patchSetId": 4
