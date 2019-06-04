@@ -98,7 +98,7 @@ void Scavenger::PageMemoryFence(MaybeObject object) {
   HeapObject heap_object;
   if (object->GetHeapObject(&heap_object)) {
     MemoryChunk* chunk = MemoryChunk::FromAddress(heap_object.address());
-    CHECK_NOT_NULL(chunk->synchronized_heap());
+    chunk->SynchronizedHeapLoad();
   }
 #endif
 }

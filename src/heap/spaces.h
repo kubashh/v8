@@ -504,7 +504,7 @@ class MemoryChunk {
     return heap_;
   }
 
-  Heap* synchronized_heap();
+  void SynchronizedHeapLoad();
 
   template <RememberedSetType type>
   bool ContainsSlots() {
