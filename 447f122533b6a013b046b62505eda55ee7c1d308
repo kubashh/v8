@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20094f35_ff8c2efb",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3723,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-06-04T07:53:13Z",
+      "side": 1,
+      "message": "I wonder if this can be a DCHECK(!ReadOnlyHeap::Contains(value)) to catch unintended usages.",
+      "range": {
+        "startLine": 3721,
+        "startChar": 2,
+        "endLine": 3723,
+        "endChar": 3
+      },
+      "revId": "447f122533b6a013b046b62505eda55ee7c1d308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38792b4b_bb559e1a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 5329,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-06-04T07:53:13Z",
+      "side": 1,
+      "message": "Let\u0027s call it owner_identity()",
+      "range": {
+        "startLine": 5329,
+        "startChar": 20,
+        "endLine": 5329,
+        "endChar": 28
+      },
+      "revId": "447f122533b6a013b046b62505eda55ee7c1d308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "499115df_8a2ba2c9",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-06-04T07:53:13Z",
+      "side": 1,
+      "message": "Is there a difference between \"sealed\" and \"detached\"?\nIf not, let\u0027s use one everywhere for consistency.",
+      "range": {
+        "startLine": 685,
+        "startChar": 12,
+        "endLine": 685,
+        "endChar": 18
+      },
+      "revId": "447f122533b6a013b046b62505eda55ee7c1d308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
