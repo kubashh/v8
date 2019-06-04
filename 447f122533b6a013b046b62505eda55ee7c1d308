@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b1d812a6_71096223",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3723,
+      "author": {
+        "id": 1327466
+      },
+      "writtenOn": "2019-06-04T10:53:56Z",
+      "side": 1,
+      "message": "Not sure I can see much benefit of DCHECKing calling Heap::Contains on read-only objects. Seems like it should just return false.",
+      "parentUuid": "20094f35_ff8c2efb",
+      "range": {
+        "startLine": 3721,
+        "startChar": 2,
+        "endLine": 3723,
+        "endChar": 3
+      },
+      "revId": "447f122533b6a013b046b62505eda55ee7c1d308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38792b4b_bb559e1a",
         "filename": "src/heap/heap.cc",
         "patchSetId": 10
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9b0aed64_6a634705",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 5329,
+      "author": {
+        "id": 1327466
+      },
+      "writtenOn": "2019-06-04T10:53:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38792b4b_bb559e1a",
+      "range": {
+        "startLine": 5329,
+        "startChar": 20,
+        "endLine": 5329,
+        "endChar": 28
+      },
+      "revId": "447f122533b6a013b046b62505eda55ee7c1d308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "499115df_8a2ba2c9",
         "filename": "src/heap/spaces.h",
         "patchSetId": 10
@@ -68,6 +116,30 @@
       "revId": "447f122533b6a013b046b62505eda55ee7c1d308",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27729564_ceeaa78e",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1327466
+      },
+      "writtenOn": "2019-06-04T10:53:56Z",
+      "side": 1,
+      "message": "I take sealing to mean \u0027detach and mark as read-only\u0027 and detaching is nulling heap_ on the owner space.",
+      "parentUuid": "499115df_8a2ba2c9",
+      "range": {
+        "startLine": 685,
+        "startChar": 12,
+        "endLine": 685,
+        "endChar": 18
+      },
+      "revId": "447f122533b6a013b046b62505eda55ee7c1d308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
