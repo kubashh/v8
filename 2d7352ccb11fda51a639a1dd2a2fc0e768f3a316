@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98fee91c_a7113ed0",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-04T09:14:43Z",
+      "side": 1,
+      "message": "We don\u0027t need this right now, so lets not add it.",
+      "range": {
+        "startLine": 60,
+        "startChar": 10,
+        "endLine": 60,
+        "endChar": 23
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deb9f614_5f21dc2f",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-04T09:14:43Z",
+      "side": 1,
+      "message": "nit: Delete newline",
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b896a84_7d19a3f2",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-04T09:14:43Z",
+      "side": 1,
+      "message": "1 - sign?\nAlso assert that sign is 0 or 1?",
+      "range": {
+        "startLine": 45,
+        "startChar": 11,
+        "endLine": 45,
+        "endChar": 64
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f7d617f_63a6ea82",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-04T09:14:43Z",
+      "side": 1,
+      "message": "temp and tempLength?",
+      "range": {
+        "startLine": 100,
+        "startChar": 12,
+        "endLine": 100,
+        "endChar": 13
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af8e44b1_e6f6edf9",
+        "filename": "src/builtins/data-view.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-04T09:14:43Z",
+      "side": 1,
+      "message": "Will this have performance impact? I like it because it is more uniform. From inspecting MakeImmutable, it is probably not doing anything expensive here.",
+      "range": {
+        "startLine": 226,
+        "startChar": 13,
+        "endLine": 226,
+        "endChar": 34
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00086741_f496af63",
+        "filename": "src/builtins/data-view.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-04T09:14:43Z",
+      "side": 1,
+      "message": "This could be sign : uint32 then we don\u0027t need a conditional below.",
+      "range": {
+        "startLine": 229,
+        "startChar": 8,
+        "endLine": 229,
+        "endChar": 18
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a700005a_ad37c341",
+        "filename": "src/builtins/data-view.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-04T09:14:43Z",
+      "side": 1,
+      "message": "If this was sign, we could get rid of the isPositive ? bigint::kPositiveSign : bigint::kNegativeSign, below.",
+      "range": {
+        "startLine": 262,
+        "startChar": 8,
+        "endLine": 262,
+        "endChar": 18
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f36573c5_aeaa8daa",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3131,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-04T09:14:43Z",
+      "side": 1,
+      "message": "This comment needs to be removed.\n\nOn a separate note: We need to inspect all callers of this function that previously relied on this invariant to hold, and possibly move the assert there.",
+      "range": {
+        "startLine": 3131,
+        "startChar": 2,
+        "endLine": 3131,
+        "endChar": 66
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0a25b28_0a906fec",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3156,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-04T09:14:43Z",
+      "side": 1,
+      "message": "CHECK(is_int32(digit_index)), better even check against (0, BigInt::kMaxLength)",
+      "range": {
+        "startLine": 3156,
+        "startChar": 2,
+        "endLine": 3156,
+        "endChar": 8
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
