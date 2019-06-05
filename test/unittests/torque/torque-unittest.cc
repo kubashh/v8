@@ -289,6 +289,17 @@ TEST(Torque, NoUnusedWarningForVariablesOnlyUsedInAsserts) {
   )");
 }
 
+TEST(Torque, LetShouldBeConstLintError) {
+  ExpectFailingCompilation(
+      R"(
+    macro Foo(y: Smi): Smi {
+      let x: Smi = y;
+      return x;
+    }
+  )",
+      HasSubstr("Variable 'x' is never assigned to."));
+}
+
 }  // namespace torque
 }  // namespace internal
 }  // namespace v8

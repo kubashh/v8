@@ -448,9 +448,9 @@ void ImplementationVisitor::Visit(Builtin* builtin) {
     parameters.Push("torque_arguments.length");
     const Type* arguments_type = TypeOracle::GetArgumentsType();
     StackRange range = parameter_types.PushMany(LowerType(arguments_type));
-    parameter_bindings.Add(
-        *signature.arguments_variable,
-        LocalValue{true, VisitResult(arguments_type, range)});
+    parameter_bindings.Add(*signature.arguments_variable,
+                           LocalValue{true, VisitResult(arguments_type, range)},
+                           true);
 
     first = 2;
   }
@@ -676,7 +676,7 @@ VisitResult ImplementationVisitor::Visit(IncrementDecrementExpression* expr) {
   args.parameters = {current_value, one};
   VisitResult assignment_value = GenerateCall(
       expr->op == IncrementDecrementOperator::kIncrement ? "+" : "-", args);
-  GenerateAssignToLocation(location_ref, assignment_value);
+  GenerateAssignToLocation(location_ref, assignment_value, expr->location);
   return scope.Yield(expr->postfix ? current_value : assignment_value);
 }
 
@@ -690,10 +690,10 @@ VisitResult ImplementationVisitor::Visit(AssignmentExpression* expr) {
     Arguments args;
     args.parameters = {location_value, assignment_value};
     assignment_value = GenerateCall(*expr->op, args);
-    GenerateAssignToLocation(location_ref, assignment_value);
+    GenerateAssignToLocation(location_ref, assignment_value, expr->location);
   } else {
     assignment_value = Visit(expr->value);
-    GenerateAssignToLocation(location_ref, assignment_value);
+    GenerateAssignToLocation(location_ref, assignment_value, expr->location);
   }
   return scope.Yield(assignment_value);
 }
@@ -1986,7 +1986,8 @@ VisitResult ImplementationVisitor::GenerateFetchFromLocation(
 }
 
 void ImplementationVisitor::GenerateAssignToLocation(
-    const LocationReference& reference, const VisitResult& assignment_value) {
+    const LocationReference& reference, const VisitResult& assignment_value,
+    base::Optional<Expression*> location) {
   if (reference.IsCallAccess()) {
     Arguments arguments{reference.call_arguments(), {}};
     arguments.parameters.push_back(assignment_value);
@@ -1997,6 +1998,16 @@ void ImplementationVisitor::GenerateAssignToLocation(
         GenerateImplicitConvert(variable.type(), assignment_value);
     assembler().Poke(variable.stack_range(), converted_value.stack_range(),
                      variable.type());
+
+    // In case of a local variable, we mark it as written.
+    if (!location) return;
+    if (auto id = IdentifierExpression::DynamicCast(*location)) {
+      if (!id->namespace_qualification.empty()) return;
+      if (base::Optional<Binding<LocalValue>*> value =
+              TryLookupLocalValue(id->name->value)) {
+        (*value)->SetWritten();
+      }
+    }
   } else if (reference.IsIndexedFieldAccess()) {
     ReportError("assigning a value directly to an indexed field isn't allowed");
   } else if (reference.IsHeapReference()) {

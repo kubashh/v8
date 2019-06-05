@@ -197,7 +197,8 @@ class Binding : public T {
         manager_(manager),
         name_(name),
         previous_binding_(this),
-        used_(false) {
+        used_(false),
+        written_(false) {
     std::swap(previous_binding_, manager_->current_bindings_[name]);
   }
   template <class... Args>
@@ -206,15 +207,23 @@ class Binding : public T {
     declaration_position_ = name->pos;
   }
   ~Binding() {
-    manager_->current_bindings_[name_] = previous_binding_;
-    if (!used_ && name_.length() > 0 && name_[0] != '_') {
+    if (!used_ && !SkipLintCheck()) {
       Lint(BindingTypeString(), "'", name_,
            "' is never used. Prefix with '_' if this is intentional.")
           .Position(declaration_position_);
     }
+
+    if (CheckWritten() && !written_ && !SkipLintCheck()) {
+      Lint(BindingTypeString(), "'", name_,
+           "' is never assigned to. Use 'const' instead of 'let'.")
+          .Position(declaration_position_);
+    }
+
+    manager_->current_bindings_[name_] = previous_binding_;
   }
 
   std::string BindingTypeString() const { return ""; }
+  bool CheckWritten() const { return true; }
 
   const std::string& name() const { return name_; }
   SourcePosition declaration_position() const { return declaration_position_; }
@@ -222,12 +231,18 @@ class Binding : public T {
   bool Used() const { return used_; }
   void SetUsed() { used_ = true; }
 
+  bool Written() const { return written_; }
+  void SetWritten() { written_ = true; }
+
  private:
+  bool SkipLintCheck() const { return name_.length() > 0 && name_[0] == '_'; }
+
   BindingsManager<T>* manager_;
   const std::string name_;
   base::Optional<Binding*> previous_binding_;
   SourcePosition declaration_position_ = CurrentSourcePosition::Get();
   bool used_;
+  bool written_;
   DISALLOW_COPY_AND_ASSIGN(Binding);
 };
 
@@ -235,7 +250,7 @@ template <class T>
 class BlockBindings {
  public:
   explicit BlockBindings(BindingsManager<T>* manager) : manager_(manager) {}
-  void Add(std::string name, T value, bool mark_as_used = true) {
+  void Add(std::string name, T value, bool mark_as_used = false) {
     ReportErrorIfAlreadyBound(name);
     auto binding =
         base::make_unique<Binding<T>>(manager_, name, std::move(value));
@@ -295,8 +310,18 @@ inline std::string Binding<LocalValue>::BindingTypeString() const {
   return "Variable ";
 }
 template <>
+inline bool Binding<LocalValue>::CheckWritten() const {
+  // Do the check only for non-const variables and non struct types.
+  auto binding = *manager_->current_bindings_[name_];
+  return !binding->is_const && !binding->value.type()->IsStructType();
+}
+template <>
 inline std::string Binding<LocalLabel>::BindingTypeString() const {
   return "Label ";
+}
+template <>
+inline bool Binding<LocalLabel>::CheckWritten() const {
+  return false;
 }
 
 struct Arguments {
@@ -537,8 +562,9 @@ class ImplementationVisitor {
 
   VisitResult GenerateCopy(const VisitResult& to_copy);
 
-  void GenerateAssignToLocation(const LocationReference& reference,
-                                const VisitResult& assignment_value);
+  void GenerateAssignToLocation(
+      const LocationReference& reference, const VisitResult& assignment_value,
+      base::Optional<Expression*> location = base::nullopt);
 
   void AddCallParameter(Callable* callable, VisitResult parameter,
                         const Type* parameter_type,
