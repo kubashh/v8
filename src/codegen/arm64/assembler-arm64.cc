@@ -1508,8 +1508,8 @@ void Assembler::ldr(const CPURegister& rt, const Immediate& imm) {
   // Currently we only support 64-bit literals.
   DCHECK(rt.Is64Bits());
 
+  BlockPoolsScope no_pool_before_ldr_pcrel_instr(this);
   RecordRelocInfo(imm.rmode(), imm.value());
-  BlockConstPoolFor(1);
   // The load will be patched when the constpool is emitted, patching code
   // expect a load literal with offset 0.
   ldr_pcrel(rt, 0);
@@ -3679,6 +3679,7 @@ void Assembler::dup(const VRegister& vd, const VRegister& vn, int vn_index) {
 }
 
 void Assembler::dcptr(Label* label) {
+  BlockPoolsScope no_pool_inbetween(this);
   RecordRelocInfo(RelocInfo::INTERNAL_REFERENCE);
   if (label->is_bound()) {
     // The label is bound, so it does not need to be updated and the internal
@@ -4511,16 +4512,19 @@ void Assembler::RecordRelocInfo(RelocInfo::Mode rmode, intptr_t data,
 }
 
 void Assembler::near_jump(int offset, RelocInfo::Mode rmode) {
+  BlockPoolsScope no_pool_before_b_instr(this);
   if (!RelocInfo::IsNone(rmode)) RecordRelocInfo(rmode, offset, NO_POOL_ENTRY);
   b(offset);
 }
 
 void Assembler::near_call(int offset, RelocInfo::Mode rmode) {
+  BlockPoolsScope no_pool_before_bl_instr(this);
   if (!RelocInfo::IsNone(rmode)) RecordRelocInfo(rmode, offset, NO_POOL_ENTRY);
   bl(offset);
 }
 
 void Assembler::near_call(HeapObjectRequest request) {
+  BlockPoolsScope no_pool_before_bl_instr(this);
   RequestHeapObject(request);
   int index = AddCodeTarget(Handle<Code>());
   RecordRelocInfo(RelocInfo::CODE_TARGET, index, NO_POOL_ENTRY);
