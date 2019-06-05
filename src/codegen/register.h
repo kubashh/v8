@@ -83,7 +83,7 @@ class RegisterBase {
 
   constexpr bool is_valid() const { return reg_code_ != kCode_no_reg; }
 
-  int code() const {
+  constexpr int code() const {
     DCHECK(is_valid());
     return reg_code_;
   }
