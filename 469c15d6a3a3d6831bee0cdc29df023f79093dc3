@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5d807b23_0bc4b0ce",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-05T12:02:18Z",
+      "side": 1,
+      "message": "The problem is that we define integer arithmetic in TurboFan with overflow semantics (no undefined behavior). This means that additions do not commute in any way with a conversion from int 32 to int 64 (because overflows might happen, which completely changes the result). Note that in C++ signed overflow is undefined and this is hence not a problem.\n\nWhen we do index computations in any TurboFan code, we must take care that we do not introduce int32 to int64 conversions, because that will materialize in an unnecessary movsxl instruction, and often even block creation of good operand expressions (because TurboFan thinks that a sign extension needs to happen).\n\nThe simplest way to navigate around this is to use intptr for everything that could be involved in an index computation (i.e. used as an offset for a load/store or similar), because then no conversions happen. For this reason it makes sense to express the max length as intptr.",
+      "parentUuid": "dd1c6ad2_8ea475dc",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd87374d_5d9ab5f7",
         "filename": "src/builtins/bigint.tq",
         "patchSetId": 5
