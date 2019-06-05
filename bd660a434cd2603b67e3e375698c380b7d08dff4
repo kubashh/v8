@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6d8449c_fd052086",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-05T13:20:35Z",
+      "side": 1,
+      "message": "If this intentionally skips the first hex digit, it deserves a comment pointing out that this is not a bug :-)",
+      "range": {
+        "startLine": 56,
+        "startChar": 7,
+        "endLine": 56,
+        "endChar": 16
+      },
+      "revId": "bd660a434cd2603b67e3e375698c380b7d08dff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
