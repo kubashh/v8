@@ -22,6 +22,30 @@
       "revId": "09abe551edc94a5770f0058b1bd12e14a8947987",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fa5a08c_39b10537",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3265,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-06-05T14:02:05Z",
+      "side": 1,
+      "message": "I see. I thought about adding it as DecompressTaggedAny is not fast, since it has to check if it is a smi or a pointer.\nI can leave it out for the sake of maintenance.",
+      "parentUuid": "ca28597d_9bd56e01",
+      "range": {
+        "startLine": 3265,
+        "startChar": 7,
+        "endLine": 3265,
+        "endChar": 42
+      },
+      "revId": "09abe551edc94a5770f0058b1bd12e14a8947987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
