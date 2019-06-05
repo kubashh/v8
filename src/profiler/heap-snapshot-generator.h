@@ -28,7 +28,7 @@ namespace internal {
 class AllocationTracker;
 class AllocationTraceNode;
 class HeapEntry;
-class HeapIterator;
+class HeapObjectIterator;
 class HeapProfiler;
 class HeapSnapshot;
 class HeapSnapshotGenerator;

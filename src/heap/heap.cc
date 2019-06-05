@@ -248,7 +248,7 @@ size_t Heap::Capacity() {
 
 size_t Heap::OldGenerationCapacity() {
   if (!HasBeenSetUp()) return 0;
-  PagedSpaces spaces(this);
+  PagedSpaceIterator spaces(this);
   size_t total = 0;
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
@@ -260,7 +260,7 @@ size_t Heap::OldGenerationCapacity() {
 size_t Heap::CommittedOldGenerationMemory() {
   if (!HasBeenSetUp()) return 0;
 
-  PagedSpaces spaces(this);
+  PagedSpaceIterator spaces(this);
   size_t total = 0;
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
@@ -1294,16 +1294,16 @@ void Heap::CollectAllAvailableGarbage(GarbageCollectionReason gc_reason) {
 
   if (FLAG_trace_duplicate_threshold_kb) {
     std::map<int, std::vector<HeapObject>> objects_by_size;
-    PagedSpaces spaces(this);
+    PagedSpaceIterator spaces(this);
     for (PagedSpace* space = spaces.Next(); space != nullptr;
          space = spaces.Next()) {
-      HeapObjectIterator it(space);
+      PagedSpaceObjectIterator it(space);
       for (HeapObject obj = it.Next(); !obj.is_null(); obj = it.Next()) {
         objects_by_size[obj.Size()].push_back(obj);
       }
     }
     {
-      LargeObjectIterator it(lo_space());
+      LargeObjectSpaceObjectIterator it(lo_space());
       for (HeapObject obj = it.Next(); !obj.is_null(); obj = it.Next()) {
         objects_by_size[obj.Size()].push_back(obj);
       }
@@ -3859,9 +3859,9 @@ void Heap::Verify() {
 void Heap::VerifyReadOnlyHeap() {
   CHECK(!read_only_space_->writable());
   // TODO(v8:7464): Always verify read-only space once PagedSpace::Verify
-  // supports verifying shared read-only space. Currently HeapObjectIterator is
-  // explicitly disabled for read-only space when sharing is enabled, because it
-  // relies on PagedSpace::heap_ being non-null.
+  // supports verifying shared read-only space. Currently
+  // PagedSpaceObjectIterator is explicitly disabled for read-only space when
+  // sharing is enabled, because it relies on PagedSpace::heap_ being non-null.
 #ifndef V8_SHARED_RO_HEAP
   VerifyReadOnlyPointersVisitor read_only_visitor(this);
   read_only_space_->Verify(isolate(), &read_only_visitor);
@@ -4014,7 +4014,7 @@ void Heap::VerifyRememberedSetFor(HeapObject object) {
 
 #ifdef DEBUG
 void Heap::VerifyCountersAfterSweeping() {
-  PagedSpaces spaces(this);
+  PagedSpaceIterator spaces(this);
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
     space->VerifyCountersAfterSweeping();
@@ -4022,7 +4022,7 @@ void Heap::VerifyCountersAfterSweeping() {
 }
 
 void Heap::VerifyCountersBeforeConcurrentSweeping() {
-  PagedSpaces spaces(this);
+  PagedSpaceIterator spaces(this);
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
     space->VerifyCountersBeforeConcurrentSweeping();
@@ -4420,7 +4420,7 @@ void Heap::RecordStats(HeapStats* stats, bool take_snapshot) {
   *stats->malloced_memory = isolate_->allocator()->GetCurrentMemoryUsage();
   *stats->malloced_peak_memory = isolate_->allocator()->GetMaxMemoryUsage();
   if (take_snapshot) {
-    HeapIterator iterator(this);
+    HeapObjectIterator iterator(this);
     for (HeapObject obj = iterator.Next(); !obj.is_null();
          obj = iterator.Next()) {
       InstanceType type = obj.map().instance_type();
@@ -4443,7 +4443,7 @@ void Heap::RecordStats(HeapStats* stats, bool take_snapshot) {
 }
 
 size_t Heap::OldGenerationSizeOfObjects() {
-  PagedSpaces spaces(this);
+  PagedSpaceIterator spaces(this);
   size_t total = 0;
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
@@ -4625,7 +4625,7 @@ void Heap::DisableInlineAllocation() {
   new_space()->UpdateInlineAllocationLimit(0);
 
   // Update inline allocation limit for old spaces.
-  PagedSpaces spaces(this);
+  PagedSpaceIterator spaces(this);
   CodeSpaceMemoryModificationScope modification_scope(this);
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
@@ -4924,7 +4924,7 @@ int Heap::NextStressMarkingLimit() {
 }
 
 void Heap::NotifyDeserializationComplete() {
-  PagedSpaces spaces(this);
+  PagedSpaceIterator spaces(this);
   for (PagedSpace* s = spaces.Next(); s != nullptr; s = spaces.Next()) {
     if (isolate()->snapshot_available()) s->ShrinkImmortalImmovablePages();
 #ifdef DEBUG
@@ -5174,7 +5174,7 @@ void Heap::CompactWeakArrayLists(AllocationType allocation) {
   // Find known PrototypeUsers and compact them.
   std::vector<Handle<PrototypeInfo>> prototype_infos;
   {
-    HeapIterator iterator(this);
+    HeapObjectIterator iterator(this);
     for (HeapObject o = iterator.Next(); !o.is_null(); o = iterator.Next()) {
       if (o.IsPrototypeInfo()) {
         PrototypeInfo prototype_info = PrototypeInfo::cast(o);
@@ -5353,7 +5353,7 @@ void Heap::ClearRecordedSlotRange(Address start, Address end) {
   }
 }
 
-PagedSpace* PagedSpaces::Next() {
+PagedSpace* PagedSpaceIterator::Next() {
   switch (counter_++) {
     case RO_SPACE:
     case NEW_SPACE:
@@ -5500,8 +5500,8 @@ class UnreachableObjectsFilter : public HeapObjectsFilter {
       reachable_;
 };
 
-HeapIterator::HeapIterator(Heap* heap,
-                           HeapIterator::HeapObjectsFiltering filtering)
+HeapObjectIterator::HeapObjectIterator(
+    Heap* heap, HeapObjectIterator::HeapObjectsFiltering filtering)
     : heap_(heap),
       filtering_(filtering),
       filter_(nullptr),
@@ -5520,8 +5520,7 @@ HeapIterator::HeapIterator(Heap* heap,
   object_iterator_ = space_iterator_->Next()->GetObjectIterator();
 }
 
-
-HeapIterator::~HeapIterator() {
+HeapObjectIterator::~HeapObjectIterator() {
 #ifdef DEBUG
   // Assert that in filtering mode we have iterated through all
   // objects. Otherwise, heap will be left in an inconsistent state.
@@ -5533,7 +5532,7 @@ HeapIterator::~HeapIterator() {
   delete filter_;
 }
 
-HeapObject HeapIterator::Next() {
+HeapObject HeapObjectIterator::Next() {
   if (filter_ == nullptr) return NextObject();
 
   HeapObject obj = NextObject();
@@ -5541,7 +5540,7 @@ HeapObject HeapIterator::Next() {
   return obj;
 }
 
-HeapObject HeapIterator::NextObject() {
+HeapObject HeapObjectIterator::NextObject() {
   // No iterator means we are done.
   if (object_iterator_.get() == nullptr) return HeapObject();
 
