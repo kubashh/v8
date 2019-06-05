@@ -2026,7 +2026,6 @@ Node* JSNativeContextSpecialization::InlinePropertyGetterCall(
         target, receiver, context, frame_state, *effect, *control);
   } else {
     auto function_template_info = constant.AsFunctionTemplateInfo();
-    function_template_info.Serialize();
     Node* holder =
         access_info.holder().is_null()
             ? receiver
@@ -2063,7 +2062,6 @@ void JSNativeContextSpecialization::InlinePropertySetterCall(
         target, receiver, value, context, frame_state, *effect, *control);
   } else {
     auto function_template_info = constant.AsFunctionTemplateInfo();
-    function_template_info.Serialize();
     Node* holder =
         access_info.holder().is_null()
             ? receiver
