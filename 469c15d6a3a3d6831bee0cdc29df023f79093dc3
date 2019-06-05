@@ -59,6 +59,57 @@
     },
     {
       "key": {
+        "uuid": "2fe4f741_633c6ad0",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-05T06:57:43Z",
+      "side": 1,
+      "message": "Are these Convert calls needed?",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36616ba5_a9ea7c92",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-05T06:57:43Z",
+      "side": 1,
+      "message": "x \u003d yBigint;\ny \u003d xBigint;\n... length ...",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8316b926_71fa1145",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-05T06:57:43Z",
+      "side": 1,
+      "message": "Nit: remove the two empty lines.\n\nWhat does the Convert\u003cBigIntBase\u003e do? I can\u0027t figure it out.",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "37602484_fa9d4c57",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 5
@@ -76,6 +127,40 @@
         "endLine": 3179,
         "endChar": 10
       },
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e03e4ec_eea0b6b8",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-05T06:57:43Z",
+      "side": 1,
+      "message": "I\u0027d prefer Handle\u003cBigInt\u003e::cast(result);",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb81bb02_9e783516",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-05T06:57:43Z",
+      "side": 1,
+      "message": "Please put DisallowHeapAllocation scopes into all these function that take raw objects.",
       "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
