@@ -277,6 +277,30 @@
     },
     {
       "key": {
+        "uuid": "85829d1b_d723cf73",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3179,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-05T11:52:40Z",
+      "side": 1,
+      "message": "Yes, but shouldn\u0027t the index be less than the length?",
+      "parentUuid": "01ca56f5_873672db",
+      "range": {
+        "startLine": 3179,
+        "startChar": 2,
+        "endLine": 3179,
+        "endChar": 10
+      },
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e03e4ec_eea0b6b8",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 5
