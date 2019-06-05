@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd1c6ad2_8ea475dc",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-05T02:25:43Z",
+      "side": 1,
+      "message": "Why is this intptr?",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd87374d_5d9ab5f7",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-05T02:25:43Z",
+      "side": 1,
+      "message": "!\u003d\nShouldn\u0027t any tests catch that?",
+      "range": {
+        "startLine": 49,
+        "startChar": 47,
+        "endLine": 49,
+        "endChar": 49
+      },
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
