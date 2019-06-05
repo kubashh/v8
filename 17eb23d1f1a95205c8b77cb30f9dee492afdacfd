@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d837128_ad579a1a",
+        "filename": "src/codegen/arm64/assembler-arm64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2828,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-05T16:23:56Z",
+      "side": 0,
+      "message": "BlockPoolsScope ensures this.",
+      "range": {
+        "startLine": 2827,
+        "startChar": 2,
+        "endLine": 2828,
+        "endChar": 20
+      },
+      "revId": "17eb23d1f1a95205c8b77cb30f9dee492afdacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0657148_355ece90",
+        "filename": "src/codegen/arm64/assembler-arm64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2832,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-05T16:23:56Z",
+      "side": 0,
+      "message": "The d\u0027tor of Assembler ensures this.",
+      "range": {
+        "startLine": 2832,
+        "startChar": 4,
+        "endLine": 2832,
+        "endChar": 31
+      },
+      "revId": "17eb23d1f1a95205c8b77cb30f9dee492afdacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee48536a_04a0c325",
+        "filename": "src/codegen/arm64/assembler-arm64-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-05T16:23:56Z",
+      "side": 1,
+      "message": "I can clean this up in a follow up CL.",
+      "range": {
+        "startLine": 1026,
+        "startChar": 4,
+        "endLine": 1026,
+        "endChar": 33
+      },
+      "revId": "3fdf90f66bc01f1320b18e47ea76ee94fd37c57a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
