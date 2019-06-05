@@ -11,6 +11,7 @@ namespace test {
     }
   }
 
+  @export
   macro ElementsKindTestHelper2(kind: constexpr ElementsKind): bool {
     return ((kind == UINT8_ELEMENTS) || (kind == UINT16_ELEMENTS));
   }
@@ -343,6 +344,7 @@ namespace test {
   Foo(TestStructA) {
     goto Foo(TestStruct2());
   }
+  @export
   macro CallTestStructInLabel(implicit context: Context)() {
     try {
       TestStructInLabel() otherwise Foo;
@@ -861,6 +863,9 @@ namespace test {
     let y = StructWithConst{a: Null, b: 1};
     y.a = Undefined;
     const copy = x;
+
+    check(x.TestMethod1() == 1);
+    check(x.TestMethod2() == Null);
   }
 
   struct TestIterator {
@@ -907,4 +912,18 @@ namespace test {
     StaticAssert(1 + 2 == 3);
   }
 
+  struct HoleIterator {
+    Next(): Object labels NoMore() {
+      return Hole;
+    }
+  }
+
+  @export
+  macro NewJSArray(implicit context: Context)(map: Map, length: Smi): JSArray {
+    const map = GetFastPackedSmiElementsJSArrayMap();
+    const i = HoleIterator{};
+    const elements = new FixedArray{map, length, objects: ...i};
+    return new
+    JSArray{map, properties_or_hash: kEmptyFixedArray, elements, length};
+  }
 }

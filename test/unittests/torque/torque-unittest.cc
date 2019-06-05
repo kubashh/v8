@@ -128,6 +128,7 @@ TEST(Torque, ClassDefinition) {
       i: uintptr;
     }
 
+    @export
     macro TestClassWithAllTypesLoadsAndStores(
         t: TestClassWithAllTypes, r: RawPtr, v1: int8, v2: uint8, v3: int16,
         v4: uint16, v5: int32, v6: uint32, v7: intptr, v8: uintptr) {
