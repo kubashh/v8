@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26d0236b_dbd08cd7",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-06-05T12:39:11Z",
+      "side": 1,
+      "message": "That\u0027s the problem.",
+      "range": {
+        "startLine": 264,
+        "startChar": 4,
+        "endLine": 264,
+        "endChar": 10
+      },
+      "revId": "d885d9302040e04557cc9ccde1ce1d5694aac533",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
