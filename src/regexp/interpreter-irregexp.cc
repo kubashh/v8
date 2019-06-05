@@ -119,30 +119,79 @@ static int32_t Load16Aligned(const byte* pc) {
 // Despite the name 'backtracking' stack, it's actually used as a generic stack
 // that stores both program counters (= offsets into the bytecode) and generic
 // integer values.
+//
+// Allocation overhead shows up fairly high on profiles, and thus this switches
+// between a statically-sized stack-allocated backing store and a std::vector
+// as needed.
 class BacktrackStack {
  public:
   BacktrackStack() = default;
 
-  void push(int v) { data_.emplace_back(v); }
+  void push(int v) {
+    if (has_static_data()) {
+      if (static_data_top_ == std::end(static_data_)) {
+        SwitchToDynamicData();
+        data_.emplace_back(v);
+      } else {
+        *static_data_top_++ = v;
+      }
+    } else {
+      data_.emplace_back(v);
+    }
+  }
   int peek() const {
-    DCHECK(!data_.empty());
-    return data_.back();
+    if (has_static_data()) {
+      return *(static_data_top_ - 1);
+    } else {
+      DCHECK(!data_.empty());
+      return data_.back();
+    }
   }
   int pop() {
-    int v = peek();
-    data_.pop_back();
-    return v;
+    if (has_static_data()) {
+      return *--static_data_top_;
+    } else {
+      int v = peek();
+      data_.pop_back();
+      return v;
+    }
   }
 
   // The 'sp' is the index of the first empty element in the stack.
-  int sp() const { return static_cast<int>(data_.size()); }
+  int sp() const {
+    if (has_static_data()) {
+      return static_cast<int>(static_data_top_ - static_data_);
+    } else {
+      return static_cast<int>(data_.size());
+    }
+  }
   void set_sp(int new_sp) {
-    DCHECK_LE(new_sp, sp());
-    data_.resize(new_sp);
+    if (has_static_data()) {
+      static_data_top_ = static_data_ + new_sp;
+    } else {
+      DCHECK_LE(new_sp, sp());
+      data_.resize(new_sp);
+    }
   }
 
  private:
+  bool has_static_data() const { return static_data_top_ != nullptr; }
+  void SwitchToDynamicData() {
+    DCHECK(data_.empty());
+    DCHECK(has_static_data());
+    DCHECK_EQ(static_data_top_, std::end(static_data_));
+    data_.insert(data_.begin(), std::begin(static_data_),
+                 std::end(static_data_));
+    static_data_top_ = nullptr;
+  }
+
   std::vector<int> data_;
+
+  // Semi-arbitrary, based on Octane/RegExp.
+  static constexpr int kStaticCapacity = 256;
+
+  int static_data_[kStaticCapacity];
+  int* static_data_top_ = std::begin(static_data_);
 
   DISALLOW_COPY_AND_ASSIGN(BacktrackStack);
 };
