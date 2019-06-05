@@ -1926,8 +1926,7 @@ class InstructionAccurateScope {
         size_(count * kInstrSize)
 #endif
   {
-    // Before blocking the const pool, see if it needs to be emitted.
-    tasm_->CheckConstPool(false, true);
+    tasm_->EmitConstPoolWithJumpIfNeeded();
     tasm_->CheckVeneerPool(false, true);
 
     tasm_->StartBlockPools();
