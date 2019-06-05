@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "dd64a764_2a4519bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-05T02:32:55Z",
+      "side": 1,
+      "message": "Please add some comments on how this is integrated with the existing implementation (e.g. when/how the existing implementation is still used).",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dd1c6ad2_8ea475dc",
         "filename": "src/builtins/base.tq",
         "patchSetId": 5
@@ -35,6 +52,29 @@
         "startChar": 47,
         "endLine": 49,
         "endChar": 49
+      },
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37602484_fa9d4c57",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3179,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-05T02:32:55Z",
+      "side": 1,
+      "message": "CHECK_LT\nalso elsewhere",
+      "range": {
+        "startLine": 3179,
+        "startChar": 2,
+        "endLine": 3179,
+        "endChar": 10
       },
       "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
