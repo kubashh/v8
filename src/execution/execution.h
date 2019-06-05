@@ -135,6 +135,14 @@ class V8_EXPORT_PRIVATE StackGuard final {
   // stack overflow, then handle the interruption accordingly.
   Object HandleInterrupts();
 
+  // This method can be called *without* holding the ExecutionAccess lock. It's
+  // intended as a cheap (and unreliable) way to check for interrupts without
+  // taking the expensive lock. Only use this if you are okay with sometimes
+  // getting the wrong result due to race conditions.
+  bool unsafe_has_pending_interrupts() const {
+    return thread_local_.interrupt_flags_ != 0;
+  }
+
  private:
   bool CheckInterrupt(InterruptFlag flag);
   void RequestInterrupt(InterruptFlag flag);
@@ -143,7 +151,7 @@ class V8_EXPORT_PRIVATE StackGuard final {
 
   // You should hold the ExecutionAccess lock when calling this method.
   bool has_pending_interrupts(const ExecutionAccess& lock) {
-    return thread_local_.interrupt_flags_ != 0;
+    return unsafe_has_pending_interrupts();
   }
 
   // You should hold the ExecutionAccess lock when calling this method.
