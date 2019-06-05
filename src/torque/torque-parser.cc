@@ -9,6 +9,7 @@
 
 #include "src/common/globals.h"
 #include "src/torque/constants.h"
+#include "src/torque/declarations.h"
 #include "src/torque/earley-parser.h"
 #include "src/torque/torque-parser.h"
 #include "src/torque/utils.h"
@@ -289,7 +290,7 @@ Expression* MakeCall(IdentifierExpression* callee,
         continue;
       }
     }
-    auto label_name = std::string("_label") + std::to_string(label_id++);
+    auto label_name = std::string("__label") + std::to_string(label_id++);
     auto label_id = MakeNode<Identifier>(label_name);
     label_id->pos = SourcePosition::Invalid();
     labels.push_back(label_id);
@@ -931,14 +932,14 @@ base::Optional<ParseResult> MakeTypeswitchStatement(
   {
     CurrentSourcePosition::Scope current_source_position(expression->pos);
     current_block->statements.push_back(MakeNode<VarDeclarationStatement>(
-        true, MakeNode<Identifier>("_value"), base::nullopt, expression));
+        true, MakeNode<Identifier>("__value"), base::nullopt, expression));
   }
 
   TypeExpression* accumulated_types;
   for (size_t i = 0; i < cases.size(); ++i) {
     CurrentSourcePosition::Scope current_source_position(cases[i].pos);
     Expression* value =
-        MakeNode<IdentifierExpression>(MakeNode<Identifier>("_value"));
+        MakeNode<IdentifierExpression>(MakeNode<Identifier>("__value"));
     if (i >= 1) {
       value =
           MakeNode<AssumeTypeImpossibleExpression>(accumulated_types, value);
@@ -950,12 +951,12 @@ base::Optional<ParseResult> MakeTypeswitchStatement(
                        std::vector<Expression*>{value},
                        std::vector<Statement*>{MakeNode<ExpressionStatement>(
                            MakeNode<IdentifierExpression>(
-                               MakeNode<Identifier>("_NextCase")))});
+                               MakeNode<Identifier>(kNextCaseLabelName)))});
       case_block = MakeNode<BlockStatement>();
     } else {
       case_block = current_block;
     }
-    std::string name = "_case_value";
+    std::string name = "__case_value";
     if (cases[i].name) name = *cases[i].name;
     case_block->statements.push_back(MakeNode<VarDeclarationStatement>(
         true, MakeNode<Identifier>(name), cases[i].type, value));
@@ -965,7 +966,7 @@ base::Optional<ParseResult> MakeTypeswitchStatement(
       current_block->statements.push_back(
           MakeNode<ExpressionStatement>(MakeNode<TryLabelExpression>(
               false, MakeNode<StatementExpression>(case_block),
-              MakeNode<LabelBlock>(MakeNode<Identifier>("_NextCase"),
+              MakeNode<LabelBlock>(MakeNode<Identifier>(kNextCaseLabelName),
                                    ParameterList::Empty(), next_block))));
       current_block = next_block;
     }
@@ -1128,8 +1129,8 @@ base::Optional<ParseResult> MakeCatchBlock(ParseResultIterator* child_results) {
   parameters.types.push_back(
       MakeNode<BasicTypeExpression>(std::vector<std::string>{}, "Object"));
   parameters.has_varargs = false;
-  LabelBlock* result = MakeNode<LabelBlock>(MakeNode<Identifier>("_catch"),
-                                            std::move(parameters), body);
+  LabelBlock* result = MakeNode<LabelBlock>(
+      MakeNode<Identifier>(kCatchLabelName), std::move(parameters), body);
   return ParseResult{result};
 }
 
@@ -1368,9 +1369,12 @@ struct TorqueGrammar : Grammar {
   }
 
   static bool MatchIdentifier(InputPosition* pos) {
-    if (!MatchChar(std::isalpha, pos)) return false;
-    while (MatchChar(std::isalnum, pos) || MatchString("_", pos)) {
+    InputPosition current = *pos;
+    MatchString("_", &current);
+    if (!MatchChar(std::isalpha, &current)) return false;
+    while (MatchChar(std::isalnum, &current) || MatchString("_", &current)) {
     }
+    *pos = current;
     return true;
   }
 

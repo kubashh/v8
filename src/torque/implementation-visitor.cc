@@ -179,14 +179,15 @@ VisitResult ImplementationVisitor::InlineMacro(
     DCHECK(macro->IsMethod());
     LocalValue this_value = LocalValue{!this_reference->IsVariableAccess(),
                                        this_reference->GetVisitResult()};
-    parameter_bindings.Add(kThisParameterName, this_value);
+    parameter_bindings.Add(kThisParameterName, this_value, true);
   }
 
   size_t i = 0;
   for (auto arg : arguments) {
     if (this_reference && i == signature.implicit_count) i++;
+    const bool mark_as_used = signature.implicit_count > i;
     const Identifier* name = macro->parameter_names()[i++];
-    parameter_bindings.Add(name, LocalValue{true, arg});
+    parameter_bindings.Add(name, LocalValue{true, arg}, mark_as_used);
   }
 
   DCHECK_EQ(label_blocks.size(), signature.labels.size());
@@ -217,7 +218,7 @@ VisitResult ImplementationVisitor::InlineMacro(
       }
     }
     macro_end = assembler().NewBlock(std::move(stack));
-    macro_end_binding.emplace(&LabelBindingsManager::Get(), "_macro_end",
+    macro_end_binding.emplace(&LabelBindingsManager::Get(), kMacroEndLabelName,
                               LocalLabel{macro_end, {return_type}});
   } else {
     SetReturnValue(VisitResult::NeverResult());
@@ -380,13 +381,15 @@ namespace {
 std::string AddParameter(size_t i, Builtin* builtin,
                          Stack<std::string>* parameters,
                          Stack<const Type*>* parameter_types,
-                         BlockBindings<LocalValue>* parameter_bindings) {
+                         BlockBindings<LocalValue>* parameter_bindings,
+                         bool mark_as_used) {
   const Identifier* name = builtin->signature().parameter_names[i];
   const Type* type = builtin->signature().types()[i];
   std::string external_name = "parameter" + std::to_string(i);
   parameters->Push(external_name);
   StackRange range = parameter_types->PushMany(LowerType(type));
-  parameter_bindings->Add(name, LocalValue{true, VisitResult(type, range)});
+  parameter_bindings->Add(name, LocalValue{true, VisitResult(type, range)},
+                          mark_as_used);
   return external_name;
 }
 
@@ -412,8 +415,10 @@ void ImplementationVisitor::Visit(Builtin* builtin) {
   BlockBindings<LocalValue> parameter_bindings(&ValueBindingsManager::Get());
 
   // Context
-  std::string parameter0 = AddParameter(0, builtin, &parameters,
-                                        &parameter_types, &parameter_bindings);
+  const bool context_is_implicit = signature.implicit_count > 0;
+  std::string parameter0 =
+      AddParameter(0, builtin, &parameters, &parameter_types,
+                   &parameter_bindings, context_is_implicit);
   source_out() << "  TNode<Context> " << parameter0
                << " = UncheckedCast<Context>(Parameter("
                << "Descriptor::kContext));\n";
@@ -425,7 +430,7 @@ void ImplementationVisitor::Visit(Builtin* builtin) {
     source_out()
         << "  Node* argc = Parameter(Descriptor::kJSActualArgumentsCount);\n";
     std::string parameter1 = AddParameter(
-        1, builtin, &parameters, &parameter_types, &parameter_bindings);
+        1, builtin, &parameters, &parameter_types, &parameter_bindings, true);
     source_out()
         << "  TNode<IntPtrT> arguments_length(ChangeInt32ToIntPtr(argc));\n";
     source_out() << "  TNode<RawPtrT> arguments_frame = "
@@ -454,8 +459,9 @@ void ImplementationVisitor::Visit(Builtin* builtin) {
     if (i < first) continue;
     const std::string& parameter_name = signature.parameter_names[i]->value;
     const Type* type = signature.types()[i];
+    const bool mark_as_used = signature.implicit_count > i;
     std::string var = AddParameter(i, builtin, &parameters, &parameter_types,
-                                   &parameter_bindings);
+                                   &parameter_bindings, mark_as_used);
     source_out() << "  " << type->GetGeneratedTypeName() << " " << var << " = "
                  << "UncheckedCast<" << type->GetGeneratedTNodeTypeName()
                  << ">(Parameter(Descriptor::k"
@@ -961,6 +967,23 @@ const Type* ImplementationVisitor::Visit(AssertStatement* stmt) {
         "Torque assert '" + FormatAssertSource(stmt->source) + "' failed"});
 
     assembler().Bind(true_block);
+  } else {
+    // Visit the expression so bindings only used in asserts are marked
+    // as such. Otherwise they might be wrongly reported as unused bindings
+    // in release builds.
+    stmt->expression->VisitAllSubExpressions([](Expression* expression) {
+      if (auto id = IdentifierExpression::DynamicCast(expression)) {
+        ValueBindingsManager::Get().TryLookup(id->name->value);
+      } else if (auto call = CallExpression::DynamicCast(expression)) {
+        for (Identifier* label : call->labels) {
+          LabelBindingsManager::Get().TryLookup(label->value);
+        }
+      } else if (auto call = CallMethodExpression::DynamicCast(expression)) {
+        for (Identifier* label : call->labels) {
+          LabelBindingsManager::Get().TryLookup(label->value);
+        }
+      }
+    });
   }
   return TypeOracle::GetVoidType();
 }
@@ -978,7 +1001,7 @@ const Type* ImplementationVisitor::Visit(ReturnStatement* stmt) {
     ReportError(s.str());
   }
   LocalLabel* end =
-      current_callable->IsMacro() ? LookupLabel("_macro_end") : nullptr;
+      current_callable->IsMacro() ? LookupLabel(kMacroEndLabelName) : nullptr;
   if (current_callable->HasReturnValue()) {
     if (!stmt->value) {
       std::stringstream s;
@@ -1390,7 +1413,8 @@ VisitResult ImplementationVisitor::Visit(NewExpression* expr) {
 }
 
 const Type* ImplementationVisitor::Visit(BreakStatement* stmt) {
-  base::Optional<Binding<LocalLabel>*> break_label = TryLookupLabel("_break");
+  base::Optional<Binding<LocalLabel>*> break_label =
+      TryLookupLabel(kBreakLabelName);
   if (!break_label) {
     ReportError("break used outside of loop");
   }
@@ -1400,7 +1424,7 @@ const Type* ImplementationVisitor::Visit(BreakStatement* stmt) {
 
 const Type* ImplementationVisitor::Visit(ContinueStatement* stmt) {
   base::Optional<Binding<LocalLabel>*> continue_label =
-      TryLookupLabel("_continue");
+      TryLookupLabel(kContinueLabelName);
   if (!continue_label) {
     ReportError("continue used outside of loop");
   }
@@ -2556,7 +2580,7 @@ bool IsCompatibleSignature(const Signature& sig, const TypeVector& types,
 base::Optional<Block*> ImplementationVisitor::GetCatchBlock() {
   base::Optional<Block*> catch_block;
   if (base::Optional<Binding<LocalLabel>*> catch_handler =
-          TryLookupLabel("_catch")) {
+          TryLookupLabel(kCatchLabelName)) {
     catch_block = assembler().NewBlock(base::nullopt, true);
   }
   return catch_block;
@@ -2566,7 +2590,7 @@ void ImplementationVisitor::GenerateCatchBlock(
     base::Optional<Block*> catch_block) {
   if (catch_block) {
     base::Optional<Binding<LocalLabel>*> catch_handler =
-        TryLookupLabel("_catch");
+        TryLookupLabel(kCatchLabelName);
     if (assembler().CurrentBlockIsComplete()) {
       assembler().Bind(*catch_block);
       assembler().Goto((*catch_handler)->block, 1);
@@ -3342,7 +3366,7 @@ void GenerateClassFieldVerifier(const std::string& class_name,
       f.is_weak ? "VerifyMaybeObjectPointer" : "VerifyPointer";
   const char* index_offset = f.index ? " + i * kTaggedSize" : "";
   // Name the local var based on the field name for nicer CHECK output.
-  const std::string value = f.name_and_type.name + "_value";
+  const std::string value = f.name_and_type.name + "__value";
 
   // Read the field.
   cc_contents << "    " << object_type << " " << value << " = " << read_fn
