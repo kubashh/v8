@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0ecce023_03be0989",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-05T08:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd64a764_2a4519bc",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd1c6ad2_8ea475dc",
         "filename": "src/builtins/base.tq",
         "patchSetId": 5
@@ -59,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "3fd06f90_da005287",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-05T08:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd87374d_5d9ab5f7",
+      "range": {
+        "startLine": 49,
+        "startChar": 47,
+        "endLine": 49,
+        "endChar": 49
+      },
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fe4f741_633c6ad0",
         "filename": "src/builtins/bigint.tq",
         "patchSetId": 5
@@ -73,6 +115,24 @@
       "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10f51b5d_72290fb2",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-05T08:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fe4f741_633c6ad0",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +153,24 @@
     },
     {
       "key": {
+        "uuid": "7f159534_c6e89e12",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-05T08:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36616ba5_a9ea7c92",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8316b926_71fa1145",
         "filename": "src/builtins/bigint.tq",
         "patchSetId": 5
@@ -107,6 +185,24 @@
       "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "512c0080_64b067ff",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-05T08:28:26Z",
+      "side": 1,
+      "message": "BigInt and MutableBigInt are siblings and Torque does not do an implicit up cast here. I\u0027m going to use MakeImmutable here as well and rename the other functions to ...AndCanonicalize as this is more what they actually do now.",
+      "parentUuid": "8316b926_71fa1145",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -133,6 +229,30 @@
     },
     {
       "key": {
+        "uuid": "46dd573b_35b1d7ab",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3179,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-05T08:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37602484_fa9d4c57",
+      "range": {
+        "startLine": 3179,
+        "startChar": 2,
+        "endLine": 3179,
+        "endChar": 10
+      },
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e03e4ec_eea0b6b8",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 5
@@ -150,6 +270,24 @@
     },
     {
       "key": {
+        "uuid": "0f9603ca_0d36eb36",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-05T08:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e03e4ec_eea0b6b8",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb81bb02_9e783516",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 5
@@ -164,6 +302,24 @@
       "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c432a092_d916ad6c",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-05T08:28:26Z",
+      "side": 1,
+      "message": "This is a neat little thingy. Thanks for letting me know.",
+      "parentUuid": "fb81bb02_9e783516",
+      "revId": "469c15d6a3a3d6831bee0cdc29df023f79093dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
