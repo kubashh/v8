@@ -44,3 +44,17 @@ function MaxBigIntWithBits(bits) {
   }
   return BigInt(s);
 }
+
+
+function RandomBigIntWithBits(bits) {
+  console.assert(bits % 4 === 0);
+  if (bits <= 0) {
+    return 0n;
+  }
+
+  let s = "0x" + RandomHexDigit(false);
+  for (bits -= 4; bits > 0; bits -= 4) {
+    s += RandomHexDigit(true);
+  }
+  return BigInt(s);
+}
