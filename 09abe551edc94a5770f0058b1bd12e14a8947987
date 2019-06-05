@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca28597d_9bd56e01",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3265,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-05T13:46:41Z",
+      "side": 1,
+      "message": "Can\u0027t we leave this conditional out and Decompress everything if COMPRESS_POINTERS_BOOL? It is not very maintainable and deoptimization translations are generally not performance critical. \n\nThat said, if you insist, then please add an IsCompressedAddress helper in a central header and use that here.",
+      "range": {
+        "startLine": 3265,
+        "startChar": 7,
+        "endLine": 3265,
+        "endChar": 42
+      },
+      "revId": "09abe551edc94a5770f0058b1bd12e14a8947987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
