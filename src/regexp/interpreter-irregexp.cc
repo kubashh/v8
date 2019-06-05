@@ -172,8 +172,14 @@ IrregexpInterpreter::Result HandleInterrupts(Isolate* isolate,
   const bool was_one_byte =
       String::IsOneByteRepresentationUnderneath(*subject_string);
 
+  // Handle interrupts if any exist. Note that at this point, we don't care too
+  // much whether we the result returned by UnsafeHasInterrupts is sometimes
+  // incorrect. If we see true while it is actually false, then we uselessly
+  // call HandleInterrupts, which will read the correct value. If we see false
+  // while it is actually true, we will pick up the right result on the next
+  // call.
   Object result;
-  {
+  if (isolate->stack_guard()->UnsafeHasInterrupts()) {
     AllowHeapAllocation yes_gc;
     result = isolate->stack_guard()->HandleInterrupts();
   }

@@ -663,5 +663,10 @@ Object StackGuard::HandleInterrupts() {
   return ReadOnlyRoots(isolate_).undefined_value();
 }
 
+bool StackGuard::UnsafeHasInterrupts() const {
+  // This read may race. See the comment in the header file.
+  return thread_local_.interrupt_flags_ != 0;
+}
+
 }  // namespace internal
 }  // namespace v8
