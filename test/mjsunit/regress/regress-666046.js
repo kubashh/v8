@@ -21,13 +21,13 @@ A.prototype = proto;
 function foo(o) {
   return o.a0;
 }
-%EnsureFeedbackVectorForFunction(foo);
 
 // Ensure |proto| is in old space.
 gc();
 gc();
 gc();
 
+%EnsureFeedbackVectorForFunction(foo);
 // Ensure |proto| is marked as "should be fast".
 var o = new A();
 foo(o);
