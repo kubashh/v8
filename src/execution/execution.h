@@ -137,14 +137,8 @@ class V8_EXPORT_PRIVATE StackGuard final {
 
   // This method can be called *without* holding the ExecutionAccess lock. It's
   // intended as a cheap (and unreliable) way to check for interrupts without
-  // taking the expensive lock, if the common case is for no interrupts to
-  // exist. Only use this if you are okay with sometimes getting the wrong
-  // result due to race conditions.
-  //
-  // Unlike StackLimitCheck::InterruptRequested, this ignores things like
-  // disabling interrupts (but is significantly faster). Callers may want to
-  // check StackLimitCheck::InterruptRequested if unsafe_has_pending_interrupts
-  // returns true.
+  // taking the expensive lock. Only use this if you are okay with sometimes
+  // getting the wrong result due to race conditions.
   bool unsafe_has_pending_interrupts() const {
     return thread_local_.interrupt_flags_ != 0;
   }

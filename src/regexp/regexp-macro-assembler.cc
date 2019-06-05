@@ -156,7 +156,8 @@ int NativeRegExpMacroAssembler::CheckStackGuardState(
   } else if (js_has_overflowed) {
     isolate->StackOverflow();
     return_value = EXCEPTION;
-  } else {
+  } else if (isolate->stack_guard()->unsafe_has_pending_interrupts() &&
+             check.InterruptRequested()) {
     Object result = isolate->stack_guard()->HandleInterrupts();
     if (result.IsException(isolate)) return_value = EXCEPTION;
   }

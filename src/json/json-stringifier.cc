@@ -510,7 +510,8 @@ JsonStringifier::Result JsonStringifier::Serialize_(Handle<Object> object,
                                                     Handle<Object> key) {
   StackLimitCheck interrupt_check(isolate_);
   Handle<Object> initial_value = object;
-  if (interrupt_check.InterruptRequested() &&
+  if (isolate_->stack_guard()->unsafe_has_pending_interrupts() &&
+      interrupt_check.InterruptRequested() &&
       isolate_->stack_guard()->HandleInterrupts().IsException(isolate_)) {
     return EXCEPTION;
   }
@@ -648,7 +649,8 @@ JsonStringifier::Result JsonStringifier::SerializeJSArray(
                                     isolate_);
         StackLimitCheck interrupt_check(isolate_);
         while (i < length) {
-          if (interrupt_check.InterruptRequested() &&
+          if (isolate_->stack_guard()->unsafe_has_pending_interrupts() &&
+              interrupt_check.InterruptRequested() &&
               isolate_->stack_guard()->HandleInterrupts().IsException(
                   isolate_)) {
             return EXCEPTION;
@@ -666,7 +668,8 @@ JsonStringifier::Result JsonStringifier::SerializeJSArray(
             FixedDoubleArray::cast(object->elements()), isolate_);
         StackLimitCheck interrupt_check(isolate_);
         while (i < length) {
-          if (interrupt_check.InterruptRequested() &&
+          if (isolate_->stack_guard()->unsafe_has_pending_interrupts() &&
+              interrupt_check.InterruptRequested() &&
               isolate_->stack_guard()->HandleInterrupts().IsException(
                   isolate_)) {
             return EXCEPTION;

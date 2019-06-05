@@ -179,8 +179,7 @@ IrregexpInterpreter::Result HandleInterrupts(Isolate* isolate,
   // see false while it is actually true, we will pick up the right result on
   // the next call.
   Object result;
-  if (isolate->stack_guard()->unsafe_has_pending_interrupts() &&
-      check.InterruptRequested()) {
+  if (isolate->stack_guard()->unsafe_has_pending_interrupts()) {
     {
       AllowHeapAllocation yes_gc;
       result = isolate->stack_guard()->HandleInterrupts();
