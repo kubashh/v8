@@ -172,21 +172,29 @@ IrregexpInterpreter::Result HandleInterrupts(Isolate* isolate,
   const bool was_one_byte =
       String::IsOneByteRepresentationUnderneath(*subject_string);
 
-  Object result;
-  {
-    AllowHeapAllocation yes_gc;
-    result = isolate->stack_guard()->HandleInterrupts();
-  }
+  // Handle interrupts if any exist. Note that at this point, we don't care too
+  // much whether we the result returned by unsafe_has_pending_interrupts is
+  // sometimes incorrect. If we see true while it is actually false, then we
+  // uselessly call HandleInterrupts, which will read the correct value. If we
+  // see false while it is actually true, we will pick up the right result on
+  // the next call.
+  if (check.InterruptRequested()) {
+    Object result;
+    {
+      AllowHeapAllocation yes_gc;
+      result = isolate->stack_guard()->HandleInterrupts();
+    }
 
-  if (result.IsException(isolate)) {
-    return IrregexpInterpreter::EXCEPTION;
-  }
+    if (result.IsException(isolate)) {
+      return IrregexpInterpreter::EXCEPTION;
+    }
 
-  // If we changed between a LATIN1 and a UC16 string, we need to restart
-  // regexp matching with the appropriate template instantiation of RawMatch.
-  if (String::IsOneByteRepresentationUnderneath(*subject_string) !=
-      was_one_byte) {
-    return IrregexpInterpreter::RETRY;
+    // If we changed between a LATIN1 and a UC16 string, we need to restart
+    // regexp matching with the appropriate template instantiation of RawMatch.
+    if (String::IsOneByteRepresentationUnderneath(*subject_string) !=
+        was_one_byte) {
+      return IrregexpInterpreter::RETRY;
+    }
   }
 
   return IrregexpInterpreter::SUCCESS;
