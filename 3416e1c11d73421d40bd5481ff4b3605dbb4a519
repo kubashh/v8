@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11058d65_62d45940",
+        "filename": "src/regexp/interpreter-irregexp.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-06-05T17:36:41Z",
+      "side": 1,
+      "message": "You can also nested the checks if it helps:\n\n  if (V8_UNLIKELY(stack_check.InterruptRequested())) {\n    if (stack_check.HasOverflowed()) {\n       ...\n    }\n\n    if (isolate_-\u003estack_guard()-\u003eHandleInterrupts()-\u003eIsException(isolate_)) {\n      return ...\n    }\n  }",
+      "revId": "3416e1c11d73421d40bd5481ff4b3605dbb4a519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
