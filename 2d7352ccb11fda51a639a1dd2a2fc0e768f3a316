@@ -390,6 +390,30 @@
     },
     {
       "key": {
+        "uuid": "0e79bf26_b26a95b7",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-05T10:24:33Z",
+      "side": 1,
+      "message": "As discussed offline: fine to leave as-is. I didn\u0027t realize that my suggestion would require quite a bit of C++ refactoring, so might not reduce CL size all that much.",
+      "parentUuid": "e876ffa6_93172009",
+      "range": {
+        "startLine": 153,
+        "startChar": 6,
+        "endLine": 153,
+        "endChar": 38
+      },
+      "revId": "2d7352ccb11fda51a639a1dd2a2fc0e768f3a316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d48f42d6_b2bcb25e",
         "filename": "src/builtins/bigint.tq",
         "patchSetId": 4
