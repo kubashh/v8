@@ -3756,7 +3756,7 @@ void AccessorAssembler::GenerateCloneObjectIC() {
         LoadObjectField(source, JSObject::kPropertiesOrHashOffset);
     {
       GotoIf(TaggedIsSmi(source_properties), &allocate_object);
-      GotoIf(IsEmptyFixedArray(source_properties), &allocate_object);
+      GotoIf(IsEmptyPropertyArray(source_properties), &allocate_object);
 
       // This IC requires that the source object has fast properties
       CSA_SLOW_ASSERT(this, IsPropertyArray(CAST(source_properties)));

@@ -50,6 +50,7 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(BooleanMap, boolean_map, BooleanMap)                                       \
   V(CodeMap, code_map, CodeMap)                                                \
   V(EmptyFixedArray, empty_fixed_array, EmptyFixedArray)                       \
+  V(EmptyPropertyArray, empty_property_array, EmptyPropertyArray)              \
   V(EmptyPropertyDictionary, empty_property_dictionary,                        \
     EmptyPropertyDictionary)                                                   \
   V(EmptySlowElementDictionary, empty_slow_element_dictionary,                 \
