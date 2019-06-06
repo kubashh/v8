@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "db491e70_64cda10f",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-06-06T08:04:08Z",
+      "side": 1,
+      "message": "Is this function never used to get Capi-functions from the table? I can see why the extension is needed for WasmJSFunctions, but I wonder why it was not necessary for Capi functions.",
+      "range": {
+        "startLine": 923,
+        "startChar": 21,
+        "endLine": 923,
+        "endChar": 42
+      },
+      "revId": "ead2e0072e3d0163a67b1190d1366c86b658142e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b162857d_140c4117",
         "filename": "src/wasm/module-instantiate.cc",
         "patchSetId": 1
@@ -58,6 +81,98 @@
         "startChar": 11,
         "endLine": 954,
         "endChar": 17
+      },
+      "revId": "ead2e0072e3d0163a67b1190d1366c86b658142e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "518e22a8_92d43a1b",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-06-06T08:04:08Z",
+      "side": 1,
+      "message": "I wonder if this function could share code with its sister version for Capi functions. You would then have to pass in the signature, and a generator function which takes a NativeModule and produces WasmCode.",
+      "range": {
+        "startLine": 1029,
+        "startChar": 22,
+        "endLine": 1029,
+        "endChar": 42
+      },
+      "revId": "ead2e0072e3d0163a67b1190d1366c86b658142e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37843dc3_a6b90797",
+        "filename": "test/mjsunit/wasm/type-reflection.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-06-06T08:04:08Z",
+      "side": 1,
+      "message": "q: Why do you use {assertDoesNotThrow} here? What is the difference to calling {table.set} directly? (I\u0027m asking mostly for my own interesting, not as marking it as a nit.)",
+      "range": {
+        "startLine": 282,
+        "startChar": 2,
+        "endLine": 282,
+        "endChar": 20
+      },
+      "revId": "ead2e0072e3d0163a67b1190d1366c86b658142e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0e49c2d_6589eb3d",
+        "filename": "test/mjsunit/wasm/type-reflection.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-06-06T08:04:08Z",
+      "side": 1,
+      "message": "table_index",
+      "range": {
+        "startLine": 286,
+        "startChar": 38,
+        "endLine": 286,
+        "endChar": 48
+      },
+      "revId": "ead2e0072e3d0163a67b1190d1366c86b658142e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "001ec4fb_9d8be7be",
+        "filename": "test/mjsunit/wasm/type-reflection.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-06-06T08:04:08Z",
+      "side": 1,
+      "message": "you could use {assertTraps(kTrapFuncSigMismatch, () \u003d\u003e instance.exports.main(1));} here instead, to also document and check the trap reason.",
+      "range": {
+        "startLine": 294,
+        "startChar": 2,
+        "endLine": 294,
+        "endChar": 14
       },
       "revId": "ead2e0072e3d0163a67b1190d1366c86b658142e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
