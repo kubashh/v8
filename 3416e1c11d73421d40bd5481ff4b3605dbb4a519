@@ -16,6 +16,24 @@
       "revId": "3416e1c11d73421d40bd5481ff4b3605dbb4a519",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b86836c6_68158b5e",
+        "filename": "src/regexp/interpreter-irregexp.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-06T04:54:49Z",
+      "side": 1,
+      "message": "It does help (slightly but noticeably) and I love the idea, but I\u0027m not sure the optimization holds in the simulator case.\n\n bool StackLimitCheck::JsHasOverflowed(uintptr_t gap) const {\n   StackGuard* stack_guard \u003d isolate_-\u003estack_guard();\n #ifdef USE_SIMULATOR\n   // The simulator uses a separate JS stack.\n   Address jssp_address \u003d Simulator::current(isolate_)-\u003eget_sp();\n   uintptr_t jssp \u003d static_cast\u003cuintptr_t\u003e(jssp_address);\n   if (jssp - gap \u003c stack_guard-\u003ereal_jslimit()) return true;\n #endif  // USE_SIMULATOR\n   return GetCurrentStackPosition() - gap \u003c stack_guard-\u003ereal_climit();\n }\n\nHere a JS overflow does not necessarily imply `InterruptRequested() ~~\u003e true`, does it?",
+      "parentUuid": "11058d65_62d45940",
+      "revId": "3416e1c11d73421d40bd5481ff4b3605dbb4a519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
