@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7563705c_d3a019f5",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-06T01:23:38Z",
+      "side": 1,
+      "message": "Please add a comment mentioning that this always returns a BigInt between 2^(n-4) and 2^n-1 (if n \u003e 0).",
+      "revId": "bd660a434cd2603b67e3e375698c380b7d08dff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a6d8449c_fd052086",
         "filename": "test/js-perf-test/BigInt/bigint-util.js",
         "patchSetId": 1
