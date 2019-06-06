@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "6a4cf144_80c90839",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4333,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "4 -\u003e kInt32Size",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00e077e8_e849c0c5",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4355,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "entry_offset is unused here.",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "665407ae_451364dd",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4383,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "What\u0027s the 1 * kInstrSize for?",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c0b02d2_a6f5595b",
+        "filename": "src/codegen/arm64/assembler-arm64.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2341,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "Could you add a comment explaining {margin}?",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4fd736ac_345f1d97",
         "filename": "src/codegen/arm64/assembler-arm64.h",
         "patchSetId": 7
@@ -19,6 +87,40 @@
     },
     {
       "key": {
+        "uuid": "94531aa4_af626290",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "Should this also be checked in ShouldEmitNow directly? There are ways to get to ConstantPool::Check that don\u0027t check next_check_ (e.g. EmitConstPoolWithJumpIfNeeded). Is this impossible for some reason?",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f8dd50b_eaa4e5d9",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "BlockScope only blocks the constant pool here - I see that you block the veneer pools around the call to EmitAndClear instead. I think I\u0027d prefer if you used BlockPoolsScope or blocked the veneer pool in this function. (Otherwise, the comment needs updating).",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bcfbc14b_0bbafe4d",
         "filename": "src/codegen/constant-pool.cc",
         "patchSetId": 7
@@ -30,6 +132,23 @@
       "writtenOn": "2019-06-06T06:47:42Z",
       "side": 1,
       "message": "kInt64Size",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14aa4d35_42a19897",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "Can this comment also make explicit that the pool entries are sorted not by the order of reference? (This is at least part of the reason why we need to compute the maximum distance from the first instruction accessing a pool entry to any of the pool entries).",
       "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -81,6 +200,92 @@
       "writtenOn": "2019-06-06T06:47:42Z",
       "side": 1,
       "message": "Ditto here and the next line (I guess this is instruction size, do we have a constant for that?)",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79c76786_ab904aba",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "I think this is the size of the last 32-bit entry, so kInt32Size. pc_offset + ComputeSize(..) is the end of the pool.",
+      "parentUuid": "40979f24_c0f2fdb2",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "912409b5_f0e8742f",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "I find this a bit confusing - the last 4 is basically kInt64Size - kInt32Size, which isn\u0027t that obvious. I\u0027d still prefer this as:\nsize_t pool_end \u003d pc_offset + ComputeSize(...);\nsize_t last_entry_32 \u003d pool_end - kInt32Size;\nsize_t last_entry_64 \u003d pool_end - Entry32Count() * kInt32Size - kInt64Size;",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b12ab652_9597dfb3",
+        "filename": "src/codegen/constant-pool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "Nit: maybe some brackets would help reading this statement?",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b74ca746_b22ddb49",
+        "filename": "src/codegen/constant-pool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "Is this still necessary?",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dd2e45a_4b49bf6f",
+        "filename": "src/codegen/constant-pool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-06-06T14:35:12Z",
+      "side": 1,
+      "message": "A comment explaining what the int is here would be useful.\n\nCould you also point out that the entries are not sorted by order of insertion, since this affects the order the pool entries are emitted and might be easy to miss at first look?",
       "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
