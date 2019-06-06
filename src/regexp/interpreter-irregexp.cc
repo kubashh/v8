@@ -7,6 +7,7 @@
 #include "src/regexp/interpreter-irregexp.h"
 
 #include "src/ast/ast.h"
+#include "src/base/small-vector.h"
 #include "src/objects/objects-inl.h"
 #include "src/regexp/bytecodes-irregexp.h"
 #include "src/regexp/jsregexp.h"
@@ -138,11 +139,14 @@ class BacktrackStack {
   int sp() const { return static_cast<int>(data_.size()); }
   void set_sp(int new_sp) {
     DCHECK_LE(new_sp, sp());
-    data_.resize(new_sp);
+    data_.resize_no_init(new_sp);
   }
 
  private:
-  std::vector<int> data_;
+  // Semi-arbitrary, based on Octane/RegExp.
+  static constexpr int kStaticCapacity = 256;
+
+  base::SmallVector<int, kStaticCapacity> data_;
 
   DISALLOW_COPY_AND_ASSIGN(BacktrackStack);
 };
