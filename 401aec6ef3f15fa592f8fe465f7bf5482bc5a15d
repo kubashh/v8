@@ -22,6 +22,30 @@
       "revId": "401aec6ef3f15fa592f8fe465f7bf5482bc5a15d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "588eff02_cf48b373",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-06T09:29:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae05ebba_74a6a1e5",
+      "range": {
+        "startLine": 367,
+        "startChar": 20,
+        "endLine": 367,
+        "endChar": 33
+      },
+      "revId": "401aec6ef3f15fa592f8fe465f7bf5482bc5a15d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
