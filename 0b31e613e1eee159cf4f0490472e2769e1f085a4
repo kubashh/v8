@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4fd736ac_345f1d97",
+        "filename": "src/codegen/arm64/assembler-arm64.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2604,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-06T06:47:42Z",
+      "side": 1,
+      "message": "Suggestion: kInt32Size, kInt64Size",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcfbc14b_0bbafe4d",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-06T06:47:42Z",
+      "side": 1,
+      "message": "kInt64Size",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f4938bf_b0bba6f7",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-06T06:47:42Z",
+      "side": 1,
+      "message": "kInt32Size",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba5f4e5a_c6bbaefc",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-06T06:47:42Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40979f24_c0f2fdb2",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-06T06:47:42Z",
+      "side": 1,
+      "message": "Ditto here and the next line (I guess this is instruction size, do we have a constant for that?)",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7731a0f_02296543",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 6507,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-06T06:47:42Z",
+      "side": 1,
+      "message": "Ditto here and L6499, L6581 (what\u0027s 2?)",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
