@@ -127,7 +127,7 @@ Node* PropertyAccessBuilder::ResolveHolder(
     PropertyAccessInfo const& access_info, Node* receiver) {
   Handle<JSObject> holder;
   if (access_info.holder().ToHandle(&holder)) {
-    return jsgraph()->Constant(holder);
+    return jsgraph()->Constant(ObjectRef(broker(), holder));
   }
   return receiver;
 }
@@ -151,7 +151,14 @@ MachineRepresentation PropertyAccessBuilder::ConvertRepresentation(
 Node* PropertyAccessBuilder::TryBuildLoadConstantDataField(
     NameRef const& name, PropertyAccessInfo const& access_info,
     Node* receiver) {
+  // XXX
+  AllowCodeDependencyChange dependency_change_;
+  AllowHandleAllocation handle_allocation_;
+  AllowHandleDereference handle_dereference_;
+  AllowHeapAllocation heap_allocation_;
+
   if (!access_info.IsDataConstant()) return nullptr;
+
   // First, determine if we have a constant holder to load from.
   Handle<JSObject> holder;
   // If {access_info} has a holder, just use it.
