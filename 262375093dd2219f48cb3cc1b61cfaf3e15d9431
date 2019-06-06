@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0bee32d_29a56bbb",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1992,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-06-06T08:38:11Z",
+      "side": 1,
+      "message": "Ack.",
+      "range": {
+        "startLine": 1992,
+        "startChar": 26,
+        "endLine": 1992,
+        "endChar": 32
+      },
+      "revId": "262375093dd2219f48cb3cc1b61cfaf3e15d9431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9dfedf57_36bf41cb",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-06-06T08:38:11Z",
+      "side": 1,
+      "message": "Nit: This and the following look like the GetLoadMode/GetStoreMode helpers you defined. Can we extract them to a common place?",
+      "range": {
+        "startLine": 1005,
+        "startChar": 24,
+        "endLine": 1005,
+        "endChar": 33
+      },
+      "revId": "262375093dd2219f48cb3cc1b61cfaf3e15d9431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

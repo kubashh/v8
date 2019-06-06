@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebcd9798_00e11cb6",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-06-06T08:38:11Z",
+      "side": 0,
+      "message": "Just for my own information - how do we make sure the bounds check mentioned in the comment above is not needed, i.e. it\u0027s ok to remove this `if`?",
+      "range": {
+        "startLine": 1721,
+        "startChar": 4,
+        "endLine": 1721,
+        "endChar": 6
+      },
+      "revId": "ea04708ee92bbd2f4a2e908e7a18f79e5f2a7696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
