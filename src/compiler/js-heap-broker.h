@@ -754,12 +754,16 @@ class GlobalAccessFeedback : public ProcessedFeedback {
 
 class ElementAccessFeedback : public ProcessedFeedback {
  public:
-  explicit ElementAccessFeedback(Zone* zone);
+  ElementAccessFeedback(Zone* zone, KeyedAccessLoadMode load_mode,
+                        KeyedAccessStoreMode store_mode);
 
   // No transition sources appear in {receiver_maps}.
   // All transition targets appear in {receiver_maps}.
   ZoneVector<Handle<Map>> receiver_maps;
   ZoneVector<std::pair<Handle<Map>, Handle<Map>>> transitions;
+
+  KeyedAccessLoadMode const load_mode;
+  KeyedAccessStoreMode const store_mode;
 
   class MapIterator {
    public:
@@ -874,7 +878,8 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
 
   // TODO(neis): Move these into serializer when we're always in the background.
   ElementAccessFeedback const* ProcessFeedbackMapsForElementAccess(
-      MapHandles const& maps);
+      MapHandles const& maps, KeyedAccessLoadMode load_mode,
+      KeyedAccessStoreMode store_mode);
   GlobalAccessFeedback const* ProcessFeedbackForGlobalAccess(
       FeedbackSource const& source);
 
