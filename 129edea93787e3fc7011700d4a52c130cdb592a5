@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "555806a7_3681ef1c",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-06-06T10:26:14Z",
+      "side": 1,
+      "message": "I realized that we also need to set min/max_global_memory_size in Heap::ConfigureHeap.\nI\u0027ll do that in a separate CL.",
+      "range": {
+        "startLine": 1829,
+        "startChar": 9,
+        "endLine": 1829,
+        "endChar": 32
+      },
+      "revId": "129edea93787e3fc7011700d4a52c130cdb592a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
