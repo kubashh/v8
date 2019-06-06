@@ -46,6 +46,30 @@
       "revId": "6c672abae8c8947f7f972e0fe9e23f1b6a74e2dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "976df73b_99d31a10",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4413,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-06-06T15:25:55Z",
+      "side": 1,
+      "message": "Ufz, thanks.",
+      "parentUuid": "17a4a401_4182554b",
+      "range": {
+        "startLine": 4413,
+        "startChar": 6,
+        "endLine": 4413,
+        "endChar": 37
+      },
+      "revId": "6c672abae8c8947f7f972e0fe9e23f1b6a74e2dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
