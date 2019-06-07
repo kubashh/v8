@@ -2121,6 +2121,7 @@ VisitResult ImplementationVisitor::GenerateCall(
     if (is_tailcall) {
       ReportError("can't tail call a macro");
     }
+    macro->SetUsed();
     if (return_type->IsConstexpr()) {
       DCHECK_EQ(0, arguments.labels.size());
       std::stringstream result;
@@ -3544,6 +3545,33 @@ void ImplementationVisitor::GenerateCSATypes(
     }
   }
   WriteFile(output_directory + "/" + file_name + ".h", h_contents.str());
+}
+
+void ReportAllUnusedMacros() {
+  for (const auto& declarable : GlobalContext::AllDeclarables()) {
+    if (!declarable->IsMacro() || declarable->IsExternMacro()) continue;
+
+    Macro* macro = Macro::cast(declarable.get());
+    if (macro->IsUsed()) continue;
+
+    if (macro->IsTorqueMacro() && TorqueMacro::cast(macro)->IsExportedToCSA()) {
+      continue;
+    }
+
+    std::vector<std::string> ignored_prefixes = {"Convert<", "Cast<",
+                                                 "FromConstexpr<"};
+    const std::string name = macro->ReadableName();
+    const bool ignore =
+        std::any_of(ignored_prefixes.begin(), ignored_prefixes.end(),
+                    [&name](const std::string& prefix) {
+                      return name.substr(0, prefix.length()) == prefix;
+                    });
+
+    if (!ignore) {
+      Lint("Macro '", macro->ReadableName(), "' is never used.")
+          .Position(macro->IdentifierPosition());
+    }
+  }
 }
 
 }  // namespace torque
