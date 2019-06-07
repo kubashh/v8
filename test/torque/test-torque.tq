@@ -11,6 +11,7 @@ namespace test {
     }
   }
 
+  @export
   macro ElementsKindTestHelper2(kind: constexpr ElementsKind): bool {
     return ((kind == UINT8_ELEMENTS) || (kind == UINT16_ELEMENTS));
   }
@@ -343,6 +344,7 @@ namespace test {
   Foo(TestStructA) {
     goto Foo(TestStruct2());
   }
+  @export
   macro CallTestStructInLabel(implicit context: Context)() {
     try {
       TestStructInLabel() otherwise Foo;
@@ -786,7 +788,7 @@ namespace test {
   @export
   macro TestNew(implicit context: Context)() {
     const f: JSArray = NewJSArray();
-    assert(f.IsEmpty());
+    check(f.IsEmpty());
     f.length = 0;
   }
 
@@ -811,15 +813,15 @@ namespace test {
   macro TestStructConstructor(implicit context: Context)() {
     // Test default constructor
     let a: TestOuter = TestOuter{a: 5, b: TestInner{x: 6, y: 7}, c: 8};
-    assert(a.a == 5);
-    assert(a.b.x == 6);
-    assert(a.b.y == 7);
-    assert(a.c == 8);
+    check(a.a == 5);
+    check(a.b.x == 6);
+    check(a.b.y == 7);
+    check(a.c == 8);
     a.b.x = 1;
-    assert(a.b.x == 1);
+    check(a.b.x == 1);
     a.b.SetX(2);
-    assert(a.b.x == 2);
-    assert(a.b.GetX() == 2);
+    check(a.b.x == 2);
+    check(a.b.GetX() == 2);
   }
 
   class InternalClass {
@@ -861,6 +863,9 @@ namespace test {
     let y = StructWithConst{a: Null, b: 1};
     y.a = Undefined;
     const _copy = x;
+
+    check(x.TestMethod1() == 1);
+    check(x.TestMethod2() == Null);
   }
 
   struct TestIterator {
@@ -924,4 +929,18 @@ namespace test {
     StaticAssert(WordEqual(v1, v2));
   }
 
+  struct HoleIterator {
+    Next(): Object labels _NoMore() {
+      return Hole;
+    }
+  }
+
+  @export
+  macro NewJSArray(implicit context: Context)(_map: Map, length: Smi): JSArray {
+    const map = GetFastPackedSmiElementsJSArrayMap();
+    const i = HoleIterator{};
+    const elements = new FixedArray{map, length, objects: ...i};
+    return new
+    JSArray{map, properties_or_hash: kEmptyFixedArray, elements, length};
+  }
 }
