@@ -537,11 +537,53 @@ void StackGuard::ClearInterrupt(InterruptFlag flag) {
   if (!has_pending_interrupts(access)) reset_limits(access);
 }
 
+namespace {
+
+bool TestAndClear(int* bitfield, int mask) {
+  bool result = (*bitfield & mask);
+  *bitfield &= ~mask;
+  return result;
+}
+
+class ShouldBeZeroOnReturnScope final {
+ public:
+  explicit ShouldBeZeroOnReturnScope(int* v) : v_(v) {}
+  ~ShouldBeZeroOnReturnScope() {
+    USE(v_);
+    DCHECK_EQ(*v_, 0);
+  }
+
+ private:
+  int* v_;
+};
+
+}  // namespace
+
 bool StackGuard::CheckAndClearInterrupt(InterruptFlag flag) {
   ExecutionAccess access(isolate_);
-  bool result = (thread_local_.interrupt_flags_ & flag);
-  thread_local_.interrupt_flags_ &= ~flag;
+  bool result = TestAndClear(&thread_local_.interrupt_flags_, flag);
   if (!has_pending_interrupts(access)) reset_limits(access);
+  return result;
+}
+
+int StackGuard::FetchAndClearInterrupts() {
+  ExecutionAccess access(isolate_);
+
+  int result = 0;
+  if (thread_local_.interrupt_flags_ & TERMINATE_EXECUTION) {
+    // The TERMINATE_EXECUTION interrupt is special, since it terminates
+    // execution but should leave V8 in a resumable state. If it exists, we only
+    // fetch and clear that bit. On resume, V8 can continue processing other
+    // interrupts.
+    result = TERMINATE_EXECUTION;
+    thread_local_.interrupt_flags_ &= ~TERMINATE_EXECUTION;
+    if (!has_pending_interrupts(access)) reset_limits(access);
+  } else {
+    result = thread_local_.interrupt_flags_;
+    thread_local_.interrupt_flags_ = 0;
+    reset_limits(access);
+  }
+
   return result;
 }
 
@@ -626,48 +668,56 @@ Object StackGuard::HandleInterrupts() {
     isolate_->heap()->MonotonicallyIncreasingTimeInMs();
   }
 
-  if (CheckAndClearInterrupt(GC_REQUEST)) {
+  // Fetch and clear interrupt bits in one go. See comments inside the method
+  // for special handling of TERMINATE_EXECUTION.
+  int interrupt_flags = FetchAndClearInterrupts();
+
+  // All seen interrupts should be fully processed when returning from this
+  // method.
+  ShouldBeZeroOnReturnScope should_be_zero_on_return(&interrupt_flags);
+
+  if (TestAndClear(&interrupt_flags, TERMINATE_EXECUTION)) {
+    TRACE_EVENT0("v8.execute", "V8.TerminateExecution");
+    return isolate_->TerminateExecution();
+  }
+
+  if (TestAndClear(&interrupt_flags, GC_REQUEST)) {
     TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.gc"), "V8.GCHandleGCRequest");
     isolate_->heap()->HandleGCRequest();
   }
 
-  if (CheckAndClearInterrupt(GROW_SHARED_MEMORY)) {
+  if (TestAndClear(&interrupt_flags, GROW_SHARED_MEMORY)) {
     TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm"),
                  "V8.WasmGrowSharedMemory");
     isolate_->wasm_engine()->memory_tracker()->UpdateSharedMemoryInstances(
         isolate_);
   }
 
-  if (CheckAndClearInterrupt(TERMINATE_EXECUTION)) {
-    TRACE_EVENT0("v8.execute", "V8.TerminateExecution");
-    return isolate_->TerminateExecution();
-  }
-
-  if (CheckAndClearInterrupt(DEOPT_MARKED_ALLOCATION_SITES)) {
+  if (TestAndClear(&interrupt_flags, DEOPT_MARKED_ALLOCATION_SITES)) {
     TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
                  "V8.GCDeoptMarkedAllocationSites");
     isolate_->heap()->DeoptMarkedAllocationSites();
   }
 
-  if (CheckAndClearInterrupt(INSTALL_CODE)) {
+  if (TestAndClear(&interrupt_flags, INSTALL_CODE)) {
     TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                  "V8.InstallOptimizedFunctions");
     DCHECK(isolate_->concurrent_recompilation_enabled());
     isolate_->optimizing_compile_dispatcher()->InstallOptimizedFunctions();
   }
 
-  if (CheckAndClearInterrupt(API_INTERRUPT)) {
+  if (TestAndClear(&interrupt_flags, API_INTERRUPT)) {
     TRACE_EVENT0("v8.execute", "V8.InvokeApiInterruptCallbacks");
     // Callbacks must be invoked outside of ExecutionAccess lock.
     isolate_->InvokeApiInterruptCallbacks();
   }
 
-  if (CheckAndClearInterrupt(LOG_WASM_CODE)) {
+  if (TestAndClear(&interrupt_flags, LOG_WASM_CODE)) {
     TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm"), "LogCode");
     isolate_->wasm_engine()->LogOutstandingCodesForIsolate(isolate_);
   }
 
-  if (CheckAndClearInterrupt(WASM_CODE_GC)) {
+  if (TestAndClear(&interrupt_flags, WASM_CODE_GC)) {
     TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm"), "WasmCodeGC");
     isolate_->wasm_engine()->ReportLiveCodeFromStackForGC(isolate_);
   }
