@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2c332ea_5d3f3bb5",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-06-11T09:15:59Z",
+      "side": 1,
+      "message": "why?",
+      "range": {
+        "startLine": 409,
+        "startChar": 31,
+        "endLine": 409,
+        "endChar": 33
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "610f0dd9_38b9125b",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-06-11T09:15:59Z",
+      "side": 1,
+      "message": "So this is unused? It\u0027s also highly suspicious, since it doesn\u0027t used the map parameter. I\u0027d vote to remove it instead.",
+      "range": {
+        "startLine": 414,
+        "startChar": 0,
+        "endLine": 421,
+        "endChar": 1
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8da0333_564b9375",
+        "filename": "src/builtins/internal-coverage.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-06-11T09:15:59Z",
+      "side": 1,
+      "message": "Please add a comment that this @export is just a hack.",
+      "range": {
+        "startLine": 31,
+        "startChar": 2,
+        "endLine": 31,
+        "endChar": 9
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b4415b1_fbe517cf",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3570,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-06-11T09:15:59Z",
+      "side": 1,
+      "message": "There is StringStartsWith in utils.h.",
+      "range": {
+        "startLine": 3570,
+        "startChar": 29,
+        "endLine": 3570,
+        "endChar": 71
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b80e890_f35922f4",
+        "filename": "test/torque/test-torque.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-06-11T09:15:59Z",
+      "side": 1,
+      "message": "What is the point of this test if it\u0027s not used? I think it should be removed.",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 9
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08d6d27a_225fb9f4",
+        "filename": "test/torque/test-torque.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-06-11T09:15:59Z",
+      "side": 1,
+      "message": "Please add a comment that explains the @export.",
+      "range": {
+        "startLine": 347,
+        "startChar": 2,
+        "endLine": 347,
+        "endChar": 9
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
