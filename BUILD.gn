@@ -3287,15 +3287,15 @@ v8_source_set("v8_crash_keys") {
       "//components/crash/core/common:crash_key",
     ]
     sources = [
-          "src/diagnostics/crash-key.cc",
+      "src/diagnostics/crash-key.cc",
     ]
   } else {
     sources = [
-          "src/diagnostics/crash-key-noop.cc",
+      "src/diagnostics/crash-key-noop.cc",
     ]
   }
 
-configs = [ ":internal_config" ]
+  configs = [ ":internal_config" ]
 }
 
 group("v8_base") {
@@ -3727,7 +3727,19 @@ if (v8_monolithic) {
   }
 }
 
-v8_static_library("wee8") {
+v8_component("wee8") {
+  sources = [
+    "src/wasm/c-api.cc",
+    "third_party/wasm-c-api/wasm.h",
+    "third_party/wasm-c-api/wasm.hh",
+  ]
+
+  configs = [ ":internal_config" ]
+
+  if (is_component_build) {
+    defines = [ "BUILDING_V8_PLATFORM_SHARED" ]
+  }
+
   deps = [
     ":v8_base",
     ":v8_libbase",
@@ -3735,18 +3747,6 @@ v8_static_library("wee8") {
     ":v8_libsampler",
     ":v8_maybe_snapshot",
     "//build/win:default_exe_manifest",
-  ]
-
-  # TODO: v8dll-main.cc equivalent for shared library builds
-
-  configs = [ ":internal_config" ]
-
-  sources = [
-    ### gcmole(all) ###
-    "src/wasm/c-api.cc",
-    "src/wasm/c-api.h",
-    "third_party/wasm-api/wasm.h",
-    "third_party/wasm-api/wasm.hh",
   ]
 }
 
