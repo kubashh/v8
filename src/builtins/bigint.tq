@@ -58,10 +58,6 @@ namespace bigint {
     return sign == kPositiveSign ? kNegativeSign : kPositiveSign;
   }
 
-  macro WriteBigIntSign(bigint: MutableBigInt, sign: uint32): void {
-    WriteBigIntSignAndLength(bigint, sign, ReadBigIntLength(bigint));
-  }
-
   macro AllocateEmptyBigInt(implicit context: Context)(
       sign: uint32, length: intptr): MutableBigInt {
     if (length > kBigIntMaxLength) {
