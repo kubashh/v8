@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "21bfcc52_77196164",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-06-11T11:27:02Z",
+      "side": 1,
+      "message": "Left-over of a sloppy rebase, removed.",
+      "parentUuid": "b2c332ea_5d3f3bb5",
+      "range": {
+        "startLine": 409,
+        "startChar": 31,
+        "endLine": 409,
+        "endChar": 33
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "610f0dd9_38b9125b",
         "filename": "src/builtins/base.tq",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a44d800_ca15272a",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-06-11T11:27:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "610f0dd9_38b9125b",
+      "range": {
+        "startLine": 414,
+        "startChar": 0,
+        "endLine": 421,
+        "endChar": 1
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a2cd9cfe_2c044919",
+        "filename": "src/builtins/internal-coverage.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-06-11T11:27:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8da0333_564b9375",
+      "range": {
+        "startLine": 31,
+        "startChar": 2,
+        "endLine": 31,
+        "endChar": 9
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b4415b1_fbe517cf",
         "filename": "src/torque/implementation-visitor.cc",
         "patchSetId": 6
@@ -91,6 +163,30 @@
       "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5c99d34_2453e82c",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3570,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-06-11T11:27:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b4415b1_fbe517cf",
+      "range": {
+        "startLine": 3570,
+        "startChar": 29,
+        "endLine": 3570,
+        "endChar": 71
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "865aa8a8_32702df7",
+        "filename": "test/torque/test-torque.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-06-11T11:27:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b80e890_f35922f4",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 9
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08d6d27a_225fb9f4",
         "filename": "test/torque/test-torque.tq",
         "patchSetId": 6
@@ -137,6 +257,30 @@
       "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03cb7229_0b5565c5",
+        "filename": "test/torque/test-torque.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-06-11T11:27:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08d6d27a_225fb9f4",
+      "range": {
+        "startLine": 347,
+        "startChar": 2,
+        "endLine": 347,
+        "endChar": 9
+      },
+      "revId": "4709aa9637dcbc30310c5447749320b2f504164f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
