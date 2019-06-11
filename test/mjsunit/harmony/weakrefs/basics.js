@@ -85,7 +85,25 @@
 
 (function TestUnregisterWithNonExistentKey() {
   let fg = new FinalizationGroup(() => {});
-  fg.unregister({"k": "whatever"});
+  let success = fg.unregister({"k": "whatever"});
+  assertFalse(success);
+})();
+
+(function TestUnregisterWithNonFinalizationGroup() {
+  assertThrows(() => FinalizationGroup.prototype.unregister.call({}, {}),
+               TypeError);
+})();
+
+(function TestUnregisterWithNonObjectUnregisterToken() {
+  let fg = new FinalizationGroup(() => {});
+  assertThrows(() => fg.unregister(1));
+  assertThrows(() => fg.unregister(1n));
+  assertThrows(() => fg.unregister('one'));
+  assertThrows(() => fg.unregister(Symbol()));
+  assertThrows(() => fg.unregister(true));
+  assertThrows(() => fg.unregister(false));
+  assertThrows(() => fg.unregister(undefined));
+  assertThrows(() => fg.unregister(null));
 })();
 
 (function TestWeakRefConstructor() {
