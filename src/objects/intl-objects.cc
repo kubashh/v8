@@ -547,8 +547,7 @@ Maybe<std::string> Intl::ToLanguageTag(const icu::Locale& locale) {
   return Just(res);
 }
 
-namespace {
-std::string DefaultLocale(Isolate* isolate) {
+std::string Intl::DefaultLocale(Isolate* isolate) {
   if (isolate->default_locale().empty()) {
     icu::Locale default_locale;
     // Translate ICU's fallback locale to a well-known locale.
@@ -566,7 +565,6 @@ std::string DefaultLocale(Isolate* isolate) {
   }
   return isolate->default_locale();
 }
-}  // namespace
 
 // See ecma402/#legacy-constructor.
 MaybeHandle<Object> Intl::LegacyUnwrapReceiver(Isolate* isolate,
@@ -1626,7 +1624,7 @@ std::string LookupMatcher(Isolate* isolate,
   // 3. Let defLocale be DefaultLocale();
   // 4. Set result.[[locale]] to defLocale.
   // 5. Return result.
-  return DefaultLocale(isolate);
+  return Intl::DefaultLocale(isolate);
 }
 
 }  // namespace

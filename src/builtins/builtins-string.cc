@@ -142,10 +142,18 @@ BUILTIN(StringPrototypeLocaleCompare) {
   Handle<String> str2;
   ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
       isolate, str2, Object::ToString(isolate, args.atOrUndefined(isolate, 1)));
-  RETURN_RESULT_OR_FAILURE(
-      isolate, Intl::StringLocaleCompare(isolate, str1, str2,
-                                         args.atOrUndefined(isolate, 2),
-                                         args.atOrUndefined(isolate, 3)));
+  static bool is_default_locale = Intl::DefaultLocale(isolate) == "en-US";
+  Handle<Object> locales = args.atOrUndefined(isolate, 2);
+  Handle<Object> options = args.atOrUndefined(isolate, 3);
+  if (locales->IsUndefined(isolate) && options->IsUndefined(isolate) &&
+      is_default_locale) {
+    LocaleComparisonResult result =
+        String::TryFastLocaleCompare(isolate, str1, str2);
+    if (result != LocaleComparisonResult::kTryFastFailed)
+      return Smi::FromInt(result);
+  }
+  RETURN_RESULT_OR_FAILURE(isolate, Intl::StringLocaleCompare(
+                                        isolate, str1, str2, locales, options));
 #else
   DCHECK_EQ(2, args.length());
 
