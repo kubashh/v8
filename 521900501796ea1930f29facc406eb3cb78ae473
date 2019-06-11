@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "446fd332_a77d0324",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-06-11T11:12:59Z",
+      "side": 1,
+      "message": "Should this be uint64_t since JSTypedArray::kMaxLength will be \u003ekMax-size_t on 32bit?\n\nWe should probably make it clear what kind of index we\u0027re talking about: ArrayIndex or IntegerIndex",
+      "revId": "521900501796ea1930f29facc406eb3cb78ae473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcde09cf_e1623f73",
+        "filename": "src/objects/js-array.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-06-11T11:12:59Z",
+      "side": 1,
+      "message": "kMaxArrayLength?",
+      "revId": "521900501796ea1930f29facc406eb3cb78ae473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
