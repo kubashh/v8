@@ -124,18 +124,6 @@ class IC {
   Handle<Map> receiver_map() { return receiver_map_; }
   inline void update_receiver_map(Handle<Object> receiver);
 
-  void TargetMaps(MapHandles* list) {
-    FindTargetMaps();
-    for (Handle<Map> map : target_maps_) {
-      list->push_back(map);
-    }
-  }
-
-  Map FirstTargetMap() {
-    FindTargetMaps();
-    return !target_maps_.empty() ? *target_maps_[0] : Map();
-  }
-
   State saved_state() const {
     return state() == RECOMPUTE_HANDLER ? old_state_ : state();
   }
@@ -143,13 +131,11 @@ class IC {
   const FeedbackNexus* nexus() const { return &nexus_; }
   FeedbackNexus* nexus() { return &nexus_; }
 
- private:
-  void FindTargetMaps() {
-    if (target_maps_set_) return;
-    target_maps_set_ = true;
-    nexus()->ExtractMaps(&target_maps_);
-  }
+ protected:
+  MapHandles const& maps() const { return maps_; }
+  MaybeObjectHandle FindHandlerForMap(Handle<Map> map) const;
 
+ private:
   Isolate* isolate_;
 
   bool vector_set_;
@@ -158,8 +144,8 @@ class IC {
   FeedbackSlotKind kind_;
   Handle<Map> receiver_map_;
 
-  MapHandles target_maps_;
-  bool target_maps_set_;
+  MapHandles maps_;
+  MaybeObjectHandles handlers_;
 
   const char* slow_stub_reason_;
 

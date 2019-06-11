@@ -165,12 +165,12 @@ IC::IC(Isolate* isolate, Handle<FeedbackVector> vector, FeedbackSlot slot,
     : isolate_(isolate),
       vector_set_(false),
       kind_(kind),
-      target_maps_set_(false),
       slow_stub_reason_(nullptr),
       nexus_(vector, slot) {
   DCHECK_IMPLIES(!vector.is_null(), kind_ == nexus_.kind());
   state_ = (vector.is_null()) ? NO_FEEDBACK : nexus_.ic_state();
   old_state_ = state_;
+  nexus()->ExtractMapsAndHandlers(&maps_, &handlers_);
 }
 
 static void LookupForRead(LookupIterator* it, bool is_has_property) {
@@ -215,18 +215,16 @@ bool IC::ShouldRecomputeHandler(Handle<String> name) {
   // monomorphic.
   if (IsGlobalIC()) return true;
 
-  MaybeObjectHandle maybe_handler = nexus()->FindHandlerForMap(receiver_map());
-
   // The current map wasn't handled yet. There's no reason to stay monomorphic,
   // *unless* we're moving from a deprecated map to its replacement, or
   // to a more general elements kind.
   // TODO(verwaest): Check if the current map is actually what the old map
   // would transition to.
-  if (maybe_handler.is_null()) {
+  MaybeObjectHandle handler = FindHandlerForMap(receiver_map());
+  if (handler.is_null()) {
     if (!receiver_map()->IsJSObjectMap()) return false;
-    Map first_map = FirstTargetMap();
-    if (first_map.is_null()) return false;
-    Handle<Map> old_map(first_map, isolate());
+    if (maps_.empty()) return false;
+    Handle<Map> old_map = maps_[0];
     if (old_map->is_deprecated()) return true;
     return IsMoreGeneralElementsKindTransition(old_map->elements_kind(),
                                                receiver_map()->elements_kind());
@@ -316,6 +314,16 @@ void IC::OnFeedbackChanged(Isolate* isolate, FeedbackVector vector,
 #endif
 
   isolate->runtime_profiler()->NotifyICChanged();
+}
+
+MaybeObjectHandle IC::FindHandlerForMap(Handle<Map> map) const {
+  DCHECK_EQ(handlers_.size(), maps_.size());
+  for (size_t i = 0; i < maps_.size(); ++i) {
+    if (maps_[i].is_identical_to(map)) {
+      return handlers_[i];
+    }
+  }
+  return MaybeObjectHandle();
 }
 
 static bool MigrateDeprecated(Handle<Object> object) {
@@ -510,16 +518,13 @@ bool IC::UpdatePolymorphicIC(Handle<Name> name,
     if (nexus()->GetName() != *name) return false;
   }
   Handle<Map> map = receiver_map();
-  MapHandles maps;
-  MaybeObjectHandles handlers;
 
-  nexus()->ExtractMapsAndHandlers(&maps, &handlers);
-  int number_of_maps = static_cast<int>(maps.size());
+  int number_of_maps = static_cast<int>(maps_.size());
   int deprecated_maps = 0;
   int handler_to_overwrite = -1;
 
   for (int i = 0; i < number_of_maps; i++) {
-    Handle<Map> current_map = maps.at(i);
+    Handle<Map> current_map = maps_[i];
     if (current_map->is_deprecated()) {
       // Filter out deprecated maps to ensure their instances get migrated.
       ++deprecated_maps;
@@ -529,7 +534,7 @@ bool IC::UpdatePolymorphicIC(Handle<Name> name,
       // in the lattice and need to go MEGAMORPHIC instead. There's one
       // exception to this rule, which is when we're in RECOMPUTE_HANDLER
       // state, there we allow to migrate to a new handler.
-      if (handler.is_identical_to(handlers[i]) &&
+      if (handler.is_identical_to(handlers_[i]) &&
           state() != RECOMPUTE_HANDLER) {
         return false;
       }
@@ -557,16 +562,14 @@ bool IC::UpdatePolymorphicIC(Handle<Name> name,
   } else {
     if (is_keyed() && nexus()->GetName() != *name) return false;
     if (handler_to_overwrite >= 0) {
-      handlers[handler_to_overwrite] = handler;
-      if (!map.is_identical_to(maps.at(handler_to_overwrite))) {
-        maps[handler_to_overwrite] = map;
-      }
+      handlers_[handler_to_overwrite] = handler;
+      maps_[handler_to_overwrite] = map;
     } else {
-      maps.push_back(map);
-      handlers.push_back(handler);
+      maps_.push_back(map);
+      handlers_.push_back(handler);
     }
 
-    ConfigureVectorState(name, maps, &handlers);
+    ConfigureVectorState(name, maps_, &handlers_);
   }
 
   return true;
@@ -579,11 +582,8 @@ void IC::UpdateMonomorphicIC(const MaybeObjectHandle& handler,
 }
 
 void IC::CopyICToMegamorphicCache(Handle<Name> name) {
-  MapHandles maps;
-  MaybeObjectHandles handlers;
-  nexus()->ExtractMapsAndHandlers(&maps, &handlers);
-  for (size_t i = 0; i < maps.size(); ++i) {
-    UpdateMegamorphicCache(maps.at(i), name, handlers.at(i));
+  for (size_t i = 0; i < maps_.size(); ++i) {
+    UpdateMegamorphicCache(maps_.at(i), name, handlers_.at(i));
   }
 }
 
@@ -954,7 +954,7 @@ static Handle<Object> TryConvertKey(Handle<Object> key, Isolate* isolate) {
 }
 
 bool KeyedLoadIC::CanChangeToAllowOutOfBounds(Handle<Map> receiver_map) {
-  const MaybeObjectHandle& handler = nexus()->FindHandlerForMap(receiver_map);
+  const MaybeObjectHandle& handler = FindHandlerForMap(receiver_map);
   if (handler.is_null()) return false;
   return LoadHandler::GetKeyedAccessLoadMode(*handler) == STANDARD_LOAD;
 }
@@ -963,8 +963,7 @@ void KeyedLoadIC::UpdateLoadElement(Handle<HeapObject> receiver,
                                     KeyedAccessLoadMode load_mode) {
   Handle<Map> receiver_map(receiver->map(), isolate());
   DCHECK(receiver_map->instance_type() != JS_VALUE_TYPE);  // Checked by caller.
-  MapHandles target_receiver_maps;
-  TargetMaps(&target_receiver_maps);
+  MapHandles target_receiver_maps = maps();
 
   if (target_receiver_maps.empty()) {
     Handle<Object> handler = LoadElementHandler(receiver_map, load_mode);
@@ -1693,8 +1692,7 @@ MaybeObjectHandle StoreIC::ComputeHandler(LookupIterator* lookup) {
 void KeyedStoreIC::UpdateStoreElement(Handle<Map> receiver_map,
                                       KeyedAccessStoreMode store_mode,
                                       Handle<Map> new_receiver_map) {
-  MapHandles target_receiver_maps;
-  TargetMaps(&target_receiver_maps);
+  MapHandles target_receiver_maps = maps();
   if (target_receiver_maps.empty()) {
     Handle<Map> monomorphic_map = receiver_map;
     // If we transitioned to a map that is a more general map than incoming
