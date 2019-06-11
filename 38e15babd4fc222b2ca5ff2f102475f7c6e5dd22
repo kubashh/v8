@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "99cd1170_f4695041",
+        "filename": "src/torque/implementation-visitor.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-06-11T10:59:39Z",
+      "side": 1,
+      "message": "Removed the default implementations for CheckWritten and BindingTypeString, but left the rest as-is (for now).",
+      "parentUuid": "60e4a86c_8d068a37",
+      "range": {
+        "startLine": 228,
+        "startChar": 8,
+        "endLine": 228,
+        "endChar": 23
+      },
+      "revId": "38e15babd4fc222b2ca5ff2f102475f7c6e5dd22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "436f49cc_065c3403",
         "filename": "src/torque/implementation-visitor.h",
         "patchSetId": 6
@@ -39,6 +63,24 @@
       "revId": "38e15babd4fc222b2ca5ff2f102475f7c6e5dd22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bd72ca5_ff5e637a",
+        "filename": "src/torque/implementation-visitor.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-06-11T10:59:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "436f49cc_065c3403",
+      "revId": "38e15babd4fc222b2ca5ff2f102475f7c6e5dd22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
