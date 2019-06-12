@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3cf3d82c_d795ba9c",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-06-12T07:52:02Z",
+      "side": 1,
+      "message": "Isn\u0027t this slower now that we convert the string to index multiple times? Why don\u0027t we keep on doing this just one time? We were pretty careful to avoid duplicating work.",
+      "revId": "521900501796ea1930f29facc406eb3cb78ae473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "446fd332_a77d0324",
         "filename": "src/ic/ic.cc",
         "patchSetId": 7
@@ -31,6 +48,24 @@
       "side": 1,
       "message": "No, on 32-bit the JSTypedArray::kMaxLength will be less than 2GiB always.",
       "parentUuid": "446fd332_a77d0324",
+      "revId": "521900501796ea1930f29facc406eb3cb78ae473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7da2bda5_7c024a26",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-06-12T07:52:02Z",
+      "side": 1,
+      "message": "Ugh, so this function will \"fail to convert it to an index\" even though it is a completely valid index, just because the underlying backing store is flat, non-holey and won\u0027t be able to hold the index? That sounds pretty subtle and will likely lead to bugs where we accidentally add the index as a named property on some paths.\n\nAt least make this crystal clear in the name and a large comment.",
+      "parentUuid": "3e2ce9df_5af10a9c",
       "revId": "521900501796ea1930f29facc406eb3cb78ae473",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
