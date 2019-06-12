@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bfe6a3f_470669e9",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1350763
+      },
+      "writtenOn": "2019-06-12T10:36:31Z",
+      "side": 1,
+      "message": "I\u0027m wondering if this is the right way to do it... maybe a better way would be to call PrintFreeListsStats only once sweeping has \"naturally\" ended (rather than forcing it to end like I\u0027m doing now)",
+      "range": {
+        "startLine": 372,
+        "startChar": 4,
+        "endLine": 372,
+        "endChar": 63
+      },
+      "revId": "85d6d8636a354bc3cbdcd1565deb4f5d344e50d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
