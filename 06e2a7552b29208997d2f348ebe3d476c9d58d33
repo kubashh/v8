@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "094a4e56_eba550dd",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-06-12T16:29:00Z",
+      "side": 1,
+      "message": "Standard iterator also works:\n\nfor (Page* page : *old_space()) {\n}",
+      "range": {
+        "startLine": 523,
+        "startChar": 2,
+        "endLine": 523,
+        "endChar": 60
+      },
+      "revId": "06e2a7552b29208997d2f348ebe3d476c9d58d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a8b9709_4f7f34b2",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-06-12T16:29:00Z",
+      "side": 1,
+      "message": "This seems fragile if the number of categories changes.\n\nHow about building the output string using the std::ostringstream?",
+      "range": {
+        "startLine": 528,
+        "startChar": 4,
+        "endLine": 528,
+        "endChar": 41
+      },
+      "revId": "06e2a7552b29208997d2f348ebe3d476c9d58d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d399c166_ea2b5b5b",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-06-12T16:29:00Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 582,
+        "startChar": 2,
+        "endLine": 582,
+        "endChar": 39
+      },
+      "revId": "06e2a7552b29208997d2f348ebe3d476c9d58d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
