@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4b1d52f5_211f3ded",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-06-12T10:43:56Z",
+      "side": 1,
+      "message": "Can we just fold this in the above if statement? E.g., have \nif (FLAG_...) {...} on line 267.",
+      "range": {
+        "startLine": 269,
+        "startChar": 33,
+        "endLine": 269,
+        "endChar": 66
+      },
+      "revId": "85d6d8636a354bc3cbdcd1565deb4f5d344e50d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6bfe6a3f_470669e9",
         "filename": "src/heap/gc-tracer.cc",
         "patchSetId": 1
@@ -18,6 +41,53 @@
         "startChar": 4,
         "endLine": 372,
         "endChar": 63
+      },
+      "revId": "85d6d8636a354bc3cbdcd1565deb4f5d344e50d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63eaca23_138a2659",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-06-12T10:43:56Z",
+      "side": 1,
+      "message": "Yes, I think so as well.\n\nThe tracer usually just observes heap states and phases and does not transition the GC itself.",
+      "parentUuid": "6bfe6a3f_470669e9",
+      "range": {
+        "startLine": 372,
+        "startChar": 4,
+        "endLine": 372,
+        "endChar": 63
+      },
+      "revId": "85d6d8636a354bc3cbdcd1565deb4f5d344e50d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96c6eb9a_a01c3b42",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-06-12T10:43:56Z",
+      "side": 1,
+      "message": "Can we build the buffers using a static buffer and snprintf? That would also allow us to use it on Android where each base::OS::Print gets its own logcat line.",
+      "range": {
+        "startLine": 529,
+        "startChar": 16,
+        "endLine": 529,
+        "endChar": 21
       },
       "revId": "85d6d8636a354bc3cbdcd1565deb4f5d344e50d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
