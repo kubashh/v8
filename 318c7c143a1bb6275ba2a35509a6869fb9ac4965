@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09b37ae1_a2a87c1f",
+        "filename": "src/execution/execution.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-06-12T18:25:23Z",
+      "side": 1,
+      "message": "You could also just have a `#ifdef DEBUG` around this part.",
+      "range": {
+        "startLine": 552,
+        "startChar": 1,
+        "endLine": 555,
+        "endChar": 10
+      },
+      "revId": "318c7c143a1bb6275ba2a35509a6869fb9ac4965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
