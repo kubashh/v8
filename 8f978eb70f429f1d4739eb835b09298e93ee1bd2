@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3754646d_ccc29a87",
+        "filename": "src/api/api.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2909,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-12T05:50:03Z",
+      "side": 1,
+      "message": "q: Why move this adjustment outside internal stack trace logic? Don\u0027t multiple spots expect the +1 for wasm line nrs? \n\nNow we seem to adjust the column nr but not the line nr inside NewStackFrameInfo, which sounds a bit weird.",
+      "revId": "8f978eb70f429f1d4739eb835b09298e93ee1bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0965383_3a481d63",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2033,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-12T05:50:03Z",
+      "side": 1,
+      "message": "I wonder if we still need this in the current V8 state. Do we really have frames that are stringified to an empty line?",
+      "revId": "8f978eb70f429f1d4739eb835b09298e93ee1bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9d46530_5eb050cc",
+        "filename": "src/execution/messages.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-12T05:50:03Z",
+      "side": 1,
+      "message": "Is this still needed?",
+      "revId": "8f978eb70f429f1d4739eb835b09298e93ee1bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69b7e812_206136d8",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3651,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-12T05:50:03Z",
+      "side": 1,
+      "message": "Seems outdated now. See also the other comment, why remove the line nr adjustment? At first sight it seems reasonable to put it in the bottleneck here.",
+      "revId": "8f978eb70f429f1d4739eb835b09298e93ee1bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
