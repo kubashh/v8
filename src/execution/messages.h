@@ -177,7 +177,7 @@ class WasmStackFrame : public StackFrameBase {
 
   int GetPosition() const override;
   int GetLineNumber() override { return wasm_func_index_; }
-  int GetColumnNumber() override { return kNone; }
+  int GetColumnNumber() override;
 
   int GetPromiseIndex() const override { return kNone; }
 
