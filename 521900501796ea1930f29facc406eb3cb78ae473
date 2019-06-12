@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3e2ce9df_5af10a9c",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-06-12T07:16:19Z",
+      "side": 1,
+      "message": "No, on 32-bit the JSTypedArray::kMaxLength will be less than 2GiB always.",
+      "parentUuid": "446fd332_a77d0324",
+      "revId": "521900501796ea1930f29facc406eb3cb78ae473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dcde09cf_e1623f73",
         "filename": "src/objects/js-array.h",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "521900501796ea1930f29facc406eb3cb78ae473",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee0d6983_be19afb4",
+        "filename": "src/objects/js-array.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-06-12T07:16:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcde09cf_e1623f73",
+      "revId": "521900501796ea1930f29facc406eb3cb78ae473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
