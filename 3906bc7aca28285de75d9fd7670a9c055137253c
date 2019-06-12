@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5121f9db_f543e105",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1334495
+      },
+      "writtenOn": "2019-06-12T13:27:24Z",
+      "side": 1,
+      "message": "kInt64Size?",
+      "revId": "3906bc7aca28285de75d9fd7670a9c055137253c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6a567b6_b448b4bd",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1334495
+      },
+      "writtenOn": "2019-06-12T13:27:24Z",
+      "side": 1,
+      "message": "`* kInt32Size`",
+      "revId": "3906bc7aca28285de75d9fd7670a9c055137253c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fad30d7f_1f9e5af7",
+        "filename": "src/codegen/constant-pool.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1334495
+      },
+      "writtenOn": "2019-06-12T13:27:24Z",
+      "side": 1,
+      "message": "typo: emits",
+      "revId": "3906bc7aca28285de75d9fd7670a9c055137253c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
