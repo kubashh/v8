@@ -507,6 +507,68 @@ void Heap::PrintShortHeapStatistics() {
                total_gc_time_ms_);
 }
 
+void Heap::PrintFreeListsStats() {
+  DCHECK(FLAG_trace_gc_freelists);
+
+  if (FLAG_trace_gc_freelists_verbose) {
+    PrintIsolate(isolate_,
+                 "Freelists statistics per Page: "
+                 "[category: length || total free bytes]\n");
+  }
+
+  int categories_lengths[kNumberOfCategories] = {0};
+  size_t categories_sums[kNumberOfCategories] = {0};
+  unsigned int pageCnt = 0;
+
+  Page* page = static_cast<Page*>(old_space_->first_page());
+  // This loops computes freelists lengths and sum.
+  // If FLAG_trace_gc_freelists_verbose is enabled, it also prints
+  // the stats of each FreeListCategory of each Page.
+  while (page) {
+    if (FLAG_trace_gc_freelists_verbose) {
+      base::OS::Print("Page %4u: ", pageCnt);
+    }
+
+    for (int cat = kFirstCategory; cat <= kLastCategory; cat++) {
+      FreeListCategory* free_list =
+          page->free_list_category(static_cast<FreeListCategoryType>(cat));
+      int length = free_list->FreeListLength();
+      size_t sum = free_list->SumFreeList();
+
+      if (FLAG_trace_gc_freelists_verbose) {
+        base::OS::Print("[%d: %4d || %6zu]%s", cat, length, sum,
+                        cat == kLastCategory ? "\n" : ", ");
+      }
+      categories_lengths[cat] += length;
+      categories_sums[cat] += sum;
+    }
+
+    page = page->next_page();
+    pageCnt++;
+  }
+
+  // Print statistics about old_space (pages, free/wasted/used memory...).
+  PrintIsolate(
+      isolate_,
+      "%d pages. Free space: %.1f MB (waste: %.2f). "
+      "Usage: %.1f/%.1f (MB) -> %.2f%%.\n",
+      pageCnt, static_cast<double>(old_space_->Available()) / MB,
+      static_cast<double>(old_space_->Waste()) / MB,
+      static_cast<double>(old_space_->Size()) / MB,
+      static_cast<double>(old_space_->Capacity()) / MB,
+      static_cast<double>(old_space_->Size()) / old_space_->Capacity() * 100);
+
+  // Print global statistics of each FreeListCategory (length & sum).
+  PrintIsolate(isolate_,
+               "FreeLists global statistics: "
+               "[category: length || total free KB]\n");
+  for (int cat = 0; cat <= kLastCategory; cat++) {
+    base::OS::Print("[%d: %d || %.1f KB]%s", cat, categories_lengths[cat],
+                    static_cast<double>(categories_sums[cat]) / KB,
+                    cat == kLastCategory ? "\n" : ", ");
+  }
+}
+
 void Heap::DumpJSONHeapStatistics(std::stringstream& stream) {
   HeapStatistics stats;
   reinterpret_cast<v8::Isolate*>(isolate())->GetHeapStatistics(&stats);
