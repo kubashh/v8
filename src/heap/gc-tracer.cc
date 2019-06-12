@@ -265,6 +265,11 @@ void GCTracer::Start(GarbageCollector collector,
   } else {
     counters->mark_compact_reason()->AddSample(static_cast<int>(gc_reason));
   }
+
+  if (FLAG_trace_gc_freelists && current_.type != Event::SCAVENGER) {
+    PrintIsolate(heap_->isolate(), "FreeLists statistics before collection:\n");
+    heap_->PrintFreeListsStats();
+  }
 }
 
 void GCTracer::ResetIncrementalMarkingCounters() {
@@ -360,6 +365,13 @@ void GCTracer::Stop(GarbageCollector collector) {
     PrintNVP();
   } else {
     Print();
+  }
+
+  if (FLAG_trace_gc_freelists && current_.type != Event::SCAVENGER) {
+    // Sweeping must be completed or old_space statistic won't be up to date.
+    heap_->mark_compact_collector()->EnsureSweepingCompleted();
+    PrintIsolate(heap_->isolate(), "FreeLists statistics after collection:\n");
+    heap_->PrintFreeListsStats();
   }
 
   if (FLAG_trace_gc) {
