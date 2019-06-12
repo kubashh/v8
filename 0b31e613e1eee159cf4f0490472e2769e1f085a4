@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "50e4e335_6b0fdc1e",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4333,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a4cf144_80c90839",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00e077e8_e849c0c5",
         "filename": "src/codegen/arm64/assembler-arm64.cc",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1509bafc_52d60b8b",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4355,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "00e077e8_e849c0c5",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9f38203a_5fe9c2ef",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4383,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "I think it was intended to account for the instruction that will inevitably be emitted before the next check. I\u0027ve removed it.",
+      "parentUuid": "665407ae_451364dd",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c0b02d2_a6f5595b",
         "filename": "src/codegen/arm64/assembler-arm64.h",
         "patchSetId": 7
@@ -67,6 +121,24 @@
       "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b81c8ea_2b8780c0",
+        "filename": "src/codegen/arm64/assembler-arm64.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2341,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c0b02d2_a6f5595b",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "5c088b3a_cd7636b7",
+        "filename": "src/codegen/arm64/assembler-arm64.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2604,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fd736ac_345f1d97",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94531aa4_af626290",
         "filename": "src/codegen/constant-pool.cc",
         "patchSetId": 7
@@ -101,6 +191,24 @@
       "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68bb70f2_e147ecdd",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Yes, I think that is a good idea. Done.",
+      "parentUuid": "94531aa4_af626290",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,42 @@
     },
     {
       "key": {
+        "uuid": "2599ff41_0fa6478a",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f8dd50b_eaa4e5d9",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7caea402_cec0e923",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f8dd50b_eaa4e5d9",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bcfbc14b_0bbafe4d",
         "filename": "src/codegen/constant-pool.cc",
         "patchSetId": 7
@@ -135,6 +279,24 @@
       "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8304bd92_00014178",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bcfbc14b_0bbafe4d",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +317,24 @@
     },
     {
       "key": {
+        "uuid": "fb299baa_c6aa821f",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14aa4d35_42a19897",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f4938bf_b0bba6f7",
         "filename": "src/codegen/constant-pool.cc",
         "patchSetId": 7
@@ -172,6 +352,24 @@
     },
     {
       "key": {
+        "uuid": "da11d7af_f24955dd",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f4938bf_b0bba6f7",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5f4e5a_c6bbaefc",
         "filename": "src/codegen/constant-pool.cc",
         "patchSetId": 7
@@ -186,6 +384,24 @@
       "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69bf3d98_c73a3ef9",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba5f4e5a_c6bbaefc",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -224,6 +440,24 @@
     },
     {
       "key": {
+        "uuid": "7077ca0a_f60882a4",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "I\u0027ve opted for removing computations here and making this check more conservative; we should never get close to kMaxDistToPool32/kMaxDistToPool64 and emit earlier.",
+      "parentUuid": "40979f24_c0f2fdb2",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "912409b5_f0e8742f",
         "filename": "src/codegen/constant-pool.cc",
         "patchSetId": 7
@@ -238,6 +472,24 @@
       "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a90d1d5_59e8e0cb",
+        "filename": "src/codegen/constant-pool.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "I\u0027ve made this method more conservative which allowed me to simplify the computations.",
+      "parentUuid": "912409b5_f0e8742f",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -258,6 +510,24 @@
     },
     {
       "key": {
+        "uuid": "7e5d959c_7c4f6f77",
+        "filename": "src/codegen/constant-pool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b12ab652_9597dfb3",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b74ca746_b22ddb49",
         "filename": "src/codegen/constant-pool.h",
         "patchSetId": 7
@@ -272,6 +542,24 @@
       "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "701b691d_f2b7fda6",
+        "filename": "src/codegen/constant-pool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b74ca746_b22ddb49",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -292,6 +580,24 @@
     },
     {
       "key": {
+        "uuid": "913f2673_0141eb1e",
+        "filename": "src/codegen/constant-pool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dd2e45a_4b49bf6f",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7731a0f_02296543",
         "filename": "test/cctest/test-assembler-arm64.cc",
         "patchSetId": 7
@@ -306,6 +612,24 @@
       "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e45d1cb_aa11cdb1",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 6507,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-12T13:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7731a0f_02296543",
+      "revId": "0b31e613e1eee159cf4f0490472e2769e1f085a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
