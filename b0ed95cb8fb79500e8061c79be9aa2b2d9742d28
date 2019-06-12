@@ -39,6 +39,24 @@
       "revId": "b0ed95cb8fb79500e8061c79be9aa2b2d9742d28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37f58d71_bd9818de",
+        "filename": "src/strings/char-predicates-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-06-12T13:41:14Z",
+      "side": 1,
+      "message": "I have no idea. It\u0027s the code that was there ... :)",
+      "parentUuid": "f2e1a654_32431c44",
+      "revId": "b0ed95cb8fb79500e8061c79be9aa2b2d9742d28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
