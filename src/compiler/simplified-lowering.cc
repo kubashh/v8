@@ -1818,6 +1818,12 @@ class RepresentationSelector {
           VisitBinop(node, UseInfo::TruncatingWord32(),
                      MachineRepresentation::kBit);
           if (lower()) NodeProperties::ChangeOp(node, Int32Op(node));
+        } else if (jsgraph_->machine()->Is64() &&
+                   lhs_type.Is(type_cache_->kSafeInteger) &&
+                   rhs_type.Is(type_cache_->kSafeInteger)) {
+          // => signed Int64Cmp
+          VisitBinop(node, UseInfo::Word64(), MachineRepresentation::kWord64);
+          if (lower()) NodeProperties::ChangeOp(node, Int64Op(node));
         } else {
           // => Float64Cmp
           VisitBinop(node, UseInfo::TruncatingFloat64(kIdentifyZeros),
