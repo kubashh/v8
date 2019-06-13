@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3301dfdd_d1647325",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-06-13T12:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d1c2df9_d527d99e",
+      "range": {
+        "startLine": 2075,
+        "startChar": 31,
+        "endLine": 2075,
+        "endChar": 53
+      },
+      "revId": "2493ea4c6ef2d1089371a08ff2844e985cbacc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "860f6e26_56fbca7f",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2019-06-07T00:41:18Z",
       "side": 1,
       "message": "The ProcessReceiverMapForApiCall is needed in the IsJSFunction case, not in the !IsJSFunction case. Please split the code accordingly and add a comment \"// For JSCallReducer::ReduceCallApiFunction.\" in one case and \"// For JSNativeContextSpecialization::InlinePropertySetterCall and InlinePropertyGetterCall.\" on top for both cases.\n\nPlease also run the api tests with --trace-heap-broker with and without your changes and observe the difference in output.\n\nPlease also put a TODO here that we eventually need to take the receiver hints into account as well, not just the feedback maps.",
+      "revId": "2493ea4c6ef2d1089371a08ff2844e985cbacc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98f9277c_5fa35e2f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-06-13T12:54:27Z",
+      "side": 1,
+      "message": "I\u0027m not sure I get what you mean. This chunk of code is handling only the JSNativeContextSpecialization::InlinePropertySetterCall and InlinePropertyGetterCall cases. In order for ProcessReceiverMapForApiCall to work, we need a FunctionTemplateInfo in the info.constant(), which is the opposite case of when we have a JSFunction. Or I\u0027m completely misunderstanding how PropertyAccessInfo works.",
+      "parentUuid": "860f6e26_56fbca7f",
       "revId": "2493ea4c6ef2d1089371a08ff2844e985cbacc44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
