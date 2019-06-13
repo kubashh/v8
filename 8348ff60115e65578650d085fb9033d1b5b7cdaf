@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0d562f83_708a7bd7",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5603,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-06-13T13:02:15Z",
+      "side": 1,
+      "message": "Great idea, will do.",
+      "parentUuid": "147f9712_72e76f27",
+      "range": {
+        "startLine": 5603,
+        "startChar": 50,
+        "endLine": 5603,
+        "endChar": 67
+      },
+      "revId": "8348ff60115e65578650d085fb9033d1b5b7cdaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "729c68ec_e55a2b05",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6c3d4ae1_1816fce2",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5647,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-06-13T13:02:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "729c68ec_e55a2b05",
+      "range": {
+        "startLine": 5647,
+        "startChar": 39,
+        "endLine": 5647,
+        "endChar": 47
+      },
+      "revId": "8348ff60115e65578650d085fb9033d1b5b7cdaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e603cd70_311076a6",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "8348ff60115e65578650d085fb9033d1b5b7cdaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d483ee0_be37a487",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-06-13T13:02:15Z",
+      "side": 1,
+      "message": "I think later it will be, but yeah, let\u0027s just get what we need. Removed.",
+      "parentUuid": "e603cd70_311076a6",
+      "range": {
+        "startLine": 863,
+        "startChar": 39,
+        "endLine": 863,
+        "endChar": 67
+      },
+      "revId": "8348ff60115e65578650d085fb9033d1b5b7cdaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
