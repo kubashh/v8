@@ -16,6 +16,24 @@
       "revId": "3e4f54498f0f8527c55151e87309cc5311a322df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5310cc1_0b53beda",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-06-13T10:11:40Z",
+      "side": 1,
+      "message": "The motivation is that I was changing this code in https://chromium-review.googlesource.com/c/v8/v8/+/1648155 and was getting comments about the inconsistent naming.\n\nI think it\u0027s ok that there\u0027s a split between torque and the actual implementation in the assembler. The assembler doesn\u0027t have a concept of builtin pointers and so the naming seemed jarring. I\u0027m also open to moving the split further if that\u0027s something people want.",
+      "parentUuid": "b02f2a71_7e6fea16",
+      "revId": "3e4f54498f0f8527c55151e87309cc5311a322df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
