@@ -508,7 +508,19 @@ std::ostream& operator<<(std::ostream& os, NumberOperationHint hint) {
   UNREACHABLE();
 }
 
+std::ostream& operator<<(std::ostream& os, BigIntOperationHint hint) {
+  switch (hint) {
+    case BigIntOperationHint::kBigInt:
+      return os << "BigInt";
+  }
+  UNREACHABLE();
+}
+
 size_t hash_value(NumberOperationHint hint) {
+  return static_cast<uint8_t>(hint);
+}
+
+size_t hash_value(BigIntOperationHint hint) {
   return static_cast<uint8_t>(hint);
 }
 
@@ -809,6 +821,7 @@ bool operator==(CheckMinusZeroParameters const& lhs,
   V(CheckedTaggedToTaggedSigned, 1, 1)      \
   V(CheckedCompressedToTaggedPointer, 1, 1) \
   V(CheckedCompressedToTaggedSigned, 1, 1)  \
+  V(CheckedTaggedToBigInt, 1, 1)            \
   V(CheckedTaggedToCompressedPointer, 1, 1) \
   V(CheckedTaggedToCompressedSigned, 1, 1)  \
   V(CheckedUint32ToInt32, 1, 1)             \
@@ -1431,6 +1444,13 @@ const Operator* SimplifiedOperatorBuilder::CheckFloat64Hole(
       IrOpcode::kCheckFloat64Hole, Operator::kFoldable | Operator::kNoThrow,
       "CheckFloat64Hole", 1, 1, 1, 1, 1, 0,
       CheckFloat64HoleParameters(mode, feedback));
+}
+
+const Operator* SimplifiedOperatorBuilder::SpeculativeBigIntAdd(
+    BigIntOperationHint hint) {
+  return new (zone()) Operator1<BigIntOperationHint>(
+      IrOpcode::kSpeculativeBigIntAdd, Operator::kFoldable | Operator::kNoThrow,
+      "SpeculativeBigIntAdd", 2, 1, 1, 1, 1, 0, hint);
 }
 
 const Operator* SimplifiedOperatorBuilder::SpeculativeToNumber(
