@@ -2025,10 +2025,6 @@ Node* JSNativeContextSpecialization::InlinePropertyGetterCall(
                                       ConvertReceiverMode::kNotNullOrUndefined),
         target, receiver, context, frame_state, *effect, *control);
   } else {
-    // TODO(mslekova): Move this to the serialization of property loads.
-    FunctionTemplateInfoRef function_template_info =
-        constant.AsFunctionTemplateInfo();
-    function_template_info.Serialize();
     Node* holder =
         access_info.holder().is_null()
             ? receiver
@@ -2036,8 +2032,9 @@ Node* JSNativeContextSpecialization::InlinePropertyGetterCall(
     SharedFunctionInfoRef shared_info(
         broker(), frame_info.shared_info().ToHandleChecked());
 
-    value = InlineApiCall(receiver, holder, frame_state, nullptr, effect,
-                          control, shared_info, function_template_info);
+    value =
+        InlineApiCall(receiver, holder, frame_state, nullptr, effect, control,
+                      shared_info, constant.AsFunctionTemplateInfo());
   }
   // Remember to rewire the IfException edge if this is inside a try-block.
   if (if_exceptions != nullptr) {
@@ -2065,9 +2062,6 @@ void JSNativeContextSpecialization::InlinePropertySetterCall(
                                       ConvertReceiverMode::kNotNullOrUndefined),
         target, receiver, value, context, frame_state, *effect, *control);
   } else {
-    // TODO(mslekova): Move this to the serialization of property stores.
-    auto function_template_info = constant.AsFunctionTemplateInfo();
-    function_template_info.Serialize();
     Node* holder =
         access_info.holder().is_null()
             ? receiver
@@ -2075,7 +2069,7 @@ void JSNativeContextSpecialization::InlinePropertySetterCall(
     SharedFunctionInfoRef shared_info(
         broker(), frame_info.shared_info().ToHandleChecked());
     InlineApiCall(receiver, holder, frame_state, value, effect, control,
-                  shared_info, function_template_info);
+                  shared_info, constant.AsFunctionTemplateInfo());
   }
   // Remember to rewire the IfException edge if this is inside a try-block.
   if (if_exceptions != nullptr) {

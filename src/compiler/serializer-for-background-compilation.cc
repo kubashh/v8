@@ -1035,8 +1035,19 @@ SerializerForBackgroundCompilation::ProcessFeedbackMapsForNamedAccess(
     ProcessMapForNamedPropertyAccess(map_ref, name);
     AccessInfoFactory access_info_factory(broker(), dependencies(),
                                           broker()->zone());
-    access_infos.push_back(access_info_factory.ComputePropertyAccessInfo(
+    PropertyAccessInfo info(access_info_factory.ComputePropertyAccessInfo(
         map, name.object(), mode));
+    access_infos.push_back(info);
+
+    // For JSNativeContextSpecialization::InlinePropertySetterCall
+    // and InlinePropertyGetterCall.
+    if (info.IsAccessorConstant() && !info.constant().is_null() &&
+        !info.constant()->IsJSFunction()) {
+      FunctionTemplateInfoRef fti_ref(
+          broker(), Handle<FunctionTemplateInfo>::cast(info.constant()));
+      fti_ref.Serialize();
+      ProcessReceiverMapForApiCall(fti_ref, map);
+    }
   }
   DCHECK(!access_infos.empty());
   return new (broker()->zone()) NamedAccessFeedback(name, access_infos);
