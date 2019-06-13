@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa619a8e_d8d23c3b",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-06-13T07:39:26Z",
+      "side": 1,
+      "message": "This is equivalent, but looks a little weird. What about introducing another method GetModuleOffset() and then implementing GetColumnNumber() as a call to that?",
+      "revId": "8ed36d6bf9f988c4b67fc283f53d94a207679a96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b84fa235_35baaeb5",
+        "filename": "test/cctest/wasm/test-wasm-stack.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-06-13T07:39:26Z",
+      "side": 1,
+      "message": "s/offest/offset/",
+      "revId": "8ed36d6bf9f988c4b67fc283f53d94a207679a96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
