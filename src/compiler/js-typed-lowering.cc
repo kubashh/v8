@@ -657,6 +657,7 @@ Reduction JSTypedLowering::ReduceJSAdd(Node* node) {
     NodeProperties::ChangeOp(node, common()->Call(call_descriptor));
     return Changed(node);
   }
+
   return NoChange();
 }
 
