@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b02f2a71_7e6fea16",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-13T10:03:29Z",
+      "side": 1,
+      "message": "FYI the \u0027Builtin Pointer\u0027 name is what we settled on back then for what we call torque\u0027s builtin pointers through the codebase. I guess it\u0027s an implementation detail that the \u0027pointer\u0027 is stored as a smi index so changing the name here seem okayish, but I also like how the name was previously consistent everywhere. \n\nWhat\u0027s the motivation for changing it now, is there a new callsite somewhere that doesn\u0027t have to do with a torque builtin pointer?",
+      "revId": "3e4f54498f0f8527c55151e87309cc5311a322df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
