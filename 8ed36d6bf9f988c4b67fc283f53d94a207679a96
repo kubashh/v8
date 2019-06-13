@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "05d1344d_85107049",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3666,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-06-13T08:21:21Z",
+      "side": 1,
+      "message": "The 1-based adjustment will most likely be pushed into the API implementation of StackFrame::GetColumn() and StackFrame::GetLine() in api.cc as that is the only place where 1-based offsets are needed.",
+      "parentUuid": "322f37bc_71392385",
+      "range": {
+        "startLine": 3666,
+        "startChar": 6,
+        "endLine": 3666,
+        "endChar": 13
+      },
+      "revId": "8ed36d6bf9f988c4b67fc283f53d94a207679a96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b84fa235_35baaeb5",
         "filename": "test/cctest/wasm/test-wasm-stack.cc",
         "patchSetId": 4
