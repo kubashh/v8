@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "322f37bc_71392385",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3666,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-06-13T08:07:52Z",
+      "side": 1,
+      "message": "Is this the only place we ever need to convert the line and column offsets? If no, can we have a getter that does the adjustment for wasm.",
+      "range": {
+        "startLine": 3666,
+        "startChar": 6,
+        "endLine": 3666,
+        "endChar": 13
+      },
+      "revId": "8ed36d6bf9f988c4b67fc283f53d94a207679a96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b84fa235_35baaeb5",
         "filename": "test/cctest/wasm/test-wasm-stack.cc",
         "patchSetId": 4
