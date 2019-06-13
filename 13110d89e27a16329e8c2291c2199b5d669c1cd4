@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea6e0ac7_c751ed4c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-13T11:16:34Z",
+      "side": 1,
+      "message": "Only in sloppy mode",
+      "revId": "13110d89e27a16329e8c2291c2199b5d669c1cd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
