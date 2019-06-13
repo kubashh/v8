@@ -5599,6 +5599,9 @@ Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
 
   if (!dependencies()->DependOnPromiseHookProtector()) return NoChange();
 
+  // Check if we have the required scope_info.
+  if (!native_context().scope_info().has_value()) return NoChange();
+
   SharedFunctionInfoRef promise_shared =
       native_context().promise_function().shared();
 
@@ -5641,7 +5644,7 @@ Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
   // Allocate a promise context for the closures below.
   Node* promise_context = effect = graph()->NewNode(
       javascript()->CreateFunctionContext(
-          handle(native_context().object()->scope_info(), isolate()),
+          native_context().scope_info().value().object(),
           PromiseBuiltins::kPromiseContextLength - Context::MIN_CONTEXT_SLOTS,
           FUNCTION_SCOPE),
       context, effect, control);
@@ -5887,6 +5890,9 @@ Reduction JSCallReducer::ReducePromisePrototypeFinally(Node* node) {
     }
   }
 
+  // Check if we have the required scope_info.
+  if (!native_context().scope_info().has_value()) return inference.NoChange();
+
   if (!dependencies()->DependOnPromiseHookProtector())
     return inference.NoChange();
   if (!dependencies()->DependOnPromiseThenProtector())
@@ -5912,13 +5918,13 @@ Reduction JSCallReducer::ReducePromisePrototypeFinally(Node* node) {
         jsgraph()->Constant(native_context().promise_function());
 
     // Allocate shared context for the closures below.
-    context = etrue = graph()->NewNode(
-        javascript()->CreateFunctionContext(
-            handle(native_context().object()->scope_info(), isolate()),
-            PromiseBuiltins::kPromiseFinallyContextLength -
-                Context::MIN_CONTEXT_SLOTS,
-            FUNCTION_SCOPE),
-        context, etrue, if_true);
+    context = etrue =
+        graph()->NewNode(javascript()->CreateFunctionContext(
+                             native_context().scope_info().value().object(),
+                             PromiseBuiltins::kPromiseFinallyContextLength -
+                                 Context::MIN_CONTEXT_SLOTS,
+                             FUNCTION_SCOPE),
+                         context, etrue, if_true);
     etrue = graph()->NewNode(
         simplified()->StoreField(
             AccessBuilder::ForContextSlot(PromiseBuiltins::kOnFinallySlot)),
