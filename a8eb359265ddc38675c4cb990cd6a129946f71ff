@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a299e272_f9c29856",
+        "filename": "src/compiler/representation-change.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-13T11:46:24Z",
+      "side": 1,
+      "message": "I think this should never reach this function. Can you make sure we DCHECK if it is the case?",
+      "range": {
+        "startLine": 824,
+        "startChar": 5,
+        "endLine": 824,
+        "endChar": 34
+      },
+      "revId": "a8eb359265ddc38675c4cb990cd6a129946f71ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
