@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "147f9712_72e76f27",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5603,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-06-13T12:46:51Z",
+      "side": 1,
+      "message": "Maybe in addition to that you could insert a TRACE_BROKER_MISSING call, as this is not expected in a typical optimization pass.",
+      "range": {
+        "startLine": 5603,
+        "startChar": 50,
+        "endLine": 5603,
+        "endChar": 67
+      },
+      "revId": "8348ff60115e65578650d085fb9033d1b5b7cdaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "729c68ec_e55a2b05",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5647,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-06-13T12:46:51Z",
+      "side": 1,
+      "message": "nit: you could shortcut this as ...scope_info()-\u003eobject(), now that we\u0027ve already checked that has_value() is true.",
+      "range": {
+        "startLine": 5647,
+        "startChar": 39,
+        "endLine": 5647,
+        "endChar": 47
+      },
+      "revId": "8348ff60115e65578650d085fb9033d1b5b7cdaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e603cd70_311076a6",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-06-13T12:46:51Z",
+      "side": 1,
+      "message": "Nit: this argument looks unused.",
+      "range": {
+        "startLine": 863,
+        "startChar": 39,
+        "endLine": 863,
+        "endChar": 67
+      },
+      "revId": "8348ff60115e65578650d085fb9033d1b5b7cdaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
