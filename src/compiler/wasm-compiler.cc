@@ -5873,6 +5873,82 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     }
   }
 
+  // TODO(jkummerow): This is a replacement for the above. Migrate all callers
+  // and drop the old implementation!
+  void BuildCWasmEntryNew() {
+    // +1 for saved_c_entry_fp.
+    // TODO(jkummerow): Fold c_entry_fp into CWasmEntryParameters.
+    // +1 offset for first parameter index being -1.
+    SetEffect(SetControl(Start(CWasmEntryParameters::kNumParameters + 2)));
+
+    Node* code_entry = Param(CWasmEntryParameters::kCodeEntry);
+    Node* object_ref = Param(CWasmEntryParameters::kObjectRef);
+    Node* arg_buffer = Param(CWasmEntryParameters::kArgumentsBuffer);
+    Node* c_entry_fp = Param(CWasmEntryParameters::kNumParameters);
+
+    Node* fp_value = graph()->NewNode(mcgraph()->machine()->LoadFramePointer());
+    STORE_RAW(fp_value, TypedFrameConstants::kFirstPushedFrameValueOffset,
+              c_entry_fp, MachineType::PointerRepresentation(),
+              kNoWriteBarrier);
+
+    int wasm_arg_count = static_cast<int>(sig_->parameter_count());
+    int arg_count = wasm_arg_count + 4;  // code, object_ref, control, effect
+    Node** args = Buffer(arg_count);
+
+    int pos = 0;
+    args[pos++] = code_entry;
+    args[pos++] = object_ref;
+
+    int offset = 0;
+    for (wasm::ValueType type : sig_->parameters()) {
+      Node* arg_load = SetEffect(
+          graph()->NewNode(GetSafeLoadOperator(offset, type), arg_buffer,
+                           Int32Constant(offset), Effect(), Control()));
+      args[pos++] = arg_load;
+      offset += wasm::ValueTypes::ElementSizeInBytes(type);
+    }
+
+    args[pos++] = Effect();
+    args[pos++] = Control();
+    DCHECK_EQ(arg_count, pos);
+
+    // Call the wasm code.
+    auto call_descriptor = GetWasmCallDescriptor(mcgraph()->zone(), sig_);
+
+    Node* call = SetEffect(graph()->NewNode(
+        mcgraph()->common()->Call(call_descriptor), arg_count, args));
+
+    Node* if_success = graph()->NewNode(mcgraph()->common()->IfSuccess(), call);
+    Node* if_exception =
+        graph()->NewNode(mcgraph()->common()->IfException(), call, call);
+
+    // Handle exception: return it.
+    SetControl(if_exception);
+    Return(if_exception);
+
+    // Handle success: store the return value(s).
+    SetControl(if_success);
+    pos = 0;
+    offset = 0;
+    for (wasm::ValueType type : sig_->returns()) {
+      StoreRepresentation store_rep(
+          wasm::ValueTypes::MachineRepresentationFor(type), kNoWriteBarrier);
+      Node* value =
+          sig_->return_count() == 1
+              ? call
+              : graph()->NewNode(mcgraph()->common()->Projection(pos), call);
+      SetEffect(graph()->NewNode(mcgraph()->machine()->Store(store_rep),
+                                 arg_buffer, Int32Constant(offset), value,
+                                 Effect(), Control()));
+      offset += wasm::ValueTypes::ElementSizeInBytes(type);
+      pos++;
+    }
+
+    Return(jsgraph()->SmiConstant(0));
+
+    if (ContainsInt64(sig_)) LowerInt64();
+  }
+
   JSGraph* jsgraph() { return jsgraph_; }
 
  private:
@@ -6355,6 +6431,65 @@ MaybeHandle<Code> CompileCWasmEntry(Isolate* isolate, wasm::FunctionSig* sig) {
   // Build a name in the form "c-wasm-entry:<params>:<returns>".
   static constexpr size_t kMaxNameLen = 128;
   char debug_name[kMaxNameLen] = "c-wasm-entry:";
+  AppendSignature(debug_name, kMaxNameLen, sig);
+
+  MaybeHandle<Code> maybe_code = Pipeline::GenerateCodeForWasmHeapStub(
+      isolate, incoming, &graph, Code::C_WASM_ENTRY, debug_name,
+      AssemblerOptions::Default(isolate));
+  Handle<Code> code;
+  if (!maybe_code.ToHandle(&code)) {
+    return maybe_code;
+  }
+#ifdef ENABLE_DISASSEMBLER
+  if (FLAG_print_opt_code) {
+    CodeTracer::Scope tracing_scope(isolate->GetCodeTracer());
+    OFStream os(tracing_scope.file());
+    code->Disassemble(debug_name, os);
+  }
+#endif
+
+  return code;
+}
+
+// TODO(jkummerow): This is a replacement for the above. Migrate all callers
+// and drop the old implementation!
+MaybeHandle<Code> CompileCWasmEntryNew(Isolate* isolate,
+                                       wasm::FunctionSig* sig) {
+  Zone zone(isolate->allocator(), ZONE_NAME);
+  Graph graph(&zone);
+  CommonOperatorBuilder common(&zone);
+  MachineOperatorBuilder machine(
+      &zone, MachineType::PointerRepresentation(),
+      InstructionSelector::SupportedMachineOperatorFlags(),
+      InstructionSelector::AlignmentRequirements());
+  JSGraph jsgraph(isolate, &graph, &common, nullptr, nullptr, &machine);
+
+  Node* control = nullptr;
+  Node* effect = nullptr;
+
+  WasmWrapperGraphBuilder builder(&zone, &jsgraph, sig, nullptr,
+                                  StubCallMode::kCallCodeObject,
+                                  wasm::WasmFeaturesFromIsolate(isolate));
+  builder.set_control_ptr(&control);
+  builder.set_effect_ptr(&effect);
+  builder.BuildCWasmEntryNew();
+
+  // Schedule and compile to machine code.
+  MachineType sig_types[] = {MachineType::Pointer(),   // return
+                             MachineType::Pointer(),   // target
+                             MachineType::Pointer(),   // object_ref
+                             MachineType::Pointer(),   // argv
+                             MachineType::Pointer()};  // c_entry_fp
+  MachineSignature incoming_sig(1, 4, sig_types);
+  // Traps need the root register, for TailCallRuntimeWithCEntry to call
+  // Runtime::kThrowWasmError.
+  bool initialize_root_flag = true;
+  CallDescriptor* incoming = Linkage::GetSimplifiedCDescriptor(
+      &zone, &incoming_sig, initialize_root_flag);
+
+  // Build a name in the form "c-wasm-entry-new:<params>:<returns>".
+  static constexpr size_t kMaxNameLen = 128;
+  char debug_name[kMaxNameLen] = "c-wasm-entry-new:";
   AppendSignature(debug_name, kMaxNameLen, sig);
 
   MaybeHandle<Code> maybe_code = Pipeline::GenerateCodeForWasmHeapStub(

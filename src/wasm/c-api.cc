@@ -28,6 +28,7 @@
 
 #include "include/libplatform/libplatform.h"
 #include "src/api/api-inl.h"
+#include "src/compiler/wasm-compiler.h"
 #include "src/wasm/leb-helper.h"
 #include "src/wasm/module-instantiate.h"
 #include "src/wasm/wasm-constants.h"
@@ -1103,85 +1104,6 @@ auto ExportType::type() const -> const ExternType* {
   return impl(this)->type.get();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Conversions of values from and to V8 objects
-
-auto val_to_v8(StoreImpl* store, const Val& v) -> v8::Local<v8::Value> {
-  auto isolate = store->isolate();
-  switch (v.kind()) {
-    case I32:
-      return v8::Integer::NewFromUnsigned(isolate, v.i32());
-    case I64:
-      return v8::BigInt::New(isolate, v.i64());
-    case F32:
-      return v8::Number::New(isolate, v.f32());
-    case F64:
-      return v8::Number::New(isolate, v.f64());
-    case ANYREF:
-    case FUNCREF: {
-      if (v.ref() == nullptr) {
-        return v8::Null(isolate);
-      } else {
-        WASM_UNIMPLEMENTED("ref value");
-      }
-    }
-    default:
-      UNREACHABLE();
-  }
-}
-
-own<Val> v8_to_val(i::Isolate* isolate, i::Handle<i::Object> value,
-                   ValKind kind) {
-  switch (kind) {
-    case I32:
-      do {
-        if (value->IsSmi()) return Val(i::Smi::ToInt(*value));
-        if (value->IsHeapNumber()) {
-          return Val(i::DoubleToInt32(i::HeapNumber::cast(*value).value()));
-        }
-        value = i::Object::ToInt32(isolate, value).ToHandleChecked();
-        // This will loop back at most once.
-      } while (true);
-      UNREACHABLE();
-    case I64:
-      if (value->IsBigInt()) return Val(i::BigInt::cast(*value).AsInt64());
-      return Val(
-          i::BigInt::FromObject(isolate, value).ToHandleChecked()->AsInt64());
-    case F32:
-      do {
-        if (value->IsSmi()) {
-          return Val(static_cast<float32_t>(i::Smi::ToInt(*value)));
-        }
-        if (value->IsHeapNumber()) {
-          return Val(i::DoubleToFloat32(i::HeapNumber::cast(*value).value()));
-        }
-        value = i::Object::ToNumber(isolate, value).ToHandleChecked();
-        // This will loop back at most once.
-      } while (true);
-      UNREACHABLE();
-    case F64:
-      do {
-        if (value->IsSmi()) {
-          return Val(static_cast<float64_t>(i::Smi::ToInt(*value)));
-        }
-        if (value->IsHeapNumber()) {
-          return Val(i::HeapNumber::cast(*value).value());
-        }
-        value = i::Object::ToNumber(isolate, value).ToHandleChecked();
-        // This will loop back at most once.
-      } while (true);
-      UNREACHABLE();
-    case ANYREF:
-    case FUNCREF: {
-      if (value->IsNull(isolate)) {
-        return Val(nullptr);
-      } else {
-        WASM_UNIMPLEMENTED("ref value");
-      }
-    }
-  }
-}
-
 i::Handle<i::String> VecToString(i::Isolate* isolate,
                                  const vec<byte_t>& chars) {
   return isolate->factory()
@@ -1728,73 +1650,182 @@ auto Func::result_arity() const -> size_t {
   return sig->return_count();
 }
 
+namespace {
+
+class WasmArgumentsPacker {
+ public:
+  explicit WasmArgumentsPacker(size_t buffer_size)
+      : heap_buffer_(buffer_size <= kMaxOnStackBuffer ? 0 : buffer_size),
+        buffer_((buffer_size <= kMaxOnStackBuffer) ? on_stack_buffer_
+                                                   : heap_buffer_.data()) {}
+  i::Address argv() const { return reinterpret_cast<i::Address>(buffer_); }
+  void Reset() { offset_ = 0; }
+
+  void Push(i::wasm::ValueType type, const Val& val) {
+    i::Address address = reinterpret_cast<i::Address>(buffer_ + offset_);
+    offset_ += i::wasm::ValueTypes::ElementSizeInBytes(type);
+    switch (type) {
+      case i::wasm::kWasmI32:
+        return i::WriteUnalignedValue(address, val.i32());
+      case i::wasm::kWasmI64:
+        return i::WriteUnalignedValue(address, val.i64());
+      case i::wasm::kWasmF32:
+        return i::WriteUnalignedValue(address, val.f32());
+      case i::wasm::kWasmF64:
+        return i::WriteUnalignedValue(address, val.f64());
+      case i::wasm::kWasmAnyRef:
+      case i::wasm::kWasmAnyFunc:
+      case i::wasm::kWasmExceptRef:
+        // TODO(jkummerow): Implement these.
+        UNIMPLEMENTED();
+        break;
+      default:
+        UNIMPLEMENTED();
+    }
+  }
+
+  Val Pop(i::wasm::ValueType type) {
+    i::Address address = reinterpret_cast<i::Address>(buffer_ + offset_);
+    offset_ += i::wasm::ValueTypes::ElementSizeInBytes(type);
+    switch (type) {
+      case i::wasm::kWasmI32:
+        return Val(i::ReadUnalignedValue<int32_t>(address));
+      case i::wasm::kWasmI64:
+        return Val(i::ReadUnalignedValue<int64_t>(address));
+      case i::wasm::kWasmF32:
+        return Val(i::ReadUnalignedValue<float>(address));
+      case i::wasm::kWasmF64:
+        return Val(i::ReadUnalignedValue<double>(address));
+      case i::wasm::kWasmAnyRef:
+      case i::wasm::kWasmAnyFunc:
+      case i::wasm::kWasmExceptRef:
+        // TODO(jkummerow): Implement these.
+        UNIMPLEMENTED();
+        break;
+      default:
+        UNIMPLEMENTED();
+    }
+    UNREACHABLE();
+    return Val(0);
+  }
+
+  static int TotalSize(i::wasm::FunctionSig* sig) {
+    int return_size = 0;
+    for (i::wasm::ValueType t : sig->returns()) {
+      return_size += i::wasm::ValueTypes::ElementSizeInBytes(t);
+    }
+    int param_size = 0;
+    for (i::wasm::ValueType t : sig->parameters()) {
+      param_size += i::wasm::ValueTypes::ElementSizeInBytes(t);
+    }
+    return std::max(return_size, param_size);
+  }
+
+ private:
+  static const size_t kMaxOnStackBuffer = 10 * i::kSystemPointerSize;
+
+  uint8_t on_stack_buffer_[kMaxOnStackBuffer];
+  std::vector<uint8_t> heap_buffer_;
+  uint8_t* buffer_;
+  size_t offset_ = 0;
+};
+
+void PrepareFunctionData(i::Isolate* isolate,
+                         i::Handle<i::WasmExportedFunctionData> function_data,
+                         i::wasm::FunctionSig* sig) {
+  // If the data is already populated, return immediately.
+  if (!function_data->c_wrapper_code().IsSmi()) return;
+  // Compile wrapper code.
+  i::Handle<i::Code> wrapper_code =
+      i::compiler::CompileCWasmEntryNew(isolate, sig).ToHandleChecked();
+  function_data->set_c_wrapper_code(*wrapper_code);
+  // Compute packed args size.
+  function_data->set_packed_args_size(WasmArgumentsPacker::TotalSize(sig));
+  // Get call target (function table offset). This is an Address, we store
+  // it as a pseudo-Smi by shifting it by one bit, so the GC leaves it alone.
+  i::Address call_target =
+      function_data->instance().GetCallTarget(function_data->function_index());
+  i::Smi smi_target((call_target << i::kSmiTagSize) | i::kSmiTag);
+  function_data->set_wasm_call_target(smi_target);
+}
+
+}  // namespace
+
 auto Func::call(const Val args[], Val results[]) const -> own<Trap*> {
   auto func = impl(this);
   auto store = func->store();
-  auto isolate = store->isolate();
-  auto i_isolate = store->i_isolate();
-  v8::HandleScope handle_scope(isolate);
+  auto isolate = store->i_isolate();
+  i::HandleScope handle_scope(isolate);
+  i::Object raw_function_data = func->v8_object()->shared().function_data();
 
-  int num_params;
-  int num_results;
-  ValKind result_kind;
-  i::Handle<i::JSFunction> v8_func = func->v8_object();
-  if (i::WasmExportedFunction::IsWasmExportedFunction(*v8_func)) {
-    i::WasmExportedFunction wef = i::WasmExportedFunction::cast(*v8_func);
-    i::wasm::FunctionSig* sig =
-        wef.instance().module()->functions[wef.function_index()].sig;
-    num_params = static_cast<int>(sig->parameter_count());
-    num_results = static_cast<int>(sig->return_count());
-    if (num_results > 0) {
-      result_kind = v8::wasm::v8_valtype_to_wasm(sig->GetReturn(0));
+  // WasmCapiFunctions can be called directly.
+  if (raw_function_data.IsWasmCapiFunctionData()) {
+    i::WasmCapiFunctionData data =
+        i::WasmCapiFunctionData::cast(raw_function_data);
+    FuncData* func_data = reinterpret_cast<FuncData*>(data.embedder_data());
+    if (func_data->kind == FuncData::kCallback) {
+      return (func_data->callback)(args, results);
     }
-#if DEBUG
-    for (int i = 0; i < num_params; i++) {
-      DCHECK_EQ(args[i].kind(), v8::wasm::v8_valtype_to_wasm(sig->GetParam(i)));
-    }
-#endif
-  } else {
-    DCHECK(i::WasmCapiFunction::IsWasmCapiFunction(*v8_func));
-    UNIMPLEMENTED();
-  }
-  // TODO(rossberg): cache v8_args array per thread.
-  auto v8_args = std::unique_ptr<i::Handle<i::Object>[]>(
-      new (std::nothrow) i::Handle<i::Object>[num_params]);
-  for (int i = 0; i < num_params; ++i) {
-    v8_args[i] = v8::Utils::OpenHandle(*val_to_v8(store, args[i]));
+    DCHECK(func_data->kind == FuncData::kCallbackWithEnv);
+    return (func_data->callback_with_env)(func_data->env, args, results);
   }
 
-  // TODO(jkummerow): Use Execution::TryCall instead of manual TryCatch.
-  v8::TryCatch handler(isolate);
-  i::MaybeHandle<i::Object> maybe_val = i::Execution::Call(
-      i_isolate, func->v8_object(), i_isolate->factory()->undefined_value(),
-      num_params, v8_args.get());
+  DCHECK(raw_function_data.IsWasmExportedFunctionData());
+  i::Handle<i::WasmExportedFunctionData> function_data(
+      i::WasmExportedFunctionData::cast(raw_function_data), isolate);
+  i::Handle<i::WasmInstanceObject> instance(function_data->instance(), isolate);
+  // Caching {sig} would give a ~10% reduction in overhead.
+  i::wasm::FunctionSig* sig =
+      instance->module()->functions[function_data->function_index()].sig;
+  PrepareFunctionData(isolate, function_data, sig);
+  i::Handle<i::Code> wrapper_code = i::Handle<i::Code>(
+      i::Code::cast(function_data->c_wrapper_code()), isolate);
+  i::Address call_target =
+      function_data->wasm_call_target().ptr() >> i::kSmiTagSize;
 
-  if (handler.HasCaught()) {
-    i_isolate->OptionalRescheduleException(true);
-    i::Handle<i::Object> exception =
-        v8::Utils::OpenHandle(*handler.Exception());
+  // Prepare arguments.
+  // TODO(jkummerow): Unify this entire calling sequence with
+  // CallExternalWasmFunction() in wasm-interpreter.cc.
+  int num_params = static_cast<int>(sig->parameter_count());
+  int num_results = static_cast<int>(sig->return_count());
+  WasmArgumentsPacker packer(function_data->packed_args_size());
+
+  for (int i = 0; i < num_params; i++) {
+    packer.Push(sig->GetParam(i), args[i]);
+  }
+
+  // Imported and then re-exported functions requiring wrappers are not
+  // supported yet.
+  // TODO(jkummerow): When we have C-API + JavaScript, we'll need to get
+  // the appropriate {instance, function} tuple -- or possibly call the
+  // original JavaScript function directly?
+  DCHECK(function_data->function_index() >=
+         static_cast<int>(instance->module()->num_imported_functions));
+  i::Handle<i::Object> object_ref = instance;
+
+  i::Execution::CallWasm(isolate, wrapper_code, call_target, object_ref,
+                         packer.argv());
+
+  if (isolate->has_pending_exception()) {
+    i::Handle<i::Object> exception(isolate->pending_exception(), isolate);
+    isolate->clear_pending_exception();
     if (!exception->IsJSReceiver()) {
       i::MaybeHandle<i::String> maybe_string =
-          i::Object::ToString(i_isolate, exception);
+          i::Object::ToString(isolate, exception);
       i::Handle<i::String> string = maybe_string.is_null()
-                                        ? i_isolate->factory()->empty_string()
+                                        ? isolate->factory()->empty_string()
                                         : maybe_string.ToHandleChecked();
       exception =
-          i_isolate->factory()->NewError(i_isolate->error_function(), string);
+          isolate->factory()->NewError(isolate->error_function(), string);
     }
     return implement<Trap>::type::make(
         store, i::Handle<i::JSReceiver>::cast(exception));
   }
 
-  auto val = maybe_val.ToHandleChecked();
-  if (num_results == 0) {
-    assert(val->IsUndefined(i_isolate));
-  } else if (num_results == 1) {
-    assert(!val->IsUndefined(i_isolate));
-    new (&results[0]) Val(v8_to_val(i_isolate, val, result_kind));
-  } else {
-    WASM_UNIMPLEMENTED("multiple results");
+  // Unpack return values.
+  packer.Reset();
+  for (int i = 0; i < num_results; i++) {
+    results[i] = packer.Pop(sig->GetReturn(i));
   }
   return nullptr;
 }

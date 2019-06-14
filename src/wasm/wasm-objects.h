@@ -738,6 +738,9 @@ class WasmExportedFunctionData : public Struct {
   DECL_ACCESSORS(instance, WasmInstanceObject)
   DECL_INT_ACCESSORS(jump_table_offset)
   DECL_INT_ACCESSORS(function_index)
+  DECL_ACCESSORS(c_wrapper_code, Object)
+  DECL_ACCESSORS(wasm_call_target, Smi)
+  DECL_INT_ACCESSORS(packed_args_size)
 
   DECL_CAST(WasmExportedFunctionData)
 
