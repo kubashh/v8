@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1367d2b2_fb38b241",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 3
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-06-14T06:22:30Z",
+      "side": 1,
+      "message": "In a future clean up we should turn this around. Rather this builder is the exception to normality and should be marked \"dchecks\" or something.",
+      "range": {
+        "startLine": 460,
+        "startChar": 4,
+        "endLine": 462,
+        "endChar": 39
+      },
+      "revId": "b9a128f751e3959b932a3316b681f01ab5d93d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
