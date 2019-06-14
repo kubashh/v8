@@ -282,12 +282,10 @@ RUNTIME_FUNCTION(Runtime_OptimizeFunctionOnNextCall) {
 
   // Check we called PrepareFunctionForOptimization and hold the bytecode
   // array to prevent it from getting flushed.
-  // TODO(mythria): Enable this check once we add PrepareForOptimization in all
-  // tests before calling OptimizeFunctionOnNextCall.
-  // CHECK(!ObjectHashTable::cast(
-  //          isolate->heap()->pending_optimize_for_test_bytecode())
-  //          ->Lookup(handle(function->shared(), isolate))
-  //          ->IsTheHole());
+  CHECK(!ObjectHashTable::cast(
+             isolate->heap()->pending_optimize_for_test_bytecode())
+             .Lookup(handle(function->shared(), isolate))
+             .IsTheHole());
 
   if (function->HasOptimizedCode()) {
     DCHECK(function->IsOptimized() || function->ChecksOptimizationMarker());

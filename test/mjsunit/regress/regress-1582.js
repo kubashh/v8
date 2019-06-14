@@ -40,6 +40,7 @@ function f(restIsArray, rest) {
   assertEquals(restIsArray, arrIsArguments);
 }
 
+%PrepareFunctionForOptimization(f);
 f(false, 'b', 'c');
 f(false, 'b', 'c');
 f(false, 'b', 'c');
