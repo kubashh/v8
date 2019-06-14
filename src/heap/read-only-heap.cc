@@ -28,15 +28,28 @@ ReadOnlyHeap* ReadOnlyHeap::shared_ro_heap_ = nullptr;
 void ReadOnlyHeap::SetUp(Isolate* isolate, ReadOnlyDeserializer* des) {
   DCHECK_NOT_NULL(isolate);
 #ifdef V8_SHARED_RO_HEAP
+#ifdef DEBUG
   // Make sure we are only sharing read-only space when deserializing. Otherwise
   // we would be trying to create heap objects inside an already initialized
   // read-only space. Use ClearSharedHeapForTest if you need a new read-only
   // space.
-  DCHECK_IMPLIES(shared_ro_heap_ != nullptr, des != nullptr);
+  CHECK_IMPLIES(shared_ro_heap_ != nullptr, des != nullptr);
+  Checksum des_checksum;
+  if (shared_ro_heap_ != nullptr && des != nullptr) {
+    des_checksum = des->GetChecksum();
+    // If we are deserializing, make sure it is the same blob as before.
+    CHECK_EQ(shared_ro_heap_->read_only_blob_checksum_, des_checksum);
+  }
+#endif  // DEBUG
 
-  base::CallOnce(&setup_ro_heap_once, [isolate, des]() {
+  base::CallOnce(&setup_ro_heap_once, [isolate, des, des_checksum]() {
     shared_ro_heap_ = CreateAndAttachToIsolate(isolate);
-    if (des != nullptr) shared_ro_heap_->DeseralizeIntoIsolate(isolate, des);
+    if (des != nullptr) {
+#ifdef DEBUG
+      shared_ro_heap_->read_only_blob_checksum_ = des_checksum;
+#endif  // DEBUG
+      shared_ro_heap_->DeseralizeIntoIsolate(isolate, des);
+    }
   });
 
   isolate->heap()->SetUpFromReadOnlyHeap(shared_ro_heap_);
