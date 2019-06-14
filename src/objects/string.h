@@ -227,6 +227,16 @@ class String : public Name {
                                                         Handle<String> x,
                                                         Handle<String> y);
 
+  // String localeCompare compare according to Collation Order, Collation Order
+  // of printable ascii is fixed without changing caseFirst of options, use
+  // kAscii2Collation table to compare is much fast than
+  // icu::Collator::compare.
+  // If compared character is not printable ascii, return
+  // LocaleComparisonResult::kTryFastFailed, else return comparison result
+  // according to kAscii2Collation table
+  V8_WARN_UNUSED_RESULT static LocaleComparisonResult TryFastLocaleCompare(
+      Isolate* isolate, Handle<String> x, Handle<String> y);
+
   // Perform ES6 21.1.3.8, including checking arguments.
   static Object IndexOf(Isolate* isolate, Handle<Object> receiver,
                         Handle<Object> search, Handle<Object> position);
@@ -403,6 +413,26 @@ class String : public Name {
   static Handle<FixedArray> CalculateLineEnds(Isolate* isolate,
                                               Handle<String> string,
                                               bool include_ending_line);
+
+  static inline bool IsPrintableAsciiChar(uc16 c) {
+    return (c >= kFirstPrintableAscii) && (c <= kLastPrintableAscii);
+  }
+
+  static inline bool IsLetter(uc16 c) {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+  }
+
+  static inline bool AreCaseInsensitiveSameLetter(uc16 char0, uc16 char1) {
+    if (IsLetter(char0) && IsLetter(char1))
+      if (abs((int16_t)char0 - (int16_t)char1) == 'a' - 'A') return true;
+    return false;
+  }
+
+  static const uint8_t kFirstPrintableAscii = ' ';
+  static const uint8_t kLastPrintableAscii = '~';
+
+  // Printable ascii only, ' '(32, 0x20) ~ '~'(126, 0x7e)
+  static uint8_t kAscii2Collation[95];
 
  private:
   friend class Name;

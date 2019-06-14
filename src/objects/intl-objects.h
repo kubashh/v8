@@ -218,6 +218,8 @@ class Intl {
                          Handle<String> additional_property_name,
                          Handle<String> additional_property_value);
 
+  V8_WARN_UNUSED_RESULT static std::string DefaultLocale(Isolate* isolate);
+
   // In ECMA 402 v1, Intl constructors supported a mode of operation
   // where calling them with an existing object as a receiver would
   // transform the receiver into the relevant Intl instance with all

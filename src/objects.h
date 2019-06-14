@@ -247,6 +247,13 @@ enum class ComparisonResult {
   kUndefined     // at least one of x or y was undefined or NaN
 };
 
+enum LocaleComparisonResult {
+  kTryFastFailed = -2,
+  kLessThan,
+  kEqual,
+  kGreaterThan
+};
+
 // (Returns false whenever {result} is kUndefined.)
 bool ComparisonResultToBool(Operation op, ComparisonResult result);
 

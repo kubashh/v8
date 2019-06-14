@@ -22,6 +22,13 @@
 namespace v8 {
 namespace internal {
 
+uint8_t String::kAscii2Collation[] = {
+    0,  6,  10, 22, 32, 23, 21, 9,  11, 12, 18, 26, 3,  2,  8,  19, 33, 34, 35,
+    36, 37, 38, 39, 40, 41, 42, 5,  4,  27, 28, 29, 7,  17, 44, 46, 48, 50, 52,
+    54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90,
+    92, 94, 13, 20, 14, 25, 1,  24, 43, 45, 47, 49, 51, 53, 55, 57, 59, 61, 63,
+    65, 67, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 15, 30, 16, 31};
+
 Handle<String> String::SlowFlatten(Isolate* isolate, Handle<ConsString> cons,
                                    AllocationType allocation) {
   DCHECK_NE(cons->second()->length(), 0);
@@ -897,6 +904,82 @@ ComparisonResult String::Compare(Isolate* isolate, Handle<String> x,
     result = ComparisonResult::kGreaterThan;
   }
   return result;
+}
+
+// static
+LocaleComparisonResult String::TryFastLocaleCompare(Isolate* isolate,
+                                                    Handle<String> x,
+                                                    Handle<String> y) {
+  LocaleComparisonResult case_result = LocaleComparisonResult::kEqual;
+  if (x.is_identical_to(y)) return LocaleComparisonResult::kEqual;
+  int x_length = x->length();
+  int y_length = y->length();
+
+  // Decide trivial cases without flattening.
+  if (x_length == 0) {
+    if (y_length == 0) return LocaleComparisonResult::kEqual;
+    return LocaleComparisonResult::kLessThan;
+  } else {
+    if (y_length == 0) return LocaleComparisonResult::kGreaterThan;
+  }
+
+  int end = x_length < y_length ? x_length : y_length;
+
+  // No need to flatten if we are going to find the answer on the first
+  // character. At this point we know there is at least one character
+  // in each string, due to the trivial case handling above.
+  uc16 x_char0 = x->Get(0);
+  uc16 y_char0 = y->Get(0);
+  if (x_char0 != y_char0) {
+    if (IsPrintableAsciiChar(x_char0) && IsPrintableAsciiChar(y_char0)) {
+      if (AreCaseInsensitiveSameLetter(x_char0, y_char0)) {
+        case_result = kAscii2Collation[x_char0 - kFirstPrintableAscii] >
+                              kAscii2Collation[y_char0 - kFirstPrintableAscii]
+                          ? LocaleComparisonResult::kGreaterThan
+                          : LocaleComparisonResult::kLessThan;
+      } else {
+        return kAscii2Collation[x_char0 - kFirstPrintableAscii] >
+                       kAscii2Collation[y_char0 - kFirstPrintableAscii]
+                   ? LocaleComparisonResult::kGreaterThan
+                   : LocaleComparisonResult::kLessThan;
+      }
+    } else {
+      return LocaleComparisonResult::kTryFastFailed;
+    }
+  }
+
+  x = String::Flatten(isolate, x);
+  y = String::Flatten(isolate, y);
+
+  DisallowHeapAllocation no_gc;
+  String::FlatContent flat1 = x->GetFlatContent(no_gc);
+  String::FlatContent flat2 = y->GetFlatContent(no_gc);
+
+  for (int i = 1; i < end; i++) {
+    uc16 char1 = flat1.Get(i);
+    uc16 char2 = flat2.Get(i);
+    if (char1 != char2) {
+      if (IsPrintableAsciiChar(char1) && IsPrintableAsciiChar(char2)) {
+        if (case_result == LocaleComparisonResult::kEqual &&
+            AreCaseInsensitiveSameLetter(char1, char2)) {
+          case_result = char1 > char2 ? LocaleComparisonResult::kGreaterThan
+                                      : LocaleComparisonResult::kLessThan;
+        } else {
+          return kAscii2Collation[char1 - kFirstPrintableAscii] >
+                         kAscii2Collation[char2 - kFirstPrintableAscii]
+                     ? LocaleComparisonResult::kGreaterThan
+                     : LocaleComparisonResult::kLessThan;
+        }
+      } else {
+        return LocaleComparisonResult::kTryFastFailed;
+      }
+    }
+  }
+
+  if (x_length == y_length || case_result != LocaleComparisonResult::kEqual)
+    return case_result;
+  return x_length > y_length ? LocaleComparisonResult::kGreaterThan
+                             : LocaleComparisonResult::kLessThan;
 }
 
 Object String::IndexOf(Isolate* isolate, Handle<Object> receiver,
