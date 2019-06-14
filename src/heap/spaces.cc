@@ -3045,23 +3045,6 @@ size_t FreeList::Free(Address start, size_t size_in_bytes, FreeMode mode) {
   return 0;
 }
 
-FreeSpace FreeList::FindNodeIn(FreeListCategoryType type, size_t minimum_size,
-                               size_t* node_size) {
-  FreeListCategoryIterator it(this, type);
-  FreeSpace node;
-  while (it.HasNext()) {
-    FreeListCategory* current = it.Next();
-    node = current->PickNodeFromList(minimum_size, node_size);
-    if (!node.is_null()) {
-      DCHECK(IsVeryLong() || Available() == SumFreeLists());
-      if (current->is_empty()) {
-        RemoveCategory(current);
-      }
-      return node;
-    }
-  }
-  return node;
-}
 
 FreeSpace FreeList::TryFindNodeIn(FreeListCategoryType type,
                                   size_t minimum_size, size_t* node_size) {
@@ -3104,8 +3087,8 @@ FreeSpace FreeList::Allocate(size_t size_in_bytes, size_t* node_size) {
   FreeListCategoryType type =
       SelectFastAllocationFreeListCategoryType(size_in_bytes);
   for (int i = type; i < kHuge && node.is_null(); i++) {
-    node = FindNodeIn(static_cast<FreeListCategoryType>(i), size_in_bytes,
-                      node_size);
+    node = TryFindNodeIn(static_cast<FreeListCategoryType>(i), size_in_bytes,
+                         node_size);
   }
 
   if (node.is_null()) {
@@ -3121,7 +3104,7 @@ FreeSpace FreeList::Allocate(size_t size_in_bytes, size_t* node_size) {
     if (type == kTiniest) {
       // For this tiniest object, the tiny list hasn't been searched yet.
       // Now searching the tiny list.
-      node = FindNodeIn(kTiny, size_in_bytes, node_size);
+      node = TryFindNodeIn(kTiny, size_in_bytes, node_size);
     }
 
     if (node.is_null()) {
