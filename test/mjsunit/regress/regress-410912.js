@@ -39,6 +39,7 @@ function __f_0(__v_1,__v_0,i) {
   gc();
 }
 try {
+  %PrepareFunctionForOptimization(__f_0);
 __f_0(__v_1,__v_0,0);
 __f_0(__v_1,__v_0,0);
 %OptimizeFunctionOnNextCall(__f_0);
@@ -84,6 +85,7 @@ function __f_7(o) {
   return o.__f_4();
 }
 try {
+  %PrepareFunctionForOptimization(__f_7);
 for (var __v_7 = 0; __v_7 < 5; __v_7++) __f_7(__v_5);
 %OptimizeFunctionOnNextCall(__f_7);
 __f_7(__v_5);
@@ -111,6 +113,7 @@ gc();
 var __v_8;
 } catch(e) { print("Caught: " + e); }
 function __f_9(n) { return __v_9.charAt(n); }
+%PrepareFunctionForOptimization(__f_9);
 try {
 for (var __v_7 = 0; __v_7 < 5; __v_7++) {
   __v_8 = __f_9(0);
