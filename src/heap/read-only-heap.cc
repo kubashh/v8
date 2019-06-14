@@ -5,9 +5,11 @@
 #include "src/heap/read-only-heap.h"
 
 #include <cstring>
+#include <utility>
 
 #include "src/base/lsan.h"
 #include "src/base/once.h"
+#include "src/base/optional.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/heap/spaces.h"
@@ -22,17 +24,26 @@ namespace internal {
 #ifdef V8_SHARED_RO_HEAP
 V8_DECLARE_ONCE(setup_ro_heap_once);
 ReadOnlyHeap* ReadOnlyHeap::shared_ro_heap_ = nullptr;
+base::Optional<std::pair<uint32_t, uint32_t>> last_checksum_;
 #endif
 
 // static
 void ReadOnlyHeap::SetUp(Isolate* isolate, ReadOnlyDeserializer* des) {
   DCHECK_NOT_NULL(isolate);
 #ifdef V8_SHARED_RO_HEAP
+#ifdef DEBUG
   // Make sure we are only sharing read-only space when deserializing. Otherwise
   // we would be trying to create heap objects inside an already initialized
   // read-only space. Use ClearSharedHeapForTest if you need a new read-only
   // space.
-  DCHECK_IMPLIES(shared_ro_heap_ != nullptr, des != nullptr);
+  CHECK_IMPLIES(shared_ro_heap_ != nullptr, des != nullptr);
+  if (des != nullptr) {
+    // If we are deserializing, make sure it is the same snapshot as before.
+    const auto new_checksum = des->GetChecksum();
+    CHECK_IMPLIES(last_checksum_.has_value(), *last_checksum_ == new_checksum);
+    last_checksum_ = new_checksum;
+  }
+#endif
 
   base::CallOnce(&setup_ro_heap_once, [isolate, des]() {
     shared_ro_heap_ = CreateAndAttachToIsolate(isolate);
