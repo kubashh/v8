@@ -811,6 +811,7 @@ void TestCustomSnapshotDataBlobWithIrregexpCode(
   DisableEmbeddedBlobRefcounting();
   v8::StartupData data1 =
       CreateSnapshotDataBlobInternal(function_code_handling, source);
+  ReadOnlyHeap::ClearSharedHeapForTest();
 
   v8::Isolate::CreateParams params1;
   params1.snapshot_blob = &data1;
@@ -1234,6 +1235,7 @@ UNINITIALIZED_TEST(CustomSnapshotDataBlob2) {
 
   DisableEmbeddedBlobRefcounting();
   v8::StartupData data2 = CreateSnapshotDataBlob(source2);
+  ReadOnlyHeap::ClearSharedHeapForTest();
 
   v8::Isolate::CreateParams params2;
   params2.snapshot_blob = &data2;
@@ -1444,8 +1446,8 @@ UNINITIALIZED_TEST(CustomSnapshotDataBlobWithWarmup) {
 
   DisableEmbeddedBlobRefcounting();
   v8::StartupData cold = CreateSnapshotDataBlob(source);
-  v8::StartupData warm = WarmUpSnapshotDataBlobInternal(cold, warmup);
   ReadOnlyHeap::ClearSharedHeapForTest();
+  v8::StartupData warm = WarmUpSnapshotDataBlobInternal(cold, warmup);
   delete[] cold.data;
 
   v8::Isolate::CreateParams params;
@@ -2950,6 +2952,7 @@ UNINITIALIZED_TEST(SnapshotCreatorArrayJoinWithKeep) {
   DisableAlwaysOpt();
   DisableEmbeddedBlobRefcounting();
   v8::StartupData blob = CreateCustomSnapshotArrayJoinWithKeep();
+  ReadOnlyHeap::ClearSharedHeapForTest();
 
   // Deserialize with an incomplete list of external references.
   {
