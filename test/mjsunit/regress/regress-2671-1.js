@@ -37,6 +37,7 @@ function f() {
   assertTrue(isNaN(a[i]));
 }
 
+%PrepareFunctionForOptimization(f);
 f();
 f();
 f();
