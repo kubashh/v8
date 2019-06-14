@@ -118,6 +118,8 @@ export class SourceResolver {
   instructionToPCOffset: Array<number>;
   pcOffsetToInstructions: Map<number, Array<number>>;
   pcOffsets: Array<number>;
+  blockIdToPCOffset: Array<number>;
+  blockStartPCtoBlockId: Map<number, number>;
 
   constructor() {
     // Maps node ids to source positions.
@@ -147,6 +149,16 @@ export class SourceResolver {
     // Maps PC offsets to instructions.
     this.pcOffsetToInstructions = new Map();
     this.pcOffsets = [];
+    this.blockIdToPCOffset = [];
+    this.blockStartPCtoBlockId = new Map();
+  }
+
+  getBlockIdForOffset(offset) {
+    return this.blockStartPCtoBlockId.get(offset);
+  }
+
+  hasBlockStartInfo() {
+    return this.blockIdToPCOffset.length > 0;
   }
 
   setSources(sources, mainBackup) {
@@ -447,6 +459,12 @@ export class SourceResolver {
       switch (phase.type) {
         case 'disassembly':
           this.disassemblyPhase = phase;
+          if (phase['blockIdToOffset']) {
+            for (const [blockId, pc] of Object.entries<number>(phase['blockIdToOffset'])) {
+              this.blockIdToPCOffset[blockId] = pc;
+              this.blockStartPCtoBlockId.set(pc, Number(blockId));
+            }
+          }
           break;
         case 'schedule':
           this.phaseNames.set(phase.name, this.phases.length);
