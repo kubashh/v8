@@ -22,6 +22,30 @@
       "revId": "ef82c6fd656c9be546378d3bd95eeabf0852c1eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e38d49e5_feda26cd",
+        "filename": "src/builtins/proxy-get-prototype-of.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-06-14T17:55:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f16f319_1669458c",
+      "range": {
+        "startLine": 25,
+        "startChar": 46,
+        "endLine": 25,
+        "endChar": 58
+      },
+      "revId": "ef82c6fd656c9be546378d3bd95eeabf0852c1eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
