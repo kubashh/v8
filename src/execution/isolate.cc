@@ -1656,6 +1656,25 @@ Object Isolate::UnwindAndFindHandler() {
                             0);
       }
 
+      case StackFrame::C_WASM_ENTRY: {
+        StackHandler* handler = frame->top_handler();
+        thread_local_top()->handler_ = handler->next_address();
+        Code code = frame->LookupCode();
+        HandlerTable table(code);
+        Address instruction_start = code.InstructionStart();
+        int return_offset = static_cast<int>(frame->pc() - instruction_start);
+        int handler_offset = table.LookupReturn(return_offset);
+        DCHECK_NE(-1, handler_offset);
+        thread_local_top()->pending_handler_context_ = Context();
+        thread_local_top()->pending_handler_entrypoint_ =
+            instruction_start + handler_offset;
+        thread_local_top()->pending_handler_constant_pool_ =
+            code.constant_pool();
+        thread_local_top()->pending_handler_fp_ = frame->fp();
+        thread_local_top()->pending_handler_sp_ = frame->sp();
+        return exception;
+      }
+
       case StackFrame::WASM_COMPILED: {
         if (trap_handler::IsThreadInWasm()) {
           trap_handler::ClearThreadInWasm();

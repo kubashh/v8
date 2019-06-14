@@ -147,6 +147,8 @@ enum CWasmEntryParameters {
 // {CWasmEntryParameters}. It loads the wasm parameters from the argument
 // buffer and calls the wasm function given as first parameter.
 MaybeHandle<Code> CompileCWasmEntry(Isolate* isolate, wasm::FunctionSig* sig);
+MaybeHandle<Code> CompileCWasmEntryNew(Isolate* isolate,
+                                       wasm::FunctionSig* sig);
 
 // Values from the instance object are cached between WASM-level function calls.
 // This struct allows the SSA environment handling this cache to be defined

@@ -2191,6 +2191,8 @@ MaybeHandle<String> MutableBigInt::ToStringGeneric(Isolate* isolate,
           // the raw characters pointer (as the string might have moved).
           chars = result->GetChars(no_gc);
         }
+        // TODO(jkummerow): I think this duplicate check for an interrupt
+        // request was added by mistake. Drop it.
         if (interrupt_check.InterruptRequested() &&
             isolate->stack_guard()->HandleInterrupts().IsException(isolate)) {
           return MaybeHandle<String>();
