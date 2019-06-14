@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6eefa54c_7afc4f58",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-06-14T14:51:47Z",
+      "side": 1,
+      "message": "This still isn\u0027t safe.\n\nIf two threads call Setup at the same time, has_value() will be false and so they\u0027ll both succeed. CallOnce will then run, but the heap will only be valid for the first caller.\n\nJust move it all after the CallOnce that confirms it\u0027s actually what they expected.",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 76
+      },
+      "revId": "87641569a937b219c86276103cf936f4007ae7e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
