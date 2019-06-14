@@ -6,6 +6,15 @@
 
 namespace proxy {
 
+  extern macro BranchIfSameValue(Object, Object): never labels IfTrue, IfFalse;
+  macro SameValue(object1: Object, object2: Object): bool {
+    if (BranchIfSameValue(object1, object2)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   extern macro ProxiesCodeStubAssembler::AllocateProxy(
       JSReceiver, JSReceiver, Context): JSProxy;
   macro AllocateProxy(implicit context: Context)(
@@ -42,6 +51,10 @@ namespace proxy {
   generates 'MessageTemplate::kProxyPreventExtensionsExtensible';
   const kProxyTrapReturnedFalsish: constexpr MessageTemplate
   generates 'MessageTemplate::kProxyTrapReturnedFalsish';
+  const kProxyGetPrototypeOfInvalid: constexpr MessageTemplate
+  generates 'MessageTemplate::kProxyGetPrototypeOfInvalid';
+  const kProxyGetPrototypeOfNonExtensible: constexpr MessageTemplate
+  generates 'MessageTemplate::kProxyGetPrototypeOfNonExtensible';
 
   const kProxyGet: constexpr int31
   generates 'JSProxy::AccessKind::kGet';
