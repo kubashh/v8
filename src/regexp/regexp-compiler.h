@@ -45,6 +45,36 @@ constexpr int kPatternTooShortForBoyerMoore = 2;
 
 }  // namespace regexp_compiler_constants
 
+inline bool IgnoreCase(JSRegExp::Flags flags) {
+  return (flags & JSRegExp::kIgnoreCase) != 0;
+}
+
+inline bool IsUnicode(JSRegExp::Flags flags) {
+  return (flags & JSRegExp::kUnicode) != 0;
+}
+
+inline bool IsSticky(JSRegExp::Flags flags) {
+  return (flags & JSRegExp::kSticky) != 0;
+}
+
+inline bool IsGlobal(JSRegExp::Flags flags) {
+  return (flags & JSRegExp::kGlobal) != 0;
+}
+
+inline bool DotAll(JSRegExp::Flags flags) {
+  return (flags & JSRegExp::kDotAll) != 0;
+}
+
+inline bool Multiline(JSRegExp::Flags flags) {
+  return (flags & JSRegExp::kMultiline) != 0;
+}
+
+inline bool NeedsUnicodeCaseEquivalents(JSRegExp::Flags flags) {
+  // Both unicode and ignore_case flags are set. We need to use ICU to find
+  // the closure over case equivalents.
+  return IsUnicode(flags) && IgnoreCase(flags);
+}
+
 // A set of unsigned integers that behaves especially well on small
 // integers (< 32).  May do zone-allocation.
 class OutSet : public ZoneObject {
@@ -246,9 +276,6 @@ enum ContainedInLattice {
 inline ContainedInLattice Combine(ContainedInLattice a, ContainedInLattice b) {
   return static_cast<ContainedInLattice>(a | b);
 }
-
-ContainedInLattice AddRange(ContainedInLattice a, const int* ranges,
-                            int ranges_size, Interval new_range);
 
 class BoyerMoorePositionInfo : public ZoneObject {
  public:
@@ -644,6 +671,8 @@ class RegExpCompiler {
     static CompilationResult RegExpTooBig() {
       return CompilationResult("RegExp too big");
     }
+
+    bool Succeeded() const { return error_message == nullptr; }
 
     const char* const error_message = nullptr;
     Object code;
