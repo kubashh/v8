@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24dcadea_b8e9f462",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T08:35:54Z",
+      "side": 1,
+      "message": "Nice, this is so much better.",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ec59e37_d6cf40d1",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4281,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T08:35:54Z",
+      "side": 1,
+      "message": "q: could we avoid the if with a static_cast\u003cTagged_t\u003e? Or perhaps add UTagged_t if we need uint32_t/uint64_t?",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83a69a0f_632a92b6",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4330,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T08:35:54Z",
+      "side": 1,
+      "message": "Why here and not in constant-pool.cc?",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a54cad82_1929740a",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4334,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T08:35:54Z",
+      "side": 1,
+      "message": "nit: static constexpr int kMarkerSize",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddf6fd2b_1af0b6f1",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4347,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T08:35:54Z",
+      "side": 1,
+      "message": "very nitty but why not \n\n require_jump \u003d\u003d Jump::kRequired ? 3 * kInstrSize : 2 * kInstrSize",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db8472f8_7098afa3",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T08:35:54Z",
+      "side": 1,
+      "message": "q: why are these here and not in constant-pool.cc? Or could you decl them as static constexpr size_t in the header?",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f2e1fb3_18571a2f",
+        "filename": "src/codegen/arm64/assembler-arm64.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 2682,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T08:35:54Z",
+      "side": 1,
+      "message": "nit: whitespace above and let\u0027s keep the friend decls either at the end of the class or just after the private: label.",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d08d732c_e5cb8660",
+        "filename": "src/codegen/constant-pool.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T08:35:54Z",
+      "side": 1,
+      "message": "nit: whitespace above please.",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9fdfe3e_d671be7b",
+        "filename": "src/codegen/constant-pool.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T08:35:54Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
