@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "2ef8d254_6b37aac4",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4281,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-17T09:13:55Z",
+      "side": 1,
+      "message": "I agree that the conditional is ugly, but it is greppable (COMPRESSED_EMBEDDED_OBJECT). The cast would be more concise but with it, it is not easy to see that overload resolution is going on there. Furthermore, Tagged_t is int32_t if pointer compression is on, so I would have to introduce Utagged_t as well. Given these constraints, I think it is better to be more verbose.",
+      "parentUuid": "7ec59e37_d6cf40d1",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83a69a0f_632a92b6",
         "filename": "src/codegen/arm64/assembler-arm64.cc",
         "patchSetId": 10
@@ -50,6 +68,24 @@
       "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9156e332_8317e6c8",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4330,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-17T09:13:55Z",
+      "side": 1,
+      "message": "Because this will be different for the arm implementation.",
+      "parentUuid": "83a69a0f_632a92b6",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "e9254c7f_4a451c0b",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4334,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-17T09:13:55Z",
+      "side": 1,
+      "message": "Made it const.",
+      "parentUuid": "a54cad82_1929740a",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ddf6fd2b_1af0b6f1",
         "filename": "src/codegen/arm64/assembler-arm64.cc",
         "patchSetId": 10
@@ -84,6 +138,24 @@
       "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4aad878_de0c5154",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4347,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-17T09:13:55Z",
+      "side": 1,
+      "message": "I think given the comment it is clearer the way it is.",
+      "parentUuid": "ddf6fd2b_1af0b6f1",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -104,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "b9ce9814_c6ed2bbf",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-17T09:13:55Z",
+      "side": 1,
+      "message": "These constants will differ for the arm version of the constant pool. That is why they are defined here. If I turn them into constexpr, I\u0027d need an initializer in the header.",
+      "parentUuid": "db8472f8_7098afa3",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f2e1fb3_18571a2f",
         "filename": "src/codegen/arm64/assembler-arm64.h",
         "patchSetId": 10
@@ -118,6 +208,24 @@
       "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43fa26bb_76b08c0b",
+        "filename": "src/codegen/arm64/assembler-arm64.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 2682,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-17T09:13:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f2e1fb3_18571a2f",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -138,6 +246,24 @@
     },
     {
       "key": {
+        "uuid": "e4b57f11_fc51e368",
+        "filename": "src/codegen/constant-pool.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-17T09:13:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d08d732c_e5cb8660",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9fdfe3e_d671be7b",
         "filename": "src/codegen/constant-pool.h",
         "patchSetId": 10
@@ -152,6 +278,24 @@
       "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a285a615_4a263a8a",
+        "filename": "src/codegen/constant-pool.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-17T09:13:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9fdfe3e_d671be7b",
+      "revId": "5524ebe691c7ed8defa280c609de552c6cbf03ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
