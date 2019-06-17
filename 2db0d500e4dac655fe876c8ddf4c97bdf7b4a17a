@@ -260,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "645e0df3_529a4530",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-06-17T13:10:42Z",
+      "side": 1,
+      "message": "Ah. Yes that\u0027s a problem. We always run into this problem in V8 where we want to identify objects uniquely by address but that doesn\u0027t work with a moving GC... Not sure how to deal with this here.\n\nI\u0027ll add Yang, maybe he has an idea.\n\nFrom briefly chatting to GC folks, it would be acceptable to add context moves to the code move event API if there is no other way to do this. The code move events are already behind a templatized interface so there is basically no overhead when profiling is not enabled.\n\nOther ideas I\u0027ll throw out there:\n1. Can we uniquely identify a context some other way, like an ID assigned on creation? The problem is that we need to deref the context during the signal handler and it might be in some weird halfway state.\n2. Make contexts non-moving. Seems like a big hammer.\n3. Do the filtering during the interrupt rather than during the processing. We\u0027d have to expose weak handles of the context to filter to the signal handler. I think we run into problems with this where one sample doesn\u0027t only map to one profile, it could go to multiple profiles with different filters.",
+      "parentUuid": "1ec09770_62e83a09",
+      "range": {
+        "startLine": 849,
+        "startChar": 28,
+        "endLine": 849,
+        "endChar": 72
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "18dcad76_1d69133f",
         "filename": "src/profiler/tick-sample.cc",
         "patchSetId": 10
