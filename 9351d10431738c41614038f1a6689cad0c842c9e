@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5a71407_b740b3fe",
+        "filename": "test/unittests/compiler/node-test-utils.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-06-17T08:14:30Z",
+      "side": 1,
+      "message": "There is node-\u003eopcode()",
+      "range": {
+        "startLine": 1099,
+        "startChar": 39,
+        "endLine": 1099,
+        "endChar": 59
+      },
+      "revId": "9351d10431738c41614038f1a6689cad0c842c9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
