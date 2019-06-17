@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "779be191_e415aba8",
+        "filename": "src/builtins/object.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T09:55:36Z",
+      "side": 1,
+      "message": "The type of object should be JSReceiver, also remove the cast in L52 and consider renaming to JSReceiverGetPrototypeOf.",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdecd771_0f170bfc",
+        "filename": "src/builtins/object.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T09:55:36Z",
+      "side": 1,
+      "message": "nit: I know it\u0027s a bit late to say this now, but \u0027objectJSProxy\u0027 and \u0027object\u003cType\u003e\u0027 is slightly confusing, since \u0027object\u0027 itself can be read as a type. Let\u0027s keep it for now just to stay consistent with the above, but consider renaming in the future.",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4930d73f_8e6dd607",
+        "filename": "src/builtins/proxy-get-prototype-of.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T09:55:36Z",
+      "side": 1,
+      "message": "q: what\u0027s the _ prefix for?",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e19e7f88_83227017",
+        "filename": "src/builtins/proxy-get-prototype-of.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T09:55:36Z",
+      "side": 1,
+      "message": "Same comment as in [0]. Let\u0027s assert the return value is either True or False, and remove the ToBoolean call. If you like, also add IsBoolean to base.tq and use that instead of \u0027\u003d\u003d True || \u003d\u003d False\u0027.\n\n[0] https://chromium-review.googlesource.com/c/v8/v8/+/1652688/2/src/builtins/proxy-prevent-extensions.tq#40",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23529fa4_924018cc",
+        "filename": "src/builtins/proxy-get-prototype-of.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T09:55:36Z",
+      "side": 1,
+      "message": "Not a big deal, but codegen for this is probably slightly worse than if you use BranchIfSameValue directly.",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5390b34d_b7a02bf1",
+        "filename": "src/builtins/proxy.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-17T09:55:36Z",
+      "side": 1,
+      "message": "I wouldn\u0027t mind having this in base.tq (next to BranchIfToBooleanIsTrue) since it\u0027s used in multiple CSA files (e.g. RegExp).",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
