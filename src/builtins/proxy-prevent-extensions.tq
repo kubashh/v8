@@ -37,8 +37,8 @@ namespace proxy {
       //    8.b If extensibleTarget is true, throw a TypeError exception.
       if (BranchIfToBooleanIsTrue(trapResult)) {
         const extensibleTarget: Object = object::ObjectIsExtensible(target);
-        assert(extensibleTarget == True || extensibleTarget == False);
-        if (BranchIfToBooleanIsTrue(extensibleTarget)) {
+        assert(IsBoolean(extensibleTarget));
+        if (extensibleTarget == True) {
           ThrowTypeError(kProxyPreventExtensionsExtensible);
         }
       } else {
