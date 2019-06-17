@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66755bec_805c4fb2",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-06-17T12:25:09Z",
+      "side": 1,
+      "message": "This function is only exposed for testing, but is used internally. In such situations it is customary to add a \"ForTesting\" suffix.",
+      "revId": "34ad7b5694f225258bec165c44541d0e6d1c412e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff9ca504_83e87999",
+        "filename": "src/base/vlq-base64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-06-17T12:25:09Z",
+      "side": 1,
+      "message": "Please add an explicitly-sized integer as the return value and document what will happen if there is an overflow. E.g. does this process user input? If so, it should probably provision for dealing with bad inputs by returning an error that the caller should check.",
+      "revId": "34ad7b5694f225258bec165c44541d0e6d1c412e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
