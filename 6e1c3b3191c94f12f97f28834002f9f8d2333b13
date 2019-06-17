@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "78d51362_a6cd2ef7",
+        "filename": "src/builtins/object.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-06-17T18:27:41Z",
+      "side": 1,
+      "message": "if we make this change, we will need to cast proxy.target to JSReceiver (which is fine to me but I thought you prefer keeping it as Object).",
+      "parentUuid": "779be191_e415aba8",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bdecd771_0f170bfc",
         "filename": "src/builtins/object.tq",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "dadf535b_931b45fb",
+        "filename": "src/builtins/object.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-06-17T18:27:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bdecd771_0f170bfc",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4930d73f_8e6dd607",
         "filename": "src/builtins/proxy-get-prototype-of.tq",
         "patchSetId": 5
@@ -47,6 +83,24 @@
       "writtenOn": "2019-06-17T09:55:36Z",
       "side": 1,
       "message": "q: what\u0027s the _ prefix for?",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88148f16_3ed40486",
+        "filename": "src/builtins/proxy-get-prototype-of.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-06-17T18:27:41Z",
+      "side": 1,
+      "message": "this is unused var. Cast\u003cJSReceiver\u003e did the sufficient check here but I don\u0027t need to use this var below.",
+      "parentUuid": "4930d73f_8e6dd607",
       "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "dae4a39a_a7c123b9",
+        "filename": "src/builtins/proxy-get-prototype-of.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-06-17T18:27:41Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "23529fa4_924018cc",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5390b34d_b7a02bf1",
         "filename": "src/builtins/proxy.tq",
         "patchSetId": 5
@@ -101,6 +173,24 @@
       "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b618f6f_f6c592c9",
+        "filename": "src/builtins/proxy.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-06-17T18:27:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5390b34d_b7a02bf1",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
