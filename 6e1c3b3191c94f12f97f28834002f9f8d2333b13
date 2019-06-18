@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "4200223a_ab3cd26d",
+        "filename": "src/builtins/object.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-18T05:27:42Z",
+      "side": 1,
+      "message": "Hmm. Since GetPrototypeOf is slightly different from the rest, wdyt of doing it this way:\n\n- Explicitly declare both ObjectGetPrototypeOf and JSReceiverGetPrototypeOf macros. \n- The former calls ToObject_Inline (note the \u0027Inline\u0027), the latter just takes a JSReceiver.\n- The latter is called by ReflectGetPrototypeOf.",
+      "parentUuid": "78d51362_a6cd2ef7",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bdecd771_0f170bfc",
         "filename": "src/builtins/object.tq",
         "patchSetId": 5
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "this is unused var. Cast\u003cJSReceiver\u003e did the sufficient check here but I don\u0027t need to use this var below.",
       "parentUuid": "4930d73f_8e6dd607",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1aa4146_495b4c64",
+        "filename": "src/builtins/proxy-get-prototype-of.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-18T05:27:42Z",
+      "side": 1,
+      "message": "Ah I see. In that case, what about `if (!IsJSReceiver(..)) { ... }`?",
+      "parentUuid": "88148f16_3ed40486",
       "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
