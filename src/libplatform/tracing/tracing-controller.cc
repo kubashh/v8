@@ -14,15 +14,27 @@
 
 #ifdef V8_USE_PERFETTO
 #include "base/trace_event/common/trace_event_common.h"
+#include "perfetto/tracing.h"
 #include "perfetto/trace/chrome/chrome_trace_event.pbzero.h"
-#include "perfetto/trace/trace_packet.pbzero.h"
-#include "perfetto/tracing/core/data_source_config.h"
-#include "perfetto/tracing/core/trace_config.h"
-#include "perfetto/tracing/core/trace_packet.h"
-#include "perfetto/tracing/core/trace_writer.h"
+// #include "perfetto/trace/trace_packet.pbzero.h"
+#include "src/base/platform/platform.h"
+#include "src/base/platform/semaphore.h"
 #include "src/libplatform/tracing/json-trace-event-listener.h"
-#include "src/libplatform/tracing/perfetto-tracing-controller.h"
 #endif  // V8_USE_PERFETTO
+
+class MyDataSource : public perfetto::DataSource<MyDataSource> {
+ public:
+  void OnSetup(const SetupArgs&) override {}
+  void OnStart(const StartArgs&) override {
+  printf("Signalled\n");started_.Signal(); }
+  void OnStop(const StopArgs&) override {}
+
+  static v8::base::Semaphore started_;
+};
+
+v8::base::Semaphore MyDataSource::started_{0};
+
+PERFETTO_DEFINE_DATA_SOURCE_STATIC_MEMBERS(MyDataSource);
 
 namespace v8 {
 namespace platform {
@@ -171,16 +183,17 @@ uint64_t TracingController::AddTraceEventWithTimestamp(
   int64_t cpu_now_us = CurrentCpuTimestampMicroseconds();
 
 #ifdef V8_USE_PERFETTO
-  if (perfetto_recording_.load()) {
     // Don't use COMPLETE events with perfetto - instead transform them into
     // BEGIN/END pairs. This avoids the need for a thread-local stack of pending
     // trace events as perfetto does not support handles into the trace buffer.
     if (phase == TRACE_EVENT_PHASE_COMPLETE) phase = TRACE_EVENT_PHASE_BEGIN;
-    ::perfetto::TraceWriter* writer =
-        perfetto_tracing_controller_->GetOrCreateThreadLocalWriter();
+    // ::perfetto::TraceWriter* writer =
+    //     perfetto_tracing_controller_->GetOrCreateThreadLocalWriter();
     // TODO(petermarshall): We shouldn't start one packet for each event.
     // We should try to bundle them together in one bundle.
-    auto packet = writer->NewTracePacket();
+
+  MyDataSource::Trace([=](MyDataSource::TraceContext ctx) {
+    auto packet = ctx.NewTracePacket();
     auto* trace_event_bundle = packet->set_chrome_events();
     auto* trace_event = trace_event_bundle->add_trace_events();
 
@@ -203,11 +216,11 @@ uint64_t TracingController::AddTraceEventWithTimestamp(
     trace_event->set_thread_timestamp(cpu_now_us);
     trace_event->set_bind_id(bind_id);
 
-    AddArgsToTraceProto(trace_event, num_args, arg_names, arg_types, arg_values,
-                        arg_convertables);
+    AddArgsToTraceProto(trace_event, num_args, arg_names, arg_types,
+                        arg_values, arg_convertables);
 
     packet->Finalize();
-  }
+  });
 #endif  // V8_USE_PERFETTO
 
   uint64_t handle = 0;
@@ -234,13 +247,10 @@ void TracingController::UpdateTraceEventDuration(
 #ifdef V8_USE_PERFETTO
   // TODO(petermarshall): Should we still record the end of unfinished events
   // when tracing has stopped?
-  if (perfetto_recording_.load()) {
     // TODO(petermarshall): We shouldn't start one packet for each event. We
     // should try to bundle them together in one bundle.
-    ::perfetto::TraceWriter* writer =
-        perfetto_tracing_controller_->GetOrCreateThreadLocalWriter();
-
-    auto packet = writer->NewTracePacket();
+  MyDataSource::Trace([=](MyDataSource::TraceContext ctx) {
+    auto packet = ctx.NewTracePacket();
     auto* trace_event_bundle = packet->set_chrome_events();
     auto* trace_event = trace_event_bundle->add_trace_events();
 
@@ -251,7 +261,7 @@ void TracingController::UpdateTraceEventDuration(
     trace_event->set_thread_timestamp(cpu_now_us);
 
     packet->Finalize();
-  }
+  });
 #endif  // V8_USE_PERFETTO
 
   TraceObject* trace_object = trace_buffer_->GetEventByHandle(handle);
@@ -275,26 +285,44 @@ const char* TracingController::GetCategoryGroupName(
   return g_category_groups[category_index];
 }
 
+
 void TracingController::StartTracing(TraceConfig* trace_config) {
 #ifdef V8_USE_PERFETTO
-  perfetto_tracing_controller_ = base::make_unique<PerfettoTracingController>();
+  // perfetto_tracing_controller_ = base::make_unique<PerfettoTracingController>();
 
-  if (listener_for_testing_) {
-    perfetto_tracing_controller_->AddTraceEventListener(listener_for_testing_);
-  }
+  // if (listener_for_testing_) {
+  //   perfetto_tracing_controller_->AddTraceEventListener(listener_for_testing_);
+  // }
   DCHECK_NOT_NULL(output_stream_);
   DCHECK(output_stream_->good());
   json_listener_ = base::make_unique<JSONTraceEventListener>(output_stream_);
-  perfetto_tracing_controller_->AddTraceEventListener(json_listener_.get());
+  // perfetto_tracing_controller_->AddTraceEventListener(json_listener_.get());
   ::perfetto::TraceConfig perfetto_trace_config;
 
   perfetto_trace_config.add_buffers()->set_size_kb(4096);
   auto* ds_config = perfetto_trace_config.add_data_sources()->mutable_config();
   ds_config->set_name("v8.trace_events");
 
-  // TODO(petermarshall): Set all the params from |perfetto_trace_config|.
-  perfetto_tracing_controller_->StartTracing(perfetto_trace_config);
-  perfetto_recording_.store(true);
+  perfetto::DataSourceDescriptor dsd;
+  dsd.set_name("my_data_source");
+  MyDataSource::Register(dsd);
+
+  // // TODO(petermarshall): Set all the params from |perfetto_trace_config|.
+  // perfetto_tracing_controller_->StartTracing(perfetto_trace_config);
+  // perfetto_recording_.store(true);
+
+  // perfetto::TracingInitArgs init_args;
+  // init_args.backends = perfetto::BackendType::kInProcessBackend;
+  // perfetto::Tracing::Initialize(init_args);
+
+  tracing_session_ =
+      perfetto::Tracing::NewTrace(perfetto::BackendType::kInProcessBackend);
+  tracing_session_->Setup(perfetto_trace_config);
+  printf("Calling start\n");
+  tracing_session_->Start();
+  printf("Calling Wait\n");
+  MyDataSource::started_.Wait();
+
 #endif  // V8_USE_PERFETTO
 
   trace_config_.reset(trace_config);
@@ -327,10 +355,18 @@ void TracingController::StopTracing() {
   }
 
 #ifdef V8_USE_PERFETTO
-  perfetto_recording_.store(false);
-  perfetto_tracing_controller_->StopTracing();
-  perfetto_tracing_controller_.reset();
+  base::Semaphore stopped_{0};
+  tracing_session_->SetOnStopCallback([&stopped_]() {
+    stopped_.Signal();
+  });
+  tracing_session_->Stop();
+  stopped_.Wait();
+
+  std::vector<char> trace = tracing_session_->ReadTraceBlocking();
+  json_listener_->ParseFromArray(trace);
+
   json_listener_.reset();
+
 #endif  // V8_USE_PERFETTO
 
   {
