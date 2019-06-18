@@ -999,6 +999,7 @@ if (!v8_enable_i18n_support) {
 action("run_torque") {
   visibility = [
     ":*",
+    "tools/debug_helper/:*",
     "tools/gcmole/:*",
     "test/cctest/:*",
   ]
@@ -1020,6 +1021,8 @@ action("run_torque") {
     "$target_gen_dir/torque-generated/class-definitions-tq.cc",
     "$target_gen_dir/torque-generated/class-definitions-tq-inl.h",
     "$target_gen_dir/torque-generated/class-definitions-tq.h",
+    "$target_gen_dir/torque-generated/class-debug-readers-tq.cc",
+    "$target_gen_dir/torque-generated/class-debug-readers-tq.h",
     "$target_gen_dir/torque-generated/exported-macros-assembler-tq.cc",
     "$target_gen_dir/torque-generated/exported-macros-assembler-tq.h",
     "$target_gen_dir/torque-generated/csa-types-tq.h",
