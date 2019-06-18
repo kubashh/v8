@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "4995aa23_5fcf932a",
+        "filename": "src/builtins/object.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-06-18T07:05:36Z",
+      "side": 1,
+      "message": "nice! thanks for suggestions",
+      "parentUuid": "4200223a_ab3cd26d",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bdecd771_0f170bfc",
         "filename": "src/builtins/object.tq",
         "patchSetId": 5
@@ -143,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "e52b2f9e_fe93b373",
+        "filename": "src/builtins/proxy-get-prototype-of.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-06-18T07:05:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1aa4146_495b4c64",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e19e7f88_83227017",
         "filename": "src/builtins/proxy-get-prototype-of.tq",
         "patchSetId": 5
@@ -157,6 +193,24 @@
       "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c7bf028_7c7d213b",
+        "filename": "src/builtins/proxy-get-prototype-of.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-06-18T07:05:36Z",
+      "side": 1,
+      "message": "Done. I would like to add IsBoolean but we only use it in assert hence release build will fail.",
+      "parentUuid": "e19e7f88_83227017",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
