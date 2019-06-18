@@ -696,3 +696,8 @@ text {
   padding-left: .5ex;
   outline: 1px dotted grey;
 }
+
+#disassembly-list .block-id {
+  width: 4ex;
+  display: inline-block;
+}
