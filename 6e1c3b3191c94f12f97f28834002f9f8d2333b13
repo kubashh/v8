@@ -214,6 +214,24 @@
     },
     {
       "key": {
+        "uuid": "7f7a30b2_bf276164",
+        "filename": "src/builtins/proxy-get-prototype-of.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-06-18T07:29:56Z",
+      "side": 1,
+      "message": "Macros declared as \"extern\" are not checked for usage, so there should not be any lint error for IsBoolean.",
+      "parentUuid": "1c7bf028_7c7d213b",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23529fa4_924018cc",
         "filename": "src/builtins/proxy-get-prototype-of.tq",
         "patchSetId": 5
