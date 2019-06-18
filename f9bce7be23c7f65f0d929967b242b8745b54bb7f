@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e79d138_2544ed5a",
+        "filename": "src/compiler/representation-change.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-18T10:44:26Z",
+      "side": 1,
+      "message": "Please add a DCHECK, we don\u0027t want the code in release mode!",
+      "range": {
+        "startLine": 825,
+        "startChar": 8,
+        "endLine": 825,
+        "endChar": 21
+      },
+      "revId": "f9bce7be23c7f65f0d929967b242b8745b54bb7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
