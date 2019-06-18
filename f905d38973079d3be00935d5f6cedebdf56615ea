@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a7fefe76_4b554485",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-06-18T15:08:08Z",
+      "side": 1,
+      "message": "I\u0027d rather not. We use the checksum in code cache because we\u0027ve observed data corruption in the wild, and the checksum is a guard against that.\n\nIn this case we really only want to make sure we only use one snapshot, so a random UUID would work equally well.",
+      "parentUuid": "21a0991c_27359477",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 16
+      },
+      "revId": "f905d38973079d3be00935d5f6cedebdf56615ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "537952d4_cbb1522f",
         "filename": "src/heap/read-only-heap.cc",
         "patchSetId": 4
