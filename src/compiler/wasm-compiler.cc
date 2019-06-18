@@ -5811,22 +5811,26 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
   }
 
   void BuildCWasmEntry() {
-    // Build the start and the JS parameter nodes.
-    SetEffect(SetControl(Start(CWasmEntryParameters::kNumParameters + 5)));
+    // +1 offset for first parameter index being -1.
+    SetEffect(SetControl(Start(CWasmEntryParameters::kNumParameters + 1)));
 
-    // Create parameter nodes (offset by 1 for the receiver parameter).
-    Node* code_entry = Param(CWasmEntryParameters::kCodeEntry + 1);
-    Node* object_ref_node = Param(CWasmEntryParameters::kObjectRef + 1);
-    Node* arg_buffer = Param(CWasmEntryParameters::kArgumentsBuffer + 1);
+    Node* code_entry = Param(CWasmEntryParameters::kCodeEntry);
+    Node* object_ref = Param(CWasmEntryParameters::kObjectRef);
+    Node* arg_buffer = Param(CWasmEntryParameters::kArgumentsBuffer);
+    Node* c_entry_fp = Param(CWasmEntryParameters::kCEntryFp);
+
+    Node* fp_value = graph()->NewNode(mcgraph()->machine()->LoadFramePointer());
+    STORE_RAW(fp_value, TypedFrameConstants::kFirstPushedFrameValueOffset,
+              c_entry_fp, MachineType::PointerRepresentation(),
+              kNoWriteBarrier);
 
     int wasm_arg_count = static_cast<int>(sig_->parameter_count());
-    int arg_count =
-        wasm_arg_count + 4;  // code, object_ref_node, control, effect
+    int arg_count = wasm_arg_count + 4;  // code, object_ref, control, effect
     Node** args = Buffer(arg_count);
 
     int pos = 0;
     args[pos++] = code_entry;
-    args[pos++] = object_ref_node;
+    args[pos++] = object_ref;
 
     int offset = 0;
     for (wasm::ValueType type : sig_->parameters()) {
@@ -5847,30 +5851,35 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     Node* call = SetEffect(graph()->NewNode(
         mcgraph()->common()->Call(call_descriptor), arg_count, args));
 
-    // Store the return value.
-    DCHECK_GE(1, sig_->return_count());
-    if (sig_->return_count() == 1) {
+    Node* if_success = graph()->NewNode(mcgraph()->common()->IfSuccess(), call);
+    Node* if_exception =
+        graph()->NewNode(mcgraph()->common()->IfException(), call, call);
+
+    // Handle exception: return it.
+    SetControl(if_exception);
+    Return(if_exception);
+
+    // Handle success: store the return value(s).
+    SetControl(if_success);
+    pos = 0;
+    offset = 0;
+    for (wasm::ValueType type : sig_->returns()) {
       StoreRepresentation store_rep(
-          wasm::ValueTypes::MachineRepresentationFor(sig_->GetReturn()),
-          kNoWriteBarrier);
+          wasm::ValueTypes::MachineRepresentationFor(type), kNoWriteBarrier);
+      Node* value =
+          sig_->return_count() == 1
+              ? call
+              : graph()->NewNode(mcgraph()->common()->Projection(pos), call);
       SetEffect(graph()->NewNode(mcgraph()->machine()->Store(store_rep),
-                                 arg_buffer, Int32Constant(0), call, Effect(),
-                                 Control()));
+                                 arg_buffer, Int32Constant(offset), value,
+                                 Effect(), Control()));
+      offset += wasm::ValueTypes::ElementSizeInBytes(type);
+      pos++;
     }
+
     Return(jsgraph()->SmiConstant(0));
 
-    if (mcgraph()->machine()->Is32() && ContainsInt64(sig_)) {
-      MachineRepresentation sig_reps[] = {
-          MachineRepresentation::kWord32,  // return value
-          MachineRepresentation::kTagged,  // receiver
-          MachineRepresentation::kTagged,  // arg0 (code)
-          MachineRepresentation::kTagged   // arg1 (buffer)
-      };
-      Signature<MachineRepresentation> c_entry_sig(1, 2, sig_reps);
-      Int64Lowering r(mcgraph()->graph(), mcgraph()->machine(),
-                      mcgraph()->common(), mcgraph()->zone(), &c_entry_sig);
-      r.LowerGraph();
-    }
+    if (ContainsInt64(sig_)) LowerInt64();
   }
 
   JSGraph* jsgraph() { return jsgraph_; }
@@ -6348,11 +6357,19 @@ MaybeHandle<Code> CompileCWasmEntry(Isolate* isolate, wasm::FunctionSig* sig) {
   builder.BuildCWasmEntry();
 
   // Schedule and compile to machine code.
-  CallDescriptor* incoming = Linkage::GetJSCallDescriptor(
-      &zone, false, CWasmEntryParameters::kNumParameters + 1,
-      CallDescriptor::kNoFlags);
+  MachineType sig_types[] = {MachineType::Pointer(),   // return
+                             MachineType::Pointer(),   // target
+                             MachineType::Pointer(),   // object_ref
+                             MachineType::Pointer(),   // argv
+                             MachineType::Pointer()};  // c_entry_fp
+  MachineSignature incoming_sig(1, 4, sig_types);
+  // Traps need the root register, for TailCallRuntimeWithCEntry to call
+  // Runtime::kThrowWasmError.
+  bool initialize_root_flag = true;
+  CallDescriptor* incoming = Linkage::GetSimplifiedCDescriptor(
+      &zone, &incoming_sig, initialize_root_flag);
 
-  // Build a name in the form "c-wasm-entry:<params>:<returns>".
+  // Build a name in the form "c-wasm-entry-new:<params>:<returns>".
   static constexpr size_t kMaxNameLen = 128;
   char debug_name[kMaxNameLen] = "c-wasm-entry:";
   AppendSignature(debug_name, kMaxNameLen, sig);
