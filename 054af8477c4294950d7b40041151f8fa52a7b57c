@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2acb3aa3_98f39877",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-06-18T10:17:05Z",
+      "side": 0,
+      "message": "add something to the description to say why this test is being removed: e.g. it used to test Map::WeakCellForMap and that doesn\u0027t exist any more.",
+      "range": {
+        "startLine": 278,
+        "startChar": 19,
+        "endLine": 278,
+        "endChar": 55
+      },
+      "revId": "054af8477c4294950d7b40041151f8fa52a7b57c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

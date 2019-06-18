@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21a0991c_27359477",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-06-18T10:17:05Z",
+      "side": 1,
+      "message": "Yang, what do you think about doing these checksum check every time even in release builds? How expensive is it to do?\n\nWe could perhaps just use the Checksum from the complete blob which is stored there and so doesn\u0027t need recalculating.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 16
+      },
+      "revId": "f905d38973079d3be00935d5f6cedebdf56615ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "537952d4_cbb1522f",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-06-18T10:17:05Z",
+      "side": 1,
+      "message": "nit: it\u0027s",
+      "range": {
+        "startLine": 55,
+        "startChar": 64,
+        "endLine": 55,
+        "endChar": 67
+      },
+      "revId": "f905d38973079d3be00935d5f6cedebdf56615ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
