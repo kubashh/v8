@@ -232,6 +232,24 @@
     },
     {
       "key": {
+        "uuid": "25e71b59_5c992068",
+        "filename": "src/builtins/proxy-get-prototype-of.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-06-18T16:22:30Z",
+      "side": 1,
+      "message": "I thought extern macros are defined in CSA and just use in Torque? Here I want to define it in Torque and only use it in assert().\n\n@export might work (I guess) but not exactly describe what we want here :)",
+      "parentUuid": "7f7a30b2_bf276164",
+      "revId": "6e1c3b3191c94f12f97f28834002f9f8d2333b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23529fa4_924018cc",
         "filename": "src/builtins/proxy-get-prototype-of.tq",
         "patchSetId": 5
