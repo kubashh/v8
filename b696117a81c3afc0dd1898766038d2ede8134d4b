@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "786f7e30_37b4f63c",
+        "filename": "test/mjsunit/reindexing-in-classes.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-06-19T10:36:39Z",
+      "side": 1,
+      "message": "Can you add a test for a private field as well?",
+      "revId": "b696117a81c3afc0dd1898766038d2ede8134d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
