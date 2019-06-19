@@ -3059,6 +3059,8 @@ bool Shell::EmptyMessageQueues(Isolate* isolate) {
       isolate, []() { return platform::MessageLoopBehavior::kDoNotWait; });
 }
 
+void Foo();
+
 class Serializer : public ValueSerializer::Delegate {
  public:
   explicit Serializer(Isolate* isolate)
@@ -3068,6 +3070,8 @@ class Serializer : public ValueSerializer::Delegate {
 
   Maybe<bool> WriteValue(Local<Context> context, Local<Value> value,
                          Local<Value> transfer) {
+    Foo();
+
     bool ok;
     DCHECK(!data_);
     data_.reset(new SerializationData);
