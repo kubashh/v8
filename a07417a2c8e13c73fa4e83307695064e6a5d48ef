@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a45fb835_e4b26957",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-06-19T10:49:46Z",
+      "side": 1,
+      "message": "Probably unnecessary, but we could make this throw a TypeError (maybe MessageTemplate::kMethodInvokedOnWrongType?)",
+      "range": {
+        "startLine": 364,
+        "startChar": 4,
+        "endLine": 364,
+        "endChar": 52
+      },
+      "revId": "a07417a2c8e13c73fa4e83307695064e6a5d48ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
