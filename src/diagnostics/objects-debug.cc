@@ -1574,12 +1574,7 @@ static void ModuleVerify(Module module, Isolate* isolate) {
 void SourceTextModule::SourceTextModuleVerify(Isolate* isolate) {
   ModuleVerify(*this, isolate);
 
-  CHECK(IsSourceTextModule());
-
-  VerifyPointer(isolate, code());
-  VerifyPointer(isolate, requested_modules());
-  VerifyPointer(isolate, script());
-  VerifyPointer(isolate, import_meta());
+  TorqueGeneratedClassVerifiers::ModuleVerify(*this, isolate);
 
   CHECK((status() >= kEvaluating && code().IsSourceTextModuleInfo()) ||
         (status() == kInstantiated && code().IsJSGeneratorObject()) ||
@@ -1587,8 +1582,6 @@ void SourceTextModule::SourceTextModuleVerify(Isolate* isolate) {
         (code().IsSharedFunctionInfo()));
 
   CHECK_EQ(requested_modules().length(), info().module_requests().length());
-
-  CHECK(import_meta().IsTheHole(isolate) || import_meta().IsJSObject());
 }
 
 void PrototypeInfo::PrototypeInfoVerify(Isolate* isolate) {

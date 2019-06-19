@@ -448,7 +448,6 @@ extern class CallHandlerInfo extends Struct {
   data: Object;
 }
 
-type ModuleInfo extends FixedArray;
 type ObjectHashTable extends FixedArray;
 
 extern class Module extends HeapObject {
@@ -457,6 +456,20 @@ extern class Module extends HeapObject {
   status: Smi;
   module_namespace: JSModuleNamespace | Undefined;
   exception: Object;
+}
+
+type SourceTextModuleInfo extends FixedArray;
+
+extern class SourceTextModule extends HeapObject {
+  code: SharedFunctionInfo | JSFunction |
+      JSGeneratorObject | SourceTextModuleInfo;
+  regular_exports: FixedArray;
+  regular_imports: FixedArray;
+  requested_modules: FixedArray;
+  script: Script;
+  import_meta: TheHole | JSObject;
+  dfs_index: Smi;
+  dfs_ancestor_index: Smi;
 }
 
 @abstract

@@ -73,20 +73,8 @@ class SourceTextModule : public Module {
       Isolate* isolate, Handle<SourceTextModule> module, int module_request);
 
   // Layout description.
-#define SOURCE_TEXT_MODULE_FIELDS(V)      \
-  V(kCodeOffset, kTaggedSize)             \
-  V(kRegularExportsOffset, kTaggedSize)   \
-  V(kRegularImportsOffset, kTaggedSize)   \
-  V(kRequestedModulesOffset, kTaggedSize) \
-  V(kScriptOffset, kTaggedSize)           \
-  V(kImportMetaOffset, kTaggedSize)       \
-  V(kDfsIndexOffset, kTaggedSize)         \
-  V(kDfsAncestorIndexOffset, kTaggedSize) \
-  /* Total size. */                       \
-  V(kSize, 0)
-
-  DEFINE_FIELD_OFFSET_CONSTANTS(Module::kSize, SOURCE_TEXT_MODULE_FIELDS)
-#undef SOURCE_TEXT_MODULE_FIELDS
+  DEFINE_FIELD_OFFSET_CONSTANTS(Module::kSize,
+                                TORQUE_GENERATED_SOURCE_TEXT_MODULE_FIELDS)
 
   using BodyDescriptor =
       SubclassBodyDescriptor<Module::BodyDescriptor,
