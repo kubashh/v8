@@ -9,7 +9,7 @@ function foo(r) {
 }
 
 const resolution = Promise.resolve();
-%PrepareFunctionForOptimization(foo);
+%PrepareFunctionForOptimization(bar);
 foo(resolution);
 
 function bar() {
