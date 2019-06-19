@@ -22,6 +22,30 @@
       "revId": "a07417a2c8e13c73fa4e83307695064e6a5d48ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8eb1b162_2131dd64",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-06-19T11:07:37Z",
+      "side": 1,
+      "message": "I think it makes sense to let the rest of CFed source to execute even if we called this function with incorrect arguments. Maybe we\u0027ll catch something earlier.",
+      "parentUuid": "a45fb835_e4b26957",
+      "range": {
+        "startLine": 364,
+        "startChar": 4,
+        "endLine": 364,
+        "endChar": 52
+      },
+      "revId": "a07417a2c8e13c73fa4e83307695064e6a5d48ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
