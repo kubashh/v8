@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "545b4839_998a8ad2",
+        "filename": "test/mjsunit/regress/regress-crbug-976256.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-06-19T09:27:42Z",
+      "side": 1,
+      "message": "Should this be after the declaration of bar?",
+      "revId": "2cb6a1708d23be6586c7a212133c6a350f506880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
