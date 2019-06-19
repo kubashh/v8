@@ -803,7 +803,9 @@ void DescriptorArray::DescriptorArrayVerify(Isolate* isolate) {
     CHECK_LT(0, number_of_all_descriptors());
     CHECK_LE(number_of_descriptors(), number_of_all_descriptors());
 
-    // Check that properties with private symbols names are non-enumerable.
+    // Check that properties with private symbols names are non-enumerable, and
+    // that fields are in order.
+    int expected_field_index = 0;
     for (int descriptor = 0; descriptor < number_of_descriptors();
          descriptor++) {
       Object key = get(ToKeyIndex(descriptor))->cast<Object>();
@@ -817,11 +819,13 @@ void DescriptorArray::DescriptorArrayVerify(Isolate* isolate) {
       MaybeObject value = get(ToValueIndex(descriptor));
       HeapObject heap_object;
       if (details.location() == kField) {
+        CHECK_EQ(details.field_index(), expected_field_index);
         CHECK(
             value == MaybeObject::FromObject(FieldType::None()) ||
             value == MaybeObject::FromObject(FieldType::Any()) ||
             value->IsCleared() ||
             (value->GetHeapObjectIfWeak(&heap_object) && heap_object.IsMap()));
+        expected_field_index += details.field_width_in_words();
       } else {
         CHECK(!value->IsWeakOrCleared());
         CHECK(!value->cast<Object>().IsMap());
