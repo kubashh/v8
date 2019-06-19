@@ -393,5 +393,60 @@ MaybeHandle<Object> Execution::TryRunMicrotasks(
                                                    exception_out));
 }
 
+struct StackHandlerMarker {
+  Address next;
+  Address padding;
+};
+STATIC_ASSERT(offsetof(StackHandlerMarker, next) ==
+              StackHandlerConstants::kNextOffset);
+STATIC_ASSERT(offsetof(StackHandlerMarker, padding) ==
+              StackHandlerConstants::kPaddingOffset);
+STATIC_ASSERT(sizeof(StackHandlerMarker) == StackHandlerConstants::kSize);
+
+void Execution::CallWasm(Isolate* isolate, Handle<Code> wrapper_code,
+                         Address wasm_call_target, Handle<Object> object_ref,
+                         Address packed_args) {
+  using WasmEntryStub = GeneratedCode<Address(
+      Address target, Address object_ref, Address argv, Address c_entry_fp)>;
+  WasmEntryStub stub_entry =
+      WasmEntryStub::FromAddress(isolate, wrapper_code->InstructionStart());
+
+  // Save and restore context around invocation and block the
+  // allocation of handles without explicit handle scopes.
+  SaveContext save(isolate);
+  SealHandleScope shs(isolate);
+
+  Address saved_c_entry_fp = *isolate->c_entry_fp_address();
+  Address saved_js_entry_sp = *isolate->js_entry_sp_address();
+  if (saved_js_entry_sp == kNullAddress) {
+    *isolate->js_entry_sp_address() = GetCurrentStackPosition();
+  }
+  StackHandlerMarker stack_handler;
+  stack_handler.next = isolate->thread_local_top()->handler_;
+  isolate->thread_local_top()->handler_ =
+      reinterpret_cast<Address>(&stack_handler);
+  trap_handler::SetThreadInWasm();
+
+  {
+    RuntimeCallTimerScope timer(isolate, RuntimeCallCounterId::kJS_Execution);
+    Address result = stub_entry.Call(wasm_call_target, object_ref->ptr(),
+                                     packed_args, saved_c_entry_fp);
+    if (result != kNullAddress) {
+      isolate->set_pending_exception(Object(result));
+    }
+  }
+
+  // If there was an exception, then the thread-in-wasm flag is cleared
+  // already.
+  if (trap_handler::IsThreadInWasm()) {
+    trap_handler::ClearThreadInWasm();
+  }
+  isolate->thread_local_top()->handler_ = stack_handler.next;
+  if (saved_js_entry_sp == kNullAddress) {
+    *isolate->js_entry_sp_address() = saved_js_entry_sp;
+  }
+  *isolate->c_entry_fp_address() = saved_c_entry_fp;
+}
+
 }  // namespace internal
 }  // namespace v8

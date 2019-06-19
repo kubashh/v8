@@ -144,8 +144,10 @@ int CallDescriptor::CalculateFixedFrameSize() const {
                  ? OptimizedBuiltinFrameConstants::kFixedSlotCount
                  : StandardFrameConstants::kFixedSlotCount;
     case kCallAddress:
-      return CommonFrameConstants::kFixedSlotCountAboveFp +
-             CommonFrameConstants::kCPSlotCount;
+      // We use frames that have an incoming C calling convention for
+      // C-to-generated-code entry stubs. They have a frame type marker
+      // plus a slot for the CEntryFP.
+      return TypedFrameConstants::kFixedSlotCount + 1 /* c_entry_fp */;
     case kCallCodeObject:
     case kCallBuiltinPointer:
       return TypedFrameConstants::kFixedSlotCount;

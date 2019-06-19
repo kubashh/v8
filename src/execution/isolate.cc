@@ -1621,7 +1621,12 @@ Object Isolate::UnwindAndFindHandler() {
     thread_local_top()->pending_handler_fp_ = handler_fp;
     thread_local_top()->pending_handler_sp_ = handler_sp;
 
-    // Return and clear pending exception.
+    // Return and clear pending exception. The contract is that:
+    // (1) the pending exception is stored in one place (no duplication), and
+    // (2) within generated-code land, that one place is the return register.
+    // If/when we unwind back into C++ (returning to the JSEntry stub,
+    // or to Execution::CallWasm), the returned exception will be sent
+    // back to isolate->set_pending_exception(...).
     clear_pending_exception();
     return exception;
   };
@@ -1654,6 +1659,19 @@ Object Isolate::UnwindAndFindHandler() {
                             table.LookupReturn(0), code.constant_pool(),
                             handler->address() + StackHandlerConstants::kSize,
                             0);
+      }
+
+      case StackFrame::C_WASM_ENTRY: {
+        StackHandler* handler = frame->top_handler();
+        thread_local_top()->handler_ = handler->next_address();
+        Code code = frame->LookupCode();
+        HandlerTable table(code);
+        Address instruction_start = code.InstructionStart();
+        int return_offset = static_cast<int>(frame->pc() - instruction_start);
+        int handler_offset = table.LookupReturn(return_offset);
+        DCHECK_NE(-1, handler_offset);
+        return FoundHandler(Context(), instruction_start, handler_offset,
+                            code.constant_pool(), frame->sp(), frame->fp());
       }
 
       case StackFrame::WASM_COMPILED: {
