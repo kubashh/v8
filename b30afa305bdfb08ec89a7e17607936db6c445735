@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "227ab399_b3b9b24b",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-06-19T13:50:22Z",
+      "side": 1,
+      "message": "It feels like there should now be a proper API for this (e.g. a class called PendingOptimizationTable that has APIs like PrepareForOptimization(...), MarkedForOptimization(...), FunctionWasOptimized(...), and hide the details of this in there, WDYT?",
+      "range": {
+        "startLine": 804,
+        "startChar": 4,
+        "endLine": 804,
+        "endChar": 34
+      },
+      "revId": "b30afa305bdfb08ec89a7e17607936db6c445735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fece7cd1_64af4962",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-06-19T13:50:22Z",
+      "side": 1,
+      "message": "nit - how about just wrapping all the optimization table logic in this flag? We could also set up the table if we see this flag (and leave undefined otherwise) thus not having to check for undefined everywhere if the flag is enabled.",
+      "range": {
+        "startLine": 229,
+        "startChar": 4,
+        "endLine": 229,
+        "endChar": 38
+      },
+      "revId": "b30afa305bdfb08ec89a7e17607936db6c445735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
