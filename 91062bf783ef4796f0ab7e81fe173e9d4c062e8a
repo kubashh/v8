@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e949355c_7d592a9f",
+        "filename": "BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 3295,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-06-19T23:09:22Z",
+      "side": 1,
+      "message": "There seems to be a problem with how memory allocator shims are configured in //base (asked about it here: https://chromium.slack.com/archives/CKPKQEZ36/p1560982905049700). I doubt this can be fixed on V8\u0027s side. Given that we do want crash keys on all other platforms, do you think we could exclude android while we are figuring it out?",
+      "range": {
+        "startLine": 3295,
+        "startChar": 29,
+        "endLine": 3295,
+        "endChar": 40
+      },
+      "revId": "91062bf783ef4796f0ab7e81fe173e9d4c062e8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
