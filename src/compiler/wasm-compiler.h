@@ -138,6 +138,7 @@ enum CWasmEntryParameters {
   kCodeEntry,
   kObjectRef,
   kArgumentsBuffer,
+  kCEntryFp,
   // marker:
   kNumParameters
 };

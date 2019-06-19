@@ -41,6 +41,12 @@ class StackHandlerIterator {
       : limit_(frame->fp()), handler_(handler) {
     // Make sure the handler has already been unwound to this frame.
     DCHECK(frame->sp() <= handler->address());
+    // For CWasmEntry frames, the handler was registered by the last C++
+    // frame (Execution::CallWasm), so even though its address is already
+    // beyond the limit, we know we always want to unwind one handler.
+    if (frame->type() == StackFrame::C_WASM_ENTRY) {
+      handler_ = handler_->next();
+    }
   }
 
   StackHandler* handler() const { return handler_; }
@@ -633,6 +639,12 @@ void EntryFrame::ComputeCallerState(State* state) const {
 
 StackFrame::Type EntryFrame::GetCallerState(State* state) const {
   const int offset = EntryFrameConstants::kCallerFPOffset;
+  Address fp = Memory<Address>(this->fp() + offset);
+  return ExitFrame::GetStateForFramePointer(fp, state);
+}
+
+StackFrame::Type CWasmEntryFrame::GetCallerState(State* state) const {
+  const int offset = TypedFrameConstants::kFirstPushedFrameValueOffset;
   Address fp = Memory<Address>(this->fp() + offset);
   return ExitFrame::GetStateForFramePointer(fp, state);
 }

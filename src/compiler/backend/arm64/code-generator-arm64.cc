@@ -2580,7 +2580,17 @@ void CodeGenerator::AssembleConstructFrame() {
                MemOperand(fp, WasmCompiledFrameConstants::kWasmInstanceOffset));
       } break;
       case CallDescriptor::kCallAddress:
+        if (info()->GetOutputStackFrameType() == StackFrame::C_WASM_ENTRY) {
+          required_slots += 2;  // marker + saved c_entry_fp.
+        }
         __ Claim(required_slots);
+        if (info()->GetOutputStackFrameType() == StackFrame::C_WASM_ENTRY) {
+          UseScratchRegisterScope temps(tasm());
+          Register scratch = temps.AcquireX();
+          __ Mov(scratch, StackFrame::TypeToMarker(StackFrame::C_WASM_ENTRY));
+          __ Str(scratch,
+                 MemOperand(fp, TypedFrameConstants::kFrameTypeOffset));
+        }
         break;
       default:
         UNREACHABLE();

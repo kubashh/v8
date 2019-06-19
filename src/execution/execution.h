@@ -31,6 +31,16 @@ class Execution final : public AllStatic {
       Isolate* isolate, Handle<Object> callable, Handle<Object> receiver,
       int argc, Handle<Object> argv[]);
 
+  // Call a Wasm function identified by {wasm_call_target} through the
+  // provided {wrapper_code}, which must match the function's signature.
+  // Upon return, either isolate->has_pending_exception() is true, or
+  // the function's return values are in {packed_args}.
+  V8_EXPORT_PRIVATE static void CallWasm(Isolate* isolate,
+                                         Handle<Code> wrapper_code,
+                                         Address wasm_call_target,
+                                         Handle<Object> object_ref,
+                                         Address packed_args);
+
   // Construct object from function, the caller supplies an array of
   // arguments.
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> New(
