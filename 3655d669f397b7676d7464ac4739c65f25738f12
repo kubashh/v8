@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afb0eb1a_784e4fef",
+        "filename": "src/builtins/bigint.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-19T15:11:19Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be called BigIntAddNoThrow similar to the earlier AllocateEmptyBigIntNoThrow?",
+      "range": {
+        "startLine": 145,
+        "startChar": 8,
+        "endLine": 145,
+        "endChar": 24
+      },
+      "revId": "3655d669f397b7676d7464ac4739c65f25738f12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23b2d598_567b7fb3",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2677,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-19T15:11:19Z",
+      "side": 1,
+      "message": "It would be nice if this did the check in the same way as LowerObjectIsBigInt (ideally sharing code).",
+      "revId": "3655d669f397b7676d7464ac4739c65f25738f12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cccbd5e_c40c37f9",
+        "filename": "src/compiler/operation-typer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-19T15:11:19Z",
+      "side": 1,
+      "message": "Nit: remove empty line.",
+      "revId": "3655d669f397b7676d7464ac4739c65f25738f12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
