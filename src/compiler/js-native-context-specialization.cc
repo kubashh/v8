@@ -687,6 +687,13 @@ Reduction JSNativeContextSpecialization::ReduceJSResolvePromise(Node* node) {
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
 
+  if (FLAG_concurrent_inlining) {
+    // This optimization is less important going forward due to a change
+    // away from the streams implementation in Chrome, therefore it's
+    // not worth fully brokerizing.
+    return NoChange();
+  }
+
   // Check if we know something about the {resolution}.
   MapInference inference(broker(), resolution, effect);
   if (!inference.HaveMaps()) return NoChange();
