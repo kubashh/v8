@@ -16,6 +16,24 @@
       "revId": "b696117a81c3afc0dd1898766038d2ede8134d4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7219e047_fade5ad2",
+        "filename": "test/mjsunit/reindexing-in-classes.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-06-19T10:45:37Z",
+      "side": 1,
+      "message": "There is one, do you mean private method? Is that implemented?",
+      "parentUuid": "786f7e30_37b4f63c",
+      "revId": "b696117a81c3afc0dd1898766038d2ede8134d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
