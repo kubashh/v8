@@ -174,6 +174,8 @@ class BoyerMoorePositionInfo : public ZoneObject {
   bool is_non_word() { return w_ == kLatticeOut; }
   bool is_word() { return w_ == kLatticeIn; }
 
+  int FirstSetBit() const;
+
  private:
   std::bitset<kMapSize> map_;
   int map_count_ = 0;                       // Number of set bits in the map.

@@ -2564,21 +2564,38 @@ ContainedInLattice AddRange(ContainedInLattice containment, const int* ranges,
   return containment;
 }
 
+using BoyerMooreBitset = std::bitset<BoyerMoorePositionInfo::kMapSize>;
+
+// Bitset operations rely on this.
+STATIC_ASSERT(BoyerMoorePositionInfo::kMapSize <=
+              2 * sizeof(unsigned long long) * kBitsPerByte);
+
+int BitsetFirstSetBit(const BoyerMooreBitset& bitset) {
+  STATIC_ASSERT(64 >= sizeof(unsigned long long) * kBitsPerByte);
+
+  uint64_t lsb = bitset.to_ullong();
+  if (lsb != 0) return base::bits::CountTrailingZeros(lsb);
+
+  uint64_t msb = static_cast<uint64_t>((bitset >> 64).to_ullong());
+  if (msb != 0) return 64 + base::bits::CountTrailingZeros(msb);
+
+  return -1;
+}
+
 }  // namespace
 
 void BoyerMoorePositionInfo::SetInterval(const Interval& interval) {
+  if (interval.size() >= kMapSize) {
+    SetAll();
+    return;
+  }
+
   s_ = AddRange(s_, kSpaceRanges, kSpaceRangeCount, interval);
   w_ = AddRange(w_, kWordRanges, kWordRangeCount, interval);
   d_ = AddRange(d_, kDigitRanges, kDigitRangeCount, interval);
   surrogate_ =
       AddRange(surrogate_, kSurrogateRanges, kSurrogateRangeCount, interval);
-  if (interval.to() - interval.from() >= kMapSize - 1) {
-    if (map_count_ != kMapSize) {
-      map_count_ = kMapSize;
-      for (int i = 0; i < kMapSize; i++) map_.set(i);
-    }
-    return;
-  }
+
   for (int i = interval.from(); i <= interval.to(); i++) {
     int mod_character = (i & kMask);
     if (!map_[mod_character]) {
@@ -2595,6 +2612,10 @@ void BoyerMoorePositionInfo::SetAll() {
     map_count_ = kMapSize;
     map_.set();
   }
+}
+
+int BoyerMoorePositionInfo::FirstSetBit() const {
+  return BitsetFirstSetBit(map_);
 }
 
 BoyerMooreLookahead::BoyerMooreLookahead(int length, RegExpCompiler* compiler,
@@ -2643,7 +2664,7 @@ int BoyerMooreLookahead::FindBestInterval(int max_number_of_chars,
     while (i < length_ && Count(i) > max_number_of_chars) i++;
     if (i == length_) break;
     int remembered_from = i;
-    bool union_map[kSize];
+    bool union_map[kSize];  // TODO: bitset
     for (int j = 0; j < kSize; j++) union_map[j] = false;
     while (i < length_ && Count(i) <= max_number_of_chars) {
       BoyerMoorePositionInfo* map = bitmaps_->at(i);
@@ -2702,7 +2723,8 @@ int BoyerMooreLookahead::GetSkipTable(int min_lookahead, int max_lookahead,
   for (int i = max_lookahead; i >= min_lookahead; i--) {
     BoyerMoorePositionInfo* map = bitmaps_->at(i);
     for (int j = 0; j < kSize; j++) {
-      if (map->at(j)) {
+      if (map->at(j)) {  // TODO: Better iteration through all set bits.
+        printf("x");
         boolean_skip_table->set(j, kDontSkipArrayEntry);
       }
     }
@@ -2724,7 +2746,7 @@ void BoyerMooreLookahead::EmitSkipInstructions(RegExpMacroAssembler* masm) {
   int single_character = 0;
   for (int i = max_lookahead; i >= min_lookahead; i--) {
     BoyerMoorePositionInfo* map = bitmaps_->at(i);
-    if (map->map_count() > 1 ||
+    if (map->map_count() > 1 ||  // TODO: Better detection.
         (found_single_character && map->map_count() != 0)) {
       found_single_character = false;
       break;
