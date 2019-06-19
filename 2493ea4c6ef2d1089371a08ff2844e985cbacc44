@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "18f78403_f7572db7",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-19T15:25:15Z",
+      "side": 1,
+      "message": "In the !IsJSFunction case, we insert a direct call to the external code. We will not trigger the call reducer so we don\u0027t need to serialize for the holder lookup in there.\n\nIn the IsJSFunction case, we insert a JSCall, which will be trigger the call reducer. If the JSFunction is a FunctionTemplate instance, ReduceCallApiFunction will try to do its job.",
+      "parentUuid": "98f9277c_5fa35e2f",
+      "revId": "2493ea4c6ef2d1089371a08ff2844e985cbacc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8ec8bfa8_8b0839bc",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 3
