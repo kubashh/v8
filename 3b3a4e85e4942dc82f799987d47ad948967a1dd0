@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1ead8b4_d128c8fe",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-06-19T15:12:05Z",
+      "side": 1,
+      "message": "nit: I think we should specifically mention {StackFrame::C_WASM_ENTRY} here. Because this is specific to the C-to-Wasm entry, it wouldn\u0027t be accurate for any other frame-type that has an incoming {IsCFunctionCall} call descriptor.",
+      "range": {
+        "startLine": 148,
+        "startChar": 8,
+        "endLine": 148,
+        "endChar": 40
+      },
+      "revId": "3b3a4e85e4942dc82f799987d47ad948967a1dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37603844_27c9ddcf",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-06-19T15:12:05Z",
+      "side": 1,
+      "message": "nit: Comment looks outdated now.",
+      "range": {
+        "startLine": 146,
+        "startChar": 3,
+        "endLine": 146,
+        "endChar": 34
+      },
+      "revId": "3b3a4e85e4942dc82f799987d47ad948967a1dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34957f00_86ea4148",
+        "filename": "src/execution/execution.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-06-19T15:12:05Z",
+      "side": 1,
+      "message": "suggestion: Lets add a couple of static asserts that guarantee that the order of the arguments here is in sync with {CWasmEntryParameters}.",
+      "range": {
+        "startLine": 432,
+        "startChar": 0,
+        "endLine": 433,
+        "endChar": 68
+      },
+      "revId": "3b3a4e85e4942dc82f799987d47ad948967a1dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c886ba4_85b82a65",
+        "filename": "src/execution/execution.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-06-19T15:12:05Z",
+      "side": 1,
+      "message": "nit: Lets move this declaration down to the bottom. That way it is not sitting in the middle of the JavaScript function and matches the position in the .cc-file as well.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 62
+      },
+      "revId": "3b3a4e85e4942dc82f799987d47ad948967a1dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5afa8051_1dbfb88c",
+        "filename": "src/wasm/wasm-arguments.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-06-19T15:12:05Z",
+      "side": 1,
+      "message": "nit: How would you feel about calling this \"CWasmArgumentsPacker\" instead? This is specific to the way arguments are packed for CWasmEntry stub. A short comment explaining this relationship and the rough functionality of this class would also be helpful I think.",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 21
+      },
+      "revId": "3b3a4e85e4942dc82f799987d47ad948967a1dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aedd96fd_445bad26",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-06-19T15:12:05Z",
+      "side": 1,
+      "message": "question: Is it possible to drop this include now?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "3b3a4e85e4942dc82f799987d47ad948967a1dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
