@@ -219,6 +219,37 @@ RUNTIME_FUNCTION(Runtime_IsConcurrentRecompilationSupported) {
 
 namespace {
 
+void MarkForRemovalFromPendingOptimizeTable(v8::internal::Isolate* isolate,
+                                            Handle<JSFunction> function) {
+  if (isolate->heap()->pending_optimize_for_test_bytecode().IsUndefined() ||
+      ObjectHashTable::cast(
+          isolate->heap()->pending_optimize_for_test_bytecode())
+          .Lookup(handle(function->shared(), isolate))
+          .IsTheHole()) {
+    if (FLAG_testing_d8_test_runner) {
+      PrintF("Error: Function ");
+      function->ShortPrint();
+      PrintF(
+          " should be prepared for optimization with "
+          "%%PrepareFunctionForOptimize before  "
+          "%%OptimizeFunctionOnNextCall / %%OptimizeOSR ");
+      UNREACHABLE();
+    }
+    return;
+  }
+
+  Handle<ObjectHashTable> table(
+      ObjectHashTable::cast(
+          isolate->heap()->pending_optimize_for_test_bytecode()),
+      isolate);
+  Handle<Tuple2> tuple = isolate->factory()->NewTuple2(
+      handle(function->shared().GetBytecodeArray(), isolate),
+      handle(Smi::FromInt(1), isolate), AllocationType::kYoung);
+  table =
+      ObjectHashTable::Put(table, handle(function->shared(), isolate), tuple);
+  isolate->heap()->SetPendingOptimizeForTestBytecode(*table);
+}
+
 void RemoveBytecodeFromPendingOptimizeTable(v8::internal::Isolate* isolate,
                                             Handle<JSFunction> function) {
   // TODO(mythria): Remove the check for undefined, once we fix all tests to
@@ -270,9 +301,9 @@ RUNTIME_FUNCTION(Runtime_OptimizeFunctionOnNextCall) {
     return ReadOnlyRoots(isolate).undefined_value();
   }
 
-  if (function->shared().optimization_disabled() &&
-      function->shared().disable_optimization_reason() ==
-          BailoutReason::kNeverOptimize) {
+  if (!FLAG_opt || (function->shared().optimization_disabled() &&
+                    function->shared().disable_optimization_reason() ==
+                        BailoutReason::kNeverOptimize)) {
     return ReadOnlyRoots(isolate).undefined_value();
   }
 
@@ -290,14 +321,7 @@ RUNTIME_FUNCTION(Runtime_OptimizeFunctionOnNextCall) {
     return ReadOnlyRoots(isolate).undefined_value();
   }
 
-  // Check we called PrepareFunctionForOptimization and hold the bytecode
-  // array to prevent it from getting flushed.
-  // TODO(mythria): Enable this check once we add PrepareForOptimization in all
-  // tests before calling OptimizeFunctionOnNextCall.
-  // CHECK(!ObjectHashTable::cast(
-  //          isolate->heap()->pending_optimize_for_test_bytecode())
-  //          ->Lookup(handle(function->shared(), isolate))
-  //          ->IsTheHole());
+  MarkForRemovalFromPendingOptimizeTable(isolate, function);
 
   ConcurrencyMode concurrency_mode = ConcurrencyMode::kNotConcurrent;
   if (args.length() == 2) {
@@ -401,9 +425,11 @@ RUNTIME_FUNCTION(Runtime_PrepareFunctionForOptimization) {
           : handle(ObjectHashTable::cast(
                        isolate->heap()->pending_optimize_for_test_bytecode()),
                    isolate);
-  table = ObjectHashTable::Put(
-      table, handle(function->shared(), isolate),
-      handle(function->shared().GetBytecodeArray(), isolate));
+  Handle<Tuple2> tuple = isolate->factory()->NewTuple2(
+      handle(function->shared().GetBytecodeArray(), isolate),
+      handle(Smi::FromInt(0), isolate), AllocationType::kYoung);
+  table =
+      ObjectHashTable::Put(table, handle(function->shared(), isolate), tuple);
   isolate->heap()->SetPendingOptimizeForTestBytecode(*table);
 
   return ReadOnlyRoots(isolate).undefined_value();
@@ -424,20 +450,11 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
   if (!it.done()) function = handle(it.frame()->function(), isolate);
   if (function.is_null()) return ReadOnlyRoots(isolate).undefined_value();
 
-  if (function->shared().optimization_disabled() &&
-      function->shared().disable_optimization_reason() ==
-          BailoutReason::kNeverOptimize) {
+  if (!FLAG_opt || (function->shared().optimization_disabled() &&
+                    function->shared().disable_optimization_reason() ==
+                        BailoutReason::kNeverOptimize)) {
     return ReadOnlyRoots(isolate).undefined_value();
   }
-
-  // Check we called PrepareFunctionForOptimization and hold the bytecode
-  // array to prevent it from getting flushed.
-  // TODO(mythria): Enable this check once we add PrepareForOptimization in all
-  // tests before calling OptimizeOsr.
-  // CHECK(!ObjectHashTable::cast(
-  //          isolate->heap()->pending_optimize_for_test_bytecode())
-  //          ->Lookup(handle(function->shared(), isolate))
-  //          ->IsTheHole());
 
   if (function->HasOptimizedCode()) {
     DCHECK(function->IsOptimized() || function->ChecksOptimizationMarker());
@@ -446,6 +463,8 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
     RemoveBytecodeFromPendingOptimizeTable(isolate, function);
     return ReadOnlyRoots(isolate).undefined_value();
   }
+
+  MarkForRemovalFromPendingOptimizeTable(isolate, function);
 
   // Ensure that the function is marked for non-concurrent optimization, so that
   // subsequent runs don't also optimize.

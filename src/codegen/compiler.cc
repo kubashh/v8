@@ -805,10 +805,18 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
         handle(ObjectHashTable::cast(
                    isolate->heap()->pending_optimize_for_test_bytecode()),
                isolate);
-    bool was_present;
-    table = table->Remove(isolate, table, handle(function->shared(), isolate),
-                          &was_present);
-    isolate->heap()->SetPendingOptimizeForTestBytecode(*table);
+    Handle<Object> value(table->Lookup(handle(function->shared(), isolate)),
+                         isolate);
+    // Remove only if we have already seen %OptimizeFunctionOnNextCall. If it is
+    // optimized for other reasons, still keep holding the bytecode since we may
+    // optimize it later.
+    if (!value->IsTheHole() &&
+        Smi::cast(Handle<Tuple2>::cast(value)->value2()).value() == 1) {
+      bool was_present;
+      table = table->Remove(isolate, table, handle(function->shared(), isolate),
+                            &was_present);
+      isolate->heap()->SetPendingOptimizeForTestBytecode(*table);
+    }
   }
 
   Handle<Code> cached_code;
