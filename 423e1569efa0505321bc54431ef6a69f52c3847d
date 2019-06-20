@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "939826b4_27655575",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-06-20T14:33:28Z",
+      "side": 1,
+      "message": "Please cleanup the description to avoid the double reland and the extra reland details in the description",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 16
+      },
+      "revId": "423e1569efa0505321bc54431ef6a69f52c3847d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
