@@ -3500,6 +3500,159 @@ void ImplementationVisitor::GenerateClassVerifiers(
   WriteFile(output_directory + "/" + file_name + ".cc", cc_contents.str());
 }
 
+namespace {
+void GenerateClassDebugReader(const ClassType& type, std::ostream& h_contents,
+                              std::ostream& cc_contents,
+                              std::unordered_set<const ClassType*>* done) {
+  // Make sure each class only gets generated once.
+  if (!type.IsExtern() || !done->insert(&type).second) return;
+  const ClassType* super_type = type.GetSuperClass();
+
+  // We must emit the classes in dependency order. If the super class hasn't
+  // been emitted yet, go handle it first.
+  if (super_type != nullptr) {
+    GenerateClassDebugReader(*super_type, h_contents, cc_contents, done);
+  }
+
+  const std::string name = type.name();
+  const std::string super_name =
+      super_type == nullptr ? "Object" : super_type->name();
+  h_contents << "\nclass Tq" << name << " : public Tq" << super_name << " {\n";
+  h_contents << " public:\n";
+  h_contents << "  inline Tq" << name << "(uintptr_t address) : Tq"
+             << super_name << "(address) {}\n";
+  h_contents << "  std::vector<std::unique_ptr<ObjectProperty>> "
+                "GetProperties(d::MemoryAccessor accessor);\n";
+  std::stringstream get_props_impl;
+
+  for (const Field& field : type.fields()) {
+    const Type* field_type = field.name_and_type.type;
+    const std::string& field_name = field.name_and_type.name;
+    bool is_field_tagged = field_type->IsSubtypeOf(TypeOracle::GetTaggedType());
+    base::Optional<const ClassType*> field_class_type =
+        field_type->ClassSupertype();
+    size_t field_size = 0;
+    std::string field_size_string;
+    std::tie(field_size, field_size_string) = field.GetFieldSizeInformation();
+    std::string field_value_type =
+        is_field_tagged
+            ? "uintptr_t"
+            : field_type->ConstexprVersion()->GetGeneratedTypeName();
+    std::string field_value_type_compressed =
+        is_field_tagged ? "i::Tagged_t" : field_value_type;
+    // TODO(v8:9376): This isn't quite right; some untagged field types like
+    // InstanceType might still need the v8::internal:: prefix. Generally the
+    // only rule for type names is that when you resolve them within the
+    // v8::internal namespace, they work correctly, so the real fix here is to
+    // generate this code within the v8::internal namespace or a sub-namespace.
+    std::string field_cc_type =
+        is_field_tagged
+            ? ("v8::internal::" + (field_class_type.has_value()
+                                       ? (*field_class_type)->name()
+                                       : "Object"))
+            : field_type->ConstexprVersion()->GetGeneratedTypeName();
+    const std::string field_getter =
+        "Get" + CamelifyString(field_name) + "Value";
+    const std::string address_getter =
+        "Get" + CamelifyString(field_name) + "Address";
+    const std::string property_type =
+        is_field_tagged && i::kTaggedSize != i::kSystemPointerSize
+            ? "d::PropertyType::kCompressedTaggedObject"
+            : "d::PropertyType::kNormal";
+    if (field.index) {
+      // TODO(v8:9376): Implement support for indexed fields.
+      continue;
+    }
+    get_props_impl << "  result.push_back(std::make_unique<ObjectProperty>(\""
+                   << field_name << "\", \"" << field_cc_type << "\", "
+                   << address_getter << "(), " << property_type << "));\n";
+    h_contents << "  uintptr_t " << address_getter << "();\n";
+    h_contents << "  Value<" << field_value_type << "> " << field_getter
+               << "(d::MemoryAccessor accessor);\n";
+    cc_contents << "\nuintptr_t Tq" << name << "::" << address_getter
+                << "() {\n";
+    cc_contents << "  return address_ - i::kHeapObjectTag + " << field.offset
+                << ";\n";
+    cc_contents << "}\n";
+    cc_contents << "\nValue<" << field_value_type << "> Tq" << name
+                << "::" << field_getter << "(d::MemoryAccessor accessor) {\n";
+    cc_contents << "  " << field_value_type_compressed << " value{};\n";
+    cc_contents << "  d::MemoryAccessResult validity = accessor("
+                << address_getter
+                << "(), reinterpret_cast<uint8_t*>(&value), sizeof(value));\n";
+    cc_contents << "  return {validity, "
+                << (is_field_tagged ? "Decompress(value, address_)" : "value")
+                << "};\n";
+    cc_contents << "}\n";
+  }
+
+  h_contents << "};\n";
+
+  cc_contents << "\nstd::vector<std::unique_ptr<ObjectProperty>> Tq" << name
+              << "::GetProperties(d::MemoryAccessor accessor) {\n";
+  cc_contents << "  std::vector<std::unique_ptr<ObjectProperty>> result = Tq"
+              << super_name << "::GetProperties(accessor);\n";
+  cc_contents << get_props_impl.str();
+  cc_contents << "  return result;\n";
+  cc_contents << "}\n";
+}
+}  // namespace
+
+void ImplementationVisitor::GenerateClassDebugReaders(
+    const std::string& output_directory) {
+  // The class-debug-readers-tq files will contain code that can read object
+  // properties in postmortem or remote scenarios, where the debuggee's memory
+  // is not part of the current process's address space but must instead be read
+  // using a custom callback.
+
+  const std::string file_name = "class-debug-readers-tq";
+  std::stringstream h_contents;
+  std::stringstream cc_contents;
+  {
+    IncludeGuardScope include_guard(h_contents, file_name + ".h");
+
+    h_contents << "#include <cstdint>\n";
+    h_contents << "#include <vector>\n";
+    h_contents
+        << "\n#include \"tools/debug_helper/debug-helper-internal.h\"\n\n";
+
+    cc_contents << "#include \"torque-generated/" << file_name << ".h\"\n";
+    cc_contents << "#include \"include/v8-internal.h\"\n\n";
+    cc_contents << "namespace i = v8::internal;\n\n";
+
+    NamespaceScope h_namespaces(h_contents, {"v8", "debug_helper_internal"});
+    NamespaceScope cc_namespaces(cc_contents, {"v8", "debug_helper_internal"});
+
+    // The base type TqObject is hard-coded. The rest of the types descending
+    // from it will be generated below.
+    h_contents << R"(
+class TqObject {
+ public:
+  inline TqObject(uintptr_t address) : address_(address) {}
+  std::vector<std::unique_ptr<ObjectProperty>> GetProperties(
+      d::MemoryAccessor accessor);
+
+ protected:
+  uintptr_t address_;
+};
+)";
+    cc_contents << R"(
+std::vector<std::unique_ptr<ObjectProperty>> TqObject::GetProperties(
+    d::MemoryAccessor accessor) {
+  return std::vector<std::unique_ptr<ObjectProperty>>();
+}
+)";
+
+    std::unordered_set<const ClassType*> done;
+    for (const TypeAlias* alias : GlobalContext::GetClasses()) {
+      const ClassType* type = ClassType::DynamicCast(alias->type());
+      GenerateClassDebugReader(*type, h_contents, cc_contents, &done);
+    }
+  }
+  WriteFile(output_directory + "/" + file_name + ".h", h_contents.str());
+  WriteFile(output_directory + "/" + file_name + ".cc", cc_contents.str());
+}
+
 void ImplementationVisitor::GenerateExportedMacrosAssembler(
     const std::string& output_directory) {
   std::string file_name = "exported-macros-assembler-tq";
