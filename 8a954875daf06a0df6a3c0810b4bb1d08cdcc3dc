@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63bfc781_7135f60b",
+        "filename": "tools/turbolizer/src/disassembly-view.ts",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-06-21T17:07:00Z",
+      "side": 1,
+      "message": "Hmm, is this intentional?",
+      "range": {
+        "startLine": 179,
+        "startChar": 12,
+        "endLine": 179,
+        "endChar": 27
+      },
+      "revId": "8a954875daf06a0df6a3c0810b4bb1d08cdcc3dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
