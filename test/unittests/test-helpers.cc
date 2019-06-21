@@ -41,15 +41,14 @@ Handle<SharedFunctionInfo> CreateSharedFunctionInfo(
       isolate->factory()->NewSharedFunctionInfoForBuiltin(
           isolate->factory()->NewStringFromAsciiChecked("f"),
           Builtins::kCompileLazy);
-  int function_literal_id = 1;
   // Ensure that the function can be compiled lazily.
   shared->set_uncompiled_data(
       *isolate->factory()->NewUncompiledDataWithoutPreparseData(
-          ReadOnlyRoots(isolate).empty_string_handle(), 0, source->length(),
-          function_literal_id));
+          ReadOnlyRoots(isolate).empty_string_handle(), 0, source->length()));
   // Make sure we have an outer scope info, even though it's empty
   shared->set_raw_outer_scope_info_or_feedback_metadata(
       ScopeInfo::Empty(isolate));
+  int function_literal_id = 1;
   SharedFunctionInfo::SetScript(shared, script, function_literal_id);
   return scope.CloseAndEscape(shared);
 }
