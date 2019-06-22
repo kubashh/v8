@@ -42,6 +42,52 @@
     },
     {
       "key": {
+        "uuid": "7b0da2f5_d3dd9055",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4133,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-22T08:37:43Z",
+      "side": 1,
+      "message": "This introduces a benign deopt loop. We can prevent that if we thread the feedback vector through in the operator (see my other comments). The case is non-obvious, and this operator behaves differently from the Number binops. The reason is that the inputs that the operator throws on produce the same feedback as the no-throwing ones. This means that, in principle, but in practice here very unlikely, we can get a loop where we add two bigints that are too big, deopt + discard optimized code to throw, reoptimize, deopt ... infinitely. \n\nThis situation is benign because if someone is adding 1,000,000 bit bigints, performance is already bad.",
+      "range": {
+        "startLine": 4132,
+        "startChar": 2,
+        "endLine": 4133,
+        "endChar": 51
+      },
+      "revId": "3655d669f397b7676d7464ac4739c65f25738f12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceedb3a9_cd36269d",
+        "filename": "src/compiler/js-type-hint-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-22T08:37:43Z",
+      "side": 1,
+      "message": "You can build a VectorSlotPair from feedback_vector and slot_ here.",
+      "range": {
+        "startLine": 216,
+        "startChar": 30,
+        "endLine": 216,
+        "endChar": 31
+      },
+      "revId": "3655d669f397b7676d7464ac4739c65f25738f12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8cccbd5e_c40c37f9",
         "filename": "src/compiler/operation-typer.cc",
         "patchSetId": 4
@@ -53,6 +99,52 @@
       "writtenOn": "2019-06-19T15:11:19Z",
       "side": 1,
       "message": "Nit: remove empty line.",
+      "revId": "3655d669f397b7676d7464ac4739c65f25738f12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02121eb4_e05c81fb",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-22T08:37:43Z",
+      "side": 1,
+      "message": "Use VectorSlotPair from operator SpeculativeBigIntAdd.",
+      "range": {
+        "startLine": 2631,
+        "startChar": 57,
+        "endLine": 2631,
+        "endChar": 73
+      },
+      "revId": "3655d669f397b7676d7464ac4739c65f25738f12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e056b394_b7338cc4",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-22T08:37:43Z",
+      "side": 1,
+      "message": ", const VectorSlotPair\u0026 feedback",
+      "range": {
+        "startLine": 661,
+        "startChar": 63,
+        "endLine": 661,
+        "endChar": 64
+      },
       "revId": "3655d669f397b7676d7464ac4739c65f25738f12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
