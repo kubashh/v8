@@ -16,6 +16,24 @@
       "revId": "73ff762c0fe1d161af79b5c1c062d90ce2090ff8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c745099d_ae07daff",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-06-24T11:36:24Z",
+      "side": 1,
+      "message": "Good point, will do. Question for Benedikt --\u003e Can we just remove this reduction now for simplicity\u0027s sake?",
+      "parentUuid": "6fd36c76_6280bd5d",
+      "revId": "73ff762c0fe1d161af79b5c1c062d90ce2090ff8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
