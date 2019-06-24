@@ -34,6 +34,24 @@
       "revId": "73ff762c0fe1d161af79b5c1c062d90ce2090ff8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a37a9cb6_13657f13",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-06-24T12:19:48Z",
+      "side": 1,
+      "message": "Sure, I think that should be fine.",
+      "parentUuid": "c745099d_ae07daff",
+      "revId": "73ff762c0fe1d161af79b5c1c062d90ce2090ff8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
