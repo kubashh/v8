@@ -16,6 +16,29 @@
       "revId": "2a03f120726ed8e30c307f18984154591cc0d5e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd498027_0b2babac",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-06-24T18:24:36Z",
+      "side": 1,
+      "message": "nit: Maybe use - consistently like with the other flags.",
+      "range": {
+        "startLine": 124,
+        "startChar": 18,
+        "endLine": 124,
+        "endChar": 40
+      },
+      "revId": "2a03f120726ed8e30c307f18984154591cc0d5e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
