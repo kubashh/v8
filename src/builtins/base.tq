@@ -188,7 +188,7 @@ type TransitionArray extends WeakFixedArray
 
 // InstanceType actually extends uint16, but a bunch of methods in
 // CodeStubAssembler expect a TNode<Int32T>, so keeping it signed for now.
-type InstanceType extends int16 constexpr 'InstanceType';
+type InstanceType extends int16 constexpr 'v8::internal::InstanceType';
 
 extern class Map extends HeapObject {
   instance_size_in_words: uint8;
@@ -1344,6 +1344,10 @@ extern class JSFinalizationGroup extends JSObject {
 }
 
 extern class JSFinalizationGroupCleanupIterator extends JSObject {
+  finalization_group: JSFinalizationGroup;
+}
+
+extern class FinalizationGroupCleanupJobTask extends Microtask {
   finalization_group: JSFinalizationGroup;
 }
 
