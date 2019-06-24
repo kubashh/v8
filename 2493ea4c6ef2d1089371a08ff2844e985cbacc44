@@ -102,6 +102,24 @@
     },
     {
       "key": {
+        "uuid": "614527f4_24598ea7",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-06-24T12:55:37Z",
+      "side": 1,
+      "message": "You were right, observed the logs with this version and with the updated (see next patch set) version. Missing the !IsJSFunction case resulted in missing data (call_code) in native context specialization. Missing the IsJSFunction case resulted in missing data (function_template_info) in call reducer.",
+      "parentUuid": "18f78403_f7572db7",
+      "revId": "2493ea4c6ef2d1089371a08ff2844e985cbacc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8ec8bfa8_8b0839bc",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 3
@@ -134,6 +152,24 @@
       "revId": "2493ea4c6ef2d1089371a08ff2844e985cbacc44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5c312f2_0fb2d3fe",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-06-24T12:55:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eb47e3e0_5cae7da3",
+      "revId": "2493ea4c6ef2d1089371a08ff2844e985cbacc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
