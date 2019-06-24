@@ -29,6 +29,7 @@
 #include "test/cctest/cctest.h"
 
 #include "include/libplatform/libplatform.h"
+#include "perfetto/tracing.h"
 #include "src/codegen/compiler.h"
 #include "src/codegen/optimized-compilation-info.h"
 #include "src/compiler/pipeline.h"
@@ -299,6 +300,10 @@ int main(int argc, char* argv[]) {
       printf("\n\n");
     }
   }
+
+  perfetto::TracingInitArgs init_args;
+  init_args.backends = perfetto::BackendType::kInProcessBackend;
+  perfetto::Tracing::Initialize(init_args);
 
   v8::V8::InitializeICUDefaultLocation(argv[0]);
   std::unique_ptr<v8::Platform> platform(v8::platform::NewDefaultPlatform());

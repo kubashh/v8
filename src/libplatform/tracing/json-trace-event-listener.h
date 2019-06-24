@@ -26,9 +26,10 @@ class JSONTraceEventListener final : public TraceEventListener {
   explicit JSONTraceEventListener(std::ostream* stream);
   ~JSONTraceEventListener() override;
 
+  void ParseFromArray(const std::vector<char>& array);
+
  private:
-  void ProcessPacket(
-      const ::perfetto::protos::ChromeTracePacket& packet) override;
+  void ProcessPacket(const ::perfetto::protos::TracePacket& packet) override;
 
   // Internal implementation
   void AppendJSONString(const char* str);
