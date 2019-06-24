@@ -7,7 +7,7 @@
 
 namespace perfetto {
 namespace protos {
-class ChromeTracePacket;
+class TracePacket;
 }  // namespace protos
 }  // namespace perfetto
 
@@ -23,8 +23,7 @@ namespace tracing {
 class TraceEventListener {
  public:
   virtual ~TraceEventListener() = default;
-  virtual void ProcessPacket(
-      const ::perfetto::protos::ChromeTracePacket& packet) = 0;
+  virtual void ProcessPacket(const ::perfetto::protos::TracePacket& packet) = 0;
 };
 
 }  // namespace tracing
