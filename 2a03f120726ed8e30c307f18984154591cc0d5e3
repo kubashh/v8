@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0183b830_a5d0aaf4",
+        "filename": "src/codegen/pending-optimization-table.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-06-24T13:41:22Z",
+      "side": 1,
+      "message": "This is a fairly small class. Happy to merge it with compiler.h but wasn\u0027t sure if that is the right place to put these test-only things.",
+      "revId": "2a03f120726ed8e30c307f18984154591cc0d5e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
