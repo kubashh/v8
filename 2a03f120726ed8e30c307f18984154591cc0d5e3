@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "c023d438_1b8c8f6f",
+        "filename": "src/codegen/pending-optimization-table.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-06-24T21:44:21Z",
+      "side": 1,
+      "message": "How about just DCHECKING on this in every function and doing the same \"if (V8_UNLIKELY(FLAG_testing_d8_test_runner)) for every call to keep them consistent?",
+      "range": {
+        "startLine": 17,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 43
+      },
+      "revId": "2a03f120726ed8e30c307f18984154591cc0d5e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6dcfee08_f9aaa5dd",
+        "filename": "src/codegen/pending-optimization-table.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-06-24T21:44:21Z",
+      "side": 1,
+      "message": "no need for the \"return\"",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 11
+      },
+      "revId": "2a03f120726ed8e30c307f18984154591cc0d5e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee89c9fc_3039f955",
+        "filename": "src/codegen/pending-optimization-table.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-06-24T21:44:21Z",
+      "side": 1,
+      "message": "Move this up to the top and use it in the if check above",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 15
+      },
+      "revId": "2a03f120726ed8e30c307f18984154591cc0d5e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c885dc76_4a5aa64a",
+        "filename": "src/codegen/pending-optimization-table.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-06-24T21:44:21Z",
+      "side": 1,
+      "message": "Why not just update the SMI in the tuple that was already allocated?",
+      "range": {
+        "startLine": 57,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 30
+      },
+      "revId": "2a03f120726ed8e30c307f18984154591cc0d5e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0183b830_a5d0aaf4",
         "filename": "src/codegen/pending-optimization-table.h",
         "patchSetId": 8
@@ -13,6 +105,64 @@
       "writtenOn": "2019-06-24T13:41:22Z",
       "side": 1,
       "message": "This is a fairly small class. Happy to merge it with compiler.h but wasn\u0027t sure if that is the right place to put these test-only things.",
+      "revId": "2a03f120726ed8e30c307f18984154591cc0d5e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30f15edf_277027bd",
+        "filename": "src/codegen/pending-optimization-table.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-06-24T21:44:21Z",
+      "side": 1,
+      "message": "Lets keep it hear to be seperate.",
+      "parentUuid": "0183b830_a5d0aaf4",
+      "revId": "2a03f120726ed8e30c307f18984154591cc0d5e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a30621df_f6aa0e8a",
+        "filename": "src/codegen/pending-optimization-table.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-06-24T21:44:21Z",
+      "side": 1,
+      "message": "this can propably live inside the cc file. Also, use \"enum class\"",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 15,
+        "endChar": 64
+      },
+      "revId": "2a03f120726ed8e30c307f18984154591cc0d5e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6dc4f0ee_11ef2432",
+        "filename": "src/codegen/pending-optimization-table.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-06-24T21:44:21Z",
+      "side": 1,
+      "message": "Please add a comment for each explaining when they should be called",
       "revId": "2a03f120726ed8e30c307f18984154591cc0d5e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
