@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fad88492_b12bed0c",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-06-24T11:25:12Z",
+      "side": 1,
+      "message": "nit: 80 char",
+      "revId": "bc6b28dd166099b04bf63eb7d95a117785708254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
