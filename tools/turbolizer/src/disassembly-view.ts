@@ -46,6 +46,16 @@ export class DisassemblyView extends TextView {
       associateData: (text, fragment: HTMLElement) => {
         const matches = text.match(/(?<address>0?x?[0-9a-fA-F]{8,16})(?<addressSpace>\s+)(?<offset>[0-9a-f]+)(?<offsetSpace>\s*)/);
         const offset = Number.parseInt(matches.groups["offset"], 16);
+        const blockId = view.sourceResolver.getBlockIdsForOffset(offset);
+        const blockIdElement = document.createElement("SPAN");
+        blockIdElement.className = "block-id com linkable-text";
+        blockIdElement.innerText = "";
+        if (blockId && blockId.length > 0) {
+          view.addHtmlElementForBlockId(blockId[0], fragment);
+          blockIdElement.innerText = `B${blockId.join(",")}:`;
+          blockIdElement.dataset.blockId = `${blockId[0]}`;
+        }
+        fragment.appendChild(blockIdElement);
         const addressElement = document.createElement("SPAN");
         addressElement.className = "instruction-address";
         addressElement.innerText = matches.groups["address"];
@@ -63,6 +73,7 @@ export class DisassemblyView extends TextView {
           addressElement.classList.add('linkable-text');
           offsetElement.classList.add('linkable-text');
         }
+        return true;
       }
     };
     const UNCLASSIFIED_STYLE = {
@@ -80,10 +91,16 @@ export class DisassemblyView extends TextView {
         const replacer = (match, hexOffset) => {
           const offset = Number.parseInt(hexOffset, 16);
           const keyOffset = view.sourceResolver.getKeyPcOffset(offset);
-          return `<span class="tag linkable-text" data-pc-offset="${keyOffset}">${match}</span>`;
+          const blockIds = view.sourceResolver.getBlockIdsForOffset(offset);
+          let block = "";
+          if (blockIds && blockIds.length > 0) {
+            block = `B${blockIds[0]} `;
+          }
+          return `<span class="tag linkable-text" data-pc-offset="${keyOffset}" data-block-id="${blockId}">${block}${match}</span>`;
         };
         const html = text.replace(/<.0?x?([0-9a-fA-F]+)>/g, replacer);
         fragment.innerHTML = html;
+        return true;
       }
     };
     const OPCODE_STYLE = {
@@ -91,12 +108,14 @@ export class DisassemblyView extends TextView {
     };
     const BLOCK_HEADER_STYLE = {
       associateData: function (text, fragment) {
+        if (view.sourceResolver.hasBlockStartInfo()) return false;
         const matches = /\d+/.exec(text);
-        if (!matches) return;
+        if (!matches) return true;
         const blockId = matches[0];
         fragment.dataset.blockId = blockId;
         fragment.innerHTML = text;
         fragment.className = "com block";
+        return true;
       }
     };
     const SOURCE_POSITION_HEADER_STYLE = {
@@ -157,7 +176,6 @@ export class DisassemblyView extends TextView {
     const linkHandlerBlock = e => {
       const blockId = e.target.dataset.blockId;
       if (typeof blockId != "undefined" && !Number.isNaN(blockId)) {
-        e.stopPropagation();
         if (!e.shiftKey) {
           view.selectionHandler.clear();
         }
