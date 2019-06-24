@@ -141,6 +141,30 @@
       "revId": "2e7184525db2af06b8d7e3889dbbeabc68e35380",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c68c049a_04d69eec",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-24T14:48:51Z",
+      "side": 1,
+      "message": "I meant this bit specifically:\n\nhttps://cs.chromium.org/chromium/src/v8/src/base/bits.h?l\u003d34\u0026rcl\u003daca1824289e3e04cd18c3813739ffb0cd56034da\n\nAnyways, replacing with CountTrailingZeros is fine :)",
+      "parentUuid": "28dc12e9_139237bc",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 22
+      },
+      "revId": "2e7184525db2af06b8d7e3889dbbeabc68e35380",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
