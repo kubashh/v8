@@ -1106,9 +1106,34 @@ SerializerForBackgroundCompilation::ProcessFeedbackMapsForNamedAccess(
     ProcessMapForNamedPropertyAccess(map_ref, name);
     AccessInfoFactory access_info_factory(broker(), dependencies(),
                                           broker()->zone());
-    access_infos.push_back(access_info_factory.ComputePropertyAccessInfo(
+    PropertyAccessInfo info(access_info_factory.ComputePropertyAccessInfo(
         map, name.object(), mode));
+    access_infos.push_back(info);
+
+    // TODO(turbofan): We want to take receiver hints into account as well,
+    // not only the feedback maps.
+    if (info.IsAccessorConstant() && !info.constant().is_null()) {
+      if (info.constant()->IsJSFunction()) {
+        // For JSCallReducer::ReduceCallApiFunction.
+        Handle<SharedFunctionInfo> sfi(
+            handle(Handle<JSFunction>::cast(info.constant())->shared(),
+                   broker()->isolate()));
+        if (sfi->IsApiFunction()) {
+          FunctionTemplateInfoRef fti_ref(
+              broker(), handle(sfi->get_api_func_data(), broker()->isolate()));
+          fti_ref.Serialize();
+          ProcessReceiverMapForApiCall(fti_ref, map);
+        }
+      } else {
+        // For JSNativeContextSpecialization::InlinePropertySetterCall
+        // and InlinePropertyGetterCall.
+        FunctionTemplateInfoRef fti_ref(
+            broker(), Handle<FunctionTemplateInfo>::cast(info.constant()));
+        fti_ref.Serialize();
+      }
+    }
   }
+
   DCHECK(!access_infos.empty());
   return new (broker()->zone()) NamedAccessFeedback(name, access_infos);
 }

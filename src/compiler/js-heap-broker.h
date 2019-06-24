@@ -555,7 +555,7 @@ class FunctionTemplateInfoRef : public HeapObjectRef {
   Handle<FunctionTemplateInfo> object() const;
 
   void Serialize();
-  ObjectRef call_code() const;
+  base::Optional<ObjectRef> call_code() const;
   bool is_signature_undefined() const;
   bool accept_any_receiver() const;
   bool has_call_code() const;

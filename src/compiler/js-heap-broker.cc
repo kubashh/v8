@@ -2717,7 +2717,15 @@ BROKER_NATIVE_CONTEXT_FIELDS(DEF_NATIVE_CONTEXT_ACCESSOR)
 BIMODAL_ACCESSOR(PropertyCell, Object, value)
 BIMODAL_ACCESSOR_C(PropertyCell, PropertyDetails, property_details)
 
-BIMODAL_ACCESSOR(FunctionTemplateInfo, Object, call_code)
+base::Optional<ObjectRef> FunctionTemplateInfoRef::call_code() const {
+  if (broker()->mode() == JSHeapBroker::kDisabled) {
+    return ObjectRef(broker(),
+                     handle(object()->call_code(), broker()->isolate()));
+  }
+  ObjectData* call_code = data()->AsFunctionTemplateInfo()->call_code();
+  if (!call_code) return base::nullopt;
+  return ObjectRef(broker(), call_code);
+}
 
 bool FunctionTemplateInfoRef::is_signature_undefined() const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
