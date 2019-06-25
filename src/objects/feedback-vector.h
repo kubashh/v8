@@ -669,6 +669,7 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
 
   inline Isolate* GetIsolate() const;
 
+  bool SetBinaryOpFeedbackAny();
   void ConfigureMonomorphic(Handle<Name> name, Handle<Map> receiver_map,
                             const MaybeObjectHandle& handler);
 
