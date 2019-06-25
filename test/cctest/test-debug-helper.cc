@@ -1,0 +1,124 @@
+// Copyright 2018 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include "src/api/api-inl.h"
+#include "test/cctest/cctest.h"
+#include "tools/debug_helper/debug-helper.h"
+
+namespace v8 {
+namespace internal {
+
+namespace {
+
+namespace d = v8::debug_helper;
+
+// Implement the memory-reading callback. This one just fetches memory from the
+// current process, but a real implementation for a debugging extension would
+// fetch memory from the debuggee process or crash dump.
+d::MemoryAccessResult ReadMemory(uintptr_t address, uint8_t* destination,
+                                 size_t byte_count) {
+  memcpy(destination, reinterpret_cast<void*>(address), byte_count);
+  return d::MemoryAccessResult::kOk;
+}
+
+// Another memory-reading callback that simulates having no accessible memory in
+// the dump.
+d::MemoryAccessResult ReadMemoryFail(uintptr_t address, uint8_t* destination,
+                                     size_t byte_count) {
+  return d::MemoryAccessResult::kAddressValidButInaccessible;
+}
+
+void CheckProp(const d::ObjectProperty& property, const char* expected_type,
+               const char* expected_name,
+               d::PropertyKind expected_kind = d::PropertyKind::kSingle,
+               size_t expected_num_values = 1) {
+  CHECK_EQ(property.num_values, expected_num_values);
+  CHECK(property.type == std::string("v8::internal::TaggedValue") ||
+        property.type == std::string(expected_type));
+  CHECK(property.decompressed_type == std::string(expected_type));
+  CHECK(property.kind == expected_kind);
+  CHECK(property.name == std::string(expected_name));
+}
+
+template <typename TValue>
+void CheckProp(const d::ObjectProperty& property, const char* expected_type,
+               const char* expected_name, TValue expected_value) {
+  CheckProp(property, expected_type, expected_name);
+  CHECK(*reinterpret_cast<TValue*>(property.address) == expected_value);
+}
+
+}  // namespace
+
+TEST(GetObjectProperties) {
+  CcTest::InitializeVM();
+  v8::HandleScope scope(CcTest::isolate());
+  LocalContext context;
+  d::Roots roots{0, 0, 0, 0};  // We don't know the heap roots.
+
+  v8::Local<v8::Value> v = CompileRun("42");
+  Handle<Object> o = v8::Utils::OpenHandle(*v);
+  d::ObjectPropertiesResultPtr props =
+      d::GetObjectProperties(o->ptr(), &ReadMemory, roots);
+  CHECK(props->type_check_result == d::TypeCheckResult::kSmi);
+  CHECK(props->brief == std::string("42 (0x2a)"));
+  CHECK(props->type == std::string("v8::internal::Smi"));
+  CHECK_EQ(props->num_properties, 0);
+
+  v = CompileRun("[\"a\", \"b\"]");
+  o = v8::Utils::OpenHandle(*v);
+  props = d::GetObjectProperties(o->ptr(), &ReadMemory, roots);
+  CHECK(props->type_check_result == d::TypeCheckResult::kUsedMap);
+  CHECK(props->type == std::string("v8::internal::JSArray"));
+  CHECK_EQ(props->num_properties, 4);
+  CheckProp(*props->properties[0], "v8::internal::Map", "map");
+  CheckProp(*props->properties[1], "v8::internal::Object",
+            "properties_or_hash");
+  CheckProp(*props->properties[2], "v8::internal::FixedArrayBase", "elements");
+  CheckProp(*props->properties[3], "v8::internal::Object", "length",
+            static_cast<i::Tagged_t>(IntToSmi(2)));
+
+  // We need to supply a root address for decompression before reading the
+  // elements from the JSArray.
+  roots.any_heap_pointer = o->ptr();
+
+  i::Tagged_t properties_or_hash =
+      *reinterpret_cast<i::Tagged_t*>(props->properties[1]->address);
+  i::Tagged_t elements =
+      *reinterpret_cast<i::Tagged_t*>(props->properties[2]->address);
+
+  // The properties_or_hash_code field should be an empty fixed array. Since
+  // that is at a known offset, we should be able to detect it even without
+  // any ability to read memory.
+  props = d::GetObjectProperties(properties_or_hash, &ReadMemoryFail, roots);
+  CHECK(props->type_check_result ==
+        d::TypeCheckResult::kObjectPointerValidButInaccessible);
+  CHECK(props->type == std::string("v8::internal::Object"));
+  CHECK_EQ(props->num_properties, 0);
+  CHECK(props->brief == std::string("maybe EmptyFixedArray"));
+
+  props = d::GetObjectProperties(elements, &ReadMemory, roots);
+  CHECK(props->type_check_result == d::TypeCheckResult::kUsedMap);
+  CHECK(props->type == std::string("v8::internal::FixedArray"));
+  CHECK_EQ(props->num_properties, 3);
+  CheckProp(*props->properties[0], "v8::internal::Map", "map");
+  CheckProp(*props->properties[1], "v8::internal::Object", "length",
+            static_cast<i::Tagged_t>(IntToSmi(2)));
+  CheckProp(*props->properties[2], "v8::internal::Object", "objects",
+            d::PropertyKind::kArrayOfKnownSize, 2);
+
+  // Get the second string value from the FixedArray.
+  props = d::GetObjectProperties(
+      *reinterpret_cast<i::Tagged_t*>(props->properties[2]->address +
+                                      sizeof(i::Tagged_t)),
+      &ReadMemory, roots);
+  CHECK(props->type_check_result == d::TypeCheckResult::kUsedMap);
+  CHECK(props->type == std::string("v8::internal::String"));
+  CHECK_EQ(props->num_properties, 3);
+  CheckProp(*props->properties[0], "v8::internal::Map", "map");
+  CheckProp(*props->properties[1], "int32_t", "hash_field");
+  CheckProp(*props->properties[2], "uint32_t", "length", 1);
+}
+
+}  // namespace internal
+}  // namespace v8
