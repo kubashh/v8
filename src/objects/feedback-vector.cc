@@ -894,6 +894,16 @@ float FeedbackNexus::ComputeCallFrequency() {
   return static_cast<float>(call_count / invocation_count);
 }
 
+bool FeedbackNexus::SetBinaryOpFeedbackAny() {
+  DCHECK_EQ(kind(), FeedbackSlotKind::kBinaryOp);
+  BinaryOperationHint hint = GetBinaryOperationFeedback();
+  if (hint == BinaryOperationHint::kAny) {
+    return false;
+  }
+  SetFeedback(Smi::FromInt(static_cast<int>(BinaryOperationHint::kAny)));
+  return true;
+}
+
 void FeedbackNexus::ConfigureMonomorphic(Handle<Name> name,
                                          Handle<Map> receiver_map,
                                          const MaybeObjectHandle& handler) {
