@@ -16,6 +16,24 @@
       "revId": "040d46ed657209083c2c45b430bc98d21df55d08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cab0ff2_72e89f83",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2629,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-25T13:41:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06fce08a_02522d94",
+      "revId": "040d46ed657209083c2c45b430bc98d21df55d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
