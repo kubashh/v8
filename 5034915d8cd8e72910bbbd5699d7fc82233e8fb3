@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8067b62b_55bcafe6",
+        "filename": "test/js-perf-test/BigInt/as-uint-n.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-26T14:20:57Z",
+      "side": 1,
+      "message": "Isn\u0027t this going to get hoisted out of the loop once TF has inlining support for `BigInt.asUintN`?",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 35
+      },
+      "revId": "5034915d8cd8e72910bbbd5699d7fc82233e8fb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
