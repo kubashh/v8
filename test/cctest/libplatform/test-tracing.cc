@@ -12,6 +12,7 @@
 #ifdef V8_USE_PERFETTO
 #include "perfetto/trace/chrome/chrome_trace_event.pb.h"
 #include "perfetto/trace/chrome/chrome_trace_packet.pb.h"
+#include "perfetto/trace/trace.pb.h"
 #include "src/libplatform/tracing/trace-event-listener.h"
 #endif
 
@@ -551,8 +552,7 @@ struct TraceEvent {
 
 class TestListener : public TraceEventListener {
  public:
-  void ProcessPacket(
-      const ::perfetto::protos::ChromeTracePacket& packet) override {
+  void ProcessPacket(const ::perfetto::protos::TracePacket& packet) {
     for (const ::perfetto::protos::ChromeTraceEvent& event :
          packet.chrome_events().trace_events()) {
       TraceEvent trace_event{event.name(),       event.timestamp(),

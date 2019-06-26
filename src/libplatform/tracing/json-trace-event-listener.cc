@@ -7,9 +7,14 @@
 #include <cmath>
 
 #include "base/trace_event/common/trace_event_common.h"
-#include "perfetto/trace/chrome/chrome_trace_packet.pb.h"
 #include "src/base/logging.h"
 #include "src/base/macros.h"
+
+#include "perfetto/trace/chrome/chrome_trace_event.pbzero.h"
+#include "perfetto/trace/chrome/chrome_trace_packet.pb.h"
+#include "perfetto/trace/trace.pb.h"
+#include "perfetto/trace/trace_packet.pbzero.h"
+#include "perfetto/tracing.h"
 
 namespace v8 {
 namespace platform {
@@ -111,7 +116,7 @@ void JSONTraceEventListener::AppendArgValue(
 }
 
 void JSONTraceEventListener::ProcessPacket(
-    const ::perfetto::protos::ChromeTracePacket& packet) {
+    const ::perfetto::protos::TracePacket& packet) {
   for (const ::perfetto::protos::ChromeTraceEvent& event :
        packet.chrome_events().trace_events()) {
     if (append_comma_) *stream_ << ",";
