@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8cee853c_a6fcbf3f",
+        "filename": "src/common/ptr-compr-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-06-26T08:32:09Z",
+      "side": 1,
+      "message": "rather than if(false), would it be reasonable to split this flag into kUseBranchlessPtrDecompressionInRuntime and kUseBranchlessPtrDecompressionInGeneratedCode ?",
+      "range": {
+        "startLine": 64,
+        "startChar": 5,
+        "endLine": 64,
+        "endChar": 48
+      },
+      "revId": "0fe5f1ff4edc22e23efd6b546aaa2a06ca35e1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
