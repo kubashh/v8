@@ -284,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "2acc7c23_6c0f0715",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-06-26T23:13:48Z",
+      "side": 1,
+      "message": "Given that context objects only move during a blocking GC, and they\u0027re retained by a stack root, this should be fairly safe. That being said, it\u0027s not ideal, considering some other form of context mutator could be added later down the line.\n\nI\u0027m not sure it\u0027s viable to identify a function context on creation, since contexts may be created inline in optimized code IIRC (which would require regeneration when profiling is enabled, or always adding those extra hooks).",
+      "parentUuid": "645e0df3_529a4530",
+      "range": {
+        "startLine": 849,
+        "startChar": 28,
+        "endLine": 849,
+        "endChar": 72
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "18dcad76_1d69133f",
         "filename": "src/profiler/tick-sample.cc",
         "patchSetId": 10
