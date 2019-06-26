@@ -213,6 +213,30 @@
       "revId": "2e7184525db2af06b8d7e3889dbbeabc68e35380",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f77d6f5e_3c862b7e",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-06-26T09:09:19Z",
+      "side": 1,
+      "message": "Yeah, dunno then, maybe that codepath is dead...",
+      "parentUuid": "0025d112_6a8214c0",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 22
+      },
+      "revId": "2e7184525db2af06b8d7e3889dbbeabc68e35380",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
