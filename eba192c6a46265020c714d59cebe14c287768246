@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "552cf43b_407a9326",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-06-26T19:29:46Z",
+      "side": 1,
+      "message": "question: I am not entirely sure what this TODO is aiming at. I do agree that a CallDescriptor does not necessarily need to know the fixed portion of the frame size (without additional context). So I am totally fine with having this additional argument to the method for now. Is the intention of this TODO to eventually move the method off of {CallDescriptor} to somewhere else? Just asking for clarification, not suggesting any change.",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 56
+      },
+      "revId": "eba192c6a46265020c714d59cebe14c287768246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cd4ddb9_3eec19eb",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-06-26T19:29:46Z",
+      "side": 1,
+      "message": "nit: Lets use {CWasmEntryFrameConstants::kCEntryFPOffset} now that we have it.",
+      "range": {
+        "startLine": 664,
+        "startChar": 21,
+        "endLine": 664,
+        "endChar": 70
+      },
+      "revId": "eba192c6a46265020c714d59cebe14c287768246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9d486b8_8cc6d539",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3588,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-06-26T19:29:46Z",
+      "side": 1,
+      "message": "Nice! I like how much simpler entire method has become now (and that we no longer need to allocate a fake JSFunction object).",
+      "range": {
+        "startLine": 3588,
+        "startChar": 4,
+        "endLine": 3588,
+        "endChar": 23
+      },
+      "revId": "eba192c6a46265020c714d59cebe14c287768246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
