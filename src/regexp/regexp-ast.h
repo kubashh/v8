@@ -64,6 +64,7 @@ class Interval {
   bool is_empty() { return from_ == kNone; }
   int from() const { return from_; }
   int to() const { return to_; }
+  int size() const { return from_ == kNone ? 0 : to_ - from_ + 1; }
   static Interval Empty() { return Interval(); }
   static const int kNone = -1;
 
