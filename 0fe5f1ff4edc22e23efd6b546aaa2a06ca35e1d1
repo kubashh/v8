@@ -22,6 +22,30 @@
       "revId": "0fe5f1ff4edc22e23efd6b546aaa2a06ca35e1d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a4190b5_c8d78239",
+        "filename": "src/common/ptr-compr-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-06-26T08:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cee853c_a6fcbf3f",
+      "range": {
+        "startLine": 64,
+        "startChar": 5,
+        "endLine": 64,
+        "endChar": 48
+      },
+      "revId": "0fe5f1ff4edc22e23efd6b546aaa2a06ca35e1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
