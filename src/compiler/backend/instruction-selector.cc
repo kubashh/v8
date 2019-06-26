@@ -1851,6 +1851,10 @@ void InstructionSelector::VisitNode(Node* node) {
       return MarkAsSimd128(node), VisitF32x4Le(node);
     case IrOpcode::kI64x2Splat:
       return MarkAsSimd128(node), VisitI64x2Splat(node);
+    case IrOpcode::kI64x2Add:
+      return MarkAsSimd128(node), VisitI64x2Add(node);
+    case IrOpcode::kI64x2Sub:
+      return MarkAsSimd128(node), VisitI64x2Sub(node);
     case IrOpcode::kI32x4Splat:
       return MarkAsSimd128(node), VisitI32x4Splat(node);
     case IrOpcode::kI32x4ExtractLane:
@@ -2496,6 +2500,8 @@ void InstructionSelector::VisitWord64AtomicCompareExchange(Node* node) {
 
 #if !V8_TARGET_ARCH_X64
 void InstructionSelector::VisitI64x2Splat(Node* node) { UNIMPLEMENTED(); }
+void InstructionSelector::VisitI64x2Add(Node* node) { UNIMPLEMENTED(); }
+void InstructionSelector::VisitI64x2Sub(Node* node) { UNIMPLEMENTED(); }
 #endif  // !V8_TARGET_ARCH_X64
 
 void InstructionSelector::VisitFinishRegion(Node* node) { EmitIdentity(node); }
