@@ -72,6 +72,7 @@ class Variable final : public ZoneObject {
     return MaybeAssignedFlagField::decode(bit_field_);
   }
   void set_maybe_assigned() {
+    printf("set_maybe_assigned");
     bit_field_ = MaybeAssignedFlagField::update(bit_field_, kMaybeAssigned);
   }
 
