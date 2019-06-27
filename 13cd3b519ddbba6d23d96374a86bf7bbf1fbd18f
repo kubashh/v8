@@ -22,6 +22,30 @@
       "revId": "13cd3b519ddbba6d23d96374a86bf7bbf1fbd18f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d9153b8_06989979",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2019-06-27T11:04:45Z",
+      "side": 1,
+      "message": "lolz",
+      "parentUuid": "020c7cb1_3eb07776",
+      "range": {
+        "startLine": 7,
+        "startChar": 35,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "13cd3b519ddbba6d23d96374a86bf7bbf1fbd18f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
