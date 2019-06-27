@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1594b478_89207d4d",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-27T12:47:07Z",
+      "side": 1,
+      "message": "Yes, the intention is to think about a good way to reorganize this logic, which most likely includes moving it off of CallDescriptor. We reasoned that \"how do I call this thing\" and \"what kind of frame does it set up\" really are orthogonal questions.",
+      "parentUuid": "552cf43b_407a9326",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 56
+      },
+      "revId": "eba192c6a46265020c714d59cebe14c287768246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8cd4ddb9_3eec19eb",
         "filename": "src/execution/frames.cc",
         "patchSetId": 11
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "de082f7b_8a94017d",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-27T12:47:07Z",
+      "side": 1,
+      "message": "Done. Thanks for catching that I forgot this :-)",
+      "parentUuid": "8cd4ddb9_3eec19eb",
+      "range": {
+        "startLine": 664,
+        "startChar": 21,
+        "endLine": 664,
+        "endChar": 70
+      },
+      "revId": "eba192c6a46265020c714d59cebe14c287768246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9d486b8_8cc6d539",
         "filename": "src/wasm/wasm-interpreter.cc",
         "patchSetId": 11
@@ -68,6 +116,30 @@
       "revId": "eba192c6a46265020c714d59cebe14c287768246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cf4e6f5_63ba7e27",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3588,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-27T12:47:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c9d486b8_8cc6d539",
+      "range": {
+        "startLine": 3588,
+        "startChar": 4,
+        "endLine": 3588,
+        "endChar": 23
+      },
+      "revId": "eba192c6a46265020c714d59cebe14c287768246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
