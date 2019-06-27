@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "52c1dab2_7497447d",
+        "filename": "src/regexp/regexp-ast.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-27T11:41:09Z",
+      "side": 1,
+      "message": "So the one use of size() will be super-fast :p Done. Closed intervals are so awkward in programming :[",
+      "parentUuid": "a5f3305d_c0c54113",
+      "range": {
+        "startLine": 67,
+        "startChar": 28,
+        "endLine": 67,
+        "endChar": 42
+      },
+      "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "609d2a7e_4ec7e656",
         "filename": "src/regexp/regexp-compiler.cc",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d62a1dac_2f4f4312",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2567,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-27T11:41:09Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "609d2a7e_4ec7e656",
+      "range": {
+        "startLine": 2567,
+        "startChar": 22,
+        "endLine": 2567,
+        "endChar": 59
+      },
+      "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75d51449_cee5f03f",
         "filename": "src/regexp/regexp-compiler.cc",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daab2ddb_6d5a4881",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2578,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-27T11:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75d51449_cee5f03f",
+      "range": {
+        "startLine": 2578,
+        "startChar": 8,
+        "endLine": 2578,
+        "endChar": 44
+      },
+      "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -106,6 +178,24 @@
     },
     {
       "key": {
+        "uuid": "5d6e5828_bfb69217",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2598,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-27T11:41:09Z",
+      "side": 1,
+      "message": "Double-checked again just now, AFAICT it\u0027s possible to end up with kLatticeOut in this case for the last range, which is [\u0027z\u0027 + 1, kRangeEndMarker]. So I\u0027m switching back to the old code as planned, luckily it\u0027s still very simple.",
+      "parentUuid": "0bc43f54_bf11ff96",
+      "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "112340b4_5972be32",
         "filename": "src/regexp/regexp-compiler.cc",
         "patchSetId": 5
@@ -129,6 +219,30 @@
     },
     {
       "key": {
+        "uuid": "11f4bb7e_938ea30b",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2678,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-27T11:41:09Z",
+      "side": 1,
+      "message": "Yep I thought about that, but went for readability. Now that I\u0027ve seen the generated code you linked above, I\u0027m not worried about perf at all any more :)",
+      "parentUuid": "112340b4_5972be32",
+      "range": {
+        "startLine": 2678,
+        "startChar": 16,
+        "endLine": 2678,
+        "endChar": 33
+      },
+      "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c07f8b0b_30714a98",
         "filename": "src/regexp/regexp-compiler.cc",
         "patchSetId": 5
@@ -149,6 +263,30 @@
       "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "000c930d_e4a79ddd",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2735,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-27T11:41:09Z",
+      "side": 1,
+      "message": "Self-documenting was one of the motivations here; the other was moving it down to its use site, a non-const variable declared in L2700, then left untouched, and finally returned in L2711 is just weird.",
+      "parentUuid": "c07f8b0b_30714a98",
+      "range": {
+        "startLine": 2735,
+        "startChar": 12,
+        "endLine": 2735,
+        "endChar": 16
+      },
+      "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
