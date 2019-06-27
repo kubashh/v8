@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45d6d850_0b4ae61e",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2598,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-27T07:22:37Z",
+      "side": 1,
+      "message": "As discussed offline I will upload another PS that changes this back to the way it was before, i.e.: call AddRange and then set all bits (instead of calling SetAll, which sets w_ to kLatticeUnknown).",
+      "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
