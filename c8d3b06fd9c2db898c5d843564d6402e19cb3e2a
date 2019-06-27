@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "c0b53fc7_256f5ca3",
+        "filename": "src/regexp/regexp-ast.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-06-27T12:08:23Z",
+      "side": 1,
+      "message": ":)",
+      "parentUuid": "52c1dab2_7497447d",
+      "range": {
+        "startLine": 67,
+        "startChar": 28,
+        "endLine": 67,
+        "endChar": 42
+      },
+      "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "609d2a7e_4ec7e656",
         "filename": "src/regexp/regexp-compiler.cc",
         "patchSetId": 5
@@ -190,6 +214,24 @@
       "side": 1,
       "message": "Double-checked again just now, AFAICT it\u0027s possible to end up with kLatticeOut in this case for the last range, which is [\u0027z\u0027 + 1, kRangeEndMarker]. So I\u0027m switching back to the old code as planned, luckily it\u0027s still very simple.",
       "parentUuid": "0bc43f54_bf11ff96",
+      "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61f2447e_34c269e3",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2598,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-06-27T12:08:23Z",
+      "side": 1,
+      "message": "That\u0027s my point, you won\u0027t hit the last range since you exit early on the first iteration. Unless I\u0027m misunderstanding entirely, which is possible, code walkthroughs are hard.",
+      "parentUuid": "5d6e5828_bfb69217",
       "revId": "c8d3b06fd9c2db898c5d843564d6402e19cb3e2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
