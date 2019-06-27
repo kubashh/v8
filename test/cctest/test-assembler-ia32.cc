@@ -30,6 +30,7 @@
 #include "src/init/v8.h"
 
 #include "src/base/platform/platform.h"
+#include "src/base/platform/time.h"
 #include "src/base/utils/random-number-generator.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/macro-assembler.h"
@@ -110,6 +111,99 @@ TEST(AssemblerIa321) {
   CHECK_EQ(5050, res);
 }
 
+static Code GenerateXchgTest(int variant, i::Isolate* isolate) {
+  v8::internal::byte buffer[256];
+  Assembler assm(AssemblerOptions{},
+                 ExternalAssemblerBuffer(buffer, sizeof buffer));
+
+  // The following program implements:
+  // for (var i = x; i > 0; i--) i%2;
+
+  Label end, loop;
+  __ mov(eax, Operand(esp, 4));
+  __ push(ebx);
+  __ push(ecx);
+  __ push(ecx);            // Scratch stack slot to play with.
+  Register divisor = ecx;  // ebx;
+  Register index = ebx;    // ecx;
+  Register scratch = edx;
+  __ mov(divisor, Immediate(2));  // Divisor.
+
+  __ bind(&loop);
+  __ cmp(eax, 0);
+  __ j(equal, &end);
+
+  __ mov(index, eax);  // Save eax.
+
+  // "idiv" version of the test.
+  __ cdq();
+  __ idiv(divisor);
+  // "add" version -- same effect, less pronounced.
+  // __ add(eax, divisor);
+
+  __ nop();
+  __ nop();
+  __ nop();
+  // Restore eax in various ways.
+  // For this simple example, we really only need to "mov (eax, ecx)",
+  // but what we're interested in is performance of exchanging the contents
+  // of two registers.
+  if (variant == 1) {
+    __ xchg(eax, index);
+  } else if (variant == 2) {
+    __ mov(scratch, eax);
+    __ mov(eax, index);
+    __ mov(index, scratch);
+  } else if (variant == 3) {
+    __ xor_(eax, index);
+    __ xor_(index, eax);
+    __ xor_(eax, index);
+  } else if (variant == 4) {
+    __ push(eax);
+    __ mov(eax, index);
+    __ pop(index);
+  }
+
+  __ dec(eax);
+  __ jmp(&loop);
+
+  __ bind(&end);
+  __ pop(ecx);  // Drop scratch.
+  __ pop(ecx);
+  __ pop(ebx);
+  __ ret(0);
+
+  CodeDesc desc;
+  assm.GetCode(isolate, &desc);
+  Handle<Code> code = Factory::CodeBuilder(isolate, desc, Code::STUB).Build();
+  return *code;
+}
+
+static void DoXchgTest(int variant, const char* description, Isolate* isolate) {
+  Code code = GenerateXchgTest(variant, isolate);
+  F1 function = FUNCTION_CAST<F1>(code.entry());
+  int input = 100000000;
+
+  v8::base::TimeTicks start = v8::base::TimeTicks::HighResolutionNow();
+  function(input);
+  v8::base::TimeTicks end = v8::base::TimeTicks::HighResolutionNow();
+
+  printf("%s: %d ms\n", description,
+         static_cast<int>((end - start).InMilliseconds()));
+}
+
+// Only for manual execution.
+TEST(xchg) {
+  i::FLAG_logfile_per_isolate = false;
+  CcTest::InitializeVM();
+  Isolate* isolate = reinterpret_cast<Isolate*>(CcTest::isolate());
+  HandleScope scope(isolate);
+
+  DoXchgTest(1, "xchg", isolate);
+  DoXchgTest(2, "move", isolate);
+  DoXchgTest(3, "xor", isolate);
+  DoXchgTest(4, "push-pop", isolate);
+}
 
 TEST(AssemblerIa322) {
   CcTest::InitializeVM();
