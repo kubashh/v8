@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "85d9d8e9_5b286dd2",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6776,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-06-27T10:58:15Z",
+      "side": 1,
+      "message": "Indeed, same length implies start \u003d\u003d 0\nDone.",
+      "parentUuid": "1ebde22e_8fbfffc5",
+      "range": {
+        "startLine": 6776,
+        "startChar": 8,
+        "endLine": 6776,
+        "endChar": 18
+      },
+      "revId": "1071a97038916f9335215dc82f28756924725b49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "119ccc23_d987e98e",
         "filename": "src/objects/objects.cc",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-06-27T09:45:34Z",
       "side": 1,
       "message": "Unrelated to this bug fix: this is only safe because source is guaranteed to be an internalized string, right? Could we add a similar fast path for source.IsInternalizedString() in general?",
+      "range": {
+        "startLine": 6777,
+        "startChar": 6,
+        "endLine": 6777,
+        "endChar": 20
+      },
+      "revId": "1071a97038916f9335215dc82f28756924725b49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f1cfa16_50fe0d7b",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6777,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-06-27T10:58:15Z",
+      "side": 1,
+      "message": "Thin strings are not internalized but the actual string inside a thin one is guaranteed to be internalized. Thin strings is a mechanism to \"cache\" result of string internalization in the string object itself.",
+      "parentUuid": "119ccc23_d987e98e",
       "range": {
         "startLine": 6777,
         "startChar": 6,
@@ -68,6 +116,30 @@
       "revId": "1071a97038916f9335215dc82f28756924725b49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a8a3886_d8627207",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-06-27T10:58:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "884de3d3_8bbe567f",
+      "range": {
+        "startLine": 1338,
+        "startChar": 0,
+        "endLine": 1342,
+        "endChar": 0
+      },
+      "revId": "1071a97038916f9335215dc82f28756924725b49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
