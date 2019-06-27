@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3df35f0b_f6970efb",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4420,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-06-27T09:46:07Z",
+      "side": 1,
+      "message": "Maybe check exclusivity of related flags. E.g, max_heap_size will be likely be inconsistent if max_semi_space_size and max_old_space_size are also set.",
+      "range": {
+        "startLine": 4420,
+        "startChar": 15,
+        "endLine": 4420,
+        "endChar": 33
+      },
+      "revId": "2f92f507629b9d5780908334a7cb5c765ce594cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
