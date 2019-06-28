@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b51bfb3b_3422a80b",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-06-28T10:51:04Z",
+      "side": 1,
+      "message": "We want taking a sample to be as fast as possible. Unconditionally filling 2KB of memory with zeroes is quite unfortunate. Can we avoid that?",
+      "range": {
+        "startLine": 119,
+        "startChar": 6,
+        "endLine": 119,
+        "endChar": 7
+      },
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13d8ebe4_e1a815f8",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-06-28T10:51:04Z",
+      "side": 1,
+      "message": "It\u0027s not clear why it\u0027s a problem. We start profiling on the VM thread, so the context address should be valid, when a GC kicks in later, we will enqueue the context move event along with others. Everything should be fine. Am I missing the issue? Can you please get into more details? Thanks.",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1ffe5b4_b8a8dcfa",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-06-28T10:51:04Z",
+      "side": 1,
+      "message": "Why do we stop the processor. There are might be other profiles being recorded. right?",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a4f1068_7a81f46d",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-06-28T10:51:04Z",
+      "side": 1,
+      "message": "Can we set frame.native_context to nullptr instead of having filterable flag?",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5cd15dc_85322481",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-06-28T10:51:04Z",
+      "side": 1,
+      "message": "nit: I prefer avoiding \"new\" in the code. How about:\ncontext_filter_ \u003d base::make_unique\u003cContextFilter\u003e(context_address);",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8eb26537_c21e54f1",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-06-28T10:51:04Z",
+      "side": 1,
+      "message": "Perhaps move this logic into the filter?",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3820944b_f6c3901d",
+        "filename": "src/profiler/profiler-listener.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-06-28T10:51:04Z",
+      "side": 1,
+      "message": "nit:\nevt_rec.NativeContextMoveEventRecord_.from_address \u003d from;",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82e00a7c_cea34f77",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-06-28T10:51:04Z",
+      "side": 1,
+      "message": "... \u0026\u0026 (contexts || borrows_top_context)",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f694a90_460d419b",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-06-28T10:51:04Z",
+      "side": 1,
+      "message": "not_needed?",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
