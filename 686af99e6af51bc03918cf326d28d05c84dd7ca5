@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4233a14_e2952edf",
+        "filename": "src/codegen/handler-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-28T17:36:12Z",
+      "side": 1,
+      "message": "Let\u0027s not have a default value here.",
+      "range": {
+        "startLine": 55,
+        "startChar": 44,
+        "endLine": 55,
+        "endChar": 71
+      },
+      "revId": "686af99e6af51bc03918cf326d28d05c84dd7ca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4330d356_cefce750",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-06-28T17:36:12Z",
+      "side": 1,
+      "message": "Please put a CHECK(is_serialized_for_compilation_) here and below.",
+      "revId": "686af99e6af51bc03918cf326d28d05c84dd7ca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
