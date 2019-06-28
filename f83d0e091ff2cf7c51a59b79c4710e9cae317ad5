@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa0b516c_1fcca87a",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7706,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-06-28T11:40:54Z",
+      "side": 1,
+      "message": "Please mark this as deprecated :)",
+      "range": {
+        "startLine": 7706,
+        "startChar": 2,
+        "endLine": 7706,
+        "endChar": 61
+      },
+      "revId": "f83d0e091ff2cf7c51a59b79c4710e9cae317ad5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
