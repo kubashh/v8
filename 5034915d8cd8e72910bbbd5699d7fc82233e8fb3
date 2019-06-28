@@ -46,6 +46,30 @@
       "revId": "5034915d8cd8e72910bbbd5699d7fc82233e8fb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8e49652_3e626680",
+        "filename": "test/js-perf-test/BigInt/as-uint-n.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-06-28T14:06:25Z",
+      "side": 1,
+      "message": "I think it did not get hoisted and benchmark results seemed to agree on that. Introduces a loop counter dependence anyways to be safe for future optimizations.",
+      "parentUuid": "0a288862_e0c2f1e4",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 35
+      },
+      "revId": "5034915d8cd8e72910bbbd5699d7fc82233e8fb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
