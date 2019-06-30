@@ -1358,7 +1358,24 @@ class BytecodeArrayData : public FixedArrayBaseData {
       constant_pool_.push_back(broker->GetOrCreateData(constant_pool->get(i)));
     }
 
+    Handle<ByteArray> handlers(bytecode_array->handler_table(),
+                               broker->isolate());
+    handler_table_.reserve(handlers->length());
+    for (int i = 0; i < handlers->length(); i++) {
+      handler_table_.push_back(handlers->get(i));
+    }
+
     is_serialized_for_compilation_ = true;
+  }
+
+  Address handler_table_address() const {
+    CHECK(is_serialized_for_compilation_);
+    return reinterpret_cast<Address>(handler_table_.data());
+  }
+
+  int handler_table_size() const {
+    CHECK(is_serialized_for_compilation_);
+    return static_cast<int>(handler_table_.size());
   }
 
   BytecodeArrayData(JSHeapBroker* broker, ObjectData** storage,
@@ -1369,6 +1386,7 @@ class BytecodeArrayData : public FixedArrayBaseData {
         incoming_new_target_or_generator_register_(
             object->incoming_new_target_or_generator_register()),
         bytecodes_(broker->zone()),
+        handler_table_(broker->zone()),
         constant_pool_(broker->zone()) {}
 
  private:
@@ -1378,6 +1396,7 @@ class BytecodeArrayData : public FixedArrayBaseData {
 
   bool is_serialized_for_compilation_ = false;
   ZoneVector<uint8_t> bytecodes_;
+  ZoneVector<uint8_t> handler_table_;
   ZoneVector<ObjectData*> constant_pool_;
 };
 
@@ -2749,6 +2768,23 @@ bool BytecodeArrayRef::IsSerializedForCompilation() const {
 void BytecodeArrayRef::SerializeForCompilation() {
   if (broker()->mode() == JSHeapBroker::kDisabled) return;
   data()->AsBytecodeArray()->SerializeForCompilation(broker());
+}
+
+Address BytecodeArrayRef::handler_table_address() const {
+  if (broker()->mode() == JSHeapBroker::kDisabled) {
+    AllowHandleDereference allow_handle_dereference;
+    return reinterpret_cast<Address>(
+        object()->handler_table().GetDataStartAddress());
+  }
+  return data()->AsBytecodeArray()->handler_table_address();
+}
+
+int BytecodeArrayRef::handler_table_size() const {
+  if (broker()->mode() == JSHeapBroker::kDisabled) {
+    AllowHandleDereference allow_handle_dereference;
+    return object()->handler_table().length();
+  }
+  return data()->AsBytecodeArray()->handler_table_size();
 }
 
 #define IF_BROKER_DISABLED_ACCESS_HANDLE_C(holder, name) \
