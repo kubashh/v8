@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d19e1332_b1103f4d",
+        "filename": "src/codegen/handler-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-06-30T14:05:42Z",
+      "side": 1,
+      "message": "Done.\n\nActually, it might be better to split this class into the two variants (return address based one and range based one). They do not seem to be sharing methods anyway.",
+      "parentUuid": "f4233a14_e2952edf",
+      "range": {
+        "startLine": 55,
+        "startChar": 44,
+        "endLine": 55,
+        "endChar": 71
+      },
+      "revId": "686af99e6af51bc03918cf326d28d05c84dd7ca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4330d356_cefce750",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "686af99e6af51bc03918cf326d28d05c84dd7ca5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78119a9d_fa4f65e0",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-06-30T14:05:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4330d356_cefce750",
+      "revId": "686af99e6af51bc03918cf326d28d05c84dd7ca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
