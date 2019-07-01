@@ -16,6 +16,24 @@
       "revId": "df7a618d1467a3c76cb05600933c3bd24fd93e81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adea6321_bfb8839a",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-07-01T20:10:54Z",
+      "side": 1,
+      "message": "I tried enabling the test and running on ia32, it doesn\u0027t work. Going to remove the lowering code and also change the test to run without lowering.",
+      "parentUuid": "5021bfdb_d41652a7",
+      "revId": "df7a618d1467a3c76cb05600933c3bd24fd93e81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
