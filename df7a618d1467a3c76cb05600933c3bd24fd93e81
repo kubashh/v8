@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5021bfdb_d41652a7",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-07-01T18:13:28Z",
+      "side": 1,
+      "message": "Do you know if this works on 32-bit platforms? When the 64x2 tests get enabled for all platforms, it might be worthwhile to look into the ordering of the Scalar lowering pass and the Int64Lowering pass in practice and how well they work together.",
+      "revId": "df7a618d1467a3c76cb05600933c3bd24fd93e81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
