@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdcdf367_9311d730",
+        "filename": "third_party/inspector_protocol/lib/base_string_adapter_cc.template",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-07-01T19:56:05Z",
+      "side": 1,
+      "message": "Why does the library mention Chromium?",
+      "range": {
+        "startLine": 188,
+        "startChar": 6,
+        "endLine": 188,
+        "endChar": 14
+      },
+      "revId": "99f50cef0f96094267c3403dd87767e569f672cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
