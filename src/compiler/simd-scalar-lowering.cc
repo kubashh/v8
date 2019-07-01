@@ -77,7 +77,7 @@ void SimdScalarLowering::LowerGraph() {
   }
 }
 
-#define FOREACH_INT64X2_OPCODE(V) V(I64x2Splat)
+#define FOREACH_INT64X2_OPCODE(V) V(I64x2Splat) V(I64x2Add) V(I64x2Sub)
 
 #define FOREACH_INT32X4_OPCODE(V) \
   V(I32x4Splat)                   \
@@ -991,6 +991,14 @@ void SimdScalarLowering::LowerNode(Node* node) {
       } else {
         DefaultLowering(node);
       }
+      break;
+    }
+    case IrOpcode::kI64x2Add: {
+      LowerBinaryOp(node, rep_type, machine()->Int64Add());
+      break;
+    }
+    case IrOpcode::kI64x2Sub: {
+      LowerBinaryOp(node, rep_type, machine()->Int64Sub());
       break;
     }
 #define I32X4_BINOP_CASE(opcode, instruction)                \
