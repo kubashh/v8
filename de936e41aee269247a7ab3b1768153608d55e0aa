@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9429d7dd_7c3aa8ed",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1116032
+      },
+      "writtenOn": "2019-07-01T09:24:20Z",
+      "side": 1,
+      "message": "Pass by reference (\u0026) instead to avoid accidental copies (here and elsewhere).",
+      "range": {
+        "startLine": 194,
+        "startChar": 25,
+        "endLine": 194,
+        "endChar": 26
+      },
+      "revId": "de936e41aee269247a7ab3b1768153608d55e0aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ea75fdf_328331be",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1116032
+      },
+      "writtenOn": "2019-07-01T09:24:20Z",
+      "side": 1,
+      "message": "nit: No need to finalize -- it happens automatically.",
+      "range": {
+        "startLine": 221,
+        "startChar": 14,
+        "endLine": 221,
+        "endChar": 22
+      },
+      "revId": "de936e41aee269247a7ab3b1768153608d55e0aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5c4ce81_ebb21a7a",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1116032
+      },
+      "writtenOn": "2019-07-01T09:24:20Z",
+      "side": 1,
+      "message": "No need to block here.",
+      "range": {
+        "startLine": 346,
+        "startChar": 2,
+        "endLine": 346,
+        "endChar": 10
+      },
+      "revId": "de936e41aee269247a7ab3b1768153608d55e0aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "626206ad_5b9b6efc",
+        "filename": "test/cctest/libplatform/test-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1116032
+      },
+      "writtenOn": "2019-07-01T09:24:20Z",
+      "side": 1,
+      "message": "No need to wait here either.",
+      "range": {
+        "startLine": 678,
+        "startChar": 2,
+        "endLine": 678,
+        "endChar": 10
+      },
+      "revId": "de936e41aee269247a7ab3b1768153608d55e0aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
