@@ -491,6 +491,7 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
   const Operator* F32x4Le();
 
   const Operator* I64x2Splat();
+  const Operator* I64x2Neg();
   const Operator* I32x4Splat();
   const Operator* I32x4ExtractLane(int32_t);
   const Operator* I32x4ReplaceLane(int32_t);

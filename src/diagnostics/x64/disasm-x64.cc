@@ -1921,6 +1921,8 @@ int DisassemblerX64::TwoByteOpcodeInstruction(byte* data) {
           mnemonic = "psubw";
         } else if (opcode == 0xFA) {
           mnemonic = "psubd";
+        } else if (opcode == 0xFB) {
+          mnemonic = "psubq";
         } else if (opcode == 0xFC) {
           mnemonic = "paddb";
         } else if (opcode == 0xFD) {

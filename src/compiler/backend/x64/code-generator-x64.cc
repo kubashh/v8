@@ -2429,6 +2429,17 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ pshufd(dst, dst, 0x0);
       break;
     }
+    case kX64I64x2Neg: {
+      XMMRegister dst = i.OutputSimd128Register();
+      XMMRegister src = i.InputSimd128Register(0);
+      if (dst == src) {
+        __ movapd(kScratchDoubleReg, src);
+        src = kScratchDoubleReg;
+      }
+      __ pxor(dst, dst);
+      __ psubq(dst, src);
+      break;
+    }
     case kX64I32x4ExtractLane: {
       CpuFeatureScope sse_scope(tasm(), SSE4_1);
       __ Pextrd(i.OutputRegister(), i.InputSimd128Register(0), i.InputInt8(1));
