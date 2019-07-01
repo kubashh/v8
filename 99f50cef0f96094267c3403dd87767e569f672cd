@@ -22,6 +22,30 @@
       "revId": "99f50cef0f96094267c3403dd87767e569f672cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c514692_052e7b97",
+        "filename": "third_party/inspector_protocol/lib/base_string_adapter_cc.template",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1280850
+      },
+      "writtenOn": "2019-07-01T20:08:04Z",
+      "side": 1,
+      "message": "base_string_adapter depends on Chromium\u0027s base, it\u0027s not portable (not even to mini_chromium I think).\n\nHaving the code in a jinja template works around the layers in Chromium, basically - before this solution we had several copies that were identical except for namespace / export macros, because each of Chromium\u0027s layers need a StringUtil / StringBuilder / Binary / etc.",
+      "parentUuid": "cdcdf367_9311d730",
+      "range": {
+        "startLine": 188,
+        "startChar": 6,
+        "endLine": 188,
+        "endChar": 14
+      },
+      "revId": "99f50cef0f96094267c3403dd87767e569f672cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
