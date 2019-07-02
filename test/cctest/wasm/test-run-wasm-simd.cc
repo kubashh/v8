@@ -861,6 +861,14 @@ WASM_SIMD_TEST_NO_LOWERING(I64x2ShrU) {
   RunI64x2ShiftOpTest(execution_tier, lower_simd, kExprI64x2ShrU,
                       LogicalShiftRight);
 }
+
+WASM_SIMD_TEST_NO_LOWERING(I64x2Eq) {
+  RunI64x2BinOpTest(execution_tier, lower_simd, kExprI64x2Eq, Equal);
+}
+
+WASM_SIMD_TEST_NO_LOWERING(I64x2Ne) {
+  RunI64x2BinOpTest(execution_tier, lower_simd, kExprI64x2Ne, NotEqual);
+}
 #endif  // V8_TARGET_ARCH_X64
 
 WASM_SIMD_TEST(I32x4Splat) {
