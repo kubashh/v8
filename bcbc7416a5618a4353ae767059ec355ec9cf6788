@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbdc4441_eaac5ceb",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-07-02T09:41:29Z",
+      "side": 1,
+      "message": "You can save space here by making this a int16_t table.",
+      "revId": "bcbc7416a5618a4353ae767059ec355ec9cf6788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78e7f324_29edf3eb",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-07-02T09:41:29Z",
+      "side": 1,
+      "message": "Can you make this return an int16_t to make its value range more explicit?",
+      "revId": "bcbc7416a5618a4353ae767059ec355ec9cf6788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac31b787_94cb6885",
+        "filename": "src/base/vlq-base64.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-07-02T09:41:29Z",
+      "side": 1,
+      "message": "I think you should leave this declaration out of the header file, since only the testing method should be called (and only from tests).",
+      "revId": "bcbc7416a5618a4353ae767059ec355ec9cf6788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
