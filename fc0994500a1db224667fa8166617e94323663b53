@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5590a9b0_7f07fea2",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2422,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-07-02T09:04:34Z",
+      "side": 1,
+      "message": "suggestion: Lets add a DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0)) here.",
+      "range": {
+        "startLine": 2422,
+        "startChar": 9,
+        "endLine": 2422,
+        "endChar": 21
+      },
+      "revId": "fc0994500a1db224667fa8166617e94323663b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09a678f0_93d8aabb",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-07-02T09:04:34Z",
+      "side": 1,
+      "message": "suggestion: Lets add a DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0)) here.",
+      "range": {
+        "startLine": 2426,
+        "startChar": 9,
+        "endLine": 2426,
+        "endChar": 21
+      },
+      "revId": "fc0994500a1db224667fa8166617e94323663b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50fb6eda_c0d87c1f",
+        "filename": "src/compiler/machine-operator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-07-02T09:04:34Z",
+      "side": 1,
+      "message": "Is subtraction really commutative? I feel this should be {Operator::kNoProperties} instead.",
+      "range": {
+        "startLine": 268,
+        "startChar": 24,
+        "endLine": 268,
+        "endChar": 36
+      },
+      "revId": "fc0994500a1db224667fa8166617e94323663b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
