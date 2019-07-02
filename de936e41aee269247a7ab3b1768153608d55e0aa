@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "942d1fca_46567571",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-02T14:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9429d7dd_7c3aa8ed",
+      "range": {
+        "startLine": 194,
+        "startChar": 25,
+        "endLine": 194,
+        "endChar": 26
+      },
+      "revId": "de936e41aee269247a7ab3b1768153608d55e0aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ea75fdf_328331be",
         "filename": "src/libplatform/tracing/tracing-controller.cc",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "8d759826_02f4b5d1",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-02T14:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ea75fdf_328331be",
+      "range": {
+        "startLine": 221,
+        "startChar": 14,
+        "endLine": 221,
+        "endChar": 22
+      },
+      "revId": "de936e41aee269247a7ab3b1768153608d55e0aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5c4ce81_ebb21a7a",
         "filename": "src/libplatform/tracing/tracing-controller.cc",
         "patchSetId": 8
@@ -59,6 +107,30 @@
       "writtenOn": "2019-07-01T09:24:20Z",
       "side": 1,
       "message": "No need to block here.",
+      "range": {
+        "startLine": 346,
+        "startChar": 2,
+        "endLine": 346,
+        "endChar": 10
+      },
+      "revId": "de936e41aee269247a7ab3b1768153608d55e0aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ee4b293_07085277",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-02T14:15:26Z",
+      "side": 1,
+      "message": "Actually I get a test failure for cctest/test-tracing/Perfetto without the wait here - it seems ReadTraceBlocking() doesn\u0027t flush or something?",
+      "parentUuid": "d5c4ce81_ebb21a7a",
       "range": {
         "startLine": 346,
         "startChar": 2,
