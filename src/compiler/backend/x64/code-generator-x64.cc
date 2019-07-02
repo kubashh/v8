@@ -2491,8 +2491,58 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ pxor(i.OutputSimd128Register(), kScratchDoubleReg);
       break;
     }
+    case kX64I64x2GtS: {
+      DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      CpuFeatureScope sse_scope(tasm(), SSE4_2);
+      __ pcmpgtq(i.OutputSimd128Register(), i.InputSimd128Register(1));
+      break;
+    }
+    case kX64I64x2GeS: {
+      DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      CpuFeatureScope sse_scope(tasm(), SSE4_2);
+      XMMRegister dst = i.OutputSimd128Register();
+      XMMRegister src = i.InputSimd128Register(1);
+      __ pcmpgtq(src, dst);
+      __ pcmpeqd(dst, dst);
+      __ pxor(dst, src);
+      break;
+    }
     case kX64I64x2ShrU: {
       __ psrlq(i.OutputSimd128Register(), i.InputInt8(1));
+      break;
+    }
+    case kX64I64x2GtU: {
+      DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      CpuFeatureScope sse_scope(tasm(), SSE4_2);
+      XMMRegister dst = i.OutputSimd128Register();
+      XMMRegister src = i.InputSimd128Register(1);
+
+      // sets up a mask to clear the sign bit of the 2 quadwords
+      __ Set(kScratchRegister, 0x8000000000000000);
+      __ movq(kScratchDoubleReg, kScratchRegister);
+      __ pshufd(kScratchDoubleReg, kScratchDoubleReg, 0x44);
+
+      __ pxor(src, kScratchDoubleReg);
+      __ pxor(dst, kScratchDoubleReg);
+      __ pcmpgtq(dst, src);
+      break;
+    }
+    case kX64I64x2GeU: {
+      DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      CpuFeatureScope sse_scope(tasm(), SSE4_2);
+      XMMRegister dst = i.OutputSimd128Register();
+      XMMRegister src = i.InputSimd128Register(1);
+
+      // sets up a mask to clear the sign bit of the 2 quadwords
+      __ Set(kScratchRegister, 0x8000000000000000);
+      __ movq(kScratchDoubleReg, kScratchRegister);
+      __ pshufd(kScratchDoubleReg, kScratchDoubleReg, 0x44);
+
+      __ pxor(dst, kScratchDoubleReg);
+      __ pxor(src, kScratchDoubleReg);
+      __ pcmpgtq(src, dst);
+      __ pcmpeqd(dst, dst);
+      __ pxor(dst, src);
       break;
     }
     case kX64I32x4Splat: {
