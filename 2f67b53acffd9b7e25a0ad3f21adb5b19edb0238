@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bcc3d9b_3f88d85d",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2949,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-07-02T12:43:03Z",
+      "side": 1,
+      "message": "Please add a comment why we do this.",
+      "range": {
+        "startLine": 2949,
+        "startChar": 3,
+        "endLine": 2949,
+        "endChar": 79
+      },
+      "revId": "2f67b53acffd9b7e25a0ad3f21adb5b19edb0238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74ac4649_a9a6f023",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2955,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-07-02T12:43:03Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 2955,
+        "startChar": 1,
+        "endLine": 2955,
+        "endChar": 73
+      },
+      "revId": "2f67b53acffd9b7e25a0ad3f21adb5b19edb0238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
