@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "44286f9b_08d68e46",
+        "filename": "src/api/api.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2909,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-07-02T12:31:11Z",
+      "side": 1,
+      "message": "After this change, more places use StackFrameInfo objects, not only the API. Internal use-sites expect a 0-based index so we adjust in the API.\n\nAfter rebasing, the column number also gets adjusted in the API.",
+      "parentUuid": "3754646d_ccc29a87",
+      "revId": "8f978eb70f429f1d4739eb835b09298e93ee1bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c0965383_3a481d63",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "8f978eb70f429f1d4739eb835b09298e93ee1bd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7898fd2c_0c4c0d15",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2033,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-07-02T12:31:11Z",
+      "side": 1,
+      "message": "Probably not, I removed it.",
+      "parentUuid": "c0965383_3a481d63",
+      "revId": "8f978eb70f429f1d4739eb835b09298e93ee1bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -64,6 +100,24 @@
       "writtenOn": "2019-06-12T05:50:03Z",
       "side": 1,
       "message": "Seems outdated now. See also the other comment, why remove the line nr adjustment? At first sight it seems reasonable to put it in the bottleneck here.",
+      "revId": "8f978eb70f429f1d4739eb835b09298e93ee1bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2d4f950_307117f9",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3651,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-07-02T12:31:11Z",
+      "side": 1,
+      "message": "Removed the code comment.\nExplanation in the other CL comment.",
+      "parentUuid": "69b7e812_206136d8",
       "revId": "8f978eb70f429f1d4739eb835b09298e93ee1bd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
