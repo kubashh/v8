@@ -393,14 +393,19 @@ class Heap {
 
   // Move len non-weak tagged elements from src_slot to dst_slot of dst_object.
   // The source and destination memory ranges can overlap.
-  void MoveRange(HeapObject dst_object, ObjectSlot dst_slot,
-                 ObjectSlot src_slot, int len, WriteBarrierMode mode);
+  void MoveRange(HeapObject dst_object, StrongTaggedValueSlot dst_slot,
+                 StrongTaggedValueSlot src_slot, int len,
+                 WriteBarrierMode mode);
 
   // Copy len non-weak tagged elements from src_slot to dst_slot of dst_object.
   // The source and destination memory ranges must not overlap.
   template <typename TSlot>
   void CopyRange(HeapObject dst_object, TSlot dst_slot, TSlot src_slot, int len,
                  WriteBarrierMode mode);
+
+  template <typename TSlot>
+  void CopyRange(HeapObject dst_object, const TSlot dst_slot,
+                 const TSlot src_slot, int len);
 
   // Initialize a filler object to keep the ability to iterate over the heap
   // when introducing gaps within pages. If slots could have been recorded in
@@ -1516,6 +1521,10 @@ class Heap {
   V8_INLINE void WriteBarrierForRangeImpl(MemoryChunk* source_page,
                                           HeapObject object, TSlot start_slot,
                                           TSlot end_slot);
+
+  template <int kModeMask, typename TSlot>
+  void CopyRangeImpl(MemoryChunk* source_page, HeapObject dst_object,
+                     TSlot dst_slot, TSlot src_slot, int len);
 
   // Deopts all code that contains allocation instruction which are tenured or
   // not tenured. Moreover it clears the pretenuring allocation site statistics.

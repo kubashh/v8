@@ -112,6 +112,12 @@ Name DescriptorArray::GetKey(int descriptor_number) const {
   return Name::cast(EntryKeyField::Relaxed_Load(*this, entry_offset));
 }
 
+Name DescriptorArray::GetKey(Isolate* isolate, int descriptor_number) const {
+  DCHECK_LT(descriptor_number, number_of_descriptors());
+  int entry_offset = OffsetOfDescriptorAt(descriptor_number);
+  return Name::cast(EntryKeyField::Relaxed_Load(isolate, *this, entry_offset));
+}
+
 void DescriptorArray::SetKey(int descriptor_number, Name key) {
   DCHECK_LT(descriptor_number, number_of_descriptors());
   int entry_offset = OffsetOfDescriptorAt(descriptor_number);
@@ -136,6 +142,11 @@ Object DescriptorArray::GetStrongValue(int descriptor_number) {
   return GetValue(descriptor_number).cast<Object>();
 }
 
+Object DescriptorArray::GetStrongValue(Isolate* isolate,
+                                       int descriptor_number) {
+  return GetValue(isolate, descriptor_number).cast<Object>();
+}
+
 void DescriptorArray::SetValue(int descriptor_number, MaybeObject value) {
   DCHECK_LT(descriptor_number, number_of_descriptors());
   int entry_offset = OffsetOfDescriptorAt(descriptor_number);
@@ -147,6 +158,12 @@ MaybeObject DescriptorArray::GetValue(int descriptor_number) {
   DCHECK_LT(descriptor_number, number_of_descriptors());
   int entry_offset = OffsetOfDescriptorAt(descriptor_number);
   return EntryValueField::Relaxed_Load(*this, entry_offset);
+}
+
+MaybeObject DescriptorArray::GetValue(Isolate* isolate, int descriptor_number) {
+  DCHECK_LT(descriptor_number, number_of_descriptors());
+  int entry_offset = OffsetOfDescriptorAt(descriptor_number);
+  return EntryValueField::Relaxed_Load(isolate, *this, entry_offset);
 }
 
 PropertyDetails DescriptorArray::GetDetails(int descriptor_number) {
@@ -171,6 +188,13 @@ int DescriptorArray::GetFieldIndex(int descriptor_number) {
 FieldType DescriptorArray::GetFieldType(int descriptor_number) {
   DCHECK_EQ(GetDetails(descriptor_number).location(), kField);
   MaybeObject wrapped_type = GetValue(descriptor_number);
+  return Map::UnwrapFieldType(wrapped_type);
+}
+
+FieldType DescriptorArray::GetFieldType(Isolate* isolate,
+                                        int descriptor_number) {
+  DCHECK_EQ(GetDetails(descriptor_number).location(), kField);
+  MaybeObject wrapped_type = GetValue(isolate, descriptor_number);
   return Map::UnwrapFieldType(wrapped_type);
 }
 

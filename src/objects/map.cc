@@ -613,7 +613,8 @@ void Map::DeprecateTransitionTree(Isolate* isolate) {
 void Map::ReplaceDescriptors(Isolate* isolate, DescriptorArray new_descriptors,
                              LayoutDescriptor new_layout_descriptor) {
   // Don't overwrite the empty descriptor array or initial map's descriptors.
-  if (NumberOfOwnDescriptors() == 0 || GetBackPointer().IsUndefined(isolate)) {
+  if (NumberOfOwnDescriptors() == 0 ||
+      GetBackPointer(isolate).IsUndefined(isolate)) {
     return;
   }
 
@@ -624,8 +625,8 @@ void Map::ReplaceDescriptors(Isolate* isolate, DescriptorArray new_descriptors,
   Map current = *this;
   MarkingBarrierForDescriptorArray(isolate->heap(), current, to_replace,
                                    to_replace.number_of_descriptors());
-  while (current.instance_descriptors() == to_replace) {
-    Object next = current.GetBackPointer();
+  while (current.instance_descriptors(isolate) == to_replace) {
+    Object next = current.GetBackPointer(isolate);
     if (next.IsUndefined(isolate)) break;  // Stop overwriting at initial map.
     current.SetEnumLength(kInvalidEnumCacheSentinel);
     current.UpdateDescriptors(isolate, new_descriptors, new_layout_descriptor,
@@ -638,7 +639,7 @@ void Map::ReplaceDescriptors(Isolate* isolate, DescriptorArray new_descriptors,
 Map Map::FindRootMap(Isolate* isolate) const {
   Map result = *this;
   while (true) {
-    Object back = result.GetBackPointer();
+    Object back = result.GetBackPointer(isolate);
     if (back.IsUndefined(isolate)) {
       // Initial map always owns descriptors and doesn't have unused entries
       // in the descriptor array.
@@ -653,10 +654,11 @@ Map Map::FindRootMap(Isolate* isolate) const {
 
 Map Map::FindFieldOwner(Isolate* isolate, int descriptor) const {
   DisallowHeapAllocation no_allocation;
-  DCHECK_EQ(kField, instance_descriptors().GetDetails(descriptor).location());
+  DCHECK_EQ(kField,
+            instance_descriptors(isolate).GetDetails(descriptor).location());
   Map result = *this;
   while (true) {
-    Object back = result.GetBackPointer();
+    Object back = result.GetBackPointer(isolate);
     if (back.IsUndefined(isolate)) break;
     const Map parent = Map::cast(back);
     if (parent.NumberOfOwnDescriptors() <= descriptor) break;
@@ -892,7 +894,7 @@ IntegrityLevelTransitionInfo DetectIntegrityLevelTransitions(
   // Figure out the most restrictive integrity level transition (it should
   // be the last one in the transition tree).
   DCHECK(!map.is_extensible());
-  Map previous = Map::cast(map.GetBackPointer());
+  Map previous = Map::cast(map.GetBackPointer(isolate));
   TransitionsAccessor last_transitions(isolate, previous, no_allocation);
   if (!last_transitions.HasIntegrityLevelTransitionTo(
           map, &(info.integrity_level_symbol), &(info.integrity_level))) {
@@ -910,7 +912,7 @@ IntegrityLevelTransitionInfo DetectIntegrityLevelTransitions(
   // transitions. If we encounter any non-integrity level transition interleaved
   // with integrity level transitions, just bail out.
   while (!source_map.is_extensible()) {
-    previous = Map::cast(source_map.GetBackPointer());
+    previous = Map::cast(source_map.GetBackPointer(isolate));
     TransitionsAccessor transitions(isolate, previous, no_allocation);
     if (!transitions.HasIntegrityLevelTransitionTo(source_map)) {
       return info;
@@ -2522,12 +2524,12 @@ void Map::SetInstanceDescriptors(Isolate* isolate, DescriptorArray descriptors,
 // static
 Handle<PrototypeInfo> Map::GetOrCreatePrototypeInfo(Handle<JSObject> prototype,
                                                     Isolate* isolate) {
-  Object maybe_proto_info = prototype->map().prototype_info();
-  if (maybe_proto_info.IsPrototypeInfo()) {
+  Object maybe_proto_info = prototype->map(isolate).prototype_info();
+  if (maybe_proto_info.IsPrototypeInfo(isolate)) {
     return handle(PrototypeInfo::cast(maybe_proto_info), isolate);
   }
   Handle<PrototypeInfo> proto_info = isolate->factory()->NewPrototypeInfo();
-  prototype->map().set_prototype_info(*proto_info);
+  prototype->map(isolate).set_prototype_info(*proto_info);
   return proto_info;
 }
 
@@ -2535,7 +2537,7 @@ Handle<PrototypeInfo> Map::GetOrCreatePrototypeInfo(Handle<JSObject> prototype,
 Handle<PrototypeInfo> Map::GetOrCreatePrototypeInfo(Handle<Map> prototype_map,
                                                     Isolate* isolate) {
   Object maybe_proto_info = prototype_map->prototype_info();
-  if (maybe_proto_info.IsPrototypeInfo()) {
+  if (maybe_proto_info.IsPrototypeInfo(isolate)) {
     return handle(PrototypeInfo::cast(maybe_proto_info), isolate);
   }
   Handle<PrototypeInfo> proto_info = isolate->factory()->NewPrototypeInfo();

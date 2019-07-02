@@ -251,10 +251,11 @@ Maybe<bool> JSTypedArray::DefineOwnProperty(Isolate* isolate,
         if (!desc->has_enumerable()) desc->set_enumerable(true);
         if (!desc->has_writable()) desc->set_writable(true);
         Handle<Object> value = desc->value();
-        RETURN_ON_EXCEPTION_VALUE(isolate,
-                                  SetOwnElementIgnoreAttributes(
-                                      o, index, value, desc->ToAttributes()),
-                                  Nothing<bool>());
+        RETURN_ON_EXCEPTION_VALUE(
+            isolate,
+            SetOwnElementIgnoreAttributes(isolate, o, index, value,
+                                          desc->ToAttributes()),
+            Nothing<bool>());
       }
       // 3b xi. Return true.
       return Just(true);

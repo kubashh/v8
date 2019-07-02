@@ -417,8 +417,8 @@ Handle<JSObject> CreateObjectLiteral(
       if (value->IsUninitialized(isolate)) {
         value = handle(Smi::kZero, isolate);
       }
-      JSObject::SetOwnElementIgnoreAttributes(boilerplate, element_index, value,
-                                              NONE)
+      JSObject::SetOwnElementIgnoreAttributes(isolate, boilerplate,
+                                              element_index, value, NONE)
           .Check();
     } else {
       Handle<String> name = Handle<String>::cast(key);

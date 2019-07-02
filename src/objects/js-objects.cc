@@ -1926,7 +1926,8 @@ MaybeHandle<FixedArray> GetOwnValuesOrEntries(Isolate* isolate,
   int length = 0;
 
   for (int i = 0; i < keys->length(); ++i) {
-    Handle<Name> key = Handle<Name>::cast(handle(keys->get(i), isolate));
+    Handle<Name> key =
+        Handle<Name>::cast(handle(keys->get(isolate, i), isolate));
 
     if (filter & ONLY_ENUMERABLE) {
       PropertyDescriptor descriptor;
@@ -2595,9 +2596,9 @@ namespace {
 //     store.
 void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
                        Handle<Map> new_map) {
-  Handle<Map> old_map(object->map(), isolate);
+  Handle<Map> old_map(object->map(isolate), isolate);
   // In case of a regular transition.
-  if (new_map->GetBackPointer() == *old_map) {
+  if (new_map->GetBackPointer(isolate) == *old_map) {
     // If the map does not add named properties, simply set the map.
     if (old_map->NumberOfOwnDescriptors() ==
         new_map->NumberOfOwnDescriptors()) {
@@ -2606,7 +2607,7 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
     }
 
     // If the map adds a new kDescriptor property, simply set the map.
-    PropertyDetails details = new_map->GetLastDescriptorDetails();
+    PropertyDetails details = new_map->GetLastDescriptorDetails(isolate);
     if (details.location() == kDescriptor) {
       object->synchronized_set_map(*new_map);
       return;
@@ -2617,8 +2618,8 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
     // double boxes).
     FieldIndex index =
         FieldIndex::ForDescriptor(*new_map, new_map->LastAdded());
-    if (index.is_inobject() ||
-        index.outobject_array_index() < object->property_array().length()) {
+    if (index.is_inobject() || index.outobject_array_index() <
+                                   object->property_array(isolate).length()) {
       // We still need to allocate MutableHeapNumbers for double fields
       // if either double field unboxing is disabled or the double field
       // is in the PropertyArray backing store (where we don't support
@@ -2634,7 +2635,7 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
     // This migration is a transition from a map that has run out of property
     // space. Extend the backing store.
     int grow_by = new_map->UnusedPropertyFields() + 1;
-    Handle<PropertyArray> old_storage(object->property_array(), isolate);
+    Handle<PropertyArray> old_storage(object->property_array(isolate), isolate);
     Handle<PropertyArray> new_storage =
         isolate->factory()->CopyPropertyArrayAndGrow(old_storage, grow_by);
 
@@ -2680,10 +2681,10 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
   Handle<FixedArray> inobject_props =
       isolate->factory()->NewFixedArray(inobject);
 
-  Handle<DescriptorArray> old_descriptors(old_map->instance_descriptors(),
-                                          isolate);
-  Handle<DescriptorArray> new_descriptors(new_map->instance_descriptors(),
-                                          isolate);
+  Handle<DescriptorArray> old_descriptors(
+      old_map->instance_descriptors(isolate), isolate);
+  Handle<DescriptorArray> new_descriptors(
+      new_map->instance_descriptors(isolate), isolate);
   int old_nof = old_map->NumberOfOwnDescriptors();
   int new_nof = new_map->NumberOfOwnDescriptors();
 
@@ -2711,7 +2712,7 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
         }
       } else {
         DCHECK_EQ(kData, old_details.kind());
-        value = handle(old_descriptors->GetStrongValue(i), isolate);
+        value = handle(old_descriptors->GetStrongValue(isolate, i), isolate);
         DCHECK(!old_representation.IsDouble() && !representation.IsDouble());
       }
     } else {
@@ -2725,7 +2726,7 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
           value = isolate->factory()->NewHeapNumberFromBits(old_bits);
         }
       } else {
-        value = handle(object->RawFastPropertyAt(index), isolate);
+        value = handle(object->RawFastPropertyAt(isolate, index), isolate);
         if (!old_representation.IsDouble() && representation.IsDouble()) {
           DCHECK_IMPLIES(old_representation.IsNone(),
                          value->IsUninitialized(isolate));
@@ -2777,7 +2778,7 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
   int limit = Min(inobject, number_of_fields);
   for (int i = 0; i < limit; i++) {
     FieldIndex index = FieldIndex::ForPropertyIndex(*new_map, i);
-    Object value = inobject_props->get(i);
+    Object value = inobject_props->get(isolate, i);
     // Can't use JSObject::FastPropertyAtPut() because proper map was not set
     // yet.
     if (new_map->IsUnboxedDoubleField(index)) {
@@ -2842,10 +2843,10 @@ void MigrateFastToSlow(Isolate* isolate, Handle<JSObject> object,
   Handle<NameDictionary> dictionary =
       NameDictionary::New(isolate, property_count);
 
-  Handle<DescriptorArray> descs(map->instance_descriptors(), isolate);
+  Handle<DescriptorArray> descs(map->instance_descriptors(isolate), isolate);
   for (int i = 0; i < real_size; i++) {
     PropertyDetails details = descs->GetDetails(i);
-    Handle<Name> key(descs->GetKey(i), isolate);
+    Handle<Name> key(descs->GetKey(isolate, i), isolate);
     Handle<Object> value;
     if (details.location() == kField) {
       FieldIndex index = FieldIndex::ForDescriptor(*map, i);
@@ -2854,7 +2855,7 @@ void MigrateFastToSlow(Isolate* isolate, Handle<JSObject> object,
           double old_value = object->RawFastDoublePropertyAt(index);
           value = isolate->factory()->NewHeapNumber(old_value);
         } else {
-          value = handle(object->RawFastPropertyAt(index), isolate);
+          value = handle(object->RawFastPropertyAt(isolate, index), isolate);
           if (details.representation().IsDouble()) {
             DCHECK(value->IsMutableHeapNumber());
             double old_value = Handle<MutableHeapNumber>::cast(value)->value();
@@ -2863,12 +2864,12 @@ void MigrateFastToSlow(Isolate* isolate, Handle<JSObject> object,
         }
       } else {
         DCHECK_EQ(kAccessor, details.kind());
-        value = handle(object->RawFastPropertyAt(index), isolate);
+        value = handle(object->RawFastPropertyAt(isolate, index), isolate);
       }
 
     } else {
       DCHECK_EQ(kDescriptor, details.location());
-      value = handle(descs->GetStrongValue(i), isolate);
+      value = handle(descs->GetStrongValue(isolate, i), isolate);
     }
     DCHECK(!value.is_null());
     PropertyDetails d(details.kind(), details.attributes(),
@@ -2933,8 +2934,8 @@ void MigrateFastToSlow(Isolate* isolate, Handle<JSObject> object,
 void JSObject::MigrateToMap(Isolate* isolate, Handle<JSObject> object,
                             Handle<Map> new_map,
                             int expected_additional_properties) {
-  if (object->map() == *new_map) return;
-  Handle<Map> old_map(object->map(), isolate);
+  if (object->map(isolate) == *new_map) return;
+  Handle<Map> old_map(object->map(isolate), isolate);
   NotifyMapChange(old_map, new_map, isolate);
 
   if (old_map->is_dictionary_map()) {
@@ -3067,7 +3068,7 @@ void JSObject::AllocateStorageForMap(Handle<JSObject> object, Handle<Map> map) {
 }
 
 void JSObject::MigrateInstance(Isolate* isolate, Handle<JSObject> object) {
-  Handle<Map> original_map(object->map(), isolate);
+  Handle<Map> original_map(object->map(isolate), isolate);
   Handle<Map> map = Map::Update(isolate, original_map);
   map->set_is_migration_target(true);
   JSObject::MigrateToMap(isolate, object, map);
@@ -3239,17 +3240,15 @@ MaybeHandle<Object> JSObject::SetOwnPropertyIgnoreAttributes(
 }
 
 MaybeHandle<Object> JSObject::SetOwnElementIgnoreAttributes(
-    Handle<JSObject> object, uint32_t index, Handle<Object> value,
-    PropertyAttributes attributes) {
-  Isolate* isolate = object->GetIsolate();
+    Isolate* isolate, Handle<JSObject> object, uint32_t index,
+    Handle<Object> value, PropertyAttributes attributes) {
   LookupIterator it(isolate, object, index, object, LookupIterator::OWN);
   return DefineOwnPropertyIgnoreAttributes(&it, value, attributes);
 }
 
 MaybeHandle<Object> JSObject::DefinePropertyOrElementIgnoreAttributes(
-    Handle<JSObject> object, Handle<Name> name, Handle<Object> value,
-    PropertyAttributes attributes) {
-  Isolate* isolate = object->GetIsolate();
+    Isolate* isolate, Handle<JSObject> object, Handle<Name> name,
+    Handle<Object> value, PropertyAttributes attributes) {
   LookupIterator it = LookupIterator::PropertyOrElement(
       isolate, object, name, object, LookupIterator::OWN);
   return DefineOwnPropertyIgnoreAttributes(&it, value, attributes);
@@ -3266,7 +3265,7 @@ void JSObject::NormalizeProperties(Isolate* isolate, Handle<JSObject> object,
                                    const char* reason) {
   if (!object->HasFastProperties()) return;
 
-  Handle<Map> map(object->map(), isolate);
+  Handle<Map> map(object->map(isolate), isolate);
   Handle<Map> new_map =
       Map::Normalize(isolate, map, map->elements_kind(), mode, reason);
 
@@ -3956,16 +3955,16 @@ Maybe<bool> JSObject::PreventExtensionsWithTransition(
   return Just(true);
 }
 
-Handle<Object> JSObject::FastPropertyAt(Handle<JSObject> object,
+Handle<Object> JSObject::FastPropertyAt(Isolate* isolate,
+                                        Handle<JSObject> object,
                                         Representation representation,
                                         FieldIndex index) {
-  Isolate* isolate = object->GetIsolate();
-  if (object->IsUnboxedDoubleField(index)) {
+  if (object->IsUnboxedDoubleField(isolate, index)) {
     DCHECK(representation.IsDouble());
     double value = object->RawFastDoublePropertyAt(index);
     return isolate->factory()->NewHeapNumber(value);
   }
-  Handle<Object> raw_value(object->RawFastPropertyAt(index), isolate);
+  Handle<Object> raw_value(object->RawFastPropertyAt(isolate, index), isolate);
   return Object::WrapForRead(isolate, raw_value, representation);
 }
 
@@ -5422,7 +5421,7 @@ bool JSFunction::SetName(Handle<JSFunction> function, Handle<Name> name,
   RETURN_ON_EXCEPTION_VALUE(
       isolate,
       JSObject::DefinePropertyOrElementIgnoreAttributes(
-          function, isolate->factory()->name_string(), function_name,
+          isolate, function, isolate->factory()->name_string(), function_name,
           static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY)),
       false);
   return true;

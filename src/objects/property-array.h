@@ -39,6 +39,8 @@ class PropertyArray : public HeapObject {
   // Signature must be in sync with FixedArray::CopyElements().
   inline void CopyElements(Isolate* isolate, int dst_index, PropertyArray src,
                            int src_index, int len, WriteBarrierMode mode);
+  inline void CopyElements(Isolate* isolate, int dst_index, PropertyArray src,
+                           int src_index, int len);
 
   // Gives access to raw memory which stores the array's data.
   inline ObjectSlot data_start();

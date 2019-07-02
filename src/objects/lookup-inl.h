@@ -117,17 +117,17 @@ bool LookupIterator::ExtendingNonExtensible(Handle<JSReceiver> receiver) {
 
 bool LookupIterator::IsCacheableTransition() {
   DCHECK_EQ(TRANSITION, state_);
-  return transition_->IsPropertyCell() ||
+  return transition_->IsPropertyCell(isolate_) ||
          (transition_map()->is_dictionary_map() &&
           !GetStoreTarget<JSReceiver>()->HasFastProperties()) ||
-         transition_map()->GetBackPointer().IsMap();
+         transition_map()->GetBackPointer(isolate_).IsMap(isolate_);
 }
 
 void LookupIterator::UpdateProtector() {
   if (IsElement()) return;
   // This list must be kept in sync with
   // CodeStubAssembler::CheckForAssociatedProtector!
-  ReadOnlyRoots roots(heap());
+  ReadOnlyRoots roots(isolate_);
   if (*name_ == roots.is_concat_spreadable_symbol() ||
       *name_ == roots.constructor_string() || *name_ == roots.next_string() ||
       *name_ == roots.species_symbol() || *name_ == roots.iterator_symbol() ||

@@ -454,7 +454,7 @@ class InterpreterHandle {
       WasmValue value = frame->GetStackValue(i);
       Handle<Object> value_obj = WasmValueToValueObject(isolate_, value);
       JSObject::SetOwnElementIgnoreAttributes(
-          stack_obj, static_cast<uint32_t>(i), value_obj, NONE)
+          isolate_, stack_obj, static_cast<uint32_t>(i), value_obj, NONE)
           .Assert();
     }
     return local_scope_object;

@@ -394,14 +394,15 @@ class JSObject : public JSReceiver {
                                  PropertyAttributes attributes);
 
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object>
-  SetOwnElementIgnoreAttributes(Handle<JSObject> object, uint32_t index,
-                                Handle<Object> value,
+  SetOwnElementIgnoreAttributes(Isolate* isolate, Handle<JSObject> object,
+                                uint32_t index, Handle<Object> value,
                                 PropertyAttributes attributes);
 
   // Equivalent to one of the above depending on whether |name| can be converted
   // to an array index.
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeHandle<Object>
-  DefinePropertyOrElementIgnoreAttributes(Handle<JSObject> object,
+  DefinePropertyOrElementIgnoreAttributes(Isolate* isolate,
+                                          Handle<JSObject> object,
                                           Handle<Name> name,
                                           Handle<Object> value,
                                           PropertyAttributes attributes = NONE);
@@ -631,7 +632,11 @@ class JSObject : public JSReceiver {
   inline bool IsUnboxedDoubleField(Isolate* isolate, FieldIndex index) const;
 
   // Access fast-case object properties at index.
-  static Handle<Object> FastPropertyAt(Handle<JSObject> object,
+  static inline Handle<Object> FastPropertyAt(Handle<JSObject> object,
+                                              Representation representation,
+                                              FieldIndex index);
+  static Handle<Object> FastPropertyAt(Isolate* isolate,
+                                       Handle<JSObject> object,
                                        Representation representation,
                                        FieldIndex index);
   inline Object RawFastPropertyAt(FieldIndex index) const;
@@ -962,7 +967,7 @@ class JSBoundFunction : public JSObject {
 class JSFunction : public JSObject {
  public:
   // [prototype_or_initial_map]:
-  DECL_ACCESSORS(prototype_or_initial_map, Object)
+  DECL_ACCESSORS(prototype_or_initial_map, HeapObject)
 
   // [shared]: The information about the function that
   // can be shared by instances.

@@ -318,6 +318,13 @@ bool JSObject::IsUnboxedDoubleField(Isolate* isolate, FieldIndex index) const {
   return map(isolate).IsUnboxedDoubleField(isolate, index);
 }
 
+Handle<Object> JSObject::FastPropertyAt(Handle<JSObject> object,
+                                        Representation representation,
+                                        FieldIndex index) {
+  Isolate* isolate = object->GetIsolate();
+  return JSObject::FastPropertyAt(isolate, object, representation, index);
+}
+
 // Access fast-case object properties at index. The use of these routines
 // is needed to correctly distinguish between properties stored in-object and
 // properties stored in the properties array.
@@ -626,7 +633,7 @@ void JSFunction::set_context(HeapObject value) {
   WRITE_BARRIER(*this, kContextOffset, value);
 }
 
-ACCESSORS_CHECKED(JSFunction, prototype_or_initial_map, Object,
+ACCESSORS_CHECKED(JSFunction, prototype_or_initial_map, HeapObject,
                   kPrototypeOrInitialMapOffset, map().has_prototype_slot())
 
 DEF_GETTER(JSFunction, has_prototype_slot, bool) {

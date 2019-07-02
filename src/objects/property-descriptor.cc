@@ -42,29 +42,30 @@ bool GetPropertyIfPresent(Handle<JSReceiver> receiver, Handle<String> name,
 // the entire conversion!
 bool ToPropertyDescriptorFastPath(Isolate* isolate, Handle<JSReceiver> obj,
                                   PropertyDescriptor* desc) {
-  if (!obj->IsJSObject()) return false;
-  Map map = Handle<JSObject>::cast(obj)->map();
+  if (!obj->IsJSObject(isolate)) return false;
+  Map map = Handle<JSObject>::cast(obj)->map(isolate);
   if (map.instance_type() != JS_OBJECT_TYPE) return false;
   if (map.is_access_check_needed()) return false;
-  if (map.prototype() != *isolate->initial_object_prototype()) return false;
+  if (map.prototype(isolate) != *isolate->initial_object_prototype())
+    return false;
   // During bootstrapping, the object_function_prototype_map hasn't been
   // set up yet.
   if (isolate->bootstrapper()->IsActive()) return false;
-  if (JSObject::cast(map.prototype()).map() !=
+  if (JSObject::cast(map.prototype(isolate)).map(isolate) !=
       isolate->native_context()->object_function_prototype_map()) {
     return false;
   }
   // TODO(jkummerow): support dictionary properties?
   if (map.is_dictionary_map()) return false;
   Handle<DescriptorArray> descs =
-      Handle<DescriptorArray>(map.instance_descriptors(), isolate);
+      Handle<DescriptorArray>(map.instance_descriptors(isolate), isolate);
   for (int i = 0; i < map.NumberOfOwnDescriptors(); i++) {
     PropertyDetails details = descs->GetDetails(i);
-    Name key = descs->GetKey(i);
+    Name key = descs->GetKey(isolate, i);
     Handle<Object> value;
     if (details.location() == kField) {
       if (details.kind() == kData) {
-        value = JSObject::FastPropertyAt(Handle<JSObject>::cast(obj),
+        value = JSObject::FastPropertyAt(isolate, Handle<JSObject>::cast(obj),
                                          details.representation(),
                                          FieldIndex::ForDescriptor(map, i));
       } else {
@@ -76,7 +77,7 @@ bool ToPropertyDescriptorFastPath(Isolate* isolate, Handle<JSReceiver> obj,
     } else {
       DCHECK_EQ(kDescriptor, details.location());
       if (details.kind() == kData) {
-        value = handle(descs->GetStrongValue(i), isolate);
+        value = handle(descs->GetStrongValue(isolate, i), isolate);
       } else {
         DCHECK_EQ(kAccessor, details.kind());
         // Bail out to slow path.
@@ -94,11 +95,11 @@ bool ToPropertyDescriptorFastPath(Isolate* isolate, Handle<JSReceiver> obj,
       desc->set_writable(value->BooleanValue(isolate));
     } else if (key == roots.get_string()) {
       // Bail out to slow path to throw an exception if necessary.
-      if (!value->IsCallable()) return false;
+      if (!value->IsCallable(isolate)) return false;
       desc->set_get(value);
     } else if (key == roots.set_string()) {
       // Bail out to slow path to throw an exception if necessary.
-      if (!value->IsCallable()) return false;
+      if (!value->IsCallable(isolate)) return false;
       desc->set_set(value);
     }
   }
