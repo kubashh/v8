@@ -759,6 +759,7 @@
   V(I64x2Add)                   \
   V(I64x2Sub)                   \
   V(I32x4Splat)                 \
+  V(I64x2Neg)                   \
   V(I32x4ExtractLane)           \
   V(I32x4ReplaceLane)           \
   V(I32x4SConvertF32x4)         \
