@@ -121,6 +121,12 @@ V8_EXPORT_PRIVATE
 Handle<FrameArray> GetFrameArrayFromStackTrace(Isolate* isolate,
                                                Handle<FixedArray> stack_trace);
 
+class IncrementalStringBuilder;
+void SerializeStackTraceFrame(Isolate* isolate, Handle<StackTraceFrame> frame,
+                              IncrementalStringBuilder& builder);
+MaybeHandle<String> SerializeStackTraceFrame(Isolate* isolate,
+                                             Handle<StackTraceFrame> frame);
+
 }  // namespace internal
 }  // namespace v8
 
