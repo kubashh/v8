@@ -409,6 +409,11 @@ class PipelineData {
                                         CallDescriptor* call_descriptor,
                                         RegisterAllocationFlags flags) {
     DCHECK_NULL(register_allocation_data_);
+    if (FLAG_trace_alloc &&
+        v8::internal::PassesFilter(CStrVector(debug_name()),
+                                   CStrVector(FLAG_trace_turbo_filter))) {
+      flags |= RegisterAllocationFlag::kTraceAlloc;
+    }
     register_allocation_data_ = new (register_allocation_zone())
         RegisterAllocationData(config, register_allocation_zone(), frame(),
                                sequence(), flags, debug_name());
