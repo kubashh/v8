@@ -763,7 +763,15 @@
   V(I64x2Sub)                   \
   V(I64x2Eq)                    \
   V(I64x2Ne)                    \
+  V(I64x2LtS)                   \
+  V(I64x2LeS)                   \
+  V(I64x2GtS)                   \
+  V(I64x2GeS)                   \
   V(I64x2ShrU)                  \
+  V(I64x2LtU)                   \
+  V(I64x2LeU)                   \
+  V(I64x2GtU)                   \
+  V(I64x2GeU)                   \
   V(I32x4Splat)                 \
   V(I32x4ExtractLane)           \
   V(I32x4ReplaceLane)           \

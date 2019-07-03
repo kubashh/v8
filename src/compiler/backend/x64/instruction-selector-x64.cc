@@ -2567,6 +2567,10 @@ VISIT_ATOMIC_BINOP(Xor)
   V(I64x2Sub)              \
   V(I64x2Eq)               \
   V(I64x2Ne)               \
+  V(I64x2GtS)              \
+  V(I64x2GeS)              \
+  V(I64x2GtU)              \
+  V(I64x2GeU)              \
   V(I32x4Add)              \
   V(I32x4AddHoriz)         \
   V(I32x4Sub)              \
