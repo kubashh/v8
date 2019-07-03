@@ -13,10 +13,62 @@
 #include "src/objects/heap-object.h"
 #include "src/objects/maybe-object.h"
 #include "src/objects/objects.h"
+#include "src/objects/tagged-value.h"
 #include "src/utils/memcopy.h"
 
 namespace v8 {
 namespace internal {
+
+//
+// TaggedValueSlotImpl implementation.
+//
+
+// template <typename TStrongTaggedValue>
+// bool TaggedValueSlotImpl<TStrongTaggedValue>::contains_value(Address
+// raw_value) const {
+//   Tagged_t value = AsAtomicTagged::Relaxed_Load(location());
+//   return value == raw_value;
+// }
+
+template <typename TStrongTaggedValue>
+TStrongTaggedValue TaggedValueSlotImpl<TStrongTaggedValue>::operator*() const {
+  Tagged_t value = *Super::location();
+  return TStrongTaggedValue(value);
+}
+
+template <typename TStrongTaggedValue>
+void TaggedValueSlotImpl<TStrongTaggedValue>::store(
+    TStrongTaggedValue value) const {
+  *Super::location() = value.ptr();
+}
+
+template <typename TStrongTaggedValue>
+TStrongTaggedValue TaggedValueSlotImpl<TStrongTaggedValue>::Acquire_Load()
+    const {
+  AtomicTagged_t value = AsAtomicTagged::Acquire_Load(Super::location());
+  return TStrongTaggedValue(value);
+}
+
+template <typename TStrongTaggedValue>
+TStrongTaggedValue TaggedValueSlotImpl<TStrongTaggedValue>::Relaxed_Load()
+    const {
+  AtomicTagged_t value = AsAtomicTagged::Relaxed_Load(Super::location());
+  return TStrongTaggedValue(value);
+}
+
+template <typename TStrongTaggedValue>
+void TaggedValueSlotImpl<TStrongTaggedValue>::Relaxed_Store(
+    TStrongTaggedValue value) const {
+  Tagged_t ptr = value.ptr();
+  AsAtomicTagged::Relaxed_Store(Super::location(), ptr);
+}
+
+template <typename TStrongTaggedValue>
+void TaggedValueSlotImpl<TStrongTaggedValue>::Release_Store(
+    TStrongTaggedValue value) const {
+  Tagged_t ptr = value.ptr();
+  AsAtomicTagged::Release_Store(Super::location(), ptr);
+}
 
 //
 // FullObjectSlot implementation.

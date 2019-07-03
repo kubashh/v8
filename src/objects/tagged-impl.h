@@ -8,6 +8,7 @@
 #include "include/v8-internal.h"
 #include "include/v8.h"
 #include "src/common/globals.h"
+#include "src/objects/object-list-macros.h"
 
 namespace v8 {
 namespace internal {
@@ -160,6 +161,12 @@ class TaggedImpl {
     DCHECK(!HAS_WEAK_HEAP_OBJECT_TAG(ptr_));
     return T::cast(Object(ptr_));
   }
+
+#define IS_TYPE_FUNCTION_DECL(Type, Value)         \
+  V8_INLINE bool Is##Type(Isolate* isolate) const; \
+  V8_INLINE bool Is##Type(ReadOnlyRoots roots) const;
+  ODDBALL_LIST(IS_TYPE_FUNCTION_DECL)
+#undef IS_TYPE_FUNCTION_DECL
 
   // Prints this object without details.
   void ShortPrint(FILE* out = stdout);
