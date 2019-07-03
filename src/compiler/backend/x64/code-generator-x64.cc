@@ -3442,6 +3442,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ por(dst, kScratchDoubleReg);
       break;
     }
+    case kX64S1x2AnyTrue:
     case kX64S1x4AnyTrue:
     case kX64S1x8AnyTrue:
     case kX64S1x16AnyTrue: {
@@ -3455,6 +3456,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ cmovq(zero, dst, tmp);
       break;
     }
+    case kX64S1x2AllTrue:
     case kX64S1x4AllTrue:
     case kX64S1x8AllTrue:
     case kX64S1x16AllTrue: {
