@@ -82,9 +82,19 @@ void PropertyArray::CopyElements(Isolate* isolate, int dst_index,
   if (len == 0) return;
   DisallowHeapAllocation no_gc;
 
-  ObjectSlot dst_slot(data_start() + dst_index);
-  ObjectSlot src_slot(src.data_start() + src_index);
+  StrongTaggedValueSlot dst_slot(data_start() + dst_index);
+  StrongTaggedValueSlot src_slot(src.data_start() + src_index);
   isolate->heap()->CopyRange(*this, dst_slot, src_slot, len, mode);
+}
+
+void PropertyArray::CopyElements(Isolate* isolate, int dst_index,
+                                 PropertyArray src, int src_index, int len) {
+  if (len == 0) return;
+  DisallowHeapAllocation no_gc;
+
+  StrongTaggedValueSlot dst_slot(data_start() + dst_index);
+  StrongTaggedValueSlot src_slot(src.data_start() + src_index);
+  isolate->heap()->CopyRange(*this, dst_slot, src_slot, len);
 }
 
 }  // namespace internal

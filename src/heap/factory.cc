@@ -2078,9 +2078,10 @@ Handle<T> Factory::CopyArrayWithMap(Handle<T> src, Handle<Map> map) {
   Handle<T> result(T::cast(obj), isolate());
   initialize_length(result, len);
 
-  DisallowHeapAllocation no_gc;
-  WriteBarrierMode mode = result->GetWriteBarrierMode(no_gc);
-  result->CopyElements(isolate(), 0, *src, 0, len, mode);
+  //  DisallowHeapAllocation no_gc;
+  //  WriteBarrierMode mode = result->GetWriteBarrierMode(no_gc);
+  //  result->CopyElements(isolate(), 0, *src, 0, len, mode);
+  result->CopyElements(isolate(), 0, *src, 0, len);
   return result;
 }
 
@@ -2099,8 +2100,9 @@ Handle<T> Factory::CopyArrayAndGrow(Handle<T> src, int grow_by,
 
   // Copy the content.
   DisallowHeapAllocation no_gc;
-  WriteBarrierMode mode = obj.GetWriteBarrierMode(no_gc);
-  result->CopyElements(isolate(), 0, *src, 0, old_len, mode);
+  //  WriteBarrierMode mode = obj.GetWriteBarrierMode(no_gc);
+  //  result->CopyElements(isolate(), 0, *src, 0, old_len, mode);
+  result->CopyElements(isolate(), 0, *src, 0, old_len);
   MemsetTagged(ObjectSlot(result->data_start() + old_len),
                ReadOnlyRoots(isolate()).undefined_value(), grow_by);
   return result;
@@ -2138,8 +2140,9 @@ Handle<WeakArrayList> Factory::CopyWeakArrayListAndGrow(
 
   // Copy the content.
   DisallowHeapAllocation no_gc;
-  WriteBarrierMode mode = obj.GetWriteBarrierMode(no_gc);
-  result.CopyElements(isolate(), 0, *src, 0, old_len, mode);
+  //  WriteBarrierMode mode = obj.GetWriteBarrierMode(no_gc);
+  //  result.CopyElements(isolate(), 0, *src, 0, old_len, mode);
+  result.CopyElements(isolate(), 0, *src, 0, old_len);
   MemsetTagged(ObjectSlot(result.data_start() + old_len),
                ReadOnlyRoots(isolate()).undefined_value(),
                new_capacity - old_len);
@@ -2164,9 +2167,10 @@ Handle<FixedArray> Factory::CopyFixedArrayUpTo(Handle<FixedArray> array,
   result->set_length(new_len);
 
   // Copy the content.
-  DisallowHeapAllocation no_gc;
-  WriteBarrierMode mode = result->GetWriteBarrierMode(no_gc);
-  result->CopyElements(isolate(), 0, *array, 0, new_len, mode);
+  //  DisallowHeapAllocation no_gc;
+  //  WriteBarrierMode mode = result->GetWriteBarrierMode(no_gc);
+  //  result->CopyElements(isolate(), 0, *array, 0, new_len, mode);
+  result->CopyElements(isolate(), 0, *array, 0, new_len);
   return result;
 }
 

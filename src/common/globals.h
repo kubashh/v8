@@ -616,6 +616,8 @@ template <HeapObjectReferenceType kRefType, typename StorageType>
 class TaggedImpl;
 class StrongTaggedValue;
 class TaggedValue;
+template <typename TTaggedValue>
+class TaggedValueSlotImpl;
 class CompressedObjectSlot;
 class CompressedMaybeObjectSlot;
 class CompressedMapWordSlot;
@@ -667,6 +669,9 @@ struct SlotTraits<SlotLocation::kOnHeap> {
   using THeapObjectSlot = FullHeapObjectSlot;
 #endif
 };
+
+using StrongTaggedValueSlot = TaggedValueSlotImpl<StrongTaggedValue>;
+using TaggedValueSlot = TaggedValueSlotImpl<TaggedValue>;
 
 // An ObjectSlot instance describes a kTaggedSize-sized on-heap field ("slot")
 // holding Object value (smi or strong heap object).

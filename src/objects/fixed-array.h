@@ -151,6 +151,9 @@ class FixedArray : public FixedArrayBase {
   inline void CopyElements(Isolate* isolate, int dst_index, FixedArray src,
                            int src_index, int len, WriteBarrierMode mode);
 
+  inline void CopyElements(Isolate* isolate, int dst_index, FixedArray src,
+                           int src_index, int len);
+
   inline void FillWithHoles(int from, int to);
 
   // Shrink the array and insert filler objects. {new_length} must be > 0.
@@ -292,6 +295,8 @@ class WeakFixedArray : public HeapObject {
 
   inline void CopyElements(Isolate* isolate, int dst_index, WeakFixedArray src,
                            int src_index, int len, WriteBarrierMode mode);
+  inline void CopyElements(Isolate* isolate, int dst_index, WeakFixedArray src,
+                           int src_index, int len);
 
   DECL_PRINTER(WeakFixedArray)
   DECL_VERIFIER(WeakFixedArray)
@@ -354,6 +359,8 @@ class WeakArrayList : public HeapObject {
 
   inline void CopyElements(Isolate* isolate, int dst_index, WeakArrayList src,
                            int src_index, int len, WriteBarrierMode mode);
+  inline void CopyElements(Isolate* isolate, int dst_index, WeakArrayList src,
+                           int src_index, int len);
 
   V8_EXPORT_PRIVATE bool IsFull();
 

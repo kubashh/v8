@@ -197,8 +197,8 @@ void FixedArray::MoveElements(Isolate* isolate, int dst_index, int src_index,
   DCHECK_LE(dst_index + len, length());
   DCHECK_LE(src_index + len, length());
   DisallowHeapAllocation no_gc;
-  ObjectSlot dst_slot(RawFieldOfElementAt(dst_index));
-  ObjectSlot src_slot(RawFieldOfElementAt(src_index));
+  StrongTaggedValueSlot dst_slot(RawFieldOfElementAt(dst_index));
+  StrongTaggedValueSlot src_slot(RawFieldOfElementAt(src_index));
   isolate->heap()->MoveRange(*this, dst_slot, src_slot, len, mode);
 }
 
@@ -209,9 +209,21 @@ void FixedArray::CopyElements(Isolate* isolate, int dst_index, FixedArray src,
   DCHECK_LE(src_index + len, src.length());
   DisallowHeapAllocation no_gc;
 
-  ObjectSlot dst_slot(RawFieldOfElementAt(dst_index));
-  ObjectSlot src_slot(src.RawFieldOfElementAt(src_index));
+  StrongTaggedValueSlot dst_slot(RawFieldOfElementAt(dst_index));
+  StrongTaggedValueSlot src_slot(src.RawFieldOfElementAt(src_index));
   isolate->heap()->CopyRange(*this, dst_slot, src_slot, len, mode);
+}
+
+void FixedArray::CopyElements(Isolate* isolate, int dst_index, FixedArray src,
+                              int src_index, int len) {
+  if (len == 0) return;
+  DCHECK_LE(dst_index + len, length());
+  DCHECK_LE(src_index + len, src.length());
+  DisallowHeapAllocation no_gc;
+
+  StrongTaggedValueSlot dst_slot(RawFieldOfElementAt(dst_index));
+  StrongTaggedValueSlot src_slot(src.RawFieldOfElementAt(src_index));
+  isolate->heap()->CopyRange(*this, dst_slot, src_slot, len);
 }
 
 // Perform a binary search in a fixed array.
@@ -430,9 +442,21 @@ void WeakFixedArray::CopyElements(Isolate* isolate, int dst_index,
   DCHECK_LE(src_index + len, src.length());
   DisallowHeapAllocation no_gc;
 
-  MaybeObjectSlot dst_slot(data_start() + dst_index);
-  MaybeObjectSlot src_slot(src.data_start() + src_index);
+  TaggedValueSlot dst_slot(data_start() + dst_index);
+  TaggedValueSlot src_slot(src.data_start() + src_index);
   isolate->heap()->CopyRange(*this, dst_slot, src_slot, len, mode);
+}
+
+void WeakFixedArray::CopyElements(Isolate* isolate, int dst_index,
+                                  WeakFixedArray src, int src_index, int len) {
+  if (len == 0) return;
+  DCHECK_LE(dst_index + len, length());
+  DCHECK_LE(src_index + len, src.length());
+  DisallowHeapAllocation no_gc;
+
+  TaggedValueSlot dst_slot(data_start() + dst_index);
+  TaggedValueSlot src_slot(src.data_start() + src_index);
+  isolate->heap()->CopyRange(*this, dst_slot, src_slot, len);
 }
 
 MaybeObject WeakArrayList::Get(int index) const {
@@ -466,9 +490,21 @@ void WeakArrayList::CopyElements(Isolate* isolate, int dst_index,
   DCHECK_LE(src_index + len, src.capacity());
   DisallowHeapAllocation no_gc;
 
-  MaybeObjectSlot dst_slot(data_start() + dst_index);
-  MaybeObjectSlot src_slot(src.data_start() + src_index);
+  TaggedValueSlot dst_slot(data_start() + dst_index);
+  TaggedValueSlot src_slot(src.data_start() + src_index);
   isolate->heap()->CopyRange(*this, dst_slot, src_slot, len, mode);
+}
+
+void WeakArrayList::CopyElements(Isolate* isolate, int dst_index,
+                                 WeakArrayList src, int src_index, int len) {
+  if (len == 0) return;
+  DCHECK_LE(dst_index + len, capacity());
+  DCHECK_LE(src_index + len, src.capacity());
+  DisallowHeapAllocation no_gc;
+
+  TaggedValueSlot dst_slot(data_start() + dst_index);
+  TaggedValueSlot src_slot(src.data_start() + src_index);
+  isolate->heap()->CopyRange(*this, dst_slot, src_slot, len);
 }
 
 HeapObject WeakArrayList::Iterator::Next() {
