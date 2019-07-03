@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23b74fa1_ccb1c0e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-03T13:49:00Z",
+      "side": 1,
+      "message": "e.g.",
+      "range": {
+        "startLine": 9,
+        "startChar": 53,
+        "endLine": 9,
+        "endChar": 57
+      },
+      "revId": "e46ae3486ebd558e13b28a87c2550850460f477a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbbc1aa3_8d758061",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4575,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-03T13:49:00Z",
+      "side": 1,
+      "message": "This seems to be an unrelated change.",
+      "revId": "e46ae3486ebd558e13b28a87c2550850460f477a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f5bd0d3_e724bd3b",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-03T13:49:00Z",
+      "side": 1,
+      "message": "Nit: kTraceAllocation (we don\u0027t abbreviate the other two \"Allocation\" here)",
+      "range": {
+        "startLine": 179,
+        "startChar": 2,
+        "endLine": 179,
+        "endChar": 13
+      },
+      "revId": "e46ae3486ebd558e13b28a87c2550850460f477a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd75c18b_44051050",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-03T13:49:00Z",
+      "side": 1,
+      "message": "Can\u0027t you move this to the call site of this function in AllocateRegisters? That\u0027s where the flags are assembled.",
+      "revId": "e46ae3486ebd558e13b28a87c2550850460f477a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
