@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "425c5822_7688c6fa",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-03T14:06:42Z",
+      "side": 0,
+      "message": "Is this no longer valid? Same above.",
+      "revId": "e304d80e094f271e729402c6c3cec219ffbdff16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
