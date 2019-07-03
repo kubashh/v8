@@ -16,6 +16,24 @@
       "revId": "9f7dec93801ffaf21d787cfb290826bedbe64da8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7404922_1a88e26a",
+        "filename": "tools/v8heapconst.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-07-03T23:21:26Z",
+      "side": 0,
+      "message": "Good point, reverted these changes.",
+      "parentUuid": "9c0025a3_60d747a5",
+      "revId": "9f7dec93801ffaf21d787cfb290826bedbe64da8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
