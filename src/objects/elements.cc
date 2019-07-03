@@ -20,6 +20,7 @@
 #include "src/objects/objects-inl.h"
 #include "src/objects/slots-atomic-inl.h"
 #include "src/objects/slots.h"
+#include "src/objects/tagged-value-inl.h"
 #include "src/utils/utils.h"
 
 // Each concrete ElementsAccessor can handle exactly one ElementsKind,
@@ -429,23 +430,20 @@ void SortIndices(Isolate* isolate, Handle<FixedArray> indices,
   AtomicSlot start(indices->GetFirstElementAddress());
   AtomicSlot end(start + sort_size);
   std::sort(start, end, [isolate](Tagged_t elementA, Tagged_t elementB) {
-#ifdef V8_COMPRESS_POINTERS
-    Object a(DecompressTaggedAny(isolate, elementA));
-    Object b(DecompressTaggedAny(isolate, elementB));
-#else
-    Object a(elementA);
-    Object b(elementB);
-#endif
+    StrongTaggedValue a(elementA);
+    StrongTaggedValue b(elementB);
     if (a.IsSmi() || !a.IsUndefined(isolate)) {
       if (!b.IsSmi() && b.IsUndefined(isolate)) {
         return true;
       }
-      return a.Number() < b.Number();
+      Object a_obj = StrongTaggedValue::ToObject(isolate, a);
+      Object b_obj = StrongTaggedValue::ToObject(isolate, b);
+      return a_obj.Number() < b_obj.Number();
     }
     return !b.IsSmi() && b.IsUndefined(isolate);
   });
-  isolate->heap()->WriteBarrierForRange(*indices, ObjectSlot(start),
-                                        ObjectSlot(end));
+  isolate->heap()->WriteBarrierForRange(*indices, StrongTaggedValueSlot(start),
+                                        StrongTaggedValueSlot(end));
 }
 
 Maybe<bool> IncludesValueSlowPath(Isolate* isolate, Handle<JSObject> receiver,

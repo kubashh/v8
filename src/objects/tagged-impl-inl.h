@@ -255,6 +255,21 @@ Object TaggedImpl<kRefType, StorageType>::GetHeapObjectOrSmi(
   return GetHeapObject(isolate);
 }
 
+// Oddball checks are faster when they are raw pointer comparisons, so the
+// isolate/read-only roots overloads should be preferred where possible.
+#define IS_TYPE_FUNCTION_DEF(Type, Value)                                    \
+  template <HeapObjectReferenceType kRefType, typename StorageType>          \
+  bool TaggedImpl<kRefType, StorageType>::Is##Type(Isolate* isolate) const { \
+    return Is##Type(ReadOnlyRoots(isolate));                                 \
+  }                                                                          \
+  template <HeapObjectReferenceType kRefType, typename StorageType>          \
+  bool TaggedImpl<kRefType, StorageType>::Is##Type(ReadOnlyRoots roots)      \
+      const {                                                                \
+    return ptr_ == static_cast<Tagged_t>(roots.Value().ptr());               \
+  }
+ODDBALL_LIST(IS_TYPE_FUNCTION_DEF)
+#undef IS_TYPE_FUNCTION_DEF
+
 }  // namespace internal
 }  // namespace v8
 

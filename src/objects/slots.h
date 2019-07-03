@@ -84,6 +84,32 @@ class SlotBase {
   Address ptr_;
 };
 
+template <typename TStrongTaggedValue>
+class TaggedValueSlotImpl
+    : public SlotBase<TaggedValueSlotImpl<TStrongTaggedValue>, Tagged_t> {
+  using Super = SlotBase<TaggedValueSlotImpl<TStrongTaggedValue>, Tagged_t>;
+
+ public:
+  using TTaggedValue = TStrongTaggedValue;
+  using TData = Tagged_t;
+
+  TaggedValueSlotImpl() : Super(kNullAddress) {}
+  explicit TaggedValueSlotImpl(Address ptr) : Super(ptr) {}
+  template <typename T>
+  explicit TaggedValueSlotImpl(SlotBase<T, TData> slot)
+      : Super(slot.address()) {}
+
+  //  bool contains_value(Address raw_value) const;
+
+  inline TStrongTaggedValue operator*() const;
+  inline void store(TStrongTaggedValue value) const;
+
+  inline TStrongTaggedValue Acquire_Load() const;
+  inline TStrongTaggedValue Relaxed_Load() const;
+  inline void Relaxed_Store(TStrongTaggedValue value) const;
+  inline void Release_Store(TStrongTaggedValue value) const;
+};
+
 // An FullObjectSlot instance describes a kSystemPointerSize-sized field
 // ("slot") holding a tagged pointer (smi or strong heap object).
 // Its address() is the address of the slot.

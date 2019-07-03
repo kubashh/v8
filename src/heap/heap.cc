@@ -64,6 +64,7 @@
 #include "src/objects/shared-function-info.h"
 #include "src/objects/slots-atomic-inl.h"
 #include "src/objects/slots-inl.h"
+#include "src/objects/tagged-value-inl.h"
 #include "src/regexp/regexp.h"
 #include "src/snapshot/embedded/embedded-data.h"
 #include "src/snapshot/natives.h"
@@ -1685,12 +1686,13 @@ void Heap::StartIdleIncrementalMarking(
                           gc_callback_flags);
 }
 
-void Heap::MoveRange(HeapObject dst_object, const ObjectSlot dst_slot,
-                     const ObjectSlot src_slot, int len,
+void Heap::MoveRange(HeapObject dst_object,
+                     const StrongTaggedValueSlot dst_slot,
+                     const StrongTaggedValueSlot src_slot, int len,
                      WriteBarrierMode mode) {
   DCHECK_NE(len, 0);
   DCHECK_NE(dst_object.map(), ReadOnlyRoots(this).fixed_cow_array_map());
-  const ObjectSlot dst_end(dst_slot + len);
+  const StrongTaggedValueSlot dst_end(dst_slot + len);
   // Ensure no range overflow.
   DCHECK(dst_slot < dst_end);
   DCHECK(src_slot < src_slot + len);
@@ -1726,42 +1728,43 @@ void Heap::MoveRange(HeapObject dst_object, const ObjectSlot dst_slot,
   WriteBarrierForRange(dst_object, dst_slot, dst_end);
 }
 
-// Instantiate Heap::CopyRange() for ObjectSlot and MaybeObjectSlot.
-template void Heap::CopyRange<ObjectSlot>(HeapObject dst_object,
-                                          ObjectSlot dst_slot,
-                                          ObjectSlot src_slot, int len,
-                                          WriteBarrierMode mode);
-template void Heap::CopyRange<MaybeObjectSlot>(HeapObject dst_object,
-                                               MaybeObjectSlot dst_slot,
-                                               MaybeObjectSlot src_slot,
+// Instantiate Heap::CopyRange() for StrongTaggedValueSlot and TaggedValueSlot.
+template void Heap::CopyRange<StrongTaggedValueSlot>(
+    HeapObject dst_object, StrongTaggedValueSlot dst_slot,
+    StrongTaggedValueSlot src_slot, int len, WriteBarrierMode mode);
+template void Heap::CopyRange<TaggedValueSlot>(HeapObject dst_object,
+                                               TaggedValueSlot dst_slot,
+                                               TaggedValueSlot src_slot,
                                                int len, WriteBarrierMode mode);
 
 template <typename TSlot>
 void Heap::CopyRange(HeapObject dst_object, const TSlot dst_slot,
                      const TSlot src_slot, int len, WriteBarrierMode mode) {
   DCHECK_NE(len, 0);
-
   DCHECK_NE(dst_object.map(), ReadOnlyRoots(this).fixed_cow_array_map());
+
   const TSlot dst_end(dst_slot + len);
   // Ensure ranges do not overlap.
   DCHECK(dst_end <= src_slot || (src_slot + len) <= dst_slot);
 
-  if (FLAG_concurrent_marking && incremental_marking()->IsMarking()) {
-    // Copy tagged values using relaxed load/stores that do not involve value
-    // decompression.
-    const AtomicSlot atomic_dst_end(dst_end);
-    AtomicSlot dst(dst_slot);
-    AtomicSlot src(src_slot);
-    while (dst < atomic_dst_end) {
-      *dst = *src;
-      ++dst;
-      ++src;
+  if (mode == SKIP_WRITE_BARRIER) {
+    if (FLAG_concurrent_marking && incremental_marking()->IsMarking()) {
+      // Copy tagged values using relaxed load/stores that do not involve value
+      // decompression.
+      const AtomicSlot atomic_dst_end(dst_end);
+      AtomicSlot dst(dst_slot);
+      AtomicSlot src(src_slot);
+      while (dst < atomic_dst_end) {
+        *dst = *src;
+        ++dst;
+        ++src;
+      }
+    } else {
+      MemCopy(dst_slot.ToVoidPtr(), src_slot.ToVoidPtr(), len * kTaggedSize);
     }
   } else {
-    MemCopy(dst_slot.ToVoidPtr(), src_slot.ToVoidPtr(), len * kTaggedSize);
+    CopyRange(dst_object, dst_slot, src_slot, len);
   }
-  if (mode == SKIP_WRITE_BARRIER) return;
-  WriteBarrierForRange(dst_object, dst_slot, dst_end);
 }
 
 #ifdef VERIFY_HEAP
@@ -6170,9 +6173,9 @@ void Heap::WriteBarrierForRangeImpl(MemoryChunk* source_page, HeapObject object,
   MarkCompactCollector* collector = this->mark_compact_collector();
 
   for (TSlot slot = start_slot; slot < end_slot; ++slot) {
-    typename TSlot::TObject value = *slot;
+    typename TSlot::TTaggedValue value = *slot;
     HeapObject value_heap_object;
-    if (!value.GetHeapObject(&value_heap_object)) continue;
+    if (!value.GetHeapObject(isolate(), &value_heap_object)) continue;
 
     if ((kModeMask & kDoGenerational) &&
         Heap::InYoungGeneration(value_heap_object)) {
@@ -6189,12 +6192,13 @@ void Heap::WriteBarrierForRangeImpl(MemoryChunk* source_page, HeapObject object,
   }
 }
 
-// Instantiate Heap::WriteBarrierForRange() for ObjectSlot and MaybeObjectSlot.
-template void Heap::WriteBarrierForRange<ObjectSlot>(HeapObject object,
-                                                     ObjectSlot start_slot,
-                                                     ObjectSlot end_slot);
-template void Heap::WriteBarrierForRange<MaybeObjectSlot>(
-    HeapObject object, MaybeObjectSlot start_slot, MaybeObjectSlot end_slot);
+// Instantiate Heap::WriteBarrierForRange() for StrongTaggedValueSlot and
+// TaggedValueSlot.
+template void Heap::WriteBarrierForRange<StrongTaggedValueSlot>(
+    HeapObject object, StrongTaggedValueSlot start_slot,
+    StrongTaggedValueSlot end_slot);
+template void Heap::WriteBarrierForRange<TaggedValueSlot>(
+    HeapObject object, TaggedValueSlot start_slot, TaggedValueSlot end_slot);
 
 template <typename TSlot>
 void Heap::WriteBarrierForRange(HeapObject object, TSlot start_slot,
@@ -6241,6 +6245,103 @@ void Heap::WriteBarrierForRange(HeapObject object, TSlot start_slot,
       return WriteBarrierForRangeImpl<kDoGenerational | kDoMarking |
                                       kDoEvacuationSlotRecording>(
           source_page, object, start_slot, end_slot);
+
+    default:
+      UNREACHABLE();
+  }
+}
+
+template <int kModeMask, typename TSlot>
+void Heap::CopyRangeImpl(MemoryChunk* dst_object_page, HeapObject dst_object,
+                         TSlot dst_slot, TSlot src_slot, int len) {
+  // At least one of generational or marking write barrier should be requested.
+  STATIC_ASSERT(kModeMask & (kDoGenerational | kDoMarking));
+  // kDoEvacuationSlotRecording implies kDoMarking.
+  STATIC_ASSERT(!(kModeMask & kDoEvacuationSlotRecording) ||
+                (kModeMask & kDoMarking));
+
+  StoreBuffer* store_buffer = this->store_buffer();
+  IncrementalMarking* incremental_marking = this->incremental_marking();
+  MarkCompactCollector* collector = this->mark_compact_collector();
+
+  const TSlot end_src_slot(src_slot + len);
+  for (; src_slot < end_src_slot; ++src_slot, ++dst_slot) {
+    typename TSlot::TTaggedValue value = *src_slot;
+    dst_slot.store(value);
+
+    HeapObject value_heap_object;
+    if (!value.GetHeapObject(isolate(), &value_heap_object)) continue;
+
+    if ((kModeMask & kDoGenerational) &&
+        Heap::InYoungGeneration(value_heap_object)) {
+      store_buffer->InsertEntry(dst_slot.address());
+    }
+
+    if ((kModeMask & kDoMarking) &&
+        incremental_marking->BaseRecordWrite(dst_object, value_heap_object)) {
+      if (kModeMask & kDoEvacuationSlotRecording) {
+        collector->RecordSlot(dst_object_page, HeapObjectSlot(dst_slot),
+                              value_heap_object);
+      }
+    }
+  }
+}
+
+// Instantiate Heap::CopyRange() for StrongTaggedValueSlot and TaggedValueSlot.
+template void Heap::CopyRange<StrongTaggedValueSlot>(
+    HeapObject dst_object, StrongTaggedValueSlot dst_slot,
+    StrongTaggedValueSlot src_slot, int len);
+template void Heap::CopyRange<TaggedValueSlot>(HeapObject dst_object,
+                                               TaggedValueSlot dst_slot,
+                                               TaggedValueSlot src_slot,
+                                               int len);
+
+template <typename TSlot>
+void Heap::CopyRange(HeapObject dst_object, const TSlot dst_slot,
+                     const TSlot src_slot, int len) {
+  MemoryChunk* dst_object_page = MemoryChunk::FromHeapObject(dst_object);
+  base::Flags<RangeWriteBarrierMode> mode;
+
+  if (!dst_object_page->InYoungGeneration()) {
+    mode |= kDoGenerational;
+  }
+
+  if (incremental_marking()->IsMarking()) {
+    mode |= kDoMarking;
+    if (!dst_object_page
+             ->ShouldSkipEvacuationSlotRecording<AccessMode::ATOMIC>()) {
+      mode |= kDoEvacuationSlotRecording;
+    }
+  }
+
+  switch (mode) {
+    case 0:
+      MemCopy(dst_slot.ToVoidPtr(), src_slot.ToVoidPtr(), len * kTaggedSize);
+      return;
+
+    // Generational only.
+    case kDoGenerational:
+      return CopyRangeImpl<kDoGenerational>(dst_object_page, dst_object,
+                                            dst_slot, src_slot, len);
+    // Marking, no evacuation slot recording.
+    case kDoMarking:
+      return CopyRangeImpl<kDoMarking>(dst_object_page, dst_object, dst_slot,
+                                       src_slot, len);
+    // Marking with evacuation slot recording.
+    case kDoMarking | kDoEvacuationSlotRecording:
+      return CopyRangeImpl<kDoMarking | kDoEvacuationSlotRecording>(
+          dst_object_page, dst_object, dst_slot, src_slot, len);
+
+    // Generational and marking, no evacuation slot recording.
+    case kDoGenerational | kDoMarking:
+      return CopyRangeImpl<kDoGenerational | kDoMarking>(
+          dst_object_page, dst_object, dst_slot, src_slot, len);
+
+    // Generational and marking with evacuation slot recording.
+    case kDoGenerational | kDoMarking | kDoEvacuationSlotRecording:
+      return CopyRangeImpl<kDoGenerational | kDoMarking |
+                           kDoEvacuationSlotRecording>(
+          dst_object_page, dst_object, dst_slot, src_slot, len);
 
     default:
       UNREACHABLE();
