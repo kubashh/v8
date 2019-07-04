@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "d823e68e_8277dfb5",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 3374,
+      "author": {
+        "id": 1116032
+      },
+      "writtenOn": "2019-07-04T10:35:47Z",
+      "side": 1,
+      "message": "nit: This doesn\u0027t currently depend on Perfetto directly, but on the off chance it might I\u0027d suggest moving perfetto::Tracing::Initialize to happen first.",
+      "range": {
+        "startLine": 3374,
+        "startChar": 13,
+        "endLine": 3374,
+        "endChar": 34
+      },
+      "revId": "42400d411a003bbe7215911b8e752c4596941464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f8abbe1_39fbe3ba",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1116032
+      },
+      "writtenOn": "2019-07-04T10:35:47Z",
+      "side": 1,
+      "message": "You can use kUnspecifiedBackend here to avoid hardcoding to the in-process backend (even though right now that\u0027s the only available one).",
+      "range": {
+        "startLine": 294,
+        "startChar": 57,
+        "endLine": 294,
+        "endChar": 74
+      },
+      "revId": "42400d411a003bbe7215911b8e752c4596941464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e29a3b7f_f0e7e131",
         "filename": "src/libplatform/tracing/tracing-controller.cc",
         "patchSetId": 15
@@ -19,6 +65,24 @@
     },
     {
       "key": {
+        "uuid": "f2e14994_afd53f7a",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1116032
+      },
+      "writtenOn": "2019-07-04T10:35:47Z",
+      "side": 1,
+      "message": "We\u0027re going to add a StartBlocking()/StopBlocking() calls for exactly this use case -- stay tuned :)",
+      "parentUuid": "e29a3b7f_f0e7e131",
+      "revId": "42400d411a003bbe7215911b8e752c4596941464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bbc32581_66c47375",
         "filename": "test/cctest/BUILD.gn",
         "patchSetId": 15
@@ -30,6 +94,24 @@
       "writtenOn": "2019-07-03T14:06:42Z",
       "side": 1,
       "message": "q: what\u0027s lite/zero? Is zero a part of lite?",
+      "revId": "42400d411a003bbe7215911b8e752c4596941464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8519a1f1_edf64d92",
+        "filename": "test/cctest/BUILD.gn",
+        "patchSetId": 15
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1116032
+      },
+      "writtenOn": "2019-07-04T10:35:47Z",
+      "side": 1,
+      "message": "\"lite\" means libprotobuf-lite, i.e., the variant of the standard protocol buffer library without runtime introspection support. \"zero\" is Perfetto\u0027s own protocol buffer library that supports zero-copy (streamed) writing of protobufs.\n\nFWIW we\u0027re working to remove the need to depend on protobuf-lite here.",
+      "parentUuid": "bbc32581_66c47375",
       "revId": "42400d411a003bbe7215911b8e752c4596941464",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
