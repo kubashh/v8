@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "048fc07f_909a941f",
+        "filename": "tools/debug_helper/get-object-properties.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-07-04T06:16:39Z",
+      "side": 1,
+      "message": "Can we have some guarantees that these two lists are consistent? Maybe there is a way to expand these macro lists for static asserts, or at the least a cctest?",
+      "range": {
+        "startLine": 20,
+        "startChar": 3,
+        "endLine": 20,
+        "endChar": 37
+      },
+      "revId": "1d9900e63f6cea8927168c828b2a15058a0b4d86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
