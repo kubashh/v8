@@ -22,6 +22,29 @@
       "revId": "1d9900e63f6cea8927168c828b2a15058a0b4d86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7894cdc1_f9e12083",
+        "filename": "tools/gcmole/BUILD.gn",
+        "patchSetId": 23
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-07-04T06:19:27Z",
+      "side": 1,
+      "message": "Should this be \"../debug_helper/\" to include all relevant new files?",
+      "range": {
+        "startLine": 18,
+        "startChar": 5,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "1d9900e63f6cea8927168c828b2a15058a0b4d86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
