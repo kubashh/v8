@@ -105,7 +105,7 @@ Running test: testConsoleLog
             callFrames : [
                 [0] : {
                     columnNumber : 8
-                    functionName : eval
+                    functionName :
                     lineNumber : 0
                     scriptId : <scriptId>
                     url :

@@ -8,7 +8,6 @@
 #include "src/logging/counters.h"
 #include "src/objects/frame-array-inl.h"
 #include "src/objects/objects-inl.h"
-#include "src/objects/stack-frame-info.h"
 
 namespace v8 {
 namespace internal {
@@ -204,9 +203,9 @@ BUILTIN(CallSitePrototypeIsToplevel) {
 BUILTIN(CallSitePrototypeToString) {
   HandleScope scope(isolate);
   CHECK_CALLSITE(recv, "toString");
-  Handle<StackTraceFrame> frame = isolate->factory()->NewStackTraceFrame(
-      GetFrameArray(isolate, recv), GetFrameIndex(isolate, recv));
-  RETURN_RESULT_OR_FAILURE(isolate, SerializeStackTraceFrame(isolate, frame));
+  FrameArrayIterator it(isolate, GetFrameArray(isolate, recv),
+                        GetFrameIndex(isolate, recv));
+  RETURN_RESULT_OR_FAILURE(isolate, it.Frame()->ToString());
 }
 
 #undef CHECK_CALLSITE
