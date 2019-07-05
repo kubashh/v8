@@ -330,7 +330,7 @@ class V8_EXPORT_PRIVATE RegExpParser {
   Zone* zone_;
   Handle<String>* error_;
   ZoneList<RegExpCapture*>* captures_;
-  ZoneList<RegExpCapture*>* named_captures_;
+  ZoneMap<ZoneVector<uc16>, RegExpCapture*>* named_captures_map_;
   ZoneList<RegExpBackReference*>* named_back_references_;
   FlatStringReader* in_;
   uc32 current_;
