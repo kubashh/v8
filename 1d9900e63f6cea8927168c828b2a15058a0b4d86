@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d639d38d_e9951455",
+        "filename": "tools/debug_helper/get-object-properties.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-07-05T16:32:56Z",
+      "side": 1,
+      "message": "Good idea, thanks! I added static assertions so that we should get compilation failures on any mismatch.",
+      "parentUuid": "048fc07f_909a941f",
+      "range": {
+        "startLine": 20,
+        "startChar": 3,
+        "endLine": 20,
+        "endChar": 37
+      },
+      "revId": "1d9900e63f6cea8927168c828b2a15058a0b4d86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7894cdc1_f9e12083",
         "filename": "tools/gcmole/BUILD.gn",
         "patchSetId": 23
@@ -36,6 +60,30 @@
       "writtenOn": "2019-07-04T06:19:27Z",
       "side": 1,
       "message": "Should this be \"../debug_helper/\" to include all relevant new files?",
+      "range": {
+        "startLine": 18,
+        "startChar": 5,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "1d9900e63f6cea8927168c828b2a15058a0b4d86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bf4f46a_e9fe19be",
+        "filename": "tools/gcmole/BUILD.gn",
+        "patchSetId": 23
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-07-05T16:32:56Z",
+      "side": 1,
+      "message": "This is the only public header file that consumers (such as cctest) should use, so I think that it would indicate a break of encapsulation if we needed any other files here. We don\u0027t run gcmole on the new cc files because they\u0027re not part of V8 and couldn\u0027t ever trigger GC.",
+      "parentUuid": "7894cdc1_f9e12083",
       "range": {
         "startLine": 18,
         "startChar": 5,
