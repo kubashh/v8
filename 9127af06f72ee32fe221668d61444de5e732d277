@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a4a7b66_fcd99cca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-05T11:44:22Z",
+      "side": 1,
+      "message": "You can \u0027tag\u0027 the CL by putting\n\u0027[regex]\u0027 at the start of the description\nI find it helpful for finding my CLs related to a certain project later",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 1
+      },
+      "revId": "9127af06f72ee32fe221668d61444de5e732d277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "845cb156_c8706aba",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-05T11:44:22Z",
+      "side": 1,
+      "message": "You\u0027ll need to use the placement operator to allocate this ZoneMap in the zone (you pass the zone into the constructor, so the elements of the map will be constructed in the zone, but the map itself is not)\n\nnamed_captures_map_ \u003d new (zone()) ZoneMap\u003cZoneVector\u003cuc16\u003e, RegExpCapture*\u003e(zone());\n\nThat\u0027s what\u0027s causing the TSAN failures",
+      "range": {
+        "startLine": 885,
+        "startChar": 26,
+        "endLine": 885,
+        "endChar": 29
+      },
+      "revId": "9127af06f72ee32fe221668d61444de5e732d277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37297d23_eb0820a0",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-05T11:44:22Z",
+      "side": 1,
+      "message": "You can remove this line of the comment now",
+      "range": {
+        "startLine": 888,
+        "startChar": 4,
+        "endLine": 888,
+        "endChar": 29
+      },
+      "revId": "9127af06f72ee32fe221668d61444de5e732d277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb9abdd1_428b5beb",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-05T11:44:22Z",
+      "side": 1,
+      "message": "Me: Huh, I wonder if there is a contains method - that would be helpful\n*looks it up*\nIt\u0027s only in C++20 onwards\n(╯°□°)╯︵ ┻━┻",
+      "range": {
+        "startLine": 891,
+        "startChar": 8,
+        "endLine": 891,
+        "endChar": 54
+      },
+      "revId": "9127af06f72ee32fe221668d61444de5e732d277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "708d9674_323e6497",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-05T11:44:22Z",
+      "side": 1,
+      "message": "I think you can do emplace(*name, capture) here instead and avoid creating the pair explicitly - the code will be a bit shorter and it can save copies/moves - https://en.cppreference.com/w/cpp/container/map/emplace",
+      "range": {
+        "startLine": 903,
+        "startChar": 23,
+        "endLine": 903,
+        "endChar": 44
+      },
+      "revId": "9127af06f72ee32fe221668d61444de5e732d277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c0eb4b3_e5487c4f",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-05T11:44:22Z",
+      "side": 1,
+      "message": "This comment, too",
+      "revId": "9127af06f72ee32fe221668d61444de5e732d277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
