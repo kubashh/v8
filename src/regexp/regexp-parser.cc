@@ -4,6 +4,7 @@
 
 #include "src/regexp/regexp-parser.h"
 
+#include <climits>
 #include <vector>
 
 #include "src/execution/isolate.h"
@@ -30,7 +31,7 @@ RegExpParser::RegExpParser(FlatStringReader* in, Handle<String>* error,
       zone_(zone),
       error_(error),
       captures_(nullptr),
-      named_captures_(nullptr),
+      named_captures_map_(nullptr),
       named_back_references_(nullptr),
       in_(in),
       current_(kEndMarker),
@@ -880,16 +881,16 @@ bool RegExpParser::CreateNamedCaptureAtIndex(const ZoneVector<uc16>* name,
   DCHECK(0 < index && index <= captures_started_);
   DCHECK_NOT_NULL(name);
 
-  if (named_captures_ == nullptr) {
-    named_captures_ = new (zone()) ZoneList<RegExpCapture*>(1, zone());
+  if (named_captures_map_ == nullptr) {
+    named_captures_map_ = new (zone_->New(sizeof(*named_captures_map_)))
+        ZoneMap<ZoneVector<uc16>, RegExpCapture*>(zone());
   } else {
     // Check for duplicates and bail if we find any.
-    // TODO(jgruber): O(n^2).
-    for (const auto& named_capture : *named_captures_) {
-      if (*named_capture->name() == *name) {
-        ReportError(CStrVector("Duplicate capture group name"));
-        return false;
-      }
+
+    const auto& named_capture_it = named_captures_map_->find(*name);
+    if (named_capture_it != named_captures_map_->end()) {
+      ReportError(CStrVector("Duplicate capture group name"));
+      return false;
     }
   }
 
@@ -897,7 +898,8 @@ bool RegExpParser::CreateNamedCaptureAtIndex(const ZoneVector<uc16>* name,
   DCHECK_NULL(capture->name());
 
   capture->set_name(name);
-  named_captures_->Add(capture, zone());
+
+  named_captures_map_->emplace(std::make_pair(*name, capture));
 
   return true;
 }
@@ -938,23 +940,20 @@ bool RegExpParser::ParseNamedBackReference(RegExpBuilder* builder,
 void RegExpParser::PatchNamedBackReferences() {
   if (named_back_references_ == nullptr) return;
 
-  if (named_captures_ == nullptr) {
+  if (named_captures_map_ == nullptr) {
     ReportError(CStrVector("Invalid named capture referenced"));
     return;
   }
 
   // Look up and patch the actual capture for each named back reference.
-  // TODO(jgruber): O(n^2), optimize if necessary.
 
   for (int i = 0; i < named_back_references_->length(); i++) {
     RegExpBackReference* ref = named_back_references_->at(i);
 
     int index = -1;
-    for (const auto& capture : *named_captures_) {
-      if (*capture->name() == *ref->name()) {
-        index = capture->index();
-        break;
-      }
+    const auto& capture_it = named_captures_map_->find(*ref->name());
+    if (capture_it != named_captures_map_->end()) {
+      index = capture_it->second->index();
     }
 
     if (index == -1) {
@@ -982,16 +981,17 @@ RegExpCapture* RegExpParser::GetCapture(int index) {
 }
 
 Handle<FixedArray> RegExpParser::CreateCaptureNameMap() {
-  if (named_captures_ == nullptr || named_captures_->is_empty())
+  if (named_captures_map_ == nullptr || named_captures_map_->empty())
     return Handle<FixedArray>();
 
   Factory* factory = isolate()->factory();
 
-  int len = named_captures_->length() * 2;
+  int len = static_cast<int>(named_captures_map_->size()) * 2;
   Handle<FixedArray> array = factory->NewFixedArray(len);
 
-  for (int i = 0; i < named_captures_->length(); i++) {
-    RegExpCapture* capture = named_captures_->at(i);
+  int i = 0;
+  for (const auto& capture_pair : *named_captures_map_) {
+    RegExpCapture* capture = capture_pair.second;
     Vector<const uc16> capture_name(capture->name()->data(),
                                     capture->name()->size());
     // CSA code in ConstructNewResultFromMatchInfo requires these strings to be
@@ -999,6 +999,8 @@ Handle<FixedArray> RegExpParser::CreateCaptureNameMap() {
     Handle<String> name = factory->InternalizeString(capture_name);
     array->set(i * 2, *name);
     array->set(i * 2 + 1, Smi::FromInt(capture->index()));
+
+    i++;
   }
 
   return array;
