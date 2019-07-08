@@ -4784,6 +4784,14 @@ void Assembler::pshufd(XMMRegister dst, Operand src, uint8_t shuffle) {
   emit(shuffle);
 }
 
+void Assembler::unpcklpd(XMMRegister dst, XMMRegister src) {
+  EnsureSpace ensure_space(this);
+  emit(0x66);
+  emit(0x0F);
+  emit(0x14);
+  emit_sse_operand(dst, src);
+}
+
 void Assembler::emit_sse_operand(XMMRegister reg, Operand adr) {
   Register ireg = Register::from_code(reg.code());
   emit_operand(ireg, adr);

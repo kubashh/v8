@@ -1730,6 +1730,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void lfence();
   void pause();
 
+  void unpcklpd(XMMRegister dst, XMMRegister src);
+
   // Check the code size generated from label to here.
   int SizeOfCodeGeneratedSince(Label* label) {
     return pc_offset() - label->pos();
