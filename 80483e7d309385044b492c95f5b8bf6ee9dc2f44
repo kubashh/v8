@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85d07dbf_d5c0868f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-08T13:24:04Z",
+      "side": 1,
+      "message": "nit: We usually use \u0027regexp\u0027 :)",
+      "revId": "80483e7d309385044b492c95f5b8bf6ee9dc2f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6ed3644_381410b7",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-08T13:24:04Z",
+      "side": 1,
+      "message": "Is this still needed anywhere?",
+      "revId": "80483e7d309385044b492c95f5b8bf6ee9dc2f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7e69991_08f642e4",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-08T13:24:04Z",
+      "side": 1,
+      "message": "nit: this would now be more natural as the `else` part of the `if` above.",
+      "revId": "80483e7d309385044b492c95f5b8bf6ee9dc2f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6a9fd7f_74052325",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-08T13:24:04Z",
+      "side": 1,
+      "message": "Nit: since we\u0027re here, could you please update the code style here and add {}. We always use them unless it\u0027s a one-line if.",
+      "revId": "80483e7d309385044b492c95f5b8bf6ee9dc2f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c6111ed_8205bfcc",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-08T13:24:04Z",
+      "side": 1,
+      "message": "nit: For safety, perhaps DCHECK_EQ(i, len) here.",
+      "revId": "80483e7d309385044b492c95f5b8bf6ee9dc2f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b45e26db_c6760ae2",
+        "filename": "src/regexp/regexp-parser.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-08T13:24:04Z",
+      "side": 1,
+      "message": "Two comments here:\n\n1. Why not use a pointer to a ZoneVector as the key? Currently we create copies of the zone vector, right? We can use a custom comparator if needed.\n\n2. Related to the first, why not use an std::set\u003cRegExpCapture*\u003e with a custom comparator instead? The name is already part of the RegExpCapture object.\n\nOh and 3. I\u0027d stick with `named_captures_` as the name.",
+      "revId": "80483e7d309385044b492c95f5b8bf6ee9dc2f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
