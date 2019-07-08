@@ -3029,11 +3029,9 @@ class ThreadImpl {
           CallIndirectImmediate<Decoder::kNoValidate> imm(
               kAllWasmFeatures, &decoder, code->at(pc));
           uint32_t entry_index = Pop().to<uint32_t>();
-          // Assume only one table for now.
-          DCHECK_LE(module()->tables.size(), 1u);
           CommitPc(pc);  // TODO(wasm): Be more disciplined about committing PC.
           ExternalCallResult result =
-              CallIndirectFunction(0, entry_index, imm.sig_index);
+              CallIndirectFunction(imm.table_index, entry_index, imm.sig_index);
           switch (result.type) {
             case ExternalCallResult::INTERNAL:
               // The import is a function of this instance. Call it directly.
@@ -3101,14 +3099,12 @@ class ThreadImpl {
           CallIndirectImmediate<Decoder::kNoValidate> imm(
               kAllWasmFeatures, &decoder, code->at(pc));
           uint32_t entry_index = Pop().to<uint32_t>();
-          // Assume only one table for now.
-          DCHECK_LE(module()->tables.size(), 1u);
           CommitPc(pc);  // TODO(wasm): Be more disciplined about committing PC.
 
           // TODO(wasm): Calling functions needs some refactoring to avoid
           // multi-exit code like this.
           ExternalCallResult result =
-              CallIndirectFunction(0, entry_index, imm.sig_index);
+              CallIndirectFunction(imm.table_index, entry_index, imm.sig_index);
           switch (result.type) {
             case ExternalCallResult::INTERNAL: {
               InterpreterCode* target = result.interpreter_code;
@@ -3722,22 +3718,25 @@ class ThreadImpl {
     uint32_t expected_sig_id = module()->signature_ids[sig_index];
     DCHECK_EQ(expected_sig_id,
               module()->signature_map.Find(*module()->signatures[sig_index]));
-
-    // The function table is stored in the instance.
-    // TODO(wasm): the wasm interpreter currently supports only one table.
-    CHECK_EQ(0, table_index);
+    uint32_t table_size =
+        table_index == 0
+            ? instance_object_->indirect_function_table_size()
+            : WasmIndirectFunctionTable::cast(
+                  instance_object_->indirect_function_tables().get(table_index))
+                  .size();
     // Bounds check against table size.
-    if (entry_index >= instance_object_->indirect_function_table_size()) {
+    if (entry_index >= table_size) {
       return {ExternalCallResult::INVALID_FUNC};
     }
 
-    IndirectFunctionTableEntry entry(instance_object_, 0, entry_index);
+    HandleScope handle_scope(isolate_);  // Avoid leaking handles.
+    IndirectFunctionTableEntry entry(instance_object_, table_index,
+                                     entry_index);
     // Signature check.
     if (entry.sig_id() != static_cast<int32_t>(expected_sig_id)) {
       return {ExternalCallResult::SIGNATURE_MISMATCH};
     }
 
-    HandleScope handle_scope(isolate_);  // Avoid leaking handles.
     FunctionSig* signature = module()->signatures[sig_index];
     Handle<Object> object_ref = handle(entry.object_ref(), isolate_);
     WasmCode* code = GetTargetCode(isolate_, entry.target());
