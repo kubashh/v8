@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ddba789c_f6a0a6a4",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-07-08T07:55:50Z",
+      "side": 1,
+      "message": "This now contains twice property_slack_... The previous version would additionally have checked computed_count_ \u003e 0 which is now dropped. Is this intentional?",
+      "revId": "308359800e6dd5da6a8bbb3917f8be97179b1311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
