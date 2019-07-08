@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81e43657_694bb86b",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 3603,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-07-08T20:30:21Z",
+      "side": 1,
+      "message": "implementation-visitor.cc is slowly really getting too big. I think such generation facilities should have their own file. We should also refactor the existing code eventually. But for now, could you put this code in a separate file?",
+      "revId": "fbaaf4ab8558e67029e10f93adb103df36fffd7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d1ad8ec_13756925",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 3770,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-07-08T20:30:21Z",
+      "side": 1,
+      "message": "nit: Could this class be moved to debug-helper-internal.{h,cc}?",
+      "range": {
+        "startLine": 3756,
+        "startChar": 0,
+        "endLine": 3770,
+        "endChar": 1
+      },
+      "revId": "fbaaf4ab8558e67029e10f93adb103df36fffd7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
