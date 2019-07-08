@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1c70cbe7_70b75728",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 3374,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-08T08:30:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d823e68e_8277dfb5",
+      "range": {
+        "startLine": 3374,
+        "startChar": 13,
+        "endLine": 3374,
+        "endChar": 34
+      },
+      "revId": "42400d411a003bbe7215911b8e752c4596941464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f8abbe1_39fbe3ba",
         "filename": "src/libplatform/tracing/tracing-controller.cc",
         "patchSetId": 15
@@ -45,6 +69,30 @@
       "revId": "42400d411a003bbe7215911b8e752c4596941464",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e7b9c73_1b8941f4",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-08T08:30:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f8abbe1_39fbe3ba",
+      "range": {
+        "startLine": 294,
+        "startChar": 57,
+        "endLine": 294,
+        "endChar": 74
+      },
+      "revId": "42400d411a003bbe7215911b8e752c4596941464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +131,24 @@
     },
     {
       "key": {
+        "uuid": "1e19c8bf_db7f1f4f",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-08T08:30:25Z",
+      "side": 1,
+      "message": "I\u0027ve added a todo to switch to it when it\u0027s available",
+      "parentUuid": "f2e14994_afd53f7a",
+      "revId": "42400d411a003bbe7215911b8e752c4596941464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bbc32581_66c47375",
         "filename": "test/cctest/BUILD.gn",
         "patchSetId": 15
@@ -118,6 +184,24 @@
     },
     {
       "key": {
+        "uuid": "1df61c40_f7f0e354",
+        "filename": "test/cctest/BUILD.gn",
+        "patchSetId": 15
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-08T08:30:25Z",
+      "side": 1,
+      "message": "Yep - so we include lite when we need to read from protos (e.g. tests, json listener) and zero when we need to write to protos (tracing controller, also tests). So sometimes we include both.",
+      "parentUuid": "8519a1f1_edf64d92",
+      "revId": "42400d411a003bbe7215911b8e752c4596941464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5395852c_5f3d18e0",
         "filename": "test/cctest/libplatform/test-tracing.cc",
         "patchSetId": 15
@@ -132,6 +216,24 @@
       "revId": "42400d411a003bbe7215911b8e752c4596941464",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94b8542c_5fe843bd",
+        "filename": "test/cctest/libplatform/test-tracing.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-08T08:30:25Z",
+      "side": 1,
+      "message": "I\u0027ll add a non-empty assert for now. Mostly this was to check it isn\u0027t crashing. I\u0027ll do a follow up to sort out testing properly too",
+      "parentUuid": "5395852c_5f3d18e0",
+      "revId": "42400d411a003bbe7215911b8e752c4596941464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

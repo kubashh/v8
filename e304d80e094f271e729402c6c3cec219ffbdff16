@@ -16,6 +16,24 @@
       "revId": "e304d80e094f271e729402c6c3cec219ffbdff16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "754220d8_d23d5df3",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-07-08T08:30:25Z",
+      "side": 0,
+      "message": "Yes, the \u0027correct\u0027 usage is to have one event per packet with the client API.\n\nre. the end of unfinished events, we don\u0027t control this decision anymore, because we always call DataSource::Trace() and it will be ignored by the client API if tracing has since been disabled",
+      "parentUuid": "425c5822_7688c6fa",
+      "revId": "e304d80e094f271e729402c6c3cec219ffbdff16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
