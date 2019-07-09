@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5e062ff_817523ca",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-07-09T05:16:12Z",
+      "side": 1,
+      "message": "I\u0027m a little concerned about the loss of precision here and below, and as the ExtractLane/ReplaceLane test only does spot checks it\u0027s possible to miss cases where precision is required.",
+      "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "014801d8_14ccb9fd",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-07-09T05:16:12Z",
+      "side": 1,
+      "message": "Can the Extract/Replace tests be modified to use FOR_FLOAT64_INPUTS?",
+      "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
