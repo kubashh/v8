@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10646de5_f2c7965b",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-09T11:24:58Z",
+      "side": 1,
+      "message": "Stray comment",
+      "revId": "a5736b08d91f9af5016668434a16bc5885948a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e87cd86_edd9e39d",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-09T11:24:58Z",
+      "side": 1,
+      "message": "Suggestion: name this something like `search_capture` or `needle` or `search` to clarify this is just used for the search. Also probably worth a comment that the index we pass in here doesn\u0027t matter, we only use the name.",
+      "revId": "a5736b08d91f9af5016668434a16bc5885948a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9f9a3bd_816b1136",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-09T11:24:58Z",
+      "side": 1,
+      "message": "Stray comment",
+      "revId": "a5736b08d91f9af5016668434a16bc5885948a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7821790_231bb45e",
+        "filename": "src/regexp/regexp-parser.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-09T11:24:58Z",
+      "side": 1,
+      "message": "Suggestion: Name this RegExpCaptureNameLess, and move it to just above the use site (e.g. as a nested struct in line 334).",
+      "revId": "a5736b08d91f9af5016668434a16bc5885948a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
