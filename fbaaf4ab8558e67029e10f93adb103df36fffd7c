@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a5a39a7f_b3a6ec1b",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 3603,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-07-09T18:14:14Z",
+      "side": 1,
+      "message": "Good idea, thanks! I also had to move some helper classes to utils so they\u0027d be available from the new file.",
+      "parentUuid": "81e43657_694bb86b",
+      "revId": "fbaaf4ab8558e67029e10f93adb103df36fffd7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d1ad8ec_13756925",
         "filename": "src/torque/implementation-visitor.cc",
         "patchSetId": 25
@@ -39,6 +57,30 @@
       "revId": "fbaaf4ab8558e67029e10f93adb103df36fffd7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2174c0bc_d7e6b6ae",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 3770,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-07-09T18:14:14Z",
+      "side": 1,
+      "message": "Good point, there\u0027s no reason to have these huge strings here. Thanks!",
+      "parentUuid": "8d1ad8ec_13756925",
+      "range": {
+        "startLine": 3756,
+        "startChar": 0,
+        "endLine": 3770,
+        "endChar": 1
+      },
+      "revId": "fbaaf4ab8558e67029e10f93adb103df36fffd7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
