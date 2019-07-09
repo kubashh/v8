@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "df422a4b_115dc633",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-07-09T18:44:19Z",
+      "side": 1,
+      "message": "I meant this as a comment for the instruction sequence, i.e. moving a double to a regular scratch register and then using pinsrq which is the instruction to insert a qword integer value to insert a double. Ideally these should just work because we\u0027re treating them as 64-bit values, but I wasn\u0027t sure if using packed integer instructions would cause a loss of precision for the resulting value in the output register for example for the +0.0/-0.0 case.",
+      "parentUuid": "c60a284b_a870be2e",
+      "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d1f02c39_d7476840",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 3
@@ -71,6 +89,30 @@
       "writtenOn": "2019-07-09T16:59:15Z",
       "side": 1,
       "message": "Don\u0027t we still need to load into a scratch register in this case, since we can\u0027t guarantee 16 byte alignment?",
+      "range": {
+        "startLine": 2253,
+        "startChar": 0,
+        "endLine": 2253,
+        "endChar": 80
+      },
+      "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ed091e6_9a8673f8",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2253,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-07-09T18:44:19Z",
+      "side": 1,
+      "message": "The Extract/Insert instructions don\u0027t need the alignment guarantee. From the SDM - \n\"SSE4.1 adds 7 instructions (corresponding to 9 assembly instruction mnemonics) that simplify data insertion and extraction between general-purpose register (GPR) and XMM registers (EXTRACTPS, INSERTPS, PINSRB, PINSRD, PINSRQ, PEXTRB, PEXTRW, PEXTRD, and PEXTRQ). When accessing memory, no alignment is required for any of these instructions (unless alignment checking is enabled).\"\n\nWe use operands for the narrower operations as well.",
+      "parentUuid": "d1f02c39_d7476840",
       "range": {
         "startLine": 2253,
         "startChar": 0,
