@@ -14,7 +14,13 @@ namespace v8 {
 namespace internal {
 
 struct RegExpCompileData;
-
+struct ZoneRegExpCaptureComparator {
+  bool operator()(const RegExpCapture* lhs, const RegExpCapture* rhs) const {
+    DCHECK_NOT_NULL(lhs);
+    DCHECK_NOT_NULL(rhs);
+    return *lhs->name() < *rhs->name();
+  }
+};
 // A BufferedZoneList is an automatically growing list, just like (and backed
 // by) a ZoneList, that is optimized for the case of adding and removing
 // a single element. The last element added is stored outside the backing list,
@@ -330,7 +336,7 @@ class V8_EXPORT_PRIVATE RegExpParser {
   Zone* zone_;
   Handle<String>* error_;
   ZoneList<RegExpCapture*>* captures_;
-  ZoneList<RegExpCapture*>* named_captures_;
+  ZoneSet<RegExpCapture*, ZoneRegExpCaptureComparator>* named_captures_;
   ZoneList<RegExpBackReference*>* named_back_references_;
   FlatStringReader* in_;
   uc32 current_;
