@@ -114,6 +114,24 @@
     },
     {
       "key": {
+        "uuid": "931f669d_54719410",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-09T19:39:27Z",
+      "side": 1,
+      "message": "On further thought, I wonder if in this case could we use palignr to do this in a single instruction?",
+      "parentUuid": "90d21a2f_769680c5",
+      "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d1f02c39_d7476840",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 3
