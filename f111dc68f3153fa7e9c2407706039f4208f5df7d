@@ -78,6 +78,24 @@
     },
     {
       "key": {
+        "uuid": "144b747a_bd81f09c",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-09T19:02:59Z",
+      "side": 1,
+      "message": "I see. movq won\u0027t distinguish between integer and floating point values, so signed 0\u0027s and NaNs would be unchanged.",
+      "parentUuid": "df422a4b_115dc633",
+      "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d1f02c39_d7476840",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 3
@@ -113,6 +131,30 @@
       "side": 1,
       "message": "The Extract/Insert instructions don\u0027t need the alignment guarantee. From the SDM - \n\"SSE4.1 adds 7 instructions (corresponding to 9 assembly instruction mnemonics) that simplify data insertion and extraction between general-purpose register (GPR) and XMM registers (EXTRACTPS, INSERTPS, PINSRB, PINSRD, PINSRQ, PEXTRB, PEXTRW, PEXTRD, and PEXTRQ). When accessing memory, no alignment is required for any of these instructions (unless alignment checking is enabled).\"\n\nWe use operands for the narrower operations as well.",
       "parentUuid": "d1f02c39_d7476840",
+      "range": {
+        "startLine": 2253,
+        "startChar": 0,
+        "endLine": 2253,
+        "endChar": 80
+      },
+      "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "911a85d7_d17de684",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2253,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-09T19:02:59Z",
+      "side": 1,
+      "message": "Great, thanks for the explanation.",
+      "parentUuid": "2ed091e6_9a8673f8",
       "range": {
         "startLine": 2253,
         "startChar": 0,
