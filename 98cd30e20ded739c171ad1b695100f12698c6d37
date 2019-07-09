@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c80a4ad_41021df6",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-07-09T13:13:43Z",
+      "side": 1,
+      "message": "suggestion: Would it make sense to hoist this into a {AssemblerArchAbort(Handle\u003cCode\u003e)} and just pass the handle to the builtin? WDYT? Applies to all architectures.",
+      "range": {
+        "startLine": 885,
+        "startChar": 0,
+        "endLine": 898,
+        "endChar": 12
+      },
+      "revId": "98cd30e20ded739c171ad1b695100f12698c6d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c50d1bb_4a14d31c",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-07-09T13:13:43Z",
+      "side": 1,
+      "message": "I am strongly in favor of removing the {AbortJS} opcode after this TODO is addressed. As discussed offline, the original intention of {AbortJS} was to only be called from JavaScript source (e.g. in mjsunit), and removing the opcode would re-establish that. Lets mention this in the TODO.",
+      "range": {
+        "startLine": 232,
+        "startChar": 2,
+        "endLine": 232,
+        "endChar": 9
+      },
+      "revId": "98cd30e20ded739c171ad1b695100f12698c6d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
