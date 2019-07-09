@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "767e74c7_3a049ecf",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-09T14:18:47Z",
+      "side": 1,
+      "message": "Since that method would still be architecture-specific, and one of the two duplications will disappear soon (the AbortJS opcode), this is not worth it IMO. Note that the code will get a bit shorter with this follow-up CL: https://crrev.com/c/1692930.",
+      "parentUuid": "5c80a4ad_41021df6",
+      "range": {
+        "startLine": 885,
+        "startChar": 0,
+        "endLine": 898,
+        "endChar": 12
+      },
+      "revId": "98cd30e20ded739c171ad1b695100f12698c6d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c50d1bb_4a14d31c",
         "filename": "src/compiler/code-assembler.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "98cd30e20ded739c171ad1b695100f12698c6d37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3e2b5ee_ed2a171c",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-09T14:18:47Z",
+      "side": 1,
+      "message": "Ack, done.",
+      "parentUuid": "3c50d1bb_4a14d31c",
+      "range": {
+        "startLine": 232,
+        "startChar": 2,
+        "endLine": 232,
+        "endChar": 9
+      },
+      "revId": "98cd30e20ded739c171ad1b695100f12698c6d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
