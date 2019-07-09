@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d0e8574d_6b330431",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1817,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-09T16:59:15Z",
+      "side": 1,
+      "message": "Not MarkAsFloat64?",
+      "range": {
+        "startLine": 1817,
+        "startChar": 13,
+        "endLine": 1817,
+        "endChar": 26
+      },
+      "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5e062ff_817523ca",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 3
@@ -13,6 +36,47 @@
       "writtenOn": "2019-07-09T05:16:12Z",
       "side": 1,
       "message": "I\u0027m a little concerned about the loss of precision here and below, and as the ExtractLane/ReplaceLane test only does spot checks it\u0027s possible to miss cases where precision is required.",
+      "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c60a284b_a870be2e",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-09T16:59:15Z",
+      "side": 1,
+      "message": "I don\u0027t see the problem. What am I missing?",
+      "parentUuid": "c5e062ff_817523ca",
+      "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1f02c39_d7476840",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2253,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-09T16:59:15Z",
+      "side": 1,
+      "message": "Don\u0027t we still need to load into a scratch register in this case, since we can\u0027t guarantee 16 byte alignment?",
+      "range": {
+        "startLine": 2253,
+        "startChar": 0,
+        "endLine": 2253,
+        "endChar": 80
+      },
       "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
