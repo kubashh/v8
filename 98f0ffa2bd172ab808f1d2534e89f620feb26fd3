@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4078782_a3414227",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-07-10T18:19:04Z",
+      "side": 1,
+      "message": "Nit: Can these be moved up to where the other helper methods are to be consistent with the rest of the file?",
+      "revId": "98f0ffa2bd172ab808f1d2534e89f620feb26fd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
