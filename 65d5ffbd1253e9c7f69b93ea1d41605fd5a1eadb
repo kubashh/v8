@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6128d9b3_a9ca872b",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-10T18:04:57Z",
+      "side": 1,
+      "message": "Nice. How did this even work before?\nSeems like we should also fix it for BinOps NaN testing too.",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 49
+      },
+      "revId": "65d5ffbd1253e9c7f69b93ea1d41605fd5a1eadb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
