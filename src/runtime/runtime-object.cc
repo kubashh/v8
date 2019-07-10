@@ -46,7 +46,7 @@ MaybeHandle<Object> Runtime::GetObjectProperty(Isolate* isolate,
     Handle<Object> name_string(Symbol::cast(*key).name(), isolate);
     DCHECK(name_string->IsString());
     THROW_NEW_ERROR(isolate,
-                    NewTypeError(MessageTemplate::kInvalidPrivateFieldRead,
+                    NewTypeError(MessageTemplate::kInvalidPrivateMemberRead,
                                  name_string, object),
                     Object);
   }
@@ -411,7 +411,7 @@ MaybeHandle<Object> Runtime::SetObjectProperty(
     Handle<Object> name_string(Symbol::cast(*key).name(), isolate);
     DCHECK(name_string->IsString());
     THROW_NEW_ERROR(isolate,
-                    NewTypeError(MessageTemplate::kInvalidPrivateFieldWrite,
+                    NewTypeError(MessageTemplate::kInvalidPrivateMemberWrite,
                                  name_string, object),
                     Object);
   }
@@ -1213,6 +1213,32 @@ RUNTIME_FUNCTION(Runtime_GetOwnPropertyDescriptor) {
 
   if (!found.FromJust()) return ReadOnlyRoots(isolate).undefined_value();
   return *desc.ToPropertyDescriptorObject(isolate);
+}
+
+RUNTIME_FUNCTION(Runtime_LoadPrivateSetter) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(args.length(), 1);
+  CONVERT_ARG_HANDLE_CHECKED(AccessorPair, pair, 0);
+  // TODO(joyee): throw if setter is not a JSFunction?
+  return pair->setter();
+}
+
+RUNTIME_FUNCTION(Runtime_LoadPrivateGetter) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(args.length(), 1);
+  CONVERT_ARG_HANDLE_CHECKED(AccessorPair, pair, 0);
+  // TODO(joyee): throw if getter is not a JSFunction?
+  return pair->getter();
+}
+
+RUNTIME_FUNCTION(Runtime_CreatePrivateAccessors) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(args.length(), 2);
+  DCHECK(args[0].IsNull() || args[0].IsJSFunction());
+  DCHECK(args[1].IsNull() || args[1].IsJSFunction());
+  Handle<AccessorPair> pair = isolate->factory()->NewAccessorPair();
+  pair->SetComponents(args[0], args[1]);
+  return *pair;
 }
 
 RUNTIME_FUNCTION(Runtime_AddPrivateBrand) {
