@@ -872,10 +872,9 @@ static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
   __ bind(&no_match);
 }
 
-static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
-                                           Register feedback_vector,
-                                           Register scratch1,
-                                           Register scratch2) {
+void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
+                                    Register feedback_vector, Register scratch1,
+                                    Register scratch2) {
   // ----------- S t a t e -------------
   //  -- r3 : new target (preserved for callee if needed, and caller)
   //  -- r1 : target function (preserved for callee if needed, and caller)
@@ -1122,18 +1121,34 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
     __ CallRuntime(Runtime::kThrowStackOverflow);
     __ bind(&ok);
 
-    // If ok, push undefined as the initial value for all register file entries.
     Label loop_header;
     Label loop_check;
     __ LoadRoot(r9, RootIndex::kUndefinedValue);
-    __ b(&loop_check, al);
-    __ bind(&loop_header);
-    // TODO(rmcilroy): Consider doing more than one push per loop iteration.
+
+    // If ok, push undefined as the initial value for all register file entries.
+    // Test if r4 % (kPointerSize * 2) == 0, that is, if we are going to be
+    // pushing an odd number of kUndefinedValue.
+    __ tst(r4, Operand(kPointerSize));
+    __ b(&loop_check, eq);
+
+    Label loop_unrolling_fallthrough;
+    // Odd border case: Push once, and substract kPointerSize. Then, we are even
+    // and we merge with the even branch.
     __ push(r9);
-    // Continue loop if not done.
+    __ sub(r4, r4, Operand(kPointerSize));
+    __ b(&loop_check, al);
+
+    __ bind(&loop_header);
+    __ push(r9);
+    __ push(r9);
     __ bind(&loop_check);
-    __ sub(r4, r4, Operand(kPointerSize), SetCC);
+    // Here we substract twice, before pushing twice. This takes into account
+    // that if we arrive here, we have an even number * kPointerSize in r4.
+    __ sub(r4, r4, Operand(kPointerSize << 1), SetCC);
+    // Continue loop if not done.
     __ b(&loop_header, ge);
+
+    __ bind(&loop_unrolling_fallthrough);
   }
 
   // If the bytecode array has a valid incoming new target or generator object
