@@ -1978,10 +1978,46 @@ bool BytecodeGenerator::ShouldOptimizeAsOneShot() const {
          info()->literal()->is_oneshot_iife();
 }
 
+struct ClassAccessors : public ZoneObject {
+  ClassAccessors() : getter(nullptr), setter(nullptr) {}
+  bool has_both() const { return getter != nullptr && setter != nullptr; }
+  ClassLiteral::Property* getter;
+  ClassLiteral::Property* setter;
+};
+
+class BytecodeGenerator::ClassAccessorTable : public ZoneHashMap {
+ public:
+  explicit ClassAccessorTable(Zone* zone)
+      : ZoneHashMap(8, ZoneAllocationPolicy(zone)) {}
+
+  ClassAccessors* Add(Zone* zone, ClassLiteral::Property* property) {
+    const AstRawString* name = property->private_name_var()->raw_name();
+    Entry* p =
+        ZoneHashMap::LookupOrInsert(const_cast<AstRawString*>(name),
+                                    name->Hash(), ZoneAllocationPolicy(zone));
+    ClassAccessors* accessors = reinterpret_cast<ClassAccessors*>(p->value);
+
+    if (accessors == nullptr) {
+      DCHECK_EQ(name, p->key);
+      accessors = new (zone) ClassAccessors();
+      p->value = accessors;
+    }
+
+    if (property->kind() == ClassLiteral::Property::GETTER) {
+      accessors->getter = property;
+    } else {
+      accessors->setter = property;
+    }
+
+    return accessors;
+  }
+};
+
 void BytecodeGenerator::BuildPrivateClassMemberNameAssignment(
-    ClassLiteral::Property* property) {
+    ClassLiteral::Property* property, ClassAccessorTable* map) {
   DCHECK(property->is_private());
-  switch (property->kind()) {
+  ClassLiteral::Property::Kind kind = property->kind();
+  switch (kind) {
     case ClassLiteral::Property::FIELD: {
       // Create the private name symbols for fields during class
       // evaluation and store them on the context. These will be
@@ -2005,9 +2041,40 @@ void BytecodeGenerator::BuildPrivateClassMemberNameAssignment(
                               HoleCheckMode::kElided);
       break;
     }
-    default:
-      // TODO(joyee): Private accessors are not yet supported.
-      UNREACHABLE();
+    case ClassLiteral::Property::GETTER:
+    case ClassLiteral::Property::SETTER: {
+      ClassAccessors* accessors = nullptr;
+
+      // Collect complementary accessors into a map and delay assignment
+      // until we have all necessary components.
+      if (property->private_name_var()->mode() ==
+          VariableMode::kPrivateGetterAndSetter) {
+        accessors = map->Add(zone(), property);
+        if (!accessors->has_both()) {
+          break;
+        }
+      }
+
+      // We need to keep the order in which the code is emitted stable.
+      // The first accessor with all necessary declarations present is
+      // compiled first.
+      RegisterAllocationScope register_scope(this);
+      RegisterList accessors_reg = register_allocator()->NewRegisterList(2);
+      if (accessors != nullptr) {  // can load both
+        VisitForRegisterValue(accessors->getter->value(), accessors_reg[0]);
+        VisitForRegisterValue(accessors->setter->value(), accessors_reg[1]);
+      } else if (kind == ClassLiteral::Property::GETTER) {  // getter only
+        VisitForRegisterValue(property->value(), accessors_reg[0]);
+        builder()->LoadNull().StoreAccumulatorInRegister(accessors_reg[1]);
+      } else {  // setter only
+        builder()->LoadNull().StoreAccumulatorInRegister(accessors_reg[0]);
+        VisitForRegisterValue(property->value(), accessors_reg[1]);
+      }
+      builder()->CallRuntime(Runtime::kCreatePrivateAccessors, accessors_reg);
+      BuildVariableAssignment(property->private_name_var(), Token::INIT,
+                              HoleCheckMode::kElided);
+      break;
+    }
   }
 }
 
@@ -2040,6 +2107,7 @@ void BytecodeGenerator::BuildClassLiteral(ClassLiteral* expr, Register name) {
         .LoadConstantPoolEntry(class_boilerplate_entry)
         .StoreAccumulatorInRegister(class_boilerplate);
 
+    ClassAccessorTable private_accessors(zone());
     // Create computed names and method values nodes to store into the literal.
     for (int i = 0; i < expr->properties()->length(); i++) {
       ClassLiteral::Property* property = expr->properties()->at(i);
@@ -2076,7 +2144,7 @@ void BytecodeGenerator::BuildClassLiteral(ClassLiteral* expr, Register name) {
       }
 
       if (property->is_private()) {
-        BuildPrivateClassMemberNameAssignment(property);
+        BuildPrivateClassMemberNameAssignment(property, &private_accessors);
         // The private fields are initialized in the initializer function and
         // the private brand for the private methods are initialized in the
         // constructor instead.
@@ -3026,7 +3094,8 @@ void BytecodeGenerator::BuildHoleCheckForVariableAssignment(Variable* variable,
   } else {
     // Perform an initialization check for let/const declared variables.
     // E.g. let x = (x = 20); is not allowed.
-    DCHECK(IsLexicalVariableMode(variable->mode()));
+    DCHECK(IsLexicalVariableMode(variable->mode()) ||
+           IsPrivateMethodOrAccessorVariableMode(variable->mode()));
     BuildThrowIfHole(variable);
   }
 }
@@ -3201,10 +3270,10 @@ BytecodeGenerator::AssignmentLhsData::NamedSuperProperty(
 }
 // static
 BytecodeGenerator::AssignmentLhsData
-BytecodeGenerator::AssignmentLhsData::PrivateMethod(Register object,
-                                                    const AstRawString* name) {
-  return AssignmentLhsData(PRIVATE_METHOD, nullptr, RegisterList(), object,
-                           Register(), nullptr, name);
+BytecodeGenerator::AssignmentLhsData::PrivateMethodOrAccessor(
+    AssignType type, Property* property) {
+  return AssignmentLhsData(type, property, RegisterList(), Register(),
+                           Register(), nullptr, nullptr);
 }
 // static
 BytecodeGenerator::AssignmentLhsData
@@ -3237,12 +3306,12 @@ BytecodeGenerator::AssignmentLhsData BytecodeGenerator::PrepareAssignmentLhs(
       Register key = VisitForRegisterValue(property->key());
       return AssignmentLhsData::KeyedProperty(object, key);
     }
-    case PRIVATE_METHOD: {
+    case PRIVATE_METHOD:
+    case PRIVATE_GETTER_ONLY:
+    case PRIVATE_SETTER_ONLY:
+    case PRIVATE_GETTER_AND_SETTER: {
       DCHECK(!property->IsSuperAccess());
-      AccumulatorPreservingScope scope(this, accumulator_preserving_mode);
-      Register object = VisitForRegisterValue(property->obj());
-      const AstRawString* name = property->key()->AsVariableProxy()->raw_name();
-      return AssignmentLhsData::PrivateMethod(object, name);
+      return AssignmentLhsData::PrivateMethodOrAccessor(assign_type, property);
     }
     case NAMED_SUPER_PROPERTY: {
       AccumulatorPreservingScope scope(this, accumulator_preserving_mode);
@@ -3799,8 +3868,15 @@ void BytecodeGenerator::BuildAssignment(
       break;
     }
     case PRIVATE_METHOD: {
-      BuildThrowPrivateMethodWriteError(lhs_data.name());
+      BuildThrowPrivateMethodWriteError(
+          lhs_data.expr()->AsProperty()->key()->AsVariableProxy()->raw_name());
       break;
+    }
+    case PRIVATE_GETTER_ONLY:
+    case PRIVATE_SETTER_ONLY:
+    case PRIVATE_GETTER_AND_SETTER: {
+      // TODO(joyee): implement private accessors.
+      return;
     }
   }
 }
@@ -3848,10 +3924,18 @@ void BytecodeGenerator::VisitCompoundAssignment(CompoundAssignment* expr) {
       break;
     }
     case PRIVATE_METHOD: {
-      BuildThrowPrivateMethodWriteError(lhs_data.name());
+      BuildThrowPrivateMethodWriteError(
+          lhs_data.expr()->AsProperty()->key()->AsVariableProxy()->raw_name());
       break;
     }
+    case PRIVATE_SETTER_ONLY:
+    case PRIVATE_GETTER_ONLY:
+    case PRIVATE_GETTER_AND_SETTER: {
+      // TODO(joyee): implement private accessors.
+      return;
+    }
   }
+
   BinaryOperation* binop = expr->AsCompoundAssignment()->binary_operation();
   FeedbackSlot slot = feedback_spec()->AddBinaryOpICSlot();
   if (expr->value()->IsSmiLiteral()) {
@@ -4324,6 +4408,12 @@ void BytecodeGenerator::VisitPropertyLoad(Register obj, Property* property) {
       // loaded (stored in a context slot), so load this directly.
       VisitForAccumulatorValue(property->key());
       break;
+    }
+    case PRIVATE_SETTER_ONLY:
+    case PRIVATE_GETTER_ONLY:
+    case PRIVATE_GETTER_AND_SETTER: {
+      // TODO(joyee): implement private accessors.
+      return;
     }
   }
 }
@@ -4879,6 +4969,12 @@ void BytecodeGenerator::VisitCountOperation(CountOperation* expr) {
           property->key()->AsVariableProxy()->raw_name());
       break;
     }
+    case PRIVATE_GETTER_ONLY:
+    case PRIVATE_SETTER_ONLY:
+    case PRIVATE_GETTER_AND_SETTER: {
+      // TODO(joyee): implement private accessors.
+      return;
+    }
   }
 
   // Save result for postfix expressions.
@@ -4949,6 +5045,12 @@ void BytecodeGenerator::VisitCountOperation(CountOperation* expr) {
       BuildThrowPrivateMethodWriteError(
           property->key()->AsVariableProxy()->raw_name());
       break;
+    }
+    case PRIVATE_GETTER_ONLY:
+    case PRIVATE_SETTER_ONLY:
+    case PRIVATE_GETTER_AND_SETTER: {
+      // TODO(joyee): implement private accessors.
+      UNREACHABLE();
     }
   }
 
