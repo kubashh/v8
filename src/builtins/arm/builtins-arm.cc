@@ -1124,6 +1124,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
     Label loop_header;
     Label loop_check;
     __ LoadRoot(r9, RootIndex::kUndefinedValue);
+    __ mov(r2, r9);
 
     // If ok, push undefined as the initial value for all register file entries.
     // Test if r4 % (kPointerSize * 2) == 0, that is, if we are going to be
@@ -1139,8 +1140,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
     __ b(&loop_check, al);
 
     __ bind(&loop_header);
-    __ push(r9);
-    __ push(r9);
+    __ Push(r9, r2);
     __ bind(&loop_check);
     // Here we substract twice, before pushing twice. This takes into account
     // that if we arrive here, we have an even number * kPointerSize in r4.
