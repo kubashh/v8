@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6034d70_d2af6129",
+        "filename": "src/base/vlq-base64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-07-10T14:05:51Z",
+      "side": 1,
+      "message": "Is it possible to leave this prototype out of the header file (leaving just the ForTesting variant?)",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
