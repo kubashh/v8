@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4785ac1a_60d9a4f7",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-07-10T03:34:15Z",
+      "side": 1,
+      "message": "Sure, we can provide the guarantee that contexts[i] is initialized iff stacks[i].",
+      "parentUuid": "b51bfb3b_3422a80b",
+      "range": {
+        "startLine": 119,
+        "startChar": 6,
+        "endLine": 119,
+        "endChar": 7
+      },
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13d8ebe4_e1a815f8",
         "filename": "src/profiler/cpu-profiler.cc",
         "patchSetId": 11
@@ -39,6 +63,24 @@
       "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4afb8765_246ae6c7",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-07-10T03:34:15Z",
+      "side": 1,
+      "message": "Suppose a new profiler is started that wants to filter on context `A`, located at `\u0026x`. Consider there may be some old/backlogged move event in the profiler events buffer, that moved some context `B` from `\u0026x -\u003e \u0026y` prior. This relocation would erroneously apply to `A`, naively, and the profiler filtering on `A` might receive old samples associated with context `B`.\n\nThat being said, I think a better approach might be to go with a logical clock for VM events, so that we don\u0027t relocate a context address that\u0027s \"newer\" than expected. I\u0027ll do this.",
+      "parentUuid": "13d8ebe4_e1a815f8",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "04b1a9a5_71309015",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-07-10T03:34:15Z",
+      "side": 1,
+      "message": "Whoops, thanks for catching this. I\u0027ll remove it.",
+      "parentUuid": "d1ffe5b4_b8a8dcfa",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a4f1068_7a81f46d",
         "filename": "src/profiler/profile-generator.cc",
         "patchSetId": 11
@@ -73,6 +133,24 @@
       "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2489ba77_ba8e5b5d",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-07-10T03:34:15Z",
+      "side": 1,
+      "message": "The problem with this is that we might not be able to distinguish frames that we failed to scrape the native context from (that we don\u0027t want to include in traces), with those that don\u0027t have an associated native context (that we do want to include in traces). We could use a off-heap value for native_context (e.g. 0x1), to denote unfilterability if you\u0027d prefer.",
+      "parentUuid": "2a4f1068_7a81f46d",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "2f1990f1_a50fad7e",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-07-10T03:34:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d5cd15dc_85322481",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8eb26537_c21e54f1",
         "filename": "src/profiler/profile-generator.cc",
         "patchSetId": 11
@@ -107,6 +203,24 @@
       "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57c122ec_ad870efb",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-07-10T03:34:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8eb26537_c21e54f1",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -127,6 +241,24 @@
     },
     {
       "key": {
+        "uuid": "1b7935ab_0a9a885d",
+        "filename": "src/profiler/profiler-listener.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-07-10T03:34:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3820944b_f6c3901d",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82e00a7c_cea34f77",
         "filename": "src/profiler/tick-sample.cc",
         "patchSetId": 11
@@ -144,6 +276,24 @@
     },
     {
       "key": {
+        "uuid": "fd36143c_6e00df15",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-07-10T03:34:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "82e00a7c_cea34f77",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f694a90_460d419b",
         "filename": "src/profiler/tick-sample.cc",
         "patchSetId": 11
@@ -158,6 +308,24 @@
       "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01335f0f_9f856f37",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-07-10T03:34:15Z",
+      "side": 1,
+      "message": "We want to make sure we only borrow the frame context of the very top frame, lest we pull a context from further down the stack (which might have a different native context).",
+      "parentUuid": "0f694a90_460d419b",
+      "revId": "8af40ed8ffd8a5f607768d3315bc669886023700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
