@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "129c6098_3c308d9c",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-07-10T08:35:31Z",
+      "side": 1,
+      "message": "Ack. Works for me, since the plan is to remove {kArchAbortJS} anyways. Thanks!",
+      "parentUuid": "767e74c7_3a049ecf",
+      "range": {
+        "startLine": 885,
+        "startChar": 0,
+        "endLine": 898,
+        "endChar": 12
+      },
+      "revId": "98cd30e20ded739c171ad1b695100f12698c6d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c50d1bb_4a14d31c",
         "filename": "src/compiler/code-assembler.cc",
         "patchSetId": 2
