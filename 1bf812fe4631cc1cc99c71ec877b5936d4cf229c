@@ -34,6 +34,24 @@
       "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "730c2336_62f2f9ce",
+        "filename": "src/base/vlq-base64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-07-11T06:07:54Z",
+      "side": 1,
+      "message": "Whoops, sorry, scanned too fast. This is, of course, the main function exported, so it\u0027s fine. (brain saw charToDigitDecode() instead).",
+      "parentUuid": "bc80688b_e4f0e5d4",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
