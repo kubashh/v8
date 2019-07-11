@@ -441,8 +441,10 @@ class Platform {
 
   /**
    * Lets the embedder to add crash keys.
+   * The caller is responsible for keeping 'name' string alive till the process
+   * is terminated (if possible, use static strings).
    */
-  virtual void AddCrashKey(int id, const char* name, uintptr_t value) {
+  virtual void AddCrashKey(const char* name, uintptr_t value) {
     // "noop" is a valid implementation if the embedder doesn't care to log
     // additional data for crashes.
   }
