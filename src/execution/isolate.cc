@@ -3300,18 +3300,29 @@ bool Isolate::InitWithSnapshot(ReadOnlyDeserializer* read_only_deserializer,
   return Init(read_only_deserializer, startup_deserializer);
 }
 
+static const char* BuildCrashKeyName(const char* name, int disambiguator) {
+  std::string id = std::to_string(disambiguator);
+
+  // Crash keys don't take ownership of the key name strings so, because we
+  // need to build them dynamically, we work around by leaking them.
+  auto key_name = new std::string{name};
+  key_name->append(":");
+  key_name->append(id);
+  return key_name->c_str();
+}
 static void AddCrashKeysForIsolateAndHeapPointers(Isolate* isolate) {
   v8::Platform* platform = V8::GetCurrentPlatform();
+  const int disambiguator = isolate->id();
 
-  const int id = isolate->id();
-  platform->AddCrashKey(id, "isolate", reinterpret_cast<uintptr_t>(isolate));
+  platform->AddCrashKey(BuildCrashKeyName("isolate", disambiguator),
+    reinterpret_cast<uintptr_t>(isolate));
 
   auto heap = isolate->heap();
-  platform->AddCrashKey(id, "ro_space",
+  platform->AddCrashKey(BuildCrashKeyName("ro_space", disambiguator),
     reinterpret_cast<uintptr_t>(heap->read_only_space()->first_page()));
-  platform->AddCrashKey(id, "map_space",
+  platform->AddCrashKey(BuildCrashKeyName("map_space", disambiguator),
     reinterpret_cast<uintptr_t>(heap->map_space()->first_page()));
-  platform->AddCrashKey(id, "code_space",
+  platform->AddCrashKey(BuildCrashKeyName("code_space", disambiguator),
     reinterpret_cast<uintptr_t>(heap->code_space()->first_page()));
 }
 
