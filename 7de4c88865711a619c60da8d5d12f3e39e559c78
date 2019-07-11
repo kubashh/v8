@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2926b56b_c860f4f3",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3307,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-07-11T21:55:28Z",
+      "side": 1,
+      "message": "Cannot say I like this... Another approach could be to keep appending new data to the existing key value, but I\u0027m not clear whether GetCrashKeyValue is OK to use in production and crash_logging doesn\u0027t implement it. All in all, I cannot find a graceful way to use crash keys in this scenario. Any other ideas?",
+      "range": {
+        "startLine": 3306,
+        "startChar": 0,
+        "endLine": 3307,
+        "endChar": 68
+      },
+      "revId": "7de4c88865711a619c60da8d5d12f3e39e559c78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
