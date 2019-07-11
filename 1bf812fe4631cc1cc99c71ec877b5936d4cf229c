@@ -16,6 +16,24 @@
       "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc80688b_e4f0e5d4",
+        "filename": "src/base/vlq-base64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-11T03:29:08Z",
+      "side": 1,
+      "message": "Hi Ben,\n\nAs this function will be called in later patchsets, I\u0027m not sure it is appropriate to leave VLQBase64Decode out of the header file. Could you give me further suggestions or inform me if I failed to catch your point?\n\nRegards,\nZhiguo",
+      "parentUuid": "a6034d70_d2af6129",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
