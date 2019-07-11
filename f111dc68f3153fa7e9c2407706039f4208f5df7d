@@ -176,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "bdbdd35c_eae730c9",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-11T18:04:10Z",
+      "side": 1,
+      "message": "I guess another way to look at this is it\u0027s a \"concatenating\" shuffle. We generate palignr instructions for this pattern and handle the problem you describe by switching the operands if necessary. A lazy way to implement ReplaceLane for two registers would be to generate an equivalent shuffle in instruction-selector-x64.c.",
+      "parentUuid": "57fed42c_ab0d091d",
+      "revId": "f111dc68f3153fa7e9c2407706039f4208f5df7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d1f02c39_d7476840",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 3
