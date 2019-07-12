@@ -3301,18 +3301,33 @@ bool Isolate::InitWithSnapshot(ReadOnlyDeserializer* read_only_deserializer,
 }
 
 static void AddCrashKeysForIsolateAndHeapPointers(Isolate* isolate) {
-  v8::Platform* platform = V8::GetCurrentPlatform();
+  static const char* key_names[] = {
+      "isolate:0",    "isolate:1",    "isolate:2",    "isolate:3",
+      "ro_space:0",   "ro_space:1",   "ro_space:2",   "ro_space:3",
+      "map_space:0",  "map_space:1",  "map_space:2",  "map_space:3",
+      "code_space:0", "code_space:1", "code_space:2", "code_space:3"};
+  static std::atomic<int> last{-1};
+  const int current = ++last;
 
-  const int id = isolate->id();
-  platform->AddCrashKey(id, "isolate", reinterpret_cast<uintptr_t>(isolate));
+  v8::Platform* platform = V8::GetCurrentPlatform();
+  if (current > 3) {
+    platform->AddCrashKey("isolates_count", current);
+    return;
+  }
+
+  platform->AddCrashKey(key_names[current],
+                        reinterpret_cast<uintptr_t>(isolate));
 
   auto heap = isolate->heap();
-  platform->AddCrashKey(id, "ro_space",
-    reinterpret_cast<uintptr_t>(heap->read_only_space()->first_page()));
-  platform->AddCrashKey(id, "map_space",
-    reinterpret_cast<uintptr_t>(heap->map_space()->first_page()));
-  platform->AddCrashKey(id, "code_space",
-    reinterpret_cast<uintptr_t>(heap->code_space()->first_page()));
+  platform->AddCrashKey(
+      key_names[current + 4],
+      reinterpret_cast<uintptr_t>(heap->read_only_space()->first_page()));
+  platform->AddCrashKey(
+      key_names[current + 8],
+      reinterpret_cast<uintptr_t>(heap->map_space()->first_page()));
+  platform->AddCrashKey(
+      key_names[current + 12],
+      reinterpret_cast<uintptr_t>(heap->code_space()->first_page()));
 }
 
 bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
