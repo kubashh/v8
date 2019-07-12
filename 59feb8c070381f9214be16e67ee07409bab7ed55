@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf797b35_aa20d9a5",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3320,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-07-12T09:08:48Z",
+      "side": 1,
+      "message": "How did this formatting make it past our upload hooks? Please run \"git cl format\" (and don\u0027t upload with --bypass-hooks in case you were doing that).",
+      "range": {
+        "startLine": 3320,
+        "startChar": 2,
+        "endLine": 3320,
+        "endChar": 4
+      },
+      "revId": "59feb8c070381f9214be16e67ee07409bab7ed55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
