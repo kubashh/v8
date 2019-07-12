@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea3f954a_c3fff84b",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-07-12T13:14:33Z",
+      "side": 1,
+      "message": "Isn\u0027t this true for private fields too?",
+      "range": {
+        "startLine": 908,
+        "startChar": 10,
+        "endLine": 908,
+        "endChar": 47
+      },
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b789478_055d674a",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-07-12T13:14:33Z",
+      "side": 1,
+      "message": "Please simplify this if statement, it\u0027s a bit hard to parse.",
+      "range": {
+        "startLine": 2085,
+        "startChar": 2,
+        "endLine": 2087,
+        "endChar": 54
+      },
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a0d933b_650741ca",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-07-12T13:14:33Z",
+      "side": 1,
+      "message": "nit: IsComplementaryAccessorPair",
+      "range": {
+        "startLine": 2329,
+        "startChar": 5,
+        "endLine": 2329,
+        "endChar": 20
+      },
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71d248da_0f1d7f45",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3032,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-07-12T13:14:33Z",
+      "side": 1,
+      "message": "Why do we need a hole check for this?",
+      "range": {
+        "startLine": 3032,
+        "startChar": 11,
+        "endLine": 3032,
+        "endChar": 48
+      },
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57bb069f_eadc7b0c",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5546,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-07-12T13:14:33Z",
+      "side": 1,
+      "message": "Please add more tests like with computed props that evaluate to the same name, nested in classes, object literals, etc",
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
