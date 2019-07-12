@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7b359f_440e842a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-07-12T13:02:40Z",
+      "side": 1,
+      "message": "Add [test] tag to beginning",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 3
+      },
+      "revId": "c808c9f1a8e44227444607079db2e0e86e0e7809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3df1842_1fc9d6b6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-07-12T13:02:40Z",
+      "side": 1,
+      "message": "delete this?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 35
+      },
+      "revId": "c808c9f1a8e44227444607079db2e0e86e0e7809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
