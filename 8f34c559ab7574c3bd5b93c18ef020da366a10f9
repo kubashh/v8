@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c718adf_4601cc6b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T10:10:21Z",
+      "side": 1,
+      "message": "Please include a short description of the problem, and how the output changes with this CL.",
+      "revId": "8f34c559ab7574c3bd5b93c18ef020da366a10f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
