@@ -2,6 +2,195 @@
   "comments": [
     {
       "key": {
+        "uuid": "193e9ba0_d01b4cea",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T08:01:59Z",
+      "side": 1,
+      "message": "Please make this array const (or even better constexpr), and name it kCharToDigit.",
+      "range": {
+        "startLine": 13,
+        "startChar": 15,
+        "endLine": 13,
+        "endChar": 26
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "662fe77a_ca0235f2",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T08:01:59Z",
+      "side": 1,
+      "message": "Why int16_t? Looks like we can save half of the space by making it int8_t.",
+      "range": {
+        "startLine": 13,
+        "startChar": 7,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abc38a70_000e4869",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T08:01:59Z",
+      "side": 1,
+      "message": "nit: the chromium style guide prefers unnamed namespaces over static definitions.",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4db95b9_f0e2514d",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T08:01:59Z",
+      "side": 1,
+      "message": "Same here (and in charToDigitDecodeForTesting): Should return int8_t.",
+      "range": {
+        "startLine": 26,
+        "startChar": 7,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f1f8255_6f68741b",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T08:01:59Z",
+      "side": 1,
+      "message": "Please be consistent in the used types. These should be uint32_t IIANM.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 23
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8c517fa_e3afbda1",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T08:01:59Z",
+      "side": 1,
+      "message": "Same here: int32_t.",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "220d5b49_9db620a6",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T08:01:59Z",
+      "side": 1,
+      "message": "Why is this stored in a local variable instead of being used in a conditional directly? Since digit is not modified below, you could just have a \"if ((digit \u0026 CONTINUE_MASK) \u003d\u003d 0) { return ... }\" at the end of the loop, and make it a \"while (true)\" loop.",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f3d9557_470ab221",
+        "filename": "src/base/vlq-base64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T08:01:59Z",
+      "side": 1,
+      "message": "unsigned char is banned by the style guide. Please use a plain char, or uint8_t.",
+      "range": {
+        "startLine": 14,
+        "startChar": 51,
+        "endLine": 14,
+        "endChar": 64
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3e2e6d4_a7a0a0b8",
+        "filename": "src/base/vlq-base64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T08:01:59Z",
+      "side": 1,
+      "message": "Please format this comment correctly by adding dots after each sentence.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 9
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a6034d70_d2af6129",
         "filename": "src/base/vlq-base64.h",
         "patchSetId": 5
@@ -49,6 +238,40 @@
       "side": 1,
       "message": "Whoops, sorry, scanned too fast. This is, of course, the main function exported, so it\u0027s fine. (brain saw charToDigitDecode() instead).",
       "parentUuid": "bc80688b_e4f0e5d4",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c2c927c_2a1f0460",
+        "filename": "src/base/vlq-base64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T08:01:59Z",
+      "side": 1,
+      "message": "Are you sure that this is the best interface for a general implementation in src/base? I could imagine that future users do not always store the data in a std::string. What about passing {char** start, char* end}, or something similar?",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "171550e7_66e66235",
+        "filename": "test/unittests/base/vlq-base64-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-12T08:01:59Z",
+      "side": 1,
+      "message": "Maybe also test a few invalid digits, or even all of them? Every char which is not contained in {syms} (can be tested with strchr) should return -1. This can be tested in one loop:\n\nfor (int i \u003d 0; i \u003c 256; ++i) {\n  char* pos \u003d strchr(kSyms, static_cast\u003cchar\u003e(i));\n  int expected \u003d i \u003d\u003d 0 || pos \u003d\u003d nullptr ? -1 : pos - kSyms;\n  DCHECK_EQ(expected, charToDigitDecodeForTesting(static_cast\u003cuint8_t\u003e(i)));\n}",
       "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
