@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e34aee09_94ed46f2",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-07-15T16:16:29Z",
+      "side": 1,
+      "message": "hmm, I guess we\u0027d need to waste an extra bit on the Variable to store if it\u0027s a private field. I think this is fine for now.",
+      "parentUuid": "9850ef5e_f9c64bea",
+      "range": {
+        "startLine": 908,
+        "startChar": 10,
+        "endLine": 908,
+        "endChar": 47
+      },
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b789478_055d674a",
         "filename": "src/ast/scopes.cc",
         "patchSetId": 3
@@ -219,6 +243,24 @@
       "side": 1,
       "message": "I think the object literal cases are covered by `PrivateMembersInNonClassNoErrors` below (which seems to be named incorrectly because it is testing errors). I will add more other cases.",
       "parentUuid": "57bb069f_eadc7b0c",
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32e76206_18578e2d",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5546,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-07-15T16:16:29Z",
+      "side": 1,
+      "message": "What about tests for nested classes that have the same name getter/setter pairs? Tests for classes that use getters/setters that are not declared?",
+      "parentUuid": "a4573179_1e1577c5",
       "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
