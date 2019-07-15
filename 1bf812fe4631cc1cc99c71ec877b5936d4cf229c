@@ -65,6 +65,72 @@
     },
     {
       "key": {
+        "uuid": "fd053ab4_46a091e1",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-15T12:42:02Z",
+      "side": 1,
+      "message": "Refined in patchset 6. Thanks!",
+      "parentUuid": "193e9ba0_d01b4cea",
+      "range": {
+        "startLine": 13,
+        "startChar": 15,
+        "endLine": 13,
+        "endChar": 26
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b7b4b19_dbbe5f6f",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-15T12:42:02Z",
+      "side": 1,
+      "message": "After reconsidering, I think you\u0027re right. int8_t table is safe and save space. Thanks!",
+      "parentUuid": "662fe77a_ca0235f2",
+      "range": {
+        "startLine": 13,
+        "startChar": 7,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "743bad49_4670d192",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-15T12:42:02Z",
+      "side": 1,
+      "message": "In patchset 6, I have put this table, and the following static function in anonymous namespace. Thanks for your suggestion.",
+      "parentUuid": "abc38a70_000e4869",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f4db95b9_f0e2514d",
         "filename": "src/base/vlq-base64.cc",
         "patchSetId": 5
@@ -76,6 +142,30 @@
       "writtenOn": "2019-07-12T08:01:59Z",
       "side": 1,
       "message": "Same here (and in charToDigitDecodeForTesting): Should return int8_t.",
+      "range": {
+        "startLine": 26,
+        "startChar": 7,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c424730_1023035d",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-15T12:42:02Z",
+      "side": 1,
+      "message": "Modified in patchset 6. Thanks.",
+      "parentUuid": "f4db95b9_f0e2514d",
       "range": {
         "startLine": 26,
         "startChar": 7,
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "b9caae07_06283caa",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-15T12:42:02Z",
+      "side": 1,
+      "message": "Modified in patchset 6. Thanks.",
+      "parentUuid": "0f1f8255_6f68741b",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 23
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8c517fa_e3afbda1",
         "filename": "src/base/vlq-base64.cc",
         "patchSetId": 5
@@ -128,6 +242,24 @@
     },
     {
       "key": {
+        "uuid": "ababcf4e_a4888bb5",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-15T12:42:02Z",
+      "side": 1,
+      "message": "Modified in patchset 6. Thanks.",
+      "parentUuid": "c8c517fa_e3afbda1",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "220d5b49_9db620a6",
         "filename": "src/base/vlq-base64.cc",
         "patchSetId": 5
@@ -139,6 +271,24 @@
       "writtenOn": "2019-07-12T08:01:59Z",
       "side": 1,
       "message": "Why is this stored in a local variable instead of being used in a conditional directly? Since digit is not modified below, you could just have a \"if ((digit \u0026 CONTINUE_MASK) \u003d\u003d 0) { return ... }\" at the end of the loop, and make it a \"while (true)\" loop.",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4717f71_fbdb6ff6",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-15T12:42:02Z",
+      "side": 1,
+      "message": "Thanks for your comment, this local variable is indeed redundant. Based on your suggestion, I rewrote it with a do-while loop, does it meet our requirement? Thanks!",
+      "parentUuid": "220d5b49_9db620a6",
       "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -168,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "c5c176f2_e536a971",
+        "filename": "src/base/vlq-base64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-15T12:42:02Z",
+      "side": 1,
+      "message": "Thanks for notification, I\u0027ve changed it to uint8_t in patchset 6.",
+      "parentUuid": "6f3d9557_470ab221",
+      "range": {
+        "startLine": 14,
+        "startChar": 51,
+        "endLine": 14,
+        "endChar": 64
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d3e2e6d4_a7a0a0b8",
         "filename": "src/base/vlq-base64.h",
         "patchSetId": 5
@@ -179,6 +353,30 @@
       "writtenOn": "2019-07-12T08:01:59Z",
       "side": 1,
       "message": "Please format this comment correctly by adding dots after each sentence.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 9
+      },
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37d20fd9_4cb225eb",
+        "filename": "src/base/vlq-base64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-15T12:42:02Z",
+      "side": 1,
+      "message": "Reformatted in patchset 6. Thanks!",
+      "parentUuid": "d3e2e6d4_a7a0a0b8",
       "range": {
         "startLine": 16,
         "startChar": 0,
@@ -261,6 +459,24 @@
     },
     {
       "key": {
+        "uuid": "71c451f1_b8da585b",
+        "filename": "src/base/vlq-base64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-15T12:42:02Z",
+      "side": 1,
+      "message": "I agree with you that C-style string is more proper, and here I\u0027d like to pass base address (const char*) and length (size_t sz) of the string, is it acceptable?",
+      "parentUuid": "7c2c927c_2a1f0460",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "171550e7_66e66235",
         "filename": "test/unittests/base/vlq-base64-unittest.cc",
         "patchSetId": 5
@@ -272,6 +488,24 @@
       "writtenOn": "2019-07-12T08:01:59Z",
       "side": 1,
       "message": "Maybe also test a few invalid digits, or even all of them? Every char which is not contained in {syms} (can be tested with strchr) should return -1. This can be tested in one loop:\n\nfor (int i \u003d 0; i \u003c 256; ++i) {\n  char* pos \u003d strchr(kSyms, static_cast\u003cchar\u003e(i));\n  int expected \u003d i \u003d\u003d 0 || pos \u003d\u003d nullptr ? -1 : pos - kSyms;\n  DCHECK_EQ(expected, charToDigitDecodeForTesting(static_cast\u003cuint8_t\u003e(i)));\n}",
+      "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33171bd8_67f60359",
+        "filename": "test/unittests/base/vlq-base64-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-15T12:42:02Z",
+      "side": 1,
+      "message": "Your solution is much more complete. I have merged it into patchset 6. Thanks for your help!",
+      "parentUuid": "171550e7_66e66235",
       "revId": "1bf812fe4631cc1cc99c71ec877b5936d4cf229c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
