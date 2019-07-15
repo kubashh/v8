@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6dc5a24_acbdd070",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3323,
+      "author": {
+        "id": 1144624
+      },
+      "writtenOn": "2019-07-15T20:23:22Z",
+      "side": 1,
+      "message": "Hard-coded offsets seem undesirable from a maintenance perspective. I\u0027d recommend separate arrays for each batch.",
+      "range": {
+        "startLine": 3323,
+        "startChar": 24,
+        "endLine": 3323,
+        "endChar": 27
+      },
+      "revId": "d5e1658af725c7750abd425d90ef5c9a9e500349",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
