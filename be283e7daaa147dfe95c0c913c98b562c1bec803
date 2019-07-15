@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9850ef5e_f9c64bea",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-07-15T11:18:03Z",
+      "side": 1,
+      "message": "Yeah, but do we have a way to check those as well? Is it safe to e.g. assume that any name starting with # declares a private name and check that is not true here?",
+      "parentUuid": "ea3f954a_c3fff84b",
+      "range": {
+        "startLine": 908,
+        "startChar": 10,
+        "endLine": 908,
+        "endChar": 47
+      },
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8b789478_055d674a",
         "filename": "src/ast/scopes.cc",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb9ed3ea_86262e5d",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-07-15T11:18:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b789478_055d674a",
+      "range": {
+        "startLine": 2085,
+        "startChar": 2,
+        "endLine": 2087,
+        "endChar": 54
+      },
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e59070d8_e1a858c2",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-07-15T11:18:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a0d933b_650741ca",
+      "range": {
+        "startLine": 2329,
+        "startChar": 5,
+        "endLine": 2329,
+        "endChar": 20
+      },
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71d248da_0f1d7f45",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "6cc03837_19e35796",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3032,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-07-15T11:18:03Z",
+      "side": 1,
+      "message": "Right, now looking at this again, we should probably DCHECK the opposite instead. The hole check for the private name variables are always elided.",
+      "parentUuid": "71d248da_0f1d7f45",
+      "range": {
+        "startLine": 3032,
+        "startChar": 11,
+        "endLine": 3032,
+        "endChar": 48
+      },
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57bb069f_eadc7b0c",
         "filename": "test/cctest/test-parsing.cc",
         "patchSetId": 3
@@ -108,6 +204,24 @@
       "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4573179_1e1577c5",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5546,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-07-15T11:18:03Z",
+      "side": 1,
+      "message": "I think the object literal cases are covered by `PrivateMembersInNonClassNoErrors` below (which seems to be named incorrectly because it is testing errors). I will add more other cases.",
+      "parentUuid": "57bb069f_eadc7b0c",
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
