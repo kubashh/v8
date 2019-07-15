@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cd6e423_c7574410",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-15T14:55:33Z",
+      "side": 1,
+      "message": "These are constants, please name them accordingly (kFoo).",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 49
+      },
+      "revId": "31b6b0f45984330cebc3b9365e5c2384831d595b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c0cfbbd_b5779d4f",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-15T14:55:33Z",
+      "side": 1,
+      "message": "This condition is still hard to understand. What about this:\n\nbool is_last_byte \u003d (shift + continue_shift \u003e\u003d 32);\nif (digit \u003d\u003d -1 || (is_last_byte \u0026\u0026 (digit \u003e\u003e 2) !\u003d 0)) {\n  ...",
+      "revId": "31b6b0f45984330cebc3b9365e5c2384831d595b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07c65f1d_30b65bed",
+        "filename": "test/unittests/base/vlq-base64-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-15T14:55:33Z",
+      "side": 1,
+      "message": "All these \"strlen\" invocations make it hard to maintain this test.\nWhat about a small helper like this:\n\nvoid TestVLQBase64Decode(char* str, int32_t expect_result, int expect_len) {\n  size_t pos \u003d 0;\n  int32_t result \u003d VLQBase64Decode(str, strlen(str), \u0026pos);\n  EXPECT_EQ(expect_result, result);\n  EXPECT_EQ(expect_len, pos);\n}\n\nThe whole test would just be invocations of this function then.",
+      "revId": "31b6b0f45984330cebc3b9365e5c2384831d595b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
