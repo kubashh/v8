@@ -282,6 +282,24 @@
       "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69b211d5_a91fc3ab",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5546,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-07-15T21:59:16Z",
+      "side": 1,
+      "message": "\u003e Tests for classes that use getters/setters that are not declared?\n\nAs far as the site of access goes, the kind of the private name does not make a difference right? It\u0027s either `obj.#foo` or `obj.#foo \u003d 1`, and the early error happens as long as `#foo` is not declared - it passes if `#foo` is declared with a wrong type. So it should currently be a parser test.\n\nThe test for the kind currently should result in runtime errors according to the spec so that should be a mjsunit test for the follow-up patch that implements the runtime semantics?",
+      "parentUuid": "d9846a72_328f8e7a",
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
