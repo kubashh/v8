@@ -385,7 +385,7 @@ void LiftoffAssembler::PopRegisters(LiftoffRegList regs) {
   bailout(kUnsupportedArchitecture, "PopRegisters");
 }
 
-void LiftoffAssembler::DropStackSlotsAndRet(uint32_t num_stack_slots) {
+void LiftoffAssembler::DropStackSlotsAndRet(int num_stack_slots) {
   bailout(kUnsupportedArchitecture, "DropStackSlotsAndRet");
 }
 

@@ -114,6 +114,35 @@ compiler::CallDescriptor* GetLoweredCallDescriptor(
              : call_desc;
 }
 
+int GetNumberOfParamStackSlots(FunctionSig* sig) {
+  LinkageAllocator linkage(kGpParamRegisters, kFpParamRegisters);
+  auto add_reg = [&linkage](ValueType type) {
+    RegClass rc = reg_class_for(type);
+    if (kNeedI64RegPair && rc == kGpRegPair && linkage.CanAllocateGP()) {
+      linkage.NextGpReg();
+      type = kWasmI32;
+      rc = kGpReg;
+    }
+    if (rc == kGpReg && linkage.CanAllocateGP()) {
+      linkage.NextGpReg();
+      return;
+    }
+    MachineRepresentation mach_rep = ValueTypes::MachineRepresentationFor(type);
+    if (rc == kFpReg && linkage.CanAllocateFP(mach_rep)) {
+      linkage.NextFpReg(mach_rep);
+      return;
+    }
+    linkage.NextStackSlot(mach_rep);
+  };
+  // Add instance parameter.
+  add_reg(LiftoffAssembler::kWasmIntPtr);
+  // Add actual parameters.
+  for (wasm::ValueType type : sig->parameters()) {
+    add_reg(type);
+  }
+  return linkage.NumStackSlots();
+}
+
 constexpr ValueType kSupportedTypesArr[] = {kWasmI32, kWasmI64, kWasmF32,
                                             kWasmF64};
 constexpr Vector<const ValueType> kSupportedTypes =
@@ -164,13 +193,11 @@ class LiftoffCompiler {
     }
   };
 
-  LiftoffCompiler(compiler::CallDescriptor* call_descriptor,
-                  CompilationEnv* env, Zone* compilation_zone,
+  LiftoffCompiler(FunctionSig* sig, CompilationEnv* env, Zone* compilation_zone,
                   std::unique_ptr<AssemblerBuffer> buffer)
       : asm_(std::move(buffer)),
-        descriptor_(
-            GetLoweredCallDescriptor(compilation_zone, call_descriptor)),
         env_(env),
+        num_stack_params_(GetNumberOfParamStackSlots(sig)),
         compilation_zone_(compilation_zone),
         safepoint_table_builder_(compilation_zone_) {}
 
@@ -274,8 +301,38 @@ class LiftoffCompiler {
     }
   }
 
-  // Returns the number of inputs processed (1 or 2).
-  uint32_t ProcessParameter(ValueType type, uint32_t input_idx) {
+  LiftoffRegList CollectReservedRegsForParameters(FunctionSig* sig) {
+    LiftoffRegList param_regs;
+    LinkageAllocator linkage(kGpParamRegisters, kFpParamRegisters);
+    auto add_gp_reg = [&param_regs, &linkage] {
+      if (!linkage.CanAllocateGP()) return;
+      Register reg = Register::from_code(linkage.NextGpReg());
+      if (kLiftoffAssemblerGpCacheRegs & reg.bit()) param_regs.set(reg);
+    };
+
+    // Add parameter of the instance object.
+    add_gp_reg();
+
+    for (ValueType type : sig->parameters()) {
+      RegClass rc = reg_class_for(type);
+      if (kNeedI64RegPair && rc == kGpRegPair) {
+        add_gp_reg();
+        add_gp_reg();
+      } else if (rc == kGpReg) {
+        add_gp_reg();
+      } else {
+        MachineRepresentation mach_rep =
+            ValueTypes::MachineRepresentationFor(type);
+        if (!linkage.CanAllocateFP(mach_rep)) continue;
+        DoubleRegister reg =
+            DoubleRegister::from_code(linkage.NextFpReg(mach_rep));
+        if (kLiftoffAssemblerGpCacheRegs & reg.bit()) param_regs.set(reg);
+      }
+    }
+    return param_regs;
+  }
+
+  void ProcessParameter(ValueType type, LinkageAllocator* linkage) {
     const int num_lowered_params = 1 + needs_reg_pair(type);
     ValueType lowered_type = needs_reg_pair(type) ? kWasmI32 : type;
     RegClass rc = reg_class_for(lowered_type);
@@ -283,51 +340,42 @@ class LiftoffCompiler {
     LiftoffRegister reg = kGpCacheRegList.GetFirstRegSet();
     LiftoffRegList pinned;
     for (int pair_idx = 0; pair_idx < num_lowered_params; ++pair_idx) {
-      compiler::LinkageLocation param_loc =
-          descriptor_->GetInputLocation(input_idx + pair_idx);
       // Initialize to anything, will be set in both arms of the if.
-      LiftoffRegister in_reg = kGpCacheRegList.GetFirstRegSet();
-      if (param_loc.IsRegister()) {
-        DCHECK(!param_loc.IsAnyRegister());
-        int reg_code = param_loc.AsRegister();
-#if V8_TARGET_ARCH_ARM
-        // Liftoff assumes a one-to-one mapping between float registers and
-        // double registers, and so does not distinguish between f32 and f64
-        // registers. The f32 register code must therefore be halved in order to
-        // pass the f64 code to Liftoff.
-        DCHECK_IMPLIES(type == kWasmF32, (reg_code % 2) == 0);
-        if (type == kWasmF32) {
-          reg_code /= 2;
-        }
-#endif
-        RegList cache_regs = rc == kGpReg ? kLiftoffAssemblerGpCacheRegs
-                                          : kLiftoffAssemblerFpCacheRegs;
-        if (cache_regs & (1ULL << reg_code)) {
+      LiftoffRegister param_reg = kGpCacheRegList.GetFirstRegSet();
+      if (rc == kGpReg && linkage->CanAllocateGP()) {
+        Register in_reg = Register::from_code(linkage->NextGpReg());
+        if (kLiftoffAssemblerGpCacheRegs & in_reg.bit()) {
           // This is a cache register, just use it.
-          in_reg = LiftoffRegister::from_code(rc, reg_code);
+          param_reg = LiftoffRegister(in_reg);
         } else {
           // Move to a cache register (spill one if necessary).
-          // Note that we cannot create a {LiftoffRegister} for reg_code, since
-          // {LiftoffRegister} can only store cache regs.
-          in_reg = __ GetUnusedRegister(rc, pinned);
-          if (rc == kGpReg) {
-            __ Move(in_reg.gp(), Register::from_code(reg_code), lowered_type);
-          } else {
-            __ Move(in_reg.fp(), DoubleRegister::from_code(reg_code),
-                    lowered_type);
-          }
+          param_reg = __ GetUnusedRegister(kGpReg, pinned);
+          __ Move(param_reg.gp(), in_reg, type);
         }
-      } else if (param_loc.IsCallerFrameSlot()) {
-        in_reg = __ GetUnusedRegister(rc, pinned);
-        __ LoadCallerFrameSlot(in_reg, -param_loc.AsCallerFrameSlot(),
-                               lowered_type);
+      } else if (rc == kFpReg &&
+                 linkage->CanAllocateFP(
+                     ValueTypes::MachineRepresentationFor(type))) {
+        DoubleRegister in_reg = DoubleRegister::from_code(
+            linkage->NextFpReg(ValueTypes::MachineRepresentationFor(type)));
+        if (kLiftoffAssemblerFpCacheRegs & in_reg.bit()) {
+          // This is a cache register, just use it.
+          param_reg = LiftoffRegister(in_reg);
+        } else {
+          // Move to a cache register (spill one if necessary).
+          param_reg = __ GetUnusedRegister(kFpReg, pinned);
+          __ Move(param_reg.fp(), in_reg, type);
+        }
+      } else {
+        int stack_slot = linkage->NextStackSlot(
+            ValueTypes::MachineRepresentationFor(lowered_type));
+        param_reg = __ GetUnusedRegister(rc, pinned);
+        __ LoadCallerFrameSlot(param_reg, stack_slot, lowered_type);
       }
-      reg = pair_idx == 0 ? in_reg
-                          : LiftoffRegister::ForPair(reg.gp(), in_reg.gp());
+      reg = pair_idx == 0 ? param_reg
+                          : LiftoffRegister::ForPair(reg.gp(), param_reg.gp());
       pinned.set(reg);
     }
     __ PushRegister(type, reg);
-    return num_lowered_params;
   }
 
   void StackCheck(WasmCodePosition position) {
@@ -348,19 +396,11 @@ class LiftoffCompiler {
         return;
     }
 
-    // Input 0 is the call target, the instance is at 1.
-    constexpr int kInstanceParameterIndex = 1;
     // Store the instance parameter to a special stack slot.
-    compiler::LinkageLocation instance_loc =
-        descriptor_->GetInputLocation(kInstanceParameterIndex);
-    DCHECK(instance_loc.IsRegister());
-    DCHECK(!instance_loc.IsAnyRegister());
-    Register instance_reg = Register::from_code(instance_loc.AsRegister());
-    DCHECK_EQ(kWasmInstanceRegister, instance_reg);
-
-    // Parameter 0 is the instance parameter.
-    uint32_t num_params =
-        static_cast<uint32_t>(decoder->sig_->parameter_count());
+    static_assert(arraysize(kGpParamRegisters) >= 1, ">= 1 gp param reg");
+    constexpr Register kInstanceReg = kGpParamRegisters[0];
+    static_assert(kWasmInstanceRegister == kInstanceReg,
+                  "inconsistent kWasmInstanceRegister");
 
     __ EnterFrame(StackFrame::WASM_COMPILED);
     __ set_has_frame(true);
@@ -373,18 +413,23 @@ class LiftoffCompiler {
     // LiftoffAssembler methods.
     if (DidAssemblerBailout(decoder)) return;
 
-    __ SpillInstance(instance_reg);
-    // Input 0 is the code target, 1 is the instance. First parameter at 2.
-    uint32_t input_idx = kInstanceParameterIndex + 1;
-    for (uint32_t param_idx = 0; param_idx < num_params; ++param_idx) {
-      input_idx += ProcessParameter(__ local_type(param_idx), input_idx);
+    __ SpillInstance(kInstanceReg);
+    LinkageAllocator linkage(kGpParamRegisters, kFpParamRegisters);
+    // Skip instance parameter.
+    if (linkage.CanAllocateGP()) {
+      linkage.NextGpReg();
+    } else {
+      linkage.NextStackSlot(MachineRepresentation::kTaggedPointer);
     }
-    DCHECK_EQ(input_idx, descriptor_->InputCount());
+    for (ValueType type : decoder->sig_->parameters()) {
+      ProcessParameter(type, &linkage);
+    }
     // Set to a gp register, to mark this uninitialized.
     LiftoffRegister zero_double_reg = kGpCacheRegList.GetFirstRegSet();
     DCHECK(zero_double_reg.is_gp());
-    for (uint32_t param_idx = num_params; param_idx < __ num_locals();
-         ++param_idx) {
+    for (uint32_t param_idx =
+             static_cast<uint32_t>(decoder->sig_->parameter_count());
+         param_idx < __ num_locals(); ++param_idx) {
       ValueType type = decoder->GetLocalType(param_idx);
       switch (type) {
         case kWasmI32:
@@ -436,8 +481,7 @@ class LiftoffCompiler {
       DCHECK(!is_stack_check);
       __ CallTrapCallbackForTesting();
       __ LeaveFrame(StackFrame::WASM_COMPILED);
-      __ DropStackSlotsAndRet(
-          static_cast<uint32_t>(descriptor_->StackParameterCount()));
+      __ DropStackSlotsAndRet(num_stack_params_);
       return;
     }
 
@@ -1216,8 +1260,7 @@ class LiftoffCompiler {
     }
     if (num_returns > 0) __ MoveToReturnRegisters(decoder->sig_);
     __ LeaveFrame(StackFrame::WASM_COMPILED);
-    __ DropStackSlotsAndRet(
-        static_cast<uint32_t>(descriptor_->StackParameterCount()));
+    __ DropStackSlotsAndRet(num_stack_params_);
   }
 
   void DoReturn(FullDecoder* decoder, Vector<Value> /*values*/) {
@@ -2051,9 +2094,9 @@ class LiftoffCompiler {
 
  private:
   LiftoffAssembler asm_;
-  compiler::CallDescriptor* const descriptor_;
   CompilationEnv* const env_;
   LiftoffBailoutReason bailout_reason_ = kSuccess;
+  const int num_stack_params_;
   std::vector<OutOfLineCode> out_of_line_code_;
   SourcePositionTableBuilder source_position_table_builder_;
   std::vector<trap_handler::ProtectedInstructionData> protected_instructions_;
@@ -2107,8 +2150,8 @@ WasmCompilationResult ExecuteLiftoffCompilation(AccountingAllocator* allocator,
   std::unique_ptr<wasm::WasmInstructionBuffer> instruction_buffer =
       wasm::WasmInstructionBuffer::New();
   WasmFullDecoder<Decoder::kValidate, LiftoffCompiler> decoder(
-      &zone, module, env->enabled_features, detected, func_body,
-      call_descriptor, env, &zone, instruction_buffer->CreateView());
+      &zone, module, env->enabled_features, detected, func_body, func_body.sig,
+      env, &zone, instruction_buffer->CreateView());
   decoder.Decode();
   liftoff_compile_time_scope.reset();
   LiftoffCompiler* compiler = &decoder.interface();
