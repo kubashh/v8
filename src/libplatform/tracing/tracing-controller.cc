@@ -92,6 +92,7 @@ void TracingController::InitializeForPerfetto(std::ostream* output_stream) {
   output_stream_ = output_stream;
   DCHECK_NOT_NULL(output_stream);
   DCHECK(output_stream->good());
+  mutex_.reset(new base::Mutex());
 }
 
 void TracingController::SetTraceEventListenerForTesting(
@@ -216,7 +217,8 @@ uint64_t TracingController::AddTraceEventWithTimestamp(
       AddArgsToTraceProto(trace_event, num_args, arg_names, arg_types,
                           arg_values, arg_convertables);
     });
-#endif  // V8_USE_PERFETTO
+    return 0;
+#else
 
   uint64_t handle = 0;
   if (recording_.load(std::memory_order_acquire)) {
@@ -232,6 +234,7 @@ uint64_t TracingController::AddTraceEventWithTimestamp(
     }
   }
   return handle;
+#endif  // V8_USE_PERFETTO
 }
 
 void TracingController::UpdateTraceEventDuration(
@@ -251,11 +254,12 @@ void TracingController::UpdateTraceEventDuration(
     trace_event->set_process_id(base::OS::GetCurrentProcessId());
     trace_event->set_thread_timestamp(cpu_now_us);
   });
-#endif  // V8_USE_PERFETTO
+#else
 
   TraceObject* trace_object = trace_buffer_->GetEventByHandle(handle);
   if (!trace_object) return;
   trace_object->UpdateDuration(now_us, cpu_now_us);
+#endif  // V8_USE_PERFETTO
 }
 
 const char* TracingController::GetCategoryGroupName(
@@ -317,7 +321,6 @@ void TracingController::StopTracing() {
   if (!recording_.compare_exchange_strong(expected, false)) {
     return;
   }
-  DCHECK(trace_buffer_);
   UpdateCategoryGroupEnabledFlags();
   std::unordered_set<v8::TracingController::TraceStateObserver*> observers_copy;
   {
@@ -339,13 +342,14 @@ void TracingController::StopTracing() {
   if (listener_for_testing_) listener_for_testing_->ParseFromArray(trace);
 
   json_listener_.reset();
-
-#endif  // V8_USE_PERFETTO
+#else
 
   {
     base::MutexGuard lock(mutex_.get());
+    DCHECK(trace_buffer_);
     trace_buffer_->Flush();
   }
+#endif  // V8_USE_PERFETTO
 }
 
 void TracingController::UpdateCategoryGroupEnabledFlag(size_t category_index) {
