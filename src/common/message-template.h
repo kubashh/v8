@@ -574,7 +574,8 @@ namespace internal {
     "FinalizationGroup.prototype.register: target and holdings must not be "   \
     "same")                                                                    \
   T(WeakRefsWeakRefConstructorTargetMustBeObject,                              \
-    "WeakRef: target must be an object")
+    "WeakRef: target must be an object")                                       \
+  T(TooManyProperties, "Too many properties to enumerate")
 
 enum class MessageTemplate {
 #define TEMPLATE(NAME, STRING) k##NAME,
