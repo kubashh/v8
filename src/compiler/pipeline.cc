@@ -539,7 +539,8 @@ class PipelineImpl final {
 
   // Step C. Run the code assembly pass.
   void AssembleCode(Linkage* linkage,
-                    std::unique_ptr<AssemblerBuffer> buffer = {});
+                    std::unique_ptr<AssemblerBuffer> buffer = {},
+                    bool hard_abort = false);
 
   // Step D. Run the code finalization pass.
   MaybeHandle<Code> FinalizeCode(bool retire_broker = true);
@@ -549,7 +550,8 @@ class PipelineImpl final {
 
   void VerifyGeneratedCodeIsIdempotent();
   void RunPrintAndVerify(const char* phase, bool untyped = false);
-  bool SelectInstructionsAndAssemble(CallDescriptor* call_descriptor);
+  bool SelectInstructionsAndAssemble(CallDescriptor* call_descriptor,
+                                     bool hard_abort = false);
   MaybeHandle<Code> GenerateCode(CallDescriptor* call_descriptor);
   void AllocateRegisters(const RegisterConfiguration* config,
                          CallDescriptor* call_descriptor, bool run_verifier);
@@ -1137,7 +1139,10 @@ CompilationJob::Status WasmHeapStubCompilationJob::ExecuteJobImpl() {
   }
   pipeline_.RunPrintAndVerify("V8.WasmMachineCode", true);
   pipeline_.ComputeScheduledGraph();
-  if (pipeline_.SelectInstructionsAndAssemble(call_descriptor_)) {
+  // Use hard abort instead of the abort builtin. The latter is accessed
+  // through the isolate which might die during background compilation.
+  constexpr bool hard_abort = true;
+  if (pipeline_.SelectInstructionsAndAssemble(call_descriptor_, hard_abort)) {
     return CompilationJob::SUCCEEDED;
   }
   return CompilationJob::FAILED;
@@ -2884,12 +2889,17 @@ std::ostream& operator<<(std::ostream& out, const InstructionStartsAsJSON& s) {
 }
 
 void PipelineImpl::AssembleCode(Linkage* linkage,
-                                std::unique_ptr<AssemblerBuffer> buffer) {
+                                std::unique_ptr<AssemblerBuffer> buffer,
+                                bool hard_abort) {
   PipelineData* data = this->data_;
   data->BeginPhaseKind("V8.TFCodeGeneration");
   data->InitializeCodeGenerator(linkage, std::move(buffer));
-
-  Run<AssembleCodePhase>();
+  if (hard_abort) {
+    HardAbortScope hard_abort(data->code_generator()->tasm());
+    Run<AssembleCodePhase>();
+  } else {
+    Run<AssembleCodePhase>();
+  }
   if (data->info()->trace_turbo_json_enabled()) {
     TurboJsonFile json_of(data->info(), std::ios_base::app);
     json_of << "{\"name\":\"code generation\""
@@ -2974,14 +2984,14 @@ MaybeHandle<Code> PipelineImpl::FinalizeCode(bool retire_broker) {
 }
 
 bool PipelineImpl::SelectInstructionsAndAssemble(
-    CallDescriptor* call_descriptor) {
+    CallDescriptor* call_descriptor, bool hard_abort) {
   Linkage linkage(call_descriptor);
 
   // Perform instruction selection and register allocation.
   if (!SelectInstructions(&linkage)) return false;
 
   // Generate the final machine code.
-  AssembleCode(&linkage);
+  AssembleCode(&linkage, {}, hard_abort);
   return true;
 }
 
