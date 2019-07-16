@@ -1296,8 +1296,7 @@ class RepresentationSelector {
     if (base_taggedness == kTaggedBase &&
         CanBeTaggedOrCompressedPointer(field_representation)) {
       Type value_type = NodeProperties::GetType(value);
-      if (value_representation == MachineRepresentation::kTaggedSigned ||
-          value_representation == MachineRepresentation::kCompressedSigned) {
+      if (value_representation == MachineType::RepCompressedTaggedSigned()) {
         // Write barriers are only for stores of heap objects.
         return kNoWriteBarrier;
       }
@@ -1318,10 +1317,8 @@ class RepresentationSelector {
           }
         }
       }
-      if (field_representation == MachineRepresentation::kTaggedPointer ||
-          value_representation == MachineRepresentation::kTaggedPointer ||
-          field_representation == MachineRepresentation::kCompressedPointer ||
-          value_representation == MachineRepresentation::kCompressedPointer) {
+      if (field_representation == MachineType::RepCompressedTaggedPointer() ||
+          value_representation == MachineType::RepCompressedTaggedPointer()) {
         // Write barriers for heap objects are cheaper.
         return kPointerWriteBarrier;
       }
