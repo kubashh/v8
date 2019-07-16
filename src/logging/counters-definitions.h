@@ -91,7 +91,9 @@ namespace internal {
   HR(wasm_module_num_triggered_code_gcs,                                       \
      V8.WasmModuleNumberOfCodeGCsTriggered, 1, 128, 20)                        \
   /* bailout reason if Liftoff failed, or {kSuccess} (per function) */         \
-  HR(liftoff_bailout_reasons, V8.LiftoffBailoutReasons, 0, 20, 21)
+  HR(liftoff_bailout_reasons, V8.LiftoffBailoutReasons, 0, 20, 21)             \
+  /* number of code spaces reserved per wasm module */                         \
+  HR(wasm_module_num_code_spaces, V8.WasmModuleNumberOfCodeSpaces, 1, 128, 20)
 
 #define HISTOGRAM_TIMER_LIST(HT)                                               \
   /* Timer histograms, not thread safe: HT(name, caption, max, unit) */        \
