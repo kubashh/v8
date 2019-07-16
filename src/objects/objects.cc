@@ -7394,7 +7394,7 @@ Handle<FixedArray> BaseNameDictionary<Derived, Shape>::IterationIndices(
 }
 
 template <typename Derived, typename Shape>
-void BaseNameDictionary<Derived, Shape>::CollectKeysTo(
+ExceptionStatus BaseNameDictionary<Derived, Shape>::CollectKeysTo(
     Handle<Derived> dictionary, KeyAccumulator* keys) {
   Isolate* isolate = keys->isolate();
   ReadOnlyRoots roots(isolate);
@@ -7439,16 +7439,19 @@ void BaseNameDictionary<Derived, Shape>::CollectKeysTo(
       has_seen_symbol = true;
       continue;
     }
-    keys->AddKey(key, DO_NOT_CONVERT);
+    ExceptionStatus status = keys->AddKey(key, DO_NOT_CONVERT);
+    if (!status) return status;
   }
   if (has_seen_symbol) {
     for (int i = 0; i < array_size; i++) {
       int index = Smi::ToInt(array->get(i));
       Object key = dictionary->NameAt(index);
       if (!key.IsSymbol()) continue;
-      keys->AddKey(key, DO_NOT_CONVERT);
+      ExceptionStatus status = keys->AddKey(key, DO_NOT_CONVERT);
+      if (!status) return status;
     }
   }
+  return ExceptionStatus::kSuccess;
 }
 
 // Backwards lookup (slow).
@@ -8055,6 +8058,9 @@ template V8_EXPORT_PRIVATE Handle<NameDictionary>
 HashTable<NameDictionary, NameDictionaryShape>::Shrink(Isolate* isolate,
                                                        Handle<NameDictionary>,
                                                        int additionalCapacity);
+
+template void HashTable<GlobalDictionary, GlobalDictionaryShape>::Rehash(
+    ReadOnlyRoots roots);
 
 void JSFinalizationGroup::Cleanup(
     Isolate* isolate, Handle<JSFinalizationGroup> finalization_group,
