@@ -79,22 +79,38 @@ RUNTIME_FUNCTION(Runtime_ThrowSymbolAsyncIteratorInvalid) {
       isolate, NewTypeError(MessageTemplate::kSymbolAsyncIteratorInvalid));
 }
 
-#define THROW_ERROR(isolate, args, call)                               \
-  HandleScope scope(isolate);                                          \
-  DCHECK_LE(1, args.length());                                         \
-  CONVERT_SMI_ARG_CHECKED(message_id_smi, 0);                          \
-                                                                       \
-  Handle<Object> undefined = isolate->factory()->undefined_value();    \
-  Handle<Object> arg0 = (args.length() > 1) ? args.at(1) : undefined;  \
-  Handle<Object> arg1 = (args.length() > 2) ? args.at(2) : undefined;  \
-  Handle<Object> arg2 = (args.length() > 3) ? args.at(3) : undefined;  \
-                                                                       \
-  MessageTemplate message_id = MessageTemplateFromInt(message_id_smi); \
-                                                                       \
+#define BUILD_ERROR(isolate, args)                                    \
+  HandleScope scope(isolate);                                         \
+  DCHECK_LE(1, args.length());                                        \
+  CONVERT_SMI_ARG_CHECKED(message_id_smi, 0);                         \
+                                                                      \
+  Handle<Object> undefined = isolate->factory()->undefined_value();   \
+  Handle<Object> arg0 = (args.length() > 1) ? args.at(1) : undefined; \
+  Handle<Object> arg1 = (args.length() > 2) ? args.at(2) : undefined; \
+  Handle<Object> arg2 = (args.length() > 3) ? args.at(3) : undefined; \
+                                                                      \
+  MessageTemplate message_id = MessageTemplateFromInt(message_id_smi);
+
+#define THROW_ERROR(isolate, args, call) \
+  BUILD_ERROR(isolate, args)             \
   THROW_NEW_ERROR_RETURN_FAILURE(isolate, call(message_id, arg0, arg1, arg2));
 
 RUNTIME_FUNCTION(Runtime_ThrowRangeError) {
-  THROW_ERROR(isolate, args, NewRangeError);
+  BUILD_ERROR(isolate, args);
+
+  // If the result of a BigInt computation is truncated to 64 bit, Turbofan
+  // can sometimes truncate intermediate results already, which can prevent
+  // those from exceeding the maximum length, effectively changing the
+  // semantics of optimized code. As this is a performance optimization, this
+  // behavior is accepted. To prevent the fuzzer from detecting this
+  // difference, we crash the program.
+  if (FLAG_correctness_fuzzer_suppressions &&
+      message_id == MessageTemplate::kBigIntTooBig) {
+    FATAL("Aborting on invalid BigInt length");
+  }
+
+  THROW_NEW_ERROR_RETURN_FAILURE(isolate,
+                                 NewRangeError(message_id, arg0, arg1, arg2));
 }
 
 RUNTIME_FUNCTION(Runtime_ThrowTypeError) {
@@ -109,6 +125,7 @@ RUNTIME_FUNCTION(Runtime_ThrowTypeErrorIfStrict) {
 }
 
 #undef THROW_ERROR
+#undef BUILD_ERROR
 
 namespace {
 
