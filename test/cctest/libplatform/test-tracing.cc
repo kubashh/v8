@@ -225,6 +225,7 @@ TEST(TestJSONTraceWriterWithCustomtag) {
   CHECK_EQ(expected_trace_str, trace_str);
 }
 
+#ifndef V8_USE_PERFETTO
 TEST(TestTracingController) {
   v8::Platform* old_platform = i::V8::GetCurrentPlatform();
   std::unique_ptr<v8::Platform> default_platform(
@@ -407,6 +408,7 @@ TEST(TestTracingControllerMultipleArgsAndCopy) {
   CHECK_EQ(all_args[22], "\"a1\":[42,42]");
   CHECK_EQ(all_args[23], "\"a1\":[42,42],\"a2\":[123,123]");
 }
+#endif
 
 namespace {
 
@@ -567,6 +569,8 @@ struct TraceEvent {
   int32_t process_id;
   int64_t thread_timestamp;
   uint64_t bind_id;
+  ::google::protobuf::RepeatedPtrField<::perfetto::protos::ChromeTraceEvent_Arg>
+      args;
 };
 
 class TestListener : public TraceEventListener {
@@ -580,7 +584,7 @@ class TestListener : public TraceEventListener {
                              event.scope(),      event.id(),
                              event.flags(),      event.category_group_name(),
                              event.process_id(), event.thread_timestamp(),
-                             event.bind_id()};
+                             event.bind_id(),    event.args()};
       events_.push_back(trace_event);
     }
   }
@@ -606,10 +610,6 @@ class TracingTestHarness {
     static_cast<v8::platform::DefaultPlatform*>(default_platform_.get())
         ->SetTracingController(std::move(tracing));
 
-    MockTraceWriter* writer = new MockTraceWriter();
-    TraceBuffer* ring_buffer =
-        TraceBuffer::CreateTraceBufferRingBuffer(1, writer);
-    tracing_controller_->Initialize(ring_buffer);
     tracing_controller_->InitializeForPerfetto(&perfetto_json_stream_);
     tracing_controller_->SetTraceEventListenerForTesting(&listener_);
   }
@@ -699,6 +699,164 @@ TEST(Perfetto) {
   timestamp = event->timestamp;
 
   CHECK_EQ(6, harness.events_size());
+}
+
+// Replacement for 'TestTracingController'
+TEST(Categories) {
+  TracingTestHarness harness;
+  harness.StartTracing();
+
+  {
+    TRACE_EVENT0("v8", "v8.Test");
+    // cat category is not included in default config
+    TRACE_EVENT0("cat", "v8.Test2");
+    TRACE_EVENT0("v8", "v8.Test3");
+  }
+  TRACE_EVENT_INSTANT0("v8", "final event not captured",
+                       TRACE_EVENT_SCOPE_THREAD);
+
+  harness.StopTracing();
+
+  CHECK_EQ(4, harness.events_size());
+  TraceEvent* event = harness.get_event(0);
+  CHECK_EQ("v8.Test", event->name);
+  event = harness.get_event(1);
+  CHECK_EQ("v8.Test3", event->name);
+}
+
+void GetJSONStrings(
+    std::vector<std::string>& ret,  // NOLINT(runtime/references)
+    std::string str, std::string param, std::string start_delim,
+    std::string end_delim) {
+  size_t pos = str.find(param);
+  while (pos != std::string::npos) {
+    size_t start_pos = str.find(start_delim, pos + param.length());
+    size_t end_pos = str.find(end_delim, start_pos + 1);
+    CHECK_NE(start_pos, std::string::npos);
+    CHECK_NE(end_pos, std::string::npos);
+    ret.push_back(str.substr(start_pos + 1, end_pos - start_pos - 1));
+    pos = str.find(param, pos + 1);
+  }
+}
+
+// Replacement for 'TestTracingControllerMultipleArgsAndCopy'
+TEST(MultipleArgsAndCopy) {
+  uint64_t aa = 11;
+  unsigned int bb = 22;
+  uint16_t cc = 33;
+  unsigned char dd = 44;
+  int64_t ee = -55;
+  int ff = -66;
+  int16_t gg = -77;
+  signed char hh = -88;
+  bool ii1 = true;
+  bool ii2 = false;
+  double jj1 = 99.0;
+  double jj2 = 1e100;
+  double jj3 = std::numeric_limits<double>::quiet_NaN();
+  double jj4 = std::numeric_limits<double>::infinity();
+  double jj5 = -std::numeric_limits<double>::infinity();
+  void* kk = &aa;
+  const char* ll = "100";
+  std::string mm = "INIT";
+  std::string mmm = "\"INIT\"";
+
+  TracingTestHarness harness;
+  harness.StartTracing();
+
+  // Create a scope for the tracing controller to terminate the trace writer.
+  {
+    TRACE_EVENT1("v8", "v8.Test.aa", "aa", aa);
+    TRACE_EVENT1("v8", "v8.Test.bb", "bb", bb);
+    TRACE_EVENT1("v8", "v8.Test.cc", "cc", cc);
+    TRACE_EVENT1("v8", "v8.Test.dd", "dd", dd);
+    TRACE_EVENT1("v8", "v8.Test.ee", "ee", ee);
+    TRACE_EVENT1("v8", "v8.Test.ff", "ff", ff);
+    TRACE_EVENT1("v8", "v8.Test.gg", "gg", gg);
+    TRACE_EVENT1("v8", "v8.Test.hh", "hh", hh);
+    TRACE_EVENT1("v8", "v8.Test.ii", "ii1", ii1);
+    TRACE_EVENT1("v8", "v8.Test.ii", "ii2", ii2);
+    TRACE_EVENT1("v8", "v8.Test.jj1", "jj1", jj1);
+    TRACE_EVENT1("v8", "v8.Test.jj2", "jj2", jj2);
+    TRACE_EVENT1("v8", "v8.Test.jj3", "jj3", jj3);
+    TRACE_EVENT1("v8", "v8.Test.jj4", "jj4", jj4);
+    TRACE_EVENT1("v8", "v8.Test.jj5", "jj5", jj5);
+    TRACE_EVENT1("v8", "v8.Test.kk", "kk", kk);
+    TRACE_EVENT1("v8", "v8.Test.ll", "ll", ll);
+    TRACE_EVENT1("v8", "v8.Test.mm", "mm", TRACE_STR_COPY(mmm.c_str()));
+
+    TRACE_EVENT2("v8", "v8.Test2.1", "aa", aa, "ll", ll);
+    TRACE_EVENT2("v8", "v8.Test2.2", "mm1", TRACE_STR_COPY(mm.c_str()), "mm2",
+                 TRACE_STR_COPY(mmm.c_str()));
+
+    // Check copies are correct.
+    TRACE_EVENT_COPY_INSTANT0("v8", mm.c_str(), TRACE_EVENT_SCOPE_THREAD);
+    TRACE_EVENT_COPY_INSTANT2("v8", mm.c_str(), TRACE_EVENT_SCOPE_THREAD, "mm1",
+                              mm.c_str(), "mm2", mmm.c_str());
+    mm = "CHANGED";
+    mmm = "CHANGED";
+
+    TRACE_EVENT_INSTANT1("v8", "v8.Test", TRACE_EVENT_SCOPE_THREAD, "a1",
+                         new ConvertableToTraceFormatMock(42));
+    std::unique_ptr<ConvertableToTraceFormatMock> trace_event_arg(
+        new ConvertableToTraceFormatMock(42));
+    TRACE_EVENT_INSTANT2("v8", "v8.Test", TRACE_EVENT_SCOPE_THREAD, "a1",
+                         std::move(trace_event_arg), "a2",
+                         new ConvertableToTraceFormatMock(123));
+  }
+  TRACE_EVENT_INSTANT0("v8", "final event not captured",
+                       TRACE_EVENT_SCOPE_THREAD);
+
+  harness.StopTracing();
+
+  // 20 START/END events, 4 INSTANT events.
+  CHECK_EQ(44, harness.events_size());
+  TraceEvent* event = harness.get_event(0);
+  CHECK_EQ("aa", event->args[0].name());
+  CHECK_EQ(aa, event->args[0].uint_value());
+
+  event = harness.get_event(1);
+  CHECK_EQ("bb", event->args[0].name());
+  CHECK_EQ(bb, event->args[0].uint_value());
+
+  event = harness.get_event(2);
+  CHECK_EQ("cc", event->args[0].name());
+  CHECK_EQ(cc, event->args[0].uint_value());
+
+  event = harness.get_event(3);
+  CHECK_EQ("dd", event->args[0].name());
+  CHECK_EQ(dd, event->args[0].uint_value());
+
+  // CHECK_EQ(all_args[0], "\"aa\":11");
+  // CHECK_EQ(all_args[1], "\"bb\":22");
+  // CHECK_EQ(all_args[2], "\"cc\":33");
+  // CHECK_EQ(all_args[3], "\"dd\":44");
+  // CHECK_EQ(all_args[4], "\"ee\":-55");
+  // CHECK_EQ(all_args[5], "\"ff\":-66");
+  // CHECK_EQ(all_args[6], "\"gg\":-77");
+  // CHECK_EQ(all_args[7], "\"hh\":-88");
+  // CHECK_EQ(all_args[8], "\"ii1\":true");
+  // CHECK_EQ(all_args[9], "\"ii2\":false");
+  // CHECK_EQ(all_args[10], "\"jj1\":99.0");
+  // CHECK_EQ(all_args[11], "\"jj2\":1e+100");
+  // CHECK_EQ(all_args[12], "\"jj3\":\"NaN\"");
+  // CHECK_EQ(all_args[13], "\"jj4\":\"Infinity\"");
+  // CHECK_EQ(all_args[14], "\"jj5\":\"-Infinity\"");
+  // std::ostringstream pointer_stream;
+  // pointer_stream << "\"kk\":\"" << &aa << "\"";
+  // CHECK_EQ(all_args[15], pointer_stream.str());
+  // CHECK_EQ(all_args[16], "\"ll\":\"100\"");
+  // CHECK_EQ(all_args[17], "\"mm\":\"\\\"INIT\\\"\"");
+
+  // CHECK_EQ(all_names[18], "v8.Test2.1");
+  // CHECK_EQ(all_args[18], "\"aa\":11,\"ll\":\"100\"");
+  // CHECK_EQ(all_args[19], "\"mm1\":\"INIT\",\"mm2\":\"\\\"INIT\\\"\"");
+
+  // CHECK_EQ(all_names[20], "INIT");
+  // CHECK_EQ(all_names[21], "INIT");
+  // CHECK_EQ(all_args[21], "\"mm1\":\"INIT\",\"mm2\":\"\\\"INIT\\\"\"");
+  // CHECK_EQ(all_args[22], "\"a1\":[42,42]");
+  // CHECK_EQ(all_args[23], "\"a1\":[42,42],\"a2\":[123,123]");
 }
 
 TEST(TracingPerfetto) {
