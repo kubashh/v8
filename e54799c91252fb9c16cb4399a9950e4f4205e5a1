@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79c89f26_459618f1",
+        "filename": "tools/debug_helper/README.md",
+        "patchSetId": 27
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-07-16T11:48:40Z",
+      "side": 1,
+      "message": "nit: Cut these lines at 80 columns for text readers.",
+      "range": {
+        "startLine": 4,
+        "startChar": 92,
+        "endLine": 4,
+        "endChar": 94
+      },
+      "revId": "e54799c91252fb9c16cb4399a9950e4f4205e5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b8f2088_6f1ace2f",
+        "filename": "tools/debug_helper/get-object-properties.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-07-16T11:48:40Z",
+      "side": 1,
+      "message": "What is currently blocking Torque from generating this? Add a // TODO\nfor yourself or maybe Tobias to address this as soon as possible.\n\n(The static assert below is awesome, though, thanks for that).",
+      "revId": "e54799c91252fb9c16cb4399a9950e4f4205e5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
