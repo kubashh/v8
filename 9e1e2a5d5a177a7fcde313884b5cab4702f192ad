@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c78495ae_d134640b",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-07-16T14:44:21Z",
+      "side": 1,
+      "message": "Should we throw an out of memory exception here?",
+      "range": {
+        "startLine": 272,
+        "startChar": 6,
+        "endLine": 272,
+        "endChar": 49
+      },
+      "revId": "9e1e2a5d5a177a7fcde313884b5cab4702f192ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
