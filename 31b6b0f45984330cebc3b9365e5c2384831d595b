@@ -116,6 +116,24 @@
       "revId": "31b6b0f45984330cebc3b9365e5c2384831d595b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b134a180_dc863015",
+        "filename": "test/unittests/base/vlq-base64-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-16T09:29:00Z",
+      "side": 1,
+      "message": "Ah, that makes sense. There is still a more elegent way than having all those local arrays that are easy to confuse again. I would propose using initializer lists instead of arrays:\n\nstruct ExpectedVLQBase64Result {\n  size_t pos;\n  int32_t result;\n};\n\nvoid TestVLQBase64Decode(\n    const char* str,\n    std::initializer_list\u003cExpectedVLQBase64Result\u003e expect_results) {\n  size_t pos \u003d 0;\n  for (auto\u0026 expect : expect_results) {\n    int32_t result \u003d VLQBase64Decode(str, strlen(str), \u0026pos);\n    EXPECT_EQ(expect.pos, pos);\n    EXPECT_EQ(expect.result, result);\n  }\n}\n\n\nThen the individual allocations are way more simple:\n\nTestVLQBase64Decode(\"\", {{0, std::numeric_limits\u003cint32_t\u003e::min()}});",
+      "parentUuid": "791874b4_30623f24",
+      "revId": "31b6b0f45984330cebc3b9365e5c2384831d595b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
