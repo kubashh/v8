@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "10511a95_ed6da793",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-16T08:56:11Z",
+      "side": 1,
+      "message": "Thanks! Modified in patchset 8.",
+      "parentUuid": "6cd6e423_c7574410",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 49
+      },
+      "revId": "31b6b0f45984330cebc3b9365e5c2384831d595b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9c0cfbbd_b5779d4f",
         "filename": "src/base/vlq-base64.cc",
         "patchSetId": 6
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "55b7ae90_d61fe8a5",
+        "filename": "src/base/vlq-base64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-16T08:56:11Z",
+      "side": 1,
+      "message": "It looks much neater now, I\u0027ve merged it into patchset 8. Thanks!",
+      "parentUuid": "9c0cfbbd_b5779d4f",
+      "revId": "31b6b0f45984330cebc3b9365e5c2384831d595b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "07c65f1d_30b65bed",
         "filename": "test/unittests/base/vlq-base64-unittest.cc",
         "patchSetId": 6
@@ -53,6 +95,24 @@
       "writtenOn": "2019-07-15T14:55:33Z",
       "side": 1,
       "message": "All these \"strlen\" invocations make it hard to maintain this test.\nWhat about a small helper like this:\n\nvoid TestVLQBase64Decode(char* str, int32_t expect_result, int expect_len) {\n  size_t pos \u003d 0;\n  int32_t result \u003d VLQBase64Decode(str, strlen(str), \u0026pos);\n  EXPECT_EQ(expect_result, result);\n  EXPECT_EQ(expect_len, pos);\n}\n\nThe whole test would just be invocations of this function then.",
+      "revId": "31b6b0f45984330cebc3b9365e5c2384831d595b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "791874b4_30623f24",
+        "filename": "test/unittests/base/vlq-base64-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-16T08:56:11Z",
+      "side": 1,
+      "message": "Thanks for your notification, the helper does make the logic clearer and make it easier to maintain. As in later tests, \"DecodeTwoSegment\" and \"DecodeFourSegment\", multiple quantities are decoded from a VLQ string, I\u0027d like to pass arrays of expected results and positions.",
+      "parentUuid": "07c65f1d_30b65bed",
       "revId": "31b6b0f45984330cebc3b9365e5c2384831d595b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
