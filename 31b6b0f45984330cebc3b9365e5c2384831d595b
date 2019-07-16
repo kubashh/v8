@@ -134,6 +134,24 @@
       "revId": "31b6b0f45984330cebc3b9365e5c2384831d595b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "038a27b2_240624e8",
+        "filename": "test/unittests/base/vlq-base64-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-07-16T14:39:25Z",
+      "side": 1,
+      "message": "Ooh, this way is doubtless much more brilliant and elegant. I can now avoid lots of confusing local arrays. Thanks! :)",
+      "parentUuid": "b134a180_dc863015",
+      "revId": "31b6b0f45984330cebc3b9365e5c2384831d595b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
