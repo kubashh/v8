@@ -586,7 +586,7 @@ class LiftoffAssembler : public TurboAssembler {
   inline void PushRegisters(LiftoffRegList);
   inline void PopRegisters(LiftoffRegList);
 
-  inline void DropStackSlotsAndRet(uint32_t num_stack_slots);
+  inline void DropStackSlotsAndRet(int num_stack_slots);
 
   // Execute a C call. Arguments are pushed to the stack and a pointer to this
   // region is passed to the C function. If {out_argument_type != kWasmStmt},

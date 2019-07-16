@@ -8,7 +8,6 @@
 #include "src/codegen/assembler-arch.h"
 #include "src/codegen/machine-type.h"
 #include "src/codegen/signature.h"
-#include "src/wasm/value-type.h"
 
 namespace v8 {
 namespace internal {
@@ -130,6 +129,7 @@ class LinkageAllocator {
       : gp_count_(gpc), gp_regs_(gp), fp_count_(fpc), fp_regs_(fp) {}
 
   bool CanAllocateGP() const { return gp_offset_ < gp_count_; }
+
   bool CanAllocateFP(MachineRepresentation rep) const {
 #if V8_TARGET_ARCH_ARM
     switch (rep) {
@@ -203,16 +203,11 @@ class LinkageAllocator {
   }
 
   // Stackslots are counted upwards starting from 0 (or the offset set by
-  // {SetStackOffset}.
-  int NumStackSlots(MachineRepresentation type) {
-    return std::max(1, ElementSizeInBytes(type) / kSystemPointerSize);
-  }
-
-  // Stackslots are counted upwards starting from 0 (or the offset set by
-  // {SetStackOffset}. If {type} needs more than
+  // {SetStackOffset}. If {rep} needs more than
   // one stack slot, the lowest used stack slot is returned.
-  int NextStackSlot(MachineRepresentation type) {
-    int num_stack_slots = NumStackSlots(type);
+  int NextStackSlot(MachineRepresentation rep) {
+    int num_stack_slots =
+        std::max(1, ElementSizeInBytes(rep) / kSystemPointerSize);
     int offset = stack_offset_;
     stack_offset_ += num_stack_slots;
     return offset;
