@@ -319,7 +319,7 @@ void LiftoffAssembler::Store(Register dst_addr, Register offset_reg,
 void LiftoffAssembler::LoadCallerFrameSlot(LiftoffRegister dst,
                                            uint32_t caller_slot_idx,
                                            ValueType type) {
-  int32_t offset = (caller_slot_idx + 1) * LiftoffAssembler::kStackSlotSize;
+  int32_t offset = (caller_slot_idx + 2) * LiftoffAssembler::kStackSlotSize;
   Ldr(liftoff::GetRegFromType(dst, type), MemOperand(fp, offset));
 }
 
@@ -966,7 +966,7 @@ void LiftoffAssembler::PopRegisters(LiftoffRegList regs) {
   PopCPURegList(liftoff::PadRegList(regs.GetGpList()));
 }
 
-void LiftoffAssembler::DropStackSlotsAndRet(uint32_t num_stack_slots) {
+void LiftoffAssembler::DropStackSlotsAndRet(int num_stack_slots) {
   DropSlots(num_stack_slots);
   Ret();
 }

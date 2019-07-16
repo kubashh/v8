@@ -508,7 +508,7 @@ void LiftoffAssembler::Store(Register dst_addr, Register offset_reg,
 void LiftoffAssembler::LoadCallerFrameSlot(LiftoffRegister dst,
                                            uint32_t caller_slot_idx,
                                            ValueType type) {
-  int32_t offset = (caller_slot_idx + 1) * kSystemPointerSize;
+  int32_t offset = (caller_slot_idx + 2) * kSystemPointerSize;
   MemOperand src(fp, offset);
   switch (type) {
     case kWasmI32:
@@ -1388,7 +1388,7 @@ void LiftoffAssembler::PopRegisters(LiftoffRegList regs) {
   }
 }
 
-void LiftoffAssembler::DropStackSlotsAndRet(uint32_t num_stack_slots) {
+void LiftoffAssembler::DropStackSlotsAndRet(int num_stack_slots) {
   Drop(num_stack_slots);
   Ret();
 }
