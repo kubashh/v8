@@ -16,6 +16,24 @@
       "revId": "98f0ffa2bd172ab808f1d2534e89f620feb26fd3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be8a54b5_ccd04037",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-07-16T02:55:52Z",
+      "side": 1,
+      "message": "Done, I moved it to the end of all the helper methods, and added a if guard.",
+      "parentUuid": "b4078782_a3414227",
+      "revId": "98f0ffa2bd172ab808f1d2534e89f620feb26fd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
