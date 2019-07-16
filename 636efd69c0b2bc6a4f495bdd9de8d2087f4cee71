@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "084da724_a662d02c",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1350763
+      },
+      "writtenOn": "2019-07-16T17:47:56Z",
+      "side": 1,
+      "message": "Will be changed to 0 before submitting; I just want to test the trybots",
+      "range": {
+        "startLine": 790,
+        "startChar": 32,
+        "endLine": 790,
+        "endChar": 35
+      },
+      "revId": "636efd69c0b2bc6a4f495bdd9de8d2087f4cee71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
