@@ -46,6 +46,30 @@
       "revId": "65d5ffbd1253e9c7f69b93ea1d41605fd5a1eadb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aada7b6a_c822e5e3",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-16T17:51:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "91e47e2e_ccd81614",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 49
+      },
+      "revId": "65d5ffbd1253e9c7f69b93ea1d41605fd5a1eadb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
