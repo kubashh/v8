@@ -70,6 +70,30 @@
       "revId": "7de4c88865711a619c60da8d5d12f3e39e559c78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2acc8b5_e53eba3c",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3307,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-07-17T20:46:12Z",
+      "side": 1,
+      "message": "Using dynamically allocated strings seems dangerous to me: it\u0027s too easy to get the lifetime of them wrong. I\u0027ve reviewed a few dumps that had the previous implementation and collected the keys -- so far none had more than one instance of isolate. Based on this I\u0027d rather go with the static solution and tune it later, if there is a need.",
+      "parentUuid": "fbd9d8cb_724e38de",
+      "range": {
+        "startLine": 3306,
+        "startChar": 0,
+        "endLine": 3307,
+        "endChar": 68
+      },
+      "revId": "7de4c88865711a619c60da8d5d12f3e39e559c78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -22,6 +22,30 @@
       "revId": "59feb8c070381f9214be16e67ee07409bab7ed55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af730ae7_43e3214c",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3320,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-07-17T20:46:12Z",
+      "side": 1,
+      "message": "Don\u0027t know. I didn\u0027t use --bypass-hooks.",
+      "parentUuid": "bf797b35_aa20d9a5",
+      "range": {
+        "startLine": 3320,
+        "startChar": 2,
+        "endLine": 3320,
+        "endChar": 4
+      },
+      "revId": "59feb8c070381f9214be16e67ee07409bab7ed55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
