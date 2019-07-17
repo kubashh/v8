@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "49ecc3f1_df8cd692",
+        "filename": "tools/debug_helper/README.md",
+        "patchSetId": 27
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-07-17T20:56:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79c89f26_459618f1",
+      "range": {
+        "startLine": 4,
+        "startChar": 92,
+        "endLine": 4,
+        "endChar": 94
+      },
+      "revId": "e54799c91252fb9c16cb4399a9950e4f4205e5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b8f2088_6f1ace2f",
         "filename": "tools/debug_helper/get-object-properties.cc",
         "patchSetId": 27
@@ -39,6 +63,24 @@
       "revId": "e54799c91252fb9c16cb4399a9950e4f4205e5a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82a1c819_06b7c531",
+        "filename": "tools/debug_helper/get-object-properties.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-07-17T20:56:17Z",
+      "side": 1,
+      "message": "Adding Sigurd on cc because I believe he\u0027s been thinking about this more than I have.\n\nAs of https://crrev.com/c/v8/v8/+/1607645 , Torque now generates a small handful of instance types for classes that are defined entirely in Torque without any corresponding C++ class. Ideally it could generate the entire InstanceType enum, automatically grouping together subclasses for range checks, but there are a lot of interesting special cases:\n- string type flags are somewhat complicated\n- we must somehow leave gaps or define instance types for classes that aren\u0027t defined in Torque (this list should be dwindling, but there are still some)\n- some values are fixed because the V8 public API exposes them\n- some types need to be ordered last within their supertype so we can do one-sided range checks (JSObject, JSReceiver)\n- some instance types are currently ordered by something other than their superclass (for example, FixedArrayBase subclasses are pretty scattered), and I\u0027m not sure what I would break by trying to clump them together\n\nThe other option I can see is to keep the InstanceType enum defined in C++ and generate this macro based on simple text manipulation of the Torque-defined class names. The existing annotations @abstract and @hasSameInstanceTypeAsParent tell us much of what we need to know here, but we would need additional information defining what to do in cases such as:\n- JSLocale (whose instance type doesn\u0027t perfectly match its name)\n- ConsString (which isn\u0027t included in this list since it could have either of two instance types)\n- PrototypeInfo (which isn\u0027t included in this list because it\u0027s in STRUCT_LIST_GENERATOR)",
+      "parentUuid": "5b8f2088_6f1ace2f",
+      "revId": "e54799c91252fb9c16cb4399a9950e4f4205e5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
