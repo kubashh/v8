@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3386ee55_16e26241",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2898,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-07-17T17:00:26Z",
+      "side": 1,
+      "message": "Would it make sense to use a Optional\u003cHardAbortScope\u003e here, so that there is only one call to Run\u003cAssembleCodePhase\u003e();?",
+      "range": {
+        "startLine": 2898,
+        "startChar": 4,
+        "endLine": 2898,
+        "endChar": 19
+      },
+      "revId": "d863504091e94c356523ffcf43840b3dca95cae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
