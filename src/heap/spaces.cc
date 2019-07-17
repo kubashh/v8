@@ -2988,6 +2988,8 @@ FreeList* FreeList::CreateFreeList() {
     return new FreeListFastAlloc();
   } else if (FLAG_gc_freelist_strategy == 2) {
     return new FreeListMany();
+  } else if (FLAG_gc_freelist_strategy == 3) {
+    return new FreeListDart();
   } else {
     return new FreeListLegacy();
   }
@@ -3264,6 +3266,166 @@ FreeSpace FreeListMany::Allocate(size_t size_in_bytes, size_t* node_size) {
   for (int i = type; i <= last_category_ && node.is_null(); i++) {
     node = TryFindNodeIn(static_cast<FreeListCategoryType>(i), size_in_bytes,
                          node_size);
+  }
+
+  if (!node.is_null()) {
+    Page::FromHeapObject(node)->IncreaseAllocatedBytes(*node_size);
+  }
+
+  DCHECK(IsVeryLong() || Available() == SumFreeLists());
+  return node;
+}
+
+FreeListDart::FreeListDart() {
+  wasted_bytes_ = 0;
+  number_of_categories_ = kNumberOfCategories;
+  last_category_ = kLastCategory;
+  freelist_search_budget_ = kInitialFreeListSearchBudget;
+
+  categories_ = new FreeListCategory*[number_of_categories_]();
+  Reset();
+}
+
+// TODO(dmercadier): the return of this function is wrong for some sizes. It is
+// tricky to get right because of how allocations are done in the last category
+// (cf FreeListDart::HeuristicSearchCategory).
+size_t FreeListDart::GuaranteedAllocatable(size_t maximum_freed) {
+  return maximum_freed;
+}
+
+Page* FreeListDart::GetPageForSize(size_t size_in_bytes) {
+  if (size_in_bytes >= kLastCategoryMin) {
+    return GetPageForCategoryType(kLastCategory);
+  }
+  const int minimum_category =
+      static_cast<int>(SelectFreeListCategoryType(size_in_bytes));
+  Page* page = GetPageForCategoryType(kLastRegularCategory);
+  for (int cat = kLastRegularCategory - 1; !page && cat >= minimum_category;
+       cat--) {
+    page = GetPageForCategoryType(cat);
+  }
+  return page;
+}
+
+FreeListDart::~FreeListDart() { delete[] categories_; }
+
+size_t FreeListDart::Free(Address start, size_t size_in_bytes, FreeMode mode) {
+  Page* page = Page::FromAddress(start);
+  page->DecreaseAllocatedBytes(size_in_bytes);
+
+  // Blocks have to be a minimum size to hold free list items.
+  if (size_in_bytes < kMinBlockSize) {
+    page->add_wasted_memory(size_in_bytes);
+    wasted_bytes_ += size_in_bytes;
+    return size_in_bytes;
+  }
+
+  // Insert other blocks at the head of a free list of the appropriate
+  // magnitude.
+  FreeListCategoryType type = SelectFreeListCategoryType(size_in_bytes);
+  page->free_list_category(type)->Free(start, size_in_bytes, mode);
+  DCHECK_EQ(page->AvailableInFreeList(),
+            page->AvailableInFreeListFromAllocatedBytes());
+  return 0;
+}
+
+FreeSpace FreeListDart::TryFindNodeIn(FreeListCategoryType type,
+                                      size_t minimum_size, size_t* node_size) {
+  FreeListCategory* category = categories_[type];
+  if (category == nullptr) return FreeSpace();
+  FreeSpace node = category->PickNodeFromList(minimum_size, node_size);
+  if (!node.is_null()) {
+    DCHECK(IsVeryLong() || Available() == SumFreeLists());
+  }
+  if (category->is_empty()) {
+    RemoveCategory(category);
+  }
+  return node;
+}
+
+// Quote from Dart's documentation of the corresponding code:
+// We are willing to search the freelist further for a big block.
+// For each successful free-list search we:
+//   * increase the search budget by #allocated-words
+//   * decrease the search budget by #free-list-entries-traversed
+//     which guarantees us to not waste more than around 1 search step per
+//     word of allocation
+//
+// If we run out of search budget we fall back to allocating a new page and
+// reset the search budget.
+FreeSpace FreeListDart::HeuristicSearchCategory(size_t size_in_bytes,
+                                                size_t* node_size) {
+  FreeListCategory* category;
+  if (size_in_bytes >= kLastCategoryMin) {
+    category = categories_[kLastCategory];
+  } else {
+    category = categories_[kLastRegularCategory];
+  }
+  intptr_t tries_left =
+      freelist_search_budget_ + (size_in_bytes >> kTaggedSize);
+  while (category != nullptr) {
+    FreeSpace previous;
+    FreeSpace current = category->top();
+    while (!current.is_null()) {
+      if (current.Size() >= static_cast<int>(size_in_bytes)) {
+        // Found an element large enough to hold the requested size.
+        if (previous.is_null()) {
+          category->set_top(current.next());
+        } else {
+          MemoryChunk* chunk = MemoryChunk::FromHeapObject(previous);
+          if (chunk->owner_identity() == CODE_SPACE) {
+            chunk->heap()->UnprotectAndRegisterMemoryChunk(chunk);
+          }
+          previous.set_next(current.next());
+        }
+        *node_size = current.Size();
+        category->available_ -= *node_size;
+        category->length_--;
+        if (category->is_empty()) {
+          RemoveCategory(category);
+        }
+
+#define min(a, b) a < b ? a : b;
+        freelist_search_budget_ = min(tries_left, kInitialFreeListSearchBudget);
+#undef min
+
+        return current;
+      } else if (tries_left-- < 0) {
+        freelist_search_budget_ = kInitialFreeListSearchBudget;
+        *node_size = 0;
+        return FreeSpace();
+      }
+      previous = current;
+      current = current.next();
+    }
+    category = category->next();
+  }
+
+  // Didn't find a free element big enough.
+  *node_size = 0;
+  return FreeSpace();
+}
+
+FreeSpace FreeListDart::Allocate(size_t size_in_bytes, size_t* node_size) {
+  DCHECK_GE(kMaxBlockSize, size_in_bytes);
+  FreeSpace node;
+  // First try the allocation fast path: try to allocate the minimum element
+  // size of a free list category. This operation is constant time.
+  FreeListCategoryType type = SelectFreeListCategoryType(size_in_bytes);
+  for (int i = type; i <= kLastRegularCategory && node.is_null(); i++) {
+    node = TryFindNodeIn(static_cast<FreeListCategoryType>(i), size_in_bytes,
+                         node_size);
+  }
+
+  if (node.is_null()) {
+    // Searching through the last (or one before last) category
+    node = HeuristicSearchCategory(size_in_bytes, node_size);
+  }
+
+  if (node.is_null() && size_in_bytes < kLastCategoryMin) {
+    // Trying the very last category even though size_in_bytes <
+    // kLastCategoryMin
+    node = TryFindNodeIn(kLastCategory, size_in_bytes, node_size);
   }
 
   if (!node.is_null()) {

@@ -220,6 +220,7 @@ class FreeListCategory {
   FreeListCategory* next_;
 
   friend class FreeList;
+  friend class FreeListDart;
   friend class PagedSpace;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(FreeListCategory);
@@ -2011,6 +2012,66 @@ class V8_EXPORT_PRIVATE FreeListMany : public FreeList {
       }
     }
     return last_category_;
+  }
+};
+
+// Use the same freelist strategy as Dart (found at
+// https://github.com/dart-lang/sdk/blob/master/runtime/vm/heap/freelist.h).
+// The idea is: 129 freelists; a free block of size n goes into the freelist
+// min(128,n/16-1).
+// Dart uses 129 freelists, but here we are going with 130 to compensate for the
+// fact that large objects are 64KB in Dart but 128KB in V8. We use the same
+// categories as Dart, plus one last, which holds object from 64 to 128KB.
+class V8_EXPORT_PRIVATE FreeListDart : public FreeList {
+ public:
+  size_t GuaranteedAllocatable(size_t maximum_freed) override;
+
+  Page* GetPageForSize(size_t size_in_bytes) override;
+
+  FreeListDart();
+  ~FreeListDart();
+
+  size_t Free(Address start, size_t size_in_bytes, FreeMode mode) override;
+
+  V8_WARN_UNUSED_RESULT FreeSpace Allocate(size_t size_in_bytes,
+                                           size_t* node_size) override;
+
+ private:
+  static const size_t kMinBlockSize = 3 * kTaggedSize;
+
+  // This is a conservative upper bound. The actual maximum block size takes
+  // padding and alignment of data and code pages into account.
+  static const size_t kMaxBlockSize = Page::kPageSize;
+
+  static const int kNumberOfCategories = 130;
+  static const int kLastCategory = 129;
+  static const int kLastCategoryMin = 64 * KB;
+  static const int kLastRegularCategory = 128;
+
+  static const intptr_t kInitialFreeListSearchBudget = 1000;
+  intptr_t freelist_search_budget_;
+
+  // Tries to retrieve a node from the first category in a given |type|.
+  // Returns nullptr if the category is empty or the top entry is smaller
+  // than minimum_size.
+  FreeSpace TryFindNodeIn(FreeListCategoryType type, size_t minimum_size,
+                          size_t* node_size);
+
+  // This method implements the part of Dart's FreeList::TryAllocateLocked which
+  // walks the biggest category to find an object.
+  FreeSpace HeuristicSearchCategory(size_t size_in_bytes, size_t* node_size);
+
+  FreeListCategoryType SelectFreeListCategoryType(size_t size_in_bytes) {
+    if (size_in_bytes >= kLastCategoryMin) return kLastCategory;
+
+    if (size_in_bytes < 16) size_in_bytes = 16;
+
+    FreeListCategoryType cat =
+        static_cast<FreeListCategoryType>((size_in_bytes >> 4) - 1);
+    if (cat > kLastRegularCategory) {
+      cat = kLastRegularCategory;
+    }
+    return cat;
   }
 };
 
