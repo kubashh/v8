@@ -300,6 +300,24 @@
       "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c1ee6537_8d43f04a",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5546,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-07-17T08:31:18Z",
+      "side": 1,
+      "message": "Sure it should be a runtime error as per the spec but we should add a test to make sure we parse it and do scope analysis correctly and not throw a syntax error.",
+      "parentUuid": "69b211d5_a91fc3ab",
+      "revId": "be283e7daaa147dfe95c0c913c98b562c1bec803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
