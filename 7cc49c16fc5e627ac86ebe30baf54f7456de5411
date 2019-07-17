@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91202723_a293d0d8",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-17T14:08:35Z",
+      "side": 1,
+      "message": "q: Is there any meaning to this 0? Or do we not care about the return value in this case.",
+      "revId": "7cc49c16fc5e627ac86ebe30baf54f7456de5411",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16178cd2_12b14bfc",
+        "filename": "test/cctest/libplatform/test-tracing.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-17T14:08:35Z",
+      "side": 1,
+      "message": "nit: we could const ref all the incoming strings.",
+      "revId": "7cc49c16fc5e627ac86ebe30baf54f7456de5411",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4eaf244d_a57aac71",
+        "filename": "test/cctest/libplatform/test-tracing.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-07-17T14:08:35Z",
+      "side": 1,
+      "message": "nit: This is far enough away to add a  // !V8_USE_PERFETTO",
+      "revId": "7cc49c16fc5e627ac86ebe30baf54f7456de5411",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
