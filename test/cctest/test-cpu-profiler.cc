@@ -440,7 +440,8 @@ class ProfilerHelper {
       v8::Local<v8::Function> function, v8::Local<v8::Value> argv[], int argc,
       unsigned min_js_samples = 0, unsigned min_external_samples = 0,
       ProfilingMode mode = ProfilingMode::kLeafNodeLineNumbers,
-      unsigned max_samples = CpuProfilingOptions::kNoSampleLimit);
+      unsigned max_samples = v8::CpuProfilingOptions::kNoSampleLimit,
+      v8::Local<v8::Context> context = v8::Local<v8::Context>());
 
   v8::CpuProfiler* profiler() { return profiler_; }
 
@@ -453,11 +454,12 @@ v8::CpuProfile* ProfilerHelper::Run(v8::Local<v8::Function> function,
                                     v8::Local<v8::Value> argv[], int argc,
                                     unsigned min_js_samples,
                                     unsigned min_external_samples,
-                                    ProfilingMode mode, unsigned max_samples) {
+                                    ProfilingMode mode, unsigned max_samples,
+                                    v8::Local<v8::Context> context) {
   v8::Local<v8::String> profile_name = v8_str("my_profile");
 
   profiler_->SetSamplingInterval(100);
-  profiler_->StartProfiling(profile_name, {mode, max_samples});
+  profiler_->StartProfiling(profile_name, {mode, max_samples, 0, context});
 
   v8::internal::CpuProfiler* iprofiler =
       reinterpret_cast<v8::internal::CpuProfiler*>(profiler_);
@@ -465,6 +467,7 @@ v8::CpuProfile* ProfilerHelper::Run(v8::Local<v8::Function> function,
       reinterpret_cast<i::SamplingEventsProcessor*>(iprofiler->processor())
           ->sampler();
   sampler->StartCountingSamples();
+
   do {
     function->Call(context_, context_->Global(), argc, argv).ToLocalChecked();
   } while (sampler->js_sample_count() < min_js_samples ||
@@ -1806,7 +1809,7 @@ TEST(Inlining2) {
   v8::Local<v8::String> profile_name = v8_str("inlining");
   profiler->StartProfiling(
       profile_name,
-      CpuProfilingOptions{v8::CpuProfilingMode::kCallerLineNumbers});
+      v8::CpuProfilingOptions{v8::CpuProfilingMode::kCallerLineNumbers});
 
   v8::Local<v8::Value> args[] = {
       v8::Integer::New(env->GetIsolate(), 50000 * load_factor)};
@@ -3336,6 +3339,83 @@ TEST(DynamicResamplingWithBaseInterval) {
   CHECK_EQ(profiles->GetCommonSamplingInterval(),
            base::TimeDelta::FromMicroseconds(0));
   profiles->StopProfiling("5us");
+}
+
+// Tests that functions from other contexts aren't recorded when filtering for
+// another context.
+TEST(ContextIsolation) {
+  i::FLAG_allow_natives_syntax = true;
+  LocalContext filter_env;
+  i::HandleScope scope(CcTest::i_isolate());
+
+  {
+    LocalContext execution_env;
+
+    // Install CollectSample callback for more deterministic sampling.
+    v8::Local<v8::FunctionTemplate> func_template = v8::FunctionTemplate::New(
+        execution_env.local()->GetIsolate(), CallCollectSample);
+    v8::Local<v8::Function> func =
+        func_template->GetFunction(execution_env.local()).ToLocalChecked();
+    func->SetName(v8_str("CallCollectSample"));
+    execution_env->Global()
+        ->Set(execution_env.local(), v8_str("CallCollectSample"), func)
+        .FromJust();
+
+    ProfilerHelper helper(execution_env.local());
+    CompileRun(R"(
+      function optimized(sample) {
+        if (sample) CallCollectSample();
+      }
+
+      function unoptimized() {
+        CallCollectSample();
+      }
+
+      function start() {
+        // Test optimized functions
+        %PrepareFunctionForOptimization(optimized);
+        optimized();
+        optimized();
+        %OptimizeFunctionOnNextCall(optimized);
+        optimized(true);
+
+        // Test unoptimized functions
+        %NeverOptimizeFunction(unoptimized);
+        unoptimized();
+
+        // Test callback
+        CallCollectSample();
+      }
+    )");
+    v8::Local<v8::Function> function =
+        GetFunction(execution_env.local(), "start");
+
+    v8::CpuProfile* same_context_profile = helper.Run(
+        function, nullptr, 0, 100, 0,
+        v8::CpuProfilingMode::kLeafNodeLineNumbers,
+        v8::CpuProfilingOptions::kNoSampleLimit, execution_env.local());
+    const v8::CpuProfileNode* root = same_context_profile->GetTopDownRoot();
+    const v8::CpuProfileNode* start_node = FindChild(root, "start");
+    CHECK(start_node);
+    const v8::CpuProfileNode* optimized_node =
+        FindChild(start_node, "optimized");
+    CHECK(optimized_node);
+    const v8::CpuProfileNode* unoptimized_node =
+        FindChild(start_node, "unoptimized");
+    CHECK(unoptimized_node);
+    const v8::CpuProfileNode* callback_node =
+        FindChild(start_node, "CallCollectSample");
+    CHECK(callback_node);
+
+    v8::CpuProfile* diff_context_profile =
+        helper.Run(function, nullptr, 0, 100, 0,
+                   v8::CpuProfilingMode::kLeafNodeLineNumbers,
+                   v8::CpuProfilingOptions::kNoSampleLimit, filter_env.local());
+    const v8::CpuProfileNode* diff_root =
+        diff_context_profile->GetTopDownRoot();
+    // Ensure that no children were recorded (including callbacks, builtins).
+    CHECK(!FindChild(diff_root, "start"));
+  }
 }
 
 enum class EntryCountMode { kAll, kOnlyInlined };

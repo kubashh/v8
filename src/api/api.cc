@@ -9785,6 +9785,20 @@ int CpuProfile::GetSamplesCount() const {
   return reinterpret_cast<const i::CpuProfile*>(this)->samples_count();
 }
 
+CpuProfilingOptions::CpuProfilingOptions(CpuProfilingMode mode,
+                                         unsigned max_samples,
+                                         int sampling_interval_us,
+                                         MaybeLocal<Context> filter_context)
+    : mode_(mode),
+      max_samples_(max_samples),
+      sampling_interval_us_(sampling_interval_us),
+      internal_(new i::CpuProfilingOptions()) {
+  if (!filter_context.IsEmpty()) {
+    internal_->filter_context =
+        Utils::OpenHandle(*filter_context.ToLocalChecked());
+  }
+}
+
 CpuProfiler* CpuProfiler::New(Isolate* isolate, CpuProfilingNamingMode mode) {
   return reinterpret_cast<CpuProfiler*>(
       new i::CpuProfiler(reinterpret_cast<i::Isolate*>(isolate), mode));
