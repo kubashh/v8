@@ -330,6 +330,7 @@ class FeedbackVector::BodyDescriptor final : public BodyDescriptorBase {
   static inline void IterateBody(Map* map, HeapObject* obj, int object_size,
                                  ObjectVisitor* v) {
     IteratePointer(obj, kSharedFunctionInfoOffset, v);
+    IterateMaybeWeakPointer(obj, kBaselineCodeOffset, v);
     IterateMaybeWeakPointer(obj, kOptimizedCodeOffset, v);
     IteratePointers(obj, kFeedbackSlotsOffset, object_size, v);
   }

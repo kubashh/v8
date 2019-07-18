@@ -61,6 +61,21 @@ class NumberBuiltinsAssembler : public CodeStubAssembler {
   }
 
   template <typename Descriptor>
+  void RelationalComparisonWithFeedbackBuiltin(Operation op) {
+    Node* lhs = Parameter(Descriptor::kLeft);
+    Node* rhs = Parameter(Descriptor::kRight);
+    Node* context = Parameter(Descriptor::kContext);
+    Node* vector = Parameter(Descriptor::kVector);
+    Node* slot = Parameter(Descriptor::kSlot);
+
+    Variable var_type_feedback(this, MachineRepresentation::kTagged);
+    Node* result =
+        RelationalComparison(op, lhs, rhs, context, &var_type_feedback);
+    UpdateFeedback(var_type_feedback.value(), vector, slot);
+    Return(result);
+  }
+
+  template <typename Descriptor>
   void UnaryOp(Variable* var_input, Label* do_smi, Label* do_double,
                Variable* var_input_double, Label* do_bigint);
 
@@ -1063,6 +1078,49 @@ TF_BUILTIN(StrictEqual, CodeStubAssembler) {
   Node* rhs = Parameter(Descriptor::kRight);
 
   Return(StrictEqual(lhs, rhs));
+}
+
+TF_BUILTIN(LessThanWithFeedback, NumberBuiltinsAssembler) {
+  RelationalComparisonWithFeedbackBuiltin<Descriptor>(Operation::kLessThan);
+}
+
+TF_BUILTIN(LessThanOrEqualWithFeedback, NumberBuiltinsAssembler) {
+  RelationalComparisonWithFeedbackBuiltin<Descriptor>(
+      Operation::kLessThanOrEqual);
+}
+
+TF_BUILTIN(GreaterThanWithFeedback, NumberBuiltinsAssembler) {
+  RelationalComparisonWithFeedbackBuiltin<Descriptor>(Operation::kGreaterThan);
+}
+
+TF_BUILTIN(GreaterThanOrEqualWithFeedback, NumberBuiltinsAssembler) {
+  RelationalComparisonWithFeedbackBuiltin<Descriptor>(
+      Operation::kGreaterThanOrEqual);
+}
+
+TF_BUILTIN(EqualWithFeedback, CodeStubAssembler) {
+  Node* lhs = Parameter(Descriptor::kLeft);
+  Node* rhs = Parameter(Descriptor::kRight);
+  Node* context = Parameter(Descriptor::kContext);
+  Node* vector = Parameter(Descriptor::kVector);
+  Node* slot = Parameter(Descriptor::kSlot);
+
+  Variable var_type_feedback(this, MachineRepresentation::kTagged);
+  Node* result = Equal(lhs, rhs, context, &var_type_feedback);
+  UpdateFeedback(var_type_feedback.value(), vector, slot);
+  Return(result);
+}
+
+TF_BUILTIN(StrictEqualWithFeedback, CodeStubAssembler) {
+  Node* lhs = Parameter(Descriptor::kLeft);
+  Node* rhs = Parameter(Descriptor::kRight);
+  Node* vector = Parameter(Descriptor::kVector);
+  Node* slot = Parameter(Descriptor::kSlot);
+
+  Variable var_type_feedback(this, MachineRepresentation::kTagged);
+  Node* result = StrictEqual(lhs, rhs, &var_type_feedback);
+  UpdateFeedback(var_type_feedback.value(), vector, slot);
+  Return(result);
 }
 
 }  // namespace internal

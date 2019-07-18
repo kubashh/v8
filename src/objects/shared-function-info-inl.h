@@ -114,6 +114,9 @@ BIT_FIELD_ACCESSORS(SharedFunctionInfo, flags, is_asm_wasm_broken,
 BIT_FIELD_ACCESSORS(SharedFunctionInfo, flags,
                     requires_instance_fields_initializer,
                     SharedFunctionInfo::RequiresInstanceFieldsInitializer)
+BIT_FIELD_ACCESSORS(SharedFunctionInfo, flags,
+                    disable_baselining,
+                    SharedFunctionInfo::DisableBaseliningBit)
 
 bool SharedFunctionInfo::optimization_disabled() const {
   return disable_optimization_reason() != BailoutReason::kNoReason;

@@ -851,6 +851,7 @@ class RuntimeCallTimer final {
   V(CompileBackgroundScript)                   \
   V(CompileBackgroundRewriteReturnResult)      \
   V(CompileBackgroundScopeAnalysis)            \
+  V(CompileBaselineCodeGeneration)             \
   V(CompileDeserialize)                        \
   V(CompileEval)                               \
   V(CompileAnalyse)                            \

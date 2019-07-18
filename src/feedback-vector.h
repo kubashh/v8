@@ -137,6 +137,7 @@ class FeedbackMetadata;
 //  - shared function info (which includes feedback metadata)
 //  - invocation count
 //  - runtime profiler ticks
+//  - baseline code cell (weak cell or Smi marker)
 //  - optimized code cell (weak cell or Smi marker)
 // followed by an array of feedback slots, of length determined by the feedback
 // metadata.
@@ -160,6 +161,10 @@ class FeedbackVector : public HeapObject {
   // marker defining optimization behaviour.
   DECL_ACCESSORS(optimized_code_weak_or_smi, MaybeObject)
 
+  // [baseline_code_weak_or_smi]: weak reference to baseline code or a Smi
+  // marker defining baseline behaviour.
+  DECL_ACCESSORS(baseline_code_weak_or_smi, MaybeObject)
+
   // [length]: The length of the feedback vector (not including the header, i.e.
   // the number of feedback slots).
   DECL_INT32_ACCESSORS(length)
@@ -176,6 +181,17 @@ class FeedbackVector : public HeapObject {
 
   inline void clear_invocation_count();
   inline void increment_deopt_count();
+
+  inline Code* baseline_code() const;
+  inline BaseliningMarker baselining_marker() const;
+  inline bool has_baseline_code() const;
+  inline bool has_baselining_marker() const;
+  void ClearBaselineCode();
+  static void SetBaselineCode(Handle<FeedbackVector> vector, Handle<Code> code);
+  void SetBaseliningMarker(BaseliningMarker marker);
+
+  // Clears the baselining marker in the feedback vector.
+  void ClearBaseliningMarker();
 
   inline Code* optimized_code() const;
   inline OptimizationMarker optimization_marker() const;
@@ -272,6 +288,7 @@ class FeedbackVector : public HeapObject {
 #define FEEDBACK_VECTOR_FIELDS(V)            \
   /* Header fields. */                       \
   V(kSharedFunctionInfoOffset, kPointerSize) \
+  V(kBaselineCodeOffset, kPointerSize)       \
   V(kOptimizedCodeOffset, kPointerSize)      \
   V(kLengthOffset, kInt32Size)               \
   V(kInvocationCountOffset, kInt32Size)      \
@@ -574,6 +591,7 @@ class FeedbackNexus final {
 
   InlineCacheState ic_state() const { return StateFromFeedback(); }
   bool IsUninitialized() const { return StateFromFeedback() == UNINITIALIZED; }
+  bool IsMonomorphic() const { return StateFromFeedback() == MONOMORPHIC; }
   bool IsMegamorphic() const { return StateFromFeedback() == MEGAMORPHIC; }
   bool IsGeneric() const { return StateFromFeedback() == GENERIC; }
 

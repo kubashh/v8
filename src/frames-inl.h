@@ -176,15 +176,15 @@ inline StubFrame::StubFrame(StackFrameIteratorBase* iterator)
     : StandardFrame(iterator) {
 }
 
-
 inline OptimizedFrame::OptimizedFrame(StackFrameIteratorBase* iterator)
     : JavaScriptFrame(iterator) {
 }
 
+inline BaselinedFrame::BaselinedFrame(StackFrameIteratorBase* iterator)
+    : InterpretedFrame(iterator) {}
 
 inline InterpretedFrame::InterpretedFrame(StackFrameIteratorBase* iterator)
     : JavaScriptFrame(iterator) {}
-
 
 inline ArgumentsAdaptorFrame::ArgumentsAdaptorFrame(
     StackFrameIteratorBase* iterator) : JavaScriptFrame(iterator) {

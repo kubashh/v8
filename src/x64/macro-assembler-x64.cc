@@ -1150,8 +1150,7 @@ void MacroAssembler::SmiCompare(Register dst, Smi* src) {
   Cmp(dst, src);
 }
 
-
-void MacroAssembler::Cmp(Register dst, Smi* src) {
+void TurboAssembler::Cmp(Register dst, Smi* src) {
   DCHECK_NE(dst, kScratchRegister);
   if (src->value() == 0) {
     testp(dst, dst);
@@ -1183,7 +1182,7 @@ void MacroAssembler::SmiCompare(Operand dst, Smi* src) {
   }
 }
 
-void MacroAssembler::Cmp(Operand dst, Smi* src) {
+void TurboAssembler::Cmp(Operand dst, Smi* src) {
   // The Operand cannot use the smi register.
   Register smi_reg = GetSmiConstant(src);
   DCHECK(!dst.AddressUsesRegister(smi_reg));
@@ -1370,7 +1369,7 @@ void MacroAssembler::Negpd(XMMRegister dst) {
         ExternalOperand(ExternalReference::address_of_double_neg_constant()));
 }
 
-void MacroAssembler::Cmp(Register dst, Handle<Object> source) {
+void TurboAssembler::Cmp(Register dst, Handle<Object> source) {
   AllowDeferredHandleDereference smi_check;
   if (source->IsSmi()) {
     Cmp(dst, Smi::cast(*source));
@@ -1380,7 +1379,7 @@ void MacroAssembler::Cmp(Register dst, Handle<Object> source) {
   }
 }
 
-void MacroAssembler::Cmp(Operand dst, Handle<Object> source) {
+void TurboAssembler::Cmp(Operand dst, Handle<Object> source) {
   AllowDeferredHandleDereference smi_check;
   if (source->IsSmi()) {
     Cmp(dst, Smi::cast(*source));

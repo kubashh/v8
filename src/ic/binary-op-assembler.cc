@@ -538,5 +538,55 @@ Node* BinaryOpAssembler::Generate_ExponentiateWithFeedback(
   return CallBuiltin(Builtins::kExponentiate, context, base, exponent);
 }
 
+Node* BinaryOpAssembler::Generate_BitwiseBinaryOpWithFeedback(
+    Operation bitwise_op, Node* context, Node* left, Node* right,
+    Node* slot_index, Node* feedback_vector) {
+  VARIABLE(var_left_feedback, MachineRepresentation::kTaggedSigned);
+  VARIABLE(var_right_feedback, MachineRepresentation::kTaggedSigned);
+  VARIABLE(var_left_word32, MachineRepresentation::kWord32);
+  VARIABLE(var_right_word32, MachineRepresentation::kWord32);
+  VARIABLE(var_left_bigint, MachineRepresentation::kTagged, left);
+  VARIABLE(var_right_bigint, MachineRepresentation::kTagged);
+  VARIABLE(result, MachineRepresentation::kTagged);
+  Label if_left_number(this), do_number_op(this),
+      if_left_bigint(this, Label::kDeferred),
+      do_bigint_op(this, Label::kDeferred), end(this);
+
+  TaggedToWord32OrBigIntWithFeedback(context, left, &if_left_number,
+                                     &var_left_word32, &if_left_bigint,
+                                     &var_left_bigint, &var_left_feedback);
+  BIND(&if_left_number);
+  TaggedToWord32OrBigIntWithFeedback(context, right, &do_number_op,
+                                     &var_right_word32, &do_bigint_op,
+                                     &var_right_bigint, &var_right_feedback);
+  BIND(&do_number_op);
+  result.Bind(
+      BitwiseOp(var_left_word32.value(), var_right_word32.value(), bitwise_op));
+  Node* result_type = SelectSmiConstant(TaggedIsSmi(result.value()),
+                                        BinaryOperationFeedback::kSignedSmall,
+                                        BinaryOperationFeedback::kNumber);
+  Node* input_feedback =
+      SmiOr(var_left_feedback.value(), var_right_feedback.value());
+  UpdateFeedback(SmiOr(result_type, input_feedback), feedback_vector,
+                 slot_index);
+  Goto(&end);
+
+  // BigInt cases.
+  BIND(&if_left_bigint);
+  TaggedToNumericWithFeedback(context, right, &do_bigint_op, &var_right_bigint,
+                              &var_right_feedback);
+
+  BIND(&do_bigint_op);
+  result.Bind(CallRuntime(Runtime::kBigIntBinaryOp, context,
+                          var_left_bigint.value(), var_right_bigint.value(),
+                          SmiConstant(bitwise_op)));
+  UpdateFeedback(SmiOr(var_left_feedback.value(), var_right_feedback.value()),
+                 feedback_vector, slot_index);
+  Goto(&end);
+
+  BIND(&end);
+  return result.value();
+}
+
 }  // namespace internal
 }  // namespace v8

@@ -370,6 +370,18 @@ inline bool Code::checks_optimization_marker() const {
       (this == builtins->builtin(Builtins::kCompileLazy) ||
        builtin_index() == interpreter_entry_trampoline->builtin_index());
   DCHECK_IMPLIES(checks_marker, !Builtins::IsLazy(builtin_index()));
+  return checks_marker || (kind() == BASELINE_FUNCTION) ||
+         (kind() == OPTIMIZED_FUNCTION && marked_for_deoptimization());
+}
+
+inline bool Code::checks_baselining_marker() const {
+  Builtins* builtins = GetIsolate()->builtins();
+  Code* interpreter_entry_trampoline =
+      builtins->builtin(Builtins::kInterpreterEntryTrampoline);
+  bool checks_marker =
+      (this == builtins->builtin(Builtins::kCompileLazy) ||
+       builtin_index() == interpreter_entry_trampoline->builtin_index());
+  DCHECK_IMPLIES(checks_marker, !Builtins::IsLazy(builtin_index()));
   return checks_marker ||
          (kind() == OPTIMIZED_FUNCTION && marked_for_deoptimization());
 }

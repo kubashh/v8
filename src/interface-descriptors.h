@@ -33,6 +33,7 @@ class PlatformInterfaceDescriptor;
   V(FastNewFunctionContext)           \
   V(FastNewObject)                    \
   V(FastNewArguments)                 \
+  V(CreateEmptyObjectLiteral)         \
   V(RecordWrite)                      \
   V(TypeConversion)                   \
   V(TypeConversionStackParameter)     \
@@ -43,12 +44,14 @@ class PlatformInterfaceDescriptor;
   V(CallWithSpread)                   \
   V(CallWithArrayLike)                \
   V(CallTrampoline)                   \
+  V(CallTrampolineWithFeedback)       \
   V(ConstructStub)                    \
   V(ConstructVarargs)                 \
   V(ConstructForwardVarargs)          \
   V(ConstructWithSpread)              \
   V(ConstructWithArrayLike)           \
   V(ConstructTrampoline)              \
+  V(ConstructWithFeedbackTrampoline)  \
   V(TransitionElementsKind)           \
   V(AbortJS)                          \
   V(AllocateHeapNumber)               \
@@ -59,7 +62,10 @@ class PlatformInterfaceDescriptor;
   V(ArraySingleArgumentConstructor)   \
   V(ArrayNArgumentsConstructor)       \
   V(Compare)                          \
+  V(CompareWithFeedback)              \
   V(BinaryOp)                         \
+  V(BinaryOpWithFeedback)             \
+  V(UnaryOpWithFeedback)              \
   V(StringAdd)                        \
   V(StringAt)                         \
   V(StringSubstring)                  \
@@ -76,6 +82,7 @@ class PlatformInterfaceDescriptor;
   V(InterpreterPushArgsThenCall)      \
   V(InterpreterPushArgsThenConstruct) \
   V(InterpreterCEntry)                \
+  V(BailoutFromBaselineCode)          \
   V(ResumeGenerator)                  \
   V(FrameDropperTrampoline)           \
   V(WasmRuntimeCall)                  \
@@ -578,6 +585,13 @@ class CallTrampolineDescriptor : public CallInterfaceDescriptor {
                                                CallInterfaceDescriptor)
 };
 
+class CallTrampolineWithFeedbackDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kFunction, kActualArgumentsCount, kFeedbackVector, kSlot)
+  DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(
+      CallTrampolineWithFeedbackDescriptor, CallInterfaceDescriptor)
+};
+
 class CallVarargsDescriptor : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS(kTarget, kActualArgumentsCount, kArgumentsList,
@@ -654,6 +668,14 @@ class ConstructTrampolineDescriptor : public CallInterfaceDescriptor {
                                                CallInterfaceDescriptor)
 };
 
+class ConstructWithFeedbackTrampolineDescriptor
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kFunction, kNewTarget, kActualArgumentsCount,
+                    kFeedbackVector, kSlot)
+  DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(
+      ConstructWithFeedbackTrampolineDescriptor, CallInterfaceDescriptor)
+};
 
 class CallFunctionDescriptor : public CallInterfaceDescriptor {
  public:
@@ -732,6 +754,12 @@ class CompareDescriptor : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR(CompareDescriptor, CallInterfaceDescriptor)
 };
 
+class CompareWithFeedbackDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kLeft, kRight, kSlot, kVector)
+  DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(CompareWithFeedbackDescriptor,
+                                               CallInterfaceDescriptor)
+};
 
 class BinaryOpDescriptor : public CallInterfaceDescriptor {
  public:
@@ -739,6 +767,19 @@ class BinaryOpDescriptor : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR(BinaryOpDescriptor, CallInterfaceDescriptor)
 };
 
+class BinaryOpWithFeedbackDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kLeft, kRight, kSlot, kVector)
+  DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(BinaryOpWithFeedbackDescriptor,
+                                               CallInterfaceDescriptor)
+};
+
+class UnaryOpWithFeedbackDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kOperand, kSlot, kVector)
+  DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(UnaryOpWithFeedbackDescriptor,
+                                               CallInterfaceDescriptor)
+};
 
 class StringAddDescriptor : public CallInterfaceDescriptor {
  public:
@@ -852,6 +893,13 @@ class InterpreterCEntryDescriptor : public CallInterfaceDescriptor {
                                                CallInterfaceDescriptor)
 };
 
+class BailoutFromBaselineCodeDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kAccumulator)
+  DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(
+      BailoutFromBaselineCodeDescriptor, CallInterfaceDescriptor)
+};
+
 class ResumeGeneratorDescriptor final : public CallInterfaceDescriptor {
  public:
   DECLARE_DESCRIPTOR(ResumeGeneratorDescriptor, CallInterfaceDescriptor)
@@ -874,6 +922,14 @@ class RunMicrotasksDescriptor final : public CallInterfaceDescriptor {
   DEFINE_EMPTY_PARAMETERS()
   DECLARE_DEFAULT_DESCRIPTOR(RunMicrotasksDescriptor, CallInterfaceDescriptor,
                              0)
+};
+
+class CreateEmptyObjectLiteralDescriptor final
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_EMPTY_PARAMETERS()
+  DECLARE_DEFAULT_DESCRIPTOR(CreateEmptyObjectLiteralDescriptor,
+                             CallInterfaceDescriptor, 0)
 };
 
 class PromiseReactionHandlerDescriptor final : public CallInterfaceDescriptor {

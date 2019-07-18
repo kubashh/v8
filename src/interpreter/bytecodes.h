@@ -688,6 +688,22 @@ class V8_EXPORT_PRIVATE Bytecodes final : public AllStatic {
     return true;
   }
 
+  static bool UnconditionallyExitsBasicBlock(Bytecode bytecode) {
+    switch (bytecode) {
+      case Bytecode::kReturn:
+      case Bytecode::kThrow:
+      case Bytecode::kReThrow:
+      case Bytecode::kAbort:
+      case Bytecode::kJump:
+      case Bytecode::kJumpLoop:
+      case Bytecode::kJumpConstant:
+      case Bytecode::kSuspendGenerator:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   // Returns true if the bytecode returns.
   static constexpr bool Returns(Bytecode bytecode) {
 #define OR_BYTECODE(NAME) || bytecode == Bytecode::k##NAME

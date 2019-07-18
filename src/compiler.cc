@@ -13,6 +13,8 @@
 #include "src/ast/prettyprinter.h"
 #include "src/ast/scopes.h"
 #include "src/base/optional.h"
+#include "src/baseline-compilation-info.h"
+#include "src/baseline/baseline-compiler.h"
 #include "src/bootstrapper.h"
 #include "src/compilation-cache.h"
 #include "src/compiler-dispatcher/compiler-dispatcher.h"
@@ -187,6 +189,57 @@ void UnoptimizedCompilationJob::RecordFunctionCompilation(
 
   LogFunctionCompilation(tag, shared, parse_info()->script(), abstract_code,
                          false, time_taken_ms, isolate);
+}
+
+// ----------------------------------------------------------------------------
+// Implementation of BaselineCompilationJob
+
+CompilationJob::Status BaselineCompilationJob::ExecuteJob() {
+  DisallowHeapAllocation no_allocation;
+  DisallowHandleAllocation no_handles;
+  DisallowHandleDereference no_deref;
+  DisallowCodeDependencyChange no_dependency_change;
+
+  // Delegate to the underlying implementation.
+  DCHECK_EQ(state(), State::kReadyToExecute);
+  ScopedTimer t(&time_taken_to_execute_);
+  return UpdateState(ExecuteJobImpl(), State::kReadyToFinalize);
+}
+
+CompilationJob::Status BaselineCompilationJob::FinalizeJob(Isolate* isolate) {
+  DCHECK(ThreadId::Current().Equals(isolate->thread_id()));
+  DisallowCodeDependencyChange no_dependency_change;
+  DisallowJavascriptExecution no_js(isolate);
+
+  // Delegate to the underlying implementation.
+  DCHECK_EQ(state(), State::kReadyToFinalize);
+  ScopedTimer t(&time_taken_to_finalize_);
+  return UpdateState(FinalizeJobImpl(isolate), State::kSucceeded);
+}
+
+void BaselineCompilationJob::RecordCompilationStats() const {
+  if (FLAG_trace_opt) {
+    Handle<SharedFunctionInfo> shared_info = compilation_info()->shared_info();
+    double ms_execute = time_taken_to_execute_.InMillisecondsF();
+    double ms_finalize = time_taken_to_finalize_.InMillisecondsF();
+    PrintF("[baselining ");
+    shared_info->ShortPrint();
+    PrintF(" - took %0.3f, %0.3f ms]\n", ms_execute, ms_finalize);
+  }
+}
+
+void BaselineCompilationJob::RecordFunctionCompilation(
+    CodeEventListener::LogEventsAndTags tag, Isolate* isolate) const {
+  Handle<AbstractCode> abstract_code =
+      Handle<AbstractCode>::cast(compilation_info()->code());
+
+  double time_taken_ms = time_taken_to_execute_.InMillisecondsF() +
+                         time_taken_to_finalize_.InMillisecondsF();
+
+  Handle<Script> script(
+      Script::cast(compilation_info()->shared_info()->script()));
+  LogFunctionCompilation(tag, compilation_info()->shared_info(), script,
+                         abstract_code, true, time_taken_ms, isolate);
 }
 
 // ----------------------------------------------------------------------------
@@ -762,7 +815,7 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
 
       // Set the optimization marker and return a code object which checks it.
       function->SetOptimizationMarker(OptimizationMarker::kInOptimizationQueue);
-      DCHECK(function->IsInterpreted() ||
+      DCHECK(function->IsInterpreted() || function->IsBaselined() ||
              (!function->is_compiled() && function->shared()->IsInterpreted()));
       DCHECK(function->shared()->HasBytecodeArray());
       return BUILTIN_CODE(isolate, InterpreterEntryTrampoline);
@@ -1031,6 +1084,59 @@ void BackgroundCompileTask::Run() {
   source_->info->set_stack_limit(old_stack_limit);
 }
 
+MaybeHandle<Code> GetBaselineCode(Isolate* isolate,
+                                  Handle<JSFunction> function) {
+  // Make sure we clear the baselining marker on the function so that we
+  // don't try to re-baseline.
+  if (function->HasBaseliningMarker()) {
+    function->ClearBaseliningMarker();
+  }
+
+  // Try getting baseline code from the feedback vector.
+  if (function->feedback_cell()->value()->IsFeedbackVector()) {
+    FeedbackVector* feedback_vector = function->feedback_vector();
+    Code* code = feedback_vector->baseline_code();
+    if (code != nullptr) {
+      DCHECK(function->shared()->is_compiled());
+      return Handle<Code>(code);
+    }
+  }
+
+  // Compile baseline code.
+  TimerEventScope<TimerEventRecompileSynchronous> timer(isolate);
+  TRACE_EVENT0("v8", "V8.CompileBaseline");
+  RuntimeCallTimerScope runtimeTimer(isolate,
+                                     RuntimeCallCounterId::kCompileBaselineCodeGeneration);
+
+  Zone zone(isolate->allocator(), "baseline_compiler");;
+  BaselineCompilationInfo compilation_info(&zone, handle(function->shared()),
+                                           handle(function->feedback_vector()));
+
+  BaselineCompilationJob* job = baseline::BaselineCompiler::NewCompilationJob(
+      isolate->stack_guard()->real_climit(), isolate, &compilation_info);
+  if (job->ExecuteJob() != CompilationJob::SUCCEEDED ||
+      job->FinalizeJob(isolate) != CompilationJob::SUCCEEDED) {
+    if (FLAG_trace_opt) {
+      PrintF("[aborted baselining ");
+      compilation_info.shared_info()->ShortPrint();
+      PrintF("]\n");
+    }
+    function->shared()->set_disable_baselining(true);
+    return MaybeHandle<Code>();
+  }
+
+  // Success! Add code to feedback vector.
+  DCHECK(function->feedback_cell()->value()->IsFeedbackVector());
+  Handle<FeedbackVector> feedback_vector =
+      handle(function->feedback_vector(), isolate);
+  FeedbackVector::SetBaselineCode(feedback_vector, compilation_info.code());
+
+  job->RecordCompilationStats();
+  DCHECK(!isolate->has_pending_exception());
+  job->RecordFunctionCompilation(CodeEventListener::LAZY_COMPILE_TAG, isolate);
+  return compilation_info.code();
+}
+
 }  // namespace
 
 // ----------------------------------------------------------------------------
@@ -1144,6 +1250,20 @@ bool Compiler::Compile(Handle<JSFunction> function, ClearExceptionFlag flag) {
   // Allocate FeedbackVector for the JSFunction.
   JSFunction::EnsureFeedbackVector(function);
 
+  // Baseline now if --always-baseline is enabled.
+  if (FLAG_always_baseline && !function->shared()->HasAsmWasmData() &&
+      function->shared()->PassesFilter(FLAG_spark_filter)) {
+    if (FLAG_trace_opt) {
+      PrintF("[baselining ");
+      function->ShortPrint();
+      PrintF(" because --always-baseline]\n");
+    }
+    Handle<Code> baseline_code;
+    if (GetBaselineCode(isolate, function).ToHandle(&baseline_code)) {
+      code = baseline_code;
+    }
+  }
+
   // Optimize now if --always-opt is enabled.
   if (FLAG_always_opt && !function->shared()->HasAsmWasmData()) {
     if (FLAG_trace_opt) {
@@ -1165,6 +1285,34 @@ bool Compiler::Compile(Handle<JSFunction> function, ClearExceptionFlag flag) {
   DCHECK(!isolate->has_pending_exception());
   DCHECK(function->shared()->is_compiled());
   DCHECK(function->is_compiled());
+  return true;
+}
+
+bool Compiler::CompileBaseline(Handle<JSFunction> function) {
+  if (function->IsBaselined()) return true;
+  Isolate* isolate = function->GetIsolate();
+  DCHECK(AllowCompilation::IsAllowed(isolate));
+
+  // Start a compilation.
+  Handle<Code> code;
+  if (!GetBaselineCode(isolate, function).ToHandle(&code)) {
+    // Baselining failed, get unoptimized code. Unoptimized code must exist
+    // already if we are baselining.
+    DCHECK(!isolate->has_pending_exception());
+    DCHECK(function->shared()->is_compiled());
+    DCHECK(function->shared()->IsInterpreted());
+    code = BUILTIN_CODE(isolate, InterpreterEntryTrampoline);
+  }
+
+  // Install code on closure.
+  function->set_code(*code);
+
+  // Check postconditions on success.
+  DCHECK(!isolate->has_pending_exception());
+  DCHECK(function->shared()->is_compiled());
+  DCHECK(function->is_compiled());
+  DCHECK(!function->HasBaseliningMarker());
+  DCHECK(function->IsBaselined());
   return true;
 }
 

@@ -280,7 +280,8 @@ class RawMachineLabel;
 
 typedef ZoneVector<CodeAssemblerVariable*> CodeAssemblerVariableList;
 
-typedef std::function<void()> CodeAssemblerCallback;
+typedef std::function<void()> CodeAssemblerCallPrologueCallback;
+typedef std::function<void(Node*)> CodeAssemblerCallEpilogueCallback;
 
 template <class T, class U>
 struct is_subtype {
@@ -748,6 +749,9 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   // Access to the stack pointer
   Node* LoadStackPointer();
 
+  // Stack slot.
+  Node* StackSlot(MachineRepresentation rep);
+
   // Poison |value| on speculative paths.
   TNode<Object> TaggedPoisonOnSpeculation(SloppyTNode<Object> value);
   TNode<WordT> WordPoisonOnSpeculation(SloppyTNode<WordT> value);
@@ -951,6 +955,9 @@ class V8_EXPORT_PRIVATE CodeAssembler {
     return CallRuntimeImpl(function, context,
                            base::implicit_cast<SloppyTNode<Object>>(args)...);
   }
+  TNode<Object> CallRuntimeN(Runtime::FunctionId function,
+                             SloppyTNode<Object> context, Node* const* args,
+                             int argc);
 
   template <class... TArgs>
   TNode<Object> TailCallRuntimeImpl(Runtime::FunctionId function,
@@ -1113,8 +1120,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
  protected:
   void RegisterCallGenerationCallbacks(
-      const CodeAssemblerCallback& call_prologue,
-      const CodeAssemblerCallback& call_epilogue);
+      const CodeAssemblerCallPrologueCallback& call_prologue,
+      const CodeAssemblerCallEpilogueCallback& call_epilogue);
   void UnregisterCallGenerationCallbacks();
 
   bool Word32ShiftIsSafe() const;
@@ -1130,7 +1137,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
   // Calls respective callback registered in the state.
   void CallPrologue();
-  void CallEpilogue();
+  void CallEpilogue(Node* result);
 
   CodeAssemblerState* state_;
 
@@ -1302,8 +1309,8 @@ class V8_EXPORT_PRIVATE CodeAssemblerState {
   int32_t builtin_index_;
   bool code_generated_;
   ZoneSet<CodeAssemblerVariable::Impl*> variables_;
-  CodeAssemblerCallback call_prologue_;
-  CodeAssemblerCallback call_epilogue_;
+  CodeAssemblerCallPrologueCallback call_prologue_;
+  CodeAssemblerCallEpilogueCallback call_epilogue_;
 
   DISALLOW_COPY_AND_ASSIGN(CodeAssemblerState);
 };

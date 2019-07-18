@@ -340,7 +340,7 @@ void IC::OnFeedbackChanged(Isolate* isolate, FeedbackVector* vector,
              reason);
     }
   }
-  vector->set_profiler_ticks(0);
+  //vector->set_profiler_ticks(0);
 
 #ifdef V8_TRACE_FEEDBACK_UPDATES
   if (FLAG_trace_feedback_updates) {

@@ -148,8 +148,8 @@ void CodeAssembler::BreakOnNode(int node_id) {
 }
 
 void CodeAssembler::RegisterCallGenerationCallbacks(
-    const CodeAssemblerCallback& call_prologue,
-    const CodeAssemblerCallback& call_epilogue) {
+    const CodeAssemblerCallPrologueCallback& call_prologue,
+    const CodeAssemblerCallEpilogueCallback& call_epilogue) {
   // The callback can be registered only once.
   DCHECK(!state_->call_prologue_);
   DCHECK(!state_->call_epilogue_);
@@ -168,9 +168,9 @@ void CodeAssembler::CallPrologue() {
   }
 }
 
-void CodeAssembler::CallEpilogue() {
+void CodeAssembler::CallEpilogue(Node* result) {
   if (state_->call_epilogue_) {
-    state_->call_epilogue_();
+    state_->call_epilogue_(result);
   }
 }
 
@@ -528,6 +528,10 @@ TNode<IntPtrT> CodeAssembler::LoadRootsPointer() {
 
 Node* CodeAssembler::LoadStackPointer() {
   return raw_assembler()->LoadStackPointer();
+}
+
+Node* CodeAssembler::StackSlot(MachineRepresentation rep) {
+  return raw_assembler()->StackSlot(rep);
 }
 
 TNode<Object> CodeAssembler::TaggedPoisonOnSpeculation(
@@ -1098,6 +1102,37 @@ void CodeAssembler::GotoIfException(Node* node, Label* if_exception,
   Bind(&success);
 }
 
+TNode<Object> CodeAssembler::CallRuntimeN(Runtime::FunctionId function,
+                                          SloppyTNode<Object> context,
+                                          Node* const* args, int argc) {
+  auto call_descriptor = Linkage::GetRuntimeCallDescriptor(
+      zone(), function, argc, Operator::kNoProperties,
+      CallDescriptor::kNoFlags);
+  int return_count = static_cast<int>(call_descriptor->ReturnCount());
+
+  Node* centry =
+      HeapConstant(CodeFactory::RuntimeCEntry(isolate(), return_count));
+  Node* ref = ExternalConstant(ExternalReference::Create(function));
+  Node* arity = Int32Constant(argc);
+
+  int nodes_count = argc + 4;
+  int index = 0;
+  Node* nodes[nodes_count];
+  nodes[index++] = centry;
+  for (int i = 0; i < argc; i++) {
+    nodes[index++] = args[i];
+  }
+  nodes[index++] = ref;
+  nodes[index++] = arity;
+  nodes[index++] = context;
+
+  CallPrologue();
+  Node* return_value =
+      raw_assembler()->CallN(call_descriptor, nodes_count, nodes);
+  CallEpilogue(return_value);
+  return UncheckedCast<Object>(return_value);
+}
+
 template <class... TArgs>
 TNode<Object> CodeAssembler::CallRuntimeImpl(Runtime::FunctionId function,
                                              SloppyTNode<Object> context,
@@ -1118,7 +1153,7 @@ TNode<Object> CodeAssembler::CallRuntimeImpl(Runtime::FunctionId function,
   CallPrologue();
   Node* return_value =
       raw_assembler()->CallN(call_descriptor, arraysize(nodes), nodes);
-  CallEpilogue();
+  CallEpilogue(return_value);
   return UncheckedCast<Object>(return_value);
 }
 
@@ -1195,7 +1230,7 @@ Node* CodeAssembler::CallStubN(const CallInterfaceDescriptor& descriptor,
   CallPrologue();
   Node* return_value =
       raw_assembler()->CallN(call_descriptor, input_count, inputs);
-  CallEpilogue();
+  CallEpilogue(return_value);
   return return_value;
 }
 

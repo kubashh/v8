@@ -897,6 +897,7 @@ class MacroAssembler : public TurboAssembler {
   // Needs access to SafepointRegisterStackIndex for compiled frame
   // traversal.
   friend class StandardFrame;
+  friend class BaselinedFrame;
 };
 
 // -----------------------------------------------------------------------------

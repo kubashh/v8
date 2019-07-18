@@ -47,6 +47,11 @@ class BinaryOpAssembler : public CodeStubAssembler {
                                           Node* feedback_vector,
                                           bool rhs_is_smi);
 
+  Node* Generate_BitwiseBinaryOpWithFeedback(Operation bitwise_op,
+                                             Node* context, Node* lhs,
+                                             Node* rhs, Node* slot_id,
+                                             Node* feedback_vector);
+
  private:
   typedef std::function<Node*(Node*, Node*, Variable*)> SmiOperation;
   typedef std::function<Node*(Node*, Node*)> FloatOperation;

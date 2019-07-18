@@ -296,6 +296,27 @@ void FeedbackVector::AddToVectorsForProfilingTools(
 }
 
 // static
+void FeedbackVector::SetBaselineCode(Handle<FeedbackVector> vector,
+                                     Handle<Code> code) {
+  DCHECK_EQ(code->kind(), Code::BASELINE_FUNCTION);
+  vector->set_baseline_code_weak_or_smi(HeapObjectReference::Weak(*code));
+}
+
+void FeedbackVector::ClearBaselineCode() {
+  DCHECK(has_baseline_code());
+  set_baseline_code_weak_or_smi(MaybeObject::FromSmi(0));
+}
+
+void FeedbackVector::ClearBaseliningMarker() {
+  DCHECK(!has_baseline_code());
+  SetBaseliningMarker(BaseliningMarker::kNone);
+}
+
+void FeedbackVector::SetBaseliningMarker(BaseliningMarker marker) {
+  set_baseline_code_weak_or_smi(MaybeObject::FromSmi(Smi::FromEnum(marker)));
+}
+
+// static
 void FeedbackVector::SetOptimizedCode(Handle<FeedbackVector> vector,
                                       Handle<Code> code) {
   DCHECK_EQ(code->kind(), Code::OPTIMIZED_FUNCTION);

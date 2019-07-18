@@ -23,11 +23,27 @@ uint8_t CreateArrayLiteralFlags::Encode(bool use_fast_shallow_clone,
 }
 
 // static
+void CreateArrayLiteralFlags::Decode(uint8_t raw_flag,
+                                     bool* use_fast_shallow_clone,
+                                     int* runtime_flags) {
+  *use_fast_shallow_clone = FastCloneSupportedBit::decode(raw_flag);
+  *runtime_flags = FlagsBits::decode(raw_flag);
+}
+
+// static
 uint8_t CreateObjectLiteralFlags::Encode(int runtime_flags,
                                          bool fast_clone_supported) {
   uint8_t result = FlagsBits::encode(runtime_flags);
   result |= FastCloneSupportedBit::encode(fast_clone_supported);
   return result;
+}
+
+// static
+void CreateObjectLiteralFlags::Decode(uint8_t raw_flag,
+                                      bool* fast_clone_supported,
+                                      int* runtime_flags) {
+  *fast_clone_supported |= FastCloneSupportedBit::decode(raw_flag);
+  *runtime_flags = FlagsBits::decode(raw_flag);
 }
 
 // static
@@ -38,6 +54,14 @@ uint8_t CreateClosureFlags::Encode(bool pretenure, bool is_function_scope) {
     result |= FastNewClosureBit::encode(true);
   }
   return result;
+}
+
+// static
+void CreateClosureFlags::Decode(uint8_t raw_flag, bool* fast_new_closure,
+                                bool* pretenure) {
+  *fast_new_closure = FastNewClosureBit::decode(raw_flag);
+  *pretenure = PretenuredBit::decode(raw_flag);
+  DCHECK_IMPLIES(*pretenure, !*fast_new_closure);
 }
 
 // static
@@ -83,6 +107,16 @@ uint8_t StoreLookupSlotFlags::Encode(LanguageMode language_mode,
                  language_mode == LanguageMode::kSloppy);
   return LanguageModeBit::encode(language_mode) |
          LookupHoistingModeBit::encode(static_cast<bool>(lookup_hoisting_mode));
+}
+
+// static
+void StoreLookupSlotFlags::Decode(uint8_t raw_flag, LanguageMode* language_mode,
+                                  LookupHoistingMode* lookup_hoisting_mode) {
+  *lookup_hoisting_mode =
+      static_cast<LookupHoistingMode>(LookupHoistingModeBit::decode(raw_flag));
+  *language_mode = LanguageModeBit::decode(raw_flag);
+  DCHECK_IMPLIES(*lookup_hoisting_mode == LookupHoistingMode::kLegacySloppy,
+                 *language_mode == LanguageMode::kSloppy);
 }
 
 }  // namespace interpreter

@@ -356,6 +356,16 @@ DEFINE_STRING(trace_ignition_dispatches_output_file, nullptr,
               "the file to which the bytecode handler dispatch table is "
               "written (by default, the table is not written to a file)")
 
+// Flags for Sparkplug.
+DEFINE_BOOL(baseline, true, "enable baseline compiler")
+DEFINE_INT(baseline_ticks, 5, "number of ticks to wait before baselining")
+DEFINE_BOOL(always_baseline, false, "always baseline compile functions")
+DEFINE_BOOL(spark_opt, false,
+            "enable monomorphic inlining optimizations in Sparkplug")
+DEFINE_BOOL(spark_locals, false,
+            "enable caching of local registers in Sparkplug")
+DEFINE_STRING(spark_filter, "*", "filter for baseline Sparkplug compiler")
+
 DEFINE_BOOL(fast_math, true, "faster (but maybe less accurate) math functions")
 DEFINE_BOOL(trace_track_allocation_sites, false,
             "trace the tracking of allocation sites")
@@ -1286,6 +1296,7 @@ DEFINE_BOOL(test_small_max_function_context_stub_size, false,
 
 // codegen-ia32.cc / codegen-arm.cc
 DEFINE_BOOL(print_code, false, "print generated code")
+DEFINE_BOOL(print_baseline_code, false, "print baseline code")
 DEFINE_BOOL(print_opt_code, false, "print optimized code")
 DEFINE_STRING(print_opt_code_filter, "*", "filter for printing optimized code")
 DEFINE_BOOL(print_code_verbose, false, "print more information for code")

@@ -151,18 +151,8 @@ void BytecodeArrayWriter::UpdateSourcePositionTable(
 }
 
 void BytecodeArrayWriter::UpdateExitSeenInBlock(Bytecode bytecode) {
-  switch (bytecode) {
-    case Bytecode::kReturn:
-    case Bytecode::kThrow:
-    case Bytecode::kReThrow:
-    case Bytecode::kAbort:
-    case Bytecode::kJump:
-    case Bytecode::kJumpConstant:
-    case Bytecode::kSuspendGenerator:
-      exit_seen_in_block_ = true;
-      break;
-    default:
-      break;
+  if (Bytecodes::UnconditionallyExitsBasicBlock(bytecode)) {
+    exit_seen_in_block_ = true;
   }
 }
 

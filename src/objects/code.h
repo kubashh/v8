@@ -27,6 +27,7 @@ class Code : public HeapObject {
   typedef uint32_t Flags;
 
 #define CODE_KIND_LIST(V)   \
+  V(BASELINE_FUNCTION)      \
   V(OPTIMIZED_FUNCTION)     \
   V(BYTECODE_HANDLER)       \
   V(STUB)                   \
@@ -114,6 +115,10 @@ class Code : public HeapObject {
   // Tells whether the code checks the optimization marker in the function's
   // feedback vector.
   inline bool checks_optimization_marker() const;
+
+  // Tells whether the code checks the baselining marker in the function's
+  // feedback vector.
+  inline bool checks_baselining_marker() const;
 
   // Tells whether the outgoing parameters of this code are tagged pointers.
   inline bool has_tagged_params() const;

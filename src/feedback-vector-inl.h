@@ -92,6 +92,7 @@ int FeedbackMetadata::GetSlotSize(FeedbackSlotKind kind) {
 
 ACCESSORS(FeedbackVector, shared_function_info, SharedFunctionInfo,
           kSharedFunctionInfoOffset)
+WEAK_ACCESSORS(FeedbackVector, baseline_code_weak_or_smi, kBaselineCodeOffset)
 WEAK_ACCESSORS(FeedbackVector, optimized_code_weak_or_smi, kOptimizedCodeOffset)
 INT32_ACCESSORS(FeedbackVector, length, kLengthOffset)
 INT32_ACCESSORS(FeedbackVector, invocation_count, kInvocationCountOffset)
@@ -111,6 +112,30 @@ void FeedbackVector::increment_deopt_count() {
   if (count < std::numeric_limits<int32_t>::max()) {
     set_deopt_count(count + 1);
   }
+}
+
+Code* FeedbackVector::baseline_code() const {
+  MaybeObject* slot = baseline_code_weak_or_smi();
+  DCHECK(slot->IsSmi() || slot->IsClearedWeakHeapObject() ||
+         slot->IsWeakHeapObject());
+  HeapObject* heap_object;
+  return slot->ToStrongOrWeakHeapObject(&heap_object) ? Code::cast(heap_object)
+                                                      : nullptr;
+}
+
+BaseliningMarker FeedbackVector::baselining_marker() const {
+  MaybeObject* slot = baseline_code_weak_or_smi();
+  Smi* value;
+  if (!slot->ToSmi(&value)) return BaseliningMarker::kNone;
+  return static_cast<BaseliningMarker>(value->value());
+}
+
+bool FeedbackVector::has_baseline_code() const {
+  return baseline_code() != nullptr;
+}
+
+bool FeedbackVector::has_baselining_marker() const {
+  return baselining_marker() != BaseliningMarker::kNone;
 }
 
 Code* FeedbackVector::optimized_code() const {

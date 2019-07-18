@@ -59,6 +59,8 @@ class V8_EXPORT_PRIVATE CodeFactory final {
   static Callable ArgumentAdaptor(Isolate* isolate);
   static Callable Call(Isolate* isolate,
                        ConvertReceiverMode mode = ConvertReceiverMode::kAny);
+  static Callable CallWithFeedback(
+      Isolate* isolate, ConvertReceiverMode mode = ConvertReceiverMode::kAny);
   static Callable CallWithArrayLike(Isolate* isolate);
   static Callable CallWithSpread(Isolate* isolate);
   static Callable CallFunction(
@@ -67,6 +69,7 @@ class V8_EXPORT_PRIVATE CodeFactory final {
   static Callable CallForwardVarargs(Isolate* isolate);
   static Callable CallFunctionForwardVarargs(Isolate* isolate);
   static Callable Construct(Isolate* isolate);
+  static Callable ConstructWithFeedback(Isolate* isolate);
   static Callable ConstructWithSpread(Isolate* isolate);
   static Callable ConstructFunction(Isolate* isolate);
   static Callable ConstructVarargs(Isolate* isolate);
@@ -80,7 +83,7 @@ class V8_EXPORT_PRIVATE CodeFactory final {
       Isolate* isolate, InterpreterPushArgsMode mode);
   static Callable InterpreterCEntry(Isolate* isolate, int result_size = 1);
   static Callable InterpreterOnStackReplacement(Isolate* isolate);
-
+  static Callable BailoutFromBaselineCode(Isolate* isolate);
   static Callable ArrayConstructor(Isolate* isolate);
   static Callable ArrayPop(Isolate* isolate);
   static Callable ArrayPush(Isolate* isolate);

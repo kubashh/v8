@@ -93,6 +93,16 @@ void CallTrampolineDescriptor::InitializePlatformSpecific(
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
+void CallTrampolineWithFeedbackDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  // rax : number of arguments
+  // rdi : the target to call
+  // rbx : feedback vector
+  // rcx : feedback slot
+  Register registers[] = {rdi, rax, rbx, rcx};
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
+
 void CallVarargsDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   // rax : number of arguments (on the stack, not including receiver)
@@ -179,7 +189,6 @@ void ConstructStubDescriptor::InitializePlatformSpecific(
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
-
 void ConstructTrampolineDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   // rax : number of arguments
@@ -189,6 +198,16 @@ void ConstructTrampolineDescriptor::InitializePlatformSpecific(
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
+void ConstructWithFeedbackTrampolineDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  // rax : number of arguments
+  // rdx : the new target
+  // rdi : the target to call
+  // rbx : the feedback vector
+  // rcx : the feedback slot
+  Register registers[] = {rdi, rdx, rax, rbx, rcx};
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
 
 void TransitionElementsKindDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
@@ -321,6 +340,14 @@ void InterpreterCEntryDescriptor::InitializePlatformSpecific(
       rax,  // argument count (argc)
       r15,  // address of first argument (argv)
       rbx   // the runtime function to call
+  };
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
+
+void BailoutFromBaselineCodeDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {
+      rax,  // accumulator
   };
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }

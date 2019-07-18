@@ -114,6 +114,7 @@ namespace internal {
 #define FOR_EACH_INTRINSIC_COMPILER(F)    \
   F(CompileForOnStackReplacement, 1, 1)   \
   F(CompileLazy, 1, 1)                    \
+  F(CompileBaseline, 1, 1)                \
   F(CompileOptimized_Concurrent, 1, 1)    \
   F(CompileOptimized_NotConcurrent, 1, 1) \
   F(EvictOptimizedCodeSlot, 1, 1)         \
@@ -578,6 +579,7 @@ namespace internal {
   F(NeverOptimizeFunction, 1, 1)              \
   F(NotifyContextDisposed, 0, 1)              \
   F(OptimizeFunctionOnNextCall, -1, 1)        \
+  F(BaselineFunctionOnNextCall, 1, 1)         \
   F(OptimizeOsr, -1, 1)                       \
   F(PrintWithNameForAssert, 2, 1)             \
   F(RedirectToWasmInterpreter, 2, 1)          \

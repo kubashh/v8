@@ -35,5 +35,17 @@ Handle<Code> Builtins::Call(ConvertReceiverMode mode) {
   UNREACHABLE();
 }
 
+Handle<Code> Builtins::CallWithFeedback(ConvertReceiverMode mode) {
+  switch (mode) {
+    case ConvertReceiverMode::kNullOrUndefined:
+      return builtin_handle(kCallReceiverIsNullOrUndefinedWithFeedback);
+    case ConvertReceiverMode::kNotNullOrUndefined:
+      return builtin_handle(kCallReceiverIsNotNullOrUndefinedWithFeedback);
+    case ConvertReceiverMode::kAny:
+      return builtin_handle(kCallReceiverIsAnyWithFeedback);
+  }
+  UNREACHABLE();
+}
+
 }  // namespace internal
 }  // namespace v8

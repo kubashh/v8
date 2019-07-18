@@ -638,6 +638,7 @@ Handle<Object> Isolate::CaptureSimpleStackTrace(Handle<JSReceiver> error_object,
       case StackFrame::JAVA_SCRIPT_BUILTIN_CONTINUATION:
       case StackFrame::JAVA_SCRIPT_BUILTIN_CONTINUATION_WITH_CATCH:
       case StackFrame::OPTIMIZED:
+      case StackFrame::BASELINED:
       case StackFrame::INTERPRETED:
       case StackFrame::BUILTIN:
         builder.AppendStandardFrame(JavaScriptFrame::cast(frame));
@@ -1381,6 +1382,27 @@ Object* Isolate::UnwindAndFindHandler() {
                             code->constant_pool(), return_sp, frame->fp());
       }
 
+      case StackFrame::BASELINED: {
+        // Some stubs are able to handle exceptions.
+        if (!catchable_by_js) break;
+        BaselinedFrame* js_frame = static_cast<BaselinedFrame*>(frame);
+        Code* code = js_frame->LookupCode();
+
+        int stack_slots = 0;  // Will contain stack slot count of frame.
+        int offset =
+            js_frame->LookupExceptionHandlerInTable(&stack_slots, nullptr);
+        if (offset < 0) break;
+
+        // Compute the stack pointer from the frame pointer. This ensures
+        // that argument slots on the stack are dropped as returning would.
+        Address return_sp = frame->fp() +
+                            StandardFrameConstants::kFixedFrameSizeAboveFp -
+                            stack_slots * kPointerSize;
+
+        return FoundHandler(nullptr, code->InstructionStart(), offset,
+                            code->constant_pool(), return_sp, frame->fp());
+      }
+
       case StackFrame::STUB: {
         // Some stubs are able to handle exceptions.
         if (!catchable_by_js) break;
@@ -1568,6 +1590,7 @@ Isolate::CatchType Isolate::PredictExceptionCatcher() {
       // For JavaScript frames we perform a lookup in the handler table.
       case StackFrame::OPTIMIZED:
       case StackFrame::INTERPRETED:
+      case StackFrame::BASELINED:
       case StackFrame::BUILTIN: {
         JavaScriptFrame* js_frame = JavaScriptFrame::cast(frame);
         Isolate::CatchType prediction = ToCatchType(PredictException(js_frame));

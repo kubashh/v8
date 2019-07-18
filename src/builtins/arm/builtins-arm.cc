@@ -701,12 +701,12 @@ void Builtins::Generate_JSConstructEntryTrampoline(MacroAssembler* masm) {
   Generate_JSEntryTrampolineHelper(masm, true);
 }
 
-static void ReplaceClosureCodeWithOptimizedCode(
-    MacroAssembler* masm, Register optimized_code, Register closure,
+static void ReplaceClosureCode(
+    MacroAssembler* masm, Register code, Register closure,
     Register scratch1, Register scratch2, Register scratch3) {
   // Store code entry in the closure.
-  __ str(optimized_code, FieldMemOperand(closure, JSFunction::kCodeOffset));
-  __ mov(scratch1, optimized_code);  // Write barrier clobbers scratch1 below.
+  __ str(code, FieldMemOperand(closure, JSFunction::kCodeOffset));
+  __ mov(scratch1, code);  // Write barrier clobbers scratch1 below.
   __ RecordWriteField(closure, JSFunction::kCodeOffset, scratch1, scratch2,
                       kLRHasNotBeenSaved, kDontSaveFPRegs, OMIT_REMEMBERED_SET,
                       OMIT_SMI_CHECK);
@@ -731,10 +731,10 @@ static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch) {
 // Tail-call |function_id| if |smi_entry| == |marker|
 static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
                                           Register smi_entry,
-                                          OptimizationMarker marker,
+                                          Smi* smi_marker,
                                           Runtime::FunctionId function_id) {
   Label no_match;
-  __ cmp(smi_entry, Operand(Smi::FromEnum(marker)));
+  __ cmp(smi_entry, Operand(smi_marker));
   __ b(ne, &no_match);
   GenerateTailCallToReturnedCode(masm, function_id);
   __ bind(&no_match);
@@ -753,7 +753,7 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
   DCHECK(
       !AreAliased(feedback_vector, r0, r1, r3, scratch1, scratch2, scratch3));
 
-  Label optimized_code_slot_is_weak_ref, fallthrough;
+  Label optimized_code_slot_is_weak_ref, fallthrough, fallthrough_clear;
 
   Register closure = r1;
   Register optimized_code_entry = scratch1;
@@ -776,14 +776,14 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
     __ b(eq, &fallthrough);
 
     TailCallRuntimeIfMarkerEquals(masm, optimized_code_entry,
-                                  OptimizationMarker::kLogFirstExecution,
+                                  Smi::FromEnum(OptimizationMarker::kLogFirstExecution),
                                   Runtime::kFunctionFirstExecution);
     TailCallRuntimeIfMarkerEquals(masm, optimized_code_entry,
-                                  OptimizationMarker::kCompileOptimized,
+                                  Smi::FromEnum(OptimizationMarker::kCompileOptimized),
                                   Runtime::kCompileOptimized_NotConcurrent);
     TailCallRuntimeIfMarkerEquals(
         masm, optimized_code_entry,
-        OptimizationMarker::kCompileOptimizedConcurrent,
+        Smi::FromEnum(OptimizationMarker::kCompileOptimizedConcurrent),
         Runtime::kCompileOptimized_Concurrent);
 
     {
@@ -803,7 +803,7 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
     // Optimized code slot is a weak reference.
     __ bind(&optimized_code_slot_is_weak_ref);
 
-    __ LoadWeakValue(optimized_code_entry, optimized_code_entry, &fallthrough);
+    __ LoadWeakValue(optimized_code_entry, optimized_code_entry, &fallthrough_clear);
 
     // Check if the optimized code is marked for deopt. If it is, call the
     // runtime to clear it.
@@ -820,7 +820,7 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
     // the optimized functions list, then tail call the optimized code.
     // The feedback vector is no longer used, so re-use it as a scratch
     // register.
-    ReplaceClosureCodeWithOptimizedCode(masm, optimized_code_entry, closure,
+    ReplaceClosureCode(masm, optimized_code_entry, closure,
                                         scratch2, scratch3, feedback_vector);
     static_assert(kJavaScriptCallCodeStartRegister == r2, "ABI mismatch");
     __ add(r2, optimized_code_entry,
@@ -831,6 +831,77 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
     // closure's code.
     __ bind(&found_deoptimized_code);
     GenerateTailCallToReturnedCode(masm, Runtime::kEvictOptimizedCodeSlot);
+  }
+
+  __ bind(&fallthrough_clear);
+  __ mov(scratch2, Operand(Smi::FromEnum(OptimizationMarker::kNone)));
+  __ str(scratch2,
+          FieldMemOperand(feedback_vector, FeedbackVector::kOptimizedCodeOffset));
+
+
+  // Fall-through if the optimized code cell is clear and there is no
+  // optimization marker.
+  __ bind(&fallthrough);
+}
+
+static void MaybeTailCallBaselineCodeSlot(MacroAssembler* masm,
+                                          Register feedback_vector,
+                                          Register scratch1, Register scratch2,
+                                          Register scratch3) {
+  // ----------- S t a t e -------------
+  //  -- r0 : argument count (preserved for callee if needed, and caller)
+  //  -- r3 : new target (preserved for callee if needed, and caller)
+  //  -- r1 : target function (preserved for callee if needed, and caller)
+  //  -- feedback vector (preserved for caller if needed)
+  // -----------------------------------
+  DCHECK(
+      !AreAliased(feedback_vector, r0, r1, r3, scratch1, scratch2, scratch3));
+
+  Label baseline_code_slot_is_weak_ref, fallthrough;
+
+  Register closure = r1;
+  Register baseline_code_entry = scratch1;
+
+  __ ldr(
+      baseline_code_entry,
+      FieldMemOperand(feedback_vector, FeedbackVector::kBaselineCodeOffset));
+
+  // Check if the code entry is a Smi. If yes, we interpret it as an
+  // optimisation marker. Otherwise, interpret it as a weak reference to a code
+  // object.
+  __ JumpIfNotSmi(baseline_code_entry, &baseline_code_slot_is_weak_ref);
+
+  {
+    // Optimized code slot is a Smi optimization marker.
+
+    // Fall through if no optimization trigger.
+    __ cmp(baseline_code_entry,
+           Operand(Smi::FromEnum(BaseliningMarker::kNone)));
+    __ b(eq, &fallthrough);
+
+    TailCallRuntimeIfMarkerEquals(
+        masm, baseline_code_entry,
+        Smi::FromEnum(BaseliningMarker::kCompileBaseline),
+        Runtime::kCompileBaseline);
+
+    __ Abort(AbortReason::kExpectedOptimizationSentinel);
+  }
+
+  {
+    // Optimized code slot is a weak reference.
+    __ bind(&baseline_code_slot_is_weak_ref);
+
+    __ LoadWeakValue(baseline_code_entry, baseline_code_entry, &fallthrough);
+
+    // Get baseline code into the closure, then tail call the baseline code.
+    // The feedback vector is no longer used, so re-use it as a scratch
+    // register.
+    ReplaceClosureCode(masm, baseline_code_entry, closure,
+                        scratch2, scratch3, feedback_vector);
+    static_assert(kJavaScriptCallCodeStartRegister == r2, "ABI mismatch");
+    __ add(r2, baseline_code_entry,
+           Operand(Code::kHeaderSize - kHeapObjectTag));
+    __ Jump(r2);
   }
 
   // Fall-through if the optimized code cell is clear and there is no
@@ -921,6 +992,10 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // Read off the optimized code slot in the feedback vector, and if there
   // is optimized code or an optimization marker, call that instead.
   MaybeTailCallOptimizedCodeSlot(masm, feedback_vector, r4, r6, r5);
+
+  // Read off the optimized code slot in the feedback vector, and if there
+  // is optimized code or an optimization marker, call that instead.
+  MaybeTailCallBaselineCodeSlot(masm, feedback_vector, r4, r6, r5);
 
   // Open a frame scope to indicate that there is a frame on the stack.  The
   // MANUAL indicates that the scope shouldn't actually generate code to set up
@@ -1300,6 +1375,34 @@ void Builtins::Generate_InterpreterEnterBytecodeDispatch(MacroAssembler* masm) {
   Generate_InterpreterEnterBytecode(masm);
 }
 
+void Builtins::Generate_BailoutFromBaselineCode(MacroAssembler* masm) {
+  // Reset the baseline code from the feedback vector and JSfunction.
+  __ ldr(r1, MemOperand(fp, StandardFrameConstants::kFunctionOffset));
+  __ Move(r2, BUILTIN_CODE(masm->isolate(), CompileLazy));
+  __ str(r2, FieldMemOperand(r1, JSFunction::kCodeOffset));
+  __ RecordWriteField(r1, JSFunction::kCodeOffset, r2, r4, kLRHasNotBeenSaved,
+                      kDontSaveFPRegs, OMIT_REMEMBERED_SET, OMIT_SMI_CHECK);
+
+  __ ldr(r2,
+         FieldMemOperand(r1, JSFunction::kFeedbackCellOffset));
+  __ ldr(r2, FieldMemOperand(r2, Cell::kValueOffset));
+  __ mov(r1, Operand(Smi::FromEnum(BaseliningMarker::kNone)));
+  __ str(r1, FieldMemOperand(r2, FeedbackVector::kBaselineCodeOffset));
+
+  // Fixup stack pointer to drop baseline code spill slots.
+  // Get bytecode array and bytecode offset from the stack frame.
+  __ ldr(kInterpreterBytecodeArrayRegister,
+         MemOperand(fp, InterpreterFrameConstants::kBytecodeArrayFromFp));
+  __ ldr(r2, FieldMemOperand(kInterpreterBytecodeArrayRegister,
+                             BytecodeArray::kFrameSizeOffset));
+  __ mov(sp, fp);
+  __ sub(sp, sp, Operand(InterpreterFrameConstants::kFixedFrameSizeFromFp));
+  __ sub(sp, sp, r2);
+
+  // Enter bytecode at correct location.
+  Generate_InterpreterEnterBytecode(masm);
+}
+
 void Builtins::Generate_CompileLazyDeoptimizedCode(MacroAssembler* masm) {
   // Set the code slot inside the JSFunction to CompileLazy.
   __ Move(r2, BUILTIN_CODE(masm->isolate(), CompileLazy));
@@ -1400,6 +1503,8 @@ void Builtins::Generate_CompileLazy(MacroAssembler* masm) {
 
   // Is there an optimization marker or optimized code in the feedback vector?
   MaybeTailCallOptimizedCodeSlot(masm, feedback_vector, r4, r6, r5);
+
+  MaybeTailCallBaselineCodeSlot(masm, feedback_vector, r4, r6, r5);
 
   // We found no optimized code. Infer the code object needed for the SFI.
   Register entry = r4;

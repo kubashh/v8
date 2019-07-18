@@ -97,6 +97,7 @@ class StackHandler BASE_EMBEDDED {
   V(WASM_INTERPRETER_ENTRY, WasmInterpreterEntryFrame)                    \
   V(C_WASM_ENTRY, CWasmEntryFrame)                                        \
   V(INTERPRETED, InterpretedFrame)                                        \
+  V(BASELINED, BaselinedFrame)                                            \
   V(STUB, StubFrame)                                                      \
   V(BUILTIN_CONTINUATION, BuiltinContinuationFrame)                       \
   V(JAVA_SCRIPT_BUILTIN_CONTINUATION, JavaScriptBuiltinContinuationFrame) \
@@ -200,6 +201,7 @@ class StackFrame BASE_EMBEDDED {
   bool is_exit() const { return type() == EXIT; }
   bool is_optimized() const { return type() == OPTIMIZED; }
   bool is_interpreted() const { return type() == INTERPRETED; }
+  bool is_baselined() const { return type() == BASELINED; }
   bool is_wasm_compiled() const { return type() == WASM_COMPILED; }
   bool is_wasm_to_js() const { return type() == WASM_TO_JS; }
   bool is_js_to_wasm() const { return type() == JS_TO_WASM; }
@@ -224,7 +226,8 @@ class StackFrame BASE_EMBEDDED {
 
   bool is_java_script() const {
     Type type = this->type();
-    return (type == OPTIMIZED) || (type == INTERPRETED) || (type == BUILTIN) ||
+    return (type == OPTIMIZED) || (type == INTERPRETED) ||
+           (type == BASELINED) || (type == BUILTIN) ||
            (type == JAVA_SCRIPT_BUILTIN_CONTINUATION) ||
            (type == JAVA_SCRIPT_BUILTIN_CONTINUATION_WITH_CATCH);
   }
@@ -861,7 +864,6 @@ class OptimizedFrame : public JavaScriptFrame {
   Object* StackSlotAt(int index) const;
 };
 
-
 class InterpretedFrame : public JavaScriptFrame {
  public:
   Type type() const override { return INTERPRETED; }
@@ -910,6 +912,28 @@ class InterpretedFrame : public JavaScriptFrame {
   friend class StackFrameIteratorBase;
 };
 
+class BaselinedFrame : public InterpretedFrame {
+ public:
+  Type type() const override { return BASELINED; }
+
+  // GC support.
+  void Iterate(RootVisitor* v) const override;
+
+  // Lookup exception handler for current {pc}, returns -1 if none found.
+  int LookupExceptionHandlerInTable(
+      int* data, HandlerTable::CatchPrediction* prediction) override;
+
+  static BaselinedFrame* cast(StackFrame* frame) {
+    DCHECK(frame->is_baselined());
+    return static_cast<BaselinedFrame*>(frame);
+  }
+
+ protected:
+  inline explicit BaselinedFrame(StackFrameIteratorBase* iterator);
+
+ private:
+  friend class StackFrameIteratorBase;
+};
 
 // Arguments adaptor frames are automatically inserted below
 // JavaScript frames when the actual number of parameters does not

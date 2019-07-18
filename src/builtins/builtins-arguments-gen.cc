@@ -410,5 +410,23 @@ Node* ArgumentsBuiltinsAssembler::EmitFastNewSloppyArguments(Node* context,
   return result.value();
 }
 
+TF_BUILTIN(FastNewSloppyArguments, ArgumentsBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* function = Parameter(Descriptor::kFunction);
+  Return(EmitFastNewSloppyArguments(context, function));
+}
+
+TF_BUILTIN(FastNewStrictArguments, ArgumentsBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* function = Parameter(Descriptor::kFunction);
+  Return(EmitFastNewStrictArguments(context, function));
+}
+
+TF_BUILTIN(FastNewRestArguments, ArgumentsBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* function = Parameter(Descriptor::kFunction);
+  Return(EmitFastNewRestParameter(context, function));
+}
+
 }  // namespace internal
 }  // namespace v8

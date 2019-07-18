@@ -63,6 +63,7 @@ class Builtins {
   // Convenience wrappers.
   Handle<Code> CallFunction(ConvertReceiverMode = ConvertReceiverMode::kAny);
   Handle<Code> Call(ConvertReceiverMode = ConvertReceiverMode::kAny);
+  Handle<Code> CallWithFeedback(ConvertReceiverMode mode);
   Handle<Code> NonPrimitiveToPrimitive(
       ToPrimitiveHint hint = ToPrimitiveHint::kDefault);
   Handle<Code> OrdinaryToPrimitive(OrdinaryToPrimitiveHint hint);

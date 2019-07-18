@@ -127,7 +127,7 @@ void Interpreter::IterateDispatchTable(RootVisitor* v) {
 }
 
 int Interpreter::InterruptBudget() {
-  return FLAG_interrupt_budget;
+  return FLAG_interrupt_budget / kTickCountMultiplier;
 }
 
 namespace {

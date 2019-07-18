@@ -34,13 +34,7 @@ class IntrinsicsGenerator {
                         const InterpreterAssembler::RegListNodePair& args);
 
  private:
-  enum InstanceTypeCompareMode {
-    kInstanceTypeEqual,
-    kInstanceTypeGreaterThanOrEqual
-  };
-
   Node* IsInstanceType(Node* input, int type);
-  Node* CompareInstanceType(Node* map, int type, InstanceTypeCompareMode mode);
   Node* IntrinsicAsStubCall(const InterpreterAssembler::RegListNodePair& args,
                             Node* context, Callable const& callable);
   Node* IntrinsicAsBuiltinCall(
@@ -121,24 +115,13 @@ Node* IntrinsicsGenerator::InvokeIntrinsic(
   return result.value();
 }
 
-Node* IntrinsicsGenerator::CompareInstanceType(Node* object, int type,
-                                               InstanceTypeCompareMode mode) {
-  Node* instance_type = __ LoadInstanceType(object);
-
-  if (mode == kInstanceTypeEqual) {
-    return __ Word32Equal(instance_type, __ Int32Constant(type));
-  } else {
-    DCHECK_EQ(mode, kInstanceTypeGreaterThanOrEqual);
-    return __ Int32GreaterThanOrEqual(instance_type, __ Int32Constant(type));
-  }
-}
-
 Node* IntrinsicsGenerator::IsInstanceType(Node* input, int type) {
   TNode<Oddball> result = __ Select<Oddball>(
       __ TaggedIsSmi(input), [=] { return __ FalseConstant(); },
       [=] {
+        Node* instance_type = __ LoadInstanceType(input);
         return __ SelectBooleanConstant(
-            CompareInstanceType(input, type, kInstanceTypeEqual));
+            __ Word32Equal(instance_type, __ Int32Constant(type)));
       });
   return result;
 }
@@ -307,44 +290,8 @@ Node* IntrinsicsGenerator::Call(
 
 Node* IntrinsicsGenerator::CreateAsyncFromSyncIterator(
     const InterpreterAssembler::RegListNodePair& args, Node* context) {
-  InterpreterAssembler::Label not_receiver(
-      assembler_, InterpreterAssembler::Label::kDeferred);
-  InterpreterAssembler::Label done(assembler_);
-  InterpreterAssembler::Variable return_value(assembler_,
-                                              MachineRepresentation::kTagged);
-
-  Node* sync_iterator = __ LoadRegisterFromRegisterList(args, 0);
-
-  __ GotoIf(__ TaggedIsSmi(sync_iterator), &not_receiver);
-  __ GotoIfNot(__ IsJSReceiver(sync_iterator), &not_receiver);
-
-  Node* const next =
-      __ GetProperty(context, sync_iterator, factory()->next_string());
-
-  Node* const native_context = __ LoadNativeContext(context);
-  Node* const map = __ LoadContextElement(
-      native_context, Context::ASYNC_FROM_SYNC_ITERATOR_MAP_INDEX);
-  Node* const iterator = __ AllocateJSObjectFromMap(map);
-
-  __ StoreObjectFieldNoWriteBarrier(
-      iterator, JSAsyncFromSyncIterator::kSyncIteratorOffset, sync_iterator);
-  __ StoreObjectFieldNoWriteBarrier(iterator,
-                                    JSAsyncFromSyncIterator::kNextOffset, next);
-
-  return_value.Bind(iterator);
-  __ Goto(&done);
-
-  __ BIND(&not_receiver);
-  {
-    return_value.Bind(
-        __ CallRuntime(Runtime::kThrowSymbolIteratorInvalid, context));
-
-    // Unreachable due to the Throw in runtime call.
-    __ Goto(&done);
-  }
-
-  __ BIND(&done);
-  return return_value.value();
+  return IntrinsicAsBuiltinCall(args, context,
+                                Builtins::kCreateAsyncFromSyncIterator);
 }
 
 Node* IntrinsicsGenerator::CreateJSGeneratorObject(

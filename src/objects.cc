@@ -12287,7 +12287,7 @@ void JSFunction::MarkForOptimization(ConcurrencyMode mode) {
     mode = ConcurrencyMode::kNotConcurrent;
   }
 
-  DCHECK(!is_compiled() || IsInterpreted());
+  DCHECK(!is_compiled() || IsInterpreted() || IsBaselined());
   DCHECK(shared()->IsInterpreted());
   DCHECK(!IsOptimized());
   DCHECK(!HasOptimizedCode());
@@ -12313,6 +12313,19 @@ void JSFunction::MarkForOptimization(ConcurrencyMode mode) {
   SetOptimizationMarker(mode == ConcurrencyMode::kConcurrent
                             ? OptimizationMarker::kCompileOptimizedConcurrent
                             : OptimizationMarker::kCompileOptimized);
+}
+
+void JSFunction::MarkForBaselining() {
+  DCHECK(!is_compiled() || IsInterpreted());
+  DCHECK(shared()->IsInterpreted());
+  DCHECK(!IsBaselined());
+  DCHECK(!HasBaselineCode());
+  DCHECK(!IsOptimized());
+  DCHECK(!HasOptimizedCode());
+  DCHECK(shared()->allows_lazy_compilation() ||
+         !shared()->optimization_disabled());
+
+  SetBaseliningMarker(BaseliningMarker::kCompileBaseline);
 }
 
 // static
@@ -13934,6 +13947,8 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
   shared_info->set_allows_lazy_compilation(lit->AllowsLazyCompilation());
   shared_info->set_language_mode(lit->language_mode());
   shared_info->set_is_wrapped(lit->is_wrapped());
+  // TODO(rmcilroy) set based on bytecode
+  shared_info->set_disable_baselining(false);
   //  shared_info->set_kind(lit->kind());
   // FunctionKind must have already been set.
   DCHECK(lit->kind() == shared_info->kind());

@@ -678,6 +678,33 @@ void CodeGenerator::AssembleRegisterArgumentPoisoning() {
   __ andq(rsp, kSpeculationPoisonRegister);
 }
 
+void CodeGenerator::AssembleOptimizedCodeCheck() {
+  Register feedback_vector = rbx;
+  __ movp(feedback_vector,
+          FieldOperand(kJSFunctionRegister, JSFunction::kFeedbackCellOffset));
+  __ movp(feedback_vector, FieldOperand(feedback_vector, Cell::kValueOffset));
+
+  Register optimized_code_entry = rbx;
+  __ movp(optimized_code_entry,
+          FieldOperand(feedback_vector, FeedbackVector::kOptimizedCodeOffset));
+
+  // Check whether optimized code slot is empty or in queue, if so fallthrough.
+  Label fallthrough;
+  __ Cmp(optimized_code_entry, Smi::FromEnum(OptimizationMarker::kNone));
+  __ j(equal, &fallthrough);
+  __ Cmp(optimized_code_entry,
+         Smi::FromEnum(OptimizationMarker::kInOptimizationQueue));
+  __ j(equal, &fallthrough);
+
+  // Otherwise tail-call InterpreterEntryTrampoline which will take care of
+  // installing optimized code.
+  __ jmp(isolate()->builtins()->builtin_handle(
+             Builtins::kInterpreterEntryTrampoline),
+         RelocInfo::CODE_TARGET);
+
+  __ bind(&fallthrough);
+}
+
 // Assembles an instruction after register allocation, producing machine code.
 CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     Instruction* instr) {

@@ -338,6 +338,8 @@ Handle<FeedbackVector> Factory::NewFeedbackVector(
   vector->set_optimized_code_weak_or_smi(MaybeObject::FromSmi(Smi::FromEnum(
       FLAG_log_function_events ? OptimizationMarker::kLogFirstExecution
                                : OptimizationMarker::kNone)));
+  vector->set_baseline_code_weak_or_smi(
+      MaybeObject::FromSmi(Smi::FromEnum(BaseliningMarker::kNone)));
   vector->set_length(length);
   vector->set_invocation_count(0);
   vector->set_profiler_ticks(0);
@@ -2010,6 +2012,7 @@ Handle<FeedbackVector> Factory::CopyFeedbackVector(
     // Slow case: Just copy the content one-by-one.
     result->set_shared_function_info(array->shared_function_info());
     result->set_optimized_code_weak_or_smi(array->optimized_code_weak_or_smi());
+    result->set_baseline_code_weak_or_smi(array->baseline_code_weak_or_smi());
     result->set_invocation_count(array->invocation_count());
     result->set_profiler_ticks(array->profiler_ticks());
     result->set_deopt_count(array->deopt_count());

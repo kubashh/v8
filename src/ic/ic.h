@@ -325,8 +325,8 @@ class StoreIC : public IC {
   void UpdateCaches(LookupIterator* lookup, Handle<Object> value,
                     JSReceiver::StoreFromKeyed store_mode);
 
- private:
   Handle<Object> ComputeHandler(LookupIterator* lookup);
+ private:
 
   friend class IC;
 };

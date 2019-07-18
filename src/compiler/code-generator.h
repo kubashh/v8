@@ -211,6 +211,10 @@ class CodeGenerator final : public GapResolver::Assembler {
   // like the context register and the function register.
   void AssembleRegisterArgumentPoisoning();
 
+  // Checks for optimized code in feedback vector, and if it or a marker exist
+  // tail call compile lazy to install the code.
+  void AssembleOptimizedCodeCheck();
+
   // Generates an architecture-specific, descriptor-specific prologue
   // to set up a stack frame.
   void AssembleConstructFrame();

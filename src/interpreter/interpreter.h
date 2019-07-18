@@ -79,6 +79,8 @@ class Interpreter {
     return reinterpret_cast<Address>(bytecode_dispatch_counters_table_.get());
   }
 
+  static const int kTickCountMultiplier = 144;
+
  private:
   friend class SetupInterpreter;
   friend class v8::internal::SetupIsolateDelegate;

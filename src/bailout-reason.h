@@ -84,6 +84,8 @@ namespace internal {
   V(kUnexpectedReturnFromThrow, "Unexpectedly returned from a throw")          \
   V(kUnexpectedReturnFromWasmTrap,                                             \
     "Should not return after throwing a wasm trap")                            \
+  V(kUnexpectedReturnFromBailout,                                              \
+    "Should not return after bailing out from baseine code")                   \
   V(kUnexpectedStackPointer, "The stack pointer is not the expected value")    \
   V(kUnexpectedValue, "Unexpected value")                                      \
   V(kUnsupportedModuleOperation, "Unsupported module operation")               \

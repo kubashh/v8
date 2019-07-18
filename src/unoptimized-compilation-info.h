@@ -109,7 +109,7 @@ class V8_EXPORT_PRIVATE UnoptimizedCompilationInfo final {
   unsigned flags_;
 
   // The zone from which the compilation pipeline working on this
-  // OptimizedCompilationInfo allocates.
+  // UnoptimizedCompilationInfo allocates.
   Zone* zone_;
 
   // The root AST node of the function literal being compiled.

@@ -2278,6 +2278,8 @@ void Simulator::DecodeType01(Instruction* instr) {
         case BKPT: {
           ArmDebugger dbg(this);
           PrintF("Simulator hit BKPT.\n");
+          set_register(pc, reinterpret_cast<int32_t>(instr)
+                              + Instruction::kInstrSize);
           dbg.Debug();
           break;
         }

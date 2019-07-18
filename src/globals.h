@@ -1427,6 +1427,11 @@ inline std::ostream& operator<<(std::ostream& os,
   return os;
 }
 
+enum class BaseliningMarker {
+  kNone,
+  kCompileBaseline,
+};
+
 enum class OptimizationMarker {
   kLogFirstExecution,
   kNone,

@@ -51,6 +51,8 @@ static const char* ComputeMarker(SharedFunctionInfo* shared,
   switch (code->kind()) {
     case AbstractCode::INTERPRETED_FUNCTION:
       return shared->optimization_disabled() ? "" : "~";
+    case AbstractCode::BASELINE_FUNCTION:
+      return "^";
     case AbstractCode::OPTIMIZED_FUNCTION:
       return "*";
     default:
@@ -306,6 +308,7 @@ void PerfBasicLogger::LogRecordedBuffer(AbstractCode* code, SharedFunctionInfo*,
                                         const char* name, int length) {
   if (FLAG_perf_basic_prof_only_functions &&
       (code->kind() != AbstractCode::INTERPRETED_FUNCTION &&
+       code->kind() != AbstractCode::BASELINE_FUNCTION &&
        code->kind() != AbstractCode::OPTIMIZED_FUNCTION)) {
     return;
   }
@@ -1630,6 +1633,7 @@ void Logger::LogCodeObject(Object* object) {
   const char* description = "Unknown code from the snapshot";
   switch (code_object->kind()) {
     case AbstractCode::INTERPRETED_FUNCTION:
+    case AbstractCode::BASELINE_FUNCTION:
     case AbstractCode::OPTIMIZED_FUNCTION:
       return;  // We log this later using LogCompiledFunctions.
     case AbstractCode::BYTECODE_HANDLER:

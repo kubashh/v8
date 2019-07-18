@@ -323,6 +323,11 @@ class TurboAssembler : public Assembler {
   Condition CheckSmi(Register src);
   Condition CheckSmi(Operand src);
 
+  void Cmp(Register dst, Handle<Object> source);
+  void Cmp(Operand dst, Handle<Object> source);
+  void Cmp(Register dst, Smi* src);
+  void Cmp(Operand dst, Smi* src);
+
   // Jump to label if the value is a tagged smi.
   void JumpIfSmi(Register src, Label* on_smi,
                  Label::Distance near_jump = Label::kFar);
@@ -732,11 +737,6 @@ class MacroAssembler : public TurboAssembler {
   void Load(Register dst, Operand src, Representation r);
   void Store(Operand dst, Register src, Representation r);
 
-  void Cmp(Register dst, Handle<Object> source);
-  void Cmp(Operand dst, Handle<Object> source);
-  void Cmp(Register dst, Smi* src);
-  void Cmp(Operand dst, Smi* src);
-
   // Emit code to discard a non-negative number of pointer-sized elements
   // from the stack, clobbering only the rsp register.
   void Drop(int stack_elements);
@@ -940,6 +940,7 @@ class MacroAssembler : public TurboAssembler {
   // Needs access to SafepointRegisterStackIndex for compiled frame
   // traversal.
   friend class StandardFrame;
+  friend class BaselinedFrame;
 };
 
 // -----------------------------------------------------------------------------

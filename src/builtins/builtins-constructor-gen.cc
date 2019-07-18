@@ -386,6 +386,26 @@ TF_BUILTIN(CreateShallowArrayLiteral, ConstructorBuiltinsAssembler) {
   }
 }
 
+TF_BUILTIN(CreateShallowArrayLiteralTrackAllocationSites,
+           ConstructorBuiltinsAssembler) {
+  Node* feedback_vector = Parameter(Descriptor::kFeedbackVector);
+  Node* slot = SmiUntag(Parameter(Descriptor::kSlot));
+  Node* constant_elements = Parameter(Descriptor::kConstantElements);
+  Node* context = Parameter(Descriptor::kContext);
+  Label call_runtime(this, Label::kDeferred);
+  Return(EmitCreateShallowArrayLiteral(feedback_vector, slot, context,
+                                       &call_runtime, TRACK_ALLOCATION_SITE));
+
+  BIND(&call_runtime);
+  {
+    Comment("call runtime");
+    int const flags = AggregateLiteral::kNeedsInitialAllocationSite |
+                      AggregateLiteral::kIsShallow;
+    Return(CallRuntime(Runtime::kCreateArrayLiteral, context, feedback_vector,
+                       SmiTag(slot), constant_elements, SmiConstant(flags)));
+  }
+}
+
 Node* ConstructorBuiltinsAssembler::EmitCreateEmptyArrayLiteral(
     Node* feedback_vector, Node* slot, Node* context) {
   // Array literals always have a valid AllocationSite to properly track
@@ -633,6 +653,11 @@ Node* ConstructorBuiltinsAssembler::EmitCreateEmptyObjectLiteral(
   Node* result =
       AllocateJSObjectFromMap(map, empty_fixed_array, empty_fixed_array);
   return result;
+}
+
+TF_BUILTIN(CreateEmptyObjectLiteral, ConstructorBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Return(EmitCreateEmptyObjectLiteral(context));
 }
 
 // ES #sec-object-constructor

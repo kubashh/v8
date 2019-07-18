@@ -2156,6 +2156,71 @@ TNode<Context> CodeStubAssembler::LoadModuleContext(
   return UncheckedCast<Context>(cur_context.value());
 }
 
+Node* CodeStubAssembler::GetContextAtDepth(Node* context, Node* depth) {
+  Variable cur_context(this, MachineRepresentation::kTaggedPointer);
+  cur_context.Bind(context);
+
+  Variable cur_depth(this, MachineRepresentation::kWord32);
+  cur_depth.Bind(depth);
+
+  Label context_found(this);
+
+  Variable* context_search_loop_variables[2] = {&cur_depth, &cur_context};
+  Label context_search(this, 2, context_search_loop_variables);
+
+  // Fast path if the depth is 0.
+  Branch(Word32Equal(depth, Int32Constant(0)), &context_found, &context_search);
+
+  // Loop until the depth is 0.
+  BIND(&context_search);
+  {
+    cur_depth.Bind(Int32Sub(cur_depth.value(), Int32Constant(1)));
+    cur_context.Bind(
+        LoadContextElement(cur_context.value(), Context::PREVIOUS_INDEX));
+
+    Branch(Word32Equal(cur_depth.value(), Int32Constant(0)), &context_found,
+           &context_search);
+  }
+
+  BIND(&context_found);
+  return cur_context.value();
+}
+
+void CodeStubAssembler::GotoIfHasContextExtensionUpToDepth(Node* context,
+                                                           Node* depth,
+                                                           Label* target) {
+  Variable cur_context(this, MachineRepresentation::kTaggedPointer);
+  cur_context.Bind(context);
+
+  Variable cur_depth(this, MachineRepresentation::kWord32);
+  cur_depth.Bind(depth);
+
+  Variable* context_search_loop_variables[2] = {&cur_depth, &cur_context};
+  Label context_search(this, 2, context_search_loop_variables);
+
+  // Loop until the depth is 0.
+  Goto(&context_search);
+  BIND(&context_search);
+  {
+    // TODO(leszeks): We only need to do this check if the context had a sloppy
+    // eval, we could pass in a context chain bitmask to figure out which
+    // contexts actually need to be checked.
+
+    Node* extension_slot =
+        LoadContextElement(cur_context.value(), Context::EXTENSION_INDEX);
+
+    // Jump to the target if the extension slot is not a hole.
+    GotoIf(WordNotEqual(extension_slot, TheHoleConstant()), target);
+
+    cur_depth.Bind(Int32Sub(cur_depth.value(), Int32Constant(1)));
+    cur_context.Bind(
+        LoadContextElement(cur_context.value(), Context::PREVIOUS_INDEX));
+
+    GotoIf(Word32NotEqual(cur_depth.value(), Int32Constant(0)),
+           &context_search);
+  }
+}
+
 TNode<Map> CodeStubAssembler::LoadJSArrayElementsMap(
     SloppyTNode<Int32T> kind, SloppyTNode<Context> native_context) {
   CSA_ASSERT(this, IsFastElementsKind(kind));
@@ -6203,6 +6268,63 @@ TNode<Number> CodeStubAssembler::ToNumber_Inline(SloppyTNode<Context> context,
   return var_result.value();
 }
 
+Node* CodeStubAssembler::ToNumberOrNumeric_Inline(Node* context, Node* object,
+                                                  Variable* var_type_feedback,
+                                                  Object::Conversion mode) {
+  VARIABLE(var_result, MachineRepresentation::kTagged);
+  Label if_done(this), if_objectissmi(this), if_objectisheapnumber(this),
+      if_objectisother(this, Label::kDeferred);
+
+  GotoIf(TaggedIsSmi(object), &if_objectissmi);
+  Branch(IsHeapNumber(object), &if_objectisheapnumber, &if_objectisother);
+
+  BIND(&if_objectissmi);
+  {
+    var_result.Bind(object);
+    if (var_type_feedback) {
+      var_type_feedback->Bind(
+          SmiConstant(BinaryOperationFeedback::kSignedSmall));
+    }
+    Goto(&if_done);
+  }
+
+  BIND(&if_objectisheapnumber);
+  {
+    var_result.Bind(object);
+    if (var_type_feedback) {
+      var_type_feedback->Bind(SmiConstant(BinaryOperationFeedback::kNumber));
+    }
+    Goto(&if_done);
+  }
+
+  BIND(&if_objectisother);
+  {
+    auto builtin = Builtins::kNonNumberToNumber;
+    if (mode == Object::Conversion::kToNumeric) {
+      builtin = Builtins::kNonNumberToNumeric;
+      // Special case for collecting BigInt feedback.
+      Label not_bigint(this);
+      GotoIfNot(IsBigInt(object), &not_bigint);
+      {
+        var_result.Bind(object);
+        if (var_type_feedback) {
+          var_type_feedback->Bind(
+              SmiConstant(BinaryOperationFeedback::kBigInt));
+        }
+        Goto(&if_done);
+      }
+      BIND(&not_bigint);
+    }
+
+    // Convert {object} by calling out to the appropriate builtin.
+    var_result.Bind(CallBuiltin(builtin, context, object));
+    var_type_feedback->Bind(SmiConstant(BinaryOperationFeedback::kAny));
+    Goto(&if_done);
+  }
+  BIND(&if_done);
+  return var_result.value();
+}
+
 TNode<Number> CodeStubAssembler::ToNumber(SloppyTNode<Context> context,
                                           SloppyTNode<Object> input,
                                           BigIntHandling bigint_handling) {
@@ -8281,9 +8403,9 @@ void CodeStubAssembler::ReportFeedbackUpdate(
     SloppyTNode<FeedbackVector> feedback_vector, SloppyTNode<IntPtrT> slot_id,
     const char* reason) {
   // Reset profiler ticks.
-  StoreObjectFieldNoWriteBarrier(
-      feedback_vector, FeedbackVector::kProfilerTicksOffset, Int32Constant(0),
-      MachineRepresentation::kWord32);
+  // StoreObjectFieldNoWriteBarrier(
+  //     feedback_vector, FeedbackVector::kProfilerTicksOffset, Int32Constant(0),
+  //     MachineRepresentation::kWord32);
 
 #ifdef V8_TRACE_FEEDBACK_UPDATES
   // Trace the update.

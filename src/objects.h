@@ -3430,6 +3430,37 @@ class JSFunction: public JSObject {
   // Clears the optimization marker in the function's feedback vector.
   inline void ClearOptimizationMarker();
 
+  // Tells whether or not this function checks its baselining marker in its
+  // feedback vector.
+  inline bool ChecksBaseliningMarker();
+
+  // Tells whether or not this function holds baselined code.
+  //
+  // Note: Returning false does not necessarily mean that this function hasn't
+  // been baselined, as it may have baseline code on its feedback vector.
+  inline bool IsBaselined();
+
+  // Tells whether or not this function has baseline code available to it,
+  // either because it is baslined or because it has baseline code in its
+  // feedback vector.
+  inline bool HasBaselineCode();
+
+  // Tells whether or not this function has a (non-zero) baselining marker.
+  inline bool HasBaseliningMarker();
+
+  // Sets the baselining marker in the function's feedback vector.
+  inline void SetBaseliningMarker(BaseliningMarker marker);
+
+  // Mark this function for lazy baselining. The function will be baselined
+  // the next time it is executed.
+  void MarkForBaselining();
+
+  // Clears the baselining marker in the function's feedback vector.
+  inline void ClearBaseliningMarker();
+
+  // Tells whether or not the function is already marked for lazy recompilation.
+  inline bool IsMarkedForBaselining();
+
   // Completes inobject slack tracking on initial map if it is active.
   inline void CompleteInobjectSlackTrackingIfActive();
 

@@ -19,8 +19,14 @@ namespace v8 {
 namespace internal {
 
 // Number of times a function has to be seen on the stack before it is
+// optimized if it is smaller than kMaxBytecodeSizeForEarlyOpt.
+static const int kProfilerTicksBeforeEarlyOptimization =
+    1 * interpreter::Interpreter::kTickCountMultiplier;
+
+// Number of times a function has to be seen on the stack before it is
 // optimized.
-static const int kProfilerTicksBeforeOptimization = 2;
+static const int kProfilerTicksBeforeOptimization =
+    2 * interpreter::Interpreter::kTickCountMultiplier;
 
 // The number of ticks required for optimizing a function increases with
 // the size of the bytecode. This is in addition to the
@@ -64,6 +70,36 @@ char const* OptimizationReasonToString(OptimizationReason reason) {
 std::ostream& operator<<(std::ostream& os, OptimizationReason reason) {
   return os << OptimizationReasonToString(reason);
 }
+
+#undef OPTIMIZATION_REASON_LIST
+
+#define BASELINE_REASON_LIST(V)       \
+  V(DoNotBaseline, "do not baseline") \
+  V(HotAndStable, "hot and stable")   \
+  V(SmallFunction, "small function")
+
+enum class BaselineReason : uint8_t {
+#define BASELINE_REASON_CONSTANTS(Constant, message) k##Constant,
+  BASELINE_REASON_LIST(BASELINE_REASON_CONSTANTS)
+#undef BASELINE_REASON_CONSTANTS
+};
+
+char const* BaselineReasonToString(BaselineReason reason) {
+  static char const* reasons[] = {
+#define BASELINE_REASON_TEXTS(Constant, message) message,
+      BASELINE_REASON_LIST(BASELINE_REASON_TEXTS)
+#undef BASELINE_REASON_TEXTS
+  };
+  size_t const index = static_cast<size_t>(reason);
+  DCHECK_LT(index, arraysize(reasons));
+  return reasons[index];
+}
+
+std::ostream& operator<<(std::ostream& os, BaselineReason reason) {
+  return os << BaselineReasonToString(reason);
+}
+
+#undef BASELINE_REASON_LIST
 
 RuntimeProfiler::RuntimeProfiler(Isolate* isolate)
     : isolate_(isolate),
@@ -122,6 +158,9 @@ void RuntimeProfiler::AttemptOnStackReplacement(JavaScriptFrame* frame,
 
   // If the code is not optimizable, don't try OSR.
   if (shared->optimization_disabled()) return;
+
+  // TODO(rmcilroy): Add OSR support for baseline code.
+  if (frame->type() == StackFrame::BASELINED) return;
 
   // We're using on-stack replacement: Store new loop nesting level in
   // BytecodeArray header so that certain back edges in any interpreter frame
@@ -206,16 +245,17 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction* function,
       (shared->GetBytecodeArray()->length() / kBytecodeSizeAllowancePerTick);
   if (ticks >= ticks_for_optimization) {
     return OptimizationReason::kHotAndStable;
-  } else if (!any_ic_changed_ && shared->GetBytecodeArray()->length() <
-                                     kMaxBytecodeSizeForEarlyOpt) {
+  } else if (ticks >= kProfilerTicksBeforeEarlyOptimization &&
+             !any_ic_changed_ &&
+             shared->GetBytecodeArray()->length() <
+                 kMaxBytecodeSizeForEarlyOpt) {
     // If no IC was patched since the last tick and this function is very
     // small, optimistically optimize it now.
     return OptimizationReason::kSmallFunction;
   } else if (FLAG_trace_opt_verbose) {
     PrintF("[not yet optimizing ");
     function->PrintName();
-    PrintF(", not enough ticks: %d/%d and ", ticks,
-           kProfilerTicksBeforeOptimization);
+    PrintF(", not enough ticks: %d/%d and ", ticks, ticks_for_optimization);
     if (any_ic_changed_) {
       PrintF("ICs changed]\n");
     } else {
@@ -226,10 +266,70 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction* function,
   return OptimizationReason::kDoNotOptimize;
 }
 
+void RuntimeProfiler::Baseline(JSFunction* function, BaselineReason reason) {
+  DCHECK_NE(reason, BaselineReason::kDoNotBaseline);
+  TraceRecompile(function, BaselineReasonToString(reason), "baseline");
+  function->MarkForBaselining();
+}
+
+void RuntimeProfiler::MaybeBaseline(JSFunction* function,
+                                    JavaScriptFrame* frame) {
+  if (frame->is_baselined() || frame->is_optimized()) return;
+  if (function->IsBaselined() || function->HasBaselineCode() ||
+      function->IsMarkedForBaselining()) return;
+
+  BaselineReason reason = ShouldBaseline(function, frame);
+
+  if (reason != BaselineReason::kDoNotBaseline) {
+    Baseline(function, reason);
+  }
+}
+
+BaselineReason RuntimeProfiler::ShouldBaseline(JSFunction* function,
+                                               JavaScriptFrame* frame) {
+  SharedFunctionInfo* shared = function->shared();
+  int ticks = function->feedback_vector()->profiler_ticks();
+
+  if (shared->GetBytecodeArray()->length() > kMaxBytecodeSizeForOpt) {
+    return BaselineReason::kDoNotBaseline;
+  }
+
+  if (shared->disable_baselining()) {
+    return BaselineReason::kDoNotBaseline;
+  }
+  const int kProfilerTicksBeforeEarlyBaselining = FLAG_baseline_ticks / 2;
+  int ticks_for_optimization =
+      FLAG_baseline_ticks +
+      (shared->GetBytecodeArray()->length() / kBytecodeSizeAllowancePerTick);
+  if (ticks >= ticks_for_optimization) {
+    return BaselineReason::kHotAndStable;
+  } else if (ticks >=
+                 kProfilerTicksBeforeEarlyBaselining && /*FIXME ?
+                                                           !any_ic_changed_ &&
+                                                         */
+             shared->GetBytecodeArray()->length() <
+                 kMaxBytecodeSizeForEarlyOpt) {
+    // If no IC was patched since the last tick and this function is very
+    // small, optimistically optimize it now.
+    return BaselineReason::kSmallFunction;
+  } else if (FLAG_trace_opt_verbose) {
+    PrintF("[not yet baselining ");
+    function->PrintName();
+    PrintF(", not enough ticks: %d/%d and ", ticks, ticks_for_optimization);
+    if (any_ic_changed_) {
+      PrintF("ICs changed]\n");
+    } else {
+      PrintF(" too large for small function optimization: %d/%d]\n",
+             shared->GetBytecodeArray()->length(), kMaxBytecodeSizeForEarlyOpt);
+    }
+  }
+  return BaselineReason::kDoNotBaseline;
+}
+
 void RuntimeProfiler::MarkCandidatesForOptimization() {
   HandleScope scope(isolate_);
 
-  if (!isolate_->use_optimizer()) return;
+  if (!isolate_->use_optimizer() && !FLAG_baseline) return;
 
   DisallowHeapAllocation no_gc;
 
@@ -248,7 +348,8 @@ void RuntimeProfiler::MarkCandidatesForOptimization() {
     DCHECK(function->shared()->is_compiled());
     if (!function->shared()->IsInterpreted()) continue;
 
-    MaybeOptimize(function, frame);
+    if (FLAG_baseline) MaybeBaseline(function, frame);
+    if (isolate_->use_optimizer()) MaybeOptimize(function, frame);
 
     // TODO(leszeks): Move this increment to before the maybe optimize checks,
     // and update the tests to assume the increment has already happened.

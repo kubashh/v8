@@ -7,6 +7,7 @@
 #include "src/code-stub-assembler.h"
 #include "src/heap/factory-inl.h"
 #include "src/ic/accessor-assembler.h"
+#include "src/ic/call-assembler.h"
 #include "src/ic/keyed-store-generic.h"
 #include "src/objects/property-descriptor-object.h"
 #include "src/objects/shared-function-info.h"
@@ -1326,6 +1327,18 @@ TF_BUILTIN(InstanceOf, ObjectBuiltinsAssembler) {
   Node* object = Parameter(Descriptor::kLeft);
   Node* callable = Parameter(Descriptor::kRight);
   Node* context = Parameter(Descriptor::kContext);
+
+  Return(InstanceOf(object, callable, context));
+}
+
+TF_BUILTIN(InstanceOfWithFeedback, CallAssembler) {
+  Node* object = Parameter(Descriptor::kLeft);
+  Node* callable = Parameter(Descriptor::kRight);
+  Node* feedback_vector = Parameter(Descriptor::kVector);
+  Node* slot = Parameter(Descriptor::kSlot);
+  Node* context = Parameter(Descriptor::kContext);
+
+  CollectCallableFeedback(callable, context, feedback_vector, slot);
 
   Return(InstanceOf(object, callable, context));
 }

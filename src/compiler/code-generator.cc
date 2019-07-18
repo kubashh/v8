@@ -168,6 +168,10 @@ void CodeGenerator::AssembleCode() {
     AssembleCodeStartRegisterCheck();
   }
 
+  if (info->code_kind() == Code::BASELINE_FUNCTION) {
+    AssembleOptimizedCodeCheck();
+  }
+
   // TODO(jupvfranco): This should be the first thing in the code, otherwise
   // MaybeCallEntryHookDelayed may happen twice (for optimized and deoptimized
   // code). We want to bailout only from JS functions, which are the only ones

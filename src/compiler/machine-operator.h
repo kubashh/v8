@@ -83,15 +83,18 @@ UnalignedStoreRepresentation const& UnalignedStoreRepresentationOf(
 
 class StackSlotRepresentation final {
  public:
-  StackSlotRepresentation(int size, int alignment)
-      : size_(size), alignment_(alignment) {}
+  StackSlotRepresentation(MachineRepresentation representation, int size,
+                          int alignment)
+      : size_(size), alignment_(alignment), representation_(representation) {}
 
+  MachineRepresentation representation() const { return representation_; }
   int size() const { return size_; }
   int alignment() const { return alignment_; }
 
  private:
   int size_;
   int alignment_;
+  MachineRepresentation representation_;
 };
 
 V8_EXPORT_PRIVATE bool operator==(StackSlotRepresentation,
@@ -601,7 +604,9 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
   // unaligned store [base + index], value
   const Operator* UnalignedStore(UnalignedStoreRepresentation rep);
 
-  const Operator* StackSlot(int size, int alignment = 0);
+  const Operator* StackSlot(
+      int size, int alignment = 0,
+      MachineRepresentation rep = MachineRepresentation::kNone);
   const Operator* StackSlot(MachineRepresentation rep, int alignment = 0);
 
   // Destroy value by masking when misspeculating.

@@ -449,6 +449,8 @@ void Deoptimizer::DeoptimizeFunction(JSFunction* function, Code* code) {
       code->set_deopt_already_counted(true);
     }
     DeoptimizeMarkedCodeForContext(function->context()->native_context());
+    // Reset ticks on deopt (since we don't reset on feedback with Sparkplug).
+    function->feedback_vector()->set_profiler_ticks(0);
   }
 }
 

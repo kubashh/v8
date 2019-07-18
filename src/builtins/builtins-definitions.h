@@ -54,6 +54,11 @@ namespace internal {
   TFC(CallWithArrayLike, CallWithArrayLike, 1)                                 \
   ASM(CallForwardVarargs)                                                      \
   ASM(CallFunctionForwardVarargs)                                              \
+  TFC(CallReceiverIsNullOrUndefinedWithFeedback, CallTrampolineWithFeedback,   \
+      1)                                                                       \
+  TFC(CallReceiverIsNotNullOrUndefinedWithFeedback,                            \
+      CallTrampolineWithFeedback, 1)                                           \
+  TFC(CallReceiverIsAnyWithFeedback, CallTrampolineWithFeedback, 1)            \
                                                                                \
   /* Construct */                                                              \
   /* ES6 section 9.2.2 [[Construct]] ( argumentsList, newTarget) */            \
@@ -63,6 +68,7 @@ namespace internal {
   ASM(ConstructedNonConstructable)                                             \
   /* ES6 section 7.3.13 Construct (F, [argumentsList], [newTarget]) */         \
   ASM(Construct)                                                               \
+  TFC(ConstructWithFeedback, ConstructWithFeedbackTrampoline, 1)               \
   ASM(ConstructVarargs)                                                        \
   TFC(ConstructWithSpread, ConstructWithSpread, 1)                             \
   TFC(ConstructWithArrayLike, ConstructWithArrayLike, 1)                       \
@@ -78,6 +84,9 @@ namespace internal {
   TFS(CreateRegExpLiteral, kFeedbackVector, kSlot, kPattern, kFlags)           \
   TFS(CreateEmptyArrayLiteral, kFeedbackVector, kSlot)                         \
   TFS(CreateShallowArrayLiteral, kFeedbackVector, kSlot, kConstantElements)    \
+  TFS(CreateShallowArrayLiteralTrackAllocationSites, kFeedbackVector, kSlot,   \
+      kConstantElements)                                                       \
+  TFC(CreateEmptyObjectLiteral, CreateEmptyObjectLiteral, 1)                   \
   TFS(CreateShallowObjectLiteral, kFeedbackVector, kSlot,                      \
       kBoilerplateDescription, kFlags)                                         \
   /* ES6 section 9.5.14 [[Construct]] ( argumentsList, newTarget) */           \
@@ -119,6 +128,9 @@ namespace internal {
   ASM(InterpreterEnterBytecodeAdvance)                                         \
   ASM(InterpreterEnterBytecodeDispatch)                                        \
   ASM(InterpreterOnStackReplacement)                                           \
+                                                                               \
+  /* Baseline compiler */                                                      \
+  ASM(BailoutFromBaselineCode)                                                 \
                                                                                \
   /* Code life-cycle */                                                        \
   ASM(CompileLazy)                                                             \
@@ -234,6 +246,11 @@ namespace internal {
   CPP(StrictPoisonPillThrower)                                                 \
   CPP(UnsupportedThrower)                                                      \
   TFJ(ReturnReceiver, 0)                                                       \
+                                                                               \
+  /* Arguments */                                                              \
+  TFS(FastNewSloppyArguments, kFunction)                                       \
+  TFS(FastNewStrictArguments, kFunction)                                       \
+  TFS(FastNewRestArguments, kFunction)                                         \
                                                                                \
   /* Array */                                                                  \
   ASM(ArrayConstructor)                                                        \
@@ -762,6 +779,28 @@ namespace internal {
   TFS(Decrement, kValue)                                                       \
   TFS(Increment, kValue)                                                       \
   TFS(Negate, kValue)                                                          \
+  TFC(AddWithFeedback, BinaryOpWithFeedback, 1)                                \
+  TFC(SubtractWithFeedback, BinaryOpWithFeedback, 1)                           \
+  TFC(MultiplyWithFeedback, BinaryOpWithFeedback, 1)                           \
+  TFC(DivideWithFeedback, BinaryOpWithFeedback, 1)                             \
+  TFC(ModulusWithFeedback, BinaryOpWithFeedback, 1)                            \
+  TFC(ExponentiateWithFeedback, BinaryOpWithFeedback, 1)                       \
+  TFC(BitwiseAndWithFeedback, BinaryOpWithFeedback, 1)                         \
+  TFC(BitwiseOrWithFeedback, BinaryOpWithFeedback, 1)                          \
+  TFC(BitwiseXorWithFeedback, BinaryOpWithFeedback, 1)                         \
+  TFC(ShiftLeftWithFeedback, BinaryOpWithFeedback, 1)                          \
+  TFC(ShiftRightWithFeedback, BinaryOpWithFeedback, 1)                         \
+  TFC(ShiftRightLogicalWithFeedback, BinaryOpWithFeedback, 1)                  \
+  TFC(BitwiseNotWithFeedback, UnaryOpWithFeedback, 1)                          \
+  TFC(DecrementWithFeedback, UnaryOpWithFeedback, 1)                           \
+  TFC(IncrementWithFeedback, UnaryOpWithFeedback, 1)                           \
+  TFC(NegateWithFeedback, UnaryOpWithFeedback, 1)                              \
+  TFC(LessThanWithFeedback, CompareWithFeedback, 1)                            \
+  TFC(LessThanOrEqualWithFeedback, CompareWithFeedback, 1)                     \
+  TFC(GreaterThanWithFeedback, CompareWithFeedback, 1)                         \
+  TFC(GreaterThanOrEqualWithFeedback, CompareWithFeedback, 1)                  \
+  TFC(EqualWithFeedback, CompareWithFeedback, 1)                               \
+  TFC(StrictEqualWithFeedback, CompareWithFeedback, 1)                         \
                                                                                \
   /* Object */                                                                 \
   /* ES #sec-object-constructor */                                             \
@@ -809,6 +848,7 @@ namespace internal {
   /* instanceof */                                                             \
   TFC(OrdinaryHasInstance, Compare, 1)                                         \
   TFC(InstanceOf, Compare, 1)                                                  \
+  TFC(InstanceOfWithFeedback, CompareWithFeedback, 1)                          \
                                                                                \
   /* for-in */                                                                 \
   TFS(ForInEnumerate, kReceiver)                                               \
@@ -1255,6 +1295,7 @@ namespace internal {
   TFJ(AsyncFromSyncIteratorPrototypeReturn, 1, kValue)                         \
   /* #sec-async-iterator-value-unwrap-functions */                             \
   TFJ(AsyncIteratorValueUnwrap, 1, kValue)                                     \
+  TFS(CreateAsyncFromSyncIterator, kSyncIterator)                              \
                                                                                \
   /* Miscellaneous */                                                          \
                                                                                \

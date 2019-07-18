@@ -93,6 +93,16 @@ void CallTrampolineDescriptor::InitializePlatformSpecific(
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
+void CallTrampolineWithFeedbackDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  // r0 : number of arguments
+  // r1 : the target to call
+  // r2 : feedback vector
+  // r3 : feedback slot
+  Register registers[] = {r1, r0, r2, r3};
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
+
 void CallVarargsDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   // r0 : number of arguments (on the stack, not including receiver)
@@ -189,6 +199,16 @@ void ConstructTrampolineDescriptor::InitializePlatformSpecific(
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
+void ConstructWithFeedbackTrampolineDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  // r0 : number of arguments
+  // r1 : the target to call
+  // r3 : the new target
+  // r2 : the feedback vector
+  // r4 : the feedback slot
+  Register registers[] = {r1, r3, r0, r2, r4};
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
 
 void TransitionElementsKindDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
@@ -326,6 +346,14 @@ void InterpreterCEntryDescriptor::InitializePlatformSpecific(
       r0,  // argument count (argc)
       r2,  // address of first argument (argv)
       r1   // the runtime function to call
+  };
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
+
+void BailoutFromBaselineCodeDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {
+      r0,  // accumulator
   };
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }

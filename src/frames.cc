@@ -490,6 +490,8 @@ StackFrame::Type StackFrame::ComputeType(const StackFrameIteratorBase* iterator,
               return OPTIMIZED;
             }
             return BUILTIN;
+          case Code::BASELINE_FUNCTION:
+            return BASELINED;
           case Code::OPTIMIZED_FUNCTION:
             return OPTIMIZED;
           case Code::WASM_FUNCTION:
@@ -531,6 +533,7 @@ StackFrame::Type StackFrame::ComputeType(const StackFrameIteratorBase* iterator,
     case JS_TO_WASM:
     case OPTIMIZED:
     case INTERPRETED:
+    case BASELINED:
     default:
       // Unoptimized and optimized JavaScript frames, including
       // interpreted frames, should never have a StackFrame::Type
@@ -880,6 +883,7 @@ void StandardFrame::IterateCompiledFrame(RootVisitor* v) const {
         break;
       case OPTIMIZED:
       case INTERPRETED:
+      case BASELINED:
       case BUILTIN:
         // These frame types have a context, but they are actually stored
         // in the place on the stack that one finds the frame type.
@@ -1636,9 +1640,125 @@ int OptimizedFrame::StackSlotOffsetRelativeToFp(int slot_index) {
          ((slot_index + 1) * kPointerSize);
 }
 
-
 Object* OptimizedFrame::StackSlotAt(int index) const {
   return Memory::Object_at(fp() + StackSlotOffsetRelativeToFp(index));
+}
+
+int BaselinedFrame::LookupExceptionHandlerInTable(
+    int* stack_slots, HandlerTable::CatchPrediction* prediction) {
+  // TODO(rmcilroy): prediction logic?
+  DCHECK_NULL(prediction);
+  Code* code = LookupCode();
+  HandlerTable table(code);
+  int pc_offset = static_cast<int>(pc() - code->InstructionStart());
+  if (stack_slots) *stack_slots = code->stack_slots();
+
+  return table.LookupReturn(pc_offset);
+}
+
+void BaselinedFrame::Iterate(RootVisitor* v) const {
+  // Make sure that we're not doing "safe" stack frame iteration. We cannot
+  // possibly find pointers in optimized frames in that state.
+  DCHECK(can_access_heap_objects());
+
+  // Find the code and compute the safepoint information.
+  Address inner_pointer = pc();
+
+  InnerPointerToCodeCache::InnerPointerToCodeCacheEntry* entry =
+      isolate()->inner_pointer_to_code_cache()->GetCacheEntry(inner_pointer);
+  if (!entry->safepoint_entry.is_valid()) {
+    entry->safepoint_entry = entry->code->GetSafepointEntry(inner_pointer);
+    DCHECK(entry->safepoint_entry.is_valid());
+  } else {
+    DCHECK(entry->safepoint_entry.Equals(
+        entry->code->GetSafepointEntry(inner_pointer)));
+  }
+
+  SafepointEntry safepoint_entry = entry->safepoint_entry;
+  Code* code = entry->code;
+  bool has_tagged_params = code->has_tagged_params();
+  uint32_t stack_slots = code->stack_slots();
+  uint32_t slot_space = stack_slots * kPointerSize;
+
+  int reg_count = GetBytecodeArray()->register_count();
+
+  int frame_header_size = InterpreterFrameConstants::kFixedFrameSizeFromFp;
+  slot_space -=
+      (frame_header_size + StandardFrameConstants::kFixedFrameSizeAboveFp);
+
+  Object** frame_header_base = &Memory::Object_at(fp() - frame_header_size);
+  Object** frame_header_limit =
+      &Memory::Object_at(fp() - StandardFrameConstants::kCPSlotSize);
+  Object** register_file_base = frame_header_base - reg_count;
+  Object** register_file_limit = frame_header_base;
+  Object** parameters_base = &Memory::Object_at(sp());
+  Object** parameters_limit = frame_header_base - slot_space / kPointerSize;
+
+  // Visit the parameters that may be on top of the saved registers.
+  if (safepoint_entry.argument_count() > 0) {
+    v->VisitRootPointers(Root::kTop, nullptr, parameters_base,
+                         parameters_base + safepoint_entry.argument_count());
+    parameters_base += safepoint_entry.argument_count();
+  }
+
+  // Skip saved double registers.
+  if (safepoint_entry.has_doubles()) {
+    // Number of doubles not known at snapshot time.
+    DCHECK(!isolate()->serializer_enabled());
+    parameters_base +=
+        RegisterConfiguration::Default()->num_allocatable_double_registers() *
+        kDoubleSize / kPointerSize;
+  }
+
+  // Visit the registers that contain pointers if any.
+  if (safepoint_entry.HasRegisters()) {
+    for (int i = kNumSafepointRegisters - 1; i >= 0; i--) {
+      if (safepoint_entry.HasRegisterAt(i)) {
+        int reg_stack_index = MacroAssembler::SafepointRegisterStackIndex(i);
+        v->VisitRootPointer(Root::kTop, nullptr,
+                            parameters_base + reg_stack_index);
+      }
+    }
+    // Skip the words containing the register values.
+    parameters_base += kNumSafepointRegisters;
+  }
+
+  // We're done dealing with the register bits.
+  uint8_t* safepoint_bits = safepoint_entry.bits();
+  safepoint_bits += kNumSafepointRegisters >> kBitsPerByteLog2;
+
+  // Visit the rest of the parameters if they are tagged.
+  if (has_tagged_params) {
+    v->VisitRootPointers(Root::kTop, nullptr, parameters_base,
+                         parameters_limit);
+  }
+
+  // Visit the register file.
+  // TODO(rmcilroy): Either skip slot below, or ensure register file is marked
+  // as safepoint bits for slots below.
+  v->VisitRootPointers(Root::kTop, nullptr, register_file_base,
+                       register_file_limit);
+
+  // Visit pointer spill slots and locals.
+  for (unsigned index = 0; index < stack_slots; index++) {
+    int byte_index = index >> kBitsPerByteLog2;
+    int bit_index = index & (kBitsPerByte - 1);
+    if ((safepoint_bits[byte_index] & (1U << bit_index)) != 0) {
+      v->VisitRootPointer(Root::kTop, nullptr, parameters_limit + index);
+    }
+  }
+
+  // For the off-heap code cases, we can skip this.
+  if (code != nullptr) {
+    // Visit the return address in the callee and incoming arguments.
+    IteratePc(v, pc_address(), constant_pool_address(), code);
+  }
+
+  // If this frame has JavaScript ABI, visit the context (in stub and JS
+  // frames) and the function (in JS frames). If it has WebAssembly ABI, visit
+  // the instance object.
+  v->VisitRootPointers(Root::kTop, nullptr, frame_header_base,
+                       frame_header_limit);
 }
 
 int InterpretedFrame::position() const {

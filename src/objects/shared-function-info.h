@@ -74,7 +74,7 @@ class SharedFunctionInfo : public HeapObject {
   //
   // Note: function->IsInterpreted() does not necessarily return the same value
   // as function->shared()->IsInterpreted() because the closure might have been
-  // optimized.
+  // optimized or baselined.
   inline bool IsInterpreted() const;
 
   // Set up the link between shared function info and the script. The shared
@@ -340,6 +340,8 @@ class SharedFunctionInfo : public HeapObject {
   // Indicates that asm->wasm conversion failed and should not be re-attempted.
   DECL_BOOLEAN_ACCESSORS(is_asm_wasm_broken)
 
+  DECL_BOOLEAN_ACCESSORS(disable_baselining)
+
   inline FunctionKind kind() const;
 
   // Defines the index in a native context of closure's map instantiated using
@@ -533,7 +535,8 @@ class SharedFunctionInfo : public HeapObject {
   V(FunctionMapIndexBits, int, 5, _)                     \
   V(DisabledOptimizationReasonBits, BailoutReason, 4, _) \
   V(RequiresInstanceFieldsInitializer, bool, 1, _)       \
-  V(ConstructAsBuiltinBit, bool, 1, _)
+  V(ConstructAsBuiltinBit, bool, 1, _)                   \
+  V(DisableBaseliningBit, bool, 1, _)
 
   DEFINE_BIT_FIELDS(FLAGS_BIT_FIELDS)
 #undef FLAGS_BIT_FIELDS

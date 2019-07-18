@@ -429,11 +429,12 @@ MachineType AtomicOpRepresentationOf(Operator const* op) {
   V(4, 0) V(8, 0) V(16, 0) V(4, 4) V(8, 8) V(16, 16)
 
 struct StackSlotOperator : public Operator1<StackSlotRepresentation> {
-  explicit StackSlotOperator(int size, int alignment)
+  explicit StackSlotOperator(MachineRepresentation representation, int size,
+                             int alignment)
       : Operator1<StackSlotRepresentation>(
             IrOpcode::kStackSlot, Operator::kNoDeopt | Operator::kNoThrow,
             "StackSlot", 0, 0, 0, 1, 0, 0,
-            StackSlotRepresentation(size, alignment)) {}
+            StackSlotRepresentation(representation, size, alignment)) {}
 };
 
 struct MachineOperatorGlobalCache {
@@ -500,16 +501,17 @@ struct MachineOperatorGlobalCache {
   MACHINE_TYPE_LIST(LOAD)
 #undef LOAD
 
-#define STACKSLOT(Size, Alignment)                                     \
-  struct StackSlotOfSize##Size##OfAlignment##Alignment##Operator final \
-      : public StackSlotOperator {                                     \
-    StackSlotOfSize##Size##OfAlignment##Alignment##Operator()          \
-        : StackSlotOperator(Size, Alignment) {}                        \
-  };                                                                   \
-  StackSlotOfSize##Size##OfAlignment##Alignment##Operator              \
-      kStackSlotOfSize##Size##OfAlignment##Alignment;
-  STACK_SLOT_CACHED_SIZES_ALIGNMENTS_LIST(STACKSLOT)
-#undef STACKSLOT
+// TODO(rmcilroy) - FIXME
+// #define STACKSLOT(Size, Alignment)                                     \
+//   struct StackSlotOfSize##Size##OfAlignment##Alignment##Operator final \
+//       : public StackSlotOperator {                                     \
+//     StackSlotOfSize##Size##OfAlignment##Alignment##Operator()          \
+//         : StackSlotOperator(Size, Alignment) {}                        \
+//   };                                                                   \
+//   StackSlotOfSize##Size##OfAlignment##Alignment##Operator              \
+//       kStackSlotOfSize##Size##OfAlignment##Alignment;
+//   STACK_SLOT_CACHED_SIZES_ALIGNMENTS_LIST(STACKSLOT)
+// #undef STACKSLOT
 
 #define STORE(Type)                                                            \
   struct Store##Type##Operator : public Operator1<StoreRepresentation> {       \
@@ -857,23 +859,25 @@ const Operator* MachineOperatorBuilder::ProtectedLoad(LoadRepresentation rep) {
   UNREACHABLE();
 }
 
-const Operator* MachineOperatorBuilder::StackSlot(int size, int alignment) {
+const Operator* MachineOperatorBuilder::StackSlot(
+    int size, int alignment, MachineRepresentation representation) {
   DCHECK_LE(0, size);
   DCHECK(alignment == 0 || alignment == 4 || alignment == 8 || alignment == 16);
-#define CASE_CACHED_SIZE(Size, Alignment)                          \
-  if (size == Size && alignment == Alignment) {                    \
-    return &cache_.kStackSlotOfSize##Size##OfAlignment##Alignment; \
-  }
+  // TODO(rmcilroy) - FIXME
+  // #define CASE_CACHED_SIZE(Size, Alignment)                          \
+  //   if (size == Size && alignment == Alignment) {                    \
+  //     return &cache_.kStackSlotOfSize##Size##OfAlignment##Alignment; \
+  //   }
 
-  STACK_SLOT_CACHED_SIZES_ALIGNMENTS_LIST(CASE_CACHED_SIZE)
+  //   STACK_SLOT_CACHED_SIZES_ALIGNMENTS_LIST(CASE_CACHED_SIZE)
 
-#undef CASE_CACHED_SIZE
-  return new (zone_) StackSlotOperator(size, alignment);
+  // #undef CASE_CACHED_SIZE
+  return new (zone_) StackSlotOperator(representation, size, alignment);
 }
 
 const Operator* MachineOperatorBuilder::StackSlot(MachineRepresentation rep,
                                                   int alignment) {
-  return StackSlot(1 << ElementSizeLog2Of(rep), alignment);
+  return StackSlot(1 << ElementSizeLog2Of(rep), alignment, rep);
 }
 
 const Operator* MachineOperatorBuilder::Store(StoreRepresentation store_rep) {

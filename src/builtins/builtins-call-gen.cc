@@ -8,6 +8,7 @@
 #include "src/builtins/builtins.h"
 #include "src/globals.h"
 #include "src/heap/heap-inl.h"
+#include "src/ic/call-assembler.h"
 #include "src/isolate.h"
 #include "src/macro-assembler.h"
 #include "src/objects/arguments.h"
@@ -368,6 +369,81 @@ TF_BUILTIN(CallWithSpread, CallOrConstructBuiltinsAssembler) {
   Node* args_count = Parameter(CallWithSpreadDescriptor::kArgumentsCount);
   Node* context = Parameter(CallWithSpreadDescriptor::kContext);
   CallOrConstructWithSpread(target, new_target, spread, args_count, context);
+}
+
+TF_BUILTIN(CallReceiverIsNullOrUndefinedWithFeedback, CallAssembler) {
+  Node* function = Parameter(Descriptor::kFunction);
+  Node* args_count = Parameter(Descriptor::kActualArgumentsCount);
+  Node* vector = Parameter(Descriptor::kFeedbackVector);
+  Node* slot = Parameter(Descriptor::kSlot);
+  Node* context = Parameter(Descriptor::kContext);
+
+  CollectCallFeedback(function, context, vector, slot);
+
+  Callable callable =
+      CodeFactory::Call(isolate(), ConvertReceiverMode::kNullOrUndefined);
+  TailCallStub(callable, context, function, args_count);
+}
+
+TF_BUILTIN(CallReceiverIsNotNullOrUndefinedWithFeedback, CallAssembler) {
+  Node* function = Parameter(Descriptor::kFunction);
+  Node* args_count = Parameter(Descriptor::kActualArgumentsCount);
+  Node* vector = Parameter(Descriptor::kFeedbackVector);
+  Node* slot = Parameter(Descriptor::kSlot);
+  Node* context = Parameter(Descriptor::kContext);
+
+  CollectCallFeedback(function, context, vector, slot);
+
+  Callable callable =
+      CodeFactory::Call(isolate(), ConvertReceiverMode::kNotNullOrUndefined);
+  TailCallStub(callable, context, function, args_count);
+}
+
+TF_BUILTIN(CallReceiverIsAnyWithFeedback, CallAssembler) {
+  Node* function = Parameter(Descriptor::kFunction);
+  Node* args_count = Parameter(Descriptor::kActualArgumentsCount);
+  Node* vector = Parameter(Descriptor::kFeedbackVector);
+  Node* slot = Parameter(Descriptor::kSlot);
+  Node* context = Parameter(Descriptor::kContext);
+
+  CollectCallFeedback(function, context, vector, slot);
+
+  Callable callable = CodeFactory::Call(isolate(), ConvertReceiverMode::kAny);
+  TailCallStub(callable, context, function, args_count);
+}
+
+TF_BUILTIN(ConstructWithFeedback, CallAssembler) {
+  Node* function = Parameter(Descriptor::kFunction);
+  Node* new_target = Parameter(Descriptor::kNewTarget);
+  Node* args_count = Parameter(Descriptor::kActualArgumentsCount);
+  Node* vector = Parameter(Descriptor::kFeedbackVector);
+  Node* slot = Parameter(Descriptor::kSlot);
+  Node* context = Parameter(Descriptor::kContext);
+
+  VARIABLE(var_site, MachineRepresentation::kTagged);
+  Label construct(this), construct_array(this);
+
+  CollectConstructFeedback(function, context, new_target, slot, vector,
+                           &var_site, &construct_array, &construct);
+
+  BIND(&construct_array);
+  {
+    // TODO(bmeurer): Introduce a dedicated builtin to deal with the Array
+    // constructor feedback collection.
+    Comment("call using ConstructArray builtin");
+    ArrayConstructorStub array_constructor_stub(isolate());
+    ArrayConstructorDescriptor descriptor(isolate());
+    TailCallStub(descriptor, HeapConstant(array_constructor_stub.GetCode()),
+                 context, function, new_target, args_count, var_site.value());
+  }
+
+  BIND(&construct);
+  {
+    // TODO(bmeurer): Remove the generic type_info parameter from the Construct.
+    Comment("call using Construct builtin");
+    TailCallStub(CodeFactory::Construct(isolate()), context, function,
+                 new_target, args_count);
+  }
 }
 
 }  // namespace internal

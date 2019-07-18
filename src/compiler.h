@@ -20,6 +20,8 @@ namespace v8 {
 namespace internal {
 
 // Forward declarations.
+class BaselineCompilationInfo;
+class BaselineCompilationJob;
 class JavaScriptFrame;
 class OptimizedCompilationInfo;
 class OptimizedCompilationJob;
@@ -56,6 +58,7 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
   static bool Compile(Handle<SharedFunctionInfo> shared,
                       ClearExceptionFlag flag);
   static bool Compile(Handle<JSFunction> function, ClearExceptionFlag flag);
+  static bool CompileBaseline(Handle<JSFunction> function);
   static bool CompileOptimized(Handle<JSFunction> function, ConcurrencyMode);
   static MaybeHandle<JSArray> CompileForLiveEdit(Handle<Script> script);
 
@@ -256,6 +259,46 @@ class UnoptimizedCompilationJob : public CompilationJob {
   base::TimeDelta time_taken_to_finalize_;
 };
 
+// A base class for baseline compilation jobs.
+//
+// The job is split into two phases which are called in sequence on
+// different threads and with different limitations:
+//  1) ExecuteJob:   Runs concurrently. No heap allocation or handle derefs.
+//  2) FinalizeJob:  Runs on main thread. No dependency changes.
+//
+// Either of phases can either fail or succeed.
+class BaselineCompilationJob : public CompilationJob {
+ public:
+  BaselineCompilationJob(intptr_t stack_limit,
+                         BaselineCompilationInfo* compilation_info)
+      : CompilationJob(stack_limit, State::kReadyToExecute),
+        compilation_info_(compilation_info) {}
+
+  // Executes the compile job. Can be called on a background thread.
+  V8_WARN_UNUSED_RESULT Status ExecuteJob();
+
+  // Finalizes the compile job. Must be called on the main thread.
+  V8_WARN_UNUSED_RESULT Status FinalizeJob(Isolate* isolate);
+
+  void RecordCompilationStats() const;
+  void RecordFunctionCompilation(CodeEventListener::LogEventsAndTags tag,
+                                 Isolate* isolate) const;
+
+  BaselineCompilationInfo* compilation_info() const {
+    return compilation_info_;
+  }
+
+ protected:
+  // Overridden by the actual implementation.
+  virtual Status ExecuteJobImpl() = 0;
+  virtual Status FinalizeJobImpl(Isolate* isolate) = 0;
+
+ private:
+  BaselineCompilationInfo* compilation_info_;
+  base::TimeDelta time_taken_to_execute_;
+  base::TimeDelta time_taken_to_finalize_;
+};
+
 // A base class for optimized compilation jobs.
 //
 // The job is split into three phases which are called in sequence on
@@ -300,6 +343,7 @@ class OptimizedCompilationJob : public CompilationJob {
   OptimizedCompilationInfo* compilation_info() const {
     return compilation_info_;
   }
+
   virtual size_t AllocatedMemory() const { return 0; }
 
  protected:

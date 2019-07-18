@@ -22,6 +22,8 @@ class CreateArrayLiteralFlags {
   class FastCloneSupportedBit : public BitField8<bool, FlagsBits::kNext, 1> {};
 
   static uint8_t Encode(bool use_fast_shallow_clone, int runtime_flags);
+  static void Decode(uint8_t raw_flag, bool* use_fast_shallow_clone,
+                     int* runtime_flags);
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CreateArrayLiteralFlags);
@@ -33,6 +35,8 @@ class CreateObjectLiteralFlags {
   class FastCloneSupportedBit : public BitField8<bool, FlagsBits::kNext, 1> {};
 
   static uint8_t Encode(int runtime_flags, bool fast_clone_supported);
+  static void Decode(uint8_t raw_flag, bool* fast_clone_supported,
+                     int* runtime_flags);
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CreateObjectLiteralFlags);
@@ -44,6 +48,7 @@ class CreateClosureFlags {
   class FastNewClosureBit : public BitField8<bool, PretenuredBit::kNext, 1> {};
 
   static uint8_t Encode(bool pretenure, bool is_function_scope);
+  static void Decode(uint8_t raw_flag, bool* fast_new_closure, bool* pretenure);
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CreateClosureFlags);
@@ -86,6 +91,8 @@ class StoreLookupSlotFlags {
 
   static uint8_t Encode(LanguageMode language_mode,
                         LookupHoistingMode lookup_hoisting_mode);
+  static void Decode(uint8_t raw_flag, LanguageMode* language_mode,
+                     LookupHoistingMode* lookup_hoisting_mode);
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(StoreLookupSlotFlags);

@@ -42,6 +42,21 @@ RUNTIME_FUNCTION(Runtime_CompileLazy) {
   return function->code();
 }
 
+RUNTIME_FUNCTION(Runtime_CompileBaseline) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
+  StackLimitCheck check(isolate);
+  if (check.JsHasOverflowed(kStackSpaceRequiredForCompilation * KB)) {
+    return isolate->StackOverflow();
+  }
+  if (!Compiler::CompileBaseline(function)) {
+    return isolate->heap()->exception();
+  }
+  DCHECK(function->is_compiled());
+  return function->code();
+}
+
 RUNTIME_FUNCTION(Runtime_CompileOptimized_Concurrent) {
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());

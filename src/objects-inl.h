@@ -2422,6 +2422,41 @@ void JSFunction::ClearOptimizationMarker() {
   feedback_vector()->ClearOptimizationMarker();
 }
 
+bool JSFunction::IsBaselined() {
+  return code()->kind() == Code::BASELINE_FUNCTION;
+}
+
+bool JSFunction::HasBaselineCode() {
+  return IsBaselined() ||
+         (has_feedback_vector() && feedback_vector()->has_baseline_code());
+}
+
+void JSFunction::SetBaseliningMarker(BaseliningMarker marker) {
+  DCHECK(has_feedback_vector());
+  DCHECK(ChecksBaseliningMarker());
+  DCHECK(!HasBaselineCode());
+
+  feedback_vector()->SetBaseliningMarker(marker);
+}
+
+bool JSFunction::HasBaseliningMarker() {
+  return has_feedback_vector() && feedback_vector()->has_baselining_marker();
+}
+
+void JSFunction::ClearBaseliningMarker() {
+  DCHECK(has_feedback_vector());
+  feedback_vector()->ClearBaseliningMarker();
+}
+
+bool JSFunction::ChecksBaseliningMarker() {
+  return code()->checks_baselining_marker();
+}
+
+bool JSFunction::IsMarkedForBaselining() {
+  return has_feedback_vector() && feedback_vector()->baselining_marker() ==
+                                      BaseliningMarker::kCompileBaseline;
+}
+
 // Optimized code marked for deoptimization will tier back down to running
 // interpreted on its next activation, and already doesn't count as IsOptimized.
 bool JSFunction::IsInterpreted() {

@@ -74,15 +74,6 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   compiler::Node* GetContext();
   void SetContext(compiler::Node* value);
 
-  // Context at |depth| in the context chain starting at |context|.
-  compiler::Node* GetContextAtDepth(compiler::Node* context,
-                                    compiler::Node* depth);
-
-  // Goto the given |target| if the context chain starting at |context| has any
-  // extensions up to the given |depth|.
-  void GotoIfHasContextExtensionUpToDepth(compiler::Node* context,
-                                          compiler::Node* depth, Label* target);
-
   // A RegListNodePair provides an abstraction over lists of registers.
   class RegListNodePair {
    public:
@@ -141,24 +132,6 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   // Load the FeedbackVector for the current function.
   compiler::Node* LoadFeedbackVector();
 
-  // Increment the call count for a CALL_IC or construct call.
-  // The call count is located at feedback_vector[slot_id + 1].
-  void IncrementCallCount(compiler::Node* feedback_vector,
-                          compiler::Node* slot_id);
-
-  // Collect the callable |target| feedback for either a CALL_IC or
-  // an INSTANCEOF_IC in the |feedback_vector| at |slot_id|.
-  void CollectCallableFeedback(compiler::Node* target, compiler::Node* context,
-                               compiler::Node* feedback_vector,
-                               compiler::Node* slot_id);
-
-  // Collect CALL_IC feedback for |target| function in the
-  // |feedback_vector| at |slot_id|, and the call counts in
-  // the |feedback_vector| at |slot_id+1|.
-  void CollectCallFeedback(compiler::Node* target, compiler::Node* context,
-                           compiler::Node* feedback_vector,
-                           compiler::Node* slot_id);
-
   // Call JSFunction or Callable |function| with |args| arguments, possibly
   // including the receiver depending on |receiver_mode|. After the call returns
   // directly dispatches to the next bytecode.
@@ -179,18 +152,7 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   // After the call returns directly dispatches to the next bytecode.
   void CallJSWithSpreadAndDispatch(compiler::Node* function,
                                    compiler::Node* context,
-                                   const RegListNodePair& args,
-                                   compiler::Node* slot_id,
-                                   compiler::Node* feedback_vector);
-
-  // Call constructor |target| with |args| arguments (not including receiver).
-  // The |new_target| is the same as the |target| for the new keyword, but
-  // differs for the super keyword.
-  compiler::Node* Construct(compiler::Node* target, compiler::Node* context,
-                            compiler::Node* new_target,
-                            const RegListNodePair& args,
-                            compiler::Node* slot_id,
-                            compiler::Node* feedback_vector);
+                                   const RegListNodePair& args);
 
   // Call constructor |target| with |args| arguments (not including
   // receiver). The last argument is always a spread. The |new_target| is the
@@ -261,8 +223,6 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   Bytecode bytecode() const { return bytecode_; }
   static bool TargetSupportsUnalignedAccess();
 
-  void ToNumberOrNumeric(Object::Conversion mode);
-
   // Lazily deserializes the current bytecode's handler and tail-calls into it.
   void DeserializeLazyAndDispatch();
 
@@ -292,7 +252,7 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   // Saves and restores interpreter bytecode offset to the interpreter stack
   // frame when performing a call.
   void CallPrologue();
-  void CallEpilogue();
+  void CallEpilogue(Node* result);
 
   // Increment the dispatch counter for the (current, next) bytecode pair.
   void TraceBytecodeDispatch(compiler::Node* target_index);

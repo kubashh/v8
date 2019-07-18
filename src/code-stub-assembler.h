@@ -779,6 +779,14 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Calling this is only valid if there's a module context in the chain.
   TNode<Context> LoadModuleContext(SloppyTNode<Context> context);
 
+  // Context at |depth| in the context chain starting at |context|.
+  Node* GetContextAtDepth(Node* context, Node* depth);
+
+  // Goto the given |target| if the context chain starting at |context| has any
+  // extensions up to the given |depth|.
+  void GotoIfHasContextExtensionUpToDepth(Node* context, Node* depth,
+                                          Label* target);
+
   void GotoIfContextElementEqual(Node* value, Node* native_context,
                                  int slot_index, Label* if_equal) {
     GotoIf(WordEqual(value, LoadContextElement(native_context, slot_index)),
@@ -1508,6 +1516,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
       BigIntHandling bigint_handling = BigIntHandling::kThrow);
   TNode<Number> ToNumber_Inline(SloppyTNode<Context> context,
                                 SloppyTNode<Object> input);
+
+  Node* ToNumberOrNumeric_Inline(Node* context, Node* object,
+                                 Variable* var_type_feedback,
+                                 Object::Conversion mode);
 
   // Try to convert an object to a BigInt. Throws on failure (e.g. for Numbers).
   // https://tc39.github.io/proposal-bigint/#sec-to-bigint

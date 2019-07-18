@@ -1540,7 +1540,8 @@ void MarkCompactCollector::ProcessEphemeralMarking() {
 void MarkCompactCollector::ProcessTopOptimizedFrame(ObjectVisitor* visitor) {
   for (StackFrameIterator it(isolate(), isolate()->thread_local_top());
        !it.done(); it.Advance()) {
-    if (it.frame()->type() == StackFrame::INTERPRETED) {
+    if (it.frame()->type() == StackFrame::INTERPRETED ||
+        it.frame()->type() == StackFrame::BASELINED) {
       return;
     }
     if (it.frame()->type() == StackFrame::OPTIMIZED) {

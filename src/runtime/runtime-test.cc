@@ -12,6 +12,7 @@
 #include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
 #include "src/compiler.h"
 #include "src/deoptimizer.h"
+#include "src/ic/ic.h"
 #include "src/frames-inl.h"
 #include "src/isolate-inl.h"
 #include "src/runtime-profiler.h"
@@ -240,6 +241,65 @@ RUNTIME_FUNCTION(Runtime_OptimizeFunctionOnNextCall) {
 
   JSFunction::EnsureFeedbackVector(function);
   function->MarkForOptimization(concurrency_mode);
+
+  return isolate->heap()->undefined_value();
+}
+
+RUNTIME_FUNCTION(Runtime_BaselineFunctionOnNextCall) {
+  HandleScope scope(isolate);
+
+  // This function is used by fuzzers, ignore calls with bogus arguments count.
+  if (args.length() != 1 && args.length() != 2) {
+    return isolate->heap()->undefined_value();
+  }
+
+  // This function is used by fuzzers to get coverage for optimizations
+  // in compiler. Ignore calls on non-function objects to avoid runtime errors.
+  CONVERT_ARG_HANDLE_CHECKED(Object, function_object, 0);
+  if (!function_object->IsJSFunction()) {
+    return isolate->heap()->undefined_value();
+  }
+  Handle<JSFunction> function = Handle<JSFunction>::cast(function_object);
+
+  // The following conditions were lifted (in part) from the DCHECK inside
+  // JSFunction::MarkForOptimization().
+
+  if (!function->shared()->allows_lazy_compilation()) {
+    return isolate->heap()->undefined_value();
+  }
+
+  // If function isn't compiled, compile it now.
+  if (!function->shared()->is_compiled() &&
+      !Compiler::Compile(function, Compiler::CLEAR_EXCEPTION)) {
+    return isolate->heap()->undefined_value();
+  }
+
+  // If the function is already optimized, just return.
+  if (function->IsBaselined()) {
+    return isolate->heap()->undefined_value();
+  }
+
+  // If the function has optimized code, ensure that we check for it and return.
+  if (function->HasBaselineCode()) {
+    DCHECK(function->ChecksBaseliningMarker());
+    return isolate->heap()->undefined_value();
+  }
+
+  if (FLAG_trace_opt) {
+    PrintF("[manually marking ");
+    function->ShortPrint();
+    PrintF(" for baselining]\n");
+  }
+
+  // This function may not have been lazily compiled yet, even though its shared
+  // function has.
+  if (!function->is_compiled()) {
+    DCHECK(function->shared()->IsInterpreted());
+    function->set_code(*BUILTIN_CODE(isolate, InterpreterEntryTrampoline));
+  }
+
+  JSFunction::EnsureFeedbackVector(function);
+  function->MarkForBaselining();
 
   return isolate->heap()->undefined_value();
 }
@@ -650,7 +710,6 @@ RUNTIME_FUNCTION(Runtime_Abort) {
   base::OS::Abort();
   UNREACHABLE();
 }
-
 
 RUNTIME_FUNCTION(Runtime_AbortJS) {
   HandleScope scope(isolate);

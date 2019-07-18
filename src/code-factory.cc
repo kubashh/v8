@@ -169,6 +169,13 @@ Callable CodeFactory::Call(Isolate* isolate, ConvertReceiverMode mode) {
 }
 
 // static
+Callable CodeFactory::CallWithFeedback(Isolate* isolate,
+                                       ConvertReceiverMode mode) {
+  return Callable(isolate->builtins()->CallWithFeedback(mode),
+                  CallTrampolineWithFeedbackDescriptor(isolate));
+}
+
+// static
 Callable CodeFactory::CallWithArrayLike(Isolate* isolate) {
   return Callable(BUILTIN_CODE(isolate, CallWithArrayLike),
                   CallWithArrayLikeDescriptor(isolate));
@@ -208,6 +215,12 @@ Callable CodeFactory::CallFunctionForwardVarargs(Isolate* isolate) {
 Callable CodeFactory::Construct(Isolate* isolate) {
   return Callable(BUILTIN_CODE(isolate, Construct),
                   ConstructTrampolineDescriptor(isolate));
+}
+
+// static
+Callable CodeFactory::ConstructWithFeedback(Isolate* isolate) {
+  return Callable(BUILTIN_CODE(isolate, ConstructWithFeedback),
+                  ConstructWithFeedbackTrampolineDescriptor(isolate));
 }
 
 // static
@@ -268,6 +281,12 @@ Callable CodeFactory::InterpreterCEntry(Isolate* isolate, int result_size) {
 Callable CodeFactory::InterpreterOnStackReplacement(Isolate* isolate) {
   return Callable(BUILTIN_CODE(isolate, InterpreterOnStackReplacement),
                   ContextOnlyDescriptor(isolate));
+}
+
+// static
+Callable CodeFactory::BailoutFromBaselineCode(Isolate* isolate) {
+  return Callable(BUILTIN_CODE(isolate, BailoutFromBaselineCode),
+                  BailoutFromBaselineCodeDescriptor(isolate));
 }
 
 // static

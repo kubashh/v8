@@ -113,5 +113,44 @@ TF_BUILTIN(AsyncIteratorValueUnwrap, AsyncBuiltinsAssembler) {
   Return(unwrapped_value);
 }
 
+TF_BUILTIN(CreateAsyncFromSyncIterator, AsyncBuiltinsAssembler) {
+  Node* const sync_iterator = Parameter(Descriptor::kSyncIterator);
+  Node* const context = Parameter(Descriptor::kContext);
+
+  Label not_receiver(this, Label::kDeferred), done(this);
+  Variable return_value(this, MachineRepresentation::kTagged);
+
+  GotoIf(TaggedIsSmi(sync_iterator), &not_receiver);
+  GotoIfNot(IsJSReceiver(sync_iterator), &not_receiver);
+
+  Node* const next =
+      GetProperty(context, sync_iterator, factory()->next_string());
+
+  Node* const native_context = LoadNativeContext(context);
+  Node* const map = LoadContextElement(
+      native_context, Context::ASYNC_FROM_SYNC_ITERATOR_MAP_INDEX);
+  Node* const iterator = AllocateJSObjectFromMap(map);
+
+  StoreObjectFieldNoWriteBarrier(
+      iterator, JSAsyncFromSyncIterator::kSyncIteratorOffset, sync_iterator);
+  StoreObjectFieldNoWriteBarrier(iterator, JSAsyncFromSyncIterator::kNextOffset,
+                                 next);
+
+  return_value.Bind(iterator);
+  Goto(&done);
+
+  BIND(&not_receiver);
+  {
+    return_value.Bind(
+        CallRuntime(Runtime::kThrowSymbolIteratorInvalid, context));
+
+    // Unreachable due to the Throw in runtime call.
+    Goto(&done);
+  }
+
+  BIND(&done);
+  Return(return_value.value());
+}
+
 }  // namespace internal
 }  // namespace v8

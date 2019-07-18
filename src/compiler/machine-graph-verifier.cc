@@ -124,6 +124,10 @@ class MachineRepresentationInferrer {
             representation_vector_[node->id()] =
                 MachineType::PointerRepresentation();
             break;
+          case IrOpcode::kStackSlot:
+            representation_vector_[node->id()] =
+                StackSlotRepresentationOf(node->op()).representation();
+            break;
           case IrOpcode::kUnalignedLoad:
             representation_vector_[node->id()] = PromoteRepresentation(
                 LoadRepresentationOf(node->op()).representation());
