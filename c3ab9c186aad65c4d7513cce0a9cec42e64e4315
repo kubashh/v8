@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "eaf23931_ea033849",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2223,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-07-19T16:54:36Z",
+      "side": 1,
+      "message": "IIUC, this gets used because BuildSimdProgram starts with a shuffle, which assigns S128 operand types, and when depth \u003c kMaxTreeDepth, everything in simd_ops[] should be added to the code buffer. Though it may be nice to separate out the code generation into it\u0027s own method so this is more clear.",
+      "parentUuid": "d5a5e02c_9b67793c",
+      "range": {
+        "startLine": 2223,
+        "startChar": 4,
+        "endLine": 2223,
+        "endChar": 20
+      },
+      "revId": "c3ab9c186aad65c4d7513cce0a9cec42e64e4315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dc76b346_d1bdc06c",
         "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
         "patchSetId": 8
