@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4884211_53e51fc5",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-19T13:32:05Z",
+      "side": 1,
+      "message": "?",
+      "revId": "9093fd3d85cfd9ab7b88bb62addcfa2c61483ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f0e0433_e3276176",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-19T13:32:05Z",
+      "side": 1,
+      "message": "I think we should give up instead of skipping over this map.",
+      "revId": "9093fd3d85cfd9ab7b88bb62addcfa2c61483ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd1c9c2b_6af72852",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-19T13:32:05Z",
+      "side": 1,
+      "message": "?",
+      "revId": "9093fd3d85cfd9ab7b88bb62addcfa2c61483ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3f5a6dc_dfc16cb4",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-19T13:32:05Z",
+      "side": 1,
+      "message": "These are not only the own.",
+      "range": {
+        "startLine": 560,
+        "startChar": 32,
+        "endLine": 560,
+        "endChar": 47
+      },
+      "revId": "9093fd3d85cfd9ab7b88bb62addcfa2c61483ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c23704d_ae84233f",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-19T13:32:05Z",
+      "side": 1,
+      "message": "Have a look at MapRef, we already have a bunch of things there about the descriptor array:\n\n  // Concerning the underlying instance_descriptors:\n  void SerializeOwnDescriptors();\n  void SerializeOwnDescriptor(int descriptor_index);\n  MapRef FindFieldOwner(int descriptor_index) const;\n  PropertyDetails GetPropertyDetails(int descriptor_index) const;\n  NameRef GetPropertyKey(int descriptor_index) const;\n  FieldIndex GetFieldIndexFor(int descriptor_index) const;\n  ObjectRef GetFieldType(int descriptor_index) const;\n  bool IsUnboxedDoubleField(int descriptor_index) const;\n\nPlease add the missing things there.",
+      "revId": "9093fd3d85cfd9ab7b88bb62addcfa2c61483ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac638bb7_26239920",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-19T13:32:05Z",
+      "side": 1,
+      "message": "PropertyDescriptor, being the element type of the DescriptorArray, does not include the property value itself, so it\u0027s a little confusing that we\u0027re adding it in the broker.\n\nI think the right place to put the value is the storage that you introduced for GetOwnProperty recently. This also eliminates the need for adding GetStrongValue.",
+      "revId": "9093fd3d85cfd9ab7b88bb62addcfa2c61483ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fc34166_325b4d9c",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1669,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-19T13:32:05Z",
+      "side": 1,
+      "message": "We should only do this if the speculation mode is enabled (otherwise the reducer doesn\u0027t do anything). Did we forget that in previous CLs?",
+      "revId": "9093fd3d85cfd9ab7b88bb62addcfa2c61483ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a1c3243_e4197873",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1758,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-19T13:32:05Z",
+      "side": 1,
+      "message": "Please remove.",
+      "revId": "9093fd3d85cfd9ab7b88bb62addcfa2c61483ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5040d2ba_cd8f6baa",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-19T13:32:05Z",
+      "side": 1,
+      "message": "We only care about two so we shouldn\u0027t serialize more than that.",
+      "revId": "9093fd3d85cfd9ab7b88bb62addcfa2c61483ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
