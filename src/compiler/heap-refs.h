@@ -71,6 +71,7 @@ enum class OddballType : uint8_t {
   V(String)                        \
   V(Symbol)                        \
   /* Subtypes of HeapObject */     \
+  V(AccessorInfo)                  \
   V(AllocationSite)                \
   V(BigInt)                        \
   V(CallHandlerInfo)               \
@@ -432,6 +433,10 @@ class DescriptorArrayRef : public HeapObjectRef {
  public:
   using HeapObjectRef::HeapObjectRef;
   Handle<DescriptorArray> object() const;
+
+  int16_t number_of_descriptors() const;
+  NameRef GetKey(int descriptor_number) const;
+  ObjectRef GetStrongValue(int descriptor_number);
 };
 
 class FeedbackCellRef : public HeapObjectRef {
@@ -461,6 +466,12 @@ class CallHandlerInfoRef : public HeapObjectRef {
 
   void Serialize();
   ObjectRef data() const;
+};
+
+class AccessorInfoRef : public HeapObjectRef {
+ public:
+  using HeapObjectRef::HeapObjectRef;
+  Handle<AccessorInfo> object() const;
 };
 
 class AllocationSiteRef : public HeapObjectRef {
@@ -556,6 +567,7 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
   FieldIndex GetFieldIndexFor(int descriptor_index) const;
   ObjectRef GetFieldType(int descriptor_index) const;
   bool IsUnboxedDoubleField(int descriptor_index) const;
+  base::Optional<DescriptorArrayRef> instance_descriptors() const;
 
   // Available after calling JSFunctionRef::Serialize on a function that has
   // this map as initial map.

@@ -845,6 +845,12 @@ bool IsInlinableFastLiteral(Handle<JSObject> boilerplate) {
 
 }  // namespace
 
+class AccessorInfoData : public HeapObjectData {
+ public:
+  AccessorInfoData(JSHeapBroker* broker, ObjectData** storage,
+                   Handle<AccessorInfo> object);
+};
+
 class AllocationSiteData : public HeapObjectData {
  public:
   AllocationSiteData(JSHeapBroker* broker, ObjectData** storage,
@@ -894,6 +900,7 @@ class ScriptContextTableData : public HeapObjectData {
 
 struct PropertyDescriptor {
   NameData* key = nullptr;
+  ObjectData* value = nullptr;
   PropertyDetails details = PropertyDetails::Empty();
   FieldIndex field_index;
   MapData* field_owner = nullptr;
@@ -1008,6 +1015,10 @@ class MapData : public HeapObjectData {
 
   bool serialized_for_element_store_ = false;
 };
+
+AccessorInfoData::AccessorInfoData(JSHeapBroker* broker, ObjectData** storage,
+                                   Handle<AccessorInfo> object)
+    : HeapObjectData(broker, storage, object) {}
 
 AllocationSiteData::AllocationSiteData(JSHeapBroker* broker,
                                        ObjectData** storage,
@@ -1191,9 +1202,27 @@ class DescriptorArrayData : public HeapObjectData {
 
   ZoneMap<int, PropertyDescriptor>& contents() { return contents_; }
 
+  int16_t number_of_descriptors() const { return contents_.size(); }
+  NameData* GetKey(int descriptor_number) const;
+  ObjectData* GetStrongValue(int descriptor_number);
+
  private:
   ZoneMap<int, PropertyDescriptor> contents_;
 };
+
+NameData* DescriptorArrayData::GetKey(int descriptor_number) const {
+  auto key = contents_.find(descriptor_number);
+  if (key == contents_.end()) return nullptr;
+
+  return key->second.key;
+}
+
+ObjectData* DescriptorArrayData::GetStrongValue(int descriptor_number) {
+  auto value = contents_.find(descriptor_number);
+  if (value == contents_.end()) return nullptr;
+
+  return value->second.value;
+}
 
 class FeedbackCellData : public HeapObjectData {
  public:
@@ -1922,6 +1951,10 @@ void MapData::SerializeOwnDescriptor(JSHeapBroker* broker,
   PropertyDescriptor d;
   d.key =
       broker->GetOrCreateData(descriptors->GetKey(descriptor_index))->AsName();
+  MaybeObject value = descriptors->GetValue(descriptor_index);
+  HeapObject obj;
+  if (value.GetHeapObjectIfStrong(&obj))
+    d.value = broker->GetOrCreateData(handle(obj, broker->isolate()));
   d.details = descriptors->GetDetails(descriptor_index);
   if (d.details.location() == kField) {
     d.field_index = FieldIndex::ForDescriptor(*map, descriptor_index);
@@ -3132,6 +3165,29 @@ BIMODAL_ACCESSOR_C(String, int, length)
 
 BIMODAL_ACCESSOR(FeedbackCell, HeapObject, value)
 
+BIMODAL_ACCESSOR_C(DescriptorArray, int16_t, number_of_descriptors)
+
+NameRef DescriptorArrayRef::GetKey(int descriptor_number) const {
+  if (broker()->mode() == JSHeapBroker::kDisabled) {
+    AllowHandleDereference allow_handle_dereference;
+    return NameRef(broker(), handle(object()->GetKey(descriptor_number),
+                                    broker()->isolate()));
+  }
+  return NameRef(broker(),
+                 data()->AsDescriptorArray()->GetKey(descriptor_number));
+}
+
+ObjectRef DescriptorArrayRef::GetStrongValue(int descriptor_number) {
+  if (broker()->mode() == JSHeapBroker::kDisabled) {
+    AllowHandleDereference allow_handle_dereference;
+    return ObjectRef(broker(),
+                     handle(object()->GetStrongValue(descriptor_number),
+                            broker()->isolate()));
+  }
+  return ObjectRef(
+      broker(), data()->AsDescriptorArray()->GetStrongValue(descriptor_number));
+}
+
 void* JSTypedArrayRef::external_pointer() const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleDereference allow_handle_dereference;
@@ -3704,6 +3760,16 @@ void MapRef::SerializeOwnDescriptor(int descriptor_index) {
   if (broker()->mode() == JSHeapBroker::kDisabled) return;
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
   data()->AsMap()->SerializeOwnDescriptor(broker(), descriptor_index);
+}
+
+base::Optional<DescriptorArrayRef> MapRef::instance_descriptors() const {
+  if (broker()->mode() == JSHeapBroker::kDisabled)
+    return DescriptorArrayRef(broker(), handle(object()->instance_descriptors(),
+                                               broker()->isolate()));
+  DescriptorArrayData* desc_array_data =
+      data()->AsMap()->instance_descriptors();
+  if (!desc_array_data) return base::nullopt;
+  return DescriptorArrayRef(broker(), desc_array_data);
 }
 
 void MapRef::SerializeBackPointer() {

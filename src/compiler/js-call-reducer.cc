@@ -485,9 +485,6 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
   NodeProperties::ChangeOp(
       node,
       javascript()->Call(arity, p.frequency(), VectorSlotPair(), convert_mode));
-  // TODO(mslekova): Remove once ReduceJSCall is brokerized.
-  AllowHandleDereference allow_handle_dereference;
-  AllowHandleAllocation allow_handle_allocation;
   // Try to further reduce the JSCall {node}.
   Reduction const reduction = ReduceJSCall(node);
   return reduction.Changed() ? reduction : Changed(node);
@@ -495,6 +492,8 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
 
 // ES section #sec-function.prototype.bind
 Reduction JSCallReducer::ReduceFunctionPrototypeBind(Node* node) {
+  DisallowHeapAccessIf no_heap_acess(FLAG_concurrent_inlining);
+
   DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
   CallParameters const& p = CallParametersOf(node->op());
   if (p.speculation_mode() == SpeculationMode::kDisallowSpeculation) {
@@ -525,14 +524,20 @@ Reduction JSCallReducer::ReduceFunctionPrototypeBind(Node* node) {
 
   MapRef first_receiver_map(broker(), receiver_maps[0]);
   bool const is_constructor = first_receiver_map.is_constructor();
-  first_receiver_map.SerializePrototype();
+  // TODO(mslekova): remove
   ObjectRef const prototype = first_receiver_map.prototype();
   for (Handle<Map> const map : receiver_maps) {
     MapRef receiver_map(broker(), map);
 
+    if (FLAG_concurrent_inlining && !receiver_map.serialized_prototype()) {
+      TRACE_BROKER_MISSING(broker(),
+                           "serialized prototype on map " << receiver_map);
+      continue;
+    }
+
     // Check for consistency among the {receiver_maps}.
     STATIC_ASSERT(LAST_TYPE == LAST_FUNCTION_TYPE);
-    receiver_map.SerializePrototype();
+    // TODO(mslekova): remove
     if (!receiver_map.prototype().equals(prototype) ||
         receiver_map.is_constructor() != is_constructor ||
         receiver_map.instance_type() < FIRST_FUNCTION_TYPE) {
@@ -548,19 +553,26 @@ Reduction JSCallReducer::ReduceFunctionPrototypeBind(Node* node) {
     // recomputed even if the actual value of the object changes.
     // This mirrors the checks done in builtins-function-gen.cc at
     // runtime otherwise.
-    Handle<DescriptorArray> descriptors(
-        receiver_map.object()->instance_descriptors(), isolate());
+    base::Optional<DescriptorArrayRef> descriptors(
+        receiver_map.instance_descriptors());
+    if (!descriptors.has_value()) {
+      TRACE_BROKER_MISSING(
+          broker(), "serialized own descriptors on map " << receiver_map);
+      continue;
+    }
     if (descriptors->number_of_descriptors() < 2) return inference.NoChange();
-    if (descriptors->GetKey(JSFunction::kLengthDescriptorIndex) !=
-        ReadOnlyRoots(isolate()).length_string()) {
+    if (!descriptors->GetKey(JSFunction::kLengthDescriptorIndex)
+             .equals(StringRef(
+                 broker(), ReadOnlyRoots(isolate()).length_string_handle()))) {
       return inference.NoChange();
     }
     if (!descriptors->GetStrongValue(JSFunction::kLengthDescriptorIndex)
              .IsAccessorInfo()) {
       return inference.NoChange();
     }
-    if (descriptors->GetKey(JSFunction::kNameDescriptorIndex) !=
-        ReadOnlyRoots(isolate()).name_string()) {
+    if (!descriptors->GetKey(JSFunction::kNameDescriptorIndex)
+             .equals(StringRef(
+                 broker(), ReadOnlyRoots(isolate()).name_string_handle()))) {
       return inference.NoChange();
     }
     if (!descriptors->GetStrongValue(JSFunction::kNameDescriptorIndex)
@@ -647,9 +659,6 @@ Reduction JSCallReducer::ReduceFunctionPrototypeCall(Node* node) {
   NodeProperties::ChangeOp(
       node,
       javascript()->Call(arity, p.frequency(), VectorSlotPair(), convert_mode));
-  // TODO(mslekova): Remove once ReduceJSCall is brokerized.
-  AllowHandleDereference allow_handle_dereference;
-  AllowHandleAllocation allow_handle_allocation;
   // Try to further reduce the JSCall {node}.
   Reduction const reduction = ReduceJSCall(node);
   return reduction.Changed() ? reduction : Changed(node);
@@ -3296,6 +3305,10 @@ base::Optional<HeapObjectRef> GetHeapObjectFeedback(
 }  // namespace
 
 Reduction JSCallReducer::ReduceJSCall(Node* node) {
+  // TODO(mslekova): Remove once ReduceJSCall is brokerized.
+  AllowHandleDereference allow_handle_dereference;
+  AllowHandleAllocation allow_handle_allocation;
+
   DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
   CallParameters const& p = CallParametersOf(node->op());
   Node* target = NodeProperties::GetValueInput(node, 0);

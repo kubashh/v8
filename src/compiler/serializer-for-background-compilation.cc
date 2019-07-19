@@ -376,6 +376,7 @@ class SerializerForBackgroundCompilation {
   void ProcessHintsForRegExpTest(Hints const& regexp_hints);
   PropertyAccessInfo ProcessMapForRegExpTest(MapRef map);
   void ProcessHintsForFunctionCall(Hints const& target_hints);
+  void ProcessHintsForFunctionBind(Hints const& receiver_hints);
 
   GlobalAccessFeedback const* ProcessFeedbackForGlobalAccess(FeedbackSlot slot);
   NamedAccessFeedback const* ProcessFeedbackMapsForNamedAccess(
@@ -1662,6 +1663,12 @@ void SerializerForBackgroundCompilation::ProcessBuiltinCall(
         ProcessHintsForFunctionCall(target_hints);
       }
       break;
+    case Builtins::kFastFunctionPrototypeBind:
+      if (arguments.size() >= 2) {
+        Hints const& receiver_hints = arguments[1];
+        ProcessHintsForFunctionBind(receiver_hints);
+      }
+      break;
     default:
       break;
   }
@@ -1743,6 +1750,25 @@ void SerializerForBackgroundCompilation::ProcessHintsForFunctionCall(
     if (!constant->IsJSFunction()) continue;
     JSFunctionRef func(broker(), constant);
     func.Serialize();
+  }
+}
+
+void SerializerForBackgroundCompilation::ProcessHintsForFunctionBind(
+    Hints const& receiver_hints) {
+  std::cout << receiver_hints << std::endl;
+  for (auto constant : receiver_hints.constants()) {
+    if (!constant->IsJSFunction()) continue;
+    JSFunctionRef func(broker(), constant);
+    func.Serialize();
+    func.map().SerializePrototype();
+    func.map().SerializeOwnDescriptors();
+  }
+
+  for (auto map : receiver_hints.maps()) {
+    if (!map->IsJSFunctionMap()) continue;
+    MapRef map_ref(broker(), map);
+    map_ref.SerializePrototype();
+    map_ref.SerializeOwnDescriptors();
   }
 }
 
