@@ -132,6 +132,7 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kPPC_AtomicLoadWord32:
     case kPPC_AtomicLoadWord64:
     case kPPC_Peek:
+    case kPPC_Sync:
       return kIsLoadOperation;
 
     case kPPC_StoreWord8:
