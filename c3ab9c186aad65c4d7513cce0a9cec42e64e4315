@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f16e72d2_9a0dfd38",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2179,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-07-19T02:50:11Z",
+      "side": 1,
+      "message": "nit: not sure on style here, should the declaration and assignment be combined?\nSimdOp operand_op \u003d opcodes[rng-\u003eNextInt(static_cast\u003cint\u003e(num_opcodes))];",
+      "range": {
+        "startLine": 2179,
+        "startChar": 4,
+        "endLine": 2179,
+        "endChar": 18
+      },
+      "revId": "c3ab9c186aad65c4d7513cce0a9cec42e64e4315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5a5e02c_9b67793c",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2223,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-07-19T02:50:11Z",
+      "side": 1,
+      "message": "I see kI8x16Add defined in enum SimdOp but not used anywhere here. Did you intend to test it here as well? BuildSimdProgram by default only tests kS8x16Shuffle, maybe change the signature to void BuildSimdProgram(std::vector\u003cbyte\u003e* buffer, SimdOp op) so you test both opcode here.",
+      "range": {
+        "startLine": 2223,
+        "startChar": 4,
+        "endLine": 2223,
+        "endChar": 20
+      },
+      "revId": "c3ab9c186aad65c4d7513cce0a9cec42e64e4315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc76b346_d1bdc06c",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-07-19T02:50:11Z",
+      "side": 1,
+      "message": "I see that you changed int8_t to byte in some other tests in this file, is there a reason int8_t is used here?",
+      "range": {
+        "startLine": 2226,
+        "startChar": 15,
+        "endLine": 2226,
+        "endChar": 21
+      },
+      "revId": "c3ab9c186aad65c4d7513cce0a9cec42e64e4315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
