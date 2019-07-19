@@ -131,6 +131,8 @@ class MetaBuildWrapper(object):
     subp.add_argument('output_path', nargs=1,
                       help='path to a file containing the output arguments '
                            'as a JSON object.')
+    subp.add_argument('--json-output',
+                      help='Write errors to json.output')
     subp.set_defaults(func=self.CmdAnalyze)
 
     subp = subps.add_parser('export',
@@ -149,6 +151,8 @@ class MetaBuildWrapper(object):
     subp.add_argument('--swarming-targets-file',
                       help='save runtime dependencies for targets listed '
                            'in file.')
+    subp.add_argument('--json-output',
+                      help='Write errors to json.output')
     subp.add_argument('path', nargs=1,
                       help='path to generate build into')
     subp.set_defaults(func=self.CmdGen)
