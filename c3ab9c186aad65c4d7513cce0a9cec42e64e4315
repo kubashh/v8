@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "742f0d0d_ab114c88",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2140,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-22T10:50:19Z",
+      "side": 1,
+      "message": "AFAIK we have the policy to not randomize tests, as this makes reproduction and flake bisection a lot harder. Can we integrate this into the wasm-compile fuzzer instead?\nSee https://cs.chromium.org/chromium/src/v8/test/fuzzer/wasm-compile.cc.",
+      "revId": "c3ab9c186aad65c4d7513cce0a9cec42e64e4315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f16e72d2_9a0dfd38",
         "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
         "patchSetId": 8
@@ -107,6 +124,30 @@
       "writtenOn": "2019-07-19T02:50:11Z",
       "side": 1,
       "message": "I see that you changed int8_t to byte in some other tests in this file, is there a reason int8_t is used here?",
+      "range": {
+        "startLine": 2226,
+        "startChar": 15,
+        "endLine": 2226,
+        "endChar": 21
+      },
+      "revId": "c3ab9c186aad65c4d7513cce0a9cec42e64e4315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0d6f571_0fe1582a",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-22T10:50:19Z",
+      "side": 1,
+      "message": "Good question! I was actually wondering about the other change: Why do we change the standard type int8_t to \"byte\", which is a typedef that not everyone might be familiar with?",
+      "parentUuid": "dc76b346_d1bdc06c",
       "range": {
         "startLine": 2226,
         "startChar": 15,
