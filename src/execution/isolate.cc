@@ -3309,19 +3309,44 @@ bool Isolate::InitWithSnapshot(ReadOnlyDeserializer* read_only_deserializer,
   return Init(read_only_deserializer, startup_deserializer);
 }
 
-static void AddCrashKeysForIsolateAndHeapPointers(Isolate* isolate) {
-  v8::Platform* platform = V8::GetCurrentPlatform();
+static std::string AddressToString(uintptr_t address) {
+  std::stringstream stream_address;
+  stream_address << "0x" << std::hex << address;
+  return stream_address.str();
+}
 
-  const int id = isolate->id();
-  platform->AddCrashKey(id, "isolate", reinterpret_cast<uintptr_t>(isolate));
+static void SetCrashKeysForIsolateAndHeapPointers(Isolate* isolate) {
+  static std::atomic<int> last{-1};
+  const int current = ++last;
+
+  v8::Platform* platform = V8::GetCurrentPlatform();
+  if (current > 0) {
+    platform->SetCrashKey(v8::Platform::CrashKeyId::kIsolatesCount,
+                          std::to_string(current).c_str());
+    return;
+  }
+
+  platform->SetCrashKey(
+      v8::Platform::CrashKeyId::kIsolateAddress,
+      AddressToString(reinterpret_cast<uintptr_t>(isolate)).c_str());
 
   auto heap = isolate->heap();
-  platform->AddCrashKey(id, "ro_space",
-    reinterpret_cast<uintptr_t>(heap->read_only_space()->first_page()));
-  platform->AddCrashKey(id, "map_space",
-    reinterpret_cast<uintptr_t>(heap->map_space()->first_page()));
-  platform->AddCrashKey(id, "code_space",
-    reinterpret_cast<uintptr_t>(heap->code_space()->first_page()));
+
+  const uintptr_t ro_address =
+      reinterpret_cast<uintptr_t>(heap->read_only_space()->first_page());
+  platform->SetCrashKey(
+      v8::Platform::CrashKeyId::kReadonlySpaceFirstPageAddress,
+      AddressToString(ro_address).c_str());
+
+  const uintptr_t map_address =
+      reinterpret_cast<uintptr_t>(heap->map_space()->first_page());
+  platform->SetCrashKey(v8::Platform::CrashKeyId::kMapSpaceFirstPageAddress,
+                        AddressToString(map_address).c_str());
+
+  const uintptr_t code_address =
+      reinterpret_cast<uintptr_t>(heap->code_space()->first_page());
+  platform->SetCrashKey(v8::Platform::CrashKeyId::kCodeSpaceFirstPageAddress,
+                        AddressToString(code_address).c_str());
 }
 
 bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
@@ -3569,7 +3594,7 @@ bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
     PrintF("[Initializing isolate from scratch took %0.3f ms]\n", ms);
   }
 
-  AddCrashKeysForIsolateAndHeapPointers(this);
+  SetCrashKeysForIsolateAndHeapPointers(this);
   return true;
 }
 
