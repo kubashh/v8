@@ -81,6 +81,24 @@
       "revId": "e54799c91252fb9c16cb4399a9950e4f4205e5a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "062088d7_f8480e17",
+        "filename": "tools/debug_helper/get-object-properties.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-07-22T08:44:12Z",
+      "side": 1,
+      "message": "Okay thanks Seth, clearly this area is a (productive) construction site! Sgtm.",
+      "parentUuid": "82a1c819_06b7c531",
+      "revId": "e54799c91252fb9c16cb4399a9950e4f4205e5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
