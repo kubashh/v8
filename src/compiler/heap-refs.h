@@ -71,6 +71,7 @@ enum class OddballType : uint8_t {
   V(String)                        \
   V(Symbol)                        \
   /* Subtypes of HeapObject */     \
+  V(AccessorInfo)                  \
   V(AllocationSite)                \
   V(BigInt)                        \
   V(CallHandlerInfo)               \
@@ -233,10 +234,13 @@ class JSObjectRef : public HeapObjectRef {
 
   // Return the value of the property identified by the field {index}
   // if {index} is known to be an own data property of the object.
-  base::Optional<ObjectRef> GetOwnProperty(Representation field_representation,
-                                           FieldIndex index,
-                                           bool serialize = false) const;
-
+  base::Optional<ObjectRef> GetOwnDataProperty(
+      Representation field_representation, FieldIndex index,
+      bool serialize = false) const;
+  // Return the value of the property identified by the field {index} if
+  // {descriptor_index} is known to be an own accessor property of the object.
+  base::Optional<ObjectRef> GetOwnAccessorProperty(
+      int descriptor_index, bool serialize = false) const;
   FixedArrayBaseRef elements() const;
   void SerializeElements();
   void EnsureElementsTenured();
@@ -463,6 +467,12 @@ class CallHandlerInfoRef : public HeapObjectRef {
   ObjectRef data() const;
 };
 
+class AccessorInfoRef : public HeapObjectRef {
+ public:
+  using HeapObjectRef::HeapObjectRef;
+  Handle<AccessorInfo> object() const;
+};
+
 class AllocationSiteRef : public HeapObjectRef {
  public:
   using HeapObjectRef::HeapObjectRef;
@@ -556,6 +566,8 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
   FieldIndex GetFieldIndexFor(int descriptor_index) const;
   ObjectRef GetFieldType(int descriptor_index) const;
   bool IsUnboxedDoubleField(int descriptor_index) const;
+  int16_t number_of_descriptors() const;
+  base::Optional<DescriptorArrayRef> instance_descriptors() const;
 
   // Available after calling JSFunctionRef::Serialize on a function that has
   // this map as initial map.
