@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a61c6ef3_9df1506c",
+        "filename": "src/compiler/backend/ppc/code-generator-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-07-22T08:05:52Z",
+      "side": 1,
+      "message": "question: Is the \"lwsync\" instruction here strong enough to model a sequentially consistent fence instruction? According to [0] a \"SeqCst Fence\" should be implemented with a \"hwsync\" instruction on PPC. Note that I am in no way familiar with the PPC memory model and might be completely off here. Just wanted to raise this question.\n\n[0] http://www.rdrop.com/users/paulmck/scalability/paper/N2745r.2011.03.04a.html",
+      "range": {
+        "startLine": 1199,
+        "startChar": 9,
+        "endLine": 1199,
+        "endChar": 15
+      },
+      "revId": "f2ba843cc156b4ecfec44f2d8380775344b26466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ea58073_19fcb822",
+        "filename": "src/compiler/backend/ppc/instruction-scheduler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-07-22T08:05:52Z",
+      "side": 1,
+      "message": "question: Should this be marked as \"kHasSideEffect\" instead? I am worried that load instruction might be hoisted across the sync instruction otherwise. But I am no expert on the PPC intricacies here.",
+      "range": {
+        "startLine": 136,
+        "startChar": 13,
+        "endLine": 136,
+        "endChar": 29
+      },
+      "revId": "f2ba843cc156b4ecfec44f2d8380775344b26466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
