@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "837a7cb9_48a8fbff",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3327,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-07-22T19:15:22Z",
+      "side": 1,
+      "message": "How can I determine the isolate being created for the main thread?",
+      "range": {
+        "startLine": 3319,
+        "startChar": 0,
+        "endLine": 3327,
+        "endChar": 3
+      },
+      "revId": "46345f47369ff8a92e920cacb6d39c3f14f22acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
