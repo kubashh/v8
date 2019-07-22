@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "52232a6e_0d1cdf15",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2140,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-22T21:29:51Z",
+      "side": 1,
+      "message": "I was following the precedent of the GapResolver fuzz test\n\nhttps://cs.chromium.org/chromium/src/v8/test/cctest/compiler/test-gap-resolver.cc?rcl\u003d12c0646785a3207f5cdd747038a9cf9910e2bab5\u0026l\u003d503\n\nand the CodeGenerator move / swap assembler test\n\nhttps://cs.chromium.org/chromium/src/v8/test/cctest/compiler/test-code-generator.cc?rcl\u003d12c0646785a3207f5cdd747038a9cf9910e2bab5\u0026l\u003d1197\n\nWe could move these tests, but they do share a lot of code with the other tests here.",
+      "parentUuid": "742f0d0d_ab114c88",
+      "revId": "c3ab9c186aad65c4d7513cce0a9cec42e64e4315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f16e72d2_9a0dfd38",
         "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
         "patchSetId": 8
@@ -30,6 +48,30 @@
       "writtenOn": "2019-07-19T02:50:11Z",
       "side": 1,
       "message": "nit: not sure on style here, should the declaration and assignment be combined?\nSimdOp operand_op \u003d opcodes[rng-\u003eNextInt(static_cast\u003cint\u003e(num_opcodes))];",
+      "range": {
+        "startLine": 2179,
+        "startChar": 4,
+        "endLine": 2179,
+        "endChar": 18
+      },
+      "revId": "c3ab9c186aad65c4d7513cce0a9cec42e64e4315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cccff6a5_7d86d156",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2179,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-22T21:29:51Z",
+      "side": 1,
+      "message": "You\u0027re right, there\u0027s no reason to separate these here.",
+      "parentUuid": "f16e72d2_9a0dfd38",
       "range": {
         "startLine": 2179,
         "startChar": 4,
@@ -148,6 +190,30 @@
       "side": 1,
       "message": "Good question! I was actually wondering about the other change: Why do we change the standard type int8_t to \"byte\", which is a typedef that not everyone might be familiar with?",
       "parentUuid": "dc76b346_d1bdc06c",
+      "range": {
+        "startLine": 2226,
+        "startChar": 15,
+        "endLine": 2226,
+        "endChar": 21
+      },
+      "revId": "c3ab9c186aad65c4d7513cce0a9cec42e64e4315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0471fb21_cce7ec45",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-22T21:29:51Z",
+      "side": 1,
+      "message": "I think I changed this to use the V8 \u0027byte\u0027 type, which is more common in v8/test. I\u0027m happy to un-change these though.",
+      "parentUuid": "e0d6f571_0fe1582a",
       "range": {
         "startLine": 2226,
         "startChar": 15,
