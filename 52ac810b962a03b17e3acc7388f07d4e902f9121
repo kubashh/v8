@@ -1,0 +1,152 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb9ead47_ba0b8f47",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T08:29:42Z",
+      "side": 1,
+      "message": "How do we now know that this doesn\u0027t crash due to missing data?",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a29833cc_ee689986",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T08:29:42Z",
+      "side": 1,
+      "message": "We don\u0027t really use \u0027descriptors\u0027.",
+      "range": {
+        "startLine": 556,
+        "startChar": 8,
+        "endLine": 556,
+        "endChar": 32
+      },
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49a85855_80bcc6a4",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T08:29:42Z",
+      "side": 1,
+      "message": "We have to give up.",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4199e7b9_3065260a",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T08:29:42Z",
+      "side": 1,
+      "message": "I\u0027m sorry Maya! I just realized that the AccessorInfo is indeed stored in the descriptor array. So let\u0027s go back to something similar to what you had in the beginning:\nObjectRef MapRef::GetValue(int descriptor_index) const;",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27f948af_9af22b72",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T08:29:42Z",
+      "side": 1,
+      "message": "Nit: Handle\u003cObject\u003e accessor(...,...);",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6140efa1_c87f0847",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T08:29:42Z",
+      "side": 1,
+      "message": "The first three only need to be done if speculation is enabled.",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14c23da3_4f533427",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T08:29:42Z",
+      "side": 1,
+      "message": "I think you mean \u003e\u003d here.",
+      "range": {
+        "startLine": 1772,
+        "startChar": 54,
+        "endLine": 1772,
+        "endChar": 55
+      },
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a3c26da_61c27c8d",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T08:29:42Z",
+      "side": 1,
+      "message": "As I mentioned, we only care about two so we shouldn\u0027t serialize more than that. Please add a SerializeOwnDescriptor(i) method.",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
