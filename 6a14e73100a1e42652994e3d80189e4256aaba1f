@@ -22,6 +22,30 @@
       "revId": "6a14e73100a1e42652994e3d80189e4256aaba1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "412382cb_2a63ed87",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2179,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-07-23T10:31:52Z",
+      "side": 1,
+      "message": "I agree that this would best fit into a true fuzzer. As Clemens mentioned, we do already have the \"wasm-compile.cc\" fuzzer that works in a very similar way to this (i.e. building valid ASTs out of a random byte stream). Depending on how hard it is to integrate Simd128 into the \"wasm-compile.cc\" fuzzer, this should rather bet fuzzed there (ideally integrated into \"wasm-compile.cc\" or alternatively as a separate piece). That way we get all the benefits of the ClusterFuzz infrastructure with bisection tools. Having a (or yet another) fuzzer in the \"cctest\" will mean that our stability sheriffs will need to manually hunt down flakes coming from this test. It might even mean that someone developing an unrelated feature has to spend time investigate a local flake on their machine to realize the failure is unrelated.\n\nWhile I do see that the RNG here is based on the random seed (i.e. FLAG_random_seed) and hence failures will be reproducible, individual runs on the waterfall (and local machines) will still be different, potentially causing flakes.\n\nIf this is intended as a regression test for the fixes that are part of this CL, we could instead add smoke tests for one or two cases that were flushed out by this fuzzer to \"cctest\". This will catch regressions. For finding new/unknown issues I think we should rely on the fuzzer framework in \"test/fuzzer\".",
+      "parentUuid": "bdd7b398_f0d92b7b",
+      "range": {
+        "startLine": 2179,
+        "startChar": 28,
+        "endLine": 2179,
+        "endChar": 35
+      },
+      "revId": "6a14e73100a1e42652994e3d80189e4256aaba1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
