@@ -99,6 +99,24 @@
       "revId": "e54799c91252fb9c16cb4399a9950e4f4205e5a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dd76e76c_045ac2b8",
+        "filename": "tools/debug_helper/get-object-properties.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-07-23T07:54:29Z",
+      "side": 1,
+      "message": "Hi Seth, thanks for putting this list of issues together. I also think we should not block this on torque generated instance types; we should, however, have tests that ensures the two definitions are in sync.",
+      "parentUuid": "062088d7_f8480e17",
+      "revId": "e54799c91252fb9c16cb4399a9950e4f4205e5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
