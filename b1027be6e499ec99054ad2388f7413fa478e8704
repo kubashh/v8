@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4d4c3a0_2262a3c4",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T12:06:54Z",
+      "side": 1,
+      "message": "descriptor_index",
+      "range": {
+        "startLine": 950,
+        "startChar": 33,
+        "endLine": 950,
+        "endChar": 50
+      },
+      "revId": "b1027be6e499ec99054ad2388f7413fa478e8704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaa9e56c_b5ecc597",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1910,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T12:06:54Z",
+      "side": 1,
+      "message": "contents() is a map, so this doesn\u0027t make sense.",
+      "revId": "b1027be6e499ec99054ad2388f7413fa478e8704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab732cdc_a950b6b9",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T12:06:54Z",
+      "side": 1,
+      "message": "... and this may actually create a new entry in the map.",
+      "revId": "b1027be6e499ec99054ad2388f7413fa478e8704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6305ddbc_fd71006e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3159,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T12:06:54Z",
+      "side": 1,
+      "message": "No, this is not the number of descriptors.",
+      "revId": "b1027be6e499ec99054ad2388f7413fa478e8704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4786bde4_016d33ac",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3162,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T12:06:54Z",
+      "side": 1,
+      "message": "descriptor_index",
+      "range": {
+        "startLine": 3162,
+        "startChar": 37,
+        "endLine": 3162,
+        "endChar": 54
+      },
+      "revId": "b1027be6e499ec99054ad2388f7413fa478e8704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8095a535_bdda4f75",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3750,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T12:06:54Z",
+      "side": 1,
+      "message": "We already have MapData::serialized_own_descriptors_.\nBut this is the wrong predicate to check for F.p.bind reducer because we only want to serialized two descriptors.",
+      "revId": "b1027be6e499ec99054ad2388f7413fa478e8704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
