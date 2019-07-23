@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdd7b398_f0d92b7b",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2179,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-07-23T09:25:21Z",
+      "side": 1,
+      "message": "I know we already have a couple of such tests in the code base, but I\u0027m not all that happy about it as they have the nature of a fuzzer and not a test. Maybe at some point we should move them to a separate dedicated test suite that also intends to stress these tests.",
+      "range": {
+        "startLine": 2179,
+        "startChar": 28,
+        "endLine": 2179,
+        "endChar": 35
+      },
+      "revId": "6a14e73100a1e42652994e3d80189e4256aaba1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
