@@ -46,6 +46,30 @@
       "revId": "6a14e73100a1e42652994e3d80189e4256aaba1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfad4730_fdbe99fc",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2179,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-23T18:34:58Z",
+      "side": 1,
+      "message": "I\u0027ve removed the new tests. We have tests for these patterns but they pass because their operands are always in registers. It would be tricky to write tests that would reliably cause operands to spill, so I think it\u0027s best to just fix the bugs with this change.",
+      "parentUuid": "412382cb_2a63ed87",
+      "range": {
+        "startLine": 2179,
+        "startChar": 28,
+        "endLine": 2179,
+        "endChar": 35
+      },
+      "revId": "6a14e73100a1e42652994e3d80189e4256aaba1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
