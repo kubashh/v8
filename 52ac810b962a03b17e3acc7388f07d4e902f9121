@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "494e54cb_6e973d20",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-23T09:10:02Z",
+      "side": 1,
+      "message": "Good point, forgot that.",
+      "parentUuid": "bb9ead47_ba0b8f47",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a29833cc_ee689986",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 2
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "0be5387c_3a8246fa",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-23T09:10:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a29833cc_ee689986",
+      "range": {
+        "startLine": 556,
+        "startChar": 8,
+        "endLine": 556,
+        "endChar": 32
+      },
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49a85855_80bcc6a4",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 2
@@ -56,6 +98,24 @@
       "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b488808_58d7c65c",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-23T09:10:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49a85855_80bcc6a4",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "cd10f857_25db2402",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-23T09:10:02Z",
+      "side": 1,
+      "message": "Oh, well... x-D",
+      "parentUuid": "4199e7b9_3065260a",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27f948af_9af22b72",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 2
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "1173f150_cb3d4770",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-23T09:10:02Z",
+      "side": 1,
+      "message": "This is gone now.",
+      "parentUuid": "27f948af_9af22b72",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6140efa1_c87f0847",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 2
@@ -107,6 +203,24 @@
       "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ab7c593_cceb44f6",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-23T09:10:02Z",
+      "side": 1,
+      "message": "Wasn\u0027t 100% sure, so now it\u0027s done. Removed the TODO.",
+      "parentUuid": "6140efa1_c87f0847",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -133,6 +247,30 @@
     },
     {
       "key": {
+        "uuid": "cbf863e2_25d7307c",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-23T09:10:02Z",
+      "side": 1,
+      "message": "*facepalm* Yeah, right.",
+      "parentUuid": "14c23da3_4f533427",
+      "range": {
+        "startLine": 1772,
+        "startChar": 54,
+        "endLine": 1772,
+        "endChar": 55
+      },
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a3c26da_61c27c8d",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 2
@@ -147,6 +285,24 @@
       "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6881eb04_a76a8c04",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-23T09:10:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a3c26da_61c27c8d",
+      "revId": "52ac810b962a03b17e3acc7388f07d4e902f9121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
