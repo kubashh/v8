@@ -1,0 +1,209 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c01bb25_82fb45ac",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T10:02:40Z",
+      "side": 1,
+      "message": "const",
+      "range": {
+        "startLine": 565,
+        "startChar": 49,
+        "endLine": 565,
+        "endChar": 50
+      },
+      "revId": "c8b5cb85dd920e27a14ebe0646c1fa360cc01674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "849aac73_6afd6906",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T10:02:40Z",
+      "side": 1,
+      "message": "Are you sure that we don\u0027t need to call SerializePrototype when the flag is off?",
+      "range": {
+        "startLine": 528,
+        "startChar": 6,
+        "endLine": 528,
+        "endChar": 30
+      },
+      "revId": "c8b5cb85dd920e27a14ebe0646c1fa360cc01674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c124769_63b34a04",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T10:02:40Z",
+      "side": 1,
+      "message": "Maybe we should (separately) make the prototype() getter return an Optional and do the warning internally, and then remove the serialized_prototype() predicate.",
+      "revId": "c8b5cb85dd920e27a14ebe0646c1fa360cc01674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c3fe078_1739e3a8",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T10:02:40Z",
+      "side": 1,
+      "message": "My comment was not about the local variable that you used but about having instance_descriptors exposed if we don\u0027t really need it. You seem to be using it only as a flag to see whether we serialized the own descriptors?",
+      "range": {
+        "startLine": 560,
+        "startChar": 9,
+        "endLine": 560,
+        "endChar": 45
+      },
+      "revId": "c8b5cb85dd920e27a14ebe0646c1fa360cc01674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f30c8391_3041414e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T10:02:40Z",
+      "side": 1,
+      "message": "Please remove.",
+      "revId": "c8b5cb85dd920e27a14ebe0646c1fa360cc01674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8de32af_fd09fdbc",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T10:02:40Z",
+      "side": 1,
+      "message": "const",
+      "revId": "c8b5cb85dd920e27a14ebe0646c1fa360cc01674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4122c09_b26e1e1e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T10:02:40Z",
+      "side": 1,
+      "message": "Do I understand correctly that we can\u0027t use GetStrongValue here?",
+      "revId": "c8b5cb85dd920e27a14ebe0646c1fa360cc01674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77302f3c_56253883",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1942,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T10:02:40Z",
+      "side": 1,
+      "message": "{ } please",
+      "revId": "c8b5cb85dd920e27a14ebe0646c1fa360cc01674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f205303a_78c9c49c",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1776,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T10:02:40Z",
+      "side": 1,
+      "message": "The variable should be called number_of_own_descriptors.\n\nThe reducer actually looks at the number of all descriptors. I suspect that we only care about the own ones. Can you please check that in an example? And then please change the reducer accordingly.",
+      "revId": "c8b5cb85dd920e27a14ebe0646c1fa360cc01674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "186d1ea6_1515df82",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T10:02:40Z",
+      "side": 1,
+      "message": "{} please\n\nBut now you changed SerializeOwnDescriptors() into SerializeOwnDescriptor(i) for each i, so that doesn\u0027t save any work either.",
+      "revId": "c8b5cb85dd920e27a14ebe0646c1fa360cc01674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8b67aa3_4c5fcb39",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-23T10:02:40Z",
+      "side": 1,
+      "message": "Please define a processMap closure and call that in both loops.",
+      "revId": "c8b5cb85dd920e27a14ebe0646c1fa360cc01674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
