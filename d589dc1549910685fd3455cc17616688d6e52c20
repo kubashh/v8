@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05e6a75f_07ce3ed7",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1299,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-07-24T08:30:10Z",
+      "side": 1,
+      "message": "I don\u0027t like this because the right-hand side changes meaning and bakes in the assumption that we only use tagged in non-ptr-comp and only compressed in ptr-comp. Could you introduce a IsAnySigned(value_representation) and use that here please?",
+      "range": {
+        "startLine": 1299,
+        "startChar": 10,
+        "endLine": 1299,
+        "endChar": 74
+      },
+      "revId": "d589dc1549910685fd3455cc17616688d6e52c20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "136579cf_cf9b9dd3",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-07-24T08:30:10Z",
+      "side": 1,
+      "message": "Similarily IsAnyTaggedPointer here?",
+      "range": {
+        "startLine": 1320,
+        "startChar": 10,
+        "endLine": 1320,
+        "endChar": 12
+      },
+      "revId": "d589dc1549910685fd3455cc17616688d6e52c20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
