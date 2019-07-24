@@ -94,6 +94,30 @@
       "revId": "6a14e73100a1e42652994e3d80189e4256aaba1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "14f6a0c6_175666f0",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2179,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-24T08:26:04Z",
+      "side": 1,
+      "message": "Ack, thanks! Bill, if you need help adding support for Simd to the \"wasm-compile\" fuzzer, let me know. I could add the first few opcodes, and then you fill in the rest.",
+      "parentUuid": "9cd369ea_ba88c51a",
+      "range": {
+        "startLine": 2179,
+        "startChar": 28,
+        "endLine": 2179,
+        "endChar": 35
+      },
+      "revId": "6a14e73100a1e42652994e3d80189e4256aaba1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
