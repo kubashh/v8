@@ -142,6 +142,30 @@
       "revId": "6a14e73100a1e42652994e3d80189e4256aaba1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25daca08_a3a9a3a1",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2179,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-07-24T16:44:10Z",
+      "side": 1,
+      "message": "Sg, filed https://bugs.chromium.org/p/v8/issues/detail?id\u003d9543 to track this",
+      "parentUuid": "82f4a0d5_ccb57ff0",
+      "range": {
+        "startLine": 2179,
+        "startChar": 28,
+        "endLine": 2179,
+        "endChar": 35
+      },
+      "revId": "6a14e73100a1e42652994e3d80189e4256aaba1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
