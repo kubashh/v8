@@ -262,7 +262,14 @@ struct FieldIndexHasher {
   }
 };
 
-class JSObjectData : public HeapObjectData {
+class JSReceiverData : public HeapObjectData {
+ public:
+  JSReceiverData(JSHeapBroker* broker, ObjectData** storage,
+                 Handle<JSReceiver> object)
+      : HeapObjectData(broker, storage, object) {}
+};
+
+class JSObjectData : public JSReceiverData {
  public:
   JSObjectData(JSHeapBroker* broker, ObjectData** storage,
                Handle<JSObject> object);
@@ -465,6 +472,7 @@ class JSBoundFunctionData : public JSObjectData {
                       Handle<JSBoundFunction> object);
 
   void Serialize(JSHeapBroker* broker);
+  bool serialized() const { return serialized_; }
 
   ObjectData* bound_target_function() const { return bound_target_function_; }
   ObjectData* bound_this() const { return bound_this_; }
@@ -1300,21 +1308,26 @@ void JSBoundFunctionData::Serialize(JSHeapBroker* broker) {
   Handle<JSBoundFunction> function = Handle<JSBoundFunction>::cast(object());
 
   DCHECK_NULL(bound_target_function_);
-  DCHECK_NULL(bound_this_);
-  DCHECK_NULL(bound_arguments_);
-
   bound_target_function_ =
       broker->GetOrCreateData(function->bound_target_function());
-  bound_this_ = broker->GetOrCreateData(function->bound_this());
+  if (bound_target_function_->IsJSBoundFunction()) {
+    bound_target_function_->AsJSBoundFunction()->Serialize(broker);
+  } else if (bound_target_function_->IsJSFunction()) {
+    bound_target_function_->AsJSFunction()->Serialize(broker);
+  }
+
+  DCHECK_NULL(bound_arguments_);
   bound_arguments_ =
       broker->GetOrCreateData(function->bound_arguments())->AsFixedArray();
-
   bound_arguments_->SerializeContents(broker);
+
+  DCHECK_NULL(bound_this_);
+  bound_this_ = broker->GetOrCreateData(function->bound_this());
 }
 
 JSObjectData::JSObjectData(JSHeapBroker* broker, ObjectData** storage,
                            Handle<JSObject> object)
-    : HeapObjectData(broker, storage, object),
+    : JSReceiverData(broker, storage, object),
       inobject_fields_(broker->zone()),
       own_constant_elements_(broker->zone()),
       own_properties_(broker->zone()) {}
@@ -2958,7 +2971,7 @@ BIMODAL_ACCESSOR(HeapObject, Map, map)
 
 BIMODAL_ACCESSOR(JSArray, Object, length)
 
-BIMODAL_ACCESSOR(JSBoundFunction, Object, bound_target_function)
+BIMODAL_ACCESSOR(JSBoundFunction, JSReceiver, bound_target_function)
 BIMODAL_ACCESSOR(JSBoundFunction, Object, bound_this)
 BIMODAL_ACCESSOR(JSBoundFunction, FixedArray, bound_arguments)
 
@@ -3747,6 +3760,11 @@ void JSBoundFunctionRef::Serialize() {
   if (broker()->mode() == JSHeapBroker::kDisabled) return;
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
   data()->AsJSBoundFunction()->Serialize(broker());
+}
+
+bool JSBoundFunctionRef::serialized() const {
+  CHECK_NE(broker()->mode(), JSHeapBroker::kDisabled);
+  return data()->AsJSBoundFunction()->serialized();
 }
 
 void PropertyCellRef::Serialize() {
