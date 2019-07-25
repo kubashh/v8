@@ -70,6 +70,30 @@
       "revId": "46345f47369ff8a92e920cacb6d39c3f14f22acb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee0ba1f3_cbc6c1d6",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3327,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-07-25T22:49:24Z",
+      "side": 1,
+      "message": "Sorry I don\u0027t think this is the right approach I\u0027m afraid. The main reason is that having multiple isolates in the same process is going to become more common (service workers, web workers, etc) and we are discussing the possibility of having multiple isolates on for the main thread (e.g. isolating cross-origin code within the same page in the same renderer process).\n\nThe approach I proposed allows us to extend crash keys to multiple isolates since each could have a unique callback with unique crash key strings associated with the crash key id enums, and the embedder would be able to control these unique key names when creating the isolate rather than having to do some kind of mapping or guess work later.\n\n\u003e I like that right now it\u0027s possible to add crashkeys from other places in v8 the same way Isolate does it, with minimal changes to the embedder (the change would be centralized in gin and would not expose any more of v8\u0027s internals to the embedder)\n\nI\u0027m not sure how my proposal changes this? It would be as easy as calling isolate-\u003eAddCrashKey(..) from the other place and having this function invoke the underlying callback if it exists.",
+      "parentUuid": "1924a7ba_9e85fbe2",
+      "range": {
+        "startLine": 3319,
+        "startChar": 0,
+        "endLine": 3327,
+        "endChar": 3
+      },
+      "revId": "46345f47369ff8a92e920cacb6d39c3f14f22acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
