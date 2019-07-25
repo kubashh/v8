@@ -46,6 +46,30 @@
       "revId": "46345f47369ff8a92e920cacb6d39c3f14f22acb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1924a7ba_9e85fbe2",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3327,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-07-25T19:53:30Z",
+      "side": 1,
+      "message": "All of the crash dumps I\u0027ve seen so far contained only one isolate so I\u0027d expect the current approach to cover most of the user cases. I like that right now it\u0027s possible to add crashkeys from other places in v8 the same way Isolate does it, with minimal changes to the embedder (the change would be centralized in gin and would not expose any more of v8\u0027s internals to the embedder), so I\u0027d prefer not using the callback.\n\nRoss, if you can live with the current solution, could you also please sign off on the gin\u0027s side?",
+      "parentUuid": "70d47714_dfb34f8a",
+      "range": {
+        "startLine": 3319,
+        "startChar": 0,
+        "endLine": 3327,
+        "endChar": 3
+      },
+      "revId": "46345f47369ff8a92e920cacb6d39c3f14f22acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
