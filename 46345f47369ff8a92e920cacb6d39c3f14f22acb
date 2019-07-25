@@ -22,6 +22,30 @@
       "revId": "46345f47369ff8a92e920cacb6d39c3f14f22acb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70d47714_dfb34f8a",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3327,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-07-25T05:31:58Z",
+      "side": 1,
+      "message": "Now that we are doing this just for the main thread, I think it would be better to be explicit about the operation rather than trying to guess which isolate is the main thread. \n\nAs such, I think we should invert the dependency and instead of exposing a SetCrashKey function on platform, could expose a SetCrashKeyFunction on Isolate that is passed a callback function for adding a crash key. This could then be called for just the main isolate, much like SetAddHistogramSampleFunction in render_thread_impl.cc [1]. I\u0027m envisaging something like the following on the V8 side:\n\n-- v8.h --\n enum class CrashKeyId ...\n typedef void (*AddCrashKeyCallback)(CrashKeyId, std::string value);\n \n class Isolate { ...\n   void SetAddCrashKeyFunction(AddCrashKeyCallback callback);\n }\n\n-- isolate.cc -- \n  Isolate::SetAddCrashKeyFunction(AddCrashKeyCallback callback) {\n    // Add initial crash keys\n    AddCrashKeyCallback(kReadonlySpaceFirstPageAddress, ...);\n    ...\n    // potentially stash callback on isolate so that we could set other crashkeys later\n  }\n\nWDYT? \n\n[1] https://cs.chromium.org/chromium/src/content/renderer/render_thread_impl.cc?sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d1173",
+      "parentUuid": "837a7cb9_48a8fbff",
+      "range": {
+        "startLine": 3319,
+        "startChar": 0,
+        "endLine": 3327,
+        "endChar": 3
+      },
+      "revId": "46345f47369ff8a92e920cacb6d39c3f14f22acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
