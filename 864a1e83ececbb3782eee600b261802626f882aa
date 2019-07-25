@@ -22,6 +22,30 @@
       "revId": "864a1e83ececbb3782eee600b261802626f882aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57f465bf_e545450b",
+        "filename": "test/mjsunit/compiler/regress-9041.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-25T18:12:15Z",
+      "side": 1,
+      "message": "No, thanks.",
+      "parentUuid": "816bf32f_9d54e0c0",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 36
+      },
+      "revId": "864a1e83ececbb3782eee600b261802626f882aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
