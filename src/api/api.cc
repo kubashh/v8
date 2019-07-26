@@ -10068,6 +10068,10 @@ SnapshotObjectId HeapProfiler::GetObjectId(Local<Value> value) {
   return reinterpret_cast<i::HeapProfiler*>(this)->GetSnapshotObjectId(obj);
 }
 
+SnapshotObjectId HeapProfiler::GetObjectId(NativeObject value) {
+  return reinterpret_cast<i::HeapProfiler*>(this)->GetSnapshotObjectId(value);
+}
+
 Local<Value> HeapProfiler::FindObjectById(SnapshotObjectId id) {
   i::Handle<i::Object> obj =
       reinterpret_cast<i::HeapProfiler*>(this)->FindHeapObjectById(id);
