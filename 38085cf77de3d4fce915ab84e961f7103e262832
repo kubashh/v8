@@ -22,6 +22,30 @@
       "revId": "38085cf77de3d4fce915ab84e961f7103e262832",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "043c58e3_9cb23222",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2254,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-07-26T23:08:39Z",
+      "side": 1,
+      "message": "Good suggestions! I used 1, saved 1 instruction (Eor), thanks!",
+      "parentUuid": "930108f8_c084b6fb",
+      "range": {
+        "startLine": 2254,
+        "startChar": 0,
+        "endLine": 2254,
+        "endChar": 12
+      },
+      "revId": "38085cf77de3d4fce915ab84e961f7103e262832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
