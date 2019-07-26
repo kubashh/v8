@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "930108f8_c084b6fb",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2254,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-07-26T22:42:54Z",
+      "side": 1,
+      "message": "I can think of 2 ways to do this.\n\n1) Vector compare immediate 0 (vceq) to canonicalize to 0(true) and -1(false). Then vpmax once to get the 64 bit result, and cmp to 0 and cset (eq).\n2) Use a vector saturating shift (vqshlu, maybe not in assembler yet) to canonicalize to 0(false) and -1(true), then vpmin as for i32x4 all true.",
+      "range": {
+        "startLine": 2254,
+        "startChar": 0,
+        "endLine": 2254,
+        "endChar": 12
+      },
+      "revId": "38085cf77de3d4fce915ab84e961f7103e262832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
