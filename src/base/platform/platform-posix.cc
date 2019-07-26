@@ -24,6 +24,9 @@
 #if defined(__APPLE__) || defined(__DragonFly__) || defined(__FreeBSD__) || \
     defined(__NetBSD__) || defined(__OpenBSD__)
 #include <sys/sysctl.h>  // NOLINT, for sysctl
+#if defined(__FreeBSD__)
+#include <sys/thr.h>
+#endif
 #endif
 
 #if defined(ANDROID) && !defined(V8_ANDROID_LOG_STDOUT)
@@ -519,6 +522,10 @@ int OS::GetCurrentThreadId() {
   return static_cast<int>(zx_thread_self());
 #elif V8_OS_SOLARIS
   return static_cast<int>(pthread_self());
+#elif V8_OS_FREEBSD
+  int64_t tid;
+  thr_self(&tid);
+  return static_cast<int>(tid);
 #else
   return static_cast<int>(reinterpret_cast<intptr_t>(pthread_self()));
 #endif
