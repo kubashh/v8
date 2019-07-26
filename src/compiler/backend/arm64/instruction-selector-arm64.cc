@@ -3073,6 +3073,7 @@ void InstructionSelector::VisitInt64AbsWithOverflow(Node* node) {
   V(I16x8UConvertI8x16High, kArm64I16x8UConvertI8x16High) \
   V(I8x16Neg, kArm64I8x16Neg)                             \
   V(S128Not, kArm64S128Not)                               \
+  V(S1x2AnyTrue, kArm64S1x2AnyTrue)                       \
   V(S1x4AnyTrue, kArm64S1x4AnyTrue)                       \
   V(S1x4AllTrue, kArm64S1x4AllTrue)                       \
   V(S1x8AnyTrue, kArm64S1x8AnyTrue)                       \
@@ -3204,6 +3205,13 @@ SIMD_TYPE_LIST(SIMD_VISIT_REPLACE_LANE)
 SIMD_UNOP_LIST(SIMD_VISIT_UNOP)
 #undef SIMD_VISIT_UNOP
 #undef SIMD_UNOP_LIST
+
+void InstructionSelector::VisitS1x2AllTrue(Node* node) {
+  Arm64OperandGenerator g(this);
+  InstructionOperand temps[] = {g.TempRegister()};
+  this->Emit(kArm64S1x2AllTrue, g.DefineAsRegister(node),
+             g.UseRegister(node->InputAt(0)), arraysize(temps), temps);
+}
 
 #define SIMD_VISIT_SHIFT_OP(Name)                     \
   void InstructionSelector::Visit##Name(Node* node) { \
