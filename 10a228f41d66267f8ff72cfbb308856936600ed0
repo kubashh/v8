@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3e6ec6b_7d67e28f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-07-26T21:10:56Z",
+      "side": 1,
+      "message": "Feel free to add a footer entry here for test skip changes:\nNo-Try: true",
+      "revId": "10a228f41d66267f8ff72cfbb308856936600ed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f68774a_9418e51a",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-07-26T21:10:56Z",
+      "side": 1,
+      "message": "nit: maintain sorting in this paragraph",
+      "range": {
+        "startLine": 867,
+        "startChar": 2,
+        "endLine": 867,
+        "endChar": 30
+      },
+      "revId": "10a228f41d66267f8ff72cfbb308856936600ed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
