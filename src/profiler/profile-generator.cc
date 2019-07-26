@@ -22,7 +22,7 @@ void SourcePositionTable::SetPosition(int pc_offset, int line,
   // Check that we are inserting in ascending order, so that the vector remains
   // sorted.
   DCHECK(pc_offsets_to_lines_.empty() ||
-         pc_offsets_to_lines_.back().pc_offset < pc_offset);
+         pc_offsets_to_lines_.back().pc_offset <= pc_offset);
   if (pc_offsets_to_lines_.empty() ||
       pc_offsets_to_lines_.back().line_number != line ||
       pc_offsets_to_lines_.back().inlining_id != inlining_id) {
