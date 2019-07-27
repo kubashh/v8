@@ -118,6 +118,30 @@
       "revId": "46345f47369ff8a92e920cacb6d39c3f14f22acb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f64ea7a_e21f9eaf",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3327,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-07-27T19:31:34Z",
+      "side": 1,
+      "message": "\u003e My thinking was that in the future we might want to set crashkeys at various callsites independent of the isolate: the standard crashkeys use case when the value from the last execution of the callsite is retained as the most relevant for a crash (should it happen thereafter).\n\nI think anything we would want to record would be specific to an isolate, almost nothing is isolate independent in V8. Isolates are often also on different threads, so without making it isolate specific, recording the last value of a call sight would introduce race conditions (e.g. another thread records its value for a callsite and overwrites tha value for the thread which is about to crash.\n\n\u003e If multiple isolates are created by the embedder using a single callsite, we\u0027ll still have the same problem of not being able to use separate static crashkeys for them, forcing the embedder to work around. I\u0027m not sure I like that -- it\u0027s just too prone for mistakes. Would it be better to append values from the new isolates to the previously created keys?\n\nI\u0027m not sure what you mean by append, there is no appending of crash keys, only overwriting. The issue of multiple isolates being created at the same callsite can be solved by creating a new callback with a set of unique crash key strings bound to the callback for each isolate created at that callsite.",
+      "parentUuid": "627460b7_5de2de08",
+      "range": {
+        "startLine": 3319,
+        "startChar": 0,
+        "endLine": 3327,
+        "endChar": 3
+      },
+      "revId": "46345f47369ff8a92e920cacb6d39c3f14f22acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
