@@ -352,7 +352,7 @@ void HeapObjectsMap::UpdateObjectSize(Address addr, int size) {
 SnapshotObjectId HeapObjectsMap::FindEntry(Address addr) {
   base::HashMap::Entry* entry = entries_map_.Lookup(
       reinterpret_cast<void*>(addr), ComputeAddressHash(addr));
-  if (entry == nullptr) return 0;
+  if (entry == nullptr) return v8::HeapProfiler::kUnknownObjectId;
   int entry_index = static_cast<int>(reinterpret_cast<intptr_t>(entry->value));
   EntryInfo& entry_info = entries_.at(entry_index);
   DCHECK(static_cast<uint32_t>(entries_.size()) > entries_map_.occupancy());
@@ -384,6 +384,25 @@ SnapshotObjectId HeapObjectsMap::FindOrAddEntry(Address addr,
   entries_.push_back(EntryInfo(id, addr, size, accessed));
   DCHECK(static_cast<uint32_t>(entries_.size()) > entries_map_.occupancy());
   return id;
+}
+
+SnapshotObjectId HeapObjectsMap::FindMergedNativeEntry(NativeObject addr) {
+  base::HashMap::Entry* entry = merged_native_entries_map_.Lookup(
+      reinterpret_cast<void*>(addr), ComputePointerHash(addr));
+  if (entry == nullptr) return v8::HeapProfiler::kUnknownObjectId;
+  return FindEntry(reinterpret_cast<Address>(entry->value));
+}
+
+void HeapObjectsMap::AddMergedNativeEntry(NativeObject addr,
+                                          Address canonical_addr) {
+  base::HashMap::Entry* entry = merged_native_entries_map_.LookupOrInsert(
+      reinterpret_cast<void*>(addr), ComputePointerHash(addr));
+  if (entry->value != nullptr) {
+    CHECK_EQ(canonical_addr, reinterpret_cast<Address>(entry->value));
+    return;
+  } else {
+    entry->value = reinterpret_cast<void*>(canonical_addr);
+  }
 }
 
 void HeapObjectsMap::StopHeapObjectsTracking() { time_intervals_.clear(); }
@@ -490,6 +509,19 @@ void HeapObjectsMap::RemoveDeadEntries() {
 
   DCHECK(static_cast<uint32_t>(entries_.size()) - 1 ==
          entries_map_.occupancy());
+
+  std::vector<NativeObject> entries_to_remove;
+  for (base::HashMap::Entry* entry = merged_native_entries_map_.Start();
+       entry != nullptr; entry = merged_native_entries_map_.Next(entry)) {
+    if (FindEntry(reinterpret_cast<Address>(entry->value)) ==
+        v8::HeapProfiler::kUnknownObjectId) {
+      entries_to_remove.push_back(entry->key);
+    }
+  }
+  for (NativeObject native_object : entries_to_remove) {
+    merged_native_entries_map_.Remove(native_object,
+                                      ComputePointerHash(native_object));
+  }
 }
 
 V8HeapExplorer::V8HeapExplorer(HeapSnapshot* snapshot,
@@ -1853,10 +1885,11 @@ HeapEntry* EmbedderGraphEntriesAllocator::AllocateEntry(HeapThing ptr) {
       reinterpret_cast<EmbedderGraphImpl::Node*>(ptr);
   DCHECK(node->IsEmbedderNode());
   size_t size = node->SizeInBytes();
-  return snapshot_->AddEntry(
-      EmbedderGraphNodeType(node), EmbedderGraphNodeName(names_, node),
-      static_cast<SnapshotObjectId>(reinterpret_cast<uintptr_t>(node) << 1),
-      static_cast<int>(size), 0);
+  SnapshotObjectId id = heap_object_map_->FindOrAddEntry(
+      reinterpret_cast<Address>(node->GetNativeObject()), 0);
+  return snapshot_->AddEntry(EmbedderGraphNodeType(node),
+                             EmbedderGraphNodeName(names_, node), id,
+                             static_cast<int>(size), 0);
 }
 
 NativeObjectsExplorer::NativeObjectsExplorer(
@@ -1865,12 +1898,15 @@ NativeObjectsExplorer::NativeObjectsExplorer(
           Isolate::FromHeap(snapshot->profiler()->heap_object_map()->heap())),
       snapshot_(snapshot),
       names_(snapshot_->profiler()->names()),
+      heap_object_map_(snapshot_->profiler()->heap_object_map()),
       embedder_graph_entries_allocator_(
           new EmbedderGraphEntriesAllocator(snapshot)) {}
 
 HeapEntry* NativeObjectsExplorer::EntryForEmbedderGraphNode(
     EmbedderGraphImpl::Node* node) {
   EmbedderGraphImpl::Node* wrapper = node->WrapperNode();
+  NativeObject native_object = node->GetNativeObject();
+  DCHECK_NOT_NULL(native_object);
   if (wrapper) {
     node = wrapper;
   }
@@ -1882,8 +1918,14 @@ HeapEntry* NativeObjectsExplorer::EntryForEmbedderGraphNode(
         static_cast<EmbedderGraphImpl::V8NodeImpl*>(node);
     Object object = v8_node->GetObject();
     if (object.IsSmi()) return nullptr;
-    return generator_->FindEntry(
+    HeapEntry* entry = generator_->FindEntry(
         reinterpret_cast<void*>(Object::cast(object).ptr()));
+    HeapObject heap_object = HeapObject::cast(object);
+    heap_object_map_->AddMergedNativeEntry(native_object,
+                                           heap_object.address());
+    DCHECK_EQ(entry->id(),
+              heap_object_map_->FindMergedNativeEntry(native_object));
+    return entry;
   }
 }
 
