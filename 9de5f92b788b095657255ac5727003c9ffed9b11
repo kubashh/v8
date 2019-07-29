@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37ad9b7f_9126ff9f",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5980,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-29T09:26:54Z",
+      "side": 1,
+      "message": "Can we document why we need to add 5 here?",
+      "revId": "9de5f92b788b095657255ac5727003c9ffed9b11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21321479_1e53ce84",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6009,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-29T09:26:54Z",
+      "side": 1,
+      "message": "Why do we add 9? I count seven additional arguments: 4 before the wasm parameters, and 3 afterwards.",
+      "revId": "9de5f92b788b095657255ac5727003c9ffed9b11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdf3919c_3bf6d08e",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6037,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-29T09:26:54Z",
+      "side": 1,
+      "message": "Can we DCHECK that the return count is not greater than 1? Maybe with a comment to fix this for multi-value.",
+      "revId": "9de5f92b788b095657255ac5727003c9ffed9b11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1df1e151_18b2144a",
+        "filename": "test/mjsunit/wasm/type-reflection.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-07-29T09:26:54Z",
+      "side": 1,
+      "message": "mini-nit: can we put a semicolon after the return?",
+      "range": {
+        "startLine": 302,
+        "startChar": 51,
+        "endLine": 302,
+        "endChar": 70
+      },
+      "revId": "9de5f92b788b095657255ac5727003c9ffed9b11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
