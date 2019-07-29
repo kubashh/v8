@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3fe11a6_7e85c7fd",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-07-29T07:20:22Z",
+      "side": 1,
+      "message": "Alternatively, we could phrase the API around returning nullptr for non-findable entries.",
+      "range": {
+        "startLine": 808,
+        "startChar": 52,
+        "endLine": 808,
+        "endChar": 56
+      },
+      "revId": "278d8ac245c61619926d8752abb9294304c17c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
