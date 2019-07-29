@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c6cf9b4_bea093d7",
+        "filename": "src/torque/declarable.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-07-29T18:31:22Z",
+      "side": 1,
+      "message": "How about just passing out the TypeArgumentInference and producing a proper error message in ImplementationVisitor::LookupCallable when overload resolution fails? That shouldn\u0027t add much code and would avoid the nice error messages being unused.",
+      "range": {
+        "startLine": 87,
+        "startChar": 2,
+        "endLine": 91,
+        "endChar": 3
+      },
+      "revId": "db44adc098a620d2f1ca2f005ec6b8874b851baf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b9d1474_ea465e9b",
+        "filename": "src/torque/type-inference.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-07-29T18:31:22Z",
+      "side": 1,
+      "message": "What does \"term\" stand for here?",
+      "range": {
+        "startLine": 15,
+        "startChar": 22,
+        "endLine": 15,
+        "endChar": 26
+      },
+      "revId": "db44adc098a620d2f1ca2f005ec6b8874b851baf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6795895_37926054",
+        "filename": "src/torque/type-inference.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-07-29T18:31:22Z",
+      "side": 1,
+      "message": "Shoudln\u0027t we have an early exit here if all type parameters were already supplied? Otherwise we might have errors while trying to match even when all parameters were provided explicitly. Or we weaken the checks sufficiently, my other comments might be sufficient for this.",
+      "revId": "db44adc098a620d2f1ca2f005ec6b8874b851baf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "354582da_119a8daf",
+        "filename": "src/torque/type-inference.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-07-29T18:31:22Z",
+      "side": 1,
+      "message": "I think we shouldn\u0027t fail here if the type parameter was provided explicitly.",
+      "range": {
+        "startLine": 69,
+        "startChar": 10,
+        "endLine": 69,
+        "endChar": 64
+      },
+      "revId": "db44adc098a620d2f1ca2f005ec6b8874b851baf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "218ee6b8_be186032",
+        "filename": "src/torque/type-inference.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-07-29T18:31:22Z",
+      "side": 1,
+      "message": "I think we shouldn\u0027t fail here. Otherwise we forbid inference as soon as there is a non-basic parameter in the function, even if it is ground, no?",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 45
+      },
+      "revId": "db44adc098a620d2f1ca2f005ec6b8874b851baf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "634ef3bf_9c19d81e",
+        "filename": "src/torque/type-inference.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-07-29T18:31:22Z",
+      "side": 1,
+      "message": "I think this shouldn\u0027t be a DCHECK, since I fear we don\u0027t actually check this when declaring the generic, so the type expressions could easily contain a wrong number of parameters.\nBut it could be an Error(\"...\").Throw(), since things are seriously wrong.",
+      "range": {
+        "startLine": 103,
+        "startChar": 2,
+        "endLine": 103,
+        "endChar": 54
+      },
+      "revId": "db44adc098a620d2f1ca2f005ec6b8874b851baf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

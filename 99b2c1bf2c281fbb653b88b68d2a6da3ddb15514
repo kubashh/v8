@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7d65877_c529bba5",
+        "filename": "src/torque/type-inference.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-07-29T18:31:22Z",
+      "side": 1,
+      "message": "Right, this is safe behavior. If we want to be more permissive in the future, we might try to combine constraints by computing a common supertype.",
+      "range": {
+        "startLine": 35,
+        "startChar": 3,
+        "endLine": 37,
+        "endChar": 55
+      },
+      "revId": "99b2c1bf2c281fbb653b88b68d2a6da3ddb15514",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
