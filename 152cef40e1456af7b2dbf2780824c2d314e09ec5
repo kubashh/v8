@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20d91819_d9282faa",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-07-29T09:23:50Z",
+      "side": 1,
+      "message": "Let\u0027s land without a flag.",
+      "range": {
+        "startLine": 931,
+        "startChar": 0,
+        "endLine": 932,
+        "endChar": 50
+      },
+      "revId": "152cef40e1456af7b2dbf2780824c2d314e09ec5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "384607a4_d0584253",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3248,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-07-29T09:23:50Z",
+      "side": 1,
+      "message": "This looks redundant because TryFindNodeIn also checks it.\nInstead let\u0027s check that we always find a node if the free list is not empty.\n\nDCHECK_IMPLIES(node.is_null(), IsEmpty());",
+      "range": {
+        "startLine": 3248,
+        "startChar": 1,
+        "endLine": 3248,
+        "endChar": 56
+      },
+      "revId": "152cef40e1456af7b2dbf2780824c2d314e09ec5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
