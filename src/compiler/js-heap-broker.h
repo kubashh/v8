@@ -123,6 +123,9 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   PropertyAccessInfo GetAccessInfoForLoadingExec(MapRef map);
   PropertyAccessInfo const& CreateAccessInfoForLoadingExec(
       MapRef map, CompilationDependencies* dependencies);
+  PropertyAccessInfo GetAccessInfoForNamedPropertyAccess(MapRef map);
+  PropertyAccessInfo const& CreateAccessInfoForNamedPropertyAccess(
+      MapRef map, NameRef name, CompilationDependencies* dependencies);
 
   std::ostream& Trace();
   void IncrementTracingIndentation();
@@ -158,6 +161,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
       MapToAccessInfos;
   MapToAccessInfos ais_for_loading_then_;
   MapToAccessInfos ais_for_loading_exec_;
+  MapToAccessInfos ais_for_named_properties_;
 
   static const size_t kMinimalRefsBucketCount = 8;     // must be power of 2
   static const size_t kInitialRefsBucketCount = 1024;  // must be power of 2
