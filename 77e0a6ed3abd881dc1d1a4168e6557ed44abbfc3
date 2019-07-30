@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "147dc6b0_a0af148c",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-07-30T12:40:24Z",
+      "side": 1,
+      "message": "The prototype is only available after we finish iterating over the properties and calling DefineClass.\n\nI tried delaying building private members after the DefineClass is called, but then realized we have to build the private members before calling DefineClass since computed properties may access the private members in the keys (even though that should likely error).",
+      "parentUuid": "86fd6b54_9a2719b9",
+      "revId": "77e0a6ed3abd881dc1d1a4168e6557ed44abbfc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ccc0fae2_11ce82a3",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 2
