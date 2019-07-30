@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b542da26_1ee54834",
+        "filename": "src/compiler/load-elimination.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-07-30T16:37:47Z",
+      "side": 1,
+      "message": "After chat with Georg, invalidating 32 bits seems necessary if we want to enable the 64 bit one.",
+      "range": {
+        "startLine": 1339,
+        "startChar": 6,
+        "endLine": 1344,
+        "endChar": 7
+      },
+      "revId": "2ec594d7d72cf464d711b8cb2ffe9bb8560455f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
