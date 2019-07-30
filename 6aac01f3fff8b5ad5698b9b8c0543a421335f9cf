@@ -16,6 +16,24 @@
       "revId": "6aac01f3fff8b5ad5698b9b8c0543a421335f9cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74045752_88b5800d",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-07-30T16:15:46Z",
+      "side": 1,
+      "message": "Good catch, uploaded https://crrev.com/c/1726400 for cleanup",
+      "parentUuid": "1fbb96f8_75814444",
+      "revId": "6aac01f3fff8b5ad5698b9b8c0543a421335f9cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
