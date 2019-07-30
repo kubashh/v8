@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a32d7437_5b75b025",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T14:57:52Z",
+      "side": 1,
+      "message": "property_access_infos_for_load\n\nAnd let\u0027s remove the others soon :)",
+      "range": {
+        "startLine": 187,
+        "startChar": 6,
+        "endLine": 187,
+        "endChar": 31
+      },
+      "revId": "f84a849fa5e9164ddfa0e9137113e788615817fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afed1f8c_61a38901",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2209,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T14:57:52Z",
+      "side": 1,
+      "message": "Please name this receiver, as it\u0027s not necessarily the holder and holder is used already below.",
+      "revId": "f84a849fa5e9164ddfa0e9137113e788615817fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c09cb1b_d088a3ea",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2218,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T14:57:52Z",
+      "side": 1,
+      "message": "{ }",
+      "revId": "f84a849fa5e9164ddfa0e9137113e788615817fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5c5a246_e103e0c6",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2221,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T14:57:52Z",
+      "side": 1,
+      "message": "We should add accumulator hints here too.",
+      "revId": "f84a849fa5e9164ddfa0e9137113e788615817fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f48f8fa_af6a965d",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2264,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T14:57:52Z",
+      "side": 1,
+      "message": "Nit: no need for this variable",
+      "revId": "f84a849fa5e9164ddfa0e9137113e788615817fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

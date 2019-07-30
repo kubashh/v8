@@ -283,6 +283,24 @@
     },
     {
       "key": {
+        "uuid": "d4725e46_e5956427",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T14:57:52Z",
+      "side": 1,
+      "message": "We could, yes. I\u0027m not saying we should only do only look at one group. I\u0027m saying there should be a single code path that is used in both cases.\n\n\"Also, if the access info already exists for the given map+name pair, the CreateAccessInfoForNamedPropertyAccess method would just return the already computed one.\"\nOnly if the access infos get stored in the map, which right now they are not for feedback maps.",
+      "parentUuid": "b45eb449_08fa6380",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed86631b_b8a8dffc",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 6
