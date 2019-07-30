@@ -7192,20 +7192,25 @@ class V8_EXPORT PersistentHandleVisitor {  // NOLINT
 enum class MemoryPressureLevel { kNone, kModerate, kCritical };
 
 /**
- * Interface for tracing through the embedder heap. During a V8 garbage
- * collection, V8 collects hidden fields of all potential wrappers, and at the
- * end of its marking phase iterates the collection and asks the embedder to
- * trace through its heap and use reporter to report each JavaScript object
- * reachable from any of the given wrappers.
+ * Garbage collection interface that allows the embedder to participate in
+ * tracing to compute the live transitive closure of objects.
+ *
+ * During a V8 garbage collection, V8 collects hidden fields of all potential
+ * wrappers, reports those to the embedder, and expects the embedder to report
+ * reachable V8 objects back.
  */
 class V8_EXPORT EmbedderHeapTracer {
  public:
+  using TaskId = uint8_t;
+
   enum TraceFlags : uint64_t {
     kNoFlags = 0,
     kReduceMemory = 1 << 0,
   };
 
-  // Indicator for the stack state of the embedder.
+  /**
+   * Indicator for the stack state of the embedder.
+   */
   enum EmbedderStackState {
     kUnknown,
     kNonEmpty,
@@ -7239,95 +7244,138 @@ class V8_EXPORT EmbedderHeapTracer {
     size_t allocated_size = 0;
   };
 
+  /**
+   * Task id to signal calls on the main thread.
+   */
+  static constexpr TaskId kMainThreadId = 0;
+
   virtual ~EmbedderHeapTracer() = default;
 
   /**
    * Iterates all TracedGlobal handles created for the v8::Isolate the tracer is
    * attached to.
+   *
+   * \param visitor The visitor that should be used to iterate the handles.
    */
   void IterateTracedGlobalHandles(TracedGlobalHandleVisitor* visitor);
 
   /**
-   * Called by v8 to register internal fields of found wrappers.
+   * The maximum number of tasks that V8 uses to register newly found references
+   * through |RegisterV8References|.
    *
-   * The embedder is expected to store them somewhere and trace reachable
-   * wrappers from them when called through |AdvanceTracing|.
+   * \returns Max number of V8 tasks used. Always >=1.
    */
-  virtual void RegisterV8References(
-      const std::vector<std::pair<void*, void*> >& embedder_fields) = 0;
-
-  void RegisterEmbedderReference(const TracedGlobal<v8::Value>& ref);
+  TaskId MaxV8TaskId() const;
 
   /**
-   * Called at the beginning of a GC cycle.
+   * Called by V8 to register live wrapper objects that are found through
+   * tracing. The embedder is expected to treat the wrappers represented by the
+   * internal fields as live for the current tracing cycle.
+   *
+   * \param id The task the references are registered from. V8 uses
+   *   |kMainThreadId| to signal a call on the main thread.
+   * \param embedder_fields A buffer of internal fields that represent the
+   *   wrappers that should be kept alive.
+   */
+  V8_DEPRECATE_SOON(
+      "Use version with task ids. Equivalent to calling with kMainThreadId.",
+      virtual void RegisterV8References(
+          const std::vector<std::pair<void*, void*>>& embedder_fields)) = 0;
+  virtual void RegisterV8References(
+      TaskId id, const std::vector<std::pair<void*, void*>>& embedder_fields);
+
+  /**
+   * The maximum number of tasks that the embedder uses to register newly found
+   * references through |RegisterEmbedderReference|.
+   *
+   * \returns Max number of embedder tasks used. Expected to always be >=1.
+   */
+  virtual TaskId MaxEmbedderTaskId() const;
+
+  /**
+   * Called by the embedder to register live V8 objects that are found through
+   * tracing. V8 will treat the objects as live for the current tracing cycle.
+   *
+   * \param id The task the references are registered from. The embedder is
+   *   expected to use |kMainThreadId| to signal a call on the main thread.
+   * \param ref The reference pointing to a V8 object that should be treated as
+   *   live.
+   */
+  V8_DEPRECATE_SOON(
+      "Use version with task ids. Equivalent to calling with kMainThreadId.",
+      void RegisterEmbedderReference(const TracedGlobal<v8::Value>& ref));
+  void RegisterEmbedderReference(TaskId id, const TracedGlobal<v8::Value>& ref);
+
+  /**
+   * Called by V8 at the beginning of a GC cycle.
+   *
+   * \param flags The flags indicating the mode of the current cycle.
    */
   V8_DEPRECATE_SOON("Use version with flags.", virtual void TracePrologue()) {}
   virtual void TracePrologue(TraceFlags flags);
 
   /**
-   * Called to advance tracing in the embedder.
+   * Called by V8 to advance tracing in the embedder.
    *
    * The embedder is expected to trace its heap starting from wrappers reported
-   * by RegisterV8References method, and report back all reachable wrappers.
-   * Furthermore, the embedder is expected to stop tracing by the given
-   * deadline. A deadline of infinity means that tracing should be finished.
+   * by |RegisterV8References| method, and report back all reachable V8 objects.
    *
-   * Returns |true| if tracing is done, and false otherwise.
+   * \param deadline_in_ms The deadline the embedder is expected to follow. A
+   *   deadline of infinity means that tracing should be finished.
+   * \returns |true| if tracing is done, |false| otherwise.
    */
   virtual bool AdvanceTracing(double deadline_in_ms) = 0;
 
-  /*
-   * Returns true if there no more tracing work to be done (see AdvanceTracing)
-   * and false otherwise.
+  /**
+   * Called by V8 upon entering the final marking pause. No more incremental
+   * marking steps will follow this call.
+   *
+   * \param stack_state Whether the garbage collection is finalized with or
+   *   without stack.
    */
-  virtual bool IsTracingDone() = 0;
+  virtual void EnterFinalPause(EmbedderStackState stack_state) = 0;
 
   /**
-   * Called at the end of a GC cycle.
+   * Called by V8 at the end of a GC cycle.
    *
-   * Note that allocation is *not* allowed within |TraceEpilogue|. Can be
-   * overriden to fill a |TraceSummary| that is used by V8 to schedule future
-   * garbage collections.
+   * Note that allocation is *not* allowed within |TraceEpilogue|.
+   *
+   * \param trace_summary A summary of the current GC cycle that V8 can use to
+   *   schedule future garbage collections.
    */
   virtual void TraceEpilogue() {}
   virtual void TraceEpilogue(TraceSummary* trace_summary) { TraceEpilogue(); }
 
   /**
-   * Called upon entering the final marking pause. No more incremental marking
-   * steps will follow this call.
+   * Returns whether tracing is done.
+   *
+   * \returns |true| if tracing is done (also see |AdvanceTracing|), |false|
+   *   otherwise.
    */
-  virtual void EnterFinalPause(EmbedderStackState stack_state) = 0;
+  virtual bool IsTracingDone() = 0;
 
-  /*
+  /**
    * Called by the embedder to request immediate finalization of the currently
-   * running tracing phase that has been started with TracePrologue and not
-   * yet finished with TraceEpilogue.
+   * running tracing phase that has been started with |TracePrologue| and not
+   * yet finished with |TraceEpilogue}.
    *
-   * Will be a noop when currently not in tracing.
-   *
-   * This is an experimental feature.
+   * Noop when currently not in tracing.
    */
   void FinalizeTracing();
 
   /**
-   * Returns true if the TracedGlobal handle should be considered as root for
-   * the currently running non-tracing garbage collection and false otherwise.
+   * Returns whether a |TracedGlobal| handle should be considered as root for
+   * the currently running non-tracing garbage collection. Default
+   * implementation will keep all |TracedGlobal| references as roots.
    *
-   * Default implementation will keep all TracedGlobal references as roots.
+   * \return |true| if it should be considered as root, |false| otherwise.
    */
   virtual bool IsRootForNonTracingGC(
       const v8::TracedGlobal<v8::Value>& handle) {
     return true;
   }
 
-  /*
-   * Called by the embedder to immediately perform a full garbage collection.
-   *
-   * Should only be used in testing code.
-   */
-  void GarbageCollectionForTesting(EmbedderStackState stack_state);
-
-  /*
+  /**
    * Called by the embedder to signal newly allocated or freed memory. Not bound
    * to tracing phases. Embedders should trade off when increments are reported
    * as V8 may consult global heuristics on whether to trigger garbage
@@ -7336,11 +7384,18 @@ class V8_EXPORT EmbedderHeapTracer {
   void IncreaseAllocatedSize(size_t bytes);
   void DecreaseAllocatedSize(size_t bytes);
 
-  /*
+  /**
    * Returns the v8::Isolate this tracer is attached too and |nullptr| if it
    * is not attached to any v8::Isolate.
    */
   v8::Isolate* isolate() const { return isolate_; }
+
+  /**
+   * Called by the embedder to immediately perform a full garbage collection.
+   *
+   * Should only be used in testing code.
+   */
+  void GarbageCollectionForTesting(EmbedderStackState stack_state);
 
  protected:
   v8::Isolate* isolate_ = nullptr;

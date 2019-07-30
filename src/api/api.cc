@@ -10194,6 +10194,18 @@ void Testing::DeoptimizeAll(Isolate* isolate) {
   i::Deoptimizer::DeoptimizeAll(i_isolate);
 }
 
+void EmbedderHeapTracer::RegisterV8References(
+    TaskId id, const std::vector<std::pair<void*, void*>>& embedder_fields) {
+#if __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+#endif
+  RegisterV8References(embedder_fields);
+#if __clang__
+#pragma clang diagnostic pop
+#endif
+}
+
 void EmbedderHeapTracer::TracePrologue(TraceFlags flags) {
 #if __clang__
 #pragma clang diagnostic push
@@ -10246,6 +10258,18 @@ void EmbedderHeapTracer::DecreaseAllocatedSize(size_t bytes) {
     DCHECK_NOT_NULL(tracer);
     tracer->DecreaseAllocatedSize(bytes);
   }
+}
+
+void EmbedderHeapTracer::RegisterEmbedderReference(
+    TaskId id, const TracedGlobal<v8::Value>& ref) {
+#if __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+#endif
+  RegisterEmbedderReference(ref);
+#if __clang__
+#pragma clang diagnostic pop
+#endif
 }
 
 void EmbedderHeapTracer::RegisterEmbedderReference(
