@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86fd6b54_9a2719b9",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-07-30T10:04:14Z",
+      "side": 1,
+      "message": "Should this go in BuildPrivateClassMemberNameAssignment? (and maybe rename it as well to BuildAndInitializePrivateClassMemberName?) \n\nRoss probably has opinions on this, will defer to him",
+      "revId": "77e0a6ed3abd881dc1d1a4168e6557ed44abbfc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccc0fae2_11ce82a3",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2142,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-07-30T10:04:14Z",
+      "side": 1,
+      "message": "Why not just use VisitSetHomeObject?",
+      "revId": "77e0a6ed3abd881dc1d1a4168e6557ed44abbfc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
