@@ -394,6 +394,8 @@ class SerializerForBackgroundCompilation {
   void ProcessFeedbackForPropertyAccess(FeedbackSlot slot, AccessMode mode,
                                         base::Optional<NameRef> static_name);
   void ProcessMapForNamedPropertyAccess(MapRef const& map, NameRef const& name);
+  void ProcessHintForNamedPropertyAccess(JSObjectRef const& receiver_hint,
+                                         NameRef const& name);
 
   void ProcessCreateContext();
   enum ContextProcessingMode {
@@ -2186,6 +2188,35 @@ void SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
     broker()->native_context().global_proxy_object().GetPropertyCell(name,
                                                                      true);
   }
+
+  PropertyAccessInfo access_info =
+      broker()->CreatePropertyAccessInfoForLoad(map, name, dependencies());
+
+  Handle<JSObject> holder;
+  if (access_info.IsDataConstant() && access_info.holder().ToHandle(&holder)) {
+    JSObjectRef holder_ref(broker(), holder);
+    holder_ref.GetOwnDataProperty(access_info.field_representation(),
+                                  access_info.field_index(), true);
+  }
+}
+
+void SerializerForBackgroundCompilation::ProcessHintForNamedPropertyAccess(
+    JSObjectRef const& receiver_hint, NameRef const& name) {
+  // For JSNativeContextSpecialization::ReduceNamedAccess.
+  Handle<HeapObject> holder(receiver_hint.object());
+
+  PropertyAccessInfo access_info = broker()->CreatePropertyAccessInfoForLoad(
+      MapRef(broker(), handle(holder->map(), broker()->isolate())), name,
+      dependencies());
+
+  if (access_info.IsDataConstant()) {
+    Handle<JSObject> holder;
+    if (!access_info.holder().ToHandle(&holder))
+      holder = receiver_hint.object();
+    JSObjectRef(broker(), holder)
+        .GetOwnDataProperty(access_info.field_representation(),
+                            access_info.field_index(), true);
+  }
 }
 
 void SerializerForBackgroundCompilation::VisitLdaKeyedProperty(
@@ -2218,10 +2249,16 @@ void SerializerForBackgroundCompilation::ProcessNamedPropertyAccess(
       global_proxy.GetPropertyCell(name, true);
     }
     // For JSNativeContextSpecialization::ReduceJSLoadNamed.
-    if (mode == AccessMode::kLoad && object.IsJSFunction() &&
-        name.equals(ObjectRef(
-            broker(), broker()->isolate()->factory()->prototype_string()))) {
-      object.AsJSFunction().Serialize();
+    if (mode == AccessMode::kLoad) {
+      if (object.IsJSFunction() &&
+          name.equals(ObjectRef(
+              broker(), broker()->isolate()->factory()->prototype_string()))) {
+        object.AsJSFunction().Serialize();
+      }
+      if (object.IsJSObject()) {
+        JSObjectRef receiver_hint(object.AsJSObject());
+        ProcessHintForNamedPropertyAccess(receiver_hint, name);
+      }
     }
   }
 
