@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8ef74ff_96d478f3",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T11:36:12Z",
+      "side": 1,
+      "message": "Could we please add a comment here describing what this function is trying to do? (I guess that means explaining what the fast path is.)",
+      "revId": "d9d896072d78cb9efd8d6ea072b7f9cd84c3de53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
