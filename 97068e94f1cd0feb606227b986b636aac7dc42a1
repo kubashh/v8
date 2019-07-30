@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62509602_fb27013c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-07-30T15:35:22Z",
+      "side": 1,
+      "message": "nit: were",
+      "range": {
+        "startLine": 9,
+        "startChar": 61,
+        "endLine": 9,
+        "endChar": 66
+      },
+      "revId": "97068e94f1cd0feb606227b986b636aac7dc42a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2200342d_a5a22197",
+        "filename": "test/mjsunit/regress/regress-crbug-986187.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-07-30T15:35:22Z",
+      "side": 1,
+      "message": "too early",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "97068e94f1cd0feb606227b986b636aac7dc42a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
