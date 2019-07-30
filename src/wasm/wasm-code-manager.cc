@@ -659,9 +659,11 @@ NativeModule::NativeModule(WasmEngine* engine, const WasmFeatures& enabled,
   if (num_wasm_functions > 0) {
     code_table_.reset(new WasmCode* [num_wasm_functions] {});
 
-    WasmCodeRefScope code_ref_scope;
-    jump_table_ = CreateEmptyJumpTable(
-        JumpTableAssembler::SizeForNumberOfSlots(num_wasm_functions));
+    if (!engine->code_manager()->IsImplicitAllocationsDisabledForTesting()) {
+      WasmCodeRefScope code_ref_scope;
+      jump_table_ = CreateEmptyJumpTable(
+          JumpTableAssembler::SizeForNumberOfSlots(num_wasm_functions));
+    }
   }
 }
 
@@ -1001,8 +1003,12 @@ WasmCode* NativeModule::PublishCodeLocked(std::unique_ptr<WasmCode> code) {
 
     // Populate optimized code to the jump table unless there is an active
     // redirection to the interpreter that should be preserved.
-    bool update_jump_table =
-        update_code_table && !has_interpreter_redirection(code->index());
+    DCHECK_IMPLIES(
+        jump_table_ == nullptr,
+        engine_->code_manager()->IsImplicitAllocationsDisabledForTesting());
+    bool update_jump_table = update_code_table &&
+                             !has_interpreter_redirection(code->index()) &&
+                             jump_table_;
 
     // Ensure that interpreter entries always populate to the jump table.
     if (code->kind_ == WasmCode::Kind::kInterpreterEntry) {
@@ -1187,10 +1193,6 @@ WasmCodeManager::WasmCodeManager(WasmMemoryTracker* memory_tracker,
                                  size_t max_committed)
     : memory_tracker_(memory_tracker),
       max_committed_code_space_(max_committed),
-#if defined(V8_OS_WIN_X64)
-      is_win64_unwind_info_disabled_for_testing_(false),
-#endif
-      total_committed_code_space_(0),
       critical_committed_code_space_(max_committed / 2) {
   DCHECK_LE(max_committed, kMaxWasmCodeMemory);
 }
@@ -1198,8 +1200,7 @@ WasmCodeManager::WasmCodeManager(WasmMemoryTracker* memory_tracker,
 #if defined(V8_OS_WIN_X64)
 bool WasmCodeManager::CanRegisterUnwindInfoForNonABICompliantCodeRange() const {
   return win64_unwindinfo::CanRegisterUnwindInfoForNonABICompliantCodeRange() &&
-         FLAG_win64_unwinding_info &&
-         !is_win64_unwind_info_disabled_for_testing_;
+         FLAG_win64_unwinding_info;
 }
 #endif
 
@@ -1370,7 +1371,8 @@ std::shared_ptr<NativeModule> WasmCodeManager::NewNativeModule(
              size);
 
 #if defined(V8_OS_WIN_X64)
-  if (CanRegisterUnwindInfoForNonABICompliantCodeRange()) {
+  if (CanRegisterUnwindInfoForNonABICompliantCodeRange() &&
+      !implicit_allocations_disabled_for_testing_) {
     win64_unwindinfo::RegisterNonABICompliantCodeRange(
         reinterpret_cast<void*>(start), size);
   }
