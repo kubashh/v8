@@ -387,13 +387,16 @@ class SerializerForBackgroundCompilation {
 
   GlobalAccessFeedback const* ProcessFeedbackForGlobalAccess(FeedbackSlot slot);
   NamedAccessFeedback const* ProcessFeedbackMapsForNamedAccess(
-      const MapHandles& maps, AccessMode mode, NameRef const& name);
+      Hints const& receiver_hints, const MapHandles& maps, AccessMode mode,
+      NameRef const& name);
   ElementAccessFeedback const* ProcessFeedbackMapsForElementAccess(
       const MapHandles& maps, AccessMode mode,
       KeyedAccessMode const& keyed_mode);
-  void ProcessFeedbackForPropertyAccess(FeedbackSlot slot, AccessMode mode,
+  void ProcessFeedbackForPropertyAccess(Hints const& receiver_hints,
+                                        FeedbackSlot slot, AccessMode mode,
                                         base::Optional<NameRef> static_name);
-  void ProcessMapForNamedPropertyAccess(MapRef const& map, NameRef const& name);
+  void ProcessMapForNamedPropertyAccess(Hints const& receiver_hints,
+                                        MapRef const& map, NameRef const& name);
 
   void ProcessCreateContext();
   enum ContextProcessingMode {
@@ -2063,11 +2066,12 @@ SerializerForBackgroundCompilation::ProcessFeedbackMapsForElementAccess(
 
 NamedAccessFeedback const*
 SerializerForBackgroundCompilation::ProcessFeedbackMapsForNamedAccess(
-    const MapHandles& maps, AccessMode mode, NameRef const& name) {
+    Hints const& receiver_hints, const MapHandles& maps, AccessMode mode,
+    NameRef const& name) {
   ZoneVector<PropertyAccessInfo> access_infos(broker()->zone());
   for (Handle<Map> map : maps) {
     MapRef map_ref(broker(), map);
-    ProcessMapForNamedPropertyAccess(map_ref, name);
+    ProcessMapForNamedPropertyAccess(receiver_hints, map_ref, name);
     AccessInfoFactory access_info_factory(broker(), dependencies(),
                                           broker()->zone());
     PropertyAccessInfo info(access_info_factory.ComputePropertyAccessInfo(
@@ -2103,7 +2107,8 @@ SerializerForBackgroundCompilation::ProcessFeedbackMapsForNamedAccess(
 }
 
 void SerializerForBackgroundCompilation::ProcessFeedbackForPropertyAccess(
-    FeedbackSlot slot, AccessMode mode, base::Optional<NameRef> static_name) {
+    Hints const& receiver_hints, FeedbackSlot slot, AccessMode mode,
+    base::Optional<NameRef> static_name) {
   if (slot.IsInvalid()) return;
   if (environment()->function().feedback_vector().is_null()) return;
 
@@ -2134,7 +2139,8 @@ void SerializerForBackgroundCompilation::ProcessFeedbackForPropertyAccess(
   base::Optional<NameRef> name =
       static_name.has_value() ? static_name : broker()->GetNameFeedback(nexus);
   if (name.has_value()) {
-    processed = ProcessFeedbackMapsForNamedAccess(maps, mode, *name);
+    processed =
+        ProcessFeedbackMapsForNamedAccess(receiver_hints, maps, mode, *name);
   } else if (nexus.GetKeyType() == ELEMENT) {
     DCHECK_NE(nexus.ic_state(), MEGAMORPHIC);
     processed = ProcessFeedbackMapsForElementAccess(
@@ -2147,7 +2153,7 @@ void SerializerForBackgroundCompilation::ProcessKeyedPropertyAccess(
     Hints const& receiver, Hints const& key, FeedbackSlot slot,
     AccessMode mode) {
   if (BailoutOnUninitialized(slot)) return;
-  ProcessFeedbackForPropertyAccess(slot, mode, base::nullopt);
+  ProcessFeedbackForPropertyAccess(receiver, slot, mode, base::nullopt);
 
   for (Handle<Object> hint : receiver.constants()) {
     ObjectRef receiver_ref(broker(), hint);
@@ -2180,11 +2186,26 @@ void SerializerForBackgroundCompilation::ProcessKeyedPropertyAccess(
 }
 
 void SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
-    MapRef const& map, NameRef const& name) {
+    Hints const& receiver_hints, MapRef const& map, NameRef const& name) {
   // For JSNativeContextSpecialization::ReduceNamedAccess.
   if (map.IsMapOfCurrentGlobalProxy()) {
     broker()->native_context().global_proxy_object().GetPropertyCell(name,
                                                                      true);
+  }
+  for (auto holder : receiver_hints.constants()) {
+    if (!holder->IsHeapObject()) continue;
+    if (handle(Handle<HeapObject>::cast(holder)->map(), broker()->isolate())
+            .equals(map.object()))
+      continue;
+
+    PropertyAccessInfo ai = broker()->CreateAccessInfoForNamedPropertyAccess(
+        map, name, dependencies());
+
+    if (ai.IsDataConstant() && ai.holder().ToHandle(&holder)) {
+      JSObjectRef holder_ref(broker(), holder);
+      holder_ref.GetOwnDataProperty(ai.field_representation(), ai.field_index(),
+                                    true);
+    }
   }
 }
 
@@ -2201,11 +2222,11 @@ void SerializerForBackgroundCompilation::ProcessNamedPropertyAccess(
     Hints const& receiver, NameRef const& name, FeedbackSlot slot,
     AccessMode mode) {
   if (BailoutOnUninitialized(slot)) return;
-  ProcessFeedbackForPropertyAccess(slot, mode, name);
+  ProcessFeedbackForPropertyAccess(receiver, slot, mode, name);
 
   for (Handle<Map> map :
        GetRelevantReceiverMaps(broker()->isolate(), receiver.maps())) {
-    ProcessMapForNamedPropertyAccess(MapRef(broker(), map), name);
+    ProcessMapForNamedPropertyAccess(receiver, MapRef(broker(), map), name);
   }
 
   JSGlobalProxyRef global_proxy =
