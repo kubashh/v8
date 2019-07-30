@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c312c335_42fad43d",
+        "filename": "src/common/globals.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-07-30T11:24:08Z",
+      "side": 1,
+      "message": "Fix newline",
+      "range": {
+        "startLine": 1067,
+        "startChar": 22,
+        "endLine": 1068,
+        "endChar": 23
+      },
+      "revId": "8a48bdec57b6bac6cafcc4e7064f6bbb208cc20b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd047989_4bbcead1",
+        "filename": "src/common/globals.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-07-30T11:24:08Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "8a48bdec57b6bac6cafcc4e7064f6bbb208cc20b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d721da0a_ea801dd1",
+        "filename": "src/common/globals.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-07-30T11:24:08Z",
+      "side": 1,
+      "message": "Why is this needed here?",
+      "range": {
+        "startLine": 1137,
+        "startChar": 2,
+        "endLine": 1138,
+        "endChar": 64
+      },
+      "revId": "8a48bdec57b6bac6cafcc4e7064f6bbb208cc20b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77d97702_e10b6e7a",
+        "filename": "src/common/globals.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-07-30T11:24:08Z",
+      "side": 1,
+      "message": "Same for all these below. We don\u0027t rely on this unlike the IsDeclaredVariableMode which does check \"mode \u003c\u003d VariableMode::kVar\", we aren\u0027t relying on ordering in these particular checks.",
+      "range": {
+        "startLine": 1144,
+        "startChar": 2,
+        "endLine": 1145,
+        "endChar": 64
+      },
+      "revId": "8a48bdec57b6bac6cafcc4e7064f6bbb208cc20b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
