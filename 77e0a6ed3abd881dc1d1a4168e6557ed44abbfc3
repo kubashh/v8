@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ea67cffe_25df7436",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-07-30T15:28:19Z",
+      "side": 1,
+      "message": "Ah okay. I guess for public methods we do this in the boilerplate.",
+      "parentUuid": "147dc6b0_a0af148c",
+      "revId": "77e0a6ed3abd881dc1d1a4168e6557ed44abbfc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ccc0fae2_11ce82a3",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 2
