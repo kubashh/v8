@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3300ef36_1b9e3191",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7284,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-07-30T21:13:58Z",
+      "side": 1,
+      "message": "I do find our naming here a bit weird: \"RegisterV8References\" actually registers embedder references and \"RegisterEmbedderReference\" actually registers a V8 reference.\n\nMaybe the naming should be reversed?",
+      "range": {
+        "startLine": 7284,
+        "startChar": 15,
+        "endLine": 7284,
+        "endChar": 35
+      },
+      "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
