@@ -1341,8 +1341,11 @@ int LoadElimination::FieldIndexOf(FieldAccess const& access) {
       }
       break;
     case MachineRepresentation::kWord64:
-      if (kInt64Size != kTaggedSize) {
-        return -1;  // We currently only track tagged pointer size fields.
+      if (!COMPRESS_POINTERS_BOOL && kInt64Size != kTaggedSize) {
+        // We currently only track tagged pointer size fields.
+        // On pointer compression, we do want to perform load elimination of
+        // kWord64, so we override this.
+        return -1;
       }
       break;
     case MachineRepresentation::kWord8:
@@ -1350,8 +1353,11 @@ int LoadElimination::FieldIndexOf(FieldAccess const& access) {
     case MachineRepresentation::kFloat32:
       return -1;  // Currently untracked.
     case MachineRepresentation::kFloat64:
-      if (kDoubleSize != kTaggedSize) {
-        return -1;  // We currently only track tagged pointer size fields.
+      if (!COMPRESS_POINTERS_BOOL && kDoubleSize != kTaggedSize) {
+        // We currently only track tagged pointer size fields.
+        // On pointer compression, we do want to perform load elimination of
+        // kFloat64, so we override this.
+        return -1;
       }
       break;
     case MachineRepresentation::kTaggedSigned:
