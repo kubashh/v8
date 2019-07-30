@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7e349c73_9e3f4818",
+        "filename": "src/common/globals.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-07-30T12:36:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c312c335_42fad43d",
+      "range": {
+        "startLine": 1067,
+        "startChar": 22,
+        "endLine": 1068,
+        "endChar": 23
+      },
+      "revId": "8a48bdec57b6bac6cafcc4e7064f6bbb208cc20b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd047989_4bbcead1",
         "filename": "src/common/globals.h",
         "patchSetId": 7
@@ -39,6 +63,24 @@
       "revId": "8a48bdec57b6bac6cafcc4e7064f6bbb208cc20b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0abf718_3cf55a52",
+        "filename": "src/common/globals.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-07-30T12:36:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd047989_4bbcead1",
+      "revId": "8a48bdec57b6bac6cafcc4e7064f6bbb208cc20b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "a405f67c_074e073c",
+        "filename": "src/common/globals.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-07-30T12:36:08Z",
+      "side": 1,
+      "message": "It\u0027s copied from the function above, but yes this should be unnecessary for the new functions.",
+      "parentUuid": "d721da0a_ea801dd1",
+      "range": {
+        "startLine": 1137,
+        "startChar": 2,
+        "endLine": 1138,
+        "endChar": 64
+      },
+      "revId": "8a48bdec57b6bac6cafcc4e7064f6bbb208cc20b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77d97702_e10b6e7a",
         "filename": "src/common/globals.h",
         "patchSetId": 7
@@ -85,6 +151,30 @@
       "revId": "8a48bdec57b6bac6cafcc4e7064f6bbb208cc20b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8504c31b_0e802002",
+        "filename": "src/common/globals.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-07-30T12:36:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77d97702_e10b6e7a",
+      "range": {
+        "startLine": 1144,
+        "startChar": 2,
+        "endLine": 1145,
+        "endChar": 64
+      },
+      "revId": "8a48bdec57b6bac6cafcc4e7064f6bbb208cc20b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
