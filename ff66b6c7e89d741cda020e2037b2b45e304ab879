@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2b1ecbf_c3e1e7ab",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4216,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T11:29:44Z",
+      "side": 1,
+      "message": "access_info",
+      "range": {
+        "startLine": 4216,
+        "startChar": 21,
+        "endLine": 4216,
+        "endChar": 28
+      },
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2829eb6c_2a8193dd",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4220,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T11:29:44Z",
+      "side": 1,
+      "message": "Perhaps have a DCHECK that the insertion succeeded.",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b998b1b8_df9aef4d",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T11:29:44Z",
+      "side": 1,
+      "message": "The name should mention that these access infos are for loads (rather than stores), just like the existing ones above.\n\nThe name also doesn\u0027t need to mention NamedPropertyAccess since that is clear from the context. How about something like CreatePropertyAccessInfoForLoad?\n\nIn a followup-CL we can remove all the code for *Execk *HasInstance and *Then and just use this new one instead. (That\u0027s part of what I meant by generalization.)",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "818d74d9_aaab1b20",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T11:29:44Z",
+      "side": 1,
+      "message": "HeapObjectRef const\u0026",
+      "range": {
+        "startLine": 397,
+        "startChar": 41,
+        "endLine": 397,
+        "endChar": 54
+      },
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b57657f2_80152b23",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2180,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T11:29:44Z",
+      "side": 1,
+      "message": "This doesn\u0027t belong here as the comment at the top says this is for ReduceKeyedLoadFromHeapConstant.\n\nI\u0027m also not sure why this is done, and why it\u0027s done in this function. At the very least this should be its own block with its own comment on where we need this data.",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7e305c6_42225597",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2197,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T11:29:44Z",
+      "side": 1,
+      "message": "access_info",
+      "range": {
+        "startLine": 2197,
+        "startChar": 21,
+        "endLine": 2197,
+        "endChar": 23
+      },
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4766e5e_2417f509",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T11:29:44Z",
+      "side": 1,
+      "message": "We already have a place where we compute the PropertyAccessInfos, namely in ProcessFeedbackMapsForNamedAccess. Now we\u0027re doing it twice for feedback maps.",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed86631b_b8a8dffc",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T11:29:44Z",
+      "side": 1,
+      "message": "if (ai.IsDataConstant()) {\n  Handle\u003cJSObject\u003e holder;\n  if (!ai.holder().ToHandle(\u0026holder)) holder \u003d receiver_hint;\n  JSObjectRef(broker(), holder).GetOwnDataProperty(\n      ai.field_representation(), ai.field_index(), true);\n}",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0668ac5_57a031ee",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2269,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-30T11:29:44Z",
+      "side": 1,
+      "message": "This looks wrong because a JSFunction is HeapObject but will not enter the second branch.",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
