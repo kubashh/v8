@@ -194,72 +194,105 @@ Reduction JSCallReducer::ReduceMathHypot(Node* node) {
   Node* control = NodeProperties::GetControlInput(node);
   NodeVector values(graph()->zone());
 
-  Node* max = effect =
-      graph()->NewNode(simplified()->SpeculativeToNumber(
-                           NumberOperationHint::kNumberOrOddball, p.feedback()),
-                       NodeProperties::GetValueInput(node, 2), effect, control);
-  max = graph()->NewNode(simplified()->NumberAbs(), max);
-  values.push_back(max);
-  for (int i = 3; i < node->op()->ValueInputCount(); ++i) {
+  Node* one_arg_is_nan = jsgraph()->FalseConstant();
+  Node* max = jsgraph()->ZeroConstant();
+  for (int i = 2; i < node->op()->ValueInputCount(); ++i) {
     Node* input = effect = graph()->NewNode(
         simplified()->SpeculativeToNumber(NumberOperationHint::kNumberOrOddball,
                                           p.feedback()),
         NodeProperties::GetValueInput(node, i), effect, control);
     input = graph()->NewNode(simplified()->NumberAbs(), input);
-    values.push_back(input);
 
-    // Make sure {max} is NaN in the end in case any argument was NaN.
-    max = graph()->NewNode(
+    // Check for NaN.
+    Node* check_is_nan = graph()->NewNode(simplified()->ObjectIsNaN(), input);
+    Node* branch_is_nan = graph()->NewNode(common()->Branch(BranchHint::kFalse),
+                                           check_is_nan, control);
+
+    Node* if_is_nan = graph()->NewNode(common()->IfTrue(), branch_is_nan);
+    one_arg_is_nan = graph()->NewNode(
         common()->Select(MachineRepresentation::kTagged),
-        graph()->NewNode(simplified()->NumberLessThanOrEqual(), input, max),
-        max, input);
+        graph()->NewNode(simplified()->ReferenceEqual(), one_arg_is_nan,
+                         jsgraph()->FalseConstant()),
+        check_is_nan, one_arg_is_nan);
+
+    // Otherwise abs_values.push_back(abs_value).
+    Node* if_not_nan = graph()->NewNode(common()->IfFalse(), branch_is_nan);
+    {
+      values.push_back(input);
+
+      // if (max < abs_value) { max = abs_value }
+      max = graph()->NewNode(
+          common()->Select(MachineRepresentation::kTagged),
+          graph()->NewNode(simplified()->NumberLessThan(), max, input), input,
+          max);
+    }
+    control = graph()->NewNode(common()->Merge(2), if_is_nan, if_not_nan);
   }
 
+  // If max == V8_INFINITY, return V8_INFINITY.
   Node* check0 = graph()->NewNode(simplified()->NumberEqual(), max,
-                                  jsgraph()->ZeroConstant());
+                                  jsgraph()->Constant(V8_INFINITY));
   Node* branch0 =
       graph()->NewNode(common()->Branch(BranchHint::kFalse), check0, control);
 
   Node* if_true0 = graph()->NewNode(common()->IfTrue(), branch0);
-  Node* vtrue0 = jsgraph()->ZeroConstant();
+  Node* vtrue0 = jsgraph()->Constant(V8_INFINITY);
 
   Node* if_false0 = graph()->NewNode(common()->IfFalse(), branch0);
   Node* vfalse0;
   {
-    Node* check1 = graph()->NewNode(simplified()->NumberEqual(), max,
-                                    jsgraph()->Constant(V8_INFINITY));
+    // If one arg is nan, return NaN.
+    Node* check1 = graph()->NewNode(simplified()->ReferenceEqual(),
+                                    one_arg_is_nan, jsgraph()->TrueConstant());
     Node* branch1 = graph()->NewNode(common()->Branch(BranchHint::kFalse),
                                      check1, if_false0);
 
     Node* if_true1 = graph()->NewNode(common()->IfTrue(), branch1);
-    Node* vtrue1 = jsgraph()->Constant(V8_INFINITY);
+    Node* vtrue1 = jsgraph()->NaNConstant();
 
     Node* if_false1 = graph()->NewNode(common()->IfFalse(), branch1);
     Node* vfalse1;
     {
-      // Kahan summation to avoid rounding errors.
-      // Normalize the numbers to the largest one to avoid overflow.
-      Node* sum = jsgraph()->ZeroConstant();
-      Node* compensation = jsgraph()->ZeroConstant();
-      for (Node* value : values) {
-        Node* n = graph()->NewNode(simplified()->NumberDivide(), value, max);
-        Node* summand = graph()->NewNode(
-            simplified()->NumberSubtract(),
-            graph()->NewNode(simplified()->NumberMultiply(), n, n),
-            compensation);
-        Node* preliminary =
-            graph()->NewNode(simplified()->NumberAdd(), sum, summand);
-        compensation = graph()->NewNode(
-            simplified()->NumberSubtract(),
-            graph()->NewNode(simplified()->NumberSubtract(), preliminary, sum),
-            summand);
-        sum = preliminary;
-      }
-      vfalse1 = graph()->NewNode(
-          simplified()->NumberMultiply(),
-          graph()->NewNode(simplified()->NumberSqrt(), sum), max);
-    }
+      // If max == 0, return 0.
+      Node* check2 = graph()->NewNode(simplified()->NumberEqual(), max,
+                                      jsgraph()->ZeroConstant());
+      Node* branch2 = graph()->NewNode(common()->Branch(BranchHint::kFalse),
+                                       check2, if_false1);
 
+      Node* if_true2 = graph()->NewNode(common()->IfTrue(), branch2);
+      Node* vtrue2 = jsgraph()->ZeroConstant();
+
+      Node* if_false2 = graph()->NewNode(common()->IfFalse(), branch2);
+      Node* vfalse2;
+      {
+        // Kahan summation to avoid rounding errors.
+        // Normalize the numbers to the largest one to avoid overflow.
+        Node* sum = jsgraph()->ZeroConstant();
+        Node* compensation = jsgraph()->ZeroConstant();
+        for (Node* value : values) {
+          Node* n = graph()->NewNode(simplified()->NumberDivide(), value, max);
+          Node* summand = graph()->NewNode(
+              simplified()->NumberSubtract(),
+              graph()->NewNode(simplified()->NumberMultiply(), n, n),
+              compensation);
+          Node* preliminary =
+              graph()->NewNode(simplified()->NumberAdd(), sum, summand);
+          compensation =
+              graph()->NewNode(simplified()->NumberSubtract(),
+                               graph()->NewNode(simplified()->NumberSubtract(),
+                                                preliminary, sum),
+                               summand);
+          sum = preliminary;
+        }
+        vfalse2 = graph()->NewNode(
+            simplified()->NumberMultiply(),
+            graph()->NewNode(simplified()->NumberSqrt(), sum), max);
+      }
+      if_false1 = graph()->NewNode(common()->Merge(2), if_true2, if_false2);
+      vfalse1 =
+          graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
+                           vtrue2, vfalse2, if_false1);
+    }
     if_false0 = graph()->NewNode(common()->Merge(2), if_true1, if_false1);
     vfalse0 = graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
                                vtrue1, vfalse1, if_false0);
