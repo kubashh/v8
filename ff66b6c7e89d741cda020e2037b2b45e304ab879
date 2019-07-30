@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4facf10e_38ba1860",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4216,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-30T13:55:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2b1ecbf_c3e1e7ab",
+      "range": {
+        "startLine": 4216,
+        "startChar": 21,
+        "endLine": 4216,
+        "endChar": 28
+      },
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2829eb6c_2a8193dd",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 6
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "68d6020d_83de394c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4220,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-30T13:55:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2829eb6c_2a8193dd",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b998b1b8_df9aef4d",
         "filename": "src/compiler/js-heap-broker.h",
         "patchSetId": 6
@@ -56,6 +98,24 @@
       "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56a3708f_cc0ffcfb",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-30T13:55:53Z",
+      "side": 1,
+      "message": "Good idea about both the name and the generalization, thanks!",
+      "parentUuid": "b998b1b8_df9aef4d",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "3fc7c936_96e61517",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-30T13:55:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "818d74d9_aaab1b20",
+      "range": {
+        "startLine": 397,
+        "startChar": 41,
+        "endLine": 397,
+        "endChar": 54
+      },
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b57657f2_80152b23",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 6
@@ -96,6 +180,24 @@
       "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "389a838e_9e54492b",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2180,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-30T13:55:53Z",
+      "side": 1,
+      "message": "Seems we\u0027re hitting this in a few cases really, but still - for various types of the key (string, symbol) and for various types of the receiver (JSArray, JSFunction, JSObject). Looks like the data is covered elsewhere though, so will remove this.",
+      "parentUuid": "b57657f2_80152b23",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "1b3d258b_f0505937",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2197,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-30T13:55:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7e305c6_42225597",
+      "range": {
+        "startLine": 2197,
+        "startChar": 21,
+        "endLine": 2197,
+        "endChar": 23
+      },
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4766e5e_2417f509",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 6
@@ -133,6 +259,24 @@
       "writtenOn": "2019-07-30T11:29:44Z",
       "side": 1,
       "message": "We already have a place where we compute the PropertyAccessInfos, namely in ProcessFeedbackMapsForNamedAccess. Now we\u0027re doing it twice for feedback maps.",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b45eb449_08fa6380",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-30T13:55:53Z",
+      "side": 1,
+      "message": "But we could happen to see different maps from the feedback and for the hints, right? Also, if the access info already exists for the given map+name pair, the CreateAccessInfoForNamedPropertyAccess method would just return the already computed one.",
+      "parentUuid": "e4766e5e_2417f509",
       "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -156,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "07027c8e_7ceccfca",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-30T13:55:53Z",
+      "side": 1,
+      "message": "Nice, thanks!",
+      "parentUuid": "ed86631b_b8a8dffc",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b0668ac5_57a031ee",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 6
@@ -170,6 +332,24 @@
       "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2615dbfc_f6bd2ee0",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2269,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-30T13:55:53Z",
+      "side": 1,
+      "message": "Good point, removed the \"else\".",
+      "parentUuid": "b0668ac5_57a031ee",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
