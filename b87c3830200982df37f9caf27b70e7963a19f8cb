@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "71865c71_a61106ed",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7284,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-07-31T11:27:28Z",
+      "side": 1,
+      "message": "Wouldn\u0027t you get the same symmetry with the existing names as well (assuming they were clarified to denote directionality)?\n\nI guess what I don\u0027t understand is when I would use each of the methods you\u0027re suggesting.",
+      "parentUuid": "547a96d2_8a16b8ff",
+      "range": {
+        "startLine": 7284,
+        "startChar": 15,
+        "endLine": 7284,
+        "endChar": 35
+      },
+      "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "601113cb_ab679395",
         "filename": "include/v8.h",
         "patchSetId": 2
