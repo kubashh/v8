@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "547a96d2_8a16b8ff",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7284,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-07-31T11:04:00Z",
+      "side": 1,
+      "message": "The motivation for the smaller granularity is to make the API symmetric in both directions so that Blink markers see the newly discovered reference as soon as possible.\n\nI think collecting the references into a vector is an artifact of the old system when we had only incremental marking.",
+      "parentUuid": "dcaf0628_f4102439",
+      "range": {
+        "startLine": 7284,
+        "startChar": 15,
+        "endLine": 7284,
+        "endChar": 35
+      },
+      "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "601113cb_ab679395",
         "filename": "include/v8.h",
         "patchSetId": 2
