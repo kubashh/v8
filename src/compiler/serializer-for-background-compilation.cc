@@ -393,7 +393,9 @@ class SerializerForBackgroundCompilation {
       KeyedAccessMode const& keyed_mode);
   void ProcessFeedbackForPropertyAccess(FeedbackSlot slot, AccessMode mode,
                                         base::Optional<NameRef> static_name);
-  void ProcessMapForNamedPropertyAccess(MapRef const& map, NameRef const& name);
+  PropertyAccessInfo ProcessMapForNamedPropertyAccess(
+      MapRef const& map, NameRef const& name, AccessMode mode,
+      MaybeHandle<JSObject> holder = MaybeHandle<JSObject>());
 
   void ProcessCreateContext();
   enum ContextProcessingMode {
@@ -2067,35 +2069,9 @@ SerializerForBackgroundCompilation::ProcessFeedbackMapsForNamedAccess(
   ZoneVector<PropertyAccessInfo> access_infos(broker()->zone());
   for (Handle<Map> map : maps) {
     MapRef map_ref(broker(), map);
-    ProcessMapForNamedPropertyAccess(map_ref, name);
-    AccessInfoFactory access_info_factory(broker(), dependencies(),
-                                          broker()->zone());
-    PropertyAccessInfo info(access_info_factory.ComputePropertyAccessInfo(
-        map, name.object(), mode));
+    PropertyAccessInfo info =
+        ProcessMapForNamedPropertyAccess(map_ref, name, mode);
     access_infos.push_back(info);
-
-    // TODO(turbofan): We want to take receiver hints into account as well,
-    // not only the feedback maps.
-    // For JSNativeContextSpecialization::InlinePropertySetterCall
-    // and InlinePropertyGetterCall.
-    if (info.IsAccessorConstant() && !info.constant().is_null()) {
-      if (info.constant()->IsJSFunction()) {
-        // For JSCallReducer::ReduceCallApiFunction.
-        Handle<SharedFunctionInfo> sfi(
-            handle(Handle<JSFunction>::cast(info.constant())->shared(),
-                   broker()->isolate()));
-        if (sfi->IsApiFunction()) {
-          FunctionTemplateInfoRef fti_ref(
-              broker(), handle(sfi->get_api_func_data(), broker()->isolate()));
-          if (fti_ref.has_call_code()) fti_ref.SerializeCallCode();
-          ProcessReceiverMapForApiCall(fti_ref, map);
-        }
-      } else {
-        FunctionTemplateInfoRef fti_ref(
-            broker(), Handle<FunctionTemplateInfo>::cast(info.constant()));
-        if (fti_ref.has_call_code()) fti_ref.SerializeCallCode();
-      }
-    }
   }
 
   DCHECK(!access_infos.empty());
@@ -2147,6 +2123,8 @@ void SerializerForBackgroundCompilation::ProcessKeyedPropertyAccess(
     Hints const& receiver, Hints const& key, FeedbackSlot slot,
     AccessMode mode) {
   if (BailoutOnUninitialized(slot)) return;
+  environment()->accumulator_hints().Clear();
+
   ProcessFeedbackForPropertyAccess(slot, mode, base::nullopt);
 
   for (Handle<Object> hint : receiver.constants()) {
@@ -2175,17 +2153,66 @@ void SerializerForBackgroundCompilation::ProcessKeyedPropertyAccess(
       }
     }
   }
-
-  environment()->accumulator_hints().Clear();
 }
 
-void SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
-    MapRef const& map, NameRef const& name) {
+PropertyAccessInfo
+SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
+    MapRef const& map, NameRef const& name, AccessMode mode,
+    MaybeHandle<JSObject> receiver) {
   // For JSNativeContextSpecialization::ReduceNamedAccess.
   if (map.IsMapOfCurrentGlobalProxy()) {
     broker()->native_context().global_proxy_object().GetPropertyCell(name,
                                                                      true);
   }
+
+  AccessInfoFactory access_info_factory(broker(), dependencies(),
+                                        broker()->zone());
+  PropertyAccessInfo access_info(access_info_factory.ComputePropertyAccessInfo(
+      map.object(), name.object(), mode));
+
+  // For JSNativeContextSpecialization::InlinePropertySetterCall
+  // and InlinePropertyGetterCall.
+  if (access_info.IsAccessorConstant() && !access_info.constant().is_null()) {
+    if (access_info.constant()->IsJSFunction()) {
+      // For JSCallReducer::ReduceCallApiFunction.
+      Handle<SharedFunctionInfo> sfi(
+          handle(Handle<JSFunction>::cast(access_info.constant())->shared(),
+                 broker()->isolate()));
+      if (sfi->IsApiFunction()) {
+        FunctionTemplateInfoRef fti_ref(
+            broker(), handle(sfi->get_api_func_data(), broker()->isolate()));
+        if (fti_ref.has_call_code()) fti_ref.SerializeCallCode();
+        ProcessReceiverMapForApiCall(fti_ref, map.object());
+      }
+    } else {
+      FunctionTemplateInfoRef fti_ref(
+          broker(), Handle<FunctionTemplateInfo>::cast(access_info.constant()));
+      if (fti_ref.has_call_code()) fti_ref.SerializeCallCode();
+    }
+  }
+
+  // For JSNativeContextSpecialization::ReduceNamedAccess.
+  if (mode == AccessMode::kLoad) {
+    broker()->StorePropertyAccessInfoForLoad(map, name, access_info);
+
+    Handle<JSObject> holder;
+    if (access_info.IsDataConstant()) {
+      if (!access_info.holder().ToHandle(&holder)) {
+        bool has_holder = receiver.ToHandle(&holder);
+        if (!has_holder) {
+          return access_info;
+        }
+      }
+      JSObjectRef holder_ref(broker(), holder);
+      base::Optional<ObjectRef> constant(holder_ref.GetOwnDataProperty(
+          access_info.field_representation(), access_info.field_index(), true));
+      if (constant.has_value()) {
+        environment()->accumulator_hints().AddConstant(constant->object());
+      }
+    }
+  }
+
+  return access_info;
 }
 
 void SerializerForBackgroundCompilation::VisitLdaKeyedProperty(
@@ -2201,11 +2228,13 @@ void SerializerForBackgroundCompilation::ProcessNamedPropertyAccess(
     Hints const& receiver, NameRef const& name, FeedbackSlot slot,
     AccessMode mode) {
   if (BailoutOnUninitialized(slot)) return;
+  environment()->accumulator_hints().Clear();
+
   ProcessFeedbackForPropertyAccess(slot, mode, name);
 
   for (Handle<Map> map :
        GetRelevantReceiverMaps(broker()->isolate(), receiver.maps())) {
-    ProcessMapForNamedPropertyAccess(MapRef(broker(), map), name);
+    ProcessMapForNamedPropertyAccess(MapRef(broker(), map), name, mode);
   }
 
   JSGlobalProxyRef global_proxy =
@@ -2218,14 +2247,19 @@ void SerializerForBackgroundCompilation::ProcessNamedPropertyAccess(
       global_proxy.GetPropertyCell(name, true);
     }
     // For JSNativeContextSpecialization::ReduceJSLoadNamed.
-    if (mode == AccessMode::kLoad && object.IsJSFunction() &&
-        name.equals(ObjectRef(
-            broker(), broker()->isolate()->factory()->prototype_string()))) {
-      object.AsJSFunction().Serialize();
+    if (mode == AccessMode::kLoad) {
+      if (object.IsJSFunction() &&
+          name.equals(ObjectRef(
+              broker(), broker()->isolate()->factory()->prototype_string()))) {
+        object.AsJSFunction().Serialize();
+      }
+      if (object.IsJSObject()) {
+        ProcessMapForNamedPropertyAccess(object.AsJSObject().map().AsMap(),
+                                         name, mode,
+                                         object.AsJSObject().object());
+      }
     }
   }
-
-  environment()->accumulator_hints().Clear();
 }
 
 void SerializerForBackgroundCompilation::ProcessNamedPropertyAccess(
