@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73f5ac00_94893415",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2161,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-31T14:35:42Z",
+      "side": 1,
+      "message": "You called this \"holder\" in the declaration. Please use \"receiver\" there too and rename \"map\" to \"receiver_map\" to make the connection clear.",
+      "range": {
+        "startLine": 2161,
+        "startChar": 26,
+        "endLine": 2161,
+        "endChar": 34
+      },
+      "revId": "564ed7fdf43884b19cab1c13a0348e2a96cabfa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b2b0a18_e81640b8",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2194,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-31T14:35:42Z",
+      "side": 1,
+      "message": "We can be more precise I think: PropertyAccessBuilder::TryBuildLoadConstantDataField",
+      "revId": "564ed7fdf43884b19cab1c13a0348e2a96cabfa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a628cae_9214abb4",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2215,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-31T14:35:42Z",
+      "side": 1,
+      "message": "if (access_info.holder().ToHandle(\u0026holder) || receiver.ToHandle(\u0026holder)) {\n  ... \n}\nreturn access_info.",
+      "revId": "564ed7fdf43884b19cab1c13a0348e2a96cabfa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5451a05d_3bb3f79d",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-31T14:35:42Z",
+      "side": 1,
+      "message": "That\u0027s unnecessary.",
+      "range": {
+        "startLine": 2257,
+        "startChar": 67,
+        "endLine": 2257,
+        "endChar": 74
+      },
+      "revId": "564ed7fdf43884b19cab1c13a0348e2a96cabfa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "427156b8_7ffc205f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2259,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-07-31T14:35:42Z",
+      "side": 1,
+      "message": "Please keep the original block from 2221 to 2225 unchanged and add this as an additional thing to the beginning of the for-loop.\n\nfor (Handle\u003cObject\u003e hint : receiver.constants()) {\n  ObjectRef object(broker(), hint);\n  if (object.IsJSObject()) {\n    ProcessMapFor.....\n  }\n  // For JSNativeContextSpecialization::ReduceNamedAccessFromNexus.\n  ...\n}",
+      "revId": "564ed7fdf43884b19cab1c13a0348e2a96cabfa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
