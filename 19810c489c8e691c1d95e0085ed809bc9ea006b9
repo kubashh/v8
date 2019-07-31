@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69100079_c216246d",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 7
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-07-31T15:56:14Z",
+      "side": 0,
+      "message": "The test passes now with pointer compression on. We are not running out of memory.",
+      "revId": "19810c489c8e691c1d95e0085ed809bc9ea006b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
