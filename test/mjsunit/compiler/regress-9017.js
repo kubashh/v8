@@ -20,7 +20,7 @@ function f() { return 0.1; }
 let g_text = "if (input === 0) return; if (input > 0) return g(input - 1);";
 g_text += " var inc = f(); var a0 = 0;";
 for (let i = 1; i < num_locals; ++i) {
-  g_text += " var a" + i + " = a" + (i - 1) + " + inc;";
+  g_text += " var a" + i + " = (a" + (i - 1) + " + inc) >> 2;";
 }
 g_text += " return f(a0";
 for (let i = 1; i < num_locals; ++i) {

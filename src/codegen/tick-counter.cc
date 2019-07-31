@@ -13,8 +13,8 @@ namespace internal {
 void TickCounter::DoTick() {
   ++ticks_;
   // Magical number to detect performance bugs or compiler divergence.
-  // Selected as being roughly 10x of what's needed frequently.
-  constexpr size_t kMaxTicks = 100000000;
+  // Chosen to be above the 99.9999th percentile according to UMA.
+  constexpr size_t kMaxTicks = 5000000;
   USE(kMaxTicks);
   DCHECK_LT(ticks_, kMaxTicks);
 }
