@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "1edcf253_fcb5292a",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7284,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-07-31T11:32:16Z",
+      "side": 1,
+      "message": "Ulan explained offline that all the names he suggested were possible replacements for RegisterV8References. I thought he suggesting to split the existing method to 3 sub-methods.\nThank you Ulan for explaining. This resolved my confusion.",
+      "parentUuid": "71865c71_a61106ed",
+      "range": {
+        "startLine": 7284,
+        "startChar": 15,
+        "endLine": 7284,
+        "endChar": 35
+      },
+      "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "601113cb_ab679395",
         "filename": "include/v8.h",
         "patchSetId": 2
