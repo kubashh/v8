@@ -106,7 +106,7 @@ TEST_F(BackingStoreTest, RacyGrowWasmMemoryInPlace) {
 
   std::shared_ptr<BackingStore> backing_store =
       BackingStore::AllocateWasmMemory(isolate(), 0, kMaxPages,
-                                       SharedFlag::kNotShared);
+                                       SharedFlag::kShared);
 
   for (int i = 0; i < kNumThreads; i++) {
     threads[i] = new GrowerThread(isolate(), 1, kMaxPages, backing_store);
