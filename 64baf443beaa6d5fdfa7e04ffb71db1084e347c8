@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0fe58855_a5c6b24b",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 7
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-07-31T16:27:08Z",
+      "side": 1,
+      "message": "Note that this will also fail on CI once this lands, e.g. on the V8 Linux - arm64 - sim builder and maybe on the debug version. You could already comment it out for those two, too...",
+      "range": {
+        "startLine": 480,
+        "startChar": 8,
+        "endLine": 480,
+        "endChar": 63
+      },
+      "revId": "64baf443beaa6d5fdfa7e04ffb71db1084e347c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
