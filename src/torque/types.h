@@ -550,6 +550,9 @@ class ClassType final : public AggregateType {
   }
   void Finalize() const override;
 
+  void TraverseChain(std::function<void(const ClassType*)> callback) const;
+  std::vector<Field> ComputeAllFields() const;
+
  private:
   friend class TypeOracle;
   friend class TypeVisitor;

@@ -46,7 +46,8 @@ namespace torque {
 //   Pick<Smi>(1, aSmi);  // inference succeeds (doing nothing)
 //
 // In the above case the inference simply ignores inconsistent constraints on
-// `T`.
+// `T`. Similarly, we ignore all constraints arising from formal parameters
+// that are function- or union-typed.
 class TypeArgumentInference {
  public:
   TypeArgumentInference(const NameVector& type_parameters,

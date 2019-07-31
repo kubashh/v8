@@ -418,6 +418,29 @@ void ClassType::Finalize() const {
   CheckForDuplicateFields();
 }
 
+void ClassType::TraverseChain(
+    std::function<void(const ClassType*)> callback) const {
+  std::vector<const ClassType*> parents;
+  const ClassType* class_type = this;
+  while (class_type) {
+    parents.push_back(class_type);
+    class_type = class_type->GetSuperClass();
+  }
+  while (!parents.empty()) {
+    callback(parents.back());
+    parents.pop_back();
+  }
+}
+
+std::vector<Field> ClassType::ComputeAllFields() const {
+  std::vector<Field> all_fields;
+  TraverseChain([&all_fields](const ClassType* class_type) mutable {
+    const std::vector<Field>& fields = class_type->fields();
+    all_fields.insert(all_fields.end(), fields.begin(), fields.end());
+  });
+  return all_fields;
+}
+
 void ClassType::GenerateAccessors() {
   // For each field, construct AST snippets that implement a CSA accessor
   // function and define a corresponding '.field' operator. The
