@@ -1270,6 +1270,10 @@ class FrameStateDescriptor : public ZoneObject {
            type_ == FrameStateType::kConstructStub;
   }
 
+  // The frame height on the stack, in number of slots. Does *not* include
+  // information from the chain of outer states.
+  size_t GetHeight() const;
+
   size_t GetSize() const;
   size_t GetTotalSize() const;
   size_t GetFrameCount() const;
