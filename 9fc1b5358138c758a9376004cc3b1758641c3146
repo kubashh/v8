@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99caeddd_6bec419b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-07-31T17:31:44Z",
+      "side": 1,
+      "message": "I\u0027d prefer the comment be something like:\n// Store the home object for any private methods or accessors that need them. We do this here once the prototype and brand symbol has been created.",
+      "revId": "9fc1b5358138c758a9376004cc3b1758641c3146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc339584_2bd989b0",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2133,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-07-31T17:31:44Z",
+      "side": 1,
+      "message": "Do we need all these checks, or would FunctionLiteral::NeedsHomeObject(property-\u003evalue()) be enough (with the others DCHECKED if necessary).",
+      "revId": "9fc1b5358138c758a9376004cc3b1758641c3146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba27c862_fa9a1dcb",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2136,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-07-31T17:31:44Z",
+      "side": 1,
+      "message": "Let\u0027s do this the other way around: \nif (property-\u003eis_private... ) {\n   // SetHomeObject\n}\n\nrather than having to add a continue to the loop.",
+      "range": {
+        "startLine": 2133,
+        "startChar": 6,
+        "endLine": 2136,
+        "endChar": 17
+      },
+      "revId": "9fc1b5358138c758a9376004cc3b1758641c3146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e21c1d9c_bf850baa",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-07-31T17:31:44Z",
+      "side": 1,
+      "message": "Add RegisterAllocationScope register_scope(this) at the top of the loop to avoid allocating a new register on each iteration of the loop.",
+      "range": {
+        "startLine": 2138,
+        "startChar": 6,
+        "endLine": 2138,
+        "endChar": 58
+      },
+      "revId": "9fc1b5358138c758a9376004cc3b1758641c3146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
