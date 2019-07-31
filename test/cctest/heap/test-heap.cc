@@ -2529,8 +2529,8 @@ TEST(OptimizedPretenuringMixedInObjectProperties) {
       v8::Utils::OpenHandle(*v8::Local<v8::Object>::Cast(res)));
 
   CHECK(CcTest::heap()->InOldSpace(*o));
-  FieldIndex idx1 = FieldIndex::ForPropertyIndex(o->map(), 0);
-  FieldIndex idx2 = FieldIndex::ForPropertyIndex(o->map(), 1);
+  FieldIndex idx1 = FieldIndex::ForDescriptor(o->map(), 0);
+  FieldIndex idx2 = FieldIndex::ForDescriptor(o->map(), 1);
   CHECK(CcTest::heap()->InOldSpace(o->RawFastPropertyAt(idx1)));
   if (!o->IsUnboxedDoubleField(idx2)) {
     CHECK(CcTest::heap()->InOldSpace(o->RawFastPropertyAt(idx2)));
@@ -2539,15 +2539,17 @@ TEST(OptimizedPretenuringMixedInObjectProperties) {
   }
 
   JSObject inner_object = JSObject::cast(o->RawFastPropertyAt(idx1));
+  FieldIndex inner_idx1 = FieldIndex::ForDescriptor(inner_object.map(), 0);
+  FieldIndex inner_idx2 = FieldIndex::ForDescriptor(inner_object.map(), 1);
   CHECK(CcTest::heap()->InOldSpace(inner_object));
-  if (!inner_object.IsUnboxedDoubleField(idx1)) {
-    CHECK(CcTest::heap()->InOldSpace(inner_object.RawFastPropertyAt(idx1)));
+  if (!inner_object.IsUnboxedDoubleField(inner_idx1)) {
+    CHECK(
+        CcTest::heap()->InOldSpace(inner_object.RawFastPropertyAt(inner_idx1)));
   } else {
-    CHECK_EQ(2.2, inner_object.RawFastDoublePropertyAt(idx1));
+    CHECK_EQ(2.2, inner_object.RawFastDoublePropertyAt(inner_idx1));
   }
-  CHECK(CcTest::heap()->InOldSpace(inner_object.RawFastPropertyAt(idx2)));
+  CHECK(CcTest::heap()->InOldSpace(inner_object.RawFastPropertyAt(inner_idx2)));
 }
-
 
 TEST(OptimizedPretenuringDoubleArrayProperties) {
   FLAG_allow_natives_syntax = true;

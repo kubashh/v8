@@ -1178,9 +1178,9 @@ void AccessorAssembler::OverwriteExistingFastDataProperty(
                    value, slow);
 
     Node* field_index =
-        DecodeWordFromWord32<PropertyDetails::FieldIndexField>(details);
-    field_index = IntPtrAdd(field_index,
-                            LoadMapInobjectPropertiesStartInWords(object_map));
+        DecodeWordFromWord32<PropertyDetails::FieldSlotIndexField>(details);
+    field_index = IntPtrAdd(
+        field_index, LoadMapInobjectFieldStorageStartInWords(object_map));
     Node* instance_size_in_words = LoadMapInstanceSizeInWords(object_map);
 
     Label inobject(this), backing_store(this);
@@ -3791,10 +3791,10 @@ void AccessorAssembler::GenerateCloneObjectIC() {
 
     // Lastly, clone any in-object properties.
     TNode<IntPtrT> source_start =
-        LoadMapInobjectPropertiesStartInWords(source_map);
+        LoadMapInobjectFieldStorageStartInWords(source_map);
     TNode<IntPtrT> source_size = LoadMapInstanceSizeInWords(source_map);
     TNode<IntPtrT> result_start =
-        LoadMapInobjectPropertiesStartInWords(result_map);
+        LoadMapInobjectFieldStorageStartInWords(result_map);
     TNode<IntPtrT> field_offset_difference =
         TimesTaggedSize(IntPtrSub(result_start, source_start));
 

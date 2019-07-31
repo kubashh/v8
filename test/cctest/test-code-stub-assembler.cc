@@ -1074,7 +1074,7 @@ TEST(TryHasOwnProperty) {
     Handle<JSObject> object = factory->NewJSObjectFromMap(map);
     AddProperties(object, names, arraysize(names));
     CHECK_EQ(JS_OBJECT_TYPE, object->map().instance_type());
-    CHECK_EQ(inobject_properties, object->map().GetInObjectProperties());
+    CHECK_EQ(inobject_properties, object->map().TotalInObjectFieldSlots());
     CHECK(!object->map().is_dictionary_map());
     objects.push_back(object);
   }
@@ -1086,7 +1086,7 @@ TEST(TryHasOwnProperty) {
     Handle<JSObject> object = factory->NewJSObjectFromMap(map);
     AddProperties(object, names, arraysize(names));
     CHECK_EQ(JS_OBJECT_TYPE, object->map().instance_type());
-    CHECK_EQ(inobject_properties, object->map().GetInObjectProperties());
+    CHECK_EQ(inobject_properties, object->map().TotalInObjectFieldSlots());
     CHECK(!object->map().is_dictionary_map());
     objects.push_back(object);
   }
@@ -1098,7 +1098,7 @@ TEST(TryHasOwnProperty) {
     Handle<JSObject> object = factory->NewJSObjectFromMap(map);
     AddProperties(object, names, arraysize(names));
     CHECK_EQ(JS_OBJECT_TYPE, object->map().instance_type());
-    CHECK_EQ(inobject_properties, object->map().GetInObjectProperties());
+    CHECK_EQ(inobject_properties, object->map().TotalInObjectFieldSlots());
     CHECK(!object->map().is_dictionary_map());
     objects.push_back(object);
   }
@@ -1279,7 +1279,7 @@ TEST(TryGetOwnProperty) {
     AddProperties(object, names, arraysize(names), values, arraysize(values),
                   rand_gen.NextInt());
     CHECK_EQ(JS_OBJECT_TYPE, object->map().instance_type());
-    CHECK_EQ(inobject_properties, object->map().GetInObjectProperties());
+    CHECK_EQ(inobject_properties, object->map().TotalInObjectFieldSlots());
     CHECK(!object->map().is_dictionary_map());
     objects.push_back(object);
   }
@@ -1292,7 +1292,7 @@ TEST(TryGetOwnProperty) {
     AddProperties(object, names, arraysize(names), values, arraysize(values),
                   rand_gen.NextInt());
     CHECK_EQ(JS_OBJECT_TYPE, object->map().instance_type());
-    CHECK_EQ(inobject_properties, object->map().GetInObjectProperties());
+    CHECK_EQ(inobject_properties, object->map().TotalInObjectFieldSlots());
     CHECK(!object->map().is_dictionary_map());
     objects.push_back(object);
   }
@@ -1305,7 +1305,7 @@ TEST(TryGetOwnProperty) {
     AddProperties(object, names, arraysize(names), values, arraysize(values),
                   rand_gen.NextInt());
     CHECK_EQ(JS_OBJECT_TYPE, object->map().instance_type());
-    CHECK_EQ(inobject_properties, object->map().GetInObjectProperties());
+    CHECK_EQ(inobject_properties, object->map().TotalInObjectFieldSlots());
     CHECK(!object->map().is_dictionary_map());
     objects.push_back(object);
   }

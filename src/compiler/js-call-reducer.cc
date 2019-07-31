@@ -1840,7 +1840,7 @@ Reduction JSCallReducer::ReduceArrayFilter(
     ab.Store(AccessBuilder::ForJSObjectElements(), empty_fixed_array);
     ab.Store(AccessBuilder::ForJSArrayLength(packed_kind),
              jsgraph()->ZeroConstant());
-    for (int i = 0; i < initial_map.GetInObjectProperties(); ++i) {
+    for (int i = 0; i < initial_map.TotalInObjectFieldSlots(); ++i) {
       ab.Store(AccessBuilder::ForJSObjectInObjectProperty(initial_map, i),
                jsgraph()->UndefinedConstant());
     }

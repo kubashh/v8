@@ -180,9 +180,9 @@ void DescriptorArray::SetDetails(int descriptor_number,
   EntryDetailsField::Relaxed_Store(*this, entry_offset, details.AsSmi());
 }
 
-int DescriptorArray::GetFieldIndex(int descriptor_number) {
+int DescriptorArray::GetFieldSlotIndex(int descriptor_number) {
   DCHECK_EQ(GetDetails(descriptor_number).location(), kField);
-  return GetDetails(descriptor_number).field_index();
+  return GetDetails(descriptor_number).field_slot_index();
 }
 
 FieldType DescriptorArray::GetFieldType(int descriptor_number) {

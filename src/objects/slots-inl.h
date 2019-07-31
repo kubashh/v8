@@ -126,6 +126,13 @@ inline void MemsetTagged(ObjectSlot start, Object value, size_t counter) {
 #endif
 }
 
+// Sets |counter| number of kTaggedSize-sized values starting at |start| slot to
+// the tagged value of Smi::kZero.
+inline void MemsetTaggedSmiZero(ObjectSlot start, size_t counter) {
+  DCHECK_EQ(CompressTagged(Smi::kZero.ptr()), static_cast<Tagged_t>(0));
+  memset(reinterpret_cast<void*>(start.location()), 0, counter * kTaggedSize);
+}
+
 // Sets |counter| number of kSystemPointerSize-sized values starting at |start|
 // slot.
 inline void MemsetPointer(FullObjectSlot start, Object value, size_t counter) {

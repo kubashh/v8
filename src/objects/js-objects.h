@@ -607,7 +607,7 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
 
   // Transform slow named properties to fast variants.
   V8_EXPORT_PRIVATE static void MigrateSlowToFast(Handle<JSObject> object,
-                                                  int unused_property_fields,
+                                                  int unused_field_slots,
                                                   const char* reason);
 
   inline bool IsUnboxedDoubleField(FieldIndex index) const;
@@ -634,7 +634,7 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
                            Object value);
 
   // Access to in object properties.
-  inline int GetInObjectPropertyOffset(int index);
+  inline int GetInObjectFieldSlotOffset(int index);
   inline Object InObjectPropertyAt(int index);
   inline Object InObjectPropertyAtPut(
       int index, Object value, WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
@@ -873,10 +873,11 @@ class JSIteratorResult : public JSObject {
   DECL_ACCESSORS(done, Object)
 
   // Layout description.
-#define JS_ITERATOR_RESULT_FIELDS(V) \
-  V(kValueOffset, kTaggedSize)       \
-  V(kDoneOffset, kTaggedSize)        \
-  /* Total size. */                  \
+#define JS_ITERATOR_RESULT_FIELDS(V)                   \
+  V(kValueOffset, kTaggedSize)                         \
+  V(kDoneOffset, kTaggedSize)                          \
+  V(kPaddingOffset, 2 * kDoubleSize - 2 * kTaggedSize) \
+  /* Total size. */                                    \
   V(kSize, 0)
 
   DEFINE_FIELD_OFFSET_CONSTANTS(JSObject::kHeaderSize,

@@ -368,21 +368,21 @@ Handle<JSObject> CreateObjectLiteral(
   // slow properties mode for now. We don't go in the map cache because
   // maps with constant functions can't be shared if the functions are
   // not the same (which is the common case).
-  int number_of_properties =
-      object_boilerplate_description->backing_store_size();
+  int backing_store_size = object_boilerplate_description->backing_store_size();
 
-  // Ignoring number_of_properties for force dictionary map with
+  // Ignoring backing_store_size for force dictionary map with
   // __proto__:null.
   Handle<Map> map =
       has_null_prototype
           ? handle(native_context->slow_object_with_null_prototype_map(),
                    isolate)
-          : isolate->factory()->ObjectLiteralMapFromCache(native_context,
-                                                          number_of_properties);
+          : isolate->factory()->ObjectLiteralMapFromCache(
+                native_context, object_boilerplate_description->size(),
+                backing_store_size);
 
   Handle<JSObject> boilerplate =
-      isolate->factory()->NewFastOrSlowJSObjectFromMap(
-          map, number_of_properties, allocation);
+      isolate->factory()->NewFastOrSlowJSObjectFromMap(map, backing_store_size,
+                                                       allocation);
 
   // Normalize the elements of the boilerplate to save space if needed.
   if (!use_fast_elements) JSObject::NormalizeElements(boilerplate);
@@ -432,7 +432,7 @@ Handle<JSObject> CreateObjectLiteral(
     // TODO(cbruni): avoid making the boilerplate fast again, the clone stub
     // supports dict-mode objects directly.
     JSObject::MigrateSlowToFast(
-        boilerplate, boilerplate->map().UnusedPropertyFields(), "FastLiteral");
+        boilerplate, boilerplate->map().UnusedFieldSlots(), "FastLiteral");
   }
   return boilerplate;
 }

@@ -1671,13 +1671,13 @@ TNode<IntPtrT> CodeStubAssembler::LoadMapInstanceSizeInWords(
       map, Map::kInstanceSizeInWordsOffset, MachineType::Uint8()));
 }
 
-TNode<IntPtrT> CodeStubAssembler::LoadMapInobjectPropertiesStartInWords(
+TNode<IntPtrT> CodeStubAssembler::LoadMapInobjectFieldStorageStartInWords(
     SloppyTNode<Map> map) {
   CSA_SLOW_ASSERT(this, IsMap(map));
-  // See Map::GetInObjectPropertiesStartInWords() for details.
+  // See Map::GetInObjectFieldStorageStartInWords() for details.
   CSA_ASSERT(this, IsJSObjectMap(map));
   return ChangeInt32ToIntPtr(LoadObjectField(
-      map, Map::kInObjectPropertiesStartOrConstructorFunctionIndexOffset,
+      map, Map::kInObjectFieldStorageStartOrConstructorFunctionIndexOffset,
       MachineType::Uint8()));
 }
 
@@ -1687,7 +1687,7 @@ TNode<IntPtrT> CodeStubAssembler::LoadMapConstructorFunctionIndex(
   // See Map::GetConstructorFunctionIndex() for details.
   CSA_ASSERT(this, IsPrimitiveInstanceType(LoadMapInstanceType(map)));
   return ChangeInt32ToIntPtr(LoadObjectField(
-      map, Map::kInObjectPropertiesStartOrConstructorFunctionIndexOffset,
+      map, Map::kInObjectFieldStorageStartOrConstructorFunctionIndexOffset,
       MachineType::Uint8()));
 }
 
@@ -9416,12 +9416,12 @@ void CodeStubAssembler::LoadPropertyFromFastObject(
   BIND(&if_in_field);
   {
     Node* field_index =
-        DecodeWordFromWord32<PropertyDetails::FieldIndexField>(details);
+        DecodeWordFromWord32<PropertyDetails::FieldSlotIndexField>(details);
     Node* representation =
         DecodeWord32<PropertyDetails::RepresentationField>(details);
 
     field_index =
-        IntPtrAdd(field_index, LoadMapInobjectPropertiesStartInWords(map));
+        IntPtrAdd(field_index, LoadMapInobjectFieldStorageStartInWords(map));
     Node* instance_size_in_words = LoadMapInstanceSizeInWords(map);
 
     Label if_inobject(this), if_backing_store(this);
@@ -13280,6 +13280,15 @@ TNode<JSObject> CodeStubAssembler::AllocateJSIteratorResult(
                        RootIndex::kEmptyFixedArray);
   StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kValueOffset, value);
   StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kDoneOffset, done);
+  if (JSIteratorResult::kSize == 7 * kTaggedSize) {
+    StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kPaddingOffset,
+                                   UndefinedConstant());
+    StoreObjectFieldNoWriteBarrier(
+        result, JSIteratorResult::kPaddingOffset + kTaggedSize,
+        UndefinedConstant());
+  } else {
+    DCHECK_EQ(JSIteratorResult::kSize, 5 * kTaggedSize);
+  }
   return CAST(result);
 }
 
@@ -13315,6 +13324,15 @@ Node* CodeStubAssembler::AllocateJSIteratorResultForEntry(Node* context,
   StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kValueOffset, array);
   StoreObjectFieldRoot(result, JSIteratorResult::kDoneOffset,
                        RootIndex::kFalseValue);
+  if (JSIteratorResult::kSize == 7 * kTaggedSize) {
+    StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kPaddingOffset,
+                                   UndefinedConstant());
+    StoreObjectFieldNoWriteBarrier(
+        result, JSIteratorResult::kPaddingOffset + kTaggedSize,
+        UndefinedConstant());
+  } else {
+    DCHECK_EQ(JSIteratorResult::kSize, 5 * kTaggedSize);
+  }
   return result;
 }
 

@@ -47,6 +47,7 @@ class PerThreadAssertScope {
  public:
   V8_EXPORT_PRIVATE PerThreadAssertScope();
   V8_EXPORT_PRIVATE ~PerThreadAssertScope();
+  MOVE_ONLY_NO_DEFAULT_CONSTRUCTOR(PerThreadAssertScope);
 
   V8_EXPORT_PRIVATE static bool IsAllowed();
 
@@ -68,8 +69,6 @@ class PerThreadAssertScope {
   }
 
   V8_INLINE bool old_state() const { return data_and_old_state_.GetPayload(); }
-
-  DISALLOW_COPY_AND_ASSIGN(PerThreadAssertScope);
 };
 
 template <PerIsolateAssertType type, bool allow>

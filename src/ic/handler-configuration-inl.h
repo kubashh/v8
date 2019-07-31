@@ -47,7 +47,7 @@ Handle<Smi> LoadHandler::LoadField(Isolate* isolate, FieldIndex field_index) {
   int config = KindBits::encode(kField) |
                IsInobjectBits::encode(field_index.is_inobject()) |
                IsDoubleBits::encode(field_index.is_double()) |
-               FieldIndexBits::encode(field_index.index());
+               FieldIndexBits::encode(field_index.offset() / kTaggedSize);
   return handle(Smi::FromInt(config), isolate);
 }
 
@@ -159,7 +159,7 @@ Handle<Smi> StoreHandler::StoreField(Isolate* isolate, Kind kind,
                IsInobjectBits::encode(field_index.is_inobject()) |
                FieldRepresentationBits::encode(field_rep) |
                DescriptorBits::encode(descriptor) |
-               FieldIndexBits::encode(field_index.index());
+               FieldIndexBits::encode(field_index.offset() / kTaggedSize);
   return handle(Smi::FromInt(config), isolate);
 }
 

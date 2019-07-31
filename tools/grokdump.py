@@ -1212,7 +1212,7 @@ class Map(HeapObject):
   def BitField2Offset(self):
     return self.BitFieldOffset() + 1
 
-  def UnusedPropertyFieldsOffset(self):
+  def UnusedFieldSlotsOffset(self):
     return self.BitField2Offset() + 1
 
   # Other fields
@@ -1259,7 +1259,7 @@ class Map(HeapObject):
     instance_type = INSTANCE_TYPES[self.ReadByte(self.InstanceTypeOffset())]
     bitfield = self.ReadByte(self.BitFieldOffset())
     bitfield2 = self.ReadByte(self.BitField2Offset())
-    unused = self.ReadByte(self.UnusedPropertyFieldsOffset())
+    unused = self.ReadByte(self.UnusedFieldSlotsOffset())
     p.Print("  - %s, bf: %d, bf2: %d, unused: %d" % (
         instance_type, bitfield, bitfield2, unused))
 

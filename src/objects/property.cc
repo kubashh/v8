@@ -81,14 +81,6 @@ Descriptor Descriptor::DataConstant(Handle<Name> key, Handle<Object> value,
                     value->OptimalRepresentation(isolate), 0);
 }
 
-Descriptor Descriptor::DataConstant(Isolate* isolate, Handle<Name> key,
-                                    int field_index, Handle<Object> value,
-                                    PropertyAttributes attributes) {
-  MaybeObjectHandle any_type(FieldType::Any(), isolate);
-  return DataField(key, field_index, attributes, PropertyConstness::kConst,
-                   Representation::Tagged(), any_type);
-}
-
 Descriptor Descriptor::AccessorConstant(Handle<Name> key,
                                         Handle<Object> foreign,
                                         PropertyAttributes attributes) {
@@ -113,8 +105,8 @@ void PropertyDetails::PrintAsFastTo(std::ostream& os, PrintMode mode) {
   os << (kind() == kData ? "data" : "accessor");
   if (location() == kField) {
     os << " field";
-    if (mode & kPrintFieldIndex) {
-      os << " " << field_index();
+    if (mode & kPrintFieldSlotIndex) {
+      os << " " << field_slot_index();
     }
     if (mode & kPrintRepresentation) {
       os << ":" << representation().Mnemonic();

@@ -316,7 +316,6 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
   DCHECK_NE(descriptor, DescriptorArray::kNotFound);
   Handle<DescriptorArray> descriptors(map->instance_descriptors(), isolate());
   PropertyDetails const details = descriptors->GetDetails(descriptor);
-  int index = descriptors->GetFieldIndex(descriptor);
   Representation details_representation = details.representation();
   if (details_representation.IsNone()) {
     // The ICs collect feedback in PREMONOMORPHIC state already,
@@ -326,8 +325,7 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
     // here and fall back to use the regular IC logic instead.
     return PropertyAccessInfo::Invalid(zone());
   }
-  FieldIndex field_index =
-      FieldIndex::ForPropertyIndex(*map, index, details_representation);
+  FieldIndex field_index = FieldIndex::ForDetails(*map, details);
   Type field_type = Type::NonInternal();
   MaybeHandle<Map> field_map;
   MapRef map_ref(broker(), map);
@@ -750,10 +748,8 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
   if (details.location() != kField) {
     return PropertyAccessInfo::Invalid(zone());
   }
-  int const index = details.field_index();
   Representation details_representation = details.representation();
-  FieldIndex field_index = FieldIndex::ForPropertyIndex(*transition_map, index,
-                                                        details_representation);
+  FieldIndex field_index = FieldIndex::ForDetails(*transition_map, details);
   Type field_type = Type::NonInternal();
   MaybeHandle<Map> field_map;
   MapRef transition_map_ref(broker(), transition_map);
