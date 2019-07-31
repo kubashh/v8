@@ -22,6 +22,30 @@
       "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "937aad29_e7082e29",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7284,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-07-31T09:19:24Z",
+      "side": 1,
+      "message": "+1 to fixing the sames. In the new API we probably also want to push individual embedder fields instead of accumulating them in arrays?\n\nSuggestions for naming:\n- RegisterDiscoveredEmbedderField(id, embedder_field);\n- PushDiscoveredEmbedderField(id, embedder_field);\n- PushEmbedderField(id, embedder_field);\n(similar for V8).",
+      "parentUuid": "3300ef36_1b9e3191",
+      "range": {
+        "startLine": 7284,
+        "startChar": 15,
+        "endLine": 7284,
+        "endChar": 35
+      },
+      "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
