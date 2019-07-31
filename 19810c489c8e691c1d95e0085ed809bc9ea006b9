@@ -16,6 +16,24 @@
       "revId": "19810c489c8e691c1d95e0085ed809bc9ea006b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d2bc187e_169de4be",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 7
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-07-31T16:25:11Z",
+      "side": 0,
+      "message": "Nice!",
+      "parentUuid": "69100079_c216246d",
+      "revId": "19810c489c8e691c1d95e0085ed809bc9ea006b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
