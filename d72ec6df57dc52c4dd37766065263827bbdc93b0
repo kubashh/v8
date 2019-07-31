@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76b787ca_e59ad301",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 4
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-07-31T14:41:10Z",
+      "side": 1,
+      "message": "The extra variant was failing with pointer compression on.",
+      "range": {
+        "startLine": 480,
+        "startChar": 30,
+        "endLine": 480,
+        "endChar": 48
+      },
+      "revId": "d72ec6df57dc52c4dd37766065263827bbdc93b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
