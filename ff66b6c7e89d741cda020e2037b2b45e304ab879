@@ -301,6 +301,24 @@
     },
     {
       "key": {
+        "uuid": "f59db26d_d6ab8128",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-07-31T07:16:52Z",
+      "side": 1,
+      "message": "I agree about the single code path, only that the functions handling the maps and the hints are not 100% equivalent, due to the case where the property is found on the object itself. Any suggestions how to incorporate them into a single function would be appreciated!",
+      "parentUuid": "d4725e46_e5956427",
+      "revId": "ff66b6c7e89d741cda020e2037b2b45e304ab879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed86631b_b8a8dffc",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 6
