@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "fef11772_4a4676f1",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7250,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-07-31T10:42:00Z",
+      "side": 1,
+      "message": "This is currently a duplicate of WorklistTaskId::MainThread.\nIs the intention to replace usages of WorklistTaskId::MainThread with kMainThreadId?\n\nIf not, I\u0027d suggest:\n1) Reconsider if we actually need kMainThread (since having 2 constants for the same thing doesn\u0027t seem desirable)\n2) Consider initializing kMainThread to WorklistTaskId::MainThread instead of hardcoded 0",
+      "range": {
+        "startLine": 7250,
+        "startChar": 26,
+        "endLine": 7250,
+        "endChar": 39
+      },
+      "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46a7bb2d_8d9f8010",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7268,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-07-31T10:42:00Z",
+      "side": 1,
+      "message": "Does need to be dynamic?\nIf not, I\u0027d suggest replacing this method with a constant the compiler can use for optimizations.",
+      "range": {
+        "startLine": 7268,
+        "startChar": 9,
+        "endLine": 7268,
+        "endChar": 20
+      },
+      "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3300ef36_1b9e3191",
         "filename": "include/v8.h",
         "patchSetId": 2
@@ -42,6 +88,76 @@
         "startChar": 15,
         "endLine": 7284,
         "endChar": 35
+      },
+      "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcaf0628_f4102439",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7284,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-07-31T10:42:00Z",
+      "side": 1,
+      "message": "I agree the names should be changed. I think they should be more explicit.\n{V8/Embedder}Refernces leaves the direction of the reference vague.\nThe names are correct if it is references from {V8/Embedder}, but reversed if it is references to.\nI was thinking of either \"RegisterReferencesTo{V8/Embedder}\" or \"RegisterReferencesFrom{V8/Embedder}\" (and swapping the names).\n\nUlan\u0027s suggestion also clarifies this distinction but I don\u0027t quite understand the need for the smaller granularity Ulan suggested.",
+      "parentUuid": "3300ef36_1b9e3191",
+      "range": {
+        "startLine": 7284,
+        "startChar": 15,
+        "endLine": 7284,
+        "endChar": 35
+      },
+      "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "601113cb_ab679395",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7358,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-07-31T10:42:00Z",
+      "side": 1,
+      "message": "does that mean the embedder can ask to go into an atomic pause and finish the gc cycle? or is this something else?",
+      "range": {
+        "startLine": 7358,
+        "startChar": 39,
+        "endLine": 7358,
+        "endChar": 61
+      },
+      "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "798bb229_e8b28b58",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 10197,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-07-31T10:42:00Z",
+      "side": 1,
+      "message": "This and RegisterEmbedderReference you added are just wrapper we should start using so the code using EmbedderHeapTracer will be prepared when we start using multiple tasks, correct?\nThe actual behavior has not changed.",
+      "range": {
+        "startLine": 10197,
+        "startChar": 25,
+        "endLine": 10197,
+        "endChar": 45
       },
       "revId": "b87c3830200982df37f9caf27b70e7963a19f8cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
