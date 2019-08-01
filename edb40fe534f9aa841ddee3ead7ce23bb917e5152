@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2544c31e_fcf360f0",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-08-01T11:48:28Z",
+      "side": 1,
+      "message": "Without this one eagerly complied function doesn\u0027t get optimized with --always-opt and that causes optimization on the second run. The second run earlier had pre-monomorphic which was treated as generic and hence the optimization was faster and it never deopted as well. With this change on the second run we have monomorphic and we keep deopting and reoptimizing (since we create a new JSFunction and with --always-opt we reoptimize if the JSFunction doesn\u0027t have optimized code). This causes OOM when optimizing in Turbofan. I will also file a bug for OOM on turbofan.",
+      "revId": "edb40fe534f9aa841ddee3ead7ce23bb917e5152",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
