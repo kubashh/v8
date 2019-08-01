@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c339984_fcc6fd22",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-01T09:12:49Z",
+      "side": 1,
+      "message": "Would just putting a boolean negation here result in inefficient code when we try to use IsNumberNotEqual as a branching condition?",
+      "revId": "d6cc1c1cf604d7ea88301dcef6bd87323f3f1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4375c1df_4b17b0e2",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2996,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-01T09:12:49Z",
+      "side": 1,
+      "message": "Could you just express this as \"GotoIfForceSlowPath() otherwise return false;\" now?",
+      "revId": "d6cc1c1cf604d7ea88301dcef6bd87323f3f1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
