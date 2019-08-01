@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccdbae7b_03f4520e",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-08-01T22:25:20Z",
+      "side": 1,
+      "message": "Hmm, don\u0027t you need to update a corresponding entry in merged_native_entries_map_ here?",
+      "revId": "1a4b8646640c471514f2eadc85ddc88834d67448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8beeb02d_dfa4d638",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-08-01T22:25:20Z",
+      "side": 1,
+      "message": "Why not std::unordered_map ?",
+      "revId": "1a4b8646640c471514f2eadc85ddc88834d67448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
