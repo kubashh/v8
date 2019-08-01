@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69a402fa_84ed6dd2",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4500,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2019-08-01T14:44:13Z",
+      "side": 1,
+      "message": "Is `i::Heap` necessary here? It is already invoked in this function without this prefix.",
+      "revId": "097b2cc9b60cab3da090268cc15a84a8c01b76fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
