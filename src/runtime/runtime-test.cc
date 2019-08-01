@@ -316,7 +316,10 @@ bool EnsureFeedbackVector(Handle<JSFunction> function) {
 
   // If function isn't compiled, compile it now.
   IsCompiledScope is_compiled_scope(function->shared().is_compiled_scope());
-  if (!is_compiled_scope.is_compiled() &&
+  // When the SFI is compiled but the JSFunction is not compiled we
+  // should still give a chance to install the code in the JSFunction
+  // and may be also optimize with --always-opt.
+  if (!function->is_compiled() &&
       !Compiler::Compile(function, Compiler::CLEAR_EXCEPTION,
                          &is_compiled_scope)) {
     return false;
