@@ -321,6 +321,7 @@ bool EnsureFeedbackVector(Handle<JSFunction> function) {
                          &is_compiled_scope)) {
     return false;
   }
+  Compiler::PostInstantiation(function);
 
   // Ensure function has a feedback vector to hold type feedback for
   // optimization.
