@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a12e8d21_ca8d9190",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-01T12:37:53Z",
+      "side": 1,
+      "message": "This can be simplified to\ngraph()-\u003eNewNode(common()-\u003eSelect(MachineRepresentation::kTagged),\n    one_arg_is_nan, one_arg_is_nan, check_is_nan);",
+      "range": {
+        "startLine": 215,
+        "startChar": 21,
+        "endLine": 219,
+        "endChar": 37
+      },
+      "revId": "1ae4ea9488e4474ac254846d047a75f8e3c981ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54bb7601_d008cb22",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-01T12:37:53Z",
+      "side": 1,
+      "message": "This can be simplified to one_arg_is_nan.",
+      "range": {
+        "startLine": 248,
+        "startChar": 19,
+        "endLine": 249,
+        "endChar": 78
+      },
+      "revId": "1ae4ea9488e4474ac254846d047a75f8e3c981ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "062c4b03_9cb98887",
+        "filename": "test/mjsunit/regress/regress-9546.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-01T12:37:53Z",
+      "side": 1,
+      "message": "Flags: --allow-natives-syntax\n\nOtherwise it won\u0027t be recognized.",
+      "revId": "1ae4ea9488e4474ac254846d047a75f8e3c981ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
