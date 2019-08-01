@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d4b12e3_57410e11",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-01T05:45:17Z",
+      "side": 1,
+      "message": "q: is there an associated bug or tracking bug?",
+      "revId": "167b56d0b8e09a8acdf313be2d837a9d654243fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6e43c27_ba733179",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-01T05:45:17Z",
+      "side": 1,
+      "message": "no \u0026 here?",
+      "revId": "167b56d0b8e09a8acdf313be2d837a9d654243fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f2c72bf_c39151f7",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-01T05:45:17Z",
+      "side": 1,
+      "message": "\u0026 :)",
+      "revId": "167b56d0b8e09a8acdf313be2d837a9d654243fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9e89c4a_03aa69c4",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-01T05:45:17Z",
+      "side": 1,
+      "message": "Personal preference, esp when auto is involved: explicitly check for nullptrs to disambiguate from real boolean conditions. Makes it easier for readers to understand what\u0027s going on.\n\nNo strong opinion though and I\u0027ll defer to common practice in torque/.",
+      "revId": "167b56d0b8e09a8acdf313be2d837a9d654243fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
