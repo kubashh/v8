@@ -8,12 +8,14 @@
 
 #include "src/base/lsan.h"
 #include "src/base/once.h"
+#include "src/common/ptr-compr-inl.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/heap/spaces.h"
 #include "src/objects/heap-object-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/smi.h"
+#include "src/snapshot/embedded-heap.h"
 #include "src/snapshot/read-only-deserializer.h"
 
 namespace v8 {
@@ -130,6 +132,29 @@ void ReadOnlyHeap::ClearSharedHeapForTest() {
 #endif
 }
 
+void ReadOnlyHeap::WriteEmbeddedHeapBlob(std::vector<byte>* sink) {
+  DCHECK(IsAligned(sink->size(), kPointerAlignment));
+  DCHECK(read_only_object_cache_is_initialized());
+
+  EmbeddedHeapWriter writer(sink);
+  writer.WriteHeader(this);
+
+  writer.WriteValue(read_only_space_->CountTotalPages());
+  uint32_t page_offset = 0;
+  for (BasicMemoryChunk* chunk : *read_only_space_) {
+    writer.WriteValue(page_offset);
+    writer.WriteValue(CompressTagged(chunk->address()));
+    page_offset += chunk->size();
+  }
+  for (BasicMemoryChunk* chunk : *read_only_space_) {
+    const auto start = reinterpret_cast<const byte*>(chunk);
+    sink->insert(sink->end(), start, start + chunk->size());
+  }
+
+  printf("Embedded blob is %lu bytes\n", sink->size());
+  DCHECK(IsAligned(sink->size(), kPointerAlignment));
+}
+
 // static
 bool ReadOnlyHeap::Contains(HeapObject object) {
   return MemoryChunk::FromHeapObject(object)->InReadOnlySpace();
@@ -147,6 +172,10 @@ Object ReadOnlyHeap::cached_read_only_object(size_t i) const {
 
 bool ReadOnlyHeap::read_only_object_cache_is_initialized() const {
   return read_only_object_cache_.size() > 0;
+}
+
+size_t ReadOnlyHeap::read_only_object_cache_size() const {
+  return read_only_object_cache_.size();
 }
 
 ReadOnlyHeapObjectIterator::ReadOnlyHeapObjectIterator(ReadOnlyHeap* ro_heap)

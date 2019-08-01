@@ -9,6 +9,7 @@
 #include "src/heap/heap-inl.h"  // crbug.com/v8/8499
 #include "src/heap/read-only-heap.h"
 #include "src/objects/slots.h"
+#include "src/snapshot/embedded-heap.h"
 #include "src/snapshot/snapshot.h"
 
 namespace v8 {
@@ -34,7 +35,7 @@ void ReadOnlyDeserializer::DeserializeInto(Isolate* isolate) {
   // Builtins are not yet created.
   DCHECK(!isolate->builtins()->is_initialized());
 
-  {
+  if (embedded_heap_data_.empty()) {
     DisallowHeapAllocation no_gc;
     ReadOnlyRoots roots(isolate);
 
@@ -51,6 +52,17 @@ void ReadOnlyDeserializer::DeserializeInto(Isolate* isolate) {
       if (object->IsUndefined(roots)) break;
     }
     DeserializeDeferredObjects();
+
+  } else {
+    // We have an embedded heap.
+    printf("Using the %lu bytes of the embedded heap\n",
+           embedded_heap_data_.size());
+    EmbeddedHeapReader reader(embedded_heap_data_);
+    reader.ReadHeader(isolate);
+    size_t page_count = reader.ReadValue();
+    for (size_t i = 0; i < page_count; i++) {
+      printf("%d %d\n", reader.ReadValue(), reader.ReadValue());
+    }
   }
 
   if (FLAG_rehash_snapshot && can_rehash()) {

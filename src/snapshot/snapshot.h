@@ -94,6 +94,8 @@ class Snapshot : public AllStatic {
                                        uint32_t index);
   static Vector<const byte> ExtractStartupData(const v8::StartupData* data);
   static Vector<const byte> ExtractReadOnlyData(const v8::StartupData* data);
+  static Vector<const byte> ExtractEmbeddedHeapData(
+      const v8::StartupData* data);
   static Vector<const byte> ExtractContextData(const v8::StartupData* data,
                                                uint32_t index);
 
@@ -115,8 +117,9 @@ class Snapshot : public AllStatic {
   // [3] checksum part B
   // [4] (128 bytes) version string
   // [5] offset to readonly
-  // [6] offset to context 0
-  // [7] offset to context 1
+  // [6] offset to embedded heap (patched later by mksnapshot)
+  // [7] offset to context 0
+  // [8] offset to context 1
   // ...
   // ... offset to context N - 1
   // ... startup snapshot data
@@ -137,8 +140,14 @@ class Snapshot : public AllStatic {
   static const uint32_t kVersionStringLength = 64;
   static const uint32_t kReadOnlyOffsetOffset =
       kVersionStringOffset + kVersionStringLength;
-  static const uint32_t kFirstContextOffsetOffset =
+
+ public:
+  static const uint32_t kEmbeddedHeapOffsetOffset =
       kReadOnlyOffsetOffset + kUInt32Size;
+
+ private:
+  static const uint32_t kFirstContextOffsetOffset =
+      kEmbeddedHeapOffsetOffset + kUInt32Size;
 
   static Vector<const byte> ChecksummedContent(const v8::StartupData* data) {
     const uint32_t kChecksumStart = kVersionStringOffset;

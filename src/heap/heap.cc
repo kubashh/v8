@@ -3971,7 +3971,7 @@ void Heap::VerifyReadOnlyHeap() {
   // supports verifying shared read-only space. Currently
   // PagedSpaceObjectIterator is explicitly disabled for read-only space when
   // sharing is enabled, because it relies on PagedSpace::heap_ being non-null.
-#ifndef V8_SHARED_RO_HEAP
+#ifndef V8_DETACHED_RO_HEAP
   VerifyReadOnlyPointersVisitor read_only_visitor(this);
   read_only_space_->Verify(isolate(), &read_only_visitor);
 #endif

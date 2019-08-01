@@ -288,9 +288,33 @@ int main(int argc, char** argv) {
 
     delete counter_map_;
 
+#ifdef V8_EMBEDDED_RO_HEAP
+    v8::Isolate::CreateParams params;
+    params.array_buffer_allocator =
+        v8::ArrayBuffer::Allocator::NewDefaultAllocator();
+    params.snapshot_blob = &blob;
+    v8::Isolate* target_isolate = v8::Isolate::Allocate();
+    v8::Isolate::Initialize(target_isolate, params);
+
+    v8::StartupData new_blob;
+    std::vector<i::byte> blob_vector(blob.data, blob.data + blob.raw_size);
+    delete[] blob.data;
+
+    const size_t old_length = blob_vector.size();
+    reinterpret_cast<i::Isolate*>(target_isolate)
+        ->read_only_heap()
+        ->WriteEmbeddedHeapBlob(&blob_vector);
+    blob_vector[i::Snapshot::kEmbeddedHeapOffsetOffset] = old_length;
+    new_blob.data = reinterpret_cast<const char*>(blob_vector.data());
+    new_blob.raw_size = static_cast<int>(blob_vector.size());
+    snapshot_writer.WriteSnapshot(new_blob);
+
+    target_isolate->Dispose();
+#else
     CHECK(blob.data);
     snapshot_writer.WriteSnapshot(blob);
     delete[] blob.data;
+#endif  // V8_EMBEDDED_RO_HEAP
   }
   i::FreeCurrentEmbeddedBlob();
 

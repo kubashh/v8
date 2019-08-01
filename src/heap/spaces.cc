@@ -53,7 +53,7 @@ PagedSpaceObjectIterator::PagedSpaceObjectIterator(PagedSpace* space)
       space_(space),
       page_range_(space->first_page(), nullptr),
       current_page_(page_range_.begin()) {
-#ifdef V8_SHARED_RO_HEAP
+#ifdef V8_DETACHED_RO_HEAP
   DCHECK_NE(space->identity(), RO_SPACE);
 #endif
 }
@@ -64,11 +64,11 @@ PagedSpaceObjectIterator::PagedSpaceObjectIterator(Page* page)
       space_(reinterpret_cast<PagedSpace*>(page->owner())),
       page_range_(page),
       current_page_(page_range_.begin()) {
-#ifdef V8_SHARED_RO_HEAP
+#ifdef V8_DETACHED_RO_HEAP
   // TODO(v8:7464): Always enforce this once PagedSpace::Verify is no longer
   // used to verify read-only space for non-shared builds.
   DCHECK(!page->InReadOnlySpace());
-#endif  // V8_SHARED_RO_HEAP
+#endif  // V8_DETACHED_RO_HEAP
 
 #ifdef DEBUG
   AllocationSpace owner = page->owner_identity();

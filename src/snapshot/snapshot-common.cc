@@ -50,6 +50,12 @@ bool Snapshot::Initialize(Isolate* isolate) {
   ReadOnlyDeserializer read_only_deserializer(&read_only_snapshot_data);
   startup_deserializer.SetRehashability(ExtractRehashability(blob));
   read_only_deserializer.SetRehashability(ExtractRehashability(blob));
+
+  Vector<const byte> embedded_heap_data = ExtractEmbeddedHeapData(blob);
+  if (!embedded_heap_data.empty()) {
+    read_only_deserializer.ConfigureEmbeddedHeap(embedded_heap_data);
+  }
+
   bool success =
       isolate->InitWithSnapshot(&read_only_deserializer, &startup_deserializer);
   if (FLAG_profile_deserialization) {
@@ -173,6 +179,10 @@ v8::StartupData Snapshot::CreateSnapshotBlob(
   }
   payload_offset += payload_length;
 
+  // Embedded heap.
+  // This will be patched later by mksnapshot.
+  SetHeaderValue(data, kEmbeddedHeapOffsetOffset, payload_offset);
+
   // Partial snapshots (context-specific data).
   for (uint32_t i = 0; i < num_contexts; i++) {
     SetHeaderValue(data, ContextSnapshotOffsetOffset(i), payload_offset);
@@ -238,8 +248,9 @@ bool Snapshot::ExtractRehashability(const v8::StartupData* data) {
 namespace {
 Vector<const byte> ExtractData(const v8::StartupData* snapshot,
                                uint32_t start_offset, uint32_t end_offset) {
-  CHECK_LT(start_offset, end_offset);
-  CHECK_LT(end_offset, snapshot->raw_size);
+  // This allows sero length data.
+  CHECK_LE(start_offset, end_offset);
+  CHECK_LE(end_offset, snapshot->raw_size);
   uint32_t length = end_offset - start_offset;
   const byte* data =
       reinterpret_cast<const byte*>(snapshot->data + start_offset);
@@ -259,7 +270,15 @@ Vector<const byte> Snapshot::ExtractReadOnlyData(const v8::StartupData* data) {
   DCHECK(SnapshotIsValid(data));
 
   return ExtractData(data, GetHeaderValue(data, kReadOnlyOffsetOffset),
-                     GetHeaderValue(data, ContextSnapshotOffsetOffset(0)));
+                     GetHeaderValue(data, kEmbeddedHeapOffsetOffset));
+}
+
+Vector<const byte> Snapshot::ExtractEmbeddedHeapData(
+    const v8::StartupData* data) {
+  DCHECK(SnapshotIsValid(data));
+
+  return ExtractData(data, GetHeaderValue(data, kEmbeddedHeapOffsetOffset),
+                     data->raw_size);
 }
 
 Vector<const byte> Snapshot::ExtractContextData(const v8::StartupData* data,

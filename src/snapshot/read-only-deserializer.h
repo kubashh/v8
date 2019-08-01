@@ -7,6 +7,7 @@
 
 #include "src/snapshot/deserializer.h"
 #include "src/snapshot/snapshot.h"
+#include "src/utils/vector.h"
 
 namespace v8 {
 namespace internal {
@@ -20,6 +21,15 @@ class ReadOnlyDeserializer final : public Deserializer {
 
   // Deserialize the snapshot into an empty heap.
   void DeserializeInto(Isolate* isolate);
+
+  void ConfigureEmbeddedHeap(Vector<const byte> data) {
+    printf("Configuring the read-only heap\n");
+    embedded_heap_data_ = data;
+    SetRehashability(false);
+  }
+
+ private:
+  Vector<const byte> embedded_heap_data_;
 };
 
 }  // namespace internal
