@@ -294,7 +294,8 @@ void TracingController::StartTracing(TraceConfig* trace_config) {
 
   perfetto::DataSourceDescriptor dsd;
   dsd.set_name("v8.trace_events");
-  V8DataSource::Register(dsd);
+  bool registered = V8DataSource::Register(dsd);
+  CHECK(registered);
 
   tracing_session_ =
       perfetto::Tracing::NewTrace(perfetto::BackendType::kUnspecifiedBackend);

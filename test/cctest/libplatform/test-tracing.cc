@@ -957,6 +957,44 @@ TEST(TracingPerfetto) {
   CHECK_GT(perfetto_json_stream_.str().length(), 0);
 }
 
+TEST(StartAndStopRepeated) {
+  for (int i = 0; i < 3; i++) {
+    ::perfetto::TraceConfig perfetto_trace_config;
+    perfetto_trace_config.add_buffers()->set_size_kb(4096);
+    auto* ds_config =
+        perfetto_trace_config.add_data_sources()->mutable_config();
+    ds_config->set_name("v8.trace_events");
+
+    perfetto::DataSourceDescriptor dsd;
+    dsd.set_name("v8.trace_events");
+    TestDataSource::Register(dsd);
+
+    auto tracing_session_ =
+        perfetto::Tracing::NewTrace(perfetto::BackendType::kInProcessBackend);
+    tracing_session_->Setup(perfetto_trace_config);
+    tracing_session_->Start();
+    TestDataSource::started_.Wait();
+
+    for (int i = 0; i < 15; i++) {
+      TestDataSource::Trace([&](TestDataSource::TraceContext ctx) {
+        auto packet = ctx.NewTracePacket();
+        auto* trace_event_bundle = packet->set_chrome_events();
+        auto* trace_event = trace_event_bundle->add_trace_events();
+
+        trace_event->set_phase('c');
+        trace_event->set_thread_id(v8::base::OS::GetCurrentThreadId());
+        trace_event->set_timestamp(123);
+        trace_event->set_process_id(v8::base::OS::GetCurrentProcessId());
+        trace_event->set_thread_timestamp(123);
+      });
+    }
+    v8::base::Semaphore stopped_{0};
+    tracing_session_->SetOnStopCallback([&stopped_]() { stopped_.Signal(); });
+    tracing_session_->Stop();
+    stopped_.Wait();
+  }
+}
+
 #endif  // V8_USE_PERFETTO
 
 }  // namespace tracing
