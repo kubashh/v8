@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fbbca0e3_b9a8de58",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-01T09:48:49Z",
+      "side": 1,
+      "message": "Good catch.",
+      "parentUuid": "d6e43c27_ba733179",
+      "revId": "167b56d0b8e09a8acdf313be2d837a9d654243fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f2c72bf_c39151f7",
         "filename": "src/torque/type-visitor.cc",
         "patchSetId": 2
@@ -71,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "93793f98_afacc18b",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-01T09:48:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f2c72bf_c39151f7",
+      "revId": "167b56d0b8e09a8acdf313be2d837a9d654243fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9e89c4a_03aa69c4",
         "filename": "src/torque/type-visitor.cc",
         "patchSetId": 2
@@ -85,6 +121,24 @@
       "revId": "167b56d0b8e09a8acdf313be2d837a9d654243fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2efc47dd_36e476c3",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-01T09:48:49Z",
+      "side": 1,
+      "message": "It\u0027s a base::Optional, in fact :-) For those it seems to be common in the Torque code base to use the \"if (optional) { ... \" idiom. I\u0027ll explicitly annotate the type of \"maybe_generic_struct\", though.",
+      "parentUuid": "a9e89c4a_03aa69c4",
+      "revId": "167b56d0b8e09a8acdf313be2d837a9d654243fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
