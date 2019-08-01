@@ -1726,17 +1726,23 @@ extern operator '!=' macro Word32NotEqual(bool, bool): bool;
 
 extern operator '+' macro Float64Add(float64, float64): float64;
 extern operator '-' macro Float64Sub(float64, float64): float64;
+extern operator '*' macro Float64Mul(float64, float64): float64;
+extern operator '/' macro Float64Div(float64, float64): float64;
 
 extern operator '+' macro NumberAdd(Number, Number): Number;
 extern operator '-' macro NumberSub(Number, Number): Number;
 extern macro NumberMin(Number, Number): Number;
 extern macro NumberMax(Number, Number): Number;
+// extern macro NumberAbs(Number): Number;
 macro Min(x: Number, y: Number): Number {
   return NumberMin(x, y);
 }
 macro Max(x: Number, y: Number): Number {
   return NumberMax(x, y);
 }
+// macro Abs(x: Number): Number {
+//  return NumberAbs(x);
+//}
 
 extern macro TryIntPtrAdd(intptr, intptr): intptr labels Overflow;
 extern macro TryIntPtrSub(intptr, intptr): intptr labels Overflow;

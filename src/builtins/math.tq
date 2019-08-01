@@ -235,4 +235,58 @@ namespace math {
     const value = Convert<float64>(ToNumber_Inline(context, x));
     return Convert<Number>(Float64Tanh(value));
   }
+
+  // ES6 #sec-math.hypot
+  transitioning javascript builtin
+  MathHypot(js-implicit context: Context, receiver: Object)(...arguments):
+      Number {
+    const length: Smi = Convert<Smi>(arguments.length);
+    if (length == 0) {
+      return 0;
+    }
+    const absValues: FixedDoubleArray =
+        AllocateZeroedFixedDoubleArray(Convert<intptr>(length));
+    let oneArgIsNan: bool = false;
+    let max: Number = 0;
+    for (let i: Smi = 0; i < length; ++i) {
+      const value: Number =
+          ToNumber_Inline(context, arguments[Convert<intptr>(i)]);
+      if (NumberIsNaN(value)) {
+        oneArgIsNan = true;
+      } else {
+        // TODO real double array? real abs?
+        const absValue: Number = Convert<Number>(value > 0 ? value : 0 - value);
+        absValues[i] = absValue;
+        if (absValue > max) {
+          max = absValue;
+        }
+      }
+    }
+    if (max == V8_INFINITY) {
+      return V8_INFINITY;
+    }
+    if (oneArgIsNan) {
+      return kNaN;
+    }
+    if (max == 0) {
+      return 0;
+    }
+    assert(max > 0);
+
+    // Kahan sumamtion to avoid rounding errors.
+    // Normalize the numbers to the largest one to avoid overflow.
+    const fMax: float64 = Convert<float64>(max);
+    let sum: float64 = 0;
+    let compensation: float64 = 0;
+    for (let i: Smi = 0; i < length; ++i) {
+      const f: float64 =
+          LoadDoubleWithHoleCheck(absValues, i) otherwise unreachable;
+      const n: float64 = f / fMax;
+      const summand: float64 = n * n - compensation;
+      const preliminary: float64 = sum + summand;
+      compensation = (preliminary - sum) - summand;
+      sum = preliminary;
+    }
+    return Convert<Number>(Float64Sqrt(sum) * fMax);
+  }
 }
