@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb2f3320_7dfa64b8",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2210,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-01T08:02:50Z",
+      "side": 1,
+      "message": "What do you think about passing receiver as Optional\u003cJSObjectRef\u003e and checking that its map (if given) is actually the receiver_map.\n\n    if (access_info.IsDataConstant()) {\n      base::Optional\u003cJSObjectRef\u003e holder;\n\n      Handle\u003cJSObject\u003e prototype;\n      if (access_info.holder().ToHandle(\u0026prototype) {\n        holder \u003d JSObjectRef(broker(), prototype);\n      } else {\n        CHECK_IMPLIES(receiver.has_value(),\n                      receiver-\u003emap().equals(receiver_map));\n        holder \u003d receiver;\n      }\n      \n      if (holder.has_value()) {\n        base::Optional\u003cObjectRef\u003e constant(\n            holder_ref.GetOwnDataProperty(access_info.field_representation(),\n                                          access_info.field_index(), true));\n        if (constant.has_value()) {\n          environment()-\u003eaccumulator_hints().AddConstant(constant-\u003eobject());\n        }\n      }\n    }",
+      "revId": "86207ecd8da3aa37dca0cb82cc8e8ab7d8d93b3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
