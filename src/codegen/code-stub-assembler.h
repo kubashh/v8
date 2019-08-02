@@ -1186,6 +1186,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                        INTPTR_PARAMETERS, if_hole);
   }
 
+  TNode<Float64T> LoadFixedDoubleArrayFloat(TNode<FixedDoubleArray> object,
+                                            TNode<IntPtrT> index,
+                                            Label* if_hole = nullptr) {
+    return LoadFixedDoubleArrayElement(object, index, MachineType::Float64(), 0,
+                                       INTPTR_PARAMETERS, if_hole);
+  }
+
   // Load an array element from a FixedArray, FixedDoubleArray or a
   // NumberDictionary (depending on the |elements_kind|) and return
   // it as a tagged value. Assumes that the |index| passed a length
