@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bcb4be0_07c46364",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-08-02T08:36:40Z",
+      "side": 1,
+      "message": "Mini-nit: This shouldn\u0027t be in quotes.",
+      "revId": "b3220b75c36db541646eb5af61649d7afd2e13e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
