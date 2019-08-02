@@ -602,17 +602,6 @@ class MemoryChunk : public BasicMemoryChunk {
   static const Flags kSkipEvacuationSlotsRecordingMask =
       kEvacuationCandidateMask | kIsInYoungGenerationMask;
 
-  // |kSweepingDone|: The page state when sweeping is complete or sweeping must
-  //   not be performed on that page. Sweeper threads that are done with their
-  //   work will set this value and not touch the page anymore.
-  // |kSweepingPending|: This page is ready for parallel sweeping.
-  // |kSweepingInProgress|: This page is currently swept by a sweeper thread.
-  enum ConcurrentSweepingState {
-    kSweepingDone,
-    kSweepingPending,
-    kSweepingInProgress,
-  };
-
   static const size_t kHeaderSize =
       BasicMemoryChunk::kHeaderSize  // Parent size.
       + 3 * kSystemPointerSize       // VirtualMemory reservation_
@@ -625,8 +614,7 @@ class MemoryChunk : public BasicMemoryChunk {
       + kSystemPointerSize  // InvalidatedSlots* invalidated_slots_
       + kSystemPointerSize  // std::atomic<intptr_t> high_water_mark_
       + kSystemPointerSize  // base::Mutex* mutex_
-      + kSystemPointerSize  // std::atomic<ConcurrentSweepingState>
-                            // concurrent_sweeping_
+      + kUIntptrSize        // std::atomic<uintptr_t> mark_compact_epoch_
       + kSystemPointerSize  // base::Mutex* page_protection_change_mutex_
       + kSystemPointerSize  // unitptr_t write_unprotect_counter_
       + kSizetSize * ExternalBackingStoreType::kNumTypes
@@ -683,15 +671,10 @@ class MemoryChunk : public BasicMemoryChunk {
 
   base::Mutex* mutex() { return mutex_; }
 
-  void set_concurrent_sweeping_state(ConcurrentSweepingState state) {
-    concurrent_sweeping_ = state;
-  }
-
-  ConcurrentSweepingState concurrent_sweeping_state() {
-    return static_cast<ConcurrentSweepingState>(concurrent_sweeping_.load());
-  }
-
-  bool SweepingDone() { return concurrent_sweeping_ == kSweepingDone; }
+  V8_EXPORT_PRIVATE void InitializeSweepingState();
+  void MarkSwept() { mark_compact_epoch_++; }
+  V8_EXPORT_PRIVATE void MarkUnswept();
+  V8_EXPORT_PRIVATE bool SweepingDone();
 
   inline Heap* heap() const {
     DCHECK_NOT_NULL(heap_);
@@ -928,7 +911,7 @@ class MemoryChunk : public BasicMemoryChunk {
 
   base::Mutex* mutex_;
 
-  std::atomic<intptr_t> concurrent_sweeping_;
+  std::atomic<uintptr_t> mark_compact_epoch_;
 
   base::Mutex* page_protection_change_mutex_;
 
@@ -1132,6 +1115,8 @@ class LargePage : public MemoryChunk {
   }
 
   inline HeapObject GetObject();
+
+  static const intptr_t kIdOffset = 9 * kSystemPointerSize;
 
   inline LargePage* next_page() {
     return static_cast<LargePage*>(list_node_.next());
