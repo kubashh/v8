@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e02234f7_aa2d2681",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2019-08-02T21:28:07Z",
+      "side": 1,
+      "message": "Does this work correctly on 32-bit platforms, where size_t cannot represent 10 GB?",
+      "revId": "5611f70b3d74fc28d6b6994a2bcabf7728b4bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
