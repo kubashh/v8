@@ -22,6 +22,30 @@
       "revId": "9e1e2a5d5a177a7fcde313884b5cab4702f192ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2bd3f08_be3e1c55",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-08-02T15:59:15Z",
+      "side": 1,
+      "message": "That makes sense to me.",
+      "parentUuid": "c78495ae_d134640b",
+      "range": {
+        "startLine": 272,
+        "startChar": 6,
+        "endLine": 272,
+        "endChar": 49
+      },
+      "revId": "9e1e2a5d5a177a7fcde313884b5cab4702f192ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
