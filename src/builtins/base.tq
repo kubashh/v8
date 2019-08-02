@@ -1726,6 +1726,8 @@ extern operator '!=' macro Word32NotEqual(bool, bool): bool;
 
 extern operator '+' macro Float64Add(float64, float64): float64;
 extern operator '-' macro Float64Sub(float64, float64): float64;
+extern operator '*' macro Float64Mul(float64, float64): float64;
+extern operator '/' macro Float64Div(float64, float64): float64;
 
 extern operator '+' macro NumberAdd(Number, Number): Number;
 extern operator '-' macro NumberSub(Number, Number): Number;
@@ -2472,6 +2474,8 @@ extern operator '.floats[]=' macro StoreFixedDoubleArrayElement(
     FixedDoubleArray, intptr, float64): void;
 extern operator '.floats[]=' macro StoreFixedDoubleArrayElementSmi(
     FixedDoubleArray, Smi, float64): void;
+extern operator '.floats[]' macro LoadFixedDoubleArrayFloat(
+    FixedDoubleArray, intptr): float64;
 operator '[]=' macro StoreFixedDoubleArrayDirect(
     a: FixedDoubleArray, i: Smi, v: Number) {
   a.floats[i] = Convert<float64>(v);
