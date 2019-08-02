@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db9481c2_a1ad32b7",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-02T07:53:24Z",
+      "side": 1,
+      "message": "Isn\u0027t this already intptr?",
+      "range": {
+        "startLine": 245,
+        "startChar": 27,
+        "endLine": 245,
+        "endChar": 42
+      },
+      "revId": "60dbcfc73e231231b69aa85708e5927a9cd8eda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
