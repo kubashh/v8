@@ -235,4 +235,56 @@ namespace math {
     const value = Convert<float64>(ToNumber_Inline(context, x));
     return Convert<Number>(Float64Tanh(value));
   }
+
+  extern macro Float64Abs(float64): float64;
+
+  // ES6 #sec-math.hypot
+  transitioning javascript builtin
+  MathHypot(js-implicit context: Context, receiver: Object)(...arguments):
+      Number {
+    const length: intptr = arguments.length;
+    if (length == 0) {
+      return 0;
+    }
+    const absValues: FixedDoubleArray = AllocateZeroedFixedDoubleArray(length);
+    let oneArgIsNan: bool = false;
+    let max: float64 = 0;
+    for (let i: intptr = 0; i < length; ++i) {
+      const value: Number = ToNumber_Inline(context, arguments[i]);
+      if (NumberIsNaN(value)) {
+        oneArgIsNan = true;
+      } else {
+        const absValue: float64 = Float64Abs(Convert<float64>(value));
+        absValues.floats[i] = absValue;
+        if (absValue > max) {
+          max = absValue;
+        }
+      }
+    }
+    if (max == V8_INFINITY) {
+      return V8_INFINITY;
+    }
+    if (oneArgIsNan) {
+      return kNaN;
+    }
+    if (max == 0) {
+      return 0;
+    }
+    assert(max > 0);
+
+    // Kahan sumamtion to avoid rounding errors.
+    // Normalize the numbers to the largest one to avoid overflow.
+    let sum: float64 = 0;
+    let compensation: float64 = 0;
+    for (let i: intptr = 0; i < length; ++i) {
+      const f: float64 =
+          LoadDoubleWithHoleCheck(absValues, i) otherwise unreachable;
+      const n: float64 = f / max;
+      const summand: float64 = n * n - compensation;
+      const preliminary: float64 = sum + summand;
+      compensation = (preliminary - sum) - summand;
+      sum = preliminary;
+    }
+    return Convert<Number>(Float64Sqrt(sum) * max);
+  }
 }
