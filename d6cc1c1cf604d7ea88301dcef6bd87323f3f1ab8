@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "ff6c8db8_b39bf2d5",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-05T13:19:05Z",
+      "side": 1,
+      "message": "This should work. I think we should keep the macro though, to support writing !\u003d.",
+      "parentUuid": "bb03c2b8_df180b9e",
+      "revId": "d6cc1c1cf604d7ea88301dcef6bd87323f3f1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4375c1df_4b17b0e2",
         "filename": "src/builtins/base.tq",
         "patchSetId": 2
@@ -85,6 +103,24 @@
       "revId": "d6cc1c1cf604d7ea88301dcef6bd87323f3f1ab8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85c84698_c5789a0d",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2996,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-05T13:19:05Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "4375c1df_4b17b0e2",
+      "revId": "d6cc1c1cf604d7ea88301dcef6bd87323f3f1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
