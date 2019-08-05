@@ -16,6 +16,24 @@
       "revId": "5611f70b3d74fc28d6b6994a2bcabf7728b4bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b7224d2_769fe235",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-08-05T07:52:51Z",
+      "side": 1,
+      "message": "Guarded regions are enabled only on 64-bit platforms.",
+      "parentUuid": "e02234f7_aa2d2681",
+      "revId": "5611f70b3d74fc28d6b6994a2bcabf7728b4bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
