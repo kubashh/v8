@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b101674_ab1d9cfc",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-05T13:24:44Z",
+      "side": 1,
+      "message": "Is there perhaps a perfetto bug for this somewhere?",
+      "revId": "ed6a62202084d9a8d4eb13a15cd4eb2744df51cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cca95737_02db0ef8",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2726,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-05T13:24:44Z",
+      "side": 1,
+      "message": "Is this freed somewhere? Also the ring buffer.",
+      "revId": "ed6a62202084d9a8d4eb13a15cd4eb2744df51cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
