@@ -22,6 +22,30 @@
       "revId": "5b66bbed8f42e9903e7b6b55072c951bad69b224",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edf9dfa8_4018c3a2",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-08-05T14:59:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c4e14ad_eead803a",
+      "range": {
+        "startLine": 345,
+        "startChar": 4,
+        "endLine": 345,
+        "endChar": 8
+      },
+      "revId": "5b66bbed8f42e9903e7b6b55072c951bad69b224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
