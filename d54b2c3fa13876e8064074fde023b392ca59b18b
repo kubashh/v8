@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4f532ff_e3002b2f",
+        "filename": "test/mjsunit/regress/regress-9546.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-05T09:52:32Z",
+      "side": 1,
+      "message": "nit: (Not necessary for this CL, but just for the future) please end comments with a \u0027.\u0027 :)",
+      "revId": "d54b2c3fa13876e8064074fde023b392ca59b18b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
