@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "721e6a82_326ec329",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-08-05T13:51:22Z",
+      "side": 1,
+      "message": "Not sure - maybe Sami knows? Kind of a design decision more than a bug at this point but maybe it\u0027s being tracked somewhere.",
+      "parentUuid": "2b101674_ab1d9cfc",
+      "revId": "ed6a62202084d9a8d4eb13a15cd4eb2744df51cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cca95737_02db0ef8",
         "filename": "test/cctest/test-cpu-profiler.cc",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "ed6a62202084d9a8d4eb13a15cd4eb2744df51cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52cf5ba4_fecdffa7",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2726,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-08-05T13:51:22Z",
+      "side": 1,
+      "message": "The TraceBufferRingBuffer constructor takes ownership of the TraceWriter* that is passed in (not that this is documented anywhere...)\n\nTracingController::Initialize() takes ownership of the RingBuffer (again.. not documented)\n\nI\u0027ve added comments to document these.",
+      "parentUuid": "cca95737_02db0ef8",
+      "revId": "ed6a62202084d9a8d4eb13a15cd4eb2744df51cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
