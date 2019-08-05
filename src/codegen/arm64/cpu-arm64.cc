@@ -90,7 +90,7 @@ void CpuFeatures::FlushICache(void* address, size_t length) {
       //    i    : invalidate
       //     va  : by address
       //       u : to the point of unification
-      "ic   ivau, %[iline]                \n\t"
+      //"ic   ivau, %[iline]                \n\t"
       "add  %[iline], %[iline], %[isize]  \n\t"
       "cmp  %[iline], %[end]              \n\t"
       "b.lt 1b                            \n\t"
