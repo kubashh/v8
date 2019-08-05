@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f1d19be_cd530010",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1231,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-08-05T09:06:21Z",
+      "side": 1,
+      "message": "Move this into the block below, since it\u0027s based on raw pointers.",
+      "revId": "8560b148fbf71e9e9b7c1e53fb5e481d14479cb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
