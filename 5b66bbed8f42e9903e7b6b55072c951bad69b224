@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c4e14ad_eead803a",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1116032
+      },
+      "writtenOn": "2019-08-05T14:32:15Z",
+      "side": 1,
+      "message": "nit: You don\u0027t actually need to fill in anything to the -- as long as we create (with NewTracePacket) and finalize (with ~packet) the last packet we guarantee that the earlier one will be parsed correctly.\n\n(We\u0027ll expose a way to flush in the client API to avoid this.)",
+      "range": {
+        "startLine": 345,
+        "startChar": 4,
+        "endLine": 345,
+        "endChar": 8
+      },
+      "revId": "5b66bbed8f42e9903e7b6b55072c951bad69b224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
