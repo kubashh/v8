@@ -144,6 +144,24 @@
     },
     {
       "key": {
+        "uuid": "f3e6dc25_055cc5bd",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-08-05T10:19:12Z",
+      "side": 1,
+      "message": "seems to be a wash, 368ms using Float64IsNan, 374ms using NumberIsNaN. however, the bench only tests the 2 number case, it is possible this matters more with more numbers. Anyway, explicit testing for now, we can further optimize the 2 number case if this is not sufficient.",
+      "parentUuid": "be6c2a78_54dfa5bb",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85123ad5_6835ffa8",
         "filename": "src/builtins/math.tq",
         "patchSetId": 12
