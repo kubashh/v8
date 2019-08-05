@@ -157,6 +157,24 @@
       "revId": "167b56d0b8e09a8acdf313be2d837a9d654243fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ad194a19_d1a1da10",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-05T06:50:29Z",
+      "side": 1,
+      "message": "Ah I see, yeah explicitly stating the type here makes sense. auto is awesome, if the type is clear from context.",
+      "parentUuid": "2efc47dd_36e476c3",
+      "revId": "167b56d0b8e09a8acdf313be2d837a9d654243fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
