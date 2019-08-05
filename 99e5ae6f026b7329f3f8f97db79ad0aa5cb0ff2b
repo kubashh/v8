@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d233775_737b0445",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-05T07:19:20Z",
+      "side": 1,
+      "message": "nit: if types are obvious you can omit declaring it, e.g. here and oneArgIsNan.",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00d31a83_6ffce4b3",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-05T07:19:20Z",
+      "side": 1,
+      "message": "Not sure how important perf is here but this seems a bit inefficient. In the standard case (!\u003d NaN) we Convert\u003cfloat64\u003e twice. I\u0027d suggest refactoring to first Convert\u003cfloat64\u003e, then create a helper Float64IsNaN based on BranchIfFloat64IsNaN and use that.\n\nAlso, why not use the same trick as in the old builtin to handle nans?",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85123ad5_6835ffa8",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-05T07:19:20Z",
+      "side": 1,
+      "message": "nit: else if, also below.",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9d6457f_0d2e8381",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-05T07:19:20Z",
+      "side": 1,
+      "message": "This equals the above, except for the TNode-style return type, right? Let\u0027s please just change the return type above.",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
