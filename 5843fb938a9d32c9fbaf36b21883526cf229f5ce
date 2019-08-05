@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85f56c0e_eaad66e5",
+        "filename": "src/api/api-natives.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1118844
+      },
+      "writtenOn": "2019-08-05T08:59:27Z",
+      "side": 1,
+      "message": "You don\u0027t need to handlify the cache just to read something out. Simply read out the value instead and handlify the result.",
+      "revId": "5843fb938a9d32c9fbaf36b21883526cf229f5ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22b8317b_71305382",
+        "filename": "src/api/api-natives.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1118844
+      },
+      "writtenOn": "2019-08-05T08:59:27Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "5843fb938a9d32c9fbaf36b21883526cf229f5ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e58f40b2_c9919010",
+        "filename": "src/api/api-natives.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1118844
+      },
+      "writtenOn": "2019-08-05T08:59:27Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "5843fb938a9d32c9fbaf36b21883526cf229f5ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
