@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "2df4c631_b436615a",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-08-05T10:00:09Z",
+      "side": 1,
+      "message": "Yes, I was also referring to that trick. There is a bit more context in v8:9546, but the problem is order matters. I cannot think of anyway to fix it other than to explicitly test for NaN.",
+      "parentUuid": "003e147f_6619f098",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85123ad5_6835ffa8",
         "filename": "src/builtins/math.tq",
         "patchSetId": 12
