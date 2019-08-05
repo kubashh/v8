@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "be269e7d_87d423b7",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-08-05T09:36:27Z",
+      "side": 1,
+      "message": "type omitted here, but unfortunately if I omit the type on oneArgIsNan the compiler thinks it should be const.",
+      "parentUuid": "0d233775_737b0445",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00d31a83_6ffce4b3",
         "filename": "src/builtins/math.tq",
         "patchSetId": 12
@@ -33,6 +51,24 @@
       "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dcd1134_c7ece051",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-08-05T09:36:27Z",
+      "side": 1,
+      "message": "I will create the conversion.\n\nRE: using the builtins tricks, this torque code is based off V8\u0027s original builtin for handling Math.hypot. The \u0027simplified\u0027 builtin in our codebase today is incorrect for handling corner cases, hence v8:9546. The purpose of this CL is to undo those simplifications, and also to convert the builtin to torque.",
+      "parentUuid": "00d31a83_6ffce4b3",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "c18790b4_db63eb3c",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-08-05T09:36:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85123ad5_6835ffa8",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d9d6457f_0d2e8381",
         "filename": "src/codegen/code-stub-assembler.h",
         "patchSetId": 12
@@ -67,6 +121,24 @@
       "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e922f2e_c20aa21c",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-08-05T09:36:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9d6457f_0d2e8381",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
