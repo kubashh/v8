@@ -9,7 +9,7 @@ namespace reflect {
 
   // ES6 section 26.1.10 Reflect.isExtensible
   transitioning javascript builtin ReflectIsExtensible(
-      js-implicit context: Context)(_receiver: Object, object: Object): Object {
+      js-implicit context: Context)(_receiver: JSAny, object: Object): Object {
     const objectJSReceiver = Cast<JSReceiver>(object)
         otherwise ThrowTypeError(kCalledOnNonObject, 'Reflect.isExtensible');
     return object::ObjectIsExtensible(objectJSReceiver);
@@ -17,7 +17,7 @@ namespace reflect {
 
   // ES6 section 26.1.12 Reflect.preventExtensions
   transitioning javascript builtin ReflectPreventExtensions(
-      js-implicit context: Context)(_receiver: Object, object: Object): Object {
+      js-implicit context: Context)(_receiver: JSAny, object: Object): Object {
     const objectJSReceiver = Cast<JSReceiver>(object)
         otherwise ThrowTypeError(kCalledOnNonObject, 'Reflect.preventExtensions');
     return object::ObjectPreventExtensionsDontThrow(objectJSReceiver);
@@ -25,7 +25,7 @@ namespace reflect {
 
   // ES6 section 26.1.8 Reflect.getPrototypeOf
   transitioning javascript builtin ReflectGetPrototypeOf(
-      js-implicit context: Context)(_receiver: Object, object: Object): Object {
+      js-implicit context: Context)(_receiver: JSAny, object: Object): Object {
     const objectJSReceiver = Cast<JSReceiver>(object)
         otherwise ThrowTypeError(kCalledOnNonObject, 'Reflect.getPrototypeOf');
     return object::JSReceiverGetPrototypeOf(objectJSReceiver);
@@ -34,16 +34,21 @@ namespace reflect {
   // ES6 section 26.1.14 Reflect.setPrototypeOf
   transitioning javascript builtin ReflectSetPrototypeOf(
       js-implicit context:
-          Context)(_receiver: Object, object: Object, proto: Object): Object {
+          Context)(_receiver: JSAny, object: JSAny, proto: JSAny): JSAny {
     const objectJSReceiver = Cast<JSReceiver>(object)
         otherwise ThrowTypeError(kCalledOnNonObject, 'Reflect.setPrototypeOf');
-    if (proto == Null || Is<JSReceiver>(proto)) {
-      return object::ObjectSetPrototypeOfDontThrow(objectJSReceiver, proto);
+    typeswitch (proto) {
+      case JSReceiver | Null: /*_TSVproto:*/ {
+        return object::ObjectSetPrototypeOfDontThrow(objectJSReceiver, proto);
+      }
+      case (JSAny): {
+        ThrowTypeError(kProtoObjectOrNull, proto);
+      }
     }
-    ThrowTypeError(kProtoObjectOrNull, proto);
   }
 
-  extern transitioning builtin ToName(implicit context: Context)(Object): Name;
+  extern transitioning builtin ToName(implicit context: Context)(Object):
+      AnyName;
   type OnNonExistent constexpr 'OnNonExistent';
   const kReturnUndefined: constexpr OnNonExistent
   generates 'OnNonExistent::kReturnUndefined';
@@ -60,7 +65,7 @@ namespace reflect {
         otherwise ThrowTypeError(kCalledOnNonObject, 'Reflect.get');
     const propertyKey: Object = length > 1 ? arguments[1] : Undefined;
     const name: Name = ToName(propertyKey);
-    const receiver: Object = length > 2 ? arguments[2] : objectJSReceiver;
+    const receiver: JSAny = length > 2 ? arguments[2] : objectJSReceiver;
     return GetPropertyWithReceiver(
         objectJSReceiver, name, receiver, SmiConstant(kReturnUndefined));
   }
@@ -68,15 +73,19 @@ namespace reflect {
   // ES6 section 26.1.4 Reflect.deleteProperty
   transitioning javascript builtin ReflectDeleteProperty(
       js-implicit context:
-          Context)(_receiver: Object, object: Object, key: Object): Object {
+          Context)(_receiver: JSAny, object: Object, key: Object): Object {
     const objectJSReceiver = Cast<JSReceiver>(object)
         otherwise ThrowTypeError(kCalledOnNonObject, 'Reflect.deleteProperty');
-    const name: Name = ToName(key);
-    if (IsPrivateSymbol(name)) {
-      return DeleteProperty(objectJSReceiver, name, kSloppy);
+    const name: AnyName = ToName(key);
+    typeswitch (name) {
+      case (name: PrivateSymbol): {
+        return DeleteProperty(objectJSReceiver, name, kSloppy);
+      }
+      case (name: PropertyKey): {
+        const proxy = Cast<JSProxy>(objectJSReceiver)
+            otherwise return DeleteProperty(objectJSReceiver, name, kSloppy);
+        return proxy::ProxyDeleteProperty(proxy, name, kSloppy);
+      }
     }
-    const proxy = Cast<JSProxy>(objectJSReceiver)
-        otherwise return DeleteProperty(objectJSReceiver, name, kSloppy);
-    return proxy::ProxyDeleteProperty(proxy, name, kSloppy);
   }
 }  // namespace reflect
