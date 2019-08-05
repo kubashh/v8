@@ -126,6 +126,24 @@
     },
     {
       "key": {
+        "uuid": "be6c2a78_54dfa5bb",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-05T10:04:26Z",
+      "side": 1,
+      "message": "Ah I see. Microoptimization: I wonder if removing the if/else and just unconditionally updating `oneArgIsNan |\u003d NumberIsNaN(value)` behaves better. Anyways, explicit checks sgtm.",
+      "parentUuid": "2df4c631_b436615a",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85123ad5_6835ffa8",
         "filename": "src/builtins/math.tq",
         "patchSetId": 12
