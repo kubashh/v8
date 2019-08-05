@@ -1224,7 +1224,11 @@ void Debug::InstallDebugBreakTrampoline() {
 
   Handle<Code> trampoline = BUILTIN_CODE(isolate_, DebugBreakTrampoline);
   std::vector<Handle<JSFunction>> needs_compile;
-  std::vector<Handle<AccessorPair>> needs_instantiate;
+  using AccessorPairWithContext =
+      std::pair<Handle<AccessorPair>, Handle<NativeContext>>;
+  std::vector<AccessorPairWithContext> needs_instantiate;
+  // Deduplicate {needs_instantiate} by recording all collected AccessorPairs.
+  std::set<AccessorPair> recorded;
   {
     HeapObjectIterator iterator(isolate_->heap());
     for (HeapObject obj = iterator.Next(); !obj.is_null();
@@ -1242,11 +1246,26 @@ void Debug::InstallDebugBreakTrampoline() {
         } else {
           fun.set_code(*trampoline);
         }
-      } else if (obj.IsAccessorPair()) {
-        AccessorPair accessor_pair = AccessorPair::cast(obj);
-        if (accessor_pair.getter().IsFunctionTemplateInfo() ||
-            accessor_pair.setter().IsFunctionTemplateInfo()) {
-          needs_instantiate.push_back(handle(accessor_pair, isolate_));
+      } else if (obj.IsJSObject()) {
+        JSObject object = JSObject::cast(obj);
+        DescriptorArray descriptors = object.map().instance_descriptors();
+
+        for (int i = 0; i < object.map().NumberOfOwnDescriptors(); ++i) {
+          if (descriptors.GetDetails(i).kind() == PropertyKind::kAccessor) {
+            Object value = descriptors.GetStrongValue(i);
+            if (!value.IsAccessorPair()) continue;
+
+            AccessorPair accessor_pair = AccessorPair::cast(value);
+            if (!accessor_pair.getter().IsFunctionTemplateInfo() &&
+                !accessor_pair.setter().IsFunctionTemplateInfo()) {
+              continue;
+            }
+            if (recorded.find(accessor_pair) != recorded.end()) continue;
+
+            needs_instantiate.emplace_back(handle(accessor_pair, isolate_),
+                                           object.GetCreationContext());
+            recorded.insert(accessor_pair);
+          }
         }
       }
     }
@@ -1254,7 +1273,12 @@ void Debug::InstallDebugBreakTrampoline() {
 
   // Forcibly instantiate all lazy accessor pairs to make sure that they
   // properly hit the debug break trampoline.
-  for (Handle<AccessorPair> accessor_pair : needs_instantiate) {
+  for (AccessorPairWithContext tuple : needs_instantiate) {
+    Handle<AccessorPair> accessor_pair = tuple.first;
+    // TODO(chromium:986063): Ensure that {ApiNatives::InstantiateFunction}
+    //                        uses the correct native context. The correct
+    //                        native context for this AccessorPair is stored
+    //                        in {tuple.second}.
     if (accessor_pair->getter().IsFunctionTemplateInfo()) {
       Handle<JSFunction> fun =
           ApiNatives::InstantiateFunction(
