@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d96daefd_0b8d512b",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-05T09:50:46Z",
+      "side": 1,
+      "message": "tebbi@ fyi: a torque compiler bug?",
+      "parentUuid": "be269e7d_87d423b7",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00d31a83_6ffce4b3",
         "filename": "src/builtins/math.tq",
         "patchSetId": 12
@@ -69,6 +87,24 @@
       "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "003e147f_6619f098",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-05T09:50:46Z",
+      "side": 1,
+      "message": "I meant this trick: https://crrev.com/c/1725200/14/src/builtins/builtins-math.cc#b33\n\n if (!(abs_value \u003c\u003d max)) {  // Avoids the explicit NaN check.\n\nOr was this builtin incorrect?",
+      "parentUuid": "4dcd1134_c7ece051",
+      "revId": "99e5ae6f026b7329f3f8f97db79ad0aa5cb0ff2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
