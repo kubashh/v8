@@ -2124,6 +2124,24 @@ void BytecodeGenerator::BuildClassLiteral(ClassLiteral* expr, Register name) {
         .CallRuntime(Runtime::kCreatePrivateNameSymbol, brand);
     BuildVariableAssignment(expr->scope()->brand(), Token::INIT,
                             HoleCheckMode::kElided);
+
+    // Store the home object for any private methods or accessors that need
+    // them. We do this here once the prototype and brand symbol has
+    // been created.
+    RegisterAllocationScope register_scope(this);
+    for (int i = 0; i < expr->properties()->length(); i++) {
+      ClassLiteral::Property* property = expr->properties()->at(i);
+      // TODO(joyee): do the same for private accessors when they are
+      // implemented.
+      if (property->is_private() &&
+          property->kind() == ClassLiteral::Property::METHOD &&
+          FunctionLiteral::NeedsHomeObject(property->value())) {
+        Register func = register_allocator()->NewRegister();
+        BuildVariableLoad(property->private_name_var(), HoleCheckMode::kElided);
+        builder()->StoreAccumulatorInRegister(func);
+        VisitSetHomeObject(func, prototype, property);
+      }
+    }
   }
 
   if (expr->instance_members_initializer_function() != nullptr) {
