@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c65151eb_fbb9f9d6",
+        "filename": "src/builtins/array-reduce.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-06T14:31:20Z",
+      "side": 1,
+      "message": "q: Did you try just \u0027JSAny\u0027 here before, and was this caught by the debug typecheck?",
+      "range": {
+        "startLine": 69,
+        "startChar": 26,
+        "endLine": 69,
+        "endChar": 41
+      },
+      "revId": "e01dcba1294d7e753106e951a386f842a5909906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
