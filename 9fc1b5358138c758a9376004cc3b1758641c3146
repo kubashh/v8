@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ad694cd5_c263bea8",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-08-06T08:36:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99caeddd_6bec419b",
+      "revId": "9fc1b5358138c758a9376004cc3b1758641c3146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cc339584_2bd989b0",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-07-31T17:31:44Z",
       "side": 1,
       "message": "Do we need all these checks, or would FunctionLiteral::NeedsHomeObject(property-\u003evalue()) be enough (with the others DCHECKED if necessary).",
+      "revId": "9fc1b5358138c758a9376004cc3b1758641c3146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0efe9dcd_d521f420",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2133,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-08-06T08:36:24Z",
+      "side": 1,
+      "message": "I think we do need the `!property-\u003eis_private()` check and `property-\u003ekind() !\u003d ClassLiteral::Property::METHOD` check, or we\u0027ll set the home object twice, since the other types of members have the home objects set either as part of the InitializeClassMembersStatement (fields) or the class literal boilerplate (public methods).",
+      "parentUuid": "cc339584_2bd989b0",
       "revId": "9fc1b5358138c758a9376004cc3b1758641c3146",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "81c9925a_46a67f36",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2136,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-08-06T08:36:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba27c862_fa9a1dcb",
+      "range": {
+        "startLine": 2133,
+        "startChar": 6,
+        "endLine": 2136,
+        "endChar": 17
+      },
+      "revId": "9fc1b5358138c758a9376004cc3b1758641c3146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e21c1d9c_bf850baa",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 3
@@ -79,6 +139,30 @@
       "revId": "9fc1b5358138c758a9376004cc3b1758641c3146",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "742b09ab_5e8c4cc1",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-08-06T08:36:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e21c1d9c_bf850baa",
+      "range": {
+        "startLine": 2138,
+        "startChar": 6,
+        "endLine": 2138,
+        "endChar": 58
+      },
+      "revId": "9fc1b5358138c758a9376004cc3b1758641c3146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
