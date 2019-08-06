@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1952d1e1_d48bd380",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-08-06T08:13:42Z",
+      "side": 1,
+      "message": "I changed the entries map from\n  \u003cNativeObject, Address /* canonical address */\u003e\nto\n  \u003cNativeObject, size_t /* index in entries_ */\u003e\n.\n\nIIUC, then moving should just fall out.",
+      "parentUuid": "ccdbae7b_03f4520e",
+      "revId": "1a4b8646640c471514f2eadc85ddc88834d67448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8beeb02d_dfa4d638",
         "filename": "src/profiler/heap-snapshot-generator.h",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "1a4b8646640c471514f2eadc85ddc88834d67448",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbebc560_2060a1a2",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-08-06T08:13:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8beeb02d_dfa4d638",
+      "revId": "1a4b8646640c471514f2eadc85ddc88834d67448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
