@@ -16,6 +16,24 @@
       "revId": "5e9d32e2b29fe2906335ba48582633d32407afca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cfd773e_086fdd1d",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-06T06:54:25Z",
+      "side": 1,
+      "message": "TBH that is not entirely clear to me either. AFAICT, \u0027Height\u0027 does not represent anything real atm and is just some arbitrarily-transformed value that both sides of Translations users (\u003d codegen and the deoptimizer) know how to handle properly. We should clean it up in follow-ups.\n\nAnyways, extended the comment.",
+      "parentUuid": "d1bf198d_856c93b4",
+      "revId": "5e9d32e2b29fe2906335ba48582633d32407afca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
