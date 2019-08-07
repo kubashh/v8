@@ -14,6 +14,10 @@
 #include "src/utils/memcopy.h"
 #include "src/utils/version.h"
 
+#ifdef V8_SNAPSHOT_COMPRESSION
+#include "src/third_party/zlib/compression_utils.h"
+#endif
+
 namespace v8 {
 namespace internal {
 
@@ -42,9 +46,15 @@ bool Snapshot::Initialize(Isolate* isolate) {
   const v8::StartupData* blob = isolate->snapshot_blob();
   CheckVersion(blob);
   CHECK(VerifyChecksum(blob));
-  Vector<const byte> startup_data = ExtractStartupData(blob);
+
+  // Strings used to store compressed data when V8_SNAPSHOT_COMPRESSION is
+  // activated.
+  std::string startup_string;
+  std::string read_only_string;
+  Vector<const byte> startup_data = ExtractStartupData(blob, &startup_string);
+  Vector<const byte> read_only_data =
+      ExtractReadOnlyData(blob, &read_only_string);
   SnapshotData startup_snapshot_data(startup_data);
-  Vector<const byte> read_only_data = ExtractReadOnlyData(blob);
   SnapshotData read_only_snapshot_data(read_only_data);
   StartupDeserializer startup_deserializer(&startup_snapshot_data);
   ReadOnlyDeserializer read_only_deserializer(&read_only_snapshot_data);
@@ -71,8 +81,13 @@ MaybeHandle<Context> Snapshot::NewContextFromSnapshot(
 
   const v8::StartupData* blob = isolate->snapshot_blob();
   bool can_rehash = ExtractRehashability(blob);
-  Vector<const byte> context_data =
-      ExtractContextData(blob, static_cast<uint32_t>(context_index));
+
+  // String used to store compressed data when V8_SNAPSHOT_COMPRESSION is
+  // activated.
+  std::string context_string;
+  Vector<const byte> context_data = ExtractContextData(
+      blob, static_cast<uint32_t>(context_index), &context_string);
+
   SnapshotData snapshot_data(context_data);
 
   MaybeHandle<Context> maybe_result = PartialDeserializer::DeserializeContext(
@@ -115,25 +130,70 @@ void ProfileDeserialization(
   }
 }
 
+#ifdef V8_SNAPSHOT_COMPRESSION
+// Adds padding to compressed string if misaligned.
+void AlignCompressedString(std::string* input) {
+  if (!(IsAligned(input->size(), kPointerAlignment))) {
+    int padding = kPointerAlignment - (input->size() % kPointerAlignment);
+    input->insert(0, padding, '\0');
+  }
+}
+#endif
+
 v8::StartupData Snapshot::CreateSnapshotBlob(
-    const SnapshotData* startup_snapshot,
-    const SnapshotData* read_only_snapshot,
-    const std::vector<SnapshotData*>& context_snapshots, bool can_be_rehashed) {
-  uint32_t num_contexts = static_cast<uint32_t>(context_snapshots.size());
+    SnapshotData* startup_snapshot, SnapshotData* read_only_snapshot,
+    std::vector<SnapshotData*>* context_snapshots, bool can_be_rehashed) {
+  uint32_t num_contexts = static_cast<uint32_t>((*context_snapshots).size());
   uint32_t startup_snapshot_offset = StartupSnapshotOffset(num_contexts);
   uint32_t total_length = startup_snapshot_offset;
+  uint32_t startup_bytes_length;
+  uint32_t read_only_bytes_length;
+
+  ProfileDeserialization(read_only_snapshot, startup_snapshot,
+                         *context_snapshots);
+  uint32_t num_startup_chunks =
+      static_cast<uint32_t>(startup_snapshot->Reservations().size());
+  std::vector<uint32_t> num_context_chunks(num_contexts);
+  for (uint32_t i = 0; i < num_contexts; i++) {
+    num_context_chunks[i] =
+        static_cast<uint32_t>((*context_snapshots)[i]->Reservations().size());
+  }
+
+#ifdef V8_SNAPSHOT_COMPRESSION
+  std::string startup_string;
+  bool success = GzipCompress(startup_snapshot->RawData(), &startup_string);
+  CHECK(success);
+  AlignCompressedString(&startup_string);
+  startup_snapshot->ReplaceData(&startup_string);
+  std::string read_only_string;
+  success = GzipCompress(read_only_snapshot->RawData(), &read_only_string);
+  CHECK(success);
+  AlignCompressedString(&read_only_string);
+  read_only_snapshot->ReplaceData(&read_only_string);
+
+  for (uint32_t i = 0; i < num_contexts; i++) {
+    SnapshotData* context_snapshot = (*context_snapshots)[i];
+    std::string context_string;
+    success = GzipCompress(context_snapshot->RawData(), &context_string);
+    CHECK(success);
+    AlignCompressedString(&context_string);
+    context_snapshot->ReplaceData(&context_string);
+  }
+#endif
+
+  startup_bytes_length =
+      static_cast<uint32_t>(startup_snapshot->RawData().length());
+  read_only_bytes_length =
+      static_cast<uint32_t>(read_only_snapshot->RawData().length());
   DCHECK(IsAligned(total_length, kPointerAlignment));
-  total_length += static_cast<uint32_t>(startup_snapshot->RawData().length());
+  total_length += startup_bytes_length;
   DCHECK(IsAligned(total_length, kPointerAlignment));
-  total_length += static_cast<uint32_t>(read_only_snapshot->RawData().length());
+  total_length += read_only_bytes_length;
   DCHECK(IsAligned(total_length, kPointerAlignment));
-  for (const auto context_snapshot : context_snapshots) {
+  for (const auto& context_snapshot : *context_snapshots) {
     total_length += static_cast<uint32_t>(context_snapshot->RawData().length());
     DCHECK(IsAligned(total_length, kPointerAlignment));
   }
-
-  ProfileDeserialization(read_only_snapshot, startup_snapshot,
-                         context_snapshots);
 
   char* data = new char[total_length];
   // Zero out pre-payload data. Part of that is only used for padding.
@@ -156,8 +216,7 @@ v8::StartupData Snapshot::CreateSnapshotBlob(
             payload_length);
   if (FLAG_profile_deserialization) {
     PrintF("Snapshot blob consists of:\n%10d bytes in %d chunks for startup\n",
-           payload_length,
-           static_cast<uint32_t>(startup_snapshot->Reservations().size()));
+           payload_length, num_startup_chunks);
   }
   payload_offset += payload_length;
 
@@ -176,7 +235,7 @@ v8::StartupData Snapshot::CreateSnapshotBlob(
   // Partial snapshots (context-specific data).
   for (uint32_t i = 0; i < num_contexts; i++) {
     SetHeaderValue(data, ContextSnapshotOffsetOffset(i), payload_offset);
-    SnapshotData* context_snapshot = context_snapshots[i];
+    SnapshotData* context_snapshot = (*context_snapshots)[i];
     payload_length = context_snapshot->RawData().length();
     CopyBytes(
         data + payload_offset,
@@ -184,7 +243,7 @@ v8::StartupData Snapshot::CreateSnapshotBlob(
         payload_length);
     if (FLAG_profile_deserialization) {
       PrintF("%10d bytes in %d chunks for context #%d\n", payload_length,
-             static_cast<uint32_t>(context_snapshot->Reservations().size()), i);
+             num_context_chunks[i], i);
     }
     payload_offset += payload_length;
   }
@@ -228,6 +287,7 @@ uint32_t Snapshot::ExtractContextOffset(const v8::StartupData* data,
   return context_offset;
 }
 
+
 bool Snapshot::ExtractRehashability(const v8::StartupData* data) {
   CHECK_LT(kRehashabilityOffset, static_cast<uint32_t>(data->raw_size));
   uint32_t rehashability = GetHeaderValue(data, kRehashabilityOffset);
@@ -236,34 +296,64 @@ bool Snapshot::ExtractRehashability(const v8::StartupData* data) {
 }
 
 namespace {
+Vector<const byte> ExtractDataHelper(const v8::StartupData* snapshot,
+                                     uint32_t start_offset, uint32_t length,
+                                     std::string* output) {
+#ifdef V8_SNAPSHOT_COMPRESSION
+  std::string temp_string(snapshot->data + start_offset, length);
+  // Remove padding.
+  int start = -1;
+  for (int i = 0; i < kPointerAlignment; i++) {
+    if (temp_string.at(i) != '\0') {
+      start = i;
+      break;
+    }
+  }
+  DCHECK_GT(start, -1);
+  temp_string.erase(0, start);
+
+  bool success = GzipUncompress(temp_string, output);
+  CHECK(success);
+  const byte* data = reinterpret_cast<const byte*>(output->data());
+  length = static_cast<uint32_t>(output->size());
+#else
+  const byte* data =
+      reinterpret_cast<const byte*>(snapshot->data + start_offset);
+#endif
+  return Vector<const byte>(data, length);
+}
+
 Vector<const byte> ExtractData(const v8::StartupData* snapshot,
-                               uint32_t start_offset, uint32_t end_offset) {
+                               uint32_t start_offset, uint32_t end_offset,
+                               std::string* output) {
   CHECK_LT(start_offset, end_offset);
   CHECK_LT(end_offset, snapshot->raw_size);
   uint32_t length = end_offset - start_offset;
-  const byte* data =
-      reinterpret_cast<const byte*>(snapshot->data + start_offset);
-  return Vector<const byte>(data, length);
+  return ExtractDataHelper(snapshot, start_offset, length, output);
 }
 }  // namespace
 
-Vector<const byte> Snapshot::ExtractStartupData(const v8::StartupData* data) {
+Vector<const byte> Snapshot::ExtractStartupData(const v8::StartupData* data,
+                                                std::string* output) {
   DCHECK(SnapshotIsValid(data));
 
   uint32_t num_contexts = ExtractNumContexts(data);
   return ExtractData(data, StartupSnapshotOffset(num_contexts),
-                     GetHeaderValue(data, kReadOnlyOffsetOffset));
+                     GetHeaderValue(data, kReadOnlyOffsetOffset), output);
 }
 
-Vector<const byte> Snapshot::ExtractReadOnlyData(const v8::StartupData* data) {
+Vector<const byte> Snapshot::ExtractReadOnlyData(const v8::StartupData* data,
+                                                 std::string* output) {
   DCHECK(SnapshotIsValid(data));
 
   return ExtractData(data, GetHeaderValue(data, kReadOnlyOffsetOffset),
-                     GetHeaderValue(data, ContextSnapshotOffsetOffset(0)));
+                     GetHeaderValue(data, ContextSnapshotOffsetOffset(0)),
+                     output);
 }
 
 Vector<const byte> Snapshot::ExtractContextData(const v8::StartupData* data,
-                                                uint32_t index) {
+                                                uint32_t index,
+                                                std::string* output) {
   uint32_t num_contexts = ExtractNumContexts(data);
   CHECK_LT(index, num_contexts);
 
@@ -276,10 +366,8 @@ Vector<const byte> Snapshot::ExtractContextData(const v8::StartupData* data,
     CHECK_LT(next_context_offset, data->raw_size);
   }
 
-  const byte* context_data =
-      reinterpret_cast<const byte*>(data->data + context_offset);
   uint32_t context_length = next_context_offset - context_offset;
-  return Vector<const byte>(context_data, context_length);
+  return ExtractDataHelper(data, context_offset, context_length, output);
 }
 
 void Snapshot::CheckVersion(const v8::StartupData* data) {
@@ -334,6 +422,18 @@ SnapshotData::SnapshotData(const Serializer* serializer) {
   CopyBytes(data_ + padded_payload_offset, payload->data(),
             static_cast<size_t>(payload->size()));
 }
+
+#ifdef V8_SNAPSHOT_COMPRESSION
+void SnapshotData::ReplaceData(std::string* compressed_data) {
+  delete[] data_;
+  owns_data_ = false;
+  AllocateData(static_cast<uint32_t>(compressed_data->size()));
+  CopyBytes(
+      data_,
+      reinterpret_cast<byte*>(const_cast<char*>((compressed_data->data()))),
+      compressed_data->size());
+}
+#endif
 
 std::vector<SerializedData::Reservation> SnapshotData::Reservations() const {
   uint32_t size = GetHeaderValue(kNumReservationsOffset);

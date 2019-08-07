@@ -51,4 +51,7 @@ specific_include_rules = {
     "+include/libplatform/v8-tracing.h",
     "+perfetto/tracing.h"
   ],
+  "compression_utils\.cc": [
+    "+third_party/zlib/zlib.h"
+  ]
 }
