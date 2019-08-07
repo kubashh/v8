@@ -22,6 +22,30 @@
       "revId": "e01dcba1294d7e753106e951a386f842a5909906",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfcccf0c_a55b7ff7",
+        "filename": "src/builtins/array-reduce.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-07T09:40:08Z",
+      "side": 1,
+      "message": "No, it\u0027s impossible to type it otherwise due to static checks, since it\u0027s called from Torque too.",
+      "parentUuid": "c65151eb_fbb9f9d6",
+      "range": {
+        "startLine": 69,
+        "startChar": 26,
+        "endLine": 69,
+        "endChar": 41
+      },
+      "revId": "e01dcba1294d7e753106e951a386f842a5909906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
