@@ -9840,6 +9840,20 @@ CpuProfiler* CpuProfiler::New(Isolate* isolate,
       reinterpret_cast<i::Isolate*>(isolate), naming_mode, logging_mode));
 }
 
+CpuProfilingOptions::CpuProfilingOptions(CpuProfilingMode mode,
+                                         unsigned max_samples,
+                                         int sampling_interval_us,
+                                         MaybeLocal<Context> filter_context)
+    : mode_(mode),
+      max_samples_(max_samples),
+      sampling_interval_us_(sampling_interval_us),
+      internal_(new i::CpuProfilingOptions()) {
+  if (!filter_context.IsEmpty()) {
+    internal_->filter_context =
+        Utils::OpenHandle(*filter_context.ToLocalChecked());
+  }
+}
+
 void CpuProfiler::Dispose() { delete reinterpret_cast<i::CpuProfiler*>(this); }
 
 // static

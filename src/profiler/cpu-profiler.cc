@@ -161,7 +161,25 @@ void ProfilerEventsProcessor::StopSynchronously() {
 bool ProfilerEventsProcessor::ProcessCodeEvent() {
   CodeEventsContainer record;
   if (events_buffer_.Dequeue(&record)) {
-    code_observer_->CodeEventHandlerInternal(record);
+    switch (record.generic.type) {
+#define PROFILER_TYPE_CASE(type, clss)                \
+  case CodeEventRecord::type:                         \
+    code_observer_->CodeEventHandlerInternal(record); \
+    break;
+
+      CODE_EVENTS_TYPE_LIST(PROFILER_TYPE_CASE)
+
+#undef PROFILER_TYPE_CASE
+      case CodeEventRecord::NATIVE_CONTEXT_MOVE: {
+        NativeContextMoveEventRecord& nc_record =
+            record.NativeContextMoveEventRecord_;
+        generator_->UpdateNativeContextAddress(nc_record.from_address,
+                                               nc_record.to_address);
+        break;
+      }
+      default:
+        return true;  // Skip record.
+    }
     last_processed_code_event_id_ = record.generic.order;
     return true;
   }
@@ -174,6 +192,7 @@ void ProfilerEventsProcessor::CodeEventHandler(
     case CodeEventRecord::CODE_CREATION:
     case CodeEventRecord::CODE_MOVE:
     case CodeEventRecord::CODE_DISABLE_OPT:
+    case CodeEventRecord::NATIVE_CONTEXT_MOVE:
       Enqueue(evt_rec);
       break;
     case CodeEventRecord::CODE_DEOPT: {
@@ -499,15 +518,17 @@ void CpuProfiler::CollectSample() {
 }
 
 void CpuProfiler::StartProfiling(const char* title,
-                                 CpuProfilingOptions options) {
+                                 v8::CpuProfilingOptions options) {
   if (profiles_->StartProfiling(title, options)) {
     TRACE_EVENT0("v8", "CpuProfiler::StartProfiling");
     AdjustSamplingInterval();
     StartProcessorIfNotStarted();
+    processor_->AddCurrentStack();
   }
 }
 
-void CpuProfiler::StartProfiling(String title, CpuProfilingOptions options) {
+void CpuProfiler::StartProfiling(String title,
+                                 v8::CpuProfilingOptions options) {
   StartProfiling(profiles_->GetName(title), options);
 }
 
@@ -534,7 +555,6 @@ void CpuProfiler::StartProcessorIfNotStarted() {
   is_profiling_ = true;
 
   // Enable stack sampling.
-  processor_->AddCurrentStack();
   processor_->StartSynchronously();
 }
 
