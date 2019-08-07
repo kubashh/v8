@@ -170,6 +170,8 @@ deps = {
     Var('chromium_url') + '/chromium/src/third_party/jinja2.git' + '@' + 'b41863e42637544c2941b574c7877d3e1f663e25',
   'v8/third_party/markupsafe':
     Var('chromium_url') + '/chromium/src/third_party/markupsafe.git' + '@' + '8f45f5cfa0009d2a70589bcda0349b8cb2b72783',
+  'v8/third_party/zlib':
+    Var('chromium_url') + '/chromium/src/third_party/zlib.git' + '@' + '796333a8c3c26e74b05b2b9f993a9c9315f96c5d',
   'v8/tools/swarming_client':
     Var('chromium_url') + '/infra/luci/client-py.git' + '@' + '96f125709acfd0b48fc1e5dae7d6ea42291726ac',
   'v8/test/benchmarks/data':
