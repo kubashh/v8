@@ -36,6 +36,10 @@ class V8_EXPORT_PRIVATE SnapshotData : public SerializedData {
     return Vector<const byte>(data_, size_);
   }
 
+#ifdef V8_SNAPSHOT_COMPRESSION
+  void ReplaceData(std::string* compressed_data);
+#endif
+
  protected:
   // The data header consists of uint32_t-sized entries:
   // [0] magic number and (internal) external reference count
@@ -77,10 +81,8 @@ class Snapshot : public AllStatic {
   // ---------------- Serialization ----------------
 
   static v8::StartupData CreateSnapshotBlob(
-      const SnapshotData* startup_snapshot,
-      const SnapshotData* read_only_snapshot,
-      const std::vector<SnapshotData*>& context_snapshots,
-      bool can_be_rehashed);
+      SnapshotData* startup_snapshot, SnapshotData* read_only_snapshot,
+      std::vector<SnapshotData*>* context_snapshots, bool can_be_rehashed);
 
 #ifdef DEBUG
   static bool SnapshotIsValid(const v8::StartupData* snapshot_blob);
@@ -96,6 +98,9 @@ class Snapshot : public AllStatic {
   static Vector<const byte> ExtractReadOnlyData(const v8::StartupData* data);
   static Vector<const byte> ExtractContextData(const v8::StartupData* data,
                                                uint32_t index);
+
+  static Vector<const byte> DecompressIfNeeded(Vector<const byte> data);
+  static void DisposeIfNeeded(Vector<const byte> data);
 
   static uint32_t GetHeaderValue(const v8::StartupData* data, uint32_t offset) {
     return base::ReadLittleEndianValue<uint32_t>(
