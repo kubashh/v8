@@ -867,7 +867,7 @@ StartupData SnapshotCreator::CreateBlob(
   i::SnapshotData startup_snapshot(&startup_serializer);
   StartupData result =
       i::Snapshot::CreateSnapshotBlob(&startup_snapshot, &read_only_snapshot,
-                                      context_snapshots, can_be_rehashed);
+                                      &context_snapshots, can_be_rehashed);
 
   // Delete heap-allocated context snapshot instances.
   for (const auto context_snapshot : context_snapshots) {
