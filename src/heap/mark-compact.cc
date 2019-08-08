@@ -1220,6 +1220,9 @@ class ProfilingMigrationObserver final : public MigrationObserver {
     if (dest == CODE_SPACE || (dest == OLD_SPACE && dst.IsBytecodeArray())) {
       PROFILE(heap_->isolate(),
               CodeMoveEvent(AbstractCode::cast(src), AbstractCode::cast(dst)));
+    } else if (dst.IsNativeContext()) {
+      PROFILE(heap_->isolate(),
+              NativeContextMoveEvent(src.address(), dst.address()));
     }
     heap_->OnMoveEvent(dst, src, size);
   }
