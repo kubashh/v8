@@ -52,6 +52,24 @@
       "revId": "107894657f79ceb5d7f4ecbe27b3da9e393476db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a76439e_78b38002",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3126,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-08-08T22:23:01Z",
+      "side": 1,
+      "message": "Yea sorry, I got lazy and found that v8:9083 has more details on this issue, so referred to it :)",
+      "parentUuid": "0aec487a_897e2fd7",
+      "revId": "107894657f79ceb5d7f4ecbe27b3da9e393476db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
