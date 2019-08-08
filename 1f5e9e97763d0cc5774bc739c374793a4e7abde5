@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45333501_cc2c8348",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-08-08T20:32:01Z",
+      "side": 1,
+      "message": "Let\u0027s add:\nIt should be large enough to hold |frames_limit| frame contexts.",
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0275ea1d_c5444c8a",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-08-08T20:32:01Z",
+      "side": 1,
+      "message": "Wouldn\u0027t unique_ptr work here?",
+      "range": {
+        "startLine": 366,
+        "startChar": 7,
+        "endLine": 366,
+        "endChar": 17
+      },
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b71035d_4680c62a",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-08-08T20:32:01Z",
+      "side": 1,
+      "message": "How about just:\n\nif (record.generic.type \u003d\u003d CodeEventRecord::NATIVE_CONTEXT_MOVE) {\n  ...\n} else {\n  code_observer_-\u003eCodeEventHandlerInternal(record);\n}",
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "578bd6b7_6d678647",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-08-08T20:32:01Z",
+      "side": 1,
+      "message": "Will it add two of these if processor_ existed before?",
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4fcf1b2_5efb5645",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-08-08T20:32:01Z",
+      "side": 1,
+      "message": "it-\u003e",
+      "range": {
+        "startLine": 421,
+        "startChar": 8,
+        "endLine": 421,
+        "endChar": 14
+      },
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b75253c_03c4f490",
+        "filename": "src/profiler/profile-generator.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-08-08T20:32:01Z",
+      "side": 1,
+      "message": "\u0027Accept\u0027 perhaps?",
+      "range": {
+        "startLine": 253,
+        "startChar": 7,
+        "endLine": 253,
+        "endChar": 12
+      },
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
