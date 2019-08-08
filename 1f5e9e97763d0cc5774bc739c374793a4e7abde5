@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b76a79e6_92eabecb",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-08-08T21:58:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45333501_cc2c8348",
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0275ea1d_c5444c8a",
         "filename": "include/v8-profiler.h",
         "patchSetId": 14
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "0e7ca8c6_2db7de88",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-08-08T21:58:51Z",
+      "side": 1,
+      "message": "Unfortunately not, as that prevents us from providing a copy constructor for CpuProfilingOptions.",
+      "parentUuid": "0275ea1d_c5444c8a",
+      "range": {
+        "startLine": 366,
+        "startChar": 7,
+        "endLine": 366,
+        "endChar": 17
+      },
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b71035d_4680c62a",
         "filename": "src/profiler/cpu-profiler.cc",
         "patchSetId": 14
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "f8cd7a18_3495e0ef",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-08-08T21:58:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b71035d_4680c62a",
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "578bd6b7_6d678647",
         "filename": "src/profiler/cpu-profiler.cc",
         "patchSetId": 14
@@ -73,6 +133,24 @@
       "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95ca2bad_6149e6f2",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-08-08T21:58:51Z",
+      "side": 1,
+      "message": "Whoops- yes, this isn\u0027t necessary any longer.",
+      "parentUuid": "578bd6b7_6d678647",
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "ac6ad394_3c47166f",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-08-08T21:58:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4fcf1b2_5efb5645",
+      "range": {
+        "startLine": 421,
+        "startChar": 8,
+        "endLine": 421,
+        "endChar": 14
+      },
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b75253c_03c4f490",
         "filename": "src/profiler/profile-generator.h",
         "patchSetId": 14
@@ -119,6 +221,30 @@
       "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b11c5cb7_88cca6fa",
+        "filename": "src/profiler/profile-generator.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-08-08T21:58:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b75253c_03c4f490",
+      "range": {
+        "startLine": 253,
+        "startChar": 7,
+        "endLine": 253,
+        "endChar": 12
+      },
+      "revId": "1f5e9e97763d0cc5774bc739c374793a4e7abde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
