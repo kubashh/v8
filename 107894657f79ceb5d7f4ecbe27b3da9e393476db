@@ -34,6 +34,24 @@
       "revId": "107894657f79ceb5d7f4ecbe27b3da9e393476db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aec487a_897e2fd7",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3126,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-08-08T22:04:39Z",
+      "side": 1,
+      "message": "Oh yes, of course, thanks. Ah, we usually only end up putting the TODO bug, closed/fixed related bugs not really needed.",
+      "parentUuid": "4bb695b6_19cbeeb9",
+      "revId": "107894657f79ceb5d7f4ecbe27b3da9e393476db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
