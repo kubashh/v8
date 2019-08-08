@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25f3399e_0edfa756",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-08-08T08:03:26Z",
+      "side": 1,
+      "message": "Can you rephrase this a bit so that it\u0027s clear what \"it\" refers here?\n\nDo you mean that the source position is wrong, or is just the script id wrong?",
+      "range": {
+        "startLine": 11,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "26a2dfbcdec89c4e59eeeb9b64554b165327fd90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd6f1e83_e3b04c8c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-08-08T08:03:26Z",
+      "side": 1,
+      "message": "Can you file a tracking bug for the underlying issue? Thanks.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 8
+      },
+      "revId": "26a2dfbcdec89c4e59eeeb9b64554b165327fd90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
