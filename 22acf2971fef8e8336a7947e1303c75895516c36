@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa319f47_c294b220",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4449,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-08-08T21:00:54Z",
+      "side": 1,
+      "message": "Given that we are logging immediately here, could avoid storing the callback for now and just use it directly. However, it\u0027s likely that in the future we might want to add more crashkeys at later points of execution.",
+      "range": {
+        "startLine": 4446,
+        "startChar": 0,
+        "endLine": 4449,
+        "endChar": 42
+      },
+      "revId": "22acf2971fef8e8336a7947e1303c75895516c36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
