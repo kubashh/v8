@@ -16,6 +16,24 @@
       "revId": "107894657f79ceb5d7f4ecbe27b3da9e393476db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bb695b6_19cbeeb9",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3126,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-08-08T21:53:26Z",
+      "side": 1,
+      "message": "The fix is similar and reason is the same (incorrect memory alignment).\nIt does not need a UseRegister here, later below (line 3224)\n\n    inputs[input_count++] \u003d\n        src1_needs_reg ? g.UseRegister(input1) : g.Use(input1);\n\nsrc1_needs_reg here will make it use a register.",
+      "parentUuid": "c45dfcbf_8be297c0",
+      "revId": "107894657f79ceb5d7f4ecbe27b3da9e393476db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
