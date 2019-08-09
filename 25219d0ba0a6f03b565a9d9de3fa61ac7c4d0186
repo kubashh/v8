@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "c74f1667_1b849db3",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-08-09T14:21:05Z",
+      "side": 1,
+      "message": "The NativeContext branch should go in Heap::OnMoveEvent. This one also contains the SFI move event.",
+      "range": {
+        "startLine": 1227,
+        "startChar": 11,
+        "endLine": 1227,
+        "endChar": 22
+      },
+      "revId": "25219d0ba0a6f03b565a9d9de3fa61ac7c4d0186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1922fea5_e84ee62f",
         "filename": "test/cctest/test-cpu-profiler.cc",
         "patchSetId": 16
@@ -36,6 +59,30 @@
       "writtenOn": "2019-08-09T14:03:15Z",
       "side": 1,
       "message": "This test is nice thanks. But we don\u0027t test the context moving - have you experimented with trying to see if you can force the context to move with a GC call? I guess you could do it during CallCollectSample from C++ with something like GcAndSweep() or do it from js with gc() and --expose-gc. Even that might not cause it to move though / might not continue to work over time. Maybe GC owners have a better idea how to force something to move for testing?",
+      "range": {
+        "startLine": 3475,
+        "startChar": 5,
+        "endLine": 3475,
+        "endChar": 21
+      },
+      "revId": "25219d0ba0a6f03b565a9d9de3fa61ac7c4d0186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72677e99_fff8555b",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 3475,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-08-09T14:21:05Z",
+      "side": 1,
+      "message": "There\u0027s helpers for C++. There\u0027s no way to reliable do this from JS though.\n\n  #include \"test/cctest/heap/heap-utils.h\"\n  ...\n  FLAG_manual_evacuation_candidates_selection \u003d true;\n  ...\n  heap::ForceEvacuationCandidate(Page::FromObject(OBJECT));\n  ...\n  // Somehow trigger GC, e.g. through C++.\n  CcTest::CollectAllGarbage();",
+      "parentUuid": "1922fea5_e84ee62f",
       "range": {
         "startLine": 3475,
         "startChar": 5,
