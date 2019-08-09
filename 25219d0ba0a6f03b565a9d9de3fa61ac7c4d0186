@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ef47e04_918356e2",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-08-09T14:03:15Z",
+      "side": 1,
+      "message": "I don\u0027t think we should expose anything under internal:: directly via the API. Maybe we could make it private and make internal::CpuProfiler a friend or something? Not sure what a better pattern would be. I\u0027ll ask API owners to chime in.\n\nMaybe it is fine to just thread a Local\u003c\u003e through to the internal::CpuProfiler and use it there rather than go so far to avoid it.",
+      "range": {
+        "startLine": 362,
+        "startChar": 8,
+        "endLine": 362,
+        "endChar": 37
+      },
+      "revId": "25219d0ba0a6f03b565a9d9de3fa61ac7c4d0186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1922fea5_e84ee62f",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 3475,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-08-09T14:03:15Z",
+      "side": 1,
+      "message": "This test is nice thanks. But we don\u0027t test the context moving - have you experimented with trying to see if you can force the context to move with a GC call? I guess you could do it during CallCollectSample from C++ with something like GcAndSweep() or do it from js with gc() and --expose-gc. Even that might not cause it to move though / might not continue to work over time. Maybe GC owners have a better idea how to force something to move for testing?",
+      "range": {
+        "startLine": 3475,
+        "startChar": 5,
+        "endLine": 3475,
+        "endChar": 21
+      },
+      "revId": "25219d0ba0a6f03b565a9d9de3fa61ac7c4d0186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
