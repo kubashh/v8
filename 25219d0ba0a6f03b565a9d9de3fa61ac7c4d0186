@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8656ff5b_e3384d37",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-08-09T22:03:05Z",
+      "side": 1,
+      "message": "Sure, having i::CpuProfiler be a friend class seems good. It may be good to keep this thunk in case we add any other internal fields to CpuProfilingOptions.",
+      "parentUuid": "5ef47e04_918356e2",
+      "range": {
+        "startLine": 362,
+        "startChar": 8,
+        "endLine": 362,
+        "endChar": 37
+      },
+      "revId": "25219d0ba0a6f03b565a9d9de3fa61ac7c4d0186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c74f1667_1b849db3",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 16
@@ -45,6 +69,30 @@
       "revId": "25219d0ba0a6f03b565a9d9de3fa61ac7c4d0186",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cd23381_9fb27fe5",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-08-09T22:03:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c74f1667_1b849db3",
+      "range": {
+        "startLine": 1227,
+        "startChar": 11,
+        "endLine": 1227,
+        "endChar": 22
+      },
+      "revId": "25219d0ba0a6f03b565a9d9de3fa61ac7c4d0186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -92,6 +140,30 @@
       "revId": "25219d0ba0a6f03b565a9d9de3fa61ac7c4d0186",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71992578_f66ec854",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 3475,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-08-09T22:03:05Z",
+      "side": 1,
+      "message": "Added, thanks!",
+      "parentUuid": "72677e99_fff8555b",
+      "range": {
+        "startLine": 3475,
+        "startChar": 5,
+        "endLine": 3475,
+        "endChar": 21
+      },
+      "revId": "25219d0ba0a6f03b565a9d9de3fa61ac7c4d0186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
