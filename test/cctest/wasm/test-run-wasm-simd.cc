@@ -1170,9 +1170,7 @@ WASM_SIMD_TEST_NO_LOWERING(F64x2Mul) {
 WASM_SIMD_TEST_NO_LOWERING(F64x2Div) {
   RunF64x2BinOpTest(execution_tier, lower_simd, kExprF64x2Div, Div);
 }
-#endif  // V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
 
-#if V8_TARGET_ARCH_X64
 void RunF64x2CompareOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
                            WasmOpcode opcode, DoubleCompareOp expected_op) {
   WasmRunner<int32_t, double, double> r(execution_tier, lower_simd);
@@ -1203,6 +1201,17 @@ void RunF64x2CompareOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
   }
 }
 
+WASM_SIMD_TEST_NO_LOWERING(F64x2Min) {
+  RunF64x2BinOpTest(execution_tier, lower_simd, kExprF64x2Min, JSMin);
+}
+
+WASM_SIMD_TEST_NO_LOWERING(F64x2Max) {
+  RunF64x2BinOpTest(execution_tier, lower_simd, kExprF64x2Max, JSMax);
+}
+#endif  // V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
+
+#if V8_TARGET_ARCH_X64
+
 WASM_SIMD_TEST_NO_LOWERING(F64x2Eq) {
   RunF64x2CompareOpTest(execution_tier, lower_simd, kExprF64x2Eq, Equal);
 }
@@ -1226,15 +1235,6 @@ WASM_SIMD_TEST_NO_LOWERING(F64x2Lt) {
 WASM_SIMD_TEST_NO_LOWERING(F64x2Le) {
   RunF64x2CompareOpTest(execution_tier, lower_simd, kExprF64x2Le, LessEqual);
 }
-
-WASM_SIMD_TEST_NO_LOWERING(F64x2Min) {
-  RunF64x2BinOpTest(execution_tier, lower_simd, kExprF64x2Min, JSMin);
-}
-
-WASM_SIMD_TEST_NO_LOWERING(F64x2Max) {
-  RunF64x2BinOpTest(execution_tier, lower_simd, kExprF64x2Max, JSMax);
-}
-
 #undef FOR_FLOAT64_NAN_INPUTS
 
 WASM_SIMD_TEST_NO_LOWERING(I64x2ExtractWithF64x2) {
