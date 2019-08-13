@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ca00e3e_49edea10",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-08-13T13:02:49Z",
+      "side": 1,
+      "message": "Why can\u0027t we just hold onto a Persistent handle of the context here?\n\nAlternative to the impl() and friend solution is to do the same trick we use for v8::Isolate and v8::internal::Isolate. Elsewhere, we use a void* to avoid having to expose internal types in the API, which we internally cast to what it actually is.",
+      "range": {
+        "startLine": 371,
+        "startChar": 2,
+        "endLine": 371,
+        "endChar": 59
+      },
+      "revId": "820f63fd303f9a5cebdbb5d47f744a9eb08d7bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45261b39_b86faa94",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-08-13T13:02:49Z",
+      "side": 1,
+      "message": "stray edit",
+      "range": {
+        "startLine": 368,
+        "startChar": 0,
+        "endLine": 368,
+        "endChar": 0
+      },
+      "revId": "820f63fd303f9a5cebdbb5d47f744a9eb08d7bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
