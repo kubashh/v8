@@ -22,6 +22,30 @@
       "revId": "196e27c1d378a26a6ce21c6ed5d545b0ef0d415f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cea9f373_32fe78e8",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1636,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-13T14:15:09Z",
+      "side": 1,
+      "message": "My understanding is that 32-bit ARM operations only look at the lower 32 bits, so this should be safe, but I don\u0027t know enough to be confident.",
+      "parentUuid": "d636204f_39907fae",
+      "range": {
+        "startLine": 1635,
+        "startChar": 0,
+        "endLine": 1636,
+        "endChar": 42
+      },
+      "revId": "196e27c1d378a26a6ce21c6ed5d545b0ef0d415f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
