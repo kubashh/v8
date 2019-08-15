@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e8247a3e_712dfffb",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-08-15T00:04:43Z",
+      "side": 1,
+      "message": "Happy to use a copyable persistent here! I figured we might want to eagerly internalize the handle types, but adding a private accessor to CpuProfilingOptions to return the address of the attached context works as well.\n\nUsing the v8::internal::Isolate trick doesn\u0027t quite work here, since CpuProfilingOptions can already be stack-allocated (i.e. is sized), which prevents us from casting freely without a mirrored data representation.",
+      "parentUuid": "8ca00e3e_49edea10",
+      "range": {
+        "startLine": 371,
+        "startChar": 2,
+        "endLine": 371,
+        "endChar": 59
+      },
+      "revId": "820f63fd303f9a5cebdbb5d47f744a9eb08d7bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45261b39_b86faa94",
         "filename": "src/execution/frames.cc",
         "patchSetId": 18
@@ -45,6 +69,30 @@
       "revId": "820f63fd303f9a5cebdbb5d47f744a9eb08d7bb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93551dd1_a4b78018",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-08-15T00:04:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "45261b39_b86faa94",
+      "range": {
+        "startLine": 368,
+        "startChar": 0,
+        "endLine": 368,
+        "endChar": 0
+      },
+      "revId": "820f63fd303f9a5cebdbb5d47f744a9eb08d7bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
