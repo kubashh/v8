@@ -727,7 +727,8 @@ IGNITION_HANDLER(LdaModuleVariable, InterpreterAssembler) {
   Node* depth = BytecodeOperandUImm(1);
 
   Node* module_context = GetContextAtDepth(GetContext(), depth);
-  Node* module = LoadContextElement(module_context, Context::EXTENSION_INDEX);
+  TNode<HeapObject> module =
+      CAST(LoadContextElement(module_context, Context::EXTENSION_INDEX));
 
   Label if_export(this), if_import(this), end(this);
   Branch(IntPtrGreaterThan(cell_index, IntPtrConstant(0)), &if_export,
@@ -735,8 +736,8 @@ IGNITION_HANDLER(LdaModuleVariable, InterpreterAssembler) {
 
   BIND(&if_export);
   {
-    TNode<FixedArray> regular_exports =
-        CAST(LoadObjectField(module, SourceTextModule::kRegularExportsOffset));
+    TNode<FixedArray> regular_exports = LoadObjectField<FixedArray>(
+        module, SourceTextModule::kRegularExportsOffset);
     // The actual array index is (cell_index - 1).
     Node* export_index = IntPtrSub(cell_index, IntPtrConstant(1));
     Node* cell = LoadFixedArrayElement(regular_exports, export_index);
@@ -746,8 +747,8 @@ IGNITION_HANDLER(LdaModuleVariable, InterpreterAssembler) {
 
   BIND(&if_import);
   {
-    TNode<FixedArray> regular_imports =
-        CAST(LoadObjectField(module, SourceTextModule::kRegularImportsOffset));
+    TNode<FixedArray> regular_imports = LoadObjectField<FixedArray>(
+        module, SourceTextModule::kRegularImportsOffset);
     // The actual array index is (-cell_index - 1).
     Node* import_index = IntPtrSub(IntPtrConstant(-1), cell_index);
     Node* cell = LoadFixedArrayElement(regular_imports, import_index);
@@ -769,7 +770,8 @@ IGNITION_HANDLER(StaModuleVariable, InterpreterAssembler) {
   Node* depth = BytecodeOperandUImm(1);
 
   Node* module_context = GetContextAtDepth(GetContext(), depth);
-  Node* module = LoadContextElement(module_context, Context::EXTENSION_INDEX);
+  TNode<HeapObject> module =
+      CAST(LoadContextElement(module_context, Context::EXTENSION_INDEX));
 
   Label if_export(this), if_import(this), end(this);
   Branch(IntPtrGreaterThan(cell_index, IntPtrConstant(0)), &if_export,
@@ -777,8 +779,8 @@ IGNITION_HANDLER(StaModuleVariable, InterpreterAssembler) {
 
   BIND(&if_export);
   {
-    TNode<FixedArray> regular_exports =
-        CAST(LoadObjectField(module, SourceTextModule::kRegularExportsOffset));
+    TNode<FixedArray> regular_exports = LoadObjectField<FixedArray>(
+        module, SourceTextModule::kRegularExportsOffset);
     // The actual array index is (cell_index - 1).
     Node* export_index = IntPtrSub(cell_index, IntPtrConstant(1));
     Node* cell = LoadFixedArrayElement(regular_exports, export_index);
@@ -2636,9 +2638,10 @@ IGNITION_HANDLER(GetTemplateObject, InterpreterAssembler) {
   {
     Node* description = LoadConstantPoolEntryAtOperandIndex(0);
     Node* slot_smi = SmiTag(slot);
-    Node* closure = LoadRegister(Register::function_closure());
-    Node* shared_info =
-        LoadObjectField(closure, JSFunction::kSharedFunctionInfoOffset);
+    TNode<HeapObject> closure =
+        CAST(LoadRegister(Register::function_closure()));
+    TNode<SharedFunctionInfo> shared_info = LoadObjectField<SharedFunctionInfo>(
+        closure, JSFunction::kSharedFunctionInfoOffset);
     Node* context = GetContext();
     Node* result = CallRuntime(Runtime::kGetTemplateObject, context,
                                description, shared_info, slot_smi);
@@ -2774,7 +2777,7 @@ IGNITION_HANDLER(CreateWithContext, InterpreterAssembler) {
 //
 // Creates a new mapped arguments object.
 IGNITION_HANDLER(CreateMappedArguments, InterpreterAssembler) {
-  Node* closure = LoadRegister(Register::function_closure());
+  TNode<HeapObject> closure = CAST(LoadRegister(Register::function_closure()));
   Node* context = GetContext();
 
   Label if_duplicate_parameters(this, Label::kDeferred);
@@ -2783,8 +2786,8 @@ IGNITION_HANDLER(CreateMappedArguments, InterpreterAssembler) {
   // Check if function has duplicate parameters.
   // TODO(rmcilroy): Remove this check when FastNewSloppyArgumentsStub supports
   // duplicate parameters.
-  Node* shared_info =
-      LoadObjectField(closure, JSFunction::kSharedFunctionInfoOffset);
+  TNode<SharedFunctionInfo> shared_info = LoadObjectField<SharedFunctionInfo>(
+      closure, JSFunction::kSharedFunctionInfoOffset);
   Node* flags = LoadObjectField(shared_info, SharedFunctionInfo::kFlagsOffset,
                                 MachineType::Uint32());
   Node* has_duplicate_parameters =
@@ -3057,13 +3060,15 @@ IGNITION_HANDLER(ForInPrepare, InterpreterAssembler) {
     Node* enum_length = LoadMapEnumLength(enumerator);
     CSA_ASSERT(this, WordNotEqual(enum_length,
                                   IntPtrConstant(kInvalidEnumCacheSentinel)));
-    Node* descriptors = LoadMapDescriptors(enumerator);
-    Node* enum_cache =
-        LoadObjectField(descriptors, DescriptorArray::kEnumCacheOffset);
-    Node* enum_keys = LoadObjectField(enum_cache, EnumCache::kKeysOffset);
+    TNode<DescriptorArray> descriptors = LoadMapDescriptors(enumerator);
+    TNode<EnumCache> enum_cache = LoadObjectField<EnumCache>(
+        descriptors, DescriptorArray::kEnumCacheOffset);
+    TNode<FixedArray> enum_keys =
+        LoadObjectField<FixedArray>(enum_cache, EnumCache::kKeysOffset);
 
     // Check if we have enum indices available.
-    Node* enum_indices = LoadObjectField(enum_cache, EnumCache::kIndicesOffset);
+    TNode<FixedArray> enum_indices =
+        LoadObjectField<FixedArray>(enum_cache, EnumCache::kIndicesOffset);
     Node* enum_indices_length = LoadAndUntagFixedArrayBaseLength(enum_indices);
     Node* feedback = SelectSmiConstant(
         IntPtrLessThanOrEqual(enum_length, enum_indices_length),
@@ -3222,18 +3227,18 @@ IGNITION_HANDLER(Illegal, InterpreterAssembler) {
 // in the accumulator.
 IGNITION_HANDLER(SuspendGenerator, InterpreterAssembler) {
   Node* generator = LoadRegisterAtOperandIndex(0);
-  TNode<FixedArray> array = CAST(LoadObjectField(
-      generator, JSGeneratorObject::kParametersAndRegistersOffset));
-  Node* closure = LoadRegister(Register::function_closure());
+  TNode<FixedArray> array = LoadObjectField<FixedArray>(
+      CAST(generator), JSGeneratorObject::kParametersAndRegistersOffset);
+  TNode<HeapObject> closure = CAST(LoadRegister(Register::function_closure()));
   Node* context = GetContext();
   RegListNodePair registers = GetRegisterListAtOperandIndex(1);
   Node* suspend_id = BytecodeOperandUImmSmi(3);
 
-  Node* shared =
-      LoadObjectField(closure, JSFunction::kSharedFunctionInfoOffset);
-  TNode<Int32T> formal_parameter_count = UncheckedCast<Int32T>(
-      LoadObjectField(shared, SharedFunctionInfo::kFormalParameterCountOffset,
-                      MachineType::Uint16()));
+  TNode<SharedFunctionInfo> shared = LoadObjectField<SharedFunctionInfo>(
+      closure, JSFunction::kSharedFunctionInfoOffset);
+  TNode<Int32T> formal_parameter_count =
+      UncheckedCast<Int32T>(LoadObjectField<Int16T>(
+          shared, SharedFunctionInfo::kFormalParameterCountOffset));
 
   ExportParametersAndRegisterFile(array, registers, formal_parameter_count);
   StoreObjectField(generator, JSGeneratorObject::kContextOffset, context);
@@ -3269,7 +3274,8 @@ IGNITION_HANDLER(SwitchOnGeneratorState, InterpreterAssembler) {
   StoreObjectField(generator, JSGeneratorObject::kContinuationOffset,
                    new_state);
 
-  Node* context = LoadObjectField(generator, JSGeneratorObject::kContextOffset);
+  TNode<Context> context = LoadObjectField<Context>(
+      CAST(generator), JSGeneratorObject::kContextOffset);
   SetContext(context);
 
   Node* table_start = BytecodeOperandIdx(1);
@@ -3300,14 +3306,14 @@ IGNITION_HANDLER(SwitchOnGeneratorState, InterpreterAssembler) {
 // state as executing.
 IGNITION_HANDLER(ResumeGenerator, InterpreterAssembler) {
   Node* generator = LoadRegisterAtOperandIndex(0);
-  Node* closure = LoadRegister(Register::function_closure());
+  TNode<HeapObject> closure = CAST(LoadRegister(Register::function_closure()));
   RegListNodePair registers = GetRegisterListAtOperandIndex(1);
 
-  Node* shared =
-      LoadObjectField(closure, JSFunction::kSharedFunctionInfoOffset);
-  TNode<Int32T> formal_parameter_count = UncheckedCast<Int32T>(
-      LoadObjectField(shared, SharedFunctionInfo::kFormalParameterCountOffset,
-                      MachineType::Uint16()));
+  TNode<SharedFunctionInfo> shared = LoadObjectField<SharedFunctionInfo>(
+      closure, JSFunction::kSharedFunctionInfoOffset);
+  TNode<Int32T> formal_parameter_count =
+      UncheckedCast<Int32T>(LoadObjectField<Int16T>(
+          shared, SharedFunctionInfo::kFormalParameterCountOffset));
 
   ImportRegisterFile(
       CAST(LoadObjectField(generator,
