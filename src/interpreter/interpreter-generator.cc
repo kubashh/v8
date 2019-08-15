@@ -3226,13 +3226,13 @@ IGNITION_HANDLER(Illegal, InterpreterAssembler) {
 // (for debugging purposes) into the generator. Then, returns the value
 // in the accumulator.
 IGNITION_HANDLER(SuspendGenerator, InterpreterAssembler) {
-  Node* generator = LoadRegisterAtOperandIndex(0);
+  TNode<HeapObject> generator = CAST(LoadRegisterAtOperandIndex(0));
   TNode<FixedArray> array = LoadObjectField<FixedArray>(
-      CAST(generator), JSGeneratorObject::kParametersAndRegistersOffset);
+      generator, JSGeneratorObject::kParametersAndRegistersOffset);
   TNode<HeapObject> closure = CAST(LoadRegister(Register::function_closure()));
-  Node* context = GetContext();
+  TNode<Context> context = CAST(GetContext());
   RegListNodePair registers = GetRegisterListAtOperandIndex(1);
-  Node* suspend_id = BytecodeOperandUImmSmi(3);
+  TNode<Smi> suspend_id = CAST(BytecodeOperandUImmSmi(3));
 
   TNode<SharedFunctionInfo> shared = LoadObjectField<SharedFunctionInfo>(
       closure, JSFunction::kSharedFunctionInfoOffset);
@@ -3242,12 +3242,12 @@ IGNITION_HANDLER(SuspendGenerator, InterpreterAssembler) {
 
   ExportParametersAndRegisterFile(array, registers, formal_parameter_count);
   StoreObjectField(generator, JSGeneratorObject::kContextOffset, context);
-  StoreObjectField(generator, JSGeneratorObject::kContinuationOffset,
-                   suspend_id);
+  StoreObjectFieldNoWriteBarrier(
+      generator, JSGeneratorObject::kContinuationOffset, suspend_id);
 
   // Store the bytecode offset in the [input_or_debug_pos] field, to be used by
   // the inspector.
-  Node* offset = SmiTag(BytecodeOffset());
+  TNode<Smi> offset = SmiTag(BytecodeOffset());
   StoreObjectField(generator, JSGeneratorObject::kInputOrDebugPosOffset,
                    offset);
 
@@ -3263,19 +3263,19 @@ IGNITION_HANDLER(SuspendGenerator, InterpreterAssembler) {
 // generator's state by looking up the generator state in a jump table in the
 // constant pool, starting at |table_start|, and of length |table_length|.
 IGNITION_HANDLER(SwitchOnGeneratorState, InterpreterAssembler) {
-  Node* generator = LoadRegisterAtOperandIndex(0);
+  TNode<HeapObject> generator = CAST(LoadRegisterAtOperandIndex(0));
 
   Label fallthrough(this);
   GotoIf(WordEqual(generator, UndefinedConstant()), &fallthrough);
 
-  Node* state =
-      LoadObjectField(generator, JSGeneratorObject::kContinuationOffset);
-  Node* new_state = SmiConstant(JSGeneratorObject::kGeneratorExecuting);
-  StoreObjectField(generator, JSGeneratorObject::kContinuationOffset,
-                   new_state);
+  TNode<Smi> state =
+      LoadObjectField<Smi>(generator, JSGeneratorObject::kContinuationOffset);
+  TNode<Smi> new_state = SmiConstant(JSGeneratorObject::kGeneratorExecuting);
+  StoreObjectFieldNoWriteBarrier(
+      generator, JSGeneratorObject::kContinuationOffset, new_state);
 
-  TNode<Context> context = LoadObjectField<Context>(
-      CAST(generator), JSGeneratorObject::kContextOffset);
+  TNode<Context> context =
+      LoadObjectField<Context>(generator, JSGeneratorObject::kContextOffset);
   SetContext(context);
 
   Node* table_start = BytecodeOperandIdx(1);
@@ -3283,17 +3283,14 @@ IGNITION_HANDLER(SwitchOnGeneratorState, InterpreterAssembler) {
   // actually need it otherwise.
   Node* table_length = BytecodeOperandUImmWord(2);
 
-  // The state must be a Smi.
-  CSA_ASSERT(this, TaggedIsSmi(state));
-
-  Node* case_value = SmiUntag(state);
+  TNode<IntPtrT> case_value = SmiUntag(state);
 
   CSA_ASSERT(this, IntPtrGreaterThanOrEqual(case_value, IntPtrConstant(0)));
   CSA_ASSERT(this, IntPtrLessThan(case_value, table_length));
   USE(table_length);
 
-  Node* entry = IntPtrAdd(table_start, case_value);
-  Node* relative_jump = LoadAndUntagConstantPoolEntry(entry);
+  TNode<WordT> entry = IntPtrAdd(table_start, case_value);
+  TNode<IntPtrT> relative_jump = LoadAndUntagConstantPoolEntry(entry);
   Jump(relative_jump);
 
   BIND(&fallthrough);
