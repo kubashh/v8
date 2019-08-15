@@ -83,6 +83,17 @@ static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
 
 namespace {
 
+void LoadRealStackLimit(MacroAssembler* masm, Register destination) {
+  DCHECK(masm->root_array_available());
+  Isolate* isolate = masm->isolate();
+  ExternalReference limit = ExternalReference::address_of_real_jslimit(isolate);
+  DCHECK(TurboAssembler::IsAddressableThroughRootRegister(isolate, limit));
+
+  intptr_t offset =
+      TurboAssembler::RootRegisterOffsetForExternalReference(isolate, limit);
+  __ Ld(destination, MemOperand(kRootRegister, static_cast<int32_t>(offset)));
+}
+
 void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
   // ----------- S t a t e -------------
   //  -- a0     : number of arguments
@@ -156,7 +167,7 @@ static void Generate_StackOverflowCheck(MacroAssembler* masm, Register num_args,
   // Check the stack for overflow. We are not trying to catch
   // interruptions (e.g. debug break and preemption) here, so the "real stack
   // limit" is checked.
-  __ LoadRoot(scratch1, RootIndex::kRealStackLimit);
+  LoadRealStackLimit(masm, scratch1);
   // Make scratch1 the space we have left. The stack might already be overflowed
   // here which will cause scratch1 to become negative.
   __ dsubu(scratch1, sp, scratch1);
@@ -407,7 +418,7 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
   // Check the stack for overflow. We are not trying to catch interruptions
   // (i.e. debug break and preemption) here, so check the "real stack limit".
   Label stack_overflow;
-  __ LoadRoot(kScratchReg, RootIndex::kRealStackLimit);
+  LoadRealStackLimit(masm, kScratchReg);
   __ Branch(&stack_overflow, lo, sp, Operand(kScratchReg));
 
   // Push receiver.
@@ -514,7 +525,7 @@ static void Generate_CheckStackOverflow(MacroAssembler* masm, Register argc,
   // interruptions (e.g. debug break and preemption) here, so the "real stack
   // limit" is checked.
   Label okay;
-  __ LoadRoot(scratch1, RootIndex::kRealStackLimit);
+  LoadRealStackLimit(masm, scratch1);
   // Make a2 the space we have left. The stack might already be overflowed
   // here which will cause r2 to become negative.
   __ dsubu(scratch1, sp, scratch1);
@@ -1099,7 +1110,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
     // Do a stack check to ensure we don't go over the limit.
     Label ok;
     __ Dsubu(a5, sp, Operand(a4));
-    __ LoadRoot(a2, RootIndex::kRealStackLimit);
+    LoadRealStackLimit(masm, a2);
     __ Branch(&ok, hs, a5, Operand(a2));
     __ CallRuntime(Runtime::kThrowStackOverflow);
     __ bind(&ok);
@@ -2100,7 +2111,7 @@ void Builtins::Generate_CallBoundFunctionImpl(MacroAssembler* masm) {
     __ Dsubu(sp, sp, Operand(a5));
     // Check the stack for overflow. We are not trying to catch interruptions
     // (i.e. debug break and preemption) here, so check the "real stack limit".
-    __ LoadRoot(kScratchReg, RootIndex::kRealStackLimit);
+    LoadRealStackLimit(masm, kScratchReg);
     __ Branch(&done, hs, sp, Operand(kScratchReg));
     // Restore the stack pointer.
     __ Daddu(sp, sp, Operand(a5));
@@ -2254,7 +2265,7 @@ void Builtins::Generate_ConstructBoundFunction(MacroAssembler* masm) {
     __ Dsubu(sp, sp, Operand(a5));
     // Check the stack for overflow. We are not trying to catch interruptions
     // (i.e. debug break and preemption) here, so check the "real stack limit".
-    __ LoadRoot(kScratchReg, RootIndex::kRealStackLimit);
+    LoadRealStackLimit(masm, kScratchReg);
     __ Branch(&done, hs, sp, Operand(kScratchReg));
     // Restore the stack pointer.
     __ Daddu(sp, sp, Operand(a5));
