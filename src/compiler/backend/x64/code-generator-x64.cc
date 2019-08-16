@@ -2572,7 +2572,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kX64I64x2Shl: {
       XMMRegister tmp = i.ToSimd128Register(instr->TempAt(0));
-      __ movq(tmp, i.InputRegister(1));
+      Register shift = i.InputRegister(1);
+      // Take shift value modulo 8.
+      __ andq(shift, Immediate(63));
+      __ movq(tmp, shift);
       __ psllq(i.OutputSimd128Register(), tmp);
       break;
     }
@@ -2583,6 +2586,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       XMMRegister dst = i.OutputSimd128Register();
       XMMRegister src = i.InputSimd128Register(0);
       Register tmp = i.ToRegister(instr->TempAt(0));
+      // Modulo 64 not required as sarq_cl will mask cl to 6 bits.
 
       // lower quadword
       __ pextrq(tmp, src, 0x0);
@@ -2694,7 +2698,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kX64I64x2ShrU: {
       XMMRegister tmp = i.ToSimd128Register(instr->TempAt(0));
-      __ movq(tmp, i.InputRegister(1));
+      Register shift = i.InputRegister(1);
+      // Take shift value modulo 64.
+      __ andq(shift, Immediate(63));
+      __ movq(tmp, shift);
       __ psrlq(i.OutputSimd128Register(), tmp);
       break;
     }
@@ -2850,13 +2857,19 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kX64I32x4Shl: {
       XMMRegister tmp = i.ToSimd128Register(instr->TempAt(0));
-      __ movq(tmp, i.InputRegister(1));
+      Register shift = i.InputRegister(1);
+      // Take shift value modulo 32.
+      __ andq(shift, Immediate(31));
+      __ movq(tmp, shift);
       __ pslld(i.OutputSimd128Register(), tmp);
       break;
     }
     case kX64I32x4ShrS: {
       XMMRegister tmp = i.ToSimd128Register(instr->TempAt(0));
-      __ movq(tmp, i.InputRegister(1));
+      Register shift = i.InputRegister(1);
+      // Take shift value modulo 32.
+      __ andq(shift, Immediate(31));
+      __ movq(tmp, shift);
       __ psrad(i.OutputSimd128Register(), tmp);
       break;
     }
@@ -2954,7 +2967,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kX64I32x4ShrU: {
       XMMRegister tmp = i.ToSimd128Register(instr->TempAt(0));
-      __ movq(tmp, i.InputRegister(1));
+      Register shift = i.InputRegister(1);
+      // Take shift value modulo 32.
+      __ andq(shift, Immediate(31));
+      __ movq(tmp, shift);
       __ psrld(i.OutputSimd128Register(), tmp);
       break;
     }
@@ -3047,13 +3063,19 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kX64I16x8Shl: {
       XMMRegister tmp = i.ToSimd128Register(instr->TempAt(0));
-      __ movq(tmp, i.InputRegister(1));
+      Register shift = i.InputRegister(1);
+      // Take shift value modulo 16.
+      __ andq(shift, Immediate(15));
+      __ movq(tmp, shift);
       __ psllw(i.OutputSimd128Register(), tmp);
       break;
     }
     case kX64I16x8ShrS: {
       XMMRegister tmp = i.ToSimd128Register(instr->TempAt(0));
-      __ movq(tmp, i.InputRegister(1));
+      Register shift = i.InputRegister(1);
+      // Take shift value modulo 16.
+      __ andq(shift, Immediate(15));
+      __ movq(tmp, shift);
       __ psraw(i.OutputSimd128Register(), tmp);
       break;
     }
@@ -3135,7 +3157,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kX64I16x8ShrU: {
       XMMRegister tmp = i.ToSimd128Register(instr->TempAt(0));
-      __ movq(tmp, i.InputRegister(1));
+      Register shift = i.InputRegister(1);
+      // Take shift value modulo 16.
+      __ andq(shift, Immediate(15));
+      __ movq(tmp, shift);
       __ psrlw(i.OutputSimd128Register(), tmp);
       break;
     }
@@ -3240,16 +3265,19 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       DCHECK_EQ(dst, i.InputSimd128Register(0));
       // Temp registers for shift mask andadditional moves to XMM registers.
       Register tmp = i.ToRegister(instr->TempAt(0));
+      Register shift = i.InputRegister(1);
       XMMRegister tmp_simd = i.ToSimd128Register(instr->TempAt(1));
       // Mask off the unwanted bits before word-shifting.
       __ pcmpeqw(kScratchDoubleReg, kScratchDoubleReg);
-      __ movq(tmp, i.InputRegister(1));
+      // Take shift value modulo 8.
+      __ andq(shift, Immediate(7));
+      __ movq(tmp, shift);
       __ addq(tmp, Immediate(8));
       __ movq(tmp_simd, tmp);
       __ psrlw(kScratchDoubleReg, tmp_simd);
       __ packuswb(kScratchDoubleReg, kScratchDoubleReg);
       __ pand(dst, kScratchDoubleReg);
-      __ movq(tmp_simd, i.InputRegister(1));
+      __ movq(tmp_simd, shift);
       __ psllw(dst, tmp_simd);
       break;
     }
@@ -3264,6 +3292,8 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ punpcklbw(dst, dst);
       // Prepare shift value
       __ movq(tmp, i.InputRegister(1));
+      // Take shift value modulo 8.
+      __ andq(tmp, Immediate(7));
       __ addq(tmp, Immediate(8));
       __ movq(tmp_simd, tmp);
       __ psraw(kScratchDoubleReg, tmp_simd);
@@ -3376,6 +3406,8 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ punpcklbw(dst, dst);
       // Prepare shift value
       __ movq(tmp, i.InputRegister(1));
+      // Take shift value modulo 8.
+      __ andq(tmp, Immediate(7));
       __ addq(tmp, Immediate(8));
       __ movq(tmp_simd, tmp);
       __ psrlw(kScratchDoubleReg, tmp_simd);
