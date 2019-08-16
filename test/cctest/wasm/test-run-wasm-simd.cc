@@ -184,13 +184,13 @@ T UnsignedGreaterEqual(T a, T b) {
 template <typename T>
 T LogicalShiftLeft(T a, int shift) {
   using UnsignedT = typename std::make_unsigned<T>::type;
-  return static_cast<UnsignedT>(a) << shift;
+  return static_cast<UnsignedT>(a) << (shift % (sizeof(T) * 8));
 }
 
 template <typename T>
 T LogicalShiftRight(T a, int shift) {
   using UnsignedT = typename std::make_unsigned<T>::type;
-  return static_cast<UnsignedT>(a) >> shift;
+  return static_cast<UnsignedT>(a) >> (shift % (sizeof(T) * 8));
 }
 
 template <typename T>
@@ -800,7 +800,8 @@ WASM_SIMD_TEST_NO_LOWERING(I64x2Neg) {
 
 void RunI64x2ShiftOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
                          WasmOpcode opcode, Int64ShiftOp expected_op) {
-  for (int shift = 1; shift < 64; shift++) {
+  // intentionally go over 1 to behavior, it should be a no-op
+  for (int shift = 1; shift <= 64; shift++) {
     WasmRunner<int32_t, int64_t> r(execution_tier, lower_simd);
     int64_t* g = r.builder().AddGlobal<int64_t>(kWasmS128);
     byte value = 0;
@@ -1649,7 +1650,8 @@ WASM_SIMD_TEST(I32x4GeU) {
 
 void RunI32x4ShiftOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
                          WasmOpcode opcode, Int32ShiftOp expected_op) {
-  for (int shift = 1; shift < 32; shift++) {
+  // intentionally go over 1 to behavior, it should be a no-op
+  for (int shift = 1; shift <= 32; shift++) {
     WasmRunner<int32_t, int32_t> r(execution_tier, lower_simd);
     int32_t* g = r.builder().AddGlobal<int32_t>(kWasmS128);
     byte value = 0;
@@ -1899,7 +1901,8 @@ WASM_SIMD_TEST(I16x8LeU) {
 
 void RunI16x8ShiftOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
                          WasmOpcode opcode, Int16ShiftOp expected_op) {
-  for (int shift = 1; shift < 16; shift++) {
+  // intentionally go over 1 to behavior, it should be a no-op
+  for (int shift = 1; shift <= 16; shift++) {
     WasmRunner<int32_t, int32_t> r(execution_tier, lower_simd);
     int16_t* g = r.builder().AddGlobal<int16_t>(kWasmS128);
     byte value = 0;
@@ -1914,7 +1917,7 @@ void RunI16x8ShiftOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
 
     FOR_INT16_INPUTS(x) {
       r.Call(x);
-      float expected = expected_op(x, shift);
+      int16_t expected = expected_op(x, shift);
       for (int i = 0; i < 8; i++) {
         CHECK_EQ(expected, ReadLittleEndianValue<int16_t>(&g[i]));
       }
@@ -2115,7 +2118,8 @@ WASM_SIMD_TEST(I8x16Mul) {
 
 void RunI8x16ShiftOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
                          WasmOpcode opcode, Int8ShiftOp expected_op) {
-  for (int shift = 1; shift < 8; shift++) {
+  // intentionally go over 1 to behavior, it should be a no-op
+  for (int shift = 1; shift <= 8; shift++) {
     WasmRunner<int32_t, int32_t> r(execution_tier, lower_simd);
     int8_t* g = r.builder().AddGlobal<int8_t>(kWasmS128);
     byte value = 0;

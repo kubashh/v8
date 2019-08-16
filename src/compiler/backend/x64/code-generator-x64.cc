@@ -3243,13 +3243,19 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       XMMRegister tmp_simd = i.ToSimd128Register(instr->TempAt(1));
       // Mask off the unwanted bits before word-shifting.
       __ pcmpeqw(kScratchDoubleReg, kScratchDoubleReg);
-      __ movq(tmp, i.InputRegister(1));
+
+      // k has masked out
+      __ movq(kScratchRegister, i.InputRegister(1));
+      __ andq(kScratchRegister, Immediate(7));
+
+      __ movq(tmp, kScratchRegister);
       __ addq(tmp, Immediate(8));
       __ movq(tmp_simd, tmp);
       __ psrlw(kScratchDoubleReg, tmp_simd);
       __ packuswb(kScratchDoubleReg, kScratchDoubleReg);
       __ pand(dst, kScratchDoubleReg);
-      __ movq(tmp_simd, i.InputRegister(1));
+
+      __ movq(tmp_simd, kScratchRegister);
       __ psllw(dst, tmp_simd);
       break;
     }
