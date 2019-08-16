@@ -111,7 +111,7 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
 
   // Loads from and stores to the interpreter register file.
   compiler::Node* LoadRegister(Register reg);
-  compiler::Node* LoadAndUntagRegister(Register reg);
+  TNode<IntPtrT> LoadAndUntagRegister(Register reg);
   compiler::Node* LoadRegisterAtOperandIndex(int operand_index);
   std::pair<compiler::Node*, compiler::Node*> LoadRegisterPairAtOperandIndex(
       int operand_index);

@@ -836,9 +836,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<IntPtrT> LoadAndUntagObjectField(SloppyTNode<HeapObject> object,
                                          int offset);
   // Load a SMI field, untag it, and convert to Word32.
-  TNode<Int32T> LoadAndUntagToWord32ObjectField(Node* object, int offset);
+  TNode<Int32T> LoadAndUntagToWord32ObjectField(SloppyTNode<HeapObject> object,
+                                                int offset);
   // Load a SMI and untag it.
-  TNode<IntPtrT> LoadAndUntagSmi(Node* base, int index);
+  TNode<IntPtrT> LoadAndUntagSmi(SloppyTNode<HeapObject> base, int index);
 
   TNode<MaybeObject> LoadMaybeWeakObjectField(SloppyTNode<HeapObject> object,
                                               int offset) {
@@ -906,7 +907,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   }
 
   // Tag a smi and store it.
-  void StoreAndTagSmi(Node* base, int offset, Node* value);
+  void StoreAndTagSmi(SloppyTNode<HeapObject> base, int offset, Node* value);
 
   // Load the floating point value of a HeapNumber.
   TNode<Float64T> LoadHeapNumberValue(SloppyTNode<HeapNumber> object);
