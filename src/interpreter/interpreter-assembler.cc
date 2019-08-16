@@ -92,7 +92,7 @@ Node* InterpreterAssembler::BytecodeOffset() {
 }
 
 Node* InterpreterAssembler::ReloadBytecodeOffset() {
-  Node* offset = LoadAndUntagRegister(Register::bytecode_offset());
+  TNode<IntPtrT> offset = LoadAndUntagRegister(Register::bytecode_offset());
   if (operand_scale() != OperandScale::kSingle) {
     // Add one to the offset such that it points to the actual bytecode rather
     // than the Wide / ExtraWide prefix bytecode.
@@ -244,7 +244,7 @@ Node* InterpreterAssembler::LoadRegister(Register reg) {
                         IntPtrConstant(reg.ToOperand() * kSystemPointerSize));
 }
 
-Node* InterpreterAssembler::LoadAndUntagRegister(Register reg) {
+TNode<IntPtrT> InterpreterAssembler::LoadAndUntagRegister(Register reg) {
   return LoadAndUntagSmi(GetInterpretedFramePointer(),
                          reg.ToOperand() * kSystemPointerSize);
 }
