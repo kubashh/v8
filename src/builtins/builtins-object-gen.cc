@@ -1436,7 +1436,7 @@ Node* ObjectBuiltinsAssembler::FromPropertyDescriptor(Node* context,
                                                       Node* desc) {
   VARIABLE(js_descriptor, MachineRepresentation::kTagged);
 
-  Node* flags = LoadAndUntagToWord32ObjectField(
+  TNode<Int32T> flags = LoadAndUntagToWord32ObjectField(
       desc, PropertyDescriptorObject::kFlagsOffset);
 
   Node* has_flags =
