@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "33aac7e1_b1d9a061",
+        "filename": "src/builtins/mips/builtins-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1355070
+      },
+      "writtenOn": "2019-08-16T15:45:13Z",
+      "side": 1,
+      "message": "OK, I will add Lw pseudo-instruction to mips32 TurboAssembler",
+      "parentUuid": "ac3e9f98_4cda241c",
+      "range": {
+        "startLine": 95,
+        "startChar": 5,
+        "endLine": 95,
+        "endChar": 7
+      },
+      "revId": "29ad80775250269c3df779dc317c5e11b79129a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00c0995c_cf125ac2",
         "filename": "src/builtins/mips64/builtins-mips64.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "29ad80775250269c3df779dc317c5e11b79129a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "264cf1ff_e1abd400",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1355070
+      },
+      "writtenOn": "2019-08-16T15:45:13Z",
+      "side": 1,
+      "message": "Yes, I will add the checking.",
+      "parentUuid": "00c0995c_cf125ac2",
+      "range": {
+        "startLine": 92,
+        "startChar": 11,
+        "endLine": 92,
+        "endChar": 17
+      },
+      "revId": "29ad80775250269c3df779dc317c5e11b79129a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
