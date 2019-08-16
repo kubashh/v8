@@ -114,8 +114,7 @@ void Deoptimizer::GenerateDeoptimizationEntries(MacroAssembler* masm,
   for (int i = 0; i < config->num_allocatable_double_registers(); ++i) {
     int code = config->GetAllocatableDoubleCode(i);
     int dst_offset = code * kDoubleSize + double_regs_offset;
-    int src_offset =
-        code * kDoubleSize + kNumberOfRegisters * kPointerSize;
+    int src_offset = code * kDoubleSize + kNumberOfRegisters * kPointerSize;
     __ Ldc1(f0, MemOperand(sp, src_offset));
     __ Sdc1(f0, MemOperand(a1, dst_offset));
   }

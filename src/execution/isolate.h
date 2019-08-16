@@ -80,6 +80,7 @@ class HandleScopeImplementer;
 class HeapObjectToIndexHashMap;
 class HeapProfiler;
 class InnerPointerToCodeCache;
+class JsonParserCache;
 class Logger;
 class MaterializedObjectStore;
 class Microtask;
@@ -896,6 +897,7 @@ class Isolate final : private HiddenFactory {
   }
   RuntimeProfiler* runtime_profiler() { return runtime_profiler_; }
   CompilationCache* compilation_cache() { return compilation_cache_; }
+  JsonParserCache* jsonparser_cache() { return jsonparser_cache_; }
   Logger* logger() {
     // Call InitializeLoggingAndCounters() if logging is needed before
     // the isolate is fully initialized.
@@ -1675,6 +1677,7 @@ class Isolate final : private HiddenFactory {
   Bootstrapper* bootstrapper_ = nullptr;
   RuntimeProfiler* runtime_profiler_ = nullptr;
   CompilationCache* compilation_cache_ = nullptr;
+  JsonParserCache* jsonparser_cache_ = nullptr;
   std::shared_ptr<Counters> async_counters_;
   base::RecursiveMutex break_access_;
   Logger* logger_ = nullptr;

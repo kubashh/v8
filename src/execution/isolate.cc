@@ -47,6 +47,7 @@
 #include "src/init/setup-isolate.h"
 #include "src/init/v8.h"
 #include "src/interpreter/interpreter.h"
+#include "src/json/jsonparser-cache.h"
 #include "src/libsampler/sampler.h"
 #include "src/logging/counters.h"
 #include "src/logging/log.h"
@@ -3102,6 +3103,8 @@ Isolate::~Isolate() {
 
   delete compilation_cache_;
   compilation_cache_ = nullptr;
+  delete jsonparser_cache_;
+  jsonparser_cache_ = nullptr;
   delete bootstrapper_;
   bootstrapper_ = nullptr;
   delete inner_pointer_to_code_cache_;
@@ -3354,6 +3357,7 @@ bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
 #undef ASSIGN_ELEMENT
 
   compilation_cache_ = new CompilationCache(this);
+  jsonparser_cache_ = new JsonParserCache(this);
   descriptor_lookup_cache_ = new DescriptorLookupCache();
   inner_pointer_to_code_cache_ = new InnerPointerToCodeCache(this);
   global_handles_ = new GlobalHandles(this);

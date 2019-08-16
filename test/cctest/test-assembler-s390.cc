@@ -959,7 +959,7 @@ TEST(17) {
   CHECK_EQ(0, static_cast<int>(res));
 }
 
-//TMHH, TMHL
+// TMHH, TMHL
 TEST(18) {
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -973,35 +973,35 @@ TEST(18) {
   // selected bits all 0
   __ lgfi(r1, Operand(0));
   __ tmhh(r1, Operand(1));
-  __ beq(&continue1); //8
+  __ beq(&continue1);  // 8
   __ b(&error);
 
   __ bind(&continue1);
   __ tmhl(r1, Operand(1));
-  __ beq(&continue2); //8
+  __ beq(&continue2);  // 8
   __ b(&error);
 
   // mask = 0
   __ bind(&continue2);
   __ lgfi(r1, Operand(-1));
   __ tmhh(r1, Operand(0));
-  __ beq(&continue3);  //8
+  __ beq(&continue3);  // 8
   __ b(&error);
 
   __ bind(&continue3);
   __ tmhh(r1, Operand(0));
-  __ beq(&continue4);  //8
+  __ beq(&continue4);  // 8
   __ b(&error);
 
   // selected bits all 1
   __ bind(&continue4);
   __ tmhh(r1, Operand(1));
-  __ b(Condition(1), &continue5); //1
+  __ b(Condition(1), &continue5);  // 1
   __ b(&error);
 
   __ bind(&continue5);
   __ tmhl(r1, Operand(1));
-  __ b(Condition(1), &continue6); //1
+  __ b(Condition(1), &continue6);  // 1
   __ b(&error);
 
   // leftmost = 1
@@ -1009,12 +1009,12 @@ TEST(18) {
   __ lgfi(r1, Operand(0xF000F000));
   __ slag(r2, r1, Operand(32));
   __ tmhh(r2, Operand(0xFFFF));
-  __ b(Condition(2), &done); //2
+  __ b(Condition(2), &done);  // 2
   __ b(&error);
 
   __ bind(&continue7);
   __ tmhl(r1, Operand(0xFFFF));
-  __ b(Condition(2), &continue8); //2
+  __ b(Condition(2), &continue8);  // 2
   __ b(&error);
 
   // leftmost = 0
@@ -1022,12 +1022,12 @@ TEST(18) {
   __ lgfi(r1, Operand(0x0FF00FF0));
   __ slag(r2, r1, Operand(32));
   __ tmhh(r2, Operand(0xFFFF));
-  __ b(Condition(4), &done); //4
+  __ b(Condition(4), &done);  // 4
   __ b(&error);
 
   __ bind(&continue9);
   __ tmhl(r1, Operand(0xFFFF));
-  __ b(Condition(4), &done); //4
+  __ b(Condition(4), &done);  // 4
   __ b(&error);
 
   __ bind(&error);

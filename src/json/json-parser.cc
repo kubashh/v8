@@ -6,6 +6,7 @@
 
 #include "src/common/message-template.h"
 #include "src/debug/debug.h"
+#include "src/json/jsonparser-cache.h"
 #include "src/numbers/conversions.h"
 #include "src/numbers/hash-seed-inl.h"
 #include "src/objects/field-type.h"
@@ -205,7 +206,8 @@ JsonParser<Char>::JsonParser(Isolate* isolate, Handle<String> source)
     : isolate_(isolate),
       hash_seed_(HashSeed(isolate)),
       object_constructor_(isolate_->object_function()),
-      original_source_(source) {
+      original_source_(source),
+      need_cache_(false) {
   size_t start = 0;
   size_t length = source->length();
   if (source->IsSlicedString()) {
@@ -727,6 +729,21 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue() {
             break;
           }
 
+          cacheable_string_ = CacheableString();
+          if (cacheable_string_->length() != 0) {
+            JsonParserCache* jsonparser_cache = isolate_->jsonparser_cache();
+            MaybeHandle<Object> maybe_result = jsonparser_cache->LookupObject(
+                cacheable_string_, isolate_->native_context());
+            if (maybe_result.is_null()) {
+              need_cache_ = true;
+            } else {
+              if (!maybe_result.ToHandle(&value))
+                printf("error maybe_result.ToHandle\n");
+              cursor_ = chars_ + cached_pos_ + 1;
+              break;
+            }
+          }
+
           // Start parsing an object with properties.
           cont_stack.emplace_back(std::move(cont));
           cont = JsonContinuation(isolate_, JsonContinuation::kObjectProperty,
@@ -834,6 +851,14 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue() {
 
           // Return the object.
           value = cont.scope.CloseAndEscape(value);
+
+          if (need_cache_) {
+            JsonParserCache* jsonparser_cache = isolate_->jsonparser_cache();
+            jsonparser_cache->PutObject(cacheable_string_,
+                                        isolate_->native_context(), value);
+            need_cache_ = false;
+          }
+
           // Pop the continuation.
           cont = std::move(cont_stack.back());
           cont_stack.pop_back();
@@ -1184,6 +1209,36 @@ JsonString JsonParser<Char>::ScanJsonString(bool needs_internalization) {
   }
 
   return JsonString();
+}
+
+template <typename Char>
+Handle<String> JsonParser<Char>::CacheableString() {
+  uc32 bits = 0;
+  const Char* first_rbrace = std::find_if(cursor_, end_, [&bits](Char c) {
+    JsonToken current = V8_LIKELY(c <= unibrow::Latin1::kMaxChar)
+                            ? one_char_json_tokens[c]
+                            : JsonToken::ILLEGAL;
+    bits |= c;
+    return current == JsonToken::RBRACE;
+  });
+
+  const Char* first_lbrace = std::find_if(cursor_, first_rbrace, [](Char c) {
+    JsonToken current = V8_LIKELY(c <= unibrow::Latin1::kMaxChar)
+                            ? one_char_json_tokens[c]
+                            : JsonToken::ILLEGAL;
+    return current == JsonToken::LBRACE;
+  });
+
+  // printf("cursor_ %ld, rbrace %ld, lbrace %ld\n", cursor_-chars_,
+  // first_rbrace-chars_, first_lbrace-chars_);
+
+  if (first_lbrace != first_rbrace) return isolate_->factory()->empty_string();
+
+  cached_pos_ = static_cast<int>(first_rbrace - chars_);
+  int length = static_cast<int>(first_rbrace - cursor_);
+  bool convert = sizeof(Char) == 1 ? bits > unibrow::Latin1::kMaxChar
+                                   : bits <= unibrow::Latin1::kMaxChar;
+  return MakeString(JsonString(position(), length, convert, false, false));
 }
 
 // Explicit instantiation.

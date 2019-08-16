@@ -54,6 +54,7 @@
 #include "src/init/bootstrapper.h"
 #include "src/init/v8.h"
 #include "src/interpreter/interpreter.h"
+#include "src/json/jsonparser-cache.h"
 #include "src/logging/log.h"
 #include "src/numbers/conversions.h"
 #include "src/objects/data-handler.h"
@@ -1375,6 +1376,7 @@ void Heap::CollectAllAvailableGarbage(GarbageCollectionReason gc_reason) {
   isolate()->ClearSerializerData();
   set_current_gc_flags(kReduceMemoryFootprintMask);
   isolate_->compilation_cache()->Clear();
+  isolate_->jsonparser_cache()->Clear();
   const int kMaxNumberOfAttempts = 7;
   const int kMinNumberOfAttempts = 2;
   const v8::GCCallbackFlags callback_flags =
@@ -2240,6 +2242,7 @@ void Heap::MarkCompactPrologue() {
   RegExpResultsCache::Clear(regexp_multiple_cache());
 
   isolate_->compilation_cache()->MarkCompactPrologue();
+  isolate_->jsonparser_cache()->MarkCompactPrologue();
 
   FlushNumberStringCache();
 }
@@ -4276,6 +4279,9 @@ void Heap::IterateStrongRoots(RootVisitor* v, VisitMode mode) {
 
   isolate_->compilation_cache()->Iterate(v);
   v->Synchronize(VisitorSynchronization::kCompilationCache);
+
+  isolate_->jsonparser_cache()->Iterate(v);
+  v->Synchronize(VisitorSynchronization::kJsonParserCache);
 
   // Iterate over local handles in handle scopes.
   FixStaleLeftTrimmedHandlesVisitor left_trim_visitor(this);

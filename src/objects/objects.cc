@@ -60,6 +60,7 @@
 #include "src/objects/function-kind.h"
 #include "src/objects/hash-table-inl.h"
 #include "src/objects/js-array-inl.h"
+#include "src/objects/jsonparser-cache-inl.h"
 #include "src/objects/keys.h"
 #include "src/objects/lookup-inl.h"
 #include "src/objects/map-updater.h"
@@ -5820,6 +5821,47 @@ class StringSharedKey : public HashTableKey {
   int position_;
 };
 
+// StringSharedKeys are used as keys in the eval cache.
+class StringObjectKey : public HashTableKey {
+ public:
+  // This tuple unambiguously identifies calls to eval() or
+  // CreateDynamicFunction() (such as through the Function() constructor).
+  // * source is the string passed into eval(). For dynamic functions, this is
+  //   the effective source for the function, some of which is implicitly
+  //   generated.
+  // * shared is the shared function info for the function containing the call
+  //   to eval(). for dynamic functions, shared is the native context closure.
+  // * When positive, position is the position in the source where eval is
+  //   called. When negative, position is the negation of the position in the
+  //   dynamic function's effective source where the ')' ends the parameters.
+  explicit StringObjectKey(Handle<String> source)
+      : HashTableKey(JsonParserCacheShape::StringObjectHash(*source)),
+        source_(source) {}
+
+  bool IsMatch(Object other) override {
+    DisallowHeapAllocation no_allocation;
+    if (!other.IsFixedArray()) {
+      DCHECK(other.IsNumber());
+      uint32_t other_hash = static_cast<uint32_t>(other.Number());
+      return Hash() == other_hash;
+    }
+    FixedArray other_array = FixedArray::cast(other);
+    String source = String::cast(other_array.get(0));
+    return source.Equals(*source_);
+  }
+
+  Handle<Object> AsHandle(Isolate* isolate) {
+    Handle<FixedArray> array = isolate->factory()->NewFixedArray(1);
+    // array->set(0, *object_);
+    array->set(0, *source_);
+    array->set_map(ReadOnlyRoots(isolate).fixed_cow_array_map());
+    return array;
+  }
+
+ private:
+  Handle<String> source_;
+};
+
 v8::Promise::PromiseState JSPromise::status() const {
   int value = flags() & kStatusMask;
   DCHECK(value == 0 || value == 1 || value == 2);
@@ -6955,6 +6997,25 @@ FeedbackCell SearchLiteralsMap(CompilationCacheTable cache, int cache_entry,
 
 }  // namespace
 
+MaybeHandle<Object> JsonParserCacheTable::LookupObject(
+    Handle<JsonParserCacheTable> table, Handle<String> src,
+    Handle<Context> native_context) {
+  Isolate* isolate = native_context->GetIsolate();
+  src = String::Flatten(isolate, src);
+  StringObjectKey key(src);
+  int entry = table->FindEntry(isolate, &key);
+  if (entry == kNotFound) return MaybeHandle<Object>();
+  int index = EntryToIndex(entry);
+  if (!table->get(index).IsFixedArray()) {
+    return MaybeHandle<Object>();
+  }
+  Object obj = table->get(index + 1);
+  // if (obj.IsSharedFunctionInfo()) {
+  return handle(obj, native_context->GetIsolate());
+  // }
+  // return MaybeHandle<SharedFunctionInfo>();
+}
+
 MaybeHandle<SharedFunctionInfo> CompilationCacheTable::LookupScript(
     Handle<CompilationCacheTable> table, Handle<String> src,
     Handle<Context> native_context, LanguageMode language_mode) {
@@ -7009,6 +7070,21 @@ Handle<Object> CompilationCacheTable::LookupRegExp(Handle<String> src,
   int entry = FindEntry(isolate, &key);
   if (entry == kNotFound) return isolate->factory()->undefined_value();
   return Handle<Object>(get(EntryToIndex(entry) + 1), isolate);
+}
+
+Handle<JsonParserCacheTable> JsonParserCacheTable::PutObject(
+    Handle<JsonParserCacheTable> cache, Handle<String> src,
+    Handle<Context> native_context, Handle<Object> value) {
+  Isolate* isolate = native_context->GetIsolate();
+  src = String::Flatten(isolate, src);
+  StringObjectKey key(src);
+  Handle<Object> k = key.AsHandle(isolate);
+  cache = EnsureCapacity(isolate, cache, 1);
+  int entry = cache->FindInsertionEntry(key.Hash());
+  cache->set(EntryToIndex(entry), *k);
+  cache->set(EntryToIndex(entry) + 1, *value);
+  cache->ElementAdded();
+  return cache;
 }
 
 Handle<CompilationCacheTable> CompilationCacheTable::PutScript(
@@ -7110,7 +7186,52 @@ void CompilationCacheTable::Age() {
   }
 }
 
+void JsonParserCacheTable::Age() {
+  DisallowHeapAllocation no_allocation;
+  Object the_hole_value = GetReadOnlyRoots().the_hole_value();
+  for (int entry = 0, size = Capacity(); entry < size; entry++) {
+    int entry_index = EntryToIndex(entry);
+    int value_index = entry_index + 1;
+
+    if (get(entry_index).IsNumber()) {
+      Smi count = Smi::cast(get(value_index));
+      count = Smi::FromInt(count.value() - 1);
+      if (count.value() == 0) {
+        NoWriteBarrierSet(*this, entry_index, the_hole_value);
+        NoWriteBarrierSet(*this, value_index, the_hole_value);
+        ElementRemoved();
+      } else {
+        NoWriteBarrierSet(*this, value_index, count);
+      }
+    } else if (get(entry_index).IsFixedArray()) {
+      Object obj = Object::cast(get(value_index));
+      USE(obj);
+      // if (info.IsInterpreted() && info.GetBytecodeArray().IsOld()) {
+      //   for (int i = 0; i < kEntrySize; i++) {
+      //     NoWriteBarrierSet(*this, entry_index + i, the_hole_value);
+      //   }
+      //   ElementRemoved();
+      // }
+    }
+  }
+}
+
 void CompilationCacheTable::Remove(Object value) {
+  DisallowHeapAllocation no_allocation;
+  Object the_hole_value = GetReadOnlyRoots().the_hole_value();
+  for (int entry = 0, size = Capacity(); entry < size; entry++) {
+    int entry_index = EntryToIndex(entry);
+    int value_index = entry_index + 1;
+    if (get(value_index) == value) {
+      for (int i = 0; i < kEntrySize; i++) {
+        NoWriteBarrierSet(*this, entry_index + i, the_hole_value);
+      }
+      ElementRemoved();
+    }
+  }
+}
+
+void JsonParserCacheTable::Remove(Object value) {
   DisallowHeapAllocation no_allocation;
   Object the_hole_value = GetReadOnlyRoots().the_hole_value();
   for (int entry = 0, size = Capacity(); entry < size; entry++) {
@@ -8017,6 +8138,9 @@ template class HashTable<StringTable, StringTableShape>;
 
 template class EXPORT_TEMPLATE_DEFINE(
     V8_EXPORT_PRIVATE) HashTable<CompilationCacheTable, CompilationCacheShape>;
+
+template class EXPORT_TEMPLATE_DEFINE(
+    V8_EXPORT_PRIVATE) HashTable<JsonParserCacheTable, JsonParserCacheShape>;
 
 template class EXPORT_TEMPLATE_DEFINE(
     V8_EXPORT_PRIVATE) HashTable<ObjectHashTable, ObjectHashTableShape>;

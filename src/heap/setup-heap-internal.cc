@@ -12,6 +12,7 @@
 #include "src/ic/handler-configuration.h"
 #include "src/init/heap-symbols.h"
 #include "src/interpreter/interpreter.h"
+#include "src/json/jsonparser-cache.h"
 #include "src/objects/arguments.h"
 #include "src/objects/cell-inl.h"
 #include "src/objects/contexts.h"
@@ -928,6 +929,7 @@ void Heap::CreateInitialObjects() {
 
   // Initialize compilation cache.
   isolate_->compilation_cache()->Clear();
+  isolate_->jsonparser_cache()->Clear();
 }
 
 void Heap::CreateInternalAccessorInfoObjects() {

@@ -560,7 +560,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeBind(Node* node) {
     // This mirrors the checks done in builtins-function-gen.cc at
     // runtime otherwise.
     int minimum_nof_descriptors = i::Max(JSFunction::kLengthDescriptorIndex,
-                                           JSFunction::kNameDescriptorIndex) +
+                                         JSFunction::kNameDescriptorIndex) +
                                   1;
     if (receiver_map.NumberOfOwnDescriptors() < minimum_nof_descriptors) {
       return inference.NoChange();

@@ -319,6 +319,8 @@ class JsonParser final {
     }
   }
 
+  Handle<String> CacheableString();
+
  private:
   static const bool kIsOneByte = sizeof(Char) == 1;
 
@@ -338,6 +340,9 @@ class JsonParser final {
   const Handle<String> original_source_;
   Handle<String> source_;
 
+  bool need_cache_;
+  Handle<String> cacheable_string_;
+
   // Cached pointer to the raw chars in source. In case source is on-heap, we
   // register an UpdatePointers callback. For this reason, chars_, cursor_ and
   // end_ should never be locally cached across a possible allocation. The scope
@@ -346,6 +351,7 @@ class JsonParser final {
   const Char* cursor_;
   const Char* end_;
   const Char* chars_;
+  int cached_pos_;
 };
 
 // Explicit instantiation declarations.

@@ -18,6 +18,7 @@
 #include "src/heap/objects-visiting.h"
 #include "src/heap/sweeper.h"
 #include "src/init/v8.h"
+#include "src/json/jsonparser-cache.h"
 #include "src/numbers/conversions.h"
 #include "src/objects/data-handler-inl.h"
 #include "src/objects/embedder-data-array-inl.h"
@@ -347,6 +348,7 @@ void IncrementalMarking::StartMarking() {
 #endif
 
   heap_->isolate()->compilation_cache()->MarkCompactPrologue();
+  heap_->isolate()->jsonparser_cache()->MarkCompactPrologue();
 
   StartBlackAllocation();
 
