@@ -141,7 +141,11 @@ MaybeHandle<Cell> Module::ResolveExport(Isolate* isolate, Handle<Module> module,
   DCHECK_GE(module->status(), kPreInstantiating);
   DCHECK_NE(module->status(), kEvaluating);
 
-  if (module->IsSourceTextModule()) {
+  if (module->IsJSWasmModule()) {
+    return JSWasmModule::ResolveExport(
+        isolate, Handle<JSWasmModule>::cast(module), module_specifier,
+        export_name, loc, must_resolve);
+  } else if (module->IsSourceTextModule()) {
     return SourceTextModule::ResolveExport(
         isolate, Handle<SourceTextModule>::cast(module), module_specifier,
         export_name, loc, must_resolve, resolve_set);
@@ -202,7 +206,11 @@ bool Module::PrepareInstantiate(Isolate* isolate, Handle<Module> module,
   module->SetStatus(kPreInstantiating);
   STACK_CHECK(isolate, false);
 
-  if (module->IsSourceTextModule()) {
+  if (module->IsJSWasmModule()) {
+    auto r = JSWasmModule::PrepareInstantiate(
+        isolate, Handle<JSWasmModule>::cast(module), context, callback);
+    return r;
+  } else if (module->IsSourceTextModule()) {
     return SourceTextModule::PrepareInstantiate(
         isolate, Handle<SourceTextModule>::cast(module), context, callback);
   } else {
@@ -219,7 +227,11 @@ bool Module::FinishInstantiate(Isolate* isolate, Handle<Module> module,
   DCHECK_EQ(module->status(), kPreInstantiating);
   STACK_CHECK(isolate, false);
 
-  if (module->IsSourceTextModule()) {
+  if (module->IsJSWasmModule()) {
+    auto r = JSWasmModule::FinishInstantiate(
+        isolate, Handle<JSWasmModule>::cast(module));
+    return r;
+  } else if (module->IsSourceTextModule()) {
     return SourceTextModule::FinishInstantiate(
         isolate, Handle<SourceTextModule>::cast(module), stack, dfs_index,
         zone);
@@ -284,7 +296,9 @@ MaybeHandle<Object> Module::Evaluate(
   DCHECK_EQ(module->status(), kInstantiated);
   STACK_CHECK(isolate, MaybeHandle<Object>());
 
-  if (module->IsSourceTextModule()) {
+  if (module->IsJSWasmModule()) {
+    return JSWasmModule::Evaluate(isolate, Handle<JSWasmModule>::cast(module));
+  } else if (module->IsSourceTextModule()) {
     return SourceTextModule::Evaluate(
         isolate, Handle<SourceTextModule>::cast(module), stack, dfs_index);
   } else {

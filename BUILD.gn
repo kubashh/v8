@@ -2532,6 +2532,8 @@ v8_source_set("v8_base_without_compiler") {
     "src/objects/js-segmenter-inl.h",
     "src/objects/js-segmenter.cc",
     "src/objects/js-segmenter.h",
+    "src/objects/js-wasm-module.cc",
+    "src/objects/js-wasm-module.h",
     "src/objects/js-weak-refs-inl.h",
     "src/objects/js-weak-refs.h",
     "src/objects/keys.cc",

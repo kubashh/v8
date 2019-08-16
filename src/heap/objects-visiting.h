@@ -57,6 +57,7 @@ namespace internal {
   V(SourceTextModule, SourceTextModule)                                   \
   V(Symbol, Symbol)                                                       \
   V(SyntheticModule, SyntheticModule)                                     \
+  V(JSWasmModule, JSWasmModule)                                           \
   V(ThinString, ThinString)                                               \
   V(TransitionArray, TransitionArray)                                     \
   V(UncompiledDataWithoutPreparseData, UncompiledDataWithoutPreparseData) \

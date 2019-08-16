@@ -5,6 +5,7 @@
 #ifndef V8_OBJECTS_MODULE_INL_H_
 #define V8_OBJECTS_MODULE_INL_H_
 
+#include "src/objects/js-wasm-module.h"
 #include "src/objects/module.h"
 #include "src/objects/source-text-module.h"
 #include "src/objects/synthetic-module.h"
@@ -23,15 +24,18 @@ OBJECT_CONSTRUCTORS_IMPL(Module, HeapObject)
 OBJECT_CONSTRUCTORS_IMPL(SourceTextModule, Module)
 OBJECT_CONSTRUCTORS_IMPL(SourceTextModuleInfoEntry, Struct)
 OBJECT_CONSTRUCTORS_IMPL(SyntheticModule, Module)
+OBJECT_CONSTRUCTORS_IMPL(JSWasmModule, Module)
 OBJECT_CONSTRUCTORS_IMPL(JSModuleNamespace, JSObject)
 
 NEVER_READ_ONLY_SPACE_IMPL(Module)
 NEVER_READ_ONLY_SPACE_IMPL(SourceTextModule)
 NEVER_READ_ONLY_SPACE_IMPL(SyntheticModule)
+NEVER_READ_ONLY_SPACE_IMPL(JSWasmModule)
 
 CAST_ACCESSOR(Module)
 CAST_ACCESSOR(SourceTextModule)
 CAST_ACCESSOR(SyntheticModule)
+CAST_ACCESSOR(JSWasmModule)
 ACCESSORS(Module, exports, ObjectHashTable, kExportsOffset)
 ACCESSORS(Module, module_namespace, HeapObject, kModuleNamespaceOffset)
 ACCESSORS(Module, exception, Object, kExceptionOffset)
@@ -51,6 +55,9 @@ SMI_ACCESSORS(SourceTextModule, dfs_ancestor_index, kDfsAncestorIndexOffset)
 ACCESSORS(SyntheticModule, name, String, kNameOffset)
 ACCESSORS(SyntheticModule, export_names, FixedArray, kExportNamesOffset)
 ACCESSORS(SyntheticModule, evaluation_steps, Foreign, kEvaluationStepsOffset)
+
+ACCESSORS(JSWasmModule, module, WasmModuleObject, kModuleOffset)
+ACCESSORS(JSWasmModule, requested_modules, FixedArray, kRequestedModulesOffset)
 
 SourceTextModuleInfo SourceTextModule::info() const {
   return (status() >= kEvaluating)

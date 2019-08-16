@@ -55,6 +55,7 @@ class SharedFunctionInfo;
 class StringStream;
 class Symbol;
 class SyntheticModule;
+class JSWasmModule;
 class FeedbackCell;
 class FeedbackMetadata;
 class FeedbackVector;
@@ -216,6 +217,7 @@ class ZoneForwardList;
   V(Symbol)                                    \
   V(SymbolWrapper)                             \
   V(SyntheticModule)                           \
+  V(JSWasmModule)                              \
   V(TemplateInfo)                              \
   V(TemplateList)                              \
   V(ThinString)                                \

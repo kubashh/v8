@@ -70,6 +70,15 @@
 #define CHECK(condition) assert(condition)
 #endif
 
+bool ends_with(const char* input, const char* suffix) {
+  size_t input_length = strlen(input);
+  size_t suffix_length = strlen(suffix);
+  if (suffix_length <= input_length) {
+    return strcmp(input + input_length - suffix_length, suffix) == 0;
+  }
+  return false;
+}
+
 namespace v8 {
 
 namespace {
@@ -665,6 +674,8 @@ MaybeLocal<Module> ResolveModuleCallback(Local<Context> context,
                                          Local<String> specifier,
                                          Local<Module> referrer) {
   Isolate* isolate = context->GetIsolate();
+  v8::String::Utf8Value str(isolate, specifier);
+
   ModuleEmbedderData* d = GetModuleDataFromContext(context);
   auto specifier_it =
       d->module_to_specifier_map.find(Global<Module>(isolate, referrer));
@@ -672,31 +683,62 @@ MaybeLocal<Module> ResolveModuleCallback(Local<Context> context,
   std::string absolute_path = NormalizePath(ToSTLString(isolate, specifier),
                                             DirName(specifier_it->second));
   auto module_it = d->specifier_to_module_map.find(absolute_path);
-  CHECK(module_it != d->specifier_to_module_map.end());
+  CHECK_WITH_MSG(module_it != d->specifier_to_module_map.end(),
+                 "not found in specifier_to_module_map");
   return module_it->second.Get(isolate);
 }
 
 }  // anonymous namespace
 
+std::string ReadFileRaw(const char* name) {
+  std::unique_ptr<base::OS::MemoryMappedFile> file(
+      base::OS::MemoryMappedFile::open(
+          name, base::OS::MemoryMappedFile::FileMode::kReadOnly));
+  if (!file) std::string("");
+
+  size_t size = static_cast<size_t>(file->size());
+  char* chars = static_cast<char*>(file->memory());
+  return std::string(chars, size);
+}
+
 MaybeLocal<Module> Shell::FetchModuleTree(Local<Context> context,
                                           const std::string& file_name) {
   DCHECK(IsAbsolutePath(file_name));
   Isolate* isolate = context->GetIsolate();
-  Local<String> source_text = ReadFile(isolate, file_name.c_str());
-  if (source_text.IsEmpty()) {
-    std::string msg = "Error reading: " + file_name;
-    Throw(isolate, msg.c_str());
-    return MaybeLocal<Module>();
-  }
-  ScriptOrigin origin(
-      String::NewFromUtf8(isolate, file_name.c_str(), NewStringType::kNormal)
-          .ToLocalChecked(),
-      Local<Integer>(), Local<Integer>(), Local<Boolean>(), Local<Integer>(),
-      Local<Value>(), Local<Boolean>(), Local<Boolean>(), True(isolate));
-  ScriptCompiler::Source source(source_text, origin);
+
   Local<Module> module;
-  if (!ScriptCompiler::CompileModule(isolate, &source).ToLocal(&module)) {
-    return MaybeLocal<Module>();
+
+  if (ends_with(file_name.c_str(), ".wasm")) {
+    std::string buffer = ReadFileRaw(file_name.c_str());
+    v8::MemorySpan<const uint8_t> serialized_module;
+    v8::MemorySpan<const uint8_t> wire_bytes(
+        reinterpret_cast<const uint8_t*>(buffer.c_str()), buffer.size());
+
+    Local<WasmModuleObject> module_wasm_object;
+    if (!WasmModuleObject::DeserializeOrCompile(isolate, serialized_module,
+                                                wire_bytes)
+             .ToLocal(&module_wasm_object)) {
+      std::string msg = "Error reading or compiling: " + file_name;
+      Throw(isolate, msg.c_str());
+      return MaybeLocal<Module>();
+    }
+    module = v8::JSWasmModule::New(isolate, module_wasm_object);
+  } else {
+    Local<String> source_text = ReadFile(isolate, file_name.c_str());
+    if (source_text.IsEmpty()) {
+      std::string msg = "Error reading: " + file_name;
+      Throw(isolate, msg.c_str());
+      return MaybeLocal<Module>();
+    }
+    ScriptOrigin origin(
+        String::NewFromUtf8(isolate, file_name.c_str(), NewStringType::kNormal)
+            .ToLocalChecked(),
+        Local<Integer>(), Local<Integer>(), Local<Boolean>(), Local<Integer>(),
+        Local<Value>(), Local<Boolean>(), Local<Boolean>(), True(isolate));
+    ScriptCompiler::Source source(source_text, origin);
+    if (!ScriptCompiler::CompileModule(isolate, &source).ToLocal(&module)) {
+      return MaybeLocal<Module>();
+    }
   }
 
   ModuleEmbedderData* d = GetModuleDataFromContext(context);
@@ -2382,15 +2424,6 @@ class InspectorClient : public v8_inspector::V8InspectorClient {
 SourceGroup::~SourceGroup() {
   delete thread_;
   thread_ = nullptr;
-}
-
-bool ends_with(const char* input, const char* suffix) {
-  size_t input_length = strlen(input);
-  size_t suffix_length = strlen(suffix);
-  if (suffix_length <= input_length) {
-    return strcmp(input + input_length - suffix_length, suffix) == 0;
-  }
-  return false;
 }
 
 bool SourceGroup::Execute(Isolate* isolate) {

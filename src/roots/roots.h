@@ -120,6 +120,7 @@ class Symbol;
   V(Map, source_text_module_map, SourceTextModuleMap)                          \
   V(Map, string_table_map, StringTableMap)                                     \
   V(Map, synthetic_module_map, SyntheticModuleMap)                             \
+  V(Map, js_wasm_module_map, JSWasmModuleMap)                                  \
   V(Map, uncompiled_data_without_preparse_data_map,                            \
     UncompiledDataWithoutPreparseDataMap)                                      \
   V(Map, uncompiled_data_with_preparse_data_map,                               \

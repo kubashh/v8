@@ -122,6 +122,7 @@ namespace internal {
                                                          \
   V(SOURCE_TEXT_MODULE_TYPE)                             \
   V(SYNTHETIC_MODULE_TYPE)                               \
+  V(JS_WASM_MODULE_TYPE)                                 \
                                                          \
   V(ALLOCATION_SITE_TYPE)                                \
   V(EMBEDDER_DATA_ARRAY_TYPE)                            \

@@ -173,6 +173,7 @@
 //       - Module
 //         - SourceTextModule
 //         - SyntheticModule
+//         - JSWasmModule
 //       - SourceTextModuleInfoEntry
 //     - FeedbackCell
 //     - FeedbackVector

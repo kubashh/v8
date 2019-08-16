@@ -2234,6 +2234,9 @@ Local<Value> Module::GetException() const {
 int Module::GetModuleRequestsLength() const {
   i::Handle<i::Module> self = Utils::OpenHandle(this);
   if (self->IsSyntheticModule()) return 0;
+  if (self->IsJSWasmModule()) {
+    return i::Handle<i::JSWasmModule>::cast(self)->requested_modules().length();
+  }
   return i::Handle<i::SourceTextModule>::cast(self)
       ->info()
       .module_requests()
@@ -2243,13 +2246,20 @@ int Module::GetModuleRequestsLength() const {
 Local<String> Module::GetModuleRequest(int i) const {
   CHECK_GE(i, 0);
   i::Handle<i::Module> self = Utils::OpenHandle(this);
-  CHECK(self->IsSourceTextModule());
   i::Isolate* isolate = self->GetIsolate();
-  i::Handle<i::FixedArray> module_requests(
-      i::Handle<i::SourceTextModule>::cast(self)->info().module_requests(),
-      isolate);
-  CHECK_LT(i, module_requests->length());
-  return ToApiHandle<String>(i::handle(module_requests->get(i), isolate));
+  if (self->IsSourceTextModule()) {
+    i::Handle<i::FixedArray> module_requests(
+        i::Handle<i::SourceTextModule>::cast(self)->info().module_requests(),
+        isolate);
+    CHECK_LT(i, module_requests->length());
+    return ToApiHandle<String>(i::handle(module_requests->get(i), isolate));
+  } else if (self->IsJSWasmModule()) {
+    i::Handle<i::String> module = i::JSWasmModule::GetModuleRequest(
+        isolate, i::Handle<i::JSWasmModule>::cast(self), i);
+    return Utils::ToLocal(module);
+  } else {
+    UNREACHABLE();
+  }
 }
 
 Location Module::GetModuleRequestLocation(int i) const {
@@ -7043,6 +7053,17 @@ CompiledWasmModule WasmModuleObject::GetCompiledModule() {
   i::Handle<i::WasmModuleObject> obj =
       i::Handle<i::WasmModuleObject>::cast(Utils::OpenHandle(this));
   return Utils::Convert(obj->shared_native_module());
+}
+
+Local<JSWasmModule> JSWasmModule::New(v8::Isolate* isolate,
+                                      Local<v8::WasmModuleObject> obj) {
+  CHECK(i::FLAG_experimental_wasm_esm);
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  i::Handle<i::WasmModuleObject> module_object =
+      i::Handle<i::WasmModuleObject>::cast(Utils::OpenHandle(*obj));
+  i::Handle<i::JSWasmModule> u =
+      i_isolate->factory()->NewJSWasmModule(module_object);
+  return Utils::ToLocal(u);
 }
 
 MaybeLocal<WasmModuleObject> WasmModuleObject::FromTransferrableModule(

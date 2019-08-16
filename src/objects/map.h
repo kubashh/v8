@@ -69,6 +69,7 @@ enum InstanceType : uint16_t;
   V(Struct)                            \
   V(Symbol)                            \
   V(SyntheticModule)                   \
+  V(JSWasmModule)                      \
   V(ThinString)                        \
   V(TransitionArray)                   \
   V(UncompiledDataWithoutPreparseData) \

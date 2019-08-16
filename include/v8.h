@@ -4487,6 +4487,16 @@ class V8_EXPORT WasmModuleObject : public Object {
 };
 
 /**
+ * esm integration
+ * TODO: document
+ */
+class V8_EXPORT JSWasmModule : public Module {
+ public:
+  static Local<JSWasmModule> New(v8::Isolate* isolate,
+                                 Local<v8::WasmModuleObject> obj);
+};
+
+/**
  * The V8 interface for WebAssembly streaming compilation. When streaming
  * compilation is initiated, V8 passes a {WasmStreaming} object to the embedder
  * such that the embedder can pass the input bytes for streaming compilation to

@@ -16,6 +16,7 @@
 #include "src/objects/foreign-inl.h"
 #include "src/objects/hash-table.h"
 #include "src/objects/js-collection.h"
+#include "src/objects/js-wasm-module.h"
 #include "src/objects/js-weak-refs.h"
 #include "src/objects/oddball.h"
 #include "src/objects/ordered-hash-table.h"
@@ -1062,6 +1063,8 @@ ReturnType BodyDescriptorApply(InstanceType type, T1 p1, T2 p2, T3 p3, T4 p4) {
     case SYNTHETIC_MODULE_TYPE:
       return Op::template apply<SyntheticModule::BodyDescriptor>(p1, p2, p3,
                                                                  p4);
+    case JS_WASM_MODULE_TYPE:
+      return Op::template apply<JSWasmModule::BodyDescriptor>(p1, p2, p3, p4);
     default:
       PrintF("Unknown type: %d\n", type);
       UNREACHABLE();

@@ -65,12 +65,14 @@ class StackFrameInfo;
 class StackTraceFrame;
 class StoreHandler;
 class SyntheticModule;
+class JSWasmModule;
 class TemplateObjectDescription;
 class UncompiledDataWithoutPreparseData;
 class UncompiledDataWithPreparseData;
 class WasmCapiFunctionData;
 class WasmExportedFunctionData;
 class WasmJSFunctionData;
+class WasmModuleObject;
 class WeakCell;
 struct SourceRange;
 template <typename T>
@@ -694,6 +696,7 @@ class V8_EXPORT_PRIVATE Factory {
   Handle<SyntheticModule> NewSyntheticModule(
       Handle<String> module_name, Handle<FixedArray> export_names,
       v8::Module::SyntheticModuleEvaluationSteps evaluation_steps);
+  Handle<JSWasmModule> NewJSWasmModule(Handle<WasmModuleObject> module_object);
 
   Handle<JSArrayBuffer> NewJSArrayBuffer(
       SharedFlag shared, AllocationType allocation = AllocationType::kYoung);

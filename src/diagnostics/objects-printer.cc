@@ -418,6 +418,7 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
       ScopeInfo::cast(*this).ScopeInfoPrint(os);
       break;
     case SOURCE_TEXT_MODULE_TYPE:
+    case JS_WASM_MODULE_TYPE:
       SourceTextModule::cast(*this).SourceTextModulePrint(os);
       break;
     case SYNTHETIC_MODULE_TYPE:

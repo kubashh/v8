@@ -23,6 +23,7 @@
 #include "src/objects/heap-number.h"
 #include "src/objects/instance-type-inl.h"
 #include "src/objects/js-generator.h"
+#include "src/objects/js-wasm-module.h"
 #include "src/objects/js-weak-refs.h"
 #include "src/objects/layout-descriptor.h"
 #include "src/objects/literal-objects-inl.h"
@@ -492,6 +493,7 @@ bool Heap::CreateInitialMaps() {
                  source_text_module)
     ALLOCATE_MAP(SYNTHETIC_MODULE_TYPE, SyntheticModule::kSize,
                  synthetic_module)
+    ALLOCATE_MAP(JS_WASM_MODULE_TYPE, JSWasmModule::kSize, js_wasm_module)
     ALLOCATE_MAP(CODE_DATA_CONTAINER_TYPE, CodeDataContainer::kSize,
                  code_data_container)
 

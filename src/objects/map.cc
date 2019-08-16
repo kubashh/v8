@@ -365,6 +365,8 @@ VisitorId Map::GetVisitorId(Map map) {
       return kVisitSourceTextModule;
     case SYNTHETIC_MODULE_TYPE:
       return kVisitSyntheticModule;
+    case JS_WASM_MODULE_TYPE:
+      return kVisitJSWasmModule;
 
     default:
       UNREACHABLE();

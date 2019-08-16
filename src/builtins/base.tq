@@ -19,6 +19,7 @@
 #include 'src/objects/source-text-module.h'
 #include 'src/objects/stack-frame-info.h'
 #include 'src/objects/synthetic-module.h'
+#include 'src/objects/js-wasm-module.h'
 #include 'src/objects/template-objects.h'
 
 type void;
@@ -520,6 +521,11 @@ extern class SyntheticModule extends Module {
   name: String;
   export_names: FixedArray;
   evaluation_steps: Foreign;
+}
+
+extern class JSWasmModule extends Module {
+  module: WasmModuleObject;
+  requested_modules: FixedArray;
 }
 
 @abstract

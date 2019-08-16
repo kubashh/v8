@@ -478,6 +478,10 @@ void HeapObject::HeapObjectVerify(Isolate* isolate) {
     case STORE_HANDLER_TYPE:
       StoreHandler::cast(*this).StoreHandlerVerify(isolate);
       break;
+
+    case JS_WASM_MODULE_TYPE:
+      JSWasmModule::cast(*this).JSWasmModuleVerify(isolate);
+      break;
   }
 }
 
@@ -1583,6 +1587,11 @@ void SyntheticModule::SyntheticModuleVerify(Isolate* isolate) {
   for (int i = 0; i < export_names().length(); i++) {
     CHECK(export_names().get(i).IsString());
   }
+}
+
+void JSWasmModule::JSWasmModuleVerify(Isolate* isolate) {
+  TorqueGeneratedClassVerifiers::JSWasmModuleVerify(*this, isolate);
+  CHECK(module().IsWasmModuleObject());
 }
 
 void PrototypeInfo::PrototypeInfoVerify(Isolate* isolate) {

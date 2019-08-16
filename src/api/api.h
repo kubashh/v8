@@ -14,6 +14,7 @@
 #include "src/objects/js-generator.h"
 #include "src/objects/js-promise.h"
 #include "src/objects/js-proxy.h"
+#include "src/objects/js-wasm-module.h"
 #include "src/objects/objects.h"
 #include "src/objects/shared-function-info.h"
 #include "src/objects/source-text-module.h"
@@ -146,6 +147,8 @@ class Utils {
       v8::internal::Handle<v8::internal::Object> obj);
   static inline Local<Module> ToLocal(
       v8::internal::Handle<v8::internal::Module> obj);
+  static inline Local<JSWasmModule> ToLocal(
+      v8::internal::Handle<v8::internal::JSWasmModule> obj);
   static inline Local<Name> ToLocal(
       v8::internal::Handle<v8::internal::Name> obj);
   static inline Local<String> ToLocal(

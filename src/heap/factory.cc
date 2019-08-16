@@ -3093,6 +3093,28 @@ Handle<SyntheticModule> Factory::NewSyntheticModule(
   return module;
 }
 
+Handle<JSWasmModule> Factory::NewJSWasmModule(
+    Handle<WasmModuleObject> module_object) {
+  Handle<JSWasmModule> module(
+      JSWasmModule::cast(New(js_wasm_module_map(), AllocationType::kOld)),
+      isolate());
+  Handle<ObjectHashTable> exports = ObjectHashTable::New(
+      isolate(),
+      static_cast<int>(module_object->module()->export_table.size()));
+  int requested_modules_length =
+      static_cast<int>(module_object->module()->import_table.size());
+  Handle<FixedArray> requested_modules =
+      requested_modules_length > 0 ? NewFixedArray(requested_modules_length)
+                                   : empty_fixed_array();
+
+  module->set_exports(*exports);
+  module->set_requested_modules(*requested_modules);
+  module->set_hash(isolate()->GenerateIdentityHash(Smi::kMaxValue));
+  module->set_module(*module_object);
+  module->set_status(Module::kUninstantiated);
+  return module;
+}
+
 Handle<JSArrayBuffer> Factory::NewJSArrayBuffer(SharedFlag shared,
                                                 AllocationType allocation) {
   Handle<JSFunction> array_buffer_fun(
