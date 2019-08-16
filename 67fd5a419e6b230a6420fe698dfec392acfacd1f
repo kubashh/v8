@@ -22,6 +22,30 @@
       "revId": "67fd5a419e6b230a6420fe698dfec392acfacd1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "019112d8_5542ec66",
+        "filename": "src/compiler/js-type-hint-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-08-16T13:54:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f0d11d5_9eb38609",
+      "range": {
+        "startLine": 493,
+        "startChar": 0,
+        "endLine": 494,
+        "endChar": 32
+      },
+      "revId": "67fd5a419e6b230a6420fe698dfec392acfacd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
