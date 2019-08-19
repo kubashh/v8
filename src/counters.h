@@ -851,6 +851,9 @@ class RuntimeCallTimer final {
   V(CompileBackgroundScript)                   \
   V(CompileBackgroundRewriteReturnResult)      \
   V(CompileBackgroundScopeAnalysis)            \
+  V(CompileBackgroundSecondSchedule)           \
+  V(CompileBackgroundSelectInstructions)       \
+  V(CompileBackgroundRegisterAllocation)       \
   V(CompileBaselineCodeGeneration)             \
   V(CompileDeserialize)                        \
   V(CompileEval)                               \
@@ -896,6 +899,35 @@ class RuntimeCallTimer final {
   V(Map_TransitionToAccessorProperty)          \
   V(Map_TransitionToDataProperty)              \
   V(Object_DeleteProperty)                     \
+  V(OptimizeUnknown1)                 \
+  V(OptimizeUnknown2)                 \
+  V(OptimizeUnknown3)                 \
+  V(OptimizeUnknown4)                 \
+  V(OptimizePrepare)                 \
+  V(OptimizeExecute)                 \
+  V(OptimizeFinalize)                 \
+  V(OptimizeSchedulePhase)           \
+  V(OptimizeEffectTrimmerPhase)           \
+  V(OptimizeGraphBuilderPhase)                 \
+  V(OptimizeInliningPhase)                     \
+  V(OptimizeEarlyGraphTrimmingPhase)           \
+  V(OptimizeTyperPhase)           \
+  V(OptimizeTypedLoweringPhase)           \
+  V(OptimizeConcurrentOptimizationPrepPhase)           \
+  V(OptimizeLoopExitEliminationPhase)           \
+  V(OptimizeSimplifiedLoweringPhase)           \
+  V(OptimizeGenericLoweringPhase)           \
+  V(OptimizeEarlyOptimizationPhase)           \
+  V(OptimizeEffectControlLinearizationPhase)           \
+  V(OptimizeEffectControlLinearizationDeadRemovalPhase)           \
+  V(OptimizeMemoryOptimizationPhase)           \
+  V(OptimizeLateOptimizationPhase)           \
+  V(OptimizeSelectVisitNode) \
+  V(OptimizeSelectVisitBlock) \
+  V(OptimizeSelectInstructions) \
+  V(OptimizeSelectInstructionsUpdate) \
+  V(OptimizeFrameElisionPhase)           \
+  V(OptimizeAssembleCodePhase)           \
   V(OptimizeCode)                              \
   V(ParseArrowFunctionLiteral)                 \
   V(ParseBackgroundArrowFunctionLiteral)       \
