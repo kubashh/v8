@@ -2390,16 +2390,18 @@ void SerializerForBackgroundCompilation::ProcessNamedAccess(
     Hints receiver, NamedAccessFeedback const& feedback, AccessMode access_mode,
     Hints* new_accumulator_hints) {
   for (Handle<Map> map : feedback.AsNamedAccess().maps()) {
-    ProcessMapForNamedPropertyAccess(MapRef(broker(), map), feedback.name(),
-                                     access_mode, base::nullopt,
-                                     new_accumulator_hints);
+    MapRef map_ref(broker(), map);
+    map_ref.SerializeRootMap();
+    ProcessMapForNamedPropertyAccess(map_ref, feedback.name(), access_mode,
+                                     base::nullopt, new_accumulator_hints);
   }
 
   for (Handle<Map> map :
        GetRelevantReceiverMaps(broker()->isolate(), receiver.maps())) {
-    ProcessMapForNamedPropertyAccess(MapRef(broker(), map), feedback.name(),
-                                     access_mode, base::nullopt,
-                                     new_accumulator_hints);
+    MapRef map_ref(broker(), map);
+    map_ref.SerializeRootMap();
+    ProcessMapForNamedPropertyAccess(map_ref, feedback.name(), access_mode,
+                                     base::nullopt, new_accumulator_hints);
   }
 
   JSGlobalProxyRef global_proxy =
@@ -2407,9 +2409,11 @@ void SerializerForBackgroundCompilation::ProcessNamedAccess(
   for (Handle<Object> hint : receiver.constants()) {
     ObjectRef object(broker(), hint);
     if (access_mode == AccessMode::kLoad && object.IsJSObject()) {
-      ProcessMapForNamedPropertyAccess(
-          object.AsJSObject().map(), feedback.name(), access_mode,
-          object.AsJSObject(), new_accumulator_hints);
+      MapRef map_ref = object.AsJSObject().map();
+      map_ref.SerializeRootMap();
+      ProcessMapForNamedPropertyAccess(map_ref, feedback.name(), access_mode,
+                                       object.AsJSObject(),
+                                       new_accumulator_hints);
     }
     // For JSNativeContextSpecialization::ReduceNamedAccessFromNexus.
     // TODO(neis): This should be done even if megamorphic.
