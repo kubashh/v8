@@ -350,5 +350,19 @@ TF_BUILTIN(IterableToListWithSymbolLookup, IteratorBuiltinsAssembler) {
   }
 }
 
+TF_BUILTIN(GetIteratorWithFeedbackLazyDeoptContinuation,
+           IteratorBuiltinsAssembler) {
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Object> callSlot = CAST(Parameter(Descriptor::kCallSlot));
+  TNode<Object> feedback = CAST(Parameter(Descriptor::kFeedback));
+  TNode<Object> iteratorMethod = CAST(Parameter(Descriptor::kResult));
+
+  TNode<Object> result =
+      CallBuiltin(Builtins::kCallIteratorWithFeedback, context, receiver,
+                  iteratorMethod, callSlot, feedback);
+  Return(result);
+}
+
 }  // namespace internal
 }  // namespace v8
