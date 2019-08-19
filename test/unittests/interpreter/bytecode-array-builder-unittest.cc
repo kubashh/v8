@@ -152,7 +152,7 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
       .StoreInArrayLiteral(reg, reg, store_array_element_slot.ToInt());
 
   // Emit Iterator-protocol operations
-  builder.GetIterator(reg, load_slot.ToInt());
+  builder.GetIterator(reg, load_slot.ToInt(), load_slot.ToInt());
 
   // Emit load / store lookup slots.
   builder.LoadLookupSlot(name, TypeofMode::NOT_INSIDE_TYPEOF)

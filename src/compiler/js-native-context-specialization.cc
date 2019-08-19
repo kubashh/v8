@@ -1399,11 +1399,50 @@ Reduction JSNativeContextSpecialization::ReduceJSLoadNamed(Node* node) {
 Reduction JSNativeContextSpecialization::ReduceJSGetIterator(Node* node) {
   DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
   DCHECK_EQ(IrOpcode::kJSGetIterator, node->opcode());
-  PropertyAccess const& p = PropertyAccessOf(node->op());
-  NameRef name(broker(), factory()->iterator_symbol());
+  GetIteratorParameters const& p = GetIteratorParametersOf(node->op());
 
-  return ReducePropertyAccess(node, nullptr, name, jsgraph()->Dead(),
-                              FeedbackSource(p.feedback()), AccessMode::kLoad);
+  // Load iterator property operator
+  Node* receiver = NodeProperties::GetValueInput(node, 0);
+  Handle<Name> name = factory()->iterator_symbol();
+  Node* context = NodeProperties::GetContextInput(node);
+  Node* frame_state = NodeProperties::GetFrameStateInput(node);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  VectorSlotPair load_feedback = p.loadFeedback();
+  const Operator* load_op = javascript()->LoadNamed(name, load_feedback);
+
+  // Lazy deopt of the load iterator property
+  Node* call_slot = jsgraph()->SmiConstant(p.callFeedback().slot().ToInt());
+  Node* call_feedback = jsgraph()->HeapConstant(p.callFeedback().vector());
+  Node* lazy_deopt_parameters[] = {receiver, call_slot, call_feedback};
+  Node* lazy_deopt_frame_state = CreateStubBuiltinContinuationFrameState(
+      jsgraph(), Builtins::kGetIteratorWithFeedbackLazyDeoptContinuation,
+      context, lazy_deopt_parameters, arraysize(lazy_deopt_parameters),
+      frame_state, ContinuationFrameStateMode::LAZY);
+  Node* load_property = graph()->NewNode(
+      load_op, receiver, context, lazy_deopt_frame_state, effect, control);
+
+  // Eager deopt of call iterator property
+  Node* parameters[] = {receiver, load_property, call_slot, call_feedback};
+  Node* eager_deopt_frame_state = CreateStubBuiltinContinuationFrameState(
+      jsgraph(), Builtins::kCallIteratorWithFeedback, context, parameters,
+      arraysize(parameters), frame_state, ContinuationFrameStateMode::EAGER);
+  Node* deopt_checkpoint =
+      graph()->NewNode(common()->Checkpoint(), eager_deopt_frame_state,
+                       load_property, load_property);
+
+  // Call iterator property operator
+  const Operator* call_op =
+      javascript()->Call(2, CallFrequency(), p.callFeedback(),
+                         ConvertReceiverMode::kNotNullOrUndefined,
+                         SpeculationMode::kAllowSpeculation);
+  control = load_property;
+  effect = load_property;
+  Node* call_property =
+      graph()->NewNode(call_op, load_property, receiver, context, frame_state,
+                       deopt_checkpoint, control);
+
+  return Replace(call_property);
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSStoreNamed(Node* node) {

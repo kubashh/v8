@@ -42,18 +42,38 @@ namespace iterator {
   extern builtin IterableToListWithSymbolLookup(implicit context:
                                                     Context)(Object);
 
+  extern builtin LoadIC(Context, Object, Object, Smi, Object): Object;
   transitioning builtin GetIteratorWithFeedback(
-      context: Context, receiver: Object, feedbackSlot: Smi,
+      context: Context, receiver: Object, loadSlot: Smi, callSlot: Smi,
       feedback: Undefined | FeedbackVector): Object {
+    let iteratorMethod: Object;
     typeswitch (feedback) {
       case (Undefined): {
-        return GetProperty(receiver, IteratorSymbolConstant());
+        iteratorMethod = GetProperty(receiver, IteratorSymbolConstant());
       }
       case (feedback: FeedbackVector): {
-        return LoadIC(
-            context, receiver, IteratorSymbolConstant(), feedbackSlot,
-            feedback);
+        iteratorMethod = LoadIC(
+            context, receiver, IteratorSymbolConstant(), loadSlot, feedback);
       }
     }
+    return CallIteratorWithFeedback(
+        context, receiver, iteratorMethod, callSlot, feedback);
+  }
+
+  transitioning builtin CallIteratorWithFeedback(
+      context: Context, receiver: Object, iteratorMethod: Object, callSlot: Smi,
+      feedback: Undefined | FeedbackVector): Object {
+    let iterator: Object = Undefined;
+    try {
+      const callSlotUnTagged: intptr = SmiUntag(callSlot);
+      CollectCallFeedback(iteratorMethod, context, feedback, callSlotUnTagged);
+      const iteratorCallable: Callable = Cast<Callable>(iteratorMethod)
+          otherwise NotIterable;
+      iterator = Call(context, iteratorCallable, receiver);
+    }
+    label NotIterable {
+      ThrowCalledNonCallable(iteratorMethod);
+    }
+    return iterator;
   }
 }
