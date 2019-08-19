@@ -584,6 +584,7 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
   bool supports_fast_array_iteration() const;
   bool supports_fast_array_resize() const;
   bool IsMapOfCurrentGlobalProxy() const;
+  bool is_abandoned_prototype_map() const;
 
   OddballType oddball_type() const;
 
@@ -615,6 +616,9 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
   ObjectRef GetFieldType(int descriptor_index) const;
   bool IsUnboxedDoubleField(int descriptor_index) const;
   ObjectRef GetStrongValue(int descriptor_number) const;
+
+  void SerializeRootMap();
+  base::Optional<MapRef> FindRootMap() const;
 
   // Available after calling JSFunctionRef::Serialize on a function that has
   // this map as initial map.

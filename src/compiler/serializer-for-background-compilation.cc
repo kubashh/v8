@@ -2218,6 +2218,7 @@ SerializerForBackgroundCompilation::ProcessFeedbackMapsForNamedAccess(
   ZoneVector<PropertyAccessInfo> access_infos(broker()->zone());
   for (Handle<Map> map : maps) {
     MapRef map_ref(broker(), map);
+    map_ref.SerializeRootMap();
     PropertyAccessInfo info =
         ProcessMapForNamedPropertyAccess(map_ref, name, mode);
     access_infos.push_back(info);
@@ -2424,7 +2425,9 @@ void SerializerForBackgroundCompilation::ProcessNamedPropertyAccess(
   for (Handle<Object> hint : receiver.constants()) {
     ObjectRef object(broker(), hint);
     if (mode == AccessMode::kLoad && object.IsJSObject()) {
-      ProcessMapForNamedPropertyAccess(object.AsJSObject().map(), name, mode,
+      MapRef map_ref = object.AsJSObject().map();
+      map_ref.SerializeRootMap();
+      ProcessMapForNamedPropertyAccess(map_ref, name, mode,
                                        object.AsJSObject());
     }
     // For JSNativeContextSpecialization::ReduceNamedAccessFromNexus.
@@ -2446,7 +2449,9 @@ void SerializerForBackgroundCompilation::ProcessNamedPropertyAccess(
 
   for (Handle<Map> map :
        GetRelevantReceiverMaps(broker()->isolate(), receiver.maps())) {
-    ProcessMapForNamedPropertyAccess(MapRef(broker(), map), name, mode);
+    MapRef map_ref(broker(), map);
+    map_ref.SerializeRootMap();
+    ProcessMapForNamedPropertyAccess(map_ref, name, mode);
   }
 }
 

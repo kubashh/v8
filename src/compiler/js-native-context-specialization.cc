@@ -1762,6 +1762,8 @@ Reduction JSNativeContextSpecialization::ReduceElementLoadFromHeapConstant(
 Reduction JSNativeContextSpecialization::ReducePropertyAccess(
     Node* node, Node* key, base::Optional<NameRef> static_name, Node* value,
     FeedbackSource const& source, AccessMode access_mode) {
+  DisallowHeapAccessIf disallow_heap_access(FLAG_concurrent_inlining);
+
   DCHECK_EQ(key == nullptr, static_name.has_value());
   DCHECK(node->opcode() == IrOpcode::kJSLoadProperty ||
          node->opcode() == IrOpcode::kJSStoreProperty ||
@@ -3258,15 +3260,15 @@ bool JSNativeContextSpecialization::ExtractReceiverMaps(
   if (nexus.ExtractMaps(receiver_maps) == 0) return true;
 
   // Try to filter impossible candidates based on inferred root map.
-  Handle<Map> root_map;
-  if (InferReceiverRootMap(receiver).ToHandle(&root_map)) {
+  base::Optional<MapRef> root_map = InferReceiverRootMap(receiver);
+  if (root_map.has_value()) {
     DCHECK(!root_map->is_abandoned_prototype_map());
-    Isolate* isolate = this->isolate();
     receiver_maps->erase(
         std::remove_if(receiver_maps->begin(), receiver_maps->end(),
-                       [root_map, isolate](Handle<Map> map) {
-                         return map->is_abandoned_prototype_map() ||
-                                map->FindRootMap(isolate) != *root_map;
+                       [root_map, this](Handle<Map> map) {
+                         MapRef map_ref(broker(), map);
+                         return map_ref.is_abandoned_prototype_map() ||
+                                !map_ref.FindRootMap()->equals(*root_map);
                        }),
         receiver_maps->end());
   }
@@ -3300,21 +3302,22 @@ bool JSNativeContextSpecialization::InferReceiverMaps(
   return false;
 }
 
-MaybeHandle<Map> JSNativeContextSpecialization::InferReceiverRootMap(
+base::Optional<MapRef> JSNativeContextSpecialization::InferReceiverRootMap(
     Node* receiver) {
   HeapObjectMatcher m(receiver);
   if (m.HasValue()) {
-    return handle(m.Value()->map().FindRootMap(isolate()), isolate());
+    MapRef map(broker(), handle(m.Value()->map(), isolate()));
+    return map.FindRootMap();
   } else if (m.IsJSCreate()) {
     base::Optional<MapRef> initial_map =
         NodeProperties::GetJSCreateMap(broker(), receiver);
     if (initial_map.has_value()) {
-      DCHECK_EQ(*initial_map->object(),
-                initial_map->object()->FindRootMap(isolate()));
-      return initial_map->object();
+      DCHECK(initial_map->FindRootMap().has_value());
+      DCHECK(initial_map->equals(*initial_map->FindRootMap()));
+      return *initial_map;
     }
   }
-  return MaybeHandle<Map>();
+  return base::nullopt;
 }
 
 Graph* JSNativeContextSpecialization::graph() const {
