@@ -31,10 +31,11 @@ class TypeOracle : public ContextualClass<TypeOracle> {
   }
 
   static StructType* GetStructType(
-      const std::string& basename,
+      const StructDeclaration* decl,
       StructType::MaybeSpecializationKey specialized_from) {
-    StructType* result =
-        new StructType(CurrentNamespace(), basename, specialized_from);
+    Namespace* nspace = CurrentNamespace();
+    DCHECK_EQ(nspace->name(), STRUCT_NAMESPACE_STRING);
+    StructType* result = new StructType(nspace, decl, specialized_from);
     Get().aggregate_types_.push_back(std::unique_ptr<StructType>(result));
     return result;
   }
