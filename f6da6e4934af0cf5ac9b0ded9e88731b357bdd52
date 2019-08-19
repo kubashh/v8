@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36df7247_e7064105",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-08-19T14:22:13Z",
+      "side": 1,
+      "message": "Smi?",
+      "range": {
+        "startLine": 357,
+        "startChar": 8,
+        "endLine": 357,
+        "endChar": 14
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57741182_642fc30d",
+        "filename": "src/builtins/iterator.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-08-19T14:22:13Z",
+      "side": 1,
+      "message": "nit: move to base.tq",
+      "range": {
+        "startLine": 45,
+        "startChar": 17,
+        "endLine": 45,
+        "endChar": 23
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4aceb4d_c2ca7b2b",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3314,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-08-19T14:22:13Z",
+      "side": 1,
+      "message": "nit: space after this line",
+      "range": {
+        "startLine": 3314,
+        "startChar": 78,
+        "endLine": 3314,
+        "endChar": 79
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61958218_a3f06fd0",
+        "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
+        "patchSetId": 5
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-08-19T14:22:13Z",
+      "side": 1,
+      "message": "why not merge these too?",
+      "range": {
+        "startLine": 443,
+        "startChar": 0,
+        "endLine": 446,
+        "endChar": 31
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9227099d_ac5a54cc",
+        "filename": "test/mjsunit/es6/iterator-lazy-deopt.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-08-19T14:22:13Z",
+      "side": 1,
+      "message": "this is ok for now, but it\u0027s slightly sketchy since this code was never seen before, so for anything other than an intrinsic call it would have soft deopted anyway.",
+      "range": {
+        "startLine": 53,
+        "startChar": 16,
+        "endLine": 53,
+        "endChar": 41
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd2036f8_8f9fd699",
+        "filename": "test/mjsunit/es6/iterator-lazy-deopt.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-08-19T14:22:13Z",
+      "side": 1,
+      "message": "please add assertUnoptimized(foo) (here and in the other tests)",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 12
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12c16877_11e05ab4",
+        "filename": "test/unittests/interpreter/bytecode-array-builder-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-08-19T14:22:13Z",
+      "side": 1,
+      "message": "should this be a call slot?",
+      "range": {
+        "startLine": 155,
+        "startChar": 46,
+        "endLine": 155,
+        "endChar": 55
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
