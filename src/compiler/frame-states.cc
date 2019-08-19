@@ -144,7 +144,7 @@ Node* CreateStubBuiltinContinuationFrameState(
   // Stack parameters first. Depending on {mode}, final parameters are added
   // by the deoptimizer and aren't explicitly passed in the frame state.
   int stack_parameter_count =
-      descriptor.GetParameterCount() - DeoptimizerParameterCountFor(mode);
+      descriptor.GetStackParameterCount() - DeoptimizerParameterCountFor(mode);
   // Reserving space in the vector, except for the case where
   // stack_parameter_count is -1.
   actual_parameters.reserve(stack_parameter_count >= 0
