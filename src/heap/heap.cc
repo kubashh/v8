@@ -3085,6 +3085,13 @@ void Heap::CreateFillerForArray(T object, int elements_to_trim,
   Address old_end = object.address() + old_size;
   Address new_end = old_end - bytes_to_trim;
 
+  // Register the array as object with invalidated old-to-new slots. This
+  // invalidates all old-to-new slots in the trimmed area.
+  if (MayContainRecordedSlots(object)) {
+    MemoryChunk* chunk = MemoryChunk::FromHeapObject(object);
+    chunk->RegisterObjectWithInvalidatedSlots<OLD_TO_NEW>(object, old_size);
+  }
+
   // Register the array as an object with invalidated old-to-old slots. We
   // cannot use NotifyObjectLayoutChange as it would mark the array black,
   // which is not safe for left-trimming because left-trimming re-pushes
