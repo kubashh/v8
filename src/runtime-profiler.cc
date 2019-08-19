@@ -18,16 +18,6 @@
 namespace v8 {
 namespace internal {
 
-// Number of times a function has to be seen on the stack before it is
-// optimized if it is smaller than kMaxBytecodeSizeForEarlyOpt.
-static const int kProfilerTicksBeforeEarlyOptimization =
-    1 * interpreter::Interpreter::kTickCountMultiplier;
-
-// Number of times a function has to be seen on the stack before it is
-// optimized.
-static const int kProfilerTicksBeforeOptimization =
-    2 * interpreter::Interpreter::kTickCountMultiplier;
-
 // The number of ticks required for optimizing a function increases with
 // the size of the bytecode. This is in addition to the
 // kProfilerTicksBeforeOptimization required for any function.
@@ -240,12 +230,13 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction* function,
     return OptimizationReason::kDoNotOptimize;
   }
 
+
   int ticks_for_optimization =
-      kProfilerTicksBeforeOptimization +
+      FLAG_opt_ticks +
       (shared->GetBytecodeArray()->length() / kBytecodeSizeAllowancePerTick);
   if (ticks >= ticks_for_optimization) {
     return OptimizationReason::kHotAndStable;
-  } else if (ticks >= kProfilerTicksBeforeEarlyOptimization &&
+  } else if (ticks >= (ticks_for_optimization / 2) &&
              !any_ic_changed_ &&
              shared->GetBytecodeArray()->length() <
                  kMaxBytecodeSizeForEarlyOpt) {

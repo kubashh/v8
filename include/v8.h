@@ -6885,6 +6885,8 @@ typedef DeserializeInternalFieldsCallback DeserializeEmbedderFieldsCallback;
  */
 class V8_EXPORT Isolate {
  public:
+  double GetTimeDelta();
+
   /**
    * Initial configuration parameters for a new Isolate.
    */

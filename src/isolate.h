@@ -1703,6 +1703,9 @@ class Isolate : private HiddenFactory {
                                                         const char*);
 
   DISALLOW_COPY_AND_ASSIGN(Isolate);
+   public:
+
+  double time_delta_ = 0.0;
 };
 
 

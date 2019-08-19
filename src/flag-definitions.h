@@ -862,6 +862,7 @@ DEFINE_BOOL(trace_file_names, false,
             "include file names in trace-opt/trace-deopt output")
 DEFINE_BOOL(trace_interrupts, false, "trace interrupts when they are handled")
 DEFINE_BOOL(opt, true, "use adaptive optimizations")
+DEFINE_INT(opt_ticks, 288, "number of ticks to wait before baselining")
 DEFINE_BOOL(always_opt, false, "always try to optimize functions")
 DEFINE_BOOL(always_osr, false, "always try to OSR functions")
 DEFINE_BOOL(prepare_always_opt, false, "prepare for turning on always opt")
