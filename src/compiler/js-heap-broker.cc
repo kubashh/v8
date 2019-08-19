@@ -4158,7 +4158,6 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
   } else {
     // No actionable feedback.
     DCHECK(maps.empty());
-    DCHECK(nexus.IsMegamorphic() || nexus.GetFeedback().IsCleared());
     // TODO(neis): Investigate if we really want to treat cleared the same as
     // megamorphic (also for global accesses).
     // TODO(neis): Using ElementAccessFeedback here is kind of an abuse.
