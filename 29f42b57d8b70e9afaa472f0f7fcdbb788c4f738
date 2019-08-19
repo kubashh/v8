@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc7adaa4_d5a46116",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-19T11:34:34Z",
+      "side": 1,
+      "message": "When this kills the environment, you should return immediately from here.\nif (environment.IsDead()) return;\n\nUsually we call Process* only at the end of a Visit* function so it wasn\u0027t an issue until now.",
+      "revId": "29f42b57d8b70e9afaa472f0f7fcdbb788c4f738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
