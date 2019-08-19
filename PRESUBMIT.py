@@ -456,9 +456,9 @@ def PostUploadHook(cl, change, output_api):
     return 'intl' in f.LocalPath() or 'test262' in f.LocalPath()
   if not change.AffectedFiles(file_filter=affects_intl):
     return []
-  return output_api.EnsureCQIncludeTrybotsAreAdded(
-      cl,
-      [
-        'luci.v8.try:v8_linux_noi18n_rel_ng'
-      ],
-      'Automatically added noi18n trybots to run tests on CQ.')
+  return []#output_api.EnsureCQIncludeTrybotsAreAdded(
+      #cl,
+      #[
+      #  'luci.v8.try:v8_linux_noi18n_rel_ng'
+      #],
+      #'Automatically added noi18n trybots to run tests on CQ.')

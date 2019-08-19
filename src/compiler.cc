@@ -1086,6 +1086,8 @@ void BackgroundCompileTask::Run() {
 
 MaybeHandle<Code> GetBaselineCode(Isolate* isolate,
                                   Handle<JSFunction> function) {
+  base::ElapsedTimer timer_for_delta;
+  timer_for_delta.Start();
   // Make sure we clear the baselining marker on the function so that we
   // don't try to re-baseline.
   if (function->HasBaseliningMarker()) {
@@ -1122,6 +1124,7 @@ MaybeHandle<Code> GetBaselineCode(Isolate* isolate,
       PrintF("]\n");
     }
     function->shared()->set_disable_baselining(true);
+    isolate->time_delta_ += timer_for_delta.Elapsed().InMicroseconds();
     return MaybeHandle<Code>();
   }
 
@@ -1134,6 +1137,7 @@ MaybeHandle<Code> GetBaselineCode(Isolate* isolate,
   job->RecordCompilationStats();
   DCHECK(!isolate->has_pending_exception());
   job->RecordFunctionCompilation(CodeEventListener::LAZY_COMPILE_TAG, isolate);
+  isolate->time_delta_ += timer_for_delta.Elapsed().InMicroseconds();
   return compilation_info.code();
 }
 
