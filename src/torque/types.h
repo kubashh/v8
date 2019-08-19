@@ -487,21 +487,21 @@ class StructType final : public AggregateType {
  private:
   friend class TypeOracle;
   StructType(Namespace* nspace, const std::string& basename,
+             const StructDeclaration* decl,
              MaybeSpecializationKey specialized_from = base::nullopt)
       : AggregateType(Kind::kStructType, nullptr, nspace,
                       ComputeName(basename, specialized_from)),
         basename_(basename),
+        decl_(decl),
         specialized_from_(specialized_from) {}
 
-  void Finalize() const override {
-    is_finalized_ = true;
-    CheckForDuplicateFields();
-  }
+  void Finalize() const override;
 
   static std::string ComputeName(const std::string& basename,
                                  MaybeSpecializationKey specialized_from);
 
   std::string basename_;
+  const StructDeclaration* decl_;
   MaybeSpecializationKey specialized_from_;
 };
 

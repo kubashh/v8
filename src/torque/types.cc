@@ -345,6 +345,17 @@ std::string StructType::ToExplicitString() const {
   return result.str();
 }
 
+void StructType::Finalize() const {
+  if (is_finalized_) return;
+  {
+    CurrentScope::Scope scope_activator(nspace());
+    CurrentSourcePosition::Scope position_activator(decl_->pos);
+    TypeVisitor::VisitStructMethods(const_cast<StructType*>(this), decl_);
+  }
+  is_finalized_ = true;
+  CheckForDuplicateFields();
+}
+
 constexpr ClassFlags ClassType::kInternalFlags;
 
 ClassType::ClassType(const Type* parent, Namespace* nspace,
