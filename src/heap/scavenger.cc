@@ -8,6 +8,7 @@
 #include "src/heap/barrier.h"
 #include "src/heap/gc-tracer.h"
 #include "src/heap/heap-inl.h"
+#include "src/heap/invalidated-slots-inl.h"
 #include "src/heap/item-parallel-job.h"
 #include "src/heap/mark-compact-inl.h"
 #include "src/heap/objects-visiting-inl.h"
@@ -242,6 +243,15 @@ void ScavengerCollector::CollectGarbage() {
         [](Page* page) { return !page->ContainsSlots<OLD_TO_NEW>(); });
     RememberedSet<OLD_TO_NEW>::IterateMemoryChunks(
         heap_, [&job](MemoryChunk* chunk) {
+          // Adjust size of invalidated objects while no other task is running
+          // yet. Avoids race between scavenger tasks: where one task processes
+          // old-to-new slots in an already swept page, while another task tries
+          // to process the swept page.
+          if (chunk->InOldSpace() && chunk->SweepingDone() &&
+              chunk->invalidated_slots<OLD_TO_NEW>() != nullptr) {
+            Page* page = static_cast<Page*>(chunk);
+            page->AdjustSizeOfInvalidatedObjects<OLD_TO_NEW>();
+          }
           job.AddItem(new PageScavengingItem(chunk));
         });
 
@@ -431,12 +441,15 @@ void Scavenger::AddPageToSweeperIfNecessary(MemoryChunk* page) {
 
 void Scavenger::ScavengePage(MemoryChunk* page) {
   CodePageMemoryModificationScope memory_modification_scope(page);
-  RememberedSet<OLD_TO_NEW>::Iterate(page,
-                                     [this](MaybeObjectSlot addr) {
-                                       return CheckAndScavengeObject(heap_,
-                                                                     addr);
-                                     },
-                                     SlotSet::KEEP_EMPTY_BUCKETS);
+  InvalidatedSlotsFilter filter = InvalidatedSlotsFilter::OldToNew(page);
+  RememberedSet<OLD_TO_NEW>::Iterate(
+      page,
+      [this, &filter](MaybeObjectSlot addr) {
+        if (!filter.IsValid(addr.address())) return REMOVE_SLOT;
+        return CheckAndScavengeObject(heap_, addr);
+      },
+      SlotSet::KEEP_EMPTY_BUCKETS);
+  page->ReleaseInvalidatedSlots<OLD_TO_NEW>();
   RememberedSet<OLD_TO_NEW>::IterateTyped(
       page, [=](SlotType type, Address addr) {
         return UpdateTypedSlotHelper::UpdateTypedSlot(
