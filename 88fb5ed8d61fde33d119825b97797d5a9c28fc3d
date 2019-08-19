@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22e648d5_d5d93b34",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-19T11:45:55Z",
+      "side": 1,
+      "message": "Nit: SharedFunctionInfoRef shared(broker(), FrameStateInfo(...));\ni.e. don\u0027t even give a name to the handle",
+      "revId": "88fb5ed8d61fde33d119825b97797d5a9c28fc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65e311bd_858d5db8",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-19T11:45:55Z",
+      "side": 1,
+      "message": "Looks like the serializer already knows about this, good!",
+      "revId": "88fb5ed8d61fde33d119825b97797d5a9c28fc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
