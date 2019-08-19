@@ -1676,6 +1676,7 @@ void PagedSpace::RefillFreeList() {
       // memory and reuse it for allocations. Update size of invalidated objects
       // such that they do not contain these gaps anymore.
       p->AdjustSizeOfInvalidatedObjects<OLD_TO_NEW>();
+      p->AdjustSizeOfInvalidatedObjects<OLD_TO_OLD>();
 
       // Only during compaction pages can actually change ownership. This is
       // safe because there exists no other competing action on the page links

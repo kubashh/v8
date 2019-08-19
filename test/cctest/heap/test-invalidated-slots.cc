@@ -129,7 +129,7 @@ HEAP_TEST(InvalidatedSlotsAfterTrimming) {
     Address end = byte_array.address() + byte_array.Size();
     heap->RightTrimFixedArray(byte_array, byte_array.length());
     for (Address addr = start; addr < end; addr += kTaggedSize) {
-      CHECK_EQ(filter.IsValid(addr), page->SweepingDone());
+      CHECK(!filter.IsValid(addr));
     }
   }
 }
