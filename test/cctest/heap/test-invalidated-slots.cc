@@ -68,6 +68,7 @@ HEAP_TEST(InvalidatedSlotsSomeInvalidatedRanges) {
   Heap* heap = CcTest::heap();
   std::vector<ByteArray> byte_arrays;
   Page* page = AllocateByteArraysOnPage(heap, &byte_arrays);
+  page->AllocateSlotSet<OLD_TO_OLD>();
   // Register every second byte arrays as invalidated.
   for (size_t i = 0; i < byte_arrays.size(); i += 2) {
     page->RegisterObjectWithInvalidatedSlots<OLD_TO_OLD>(byte_arrays[i],
@@ -93,6 +94,7 @@ HEAP_TEST(InvalidatedSlotsAllInvalidatedRanges) {
   Heap* heap = CcTest::heap();
   std::vector<ByteArray> byte_arrays;
   Page* page = AllocateByteArraysOnPage(heap, &byte_arrays);
+  page->AllocateSlotSet<OLD_TO_OLD>();
   // Register the all byte arrays as invalidated.
   for (size_t i = 0; i < byte_arrays.size(); i++) {
     page->RegisterObjectWithInvalidatedSlots<OLD_TO_OLD>(byte_arrays[i],
@@ -165,6 +167,7 @@ HEAP_TEST(InvalidatedSlotsResetObjectRegression) {
   Heap* heap = CcTest::heap();
   std::vector<ByteArray> byte_arrays;
   Page* page = AllocateByteArraysOnPage(heap, &byte_arrays);
+  page->AllocateSlotSet<OLD_TO_OLD>();
   // Ensure that the first array has smaller size then the rest.
   heap->RightTrimFixedArray(byte_arrays[0], byte_arrays[0].length() - 8);
   // Register the all byte arrays as invalidated.
@@ -357,6 +360,7 @@ HEAP_TEST(InvalidatedSlotsCleanupFull) {
   Heap* heap = CcTest::heap();
   std::vector<ByteArray> byte_arrays;
   Page* page = AllocateByteArraysOnPage(heap, &byte_arrays);
+  page->AllocateSlotSet<OLD_TO_NEW>();
   // Register all byte arrays as invalidated.
   for (size_t i = 0; i < byte_arrays.size(); i++) {
     page->RegisterObjectWithInvalidatedSlots<OLD_TO_NEW>(byte_arrays[i],
@@ -377,6 +381,7 @@ HEAP_TEST(InvalidatedSlotsCleanupEachObject) {
   Heap* heap = CcTest::heap();
   std::vector<ByteArray> byte_arrays;
   Page* page = AllocateByteArraysOnPage(heap, &byte_arrays);
+  page->AllocateSlotSet<OLD_TO_NEW>();
   // Register all byte arrays as invalidated.
   for (size_t i = 0; i < byte_arrays.size(); i++) {
     page->RegisterObjectWithInvalidatedSlots<OLD_TO_NEW>(byte_arrays[i],
@@ -402,6 +407,7 @@ HEAP_TEST(InvalidatedSlotsCleanupRightTrim) {
   Heap* heap = CcTest::heap();
   std::vector<ByteArray> byte_arrays;
   Page* page = AllocateByteArraysOnPage(heap, &byte_arrays);
+  page->AllocateSlotSet<OLD_TO_NEW>();
 
   CHECK_GT(byte_arrays.size(), 1);
   ByteArray& invalidated = byte_arrays[1];

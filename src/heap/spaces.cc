@@ -1515,7 +1515,7 @@ MemoryChunk::RegisterObjectWithInvalidatedSlots<OLD_TO_OLD>(HeapObject object,
 template <RememberedSetType type>
 void MemoryChunk::RegisterObjectWithInvalidatedSlots(HeapObject object,
                                                      int size) {
-  if (!ShouldSkipEvacuationSlotRecording()) {
+  if (!ShouldSkipEvacuationSlotRecording() && slot_set<type>() != nullptr) {
     if (invalidated_slots<type>() == nullptr) {
       AllocateInvalidatedSlots<type>();
     }
