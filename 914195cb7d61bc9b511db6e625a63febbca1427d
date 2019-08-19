@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c4ffc22_fcfffca6",
+        "filename": "src/json/json-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-08-19T14:38:12Z",
+      "side": 1,
+      "message": "don\u0027t we need to deep-copy the value? JSON parse outputs are still mutable...",
+      "range": {
+        "startLine": 740,
+        "startChar": 42,
+        "endLine": 740,
+        "endChar": 47
+      },
+      "revId": "914195cb7d61bc9b511db6e625a63febbca1427d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "130b2d21_684f09ad",
+        "filename": "src/json/json-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-08-19T14:38:12Z",
+      "side": 1,
+      "message": "will this even work for nested objects? e.g.\n\n    {x:{}, y:1}\n    {x:{}, y:2}\n\nfor both (unless i misread) the cacheable string is \"{x:{}\". Frankly, finding the closing brace requires pretty much a full JSON parse (albeit without allocation).",
+      "range": {
+        "startLine": 1225,
+        "startChar": 34,
+        "endLine": 1225,
+        "endChar": 41
+      },
+      "revId": "914195cb7d61bc9b511db6e625a63febbca1427d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
