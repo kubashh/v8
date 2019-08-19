@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea1bef07_7e0fcb81",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-19T13:24:37Z",
+      "side": 1,
+      "message": "Are negative indices supposed to work?",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae5b6d3c_8eb78246",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-19T13:24:37Z",
+      "side": 1,
+      "message": "q: Why NonEmpty instead of Empty? That\u0027d be less surprising to me, consider e.g. the empty() method on C++ containers.",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "876e1c08_9449abee",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-19T13:24:37Z",
+      "side": 1,
+      "message": "Just a q, did you consider storing and `end` reference instead of `length`?",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57932c9b_aacce5db",
+        "filename": "src/torque/declarable.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-19T13:24:37Z",
+      "side": 1,
+      "message": "nit: Why not just ParentScope()?",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "911a4441_5bac47be",
+        "filename": "src/torque/type-oracle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-19T13:24:37Z",
+      "side": 1,
+      "message": "Perhaps only pass in decl and grab name-\u003evalue inside StructType, wdyt?",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f284e82_2195ab55",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-19T13:24:37Z",
+      "side": 1,
+      "message": "q: Is there a good place to declare \"_struct\" as a constant somewhere?",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "303c7ed7_428cbd47",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-19T13:24:37Z",
+      "side": 1,
+      "message": "Why mark this method const only to const_cast here?",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
