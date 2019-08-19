@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "158df90e_b50e913c",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-19T19:50:53Z",
+      "side": 1,
+      "message": "Good catch, this should\u0027ve been an unsigned comparison (which is equivalent to 0 \u003c\u003d index \u003c this.length where \u003c\u003d and \u003c are signed comparisons).",
+      "parentUuid": "ea1bef07_7e0fcb81",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae5b6d3c_8eb78246",
         "filename": "src/builtins/torque-internal.tq",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-08-19T13:24:37Z",
       "side": 1,
       "message": "q: Why NonEmpty instead of Empty? That\u0027d be less surprising to me, consider e.g. the empty() method on C++ containers.",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de0cf0d0_20c37c9c",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-19T19:50:53Z",
+      "side": 1,
+      "message": "No particularly compelling reason; in principle it might help us in writing loops as usual without requiring smart optimizations. E.g. in\n\n  let slice \u003d \u0026obj.values;\n  while (slice.NonEmpty()) {\n    let ref \u003d slice.Next();\n    // ...\n  }\n\nwe should be able to elide the \u0027this.NonEmpty()\u0027 check in \u0027slice.Next()\u0027 since the loop body is dominated by the same check. That being said, calling something like \u0027!Empty()\u0027 in both places might also work. (Out of the box, neither work.) In any case, the details of this are still in flux, and we might instead even rely on a label passed to Next() so that we can write something like\n\n  while (true) {\n    let ref \u003d slice.Next() or break;\n    // ...\n  }",
+      "parentUuid": "ae5b6d3c_8eb78246",
       "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "e49b0161_66f1a62c",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-19T19:50:53Z",
+      "side": 1,
+      "message": "We briefly did, but then computing the length of the slice in the existing proposal becomes slightly more expensive. Also, if we actually compared the \u0027base\u0027 and the \u0027end\u0027 reference, we might unnecessarily compare the \u0027base.object\u0027 and \u0027end.object\u0027 over and over again, even though they\u0027d always be the same anyways. I\u0027m guessing that we\u0027d probably be able to constant-fold that check away in the CSA pipeline, but it\u0027s an extra bit of optimization to rely on.\n\nI\u0027m not sure what the performance improvement of the \u0027end\u0027 variant might be, but I put together an alternative version that separates Slice from SliceIterator in the new patch set. SliceIterator not having a length in the first place deals with part of the potential issue.\n\nCan you think of other reasons why having an \u0027end\u0027 reference might be helpful?",
+      "parentUuid": "876e1c08_9449abee",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57932c9b_aacce5db",
         "filename": "src/torque/declarable.cc",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e501c4e_51a362cb",
+        "filename": "src/torque/declarable.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-19T19:50:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57932c9b_aacce5db",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "8b6f9409_28c991d6",
+        "filename": "src/torque/type-oracle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-19T19:50:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "911a4441_5bac47be",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f284e82_2195ab55",
         "filename": "src/torque/type-visitor.cc",
         "patchSetId": 1
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "94d2e0f1_dd8c0bd5",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-19T19:50:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f284e82_2195ab55",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "303c7ed7_428cbd47",
         "filename": "src/torque/types.cc",
         "patchSetId": 1
@@ -118,6 +226,24 @@
       "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "285e99fa_2fe7a557",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-19T19:50:53Z",
+      "side": 1,
+      "message": "Finalize is an existing const virtual method on AggregateType; many methods that are const themselves rely on it. This may sounds murky, but Finalize() really just forces some lazy computation to be completed; namely, it ensures that everything relating to a type has been declared and checked for errors. Marking it const should be fine, since Finalize() is idempotent and the difference should never be observable from the outside.",
+      "parentUuid": "303c7ed7_428cbd47",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
