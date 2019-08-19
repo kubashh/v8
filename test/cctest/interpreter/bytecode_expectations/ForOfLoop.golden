@@ -15,12 +15,10 @@ snippet: "
 "
 frame size: 17
 parameter count: 2
-bytecode array length: 170
+bytecode array length: 165
 bytecodes: [
   /*   10 E> */ B(StackCheck),
-  /*   34 S> */ B(GetIterator), R(arg0), U8(0),
-                B(Star), R(7),
-                B(CallProperty0), R(7), R(arg0), U8(2),
+  /*   34 S> */ B(GetIterator), R(arg0), U8(0), U8(2),
                 B(Mov), R(arg0), R(6),
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowSymbolIteratorInvalid), R(0), U8(0),
@@ -101,8 +99,8 @@ constant pool: [
   ONE_BYTE_INTERNALIZED_STRING_TYPE [""],
 ]
 handlers: [
-  [34, 80, 88],
-  [112, 145, 147],
+  [29, 75, 83],
+  [107, 140, 142],
 ]
 
 ---
@@ -114,7 +112,7 @@ snippet: "
 "
 frame size: 22
 parameter count: 2
-bytecode array length: 251
+bytecode array length: 246
 bytecodes: [
                 B(CreateFunctionContext), U8(0), U8(4),
                 B(PushContext), R(2),
@@ -133,9 +131,7 @@ bytecodes: [
                 B(StaCurrentContextSlot), U8(4),
   /*   34 S> */ B(LdaContextSlot), R(3), U8(4), U8(0),
                 B(Star), R(6),
-                B(GetIterator), R(6), U8(0),
-                B(Star), R(7),
-                B(CallProperty0), R(7), R(6), U8(2),
+                B(GetIterator), R(6), U8(0), U8(2),
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowSymbolIteratorInvalid), R(0), U8(0),
                 B(Star), R(5),
@@ -242,8 +238,8 @@ constant pool: [
   ONE_BYTE_INTERNALIZED_STRING_TYPE [""],
 ]
 handlers: [
-  [64, 159, 167],
-  [191, 224, 226],
+  [59, 154, 162],
+  [186, 219, 221],
 ]
 
 ---
@@ -255,12 +251,10 @@ snippet: "
 "
 frame size: 16
 parameter count: 2
-bytecode array length: 187
+bytecode array length: 182
 bytecodes: [
   /*   10 E> */ B(StackCheck),
-  /*   34 S> */ B(GetIterator), R(arg0), U8(0),
-                B(Star), R(5),
-                B(CallProperty0), R(5), R(arg0), U8(2),
+  /*   34 S> */ B(GetIterator), R(arg0), U8(0), U8(2),
                 B(Mov), R(arg0), R(4),
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowSymbolIteratorInvalid), R(0), U8(0),
@@ -351,8 +345,8 @@ constant pool: [
   ONE_BYTE_INTERNALIZED_STRING_TYPE [""],
 ]
 handlers: [
-  [34, 97, 105],
-  [129, 162, 164],
+  [29, 92, 100],
+  [124, 157, 159],
 ]
 
 ---
@@ -364,12 +358,10 @@ snippet: "
 "
 frame size: 19
 parameter count: 2
-bytecode array length: 194
+bytecode array length: 189
 bytecodes: [
   /*   10 E> */ B(StackCheck),
-  /*   41 S> */ B(GetIterator), R(arg0), U8(0),
-                B(Star), R(9),
-                B(CallProperty0), R(9), R(arg0), U8(2),
+  /*   41 S> */ B(GetIterator), R(arg0), U8(0), U8(2),
                 B(Mov), R(arg0), R(8),
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowSymbolIteratorInvalid), R(0), U8(0),
@@ -461,8 +453,8 @@ constant pool: [
   ONE_BYTE_INTERNALIZED_STRING_TYPE [""],
 ]
 handlers: [
-  [34, 104, 112],
-  [136, 169, 171],
+  [29, 99, 107],
+  [131, 164, 166],
 ]
 
 ---
@@ -474,7 +466,7 @@ snippet: "
 "
 frame size: 18
 parameter count: 2
-bytecode array length: 211
+bytecode array length: 206
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(Mov), R(closure), R(5),
@@ -491,9 +483,7 @@ bytecodes: [
   /*   11 E> */ B(Throw),
                 B(Ldar), R(5),
   /*   55 S> */ B(Return),
-  /*   35 S> */ B(GetIterator), R(arg0), U8(0),
-                B(Star), R(8),
-                B(CallProperty0), R(8), R(arg0), U8(2),
+  /*   35 S> */ B(GetIterator), R(arg0), U8(0), U8(2),
                 B(Mov), R(arg0), R(7),
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowSymbolIteratorInvalid), R(0), U8(0),
@@ -577,8 +567,8 @@ constant pool: [
   ONE_BYTE_INTERNALIZED_STRING_TYPE [""],
 ]
 handlers: [
-  [75, 121, 129],
-  [153, 186, 188],
+  [70, 116, 124],
+  [148, 181, 183],
 ]
 
 ---
@@ -590,7 +580,7 @@ snippet: "
 "
 frame size: 17
 parameter count: 2
-bytecode array length: 255
+bytecode array length: 250
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(4),
@@ -607,9 +597,7 @@ bytecodes: [
   /*   11 E> */ B(Throw),
                 B(Ldar), R(4),
   /*   49 S> */ B(Return),
-  /*   35 S> */ B(GetIterator), R(arg0), U8(0),
-                B(Star), R(7),
-                B(CallProperty0), R(7), R(arg0), U8(2),
+  /*   35 S> */ B(GetIterator), R(arg0), U8(0), U8(2),
                 B(Mov), R(arg0), R(6),
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowSymbolIteratorInvalid), R(0), U8(0),
@@ -700,7 +688,7 @@ bytecodes: [
 ]
 constant pool: [
   Smi [22],
-  Smi [128],
+  Smi [123],
   Smi [10],
   Smi [7],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["next"],
@@ -714,8 +702,8 @@ constant pool: [
   Smi [9],
 ]
 handlers: [
-  [75, 159, 167],
-  [191, 224, 226],
+  [70, 154, 162],
+  [186, 219, 221],
 ]
 
 ---
@@ -727,7 +715,7 @@ snippet: "
 "
 frame size: 19
 parameter count: 2
-bytecode array length: 225
+bytecode array length: 220
 bytecodes: [
                 B(Mov), R(closure), R(5),
                 B(Mov), R(this), R(6),
@@ -735,9 +723,7 @@ bytecodes: [
                 B(Star), R(0),
   /*   16 E> */ B(StackCheck),
                 B(Mov), R(context), R(5),
-  /*   40 S> */ B(GetIterator), R(arg0), U8(0),
-                B(Star), R(9),
-                B(CallProperty0), R(9), R(arg0), U8(2),
+  /*   40 S> */ B(GetIterator), R(arg0), U8(0), U8(2),
                 B(Mov), R(arg0), R(8),
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowSymbolIteratorInvalid), R(0), U8(0),
@@ -838,9 +824,9 @@ constant pool: [
   SCOPE_INFO_TYPE,
 ]
 handlers: [
-  [16, 197, 197],
-  [49, 95, 103],
-  [127, 160, 162],
+  [16, 192, 192],
+  [44, 90, 98],
+  [122, 155, 157],
 ]
 
 ---
@@ -852,7 +838,7 @@ snippet: "
 "
 frame size: 18
 parameter count: 2
-bytecode array length: 261
+bytecode array length: 256
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(Mov), R(closure), R(4),
@@ -861,9 +847,7 @@ bytecodes: [
                 B(Star), R(0),
   /*   16 E> */ B(StackCheck),
                 B(Mov), R(context), R(4),
-  /*   40 S> */ B(GetIterator), R(arg0), U8(0),
-                B(Star), R(8),
-                B(CallProperty0), R(8), R(arg0), U8(2),
+  /*   40 S> */ B(GetIterator), R(arg0), U8(0), U8(2),
                 B(Mov), R(arg0), R(7),
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowSymbolIteratorInvalid), R(0), U8(0),
@@ -968,7 +952,7 @@ bytecodes: [
   /*   54 S> */ B(Return),
 ]
 constant pool: [
-  Smi [106],
+  Smi [101],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["next"],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["done"],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["value"],
@@ -977,8 +961,8 @@ constant pool: [
   SCOPE_INFO_TYPE,
 ]
 handlers: [
-  [20, 233, 233],
-  [53, 131, 139],
-  [163, 196, 198],
+  [20, 228, 228],
+  [48, 126, 134],
+  [158, 191, 193],
 ]
 

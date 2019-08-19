@@ -559,6 +559,33 @@ const CloneObjectParameters& CloneObjectParametersOf(const Operator* op) {
   return OpParameter<CloneObjectParameters>(op);
 }
 
+std::ostream& operator<<(std::ostream& os, GetIteratorParameters const& p) {
+  return os << p.language_mode() << ", " << p.loadFeedback() << ", "
+            << p.callFeedback();
+}
+
+bool operator==(GetIteratorParameters const& lhs,
+                GetIteratorParameters const& rhs) {
+  return lhs.language_mode() == rhs.language_mode() &&
+         lhs.loadFeedback() == rhs.loadFeedback() &&
+         lhs.callFeedback() == rhs.callFeedback();
+}
+
+bool operator!=(GetIteratorParameters const& lhs,
+                GetIteratorParameters const& rhs) {
+  return !(lhs == rhs);
+}
+
+GetIteratorParameters const& GetIteratorParametersOf(const Operator* op) {
+  DCHECK(op->opcode() == IrOpcode::kJSGetIterator);
+  return OpParameter<GetIteratorParameters>(op);
+}
+
+size_t hash_value(GetIteratorParameters const& p) {
+  return base::hash_combine(p.language_mode(), p.loadFeedback(),
+                            p.callFeedback());
+}
+
 size_t hash_value(ForInMode mode) { return static_cast<uint8_t>(mode); }
 
 std::ostream& operator<<(std::ostream& os, ForInMode mode) {
@@ -954,9 +981,11 @@ const Operator* JSOperatorBuilder::LoadProperty(
       access);                                             // parameter
 }
 
-const Operator* JSOperatorBuilder::GetIterator(VectorSlotPair const& feedback) {
-  PropertyAccess access(LanguageMode::kSloppy, feedback);
-  return new (zone()) Operator1<PropertyAccess>(          // --
+const Operator* JSOperatorBuilder::GetIterator(
+    VectorSlotPair const& load_feedback, VectorSlotPair const& call_feedback) {
+  GetIteratorParameters access(LanguageMode::kSloppy, load_feedback,
+                               call_feedback);
+  return new (zone()) Operator1<GetIteratorParameters>(   // --
       IrOpcode::kJSGetIterator, Operator::kNoProperties,  // opcode
       "JSGetIterator",                                    // name
       1, 1, 1, 1, 1, 2,                                   // counts
