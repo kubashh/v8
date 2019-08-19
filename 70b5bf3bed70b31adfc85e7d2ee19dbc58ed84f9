@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd75ee2b_bfe7277e",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-08-19T14:47:58Z",
+      "side": 1,
+      "message": "From here on downwards this file is (and the current changes are) an almost exact copy of upstream; the only modifications are formatting and explicit wasm:: namespace mentions.",
+      "revId": "70b5bf3bed70b31adfc85e7d2ee19dbc58ed84f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff2bc76f_fab47957",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-08-19T14:47:58Z",
+      "side": 1,
+      "message": "With space: \"Extra space before )\"\nWithout space: \"Missing space after ,\"\nSo I have no choice but to tell the linter to ignore this.",
+      "range": {
+        "startLine": 2156,
+        "startChar": 39,
+        "endLine": 2156,
+        "endChar": 64
+      },
+      "revId": "70b5bf3bed70b31adfc85e7d2ee19dbc58ed84f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
