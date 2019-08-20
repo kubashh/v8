@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "b6655a79_5aa1f772",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-20T06:24:12Z",
+      "side": 1,
+      "message": "As an API (and ignoring technical concerns), I\u0027d prefer Empty(). But no strong preference, I\u0027m also okay with this.",
+      "parentUuid": "de0cf0d0_20c37c9c",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "876e1c08_9449abee",
         "filename": "src/builtins/torque-internal.tq",
         "patchSetId": 1
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "We briefly did, but then computing the length of the slice in the existing proposal becomes slightly more expensive. Also, if we actually compared the \u0027base\u0027 and the \u0027end\u0027 reference, we might unnecessarily compare the \u0027base.object\u0027 and \u0027end.object\u0027 over and over again, even though they\u0027d always be the same anyways. I\u0027m guessing that we\u0027d probably be able to constant-fold that check away in the CSA pipeline, but it\u0027s an extra bit of optimization to rely on.\n\nI\u0027m not sure what the performance improvement of the \u0027end\u0027 variant might be, but I put together an alternative version that separates Slice from SliceIterator in the new patch set. SliceIterator not having a length in the first place deals with part of the potential issue.\n\nCan you think of other reasons why having an \u0027end\u0027 reference might be helpful?",
       "parentUuid": "876e1c08_9449abee",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "961004e0_7d77a16e",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-20T06:24:12Z",
+      "side": 1,
+      "message": "To be clear, I\u0027m not asking for an alternative implementation, I was just curious. The reason I asked was to omit the `this.length -\u003d 1` in Next, and it didn\u0027t look like other Slice methods would become more expensive. Not that important :)\n\nEdit: Oh just saw the new impl already exists. 👍",
+      "parentUuid": "e49b0161_66f1a62c",
       "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -244,6 +280,24 @@
       "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ebb5c06_ccbc2a19",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-20T06:24:12Z",
+      "side": 1,
+      "message": "I see. Wdyt about removing const from Finalize? After all, it\u0027s no longer const.",
+      "parentUuid": "285e99fa_2fe7a557",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
