@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbe7c65e_52b8c921",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-08-20T12:20:56Z",
+      "side": 1,
+      "message": "Also here I would prefer to have the definitions just before the uses.",
+      "range": {
+        "startLine": 208,
+        "startChar": 1,
+        "endLine": 210,
+        "endChar": 76
+      },
+      "revId": "01c6ddaf9765adfbe3daa33d547a750a3ba4c069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07fbae77_0036650b",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-08-20T12:20:56Z",
+      "side": 1,
+      "message": "Can you add a TODO that we define the \"anyfunc\" constant at a central place and then use that constant. I think in one proposal we want to rename it, and then it would be good if if have it defined in one central place.",
+      "range": {
+        "startLine": 214,
+        "startChar": 46,
+        "endLine": 214,
+        "endChar": 53
+      },
+      "revId": "01c6ddaf9765adfbe3daa33d547a750a3ba4c069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16ae77f9_c69d9f7e",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-08-20T12:20:56Z",
+      "side": 1,
+      "message": "you could replace the ... } else { UNREACHABLE(); } by a ... } else { DCHECK(enabled_features.anyref \u0026\u0026 type \u003d\u003d ValueType::kWasmAnyRef); }",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 15
+      },
+      "revId": "01c6ddaf9765adfbe3daa33d547a750a3ba4c069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da563491_ba5d8b8d",
+        "filename": "test/mjsunit/wasm/type-reflection.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-08-20T12:20:56Z",
+      "side": 1,
+      "message": "Same as in the other CL, should we also test for the module name?",
+      "revId": "01c6ddaf9765adfbe3daa33d547a750a3ba4c069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
