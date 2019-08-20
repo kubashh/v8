@@ -129,7 +129,6 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
   builder.addImportedGlobal("m", "b", kWasmF64, true);
   let module = new WebAssembly.Module(builder.toBuffer());
   let imports = WebAssembly.Module.imports(module);
-  print(JSON.stringify(imports));
 
   assertEquals("a", imports[0].name);
   assertTrue("type" in imports[0]);
@@ -340,6 +339,44 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
     let instance = builder.instantiate();
     let type = WebAssembly.Function.type(instance.exports.fun);
     assertEquals(expected, type)
+  });
+})();
+
+(function TestFunctionExports() {
+  let testcases = [
+    [kSig_v_v, {parameters:[], results:[]}],
+    [kSig_v_i, {parameters:["i32"], results:[]}],
+    [kSig_i_l, {parameters:["i64"], results:["i32"]}],
+    [kSig_v_ddi, {parameters:["f64", "f64", "i32"], results:[]}],
+    [kSig_f_f, {parameters:["f32"], results:["f32"]}],
+  ];
+  testcases.forEach(function([sig, expected]) {
+    let builder = new WasmModuleBuilder();
+    builder.addFunction("fun", sig).addBody([kExprUnreachable]).exportFunc();
+    let module = new WebAssembly.Module(builder.toBuffer());
+    let exports = WebAssembly.Module.exports(module);
+    assertEquals("fun", exports[0].name);
+    assertTrue("type" in exports[0]);
+    assertEquals(expected, exports[0].type);
+  });
+})();
+
+(function TestFunctionImports() {
+  let testcases = [
+    [kSig_v_v, {parameters:[], results:[]}],
+    [kSig_v_i, {parameters:["i32"], results:[]}],
+    [kSig_i_l, {parameters:["i64"], results:["i32"]}],
+    [kSig_v_ddi, {parameters:["f64", "f64", "i32"], results:[]}],
+    [kSig_f_f, {parameters:["f32"], results:["f32"]}],
+  ];
+  testcases.forEach(function([sig, expected]) {
+    let builder = new WasmModuleBuilder();
+    builder.addImport("m", "fun", sig);
+    let module = new WebAssembly.Module(builder.toBuffer());
+    let imports = WebAssembly.Module.imports(module);
+    assertEquals("fun", imports[0].name);
+    assertTrue("type" in imports[0]);
+    assertEquals(expected, imports[0].type);
   });
 })();
 
