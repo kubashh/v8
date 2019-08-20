@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48c160c7_5f81113c",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3734,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T13:29:10Z",
+      "side": 1,
+      "message": "Can we keep this simple and make one of the following work:\n\n1) if (shared.function_template_info().has_value())\n2) if (shared.IsApiFunction())",
+      "revId": "cfed00489ddb654b4b42607f5b521a739b4bb21f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ec10be1_7993f386",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2365,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T13:29:10Z",
+      "side": 1,
+      "message": "IsTypedArrayElementsKind(kind)\nThis can be a DCHECK since we control the inputs.",
+      "revId": "cfed00489ddb654b4b42607f5b521a739b4bb21f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21d83326_4f8a0c75",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2366,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T13:29:10Z",
+      "side": 1,
+      "message": "FIRST_FIXED_TYPED_ARRAY_ELEMENTS_KIND",
+      "range": {
+        "startLine": 2366,
+        "startChar": 22,
+        "endLine": 2366,
+        "endChar": 36
+      },
+      "revId": "cfed00489ddb654b4b42607f5b521a739b4bb21f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88d4cf1b_c5618ffe",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T13:29:10Z",
+      "side": 1,
+      "message": "This can be const.",
+      "revId": "cfed00489ddb654b4b42607f5b521a739b4bb21f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c48e3f29_23f7ad1a",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T13:29:10Z",
+      "side": 1,
+      "message": "Let\u0027s store the Data* pointers like in most other cases.",
+      "revId": "cfed00489ddb654b4b42607f5b521a739b4bb21f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
