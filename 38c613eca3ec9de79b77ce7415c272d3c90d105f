@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff7a70b0_99011963",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2370,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T14:51:46Z",
+      "side": 1,
+      "message": "Right, after the change to Data* this method can\u0027t be const anymore. That\u0027s fine, better remove the const than do the const_cast. We could consider adding a FooRef constructor that takes a const broker and fails if the ref doesn\u0027t exist already.",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4710e83f_741edd18",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3297,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T14:51:46Z",
+      "side": 1,
+      "message": "THis is not ok. You can do\nTRACE_BROKER_MISSING(broker(), \"root map for map \" \u003c\u003c *this);",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30cc3dfc_ea33a3dc",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T14:51:46Z",
+      "side": 1,
+      "message": "That shouldn\u0027t be needed.",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad3c1174_3f97d2f0",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T14:51:46Z",
+      "side": 1,
+      "message": "Let\u0027s call this object_hints.",
+      "range": {
+        "startLine": 412,
+        "startChar": 54,
+        "endLine": 412,
+        "endChar": 68
+      },
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9d1e47d_22e26785",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T14:51:46Z",
+      "side": 1,
+      "message": "The call reducers for these (also below) don\u0027t care about the speculation mode.",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c428d0ad_3a56f004",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1861,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T14:51:46Z",
+      "side": 1,
+      "message": "Did you check if we need to do anything for less arguments? The reducer can deal with a missing argument (it uses undefined then).",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
