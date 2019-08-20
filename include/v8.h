@@ -799,6 +799,11 @@ using UniquePersistent = Global<T>;
  * - Non-tracing garbage collections refer to
  *   |v8::EmbedderHeapTracer::IsRootForNonTracingGC()| whether the handle should
  *   be treated as root or not.
+ *
+ * TracedGobal does not clear the handle on destruction. The handle is cleared
+ * upon garbage collection when the object that it's referring to is considered
+ * as unreachable. It is the responsibility of the embedder to ensure that the
+ * memory holding TracedGlobal is still alive at that pointer.
  */
 template <typename T>
 class TracedGlobal {
@@ -807,7 +812,6 @@ class TracedGlobal {
    * An empty TracedGlobal without storage cell.
    */
   TracedGlobal() = default;
-  ~TracedGlobal() { Reset(); }
 
   /**
    * Construct a TracedGlobal from a Local.
