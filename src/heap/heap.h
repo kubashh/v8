@@ -841,9 +841,6 @@ class Heap {
   static intptr_t store_buffer_mask_constant();
   static Address store_buffer_overflow_function_address();
 
-  void ClearRecordedSlot(HeapObject object, ObjectSlot slot);
-  void ClearRecordedSlotRange(Address start, Address end);
-
 #ifdef DEBUG
   void VerifyClearedSlot(HeapObject object, ObjectSlot slot);
 #endif
@@ -894,7 +891,7 @@ class Heap {
   // The runtime uses this function to notify potentially unsafe object layout
   // changes that require special synchronization with the concurrent marker.
   // The old size is the size of the object before layout change.
-  void NotifyObjectLayoutChange(HeapObject object, int old_size,
+  void NotifyObjectLayoutChange(HeapObject object,
                                 const DisallowHeapAllocation&);
 
 #ifdef VERIFY_HEAP

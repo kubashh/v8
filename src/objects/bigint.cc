@@ -2222,7 +2222,7 @@ MaybeHandle<String> MutableBigInt::ToStringGeneric(Isolate* isolate,
     int needed_size = SeqOneByteString::SizeFor(pos);
     if (needed_size < string_size) {
       Address new_end = result->address() + needed_size;
-      heap->CreateFillerObjectAt(new_end, (string_size - needed_size));
+      heap->CreateFillerObjectAt(new_end, string_size - needed_size);
     }
   }
   // Reverse the string.
