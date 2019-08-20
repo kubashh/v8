@@ -1289,7 +1289,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   void GotoIfPrototypeRequiresRuntimeLookup(TNode<JSFunction> function,
                                             TNode<Map> map, Label* runtime);
   // Load the "prototype" property of a JSFunction.
-  Node* LoadJSFunctionPrototype(TNode<JSFunction> function, Label* if_bailout);
+  Node* LoadJSFunctionPrototype(Node* function, Label* if_bailout);
 
   TNode<BytecodeArray> LoadSharedFunctionInfoBytecodeArray(
       SloppyTNode<SharedFunctionInfo> shared);
@@ -1371,6 +1371,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return StoreFixedArrayElement(object, index, value,
                                   CheckBounds::kDebugOnly);
   }
+
+  void StoreJSArrayLength(TNode<JSArray> array, TNode<Smi> length);
+  void StoreElements(TNode<Object> object, TNode<FixedArrayBase> elements);
 
   void StoreFixedArrayOrPropertyArrayElement(
       Node* array, Node* index, Node* value,
@@ -1547,12 +1550,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Allocate a SeqOneByteString with the given length.
   TNode<String> AllocateSeqOneByteString(uint32_t length,
                                          AllocationFlags flags = kNone);
-  TNode<String> AllocateSeqOneByteString(TNode<Uint32T> length,
+  TNode<String> AllocateSeqOneByteString(Node* context, TNode<Uint32T> length,
                                          AllocationFlags flags = kNone);
   // Allocate a SeqTwoByteString with the given length.
   TNode<String> AllocateSeqTwoByteString(uint32_t length,
                                          AllocationFlags flags = kNone);
-  TNode<String> AllocateSeqTwoByteString(TNode<Uint32T> length,
+  TNode<String> AllocateSeqTwoByteString(Node* context, TNode<Uint32T> length,
                                          AllocationFlags flags = kNone);
 
   // Allocate a SlicedOneByteString with the given length, parent and offset.

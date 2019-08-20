@@ -1390,8 +1390,8 @@
       'os': 'Ubuntu-16.04',
     },
     'tests': [
-      {'name': 'mjsunit_sp_frame_access', 'shards': 4},
-      {'name': 'mozilla', 'shards': 4},
+      {'name': 'mjsunit_sp_frame_access'},
+      {'name': 'mozilla'},
       {'name': 'test262'},
       {'name': 'v8testing', 'shards': 8},
       {'name': 'v8testing', 'variant': 'extra', 'shards': 4},
@@ -1401,13 +1401,13 @@
         'name': 'mozilla',
         'suffix': 'armv8-a',
         'test_args': ['--extra-flags', '--enable-armv8'],
-        'shards': 3,
+        'shards': 2,
       },
       {
         'name': 'test262',
         'suffix': 'armv8-a',
         'test_args': ['--extra-flags', '--enable-armv8'],
-        'shards': 3,
+        'shards': 2,
       },
       {
         'name': 'v8testing',

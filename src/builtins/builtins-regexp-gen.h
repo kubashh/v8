@@ -35,8 +35,7 @@ class RegExpBuiltinsAssembler : public CodeStubAssembler {
   // and input string.
   TNode<JSRegExpResult> AllocateRegExpResult(
       TNode<Context> context, TNode<Smi> length, TNode<Smi> index,
-      TNode<String> input, TNode<RegExpMatchInfo> match_info,
-      TNode<FixedArray>* elements_out = nullptr);
+      TNode<String> input, TNode<FixedArray>* elements_out = nullptr);
 
   TNode<Object> FastLoadLastIndexBeforeSmiCheck(TNode<JSRegExp> regexp);
   TNode<Smi> FastLoadLastIndex(TNode<JSRegExp> regexp) {
@@ -75,7 +74,7 @@ class RegExpBuiltinsAssembler : public CodeStubAssembler {
       TNode<Context> context, TNode<JSReceiver> maybe_regexp,
       TNode<String> string, Label* if_didnotmatch, const bool is_fastpath);
   TNode<RegExpMatchInfo> RegExpPrototypeExecBodyWithoutResultFast(
-      TNode<Context> context, TNode<JSRegExp> maybe_regexp,
+      TNode<Context> context, TNode<JSReceiver> maybe_regexp,
       TNode<String> string, Label* if_didnotmatch);
 
   TNode<HeapObject> RegExpPrototypeExecBody(TNode<Context> context,
@@ -134,6 +133,10 @@ class RegExpBuiltinsAssembler : public CodeStubAssembler {
                                      Label* if_isunmodified,
                                      Label* if_ismodified);
 
+  // Analogous to BranchIfFastRegExp_Permissive, for use in asserts.
+  TNode<BoolT> IsFastRegExp_Permissive(SloppyTNode<Context> context,
+                                       SloppyTNode<Object> object);
+
   // Performs fast path checks on the given object itself, but omits prototype
   // checks.
   Node* IsFastRegExpNoPrototype(Node* const context, Node* const object);
@@ -167,7 +170,7 @@ class RegExpBuiltinsAssembler : public CodeStubAssembler {
   Node* RegExpInitialize(Node* const context, Node* const regexp,
                          Node* const maybe_pattern, Node* const maybe_flags);
 
-  TNode<Object> RegExpExec(Node* context, Node* regexp, Node* string);
+  Node* RegExpExec(Node* context, Node* regexp, Node* string);
 
   TNode<Number> AdvanceStringIndex(SloppyTNode<String> string,
                                    SloppyTNode<Number> index,
@@ -189,7 +192,7 @@ class RegExpBuiltinsAssembler : public CodeStubAssembler {
   void RegExpPrototypeSearchBodySlow(Node* const context, Node* const regexp,
                                      Node* const string);
 
-  void RegExpPrototypeSplitBody(TNode<Context> context, TNode<JSRegExp> regexp,
+  void RegExpPrototypeSplitBody(Node* const context, Node* const regexp,
                                 TNode<String> const string,
                                 TNode<Smi> const limit);
 };

@@ -137,7 +137,6 @@ Handle<String> ToValueTypeString(Isolate* isolate, ValueType type) {
       string = factory->InternalizeUtf8String("f64");
       break;
     }
-    // TODO(mstarzinger): Add support and tests for exnref and funcref.
     case i::wasm::kWasmAnyRef: {
       string = factory->InternalizeUtf8String("anyref");
       break;
@@ -152,6 +151,9 @@ Handle<String> ToValueTypeString(Isolate* isolate, ValueType type) {
 
 Handle<JSObject> GetTypeForFunction(Isolate* isolate, FunctionSig* sig) {
   Factory* factory = isolate->factory();
+
+  Handle<String> params_string = factory->InternalizeUtf8String("parameters");
+  Handle<String> results_string = factory->InternalizeUtf8String("results");
 
   // Extract values for the {ValueType[]} arrays.
   int param_index = 0;
@@ -174,8 +176,6 @@ Handle<JSObject> GetTypeForFunction(Isolate* isolate, FunctionSig* sig) {
   Handle<JSObject> object = factory->NewJSObject(object_function);
   Handle<JSArray> params = factory->NewJSArrayWithElements(param_values);
   Handle<JSArray> results = factory->NewJSArrayWithElements(result_values);
-  Handle<String> params_string = factory->InternalizeUtf8String("parameters");
-  Handle<String> results_string = factory->InternalizeUtf8String("results");
   JSObject::AddProperty(isolate, object, params_string, params, NONE);
   JSObject::AddProperty(isolate, object, results_string, results, NONE);
 
@@ -186,14 +186,47 @@ Handle<JSObject> GetTypeForGlobal(Isolate* isolate, bool is_mutable,
                                   ValueType type) {
   Factory* factory = isolate->factory();
 
-  Handle<JSFunction> object_function = isolate->object_function();
-  Handle<JSObject> object = factory->NewJSObject(object_function);
   Handle<String> mutable_string = factory->InternalizeUtf8String("mutable");
   Handle<String> value_string = factory->InternalizeUtf8String("value");
+
+  Handle<JSFunction> object_function = isolate->object_function();
+  Handle<JSObject> object = factory->NewJSObject(object_function);
   JSObject::AddProperty(isolate, object, mutable_string,
                         factory->ToBoolean(is_mutable), NONE);
   JSObject::AddProperty(isolate, object, value_string,
                         ToValueTypeString(isolate, type), NONE);
+
+  return object;
+}
+
+Handle<JSObject> GetTypeForTable(Isolate* isolate, ValueType type,
+                                 uint32_t min_size,
+                                 base::Optional<uint32_t> max_size) {
+  auto enabled_features = i::wasm::WasmFeaturesFromIsolate(isolate);
+  Factory* factory = isolate->factory();
+
+  Handle<String> element;
+  if (type == ValueType::kWasmFuncRef) {
+    // TODO(wasm): We should define the "anyfunc" string in one central place
+    // and then use that constant everywhere.
+    element = factory->InternalizeUtf8String("anyfunc");
+  } else {
+    DCHECK(enabled_features.anyref && type == ValueType::kWasmAnyRef);
+    element = factory->InternalizeUtf8String("anyref");
+  }
+
+  Handle<JSFunction> object_function = isolate->object_function();
+  Handle<JSObject> object = factory->NewJSObject(object_function);
+  Handle<String> element_string = factory->InternalizeUtf8String("element");
+  Handle<String> minimum_string = factory->InternalizeUtf8String("minimum");
+  Handle<String> maximum_string = factory->InternalizeUtf8String("maximum");
+  JSObject::AddProperty(isolate, object, element_string, element, NONE);
+  JSObject::AddProperty(isolate, object, minimum_string,
+                        factory->NewNumberFromUint(min_size), NONE);
+  if (max_size.has_value()) {
+    JSObject::AddProperty(isolate, object, maximum_string,
+                          factory->NewNumberFromUint(max_size.value()), NONE);
+  }
 
   return object;
 }
@@ -242,6 +275,13 @@ Handle<JSArray> GetImports(Isolate* isolate,
         import_kind = function_string;
         break;
       case kExternalTable:
+        if (enabled_features.type_reflection) {
+          auto& table = module->tables[import.index];
+          base::Optional<uint32_t> maximum_size;
+          if (table.has_maximum_size) maximum_size.emplace(table.maximum_size);
+          type_value = GetTypeForTable(isolate, table.type, table.initial_size,
+                                       maximum_size);
+        }
         import_kind = table_string;
         break;
       case kExternalMemory:
@@ -326,6 +366,13 @@ Handle<JSArray> GetExports(Isolate* isolate,
         export_kind = function_string;
         break;
       case kExternalTable:
+        if (enabled_features.type_reflection) {
+          auto& table = module->tables[exp.index];
+          base::Optional<uint32_t> maximum_size;
+          if (table.has_maximum_size) maximum_size.emplace(table.maximum_size);
+          type_value = GetTypeForTable(isolate, table.type, table.initial_size,
+                                       maximum_size);
+        }
         export_kind = table_string;
         break;
       case kExternalMemory:

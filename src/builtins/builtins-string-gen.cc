@@ -128,7 +128,8 @@ Node* StringBuiltinsAssembler::PointerToStringDataAtIndex(
   return IntPtrAdd(string_data, offset_in_bytes);
 }
 
-void StringBuiltinsAssembler::GenerateStringEqual(Node* left, Node* right) {
+void StringBuiltinsAssembler::GenerateStringEqual(Node* context, Node* left,
+                                                  Node* right) {
   VARIABLE(var_left, MachineRepresentation::kTagged, left);
   VARIABLE(var_right, MachineRepresentation::kTagged, right);
   Label if_equal(this), if_notequal(this), if_indirect(this, Label::kDeferred),
@@ -148,8 +149,8 @@ void StringBuiltinsAssembler::GenerateStringEqual(Node* left, Node* right) {
   Node* lhs_instance_type = LoadInstanceType(lhs);
   Node* rhs_instance_type = LoadInstanceType(rhs);
 
-  StringEqual_Core(lhs, lhs_instance_type, rhs, rhs_instance_type, lhs_length,
-                   &if_equal, &if_notequal, &if_indirect);
+  StringEqual_Core(context, lhs, lhs_instance_type, rhs, rhs_instance_type,
+                   lhs_length, &if_equal, &if_notequal, &if_indirect);
 
   BIND(&if_indirect);
   {
@@ -157,7 +158,7 @@ void StringBuiltinsAssembler::GenerateStringEqual(Node* left, Node* right) {
     MaybeDerefIndirectStrings(&var_left, lhs_instance_type, &var_right,
                               rhs_instance_type, &restart);
 
-    TailCallRuntime(Runtime::kStringEqual, NoContextConstant(), lhs, rhs);
+    TailCallRuntime(Runtime::kStringEqual, context, lhs, rhs);
   }
 
   BIND(&if_equal);
@@ -168,9 +169,9 @@ void StringBuiltinsAssembler::GenerateStringEqual(Node* left, Node* right) {
 }
 
 void StringBuiltinsAssembler::StringEqual_Core(
-    Node* lhs, Node* lhs_instance_type, Node* rhs, Node* rhs_instance_type,
-    TNode<IntPtrT> length, Label* if_equal, Label* if_not_equal,
-    Label* if_indirect) {
+    Node* context, Node* lhs, Node* lhs_instance_type, Node* rhs,
+    Node* rhs_instance_type, TNode<IntPtrT> length, Label* if_equal,
+    Label* if_not_equal, Label* if_indirect) {
   CSA_ASSERT(this, IsString(lhs));
   CSA_ASSERT(this, IsString(rhs));
   CSA_ASSERT(this, WordEqual(LoadStringLengthAsWord(lhs), length));
@@ -324,7 +325,8 @@ TF_BUILTIN(SubString, StringBuiltinsAssembler) {
   Return(SubString(string, SmiUntag(from), SmiUntag(to)));
 }
 
-void StringBuiltinsAssembler::GenerateStringRelationalComparison(Node* left,
+void StringBuiltinsAssembler::GenerateStringRelationalComparison(Node* context,
+                                                                 Node* left,
                                                                  Node* right,
                                                                  Operation op) {
   VARIABLE(var_left, MachineRepresentation::kTagged, left);
@@ -429,20 +431,16 @@ void StringBuiltinsAssembler::GenerateStringRelationalComparison(Node* left,
     // TODO(bmeurer): Add support for two byte string relational comparisons.
     switch (op) {
       case Operation::kLessThan:
-        TailCallRuntime(Runtime::kStringLessThan, NoContextConstant(), lhs,
-                        rhs);
+        TailCallRuntime(Runtime::kStringLessThan, context, lhs, rhs);
         break;
       case Operation::kLessThanOrEqual:
-        TailCallRuntime(Runtime::kStringLessThanOrEqual, NoContextConstant(),
-                        lhs, rhs);
+        TailCallRuntime(Runtime::kStringLessThanOrEqual, context, lhs, rhs);
         break;
       case Operation::kGreaterThan:
-        TailCallRuntime(Runtime::kStringGreaterThan, NoContextConstant(), lhs,
-                        rhs);
+        TailCallRuntime(Runtime::kStringGreaterThan, context, lhs, rhs);
         break;
       case Operation::kGreaterThanOrEqual:
-        TailCallRuntime(Runtime::kStringGreaterThanOrEqual, NoContextConstant(),
-                        lhs, rhs);
+        TailCallRuntime(Runtime::kStringGreaterThanOrEqual, context, lhs, rhs);
         break;
       default:
         UNREACHABLE();
@@ -496,33 +494,41 @@ void StringBuiltinsAssembler::GenerateStringRelationalComparison(Node* left,
 }
 
 TF_BUILTIN(StringEqual, StringBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
   Node* left = Parameter(Descriptor::kLeft);
   Node* right = Parameter(Descriptor::kRight);
-  GenerateStringEqual(left, right);
+  GenerateStringEqual(context, left, right);
 }
 
 TF_BUILTIN(StringLessThan, StringBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
   Node* left = Parameter(Descriptor::kLeft);
   Node* right = Parameter(Descriptor::kRight);
-  GenerateStringRelationalComparison(left, right, Operation::kLessThan);
+  GenerateStringRelationalComparison(context, left, right,
+                                     Operation::kLessThan);
 }
 
 TF_BUILTIN(StringLessThanOrEqual, StringBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
   Node* left = Parameter(Descriptor::kLeft);
   Node* right = Parameter(Descriptor::kRight);
-  GenerateStringRelationalComparison(left, right, Operation::kLessThanOrEqual);
+  GenerateStringRelationalComparison(context, left, right,
+                                     Operation::kLessThanOrEqual);
 }
 
 TF_BUILTIN(StringGreaterThan, StringBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
   Node* left = Parameter(Descriptor::kLeft);
   Node* right = Parameter(Descriptor::kRight);
-  GenerateStringRelationalComparison(left, right, Operation::kGreaterThan);
+  GenerateStringRelationalComparison(context, left, right,
+                                     Operation::kGreaterThan);
 }
 
 TF_BUILTIN(StringGreaterThanOrEqual, StringBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
   Node* left = Parameter(Descriptor::kLeft);
   Node* right = Parameter(Descriptor::kRight);
-  GenerateStringRelationalComparison(left, right,
+  GenerateStringRelationalComparison(context, left, right,
                                      Operation::kGreaterThanOrEqual);
 }
 
@@ -605,7 +611,7 @@ TF_BUILTIN(StringFromCharCode, CodeStubAssembler) {
   {
     Label two_byte(this);
     // Assume that the resulting string contains only one-byte characters.
-    Node* one_byte_result = AllocateSeqOneByteString(Unsigned(argc));
+    Node* one_byte_result = AllocateSeqOneByteString(context, Unsigned(argc));
 
     TVARIABLE(IntPtrT, var_max_index);
     var_max_index = IntPtrConstant(0);
@@ -639,7 +645,7 @@ TF_BUILTIN(StringFromCharCode, CodeStubAssembler) {
     // At least one of the characters in the string requires a 16-bit
     // representation.  Allocate a SeqTwoByteString to hold the resulting
     // string.
-    Node* two_byte_result = AllocateSeqTwoByteString(Unsigned(argc));
+    Node* two_byte_result = AllocateSeqTwoByteString(context, Unsigned(argc));
 
     // Copy the characters that have already been put in the 8-bit string into
     // their corresponding positions in the new 16-bit string.

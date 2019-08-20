@@ -405,11 +405,6 @@ JSTypeHintLowering::LoweringResult JSTypeHintLowering::ReduceBinaryOperation(
       break;
     }
     case IrOpcode::kJSExponentiate: {
-      if (Node* node = TryBuildSoftDeopt(
-              slot, effect, control,
-              DeoptimizeReason::kInsufficientTypeFeedbackForBinaryOperation)) {
-        return LoweringResult::Exit(node);
-      }
       // TODO(neis): Introduce a SpeculativeNumberPow operator?
       break;
     }

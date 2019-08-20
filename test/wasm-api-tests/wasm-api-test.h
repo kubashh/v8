@@ -27,7 +27,6 @@ using ::wasm::Instance;
 using ::wasm::Memory;
 using ::wasm::Module;
 using ::wasm::own;
-using ::wasm::ownvec;
 using ::wasm::Ref;
 using ::wasm::Store;
 using ::wasm::Table;
@@ -43,13 +42,13 @@ class WasmCapiTest : public ::testing::Test {
         zone_(&allocator_, ZONE_NAME),
         wire_bytes_(&zone_),
         builder_(&zone_),
-        exports_(ownvec<Extern>::make()),
+        exports_(vec<Extern*>::make()),
         wasm_i_i_sig_(1, 1, wasm_i_i_sig_types_) {
     engine_ = Engine::make();
     store_ = Store::make(engine_.get());
     cpp_i_i_sig_ =
-        FuncType::make(ownvec<ValType>::make(ValType::make(::wasm::I32)),
-                       ownvec<ValType>::make(ValType::make(::wasm::I32)));
+        FuncType::make(vec<ValType*>::make(ValType::make(::wasm::I32)),
+                       vec<ValType*>::make(ValType::make(::wasm::I32)));
   }
 
   void Compile() {
@@ -80,7 +79,7 @@ class WasmCapiTest : public ::testing::Test {
 
   Func* GetExportedFunction(size_t index) {
     DCHECK_GT(exports_.size(), index);
-    Extern* exported = exports_[index].get();
+    Extern* exported = exports_[index];
     DCHECK_EQ(exported->kind(), ::wasm::EXTERN_FUNC);
     Func* func = exported->func();
     DCHECK_NE(func, nullptr);
@@ -89,7 +88,7 @@ class WasmCapiTest : public ::testing::Test {
 
   Global* GetExportedGlobal(size_t index) {
     DCHECK_GT(exports_.size(), index);
-    Extern* exported = exports_[index].get();
+    Extern* exported = exports_[index];
     DCHECK_EQ(exported->kind(), ::wasm::EXTERN_GLOBAL);
     Global* global = exported->global();
     DCHECK_NE(global, nullptr);
@@ -98,7 +97,7 @@ class WasmCapiTest : public ::testing::Test {
 
   Memory* GetExportedMemory(size_t index) {
     DCHECK_GT(exports_.size(), index);
-    Extern* exported = exports_[index].get();
+    Extern* exported = exports_[index];
     DCHECK_EQ(exported->kind(), ::wasm::EXTERN_MEMORY);
     Memory* memory = exported->memory();
     DCHECK_NE(memory, nullptr);
@@ -107,7 +106,7 @@ class WasmCapiTest : public ::testing::Test {
 
   Table* GetExportedTable(size_t index) {
     DCHECK_GT(exports_.size(), index);
-    Extern* exported = exports_[index].get();
+    Extern* exported = exports_[index];
     DCHECK_EQ(exported->kind(), ::wasm::EXTERN_TABLE);
     Table* table = exported->table();
     DCHECK_NE(table, nullptr);
@@ -126,7 +125,7 @@ class WasmCapiTest : public ::testing::Test {
   Store* store() { return store_.get(); }
   Module* module() { return module_.get(); }
   Instance* instance() { return instance_.get(); }
-  const ownvec<Extern>& exports() { return exports_; }
+  const vec<Extern*>& exports() { return exports_; }
   ZoneBuffer* wire_bytes() { return &wire_bytes_; }
 
   FunctionSig* wasm_i_i_sig() { return &wasm_i_i_sig_; }
@@ -137,12 +136,12 @@ class WasmCapiTest : public ::testing::Test {
   Zone zone_;
   ZoneBuffer wire_bytes_;
   WasmModuleBuilder builder_;
-  own<Engine> engine_;
-  own<Store> store_;
-  own<Module> module_;
-  own<Instance> instance_;
-  ownvec<Extern> exports_;
-  own<FuncType> cpp_i_i_sig_;
+  own<Engine*> engine_;
+  own<Store*> store_;
+  own<Module*> module_;
+  own<Instance*> instance_;
+  vec<Extern*> exports_;
+  own<FuncType*> cpp_i_i_sig_;
   ValueType wasm_i_i_sig_types_[2] = {kWasmI32, kWasmI32};
   FunctionSig wasm_i_i_sig_;
 };

@@ -1278,19 +1278,8 @@ RegExpBuiltinsAssembler::FastStoreLastIndex(FastJSRegExp, Smi): void;
 
 @hasSameInstanceTypeAsParent
 extern class JSRegExpResult extends JSArray {
-  // The below fields are for internal use only.
-  cached_indices_or_match_info: JSRegExpResultIndices | RegExpMatchInfo;
-  names: FixedArray | Undefined;
-
-  // The below fields are externally exposed.
   index: Object;
   input: Object;
-  groups: Object;
-}
-
-@hasSameInstanceTypeAsParent
-extern class JSRegExpResultIndices extends JSArray {
-  // The groups field is externally exposed.
   groups: Object;
 }
 
@@ -3012,8 +3001,10 @@ transitioning macro GetMethod(implicit context: Context)(
 
 extern macro NumberToString(Number): String;
 extern macro IsOneByteStringInstanceType(InstanceType): bool;
-extern macro AllocateSeqOneByteString(uint32): String;
-extern macro AllocateSeqTwoByteString(uint32): String;
+extern macro AllocateSeqOneByteString(implicit context: Context)(uint32):
+    String;
+extern macro AllocateSeqTwoByteString(implicit context: Context)(uint32):
+    String;
 extern macro ConvertToRelativeIndex(implicit context: Context)(
     Object, intptr): intptr;
 

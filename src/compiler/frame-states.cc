@@ -190,13 +190,11 @@ Node* CreateJavaScriptBuiltinContinuationFrameState(
     actual_parameters.push_back(stack_parameters[i]);
   }
 
-  Node* new_target = jsgraph->UndefinedConstant();
-
-  // Register parameters follow stack parameters. The context will be added by
+  // Register parameters follow stack paraemters. The context will be added by
   // instruction selector during FrameState translation.
-  actual_parameters.push_back(target);      // kJavaScriptCallTargetRegister
-  actual_parameters.push_back(new_target);  // kJavaScriptCallNewTargetRegister
-  actual_parameters.push_back(argc);        // kJavaScriptCallArgCountRegister
+  actual_parameters.push_back(target);
+  actual_parameters.push_back(jsgraph->UndefinedConstant());
+  actual_parameters.push_back(argc);
 
   return CreateBuiltinContinuationFrameStateCommon(
       jsgraph,

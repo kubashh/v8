@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "src/base/optional.h"
 #include "src/common/globals.h"
 #include "src/handles/handles.h"
 #include "src/utils/vector.h"
@@ -301,9 +302,14 @@ V8_EXPORT_PRIVATE MaybeHandle<WasmModuleObject> CreateModuleObjectFromBytes(
 V8_EXPORT_PRIVATE bool IsWasmCodegenAllowed(Isolate* isolate,
                                             Handle<Context> context);
 
+// TODO(mstarzinger): The below methods are only used by the JS API, hence we
+// should consider moving them into the "wasm-js.cc" file instead.
 Handle<JSObject> GetTypeForFunction(Isolate* isolate, FunctionSig* sig);
 Handle<JSObject> GetTypeForGlobal(Isolate* isolate, bool is_mutable,
                                   ValueType type);
+Handle<JSObject> GetTypeForTable(Isolate* isolate, ValueType type,
+                                 uint32_t min_size,
+                                 base::Optional<uint32_t> max_size);
 Handle<JSArray> GetImports(Isolate* isolate, Handle<WasmModuleObject> module);
 Handle<JSArray> GetExports(Isolate* isolate, Handle<WasmModuleObject> module);
 Handle<JSArray> GetCustomSections(Isolate* isolate,

@@ -2342,8 +2342,7 @@ Local<Module> Module::CreateSyntheticModule(
   i::Handle<i::FixedArray> i_export_names = i_isolate->factory()->NewFixedArray(
       static_cast<int>(export_names.size()));
   for (int i = 0; i < i_export_names->length(); ++i) {
-    i::Handle<i::String> str = i_isolate->factory()->InternalizeString(
-        Utils::OpenHandle(*export_names[i]));
+    i::Handle<i::String> str = Utils::OpenHandle(*export_names[i]);
     i_export_names->set(i, *str);
   }
   return v8::Utils::ToLocal(
@@ -9844,27 +9843,6 @@ CpuProfiler* CpuProfiler::New(Isolate* isolate,
                               CpuProfilingLoggingMode logging_mode) {
   return reinterpret_cast<CpuProfiler*>(new i::CpuProfiler(
       reinterpret_cast<i::Isolate*>(isolate), naming_mode, logging_mode));
-}
-
-CpuProfilingOptions::CpuProfilingOptions(CpuProfilingMode mode,
-                                         unsigned max_samples,
-                                         int sampling_interval_us,
-                                         MaybeLocal<Context> filter_context)
-    : mode_(mode),
-      max_samples_(max_samples),
-      sampling_interval_us_(sampling_interval_us) {
-  if (!filter_context.IsEmpty()) {
-    Local<Context> local_filter_context = filter_context.ToLocalChecked();
-    filter_context_.Reset(local_filter_context->GetIsolate(),
-                          local_filter_context);
-  }
-}
-
-void* CpuProfilingOptions::raw_filter_context() const {
-  return reinterpret_cast<void*>(
-      i::Context::cast(*Utils::OpenPersistent(filter_context_))
-          .native_context()
-          .address());
 }
 
 void CpuProfiler::Dispose() { delete reinterpret_cast<i::CpuProfiler*>(this); }

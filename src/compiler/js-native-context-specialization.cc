@@ -70,8 +70,6 @@ JSNativeContextSpecialization::JSNativeContextSpecialization(
       type_cache_(TypeCache::Get()) {}
 
 Reduction JSNativeContextSpecialization::Reduce(Node* node) {
-  DisallowHeapAccessIf disallow_heap_access(FLAG_concurrent_inlining);
-
   switch (node->opcode()) {
     case IrOpcode::kJSAdd:
       return ReduceJSAdd(node);
@@ -229,12 +227,11 @@ Reduction JSNativeContextSpecialization::ReduceJSAsyncFunctionEnter(
 
   // Create the JSAsyncFunctionObject based on the SharedFunctionInfo
   // extracted from the top-most frame in {frame_state}.
-  SharedFunctionInfoRef shared(
-      broker(),
-      FrameStateInfoOf(frame_state->op()).shared_info().ToHandleChecked());
-  DCHECK(shared.is_compiled());
-  int register_count = shared.internal_formal_parameter_count() +
-                       shared.GetBytecodeArray().register_count();
+  Handle<SharedFunctionInfo> shared =
+      FrameStateInfoOf(frame_state->op()).shared_info().ToHandleChecked();
+  DCHECK(shared->is_compiled());
+  int register_count = shared->internal_formal_parameter_count() +
+                       shared->GetBytecodeArray().register_count();
   Node* value = effect =
       graph()->NewNode(javascript()->CreateAsyncFunctionObject(register_count),
                        closure, receiver, promise, context, effect, control);
@@ -375,6 +372,8 @@ Reduction JSNativeContextSpecialization::ReduceJSGetSuperConstructor(
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
+
   DCHECK_EQ(IrOpcode::kJSInstanceOf, node->opcode());
   FeedbackParameter const& p = FeedbackParameterOf(node->op());
   Node* object = NodeProperties::GetValueInput(node, 0);
@@ -573,6 +572,8 @@ JSNativeContextSpecialization::InferHasInPrototypeChain(
 
 Reduction JSNativeContextSpecialization::ReduceJSHasInPrototypeChain(
     Node* node) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
+
   DCHECK_EQ(IrOpcode::kJSHasInPrototypeChain, node->opcode());
   Node* value = NodeProperties::GetValueInput(node, 0);
   Node* prototype = NodeProperties::GetValueInput(node, 1);
@@ -596,6 +597,8 @@ Reduction JSNativeContextSpecialization::ReduceJSHasInPrototypeChain(
 
 Reduction JSNativeContextSpecialization::ReduceJSOrdinaryHasInstance(
     Node* node) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
+
   DCHECK_EQ(IrOpcode::kJSOrdinaryHasInstance, node->opcode());
   Node* constructor = NodeProperties::GetValueInput(node, 0);
   Node* object = NodeProperties::GetValueInput(node, 1);
@@ -690,6 +693,7 @@ Reduction JSNativeContextSpecialization::ReduceJSPromiseResolve(Node* node) {
 
 // ES section #sec-promise-resolve-functions
 Reduction JSNativeContextSpecialization::ReduceJSResolvePromise(Node* node) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
   DCHECK_EQ(IrOpcode::kJSResolvePromise, node->opcode());
   Node* promise = NodeProperties::GetValueInput(node, 0);
   Node* resolution = NodeProperties::GetValueInput(node, 1);
@@ -987,6 +991,8 @@ Reduction JSNativeContextSpecialization::ReduceGlobalAccess(
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSLoadGlobal(Node* node) {
+  DisallowHeapAccessIf no_heap_acess(FLAG_concurrent_inlining);
+
   DCHECK_EQ(IrOpcode::kJSLoadGlobal, node->opcode());
   LoadGlobalParameters const& p = LoadGlobalParametersOf(node->op());
   if (!p.feedback().IsValid()) return NoChange();
@@ -1016,6 +1022,8 @@ Reduction JSNativeContextSpecialization::ReduceJSLoadGlobal(Node* node) {
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSStoreGlobal(Node* node) {
+  DisallowHeapAccessIf no_heap_acess(FLAG_concurrent_inlining);
+
   DCHECK_EQ(IrOpcode::kJSStoreGlobal, node->opcode());
   Node* value = NodeProperties::GetValueInput(node, 0);
   StoreGlobalParameters const& p = StoreGlobalParametersOf(node->op());
@@ -1076,7 +1084,6 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
          node->opcode() == IrOpcode::kJSLoadProperty ||
          node->opcode() == IrOpcode::kJSStoreProperty ||
          node->opcode() == IrOpcode::kJSStoreNamedOwn ||
-         node->opcode() == IrOpcode::kJSStoreDataPropertyInLiteral ||
          node->opcode() == IrOpcode::kJSHasProperty ||
          node->opcode() == IrOpcode::kJSGetIterator);
   Node* receiver = NodeProperties::GetValueInput(node, 0);
@@ -1346,6 +1353,7 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccessFromNexus(
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSLoadNamed(Node* node) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
   DCHECK_EQ(IrOpcode::kJSLoadNamed, node->opcode());
   NamedAccess const& p = NamedAccessOf(node->op());
   Node* const receiver = NodeProperties::GetValueInput(node, 0);
@@ -1389,6 +1397,7 @@ Reduction JSNativeContextSpecialization::ReduceJSLoadNamed(Node* node) {
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSGetIterator(Node* node) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
   DCHECK_EQ(IrOpcode::kJSGetIterator, node->opcode());
   PropertyAccess const& p = PropertyAccessOf(node->op());
   NameRef name(broker(), factory()->iterator_symbol());
@@ -1398,6 +1407,7 @@ Reduction JSNativeContextSpecialization::ReduceJSGetIterator(Node* node) {
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSStoreNamed(Node* node) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
   DCHECK_EQ(IrOpcode::kJSStoreNamed, node->opcode());
   NamedAccess const& p = NamedAccessOf(node->op());
   Node* const value = NodeProperties::GetValueInput(node, 1);
@@ -1409,6 +1419,7 @@ Reduction JSNativeContextSpecialization::ReduceJSStoreNamed(Node* node) {
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSStoreNamedOwn(Node* node) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
   DCHECK_EQ(IrOpcode::kJSStoreNamedOwn, node->opcode());
   StoreNamedOwnParameters const& p = StoreNamedOwnParametersOf(node->op());
   Node* const value = NodeProperties::GetValueInput(node, 1);
@@ -1462,16 +1473,18 @@ base::Optional<JSTypedArrayRef> GetTypedArrayConstant(JSHeapBroker* broker,
 
 void JSNativeContextSpecialization::RemoveImpossibleReceiverMaps(
     Node* receiver, ZoneVector<Handle<Map>>* receiver_maps) const {
-  base::Optional<MapRef> root_map = InferReceiverRootMap(receiver);
-  if (root_map.has_value()) {
+  // TODO(neis): Decide what to do about this for concurrent inlining.
+  AllowHandleAllocation allow_handle_allocation;
+  AllowHandleDereference allow_handle_dereference;
+  Handle<Map> root_map;
+  if (InferReceiverRootMap(receiver).ToHandle(&root_map)) {
     DCHECK(!root_map->is_abandoned_prototype_map());
+    Isolate* isolate = this->isolate();
     receiver_maps->erase(
         std::remove_if(receiver_maps->begin(), receiver_maps->end(),
-                       [root_map, this](Handle<Map> map) {
-                         MapRef map_ref(broker(), map);
-                         return map_ref.is_abandoned_prototype_map() ||
-                                (map_ref.FindRootMap().has_value() &&
-                                 !map_ref.FindRootMap()->equals(*root_map));
+                       [root_map, isolate](Handle<Map> map) {
+                         return map->is_abandoned_prototype_map() ||
+                                map->FindRootMap(isolate) != *root_map;
                        }),
         receiver_maps->end());
   }
@@ -1500,10 +1513,10 @@ JSNativeContextSpecialization::TryRefineElementAccessFeedback(
 Reduction JSNativeContextSpecialization::ReduceElementAccess(
     Node* node, Node* index, Node* value,
     ElementAccessFeedback const& feedback) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
   DCHECK(node->opcode() == IrOpcode::kJSLoadProperty ||
          node->opcode() == IrOpcode::kJSStoreProperty ||
          node->opcode() == IrOpcode::kJSStoreInArrayLiteral ||
-         node->opcode() == IrOpcode::kJSStoreDataPropertyInLiteral ||
          node->opcode() == IrOpcode::kJSHasProperty);
 
   Node* receiver = NodeProperties::GetValueInput(node, 0);
@@ -1804,19 +1817,15 @@ Reduction JSNativeContextSpecialization::ReduceElementLoadFromHeapConstant(
 Reduction JSNativeContextSpecialization::ReducePropertyAccess(
     Node* node, Node* key, base::Optional<NameRef> static_name, Node* value,
     FeedbackSource const& source, AccessMode access_mode) {
-  DisallowHeapAccessIf disallow_heap_access(FLAG_concurrent_inlining);
-
   DCHECK_EQ(key == nullptr, static_name.has_value());
   DCHECK(node->opcode() == IrOpcode::kJSLoadProperty ||
          node->opcode() == IrOpcode::kJSStoreProperty ||
          node->opcode() == IrOpcode::kJSStoreInArrayLiteral ||
-         node->opcode() == IrOpcode::kJSStoreDataPropertyInLiteral ||
          node->opcode() == IrOpcode::kJSHasProperty ||
          node->opcode() == IrOpcode::kJSLoadNamed ||
          node->opcode() == IrOpcode::kJSStoreNamed ||
          node->opcode() == IrOpcode::kJSStoreNamedOwn ||
          node->opcode() == IrOpcode::kJSGetIterator);
-  DCHECK_GE(node->op()->ControlOutputCount(), 1);
 
   ProcessedFeedback const& feedback =
       broker()->GetFeedbackForPropertyAccess(source, access_mode, static_name);
@@ -1857,6 +1866,7 @@ Reduction JSNativeContextSpecialization::ReduceSoftDeoptimize(
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSHasProperty(Node* node) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
   DCHECK_EQ(IrOpcode::kJSHasProperty, node->opcode());
   PropertyAccess const& p = PropertyAccessOf(node->op());
   Node* key = NodeProperties::GetValueInput(node, 1);
@@ -1974,6 +1984,7 @@ Reduction JSNativeContextSpecialization::ReduceJSLoadPropertyWithEnumeratedKey(
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSLoadProperty(Node* node) {
+  DisallowHeapAccessIf no_heap_acess(FLAG_concurrent_inlining);
   DCHECK_EQ(IrOpcode::kJSLoadProperty, node->opcode());
   PropertyAccess const& p = PropertyAccessOf(node->op());
   Node* name = NodeProperties::GetValueInput(node, 1);
@@ -1990,6 +2001,7 @@ Reduction JSNativeContextSpecialization::ReduceJSLoadProperty(Node* node) {
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSStoreProperty(Node* node) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
   DCHECK_EQ(IrOpcode::kJSStoreProperty, node->opcode());
   PropertyAccess const& p = PropertyAccessOf(node->op());
   Node* const key = NodeProperties::GetValueInput(node, 1);
@@ -2416,18 +2428,80 @@ JSNativeContextSpecialization::BuildPropertyStore(
 Reduction JSNativeContextSpecialization::ReduceJSStoreDataPropertyInLiteral(
     Node* node) {
   DCHECK_EQ(IrOpcode::kJSStoreDataPropertyInLiteral, node->opcode());
+
   FeedbackParameter const& p = FeedbackParameterOf(node->op());
-  Node* const key = NodeProperties::GetValueInput(node, 1);
-  Node* const value = NodeProperties::GetValueInput(node, 2);
 
   if (!p.feedback().IsValid()) return NoChange();
-  return ReducePropertyAccess(node, key, base::nullopt, value,
-                              FeedbackSource(p.feedback()),
-                              AccessMode::kStoreInLiteral);
+
+  FeedbackNexus nexus(p.feedback().vector(), p.feedback().slot());
+  if (nexus.IsUninitialized()) {
+    return NoChange();
+  }
+
+  if (nexus.ic_state() == MEGAMORPHIC) {
+    return NoChange();
+  }
+
+  DCHECK_EQ(MONOMORPHIC, nexus.ic_state());
+
+  Map map = nexus.GetFirstMap();
+  if (map.is_null()) {
+    // Maps are weakly held in the type feedback vector, we may not have one.
+    return NoChange();
+  }
+
+  Handle<Map> receiver_map(map, isolate());
+  if (!Map::TryUpdate(isolate(), receiver_map).ToHandle(&receiver_map))
+    return NoChange();
+
+  NameRef cached_name(
+      broker(),
+      handle(Name::cast(nexus.GetFeedbackExtra()->GetHeapObjectAssumeStrong()),
+             isolate()));
+
+  AccessInfoFactory access_info_factory(broker(), dependencies(),
+                                        graph()->zone());
+  PropertyAccessInfo access_info =
+      access_info_factory.ComputePropertyAccessInfo(
+          receiver_map, cached_name.object(), AccessMode::kStoreInLiteral);
+  if (access_info.IsInvalid()) return NoChange();
+  access_info.RecordDependencies(dependencies());
+
+  Node* receiver = NodeProperties::GetValueInput(node, 0);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+
+  // Monomorphic property access.
+  PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
+  access_builder.BuildCheckMaps(receiver, &effect, control,
+                                access_info.receiver_maps());
+
+  // Ensure that {name} matches the cached name.
+  Node* name = NodeProperties::GetValueInput(node, 1);
+  Node* check = graph()->NewNode(simplified()->ReferenceEqual(), name,
+                                 jsgraph()->Constant(cached_name));
+  effect = graph()->NewNode(simplified()->CheckIf(DeoptimizeReason::kWrongName),
+                            check, effect, control);
+
+  Node* value = NodeProperties::GetValueInput(node, 2);
+  Node* context = NodeProperties::GetContextInput(node);
+  Node* frame_state_lazy = NodeProperties::GetFrameStateInput(node);
+
+  // Generate the actual property access.
+  ValueEffectControl continuation = BuildPropertyAccess(
+      receiver, value, context, frame_state_lazy, effect, control, cached_name,
+      nullptr, access_info, AccessMode::kStoreInLiteral);
+  value = continuation.value();
+  effect = continuation.effect();
+  control = continuation.control();
+
+  ReplaceWithValue(node, value, effect, control);
+  return Replace(value);
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSStoreInArrayLiteral(
     Node* node) {
+  DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
   DCHECK_EQ(IrOpcode::kJSStoreInArrayLiteral, node->opcode());
   FeedbackParameter const& p = FeedbackParameterOf(node->op());
   Node* const index = NodeProperties::GetValueInput(node, 1);
@@ -3206,24 +3280,21 @@ bool JSNativeContextSpecialization::InferReceiverMaps(
   return false;
 }
 
-base::Optional<MapRef> JSNativeContextSpecialization::InferReceiverRootMap(
+MaybeHandle<Map> JSNativeContextSpecialization::InferReceiverRootMap(
     Node* receiver) const {
   HeapObjectMatcher m(receiver);
   if (m.HasValue()) {
-    MapRef map = m.Ref(broker()).map();
-    return map.FindRootMap();
+    return handle(m.Value()->map().FindRootMap(isolate()), isolate());
   } else if (m.IsJSCreate()) {
     base::Optional<MapRef> initial_map =
         NodeProperties::GetJSCreateMap(broker(), receiver);
     if (initial_map.has_value()) {
-      if (!initial_map->FindRootMap().has_value()) {
-        return base::nullopt;
-      }
-      DCHECK(initial_map->equals(*initial_map->FindRootMap()));
-      return *initial_map;
+      DCHECK_EQ(*initial_map->object(),
+                initial_map->object()->FindRootMap(isolate()));
+      return initial_map->object();
     }
   }
-  return base::nullopt;
+  return MaybeHandle<Map>();
 }
 
 Graph* JSNativeContextSpecialization::graph() const {

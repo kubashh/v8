@@ -188,8 +188,8 @@ declare_args() {
   # Sets -DV8_SHARED_RO_HEAP.
   v8_enable_shared_ro_heap = ""
 
-  # Disable lazy source positions by default.
-  v8_enable_lazy_source_positions = false
+  # Enables lazy source positions by default.
+  v8_enable_lazy_source_positions = true
 
   # Disable write barriers when GCs are non-incremental and
   # heap has single generation.
@@ -913,7 +913,6 @@ action("postmortem-metadata") {
     "src/objects/js-promise-inl.h",
     "src/objects/js-promise.h",
     "src/objects/js-regexp-inl.h",
-    "src/objects/js-regexp.cc",
     "src/objects/js-regexp.h",
     "src/objects/js-regexp-string-iterator-inl.h",
     "src/objects/js-regexp-string-iterator.h",
@@ -995,7 +994,6 @@ torque_files = [
   "src/builtins/proxy.tq",
   "src/builtins/reflect.tq",
   "src/builtins/regexp-replace.tq",
-  "src/builtins/regexp-test.tq",
   "src/builtins/regexp.tq",
   "src/builtins/string.tq",
   "src/builtins/string-endswith.tq",
@@ -2552,7 +2550,6 @@ v8_source_set("v8_base_without_compiler") {
     "src/objects/js-regexp-inl.h",
     "src/objects/js-regexp-string-iterator-inl.h",
     "src/objects/js-regexp-string-iterator.h",
-    "src/objects/js-regexp.cc",
     "src/objects/js-regexp.h",
     "src/objects/js-relative-time-format-inl.h",
     "src/objects/js-relative-time-format.cc",

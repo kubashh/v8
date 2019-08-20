@@ -2923,9 +2923,6 @@ void Heap::OnMoveEvent(HeapObject target, HeapObject source,
   if (target.IsSharedFunctionInfo()) {
     LOG_CODE_EVENT(isolate_, SharedFunctionInfoMoveEvent(source.address(),
                                                          target.address()));
-  } else if (target.IsNativeContext()) {
-    PROFILE(isolate_,
-            NativeContextMoveEvent(source.address(), target.address()));
   }
 
   if (FLAG_verify_predictable) {
@@ -2986,7 +2983,7 @@ FixedArrayBase Heap::LeftTrimFixedArray(FixedArrayBase object,
   // debug mode which iterates through the heap), but to play safer
   // we still do it.
   HeapObject filler =
-      CreateFillerObjectAt(old_start, bytes_to_trim, ClearRecordedSlots::kNo);
+      CreateFillerObjectAt(old_start, bytes_to_trim, ClearRecordedSlots::kYes);
 
   // Initialize header of the trimmed array. Since left trimming is only
   // performed on pages which are not concurrently swept creating a filler
@@ -2997,6 +2994,11 @@ FixedArrayBase Heap::LeftTrimFixedArray(FixedArrayBase object,
 
   FixedArrayBase new_object =
       FixedArrayBase::cast(HeapObject::FromAddress(new_start));
+
+  // Remove recorded slots for the new map and length offset.
+  ClearRecordedSlot(new_object, new_object.RawField(0));
+  ClearRecordedSlot(new_object,
+                    new_object.RawField(FixedArrayBase::kLengthOffset));
 
   // Handle invalidated old-to-old slots.
   if (incremental_marking()->IsCompacting() &&
@@ -3082,12 +3084,6 @@ void Heap::CreateFillerForArray(T object, int elements_to_trim,
   int old_size = object.Size();
   Address old_end = object.address() + old_size;
   Address new_end = old_end - bytes_to_trim;
-
-  // Remove recorded old-to-new slots in right-trimmed area.
-  if (MayContainRecordedSlots(object)) {
-    int new_size = old_size - bytes_to_trim;
-    RemoveRecordedSlotsAfterObjectShrinking(object, new_size, old_size);
-  }
 
   // Register the array as an object with invalidated old-to-old slots. We
   // cannot use NotifyObjectLayoutChange as it would mark the array black,
@@ -4143,18 +4139,6 @@ void Heap::VerifyCountersBeforeConcurrentSweeping() {
   }
 }
 #endif
-
-void Heap::RemoveRecordedSlotsAfterObjectShrinking(HeapObject object,
-                                                   int new_size, int old_size) {
-  DCHECK_LE(new_size, old_size);
-  if (new_size == old_size) return;
-  store_buffer()->MoveAllEntriesToRememberedSet();
-  MemoryChunk* chunk = MemoryChunk::FromHeapObject(object);
-  Address free_start = object.address() + new_size;
-  Address free_end = object.address() + old_size;
-  RememberedSet<OLD_TO_NEW>::RemoveRange(chunk, free_start, free_end,
-                                         SlotSet::KEEP_EMPTY_BUCKETS);
-}
 
 void Heap::ZapFromSpace() {
   if (!new_space_->IsFromSpaceCommitted()) return;

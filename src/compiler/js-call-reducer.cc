@@ -3247,7 +3247,8 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
     if (target_ref.IsJSFunction()) {
       JSFunctionRef function = target_ref.AsJSFunction();
       if (FLAG_concurrent_inlining && !function.serialized()) {
-        TRACE_BROKER_MISSING(broker(), "data for function " << function);
+        TRACE_BROKER_MISSING(broker(),
+                             "function, not serialized: " << function);
         return NoChange();
       }
 
@@ -3260,7 +3261,8 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
     } else if (target_ref.IsJSBoundFunction()) {
       JSBoundFunctionRef function = target_ref.AsJSBoundFunction();
       if (FLAG_concurrent_inlining && !function.serialized()) {
-        TRACE_BROKER_MISSING(broker(), "data for function " << function);
+        TRACE_BROKER_MISSING(broker(),
+                             "function, not serialized: " << function);
         return NoChange();
       }
 
@@ -5646,14 +5648,10 @@ Node* JSCallReducer::CreateArtificialFrameState(
       bailout_id, OutputFrameStateCombine::Ignore(), state_info);
   const Operator* op0 = common()->StateValues(0, SparseInputMask::Dense());
   Node* node0 = graph()->NewNode(op0);
-
-  static constexpr int kTargetInputIndex = 0;
-  static constexpr int kReceiverInputIndex = 1;
-  const int parameter_count_with_receiver = parameter_count + 1;
   std::vector<Node*> params;
-  params.reserve(parameter_count_with_receiver);
-  for (int i = 0; i < parameter_count_with_receiver; i++) {
-    params.push_back(node->InputAt(kReceiverInputIndex + i));
+  params.reserve(parameter_count + 1);
+  for (int parameter = 0; parameter < parameter_count + 1; ++parameter) {
+    params.push_back(node->InputAt(1 + parameter));
   }
   const Operator* op_param = common()->StateValues(
       static_cast<int>(params.size()), SparseInputMask::Dense());
@@ -5663,7 +5661,7 @@ Node* JSCallReducer::CreateArtificialFrameState(
     context = jsgraph()->UndefinedConstant();
   }
   return graph()->NewNode(op, params_node, node0, node0, context,
-                          node->InputAt(kTargetInputIndex), outer_frame_state);
+                          node->InputAt(0), outer_frame_state);
 }
 
 Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {

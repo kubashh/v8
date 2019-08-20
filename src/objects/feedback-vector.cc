@@ -1093,12 +1093,6 @@ Name FeedbackNexus::GetName() const {
       return Name::cast(feedback->GetHeapObjectAssumeStrong());
     }
   }
-  if (IsStoreDataPropertyInLiteralKind(kind())) {
-    MaybeObject extra = GetFeedbackExtra();
-    if (IsPropertyNameFeedback(extra)) {
-      return Name::cast(extra->GetHeapObjectAssumeStrong());
-    }
-  }
   return Name();
 }
 
@@ -1185,8 +1179,7 @@ KeyedAccessStoreMode KeyedAccessStoreModeForBuiltin(int builtin_index) {
 }  // namespace
 
 KeyedAccessStoreMode FeedbackNexus::GetKeyedAccessStoreMode() const {
-  DCHECK(IsKeyedStoreICKind(kind()) || IsStoreInArrayLiteralICKind(kind()) ||
-         IsStoreDataPropertyInLiteralKind(kind()));
+  DCHECK(IsKeyedStoreICKind(kind()) || IsStoreInArrayLiteralICKind(kind()));
   KeyedAccessStoreMode mode = STANDARD_STORE;
   MapHandles maps;
   MaybeObjectHandles handlers;
@@ -1226,17 +1219,14 @@ KeyedAccessStoreMode FeedbackNexus::GetKeyedAccessStoreMode() const {
 
 IcCheckType FeedbackNexus::GetKeyType() const {
   DCHECK(IsKeyedStoreICKind(kind()) || IsKeyedLoadICKind(kind()) ||
-         IsStoreInArrayLiteralICKind(kind()) || IsKeyedHasICKind(kind()) ||
-         IsStoreDataPropertyInLiteralKind(kind()));
+         IsStoreInArrayLiteralICKind(kind()) || IsKeyedHasICKind(kind()));
   MaybeObject feedback = GetFeedback();
   if (feedback == MaybeObject::FromObject(
                       *FeedbackVector::MegamorphicSentinel(GetIsolate()))) {
     return static_cast<IcCheckType>(
         Smi::ToInt(GetFeedbackExtra()->cast<Object>()));
   }
-  MaybeObject maybe_name =
-      IsStoreDataPropertyInLiteralKind(kind()) ? GetFeedbackExtra() : feedback;
-  return IsPropertyNameFeedback(maybe_name) ? PROPERTY : ELEMENT;
+  return IsPropertyNameFeedback(feedback) ? PROPERTY : ELEMENT;
 }
 
 BinaryOperationHint FeedbackNexus::GetBinaryOperationFeedback() const {

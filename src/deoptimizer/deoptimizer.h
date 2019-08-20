@@ -172,14 +172,7 @@ class TranslatedFrame {
   Kind kind() const { return kind_; }
   BailoutId node_id() const { return node_id_; }
   Handle<SharedFunctionInfo> shared_info() const { return shared_info_; }
-
-  // TODO(jgruber): Simplify/clarify the semantics of this field. The name
-  // `height` is slightly misleading. Yes, this value is related to stack frame
-  // height, but must undergo additional mutations to arrive at the real stack
-  // frame height (e.g.: addition/subtraction of context, accumulator, fixed
-  // frame sizes, padding).
   int height() const { return height_; }
-
   int return_value_offset() const { return return_value_offset_; }
   int return_value_count() const { return return_value_count_; }
 
@@ -572,9 +565,6 @@ class Deoptimizer : public Malloced {
   // Some architectures need to push padding together with the TOS register
   // in order to maintain stack alignment.
   static bool PadTopOfStackRegister();
-  static int TopOfStackRegisterPaddingSlots() {
-    return PadTopOfStackRegister() ? 1 : 0;
-  }
 
   // Searches the list of known deoptimizing code for a Code object
   // containing the given address (which is supposedly faster than
