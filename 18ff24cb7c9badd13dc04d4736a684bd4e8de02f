@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3ec58607_e182e257",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-08-20T12:21:37Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "6b916249_fcd4147a",
+      "range": {
+        "startLine": 155,
+        "startChar": 2,
+        "endLine": 156,
+        "endChar": 76
+      },
+      "revId": "18ff24cb7c9badd13dc04d4736a684bd4e8de02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "332736c4_d2cfa102",
         "filename": "test/mjsunit/wasm/type-reflection.js",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "18ff24cb7c9badd13dc04d4736a684bd4e8de02f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7d17fd5_4769fd58",
+        "filename": "test/mjsunit/wasm/type-reflection.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-08-20T12:21:37Z",
+      "side": 1,
+      "message": "Done, here and also for the \"global\" tests above.",
+      "parentUuid": "332736c4_d2cfa102",
+      "revId": "18ff24cb7c9badd13dc04d4736a684bd4e8de02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
