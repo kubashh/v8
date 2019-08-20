@@ -16,6 +16,24 @@
       "revId": "9875c66136c4c072e393379fc0f65bb9876ac7c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "829bf8da_45c2e4f2",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2395,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-20T08:38:11Z",
+      "side": 1,
+      "message": "Initially didn\u0027t want to turn the const\u0026 to non-const\u0026, but now moved it inside.\nAlso I had the serialization for ElementAccess, but it got lost during the rebase, thanks!",
+      "parentUuid": "79980ee6_5d48bbfb",
+      "revId": "9875c66136c4c072e393379fc0f65bb9876ac7c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
