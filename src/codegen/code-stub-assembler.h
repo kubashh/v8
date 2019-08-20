@@ -2280,6 +2280,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<BoolT> IsPropertyCell(SloppyTNode<HeapObject> object);
   TNode<BoolT> IsPrototypeInitialArrayPrototype(SloppyTNode<Context> context,
                                                 SloppyTNode<Map> map);
+  TNode<BoolT> IsPrototypeInitialRegExpPrototype(SloppyTNode<Context> context,
+                                                 SloppyTNode<Object> receiver);
   TNode<BoolT> IsPrototypeTypedArrayPrototype(SloppyTNode<Context> context,
                                               SloppyTNode<Map> map);
 
