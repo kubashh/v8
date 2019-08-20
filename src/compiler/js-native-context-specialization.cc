@@ -2260,7 +2260,6 @@ JSNativeContextSpecialization::BuildPropertyStore(
           storage, effect, control);
     }
     bool store_to_existing_constant_field = access_info.IsDataConstant() &&
-                                            access_mode == AccessMode::kStore &&
                                             !access_info.HasTransitionMap();
     FieldAccess field_access = {
         kTaggedBase,
