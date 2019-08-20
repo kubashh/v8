@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37df63d2_c54459df",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-20T14:07:11Z",
+      "side": 1,
+      "message": "Perhaps add a comment explaining the use of Unsafe.",
+      "revId": "fe673531d3a52efefaf33cb0003bd9268a5fae3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2322afb9_3d2b457e",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-20T14:07:11Z",
+      "side": 1,
+      "message": "I think it\u0027s fine to overload \u0027\u003d\u003d\u0027 for this.",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 7
+      },
+      "revId": "fe673531d3a52efefaf33cb0003bd9268a5fae3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28da71ff_8de0d8a8",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-20T14:07:11Z",
+      "side": 1,
+      "message": "WordEqual?",
+      "range": {
+        "startLine": 23,
+        "startChar": 11,
+        "endLine": 23,
+        "endChar": 20
+      },
+      "revId": "fe673531d3a52efefaf33cb0003bd9268a5fae3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f9efab7_10e44df4",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-20T14:07:11Z",
+      "side": 1,
+      "message": "I think this shouldn\u0027t be a reference, since it can be invalid.",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 12
+      },
+      "revId": "fe673531d3a52efefaf33cb0003bd9268a5fae3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "406555fa_4b10b43a",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-20T14:07:11Z",
+      "side": 1,
+      "message": "We might want to create slices of length 0, so I think this shouldn\u0027t be a reference either, but rather take the offset directly.",
+      "range": {
+        "startLine": 55,
+        "startChar": 32,
+        "endLine": 55,
+        "endChar": 50
+      },
+      "revId": "fe673531d3a52efefaf33cb0003bd9268a5fae3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6e9f9ef_2d15279a",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-20T14:07:11Z",
+      "side": 1,
+      "message": "As discussed offline: How about the label version?",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 13
+      },
+      "revId": "fe673531d3a52efefaf33cb0003bd9268a5fae3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86059e03_f36142cc",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-20T14:07:11Z",
+      "side": 1,
+      "message": "These references might be invalid too.",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 11
+      },
+      "revId": "fe673531d3a52efefaf33cb0003bd9268a5fae3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0004cd14_5bbb05d2",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-20T14:07:11Z",
+      "side": 1,
+      "message": "Let\u0027s perhaps not actually declare them and make them accessible, but rather put them in some secret global list to keep them alive.",
+      "range": {
+        "startLine": 114,
+        "startChar": 20,
+        "endLine": 114,
+        "endChar": 36
+      },
+      "revId": "fe673531d3a52efefaf33cb0003bd9268a5fae3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4513122a_90602e5d",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-20T14:07:11Z",
+      "side": 1,
+      "message": "This can be done earlier, no?",
+      "range": {
+        "startLine": 356,
+        "startChar": 2,
+        "endLine": 356,
+        "endChar": 25
+      },
+      "revId": "fe673531d3a52efefaf33cb0003bd9268a5fae3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
