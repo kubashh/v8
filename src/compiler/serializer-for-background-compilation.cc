@@ -423,7 +423,7 @@ class SerializerForBackgroundCompilation {
                                      bool honor_bailout_on_uninitialized);
 
   PropertyAccessInfo ProcessMapForNamedPropertyAccess(
-      MapRef const& receiver_map, NameRef const& name, AccessMode access_mode,
+      MapRef* receiver_map, NameRef const& name, AccessMode access_mode,
       base::Optional<JSObjectRef> receiver, Hints* new_accumulator_hints);
 
   void ProcessCreateContext(interpreter::BytecodeArrayIterator* iterator,
@@ -2244,16 +2244,19 @@ void SerializerForBackgroundCompilation::ProcessUnaryOrBinaryOperation(
 
 PropertyAccessInfo
 SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
-    MapRef const& receiver_map, NameRef const& name, AccessMode access_mode,
+    MapRef* receiver_map, NameRef const& name, AccessMode access_mode,
     base::Optional<JSObjectRef> receiver, Hints* new_accumulator_hints) {
+  // For JSNativeContextSpecialization::InferReceiverRootMap
+  receiver_map->SerializeRootMap();
+
   // For JSNativeContextSpecialization::ReduceNamedAccess.
-  if (receiver_map.IsMapOfCurrentGlobalProxy()) {
+  if (receiver_map->IsMapOfCurrentGlobalProxy()) {
     broker()->native_context().global_proxy_object().GetPropertyCell(
         name, SerializationPolicy::kSerializeIfNeeded);
   }
 
   PropertyAccessInfo const& access_info = broker()->GetPropertyAccessInfo(
-      receiver_map, name, access_mode, dependencies(),
+      *receiver_map, name, access_mode, dependencies(),
       SerializationPolicy::kSerializeIfNeeded);
 
   // For JSNativeContextSpecialization::InlinePropertySetterCall
@@ -2271,7 +2274,7 @@ SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
         FunctionTemplateInfoRef fti_ref(
             broker(), handle(sfi->get_api_func_data(), broker()->isolate()));
         if (fti_ref.has_call_code()) fti_ref.SerializeCallCode();
-        ProcessReceiverMapForApiCall(fti_ref, receiver_map.object());
+        ProcessReceiverMapForApiCall(fti_ref, receiver_map->object());
       }
     } else if (access_info.constant()->IsJSBoundFunction()) {
       JSBoundFunctionRef function(broker(), access_info.constant());
@@ -2293,7 +2296,7 @@ SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
         holder = JSObjectRef(broker(), prototype);
       } else {
         CHECK_IMPLIES(receiver.has_value(),
-                      receiver->map().equals(receiver_map));
+                      receiver->map().equals(*receiver_map));
         holder = receiver;
       }
 
@@ -2390,16 +2393,16 @@ void SerializerForBackgroundCompilation::ProcessNamedAccess(
     Hints receiver, NamedAccessFeedback const& feedback, AccessMode access_mode,
     Hints* new_accumulator_hints) {
   for (Handle<Map> map : feedback.AsNamedAccess().maps()) {
-    ProcessMapForNamedPropertyAccess(MapRef(broker(), map), feedback.name(),
-                                     access_mode, base::nullopt,
-                                     new_accumulator_hints);
+    MapRef map_ref(broker(), map);
+    ProcessMapForNamedPropertyAccess(&map_ref, feedback.name(), access_mode,
+                                     base::nullopt, new_accumulator_hints);
   }
 
   for (Handle<Map> map :
        GetRelevantReceiverMaps(broker()->isolate(), receiver.maps())) {
-    ProcessMapForNamedPropertyAccess(MapRef(broker(), map), feedback.name(),
-                                     access_mode, base::nullopt,
-                                     new_accumulator_hints);
+    MapRef map_ref(broker(), map);
+    ProcessMapForNamedPropertyAccess(&map_ref, feedback.name(), access_mode,
+                                     base::nullopt, new_accumulator_hints);
   }
 
   JSGlobalProxyRef global_proxy =
@@ -2407,9 +2410,10 @@ void SerializerForBackgroundCompilation::ProcessNamedAccess(
   for (Handle<Object> hint : receiver.constants()) {
     ObjectRef object(broker(), hint);
     if (access_mode == AccessMode::kLoad && object.IsJSObject()) {
-      ProcessMapForNamedPropertyAccess(
-          object.AsJSObject().map(), feedback.name(), access_mode,
-          object.AsJSObject(), new_accumulator_hints);
+      MapRef map_ref = object.AsJSObject().map();
+      ProcessMapForNamedPropertyAccess(&map_ref, feedback.name(), access_mode,
+                                       object.AsJSObject(),
+                                       new_accumulator_hints);
     }
     // For JSNativeContextSpecialization::ReduceNamedAccessFromNexus.
     // TODO(neis): This should be done even if megamorphic.
@@ -2450,6 +2454,11 @@ void SerializerForBackgroundCompilation::ProcessElementAccess(
   for (Handle<Object> hint : receiver.constants()) {
     ObjectRef receiver_ref(broker(), hint);
 
+    // For JSNativeContextSpecialization::InferReceiverRootMap
+    if (receiver_ref.IsJSObject()) {
+      receiver_ref.AsJSObject().map().SerializeRootMap();
+    }
+
     // For JSNativeContextSpecialization::ReduceElementAccess.
     if (receiver_ref.IsJSTypedArray()) {
       receiver_ref.AsJSTypedArray().Serialize();
@@ -2474,6 +2483,12 @@ void SerializerForBackgroundCompilation::ProcessElementAccess(
         }
       }
     }
+  }
+
+  // For JSNativeContextSpecialization::InferReceiverRootMap
+  for (Handle<Map> map : receiver.maps()) {
+    MapRef map_ref(broker(), map);
+    map_ref.SerializeRootMap();
   }
 }
 
