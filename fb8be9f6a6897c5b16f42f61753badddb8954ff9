@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7aa0479_f926f74a",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-20T16:59:49Z",
+      "side": 1,
+      "message": "Can you add a scope here so elements_known_double_array is only local to its use here",
+      "revId": "fb8be9f6a6897c5b16f42f61753badddb8954ff9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
