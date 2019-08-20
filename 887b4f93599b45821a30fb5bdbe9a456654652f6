@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67e069fe_8b46684e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2368,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T15:22:26Z",
+      "side": 1,
+      "message": "Nit: redundant",
+      "range": {
+        "startLine": 2368,
+        "startChar": 54,
+        "endLine": 2368,
+        "endChar": 66
+      },
+      "revId": "887b4f93599b45821a30fb5bdbe9a456654652f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

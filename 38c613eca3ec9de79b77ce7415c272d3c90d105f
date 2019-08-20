@@ -221,6 +221,24 @@
       "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "791b7cc1_4906b451",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1861,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T15:22:26Z",
+      "side": 1,
+      "message": "We can create a hint containing only the undefined value. And maybe we should, otherwise we\u0027ll end up with a miss-warning.\n\nHere\u0027s a test to verify:\n\nfunction foo() { return Object.getPrototypeOf() }\n%PrepareFunctionForOptimization(foo); \ntry { print(typeof foo()); } catch(_) {};\n%OptimizeFunctionOnNextCall(foo); \ntry { print(typeof foo()); } catch(_) {};",
+      "parentUuid": "0ab14363_f402698c",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
