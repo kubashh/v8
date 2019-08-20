@@ -239,6 +239,24 @@
       "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba84f6ed_0e611a22",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1861,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-20T15:29:57Z",
+      "side": 1,
+      "message": "You\u0027re absolutely right, thanks!",
+      "parentUuid": "791b7cc1_4906b451",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

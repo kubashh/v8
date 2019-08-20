@@ -22,6 +22,30 @@
       "revId": "887b4f93599b45821a30fb5bdbe9a456654652f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4589ac5_8df3313a",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2368,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-20T15:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67e069fe_8b46684e",
+      "range": {
+        "startLine": 2368,
+        "startChar": 54,
+        "endLine": 2368,
+        "endChar": 66
+      },
+      "revId": "887b4f93599b45821a30fb5bdbe9a456654652f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
