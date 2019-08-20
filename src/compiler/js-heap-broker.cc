@@ -2218,7 +2218,8 @@ JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
       ais_for_loading_exec_(zone()),
       ais_for_loading_has_instance_(zone()),
       ais_for_loading_then_(zone()),
-      property_access_infos_(zone()) {
+      property_access_infos_(zone()),
+      typed_array_string_tags_(zone()) {
   // Note that this initialization of the refs_ pointer with the minimal
   // initial capacity is redundant in the normal use case (concurrent
   // compilation enabled, standard objects to be serialized), as the map
@@ -2348,6 +2349,25 @@ void JSHeapBroker::CollectArrayAndObjectPrototypes() {
   CHECK(!array_and_object_prototypes_.empty());
 }
 
+void JSHeapBroker::SerializeTypedArrayStringTags() {
+#define TYPED_ARRAY_STRING_TAG(Type, type, TYPE, ctype)                     \
+  do {                                                                      \
+    typed_array_string_tags_.push_back(StringRef(                           \
+        this, isolate()->factory()->InternalizeUtf8String(#Type "Array"))); \
+  } while (false);
+
+  TYPED_ARRAYS(TYPED_ARRAY_STRING_TAG)
+#undef TYPED_ARRAY_STRING_TAG
+}
+
+StringRef JSHeapBroker::GetTypedArrayStringTag(ElementsKind kind) {
+  CHECK_LE(UINT8_ELEMENTS, kind);
+  CHECK_LE(kind, BIGINT64_ELEMENTS);
+  size_t idx = kind - UINT8_ELEMENTS;
+  CHECK_LT(idx, typed_array_string_tags_.size());
+  return typed_array_string_tags_[idx];
+}
+
 bool JSHeapBroker::IsArrayOrObjectPrototype(const JSObjectRef& object) const {
   if (mode() == kDisabled) {
     return isolate()->IsInAnyContext(*object.object(),
@@ -2369,6 +2389,7 @@ void JSHeapBroker::SerializeStandardObjects() {
   TraceScope tracer(this, "JSHeapBroker::SerializeStandardObjects");
 
   CollectArrayAndObjectPrototypes();
+  SerializeTypedArrayStringTags();
 
   SetNativeContextRef();
   native_context().Serialize();
@@ -3269,6 +3290,7 @@ base::Optional<MapRef> MapRef::FindRootMap() const {
   if (map_data) {
     return MapRef(broker(), map_data);
   }
+  AllowHandleDereference allow_handle_dereference;
   TRACE_BROKER_MISSING(broker(), "root map for object " << object());
   return base::nullopt;
 }
