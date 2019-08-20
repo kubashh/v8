@@ -1108,6 +1108,15 @@ void Heap::GarbageCollectionEpilogue() {
   AllowHeapAllocation for_the_rest_of_the_epilogue;
 
 #ifdef DEBUG
+  // There should be no invalidated old-to-new slots after each collection.
+  for (SpaceIterator it(this); it.HasNext();) {
+    Space* space = it.Next();
+
+    for (MemoryChunk* chunk = space->first_page(); chunk != space->last_page();
+         chunk = chunk->list_node().next())
+      DCHECK_NULL(chunk->invalidated_slots<OLD_TO_NEW>());
+  }
+
   if (FLAG_print_global_handles) isolate_->global_handles()->Print();
   if (FLAG_print_handles) PrintHandles();
   if (FLAG_gc_verbose) Print();
@@ -2990,14 +2999,9 @@ FixedArrayBase Heap::LeftTrimFixedArray(FixedArrayBase object,
   FixedArrayBase new_object =
       FixedArrayBase::cast(HeapObject::FromAddress(new_start));
 
-  // Handle invalidated old-to-old slots.
-  if (incremental_marking()->IsCompacting() &&
-      MayContainRecordedSlots(new_object)) {
-    // If the array was right-trimmed before, then it is registered in
-    // the invalidated_slots.
-    MemoryChunk::FromHeapObject(new_object)
-        ->MoveObjectWithInvalidatedSlots(filler, new_object);
-    // We have to clear slots in the free space to avoid stale old-to-old slots.
+  // Handle invalidated slots.
+  if (MayContainRecordedSlots(new_object)) {
+    // We have to clear slots in the free space to avoid stale slots.
     // Note we cannot use ClearFreedMemoryMode of CreateFillerObjectAt because
     // we need pointer granularity writes to avoid race with the concurrent
     // marking.
@@ -3090,8 +3094,6 @@ void Heap::CreateFillerForArray(T object, int elements_to_trim,
     // Ensure that the object survives because the InvalidatedSlotsFilter will
     // compute its size from its map during pointers updating phase.
     incremental_marking()->WhiteToGreyAndPush(object);
-    MemoryChunk::FromHeapObject(object)->RegisterObjectWithInvalidatedSlots(
-        object, old_size);
   }
 
   // Technically in new space this write might be omitted (except for
@@ -3376,15 +3378,10 @@ void Heap::RegisterDeserializedObjectsForBlackAllocation(
   }
 }
 
-void Heap::NotifyObjectLayoutChange(HeapObject object, int size,
+void Heap::NotifyObjectLayoutChange(HeapObject object,
                                     const DisallowHeapAllocation&) {
   if (incremental_marking()->IsMarking()) {
     incremental_marking()->MarkBlackAndVisitObjectDueToLayoutChange(object);
-    if (incremental_marking()->IsCompacting() &&
-        MayContainRecordedSlots(object)) {
-      MemoryChunk::FromHeapObject(object)->RegisterObjectWithInvalidatedSlots(
-          object, size);
-    }
   }
 #ifdef VERIFY_HEAP
   if (FLAG_verify_heap) {
@@ -4145,6 +4142,14 @@ void Heap::RemoveRecordedSlotsAfterObjectShrinking(HeapObject object,
   Address free_end = object.address() + old_size;
   RememberedSet<OLD_TO_NEW>::RemoveRange(chunk, free_start, free_end,
                                          SlotSet::KEEP_EMPTY_BUCKETS);
+  MemoryChunk::FromHeapObject(object)
+      ->ResizeObjectWithInvalidatedSlots<OLD_TO_NEW>(object, new_size);
+  if (incremental_marking()->IsCompacting()) {
+    RememberedSet<OLD_TO_OLD>::RemoveRange(chunk, free_start, free_end,
+                                           SlotSet::KEEP_EMPTY_BUCKETS);
+    MemoryChunk::FromHeapObject(object)
+        ->ResizeObjectWithInvalidatedSlots<OLD_TO_OLD>(object, new_size);
+  }
 }
 
 void Heap::ZapFromSpace() {
@@ -5525,15 +5530,6 @@ Address Heap::store_buffer_overflow_function_address() {
   return FUNCTION_ADDR(StoreBuffer::StoreBufferOverflow);
 }
 
-void Heap::ClearRecordedSlot(HeapObject object, ObjectSlot slot) {
-  DCHECK(!IsLargeObject(object));
-  Page* page = Page::FromAddress(slot.address());
-  if (!page->InYoungGeneration()) {
-    DCHECK_EQ(page->owner_identity(), OLD_SPACE);
-    store_buffer()->DeleteEntry(slot.address());
-  }
-}
-
 #ifdef DEBUG
 void Heap::VerifyClearedSlot(HeapObject object, ObjectSlot slot) {
   DCHECK(!IsLargeObject(object));
@@ -5541,21 +5537,13 @@ void Heap::VerifyClearedSlot(HeapObject object, ObjectSlot slot) {
   Page* page = Page::FromAddress(slot.address());
   DCHECK_EQ(page->owner_identity(), OLD_SPACE);
   store_buffer()->MoveAllEntriesToRememberedSet();
-  CHECK(!RememberedSet<OLD_TO_NEW>::Contains(page, slot.address()));
+  CHECK_IMPLIES(RememberedSet<OLD_TO_NEW>::Contains(page, slot.address()),
+                page->RegisteredObjectWithInvalidatedSlots<OLD_TO_NEW>(object));
   // Old to old slots are filtered with invalidated slots.
   CHECK_IMPLIES(RememberedSet<OLD_TO_OLD>::Contains(page, slot.address()),
-                page->RegisteredObjectWithInvalidatedSlots(object));
+                page->RegisteredObjectWithInvalidatedSlots<OLD_TO_OLD>(object));
 }
 #endif
-
-void Heap::ClearRecordedSlotRange(Address start, Address end) {
-  Page* page = Page::FromAddress(start);
-  DCHECK(!page->IsLargePage());
-  if (!page->InYoungGeneration()) {
-    DCHECK_EQ(page->owner_identity(), OLD_SPACE);
-    store_buffer()->DeleteEntry(start, end);
-  }
-}
 
 PagedSpace* PagedSpaceIterator::Next() {
   switch (counter_++) {
