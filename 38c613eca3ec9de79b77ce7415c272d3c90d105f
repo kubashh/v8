@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b2a1873f_d5c81a2c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2370,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-20T15:02:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff7a70b0_99011963",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4710e83f_741edd18",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 6
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa68046f_1607bc98",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3297,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-20T15:02:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4710e83f_741edd18",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30cc3dfc_ea33a3dc",
         "filename": "src/compiler/js-heap-broker.h",
         "patchSetId": 6
@@ -50,6 +86,24 @@
       "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68a1fd83_625de402",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-20T15:02:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30cc3dfc_ea33a3dc",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "a50846bd_73f584ad",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-20T15:02:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad3c1174_3f97d2f0",
+      "range": {
+        "startLine": 412,
+        "startChar": 54,
+        "endLine": 412,
+        "endChar": 68
+      },
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9d1e47d_22e26785",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 6
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "2aa9a1a6_fca7d427",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-20T15:02:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9d1e47d_22e26785",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c428d0ad_3a56f004",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 6
@@ -104,6 +200,24 @@
       "writtenOn": "2019-08-20T14:51:46Z",
       "side": 1,
       "message": "Did you check if we need to do anything for less arguments? The reducer can deal with a missing argument (it uses undefined then).",
+      "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ab14363_f402698c",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1861,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-20T15:02:24Z",
+      "side": 1,
+      "message": "As far as I checked, for these 2 builtin ids we either have the object in arguments[1] or we don\u0027t have any hints. In the latter case we can\u0027t really do anything.",
+      "parentUuid": "c428d0ad_3a56f004",
       "revId": "38c613eca3ec9de79b77ce7415c272d3c90d105f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
