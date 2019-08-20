@@ -71,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "b2367a88_59925e81",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5275,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-20T12:33:24Z",
+      "side": 1,
+      "message": "Any reason we can\u0027t use GetIterator here? If so, could you add a TODO both here and in \"LoadIteratorProperty\" stating when it could be removed and replaced with GetIterator.",
+      "range": {
+        "startLine": 5269,
+        "startChar": 10,
+        "endLine": 5275,
+        "endChar": 78
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "61958218_a3f06fd0",
         "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
         "patchSetId": 5
