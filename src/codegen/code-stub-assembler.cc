@@ -6154,6 +6154,17 @@ TNode<BoolT> CodeStubAssembler::IsRegExpSpeciesProtectorCellInvalid(
   return WordEqual(cell_value, invalid);
 }
 
+TNode<BoolT> CodeStubAssembler::IsPrototypeInitialRegExpPrototype(
+    SloppyTNode<Context> context, SloppyTNode<Object> receiver) {
+  Node* const native_context = LoadNativeContext(context);
+  Node* const regexp_fun =
+      LoadContextElement(native_context, Context::REGEXP_FUNCTION_INDEX);
+  Node* const initial_map =
+      LoadObjectField(regexp_fun, JSFunction::kPrototypeOrInitialMapOffset);
+  Node* const initial_prototype = LoadMapPrototype(initial_map);
+  return WordEqual(receiver, initial_prototype);
+}
+
 TNode<BoolT> CodeStubAssembler::IsPromiseSpeciesProtectorCellInvalid() {
   Node* invalid = SmiConstant(Isolate::kProtectorInvalid);
   Node* cell = LoadRoot(RootIndex::kPromiseSpeciesProtector);
