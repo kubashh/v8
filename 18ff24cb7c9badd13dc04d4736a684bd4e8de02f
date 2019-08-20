@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b916249_fcd4147a",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-08-20T12:03:14Z",
+      "side": 1,
+      "message": "Could we have these definitions close to their use? I don\u0027t really see a value in having the definitions at the beginning of the function, and the uses at the end (aside from other functions have the same structure because of unknown reasons.",
+      "range": {
+        "startLine": 155,
+        "startChar": 2,
+        "endLine": 156,
+        "endChar": 76
+      },
+      "revId": "18ff24cb7c9badd13dc04d4736a684bd4e8de02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "332736c4_d2cfa102",
+        "filename": "test/mjsunit/wasm/type-reflection.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-08-20T12:03:14Z",
+      "side": 1,
+      "message": "Should there not also be a getter of the module name, i.e. the \"m\"?",
+      "revId": "18ff24cb7c9badd13dc04d4736a684bd4e8de02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
