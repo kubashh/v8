@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c7bed03_39d2cba0",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T09:14:55Z",
+      "side": 1,
+      "message": "That\u0027s equivalent to simply returning root_map_.",
+      "revId": "902427cf8e4794cd10c7df0d7b91d879a4edd082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15f713f1_35bd1149",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3263,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T09:14:55Z",
+      "side": 1,
+      "message": "Can this even happen?",
+      "revId": "902427cf8e4794cd10c7df0d7b91d879a4edd082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ea33a5d_033b723d",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3264,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T09:14:55Z",
+      "side": 1,
+      "message": "CHECK_EQ",
+      "revId": "902427cf8e4794cd10c7df0d7b91d879a4edd082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "343bf49e_dd24cdeb",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1491,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T09:14:55Z",
+      "side": 1,
+      "message": "This needs to check has_value().",
+      "range": {
+        "startLine": 1491,
+        "startChar": 33,
+        "endLine": 1491,
+        "endChar": 56
+      },
+      "revId": "902427cf8e4794cd10c7df0d7b91d879a4edd082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f8e4370_9c583249",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T09:14:55Z",
+      "side": 1,
+      "message": "I think we never use pointers to Refs so far. Just do call-by-value here, i.e. MapRef.",
+      "revId": "902427cf8e4794cd10c7df0d7b91d879a4edd082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09988a49_4a375279",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2458,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-20T09:14:55Z",
+      "side": 1,
+      "message": "Hmm, why only for JSObject?",
+      "range": {
+        "startLine": 2458,
+        "startChar": 21,
+        "endLine": 2458,
+        "endChar": 31
+      },
+      "revId": "902427cf8e4794cd10c7df0d7b91d879a4edd082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
