@@ -2780,6 +2780,7 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
 
   Heap* heap = isolate->heap();
 
+  int new_instance_size = new_map->instance_size();
   int old_instance_size = old_map->instance_size();
 
   heap->NotifyObjectLayoutChange(*object, old_instance_size, no_allocation);
@@ -2799,7 +2800,9 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
           index, MutableHeapNumber::cast(value).value_as_bits());
       if (i < old_number_of_fields && !old_map->IsUnboxedDoubleField(index)) {
         // Transition from tagged to untagged slot.
-        heap->ClearRecordedSlot(*object, object->RawField(index.offset()));
+        MemoryChunk::FromHeapObject(*object)
+            ->RegisterObjectWithBothInvalidatedSlots(*object,
+                                                     new_instance_size);
       } else {
 #ifdef DEBUG
         heap->VerifyClearedSlot(*object, object->RawField(index.offset()));
@@ -2813,7 +2816,6 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
   object->SetProperties(*array);
 
   // Create filler object past the new instance size.
-  int new_instance_size = new_map->instance_size();
   int instance_size_delta = old_instance_size - new_instance_size;
   DCHECK_GE(instance_size_delta, 0);
 
@@ -2922,10 +2924,8 @@ void MigrateFastToSlow(Isolate* isolate, Handle<JSObject> object,
   // garbage.
   int inobject_properties = new_map->GetInObjectProperties();
   if (inobject_properties) {
-    Heap* heap = isolate->heap();
-    heap->ClearRecordedSlotRange(
-        object->address() + map->GetInObjectPropertyOffset(0),
-        object->address() + new_instance_size);
+    MemoryChunk::FromHeapObject(*object)
+        ->RegisterObjectWithBothInvalidatedSlots(*object, new_instance_size);
 
     for (int i = 0; i < inobject_properties; i++) {
       FieldIndex index = FieldIndex::ForPropertyIndex(*new_map, i);

@@ -130,12 +130,16 @@ bool DeleteObjectPropertyFast(Isolate* isolate, Handle<JSReceiver> receiver,
               descriptors->GetDetails(descriptor).constness());
   }
 
+  int old_size = receiver_map->instance_size();
+  int new_size = parent_map->instance_size();
+
   // Zap the property to avoid keeping objects alive. Zapping is not necessary
   // for properties stored in the descriptor array.
   if (details.location() == kField) {
     DisallowHeapAllocation no_allocation;
-    isolate->heap()->NotifyObjectLayoutChange(
-        *receiver, receiver_map->instance_size(), no_allocation);
+    isolate->heap()->NotifyObjectLayoutChange(*receiver, old_size,
+                                              no_allocation);
+
     FieldIndex index =
         FieldIndex::ForPropertyIndex(*receiver_map, details.field_index());
     // Special case deleting the last out-of object property.
@@ -146,16 +150,22 @@ bool DeleteObjectPropertyFast(Isolate* isolate, Handle<JSReceiver> receiver,
     } else {
       Object filler = ReadOnlyRoots(isolate).one_pointer_filler_map();
       JSObject::cast(*receiver).RawFastPropertyAtPut(index, filler);
-      // We must clear any recorded slot for the deleted property, because
-      // subsequent object modifications might put a raw double there.
-      // Slot clearing is the reason why this entire function cannot currently
-      // be implemented in the DeleteProperty stub.
+
+      // We need to remove recorded slots because subsequent object
+      // modifications might put a raw double into the deleted property. Slot
+      // clearing is the reason why this entire function cannot currently be
+      // implemented in the DeleteProperty stub.
       if (index.is_inobject() && !receiver_map->IsUnboxedDoubleField(index)) {
-        isolate->heap()->ClearRecordedSlot(*receiver,
-                                           receiver->RawField(index.offset()));
+        int new_size = parent_map->instance_size();
+        MemoryChunk::FromHeapObject(*receiver)
+            ->RegisterObjectWithBothInvalidatedSlots(*receiver, new_size);
       }
     }
   }
+
+  isolate->heap()->RemoveRecordedSlotsAfterObjectShrinking(*receiver, new_size,
+                                                           old_size);
+
   // If the {receiver_map} was marked stable before, then there could be
   // optimized code that depends on the assumption that no object that
   // reached this {receiver_map} transitions away from it without triggering
