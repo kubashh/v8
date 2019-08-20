@@ -789,6 +789,11 @@ class Global : public PersistentBase<T> {
 template <class T>
 using UniquePersistent = Global<T>;
 
+template <typename T>
+struct TypeTrait {
+  static constexpr bool kRequiresExplicitDestruction = true;
+};
+
 /**
  * A traced handle with move semantics, similar to std::unique_ptr. The handle
  * is to be used together with |v8::EmbedderHeapTracer| and specifies edges from
@@ -799,6 +804,12 @@ using UniquePersistent = Global<T>;
  * - Non-tracing garbage collections refer to
  *   |v8::EmbedderHeapTracer::IsRootForNonTracingGC()| whether the handle should
  *   be treated as root or not.
+ *
+ * Whether or not TracedGlobal clears its handle on destruction is specified via
+ * TypeTrait<TracedGlobal<T>>::kRequiresExplicitDestruction. The handle is
+ * cleared upon garbage collection as well when the object that it's referring
+ * to is considered as unreachable. It is the responsibility of the embedder to
+ * ensure that the memory holding TracedGlobal is still alive at that pointer.
  */
 template <typename T>
 class TracedGlobal {
@@ -807,7 +818,6 @@ class TracedGlobal {
    * An empty TracedGlobal without storage cell.
    */
   TracedGlobal() = default;
-  ~TracedGlobal() { Reset(); }
 
   /**
    * Construct a TracedGlobal from a Local.
@@ -921,11 +931,29 @@ class TracedGlobal {
       void* parameter, WeakCallbackInfo<void>::Callback callback);
 
  private:
-  V8_INLINE static T* New(Isolate* isolate, T* that, T** slot);
+  // Wrapping type used when clearing on destruction is required.
+  template <typename U>
+  struct WrappedForDestruction {
+    U* value;
+
+    WrappedForDestruction(U* val) : value(val) {}  // NOLINT
+    ~WrappedForDestruction();
+    operator U*() const { return value; }
+    U* operator*() const { return value; }
+    U* operator->() const { return value; }
+    WrappedForDestruction& operator=(const WrappedForDestruction& other) {
+      value = other.value;
+      return *this;
+    }
+  };
+
+  V8_INLINE static T* New(Isolate* isolate, T* that, void* slot);
 
   T* operator*() const { return this->val_; }
 
-  T* val_ = nullptr;
+  std::conditional_t<TypeTrait<TracedGlobal<T>>::kRequiresExplicitDestruction,
+                     WrappedForDestruction<T>, T*>
+      val_ = {nullptr};
 
   friend class EmbedderHeapTracer;
   template <typename F>
@@ -10024,7 +10052,15 @@ Global<T>& Global<T>::operator=(Global<S>&& rhs) {
 }
 
 template <class T>
-T* TracedGlobal<T>::New(Isolate* isolate, T* that, T** slot) {
+template <class U>
+TracedGlobal<T>::WrappedForDestruction<U>::~WrappedForDestruction() {
+  if (value == nullptr) return;
+  V8::DisposeTracedGlobal(reinterpret_cast<internal::Address*>(value));
+  value = nullptr;
+}
+
+template <class T>
+T* TracedGlobal<T>::New(Isolate* isolate, T* that, void* slot) {
   if (that == nullptr) return nullptr;
   internal::Address* p = reinterpret_cast<internal::Address*>(that);
   return reinterpret_cast<T*>(V8::GlobalizeTracedReference(
@@ -10035,7 +10071,7 @@ T* TracedGlobal<T>::New(Isolate* isolate, T* that, T** slot) {
 template <class T>
 void TracedGlobal<T>::Reset() {
   if (IsEmpty()) return;
-  V8::DisposeTracedGlobal(reinterpret_cast<internal::Address*>(val_));
+  V8::DisposeTracedGlobal(reinterpret_cast<internal::Address*>(**this));
   val_ = nullptr;
 }
 
@@ -10079,7 +10115,7 @@ template <class T>
 void TracedGlobal<T>::SetWrapperClassId(uint16_t class_id) {
   typedef internal::Internals I;
   if (IsEmpty()) return;
-  internal::Address* obj = reinterpret_cast<internal::Address*>(this->val_);
+  internal::Address* obj = reinterpret_cast<internal::Address*>(**this);
   uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + I::kNodeClassIdOffset;
   *reinterpret_cast<uint16_t*>(addr) = class_id;
 }
@@ -10088,7 +10124,7 @@ template <class T>
 uint16_t TracedGlobal<T>::WrapperClassId() const {
   typedef internal::Internals I;
   if (IsEmpty()) return 0;
-  internal::Address* obj = reinterpret_cast<internal::Address*>(this->val_);
+  internal::Address* obj = reinterpret_cast<internal::Address*>(**this);
   uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + I::kNodeClassIdOffset;
   return *reinterpret_cast<uint16_t*>(addr);
 }
@@ -10097,7 +10133,7 @@ template <class T>
 void TracedGlobal<T>::SetFinalizationCallback(
     void* parameter, typename WeakCallbackInfo<void>::Callback callback) {
   V8::SetFinalizationCallbackTraced(
-      reinterpret_cast<internal::Address*>(this->val_), parameter, callback);
+      reinterpret_cast<internal::Address*>(**this), parameter, callback);
 }
 
 template <typename T>
