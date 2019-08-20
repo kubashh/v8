@@ -703,7 +703,8 @@ MemoryChunk* MemoryChunk::Initialize(Heap* heap, Address base, size_t size,
                                        nullptr);
   base::AsAtomicPointer::Release_Store(&chunk->typed_slot_set_[OLD_TO_OLD],
                                        nullptr);
-  chunk->invalidated_slots_ = nullptr;
+  chunk->invalidated_slots_[OLD_TO_NEW] = nullptr;
+  chunk->invalidated_slots_[OLD_TO_OLD] = nullptr;
   chunk->progress_bar_ = 0;
   chunk->high_water_mark_ = static_cast<intptr_t>(area_start - base);
   chunk->set_concurrent_sweeping_state(kSweepingDone);
@@ -842,6 +843,28 @@ void Page::ReleaseFreeListCategories() {
     }
     delete[] categories_;
     categories_ = nullptr;
+  }
+}
+
+template V8_EXPORT_PRIVATE void
+Page::AdjustSizeOfInvalidatedObjects<OLD_TO_NEW>();
+
+template <RememberedSetType type>
+void Page::AdjustSizeOfInvalidatedObjects() {
+  if (!invalidated_slots<type>()) return;
+
+  for (auto& pair : *invalidated_slots<type>()) {
+    int old_size = pair.second;
+    int new_size = pair.first.Size();
+    DCHECK_LE(new_size, old_size);
+
+    if (new_size < old_size) {
+      Address free_start = pair.first.address() + new_size;
+      Address free_end = pair.first.address() + old_size;
+      RememberedSet<type>::RemoveRange(this, free_start, free_end,
+                                       SlotSet::KEEP_EMPTY_BUCKETS);
+      pair.second = new_size;
+    }
   }
 }
 
@@ -1378,7 +1401,8 @@ void MemoryChunk::ReleaseAllocatedMemoryNeededForWritableChunk() {
   ReleaseSlotSet<OLD_TO_OLD>();
   ReleaseTypedSlotSet<OLD_TO_NEW>();
   ReleaseTypedSlotSet<OLD_TO_OLD>();
-  ReleaseInvalidatedSlots();
+  ReleaseInvalidatedSlots<OLD_TO_NEW>();
+  ReleaseInvalidatedSlots<OLD_TO_OLD>();
 
   if (local_tracker_ != nullptr) ReleaseLocalTracker();
   if (young_generation_bitmap_ != nullptr) ReleaseYoungGenerationBitmap();
@@ -1460,53 +1484,89 @@ void MemoryChunk::ReleaseTypedSlotSet() {
   }
 }
 
+template InvalidatedSlots* MemoryChunk::AllocateInvalidatedSlots<OLD_TO_NEW>();
+template InvalidatedSlots* MemoryChunk::AllocateInvalidatedSlots<OLD_TO_OLD>();
+
+template <RememberedSetType type>
 InvalidatedSlots* MemoryChunk::AllocateInvalidatedSlots() {
-  DCHECK_NULL(invalidated_slots_);
-  invalidated_slots_ = new InvalidatedSlots();
-  return invalidated_slots_;
+  DCHECK_NULL(invalidated_slots_[type]);
+  invalidated_slots_[type] = new InvalidatedSlots();
+  return invalidated_slots_[type];
 }
 
+template void MemoryChunk::ReleaseInvalidatedSlots<OLD_TO_NEW>();
+template void MemoryChunk::ReleaseInvalidatedSlots<OLD_TO_OLD>();
+
+template <RememberedSetType type>
 void MemoryChunk::ReleaseInvalidatedSlots() {
-  if (invalidated_slots_) {
-    delete invalidated_slots_;
-    invalidated_slots_ = nullptr;
+  if (invalidated_slots_[type]) {
+    delete invalidated_slots_[type];
+    invalidated_slots_[type] = nullptr;
   }
 }
 
+template V8_EXPORT_PRIVATE void
+MemoryChunk::RegisterObjectWithInvalidatedSlots<OLD_TO_NEW>(HeapObject object,
+                                                            int size);
+template V8_EXPORT_PRIVATE void
+MemoryChunk::RegisterObjectWithInvalidatedSlots<OLD_TO_OLD>(HeapObject object,
+                                                            int size);
+
+template <RememberedSetType type>
 void MemoryChunk::RegisterObjectWithInvalidatedSlots(HeapObject object,
                                                      int size) {
   if (!ShouldSkipEvacuationSlotRecording()) {
-    if (invalidated_slots() == nullptr) {
-      AllocateInvalidatedSlots();
+    if (invalidated_slots<type>() == nullptr) {
+      AllocateInvalidatedSlots<type>();
     }
-    int old_size = (*invalidated_slots())[object];
-    (*invalidated_slots())[object] = std::max(old_size, size);
+
+    InvalidatedSlots::iterator it = invalidated_slots<type>()->find(object);
+
+    if (it != invalidated_slots<type>()->end()) {
+      int old_size = it->second;
+      it->second = std::max(old_size, size);
+    } else {
+      invalidated_slots<type>()->insert(it, std::make_pair(object, size));
+    }
   }
 }
 
+template bool MemoryChunk::RegisteredObjectWithInvalidatedSlots<OLD_TO_NEW>(
+    HeapObject object);
+template bool MemoryChunk::RegisteredObjectWithInvalidatedSlots<OLD_TO_OLD>(
+    HeapObject object);
+
+template <RememberedSetType type>
 bool MemoryChunk::RegisteredObjectWithInvalidatedSlots(HeapObject object) {
   if (ShouldSkipEvacuationSlotRecording()) {
     // Invalidated slots do not matter if we are not recording slots.
     return true;
   }
-  if (invalidated_slots() == nullptr) {
+  if (invalidated_slots<type>() == nullptr) {
     return false;
   }
-  return invalidated_slots()->find(object) != invalidated_slots()->end();
+  return invalidated_slots<type>()->find(object) !=
+         invalidated_slots<type>()->end();
 }
 
+template void MemoryChunk::MoveObjectWithInvalidatedSlots<OLD_TO_NEW>(
+    HeapObject old_start, HeapObject new_start);
+template void MemoryChunk::MoveObjectWithInvalidatedSlots<OLD_TO_OLD>(
+    HeapObject old_start, HeapObject new_start);
+
+template <RememberedSetType type>
 void MemoryChunk::MoveObjectWithInvalidatedSlots(HeapObject old_start,
                                                  HeapObject new_start) {
   DCHECK_LT(old_start, new_start);
   DCHECK_EQ(MemoryChunk::FromHeapObject(old_start),
             MemoryChunk::FromHeapObject(new_start));
-  if (!ShouldSkipEvacuationSlotRecording() && invalidated_slots()) {
-    auto it = invalidated_slots()->find(old_start);
-    if (it != invalidated_slots()->end()) {
+  if (!ShouldSkipEvacuationSlotRecording() && invalidated_slots<type>()) {
+    auto it = invalidated_slots<type>()->find(old_start);
+    if (it != invalidated_slots<type>()->end()) {
       int old_size = it->second;
       int delta = static_cast<int>(new_start.address() - old_start.address());
-      invalidated_slots()->erase(it);
-      (*invalidated_slots())[new_start] = old_size - delta;
+      invalidated_slots<type>()->erase(it);
+      (*invalidated_slots<type>())[new_start] = old_size - delta;
     }
   }
 }
@@ -1610,6 +1670,13 @@ void PagedSpace::RefillFreeList() {
         p->ForAllFreeListCategories(
             [](FreeListCategory* category) { category->Reset(); });
       }
+
+      // Between "sweeping pending" and the actual sweep, objects might shrink
+      // or get right-trimmed. The sweeper would detect these gaps as free
+      // memory and reuse it for allocations. Update size of invalidated objects
+      // such that they do not contain these gaps anymore.
+      p->AdjustSizeOfInvalidatedObjects<OLD_TO_NEW>();
+
       // Only during compaction pages can actually change ownership. This is
       // safe because there exists no other competing action on the page links
       // during compaction.
@@ -3487,9 +3554,17 @@ bool PagedSpace::RawSlowRefillLinearAllocationArea(int size_in_bytes) {
             static_cast<size_t>(size_in_bytes)))
       return true;
 
+    // Cleanup invalidated old-to-new refs for compaction space in the
+    // final atomic pause.
+    Sweeper::FreeSpaceMayContainInvalidatedSlots
+        invalidated_slots_in_free_space =
+            is_local() ? Sweeper::FreeSpaceMayContainInvalidatedSlots::kYes
+                       : Sweeper::FreeSpaceMayContainInvalidatedSlots::kNo;
+
     // If sweeping is still in progress try to sweep pages.
     int max_freed = collector->sweeper()->ParallelSweepSpace(
-        identity(), size_in_bytes, kMaxPagesToSweep);
+        identity(), size_in_bytes, kMaxPagesToSweep,
+        invalidated_slots_in_free_space);
     RefillFreeList();
     if (max_freed >= size_in_bytes) {
       if (RefillLinearAllocationAreaFromFreeList(
