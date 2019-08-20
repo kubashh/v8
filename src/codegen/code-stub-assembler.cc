@@ -1402,12 +1402,12 @@ TNode<IntPtrT> CodeStubAssembler::LoadAndUntagObjectField(
         LoadObjectField(object, offset, MachineType::Int32()));
   } else {
     return SmiToIntPtr(
-        LoadObjectField(object, offset, MachineType::AnyTagged()));
+        LoadObjectField(object, offset, MachineType::TaggedSigned()));
   }
 }
 
-TNode<Int32T> CodeStubAssembler::LoadAndUntagToWord32ObjectField(Node* object,
-                                                                 int offset) {
+TNode<Int32T> CodeStubAssembler::LoadAndUntagToWord32ObjectField(
+    SloppyTNode<HeapObject> object, int offset) {
   if (SmiValuesAre32Bits()) {
 #if V8_TARGET_LITTLE_ENDIAN
     offset += 4;
@@ -1415,12 +1415,12 @@ TNode<Int32T> CodeStubAssembler::LoadAndUntagToWord32ObjectField(Node* object,
     return UncheckedCast<Int32T>(
         LoadObjectField(object, offset, MachineType::Int32()));
   } else {
-    return SmiToInt32(
-        LoadObjectField(object, offset, MachineType::AnyTagged()));
+    return SmiToInt32(LoadObjectField<Smi>(object, offset));
   }
 }
 
-TNode<IntPtrT> CodeStubAssembler::LoadAndUntagSmi(Node* base, int index) {
+TNode<IntPtrT> CodeStubAssembler::LoadAndUntagSmi(SloppyTNode<HeapObject> base,
+                                                  int index) {
   if (SmiValuesAre32Bits()) {
 #if V8_TARGET_LITTLE_ENDIAN
     index += 4;
@@ -1429,11 +1429,12 @@ TNode<IntPtrT> CodeStubAssembler::LoadAndUntagSmi(Node* base, int index) {
         Load(MachineType::Int32(), base, IntPtrConstant(index)));
   } else {
     return SmiToIntPtr(
-        Load(MachineType::AnyTagged(), base, IntPtrConstant(index)));
+        Load(MachineType::TaggedSigned(), base, IntPtrConstant(index)));
   }
 }
 
-void CodeStubAssembler::StoreAndTagSmi(Node* base, int offset, Node* value) {
+void CodeStubAssembler::StoreAndTagSmi(SloppyTNode<HeapObject> base, int offset,
+                                       Node* value) {
   if (SmiValuesAre32Bits()) {
     int zero_offset = offset + 4;
     int payload_offset = offset;
@@ -2432,7 +2433,7 @@ TNode<Int32T> CodeStubAssembler::LoadAndUntagToWord32ArrayElement(
   if (SmiValuesAre32Bits()) {
     return UncheckedCast<Int32T>(Load(MachineType::Int32(), object, offset));
   } else {
-    return SmiToInt32(Load(MachineType::AnyTagged(), object, offset));
+    return SmiToInt32(Load(MachineType::TaggedSigned(), object, offset));
   }
 }
 

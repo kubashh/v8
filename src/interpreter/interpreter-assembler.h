@@ -111,7 +111,7 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
 
   // Loads from and stores to the interpreter register file.
   compiler::Node* LoadRegister(Register reg);
-  compiler::Node* LoadAndUntagRegister(Register reg);
+  TNode<IntPtrT> LoadAndUntagRegister(Register reg);
   compiler::Node* LoadRegisterAtOperandIndex(int operand_index);
   std::pair<compiler::Node*, compiler::Node*> LoadRegisterPairAtOperandIndex(
       int operand_index);
@@ -379,7 +379,7 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   // Save the bytecode offset to the interpreter frame.
   void SaveBytecodeOffset();
   // Reload the bytecode offset from the interpreter frame.
-  Node* ReloadBytecodeOffset();
+  TNode<IntPtrT> ReloadBytecodeOffset();
 
   // Updates and returns BytecodeOffset() advanced by the current bytecode's
   // size. Traces the exit of the current bytecode.
