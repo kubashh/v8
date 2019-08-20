@@ -111,7 +111,7 @@ void String::MakeThin(Isolate* isolate, String internalized) {
   }
 
   int old_size = this->Size();
-  isolate->heap()->NotifyObjectLayoutChange(*this, old_size, no_gc);
+  isolate->heap()->NotifyObjectLayoutChange(*this, no_gc);
   bool one_byte = internalized.IsOneByteRepresentation();
   Handle<Map> map = one_byte ? isolate->factory()->thin_one_byte_string_map()
                              : isolate->factory()->thin_string_map();
@@ -153,9 +153,6 @@ bool String::MakeExternal(v8::String::ExternalStringResource* resource) {
   bool is_internalized = this->IsInternalizedString();
   bool has_pointers = StringShape(*this).IsIndirect();
 
-  if (has_pointers) {
-    isolate->heap()->NotifyObjectLayoutChange(*this, size, no_allocation);
-  }
   // Morph the string to an external string by replacing the map and
   // reinitializing the fields.  This won't work if the space the existing
   // string occupies is too small for a regular external string.  Instead, we
@@ -177,12 +174,19 @@ bool String::MakeExternal(v8::String::ExternalStringResource* resource) {
 
   // Byte size of the external String object.
   int new_size = this->SizeFromMap(new_map);
+
+  if (has_pointers) {
+    isolate->heap()->NotifyObjectLayoutChange(*this, no_allocation);
+
+    MemoryChunk::FromAddress(this->address())
+        ->RegisterObjectWithBothInvalidatedSlots(
+            HeapObject::FromAddress(this->address()), new_size);
+  }
+
   isolate->heap()->CreateFillerObjectAt(this->address() + new_size,
                                         size - new_size);
-  if (has_pointers) {
-    isolate->heap()->ClearRecordedSlotRange(this->address(),
-                                            this->address() + new_size);
-  }
+  isolate->heap()->RemoveRecordedSlotsAfterObjectShrinking(
+      HeapObject::FromAddress(this->address()), new_size, size);
 
   // We are storing the new map using release store after creating a filler for
   // the left-over space to avoid races with the sweeper thread.
@@ -227,7 +231,11 @@ bool String::MakeExternal(v8::String::ExternalOneByteStringResource* resource) {
   bool has_pointers = StringShape(*this).IsIndirect();
 
   if (has_pointers) {
-    isolate->heap()->NotifyObjectLayoutChange(*this, size, no_allocation);
+    isolate->heap()->NotifyObjectLayoutChange(*this, no_allocation);
+
+    MemoryChunk::FromAddress(this->address())
+        ->RegisterObjectWithBothInvalidatedSlots(
+            HeapObject::FromAddress(this->address()), size);
   }
   // Morph the string to an external string by replacing the map and
   // reinitializing the fields.  This won't work if the space the existing
@@ -251,10 +259,6 @@ bool String::MakeExternal(v8::String::ExternalOneByteStringResource* resource) {
   int new_size = this->SizeFromMap(new_map);
   isolate->heap()->CreateFillerObjectAt(this->address() + new_size,
                                         size - new_size);
-  if (has_pointers) {
-    isolate->heap()->ClearRecordedSlotRange(this->address(),
-                                            this->address() + new_size);
-  }
 
   // We are storing the new map using release store after creating a filler for
   // the left-over space to avoid races with the sweeper thread.
