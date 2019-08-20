@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c93e5c5_9a5ce7b3",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-20T17:12:15Z",
+      "side": 1,
+      "message": "Any reason these (and below) are Unchecked? I\u0027m fine with it I\u0027d just like to know.",
+      "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "344147c7_496ecd2f",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-20T17:12:15Z",
+      "side": 1,
+      "message": "Can we TNode LoadParentFramePointer instead?",
+      "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39f313f3_97d7b70c",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-20T17:12:15Z",
+      "side": 1,
+      "message": "bytecode_offset",
+      "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e338d800_55761a34",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-20T17:12:15Z",
+      "side": 1,
+      "message": "Let\u0027s rename this rather than adding a comment (store_offset)",
+      "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "450dd5a1_f8ca6755",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-20T17:12:15Z",
+      "side": 1,
+      "message": "Can we TNodify the other variables (bytecode_array, dispatch_table, accumulator_) while we are at it (in a follow-up CL is fine)?",
+      "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
