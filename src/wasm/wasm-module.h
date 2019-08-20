@@ -301,13 +301,15 @@ V8_EXPORT_PRIVATE MaybeHandle<WasmModuleObject> CreateModuleObjectFromBytes(
 V8_EXPORT_PRIVATE bool IsWasmCodegenAllowed(Isolate* isolate,
                                             Handle<Context> context);
 
-V8_EXPORT_PRIVATE Handle<JSArray> GetImports(Isolate* isolate,
-                                             Handle<WasmModuleObject> module);
-V8_EXPORT_PRIVATE Handle<JSArray> GetExports(Isolate* isolate,
-                                             Handle<WasmModuleObject> module);
-V8_EXPORT_PRIVATE Handle<JSArray> GetCustomSections(
-    Isolate* isolate, Handle<WasmModuleObject> module, Handle<String> name,
-    ErrorThrower* thrower);
+// TODO(mstarzinger): The below methods are only used by the JS API, hence we
+// should consider moving them into the "wasm-js.cc" file instead.
+Handle<JSObject> GetTypeForGlobal(Isolate* isolate, bool is_mutable,
+                                  ValueType type);
+Handle<JSArray> GetImports(Isolate* isolate, Handle<WasmModuleObject> module);
+Handle<JSArray> GetExports(Isolate* isolate, Handle<WasmModuleObject> module);
+Handle<JSArray> GetCustomSections(Isolate* isolate,
+                                  Handle<WasmModuleObject> module,
+                                  Handle<String> name, ErrorThrower* thrower);
 
 // Decode local variable names from the names section. Return FixedArray of
 // FixedArray of <undefined|String>. The outer fixed array is indexed by the
