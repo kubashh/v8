@@ -301,6 +301,9 @@ V8_EXPORT_PRIVATE MaybeHandle<WasmModuleObject> CreateModuleObjectFromBytes(
 V8_EXPORT_PRIVATE bool IsWasmCodegenAllowed(Isolate* isolate,
                                             Handle<Context> context);
 
+// TODO(mstarzinger): The below methods are only used by the JS API, hence we
+// should consider moving them into the "wasm-js.cc" file instead.
+Handle<JSObject> GetTypeForFunction(Isolate* isolate, FunctionSig* sig);
 Handle<JSObject> GetTypeForGlobal(Isolate* isolate, bool is_mutable,
                                   ValueType type);
 Handle<JSArray> GetImports(Isolate* isolate, Handle<WasmModuleObject> module);
