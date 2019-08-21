@@ -223,7 +223,7 @@ class NativeRegExpMacroAssembler: public RegExpMacroAssembler {
   bool CanReadUnaligned() override;
 
   // Returns a {Result} sentinel, or the number of successful matches.
-  static int Match(Handle<Code> regexp, Handle<String> subject,
+  static int Match(Handle<JSRegExp> regexp, Handle<String> subject,
                    int* offsets_vector, int offsets_vector_length,
                    int previous_index, Isolate* isolate);
 
@@ -254,7 +254,7 @@ class NativeRegExpMacroAssembler: public RegExpMacroAssembler {
   }
 
   // Returns a {Result} sentinel, or the number of successful matches.
-  V8_EXPORT_PRIVATE static int Execute(Code code, String input,
+  V8_EXPORT_PRIVATE static int Execute(JSRegExp regexp, String input,
                                        int start_offset,
                                        const byte* input_start,
                                        const byte* input_end, int* output,
