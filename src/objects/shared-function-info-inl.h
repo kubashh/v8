@@ -628,6 +628,9 @@ void SharedFunctionInfo::ClearPreparseData() {
       data.address() + UncompiledDataWithoutPreparseData::kSize,
       UncompiledDataWithPreparseData::kSize -
           UncompiledDataWithoutPreparseData::kSize);
+  heap->ClearRecordedSlotsRightTrim(*this,
+                                    UncompiledDataWithoutPreparseData::kSize,
+                                    UncompiledDataWithPreparseData::kSize);
 
   // Ensure that the clear was successful.
   DCHECK(HasUncompiledDataWithoutPreparseData());
