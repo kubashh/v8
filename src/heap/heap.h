@@ -435,8 +435,9 @@ class Heap {
   V8_EXPORT_PRIVATE void RightTrimFixedArray(FixedArrayBase obj,
                                              int elements_to_trim);
   void RightTrimWeakFixedArray(WeakFixedArray obj, int elements_to_trim);
-  void RemoveRecordedSlotsAfterObjectShrinking(HeapObject object, int new_size,
-                                               int old_size);
+  void ClearRecordedSlotsRightTrim(HeapObject object, int new_size,
+                                   int old_size);
+  void ClearRecordedSlotsLeftTrim(HeapObject filler, HeapObject new_object);
 
   // Converts the given boolean condition to JavaScript boolean value.
   inline Oddball ToBoolean(bool condition);
@@ -840,9 +841,6 @@ class Heap {
   Address* store_buffer_top_address();
   static intptr_t store_buffer_mask_constant();
   static Address store_buffer_overflow_function_address();
-
-  void ClearRecordedSlot(HeapObject object, ObjectSlot slot);
-  void ClearRecordedSlotRange(Address start, Address end);
 
 #ifdef DEBUG
   void VerifyClearedSlot(HeapObject object, ObjectSlot slot);
