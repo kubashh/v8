@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "32c8f60f_efe881f6",
+        "filename": "src/builtins/regexp-source.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-08-21T17:42:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "839ea858_a7dab21f",
+      "revId": "1c576118fbc27401faab2a1081f43834faf4d4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6efa3e8a_bcfaaf23",
         "filename": "src/builtins/regexp-source.tq",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "4d3c153d_823cea92",
+        "filename": "src/builtins/regexp-source.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-08-21T17:42:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6efa3e8a_bcfaaf23",
+      "revId": "1c576118fbc27401faab2a1081f43834faf4d4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1b6c353_4cbdc628",
         "filename": "src/codegen/code-stub-assembler.h",
         "patchSetId": 2
@@ -50,6 +86,24 @@
       "revId": "1c576118fbc27401faab2a1081f43834faf4d4f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4832a59_3960aeaa",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2283,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-08-21T17:42:16Z",
+      "side": 1,
+      "message": "thanks, I moved it to builtins-regexp-gen since it doesn\u0027t have any uses outside of regexp.",
+      "parentUuid": "e1b6c353_4cbdc628",
+      "revId": "1c576118fbc27401faab2a1081f43834faf4d4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
