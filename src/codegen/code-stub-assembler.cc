@@ -1402,12 +1402,12 @@ TNode<IntPtrT> CodeStubAssembler::LoadAndUntagObjectField(
         LoadObjectField(object, offset, MachineType::Int32()));
   } else {
     return SmiToIntPtr(
-        LoadObjectField(object, offset, MachineType::AnyTagged()));
+        LoadObjectField(object, offset, MachineType::TaggedSigned()));
   }
 }
 
-TNode<Int32T> CodeStubAssembler::LoadAndUntagToWord32ObjectField(Node* object,
-                                                                 int offset) {
+TNode<Int32T> CodeStubAssembler::LoadAndUntagToWord32ObjectField(
+    SloppyTNode<HeapObject> object, int offset) {
   if (SmiValuesAre32Bits()) {
 #if V8_TARGET_LITTLE_ENDIAN
     offset += 4;
@@ -1416,38 +1416,7 @@ TNode<Int32T> CodeStubAssembler::LoadAndUntagToWord32ObjectField(Node* object,
         LoadObjectField(object, offset, MachineType::Int32()));
   } else {
     return SmiToInt32(
-        LoadObjectField(object, offset, MachineType::AnyTagged()));
-  }
-}
-
-TNode<IntPtrT> CodeStubAssembler::LoadAndUntagSmi(Node* base, int index) {
-  if (SmiValuesAre32Bits()) {
-#if V8_TARGET_LITTLE_ENDIAN
-    index += 4;
-#endif
-    return ChangeInt32ToIntPtr(
-        Load(MachineType::Int32(), base, IntPtrConstant(index)));
-  } else {
-    return SmiToIntPtr(
-        Load(MachineType::AnyTagged(), base, IntPtrConstant(index)));
-  }
-}
-
-void CodeStubAssembler::StoreAndTagSmi(Node* base, int offset, Node* value) {
-  if (SmiValuesAre32Bits()) {
-    int zero_offset = offset + 4;
-    int payload_offset = offset;
-#if V8_TARGET_LITTLE_ENDIAN
-    std::swap(zero_offset, payload_offset);
-#endif
-    StoreNoWriteBarrier(MachineRepresentation::kWord32, base,
-                        IntPtrConstant(zero_offset), Int32Constant(0));
-    StoreNoWriteBarrier(MachineRepresentation::kWord32, base,
-                        IntPtrConstant(payload_offset),
-                        TruncateInt64ToInt32(value));
-  } else {
-    StoreNoWriteBarrier(MachineRepresentation::kTaggedSigned, base,
-                        IntPtrConstant(offset), SmiTag(value));
+        LoadObjectField(object, offset, MachineType::TaggedSigned()));
   }
 }
 
@@ -2433,7 +2402,7 @@ TNode<Int32T> CodeStubAssembler::LoadAndUntagToWord32ArrayElement(
   if (SmiValuesAre32Bits()) {
     return UncheckedCast<Int32T>(Load(MachineType::Int32(), object, offset));
   } else {
-    return SmiToInt32(Load(MachineType::AnyTagged(), object, offset));
+    return SmiToInt32(Load(MachineType::TaggedSigned(), object, offset));
   }
 }
 
@@ -2702,8 +2671,8 @@ Node* CodeStubAssembler::LoadJSFunctionPrototype(TNode<JSFunction> function,
   CSA_ASSERT(this, IsFunctionWithPrototypeSlotMap(LoadMap(function)));
   CSA_ASSERT(this, IsClearWord32<Map::HasNonInstancePrototypeBit>(
                        LoadMapBitField(LoadMap(function))));
-  Node* proto_or_map =
-      LoadObjectField(function, JSFunction::kPrototypeOrInitialMapOffset);
+  TNode<HeapObject> proto_or_map = LoadObjectField<HeapObject>(
+      function, JSFunction::kPrototypeOrInitialMapOffset);
   GotoIf(IsTheHole(proto_or_map), if_bailout);
 
   TVARIABLE(HeapObject, var_result, proto_or_map);
@@ -2817,16 +2786,6 @@ void CodeStubAssembler::StoreObjectFieldRoot(Node* object, int offset,
   } else {
     return StoreObjectField(object, offset, LoadRoot(root_index));
   }
-}
-
-void CodeStubAssembler::StoreJSArrayLength(TNode<JSArray> array,
-                                           TNode<Smi> length) {
-  StoreObjectFieldNoWriteBarrier(array, JSArray::kLengthOffset, length);
-}
-
-void CodeStubAssembler::StoreElements(TNode<Object> object,
-                                      TNode<FixedArrayBase> elements) {
-  StoreObjectField(object, JSObject::kElementsOffset, elements);
 }
 
 void CodeStubAssembler::StoreFixedArrayOrPropertyArrayElement(
@@ -10022,16 +9981,16 @@ Node* CodeStubAssembler::OrdinaryHasInstance(Node* context, Node* callable,
                                        &return_runtime);
 
   // Get the "prototype" (or initial map) of the {callable}.
-  Node* callable_prototype =
-      LoadObjectField(callable, JSFunction::kPrototypeOrInitialMapOffset);
+  TNode<HeapObject> callable_prototype = LoadObjectField<HeapObject>(
+      CAST(callable), JSFunction::kPrototypeOrInitialMapOffset);
   {
     Label no_initial_map(this), walk_prototype_chain(this);
     TVARIABLE(HeapObject, var_callable_prototype, callable_prototype);
 
     // Resolve the "prototype" if the {callable} has an initial map.
     GotoIfNot(IsMap(callable_prototype), &no_initial_map);
-    var_callable_prototype.Bind(
-        LoadObjectField(callable_prototype, Map::kPrototypeOffset));
+    var_callable_prototype =
+        LoadObjectField<HeapObject>(callable_prototype, Map::kPrototypeOffset);
     Goto(&walk_prototype_chain);
 
     BIND(&no_initial_map);
