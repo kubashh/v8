@@ -1344,6 +1344,12 @@ class InterpretedFrameInfo {
             FrameInfoKind::kPrecise};
   }
 
+  static InterpretedFrameInfo Conservative(int parameters_count_with_receiver,
+                                           int locals_count) {
+    return {parameters_count_with_receiver, locals_count, false,
+            FrameInfoKind::kConservative};
+  }
+
   uint32_t register_stack_slot_count() const {
     return register_stack_slot_count_;
   }
@@ -1368,6 +1374,10 @@ class ArgumentsAdaptorFrameInfo {
     return ArgumentsAdaptorFrameInfo{translation_height};
   }
 
+  static ArgumentsAdaptorFrameInfo Conservative(int parameters_count) {
+    return ArgumentsAdaptorFrameInfo{parameters_count};
+  }
+
   uint32_t frame_size_in_bytes_without_fixed() const {
     return frame_size_in_bytes_without_fixed_;
   }
@@ -1385,6 +1395,10 @@ class ConstructStubFrameInfo {
   static ConstructStubFrameInfo Precise(int translation_height,
                                         bool is_topmost) {
     return {translation_height, is_topmost, FrameInfoKind::kPrecise};
+  }
+
+  static ConstructStubFrameInfo Conservative(int parameters_count) {
+    return {parameters_count, false, FrameInfoKind::kConservative};
   }
 
   uint32_t frame_size_in_bytes_without_fixed() const {
@@ -1418,6 +1432,21 @@ class BuiltinContinuationFrameInfo {
             deopt_kind,
             continuation_mode,
             FrameInfoKind::kPrecise};
+  }
+
+  static BuiltinContinuationFrameInfo Conservative(
+      int parameters_count,
+      const CallInterfaceDescriptor& continuation_descriptor,
+      const RegisterConfiguration* register_config) {
+    // It doesn't matter what we pass as is_topmost, deopt_kind and
+    // continuation_mode; these values are ignored in conservative mode.
+    return {parameters_count,
+            continuation_descriptor,
+            register_config,
+            false,
+            DeoptimizeKind::kEager,
+            BuiltinContinuationMode::STUB,
+            FrameInfoKind::kConservative};
   }
 
   bool frame_has_result_stack_slot() const {
