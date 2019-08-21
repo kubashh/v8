@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c1f47e63_f05a205f",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-21T14:48:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47b56d29_379a6757",
+      "range": {
+        "startLine": 151,
+        "startChar": 5,
+        "endLine": 151,
+        "endChar": 26
+      },
+      "revId": "d6f99ff6f07a6c4fb74e1824fdd1ac0fd09e5abf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fb771de_cee21a19",
         "filename": "src/compiler/js-generic-lowering.cc",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2019-08-21T13:46:53Z",
       "side": 1,
       "message": "Since you use this instead of GetFeedback, I think the branch above for !FLAG... is not necessary.",
+      "revId": "d6f99ff6f07a6c4fb74e1824fdd1ac0fd09e5abf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "475d2f07_5fe73283",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-21T14:48:01Z",
+      "side": 1,
+      "message": "In case the flag is not set, our ProcessedFeedback doesn\u0027t seem to be populated (I got errors in the tests).",
+      "parentUuid": "9fb771de_cee21a19",
       "revId": "d6f99ff6f07a6c4fb74e1824fdd1ac0fd09e5abf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "d5505e44_ea4dd7fa",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-21T14:48:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdbd44f4_00975715",
+      "revId": "d6f99ff6f07a6c4fb74e1824fdd1ac0fd09e5abf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b6ad237_f02681bd",
         "filename": "src/compiler/js-generic-lowering.cc",
         "patchSetId": 3
@@ -73,6 +133,24 @@
       "revId": "d6f99ff6f07a6c4fb74e1824fdd1ac0fd09e5abf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0ad41af_a5f32ffd",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-08-21T14:48:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b6ad237_f02681bd",
+      "revId": "d6f99ff6f07a6c4fb74e1824fdd1ac0fd09e5abf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
