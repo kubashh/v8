@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c404b37_3d99750d",
+        "filename": "src/compiler/js-generic-lowering.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-21T14:54:03Z",
+      "side": 1,
+      "message": "const",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 24
+      },
+      "revId": "63cecd060c4ebd65e61a53ff49663d981be6f6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
