@@ -2537,8 +2537,14 @@ base::Optional<MapRef> JSObjectRef::GetObjectCreateMap() const {
     }
   }
   MapData* map_data = data()->AsJSObject()->object_create_map();
-  return map_data != nullptr ? MapRef(broker(), map_data)
-                             : base::Optional<MapRef>();
+  if (map_data != nullptr) {
+    DCHECK(serialized_object_create_map_);
+    return MapRef(broker(), map_data);
+  }
+  if (!serialized_object_create_map_) {
+    TRACE_MISSING(broker, "object_create_map on " << this);
+  }
+  return base::nullopt;
 }
 
 #define DEF_TESTER(Type, ...)                              \
