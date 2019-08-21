@@ -1017,6 +1017,7 @@ Node* BytecodeGraphBuilder::BuildLoadNativeContextField(int index) {
 }
 
 VectorSlotPair BytecodeGraphBuilder::CreateVectorSlotPair(int slot_id) {
+  AllowHandleDereference allow_handle_deref;
   FeedbackSlot slot = FeedbackVector::ToSlot(slot_id);
   // TODO(mvstanton): eliminate this use of a FeedbackNexus.
   FeedbackNexus nexus(feedback_vector().object(), slot);
@@ -1024,6 +1025,7 @@ VectorSlotPair BytecodeGraphBuilder::CreateVectorSlotPair(int slot_id) {
 }
 
 void BytecodeGraphBuilder::CreateGraph() {
+  DisallowHeapAccessIf disallow_heap_access(FLAG_concurrent_inlining);
   SourcePositionTable::Scope pos_scope(source_positions_, start_position_);
 
   // Set up the basic structure of the graph. Outputs for {Start} are the formal
@@ -1394,6 +1396,7 @@ void BytecodeGraphBuilder::VisitMov() {
 Node* BytecodeGraphBuilder::BuildLoadGlobal(NameRef name,
                                             uint32_t feedback_slot_index,
                                             TypeofMode typeof_mode) {
+  AllowHandleDereference allow_handle_deref;
   VectorSlotPair feedback = CreateVectorSlotPair(feedback_slot_index);
   DCHECK(
       IsLoadGlobalICKind(feedback_vector().object()->GetKind(feedback.slot())));
@@ -1423,6 +1426,7 @@ void BytecodeGraphBuilder::VisitLdaGlobalInsideTypeof() {
 }
 
 void BytecodeGraphBuilder::VisitStaGlobal() {
+  AllowHandleDereference allow_handle_deref;
   PrepareEagerCheckpoint();
   NameRef name(broker(),
                bytecode_iterator().GetConstantForIndexOperand(0, isolate()));
@@ -1811,6 +1815,7 @@ void BytecodeGraphBuilder::VisitLdaKeyedProperty() {
 }
 
 void BytecodeGraphBuilder::BuildNamedStore(StoreMode store_mode) {
+  AllowHandleDereference allow_handle_deref;
   PrepareEagerCheckpoint();
   Node* value = environment()->LookupAccumulator();
   Node* object =
@@ -1870,6 +1875,7 @@ void BytecodeGraphBuilder::VisitStaNamedOwnProperty() {
 }
 
 void BytecodeGraphBuilder::VisitStaKeyedProperty() {
+  AllowHandleDereference allow_handle_deref;
   PrepareEagerCheckpoint();
   Node* value = environment()->LookupAccumulator();
   Node* object =
@@ -1929,15 +1935,18 @@ void BytecodeGraphBuilder::VisitPopContext() {
 }
 
 void BytecodeGraphBuilder::VisitCreateClosure() {
-  Handle<SharedFunctionInfo> shared_info = Handle<SharedFunctionInfo>::cast(
-      bytecode_iterator().GetConstantForIndexOperand(0, isolate()));
+  SharedFunctionInfoRef shared_info(
+      broker(), bytecode_iterator().GetConstantForIndexOperand(0, isolate()));
   AllocationType allocation =
       interpreter::CreateClosureFlags::PretenuredBit::decode(
           bytecode_iterator().GetFlagOperand(2))
           ? AllocationType::kOld
           : AllocationType::kYoung;
+
+  AllowHandleDereference allow_handle_deref;
+  AllowHandleAllocation allow_handle_alloc;
   const Operator* op = javascript()->CreateClosure(
-      shared_info,
+      shared_info.object(),
       feedback_vector().object()->GetClosureFeedbackCell(
           bytecode_iterator().GetIndexOperand(1)),
       handle(jsgraph()->isolate()->builtins()->builtin(Builtins::kCompileLazy),
