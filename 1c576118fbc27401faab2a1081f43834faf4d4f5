@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "839ea858_a7dab21f",
+        "filename": "src/builtins/regexp-source.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-21T05:41:57Z",
+      "side": 1,
+      "message": "Please put this next to its use below.",
+      "revId": "1c576118fbc27401faab2a1081f43834faf4d4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6efa3e8a_bcfaaf23",
+        "filename": "src/builtins/regexp-source.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-21T05:41:57Z",
+      "side": 1,
+      "message": "nit: `return \u0027(?:)\u0027`",
+      "revId": "1c576118fbc27401faab2a1081f43834faf4d4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1b6c353_4cbdc628",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2283,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-21T05:41:57Z",
+      "side": 1,
+      "message": "The naming and placement of this function are misleading. It checks if the given receiver equals the initial regexp prototype. The other, surrounding functions check *the given map\u0027s prototype*. \n\nI\u0027d suggest putting it in regexp.tq (you can still call the Torque-defined macro from CSA). The name could be \u0027LoadInitialRegExpPrototype\u0027 and the comparison could happen with a normal `\u003d\u003d`.",
+      "revId": "1c576118fbc27401faab2a1081f43834faf4d4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
