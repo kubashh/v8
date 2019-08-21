@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47b56d29_379a6757",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-21T13:46:53Z",
+      "side": 1,
+      "message": "That\u0027s not quite accurate, so let\u0027s call it ShouldUseMegamorphicLoadBuiltin or something like that.",
+      "range": {
+        "startLine": 151,
+        "startChar": 5,
+        "endLine": 151,
+        "endChar": 26
+      },
+      "revId": "d6f99ff6f07a6c4fb74e1824fdd1ac0fd09e5abf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fb771de_cee21a19",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-21T13:46:53Z",
+      "side": 1,
+      "message": "Since you use this instead of GetFeedback, I think the branch above for !FLAG... is not necessary.",
+      "revId": "d6f99ff6f07a6c4fb74e1824fdd1ac0fd09e5abf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdbd44f4_00975715",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-21T13:46:53Z",
+      "side": 1,
+      "message": "Nothing is missing here, we should return false.",
+      "revId": "d6f99ff6f07a6c4fb74e1824fdd1ac0fd09e5abf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b6ad237_f02681bd",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-21T13:46:53Z",
+      "side": 1,
+      "message": "UNREACHABLE()",
+      "revId": "d6f99ff6f07a6c4fb74e1824fdd1ac0fd09e5abf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
