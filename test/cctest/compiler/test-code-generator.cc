@@ -114,7 +114,8 @@ Handle<Code> BuildSetupFunction(Isolate* isolate,
   // Then take each element of the initial state and pass them as arguments.
   TNode<FixedArray> state_in = __ Cast(__ Parameter(1));
   for (int i = 0; i < static_cast<int>(parameters.size()); i++) {
-    Node* element = __ LoadFixedArrayElement(state_in, __ IntPtrConstant(i));
+    TNode<Object> element =
+        __ LoadFixedArrayElement(state_in, __ IntPtrConstant(i));
     // Unbox all elements before passing them as arguments.
     switch (parameters[i].representation()) {
       // Tagged parameters are Smis, they do not need unboxing.
@@ -223,7 +224,7 @@ Handle<Code> BuildTeardownFunction(Isolate* isolate,
         TNode<FixedArray> vector =
             __ Cast(__ LoadFixedArrayElement(result_array, i));
         for (int lane = 0; lane < 4; lane++) {
-          Node* lane_value =
+          TNode<Smi> lane_value =
               __ SmiFromInt32(tester.raw_assembler_for_testing()->AddNode(
                   tester.raw_assembler_for_testing()
                       ->machine()

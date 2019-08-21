@@ -441,7 +441,7 @@ TARGET_TEST_F(InterpreterAssemblerTest, LoadConstantPoolEntry) {
     InterpreterAssemblerTestState state(this, bytecode);
     InterpreterAssemblerForTest m(&state, bytecode);
     {
-      Node* index = m.IntPtrConstant(2);
+      TNode<IntPtrT> index = m.IntPtrConstant(2);
       Node* load_constant = m.LoadConstantPoolEntry(index);
 #ifdef V8_COMPRESS_POINTERS
       Matcher<Node*> constant_pool_matcher =
@@ -511,9 +511,9 @@ TARGET_TEST_F(InterpreterAssemblerTest, LoadObjectField) {
   TRACED_FOREACH(interpreter::Bytecode, bytecode, kBytecodes) {
     InterpreterAssemblerTestState state(this, bytecode);
     InterpreterAssemblerForTest m(&state, bytecode);
-    Node* object = m.IntPtrConstant(0xDEADBEEF);
+    TNode<IntPtrT> object = m.IntPtrConstant(0xDEADBEEF);
     int offset = 16;
-    Node* load_field = m.LoadObjectField(object, offset);
+    TNode<Object> load_field = m.LoadObjectField(object, offset);
 #ifdef V8_COMPRESS_POINTERS
     EXPECT_THAT(load_field, IsChangeCompressedToTagged(m.IsLoadFromObject(
                                 MachineType::AnyCompressed(), object,
@@ -530,10 +530,11 @@ TARGET_TEST_F(InterpreterAssemblerTest, CallRuntime2) {
   TRACED_FOREACH(interpreter::Bytecode, bytecode, kBytecodes) {
     InterpreterAssemblerTestState state(this, bytecode);
     InterpreterAssemblerForTest m(&state, bytecode);
-    Node* arg1 = m.Int32Constant(2);
-    Node* arg2 = m.Int32Constant(3);
-    Node* context = m.Int32Constant(4);
-    Node* call_runtime = m.CallRuntime(Runtime::kAdd, context, arg1, arg2);
+    TNode<Int32T> arg1 = m.Int32Constant(2);
+    TNode<Int32T> arg2 = m.Int32Constant(3);
+    TNode<Int32T> context = m.Int32Constant(4);
+    TNode<Object> call_runtime =
+        m.CallRuntime(Runtime::kAdd, context, arg1, arg2);
     EXPECT_THAT(call_runtime, c::IsCall(_, _, arg1, arg2, _,
                                         c::IsInt32Constant(2), context, _, _));
   }
@@ -549,10 +550,10 @@ TARGET_TEST_F(InterpreterAssemblerTest, CallRuntime) {
         Callable builtin =
             CodeFactory::InterpreterCEntry(isolate(), result_size);
 
-        Node* function_id = m.Int32Constant(0);
+        TNode<Int32T> function_id = m.Int32Constant(0);
         InterpreterAssembler::RegListNodePair registers(m.IntPtrConstant(1),
                                                         m.Int32Constant(2));
-        Node* context = m.IntPtrConstant(4);
+        TNode<IntPtrT> context = m.IntPtrConstant(4);
 
         Matcher<Node*> function_table = c::IsExternalConstant(
             ExternalReference::runtime_function_table_address_for_unittests(
@@ -581,7 +582,7 @@ TARGET_TEST_F(InterpreterAssemblerTest, LoadFeedbackVector) {
   TRACED_FOREACH(interpreter::Bytecode, bytecode, kBytecodes) {
     InterpreterAssemblerTestState state(this, bytecode);
     InterpreterAssemblerForTest m(&state, bytecode);
-    Node* feedback_vector = m.LoadFeedbackVector();
+    TNode<HeapObject> feedback_vector = m.LoadFeedbackVector();
 
     // Feedback vector is a phi node with two inputs. One of them is loading the
     // feedback vector and the other is undefined constant (when feedback
