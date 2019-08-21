@@ -3060,15 +3060,38 @@ IGNITION_HANDLER(ForInPrepare, InterpreterAssembler) {
     Node* enum_length = LoadMapEnumLength(enumerator);
     CSA_ASSERT(this, WordNotEqual(enum_length,
                                   IntPtrConstant(kInvalidEnumCacheSentinel)));
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> More TNodification
     TNode<DescriptorArray> descriptors = LoadMapDescriptors(enumerator);
     TNode<EnumCache> enum_cache = LoadObjectField<EnumCache>(
         descriptors, DescriptorArray::kEnumCacheOffset);
     TNode<FixedArray> enum_keys =
         LoadObjectField<FixedArray>(enum_cache, EnumCache::kKeysOffset);
+<<<<<<< HEAD
 
     // Check if we have enum indices available.
     TNode<FixedArray> enum_indices =
         LoadObjectField<FixedArray>(enum_cache, EnumCache::kIndicesOffset);
+=======
+    Node* descriptors = LoadMapDescriptors(enumerator);
+    Node* enum_cache =
+        LoadObjectField(descriptors, DescriptorArray::kEnumCacheOffset,
+                        MachineType::TaggedPointer());
+    Node* enum_keys = LoadObjectField(enum_cache, EnumCache::kKeysOffset,
+                                      MachineType::TaggedPointer());
+
+    // Check if we have enum indices available.
+    Node* enum_indices = LoadObjectField(enum_cache, EnumCache::kIndicesOffset,
+                                         MachineType::TaggedPointer());
+>>>>>>> [ptr-compr][csa] More specialized loads from Any to Pointer
+=======
+
+    // Check if we have enum indices available.
+    TNode<FixedArray> enum_indices =
+        LoadObjectField<FixedArray>(enum_cache, EnumCache::kIndicesOffset);
+>>>>>>> More TNodification
     Node* enum_indices_length = LoadAndUntagFixedArrayBaseLength(enum_indices);
     Node* feedback = SelectSmiConstant(
         IntPtrLessThanOrEqual(enum_length, enum_indices_length),

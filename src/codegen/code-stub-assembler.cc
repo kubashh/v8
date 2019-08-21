@@ -2702,8 +2702,8 @@ Node* CodeStubAssembler::LoadJSFunctionPrototype(TNode<JSFunction> function,
   CSA_ASSERT(this, IsFunctionWithPrototypeSlotMap(LoadMap(function)));
   CSA_ASSERT(this, IsClearWord32<Map::HasNonInstancePrototypeBit>(
                        LoadMapBitField(LoadMap(function))));
-  TNode<HeapObject> proto_or_map = LoadObjectField<HeapObject>(
-      function, JSFunction::kPrototypeOrInitialMapOffset);
+  Node* proto_or_map =
+      LoadObjectField(function, JSFunction::kPrototypeOrInitialMapOffset);
   GotoIf(IsTheHole(proto_or_map), if_bailout);
 
   TVARIABLE(HeapObject, var_result, proto_or_map);
@@ -2817,6 +2817,16 @@ void CodeStubAssembler::StoreObjectFieldRoot(Node* object, int offset,
   } else {
     return StoreObjectField(object, offset, LoadRoot(root_index));
   }
+}
+
+void CodeStubAssembler::StoreJSArrayLength(TNode<JSArray> array,
+                                           TNode<Smi> length) {
+  StoreObjectFieldNoWriteBarrier(array, JSArray::kLengthOffset, length);
+}
+
+void CodeStubAssembler::StoreElements(TNode<Object> object,
+                                      TNode<FixedArrayBase> elements) {
+  StoreObjectField(object, JSObject::kElementsOffset, elements);
 }
 
 void CodeStubAssembler::StoreFixedArrayOrPropertyArrayElement(
@@ -10012,16 +10022,16 @@ Node* CodeStubAssembler::OrdinaryHasInstance(Node* context, Node* callable,
                                        &return_runtime);
 
   // Get the "prototype" (or initial map) of the {callable}.
-  TNode<HeapObject> callable_prototype = LoadObjectField<HeapObject>(
-      CAST(callable), JSFunction::kPrototypeOrInitialMapOffset);
+  Node* callable_prototype =
+      LoadObjectField(callable, JSFunction::kPrototypeOrInitialMapOffset);
   {
     Label no_initial_map(this), walk_prototype_chain(this);
     TVARIABLE(HeapObject, var_callable_prototype, callable_prototype);
 
     // Resolve the "prototype" if the {callable} has an initial map.
     GotoIfNot(IsMap(callable_prototype), &no_initial_map);
-    var_callable_prototype =
-        LoadObjectField<HeapObject>(callable_prototype, Map::kPrototypeOffset);
+    var_callable_prototype.Bind(
+        LoadObjectField(callable_prototype, Map::kPrototypeOffset));
     Goto(&walk_prototype_chain);
 
     BIND(&no_initial_map);
