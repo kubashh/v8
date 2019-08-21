@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "af8411b7_d0fa49d5",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-21T11:48:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6655a79_5aa1f772",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "876e1c08_9449abee",
         "filename": "src/builtins/torque-internal.tq",
         "patchSetId": 1
@@ -140,6 +158,24 @@
       "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b623fcf9_f30743fa",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-21T11:48:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "961004e0_7d77a16e",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -298,6 +334,24 @@
       "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96c37600_c83a5528",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-08-21T11:48:16Z",
+      "side": 1,
+      "message": "As discussed offline, we might at some point, but that\u0027ll require some more changes in how existing finalizers work.",
+      "parentUuid": "0ebb5c06_ccbc2a19",
+      "revId": "d5fed17f6e976b857b67bd9d5a5ae0657bdb195e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
