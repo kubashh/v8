@@ -22,6 +22,30 @@
       "revId": "0d15cddf37d36eb245b87f1b0424dca18ef3b5db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2beae93_c28517e1",
+        "filename": "test/cctest/compiler/test-run-retpoline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-08-21T12:02:10Z",
+      "side": 1,
+      "message": "I think the latter, since these are all stack parameters -- but I didn\u0027t want to change the semantics of the test by changing everything to Smi operations. I can do that though, WDYT?",
+      "parentUuid": "f676b847_984a51ab",
+      "range": {
+        "startLine": 34,
+        "startChar": 15,
+        "endLine": 34,
+        "endChar": 30
+      },
+      "revId": "0d15cddf37d36eb245b87f1b0424dca18ef3b5db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
