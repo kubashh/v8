@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a3048069_055f8df4",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-08-21T11:18:10Z",
+      "side": 1,
+      "message": "We know it\u0027s a IntPtr because of https://cs.chromium.org/chromium/src/v8/src/codegen/interface-descriptors.h?l\u003d1082. However, the CAST fails because of incompatible types Object vs IntPtrT.",
+      "parentUuid": "2c93e5c5_9a5ce7b3",
+      "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "344147c7_496ecd2f",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 10
@@ -33,6 +51,24 @@
       "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d71f6552_e4f19b62",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-08-21T11:18:10Z",
+      "side": 1,
+      "message": "LoadParentFramePointer was already TNodified. What I did to solve this was change interpreted_frame_pointer_ from IntPtr (which was wrong to begin with) to RawPtr.",
+      "parentUuid": "344147c7_496ecd2f",
+      "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "2df14f2e_8f404620",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-08-21T11:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39f313f3_97d7b70c",
+      "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e338d800_55761a34",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 10
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "83276b0f_fc2e6f03",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-08-21T11:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e338d800_55761a34",
+      "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "450dd5a1_f8ca6755",
         "filename": "src/interpreter/interpreter-assembler.h",
         "patchSetId": 10
@@ -84,6 +156,24 @@
       "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4c76372_b1ffa734",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-08-21T11:18:10Z",
+      "side": 1,
+      "message": "Yes, in a follow-up",
+      "parentUuid": "450dd5a1_f8ca6755",
+      "revId": "8e2d4a0aa0682c5cebbeea5409ef629bdc42d2e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
