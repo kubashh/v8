@@ -20,7 +20,7 @@ snippet: "
 "
 frame size: 9
 parameter count: 1
-bytecode array length: 80
+bytecode array length: 83
 bytecodes: [
   /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
@@ -31,6 +31,8 @@ bytecodes: [
                 B(Star), R(4),
                 B(LdaConstant), U8(1),
                 B(Star), R(5),
+                B(LdaTheHole),
+                B(StaCurrentContextSlot), U8(4),
                 B(CreateClosure), U8(3), U8(1), U8(2),
                 B(StaCurrentContextSlot), U8(4),
                 B(CreateClosure), U8(4), U8(2), U8(2),
@@ -85,7 +87,7 @@ snippet: "
 "
 frame size: 11
 parameter count: 1
-bytecode array length: 138
+bytecode array length: 144
 bytecodes: [
   /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
@@ -96,6 +98,8 @@ bytecodes: [
                 B(Star), R(6),
                 B(LdaConstant), U8(1),
                 B(Star), R(7),
+                B(LdaTheHole),
+                B(StaCurrentContextSlot), U8(4),
                 B(CreateClosure), U8(3), U8(1), U8(2),
                 B(StaCurrentContextSlot), U8(4),
                 B(CreateClosure), U8(4), U8(2), U8(2),
@@ -116,6 +120,8 @@ bytecodes: [
                 B(Star), R(6),
                 B(LdaConstant), U8(7),
                 B(Star), R(7),
+                B(LdaTheHole),
+                B(StaCurrentContextSlot), U8(4),
                 B(CreateClosure), U8(9), U8(4), U8(2),
                 B(StaCurrentContextSlot), U8(4),
                 B(CreateClosure), U8(10), U8(5), U8(2),
@@ -171,7 +177,7 @@ snippet: "
 "
 frame size: 10
 parameter count: 1
-bytecode array length: 131
+bytecode array length: 134
 bytecodes: [
   /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
@@ -196,6 +202,8 @@ bytecodes: [
                 B(Star), R(5),
                 B(LdaConstant), U8(5),
                 B(Star), R(6),
+                B(LdaTheHole),
+                B(StaCurrentContextSlot), U8(4),
                 B(CreateClosure), U8(7), U8(3), U8(2),
                 B(StaCurrentContextSlot), U8(4),
                 B(CreateClosure), U8(8), U8(4), U8(2),

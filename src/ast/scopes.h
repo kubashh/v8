@@ -1213,6 +1213,10 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
     return rare_data_ == nullptr ? nullptr : rare_data_->brand;
   }
 
+  VariableMap* private_names() {
+    return rare_data_ == nullptr ? nullptr : &(rare_data_->private_name_map);
+  }
+
  private:
   friend class Scope;
   // Find the private name declared in the private name map first,

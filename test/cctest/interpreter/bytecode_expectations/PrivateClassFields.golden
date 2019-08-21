@@ -24,7 +24,7 @@ snippet: "
 "
 frame size: 10
 parameter count: 1
-bytecode array length: 137
+bytecode array length: 143
 bytecodes: [
   /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
@@ -35,6 +35,8 @@ bytecodes: [
                 B(Star), R(5),
                 B(LdaConstant), U8(1),
                 B(Star), R(6),
+                B(LdaTheHole),
+                B(StaCurrentContextSlot), U8(4),
                 B(LdaConstant), U8(3),
                 B(Star), R(9),
                 B(LdaConstant), U8(3),
@@ -58,6 +60,8 @@ bytecodes: [
                 B(Star), R(5),
                 B(LdaConstant), U8(7),
                 B(Star), R(6),
+                B(LdaTheHole),
+                B(StaCurrentContextSlot), U8(4),
                 B(LdaConstant), U8(3),
                 B(Star), R(9),
                 B(LdaConstant), U8(3),
@@ -132,7 +136,7 @@ snippet: "
 "
 frame size: 15
 parameter count: 1
-bytecode array length: 277
+bytecode array length: 289
 bytecodes: [
   /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
@@ -150,6 +154,8 @@ bytecodes: [
                 B(Star), R(7),
                 B(LdaConstant), U8(1),
                 B(Star), R(8),
+                B(LdaTheHole),
+                B(StaCurrentContextSlot), U8(4),
                 B(LdaConstant), U8(5),
                 B(Star), R(11),
                 B(LdaConstant), U8(5),
@@ -181,6 +187,10 @@ bytecodes: [
                 B(Star), R(7),
                 B(LdaConstant), U8(9),
                 B(Star), R(8),
+                B(LdaTheHole),
+                B(StaCurrentContextSlot), U8(4),
+                B(LdaTheHole),
+                B(StaCurrentContextSlot), U8(5),
                 B(LdaConstant), U8(5),
                 B(Star), R(11),
                 B(LdaConstant), U8(5),
@@ -213,6 +223,8 @@ bytecodes: [
                 B(Star), R(7),
                 B(LdaConstant), U8(18),
                 B(Star), R(8),
+                B(LdaTheHole),
+                B(StaCurrentContextSlot), U8(4),
                 B(LdaConstant), U8(5),
                 B(Star), R(11),
                 B(LdaConstant), U8(5),
