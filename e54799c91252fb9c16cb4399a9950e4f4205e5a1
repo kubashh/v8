@@ -135,6 +135,24 @@
       "revId": "e54799c91252fb9c16cb4399a9950e4f4205e5a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de0208d8_164b2250",
+        "filename": "tools/debug_helper/get-object-properties.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-08-22T21:56:54Z",
+      "side": 1,
+      "message": "Following up on this TODO, I\u0027ve put together a brief document describing a possible set of annotations that would let Torque assign most instance types (everything except String subclasses and a handful of other types that are locked to specific values). If Torque becomes responsible for assigning instance types, then it could also generate this list (as well as the corresponding list of runtime type checkers). What do you think? https://docs.google.com/document/d/1ZU6rCvF2YHBGMLujWqqaxlPsjFfjKDE9C3-EugfdlAE/edit",
+      "parentUuid": "5f71a3b2_c7a9ffec",
+      "revId": "e54799c91252fb9c16cb4399a9950e4f4205e5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
