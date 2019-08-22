@@ -402,6 +402,15 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   // state. Applied as an offset to the first stack check of an optimized
   // function.
   const size_t max_unoptimized_frame_height_;
+  // Controls whether to apply the maximal unoptimized frame height. We always
+  // apply it to the first stack check we encounter. This is a pragmatic but
+  // slightly hacky approach since we simply assume that the first stack check
+  // we see is the function-entry stack check. The alternative, but heavy-weight
+  // implementation is to mark the StackCheck bytecode created by the bytecode
+  // generator, thread this information all the way through the compiler, and
+  // finally use it in code generation. It's unclear whether this is worth doing
+  // versus the current simple approach.
+  bool apply_offset_to_next_stack_check_ = true;
 
   // kArchCallCFunction could be reached either:
   //   kArchCallCFunction;

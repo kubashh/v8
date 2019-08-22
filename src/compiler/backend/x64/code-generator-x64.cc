@@ -1023,11 +1023,30 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     case kArchStackPointerGreaterThan: {
+      // Potentially apply an offset to the current stack pointer before the
+      // comparison to consider the size difference of an optimized frame versus
+      // the contained unoptimized frames.
+
+      Register lhs_register = rsp;
+      if (apply_offset_to_next_stack_check_) {
+        apply_offset_to_next_stack_check_ = false;
+        int optimized_frame_height =
+            frame()->GetTotalFrameSlotCount() * kSystemPointerSize;
+        int32_t offset =
+            std::max(static_cast<int32_t>(max_unoptimized_frame_height_ -
+                                          optimized_frame_height),
+                     0);
+        if (offset != 0 && frame_access_state()->has_frame()) {
+          lhs_register = kScratchRegister;
+          __ leaq(lhs_register, Operand(rsp, -offset));  // Apply the offset.
+        }
+      }
+
       constexpr size_t kValueIndex = 0;
       if (HasAddressingMode(instr)) {
-        __ cmpq(rsp, i.MemoryOperand(kValueIndex));
+        __ cmpq(lhs_register, i.MemoryOperand(kValueIndex));
       } else {
-        __ cmpq(rsp, i.InputRegister(kValueIndex));
+        __ cmpq(lhs_register, i.InputRegister(kValueIndex));
       }
       break;
     }
