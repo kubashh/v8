@@ -22,6 +22,30 @@
       "revId": "0665c58cf9f865876172f6457969432254801cbc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6a78d25_feffe7f3",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7105,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-08-22T14:19:58Z",
+      "side": 1,
+      "message": "I adopted Clemens\u0027s style here, see https://cs.chromium.org/chromium/src/v8/src/wasm/function-body-decoder-impl.h?q\u003dfunction-body-decoder-impl.h\u0026sq\u003dpackage:chromium\u0026dr\u0026l\u003d2051",
+      "parentUuid": "d643bc84_e848edd7",
+      "range": {
+        "startLine": 7105,
+        "startChar": 21,
+        "endLine": 7105,
+        "endChar": 22
+      },
+      "revId": "0665c58cf9f865876172f6457969432254801cbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
