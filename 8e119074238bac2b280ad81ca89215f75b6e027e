@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f7dfabf_cc794315",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1953,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-08-22T14:53:56Z",
+      "side": 1,
+      "message": "what\u0027s the reason why you don\u0027t call {isolate-\u003eclear_pending_exception();} here?",
+      "revId": "8e119074238bac2b280ad81ca89215f75b6e027e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da1b85ed_e387e9cb",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-08-22T14:53:56Z",
+      "side": 1,
+      "message": "Is this case actually possible? Does it not mean that instantiation failed without any error message? I think we should handle this case, either by crashing or by producing an error, so that if this case happens, we will learn about it eventually and handle instantiation properly.",
+      "revId": "8e119074238bac2b280ad81ca89215f75b6e027e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
