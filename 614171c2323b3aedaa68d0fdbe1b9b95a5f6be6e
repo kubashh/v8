@@ -52,6 +52,24 @@
       "revId": "614171c2323b3aedaa68d0fdbe1b9b95a5f6be6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4acac17d_dc512561",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-08-22T16:58:09Z",
+      "side": 0,
+      "message": "Perhaps because TypeError has to be a frozen object? I am not exactly sure to be honest. I have added a comment to the latest cl. The relevant portion from the spec is:\nThe `name` property of a %ThrowTypeError% function has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }",
+      "parentUuid": "d474b87f_f19d49f7",
+      "revId": "614171c2323b3aedaa68d0fdbe1b9b95a5f6be6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
