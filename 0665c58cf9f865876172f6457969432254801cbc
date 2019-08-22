@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d643bc84_e848edd7",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7105,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-08-22T14:16:43Z",
+      "side": 1,
+      "message": "nit: \"end\"?",
+      "range": {
+        "startLine": 7105,
+        "startChar": 21,
+        "endLine": 7105,
+        "endChar": 22
+      },
+      "revId": "0665c58cf9f865876172f6457969432254801cbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
