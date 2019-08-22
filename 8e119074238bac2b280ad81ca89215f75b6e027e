@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "58c8afae_a93d1ac8",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1953,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-08-22T17:18:41Z",
+      "side": 1,
+      "message": "The exception hasn\u0027t been thrown yet if the thrower is still holding onto it. Added a DCHECK and comment.",
+      "parentUuid": "4f7dfabf_cc794315",
+      "revId": "8e119074238bac2b280ad81ca89215f75b6e027e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da1b85ed_e387e9cb",
         "filename": "src/wasm/c-api.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "8e119074238bac2b280ad81ca89215f75b6e027e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7401f94a_bf21ce4e",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-08-22T17:18:41Z",
+      "side": 1,
+      "message": "{trap} is an out parameter: it can be nullptr if the embedder/caller didn\u0027t give us one. {instance_obj.is_null()} means instantiation failed. We do have a pending exception or {thrower.error()} in this case, but can\u0027t do anything useful with it. Well, we could print something to stdout, but we haven\u0027t been asked to, so why should we? Returning an empty own\u003cInstance\u003e() is the best we can do to signal the error to the caller. We could also crash here, but I don\u0027t think that would be better: maybe the caller wants to be robust towards this case and handle it differently, e.g. by providing an error message to the user.\nIf this were the V8 API, the result type would be a MaybeLocal, but this is the C-API, which doesn\u0027t have the concept of maybe-results.\nWhat do you mean by \"we will learn about it eventually\"? This code is not in Chrome, so there is no crash reporting.",
+      "parentUuid": "da1b85ed_e387e9cb",
+      "revId": "8e119074238bac2b280ad81ca89215f75b6e027e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
