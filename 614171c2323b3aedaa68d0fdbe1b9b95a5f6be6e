@@ -16,6 +16,24 @@
       "revId": "614171c2323b3aedaa68d0fdbe1b9b95a5f6be6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "add8a8f1_65176ed2",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-08-22T16:04:59Z",
+      "side": 0,
+      "message": "It looks like there is, but unfortunately it looks like it sets the name to be configurable, which is not correct for ThrowTypeError. Thoughts?",
+      "parentUuid": "fbf869e8_a521a894",
+      "revId": "614171c2323b3aedaa68d0fdbe1b9b95a5f6be6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
