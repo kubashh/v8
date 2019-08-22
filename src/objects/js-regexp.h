@@ -120,8 +120,18 @@ class JSRegExp : public JSObject {
     }
   }
 
-  // This could be a Smi kUninitializedValue, a ByteArray, or Code.
+  static int bytecode_index(bool is_latin1) {
+    if (is_latin1) {
+      return kIrregexpLatin1BytecodeIndex;
+    } else {
+      return kIrregexpUC16BytecodeIndex;
+    }
+  }
+
+  // This could be a Smi kUninitializedValue or Code.
   Object Code(bool is_latin1) const;
+  // This could be a Smi kUninitializedValue or ByteArray.
+  Object Bytecode(bool is_latin1) const;
   bool ShouldProduceBytecode();
   inline bool HasCompiledCode() const;
   inline void DiscardCompiledCodeForSerialization();
@@ -151,23 +161,29 @@ class JSRegExp : public JSObject {
 
   static const int kAtomDataSize = kAtomPatternIndex + 1;
 
-  // Irregexp compiled code or bytecode for Latin1. If compilation
-  // fails, this fields hold an exception object that should be
+  // Irregexp compiled code or trampoline to interpreter for Latin1. If
+  // compilation fails, this fields hold an exception object that should be
   // thrown if the regexp is used again.
   static const int kIrregexpLatin1CodeIndex = kDataIndex;
-  // Irregexp compiled code or bytecode for UC16.  If compilation
-  // fails, this fields hold an exception object that should be
+  // Irregexp compiled code or trampoline to interpreter for UC16.  If
+  // compilation fails, this fields hold an exception object that should be
   // thrown if the regexp is used again.
   static const int kIrregexpUC16CodeIndex = kDataIndex + 1;
+  // Bytecode to interpret the regexp for Latin1. kUninitializedValue if data at
+  // kIrregexpLatin1CodeIndex contains native irregexp code.
+  static const int kIrregexpLatin1BytecodeIndex = kDataIndex + 2;
+  // Bytecode to interpret the regexp for UC16. kUninitializedValue if data at
+  // kIrregexpUC16CodeIndex contains native irregexp code.
+  static const int kIrregexpUC16BytecodeIndex = kDataIndex + 3;
   // Maximal number of registers used by either Latin1 or UC16.
   // Only used to check that there is enough stack space
-  static const int kIrregexpMaxRegisterCountIndex = kDataIndex + 2;
+  static const int kIrregexpMaxRegisterCountIndex = kDataIndex + 4;
   // Number of captures in the compiled regexp.
-  static const int kIrregexpCaptureCountIndex = kDataIndex + 3;
+  static const int kIrregexpCaptureCountIndex = kDataIndex + 5;
   // Maps names of named capture groups (at indices 2i) to their corresponding
   // (1-based) capture group indices (at indices 2i + 1).
-  static const int kIrregexpCaptureNameMapIndex = kDataIndex + 4;
-  static const int kIrregexpTierUpTicksIndex = kDataIndex + 5;
+  static const int kIrregexpCaptureNameMapIndex = kDataIndex + 6;
+  static const int kIrregexpTierUpTicksIndex = kDataIndex + 7;
 
   static const int kIrregexpDataSize = kIrregexpTierUpTicksIndex + 1;
 

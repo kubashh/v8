@@ -1957,6 +1957,11 @@ void TurboAssembler::JumpCodeObject(Register code_object) {
   jmp(code_object);
 }
 
+void TurboAssembler::Jump(ExternalReference ext) {
+  LoadAddress(eax, ext);
+  jmp(eax);
+}
+
 void TurboAssembler::Jump(Handle<Code> code_object, RelocInfo::Mode rmode) {
   DCHECK_IMPLIES(options().isolate_independent_code,
                  Builtins::IsIsolateIndependentBuiltin(*code_object));

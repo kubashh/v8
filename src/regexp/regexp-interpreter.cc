@@ -788,7 +788,7 @@ IrregexpInterpreter::Result IrregexpInterpreter::Match(
   }
 
   bool is_one_byte = String::IsOneByteRepresentationUnderneath(subject_string);
-  ByteArray code_array = ByteArray::cast(regexp.Code(is_one_byte));
+  ByteArray code_array = ByteArray::cast(regexp.Bytecode(is_one_byte));
 
   return MatchInternal(isolate, code_array, subject_string, registers,
                        registers_length, start_position, call_origin);
@@ -832,9 +832,13 @@ IrregexpInterpreter::Result IrregexpInterpreter::MatchInternal(
 
 // This method is called through an external reference from RegExpExecInternal
 // builtin.
+// Arguments input_start, input_end, backtrack_stack and direct_call are unused.
+// They are only passed to match the signature of the native irregex code.
 IrregexpInterpreter::Result IrregexpInterpreter::MatchForCallFromJs(
-    Isolate* isolate, Address regexp, Address subject, int* registers,
-    int32_t registers_length, int32_t start_position) {
+    Address subject, int32_t start_position, Address input_start,
+    Address input_end, int* registers, int32_t registers_length,
+    Address backtrack_stack, int direct_call, Isolate* isolate,
+    Address regexp) {
   DCHECK_NOT_NULL(isolate);
   DCHECK_NOT_NULL(registers);
 
