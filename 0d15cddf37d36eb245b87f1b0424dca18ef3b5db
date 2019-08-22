@@ -46,6 +46,30 @@
       "revId": "0d15cddf37d36eb245b87f1b0424dca18ef3b5db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9e46768_dbb29eea",
+        "filename": "test/cctest/compiler/test-run-retpoline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-08-22T10:00:00Z",
+      "side": 1,
+      "message": "Turns out the call descriptor is IntPtr, so reverted back to Node for now and added a TODO on Return.",
+      "parentUuid": "d2beae93_c28517e1",
+      "range": {
+        "startLine": 34,
+        "startChar": 15,
+        "endLine": 34,
+        "endChar": 30
+      },
+      "revId": "0d15cddf37d36eb245b87f1b0424dca18ef3b5db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
