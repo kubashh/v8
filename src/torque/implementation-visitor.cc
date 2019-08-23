@@ -468,13 +468,13 @@ void ImplementationVisitor::Visit(Builtin* builtin) {
                     : "UncheckedCast<Object>(Parameter(Descriptor::kReceiver))")
             << ";\n";
         source_out() << "USE(" << generated_name << ");\n";
-        expected_type = TypeOracle::GetObjectType();
+        expected_type = TypeOracle::GetJSAnyType();
       } else if (param_name == "newTarget") {
         source_out() << "  TNode<Object> " << generated_name
                      << " = UncheckedCast<Object>(Parameter("
                      << "Descriptor::kJSNewTarget));\n";
         source_out() << "USE(" << generated_name << ");\n";
-        expected_type = TypeOracle::GetObjectType();
+        expected_type = TypeOracle::GetJSAnyType();
       } else if (param_name == "target") {
         source_out() << "  TNode<JSFunction> " << generated_name
                      << " = UncheckedCast<JSFunction>(Parameter("
@@ -2264,9 +2264,10 @@ VisitResult ImplementationVisitor::GenerateCall(
         size_t j = 0;
         for (auto t : callable->signature().labels[i].types) {
           const Type* parameter_type = label->parameter_types[j];
-          if (parameter_type != t) {
-            ReportError("mismatch of label parameters (expected ", *t, " got ",
-                        parameter_type, " for parameter ", i + 1, ")");
+          if (!t->IsSubtypeOf(parameter_type)) {
+            ReportError("mismatch of label parameters (label expects ",
+                        *parameter_type, " but macro produces ", *t,
+                        " for parameter ", i + 1, ")");
           }
           j++;
         }
@@ -2645,7 +2646,7 @@ void ImplementationVisitor::GenerateBuiltinDefinitions(
     for (auto& declarable : GlobalContext::AllDeclarables()) {
       Builtin* builtin = Builtin::DynamicCast(declarable.get());
       if (!builtin || builtin->IsExternal()) continue;
-      int firstParameterIndex = 1;
+      size_t firstParameterIndex = 1;
       bool declareParameters = true;
       if (builtin->IsStub()) {
         new_contents_stream << "TFS(" << builtin->ExternalName();
@@ -2656,19 +2657,19 @@ void ImplementationVisitor::GenerateBuiltinDefinitions(
               << ", SharedFunctionInfo::kDontAdaptArgumentsSentinel";
           declareParameters = false;
         } else {
-          assert(builtin->IsFixedArgsJavaScript());
+          DCHECK(builtin->IsFixedArgsJavaScript());
           // FixedArg javascript builtins need to offer the parameter
           // count.
-          int size = static_cast<int>(builtin->parameter_names().size());
-          assert(size >= 1);
-          new_contents_stream << ", " << (std::max(size - 2, 0));
+          int parameter_count =
+              static_cast<int>(builtin->signature().ExplicitCount());
+          new_contents_stream << ", " << parameter_count;
           // And the receiver is explicitly declared.
           new_contents_stream << ", kReceiver";
-          firstParameterIndex = 2;
+          firstParameterIndex = builtin->signature().implicit_count;
         }
       }
       if (declareParameters) {
-        int index = 0;
+        size_t index = 0;
         for (const auto& parameter : builtin->parameter_names()) {
           if (index >= firstParameterIndex) {
             new_contents_stream << ", k" << CamelifyString(parameter->value);
