@@ -5324,7 +5324,8 @@ void BytecodeGenerator::BuildGetIterator(IteratorType hint) {
     // If method is undefined,
     //     Let syncMethod be GetMethod(obj, @@iterator)
     builder()
-        ->GetIterator(obj, feedback_index(feedback_spec()->AddLoadICSlot()))
+        ->LoadIteratorProperty(obj,
+                               feedback_index(feedback_spec()->AddLoadICSlot()))
         .StoreAccumulatorInRegister(method);
 
     //     Let syncIterator be Call(syncMethod, obj)
@@ -5340,15 +5341,10 @@ void BytecodeGenerator::BuildGetIterator(IteratorType hint) {
     builder()->Bind(&done);
   } else {
     // Let method be GetMethod(obj, @@iterator).
-    builder()
-        ->StoreAccumulatorInRegister(obj)
-        .GetIterator(obj, feedback_index(feedback_spec()->AddLoadICSlot()))
-        .StoreAccumulatorInRegister(method);
-
-    // Let iterator be Call(method, obj).
-    builder()->CallProperty(method, args,
-                            feedback_index(feedback_spec()->AddCallICSlot()));
-
+    int load_feedback_index = feedback_index(feedback_spec()->AddLoadICSlot());
+    int call_feedback_index = feedback_index(feedback_spec()->AddCallICSlot());
+    builder()->StoreAccumulatorInRegister(obj).GetIterator(
+        obj, load_feedback_index, call_feedback_index);
     // If Type(iterator) is not Object, throw a TypeError exception.
     BytecodeLabel no_type_error;
     builder()->JumpIfJSReceiver(&no_type_error);

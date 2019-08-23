@@ -653,6 +653,37 @@ std::ostream& operator<<(std::ostream&, CloneObjectParameters const&);
 
 const CloneObjectParameters& CloneObjectParametersOf(const Operator* op);
 
+// Defines the shared information for the iterator symbol thats loaded and
+// called. This is used as a parameter by JSGetIterator operator.
+class GetIteratorParameters final {
+ public:
+  GetIteratorParameters(LanguageMode language_mode,
+                        const FeedbackSource& load_feedback,
+                        const FeedbackSource& call_feedback)
+      : load_feedback_(load_feedback),
+        call_feedback_(call_feedback),
+        language_mode_(language_mode) {}
+
+  LanguageMode language_mode() const { return language_mode_; }
+
+  const FeedbackSource& loadFeedback() const { return load_feedback_; }
+  const FeedbackSource& callFeedback() const { return call_feedback_; }
+
+ private:
+  const FeedbackSource load_feedback_;
+  const FeedbackSource call_feedback_;
+  LanguageMode const language_mode_;
+};
+
+bool operator==(GetIteratorParameters const&, GetIteratorParameters const&);
+bool operator!=(GetIteratorParameters const&, GetIteratorParameters const&);
+
+size_t hash_value(GetIteratorParameters const&);
+
+std::ostream& operator<<(std::ostream&, GetIteratorParameters const&);
+
+const GetIteratorParameters& GetIteratorParametersOf(const Operator* op);
+
 // Descriptor used by the JSForInPrepare and JSForInNext opcodes.
 enum class ForInMode : uint8_t {
   kUseEnumCacheKeysAndIndices,
@@ -856,7 +887,8 @@ class V8_EXPORT_PRIVATE JSOperatorBuilder final
   const Operator* ParseInt();
   const Operator* RegExpTest();
 
-  const Operator* GetIterator(FeedbackSource const& feedback);
+  const Operator* GetIterator(FeedbackSource const& load_feedback,
+                              FeedbackSource const& call_feedback);
 
  private:
   Zone* zone() const { return zone_; }
