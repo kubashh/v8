@@ -240,14 +240,12 @@ void JSGenericLowering::LowerJSLoadGlobal(Node* node) {
 }
 
 void JSGenericLowering::LowerJSGetIterator(Node* node) {
-  CallDescriptor::Flags flags = FrameStateFlagForCall(node);
-  const PropertyAccess& p = PropertyAccessOf(node->op());
-  node->InsertInput(zone(), 1, jsgraph()->SmiConstant(p.feedback().index()));
-  Node* vector = jsgraph()->HeapConstant(p.feedback().vector());
-  node->InsertInput(zone(), 2, vector);
-  Callable callable =
-      Builtins::CallableFor(isolate(), Builtins::kGetIteratorWithFeedback);
-  ReplaceWithStubCall(node, callable, flags);
+  // TODO(v8:9625): Currently, the GetIterator operator is desugared in the
+  // native context specialization phase. Thus, the following generic lowering
+  // would never be reachable. Ideally, the native context specialization should
+  // reduce the operator to its equievalent optimised graph using the feedback
+  // vector.
+  UNREACHABLE();
 }
 
 void JSGenericLowering::LowerJSStoreProperty(Node* node) {
