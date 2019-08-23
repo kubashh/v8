@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6eb092c_966e3b42",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-08-23T14:02:20Z",
+      "side": 1,
+      "message": "As far as I can tell this should not be possible at this point - it should either be a Smi or a code obejct at all times, right?. Can you change it to a CSA_ASSERT?",
+      "range": {
+        "startLine": 520,
+        "startChar": 2,
+        "endLine": 520,
+        "endChar": 54
+      },
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "921d6701_b043fcf5",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-08-23T14:02:20Z",
+      "side": 1,
+      "message": "It will also be kUninitializedValue before we execute the regexp for the first time, right?",
+      "range": {
+        "startLine": 172,
+        "startChar": 50,
+        "endLine": 173,
+        "endChar": 59
+      },
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb6c342d_9c4789c6",
+        "filename": "src/regexp/regexp.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-08-23T14:02:20Z",
+      "side": 1,
+      "message": "It\u0027s true that compiled_code will always be a code object now because it will always be the trampoline or the native generated code - but does the implication from regexp_interpret_all still hold, e.g. for bytecode.IsByteArray()? You could leave that in",
+      "range": {
+        "startLine": 317,
+        "startChar": 4,
+        "endLine": 317,
+        "endChar": 35
+      },
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
