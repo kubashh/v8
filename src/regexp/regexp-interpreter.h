@@ -31,10 +31,14 @@ class V8_EXPORT_PRIVATE IrregexpInterpreter : public AllStatic {
 
   // In case a StackOverflow occurs, EXCEPTION is returned. The caller is
   // responsible for creating the exception.
-  static Result MatchForCallFromJs(Isolate* isolate, Address regexp,
-                                   Address subject, int* registers,
-                                   int32_t registers_length,
-                                   int32_t start_position);
+  // Arguments input_start, input_end, backtrack_stack and direct_call are
+  // unused. They are only passed to match the signature of the native irregex
+  // code.
+  static Result MatchForCallFromJs(Address subject, int32_t start_position,
+                                   Address input_start, Address input_end,
+                                   int* registers, int32_t registers_length,
+                                   Address backtrack_stack, int direct_call,
+                                   Isolate* isolate, Address regexp);
 
   static Result MatchInternal(Isolate* isolate, ByteArray code_array,
                               String subject_string, int* registers,

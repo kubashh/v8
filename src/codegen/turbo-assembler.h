@@ -98,6 +98,7 @@ class V8_EXPORT_PRIVATE TurboAssemblerBase : public Assembler {
   static bool IsAddressableThroughRootRegister(
       Isolate* isolate, const ExternalReference& reference);
 
+  virtual void Jump(ExternalReference ext) = 0;
 #if V8_OS_WIN
   // Minimum page size. We must touch memory once per page when expanding the
   // stack, to avoid access violations.

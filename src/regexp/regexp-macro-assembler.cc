@@ -219,7 +219,7 @@ int NativeRegExpMacroAssembler::CheckStackGuardState(
 }
 
 // Returns a {Result} sentinel, or the number of successful matches.
-int NativeRegExpMacroAssembler::Match(Handle<Code> regexp_code,
+int NativeRegExpMacroAssembler::Match(Handle<JSRegExp> regexp,
                                       Handle<String> subject,
                                       int* offsets_vector,
                                       int offsets_vector_length,
@@ -262,13 +262,13 @@ int NativeRegExpMacroAssembler::Match(Handle<Code> regexp_code,
       StringCharacterPosition(subject_ptr, start_offset + slice_offset, no_gc);
   int byte_length = char_length << char_size_shift;
   const byte* input_end = input_start + byte_length;
-  return Execute(*regexp_code, *subject, start_offset, input_start, input_end,
+  return Execute(*regexp, *subject, start_offset, input_start, input_end,
                  offsets_vector, offsets_vector_length, isolate);
 }
 
 // Returns a {Result} sentinel, or the number of successful matches.
 int NativeRegExpMacroAssembler::Execute(
-    Code code,
+    JSRegExp regexp,
     String input,  // This needs to be the unpacked (sliced, cons) string.
     int start_offset, const byte* input_start, const byte* input_end,
     int* output, int output_size, Isolate* isolate) {
@@ -276,17 +276,20 @@ int NativeRegExpMacroAssembler::Execute(
   RegExpStackScope stack_scope(isolate);
   Address stack_base = stack_scope.stack()->stack_base();
 
+  bool is_one_byte = String::IsOneByteRepresentationUnderneath(input);
+  Code code = Code::cast(regexp.Code(is_one_byte));
   int direct_call = 0;
 
   using RegexpMatcherSig = int(
       Address input_string, int start_offset,  // NOLINT(readability/casting)
       const byte* input_start, const byte* input_end, int* output,
-      int output_size, Address stack_base, int direct_call, Isolate* isolate);
+      int output_size, Address stack_base, int direct_call, Isolate* isolate,
+      JSRegExp* regexp);
 
   auto fn = GeneratedCode<RegexpMatcherSig>::FromCode(code);
   int result =
       fn.CallIrregexp(input.ptr(), start_offset, input_start, input_end, output,
-                      output_size, stack_base, direct_call, isolate);
+                      output_size, stack_base, direct_call, isolate, &regexp);
   DCHECK(result >= RETRY);
 
   if (result == EXCEPTION && !isolate->has_pending_exception()) {
