@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1285fa8e_ed61acef",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-08-23T20:07:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "36df7247_e7064105",
+      "range": {
+        "startLine": 357,
+        "startChar": 8,
+        "endLine": 357,
+        "endChar": 14
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57741182_642fc30d",
         "filename": "src/builtins/iterator.tq",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b1621948_b44b1a8d",
+        "filename": "src/builtins/iterator.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-08-23T20:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57741182_642fc30d",
+      "range": {
+        "startLine": 45,
+        "startChar": 17,
+        "endLine": 45,
+        "endChar": 23
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4aceb4d_c2ca7b2b",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81f85e8a_699e8701",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3314,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-08-23T20:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4aceb4d_c2ca7b2b",
+      "range": {
+        "startLine": 3314,
+        "startChar": 78,
+        "endLine": 3314,
+        "endChar": 79
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +177,30 @@
       "writtenOn": "2019-08-19T14:22:13Z",
       "side": 1,
       "message": "why not merge these too?",
+      "range": {
+        "startLine": 443,
+        "startChar": 0,
+        "endLine": 446,
+        "endChar": 31
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9f148dd_1c9b3a05",
+        "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
+        "patchSetId": 5
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-08-23T20:07:02Z",
+      "side": 1,
+      "message": "Merging would work for now. However, the behavior of the GetIterator would differ for async case as we extend its functionality further. Restricting the bytecode to handle just the synchronized case would make it quicker to extend its functionality because it would not require to incorporate the JIT compilation mechanism for the asynchnous case.",
+      "parentUuid": "61958218_a3f06fd0",
       "range": {
         "startLine": 443,
         "startChar": 0,
@@ -163,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "0f487b9f_ec61e452",
+        "filename": "test/mjsunit/es6/iterator-lazy-deopt.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-08-23T20:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd2036f8_8f9fd699",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 12
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "12c16877_11e05ab4",
         "filename": "test/unittests/interpreter/bytecode-array-builder-unittest.cc",
         "patchSetId": 5
@@ -183,6 +303,30 @@
       "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ec50a82_3e626b06",
+        "filename": "test/unittests/interpreter/bytecode-array-builder-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-08-23T20:07:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "12c16877_11e05ab4",
+      "range": {
+        "startLine": 155,
+        "startChar": 46,
+        "endLine": 155,
+        "endChar": 55
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

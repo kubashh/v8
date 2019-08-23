@@ -16,6 +16,24 @@
       "revId": "29f42b57d8b70e9afaa472f0f7fcdbb788c4f738",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "852f584b_c9806b6f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-08-23T20:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc7adaa4_d5a46116",
+      "revId": "29f42b57d8b70e9afaa472f0f7fcdbb788c4f738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
