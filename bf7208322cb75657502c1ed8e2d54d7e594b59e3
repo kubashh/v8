@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a690152_c7d81dc6",
+        "filename": "src/compiler/backend/code-generator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-23T10:58:29Z",
+      "side": 1,
+      "message": "\"all inlined frames\" sounds a little as if the original function itself is not included. How about something like \"The maximal combined height of all frames produced upon deoptimization\"",
+      "revId": "bf7208322cb75657502c1ed8e2d54d7e594b59e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
