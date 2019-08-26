@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76042475_96b0976e",
+        "filename": "src/builtins/reflect.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-26T09:44:36Z",
+      "side": 1,
+      "message": "These are part of the other (\u0027fix tfj args\u0027) CL, right?",
+      "revId": "447864be932fc039a28a98821f08aa7767d5f64e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
