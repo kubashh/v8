@@ -1346,7 +1346,7 @@ TF_BUILTIN(ObjectGetOwnPropertyDescriptor, ObjectBuiltinsAssembler) {
   Label if_keyisindex(this), if_iskeyunique(this),
       call_runtime(this, Label::kDeferred),
       return_undefined(this, Label::kDeferred), if_notunique_name(this);
-  Node* map = LoadMap(object);
+  TNode<Map> map = LoadMap(object);
   TNode<Uint16T> instance_type = LoadMapInstanceType(map);
   GotoIf(IsSpecialReceiverInstanceType(instance_type), &call_runtime);
   {

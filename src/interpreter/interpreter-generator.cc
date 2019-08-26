@@ -3231,9 +3231,9 @@ IGNITION_HANDLER(Illegal, InterpreterAssembler) {
 // in the accumulator.
 IGNITION_HANDLER(SuspendGenerator, InterpreterAssembler) {
   Node* generator = LoadRegisterAtOperandIndex(0);
-  TNode<FixedArray> array = CAST(LoadObjectField(
-      generator, JSGeneratorObject::kParametersAndRegistersOffset));
-  Node* closure = LoadRegister(Register::function_closure());
+  TNode<FixedArray> array = LoadObjectField<FixedArray>(
+      CAST(generator), JSGeneratorObject::kParametersAndRegistersOffset);
+  TNode<HeapObject> closure = CAST(LoadRegister(Register::function_closure()));
   TNode<Context> context = GetContext();
   RegListNodePair registers = GetRegisterListAtOperandIndex(1);
   Node* suspend_id = BytecodeOperandUImmSmi(3);
@@ -3281,7 +3281,7 @@ IGNITION_HANDLER(SwitchOnGeneratorState, InterpreterAssembler) {
                    new_state);
 
   TNode<Context> context =
-      CAST(LoadObjectField(generator, JSGeneratorObject::kContextOffset));
+      LoadObjectField<Context>(generator, JSGeneratorObject::kContextOffset);
   SetContext(context);
 
   Node* table_start = BytecodeOperandIdx(1);
