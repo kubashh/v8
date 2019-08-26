@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53e0c945_c1315ca7",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2671,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-26T09:40:33Z",
+      "side": 1,
+      "message": "nit: Wdyt about a `for (size_t i \u003d firstParameterIndex; ...)`-style loop here? The current form seems a bit awkward.",
+      "revId": "4dfb718c3e908a04dbc0b0baf353a82e437664f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
