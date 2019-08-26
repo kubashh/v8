@@ -1081,8 +1081,7 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
          node->opcode() == IrOpcode::kJSStoreProperty ||
          node->opcode() == IrOpcode::kJSStoreNamedOwn ||
          node->opcode() == IrOpcode::kJSStoreDataPropertyInLiteral ||
-         node->opcode() == IrOpcode::kJSHasProperty ||
-         node->opcode() == IrOpcode::kJSGetIterator);
+         node->opcode() == IrOpcode::kJSHasProperty);
   Node* receiver = NodeProperties::GetValueInput(node, 0);
   Node* context = NodeProperties::GetContextInput(node);
   Node* frame_state = NodeProperties::GetFrameStateInput(node);
@@ -1395,11 +1394,57 @@ Reduction JSNativeContextSpecialization::ReduceJSLoadNamed(Node* node) {
 
 Reduction JSNativeContextSpecialization::ReduceJSGetIterator(Node* node) {
   DCHECK_EQ(IrOpcode::kJSGetIterator, node->opcode());
-  PropertyAccess const& p = PropertyAccessOf(node->op());
-  NameRef name(broker(), factory()->iterator_symbol());
+  GetIteratorParameters const& p = GetIteratorParametersOf(node->op());
 
-  return ReducePropertyAccess(node, nullptr, name, jsgraph()->Dead(),
-                              FeedbackSource(p.feedback()), AccessMode::kLoad);
+  // Load iterator property operator
+  Node* receiver = NodeProperties::GetValueInput(node, 0);
+  Handle<Name> name = factory()->iterator_symbol();
+  Node* context = NodeProperties::GetContextInput(node);
+  Node* frame_state = NodeProperties::GetFrameStateInput(node);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  FeedbackSource load_feedback = p.loadFeedback();
+  const Operator* load_op = javascript()->LoadNamed(name, load_feedback);
+
+  // Lazy deopt of the load iterator property
+  Node* call_slot = jsgraph()->SmiConstant(p.callFeedback().slot.ToInt());
+  Node* call_feedback = jsgraph()->HeapConstant(p.callFeedback().vector);
+  Node* lazy_deopt_parameters[] = {receiver, call_slot, call_feedback};
+  Node* lazy_deopt_frame_state = CreateStubBuiltinContinuationFrameState(
+      jsgraph(), Builtins::kGetIteratorWithFeedbackLazyDeoptContinuation,
+      context, lazy_deopt_parameters, arraysize(lazy_deopt_parameters),
+      frame_state, ContinuationFrameStateMode::LAZY);
+  Node* load_property = graph()->NewNode(
+      load_op, receiver, context, lazy_deopt_frame_state, effect, control);
+  effect = load_property;
+  control = load_property;
+
+  // Handle exception path the load named property
+  control = BuildExceptionForLoadIteratorProperty(node, effect, control);
+
+  // Eager deopt of call iterator property
+  Node* parameters[] = {receiver, load_property, call_slot, call_feedback};
+  Node* eager_deopt_frame_state = CreateStubBuiltinContinuationFrameState(
+      jsgraph(), Builtins::kCallIteratorWithFeedback, context, parameters,
+      arraysize(parameters), frame_state, ContinuationFrameStateMode::EAGER);
+  Node* deopt_checkpoint = graph()->NewNode(
+      common()->Checkpoint(), eager_deopt_frame_state, effect, control);
+  effect = deopt_checkpoint;
+
+  // Call iterator property operator
+  FeedbackSlot slot = p.callFeedback().slot;
+  FeedbackSource source(p.callFeedback().vector, slot);
+  ProcessedFeedback const& feedback = broker()->GetFeedbackForCall(source);
+  SpeculationMode mode = feedback.IsInsufficient()
+                             ? SpeculationMode::kDisallowSpeculation
+                             : feedback.AsCall().speculation_mode();
+  const Operator* call_op =
+      javascript()->Call(2, CallFrequency(), p.callFeedback(),
+                         ConvertReceiverMode::kNotNullOrUndefined, mode);
+  Node* call_property = graph()->NewNode(call_op, load_property, receiver,
+                                         context, frame_state, effect, control);
+
+  return Replace(call_property);
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSStoreNamed(Node* node) {
@@ -1819,8 +1864,7 @@ Reduction JSNativeContextSpecialization::ReducePropertyAccess(
          node->opcode() == IrOpcode::kJSHasProperty ||
          node->opcode() == IrOpcode::kJSLoadNamed ||
          node->opcode() == IrOpcode::kJSStoreNamed ||
-         node->opcode() == IrOpcode::kJSStoreNamedOwn ||
-         node->opcode() == IrOpcode::kJSGetIterator);
+         node->opcode() == IrOpcode::kJSStoreNamedOwn);
   DCHECK_GE(node->op()->ControlOutputCount(), 1);
 
   ProcessedFeedback const& feedback =
@@ -3165,6 +3209,39 @@ Node* JSNativeContextSpecialization::BuildCheckEqualsName(NameRef const& name,
                       : simplified()->CheckEqualsInternalizedString();
   return graph()->NewNode(op, jsgraph()->Constant(name), value, effect,
                           control);
+}
+
+Node* JSNativeContextSpecialization::BuildExceptionForLoadIteratorProperty(
+    Node* iterator_node, Node* effect, Node* control) {
+  // If there exists an exception node for the given iterator_node, create a
+  // pair of IfException/IfSuccess nodes on the current control path. The uses
+  // of new exception node are merged with the original exception node. The
+  // IfSuccess node is returned as a control path for further reduction.
+  for (Node* iterator_use : iterator_node->uses()) {
+    if (iterator_use->opcode() == IrOpcode::kIfException) {
+      Node* iterator_exception_node = iterator_use;
+      Node* exception_node =
+          graph()->NewNode(common()->IfException(), effect, control);
+      Node* if_success = graph()->NewNode(common()->IfSuccess(), control);
+
+      // Use dead_node as a placeholder for the original exception node until
+      // its uses are rewired to the nodes merging the exceptions
+      Node* dead_node = jsgraph()->Dead();
+      Node* merge_node =
+          graph()->NewNode(common()->Merge(2), dead_node, exception_node);
+      Node* effect_phi = graph()->NewNode(common()->EffectPhi(2), dead_node,
+                                          exception_node, merge_node);
+      Node* phi =
+          graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
+                           dead_node, exception_node, merge_node);
+      ReplaceWithValue(iterator_exception_node, phi, effect_phi, merge_node);
+      phi->ReplaceInput(0, iterator_exception_node);
+      effect_phi->ReplaceInput(0, iterator_exception_node);
+      merge_node->ReplaceInput(0, iterator_exception_node);
+      return if_success;
+    }
+  }
+  return control;
 }
 
 bool JSNativeContextSpecialization::CanTreatHoleAsUndefined(

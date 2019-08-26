@@ -208,6 +208,9 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
   Node* BuildCheckEqualsName(NameRef const& name, Node* value, Node* effect,
                              Node* control);
 
+  Node* BuildExceptionForLoadIteratorProperty(Node* iterator_node, Node* effect,
+                                              Node* control);
+
   // Checks if we can turn the hole into undefined when loading an element
   // from an object with one of the {receiver_maps}; sets up appropriate
   // code dependencies and might use the array protector cell.
