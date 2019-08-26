@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "5f9ce6d9_214f8977",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5275,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-08-26T10:48:03Z",
+      "side": 1,
+      "message": "Merging would work for now. However, the behavior of the GetIterator would differ for async case as we extend its functionality further. Restricting the bytecode to handle just the synchronized case would make it quicker to extend its functionality because it would not require to incorporate the JIT compilation mechanism for the asynchnous case.",
+      "parentUuid": "b2367a88_59925e81",
+      "range": {
+        "startLine": 5269,
+        "startChar": 10,
+        "endLine": 5275,
+        "endChar": 78
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61958218_a3f06fd0",
         "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
         "patchSetId": 5
@@ -213,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "4f133cf8_95e204ec",
+        "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
+        "patchSetId": 5
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-08-26T10:48:03Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "a9f148dd_1c9b3a05",
+      "range": {
+        "startLine": 443,
+        "startChar": 0,
+        "endLine": 446,
+        "endChar": 31
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9227099d_ac5a54cc",
         "filename": "test/mjsunit/es6/iterator-lazy-deopt.js",
         "patchSetId": 5
@@ -233,6 +281,30 @@
       "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd66469b_97494137",
+        "filename": "test/mjsunit/es6/iterator-lazy-deopt.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-08-26T10:48:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9227099d_ac5a54cc",
+      "range": {
+        "startLine": 53,
+        "startChar": 16,
+        "endLine": 53,
+        "endChar": 41
+      },
+      "revId": "f6da6e4934af0cf5ac9b0ded9e88731b357bdd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
