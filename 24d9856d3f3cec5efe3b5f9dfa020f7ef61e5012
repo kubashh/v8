@@ -2,6 +2,125 @@
   "comments": [
     {
       "key": {
+        "uuid": "739eb902_e892ed3e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "Did tier-up logic move?",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a65b356_7574b4eb",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "turbo-assembler.h is not enough?",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ca473d9_43273b62",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "q: Would it be too involved to ensure Jump doesn\u0027t clobber any register used to pass C call args?",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fbc9c34_c487414e",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "Please add a TODO \u0027A potential optimization for the future is to make this decision based on the builtin index instead of flags, and avoid it\u0027s additional load below.\u0027",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d82a247e_86a2c515",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "nit: Whitespace please here and before L72.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bf386e4_158ce0e9",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "nit: builtin_entry_offset_from_isolate_root",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec658d97_0c914fe9",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "\u0027code or bytecode\u0027",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f6eb092c_966e3b42",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 3
@@ -22,6 +141,176 @@
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14128d5b_1c6392f5",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "Could we solve this some other way? It\u0027d be great to avoid loading the bytecode just for this check. Is it possible to always allocate an initial stack area?\n\nAnd while looking at this, I think we could also avoid juggling around with the `start + size \u003d stack_top` calculation below and just have a dedicated external reference for that :) Perhaps leave a TODO.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a7e6d15_67cacbc1",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "We *could* use it to build the subject_vector though, right? Again, perhaps in a follow-up.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66b46a3f_e9b8c134",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "No need to explain the history here, just document the current state :) Please also explain the \u0027(x + 1) \u003c\u003c 1\u0027 below.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2c21424_d89d4046",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "Please assert TaggedIsPositiveSmi(register_count). Or (to make the connection) STATIC_ASSERT that \u0027(kMaxCaptures + 1) \u003c\u003c 1\u0027 is a valid smi. I\u0027d be okay with exposing kMaxCaptures in regexp.h.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc908c26_368bae9e",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "Why not pass it through as CallOrigin? We could expose CallOrigin in regexp.h and use it here (instead of literal 1).",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b4e6ce8_f5316137",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1962,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "What about jmp(ExternalReferenceAsOperand(ext))? We could actually do the same on x64 to generate better code.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b12f13eb_1599e64e",
+        "filename": "src/codegen/turbo-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "Please put this next to similar pure-virtual methods above, e.g. just before CallBuiltinByIndex (don\u0027t forget whitespace). For consistency, call the arg \u0027reference\u0027 and potentially pass by const reference.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53df5cc0_a183115f",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "\u0027 or the interpreter trampoline\u0027",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15d54768_78b7bc93",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "nit: we could make this (and above) constexpr",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80e4dc7e_dff6cc35",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "Once Ana extracts the prologue from irregexp-generated code, this should be renamed to \u0027Trampoline\u0027 and the below to \u0027CodeOrBytecode\u0027.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -48,6 +337,74 @@
     },
     {
       "key": {
+        "uuid": "941e1859_c9f90b7e",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "104? :)",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e653d358_20719020",
+        "filename": "src/regexp/regexp-interpreter.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "Alternatively just omit names for the args below and in the .cc file.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d62cd11_090940e0",
+        "filename": "src/regexp/regexp-macro-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "nit: perhaps put this last, other args are also in order of the final call below.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd9bbd4f_f410006a",
+        "filename": "src/regexp/regexp-macro-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "This is likely the wrong address (of the C++) object, regexp.ptr() will give you the real heap object pointer.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb6c342d_9c4789c6",
         "filename": "src/regexp/regexp.cc",
         "patchSetId": 3
@@ -65,6 +422,57 @@
         "endLine": 317,
         "endChar": 35
       },
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0808de49_c9498d98",
+        "filename": "src/regexp/regexp.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "This is the bottleneck, right? IMO we should just dispatch based on compile_data.compilation_target here to properly assign fields.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbbef139_c3075cba",
+        "filename": "src/regexp/regexp.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "q: Why keep the trampoline here? Is it convenient for some reason? I wouldn\u0027t expect the regexp compiler to know about the trampoline, or for it to mirror JSRegExp structure.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ff1938b_721e7fce",
+        "filename": "test/cctest/test-regexp.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-27T10:52:34Z",
+      "side": 1,
+      "message": "This partially-constructed JSRegExp object may fail heap verification: https://cs.chromium.org/chromium/src/v8/src/diagnostics/objects-debug.cc?l\u003d1441\u0026rcl\u003d0faa1ec736a758eac44f1cedf4d93ab7f90c9f1a\n\nWe probably need to set it up fully; ideally this should be done in a factory function that\u0027s also used in the normal path (JSRegExp::New). \n\nSpeaking of which, can we not use JSRegExp::New here? It doesn\u0027t matter what\u0027s inside the regexp, does it?",
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
