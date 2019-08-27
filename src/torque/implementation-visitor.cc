@@ -84,6 +84,7 @@ void ImplementationVisitor::BeginCSAFiles() {
     header << "namespace v8 {\n"
            << "namespace internal {\n"
            << "\n";
+    header << "class CodeStubArguments;\n";
   }
 }
 
