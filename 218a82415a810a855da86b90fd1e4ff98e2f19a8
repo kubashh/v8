@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "463afc8f_2263069e",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T11:12:30Z",
+      "side": 1,
+      "message": "These types could be more precise, no?",
+      "range": {
+        "startLine": 1498,
+        "startChar": 33,
+        "endLine": 1498,
+        "endChar": 64
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0a795f3_bada214c",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T11:12:30Z",
+      "side": 1,
+      "message": "Why this? I thought TFS doesn\u0027t work for continuation builtins.",
+      "range": {
+        "startLine": 92,
+        "startChar": 9,
+        "endLine": 92,
+        "endChar": 38
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab6ca9a1_4fff55fc",
+        "filename": "src/builtins/iterator.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T11:12:30Z",
+      "side": 1,
+      "message": "JSAny now that https://chromium-review.googlesource.com/c/v8/v8/+/1769316 has landed.",
+      "range": {
+        "startLine": 48,
+        "startChar": 24,
+        "endLine": 48,
+        "endChar": 30
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "204c6b06_8426cb84",
+        "filename": "src/builtins/iterator.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T11:12:30Z",
+      "side": 1,
+      "message": "In Torque, there is no need to initialize a variable of you don\u0027t read it. It will produce an error if you attempt to read it.",
+      "range": {
+        "startLine": 65,
+        "startChar": 24,
+        "endLine": 65,
+        "endChar": 36
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "726725d7_22cc8357",
+        "filename": "src/builtins/iterator.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T11:12:30Z",
+      "side": 1,
+      "message": "Why not:\n\nconst callSlotUnTagged: intptr \u003d SmiUntag(callSlot); \nCollectCallFeedback(iteratorMethod, context, feedback, callSlotUnTagged);\nconst iteratorCallable \u003d Cast\u003cCallable\u003e(iteratorMethod)\n          otherwise ThrowCalledNonCallable(iteratorMethod);\nreturn Call(context, iteratorCallable, receiver);",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 20
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d58b0664_962125b9",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1863,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T11:12:30Z",
+      "side": 1,
+      "message": "Node* without the compiler:: will work.\nFor the one exported to Torque, it would be better to TNode-ify them.",
+      "range": {
+        "startLine": 1863,
+        "startChar": 31,
+        "endLine": 1863,
+        "endChar": 45
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63acb15c_d37eaf26",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T11:12:30Z",
+      "side": 1,
+      "message": "This can be misunderstood as a future plan, which it is not, right?",
+      "range": {
+        "startLine": 246,
+        "startChar": 31,
+        "endLine": 248,
+        "endChar": 12
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8be29e08_8aecc580",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1422,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T11:12:30Z",
+      "side": 1,
+      "message": "... for the ...",
+      "range": {
+        "startLine": 1422,
+        "startChar": 27,
+        "endLine": 1422,
+        "endChar": 30
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64522171_1c6cc772",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1423,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T11:12:30Z",
+      "side": 1,
+      "message": "I think the interface of BuildExceptionForLoadIteratorProperty() is very custom and context-specific and will not survive a second throwing operator being added to the lowering, so I\u0027d prefer if it was not a separate function.",
+      "range": {
+        "startLine": 1423,
+        "startChar": 12,
+        "endLine": 1423,
+        "endChar": 49
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd351e41_75ef4ed4",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3220,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T11:12:30Z",
+      "side": 1,
+      "message": "You can use NodeProperties::IsExceptionalCall for this.",
+      "range": {
+        "startLine": 3220,
+        "startChar": 2,
+        "endLine": 3220,
+        "endChar": 52
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
