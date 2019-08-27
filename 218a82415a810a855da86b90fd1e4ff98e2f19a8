@@ -229,6 +229,98 @@
       "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1e9e7dd_e2e10076",
+        "filename": "src/compiler/js-operator.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T12:46:09Z",
+      "side": 1,
+      "message": "nit: non-uniform placement of const is a bit confusing. The common pattern in this file seems to be to put them all on the right.",
+      "range": {
+        "startLine": 675,
+        "startChar": 15,
+        "endLine": 675,
+        "endChar": 20
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bb07751_160dd4e0",
+        "filename": "test/mjsunit/es6/iterator-eager-deopt.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T12:46:09Z",
+      "side": 1,
+      "message": "Not anymore, it increments now, no?",
+      "range": {
+        "startLine": 46,
+        "startChar": 62,
+        "endLine": 46,
+        "endChar": 75
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f103e39_7e80ad35",
+        "filename": "test/mjsunit/es6/iterator-lazy-deopt.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T12:46:09Z",
+      "side": 1,
+      "message": "also outdated",
+      "range": {
+        "startLine": 48,
+        "startChar": 18,
+        "endLine": 48,
+        "endChar": 36
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2730e38c_8a36a05d",
+        "filename": "test/mjsunit/es6/iterator-lazy-deopt.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-08-27T12:46:09Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 49,
+        "startChar": 50,
+        "endLine": 49,
+        "endChar": 55
+      },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
