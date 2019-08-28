@@ -805,46 +805,42 @@ void Code::Disassemble(const char* name, std::ostream& os, Address current_pc) {
 }
 #endif  // ENABLE_DISASSEMBLER
 
-void BytecodeArray::Disassemble(std::ostream& os) {
+void BytecodeArray::Disassemble(
+    std::ostream& os, Address base_address,
+    std::unique_ptr<interpreter::BytecodeArrayIterator> iterator) {
   DisallowHeapAllocation no_gc;
 
   os << "Parameter count " << parameter_count() << "\n";
   os << "Register count " << register_count() << "\n";
   os << "Frame size " << frame_size() << "\n";
 
-  Address base_address = GetFirstBytecodeAddress();
   SourcePositionTableIterator source_positions(
       SourcePositionTableIfCollected());
 
-  // Storage for backing the handle passed to the iterator. This handle won't be
-  // updated by the gc, but that's ok because we've disallowed GCs anyway.
-  BytecodeArray handle_storage = *this;
-  Handle<BytecodeArray> handle(reinterpret_cast<Address*>(&handle_storage));
-  interpreter::BytecodeArrayIterator iterator(handle);
-  while (!iterator.done()) {
+  while (!iterator->done()) {
     if (!source_positions.done() &&
-        iterator.current_offset() == source_positions.code_offset()) {
+        iterator->current_offset() == source_positions.code_offset()) {
       os << std::setw(5) << source_positions.source_position().ScriptOffset();
       os << (source_positions.is_statement() ? " S> " : " E> ");
       source_positions.Advance();
     } else {
       os << "         ";
     }
-    Address current_address = base_address + iterator.current_offset();
+    Address current_address = base_address + iterator->current_offset();
     os << reinterpret_cast<const void*>(current_address) << " @ "
-       << std::setw(4) << iterator.current_offset() << " : ";
+       << std::setw(4) << iterator->current_offset() << " : ";
     interpreter::BytecodeDecoder::Decode(
         os, reinterpret_cast<byte*>(current_address),
         static_cast<int>(parameter_count()));
-    if (interpreter::Bytecodes::IsJump(iterator.current_bytecode())) {
-      Address jump_target = base_address + iterator.GetJumpTargetOffset();
+    if (interpreter::Bytecodes::IsJump(iterator->current_bytecode())) {
+      Address jump_target = base_address + iterator->GetJumpTargetOffset();
       os << " (" << reinterpret_cast<void*>(jump_target) << " @ "
-         << iterator.GetJumpTargetOffset() << ")";
+         << iterator->GetJumpTargetOffset() << ")";
     }
-    if (interpreter::Bytecodes::IsSwitch(iterator.current_bytecode())) {
+    if (interpreter::Bytecodes::IsSwitch(iterator->current_bytecode())) {
       os << " {";
       bool first_entry = true;
-      for (const auto& entry : iterator.GetJumpTableTargetOffsets()) {
+      for (const auto& entry : iterator->GetJumpTableTargetOffsets()) {
         if (first_entry) {
           first_entry = false;
         } else {
@@ -855,7 +851,7 @@ void BytecodeArray::Disassemble(std::ostream& os) {
       os << " }";
     }
     os << std::endl;
-    iterator.Advance();
+    iterator->Advance();
   }
 
   os << "Constant pool (size = " << constant_pool().length() << ")\n";
@@ -872,6 +868,21 @@ void BytecodeArray::Disassemble(std::ostream& os) {
     table.HandlerTableRangePrint(os);
   }
 #endif
+}
+
+void BytecodeArray::Disassemble(std::ostream& os) {
+  DisallowHeapAllocation no_gc;
+  Address base_address = GetFirstBytecodeAddress();
+  SourcePositionTableIterator source_positions(
+      SourcePositionTableIfCollected());
+
+  // Storage for backing the handle passed to the iterator. This handle won't be
+  // updated by the gc, but that's ok because we've disallowed GCs anyway.
+  BytecodeArray handle_storage = *this;
+  Handle<BytecodeArray> handle(reinterpret_cast<Address*>(&handle_storage));
+
+  Disassemble(os, base_address,
+              base::make_unique<interpreter::BytecodeArrayIterator>(handle));
 }
 
 void BytecodeArray::CopyBytecodesTo(BytecodeArray to) {
