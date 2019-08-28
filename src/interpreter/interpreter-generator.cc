@@ -3203,13 +3203,15 @@ IGNITION_HANDLER(GetIterator, InterpreterAssembler) {
   TNode<Object> receiver = LoadRegisterAtOperandIndex(0);
   TNode<Context> context = GetContext();
   TNode<HeapObject> feedback_vector = LoadFeedbackVector();
-  Node* feedback_slot = BytecodeOperandIdx(1);
-  TNode<Smi> smi_slot = SmiTag(feedback_slot);
+  Node* load_feedback_slot = BytecodeOperandIdx(1);
+  Node* call_feedback_slot = BytecodeOperandIdx(2);
+  TNode<Smi> load_slot_smi = SmiTag(load_feedback_slot);
+  TNode<Smi> call_slot_smi = SmiTag(call_feedback_slot);
 
-  TNode<Object> result =
+  TNode<Object> iterator =
       CallBuiltin(Builtins::kGetIteratorWithFeedback, context, receiver,
-                  smi_slot, feedback_vector);
-  SetAccumulator(result);
+                  load_slot_smi, call_slot_smi, feedback_vector);
+  SetAccumulator(iterator);
   Dispatch();
 }
 
