@@ -897,6 +897,29 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
         if (receiver_is_holder) return smi_handler;
         TRACE_HANDLER_STATS(isolate(), LoadIC_LoadFieldFromPrototypeDH);
       }
+      if (lookup->constness() == PropertyConstness::kConst &&
+          !receiver_is_holder) {
+        DCHECK(!lookup->is_dictionary_holder());
+        smi_handler = LoadHandler::LoadConstantFromPrototype(isolate());
+        TRACE_HANDLER_STATS(isolate(), LoadIC_LoadConstantFromPrototypeDH);
+
+        Handle<Object> value = lookup->GetDataValue();
+
+        // Weak references to thin/cons strings are not supported in
+        // the GC. If concurrent marking is running and the thin/cons
+        // string is marked but the actual string is not, then the
+        // weak reference could be missed.
+        if (value->IsThinString() || value->IsConsString()) {
+          return LoadHandler::LoadFromPrototype(isolate(), map, holder,
+                                                smi_handler);
+        }
+
+        MaybeObjectHandle weak_value =
+            value->IsSmi() ? MaybeObjectHandle(*value, isolate())
+                           : MaybeObjectHandle::Weak(*value, isolate());
+        return LoadHandler::LoadFromPrototype(isolate(), map, holder,
+                                              smi_handler, weak_value);
+      }
       return LoadHandler::LoadFromPrototype(isolate(), map, holder,
                                             smi_handler);
     }
