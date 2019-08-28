@@ -209,6 +209,23 @@
     },
     {
       "key": {
+        "uuid": "dfcd6038_bdab315e",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-28T09:48:37Z",
+      "side": 1,
+      "message": "p.callFeedback() is already a FeedbackSource.",
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd351e41_75ef4ed4",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 8
@@ -232,6 +249,23 @@
     },
     {
       "key": {
+        "uuid": "a4572c69_a001dfcc",
+        "filename": "src/compiler/js-operator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-28T09:48:37Z",
+      "side": 1,
+      "message": "Why do you include a language mode in GetIteratorParameters if you always set it to kSloppy? Is it even used?",
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c1e9e7dd_e2e10076",
         "filename": "src/compiler/js-operator.h",
         "patchSetId": 8
@@ -249,6 +283,40 @@
         "endLine": 675,
         "endChar": 20
       },
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ed9e087_54668a98",
+        "filename": "src/compiler/js-type-hint-lowering.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-28T09:48:37Z",
+      "side": 1,
+      "message": "DCHECK_EQ for better error message",
+      "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f171fa2a_d9c42930",
+        "filename": "src/compiler/js-type-hint-lowering.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-28T09:48:37Z",
+      "side": 1,
+      "message": "DCHECK_EQ",
       "revId": "218a82415a810a855da86b90fd1e4ff98e2f19a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
