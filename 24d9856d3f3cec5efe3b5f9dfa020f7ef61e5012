@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fc9ac5f9_3c34c61b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "My bad. Re-introduced in builtins-regexp-gen.cc line 541.",
+      "parentUuid": "739eb902_e892ed3e",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a65b356_7574b4eb",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-08-27T10:52:34Z",
       "side": 1,
       "message": "turbo-assembler.h is not enough?",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15f1e099_e04e83bf",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "macro-assembler.h is required for the trampoline builtin (line 29 in this file).",
+      "parentUuid": "1a65b356_7574b4eb",
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "d17abfd3_813b456c",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "If we want to do something like that, then I think we shouldn\u0027t call it \"Jump\" but something like \"FastTailCallCFunction\"?\nI added this item to my follow-up todo list.",
+      "parentUuid": "9ca473d9_43273b62",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0fbc9c34_c487414e",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c4d5b77_a4ddcba4",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fbc9c34_c487414e",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "0dafd95c_2d4a53be",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d82a247e_86a2c515",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4bf386e4_158ce0e9",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 3
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "a97d8d2b_025c57c7",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bf386e4_158ce0e9",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec658d97_0c914fe9",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 3
@@ -118,6 +226,24 @@
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a0e9078_4191fed3",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec658d97_0c914fe9",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -144,6 +270,30 @@
     },
     {
       "key": {
+        "uuid": "29f847e7_e63afdad",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6eb092c_966e3b42",
+      "range": {
+        "startLine": 520,
+        "startChar": 2,
+        "endLine": 520,
+        "endChar": 54
+      },
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14128d5b_1c6392f5",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 3
@@ -155,6 +305,24 @@
       "writtenOn": "2019-08-27T10:52:34Z",
       "side": 1,
       "message": "Could we solve this some other way? It\u0027d be great to avoid loading the bytecode just for this check. Is it possible to always allocate an initial stack area?\n\nAnd while looking at this, I think we could also avoid juggling around with the `start + size \u003d stack_top` calculation below and just have a dedicated external reference for that :) Perhaps leave a TODO.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a07c905_4bf53bf1",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "We could always create an initial stack area. For --regexp-interpret-all this would waste 1KB per isolate. But with tier-up it is quite likely that we need the area anyways. I don\u0027t know if 1KB extra for jitless mode is OK or not?\nAdditionally the bytecode field is used as an indicator that tier-up hasn\u0027t happened yet.\n\nRegarding top of stack: Added a TODO. Thought about just implementing it but this CL is quite huge already. Leaving this as a follow-up.",
+      "parentUuid": "14128d5b_1c6392f5",
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -178,6 +346,24 @@
     },
     {
       "key": {
+        "uuid": "7a047187_96180f72",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Added to my follow-up TODO list.",
+      "parentUuid": "8a7e6d15_67cacbc1",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66b46a3f_e9b8c134",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 3
@@ -195,6 +381,24 @@
     },
     {
       "key": {
+        "uuid": "17b3cc7a_91b8e587",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66b46a3f_e9b8c134",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2c21424_d89d4046",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 3
@@ -206,6 +410,24 @@
       "writtenOn": "2019-08-27T10:52:34Z",
       "side": 1,
       "message": "Please assert TaggedIsPositiveSmi(register_count). Or (to make the connection) STATIC_ASSERT that \u0027(kMaxCaptures + 1) \u003c\u003c 1\u0027 is a valid smi. I\u0027d be okay with exposing kMaxCaptures in regexp.h.",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fac14dc4_35a2dcde",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "I moved the definition of kMaxCaptures to js-regexp.h. I think it fits there, as the capture count is also stored within the JSRegExp object, and the parser is already tied to JSRegExp. OK?",
+      "parentUuid": "a2c21424_d89d4046",
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -229,6 +451,24 @@
     },
     {
       "key": {
+        "uuid": "420fb987_3e10c48a",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc908c26_368bae9e",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b4e6ce8_f5316137",
         "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
         "patchSetId": 3
@@ -243,6 +483,24 @@
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a9f143c_e850aa96",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1962,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "This won\u0027t work.\nAs far as I understand it you can use ExternalReferenceAsOperand(ext) only if the external reference is pointing to an address, whereas in our case the external reference points to code.\n\nAs discussed offline: We emit an indirect jump now instead of loading the address to a register.",
+      "parentUuid": "2b4e6ce8_f5316137",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -263,6 +521,24 @@
     },
     {
       "key": {
+        "uuid": "39d10de7_8ac572d1",
+        "filename": "src/codegen/turbo-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b12f13eb_1599e64e",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "53df5cc0_a183115f",
         "filename": "src/diagnostics/objects-debug.cc",
         "patchSetId": 3
@@ -280,6 +556,24 @@
     },
     {
       "key": {
+        "uuid": "c15c4dc4_55713d94",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53df5cc0_a183115f",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "15d54768_78b7bc93",
         "filename": "src/objects/js-regexp.h",
         "patchSetId": 3
@@ -291,6 +585,24 @@
       "writtenOn": "2019-08-27T10:52:34Z",
       "side": 1,
       "message": "nit: we could make this (and above) constexpr",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e9e73c9_b9e0c1bb",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "For some reason we use c++11 for gcc and c++14 for clang.\nIn c++11 constexpr is only allowed if the body contains exactly one return statement.\nI changed this to use ternary operator.",
+      "parentUuid": "15d54768_78b7bc93",
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -337,6 +649,30 @@
     },
     {
       "key": {
+        "uuid": "45ff98c6_6c3839d2",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Yes, right. But that\u0027s true for other fields as well. My intention with this comment was to make clear that this field might never be used or can be reset to kUninitializedValue when we use tier-up.\nI re-phrased the comment to make my intention more clear. Is it better now?",
+      "parentUuid": "921d6701_b043fcf5",
+      "range": {
+        "startLine": 172,
+        "startChar": 50,
+        "endLine": 173,
+        "endChar": 59
+      },
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "941e1859_c9f90b7e",
         "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
         "patchSetId": 3
@@ -351,6 +687,24 @@
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b578603_10140869",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "941e1859_c9f90b7e",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -371,6 +725,24 @@
     },
     {
       "key": {
+        "uuid": "92d3defd_12aef6d5",
+        "filename": "src/regexp/regexp-interpreter.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "As discussed ommited names in .cc and kept them with comments in .h",
+      "parentUuid": "e653d358_20719020",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d62cd11_090940e0",
         "filename": "src/regexp/regexp-macro-assembler.cc",
         "patchSetId": 3
@@ -388,6 +760,24 @@
     },
     {
       "key": {
+        "uuid": "63dfa797_2697aac2",
+        "filename": "src/regexp/regexp-macro-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d62cd11_090940e0",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd9bbd4f_f410006a",
         "filename": "src/regexp/regexp-macro-assembler.cc",
         "patchSetId": 3
@@ -402,6 +792,24 @@
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4180680d_1b58aa31",
+        "filename": "src/regexp/regexp-macro-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd9bbd4f_f410006a",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -428,6 +836,30 @@
     },
     {
       "key": {
+        "uuid": "f484576d_471991e4",
+        "filename": "src/regexp/regexp.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb6c342d_9c4789c6",
+      "range": {
+        "startLine": 317,
+        "startChar": 4,
+        "endLine": 317,
+        "endChar": 35
+      },
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0808de49_c9498d98",
         "filename": "src/regexp/regexp.cc",
         "patchSetId": 3
@@ -442,6 +874,24 @@
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c1425f5_817b9b6a",
+        "filename": "src/regexp/regexp.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0808de49_c9498d98",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -462,6 +912,24 @@
     },
     {
       "key": {
+        "uuid": "c70e9e8f_2e2117c7",
+        "filename": "src/regexp/regexp.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "Moved the logic to regexp.cc bottleneck as suggested by you.",
+      "parentUuid": "cbbef139_c3075cba",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ff1938b_721e7fce",
         "filename": "test/cctest/test-regexp.cc",
         "patchSetId": 3
@@ -473,6 +941,24 @@
       "writtenOn": "2019-08-27T10:52:34Z",
       "side": 1,
       "message": "This partially-constructed JSRegExp object may fail heap verification: https://cs.chromium.org/chromium/src/v8/src/diagnostics/objects-debug.cc?l\u003d1441\u0026rcl\u003d0faa1ec736a758eac44f1cedf4d93ab7f90c9f1a\n\nWe probably need to set it up fully; ideally this should be done in a factory function that\u0027s also used in the normal path (JSRegExp::New). \n\nSpeaking of which, can we not use JSRegExp::New here? It doesn\u0027t matter what\u0027s inside the regexp, does it?",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc1b7988_836b1290",
+        "filename": "test/cctest/test-regexp.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1356229
+      },
+      "writtenOn": "2019-08-28T11:55:33Z",
+      "side": 1,
+      "message": "The reason I created this instead of using JSRegExp::New is that JSRegExp::New compiles the given source string and set all fields accordingly. The problem with this is that source strings of the tests here can also be atoms and then the whole layout will be wrong. \n\nIt does matter whats inside because the JSRegExp object is passed to NativeRegExpMacroAssembler::Execute() instead of the code (the code gets extracted from the JSRegExp object). This is done so we can pass the JSRegExp object to native irregexp code for consistency (because we also pass it from RegExpExecInternal now as it is required for the interpreter).\nAlso added a TODO to NativeRegexpMacroAssembler::Execute to get rid of the JS object if possible.\n\nThe partial objects also shouldn\u0027t fail heap verification as factory-\u003eSetRegExpIrregexpData initializes all the fields.",
+      "parentUuid": "5ff1938b_721e7fce",
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
