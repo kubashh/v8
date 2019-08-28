@@ -655,6 +655,32 @@ std::unique_ptr<Coverage> Coverage::Collect(
 }
 
 void Coverage::SelectMode(Isolate* isolate, debug::CoverageMode mode) {
+  {
+    // Changing the coverage mode can change the bytecode that would be
+    // generated for a function, which in turn can interfere with lazy source
+    // positions, so force source position collection before toggling which
+    // should mean the source positions will be generated for the same mode as
+    // the bytecode was generated.
+    HandleScope scope(isolate);
+    std::vector<Handle<SharedFunctionInfo>> sfis;
+    {
+      DisallowHeapAllocation no_gc;
+      HeapObjectIterator iterator(isolate->heap());
+      for (HeapObject obj = iterator.Next(); !obj.is_null();
+           obj = iterator.Next()) {
+        if (obj.IsSharedFunctionInfo()) {
+          SharedFunctionInfo sfi = SharedFunctionInfo::cast(obj);
+          if (sfi.HasBytecodeArray()) {
+            sfis.push_back(Handle<SharedFunctionInfo>(sfi, isolate));
+          }
+        }
+      }
+    }
+    for (auto sfi : sfis) {
+      SharedFunctionInfo::EnsureSourcePositionsAvailable(isolate, sfi);
+    }
+  }
+
   switch (mode) {
     case debug::CoverageMode::kBestEffort:
       // Note that DevTools switches back to best-effort coverage once the
