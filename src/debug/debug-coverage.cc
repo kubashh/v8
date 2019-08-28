@@ -654,7 +654,46 @@ std::unique_ptr<Coverage> Coverage::Collect(
   return result;
 }
 
+namespace {
+int EnumerateSharedFunctionsInfosWithBytecodeArrays(
+    Isolate* isolate, Handle<SharedFunctionInfo>* sfis) {
+  HeapObjectIterator iterator(isolate->heap());
+  DisallowHeapAllocation no_gc;
+  int compiled_funcs_count = 0;
+
+  for (HeapObject obj = iterator.Next(); !obj.is_null();
+       obj = iterator.Next()) {
+    if (obj.IsSharedFunctionInfo()) {
+      SharedFunctionInfo sfi = SharedFunctionInfo::cast(obj);
+      if (sfi.HasBytecodeArray()) {
+        if (sfis != nullptr) {
+          sfis[compiled_funcs_count] = Handle<SharedFunctionInfo>(sfi, isolate);
+        }
+        ++compiled_funcs_count;
+      }
+    }
+  }
+  return compiled_funcs_count;
+}
+}  // namespace
+
 void Coverage::SelectMode(Isolate* isolate, debug::CoverageMode mode) {
+  {
+    // Changing the coverage mode can change the bytecode that would be
+    // generated for a function, which in turn can interfere with lazy source
+    // positions, so force source position collection before toggling which
+    // should mean the source positions will be generated for the same mode as
+    // the bytecode was generated.
+    HandleScope scope(isolate);
+    const int compiled_funcs_count =
+        EnumerateSharedFunctionsInfosWithBytecodeArrays(isolate, nullptr);
+    ScopedVector<Handle<SharedFunctionInfo>> sfis(compiled_funcs_count);
+    EnumerateSharedFunctionsInfosWithBytecodeArrays(isolate, sfis.begin());
+    for (int i = 0; i < compiled_funcs_count; ++i) {
+      SharedFunctionInfo::EnsureSourcePositionsAvailable(isolate, sfis[i]);
+    }
+  }
+
   switch (mode) {
     case debug::CoverageMode::kBestEffort:
       // Note that DevTools switches back to best-effort coverage once the

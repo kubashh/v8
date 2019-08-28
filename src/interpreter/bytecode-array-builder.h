@@ -24,6 +24,7 @@ namespace internal {
 class BytecodeArray;
 class FeedbackVectorSpec;
 class Isolate;
+class ParseInfo;
 
 namespace interpreter {
 
@@ -46,7 +47,8 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
   Handle<ByteArray> ToSourcePositionTable(Isolate* isolate);
 
 #ifdef DEBUG
-  void CheckBytecodeMatches(Handle<BytecodeArray> bytecode);
+  void CheckBytecodeMatches(Isolate* isolate, ParseInfo* parse_info,
+                            Handle<BytecodeArray> bytecode);
 #endif
 
   // Get the number of parameters expected by function.

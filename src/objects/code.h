@@ -24,6 +24,7 @@ class CodeDataContainer;
 class CodeDesc;
 
 namespace interpreter {
+class BytecodeArrayIterator;
 class Register;
 }
 
@@ -845,6 +846,11 @@ class BytecodeArray : public FixedArrayBase {
   class BodyDescriptor;
 
   OBJECT_CONSTRUCTORS(BytecodeArray, FixedArrayBase);
+
+ private:
+  void Disassemble(
+      std::ostream& os, Address base_address,
+      std::unique_ptr<interpreter::BytecodeArrayIterator> iterator);
 };
 
 // DeoptimizationData is a fixed array used to hold the deoptimization data for

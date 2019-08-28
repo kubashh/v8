@@ -58,7 +58,7 @@ class V8_EXPORT_PRIVATE BytecodeArrayWriter final {
   Handle<ByteArray> ToSourcePositionTable(Isolate* isolate);
 
 #ifdef DEBUG
-  void CheckBytecodeMatches(Handle<BytecodeArray> bytecode);
+  int CheckBytecodeMatches(Handle<BytecodeArray> bytecode);
 #endif
 
   bool RemainderOfBlockIsDead() const { return exit_seen_in_block_; }
