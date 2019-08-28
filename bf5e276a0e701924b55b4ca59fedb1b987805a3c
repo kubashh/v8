@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e440744_239bf890",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3881,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-28T14:12:16Z",
+      "side": 1,
+      "message": "nit - key (to be consistent with cases below)",
+      "range": {
+        "startLine": 3881,
+        "startChar": 15,
+        "endLine": 3881,
+        "endChar": 28
+      },
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca0f34fe_7f421880",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3934,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-28T14:12:16Z",
+      "side": 1,
+      "message": "Please move this just above the UNREACHABLE()",
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df75b3da_ead4a5be",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4415,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-28T14:12:16Z",
+      "side": 1,
+      "message": "Is it purposeful that you do the brand check before visiting the key in this case, but in the count operation you do it the other way around? I\u0027m wondering if BuildPrivateBrandCheck could be moved into BuildPrivateGetterAccess / BuildPrivateSetterAccess?",
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3a104ff_886b8629",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4462,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-28T14:12:16Z",
+      "side": 1,
+      "message": "Drop this comment",
+      "range": {
+        "startLine": 4462,
+        "startChar": 2,
+        "endLine": 4462,
+        "endChar": 29
+      },
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9645ef1a_b163cb4d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5151,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-28T14:12:16Z",
+      "side": 1,
+      "message": "nit - value.",
+      "range": {
+        "startLine": 5151,
+        "startChar": 15,
+        "endLine": 5151,
+        "endChar": 24
+      },
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65aa7ff8_c7857e18",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5154,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-28T14:12:16Z",
+      "side": 1,
+      "message": "You also need: \nif (!execution_result()-\u003eIsEffect()) {\n  builder()-\u003eLoadAccumulatorWithRegister(value);\n}",
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
