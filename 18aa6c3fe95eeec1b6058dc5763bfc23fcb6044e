@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5dd5de53_8c16c599",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-08-28T15:46:38Z",
+      "side": 1,
+      "message": "This doesn\u0027t work because this string can turn into a ThinString after insertion when it is internalized.\n\nInstead I would suggest:\n\nif (value-\u003eIsThinString()) {\n  value \u003d value-\u003eactual();\n}\n\nif(!value-\u003eIsInternalizedString()) {\n  return LoadHandler::LoadFromPrototype(isolate(), map, holder,\n                                                  smi_handler);\n}\n\n\n// DCHECK(!value-\u003eIsThinString() \u0026\u0026 !value-\u003eIsConsString());\n\n...",
+      "range": {
+        "startLine": 910,
+        "startChar": 12,
+        "endLine": 910,
+        "endChar": 17
+      },
+      "revId": "18aa6c3fe95eeec1b6058dc5763bfc23fcb6044e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
