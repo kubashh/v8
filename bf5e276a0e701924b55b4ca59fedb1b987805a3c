@@ -119,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "09bc51a9_7017591a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4415,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-08-29T11:13:20Z",
+      "side": 1,
+      "message": "Let\u0027s just always do the brand check immediately before the BuildPrivate**Access to keep things consistent.",
+      "parentUuid": "3cb4c7f2_ef381aeb",
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e3a104ff_886b8629",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 8
