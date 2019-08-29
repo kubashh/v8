@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "315459c2_0eb15ea8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-29T06:42:45Z",
+      "side": 1,
+      "message": "FYI Ana is currently changing that bit; please coordinate to make sure you don\u0027t overwrite each other\u0027s changes.",
+      "parentUuid": "fc9ac5f9_3c34c61b",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a65b356_7574b4eb",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 3
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "macro-assembler.h is required for the trampoline builtin (line 29 in this file).",
       "parentUuid": "1a65b356_7574b4eb",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdc2cafc_a4f7f5ff",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-29T06:42:45Z",
+      "side": 1,
+      "message": "But is it? You could pass in a TurboAssembler (the macro assembler base class) and call Jump on that, right?",
+      "parentUuid": "15f1e099_e04e83bf",
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -104,6 +140,24 @@
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e99cec2_ff4895d4",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-29T06:42:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d17abfd3_813b456c",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -294,6 +348,30 @@
     },
     {
       "key": {
+        "uuid": "27aca3a1_a5d51615",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-29T06:42:45Z",
+      "side": 1,
+      "message": "nit: the ASSERT is implicit in the TNode\u003cCode\u003e cast just below.",
+      "parentUuid": "29f847e7_e63afdad",
+      "range": {
+        "startLine": 520,
+        "startChar": 2,
+        "endLine": 520,
+        "endChar": 54
+      },
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14128d5b_1c6392f5",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 3
@@ -323,6 +401,24 @@
       "side": 1,
       "message": "We could always create an initial stack area. For --regexp-interpret-all this would waste 1KB per isolate. But with tier-up it is quite likely that we need the area anyways. I don\u0027t know if 1KB extra for jitless mode is OK or not?\nAdditionally the bytecode field is used as an indicator that tier-up hasn\u0027t happened yet.\n\nRegarding top of stack: Added a TODO. Thought about just implementing it but this CL is quite huge already. Leaving this as a follow-up.",
       "parentUuid": "14128d5b_1c6392f5",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83e592e6_a9f96768",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-29T06:42:45Z",
+      "side": 1,
+      "message": "Follow-up SGTM but let\u0027s not forget about this. 1K per isolate sounds okay, although we could also create a smaller initial size, right?",
+      "parentUuid": "0a07c905_4bf53bf1",
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -431,6 +527,24 @@
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cf3535b_a683c7f3",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-29T06:42:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fac14dc4_35a2dcde",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -606,6 +720,24 @@
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54720b30_2283a31a",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-29T06:42:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6e9e73c9_b9e0c1bb",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -962,6 +1094,24 @@
       "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4921ef84_0f592238",
+        "filename": "test/cctest/test-regexp.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-29T06:42:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cc1b7988_836b1290",
+      "revId": "24d9856d3f3cec5efe3b5f9dfa020f7ef61e5012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

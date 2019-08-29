@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c3c1c4f_7115b5f8",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-29T06:42:45Z",
+      "side": 1,
+      "message": "nit: \u0027its\u0027 or \u0027the\u0027",
+      "revId": "d42d901aeda36d33a69a147a029268a8fb25e971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "361ea558_1d2b2746",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-08-29T06:42:45Z",
+      "side": 1,
+      "message": "FYI, the bug Ana is fixing is in this line (it\u0027s not valid to Truncate here).",
+      "revId": "d42d901aeda36d33a69a147a029268a8fb25e971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
