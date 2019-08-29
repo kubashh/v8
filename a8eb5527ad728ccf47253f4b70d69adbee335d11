@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24d84a58_6ad3f6b9",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3334,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-29T15:15:06Z",
+      "side": 1,
+      "message": "Isn\u0027t this the iterator object?",
+      "revId": "a8eb5527ad728ccf47253f4b70d69adbee335d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b50d4244_88af5f29",
+        "filename": "src/compiler/frame-states.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-29T15:15:06Z",
+      "side": 1,
+      "message": "This comment needs an update.",
+      "revId": "a8eb5527ad728ccf47253f4b70d69adbee335d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aa71c6f_53b4eb01",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-29T15:15:06Z",
+      "side": 1,
+      "message": "A TODO comment should express an intended action. Could you say what you\u0027d like to change?",
+      "revId": "a8eb5527ad728ccf47253f4b70d69adbee335d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "319a22c0_3cb8e0e0",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 5356,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-29T15:15:06Z",
+      "side": 1,
+      "message": "Please keep the comment about Call.",
+      "revId": "a8eb5527ad728ccf47253f4b70d69adbee335d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0f63807_7f7d6441",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3201,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-08-29T15:15:06Z",
+      "side": 1,
+      "message": "Please update this.",
+      "revId": "a8eb5527ad728ccf47253f4b70d69adbee335d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
