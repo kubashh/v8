@@ -1904,14 +1904,20 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArmI32x4Shl: {
       QwNeonRegister tmp = i.TempSimd128Register(0);
-      __ vdup(Neon32, tmp, i.InputRegister(1));
+      Register shift = i.TempRegister(1);
+      // Take shift value modulo 32.
+      __ and_(shift, i.InputRegister(1), Operand(31));
+      __ vdup(Neon32, tmp, shift);
       __ vshl(NeonS32, i.OutputSimd128Register(), i.InputSimd128Register(0),
               tmp);
       break;
     }
     case kArmI32x4ShrS: {
       QwNeonRegister tmp = i.TempSimd128Register(0);
-      __ vdup(Neon32, tmp, i.InputRegister(1));
+      Register shift = i.TempRegister(1);
+      // Take shift value modulo 32.
+      __ and_(shift, i.InputRegister(1), Operand(31));
+      __ vdup(Neon32, tmp, shift);
       __ vneg(Neon32, tmp, tmp);
       __ vshl(NeonS32, i.OutputSimd128Register(), i.InputSimd128Register(0),
               tmp);
@@ -1983,7 +1989,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArmI32x4ShrU: {
       QwNeonRegister tmp = i.TempSimd128Register(0);
-      __ vdup(Neon32, tmp, i.InputRegister(1));
+      Register shift = i.TempRegister(1);
+      // Take shift value modulo 32.
+      __ and_(shift, i.InputRegister(1), Operand(31));
+      __ vdup(Neon32, tmp, shift);
       __ vneg(Neon32, tmp, tmp);
       __ vshl(NeonU32, i.OutputSimd128Register(), i.InputSimd128Register(0),
               tmp);
@@ -2039,14 +2048,20 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArmI16x8Shl: {
       QwNeonRegister tmp = i.TempSimd128Register(0);
-      __ vdup(Neon16, tmp, i.InputRegister(1));
+      Register shift = i.TempRegister(1);
+      // Take shift value modulo 16.
+      __ and_(shift, i.InputRegister(1), Operand(15));
+      __ vdup(Neon16, tmp, shift);
       __ vshl(NeonS16, i.OutputSimd128Register(), i.InputSimd128Register(0),
               tmp);
       break;
     }
     case kArmI16x8ShrS: {
       QwNeonRegister tmp = i.TempSimd128Register(0);
-      __ vdup(Neon16, tmp, i.InputRegister(1));
+      Register shift = i.TempRegister(1);
+      // Take shift value modulo 16.
+      __ and_(shift, i.InputRegister(1), Operand(15));
+      __ vdup(Neon16, tmp, shift);
       __ vneg(Neon16, tmp, tmp);
       __ vshl(NeonS16, i.OutputSimd128Register(), i.InputSimd128Register(0),
               tmp);
@@ -2127,7 +2142,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArmI16x8ShrU: {
       QwNeonRegister tmp = i.TempSimd128Register(0);
-      __ vdup(Neon16, tmp, i.InputRegister(1));
+      Register shift = i.TempRegister(1);
+      // Take shift value modulo 16.
+      __ and_(shift, i.InputRegister(1), Operand(15));
+      __ vdup(Neon16, tmp, shift);
       __ vneg(Neon16, tmp, tmp);
       __ vshl(NeonU16, i.OutputSimd128Register(), i.InputSimd128Register(0),
               tmp);
@@ -2186,6 +2204,9 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArmI8x16Shl: {
       QwNeonRegister tmp = i.TempSimd128Register(0);
+      Register shift = i.TempRegister(1);
+      // Take shift value modulo 8.
+      __ and_(shift, i.InputRegister(1), Operand(7));
       __ vdup(Neon8, tmp, i.InputRegister(1));
       __ vshl(NeonS8, i.OutputSimd128Register(), i.InputSimd128Register(0),
               tmp);
@@ -2193,7 +2214,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArmI8x16ShrS: {
       QwNeonRegister tmp = i.TempSimd128Register(0);
-      __ vdup(Neon8, tmp, i.InputRegister(1));
+      Register shift = i.TempRegister(1);
+      // Take shift value modulo 8.
+      __ and_(shift, i.InputRegister(1), Operand(7));
+      __ vdup(Neon8, tmp, shift);
       __ vneg(Neon8, tmp, tmp);
       __ vshl(NeonS8, i.OutputSimd128Register(), i.InputSimd128Register(0),
               tmp);
@@ -2260,7 +2284,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArmI8x16ShrU: {
       QwNeonRegister tmp = i.TempSimd128Register(0);
-      __ vdup(Neon8, tmp, i.InputRegister(1));
+      Register shift = i.TempRegister(1);
+      // Take shift value modulo 8.
+      __ and_(shift, i.InputRegister(1), Operand(7));
+      __ vdup(Neon8, tmp, shift);
       __ vneg(Neon8, tmp, tmp);
       __ vshl(NeonU8, i.OutputSimd128Register(), i.InputSimd128Register(0),
               tmp);
