@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56637b55_b9985a25",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-08-29T08:33:12Z",
+      "side": 1,
+      "message": "Let\u0027s reverse the condition and let it fall through to line 929 if the string is not internalized.",
+      "revId": "ee710f4fb6ce1f70ab57cfe185561d92645daf28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
