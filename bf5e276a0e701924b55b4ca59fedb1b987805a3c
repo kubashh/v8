@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1ce1d6e8_23674a4b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3881,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-08-29T04:42:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e440744_239bf890",
+      "range": {
+        "startLine": 3881,
+        "startChar": 15,
+        "endLine": 3881,
+        "endChar": 28
+      },
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca0f34fe_7f421880",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 8
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "4b5dccf7_545c625a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3934,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-08-29T04:42:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca0f34fe_7f421880",
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df75b3da_ead4a5be",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 8
@@ -53,6 +95,24 @@
       "writtenOn": "2019-08-28T14:12:16Z",
       "side": 1,
       "message": "Is it purposeful that you do the brand check before visiting the key in this case, but in the count operation you do it the other way around? I\u0027m wondering if BuildPrivateBrandCheck could be moved into BuildPrivateGetterAccess / BuildPrivateSetterAccess?",
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cb4c7f2_ef381aeb",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4415,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-08-29T04:42:22Z",
+      "side": 1,
+      "message": "I moved the brand check out of BuildPrivateSetterAccess() because we do not need to perform the brand check for the setter access in VisitCountOperation(), since we already do a brand check for the getter first and the receiver can\u0027t change there. To keep them consistent, the brand check was moved out of BuildPrivateGetterAccess() as well.\n\nIt\u0027s not intentional that the brand check happens after the loading of the key - should I change it to performing brand check before loading the key always? That would make a bit more sense since if the brand check throws the loaded keys are not going to be used anyway.",
+      "parentUuid": "df75b3da_ead4a5be",
       "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "d87b4b46_d1bb175a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4462,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-08-29T04:42:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3a104ff_886b8629",
+      "range": {
+        "startLine": 4462,
+        "startChar": 2,
+        "endLine": 4462,
+        "endChar": 29
+      },
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9645ef1a_b163cb4d",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 8
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "b4dee7f8_d6a34a4a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5151,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-08-29T04:42:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9645ef1a_b163cb4d",
+      "range": {
+        "startLine": 5151,
+        "startChar": 15,
+        "endLine": 5151,
+        "endChar": 24
+      },
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "65aa7ff8_c7857e18",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 8
@@ -119,6 +227,24 @@
       "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c29094b9_63d0bad9",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5154,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-08-29T04:42:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65aa7ff8_c7857e18",
+      "revId": "bf5e276a0e701924b55b4ca59fedb1b987805a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
