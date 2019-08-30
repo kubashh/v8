@@ -16,6 +16,24 @@
       "revId": "189248e0f78834cd34c5c6213fc3b62c4bddb28a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64e6a4ed_c389f66a",
+        "filename": "src/debug/debug-coverage.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-08-30T15:44:58Z",
+      "side": 1,
+      "message": "moved to a separate function in Isolate leaving a check here that only executes it if the mode has actually changed.",
+      "parentUuid": "5599d7bc_07ba8d51",
+      "revId": "189248e0f78834cd34c5c6213fc3b62c4bddb28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
