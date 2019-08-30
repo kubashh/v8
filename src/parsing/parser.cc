@@ -2225,6 +2225,25 @@ void Parser::PrepareGeneratorVariables() {
       ast_value_factory()->dot_generator_object_string());
 }
 
+namespace {
+
+bool UsesThisExpression(Call* call) {
+  for (int i = 0; i < call->arguments()->length(); i++) {
+    Expression* expr = call->arguments()->at(i);
+    if (expr->IsThisExpression()) {
+      return true;
+    }
+    if (expr->IsCall()) {
+      if (UsesThisExpression(expr->AsCall())) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+}  // namespace
+
 FunctionLiteral* Parser::ParseFunctionLiteral(
     const AstRawString* function_name, Scanner::Location function_name_location,
     FunctionNameValidity function_name_validity, FunctionKind kind,
@@ -2444,6 +2463,29 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
 
   if (should_infer_name) {
     fni_.AddFunction(function_literal);
+  }
+
+  // We do the simplest possible static analysis of the AST for derived
+  // constructors, and remove any hole checks in the constructor if the first
+  // expression is super and 'this' is not used as an argument.
+  if (IsDerivedConstructor(kind) && body.length() > 0 &&
+      body.at(0)->IsExpressionStatement() &&
+      body.at(0)->AsExpressionStatement()->expression()->IsCall() &&
+      body.at(0)
+          ->AsExpressionStatement()
+          ->expression()
+          ->AsCall()
+          ->expression()
+          ->IsSuperCallReference() &&
+      scope->has_derived_constructor_elide_hole_checks()) {
+    // SuperCallReference* super =
+    //  body.at(0)->AsExpressionStatement()->expression()->AsCall()->expression()->AsSuperCallReference();
+    // super->set_can_elide_hole_check();
+
+    // PrintF("Can elide? %d\n",
+    // scope->has_derived_constructor_elide_hole_checks());
+  } else {
+    scope->unset_derived_constructor_elide_hole_checks();
   }
   return function_literal;
 }

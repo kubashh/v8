@@ -2590,6 +2590,9 @@ class SuperCallReference final : public Expression {
   VariableProxy* new_target_var() const { return new_target_var_; }
   VariableProxy* this_function_var() const { return this_function_var_; }
 
+  void set_can_elide_hole_check() { can_elide_hole_check_ = true; }
+  bool can_elide_hole_check() const { return can_elide_hole_check_; }
+
  private:
   friend class AstNodeFactory;
 
@@ -2598,13 +2601,15 @@ class SuperCallReference final : public Expression {
                      VariableProxy* this_function_var, int pos)
       : Expression(pos, kSuperCallReference),
         new_target_var_(new_target_var),
-        this_function_var_(this_function_var) {
+        this_function_var_(this_function_var),
+        can_elide_hole_check_(false) {
     DCHECK(new_target_var->raw_name()->IsOneByteEqualTo(".new.target"));
     DCHECK(this_function_var->raw_name()->IsOneByteEqualTo(".this_function"));
   }
 
   VariableProxy* new_target_var_;
   VariableProxy* this_function_var_;
+  bool can_elide_hole_check_;
 };
 
 // This AST Node is used to represent a dynamic import call --

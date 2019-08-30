@@ -3111,7 +3111,10 @@ void BytecodeGenerator::BuildHoleCheckForVariableAssignment(Variable* variable,
     // Perform an initialization check for 'this'. 'this' variable is the
     // only variable able to trigger bind operations outside the TDZ
     // via 'super' calls.
+    // DeclarationScope* receiver_scope = closure_scope()->GetReceiverScope();
+    // if (!receiver_scope->has_derived_constructor_elide_hole_checks()) {
     builder()->ThrowSuperAlreadyCalledIfNotHole();
+    //}
   } else {
     // Perform an initialization check for let/const declared variables.
     // E.g. let x = (x = 20); is not allowed.
@@ -4776,7 +4779,10 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
   // 'this' isn't accessed in default constructors.
   if (!IsDefaultConstructor(info()->literal()->kind())) {
     Variable* var = closure_scope()->GetReceiverScope()->receiver();
-    BuildVariableAssignment(var, Token::INIT, HoleCheckMode::kRequired);
+    BuildVariableAssignment(var, Token::INIT,
+                            super->can_elide_hole_check()
+                                ? HoleCheckMode::kElided
+                                : HoleCheckMode::kRequired);
   }
 
   Register instance = register_allocator()->NewRegister();
@@ -5522,9 +5528,9 @@ void BytecodeGenerator::VisitTemplateLiteral(TemplateLiteral* expr) {
 void BytecodeGenerator::BuildThisVariableLoad() {
   DeclarationScope* receiver_scope = closure_scope()->GetReceiverScope();
   Variable* var = receiver_scope->receiver();
-  // TODO(littledan): implement 'this' hole check elimination.
   HoleCheckMode hole_check_mode =
-      IsDerivedConstructor(receiver_scope->function_kind())
+      (IsDerivedConstructor(receiver_scope->function_kind()) &&
+       !receiver_scope->has_derived_constructor_elide_hole_checks())
           ? HoleCheckMode::kRequired
           : HoleCheckMode::kElided;
   BuildVariableLoad(var, hole_check_mode);
