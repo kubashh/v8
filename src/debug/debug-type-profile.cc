@@ -71,6 +71,10 @@ std::unique_ptr<TypeProfile> TypeProfile::Collect(Isolate* isolate) {
 }
 
 void TypeProfile::SelectMode(Isolate* isolate, debug::TypeProfileMode mode) {
+  if (mode != isolate->type_profile_mode()) {
+    isolate->CollectSourcePositionsForAllBytecodeArrays();
+  }
+
   HandleScope handle_scope(isolate);
 
   if (mode == debug::TypeProfileMode::kNone) {

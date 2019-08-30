@@ -655,6 +655,10 @@ std::unique_ptr<Coverage> Coverage::Collect(
 }
 
 void Coverage::SelectMode(Isolate* isolate, debug::CoverageMode mode) {
+  if (mode != isolate->code_coverage_mode()) {
+    isolate->CollectSourcePositionsForAllBytecodeArrays();
+  }
+
   switch (mode) {
     case debug::CoverageMode::kBestEffort:
       // Note that DevTools switches back to best-effort coverage once the
