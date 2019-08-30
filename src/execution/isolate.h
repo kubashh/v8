@@ -1565,6 +1565,13 @@ class Isolate final : private HiddenFactory {
 
   V8_EXPORT_PRIVATE void SetIdle(bool is_idle);
 
+  // Changing the coverage or type profile mode can change the bytecode that
+  // would be generated for a function, which in turn can interfere with lazy
+  // source positions, so this should be called to force source position
+  // collection whenever there's such a change. This will mean the source
+  // positions will be generated in the same mode as the original bytecode.
+  V8_EXPORT_PRIVATE void CollectSourcePositionsForAllBytecodeArrays();
+
  private:
   explicit Isolate(std::unique_ptr<IsolateAllocator> isolate_allocator);
   ~Isolate();
