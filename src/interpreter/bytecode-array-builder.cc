@@ -4,6 +4,7 @@
 
 #include "src/interpreter/bytecode-array-builder.h"
 
+#include "src/ast/scopes.h"
 #include "src/common/globals.h"
 #include "src/interpreter/bytecode-array-writer.h"
 #include "src/interpreter/bytecode-jump-table.h"
@@ -14,6 +15,7 @@
 #include "src/interpreter/interpreter-intrinsics.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/smi.h"
+#include "src/parsing/parse-info.h"
 
 namespace v8 {
 namespace internal {
@@ -101,8 +103,19 @@ Handle<BytecodeArray> BytecodeArrayBuilder::ToBytecodeArray(Isolate* isolate) {
 
 #ifdef DEBUG
 void BytecodeArrayBuilder::CheckBytecodeMatches(
-    Handle<BytecodeArray> bytecode) {
-  bytecode_array_writer_.CheckBytecodeMatches(bytecode);
+    Isolate* isolate, ParseInfo* parse_info, Handle<BytecodeArray> bytecode) {
+  int first_mismatch = bytecode_array_writer_.CheckBytecodeMatches(bytecode);
+  if (first_mismatch != kNoSourcePosition) {
+    parse_info->ast_value_factory()->Internalize(isolate);
+    DeclarationScope::AllocateScopeInfos(parse_info, isolate);
+
+    Handle<BytecodeArray> new_bytecode = ToBytecodeArray(isolate);
+    std::cerr << "Bytecode mismatch\nOriginal bytecode:\n";
+    bytecode->Disassemble(std::cerr);
+    std::cerr << "\nNew bytecode:\n";
+    new_bytecode->Disassemble(std::cerr);
+    FATAL("Bytecode mismatch at offset %d\n", first_mismatch);
+  }
 }
 #endif
 

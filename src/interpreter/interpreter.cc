@@ -236,6 +236,10 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl(
     os << std::flush;
   }
 
+#ifdef DEBUG
+  generator()->CheckBytecodeMatches(isolate, parse_info(), bytecodes);
+#endif
+
   return SUCCEEDED;
 }
 
