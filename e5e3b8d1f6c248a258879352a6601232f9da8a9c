@@ -22,6 +22,30 @@
       "revId": "e5e3b8d1f6c248a258879352a6601232f9da8a9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6af6bdea_69738d4f",
+        "filename": "test/cctest/interpreter/test-bytecode-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2810,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-08-30T09:21:31Z",
+      "side": 1,
+      "message": "If the function is not called it crashes with something like this\n\n#\n# Fatal error in ../../src/objects/shared-function-info-inl.h, line 459\n# Debug check failed: HasBytecodeArray().\n#\n#\n#\n#FailureMessage Object: 0x7ffee0794800\n\u003d\u003d\u003d\u003d C stack trace \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\n    0   libv8_libbase.dylib                 0x00000001155e6411 v8::base::debug::StackTrace::StackTrace() + 33\n    1   libv8_libbase.dylib                 0x00000001155e6445 v8::base::debug::StackTrace::StackTrace() + 21\n    2   libv8_libplatform.dylib             0x0000000115679445 v8::platform::(anonymous namespace)::PrintStackTrace() + 37\n    3   libv8_libbase.dylib                 0x00000001155ce64a V8_Fatal(char const*, int, char const*, ...) + 554\n    4   libv8_libbase.dylib                 0x00000001155cdf4c v8::base::(anonymous namespace)::DefaultDcheckHandler(char const*, int, char const*) + 44\n    5   libv8_libbase.dylib                 0x00000001155ce6c7 V8_Dcheck(char const*, int, char const*) + 39\n    6   generate-bytecode-expectations      0x000000010f46baa6 v8::internal::SharedFunctionInfo::GetBytecodeArray() const + 86\n    7   generate-bytecode-expectations      0x000000010f46b546 v8::internal::interpreter::BytecodeExpectationsPrinter::GetBytecodeArrayForGlobal(char const*) const + 294\n    8   generate-bytecode-expectations      0x000000010f46f3db v8::internal::interpreter::BytecodeExpectationsPrinter::PrintExpectation(std::__1::basic_ostream\u003cchar, std::__1::char_traits\u003cchar\u003e \u003e\u0026, std::__1::basic_string\u003cchar, std::__1::char_traits\u003cchar\u003e, std::__1::allocator\u003cchar\u003e \u003e const\u0026) const + 571",
+      "parentUuid": "bdd25f69_a7f586d8",
+      "range": {
+        "startLine": 2810,
+        "startChar": 7,
+        "endLine": 2810,
+        "endChar": 17
+      },
+      "revId": "e5e3b8d1f6c248a258879352a6601232f9da8a9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
