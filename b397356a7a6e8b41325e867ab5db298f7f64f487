@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f2b3b186_39f91896",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-02T13:27:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d03d2e58_f3cd4718",
+      "revId": "b397356a7a6e8b41325e867ab5db298f7f64f487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9805b374_5d811812",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 12
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "f1e012a3_a18f9b31",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-02T13:27:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9805b374_5d811812",
+      "range": {
+        "startLine": 1409,
+        "startChar": 58,
+        "endLine": 1409,
+        "endChar": 71
+      },
+      "revId": "b397356a7a6e8b41325e867ab5db298f7f64f487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b87b906c_0ca8567f",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 12
@@ -56,6 +98,24 @@
       "revId": "b397356a7a6e8b41325e867ab5db298f7f64f487",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6683e19_dd22218f",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-02T13:27:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b87b906c_0ca8567f",
+      "revId": "b397356a7a6e8b41325e867ab5db298f7f64f487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
