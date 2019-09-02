@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d03d2e58_f3cd4718",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-02T11:51:28Z",
+      "side": 1,
+      "message": "Nit: That comment is redundant given the other comment below.",
+      "revId": "b397356a7a6e8b41325e867ab5db298f7f64f487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9805b374_5d811812",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-02T11:51:28Z",
+      "side": 1,
+      "message": "Just inline this variable.",
+      "range": {
+        "startLine": 1409,
+        "startChar": 58,
+        "endLine": 1409,
+        "endChar": 71
+      },
+      "revId": "b397356a7a6e8b41325e867ab5db298f7f64f487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b87b906c_0ca8567f",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-02T11:51:28Z",
+      "side": 1,
+      "message": "How about separating the LoadNamed from giving names to all the inputs:\n\n  GetIteratorParameters const\u0026 p \u003d GetIteratorParametersOf(node-\u003eop());\n  Node* receiver \u003d NodeProperties::GetValueInput(node, 0);\n  Node* context \u003d NodeProperties::GetContextInput(node);\n  Node* frame_state \u003d NodeProperties::GetFrameStateInput(node);\n  Node* effect \u003d NodeProperties::GetEffectInput(node);\n  Node* control \u003d NodeProperties::GetControlInput(node);\n\n  Handle\u003cName\u003e iterator_symbol \u003d factory()-\u003eiterator_symbol();\n  const Operator* load_op \u003d\n      javascript()-\u003eLoadNamed(iterator_symbol, p.load_feedback());",
+      "revId": "b397356a7a6e8b41325e867ab5db298f7f64f487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
