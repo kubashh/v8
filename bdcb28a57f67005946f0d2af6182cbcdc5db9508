@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bdb84b01_6430de8f",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1340562
+      },
+      "writtenOn": "2019-09-02T10:58:43Z",
+      "side": 1,
+      "message": "There are about 20-30 calls in total and we can fix the caller instead.\n\nHowever, I would say fixing caller may make it unsafe as next time to call these functions one has to do if(!FLAG_no_write_barriers) first. ​What do you think?",
+      "parentUuid": "fafb52bb_107b7832",
+      "range": {
+        "startLine": 145,
+        "startChar": 2,
+        "endLine": 145,
+        "endChar": 42
+      },
+      "revId": "bdcb28a57f67005946f0d2af6182cbcdc5db9508",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5708a7a9_c2915d86",
         "filename": "src/heap/heap-write-barrier-inl.h",
         "patchSetId": 1
