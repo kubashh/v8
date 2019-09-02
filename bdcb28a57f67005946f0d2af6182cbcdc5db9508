@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fafb52bb_107b7832",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-02T08:05:03Z",
+      "side": 1,
+      "message": "Is it possible to fix the caller instead?\n\nI would expect that after disabling the write barrier macros, there are not many places that explicitly invoke these write barrier functions.",
+      "range": {
+        "startLine": 145,
+        "startChar": 2,
+        "endLine": 145,
+        "endChar": 42
+      },
+      "revId": "bdcb28a57f67005946f0d2af6182cbcdc5db9508",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5708a7a9_c2915d86",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-02T08:05:03Z",
+      "side": 1,
+      "message": "This looks good.",
+      "range": {
+        "startLine": 223,
+        "startChar": 2,
+        "endLine": 223,
+        "endChar": 61
+      },
+      "revId": "bdcb28a57f67005946f0d2af6182cbcdc5db9508",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e1fc27e_fd34b665",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-02T08:05:03Z",
+      "side": 1,
+      "message": "This is fragile as the caller may do DCHECK(ObjectInYoungGeneration(object)). Let\u0027s fix the caller instead.",
+      "range": {
+        "startLine": 233,
+        "startChar": 1,
+        "endLine": 233,
+        "endChar": 43
+      },
+      "revId": "bdcb28a57f67005946f0d2af6182cbcdc5db9508",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "005984a2_eeb03c2a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5533,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-02T08:05:03Z",
+      "side": 1,
+      "message": "Good catch",
+      "range": {
+        "startLine": 5533,
+        "startChar": 0,
+        "endLine": 5533,
+        "endChar": 33
+      },
+      "revId": "bdcb28a57f67005946f0d2af6182cbcdc5db9508",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "198c7e83_9fde51a0",
+        "filename": "src/heap/spaces-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-02T08:05:03Z",
+      "side": 1,
+      "message": "Accounting of the external backing store bytes are independent from write barriers.\nI think the proper way would be to guard this with V8_USE_THIRD_PARTY_HEAP in subsequent CLs.",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 33
+      },
+      "revId": "bdcb28a57f67005946f0d2af6182cbcdc5db9508",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
