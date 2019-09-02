@@ -210,14 +210,18 @@ MemoryChunk* MemoryChunk::FromAnyPointerAddress(Address addr) {
 
 void MemoryChunk::IncrementExternalBackingStoreBytes(
     ExternalBackingStoreType type, size_t amount) {
+#ifndef V8_DISABLE_WRITE_BARRIERS
   base::CheckedIncrement(&external_backing_store_bytes_[type], amount);
   owner()->IncrementExternalBackingStoreBytes(type, amount);
+#endif
 }
 
 void MemoryChunk::DecrementExternalBackingStoreBytes(
     ExternalBackingStoreType type, size_t amount) {
+#ifndef V8_DISABLE_WRITE_BARRIERS
   base::CheckedDecrement(&external_backing_store_bytes_[type], amount);
   owner()->DecrementExternalBackingStoreBytes(type, amount);
+#endif
 }
 
 void MemoryChunk::MoveExternalBackingStoreBytes(ExternalBackingStoreType type,
