@@ -756,7 +756,7 @@ void HeapObject::set_map(Map value) {
 #endif
   }
   set_map_word(MapWord::FromMap(value));
-  if (!value.is_null()) {
+  if (!value.is_null() && !FLAG_disable_write_barriers) {
     // TODO(1600) We are passing kNullAddress as a slot because maps can never
     // be on an evacuation candidate.
     MarkingBarrier(*this, ObjectSlot(kNullAddress), value);
@@ -774,7 +774,7 @@ void HeapObject::synchronized_set_map(Map value) {
 #endif
   }
   synchronized_set_map_word(MapWord::FromMap(value));
-  if (!value.is_null()) {
+  if (!value.is_null() && !FLAG_disable_write_barriers) {
     // TODO(1600) We are passing kNullAddress as a slot because maps can never
     // be on an evacuation candidate.
     MarkingBarrier(*this, ObjectSlot(kNullAddress), value);
@@ -793,7 +793,7 @@ void HeapObject::set_map_no_write_barrier(Map value) {
 
 void HeapObject::set_map_after_allocation(Map value, WriteBarrierMode mode) {
   set_map_word(MapWord::FromMap(value));
-  if (mode != SKIP_WRITE_BARRIER) {
+  if (mode != SKIP_WRITE_BARRIER && !FLAG_disable_write_barriers) {
     DCHECK(!value.is_null());
     // TODO(1600) We are passing kNullAddress as a slot because maps can never
     // be on an evacuation candidate.

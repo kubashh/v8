@@ -1168,7 +1168,9 @@ class RecordMigratedSlotVisitor : public ObjectVisitor {
     DCHECK_EQ(host, rinfo->host());
     DCHECK(RelocInfo::IsEmbeddedObjectMode(rinfo->rmode()));
     HeapObject object = HeapObject::cast(rinfo->target_object());
+#ifndef V8_DISABLE_WRITE_BARRIERS
     GenerationalBarrierForCode(host, rinfo, object);
+#endif
     collector_->RecordRelocSlot(host, rinfo, object);
   }
 

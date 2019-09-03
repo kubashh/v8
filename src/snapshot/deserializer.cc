@@ -740,7 +740,8 @@ bool Deserializer::ReadData(TSlot current, TSlot limit,
         // Don't update current pointer here as it may be needed for write
         // barrier.
         Write(current, hot_maybe_object);
-        if (write_barrier_needed && Heap::InYoungGeneration(hot_object)) {
+        if (write_barrier_needed && Heap::InYoungGeneration(hot_object) &&
+            !FLAG_disable_write_barriers) {
           HeapObject current_object =
               HeapObject::FromAddress(current_object_address);
           GenerationalBarrier(current_object,
@@ -841,7 +842,8 @@ TSlot Deserializer::ReadDataCase(Isolate* isolate, TSlot current,
           : HeapObjectReference::Weak(heap_object);
   // Don't update current pointer here as it may be needed for write barrier.
   Write(current, heap_object_ref);
-  if (emit_write_barrier && write_barrier_needed) {
+  if (emit_write_barrier && write_barrier_needed &&
+      !FLAG_disable_write_barriers) {
     HeapObject host_object = HeapObject::FromAddress(current_object_address);
     SLOW_DCHECK(isolate->heap()->Contains(host_object));
     GenerationalBarrier(host_object, MaybeObjectSlot(current.address()),
