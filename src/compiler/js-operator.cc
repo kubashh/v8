@@ -562,6 +562,29 @@ const CloneObjectParameters& CloneObjectParametersOf(const Operator* op) {
   return OpParameter<CloneObjectParameters>(op);
 }
 
+bool operator==(StackCheckParameters const& lhs,
+                StackCheckParameters const& rhs) {
+  return lhs.kind() == rhs.kind();
+}
+
+bool operator!=(StackCheckParameters const& lhs,
+                StackCheckParameters const& rhs) {
+  return !(lhs == rhs);
+}
+
+size_t hash_value(StackCheckParameters const& p) {
+  return hash_value(p.kind());
+}
+
+std::ostream& operator<<(std::ostream& os, StackCheckParameters const& p) {
+  return os << p.kind();
+}
+
+const StackCheckParameters& StackCheckParametersOf(const Operator* op) {
+  DCHECK(op->opcode() == IrOpcode::kJSStackCheck);
+  return OpParameter<StackCheckParameters>(op);
+}
+
 size_t hash_value(ForInMode mode) { return static_cast<uint8_t>(mode); }
 
 std::ostream& operator<<(std::ostream& os, ForInMode mode) {
@@ -639,7 +662,6 @@ CompareOperationHint CompareOperationHintOf(const Operator* op) {
   V(GeneratorRestoreContinuation, Operator::kNoThrow, 1, 1)              \
   V(GeneratorRestoreContext, Operator::kNoThrow, 1, 1)                   \
   V(GeneratorRestoreInputOrDebugPos, Operator::kNoThrow, 1, 1)           \
-  V(StackCheck, Operator::kNoWrite, 0, 0)                                \
   V(Debugger, Operator::kNoProperties, 0, 0)                             \
   V(FulfillPromise, Operator::kNoDeopt | Operator::kNoThrow, 2, 1)       \
   V(PerformPromiseThen, Operator::kNoDeopt | Operator::kNoThrow, 4, 1)   \
@@ -1266,6 +1288,16 @@ const Operator* JSOperatorBuilder::CloneObject(FeedbackSource const& feedback,
       "JSCloneObject",                                   // name
       1, 1, 1, 1, 1, 2,                                  // counts
       parameters);                                       // parameter
+}
+
+const Operator* JSOperatorBuilder::StackCheck(StackCheckKind kind) {
+  StackCheckParameters parameters(kind);
+  return new (zone()) Operator1<StackCheckParameters>(  // --
+      IrOpcode::kJSStackCheck,                          // opcode
+      Operator::kNoWrite,                               // properties
+      "JSStackCheck",                                   // name
+      0, 1, 1, 0, 1, 2,                                 // counts
+      parameters);                                      // parameter
 }
 
 const Operator* JSOperatorBuilder::CreateEmptyLiteralObject() {

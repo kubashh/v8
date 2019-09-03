@@ -1588,6 +1588,28 @@ V8_INLINE bool operator!(ExceptionStatus status) {
   return !static_cast<bool>(status);
 }
 
+enum class StackCheckKind {
+  kFunctionEntry = 0,
+  kIterationBody = 1,
+  kUnknown = 2,
+};
+
+inline std::ostream& operator<<(std::ostream& os, StackCheckKind kind) {
+  switch (kind) {
+    case StackCheckKind::kFunctionEntry:
+      return os << "FunctionEntry";
+    case StackCheckKind::kIterationBody:
+      return os << "IterationBody";
+    case StackCheckKind::kUnknown:
+      return os << "Unknown";
+  }
+  UNREACHABLE();
+}
+
+inline size_t hash_value(StackCheckKind kind) {
+  return static_cast<size_t>(kind);
+}
+
 }  // namespace internal
 }  // namespace v8
 
