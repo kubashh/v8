@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e6654de_4e36d8d0",
+        "filename": "src/codegen/arm/assembler-arm-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1340562
+      },
+      "writtenOn": "2019-09-03T00:57:42Z",
+      "side": 1,
+      "message": "Fixed callers referring to those write-barriers.\n\nSome parts of callers involve assemblers and snapshots that may need to be reviewed by the owners.",
+      "range": {
+        "startLine": 122,
+        "startChar": 7,
+        "endLine": 122,
+        "endChar": 34
+      },
+      "revId": "6bbae0af72271ba1d94ab2038dbff73272b6bae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "006587d5_81c14cb9",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1340562
+      },
+      "writtenOn": "2019-09-03T00:57:42Z",
+      "side": 1,
+      "message": "Leaving a TODO here.",
+      "revId": "6bbae0af72271ba1d94ab2038dbff73272b6bae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
