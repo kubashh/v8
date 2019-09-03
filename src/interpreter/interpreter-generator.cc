@@ -696,7 +696,8 @@ IGNITION_HANDLER(StaDataPropertyInLiteral, InterpreterAssembler) {
   TNode<Object> object = LoadRegisterAtOperandIndex(0);
   TNode<Object> name = LoadRegisterAtOperandIndex(1);
   TNode<Object> value = GetAccumulator();
-  TNode<Smi> flags = SmiFromInt32(BytecodeOperandFlag(2));
+  TNode<Smi> flags =
+      SmiFromInt32(UncheckedCast<Int32T>(BytecodeOperandFlag(2)));
   TNode<Smi> vector_index = SmiTag(BytecodeOperandIdx(3));
 
   TNode<HeapObject> feedback_vector = LoadFeedbackVector();
@@ -2415,9 +2416,9 @@ IGNITION_HANDLER(JumpLoop, InterpreterAssembler) {
 // next bytecode.
 IGNITION_HANDLER(SwitchOnSmiNoFeedback, InterpreterAssembler) {
   TNode<Object> acc = GetAccumulator();
-  Node* table_start = BytecodeOperandIdx(0);
-  Node* table_length = BytecodeOperandUImmWord(1);
-  Node* case_value_base = BytecodeOperandImmIntPtr(2);
+  TNode<IntPtrT> table_start = BytecodeOperandIdx(0);
+  TNode<IntPtrT> table_length = BytecodeOperandUImmWord(1);
+  TNode<IntPtrT> case_value_base = BytecodeOperandImmIntPtr(2);
 
   Label fall_through(this);
 
@@ -2426,10 +2427,10 @@ IGNITION_HANDLER(SwitchOnSmiNoFeedback, InterpreterAssembler) {
   // accumulator values.
   CSA_ASSERT(this, TaggedIsSmi(acc));
 
-  TNode<WordT> case_value = IntPtrSub(SmiUntag(CAST(acc)), case_value_base);
+  TNode<IntPtrT> case_value = IntPtrSub(SmiUntag(CAST(acc)), case_value_base);
   GotoIf(IntPtrLessThan(case_value, IntPtrConstant(0)), &fall_through);
   GotoIf(IntPtrGreaterThanOrEqual(case_value, table_length), &fall_through);
-  TNode<WordT> entry = IntPtrAdd(table_start, case_value);
+  TNode<IntPtrT> entry = IntPtrAdd(table_start, case_value);
   TNode<IntPtrT> relative_jump = LoadAndUntagConstantPoolEntry(entry);
   Jump(relative_jump);
 
@@ -2445,7 +2446,8 @@ IGNITION_HANDLER(CreateRegExpLiteral, InterpreterAssembler) {
   Node* pattern = LoadConstantPoolEntryAtOperandIndex(0);
   TNode<HeapObject> feedback_vector = LoadFeedbackVector();
   Node* slot_id = BytecodeOperandIdx(1);
-  TNode<Smi> flags = SmiFromInt32(BytecodeOperandFlag(2));
+  TNode<Smi> flags =
+      SmiFromInt32(UncheckedCast<Int32T>(BytecodeOperandFlag(2)));
   TNode<Context> context = GetContext();
 
   VARIABLE(result, MachineRepresentation::kTagged);
@@ -2750,8 +2752,8 @@ IGNITION_HANDLER(CreateCatchContext, InterpreterAssembler) {
 //
 // Creates a new context with number of |slots| for the function closure.
 IGNITION_HANDLER(CreateFunctionContext, InterpreterAssembler) {
-  Node* scope_info_idx = BytecodeOperandIdx(0);
-  Node* scope_info = LoadConstantPoolEntry(scope_info_idx);
+  TNode<IntPtrT> scope_info_idx = BytecodeOperandIdx(0);
+  TNode<ScopeInfo> scope_info = CAST(LoadConstantPoolEntry(scope_info_idx));
   TNode<Uint32T> slots = BytecodeOperandUImm(1);
   TNode<Context> context = GetContext();
   ConstructorBuiltinsAssembler constructor_assembler(state());
@@ -2764,8 +2766,8 @@ IGNITION_HANDLER(CreateFunctionContext, InterpreterAssembler) {
 //
 // Creates a new context with number of |slots| for an eval closure.
 IGNITION_HANDLER(CreateEvalContext, InterpreterAssembler) {
-  Node* scope_info_idx = BytecodeOperandIdx(0);
-  Node* scope_info = LoadConstantPoolEntry(scope_info_idx);
+  TNode<IntPtrT> scope_info_idx = BytecodeOperandIdx(0);
+  TNode<ScopeInfo> scope_info = CAST(LoadConstantPoolEntry(scope_info_idx));
   TNode<Uint32T> slots = BytecodeOperandUImm(1);
   TNode<Context> context = GetContext();
   ConstructorBuiltinsAssembler constructor_assembler(state());
@@ -3297,10 +3299,10 @@ IGNITION_HANDLER(SwitchOnGeneratorState, InterpreterAssembler) {
       CAST(LoadObjectField(generator, JSGeneratorObject::kContextOffset));
   SetContext(context);
 
-  Node* table_start = BytecodeOperandIdx(1);
+  TNode<IntPtrT> table_start = BytecodeOperandIdx(1);
   // TODO(leszeks): table_length is only used for a CSA_ASSERT, we don't
   // actually need it otherwise.
-  Node* table_length = BytecodeOperandUImmWord(2);
+  TNode<IntPtrT> table_length = BytecodeOperandUImmWord(2);
 
   // The state must be a Smi.
   CSA_ASSERT(this, TaggedIsSmi(state));
@@ -3311,7 +3313,7 @@ IGNITION_HANDLER(SwitchOnGeneratorState, InterpreterAssembler) {
   CSA_ASSERT(this, IntPtrLessThan(case_value, table_length));
   USE(table_length);
 
-  TNode<WordT> entry = IntPtrAdd(table_start, case_value);
+  TNode<IntPtrT> entry = IntPtrAdd(table_start, case_value);
   TNode<IntPtrT> relative_jump = LoadAndUntagConstantPoolEntry(entry);
   Jump(relative_jump);
 

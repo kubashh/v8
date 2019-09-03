@@ -474,7 +474,8 @@ TARGET_TEST_F(InterpreterAssemblerTest, LoadConstantPoolEntry) {
     }
     {
       Node* index = m.Parameter(2);
-      Node* load_constant = m.LoadConstantPoolEntry(index);
+      Node* load_constant =
+          m.LoadConstantPoolEntry(m.ReinterpretCast<IntPtrT>(index));
 #if V8_COMPRESS_POINTERS
       Matcher<Node*> constant_pool_matcher =
           IsChangeCompressedToTagged(m.IsLoadFromObject(

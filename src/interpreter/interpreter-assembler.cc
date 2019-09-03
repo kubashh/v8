@@ -561,7 +561,7 @@ TNode<Uint32T> InterpreterAssembler::BytecodeOperandCount(int operand_index) {
   return BytecodeUnsignedOperand(operand_index, operand_size);
 }
 
-Node* InterpreterAssembler::BytecodeOperandFlag(int operand_index) {
+TNode<Uint32T> InterpreterAssembler::BytecodeOperandFlag(int operand_index) {
   DCHECK_EQ(OperandType::kFlag8,
             Bytecodes::GetOperandType(bytecode_, operand_index));
   OperandSize operand_size =
@@ -578,15 +578,21 @@ TNode<Uint32T> InterpreterAssembler::BytecodeOperandUImm(int operand_index) {
   return BytecodeUnsignedOperand(operand_index, operand_size);
 }
 
-Node* InterpreterAssembler::BytecodeOperandUImmWord(int operand_index) {
-  return ChangeUint32ToWord(BytecodeOperandUImm(operand_index));
+TNode<IntPtrT> InterpreterAssembler::BytecodeOperandUImmWord(
+    int operand_index) {
+  return Signed(ChangeUint32ToWord(BytecodeOperandUImm(operand_index)));
 }
 
-Node* InterpreterAssembler::BytecodeOperandUImmSmi(int operand_index) {
-  return SmiFromInt32(Signed(BytecodeOperandUImm(operand_index)));
+TNode<Smi> InterpreterAssembler::BytecodeOperandUImmSmi(int operand_index) {
+  TNode<Uint32T> operand = BytecodeOperandUImm(operand_index);
+  // TODO(v8:6949): This check should probably be part of the Smi or Int32T
+  // cast.
+  CSA_ASSERT(this, IntPtrLessThan(ChangeUint32ToWord(operand),
+                                  IntPtrConstant(Smi::kMaxValue)));
+  return SmiFromInt32(Signed(operand));
 }
 
-Node* InterpreterAssembler::BytecodeOperandImm(int operand_index) {
+TNode<Int32T> InterpreterAssembler::BytecodeOperandImm(int operand_index) {
   DCHECK_EQ(OperandType::kImm,
             Bytecodes::GetOperandType(bytecode_, operand_index));
   OperandSize operand_size =
@@ -594,15 +600,17 @@ Node* InterpreterAssembler::BytecodeOperandImm(int operand_index) {
   return BytecodeSignedOperand(operand_index, operand_size);
 }
 
-Node* InterpreterAssembler::BytecodeOperandImmIntPtr(int operand_index) {
+TNode<IntPtrT> InterpreterAssembler::BytecodeOperandImmIntPtr(
+    int operand_index) {
   return ChangeInt32ToIntPtr(BytecodeOperandImm(operand_index));
 }
 
-Node* InterpreterAssembler::BytecodeOperandImmSmi(int operand_index) {
+TNode<Smi> InterpreterAssembler::BytecodeOperandImmSmi(int operand_index) {
   return SmiFromInt32(BytecodeOperandImm(operand_index));
 }
 
-Node* InterpreterAssembler::BytecodeOperandIdxInt32(int operand_index) {
+TNode<Uint32T> InterpreterAssembler::BytecodeOperandIdxInt32(
+    int operand_index) {
   DCHECK_EQ(OperandType::kIdx,
             Bytecodes::GetOperandType(bytecode_, operand_index));
   OperandSize operand_size =
@@ -610,25 +618,25 @@ Node* InterpreterAssembler::BytecodeOperandIdxInt32(int operand_index) {
   return BytecodeUnsignedOperand(operand_index, operand_size);
 }
 
-Node* InterpreterAssembler::BytecodeOperandIdx(int operand_index) {
-  return ChangeUint32ToWord(BytecodeOperandIdxInt32(operand_index));
+TNode<IntPtrT> InterpreterAssembler::BytecodeOperandIdx(int operand_index) {
+  return Signed(ChangeUint32ToWord(BytecodeOperandIdxInt32(operand_index)));
 }
 
-Node* InterpreterAssembler::BytecodeOperandIdxSmi(int operand_index) {
+TNode<Smi> InterpreterAssembler::BytecodeOperandIdxSmi(int operand_index) {
   return SmiTag(BytecodeOperandIdx(operand_index));
 }
 
-Node* InterpreterAssembler::BytecodeOperandConstantPoolIdx(
+TNode<IntPtrT> InterpreterAssembler::BytecodeOperandConstantPoolIdx(
     int operand_index, LoadSensitivity needs_poisoning) {
   DCHECK_EQ(OperandType::kIdx,
             Bytecodes::GetOperandType(bytecode_, operand_index));
   OperandSize operand_size =
       Bytecodes::GetOperandSize(bytecode_, operand_index, operand_scale());
-  return ChangeUint32ToWord(
-      BytecodeUnsignedOperand(operand_index, operand_size, needs_poisoning));
+  return Signed(ChangeUint32ToWord(
+      BytecodeUnsignedOperand(operand_index, operand_size, needs_poisoning)));
 }
 
-Node* InterpreterAssembler::BytecodeOperandReg(
+TNode<IntPtrT> InterpreterAssembler::BytecodeOperandReg(
     int operand_index, LoadSensitivity needs_poisoning) {
   DCHECK(Bytecodes::IsRegisterOperandType(
       Bytecodes::GetOperandType(bytecode_, operand_index)));
@@ -638,7 +646,8 @@ Node* InterpreterAssembler::BytecodeOperandReg(
       BytecodeSignedOperand(operand_index, operand_size, needs_poisoning));
 }
 
-Node* InterpreterAssembler::BytecodeOperandRuntimeId(int operand_index) {
+TNode<Uint32T> InterpreterAssembler::BytecodeOperandRuntimeId(
+    int operand_index) {
   DCHECK_EQ(OperandType::kRuntimeId,
             Bytecodes::GetOperandType(bytecode_, operand_index));
   OperandSize operand_size =
@@ -647,17 +656,18 @@ Node* InterpreterAssembler::BytecodeOperandRuntimeId(int operand_index) {
   return BytecodeUnsignedOperand(operand_index, operand_size);
 }
 
-Node* InterpreterAssembler::BytecodeOperandNativeContextIndex(
+TNode<IntPtrT> InterpreterAssembler::BytecodeOperandNativeContextIndex(
     int operand_index) {
   DCHECK_EQ(OperandType::kNativeContextIndex,
             Bytecodes::GetOperandType(bytecode_, operand_index));
   OperandSize operand_size =
       Bytecodes::GetOperandSize(bytecode_, operand_index, operand_scale());
-  return ChangeUint32ToWord(
-      BytecodeUnsignedOperand(operand_index, operand_size));
+  return Signed(
+      ChangeUint32ToWord(BytecodeUnsignedOperand(operand_index, operand_size)));
 }
 
-Node* InterpreterAssembler::BytecodeOperandIntrinsicId(int operand_index) {
+TNode<Uint32T> InterpreterAssembler::BytecodeOperandIntrinsicId(
+    int operand_index) {
   DCHECK_EQ(OperandType::kIntrinsicId,
             Bytecodes::GetOperandType(bytecode_, operand_index));
   OperandSize operand_size =
@@ -666,7 +676,8 @@ Node* InterpreterAssembler::BytecodeOperandIntrinsicId(int operand_index) {
   return BytecodeUnsignedOperand(operand_index, operand_size);
 }
 
-Node* InterpreterAssembler::LoadConstantPoolEntry(Node* index) {
+TNode<Object> InterpreterAssembler::LoadConstantPoolEntry(
+    TNode<IntPtrT> index) {
   TNode<FixedArray> constant_pool = CAST(LoadObjectField(
       BytecodeArrayTaggedPointer(), BytecodeArray::kConstantPoolOffset));
   return UnsafeLoadFixedArrayElement(
@@ -674,13 +685,13 @@ Node* InterpreterAssembler::LoadConstantPoolEntry(Node* index) {
 }
 
 TNode<IntPtrT> InterpreterAssembler::LoadAndUntagConstantPoolEntry(
-    Node* index) {
-  return SmiUntag(LoadConstantPoolEntry(index));
+    TNode<IntPtrT> index) {
+  return SmiUntag(CAST(LoadConstantPoolEntry(index)));
 }
 
-Node* InterpreterAssembler::LoadConstantPoolEntryAtOperandIndex(
+TNode<Object> InterpreterAssembler::LoadConstantPoolEntryAtOperandIndex(
     int operand_index) {
-  Node* index =
+  TNode<IntPtrT> index =
       BytecodeOperandConstantPoolIdx(operand_index, LoadSensitivity::kSafe);
   return LoadConstantPoolEntry(index);
 }
@@ -688,7 +699,7 @@ Node* InterpreterAssembler::LoadConstantPoolEntryAtOperandIndex(
 TNode<IntPtrT>
 InterpreterAssembler::LoadAndUntagConstantPoolEntryAtOperandIndex(
     int operand_index) {
-  return SmiUntag(LoadConstantPoolEntryAtOperandIndex(operand_index));
+  return SmiUntag(CAST(LoadConstantPoolEntryAtOperandIndex(operand_index)));
 }
 
 TNode<HeapObject> InterpreterAssembler::LoadFeedbackVector() {
