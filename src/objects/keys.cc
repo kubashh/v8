@@ -671,7 +671,7 @@ Maybe<bool> KeyAccumulator::CollectOwnPropertyNames(Handle<JSReceiver> receiver,
             Handle<DescriptorArray>(map.instance_descriptors(), isolate_);
         for (int i = 0; i < nof_descriptors; i++) {
           PropertyDetails details = descs->GetDetails(i);
-          if (!details.IsDontEnum()) continue;
+          if (!details.IsDontEnum() || !details.IsReadOnly()) continue;
           Object key = descs->GetKey(i);
           this->AddShadowingKey(key);
         }
