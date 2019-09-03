@@ -39,6 +39,24 @@
       "revId": "6bbae0af72271ba1d94ab2038dbff73272b6bae8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a28000ec_7f038288",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-03T05:23:47Z",
+      "side": 1,
+      "message": "nit: End with a \u0027.\u0027, and did you mean \u0027deploy\u0027?",
+      "parentUuid": "006587d5_81c14cb9",
+      "revId": "6bbae0af72271ba1d94ab2038dbff73272b6bae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
