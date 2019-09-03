@@ -149,11 +149,17 @@ ClassScope::ClassScope(Zone* zone, AstValueFactory* ast_value_factory,
                        Handle<ScopeInfo> scope_info)
     : Scope(zone, CLASS_SCOPE, scope_info) {
   set_language_mode(LanguageMode::kStrict);
-  if (scope_info->HasClassBrand()) {
+  if (scope_info->HasInstanceBrand()) {
     Variable* brand =
         LookupInScopeInfo(ast_value_factory->dot_brand_string(), this);
     DCHECK_NOT_NULL(brand);
-    EnsureRareData()->brand = brand;
+    EnsureRareData()->instance_brand = brand;
+  }
+  if (scope_info->HasStaticBrand()) {
+    Variable* brand =
+        LookupInScopeInfo(ast_value_factory->dot_static_brand_string(), this);
+    DCHECK_NOT_NULL(brand);
+    EnsureRareData()->static_brand = brand;
   }
 }
 
@@ -1726,10 +1732,13 @@ void Scope::Print(int n) {
     if (class_scope->rare_data_ != nullptr) {
       PrintMap(n1, "// private name vars:\n",
                &(class_scope->rare_data_->private_name_map), true, function);
-      Variable* brand = class_scope->brand();
-      if (brand != nullptr) {
-        Indent(n1, "// brand var:\n");
-        PrintVar(n1, brand);
+      if (class_scope->instance_brand() != nullptr) {
+        Indent(n1, "// instance brand var:\n");
+        PrintVar(n1, class_scope->instance_brand());
+      }
+      if (class_scope->static_brand() != nullptr) {
+        Indent(n1, "// static brand var:\n");
+        PrintVar(n1, class_scope->static_brand());
       }
     }
   }
@@ -2343,10 +2352,14 @@ int Scope::ContextLocalCount() const {
 
 bool IsComplementaryAccessorPair(VariableMode a, VariableMode b) {
   switch (a) {
-    case VariableMode::kPrivateGetterOnly:
-      return b == VariableMode::kPrivateSetterOnly;
-    case VariableMode::kPrivateSetterOnly:
-      return b == VariableMode::kPrivateGetterOnly;
+    case VariableMode::kInstancePrivateGetterOnly:
+      return b == VariableMode::kInstancePrivateSetterOnly;
+    case VariableMode::kInstancePrivateSetterOnly:
+      return b == VariableMode::kInstancePrivateGetterOnly;
+    case VariableMode::kStaticPrivateGetterOnly:
+      return b == VariableMode::kStaticPrivateSetterOnly;
+    case VariableMode::kStaticPrivateSetterOnly:
+      return b == VariableMode::kStaticPrivateGetterOnly;
     default:
       return false;
   }
@@ -2362,7 +2375,10 @@ Variable* ClassScope::DeclarePrivateName(const AstRawString* name,
     locals_.Add(result);
   } else if (IsComplementaryAccessorPair(result->mode(), mode)) {
     *was_added = true;
-    result->set_mode(VariableMode::kPrivateGetterAndSetter);
+    VariableMode new_mode = IsStaticPrivateMethodOrAccessorVariableMode(mode)
+                                ? VariableMode::kStaticPrivateGetterAndSetter
+                                : VariableMode::kInstancePrivateGetterAndSetter;
+    result->set_mode(new_mode);
   }
   result->ForceContextAllocation();
   return result;
@@ -2567,17 +2583,26 @@ VariableProxy* ClassScope::ResolvePrivateNamesPartially() {
 }
 
 Variable* ClassScope::DeclareBrandVariable(AstValueFactory* ast_value_factory,
-                                           int class_token_pos) {
-  DCHECK_IMPLIES(rare_data_ != nullptr, rare_data_->brand == nullptr);
+                                           int class_token_pos,
+                                           bool is_static) {
   bool was_added;
-  Variable* brand = Declare(zone(), ast_value_factory->dot_brand_string(),
-                            VariableMode::kConst, NORMAL_VARIABLE,
-                            InitializationFlag::kNeedsInitialization,
-                            MaybeAssignedFlag::kMaybeAssigned, &was_added);
+  const AstRawString* brand_string =
+      is_static ? ast_value_factory->dot_static_brand_string()
+                : ast_value_factory->dot_brand_string();
+  Variable* brand =
+      Declare(zone(), brand_string, VariableMode::kConst, NORMAL_VARIABLE,
+              InitializationFlag::kNeedsInitialization,
+              MaybeAssignedFlag::kMaybeAssigned, &was_added);
   DCHECK(was_added);
   brand->ForceContextAllocation();
   brand->set_is_used();
-  EnsureRareData()->brand = brand;
+  if (is_static) {
+    DCHECK_NULL(EnsureRareData()->static_brand);
+    EnsureRareData()->static_brand = brand;
+  } else {
+    DCHECK_NULL(EnsureRareData()->instance_brand);
+    EnsureRareData()->instance_brand = brand;
+  }
   brand->set_initializer_position(class_token_pos);
   return brand;
 }
