@@ -169,6 +169,9 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
 
   static constexpr int kBinarySearchSwitchMinimalCases = 4;
 
+  // Returns true if an offset should be applied to the given stack check.
+  bool ShouldApplyOffsetToStackCheck(Instruction* instr, int32_t* offset);
+
  private:
   GapResolver* resolver() { return &resolver_; }
   SafepointTableBuilder* safepoints() { return &safepoints_; }

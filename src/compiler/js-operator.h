@@ -655,6 +655,23 @@ std::ostream& operator<<(std::ostream&, CloneObjectParameters const&);
 
 const CloneObjectParameters& CloneObjectParametersOf(const Operator* op);
 
+class StackCheckParameters final {
+ public:
+  explicit StackCheckParameters(StackCheckKind kind) : kind_(kind) {}
+
+  StackCheckKind kind() const { return kind_; }
+
+ private:
+  const StackCheckKind kind_;
+};
+
+bool operator==(StackCheckParameters const&, StackCheckParameters const&);
+bool operator!=(StackCheckParameters const&, StackCheckParameters const&);
+
+size_t hash_value(StackCheckParameters const&);
+
+const StackCheckParameters& StackCheckParametersOf(const Operator* op);
+
 // Descriptor used by the JSForInPrepare and JSForInNext opcodes.
 enum class ForInMode : uint8_t {
   kUseEnumCacheKeysAndIndices,
@@ -839,7 +856,7 @@ class V8_EXPORT_PRIVATE JSOperatorBuilder final
   const Operator* GeneratorRestoreRegister(int index);
   const Operator* GeneratorRestoreInputOrDebugPos();
 
-  const Operator* StackCheck();
+  const Operator* StackCheck(StackCheckKind kind);
   const Operator* Debugger();
 
   const Operator* FulfillPromise();
