@@ -115,6 +115,9 @@ MachineType AtomicOpType(Operator const* op) V8_WARN_UNUSED_RESULT;
 V8_EXPORT_PRIVATE const uint8_t* S8x16ShuffleOf(Operator const* op)
     V8_WARN_UNUSED_RESULT;
 
+V8_EXPORT_PRIVATE StackCheckKind StackCheckKindOf(Operator const* op)
+    V8_WARN_UNUSED_RESULT;
+
 // Interface for building machine-level operators. These operators are
 // machine-level but machine-independent and thus define a language suitable
 // for generating code to run on architectures such as ia32, x64, arm, etc.
@@ -671,7 +674,7 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
   const Operator* LoadParentFramePointer();
 
   // Compares: stack_pointer > value.
-  const Operator* StackPointerGreaterThan();
+  const Operator* StackPointerGreaterThan(StackCheckKind kind);
 
   // Memory barrier.
   const Operator* MemBarrier();

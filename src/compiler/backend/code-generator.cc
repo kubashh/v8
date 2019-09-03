@@ -115,6 +115,24 @@ void CodeGenerator::CreateFrameAccessState(Frame* frame) {
   frame_access_state_ = new (zone()) FrameAccessState(frame);
 }
 
+bool CodeGenerator::ShouldApplyOffsetToStackCheck(Instruction* instr,
+                                                  int32_t* offset) {
+  DCHECK_EQ(ArchOpcodeField::decode(instr->opcode()),
+            kArchStackPointerGreaterThan);
+
+  StackCheckKind kind =
+      static_cast<StackCheckKind>(MiscField::decode(instr->opcode()));
+  if (kind != StackCheckKind::kFunctionEntry) return false;
+
+  int optimized_frame_height =
+      frame()->GetTotalFrameSlotCount() * kSystemPointerSize;
+  *offset = std::max(static_cast<int32_t>(max_unoptimized_frame_height_ -
+                                          optimized_frame_height),
+                     0);
+
+  return (offset != 0 && frame_access_state()->has_frame());
+}
+
 CodeGenerator::CodeGenResult CodeGenerator::AssembleDeoptimizerCall(
     DeoptimizationExit* exit) {
   int deoptimization_id = exit->deoptimization_id();
