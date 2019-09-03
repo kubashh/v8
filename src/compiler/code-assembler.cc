@@ -1394,22 +1394,26 @@ Node* CodeAssembler::TailCallStubThenBytecodeDispatchImpl(
 }
 
 template <class... TArgs>
-Node* CodeAssembler::TailCallBytecodeDispatch(
-    const CallInterfaceDescriptor& descriptor, Node* target, TArgs... args) {
+TNode<Object> CodeAssembler::TailCallBytecodeDispatch(
+    const CallInterfaceDescriptor& descriptor, TNode<WordT> target,
+    TArgs... args) {
   DCHECK_EQ(descriptor.GetParameterCount(), sizeof...(args));
   auto call_descriptor = Linkage::GetBytecodeDispatchCallDescriptor(
       zone(), descriptor, descriptor.GetStackParameterCount());
 
   Node* nodes[] = {target, args...};
   CHECK_EQ(descriptor.GetParameterCount() + 1, arraysize(nodes));
-  return raw_assembler()->TailCallN(call_descriptor, arraysize(nodes), nodes);
+  return UncheckedCast<Object>(
+      raw_assembler()->TailCallN(call_descriptor, arraysize(nodes), nodes));
 }
 
 // Instantiate TailCallBytecodeDispatch() for argument counts used by
 // CSA-generated code
-template V8_EXPORT_PRIVATE Node* CodeAssembler::TailCallBytecodeDispatch(
-    const CallInterfaceDescriptor& descriptor, Node* target, TNode<Object>,
-    Node*, TNode<BytecodeArray>, TNode<ExternalReference>);
+template V8_EXPORT_PRIVATE TNode<Object>
+CodeAssembler::TailCallBytecodeDispatch(
+    const CallInterfaceDescriptor& descriptor, TNode<WordT> target,
+    TNode<Object>, TNode<IntPtrT>, TNode<BytecodeArray>,
+    TNode<ExternalReference>);
 
 TNode<Object> CodeAssembler::TailCallJSCode(TNode<Code> code,
                                             TNode<Context> context,
