@@ -57,6 +57,24 @@
       "revId": "6bbae0af72271ba1d94ab2038dbff73272b6bae8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a04611ed_9efd42c6",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1340562
+      },
+      "writtenOn": "2019-09-03T05:41:27Z",
+      "side": 1,
+      "message": "True, sorry about that.",
+      "parentUuid": "a28000ec_7f038288",
+      "revId": "6bbae0af72271ba1d94ab2038dbff73272b6bae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
