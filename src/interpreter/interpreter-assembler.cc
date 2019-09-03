@@ -1335,7 +1335,7 @@ TNode<IntPtrT> InterpreterAssembler::Advance(int delta) {
   return Advance(IntPtrConstant(delta));
 }
 
-TNode<IntPtrT> InterpreterAssembler::Advance(SloppyTNode<IntPtrT> delta,
+TNode<IntPtrT> InterpreterAssembler::Advance(TNode<IntPtrT> delta,
                                              bool backward) {
 #ifdef V8_TRACE_IGNITION
   TraceBytecode(Runtime::kInterpreterTraceBytecodeExit);
@@ -1346,40 +1346,45 @@ TNode<IntPtrT> InterpreterAssembler::Advance(SloppyTNode<IntPtrT> delta,
   return next_offset;
 }
 
-TNode<Object> InterpreterAssembler::Jump(Node* delta, bool backward) {
+TNode<Object> InterpreterAssembler::Jump(TNode<IntPtrT> jump_offset,
+                                         bool backward) {
   DCHECK(!Bytecodes::IsStarLookahead(bytecode_, operand_scale_));
 
-  UpdateInterruptBudget(TruncateIntPtrToInt32(delta), backward);
-  TNode<IntPtrT> new_bytecode_offset = Advance(delta, backward);
+  UpdateInterruptBudget(TruncateIntPtrToInt32(jump_offset), backward);
+  TNode<IntPtrT> new_bytecode_offset = Advance(jump_offset, backward);
   TNode<WordT> target_bytecode = LoadBytecode(new_bytecode_offset);
   return DispatchToBytecode(target_bytecode, new_bytecode_offset);
 }
 
-Node* InterpreterAssembler::Jump(Node* delta) { return Jump(delta, false); }
-
-Node* InterpreterAssembler::JumpBackward(Node* delta) {
-  return Jump(delta, true);
+TNode<Object> InterpreterAssembler::Jump(TNode<IntPtrT> jump_offset) {
+  return Jump(jump_offset, false);
 }
 
-void InterpreterAssembler::JumpConditional(Node* condition, Node* delta) {
+Node* InterpreterAssembler::JumpBackward(TNode<IntPtrT> jump_offset) {
+  return Jump(jump_offset, true);
+}
+
+void InterpreterAssembler::JumpConditional(TNode<BoolT> condition,
+                                           TNode<IntPtrT> jump_offset) {
   Label match(this), no_match(this);
 
   Branch(condition, &match, &no_match);
   BIND(&match);
-  Jump(delta);
+  Jump(jump_offset);
   BIND(&no_match);
   Dispatch();
 }
 
 void InterpreterAssembler::JumpIfTaggedEqual(TNode<Object> lhs,
-                                             TNode<Object> rhs, Node* delta) {
-  JumpConditional(TaggedEqual(lhs, rhs), delta);
+                                             TNode<Object> rhs,
+                                             TNode<IntPtrT> jump_offset) {
+  JumpConditional(TaggedEqual(lhs, rhs), jump_offset);
 }
 
 void InterpreterAssembler::JumpIfTaggedNotEqual(TNode<Object> lhs,
                                                 TNode<Object> rhs,
-                                                Node* delta) {
-  JumpConditional(TaggedNotEqual(lhs, rhs), delta);
+                                                TNode<IntPtrT> jump_offset) {
+  JumpConditional(TaggedNotEqual(lhs, rhs), jump_offset);
 }
 
 TNode<WordT> InterpreterAssembler::LoadBytecode(
@@ -1525,10 +1530,9 @@ void InterpreterAssembler::UpdateInterruptBudgetOnReturn() {
   UpdateInterruptBudget(profiling_weight, true);
 }
 
-Node* InterpreterAssembler::LoadOsrNestingLevel() {
-  return LoadObjectField(BytecodeArrayTaggedPointer(),
-                         BytecodeArray::kOsrNestingLevelOffset,
-                         MachineType::Int8());
+TNode<Int8T> InterpreterAssembler::LoadOsrNestingLevel() {
+  return LoadObjectField<Int8T>(BytecodeArrayTaggedPointer(),
+                                BytecodeArray::kOsrNestingLevelOffset);
 }
 
 void InterpreterAssembler::Abort(AbortReason abort_reason) {
