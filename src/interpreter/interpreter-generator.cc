@@ -2098,7 +2098,7 @@ IGNITION_HANDLER(TestTypeOf, InterpreterAssembler) {
 //
 // Jump by the number of bytes represented by the immediate operand |imm|.
 IGNITION_HANDLER(Jump, InterpreterAssembler) {
-  Node* relative_jump = BytecodeOperandUImmWord(0);
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
   Jump(relative_jump);
 }
 
@@ -2118,7 +2118,7 @@ IGNITION_HANDLER(JumpConstant, InterpreterAssembler) {
 // will misbehave if passed arbitrary input values.
 IGNITION_HANDLER(JumpIfTrue, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
-  Node* relative_jump = BytecodeOperandUImmWord(0);
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
   CSA_ASSERT(this, IsBoolean(CAST(accumulator)));
   JumpIfTaggedEqual(accumulator, TrueConstant(), relative_jump);
 }
@@ -2142,7 +2142,7 @@ IGNITION_HANDLER(JumpIfTrueConstant, InterpreterAssembler) {
 // will misbehave if passed arbitrary input values.
 IGNITION_HANDLER(JumpIfFalse, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
-  Node* relative_jump = BytecodeOperandUImmWord(0);
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
   CSA_ASSERT(this, IsBoolean(CAST(accumulator)));
   JumpIfTaggedEqual(accumulator, FalseConstant(), relative_jump);
 }
@@ -2155,7 +2155,6 @@ IGNITION_HANDLER(JumpIfFalse, InterpreterAssembler) {
 IGNITION_HANDLER(JumpIfFalseConstant, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
   TNode<IntPtrT> relative_jump = LoadAndUntagConstantPoolEntryAtOperandIndex(0);
-  CSA_ASSERT(this, IsBoolean(CAST(accumulator)));
   JumpIfTaggedEqual(accumulator, FalseConstant(), relative_jump);
 }
 
@@ -2165,7 +2164,7 @@ IGNITION_HANDLER(JumpIfFalseConstant, InterpreterAssembler) {
 // referenced by the accumulator is true when the object is cast to boolean.
 IGNITION_HANDLER(JumpIfToBooleanTrue, InterpreterAssembler) {
   TNode<Object> value = GetAccumulator();
-  Node* relative_jump = BytecodeOperandUImmWord(0);
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
   Label if_true(this), if_false(this);
   BranchIfToBooleanIsTrue(value, &if_true, &if_false);
   BIND(&if_true);
@@ -2196,7 +2195,7 @@ IGNITION_HANDLER(JumpIfToBooleanTrueConstant, InterpreterAssembler) {
 // referenced by the accumulator is false when the object is cast to boolean.
 IGNITION_HANDLER(JumpIfToBooleanFalse, InterpreterAssembler) {
   TNode<Object> value = GetAccumulator();
-  Node* relative_jump = BytecodeOperandUImmWord(0);
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
   Label if_true(this), if_false(this);
   BranchIfToBooleanIsTrue(value, &if_true, &if_false);
   BIND(&if_true);
@@ -2227,7 +2226,7 @@ IGNITION_HANDLER(JumpIfToBooleanFalseConstant, InterpreterAssembler) {
 // referenced by the accumulator is the null constant.
 IGNITION_HANDLER(JumpIfNull, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
-  Node* relative_jump = BytecodeOperandUImmWord(0);
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
   JumpIfTaggedEqual(accumulator, NullConstant(), relative_jump);
 }
 
@@ -2247,7 +2246,7 @@ IGNITION_HANDLER(JumpIfNullConstant, InterpreterAssembler) {
 // referenced by the accumulator is not the null constant.
 IGNITION_HANDLER(JumpIfNotNull, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
-  Node* relative_jump = BytecodeOperandUImmWord(0);
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
   JumpIfTaggedNotEqual(accumulator, NullConstant(), relative_jump);
 }
 
@@ -2267,7 +2266,7 @@ IGNITION_HANDLER(JumpIfNotNullConstant, InterpreterAssembler) {
 // referenced by the accumulator is the undefined constant.
 IGNITION_HANDLER(JumpIfUndefined, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
-  Node* relative_jump = BytecodeOperandUImmWord(0);
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
   JumpIfTaggedEqual(accumulator, UndefinedConstant(), relative_jump);
 }
 
@@ -2287,7 +2286,7 @@ IGNITION_HANDLER(JumpIfUndefinedConstant, InterpreterAssembler) {
 // referenced by the accumulator is not the undefined constant.
 IGNITION_HANDLER(JumpIfNotUndefined, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
-  Node* relative_jump = BytecodeOperandUImmWord(0);
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
   JumpIfTaggedNotEqual(accumulator, UndefinedConstant(), relative_jump);
 }
 
@@ -2315,7 +2314,7 @@ IGNITION_HANDLER(JumpIfUndefinedOrNull, InterpreterAssembler) {
   Dispatch();
 
   BIND(&do_jump);
-  Node* relative_jump = BytecodeOperandUImmWord(0);
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
   Jump(relative_jump);
 }
 
@@ -2343,7 +2342,7 @@ IGNITION_HANDLER(JumpIfUndefinedOrNullConstant, InterpreterAssembler) {
 // referenced by the accumulator is a JSReceiver.
 IGNITION_HANDLER(JumpIfJSReceiver, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
-  Node* relative_jump = BytecodeOperandUImmWord(0);
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
 
   Label if_object(this), if_notobject(this, Label::kDeferred), if_notsmi(this);
   Branch(TaggedIsSmi(accumulator), &if_notobject, &if_notsmi);
@@ -2384,9 +2383,9 @@ IGNITION_HANDLER(JumpIfJSReceiverConstant, InterpreterAssembler) {
 // performs a loop nesting check and potentially triggers OSR in case the
 // current OSR level matches (or exceeds) the specified |loop_depth|.
 IGNITION_HANDLER(JumpLoop, InterpreterAssembler) {
-  Node* relative_jump = BytecodeOperandUImmWord(0);
-  Node* loop_depth = BytecodeOperandImm(1);
-  Node* osr_level = LoadOsrNestingLevel();
+  TNode<IntPtrT> relative_jump = BytecodeOperandUImmWord(0);
+  TNode<Int32T> loop_depth = BytecodeOperandImm(1);
+  TNode<Int8T> osr_level = LoadOsrNestingLevel();
 
   // Check if OSR points at the given {loop_depth} are armed by comparing it to
   // the current {osr_level} loaded from the header of the BytecodeArray.
