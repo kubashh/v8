@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54dd471e_c00d6a3d",
+        "filename": "src/codegen/arm/assembler-arm-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-03T09:03:05Z",
+      "side": 1,
+      "message": "Ideally we would have a WRITE_BARRIER_FOR_CODE macro and use it here.\nI\u0027ll do that in a separate CL once this CL lands.",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 23
+      },
+      "revId": "da57dc5bafa070564f5baf42eac392239e3b3119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78dc3609_94898130",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-03T09:03:05Z",
+      "side": 1,
+      "message": "Fyi: this is part of V8\u0027s GC, which doesn\u0027t work with disabled write-barriers anyway.",
+      "range": {
+        "startLine": 1171,
+        "startChar": 0,
+        "endLine": 1171,
+        "endChar": 33
+      },
+      "revId": "da57dc5bafa070564f5baf42eac392239e3b3119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14168db2_6ef83c0b",
+        "filename": "src/objects/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-03T09:03:05Z",
+      "side": 1,
+      "message": "This is a frequent operation. Could you please use #ifndef around this conditional?",
+      "range": {
+        "startLine": 759,
+        "startChar": 1,
+        "endLine": 759,
+        "endChar": 57
+      },
+      "revId": "da57dc5bafa070564f5baf42eac392239e3b3119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d6aa5d7_eb661a7d",
+        "filename": "src/objects/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-03T09:03:05Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 777,
+        "startChar": 1,
+        "endLine": 777,
+        "endChar": 57
+      },
+      "revId": "da57dc5bafa070564f5baf42eac392239e3b3119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a1eb9f3_2d8327ab",
+        "filename": "src/objects/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-03T09:03:05Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 796,
+        "startChar": 2,
+        "endLine": 796,
+        "endChar": 67
+      },
+      "revId": "da57dc5bafa070564f5baf42eac392239e3b3119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "428f0297_a34d3fc5",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-03T09:03:05Z",
+      "side": 1,
+      "message": "Let\u0027s move this flag check to the place that defines write_barrier_needed above (line 526).",
+      "range": {
+        "startLine": 744,
+        "startChar": 11,
+        "endLine": 744,
+        "endChar": 40
+      },
+      "revId": "da57dc5bafa070564f5baf42eac392239e3b3119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edbd3418_b03ba84a",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-03T09:03:05Z",
+      "side": 1,
+      "message": "write_barrier_needed should be false at this point, so you can\nDCHECK_IMPLIES(FLAG_disable_write_barriers, !write_barrier_needed).",
+      "range": {
+        "startLine": 846,
+        "startChar": 6,
+        "endLine": 846,
+        "endChar": 34
+      },
+      "revId": "da57dc5bafa070564f5baf42eac392239e3b3119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
