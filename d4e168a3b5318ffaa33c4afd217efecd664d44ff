@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f0782e5_4c5f3aa2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-04T08:59:47Z",
+      "side": 1,
+      "message": "Please link the issue for future reverts :)",
+      "range": {
+        "startLine": 11,
+        "startChar": 19,
+        "endLine": 11,
+        "endChar": 43
+      },
+      "revId": "d4e168a3b5318ffaa33c4afd217efecd664d44ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
