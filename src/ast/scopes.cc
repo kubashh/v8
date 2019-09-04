@@ -220,6 +220,7 @@ void DeclarationScope::SetDefaults() {
   scope_uses_super_property_ = false;
   has_checked_syntax_ = false;
   has_this_reference_ = false;
+  has_super_call_reference_ = false;
   has_this_declaration_ =
       (is_function_scope() && !is_arrow_scope()) || is_module_scope();
   has_rest_ = false;
@@ -256,6 +257,8 @@ void Scope::SetDefaults() {
 
   num_stack_slots_ = 0;
   num_heap_slots_ = Context::MIN_CONTEXT_SLOTS;
+
+  derived_constructor_elide_hole_checks_ = false;
 
   set_language_mode(LanguageMode::kSloppy);
 
@@ -1437,6 +1440,7 @@ void DeclarationScope::ResetAfterPreparsing(AstValueFactory* ast_value_factory,
   sloppy_block_functions_.Clear();
   rare_data_ = nullptr;
   has_rest_ = false;
+  has_super_call_reference_ = false;
 
   DCHECK_NE(zone_, ast_value_factory->zone());
   zone_->ReleaseMemory();

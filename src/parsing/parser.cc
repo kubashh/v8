@@ -2445,6 +2445,23 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
   if (should_infer_name) {
     fni_.AddFunction(function_literal);
   }
+
+  // We do the simplest possible static analysis of the AST for derived
+  // constructors, and remove any hole checks in the constructor if the first
+  // expression is super and 'this' is not used as an argument.
+  if (IsDerivedConstructor(kind) && body.length() > 0 &&
+      body.at(0)->IsExpressionStatement() &&
+      body.at(0)->AsExpressionStatement()->expression()->IsCall() &&
+      body.at(0)
+          ->AsExpressionStatement()
+          ->expression()
+          ->AsCall()
+          ->expression()
+          ->IsSuperCallReference() &&
+      scope->has_derived_constructor_elide_hole_checks()) {
+  } else {
+    scope->unset_derived_constructor_elide_hole_checks();
+  }
   return function_literal;
 }
 

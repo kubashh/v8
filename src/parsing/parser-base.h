@@ -998,6 +998,23 @@ class ParserBase {
     return var;
   }
 
+  V8_INLINE Variable* UseSuperCallReference() {
+    DeclarationScope* closure_scope = scope()->GetClosureScope();
+    DeclarationScope* receiver_scope = closure_scope->GetReceiverScope();
+    Variable* var = receiver_scope->receiver();
+    var->set_is_used();
+    if (closure_scope == receiver_scope) {
+      // It's possible that we're parsing the head of an arrow function, in
+      // which case we haven't realized yet that closure_scope !=
+      // receiver_scope. Mark through the ExpressionScope for now.
+      expression_scope()->RecordSuperCallReference();
+    } else {
+      closure_scope->set_has_super_call_reference();
+      var->ForceContextAllocation();
+    }
+    return var;
+  }
+
   V8_INLINE IdentifierT ParseAndClassifyIdentifier(Token::Value token);
   // Parses an identifier or a strict mode future reserved word. Allows passing
   // in function_kind for the case of parsing the identifier in a function
@@ -1817,6 +1834,10 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseExpression() {
   AcceptINScope scope(this, true);
   ExpressionT result = ParseExpressionCoverGrammar();
   expression_scope.ValidateExpression();
+  if (expression_scope.can_elide_this_hole_checks()) {
+    DeclarationScope* scope = GetReceiverScope();
+    scope->set_derived_constructor_elide_hole_checks();
+  }
   return result;
 }
 
@@ -3463,8 +3484,8 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseSuperExpression(
     if (!is_new && peek() == Token::LPAREN && IsDerivedConstructor(kind)) {
       // TODO(rossberg): This might not be the correct FunctionState for the
       // method here.
-      expression_scope()->RecordThisUse();
-      UseThis();
+      expression_scope()->RecordSuperCallReference();
+      UseSuperCallReference();
       return impl()->NewSuperCallReference(pos);
     }
   }
