@@ -1552,7 +1552,7 @@ class InterpreterJSCallAssembler : public InterpreterAssembler {
   void JSCall(ConvertReceiverMode receiver_mode) {
     TNode<Object> function = LoadRegisterAtOperandIndex(0);
     RegListNodePair args = GetRegisterListAtOperandIndex(1);
-    TNode<UintPtrT> slot_id = BytecodeOperandIdx(3);
+    TNode<IntPtrT> slot_id = Signed(BytecodeOperandIdx(3));
     TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
     TNode<Context> context = GetContext();
 
@@ -1585,7 +1585,7 @@ class InterpreterJSCallAssembler : public InterpreterAssembler {
         kFirstArgumentOperandIndex + kRecieverAndArgOperandCount;
 
     TNode<Object> function = LoadRegisterAtOperandIndex(0);
-    TNode<UintPtrT> slot_id = BytecodeOperandIdx(kSlotOperandIndex);
+    TNode<IntPtrT> slot_id = Signed(BytecodeOperandIdx(kSlotOperandIndex));
     TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
     TNode<Context> context = GetContext();
 
@@ -1746,7 +1746,7 @@ IGNITION_HANDLER(CallJSRuntime, InterpreterAssembler) {
 IGNITION_HANDLER(CallWithSpread, InterpreterAssembler) {
   TNode<Object> callable = LoadRegisterAtOperandIndex(0);
   RegListNodePair args = GetRegisterListAtOperandIndex(1);
-  TNode<UintPtrT> slot_id = BytecodeOperandIdx(3);
+  TNode<IntPtrT> slot_id = Signed(BytecodeOperandIdx(3));
   TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
   TNode<Context> context = GetContext();
 
@@ -1765,11 +1765,11 @@ IGNITION_HANDLER(ConstructWithSpread, InterpreterAssembler) {
   TNode<Object> new_target = GetAccumulator();
   TNode<Object> constructor = LoadRegisterAtOperandIndex(0);
   RegListNodePair args = GetRegisterListAtOperandIndex(1);
-  TNode<UintPtrT> slot_id = BytecodeOperandIdx(3);
-  TNode<HeapObject> feedback_vector = LoadFeedbackVector();
+  TNode<IntPtrT> slot_id = Signed(BytecodeOperandIdx(3));
+  TNode<Object> maybe_feedback_vector = LoadFeedbackVector();
   TNode<Context> context = GetContext();
   Node* result = ConstructWithSpread(constructor, context, new_target, args,
-                                     slot_id, feedback_vector);
+                                     slot_id, maybe_feedback_vector);
   SetAccumulator(result);
   Dispatch();
 }
@@ -1784,11 +1784,11 @@ IGNITION_HANDLER(Construct, InterpreterAssembler) {
   TNode<Object> new_target = GetAccumulator();
   TNode<Object> constructor = LoadRegisterAtOperandIndex(0);
   RegListNodePair args = GetRegisterListAtOperandIndex(1);
-  TNode<UintPtrT> slot_id = BytecodeOperandIdx(3);
-  TNode<HeapObject> feedback_vector = LoadFeedbackVector();
+  TNode<IntPtrT> slot_id = Signed(BytecodeOperandIdx(3));
+  TNode<Object> maybe_feedback_vector = LoadFeedbackVector();
   TNode<Context> context = GetContext();
   Node* result = Construct(constructor, context, new_target, args, slot_id,
-                           feedback_vector);
+                           maybe_feedback_vector);
   SetAccumulator(result);
   Dispatch();
 }
@@ -1915,15 +1915,16 @@ IGNITION_HANDLER(TestIn, InterpreterAssembler) {
 IGNITION_HANDLER(TestInstanceOf, InterpreterAssembler) {
   TNode<Object> object = LoadRegisterAtOperandIndex(0);
   TNode<Object> callable = GetAccumulator();
-  TNode<UintPtrT> slot_id = BytecodeOperandIdx(1);
-  TNode<HeapObject> feedback_vector = LoadFeedbackVector();
+  TNode<IntPtrT> slot_id = Signed(BytecodeOperandIdx(1));
+  TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
   TNode<Context> context = GetContext();
 
   Label feedback_done(this);
-  GotoIf(IsUndefined(feedback_vector), &feedback_done);
+  GotoIf(IsUndefined(maybe_feedback_vector), &feedback_done);
 
   // Record feedback for the {callable} in the {feedback_vector}.
-  CollectCallableFeedback(callable, context, feedback_vector, slot_id);
+  CollectCallableFeedback(callable, context, CAST(maybe_feedback_vector),
+                          slot_id);
   Goto(&feedback_done);
 
   BIND(&feedback_done);
