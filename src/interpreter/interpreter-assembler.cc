@@ -174,15 +174,16 @@ void InterpreterAssembler::SetContext(TNode<Context> value) {
   StoreRegister(value, Register::current_context());
 }
 
-Node* InterpreterAssembler::GetContextAtDepth(TNode<Context> context,
-                                              TNode<Uint32T> depth) {
+TNode<Context> InterpreterAssembler::GetContextAtDepth(TNode<Context> context,
+                                                       TNode<Uint32T> depth) {
   TVARIABLE(Context, cur_context, context);
   TVARIABLE(Uint32T, cur_depth, depth);
 
   Label context_found(this);
 
-  Variable* context_search_loop_variables[2] = {&cur_depth, &cur_context};
-  Label context_search(this, 2, context_search_loop_variables);
+  VariableList context_search_loop_variables({&cur_depth, &cur_context},
+                                             zone());
+  Label context_search(this, context_search_loop_variables);
 
   // Fast path if the depth is 0.
   Branch(Word32Equal(depth, Int32Constant(0)), &context_found, &context_search);
@@ -1340,11 +1341,11 @@ TNode<IntPtrT> InterpreterAssembler::Advance(SloppyTNode<IntPtrT> delta,
   return next_offset;
 }
 
-Node* InterpreterAssembler::Jump(Node* delta, bool backward) {
+TNode<Object> InterpreterAssembler::Jump(Node* delta, bool backward) {
   DCHECK(!Bytecodes::IsStarLookahead(bytecode_, operand_scale_));
 
   UpdateInterruptBudget(TruncateIntPtrToInt32(delta), backward);
-  Node* new_bytecode_offset = Advance(delta, backward);
+  TNode<IntPtrT> new_bytecode_offset = Advance(delta, backward);
   TNode<WordT> target_bytecode = LoadBytecode(new_bytecode_offset);
   return DispatchToBytecode(target_bytecode, new_bytecode_offset);
 }
@@ -1376,9 +1377,10 @@ void InterpreterAssembler::JumpIfTaggedNotEqual(TNode<Object> lhs,
   JumpConditional(TaggedNotEqual(lhs, rhs), delta);
 }
 
-TNode<WordT> InterpreterAssembler::LoadBytecode(Node* bytecode_offset) {
-  Node* bytecode =
-      Load(MachineType::Uint8(), BytecodeArrayTaggedPointer(), bytecode_offset);
+TNode<WordT> InterpreterAssembler::LoadBytecode(
+    TNode<IntPtrT> bytecode_offset) {
+  TNode<Uint8T> bytecode =
+      Load<Uint8T>(BytecodeArrayTaggedPointer(), bytecode_offset);
   return ChangeUint32ToWord(bytecode);
 }
 
@@ -1424,10 +1426,10 @@ void InterpreterAssembler::InlineStar() {
   accumulator_use_ = previous_acc_use;
 }
 
-Node* InterpreterAssembler::Dispatch() {
+TNode<Object> InterpreterAssembler::Dispatch() {
   Comment("========= Dispatch");
   DCHECK_IMPLIES(Bytecodes::MakesCallAlongCriticalPath(bytecode_), made_call_);
-  Node* target_offset = Advance();
+  TNode<IntPtrT> target_offset = Advance();
   TNode<WordT> target_bytecode = LoadBytecode(target_offset);
 
   if (Bytecodes::IsStarLookahead(bytecode_, operand_scale_)) {
@@ -1436,32 +1438,20 @@ Node* InterpreterAssembler::Dispatch() {
   return DispatchToBytecode(target_bytecode, BytecodeOffset());
 }
 
-Node* InterpreterAssembler::DispatchToBytecode(Node* target_bytecode,
-                                               Node* new_bytecode_offset) {
+TNode<Object> InterpreterAssembler::DispatchToBytecode(
+    TNode<WordT> target_bytecode, TNode<IntPtrT> new_bytecode_offset) {
   if (FLAG_trace_ignition_dispatches) {
     TraceBytecodeDispatch(target_bytecode);
   }
 
-  Node* target_code_entry = Load(MachineType::Pointer(), DispatchTablePointer(),
-                                 TimesSystemPointerSize(target_bytecode));
+  TNode<WordT> target_code_entry = Load<RawPtrT>(
+      DispatchTablePointer(), TimesSystemPointerSize(target_bytecode));
 
-  return DispatchToBytecodeHandlerEntry(target_code_entry, new_bytecode_offset,
-                                        target_bytecode);
+  return DispatchToBytecodeHandlerEntry(target_code_entry, new_bytecode_offset);
 }
 
-Node* InterpreterAssembler::DispatchToBytecodeHandler(Node* handler,
-                                                      Node* bytecode_offset,
-                                                      Node* target_bytecode) {
-  // TODO(ishell): Add CSA::CodeEntryPoint(code).
-  TNode<IntPtrT> handler_entry =
-      IntPtrAdd(BitcastTaggedToWord(handler),
-                IntPtrConstant(Code::kHeaderSize - kHeapObjectTag));
-  return DispatchToBytecodeHandlerEntry(handler_entry, bytecode_offset,
-                                        target_bytecode);
-}
-
-Node* InterpreterAssembler::DispatchToBytecodeHandlerEntry(
-    Node* handler_entry, Node* bytecode_offset, Node* target_bytecode) {
+TNode<Object> InterpreterAssembler::DispatchToBytecodeHandlerEntry(
+    TNode<WordT> handler_entry, TNode<IntPtrT> bytecode_offset) {
   // Propagate speculation poisoning.
   TNode<WordT> poisoned_handler_entry = WordPoisonOnSpeculation(handler_entry);
   return TailCallBytecodeDispatch(
@@ -1479,7 +1469,7 @@ void InterpreterAssembler::DispatchWide(OperandScale operand_scale) {
   //   Indices 256-511 correspond to bytecodes with operand_scale == 1
   //   Indices 512-767 correspond to bytecodes with operand_scale == 2
   DCHECK_IMPLIES(Bytecodes::MakesCallAlongCriticalPath(bytecode_), made_call_);
-  Node* next_bytecode_offset = Advance(1);
+  TNode<IntPtrT> next_bytecode_offset = Advance(1);
   TNode<WordT> next_bytecode = LoadBytecode(next_bytecode_offset);
 
   if (FLAG_trace_ignition_dispatches) {
@@ -1498,11 +1488,10 @@ void InterpreterAssembler::DispatchWide(OperandScale operand_scale) {
       UNREACHABLE();
   }
   TNode<WordT> target_index = IntPtrAdd(base_index, next_bytecode);
-  Node* target_code_entry = Load(MachineType::Pointer(), DispatchTablePointer(),
-                                 TimesSystemPointerSize(target_index));
+  TNode<WordT> target_code_entry = Load<RawPtrT>(
+      DispatchTablePointer(), TimesSystemPointerSize(target_index));
 
-  DispatchToBytecodeHandlerEntry(target_code_entry, next_bytecode_offset,
-                                 next_bytecode);
+  DispatchToBytecodeHandlerEntry(target_code_entry, next_bytecode_offset);
 }
 
 void InterpreterAssembler::UpdateInterruptBudgetOnReturn() {
@@ -1637,7 +1626,7 @@ void InterpreterAssembler::AbortIfRegisterCountInvalid(
   BIND(&ok);
 }
 
-Node* InterpreterAssembler::ExportParametersAndRegisterFile(
+TNode<FixedArray> InterpreterAssembler::ExportParametersAndRegisterFile(
     TNode<FixedArray> array, const RegListNodePair& registers,
     TNode<Int32T> formal_parameter_count) {
   // Store the formal parameters (without receiver) followed by the
@@ -1653,8 +1642,8 @@ Node* InterpreterAssembler::ExportParametersAndRegisterFile(
   }
 
   {
-    Variable var_index(this, MachineType::PointerRepresentation());
-    var_index.Bind(IntPtrConstant(0));
+    TVARIABLE(WordT, var_index);
+    var_index = IntPtrConstant(0);
 
     // Iterate over parameters and write them into the array.
     Label loop(this, &var_index), done_loop(this);
@@ -1666,7 +1655,7 @@ Node* InterpreterAssembler::ExportParametersAndRegisterFile(
     Goto(&loop);
     BIND(&loop);
     {
-      Node* index = var_index.value();
+      TNode<WordT> index = var_index.value();
       GotoIfNot(UintPtrLessThan(index, formal_parameter_count_intptr),
                 &done_loop);
 
@@ -1675,7 +1664,7 @@ Node* InterpreterAssembler::ExportParametersAndRegisterFile(
 
       StoreFixedArrayElement(array, index, value);
 
-      var_index.Bind(IntPtrAdd(index, IntPtrConstant(1)));
+      var_index = IntPtrAdd(index, IntPtrConstant(1));
       Goto(&loop);
     }
     BIND(&done_loop);
@@ -1685,14 +1674,14 @@ Node* InterpreterAssembler::ExportParametersAndRegisterFile(
     // Iterate over register file and write values into array.
     // The mapping of register to array index must match that used in
     // BytecodeGraphBuilder::VisitResumeGenerator.
-    Variable var_index(this, MachineType::PointerRepresentation());
-    var_index.Bind(IntPtrConstant(0));
+    TVARIABLE(WordT, var_index);
+    var_index = IntPtrConstant(0);
 
     Label loop(this, &var_index), done_loop(this);
     Goto(&loop);
     BIND(&loop);
     {
-      Node* index = var_index.value();
+      TNode<WordT> index = var_index.value();
       GotoIfNot(UintPtrLessThan(index, register_count), &done_loop);
 
       TNode<WordT> reg_index =
@@ -1703,7 +1692,7 @@ Node* InterpreterAssembler::ExportParametersAndRegisterFile(
           IntPtrAdd(formal_parameter_count_intptr, index);
       StoreFixedArrayElement(array, array_index, value);
 
-      var_index.Bind(IntPtrAdd(index, IntPtrConstant(1)));
+      var_index = IntPtrAdd(index, IntPtrConstant(1));
       Goto(&loop);
     }
     BIND(&done_loop);
@@ -1712,7 +1701,7 @@ Node* InterpreterAssembler::ExportParametersAndRegisterFile(
   return array;
 }
 
-Node* InterpreterAssembler::ImportRegisterFile(
+TNode<FixedArray> InterpreterAssembler::ImportRegisterFile(
     TNode<FixedArray> array, const RegListNodePair& registers,
     TNode<Int32T> formal_parameter_count) {
   TNode<IntPtrT> formal_parameter_count_intptr =

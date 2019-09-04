@@ -1378,8 +1378,9 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   }
 
   template <class... TArgs>
-  Node* TailCallBytecodeDispatch(const CallInterfaceDescriptor& descriptor,
-                                 Node* target, TArgs... args);
+  TNode<Object> TailCallBytecodeDispatch(
+      const CallInterfaceDescriptor& descriptor, TNode<WordT> target,
+      TArgs... args);
 
   template <class... TArgs>
   Node* TailCallStubThenBytecodeDispatch(
