@@ -546,6 +546,20 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
     return nullptr;
   }
 
+  bool has_derived_constructor_elide_hole_checks() const {
+    return derived_constructor_elide_hole_checks_;
+  }
+
+  void set_derived_constructor_elide_hole_checks() {
+    derived_constructor_elide_hole_checks_ = true;
+  }
+
+  void unset_derived_constructor_elide_hole_checks() {
+    derived_constructor_elide_hole_checks_ = false;
+  }
+
+  bool derived_constructor_elide_hole_checks_ : 1;
+
  protected:
   explicit Scope(Zone* zone);
 
@@ -1075,8 +1089,17 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
 
   void set_has_this_reference() { has_this_reference_ = true; }
   bool has_this_reference() const { return has_this_reference_; }
+
   void UsesThis() {
     set_has_this_reference();
+    GetReceiverScope()->receiver()->ForceContextAllocation();
+  }
+
+  void set_has_super_call_reference() { has_super_call_reference_ = true; }
+  bool has_super_call_reference() const { return has_super_call_reference_; }
+
+  void UsesSuperCallReference() {
+    set_has_super_call_reference();
     GetReceiverScope()->receiver()->ForceContextAllocation();
   }
 
@@ -1118,6 +1141,7 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
   bool has_checked_syntax_ : 1;
   bool has_this_reference_ : 1;
   bool has_this_declaration_ : 1;
+  bool has_super_call_reference_ : 1;
 
   // If the scope is a function scope, this is the function kind.
   const FunctionKind function_kind_;
