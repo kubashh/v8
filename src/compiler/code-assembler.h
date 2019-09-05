@@ -1343,17 +1343,18 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   }
 
   template <class... TArgs>
-  Node* CallStubR(StubCallMode call_mode,
-                  const CallInterfaceDescriptor& descriptor, size_t result_size,
-                  SloppyTNode<Object> target, SloppyTNode<Object> context,
-                  TArgs... args) {
+  TNode<Object> CallStubR(StubCallMode call_mode,
+                          const CallInterfaceDescriptor& descriptor,
+                          size_t result_size, SloppyTNode<Object> target,
+                          SloppyTNode<Object> context, TArgs... args) {
     return CallStubRImpl(call_mode, descriptor, result_size, target, context,
                          {args...});
   }
 
-  Node* CallStubN(StubCallMode call_mode,
-                  const CallInterfaceDescriptor& descriptor, size_t result_size,
-                  int input_count, Node* const* inputs);
+  TNode<Object> CallStubN(StubCallMode call_mode,
+                          const CallInterfaceDescriptor& descriptor,
+                          size_t result_size, int input_count,
+                          Node* const* inputs);
 
   template <class T = Object, class... TArgs>
   TNode<T> CallBuiltinPointer(const CallInterfaceDescriptor& descriptor,
@@ -1520,11 +1521,11 @@ class V8_EXPORT_PRIVATE CodeAssembler {
       const CallInterfaceDescriptor& descriptor, Node* target, Node* context,
       std::initializer_list<Node*> args);
 
-  Node* CallStubRImpl(StubCallMode call_mode,
-                      const CallInterfaceDescriptor& descriptor,
-                      size_t result_size, Node* target,
-                      SloppyTNode<Object> context,
-                      std::initializer_list<Node*> args);
+  TNode<Object> CallStubRImpl(StubCallMode call_mode,
+                              const CallInterfaceDescriptor& descriptor,
+                              size_t result_size, Node* target,
+                              SloppyTNode<Object> context,
+                              std::initializer_list<Node*> args);
 
   // These two don't have definitions and are here only for catching use cases
   // where the cast is not necessary.

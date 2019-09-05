@@ -18,7 +18,8 @@ namespace interpreter {
 
 extern compiler::Node* GenerateInvokeIntrinsic(
     InterpreterAssembler* assembler, compiler::Node* function_id,
-    compiler::Node* context, const InterpreterAssembler::RegListNodePair& args);
+    compiler::TNode<Context> context,
+    const InterpreterAssembler::RegListNodePair& args);
 
 }  // namespace interpreter
 }  // namespace internal

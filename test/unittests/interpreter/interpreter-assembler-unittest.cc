@@ -558,7 +558,7 @@ TARGET_TEST_F(InterpreterAssemblerTest, CallRuntime) {
         TNode<Int32T> function_id = m.Int32Constant(0);
         InterpreterAssembler::RegListNodePair registers(m.IntPtrConstant(1),
                                                         m.Int32Constant(2));
-        TNode<Object> context = m.ReinterpretCast<Object>(m.Int32Constant(4));
+        TNode<Context> context = m.ReinterpretCast<Context>(m.Int32Constant(4));
 
         Matcher<Node*> function_table = c::IsExternalConstant(
             ExternalReference::runtime_function_table_address_for_unittests(
