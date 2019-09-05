@@ -1298,10 +1298,9 @@ void CodeAssembler::TailCallRuntimeWithCEntryImpl(
   raw_assembler()->TailCallN(call_descriptor, inputs.size(), inputs.data());
 }
 
-Node* CodeAssembler::CallStubN(StubCallMode call_mode,
-                               const CallInterfaceDescriptor& descriptor,
-                               size_t result_size, int input_count,
-                               Node* const* inputs) {
+TNode<Object> CodeAssembler::CallStubN(
+    StubCallMode call_mode, const CallInterfaceDescriptor& descriptor,
+    size_t result_size, int input_count, Node* const* inputs) {
   DCHECK(call_mode == StubCallMode::kCallCodeObject ||
          call_mode == StubCallMode::kCallBuiltinPointer);
 
@@ -1324,7 +1323,7 @@ Node* CodeAssembler::CallStubN(StubCallMode call_mode,
       raw_assembler()->CallN(call_descriptor, input_count, inputs);
   HandleException(return_value);
   CallEpilogue();
-  return return_value;
+  return UncheckedCast<Object>(return_value);
 }
 
 void CodeAssembler::TailCallStubImpl(const CallInterfaceDescriptor& descriptor,
@@ -1347,11 +1346,10 @@ void CodeAssembler::TailCallStubImpl(const CallInterfaceDescriptor& descriptor,
   raw_assembler()->TailCallN(call_descriptor, inputs.size(), inputs.data());
 }
 
-Node* CodeAssembler::CallStubRImpl(StubCallMode call_mode,
-                                   const CallInterfaceDescriptor& descriptor,
-                                   size_t result_size, Node* target,
-                                   SloppyTNode<Object> context,
-                                   std::initializer_list<Node*> args) {
+TNode<Object> CodeAssembler::CallStubRImpl(
+    StubCallMode call_mode, const CallInterfaceDescriptor& descriptor,
+    size_t result_size, TNode<Object> target, TNode<Object> context,
+    std::initializer_list<Node*> args) {
   DCHECK(call_mode == StubCallMode::kCallCodeObject ||
          call_mode == StubCallMode::kCallBuiltinPointer);
 

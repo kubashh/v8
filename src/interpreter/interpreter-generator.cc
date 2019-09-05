@@ -1681,7 +1681,7 @@ IGNITION_HANDLER(CallRuntime, InterpreterAssembler) {
   TNode<Uint32T> function_id = BytecodeOperandRuntimeId(0);
   RegListNodePair args = GetRegisterListAtOperandIndex(1);
   TNode<Context> context = GetContext();
-  Node* result = CallRuntimeN(function_id, context, args);
+  TNode<Object> result = CallRuntimeN(function_id, context, args);
   SetAccumulator(result);
   Dispatch();
 }
@@ -1711,7 +1711,7 @@ IGNITION_HANDLER(CallRuntimeForPair, InterpreterAssembler) {
   TNode<Uint32T> function_id = BytecodeOperandRuntimeId(0);
   RegListNodePair args = GetRegisterListAtOperandIndex(1);
   TNode<Context> context = GetContext();
-  Node* result_pair = CallRuntimeN(function_id, context, args, 2);
+  TNode<Object> result_pair = CallRuntimeN(function_id, context, args, 2);
   // Store the results in <first_return> and <first_return + 1>
   TNode<Object> result0 = CAST(Projection(0, result_pair));
   TNode<Object> result1 = CAST(Projection(1, result_pair));
@@ -1766,10 +1766,10 @@ IGNITION_HANDLER(ConstructWithSpread, InterpreterAssembler) {
   TNode<Object> constructor = LoadRegisterAtOperandIndex(0);
   RegListNodePair args = GetRegisterListAtOperandIndex(1);
   TNode<UintPtrT> slot_id = BytecodeOperandIdx(3);
-  TNode<HeapObject> feedback_vector = LoadFeedbackVector();
+  TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
   TNode<Context> context = GetContext();
   Node* result = ConstructWithSpread(constructor, context, new_target, args,
-                                     slot_id, feedback_vector);
+                                     slot_id, maybe_feedback_vector);
   SetAccumulator(result);
   Dispatch();
 }
@@ -1785,10 +1785,10 @@ IGNITION_HANDLER(Construct, InterpreterAssembler) {
   TNode<Object> constructor = LoadRegisterAtOperandIndex(0);
   RegListNodePair args = GetRegisterListAtOperandIndex(1);
   TNode<UintPtrT> slot_id = BytecodeOperandIdx(3);
-  TNode<HeapObject> feedback_vector = LoadFeedbackVector();
+  TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
   TNode<Context> context = GetContext();
   Node* result = Construct(constructor, context, new_target, args, slot_id,
-                           feedback_vector);
+                           maybe_feedback_vector);
   SetAccumulator(result);
   Dispatch();
 }
@@ -1916,14 +1916,15 @@ IGNITION_HANDLER(TestInstanceOf, InterpreterAssembler) {
   TNode<Object> object = LoadRegisterAtOperandIndex(0);
   TNode<Object> callable = GetAccumulator();
   TNode<UintPtrT> slot_id = BytecodeOperandIdx(1);
-  TNode<HeapObject> feedback_vector = LoadFeedbackVector();
+  TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
   TNode<Context> context = GetContext();
 
   Label feedback_done(this);
-  GotoIf(IsUndefined(feedback_vector), &feedback_done);
+  GotoIf(IsUndefined(maybe_feedback_vector), &feedback_done);
 
   // Record feedback for the {callable} in the {feedback_vector}.
-  CollectCallableFeedback(callable, context, feedback_vector, slot_id);
+  CollectCallableFeedback(callable, context, CAST(maybe_feedback_vector),
+                          slot_id);
   Goto(&feedback_done);
 
   BIND(&feedback_done);
