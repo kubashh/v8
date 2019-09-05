@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d99ccb88_41fc6943",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T11:00:42Z",
+      "side": 1,
+      "message": "Can/should these ones be TNodified? They are used as inputs to raw_assembler()-\u003eCallN below.",
+      "range": {
+        "startLine": 1303,
+        "startChar": 41,
+        "endLine": 1303,
+        "endChar": 60
+      },
+      "revId": "fec9b31d43364e97b2bf5fab3f767ecab58541c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
