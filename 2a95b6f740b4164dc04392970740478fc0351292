@@ -45,6 +45,159 @@
       "revId": "2a95b6f740b4164dc04392970740478fc0351292",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6043da0_5513a775",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-05T12:57:08Z",
+      "side": 1,
+      "message": "This can be TNode\u003cHeapObject\u003e maybe_feedback_vector is either UndefinedConstant or FeedbackVector. Shouldn\u0027t be an SMI.",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78625d5e_69094171",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-05T12:57:08Z",
+      "side": 1,
+      "message": "TNode\u003cHeapObject\u003e for maybe_feedback_vector",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7c5db5c_c6a63244",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-05T12:57:08Z",
+      "side": 1,
+      "message": "TNode\u003cHeapObject\u003e",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ffbf412_9aa4eec8",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-05T12:57:08Z",
+      "side": 1,
+      "message": "TNode\u003cHeapObject\u003e maybe_feedback_vector",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee7e5502_094b5d11",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-05T12:57:08Z",
+      "side": 1,
+      "message": "Should this be Uint32T to be consistent with GenerateInvokeIntrinsic?",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b9430ee_11213f0a",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-05T12:57:08Z",
+      "side": 1,
+      "message": "Is there a reason why we want to change this to IntPtr from UintPtr? slot_id would always be positive.",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fa26233_162ef501",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-05T12:57:08Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f68b0b42_1cc89f33",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-05T12:57:08Z",
+      "side": 1,
+      "message": "HeapObject is fine here. renaming feedback_vector to maybe_feedback_vector is good.",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba61ef1f_c752afe1",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1788,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-05T12:57:08Z",
+      "side": 1,
+      "message": "HeapObject should be fine.",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
