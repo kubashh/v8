@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f9b50fa7_838dcac3",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T15:07:12Z",
+      "side": 1,
+      "message": "This ends up calling CallStubN, which in turn calls CallN. Why would it be different to this case https://cs.chromium.org/chromium/src/v8/src/compiler/code-assembler.cc?l\u003d1266?",
+      "parentUuid": "b467f2fb_6ad8015e",
+      "range": {
+        "startLine": 1346,
+        "startChar": 2,
+        "endLine": 1346,
+        "endChar": 15
+      },
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e43dca71_b3d66fb6",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "bf9491bf_df7bdef3",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T15:07:12Z",
+      "side": 1,
+      "message": "Probably needs to be changed. I started doing it, but sometimes we don\u0027t have a proper Context so we run into failures. The propagation of changing it to context is a long chain and the CL is big enough as it is.\nLeft the change for a follow-up CL.",
+      "parentUuid": "e43dca71_b3d66fb6",
+      "range": {
+        "startLine": 1349,
+        "startChar": 38,
+        "endLine": 1349,
+        "endChar": 44
+      },
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6043da0_5513a775",
         "filename": "src/interpreter/interpreter-assembler.h",
         "patchSetId": 4
@@ -62,6 +110,24 @@
       "revId": "2a95b6f740b4164dc04392970740478fc0351292",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad409fef_6846288f",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T15:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6043da0_5513a775",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "f4d1780a_dd98e77a",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T15:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78625d5e_69094171",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d7c5db5c_c6a63244",
         "filename": "src/interpreter/interpreter-assembler.h",
         "patchSetId": 4
@@ -96,6 +180,24 @@
       "revId": "2a95b6f740b4164dc04392970740478fc0351292",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff37a504_7121e7cd",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T15:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7c5db5c_c6a63244",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +218,24 @@
     },
     {
       "key": {
+        "uuid": "b43a4206_0d90ddc5",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T15:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ffbf412_9aa4eec8",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee7e5502_094b5d11",
         "filename": "src/interpreter/interpreter-assembler.h",
         "patchSetId": 4
@@ -130,6 +250,24 @@
       "revId": "2a95b6f740b4164dc04392970740478fc0351292",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f5b0681_01c0315a",
+        "filename": "src/interpreter/interpreter-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T15:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee7e5502_094b5d11",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -150,6 +288,24 @@
     },
     {
       "key": {
+        "uuid": "f5075977_9d821ed4",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T15:07:12Z",
+      "side": 1,
+      "message": "Not here. There were some cases in interpreter-assembler.cc where we needed an IntPtr.\nChanged these ones to UintPtr, and the other ones will be IntPtr when needed.",
+      "parentUuid": "9b9430ee_11213f0a",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0fa26233_162ef501",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 4
@@ -164,6 +320,24 @@
       "revId": "2a95b6f740b4164dc04392970740478fc0351292",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2287b13_3bf192a3",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T15:07:12Z",
+      "side": 1,
+      "message": "Replied in the comment above.",
+      "parentUuid": "0fa26233_162ef501",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -184,6 +358,24 @@
     },
     {
       "key": {
+        "uuid": "f06c15a6_346e4363",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T15:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f68b0b42_1cc89f33",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba61ef1f_c752afe1",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 4
@@ -198,6 +390,24 @@
       "revId": "2a95b6f740b4164dc04392970740478fc0351292",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "825d93cf_ec8fe4b1",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1788,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-05T15:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba61ef1f_c752afe1",
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
