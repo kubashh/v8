@@ -474,14 +474,14 @@ local function TestRun()
 
    if output ~= expectations then
       log("** Output mismatch from running tests. Please run them manually.")
+      return true
    else
       log("** Tests ran successfully")
+      return false
    end
 end
 
-TestRun()
-
-local errors = false
+local errors = TestRun()
 
 for _, arch in ipairs(ARCHS) do
    if not ARCHITECTURES[arch] then
