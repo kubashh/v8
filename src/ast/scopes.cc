@@ -1399,13 +1399,8 @@ void Scope::AnalyzePartially(DeclarationScope* max_outer_scope,
       Variable* var =
           Lookup<kParsedScope>(proxy, scope, max_outer_scope->outer_scope());
       if (var == nullptr) {
-        // Don't copy unresolved references to the script scope, unless it's a
-        // reference to a private name or method. In that case keep it so we
-        // can fail later.
-        if (!max_outer_scope->outer_scope()->is_script_scope()) {
-          VariableProxy* copy = ast_node_factory->CopyVariableProxy(proxy);
-          new_unresolved_list->Add(copy);
-        }
+        VariableProxy* copy = ast_node_factory->CopyVariableProxy(proxy);
+        new_unresolved_list->Add(copy);
       } else {
         var->set_is_used();
         if (proxy->is_assigned()) var->SetMaybeAssigned();
@@ -1494,10 +1489,7 @@ void DeclarationScope::AnalyzePartially(Parser* parser,
                                         AstNodeFactory* ast_node_factory) {
   DCHECK(!force_eager_compilation_);
   UnresolvedList new_unresolved_list;
-  if (!IsArrowFunction(function_kind_) &&
-      (!outer_scope_->is_script_scope() ||
-       (preparse_data_builder_ != nullptr &&
-        preparse_data_builder_->HasInnerFunctions()))) {
+  if (!IsArrowFunction(function_kind_)) {
     // Try to resolve unresolved variables for this Scope and migrate those
     // which cannot be resolved inside. It doesn't make sense to try to resolve
     // them in the outer Scopes here, because they are incomplete.
