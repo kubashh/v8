@@ -894,7 +894,7 @@ void ConcurrentMarking::ScheduleTasks() {
       is_pending_[i] = true;
       ++pending_task_count_;
       auto task =
-          base::make_unique<Task>(heap_->isolate(), this, &task_state_[i], i);
+          std::make_unique<Task>(heap_->isolate(), this, &task_state_[i], i);
       cancelable_id_[i] = task->id();
       V8::GetCurrentPlatform()->CallOnWorkerThread(std::move(task));
     }

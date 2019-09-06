@@ -94,7 +94,7 @@ class PredictablePlatform : public Platform {
 
 std::unique_ptr<Platform> MakePredictablePlatform(
     std::unique_ptr<Platform> platform) {
-  return base::make_unique<PredictablePlatform>(std::move(platform));
+  return std::make_unique<PredictablePlatform>(std::move(platform));
 }
 
 class DelayedTasksPlatform : public Platform {
@@ -284,14 +284,14 @@ class DelayedTasksPlatform : public Platform {
   }
 
   std::unique_ptr<Task> MakeDelayedTask(std::unique_ptr<Task> task) {
-    return base::make_unique<DelayedTask>(std::move(task),
-                                          GetRandomDelayInMilliseconds());
+    return std::make_unique<DelayedTask>(std::move(task),
+                                         GetRandomDelayInMilliseconds());
   }
 
   std::unique_ptr<IdleTask> MakeDelayedIdleTask(
       std::unique_ptr<IdleTask> task) {
-    return base::make_unique<DelayedIdleTask>(std::move(task),
-                                              GetRandomDelayInMilliseconds());
+    return std::make_unique<DelayedIdleTask>(std::move(task),
+                                             GetRandomDelayInMilliseconds());
   }
 
   DISALLOW_COPY_AND_ASSIGN(DelayedTasksPlatform);
@@ -300,10 +300,10 @@ class DelayedTasksPlatform : public Platform {
 std::unique_ptr<Platform> MakeDelayedTasksPlatform(
     std::unique_ptr<Platform> platform, int64_t random_seed) {
   if (random_seed) {
-    return base::make_unique<DelayedTasksPlatform>(std::move(platform),
-                                                   random_seed);
+    return std::make_unique<DelayedTasksPlatform>(std::move(platform),
+                                                  random_seed);
   }
-  return base::make_unique<DelayedTasksPlatform>(std::move(platform));
+  return std::make_unique<DelayedTasksPlatform>(std::move(platform));
 }
 
 }  // namespace v8

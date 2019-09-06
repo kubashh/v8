@@ -244,14 +244,14 @@ void OptimizingCompileDispatcher::QueueForOptimization(
     blocked_jobs_++;
   } else {
     V8::GetCurrentPlatform()->CallOnWorkerThread(
-        base::make_unique<CompileTask>(isolate_, this));
+        std::make_unique<CompileTask>(isolate_, this));
   }
 }
 
 void OptimizingCompileDispatcher::Unblock() {
   while (blocked_jobs_ > 0) {
     V8::GetCurrentPlatform()->CallOnWorkerThread(
-        base::make_unique<CompileTask>(isolate_, this));
+        std::make_unique<CompileTask>(isolate_, this));
     blocked_jobs_--;
   }
 }

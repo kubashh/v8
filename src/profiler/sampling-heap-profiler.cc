@@ -89,7 +89,7 @@ void SamplingHeapProfiler::SampleObject(Address soon_object, size_t size) {
   AllocationNode* node = AddStack();
   node->allocations_[size]++;
   auto sample =
-      base::make_unique<Sample>(size, node, loc, this, next_sample_id());
+      std::make_unique<Sample>(size, node, loc, this, next_sample_id());
   sample->global.SetWeak(sample.get(), OnWeakCallback,
                          WeakCallbackType::kParameter);
   samples_.emplace(sample.get(), std::move(sample));
@@ -126,7 +126,7 @@ SamplingHeapProfiler::AllocationNode* SamplingHeapProfiler::FindOrAddChildNode(
     DCHECK_EQ(strcmp(child->name_, name), 0);
     return child;
   }
-  auto new_child = base::make_unique<AllocationNode>(
+  auto new_child = std::make_unique<AllocationNode>(
       parent, name, script_id, start_position, next_node_id());
   return parent->AddChildNode(id, std::move(new_child));
 }

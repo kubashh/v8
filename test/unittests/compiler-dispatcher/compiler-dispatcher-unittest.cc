@@ -205,7 +205,7 @@ class MockPlatform : public v8::Platform {
       tasks.swap(worker_tasks_);
     }
     platform->CallOnWorkerThread(
-        base::make_unique<TaskWrapper>(this, std::move(tasks), true));
+        std::make_unique<TaskWrapper>(this, std::move(tasks), true));
     sem_.Wait();
   }
 
@@ -216,7 +216,7 @@ class MockPlatform : public v8::Platform {
       tasks.swap(worker_tasks_);
     }
     platform->CallOnWorkerThread(
-        base::make_unique<TaskWrapper>(this, std::move(tasks), false));
+        std::make_unique<TaskWrapper>(this, std::move(tasks), false));
   }
 
   void RunForegroundTasks() {
