@@ -70,6 +70,30 @@
       "revId": "fec9b31d43364e97b2bf5fab3f767ecab58541c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "643da41c_d7a4d750",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-09-06T13:37:00Z",
+      "side": 1,
+      "message": "Oh, perhaps not then. I don\u0027t think there is too much point in TNodeifying this one, as it\u0027s used so rarely.",
+      "parentUuid": "b39f694c_d167eb68",
+      "range": {
+        "startLine": 1303,
+        "startChar": 41,
+        "endLine": 1303,
+        "endChar": 60
+      },
+      "revId": "fec9b31d43364e97b2bf5fab3f767ecab58541c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

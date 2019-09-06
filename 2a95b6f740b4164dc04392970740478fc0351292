@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "4db77205_c0432f72",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-09-06T13:37:00Z",
+      "side": 1,
+      "message": "Because runtime functions really cannot return untagged values, but I think builtins can.",
+      "parentUuid": "f9b50fa7_838dcac3",
+      "range": {
+        "startLine": 1346,
+        "startChar": 2,
+        "endLine": 1346,
+        "endChar": 15
+      },
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e43dca71_b3d66fb6",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 4
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Probably needs to be changed. I started doing it, but sometimes we don\u0027t have a proper Context so we run into failures. The propagation of changing it to context is a long chain and the CL is big enough as it is.\nLeft the change for a follow-up CL.",
       "parentUuid": "e43dca71_b3d66fb6",
+      "range": {
+        "startLine": 1349,
+        "startChar": 38,
+        "endLine": 1349,
+        "endChar": 44
+      },
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c9ad369d_3ebceeb7",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-09-06T13:37:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bf9491bf_df7bdef3",
       "range": {
         "startLine": 1349,
         "startChar": 38,
