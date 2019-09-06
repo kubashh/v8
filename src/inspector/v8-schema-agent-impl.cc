@@ -19,9 +19,9 @@ V8SchemaAgentImpl::~V8SchemaAgentImpl() = default;
 
 Response V8SchemaAgentImpl::getDomains(
     std::unique_ptr<protocol::Array<protocol::Schema::Domain>>* result) {
-  *result = v8::base::make_unique<
-      std::vector<std::unique_ptr<protocol::Schema::Domain>>>(
-      m_session->supportedDomainsImpl());
+  *result =
+      std::make_unique<std::vector<std::unique_ptr<protocol::Schema::Domain>>>(
+          m_session->supportedDomainsImpl());
   return Response::OK();
 }
 

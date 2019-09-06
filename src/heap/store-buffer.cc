@@ -128,7 +128,7 @@ void StoreBuffer::FlipStoreBuffers() {
   if (!task_running_ && FLAG_concurrent_store_buffer) {
     task_running_ = true;
     V8::GetCurrentPlatform()->CallOnWorkerThread(
-        base::make_unique<Task>(heap_->isolate(), this));
+        std::make_unique<Task>(heap_->isolate(), this));
   }
 }
 

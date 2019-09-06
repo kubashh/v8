@@ -304,7 +304,7 @@ class ModuleDecoderImpl : public Decoder {
     CHECK_NULL(module_);
     SetCounters(counters);
     module_.reset(
-        new WasmModule(base::make_unique<Zone>(allocator, "signatures")));
+        new WasmModule(std::make_unique<Zone>(allocator, "signatures")));
     module_->initial_pages = 0;
     module_->maximum_pages = 0;
     module_->mem_export = false;
@@ -1895,7 +1895,7 @@ FunctionResult DecodeWasmFunctionForTesting(
   ModuleDecoderImpl decoder(enabled, function_start, function_end, kWasmOrigin);
   decoder.SetCounters(counters);
   return decoder.DecodeSingleFunction(zone, wire_bytes, module,
-                                      base::make_unique<WasmFunction>());
+                                      std::make_unique<WasmFunction>());
 }
 
 AsmJsOffsetsResult DecodeAsmJsOffsets(const byte* tables_start,

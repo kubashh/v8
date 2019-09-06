@@ -74,7 +74,7 @@ std::unique_ptr<protocol::Runtime::StackTrace> buildInspectorObjectCommon(
   }
 
   auto inspectorFrames =
-      v8::base::make_unique<protocol::Array<protocol::Runtime::CallFrame>>();
+      std::make_unique<protocol::Array<protocol::Runtime::CallFrame>>();
   for (const std::shared_ptr<StackFrame>& frame : frames) {
     V8InspectorClient* client = nullptr;
     if (debugger && debugger->inspector())
