@@ -467,6 +467,7 @@ end
 
 local function TestRun()
    local errors, output = SafeCheckCorrectnessForArch('x64', true)
+   if errors then return errors end
 
    local filename = "tools/gcmole/test-expectations.txt"
    local exp_file = assert(io.open(filename), "failed to open test expectations file")
@@ -477,11 +478,10 @@ local function TestRun()
    else
       log("** Tests ran successfully")
    end
+   return false
 end
 
-TestRun()
-
-local errors = false
+local errors = TestRun()
 
 for _, arch in ipairs(ARCHS) do
    if not ARCHITECTURES[arch] then
