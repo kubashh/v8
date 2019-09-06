@@ -94,6 +94,30 @@
       "revId": "fec9b31d43364e97b2bf5fab3f767ecab58541c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3310b271_7596006f",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-06T15:28:35Z",
+      "side": 1,
+      "message": "Any reason why not? I think we should aim to have Node* not even be visible outside compiler/ so that we can be sure all CSA code is TNodified.",
+      "parentUuid": "643da41c_d7a4d750",
+      "range": {
+        "startLine": 1303,
+        "startChar": 41,
+        "endLine": 1303,
+        "endChar": 60
+      },
+      "revId": "fec9b31d43364e97b2bf5fab3f767ecab58541c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
