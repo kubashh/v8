@@ -18,6 +18,7 @@ group("v8_run_gcmole") {
     "test-expectations.txt",
 
     # The following contains all relevant source and build files.
+    "gcmole-test.cc",
     "../debug_helper/debug-helper.h",
     "../../BUILD.gn",
     "../../base/",
