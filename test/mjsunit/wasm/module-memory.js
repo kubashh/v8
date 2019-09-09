@@ -150,11 +150,6 @@ function testOOBThrows() {
   function read() { return module.exports.geti(0, offset); }
   function write() { return module.exports.geti(offset, 0); }
 
-  for (offset = 0; offset < 65533; offset++) {
-    assertEquals(0, read());
-    assertEquals(0, write());
-  }
-
   // Note that this test might be run concurrently in multiple Isolates, which
   // makes an exact comparison of the expected trap count unreliable. But is is
   // still possible to check the lower bound for the expected trap count.
