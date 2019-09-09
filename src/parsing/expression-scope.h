@@ -189,6 +189,10 @@ class ExpressionScope {
     return variable_index;
   }
 
+  bool has_possible_parameter_in_scope_chain() const {
+    return has_possible_parameter_in_scope_chain_;
+  }
+
  protected:
   enum ScopeType : uint8_t {
     // Expression or assignment target.
