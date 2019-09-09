@@ -3492,7 +3492,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // for..in helpers
   void CheckPrototypeEnumCache(Node* receiver, Node* receiver_map,
                                Label* if_fast, Label* if_slow);
-  Node* CheckEnumCache(Node* receiver, Label* if_empty, Label* if_runtime);
+  TNode<Map> CheckEnumCache(Node* receiver, Label* if_empty, Label* if_runtime);
 
   TNode<Object> GetArgumentValue(TorqueStructArguments args,
                                  TNode<IntPtrT> index);

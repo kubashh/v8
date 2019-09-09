@@ -13977,8 +13977,8 @@ void CodeStubAssembler::CheckPrototypeEnumCache(Node* receiver,
   }
 }
 
-Node* CodeStubAssembler::CheckEnumCache(Node* receiver, Label* if_empty,
-                                        Label* if_runtime) {
+TNode<Map> CodeStubAssembler::CheckEnumCache(Node* receiver, Label* if_empty,
+                                             Label* if_runtime) {
   Label if_fast(this), if_cache(this), if_no_cache(this, Label::kDeferred);
   TNode<Map> receiver_map = LoadMap(receiver);
 
