@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a106adc7_e9a1029f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-09T08:25:32Z",
+      "side": 1,
+      "message": "Yes of course (just didn\u0027t get around to a description til now :).",
+      "parentUuid": "0da4e763_b943a794",
+      "revId": "1b18a808f502032438a18b8d78c7694b288e5a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e7cb75e_45e60857",
         "filename": "src/compiler/backend/code-generator.cc",
         "patchSetId": 6
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "1bf86eb3_c0c25e61",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-09T08:25:32Z",
+      "side": 1,
+      "message": "Good catch, done. I also fixed the `offset !\u003d 0` below.",
+      "parentUuid": "1e7cb75e_45e60857",
+      "range": {
+        "startLine": 129,
+        "startChar": 42,
+        "endLine": 130,
+        "endChar": 64
+      },
+      "revId": "1b18a808f502032438a18b8d78c7694b288e5a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fee80abf_4d28e21d",
         "filename": "src/compiler/backend/code-generator.h",
         "patchSetId": 6
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "1d98cb1a_196a8bbc",
+        "filename": "src/compiler/backend/code-generator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-09T08:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fee80abf_4d28e21d",
+      "revId": "1b18a808f502032438a18b8d78c7694b288e5a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2855afbd_0dbffb8c",
         "filename": "src/compiler/js-operator.cc",
         "patchSetId": 6
@@ -73,6 +133,24 @@
       "revId": "1b18a808f502032438a18b8d78c7694b288e5a6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "994b4e9d_fec9f4d8",
+        "filename": "src/compiler/js-operator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1301,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-09T08:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2855afbd_0dbffb8c",
+      "revId": "1b18a808f502032438a18b8d78c7694b288e5a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -96,6 +174,30 @@
       "revId": "1b18a808f502032438a18b8d78c7694b288e5a6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96f3b5fe_bc30d0c8",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-09T08:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "794c694c_7d9f189b",
+      "range": {
+        "startLine": 810,
+        "startChar": 45,
+        "endLine": 810,
+        "endChar": 56
+      },
+      "revId": "1b18a808f502032438a18b8d78c7694b288e5a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
