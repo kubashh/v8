@@ -1422,8 +1422,11 @@ Reduction JSNativeContextSpecialization::ReduceJSGetIterator(Node* node) {
 
   // Handle exception path for the load named property
   Node* iterator_exception_node = nullptr;
+  Node* merge_node = nullptr;
+  Node* effect_phi = nullptr;
+  Node* phi = nullptr;
   if (NodeProperties::IsExceptionalCall(node, &iterator_exception_node)) {
-    // If there exists an exception node for the given iterator_node, create a
+    // If there exists an IfException node for the given node, create a
     // pair of IfException/IfSuccess nodes on the current control path. The uses
     // of new exception node are merged with the original exception node. The
     // IfSuccess node is returned as a control path for further reduction.
@@ -1434,17 +1437,16 @@ Reduction JSNativeContextSpecialization::ReduceJSGetIterator(Node* node) {
     // Use dead_node as a placeholder for the original exception node until
     // its uses are rewired to the nodes merging the exceptions
     Node* dead_node = jsgraph()->Dead();
-    Node* merge_node =
+    merge_node =
         graph()->NewNode(common()->Merge(2), dead_node, exception_node);
-    Node* effect_phi = graph()->NewNode(common()->EffectPhi(2), dead_node,
-                                        exception_node, merge_node);
-    Node* phi =
-        graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
-                         dead_node, exception_node, merge_node);
+    effect_phi = graph()->NewNode(common()->EffectPhi(2), dead_node,
+                                  exception_node, merge_node);
+    phi = graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
+                           dead_node, exception_node, merge_node);
     ReplaceWithValue(iterator_exception_node, phi, effect_phi, merge_node);
-    phi->ReplaceInput(0, iterator_exception_node);
-    effect_phi->ReplaceInput(0, iterator_exception_node);
     merge_node->ReplaceInput(0, iterator_exception_node);
+    effect_phi->ReplaceInput(0, iterator_exception_node);
+    phi->ReplaceInput(0, iterator_exception_node);
     control = if_success;
   }
 
@@ -1468,8 +1470,41 @@ Reduction JSNativeContextSpecialization::ReduceJSGetIterator(Node* node) {
                          ConvertReceiverMode::kNotNullOrUndefined, mode);
   Node* call_property = graph()->NewNode(call_op, load_property, receiver,
                                          context, frame_state, effect, control);
+  effect = call_property;
+  control = call_property;
+  if (iterator_exception_node != nullptr) {
+    control =
+        AppendExceptionHandling(effect, control, merge_node, phi, effect_phi);
+  }
 
-  return Replace(call_property);
+  // Check if the call property returns a valid JSReceiver else throw an invalid
+  // iterator runtime exception
+  Node* is_receiver =
+      graph()->NewNode(simplified()->ObjectIsReceiver(), call_property);
+  Node* branch_node = graph()->NewNode(
+      common()->Branch(BranchHint::kNone, IsSafetyCheck::kNoSafetyCheck),
+      is_receiver, control);
+
+  Node* if_not_receiver = graph()->NewNode(common()->IfFalse(), branch_node);
+  control = if_not_receiver;
+  const Operator* call_runtime_op =
+      javascript()->CallRuntime(Runtime::kThrowSymbolIteratorInvalid, 0);
+  Node* call_runtime =
+      graph()->NewNode(call_runtime_op, context, frame_state, effect, control);
+  control = call_runtime;
+  if (iterator_exception_node != nullptr) {
+    control =
+        AppendExceptionHandling(effect, control, merge_node, phi, effect_phi);
+  }
+  Node* throw_node = graph()->NewNode(common()->Throw(), call_runtime, control);
+  Node* end_node = graph()->end();
+  const Operator* end_op = common()->End(end_node->InputCount() + 1);
+  end_node->AppendInput(graph()->zone(), throw_node);
+  NodeProperties::ChangeOp(end_node, end_op);
+
+  Node* if_receiver = graph()->NewNode(common()->IfTrue(), branch_node);
+  ReplaceWithValue(node, call_property, effect, if_receiver);
+  return Replace(if_receiver);
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSStoreNamed(Node* node) {
@@ -3235,6 +3270,21 @@ Node* JSNativeContextSpecialization::BuildCheckEqualsName(NameRef const& name,
                       : simplified()->CheckEqualsInternalizedString();
   return graph()->NewNode(op, jsgraph()->Constant(name), value, effect,
                           control);
+}
+
+Node* JSNativeContextSpecialization::AppendExceptionHandling(
+    Node* effect, Node* control, Node* merge, Node* phi, Node* effect_phi) {
+  int input_count = merge->InputCount() + 1;
+  Node* if_exception =
+      graph()->NewNode(common()->IfException(), effect, control);
+  merge->InsertInput(graph()->zone(), 0, if_exception);
+  NodeProperties::ChangeOp(merge, common()->Merge(input_count));
+  phi->InsertInput(graph()->zone(), 0, if_exception);
+  NodeProperties::ChangeOp(
+      phi, common()->Phi(MachineRepresentation::kTagged, input_count));
+  effect_phi->InsertInput(graph()->zone(), 0, if_exception);
+  NodeProperties::ChangeOp(effect_phi, common()->EffectPhi(input_count));
+  return graph()->NewNode(common()->IfSuccess(), control);
 }
 
 bool JSNativeContextSpecialization::CanTreatHoleAsUndefined(
