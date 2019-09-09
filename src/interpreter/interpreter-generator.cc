@@ -832,9 +832,10 @@ class InterpreterBinaryOpAssembler : public InterpreterAssembler {
                                OperandScale operand_scale)
       : InterpreterAssembler(state, bytecode, operand_scale) {}
 
-  using BinaryOpGenerator =
-      Node* (BinaryOpAssembler::*)(Node* context, Node* left, Node* right,
-                                   Node* slot, Node* vector, bool lhs_is_smi);
+  using BinaryOpGenerator = TNode<Object> (BinaryOpAssembler::*)(
+      TNode<Context> context, TNode<Object> left, TNode<Object> right,
+      TNode<IntPtrT> slot, TNode<HeapObject> maybe_feedback_vector,
+      bool lhs_is_smi);
 
   void BinaryOpWithFeedback(BinaryOpGenerator generator) {
     TNode<Object> lhs = LoadRegisterAtOperandIndex(0);
@@ -844,8 +845,8 @@ class InterpreterBinaryOpAssembler : public InterpreterAssembler {
     TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
 
     BinaryOpAssembler binop_asm(state());
-    Node* result = (binop_asm.*generator)(context, lhs, rhs, slot_index,
-                                          maybe_feedback_vector, false);
+    TNode<Object> result = (binop_asm.*generator)(context, lhs, rhs, slot_index,
+                                                  maybe_feedback_vector, false);
     SetAccumulator(result);
     Dispatch();
   }
@@ -858,8 +859,8 @@ class InterpreterBinaryOpAssembler : public InterpreterAssembler {
     TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
 
     BinaryOpAssembler binop_asm(state());
-    Node* result = (binop_asm.*generator)(context, lhs, rhs, slot_index,
-                                          maybe_feedback_vector, true);
+    TNode<Object> result = (binop_asm.*generator)(context, lhs, rhs, slot_index,
+                                                  maybe_feedback_vector, true);
     SetAccumulator(result);
     Dispatch();
   }
