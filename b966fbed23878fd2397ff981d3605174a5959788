@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0ed65d0a_994cefae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-09-09T10:21:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33beee42_7457918a",
+      "range": {
+        "startLine": 12,
+        "startChar": 59,
+        "endLine": 13,
+        "endChar": 24
+      },
+      "revId": "b966fbed23878fd2397ff981d3605174a5959788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "93d67640_753b57b3",
         "filename": "tools/gcmole/gcmole.lua",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "b966fbed23878fd2397ff981d3605174a5959788",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7afccd8d_3937c3d8",
+        "filename": "tools/gcmole/gcmole.lua",
+        "patchSetId": 5
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-09-09T10:21:14Z",
+      "side": 1,
+      "message": "Ack, done.",
+      "parentUuid": "93d67640_753b57b3",
+      "range": {
+        "startLine": 472,
+        "startChar": 13,
+        "endLine": 472,
+        "endChar": 17
+      },
+      "revId": "b966fbed23878fd2397ff981d3605174a5959788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
