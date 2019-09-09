@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "302af0d4_172d38ee",
+        "filename": "src/builtins/iterator.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-09T17:08:36Z",
+      "side": 1,
+      "message": "not in this CL, but it\u0027d be nice to have a \"default\" case in torque...",
+      "range": {
+        "startLine": 74,
+        "startChar": 6,
+        "endLine": 74,
+        "endChar": 23
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eff74987_f5bd37ee",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1425,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-09T17:08:36Z",
+      "side": 1,
+      "message": "maybe name these as \"if_exception_merge\", \"if_exception_phi\" etc.",
+      "range": {
+        "startLine": 1425,
+        "startChar": 8,
+        "endLine": 1425,
+        "endChar": 18
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1751e19_8e688a04",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1428,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-09T17:08:36Z",
+      "side": 1,
+      "message": "extract to assign to boolean (\"has_exception_node\" maybe?) and use that rather than iterator_exception_node \u003d\u003d nullptr",
+      "range": {
+        "startLine": 1428,
+        "startChar": 6,
+        "endLine": 1428,
+        "endChar": 71
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23785b7b_535cf4ad",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-09T17:08:36Z",
+      "side": 1,
+      "message": "maybe it\u0027d be cleaner to have this right at the start, with just the one input of iterator_exception_node, and then use AppendExceptionHandling for the LoadNamed case too?\n\nAn alternative that is less readable but more efficient is to pre-allocate these with 4 inputs, and Replace inputs rather than appending them in later calls.",
+      "range": {
+        "startLine": 1437,
+        "startChar": 0,
+        "endLine": 1446,
+        "endChar": 75
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d53c68ba_6c92233a",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-09T17:08:36Z",
+      "side": 1,
+      "message": "Use NodeProperties::MergeControlToEnd",
+      "range": {
+        "startLine": 1500,
+        "startChar": 2,
+        "endLine": 1504,
+        "endChar": 0
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4da2bbda_58cb0cd0",
+        "filename": "test/mjsunit/es6/iterator-invalid-receiver-opt.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-09T17:08:36Z",
+      "side": 1,
+      "message": "nit: let a, otherwise this writes to a global variable",
+      "range": {
+        "startLine": 24,
+        "startChar": 12,
+        "endLine": 24,
+        "endChar": 13
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
