@@ -22,6 +22,30 @@
       "revId": "6192ecb0d1c059aaf21a1a9a1bc74c1e566df19c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c4ab6ac_1b95a757",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-09-09T16:48:51Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "1278b4b8_b2287e81",
+      "range": {
+        "startLine": 1405,
+        "startChar": 7,
+        "endLine": 1405,
+        "endChar": 65
+      },
+      "revId": "6192ecb0d1c059aaf21a1a9a1bc74c1e566df19c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
