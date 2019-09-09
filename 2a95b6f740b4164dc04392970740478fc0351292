@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "342fc247_c6cc71df",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-09T10:15:13Z",
+      "side": 1,
+      "message": "Let me rephrase it. I tried being brief but I came short with the explanation.\n\nCallRuntimeN gets called two times: One where the result is an Object, and the other one where the results is a pair of Object. That second result is the one that gets feed into Projection(). That Projection function isn\u0027t TNodified yet.\n\nSo, what would be the TNodified result of CallRuntimeN? Can\u0027t be an Object because sometimes we then call to Projection, and that value isn\u0027t an Object but a Collection/Projections/Pair of Object. Should then the result of CallRuntimeN be a Union\u003cObject, Projection\u003cObject\u003e\u003e or similar? Should it always be Projection\u003cObject\u003e but sometimes we only have one value there?\n\nRight now, I am not sure what\u0027s the correct approach.",
+      "parentUuid": "68d0ced0_f7ba7951",
+      "range": {
+        "startLine": 1346,
+        "startChar": 2,
+        "endLine": 1346,
+        "endChar": 15
+      },
+      "revId": "2a95b6f740b4164dc04392970740478fc0351292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e43dca71_b3d66fb6",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 4
