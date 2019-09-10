@@ -2455,7 +2455,10 @@ void TaggedImpl<kRefType, StorageType>::Print(std::ostream& os) {
 
 #endif  // OBJECT_PRINT
 
-void HeapNumber::HeapNumberPrint(std::ostream& os) { os << value(); }
+void HeapNumber::HeapNumberPrint(std::ostream& os) {
+  os << value() << " (bits: 0x" << std::hex << value_as_bits() << std::dec
+     << ")";
+}
 
 // TODO(cbruni): remove once the new maptracer is in place.
 void Name::NameShortPrint() {
