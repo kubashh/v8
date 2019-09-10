@@ -1085,6 +1085,23 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
     GetReceiverScope()->receiver()->ForceContextAllocation();
   }
 
+  void set_has_super_call_reference() { has_super_call_reference_ = true; }
+  bool has_super_call_reference() const { return has_super_call_reference_; }
+  void UsesSuperCallReference() {
+    set_has_super_call_reference();
+    GetReceiverScope()->receiver()->ForceContextAllocation();
+  }
+
+  bool can_elide_this_hole_checks() const {
+    return can_elide_this_hole_checks_;
+  }
+
+  void set_can_elide_this_hole_checks() { can_elide_this_hole_checks_ = true; }
+
+  void unset_can_elide_this_hole_checks() {
+    can_elide_this_hole_checks_ = false;
+  }
+
   bool needs_private_name_context_chain_recalc() const {
     return needs_private_name_context_chain_recalc_;
   }
@@ -1134,6 +1151,8 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
   bool has_checked_syntax_ : 1;
   bool has_this_reference_ : 1;
   bool has_this_declaration_ : 1;
+  bool has_super_call_reference_ : 1;
+  bool can_elide_this_hole_checks_ : 1;
   bool needs_private_name_context_chain_recalc_ : 1;
 
   // If the scope is a function scope, this is the function kind.
