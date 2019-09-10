@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "20811dc9_7759ec80",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T17:51:00Z",
+      "side": 1,
+      "message": "Ack. Removing the TODO.",
+      "parentUuid": "f0bd93e5_1402cdfe",
+      "revId": "c0c92ca0525d097bbbe501d421c2a78c45c71c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd7123f0_d8dbc15d",
         "filename": "src/ic/binary-op-assembler.cc",
         "patchSetId": 7
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "b8afb553_62f8b61b",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T17:51:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd7123f0_d8dbc15d",
+      "revId": "c0c92ca0525d097bbbe501d421c2a78c45c71c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2c01a8e_dc1e0e37",
         "filename": "src/ic/binary-op-assembler.cc",
         "patchSetId": 7
@@ -50,6 +86,24 @@
       "revId": "c0c92ca0525d097bbbe501d421c2a78c45c71c0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3a46749_ad0ddc49",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T17:51:00Z",
+      "side": 1,
+      "message": "Nice catch, thanks!",
+      "parentUuid": "d2c01a8e_dc1e0e37",
+      "revId": "c0c92ca0525d097bbbe501d421c2a78c45c71c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
