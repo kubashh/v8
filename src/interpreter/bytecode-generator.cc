@@ -3331,10 +3331,14 @@ BytecodeGenerator::AssignmentLhsData BytecodeGenerator::PrepareAssignmentLhs(
       Register key = VisitForRegisterValue(property->key());
       return AssignmentLhsData::KeyedProperty(object, key);
     }
-    case PRIVATE_METHOD:
-    case PRIVATE_GETTER_ONLY:
-    case PRIVATE_SETTER_ONLY:
-    case PRIVATE_GETTER_AND_SETTER: {
+    case INSTANCE_PRIVATE_METHOD:
+    case INSTANCE_PRIVATE_GETTER_ONLY:
+    case INSTANCE_PRIVATE_SETTER_ONLY:
+    case INSTANCE_PRIVATE_GETTER_AND_SETTER:
+    case STATIC_PRIVATE_METHOD:
+    case STATIC_PRIVATE_GETTER_ONLY:
+    case STATIC_PRIVATE_SETTER_ONLY:
+    case STATIC_PRIVATE_GETTER_AND_SETTER: {
       DCHECK(!property->IsSuperAccess());
       return AssignmentLhsData::PrivateMethodOrAccessor(assign_type, property);
     }
@@ -3902,18 +3906,20 @@ void BytecodeGenerator::BuildAssignment(
                        lhs_data.super_property_args());
       break;
     }
-    case PRIVATE_METHOD: {
+    case INSTANCE_PRIVATE_METHOD:
+    case STATIC_PRIVATE_METHOD: {
       BuildInvalidPropertyAccess(MessageTemplate::kInvalidPrivateMethodWrite,
                                  lhs_data.expr()->AsProperty());
       break;
     }
-    case PRIVATE_GETTER_ONLY: {
+    case INSTANCE_PRIVATE_GETTER_ONLY:
+    case STATIC_PRIVATE_GETTER_ONLY: {
       BuildInvalidPropertyAccess(MessageTemplate::kInvalidPrivateSetterAccess,
                                  lhs_data.expr()->AsProperty());
       break;
     }
-    case PRIVATE_SETTER_ONLY:
-    case PRIVATE_GETTER_AND_SETTER: {
+    case INSTANCE_PRIVATE_SETTER_ONLY:
+    case INSTANCE_PRIVATE_GETTER_AND_SETTER: {
       Register value = register_allocator()->NewRegister();
       builder()->StoreAccumulatorInRegister(value);
       Property* property = lhs_data.expr()->AsProperty();
@@ -3924,6 +3930,12 @@ void BytecodeGenerator::BuildAssignment(
       if (!execution_result()->IsEffect()) {
         builder()->LoadAccumulatorWithRegister(value);
       }
+      break;
+    }
+    case STATIC_PRIVATE_SETTER_ONLY:
+    case STATIC_PRIVATE_GETTER_AND_SETTER: {
+      // TODO(joyee): implement static private methods and accessors.
+      UNIMPLEMENTED();
       break;
     }
   }
@@ -3971,10 +3983,14 @@ void BytecodeGenerator::VisitCompoundAssignment(CompoundAssignment* expr) {
                              lhs_data.super_property_args().Truncate(3));
       break;
     }
-    case PRIVATE_METHOD:
-    case PRIVATE_GETTER_ONLY:
-    case PRIVATE_SETTER_ONLY:
-    case PRIVATE_GETTER_AND_SETTER: {
+    case INSTANCE_PRIVATE_METHOD:
+    case INSTANCE_PRIVATE_GETTER_ONLY:
+    case INSTANCE_PRIVATE_SETTER_ONLY:
+    case INSTANCE_PRIVATE_GETTER_AND_SETTER:
+    case STATIC_PRIVATE_METHOD:
+    case STATIC_PRIVATE_GETTER_ONLY:
+    case STATIC_PRIVATE_SETTER_ONLY:
+    case STATIC_PRIVATE_GETTER_AND_SETTER: {
       // ({ #foo: name } = obj) is currently syntactically invalid.
       UNREACHABLE();
       break;
@@ -4444,23 +4460,31 @@ void BytecodeGenerator::VisitPropertyLoad(Register obj, Property* property) {
     case KEYED_SUPER_PROPERTY:
       VisitKeyedSuperPropertyLoad(property, Register::invalid_value());
       break;
-    case PRIVATE_SETTER_ONLY: {
+    case INSTANCE_PRIVATE_SETTER_ONLY:
+    case STATIC_PRIVATE_SETTER_ONLY: {
       BuildInvalidPropertyAccess(MessageTemplate::kInvalidPrivateGetterAccess,
                                  property);
       break;
     }
-    case PRIVATE_GETTER_ONLY:
-    case PRIVATE_GETTER_AND_SETTER: {
+    case INSTANCE_PRIVATE_GETTER_ONLY:
+    case INSTANCE_PRIVATE_GETTER_AND_SETTER: {
       Register key = VisitForRegisterValue(property->key());
       BuildPrivateBrandCheck(property, obj);
       BuildPrivateGetterAccess(obj, key);
       break;
     }
-    case PRIVATE_METHOD: {
+    case INSTANCE_PRIVATE_METHOD: {
       BuildPrivateBrandCheck(property, obj);
       // In the case of private methods, property->key() is the function to be
       // loaded (stored in a context slot), so load this directly.
       VisitForAccumulatorValue(property->key());
+      break;
+    }
+    case STATIC_PRIVATE_GETTER_ONLY:
+    case STATIC_PRIVATE_GETTER_AND_SETTER:
+    case STATIC_PRIVATE_METHOD: {
+      // TODO(joyee): implement static private methods and accessors.
+      UNIMPLEMENTED();
       break;
     }
   }
@@ -5093,26 +5117,34 @@ void BytecodeGenerator::VisitCountOperation(CountOperation* expr) {
       builder()->CallRuntime(Runtime::kLoadKeyedFromSuper, load_super_args);
       break;
     }
-    case PRIVATE_METHOD: {
+    case INSTANCE_PRIVATE_METHOD:
+    case STATIC_PRIVATE_METHOD: {
       BuildInvalidPropertyAccess(MessageTemplate::kInvalidPrivateMethodWrite,
                                  property);
       return;
     }
-    case PRIVATE_GETTER_ONLY: {
+    case INSTANCE_PRIVATE_GETTER_ONLY:
+    case STATIC_PRIVATE_GETTER_ONLY: {
       BuildInvalidPropertyAccess(MessageTemplate::kInvalidPrivateSetterAccess,
                                  property);
       return;
     }
-    case PRIVATE_SETTER_ONLY: {
+    case INSTANCE_PRIVATE_SETTER_ONLY:
+    case STATIC_PRIVATE_SETTER_ONLY: {
       BuildInvalidPropertyAccess(MessageTemplate::kInvalidPrivateGetterAccess,
                                  property);
       return;
     }
-    case PRIVATE_GETTER_AND_SETTER: {
+    case INSTANCE_PRIVATE_GETTER_AND_SETTER: {
       object = VisitForRegisterValue(property->obj());
       key = VisitForRegisterValue(property->key());
       BuildPrivateBrandCheck(property, object);
       BuildPrivateGetterAccess(object, key);
+      break;
+    }
+    case STATIC_PRIVATE_GETTER_AND_SETTER: {
+      // TODO(joyee): implement static private methods and accessors.
+      UNIMPLEMENTED();
       break;
     }
   }
@@ -5181,18 +5213,26 @@ void BytecodeGenerator::VisitCountOperation(CountOperation* expr) {
           .CallRuntime(Runtime::kStoreKeyedToSuper, super_property_args);
       break;
     }
-    case PRIVATE_SETTER_ONLY:
-    case PRIVATE_GETTER_ONLY:
-    case PRIVATE_METHOD: {
+    case INSTANCE_PRIVATE_SETTER_ONLY:
+    case INSTANCE_PRIVATE_GETTER_ONLY:
+    case INSTANCE_PRIVATE_METHOD:
+    case STATIC_PRIVATE_SETTER_ONLY:
+    case STATIC_PRIVATE_GETTER_ONLY:
+    case STATIC_PRIVATE_METHOD: {
       UNREACHABLE();
     }
-    case PRIVATE_GETTER_AND_SETTER: {
+    case INSTANCE_PRIVATE_GETTER_AND_SETTER: {
       Register value = register_allocator()->NewRegister();
       builder()->StoreAccumulatorInRegister(value);
       BuildPrivateSetterAccess(object, key, value);
       if (!execution_result()->IsEffect()) {
         builder()->LoadAccumulatorWithRegister(value);
       }
+      break;
+    }
+    case STATIC_PRIVATE_GETTER_AND_SETTER: {
+      // TODO(joyee): implement static private methods and accessors.
+      UNIMPLEMENTED();
       break;
     }
   }
