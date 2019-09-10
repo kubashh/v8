@@ -301,8 +301,12 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
   // This operator reinterprets the bits of a tagged pointer as a word.
   const Operator* BitcastTaggedToWord();
 
-  // This operator reinterprets the bits of a Smi as a word.
-  const Operator* BitcastTaggedSignedToWord();
+  // This operator reinterprets the bits of a tagged value as a word preserving
+  // non-pointer bits (all the bits that are not modified by GC):
+  // 1) smi tag
+  // 2) weak tag
+  // 3) smi payload if the tagged value is a smi.
+  const Operator* BitcastTaggedNonPointerBitsToWord();
 
   // This operator reinterprets the bits of a tagged MaybeObject pointer as
   // word.
