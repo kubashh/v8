@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e0a31578_d339b205",
+        "filename": "src/interpreter/interpreter-intrinsics-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T13:17:28Z",
+      "side": 1,
+      "message": "Done. This one doesn\u0027t use the macro.",
+      "parentUuid": "b142fb31_54044000",
+      "revId": "f41c7a9eb29983b3fba549cf6ade0ffad4ed29a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "423013ed_fd96eb3b",
         "filename": "src/interpreter/interpreter-intrinsics-generator.cc",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "f41c7a9eb29983b3fba549cf6ade0ffad4ed29a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0ab4b01_69de64b5",
+        "filename": "src/interpreter/interpreter-intrinsics-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T13:17:28Z",
+      "side": 1,
+      "message": "Same as other comment. Do you think it\u0027s worth it to further specialize these ones?",
+      "parentUuid": "423013ed_fd96eb3b",
+      "revId": "f41c7a9eb29983b3fba549cf6ade0ffad4ed29a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "19a61ea9_a53b5bdf",
+        "filename": "src/interpreter/interpreter-intrinsics-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T13:17:28Z",
+      "side": 1,
+      "message": "I agree. They are also declared with the macro in this file in which all are the same type.\nIn the future the macro can be further specialized to take a \"type\" parameter, but I don\u0027t think it\u0027s worth to do it right now.",
+      "parentUuid": "9574d44e_3ad17a16",
+      "revId": "f41c7a9eb29983b3fba549cf6ade0ffad4ed29a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72429b38_087c5afd",
         "filename": "src/interpreter/interpreter-intrinsics-generator.cc",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "f41c7a9eb29983b3fba549cf6ade0ffad4ed29a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd67427b_8ed90116",
+        "filename": "src/interpreter/interpreter-intrinsics-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T13:17:28Z",
+      "side": 1,
+      "message": "Same as other comment.",
+      "parentUuid": "72429b38_087c5afd",
+      "revId": "f41c7a9eb29983b3fba549cf6ade0ffad4ed29a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
