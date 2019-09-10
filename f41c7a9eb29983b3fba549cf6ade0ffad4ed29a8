@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b142fb31_54044000",
+        "filename": "src/interpreter/interpreter-intrinsics-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-10T13:07:42Z",
+      "side": 1,
+      "message": "This could be TNode\u003cOddball\u003e It should return only TrueConstant or FalseConstant.",
+      "revId": "f41c7a9eb29983b3fba549cf6ade0ffad4ed29a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "423013ed_fd96eb3b",
+        "filename": "src/interpreter/interpreter-intrinsics-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-10T13:07:42Z",
+      "side": 1,
+      "message": "Here and also in IsArray, IsSmi the return value can only be Oddball.",
+      "revId": "f41c7a9eb29983b3fba549cf6ade0ffad4ed29a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9574d44e_3ad17a16",
+        "filename": "src/interpreter/interpreter-intrinsics-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-10T13:07:42Z",
+      "side": 1,
+      "message": "I think this can only return UndefinedConstant, though I don\u0027t think it is worth specializing them further. Since these are called from InvokeIntrinsic which just returns a TNode\u003cObject\u003e.\nSimilarly below there are more functions that return a more restricted type but may be not worth  updating them as well for the same reason.",
+      "revId": "f41c7a9eb29983b3fba549cf6ade0ffad4ed29a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72429b38_087c5afd",
+        "filename": "src/interpreter/interpreter-intrinsics-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-10T13:07:42Z",
+      "side": 1,
+      "message": "I think ResumeMode can only be Smi. I am also OK even if you leave this as is.",
+      "revId": "f41c7a9eb29983b3fba549cf6ade0ffad4ed29a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
