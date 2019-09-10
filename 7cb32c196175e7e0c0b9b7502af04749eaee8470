@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "fcd6d0a0_df607fc5",
+        "filename": "src/codegen/arm/assembler-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4806,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-10T16:43:37Z",
+      "side": 1,
+      "message": "The undefined behavior here that UBSan complained about is overflowing pointer arithmetic. (That said, this case of pointer arithmetic in itself is also undefined behavior.) I can use static_casts to unsigned types (here and elsewhere) if you prefer. The reason for using the _WithWraparound helpers is to only have that casting code once. After our offline discussion, I\u0027ve switched this particular place to a simple cast to Address. (Ideally we\u0027d eventually switch {pc_} to have type Address, but that\u0027s a larger refactoring.)\n\nI\u0027m aware of the -fwrapv flag, but signed overflow *can* be a real bug, so I think it\u0027s better to explicitly make places where we want to allow overflow overflow-safe, and let UBSan do its job of warning us about the others, rather than globally silencing the warning.",
+      "parentUuid": "a04890ff_4deec421",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e90f71bb_62c8f677",
         "filename": "src/codegen/arm64/assembler-arm64.cc",
         "patchSetId": 1
@@ -69,6 +87,24 @@
       "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "582f8255_ba2671b2",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3971,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-10T16:43:37Z",
+      "side": 1,
+      "message": "Because (1) ShlWithWraparound does extra work: it masks the right-hand side, which is not needed here; and (2) ShlWithWraparound wants both operands to have the same type, so it would need an unsightly cast for {size}. I don\u0027t feel strongly about it though.",
+      "parentUuid": "e90f71bb_62c8f677",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -89,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "ba2ef490_667e3cca",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4188,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-10T16:43:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "550f3461_d61dd356",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2225e1cb_32e9124e",
         "filename": "src/codegen/arm64/instructions-arm64.cc",
         "patchSetId": 1
@@ -106,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "ba1e1169_23873627",
+        "filename": "src/codegen/arm64/instructions-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-10T16:43:37Z",
+      "side": 1,
+      "message": "Doesn\u0027t deal with the {width} parameter.",
+      "parentUuid": "2225e1cb_32e9124e",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7cf48de_1df8feb7",
         "filename": "src/codegen/external-reference.cc",
         "patchSetId": 1
@@ -117,6 +189,24 @@
       "writtenOn": "2019-09-10T06:00:00Z",
       "side": 1,
       "message": "Huh.. nice find.",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d8a2816_0545ca39",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-10T16:43:37Z",
+      "side": 1,
+      "message": "UBSan find :-)",
+      "parentUuid": "f7cf48de_1df8feb7",
       "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -140,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "0a79656d_418b17ff",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-10T16:43:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aba9816d_b5a44875",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "579761c0_47a975af",
         "filename": "src/execution/arm/simulator-arm.cc",
         "patchSetId": 1
@@ -154,6 +262,24 @@
       "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c615dcfb_3ec000cf",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3608,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-10T16:43:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "579761c0_47a975af",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "5d108804_31e5a3c2",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3899,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-10T16:43:37Z",
+      "side": 1,
+      "message": "I agree with the guess. I can\u0027t find any definitive statements.",
+      "parentUuid": "df218016_3ba10e62",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "17a9fa68_f8499db0",
         "filename": "src/execution/frames.h",
         "patchSetId": 1
@@ -188,6 +332,24 @@
       "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62d8e9a4_ed08c86b",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-10T16:43:37Z",
+      "side": 1,
+      "message": "It\u0027s complaining (at the caller) that the returned {type} is not a valid value for the enum. See the TODO right above (line 146) and the DCHECK below (line 154). So no, we can\u0027t put an UNREACHABLE here.",
+      "parentUuid": "17a9fa68_f8499db0",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
