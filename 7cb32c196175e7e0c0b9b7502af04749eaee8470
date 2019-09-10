@@ -72,6 +72,23 @@
     },
     {
       "key": {
+        "uuid": "550f3461_d61dd356",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4188,
+      "author": {
+        "id": 1182309
+      },
+      "writtenOn": "2019-09-10T15:57:18Z",
+      "side": 1,
+      "message": "Maybe this is simpler as (-d * 2).",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2225e1cb_32e9124e",
         "filename": "src/codegen/arm64/instructions-arm64.cc",
         "patchSetId": 1
