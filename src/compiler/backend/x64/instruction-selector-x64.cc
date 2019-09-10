@@ -2688,6 +2688,7 @@ VISIT_ATOMIC_BINOP(Xor)
   V(F32x4SConvertI32x4)     \
   V(F32x4Abs)               \
   V(F32x4Neg)               \
+  V(F32x4Sqrt)              \
   V(F32x4RecipApprox)       \
   V(F32x4RecipSqrtApprox)   \
   V(I64x2Neg)               \
@@ -2864,6 +2865,12 @@ void InstructionSelector::VisitF64x2Neg(Node* node) {
   InstructionOperand temps[] = {g.TempDoubleRegister()};
   Emit(kX64F64x2Neg, g.DefineSameAsFirst(node), g.UseRegister(node->InputAt(0)),
        arraysize(temps), temps);
+}
+
+void InstructionSelector::VisitF64x2Sqrt(Node* node) {
+  X64OperandGenerator g(this);
+  Emit(kX64F64x2Sqrt, g.DefineAsRegister(node),
+       g.UseRegister(node->InputAt(0)));
 }
 
 void InstructionSelector::VisitF32x4UConvertI32x4(Node* node) {
