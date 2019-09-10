@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "629d2cfb_60e015de",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T13:58:12Z",
+      "side": 1,
+      "message": "I think it\u0027s because in the .h the TNodes appear within BinaryOpAssembler, which inherits from CodeStubAssembler. CodeStubAssembler has that same using in its public declaration, therefore BinaryOpAssembler doesn\u0027t need it.\n\nOver here, we are outside that and in v8::internal. Then, we need that using statement.\n\nAs a drive-by, we don\u0027t need the \"using compiler::Node;\" since there are no more Node*",
+      "parentUuid": "0b8f8bdc_cd3496fa",
+      "revId": "2c44dffb9c956deaeadbf53e8698f0ad3bedefb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "821e7a42_1d612459",
         "filename": "src/ic/binary-op-assembler.cc",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "2c342a20_fde75f55",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T13:58:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "821e7a42_1d612459",
+      "revId": "2c44dffb9c956deaeadbf53e8698f0ad3bedefb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7164f603_9d2619ca",
         "filename": "src/ic/binary-op-assembler.cc",
         "patchSetId": 3
@@ -50,6 +86,24 @@
       "revId": "2c44dffb9c956deaeadbf53e8698f0ad3bedefb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4854242_b47f0e02",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T13:58:12Z",
+      "side": 1,
+      "message": "Done. Removed the braces. The spaces were eliminated by clang format.",
+      "parentUuid": "7164f603_9d2619ca",
+      "revId": "2c44dffb9c956deaeadbf53e8698f0ad3bedefb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42b64112_03e69df3",
+        "filename": "src/ic/binary-op-assembler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T13:58:12Z",
+      "side": 0,
+      "message": "These names were wrong. Possibly copy paste from above.",
+      "range": {
+        "startLine": 45,
+        "startChar": 57,
+        "endLine": 46,
+        "endChar": 55
+      },
+      "revId": "5968c2e4949f8aac0cf0db8d56d77f0820ca3619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

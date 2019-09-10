@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51db2f9e_d8233865",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T13:58:12Z",
+      "side": 1,
+      "message": "Fixed typo. It has been there since the beginning (https://chromium-review.googlesource.com/c/v8/v8/+/530845/). \nBelow, we can see that it\u0027s true or false depending on rhs. Also, in binary-op-assembler it is named as used taking into account rhs.",
+      "range": {
+        "startLine": 838,
+        "startChar": 11,
+        "endLine": 838,
+        "endChar": 21
+      },
+      "revId": "c0c92ca0525d097bbbe501d421c2a78c45c71c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

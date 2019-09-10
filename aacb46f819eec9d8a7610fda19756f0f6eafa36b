@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49b87464_2dce82a2",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T13:58:12Z",
+      "side": 1,
+      "message": "Should this be renamed? E.g to rhs_known_smi since functionality is:\nIf rhs_is_smi is true, we are sure that rhs is a Smi.\nIf rhs_is_smi is false, rhs might or not be a Smi.",
+      "range": {
+        "startLine": 18,
+        "startChar": 9,
+        "endLine": 18,
+        "endChar": 19
+      },
+      "revId": "aacb46f819eec9d8a7610fda19756f0f6eafa36b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "006b47dc_ccf017b4",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-10T13:58:12Z",
+      "side": 1,
+      "message": "Moved up to avoid asking twice the same thing.",
+      "range": {
+        "startLine": 149,
+        "startChar": 6,
+        "endLine": 150,
+        "endChar": 52
+      },
+      "revId": "aacb46f819eec9d8a7610fda19756f0f6eafa36b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
