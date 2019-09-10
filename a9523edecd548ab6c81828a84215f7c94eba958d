@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e31a10e3_3f77e209",
+        "filename": "src/builtins/iterator.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-10T09:45:23Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "302af0d4_172d38ee",
+      "range": {
+        "startLine": 74,
+        "startChar": 6,
+        "endLine": 74,
+        "endChar": 23
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eff74987_f5bd37ee",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bf15811_628df8e7",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1425,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-10T09:45:23Z",
+      "side": 1,
+      "message": "Done. I like the new naming, it\u0027s more readable.",
+      "parentUuid": "eff74987_f5bd37ee",
+      "range": {
+        "startLine": 1425,
+        "startChar": 8,
+        "endLine": 1425,
+        "endChar": 18
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3f9163e0_7b9b8c66",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1428,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-10T09:45:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1751e19_8e688a04",
+      "range": {
+        "startLine": 1428,
+        "startChar": 6,
+        "endLine": 1428,
+        "endChar": 71
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23785b7b_535cf4ad",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "619dc178_904c0348",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-10T09:45:23Z",
+      "side": 1,
+      "message": "going with the first (cleaner) solution.",
+      "parentUuid": "23785b7b_535cf4ad",
+      "range": {
+        "startLine": 1437,
+        "startChar": 0,
+        "endLine": 1446,
+        "endChar": 75
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "6df6630a_c51ff78a",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-10T09:45:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d53c68ba_6c92233a",
+      "range": {
+        "startLine": 1500,
+        "startChar": 2,
+        "endLine": 1504,
+        "endChar": 0
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c9a0adc_89332dbe",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 1
@@ -131,6 +251,24 @@
       "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe30fbe3_fb82d3f8",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3204,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-10T09:45:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c9a0adc_89332dbe",
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -154,6 +292,30 @@
       "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20fb1530_5125e49e",
+        "filename": "test/mjsunit/es6/iterator-invalid-receiver-opt.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-10T09:45:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4da2bbda_58cb0cd0",
+      "range": {
+        "startLine": 24,
+        "startChar": 12,
+        "endLine": 24,
+        "endChar": 13
+      },
+      "revId": "a9523edecd548ab6c81828a84215f7c94eba958d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
