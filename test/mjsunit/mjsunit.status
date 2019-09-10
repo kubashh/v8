@@ -1033,6 +1033,12 @@
 }],  # (arch == arm or arch == arm64)
 
 ##############################################################################
+['arch == arm and simulator_run', {
+  # Slow test
+  'bit-not': [PASS, SLOW],
+}],  # arch == arm and simulator_run
+
+##############################################################################
 ['gcov_coverage', {
   # Tests taking too long.
   'array-functions-prototype-misc': [SKIP],
