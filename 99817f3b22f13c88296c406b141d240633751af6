@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86c99614_6483e43c",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-10T14:34:26Z",
+      "side": 1,
+      "message": "This can be only BigInt.",
+      "revId": "99817f3b22f13c88296c406b141d240633751af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd0809c3_4f252366",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-10T14:34:26Z",
+      "side": 1,
+      "message": "This could be only BigInt.",
+      "revId": "99817f3b22f13c88296c406b141d240633751af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1761ecb5_d6484b5c",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-10T14:34:26Z",
+      "side": 1,
+      "message": "I think this should be a JSRegExp. I am also OK if you fix this in a followup cl along with EmitCreateRegExpLiteral.",
+      "revId": "99817f3b22f13c88296c406b141d240633751af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41bbef17_4d3d06a8",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2516,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-10T14:34:26Z",
+      "side": 1,
+      "message": "This is always a JSArray.",
+      "revId": "99817f3b22f13c88296c406b141d240633751af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
