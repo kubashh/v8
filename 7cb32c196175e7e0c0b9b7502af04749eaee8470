@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "454f311c_357944ec",
+        "filename": "src/codegen/arm/assembler-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4806,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-10T11:50:15Z",
+      "side": 1,
+      "message": "Offline discussion:\n\n- Special handling (e.g. AddWithWraparound) is only needed if the operation can actually overflow in practice. (This could help us find potential bugs when overflow is unintended, and when overflow *is* intended it makes it very clear.)\n- You pointed out that I asked for a static_cast-based solution here and asked to use the helper elsewhere :p You\u0027re right, I must\u0027ve changed my mind during the review. My conclusion now is to prefer the OpWithWraparound helper methods to make these spots discoverable.",
+      "parentUuid": "a04890ff_4deec421",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e90f71bb_62c8f677",
         "filename": "src/codegen/arm64/assembler-arm64.cc",
         "patchSetId": 1
