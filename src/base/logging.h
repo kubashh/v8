@@ -65,7 +65,7 @@ V8_BASE_EXPORT void SetDcheckFunction(void (*dcheck_Function)(const char*, int,
 #if !defined(DEBUG) && defined(OFFICIAL_BUILD)
 #define CHECK_FAILED_HANDLER(message) FATAL("ignored")
 #else
-#define CHECK_FAILED_HANDLER(message) FATAL("Check failed: %s.", message)
+#define CHECK_FAILED_HANDLER(message) FATAL("Check failed 1: %s.", message)
 #endif
 
 // CHECK dies with a fatal error if condition is not true.  It is *not*
@@ -100,7 +100,7 @@ V8_BASE_EXPORT void SetDcheckFunction(void (*dcheck_Function)(const char*, int,
             typename ::v8::base::pass_value_or_ref<decltype(lhs)>::type,  \
             typename ::v8::base::pass_value_or_ref<decltype(rhs)>::type>( \
             (lhs), (rhs), #lhs " " #op " " #rhs)) {                       \
-      FATAL("Check failed: %s.", _msg->c_str());                          \
+      FATAL("Check failed 2: %s.", _msg->c_str());                        \
       delete _msg;                                                        \
     }                                                                     \
   } while (false)
@@ -121,24 +121,38 @@ V8_BASE_EXPORT void SetDcheckFunction(void (*dcheck_Function)(const char*, int,
 // Make all CHECK functions discard their log strings to reduce code
 // bloat for official release builds.
 
-#define CHECK_OP(name, op, lhs, rhs)                                         \
-  do {                                                                       \
-    bool _cmp = ::v8::base::Cmp##name##Impl<                                 \
-        typename ::v8::base::pass_value_or_ref<decltype(lhs)>::type,         \
-        typename ::v8::base::pass_value_or_ref<decltype(rhs)>::type>((lhs),  \
-                                                                     (rhs)); \
-    CHECK_WITH_MSG(_cmp, #lhs " " #op " " #rhs);                             \
+#define CHECK_OP(name, op, lhs, rhs)                                      \
+  do {                                                                    \
+    if (std::string* _msg = ::v8::base::Check##name##Impl<                \
+            typename ::v8::base::pass_value_or_ref<decltype(lhs)>::type,  \
+            typename ::v8::base::pass_value_or_ref<decltype(rhs)>::type>( \
+            (lhs), (rhs), #lhs " " #op " " #rhs)) {                       \
+      FATAL("Check failed 2: %s.", _msg->c_str());                        \
+      delete _msg;                                                        \
+    }                                                                     \
   } while (false)
 
 #define DCHECK_WITH_MSG(condition, msg) void(0);
 
 #endif
 
+template <typename T>
+typename std::enable_if<
+    !std::is_function<typename std::remove_pointer<T>::type>::value &&
+    std::is_floating_point<T>::value && has_output_operator<T>::value>::type
+PrintCheckOperand(std::ostream& os, T val) {
+  const char* fmt = "%a";
+  char buf[30];
+  snprintf(buf, sizeof(buf), fmt, val);
+  os << buf;
+  /* os << std::forward<T>(val); */
+}
+
 // Define PrintCheckOperand<T> for each T which defines operator<< for ostream.
 template <typename T>
 typename std::enable_if<
     !std::is_function<typename std::remove_pointer<T>::type>::value &&
-    has_output_operator<T>::value>::type
+    !std::is_floating_point<T>::value && has_output_operator<T>::value>::type
 PrintCheckOperand(std::ostream& os, T val) {
   os << std::forward<T>(val);
 }
