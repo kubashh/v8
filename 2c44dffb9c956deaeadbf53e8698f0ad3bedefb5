@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b8f8bdc_cd3496fa",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-10T11:09:31Z",
+      "side": 1,
+      "message": "Why is this needed here when it\u0027s not needed in the header file?",
+      "revId": "2c44dffb9c956deaeadbf53e8698f0ad3bedefb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "821e7a42_1d612459",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-10T11:09:31Z",
+      "side": 1,
+      "message": "Why this change? It looks like a bug.",
+      "revId": "2c44dffb9c956deaeadbf53e8698f0ad3bedefb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7164f603_9d2619ca",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-10T11:09:31Z",
+      "side": 1,
+      "message": "Please keep the brackets on seperate lines",
+      "revId": "2c44dffb9c956deaeadbf53e8698f0ad3bedefb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
