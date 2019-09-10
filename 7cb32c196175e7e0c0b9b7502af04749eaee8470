@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25e4632b_c9117ef1",
+        "filename": "src/codegen/arm/assembler-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4806,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-10T06:00:00Z",
+      "side": 1,
+      "message": "What is the undefined behavior here, addition on signed types and how potential overflow is handled? Or arithmetic on pointers? \n\nI guess I\u0027m asking why we need the (very unwieldy) AddWithWraparound instead of just `static_cast\u003cuintptr_t\u003e(pos) + rc_delta`. I don\u0027t think replacing every signed op with a safe \u0027OpWithWraparound\u0027 is a good idea from a readability perspective.",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e90f71bb_62c8f677",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3971,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-10T06:00:00Z",
+      "side": 1,
+      "message": "Why not ShlWithWraparound here and in other files?",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2225e1cb_32e9124e",
+        "filename": "src/codegen/arm64/instructions-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-10T06:00:00Z",
+      "side": 1,
+      "message": "q: What about base::RotateRight64?",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7cf48de_1df8feb7",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-10T06:00:00Z",
+      "side": 1,
+      "message": "Huh.. nice find.",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aba9816d_b5a44875",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-10T06:00:00Z",
+      "side": 1,
+      "message": "Similar here, base::RotateRight32?",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "579761c0_47a975af",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3608,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-10T06:00:00Z",
+      "side": 1,
+      "message": "Could you document what the differences are?",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df218016_3ba10e62",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3899,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-10T06:00:00Z",
+      "side": 1,
+      "message": "q: std::negate is not an option? I mean, they list the possible implementation as `return -arg`, so I guess maybe not?",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17a9fa68_f8499db0",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-10T06:00:00Z",
+      "side": 1,
+      "message": "What is it complaining about? Could we put UNREACHABLE here?",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
