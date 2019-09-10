@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a04890ff_4deec421",
+        "filename": "src/codegen/arm/assembler-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4806,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-10T08:08:16Z",
+      "side": 1,
+      "message": "Another option is to use compiler flags that allow overflow of signed integers. GCC has two flags -fwrapv and -fwrapv-pointer. I believe Clang accepts similar flags.\n\n-fwrapv\nThis option instructs the compiler to assume that signed arithmetic overflow of addition, subtraction and multiplication wraps around using twos-complement representation. This flag enables some optimizations and disables others. The options -ftrapv and -fwrapv override each other, so using -ftrapv -fwrapv on the command-line results in -fwrapv being effective. Note that only active options override, so using -ftrapv -fwrapv -fno-wrapv on the command-line results in -ftrapv being effective.\n\n-fwrapv-pointer\nThis option instructs the compiler to assume that pointer arithmetic overflow on addition and subtraction wraps around using twos-complement representation. This flag disables some optimizations which assume pointer overflow is invalid.",
+      "parentUuid": "25e4632b_c9117ef1",
+      "revId": "7cb32c196175e7e0c0b9b7502af04749eaee8470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e90f71bb_62c8f677",
         "filename": "src/codegen/arm64/assembler-arm64.cc",
         "patchSetId": 1
