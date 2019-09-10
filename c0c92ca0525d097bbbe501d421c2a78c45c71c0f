@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "f0bd93e5_1402cdfe",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-10T17:15:46Z",
+      "side": 1,
+      "message": "I don\u0027t think it can due to string addition/concatenation, which is unique to Add.",
+      "revId": "c0c92ca0525d097bbbe501d421c2a78c45c71c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd7123f0_d8dbc15d",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-10T17:15:46Z",
+      "side": 1,
+      "message": "// Check if the {rhs} is a smi, and exit the string and bigint check early if it is.",
+      "revId": "c0c92ca0525d097bbbe501d421c2a78c45c71c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2c01a8e_dc1e0e37",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-10T17:15:46Z",
+      "side": 1,
+      "message": "Please pull out rhs_heap_object rather than casting twice in this block.",
+      "revId": "c0c92ca0525d097bbbe501d421c2a78c45c71c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51db2f9e_d8233865",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 7
@@ -13,6 +64,30 @@
       "writtenOn": "2019-09-10T13:58:12Z",
       "side": 1,
       "message": "Fixed typo. It has been there since the beginning (https://chromium-review.googlesource.com/c/v8/v8/+/530845/). \nBelow, we can see that it\u0027s true or false depending on rhs. Also, in binary-op-assembler it is named as used taking into account rhs.",
+      "range": {
+        "startLine": 838,
+        "startChar": 11,
+        "endLine": 838,
+        "endChar": 21
+      },
+      "revId": "c0c92ca0525d097bbbe501d421c2a78c45c71c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "59bfca68_b80b40d8",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-10T17:15:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "51db2f9e_d8233865",
       "range": {
         "startLine": 838,
         "startChar": 11,
