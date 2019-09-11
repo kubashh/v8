@@ -39,6 +39,24 @@
       "revId": "49eb6723f3dcbe4d0358af6d7b0d05c4fca7710e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bae47465_4db1ec81",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-11T14:14:29Z",
+      "side": 1,
+      "message": "Like discussed offline, I like the idea of annotating stack checks with a meaningful kind (function-entry/iteration-body/other) more than with what the specific kind implies. Wdyt of slightly renaming to clarify and calling the kinds\n\n - kJSFunctionEntry\n - kJSIterationBody\n - kOther (alternatively, split this into kCodeStubAssembler \u0026 kWasm)",
+      "parentUuid": "741e4429_5eba01e2",
+      "revId": "49eb6723f3dcbe4d0358af6d7b0d05c4fca7710e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
