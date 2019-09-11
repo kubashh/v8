@@ -44,7 +44,7 @@ class VariableMap : public ZoneHashMap {
                     VariableMode mode, VariableKind kind,
                     InitializationFlag initialization_flag,
                     MaybeAssignedFlag maybe_assigned_flag,
-                    bool* was_added);
+                    IsStaticFlag is_static_flag, bool* was_added);
 
   V8_EXPORT_PRIVATE Variable* Lookup(const AstRawString* name);
   void Remove(Variable* var);
@@ -556,9 +556,10 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   Variable* Declare(Zone* zone, const AstRawString* name, VariableMode mode,
                     VariableKind kind, InitializationFlag initialization_flag,
                     MaybeAssignedFlag maybe_assigned_flag, bool* was_added) {
-    Variable* result =
-        variables_.Declare(zone, this, name, mode, kind, initialization_flag,
-                           maybe_assigned_flag, was_added);
+    // Static variables can only be declared using ClassScope methods.
+    Variable* result = variables_.Declare(
+        zone, this, name, mode, kind, initialization_flag, maybe_assigned_flag,
+        IsStaticFlag::kNotStatic, was_added);
     if (*was_added) locals_.Add(result);
     return result;
   }
@@ -1256,7 +1257,7 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
   // Declare a private name in the private name map and add it to the
   // local variables of this scope.
   Variable* DeclarePrivateName(const AstRawString* name, VariableMode mode,
-                               bool* was_added);
+                               IsStaticFlag is_static_flag, bool* was_added);
 
   // Try resolving all unresolved private names found in the current scope.
   // Called from DeclarationScope::AllocateVariables() when reparsing a
@@ -1287,13 +1288,21 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
   void MigrateUnresolvedPrivateNameTail(AstNodeFactory* ast_node_factory,
                                         UnresolvedList::Iterator tail);
   Variable* DeclareBrandVariable(AstValueFactory* ast_value_factory,
+                                 IsStaticFlag is_static_flag,
                                  int class_token_pos);
-  Variable* brand() {
-    return GetRareData() == nullptr ? nullptr : GetRareData()->brand;
-  }
 
   V8_INLINE bool IsParsingHeritage() {
     return rare_data_and_is_parsing_heritage_.GetPayload();
+  }
+
+  Variable* instance_brand() {
+    RareData* rare_data = GetRareData();
+    return rare_data == nullptr ? nullptr : rare_data->instance_brand;
+  }
+
+  Variable* static_brand() {
+    RareData* rare_data = GetRareData();
+    return rare_data == nullptr ? nullptr : rare_data->static_brand;
   }
 
  private:
@@ -1314,7 +1323,8 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
     explicit RareData(Zone* zone) : private_name_map(zone) {}
     UnresolvedList unresolved_private_names;
     VariableMap private_name_map;
-    Variable* brand = nullptr;
+    Variable* instance_brand = nullptr;
+    Variable* static_brand = nullptr;
   };
 
   V8_INLINE RareData* GetRareData() {

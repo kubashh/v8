@@ -69,8 +69,13 @@ class ScopeInfo : public FixedArray {
   // or context-allocated?
   bool HasAllocatedReceiver() const;
 
-  // Does this scope has class brand (for private methods)?
-  bool HasClassBrand() const;
+  // Does this scope has instance brand (for instance private methods and
+  // accessors)?
+  bool HasInstanceBrand() const;
+
+  // Does this scope has static brand (for static private methods and
+  // accessors)?
+  bool HasStaticBrand() const;
 
   // Does this scope declare a "new.target" binding?
   bool HasNewTarget() const;
@@ -121,6 +126,9 @@ class ScopeInfo : public FixedArray {
   // Return the mode of the given context local.
   VariableMode ContextLocalMode(int var) const;
 
+  // Return whether the given context local variable is static.
+  IsStaticFlag ContextLocalIsStaticFlag(int var) const;
+
   // Return the initialization flag of the given context local.
   InitializationFlag ContextLocalInitFlag(int var) const;
 
@@ -141,7 +149,8 @@ class ScopeInfo : public FixedArray {
   // mode for that variable.
   static int ContextSlotIndex(ScopeInfo scope_info, String name,
                               VariableMode* mode, InitializationFlag* init_flag,
-                              MaybeAssignedFlag* maybe_assigned_flag);
+                              MaybeAssignedFlag* maybe_assigned_flag,
+                              IsStaticFlag* is_static_flag);
 
   // Lookup metadata of a MODULE-allocated variable.  Return 0 if there is no
   // module variable with the given name (the index value of a MODULE variable
@@ -231,8 +240,9 @@ class ScopeInfo : public FixedArray {
   using DeclarationScopeField = LanguageModeField::Next<bool, 1>;
   using ReceiverVariableField =
       DeclarationScopeField::Next<VariableAllocationInfo, 2>;
-  using HasClassBrandField = ReceiverVariableField::Next<bool, 1>;
-  using HasNewTargetField = HasClassBrandField::Next<bool, 1>;
+  using HasInstanceBrandField = ReceiverVariableField::Next<bool, 1>;
+  using HasStaticBrandField = HasInstanceBrandField::Next<bool, 1>;
+  using HasNewTargetField = HasStaticBrandField::Next<bool, 1>;
   using FunctionVariableField =
       HasNewTargetField::Next<VariableAllocationInfo, 2>;
   // TODO(cbruni): Combine with function variable field when only storing the
@@ -316,6 +326,7 @@ class ScopeInfo : public FixedArray {
   using InitFlagField = VariableModeField::Next<InitializationFlag, 1>;
   using MaybeAssignedFlagField = InitFlagField::Next<MaybeAssignedFlag, 1>;
   using ParameterNumberField = MaybeAssignedFlagField::Next<uint32_t, 16>;
+  using IsStaticFlagField = ParameterNumberField::Next<IsStaticFlag, 1>;
 
   friend class ScopeIterator;
   friend std::ostream& operator<<(std::ostream& os,
