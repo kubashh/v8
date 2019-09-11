@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b7da79e_65a20ecd",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-11T10:00:25Z",
+      "side": 1,
+      "message": "I would feel better if you cast this to int32_t first (also in some other files).",
+      "range": {
+        "startLine": 1035,
+        "startChar": 48,
+        "endLine": 1035,
+        "endChar": 54
+      },
+      "revId": "49eb6723f3dcbe4d0358af6d7b0d05c4fca7710e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "741e4429_5eba01e2",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-11T10:00:25Z",
+      "side": 1,
+      "message": "How about making kUnknown the default value for StackPointerGreaterThan()?\n\nActually, what do you think about having only two StackCheckKind values, kAccountForDeoptimization and kDontAccountForDeoptimization?",
+      "revId": "49eb6723f3dcbe4d0358af6d7b0d05c4fca7710e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
