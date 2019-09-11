@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82b4412a_3a6bf313",
+        "filename": "src/builtins/regexp-split.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-11T10:28:51Z",
+      "side": 1,
+      "message": "nit: returns a JSArray",
+      "revId": "8bd82629acb601089893ccb3804ef3227f7cf95c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccef0bda_7fa8fafe",
+        "filename": "src/builtins/regexp-split.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-11T10:28:51Z",
+      "side": 1,
+      "message": "nit: please refactor slightly\n\n } else if (!TaggedIsPositiveSmi(...)) {\n  ...\n } else {\n  varLimit \u003d ...\n }\n\nAlso, please rename varLimit to sanitizedLimit or just reassign to limit.",
+      "revId": "8bd82629acb601089893ccb3804ef3227f7cf95c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "371abd87_848f668a",
+        "filename": "src/builtins/regexp-split.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-11T10:28:51Z",
+      "side": 1,
+      "message": "AFAIK the length checks aren\u0027t needed as they\u0027re already part of operator[]. So I\u0027d suggest:\n\n const string \u003d ToString_Inline(arguments[0]);\n const limit \u003d arguments[1];",
+      "revId": "8bd82629acb601089893ccb3804ef3227f7cf95c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
