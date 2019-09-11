@@ -839,13 +839,13 @@ void NativeModule::UseLazyStub(uint32_t func_index) {
 
   // Add jump table entry for jump to the lazy compile stub.
   uint32_t slot_index = func_index - module_->num_imported_functions;
+  DCHECK_NULL(code_table_[slot_index]);
   DCHECK_NE(runtime_stub_entry(WasmCode::kWasmCompileLazy), kNullAddress);
   Address lazy_compile_target =
       lazy_compile_table_->instruction_start() +
       JumpTableAssembler::LazyCompileSlotIndexToOffset(slot_index);
-  JumpTableAssembler::PatchJumpTableSlot(main_jump_table_->instruction_start(),
-                                         slot_index, lazy_compile_target,
-                                         WasmCode::kFlushICache);
+  base::MutexGuard guard(&allocation_mutex_);
+  PatchJumpTablesLocked(func_index, lazy_compile_target);
 }
 
 // TODO(mstarzinger): Remove {Isolate} parameter once {V8_EMBEDDED_BUILTINS}
@@ -1035,9 +1035,7 @@ WasmCode* NativeModule::PublishCodeLocked(std::unique_ptr<WasmCode> code) {
     }
 
     if (update_jump_table) {
-      JumpTableAssembler::PatchJumpTableSlot(
-          main_jump_table_->instruction_start(), slot_idx,
-          code->instruction_start(), WasmCode::kFlushICache);
+      PatchJumpTablesLocked(code->index(), code->instruction_start());
     }
   }
   WasmCodeRefScope::AddRef(code.get());
@@ -1131,6 +1129,19 @@ WasmCode* NativeModule::CreateEmptyJumpTableInRegion(
   return PublishCode(std::move(code));
 }
 
+void NativeModule::PatchJumpTablesLocked(uint32_t func_index, Address target) {
+  // The caller must hold the {allocation_mutex_}, thus we fail to lock it here.
+  DCHECK(!allocation_mutex_.TryLock());
+
+  uint32_t slot_index = func_index - module_->num_imported_functions;
+  for (auto& code_space_data : code_space_data_) {
+    if (!code_space_data.jump_table) continue;
+    Address jump_table_base = code_space_data.jump_table->instruction_start();
+    JumpTableAssembler::PatchJumpTableSlot(jump_table_base, slot_index, target,
+                                           WasmCode::kFlushICache);
+  }
+}
+
 void NativeModule::AddCodeSpace(base::AddressRegion region) {
   // Each code space must be at least twice as large as the overhead per code
   // space. Otherwise, we are wasting too much memory.
@@ -1170,6 +1181,7 @@ void NativeModule::AddCodeSpace(base::AddressRegion region) {
 
   if (is_first_code_space) main_jump_table_ = jump_table;
 
+  base::MutexGuard guard(&allocation_mutex_);
   code_space_data_.push_back(CodeSpaceData{region, jump_table});
 }
 
