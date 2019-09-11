@@ -1290,12 +1290,19 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
   Variable* DeclareBrandVariable(AstValueFactory* ast_value_factory,
                                  IsStaticFlag is_static_flag,
                                  int class_token_pos);
-  Variable* brand() {
-    return GetRareData() == nullptr ? nullptr : GetRareData()->brand;
-  }
 
   V8_INLINE bool IsParsingHeritage() {
     return rare_data_and_is_parsing_heritage_.GetPayload();
+  }
+
+  Variable* instance_brand() {
+    RareData* rare_data = GetRareData();
+    return rare_data == nullptr ? nullptr : rare_data->instance_brand;
+  }
+
+  Variable* static_brand() {
+    RareData* rare_data = GetRareData();
+    return rare_data == nullptr ? nullptr : rare_data->static_brand;
   }
 
  private:
@@ -1316,7 +1323,8 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
     explicit RareData(Zone* zone) : private_name_map(zone) {}
     UnresolvedList unresolved_private_names;
     VariableMap private_name_map;
-    Variable* brand = nullptr;
+    Variable* instance_brand = nullptr;
+    Variable* static_brand = nullptr;
   };
 
   V8_INLINE RareData* GetRareData() {
