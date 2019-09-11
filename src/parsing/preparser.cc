@@ -372,7 +372,7 @@ PreParser::Expression PreParser::ParseFunctionLiteral(
 void PreParser::ParseStatementListAndLogFunction(
     PreParserFormalParameters* formals) {
   PreParserScopedStatementList body(pointer_buffer());
-  ParseStatementList(&body, Token::RBRACE);
+  ParseStatementList(&body, Token::RBRACE, StatementListType::kTopLevel);
 
   // Position right after terminal '}'.
   DCHECK_IMPLIES(!has_error(), scanner()->peek() == Token::RBRACE);

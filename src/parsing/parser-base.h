@@ -986,6 +986,10 @@ class ParserBase {
     DeclarationScope* receiver_scope = closure_scope->GetReceiverScope();
     Variable* var = receiver_scope->receiver();
     var->set_is_used();
+
+    // Mark the use of 'this' on the receiever scope to prevent any
+    // hole check ellision.
+    receiver_scope->set_has_this_reference();
     if (closure_scope == receiver_scope) {
       // It's possible that we're parsing the head of an arrow function, in
       // which case we haven't realized yet that closure_scope !=
@@ -993,6 +997,23 @@ class ParserBase {
       expression_scope()->RecordThisUse();
     } else {
       closure_scope->set_has_this_reference();
+      var->ForceContextAllocation();
+    }
+    return var;
+  }
+
+  // Similar to UseThis, but does not disable hole check elision.
+  V8_INLINE Variable* UseSuperCallReference() {
+    DeclarationScope* closure_scope = scope()->GetClosureScope();
+    DeclarationScope* receiver_scope = closure_scope->GetReceiverScope();
+    Variable* var = receiver_scope->receiver();
+    var->set_is_used();
+    if (closure_scope == receiver_scope) {
+      // It's possible that we're parsing the head of an arrow function, in
+      // which case we haven't realized yet that closure_scope !=
+      // receiver_scope. Mark through the ExpressionScope for now.
+      expression_scope()->RecordSuperCallReference();
+    } else {
       var->ForceContextAllocation();
     }
     return var;
@@ -1156,12 +1177,15 @@ class ParserBase {
     }
   }
 
+  enum class StatementListType { kTopLevel, kNested };
+
   // TODO(nikolaos, marja): The first argument should not really be passed
   // by value. The method is expected to add the parsed statements to the
   // list. This works because in the case of the parser, StatementListT is
   // a pointer whereas the preparser does not really modify the body.
-  V8_INLINE void ParseStatementList(StatementListT* body,
-                                    Token::Value end_token);
+  V8_INLINE void ParseStatementList(
+      StatementListT* body, Token::Value end_token,
+      StatementListType type = StatementListType::kNested);
   StatementT ParseStatementListItem();
 
   StatementT ParseStatement(ZonePtrList<const AstRawString>* labels,
@@ -3473,8 +3497,8 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseSuperExpression(
     if (!is_new && peek() == Token::LPAREN && IsDerivedConstructor(kind)) {
       // TODO(rossberg): This might not be the correct FunctionState for the
       // method here.
-      expression_scope()->RecordThisUse();
-      UseThis();
+      expression_scope()->RecordSuperCallReference();
+      UseSuperCallReference();
       return impl()->NewSuperCallReference(pos);
     }
   }
@@ -4046,7 +4070,8 @@ void ParserBase<Impl>::ParseFunctionBody(
       } else if (IsAsyncFunction(kind)) {
         ParseAsyncFunctionBody(inner_scope, &inner_body);
       } else {
-        ParseStatementList(&inner_body, closing_token);
+        ParseStatementList(&inner_body, closing_token,
+                           StatementListType::kTopLevel);
       }
 
       if (IsDerivedConstructor(kind)) {
@@ -4453,7 +4478,8 @@ void ParserBase<Impl>::ParseAsyncFunctionBody(Scope* scope,
   BlockT block = impl()->NullBlock();
   {
     StatementListT statements(pointer_buffer());
-    ParseStatementList(&statements, Token::RBRACE);
+    ParseStatementList(&statements, Token::RBRACE,
+                       StatementListType::kTopLevel);
     block = factory()->NewBlock(true, statements);
   }
   impl()->RewriteAsyncFunctionBody(
@@ -4713,7 +4739,8 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseV8Intrinsic() {
 
 template <typename Impl>
 void ParserBase<Impl>::ParseStatementList(StatementListT* body,
-                                          Token::Value end_token) {
+                                          Token::Value end_token,
+                                          StatementListType type) {
   // StatementList ::
   //   (StatementListItem)* <end_token>
   DCHECK_NOT_NULL(body);
@@ -4764,6 +4791,30 @@ void ParserBase<Impl>::ParseStatementList(StatementListT* body,
   // all scripts and functions get their own target stack thus avoiding illegal
   // breaks and continues across functions.
   TargetScopeT target_scope(this);
+
+  // If the first statement in a block is 'super,' we might be able to elide
+  // hole checks, but only if we are parsing a top level function and the
+  // receiving scope has not already seen 'this'(ie in a default argument to
+  // the function).
+  if (V8_UNLIKELY(type == StatementListType::kTopLevel &&
+                  peek() == Token::SUPER && PeekAhead() == Token::LPAREN)) {
+    DeclarationScope* receiver_scope = GetReceiverScope();
+    if (!receiver_scope->has_this_reference()) {
+      int pos = peek_position();
+      ExpressionT expr;
+      {
+        ExpressionParsingScope expression_scope(impl());
+        AcceptINScope scope(this, true);
+        expr = ParseExpressionCoverGrammar();
+        expression_scope.ValidateExpression();
+        if (!expression_scope.uses_this()) {
+          receiver_scope->set_can_elide_this_hole_checks();
+        }
+      }
+      StatementT stat = factory()->NewExpressionStatement(expr, pos);
+      body->Add(stat);
+    }
+  }
   while (peek() != end_token) {
     StatementT stat = ParseStatementListItem();
     if (impl()->IsNull(stat)) return;
