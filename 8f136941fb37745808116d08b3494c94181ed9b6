@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9b48aaf_297f274f",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2870,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-09-11T08:25:35Z",
+      "side": 1,
+      "message": "Could this be implemented like the SIMD_UNOP_LIST ops?",
+      "range": {
+        "startLine": 2870,
+        "startChar": 0,
+        "endLine": 2870,
+        "endChar": 54
+      },
+      "revId": "8f136941fb37745808116d08b3494c94181ed9b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
