@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33325e67_38a009f1",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-09-11T10:17:54Z",
+      "side": 1,
+      "message": "nit: \"JavaScript\u0027s\"?",
+      "range": {
+        "startLine": 1000,
+        "startChar": 42,
+        "endLine": 1000,
+        "endChar": 52
+      },
+      "revId": "225010d0b2400f347d21267a8b97837047454069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50fab461_e26890d9",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-09-11T10:17:54Z",
+      "side": 1,
+      "message": "Maybe \"\u003e\u003d\" to make it more robust and more JS-like?",
+      "range": {
+        "startLine": 1007,
+        "startChar": 20,
+        "endLine": 1007,
+        "endChar": 22
+      },
+      "revId": "225010d0b2400f347d21267a8b97837047454069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
