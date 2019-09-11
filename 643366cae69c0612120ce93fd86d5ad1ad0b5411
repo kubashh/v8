@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "414c1152_e178212a",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10229,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-11T15:10:23Z",
+      "side": 1,
+      "message": "If we\u0027re getting rid of ParameterMode, would it be better to skip the two implementations, just convert the index into BInt, and then continue?",
+      "range": {
+        "startLine": 10222,
+        "startChar": 0,
+        "endLine": 10229,
+        "endChar": 3
+      },
+      "revId": "643366cae69c0612120ce93fd86d5ad1ad0b5411",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
