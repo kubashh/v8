@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afa974db_e0931ff1",
+        "filename": "src/objects/scope-info.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-11T12:34:30Z",
+      "side": 1,
+      "message": "is this on the ScopeInfo so that we can elide `this` in lazily compiled arrow function bodies?",
+      "range": {
+        "startLine": 57,
+        "startChar": 7,
+        "endLine": 57,
+        "endChar": 29
+      },
+      "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ed3930b_50783a8a",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-11T12:34:30Z",
+      "side": 1,
+      "message": "so, my understanding is that this will always set maybe_can_elide_this_hole_checks\u003dfalse for all uses of this, and it works because maybe_can_elide_this_hole_checks is only checked after parsing an expression (and so will only be true after a super call)?",
+      "range": {
+        "startLine": 125,
+        "startChar": 4,
+        "endLine": 125,
+        "endChar": 37
+      },
+      "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "286655b7_e81aeb14",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-11T12:34:30Z",
+      "side": 1,
+      "message": "might be worth wrapping this in a two-state enum, for callsite readability",
+      "range": {
+        "startLine": 1186,
+        "startChar": 36,
+        "endLine": 1186,
+        "endChar": 61
+      },
+      "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "287ff7df_1c7f573b",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-11T12:34:30Z",
+      "side": 1,
+      "message": "it\u0027s not pretty doing this after every single ParseExpression. Would it make sense to call ParseSuperExpression directly in ParseStatementList after your peek, and to do this logic inline there?",
+      "range": {
+        "startLine": 1849,
+        "startChar": 0,
+        "endLine": 1852,
+        "endChar": 18
+      },
+      "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b2d408b_7c693d63",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-11T12:34:30Z",
+      "side": 1,
+      "message": "is this strong enough? what if \"this\" is used in an arrow function body? e.g.\n\n    super( (()\u003d\u003ethis)() )",
+      "range": {
+        "startLine": 1855,
+        "startChar": 4,
+        "endLine": 1855,
+        "endChar": 39
+      },
+      "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
