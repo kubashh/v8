@@ -3052,6 +3052,14 @@ WASM_SIMD_TEST_NO_LOWERING(I16x8GtUMixed) {
                                 UnsignedGreater);
 }
 
+WASM_SIMD_TEST_NO_LOWERING(ZHIN) {
+  int64_t x = 0x8000000000000401;
+  double actual = static_cast<double>(static_cast<uint64_t>(x));
+  printf("x: %" PRIu64 " cast double: %a cast uint64 then double: %a \n", x,
+         static_cast<double>(x), static_cast<double>(static_cast<uint64_t>(x)));
+  CHECK_EQ(actual, static_cast<double>(static_cast<uint64_t>((x))));
+}
+
 #undef WASM_SIMD_TEST
 #undef WASM_SIMD_CHECK_LANE
 #undef TO_BYTE
