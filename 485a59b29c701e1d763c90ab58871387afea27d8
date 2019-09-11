@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "9203fad7_be93021c",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-11T10:22:53Z",
+      "side": 1,
+      "message": "I see, thanks. I still think \u0027NonPointerBits\u0027 is kinda tough to parse. Especially since in the smi case, it does actually also bitcast the \u0027pointer bits\u0027, we just don\u0027t guarantee they will be the correct value.\n\nIgor, Tobias, wdyt of making the name positive instead, e.g. BitcastSmiAndTagBitsOfTaggedToWord or similar? It\u0027s longer but perhaps makes it a bit clearer what\u0027s going on.\n\nJust intended as a suggestion + slight preference, if you prefer the current name I\u0027m okay with that.",
+      "parentUuid": "f1ea0c05_de265bd5",
+      "revId": "485a59b29c701e1d763c90ab58871387afea27d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2545dcb8_a61dc47d",
         "filename": "src/compiler/machine-operator.h",
         "patchSetId": 1
