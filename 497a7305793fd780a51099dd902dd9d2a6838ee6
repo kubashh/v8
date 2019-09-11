@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "87bab5de_4dc18fa0",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-09-11T10:16:24Z",
+      "side": 1,
+      "message": "If you change effect above, this has to still be the old effect (call_property). I think the false branch should be in a C++ block with it\u0027s own effect and control variables.",
+      "range": {
+        "startLine": 1511,
+        "startChar": 40,
+        "endLine": 1511,
+        "endChar": 46
+      },
+      "revId": "497a7305793fd780a51099dd902dd9d2a6838ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "546161e3_d8a968f4",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 2
