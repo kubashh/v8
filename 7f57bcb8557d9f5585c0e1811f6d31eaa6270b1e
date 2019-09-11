@@ -22,6 +22,30 @@
       "revId": "7f57bcb8557d9f5585c0e1811f6d31eaa6270b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7e55e86_8e2c8b45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-09-11T16:15:16Z",
+      "side": 1,
+      "message": "wow how did i even make this typo??? thanks!",
+      "parentUuid": "8f48189d_713c773e",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 20,
+        "endChar": 31
+      },
+      "revId": "7f57bcb8557d9f5585c0e1811f6d31eaa6270b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
