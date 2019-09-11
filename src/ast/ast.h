@@ -2348,7 +2348,7 @@ class FunctionLiteral final : public Expression {
     return RequiresInstanceMembersInitializer::decode(bit_field_);
   }
 
-  bool requires_brand_initialization() const;
+  bool requires_instance_brand_initialization() const;
 
   bool private_name_lookup_skips_outer_class() const;
 
