@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3f08353e_d0b36def",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1501,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-11T17:58:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb8d4ed7_d13ef8a4",
+      "range": {
+        "startLine": 1501,
+        "startChar": 2,
+        "endLine": 1501,
+        "endChar": 24
+      },
+      "revId": "497a7305793fd780a51099dd902dd9d2a6838ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87bab5de_4dc18fa0",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "76d8940c_5023bbbc",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-11T17:58:26Z",
+      "side": 1,
+      "message": "Ack, also added a comment that we create a version of effect and control for the false path of the branch.",
+      "parentUuid": "87bab5de_4dc18fa0",
+      "range": {
+        "startLine": 1511,
+        "startChar": 40,
+        "endLine": 1511,
+        "endChar": 46
+      },
+      "revId": "497a7305793fd780a51099dd902dd9d2a6838ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "546161e3_d8a968f4",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "497a7305793fd780a51099dd902dd9d2a6838ee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "782dbb75_e96dad91",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3281,
+      "author": {
+        "id": 1351064
+      },
+      "writtenOn": "2019-09-11T17:58:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "546161e3_d8a968f4",
+      "range": {
+        "startLine": 3281,
+        "startChar": 10,
+        "endLine": 3281,
+        "endChar": 31
+      },
+      "revId": "497a7305793fd780a51099dd902dd9d2a6838ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
