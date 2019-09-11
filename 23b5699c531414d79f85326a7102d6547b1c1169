@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a11dae8_530c03fe",
+        "filename": "include/v8.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 8098,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-11T10:55:52Z",
+      "side": 1,
+      "message": "Keeping this intentionally vague until the API stabilizes.",
+      "parentUuid": "bc35cff0_7e0195a4",
+      "range": {
+        "startLine": 8098,
+        "startChar": 6,
+        "endLine": 8098,
+        "endChar": 13
+      },
+      "revId": "23b5699c531414d79f85326a7102d6547b1c1169",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "209468e8_b7399f3c",
         "filename": "src/heap/memory-measurement.h",
         "patchSetId": 5
@@ -39,6 +63,24 @@
       "revId": "23b5699c531414d79f85326a7102d6547b1c1169",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2351671b_2feb0ddd",
+        "filename": "src/heap/memory-measurement.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-11T10:55:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "209468e8_b7399f3c",
+      "revId": "23b5699c531414d79f85326a7102d6547b1c1169",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "23b5699c531414d79f85326a7102d6547b1c1169",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "935a5bd6_68f4733e",
+        "filename": "test/mjsunit/d8/d8-performance-measure-memory.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-11T10:55:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a364cd04_ea8f9edb",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "23b5699c531414d79f85326a7102d6547b1c1169",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
