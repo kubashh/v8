@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb8d4ed7_d13ef8a4",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1501,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-09-11T09:54:00Z",
+      "side": 1,
+      "message": "We should also update effect here.",
+      "range": {
+        "startLine": 1501,
+        "startChar": 2,
+        "endLine": 1501,
+        "endChar": 24
+      },
+      "revId": "497a7305793fd780a51099dd902dd9d2a6838ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "546161e3_d8a968f4",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3281,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-09-11T09:54:00Z",
+      "side": 1,
+      "message": "I think effect and control should always be the same node. Can we DCHECK this?",
+      "range": {
+        "startLine": 3281,
+        "startChar": 10,
+        "endLine": 3281,
+        "endChar": 31
+      },
+      "revId": "497a7305793fd780a51099dd902dd9d2a6838ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
