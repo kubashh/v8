@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4afff7ec_e41f4f5f",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-09-11T09:53:38Z",
+      "side": 1,
+      "message": "Could this use AnyTaggedT too?",
+      "range": {
+        "startLine": 860,
+        "startChar": 27,
+        "endLine": 863,
+        "endChar": 3
+      },
+      "revId": "485a59b29c701e1d763c90ab58871387afea27d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2545dcb8_a61dc47d",
+        "filename": "src/compiler/machine-operator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-09-11T09:53:38Z",
+      "side": 1,
+      "message": "Can we add that it is illegal to look at the pointer bits? Because it might work accidentially.\nWe could actually remove the pointer bits in debug mode ... :)",
+      "revId": "485a59b29c701e1d763c90ab58871387afea27d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
