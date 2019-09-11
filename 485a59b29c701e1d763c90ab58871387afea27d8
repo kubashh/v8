@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "ce79889e_cc07bff9",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-11T10:02:53Z",
+      "side": 1,
+      "message": "Could you explain what \u0027NonPointerBits\u0027 means? Just by reading the name I don\u0027t what what this does.. Is it \u0027all tagged objects that are not pointers\u0027? So what else is there except Smis? \n\nAnd is there a significance to \u0027bits\u0027 in the name? I ask because BitcastTaggedToWord does not contain \u0027bits\u0027.",
+      "revId": "485a59b29c701e1d763c90ab58871387afea27d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2545dcb8_a61dc47d",
         "filename": "src/compiler/machine-operator.h",
         "patchSetId": 1
