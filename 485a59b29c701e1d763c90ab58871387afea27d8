@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ec729fbf_a6c16b2f",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-09-11T10:13:48Z",
+      "side": 1,
+      "message": "Not yet, because of this will make the methods ambiguous when the argument is TNode\u003cObject\u003e. But once we TNodify everything then yes.",
+      "parentUuid": "4afff7ec_e41f4f5f",
+      "range": {
+        "startLine": 860,
+        "startChar": 27,
+        "endLine": 863,
+        "endChar": 3
+      },
+      "revId": "485a59b29c701e1d763c90ab58871387afea27d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce79889e_cc07bff9",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "f1ea0c05_de265bd5",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-09-11T10:13:48Z",
+      "side": 1,
+      "message": "See the comment in machine-operator.h.\nTLDR: this operation guarantees to preserve only smi and weak tags and Smi value if the tagged is a Smi. If the value is a strong or weak heap pointer then the values are not guaranteed to be preserved because GC may move the object we are bitcasting.\n\nThe difference between this bitcast and BitcastTaggedToWord is that the former one can be hoisted over GC calls while the second is guaranteed to be non-hoistable over GC calls.",
+      "parentUuid": "ce79889e_cc07bff9",
+      "revId": "485a59b29c701e1d763c90ab58871387afea27d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2545dcb8_a61dc47d",
         "filename": "src/compiler/machine-operator.h",
         "patchSetId": 1
@@ -56,6 +98,24 @@
       "revId": "485a59b29c701e1d763c90ab58871387afea27d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d832e010_e5d8762e",
+        "filename": "src/compiler/machine-operator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-09-11T10:13:48Z",
+      "side": 1,
+      "message": "Updated the comment. I\u0027d suggest to leave the implementation as is for now ))",
+      "parentUuid": "2545dcb8_a61dc47d",
+      "revId": "485a59b29c701e1d763c90ab58871387afea27d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
