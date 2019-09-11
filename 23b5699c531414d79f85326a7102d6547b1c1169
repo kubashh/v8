@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc35cff0_7e0195a4",
+        "filename": "include/v8.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 8098,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-09-11T10:43:56Z",
+      "side": 1,
+      "message": "nit: Do you want to provide an example of what the resulting value looks like?",
+      "range": {
+        "startLine": 8098,
+        "startChar": 6,
+        "endLine": 8098,
+        "endChar": 13
+      },
+      "revId": "23b5699c531414d79f85326a7102d6547b1c1169",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "209468e8_b7399f3c",
+        "filename": "src/heap/memory-measurement.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-09-11T10:43:56Z",
+      "side": 1,
+      "message": "nit: newline",
+      "revId": "23b5699c531414d79f85326a7102d6547b1c1169",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a364cd04_ea8f9edb",
+        "filename": "test/mjsunit/d8/d8-performance-measure-memory.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-09-11T10:43:56Z",
+      "side": 1,
+      "message": "nit: we do use a smaller header these days",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "23b5699c531414d79f85326a7102d6547b1c1169",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
