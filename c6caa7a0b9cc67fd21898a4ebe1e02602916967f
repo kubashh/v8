@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86d73efe_d20cda10",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-12T11:15:15Z",
+      "side": 1,
+      "message": "This code is exactly the same as the code above.\n\nLet\u0027s either extract it into a separate function (e.g. AllocateRawFastPath) or use template function to perform the fast path and dispatch to AllocateRawWithLightRetrySlowPath/AllocateRawWithRetryOrFailSlowPath based on the template parameter.",
+      "range": {
+        "startLine": 270,
+        "startChar": 2,
+        "endLine": 283,
+        "endChar": 3
+      },
+      "revId": "c6caa7a0b9cc67fd21898a4ebe1e02602916967f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
