@@ -127,6 +127,16 @@ class ExpressionScope {
     } while (scope != nullptr);
   }
 
+  void RecordSuperCallReference() {
+    ExpressionScope* scope = this;
+    do {
+      if (scope->IsArrowHeadParsingScope()) {
+        scope->AsArrowHeadParsingScope()->RecordSuperCallReference();
+      }
+      scope = scope->parent();
+    } while (scope != nullptr);
+  }
+
   void RecordPatternError(const Scanner::Location& loc,
                           MessageTemplate message) {
     // TODO(verwaest): Non-assigning expression?
@@ -761,6 +771,7 @@ class ArrowHeadParsingScope : public ExpressionParsingScope<Types> {
 #endif  // DEBUG
 
     if (uses_this_) result->UsesThis();
+    if (uses_super_call_reference_) result->UsesSuperCallReference();
     return result;
   }
 
@@ -773,6 +784,7 @@ class ArrowHeadParsingScope : public ExpressionParsingScope<Types> {
 
   void RecordNonSimpleParameter() { has_simple_parameter_list_ = false; }
   void RecordThisUse() { uses_this_ = true; }
+  void RecordSuperCallReference() { uses_super_call_reference_ = true; }
 
  private:
   FunctionKind kind() const {
@@ -785,6 +797,7 @@ class ArrowHeadParsingScope : public ExpressionParsingScope<Types> {
   MessageTemplate declaration_error_message = MessageTemplate::kNone;
   bool has_simple_parameter_list_ = true;
   bool uses_this_ = false;
+  bool uses_super_call_reference_ = false;
 
   DISALLOW_COPY_AND_ASSIGN(ArrowHeadParsingScope);
 };
