@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "640d37ef_174e85ed",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4927,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-12T15:14:09Z",
+      "side": 1,
+      "message": "This should be  AllocateRawWithLightRetrySlowPath to avoid running the fast path again.",
+      "range": {
+        "startLine": 4927,
+        "startChar": 6,
+        "endLine": 4927,
+        "endChar": 31
+      },
+      "revId": "a82811811c3b1d8e8a60667c168afe6d0da0b46e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e726056_f6252120",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-12T15:14:09Z",
+      "side": 1,
+      "message": "Let\u0027s call it \"AllocationRetryMode\"",
+      "range": {
+        "startLine": 1751,
+        "startChar": 7,
+        "endLine": 1751,
+        "endChar": 30
+      },
+      "revId": "a82811811c3b1d8e8a60667c168afe6d0da0b46e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "473d9ea1_fd36c6c8",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1753,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-12T15:14:09Z",
+      "side": 1,
+      "message": "If we name this AllocateRawWith, then we can get rid of AllocateRawWithLightRetry and AllocateRawWitRetryOrFail by replacing:\n\nAllocateRawWithLightRetry \u003d\u003e AllocateRawWith\u003ckLightRetry\u003e\nAllocateRawWithRetryOrFail \u003d\u003e AllocateRawWith\u003ckRetryOrFail\u003e\n\nThere not many callers of these functions in Factory.",
+      "range": {
+        "startLine": 1753,
+        "startChar": 42,
+        "endLine": 1753,
+        "endChar": 61
+      },
+      "revId": "a82811811c3b1d8e8a60667c168afe6d0da0b46e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b135dae_8bfe3620",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-12T15:14:09Z",
+      "side": 1,
+      "message": "This is not related to your change, but as a drive-by fix could you please remove this version of the function and only keep the version that accepts \"origin\"?",
+      "range": {
+        "startLine": 1765,
+        "startChar": 42,
+        "endLine": 1765,
+        "endChar": 67
+      },
+      "revId": "a82811811c3b1d8e8a60667c168afe6d0da0b46e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
