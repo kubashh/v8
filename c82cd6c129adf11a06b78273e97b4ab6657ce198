@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0da9c5fb_22b99e0d",
+        "filename": "src/objects/scope-info.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-12T15:10:27Z",
+      "side": 1,
+      "message": "correct, we basically have to or we get mismatches when stressing lazy source positions.",
+      "parentUuid": "afa974db_e0931ff1",
+      "range": {
+        "startLine": 57,
+        "startChar": 7,
+        "endLine": 57,
+        "endChar": 29
+      },
+      "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ed3930b_50783a8a",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 12
@@ -45,6 +69,30 @@
       "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "178e906b_3e1192a5",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-12T15:10:27Z",
+      "side": 1,
+      "message": "I have refactored this to be a bit clearer(I hope).",
+      "parentUuid": "4ed3930b_50783a8a",
+      "range": {
+        "startLine": 125,
+        "startChar": 4,
+        "endLine": 125,
+        "endChar": 37
+      },
+      "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "fb179312_870969e7",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-12T15:10:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "286655b7_e81aeb14",
+      "range": {
+        "startLine": 1186,
+        "startChar": 36,
+        "endLine": 1186,
+        "endChar": 61
+      },
+      "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "287ff7df_1c7f573b",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 12
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "ad5a6f5b_7aef4824",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-12T15:10:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "287ff7df_1c7f573b",
+      "range": {
+        "startLine": 1849,
+        "startChar": 0,
+        "endLine": 1852,
+        "endChar": 18
+      },
+      "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b2d408b_7c693d63",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 12
@@ -114,6 +210,30 @@
       "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a96b3bca_16cc2f70",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-12T15:10:27Z",
+      "side": 1,
+      "message": "I think it is strong enough after this cl. Specifically, I modified ParserBase::UseThis to always flip the \u0027has_this_reference\u0027 on the receiver.",
+      "parentUuid": "3b2d408b_7c693d63",
+      "range": {
+        "startLine": 1855,
+        "startChar": 4,
+        "endLine": 1855,
+        "endChar": 39
+      },
+      "revId": "c82cd6c129adf11a06b78273e97b4ab6657ce198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
