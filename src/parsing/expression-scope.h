@@ -120,8 +120,16 @@ class ExpressionScope {
   void RecordThisUse() {
     ExpressionScope* scope = this;
     do {
+      scope->uses_this_ = true;
+      scope = scope->parent();
+    } while (scope != nullptr);
+  }
+
+  void RecordSuperCallReference() {
+    ExpressionScope* scope = this;
+    do {
       if (scope->IsArrowHeadParsingScope()) {
-        scope->AsArrowHeadParsingScope()->RecordThisUse();
+        scope->AsArrowHeadParsingScope()->RecordSuperCallReference();
       }
       scope = scope->parent();
     } while (scope != nullptr);
@@ -189,6 +197,8 @@ class ExpressionScope {
     return variable_index;
   }
 
+  bool uses_this() const { return uses_this_; }
+
   bool has_possible_arrow_parameter_in_scope_chain() const {
     return has_possible_arrow_parameter_in_scope_chain_;
   }
@@ -224,8 +234,8 @@ class ExpressionScope {
             (parent_ && parent_->has_possible_parameter_in_scope_chain_)),
         has_possible_arrow_parameter_in_scope_chain_(
             CanBeArrowParameterDeclaration() ||
-            (parent_ &&
-             parent_->has_possible_arrow_parameter_in_scope_chain_)) {
+            (parent_ && parent_->has_possible_arrow_parameter_in_scope_chain_)),
+        uses_this_(false) {
     parser->expression_scope_ = this;
   }
 
@@ -302,6 +312,7 @@ class ExpressionScope {
   ScopeType type_;
   bool has_possible_parameter_in_scope_chain_;
   bool has_possible_arrow_parameter_in_scope_chain_;
+  bool uses_this_;
 
   DISALLOW_COPY_AND_ASSIGN(ExpressionScope);
 };
@@ -760,7 +771,8 @@ class ArrowHeadParsingScope : public ExpressionParsingScope<Types> {
     }
 #endif  // DEBUG
 
-    if (uses_this_) result->UsesThis();
+    if (this->uses_this()) result->UsesThis();
+    if (uses_super_call_reference_) result->UsesSuperCallReference();
     return result;
   }
 
@@ -772,7 +784,7 @@ class ArrowHeadParsingScope : public ExpressionParsingScope<Types> {
   }
 
   void RecordNonSimpleParameter() { has_simple_parameter_list_ = false; }
-  void RecordThisUse() { uses_this_ = true; }
+  void RecordSuperCallReference() { uses_super_call_reference_ = true; }
 
  private:
   FunctionKind kind() const {
@@ -784,7 +796,7 @@ class ArrowHeadParsingScope : public ExpressionParsingScope<Types> {
   Scanner::Location declaration_error_location = Scanner::Location::invalid();
   MessageTemplate declaration_error_message = MessageTemplate::kNone;
   bool has_simple_parameter_list_ = true;
-  bool uses_this_ = false;
+  bool uses_super_call_reference_ = false;
 
   DISALLOW_COPY_AND_ASSIGN(ArrowHeadParsingScope);
 };
