@@ -26,6 +26,8 @@ using InnerScopeCallsEvalField =
     ScopeSloppyEvalCanExtendVarsField::Next<bool, 1>;
 using NeedsPrivateNameContextChainRecalcField =
     InnerScopeCallsEvalField::Next<bool, 1>;
+using CanElideThisHoleChecks =
+    NeedsPrivateNameContextChainRecalcField::Next<bool, 1>;
 
 using VariableMaybeAssignedField = BitField8<bool, 0, 1>;
 using VariableContextAllocatedField = VariableMaybeAssignedField::Next<bool, 1>;
@@ -362,7 +364,10 @@ void PreparseDataBuilder::SaveDataForScope(Scope* scope) {
       NeedsPrivateNameContextChainRecalcField::encode(
           scope->is_function_scope() &&
           scope->AsDeclarationScope()
-              ->needs_private_name_context_chain_recalc());
+              ->needs_private_name_context_chain_recalc()) |
+      CanElideThisHoleChecks::encode(
+          scope->is_declaration_scope() &&
+          scope->AsDeclarationScope()->can_elide_this_hole_checks());
   byte_data_.Reserve(kUint8Size);
   byte_data_.WriteUint8(eval_and_private_recalc);
 
@@ -615,6 +620,9 @@ void BaseConsumedPreparseData<Data>::RestoreDataForScope(Scope* scope) {
   if (NeedsPrivateNameContextChainRecalcField::decode(
           eval_and_private_recalc)) {
     scope->AsDeclarationScope()->RecordNeedsPrivateNameContextChainRecalc();
+  }
+  if (CanElideThisHoleChecks::decode(eval_and_private_recalc)) {
+    scope->AsDeclarationScope()->set_can_elide_this_hole_checks();
   }
 
   if (scope->is_function_scope()) {
