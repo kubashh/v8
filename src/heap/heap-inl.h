@@ -238,6 +238,59 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationType type,
   return allocation;
 }
 
+template <Heap::AllocateRawSlowPathFlag slowPathFlag>
+HeapObject Heap::AllocateRawFastPath(int size, AllocationType allocation,
+                                     AllocationOrigin origin,
+                                     AllocationAlignment alignment) {
+  Heap* heap = isolate()->heap();
+  Address* top = heap->NewSpaceAllocationTopAddress();
+  Address* limit = heap->NewSpaceAllocationLimitAddress();
+  if (allocation == AllocationType::kYoung &&
+      alignment == AllocationAlignment::kWordAligned &&
+      size < kMaxRegularHeapObjectSize &&
+      (*limit - *top >= static_cast<unsigned>(size)) &&
+      V8_LIKELY(!FLAG_single_generation && FLAG_inline_new)) {
+    HeapObject obj = HeapObject::FromAddress(*top);
+    *top += size;
+    heap->CreateFillerObjectAt(obj.address(), size, ClearRecordedSlots::kNo);
+    MSAN_ALLOCATED_UNINITIALIZED_MEMORY(obj.address(), size);
+    return obj;
+  }
+  switch (slowPathFlag) {
+    case kLightRetry:
+      return AllocateRawWithLightRetrySlowPath(size, allocation, origin,
+                                               alignment);
+    case kRetryOrFail:
+      return AllocateRawWithRetryOrFailSlowPath(size, allocation, origin,
+                                                alignment);
+  }
+  UNREACHABLE();
+}
+
+HeapObject Heap::AllocateRawWithLightRetry(int size, AllocationType allocation,
+                                           AllocationOrigin origin,
+                                           AllocationAlignment alignment) {
+  return AllocateRawFastPath<kLightRetry>(size, allocation, origin, alignment);
+}
+
+HeapObject Heap::AllocateRawWithLightRetry(int size, AllocationType allocation,
+                                           AllocationAlignment alignment) {
+  return AllocateRawWithLightRetry(size, allocation, AllocationOrigin::kRuntime,
+                                   alignment);
+}
+
+HeapObject Heap::AllocateRawWithRetryOrFail(int size, AllocationType allocation,
+                                            AllocationOrigin origin,
+                                            AllocationAlignment alignment) {
+  return AllocateRawFastPath<kRetryOrFail>(size, allocation, origin, alignment);
+}
+
+HeapObject Heap::AllocateRawWithRetryOrFail(int size, AllocationType allocation,
+                                            AllocationAlignment alignment) {
+  return AllocateRawWithRetryOrFail(size, allocation,
+                                    AllocationOrigin::kRuntime, alignment);
+}
+
 void Heap::OnAllocationEvent(HeapObject object, int size_in_bytes) {
   for (auto& tracker : allocation_trackers_) {
     tracker->AllocationEvent(object.address(), size_in_bytes);
