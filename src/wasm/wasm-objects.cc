@@ -192,6 +192,21 @@ bool IsBreakablePosition(wasm::NativeModule* native_module, int func_index,
   }
   return false;
 }
+
+int FindFirstBreakablePosition(wasm::NativeModule* native_module,
+                               int func_index) {
+  AccountingAllocator alloc;
+  Zone tmp(&alloc, ZONE_NAME);
+  wasm::BodyLocalDecls locals(&tmp);
+  const byte* module_start = native_module->wire_bytes().begin();
+  const WasmFunction& func = native_module->module()->functions[func_index];
+  wasm::BytecodeIterator iterator(module_start + func.code.offset(),
+                                  module_start + func.code.end_offset(),
+                                  &locals);
+  DCHECK_LT(0, locals.encoded_size);
+  if (iterator.offsets().begin() == iterator.offsets().end()) return -1;
+  return *iterator.offsets().begin();
+}
 #endif  // DEBUG
 
 enum DispatchTableElements : int {
@@ -265,8 +280,13 @@ bool WasmModuleObject::SetBreakPoint(Handle<WasmModuleObject> module_object,
 
   // According to the current design, we should only be called with valid
   // breakable positions.
-  DCHECK(IsBreakablePosition(module_object->native_module(), func_index,
-                             offset_in_func));
+  if (!IsBreakablePosition(module_object->native_module(), func_index,
+                           offset_in_func)) {
+    int first_breakable_offset =
+        FindFirstBreakablePosition(module_object->native_module(), func_index);
+    offset_in_func += first_breakable_offset;
+    *position = func.code.offset() + first_breakable_offset;
+  }
 
   // Insert new break point into break_positions of module object.
   WasmModuleObject::AddBreakpoint(module_object, *position, break_point);
@@ -721,7 +741,7 @@ int WasmModuleObject::GetContainingFunction(uint32_t byte_offset) {
   // Binary search for a function containing the given position.
   int left = 0;                                    // inclusive
   int right = static_cast<int>(functions.size());  // exclusive
-  if (right == 0) return false;
+  if (right == 0) return -1;
   while (right - left > 1) {
     int mid = left + (right - left) / 2;
     if (functions[mid].code.offset() <= byte_offset) {
@@ -760,6 +780,94 @@ bool WasmModuleObject::GetPositionInfo(uint32_t position,
   info->line_start = function.code.offset();
   info->line_end = function.code.end_offset();
   return true;
+}
+
+bool WasmModuleObject::GetWasmGlobal(uint32_t index, uint64_t* value) const {
+  Isolate* isolate = GetIsolate();
+
+  // Only uses the first instances of this module.
+  Handle<WeakArrayList> weak_instance_list(this->weak_instance_list(), isolate);
+  if (weak_instance_list->length() == 0) {
+    return false;
+  }
+  MaybeObject maybe_instance = weak_instance_list->Get(0);
+  if (maybe_instance->IsWeak()) {
+    Handle<WasmInstanceObject> instance(
+        WasmInstanceObject::cast(maybe_instance->GetHeapObjectAssumeWeak()),
+        isolate);
+
+    Handle<WasmDebugInfo> debug_info =
+        WasmInstanceObject::GetOrCreateDebugInfo(instance);
+    return WasmDebugInfo::GetWasmGlobal(debug_info, index, value);
+  }
+  return false;
+}
+
+bool WasmModuleObject::GetWasmLocal(uint32_t index, uint64_t* value) const {
+  Isolate* isolate = GetIsolate();
+
+  // Only uses the first instances of this module.
+  Handle<WeakArrayList> weak_instance_list(this->weak_instance_list(), isolate);
+  if (weak_instance_list->length() == 0) {
+    return false;
+  }
+  MaybeObject maybe_instance = weak_instance_list->Get(0);
+  if (maybe_instance->IsWeak()) {
+    Handle<WasmInstanceObject> instance(
+        WasmInstanceObject::cast(maybe_instance->GetHeapObjectAssumeWeak()),
+        isolate);
+
+    Handle<WasmDebugInfo> debug_info =
+        WasmInstanceObject::GetOrCreateDebugInfo(instance);
+    return WasmDebugInfo::GetWasmLocal(debug_info, index, value);
+  }
+  return false;
+}
+
+bool WasmModuleObject::GetWasmStackValue(uint32_t index,
+                                         uint64_t* value) const {
+  Isolate* isolate = GetIsolate();
+
+  // Only uses the first instances of this module.
+  Handle<WeakArrayList> weak_instance_list(this->weak_instance_list(), isolate);
+  if (weak_instance_list->length() == 0) {
+    return false;
+  }
+  MaybeObject maybe_instance = weak_instance_list->Get(0);
+  if (maybe_instance->IsWeak()) {
+    Handle<WasmInstanceObject> instance(
+        WasmInstanceObject::cast(maybe_instance->GetHeapObjectAssumeWeak()),
+        isolate);
+
+    Handle<WasmDebugInfo> debug_info =
+        WasmInstanceObject::GetOrCreateDebugInfo(instance);
+    return WasmDebugInfo::GetWasmStackValue(debug_info, index, value);
+  }
+  return false;
+}
+
+bool WasmModuleObject::GetWasmMemory(uint32_t offset, uint8_t* buffer,
+                                     uint32_t size) const {
+  Isolate* isolate = GetIsolate();
+
+  // Only uses the first instances of this module.
+  Handle<WeakArrayList> weak_instance_list(this->weak_instance_list(), isolate);
+  if (weak_instance_list->length() == 0) {
+    return false;
+  }
+  MaybeObject maybe_instance = weak_instance_list->Get(0);
+  if (maybe_instance->IsWeak()) {
+    Handle<WasmInstanceObject> instance(
+        WasmInstanceObject::cast(maybe_instance->GetHeapObjectAssumeWeak()),
+        isolate);
+    byte* mem_start = instance->memory_start();
+    size_t mem_size = instance->memory_size();
+    if (offset < mem_size) {
+      memcpy(buffer, mem_start + offset, size);
+      return true;
+    }
+  }
+  return false;
 }
 
 Handle<WasmTableObject> WasmTableObject::New(Isolate* isolate,

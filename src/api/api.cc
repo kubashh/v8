@@ -9259,7 +9259,7 @@ v8::debug::Location debug::Script::GetSourceLocation(int offset) const {
   i::Handle<i::Script> script = Utils::OpenHandle(this);
   i::Script::PositionInfo info;
   i::Script::GetPositionInfo(script, offset, &info, i::Script::WITH_OFFSET);
-  return debug::Location(info.line, info.column);
+  return debug::Location(info.line, info.column, info.line_start + info.column);
 }
 
 bool debug::Script::SetScriptSource(v8::Local<v8::String> newSource,
@@ -9380,15 +9380,85 @@ debug::WasmDisassembly debug::WasmScript::DisassembleFunction(
   return module_object.DisassembleFunction(function_index);
 }
 
-debug::Location::Location(int line_number, int column_number)
+std::vector<int> debug::WasmScript::GetWasmFunctionsOffsets() const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  i::WasmModuleObject module_object =
+      i::WasmModuleObject::cast(script->wasm_module_object());
+
+  std::vector<int> result;
+  const auto& functions = module_object.module()->functions;
+  for (const auto& function : functions) {
+    result.push_back(function.code.offset());
+  }
+  return result;
+}
+
+bool debug::WasmScript::GetWasmGlobal(uint32_t index, uint64_t* value) const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  i::WasmModuleObject module_object =
+      i::WasmModuleObject::cast(script->wasm_module_object());
+  return module_object.GetWasmGlobal(index, value);
+}
+
+bool debug::WasmScript::GetWasmLocal(uint32_t index, uint64_t* value) const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  i::WasmModuleObject module_object =
+      i::WasmModuleObject::cast(script->wasm_module_object());
+  return module_object.GetWasmLocal(index, value);
+}
+
+bool debug::WasmScript::GetWasmStackValue(uint32_t index,
+                                          uint64_t* value) const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  i::WasmModuleObject module_object =
+      i::WasmModuleObject::cast(script->wasm_module_object());
+  return module_object.GetWasmStackValue(index, value);
+}
+
+bool debug::WasmScript::GetWasmMemory(uint32_t offset, uint8_t* buffer,
+                                      uint32_t size) const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  i::WasmModuleObject module_object =
+      i::WasmModuleObject::cast(script->wasm_module_object());
+  return module_object.GetWasmMemory(offset, buffer, size);
+}
+
+bool debug::WasmScript::AddWasmBreakpoint(uint32_t offset,
+                                          debug::BreakpointId* id) {
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  i::Isolate* isolate = script->GetIsolate();
+  i::Handle<i::String> condition = isolate->factory()->empty_string();
+  int address = offset;
+  return isolate->debug()->SetBreakPointForScript(script, condition, &address,
+                                                  id);
+}
+
+bool debug::WasmScript::RemoveWasmBreakpoint(uint32_t offset) {
+  // TODO(paolosev)
+  return false;
+}
+
+debug::Location::Location(int line_number, int column_number, int offset)
     : line_number_(line_number),
       column_number_(column_number),
-      is_empty_(false) {}
+      is_empty_(false),
+      offset_(offset) {}
 
 debug::Location::Location()
     : line_number_(v8::Function::kLineOffsetNotFound),
       column_number_(v8::Function::kLineOffsetNotFound),
-      is_empty_(true) {}
+      is_empty_(true),
+      offset_(-1) {}
 
 int debug::Location::GetLineNumber() const {
   DCHECK(!IsEmpty());
@@ -9401,6 +9471,8 @@ int debug::Location::GetColumnNumber() const {
 }
 
 bool debug::Location::IsEmpty() const { return is_empty_; }
+
+int debug::Location::GetOffset() const { return offset_; }
 
 void debug::GetLoadedScripts(v8::Isolate* v8_isolate,
                              PersistentValueVector<debug::Script>& scripts) {

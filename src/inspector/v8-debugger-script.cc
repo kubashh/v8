@@ -251,6 +251,50 @@ class ActualScript : public V8DebuggerScript {
     return m_hash;
   }
 
+  std::vector<int> getWasmFunctionsOffsets() const override {
+    v8::HandleScope scope(m_isolate);
+    v8::debug::WasmScript* wasmScript = v8::debug::WasmScript::Cast(*script());
+    return wasmScript->GetWasmFunctionsOffsets();
+  }
+
+  bool getWasmGlobal(uint32_t index, uint64_t* value) const override {
+    v8::HandleScope scope(m_isolate);
+    v8::debug::WasmScript* wasmScript = v8::debug::WasmScript::Cast(*script());
+    return wasmScript->GetWasmGlobal(index, value);
+  }
+
+  bool getWasmLocal(uint32_t index, uint64_t* value) const override {
+    v8::HandleScope scope(m_isolate);
+    v8::debug::WasmScript* wasmScript = v8::debug::WasmScript::Cast(*script());
+    return wasmScript->GetWasmLocal(index, value);
+  }
+
+  bool getWasmStackValue(uint32_t index, uint64_t* value) const override {
+    v8::HandleScope scope(m_isolate);
+    v8::debug::WasmScript* wasmScript = v8::debug::WasmScript::Cast(*script());
+    return wasmScript->GetWasmStackValue(index, value);
+  }
+
+  bool getWasmMemory(uint32_t offset, uint8_t* buffer,
+                     uint32_t size) const override {
+    v8::HandleScope scope(m_isolate);
+    v8::debug::WasmScript* wasmScript = v8::debug::WasmScript::Cast(*script());
+    return wasmScript->GetWasmMemory(offset, buffer, size);
+  }
+
+  bool addWasmBreakpoint(uint32_t offset) override {
+    v8::HandleScope scope(m_isolate);
+    v8::debug::WasmScript* wasmScript = v8::debug::WasmScript::Cast(*script());
+    int breakpointId = 0;
+    return wasmScript->AddWasmBreakpoint(offset, &breakpointId);
+  }
+
+  bool removeWasmBreakpoint(uint32_t offset) override {
+    v8::HandleScope scope(m_isolate);
+    v8::debug::WasmScript* wasmScript = v8::debug::WasmScript::Cast(*script());
+    return wasmScript->RemoveWasmBreakpoint(offset);
+  }
+
  private:
   static String16 GetScriptURL(v8::Isolate* isolate,
                                v8::Local<v8::debug::Script> script,
@@ -439,6 +483,50 @@ class WasmVirtualScript : public V8DebuggerScript {
   }
 
   void MakeWeak() override {}
+
+  std::vector<int> getWasmFunctionsOffsets() const override {
+    v8::HandleScope scope(m_isolate);
+    v8::Local<v8::debug::WasmScript> script = m_script.Get(m_isolate);
+    return script->GetWasmFunctionsOffsets();
+  }
+
+  bool getWasmGlobal(uint32_t index, uint64_t* value) const override {
+    v8::HandleScope scope(m_isolate);
+    v8::Local<v8::debug::WasmScript> script = m_script.Get(m_isolate);
+    return script->GetWasmGlobal(index, value);
+  }
+
+  bool getWasmLocal(uint32_t index, uint64_t* value) const override {
+    v8::HandleScope scope(m_isolate);
+    v8::Local<v8::debug::WasmScript> script = m_script.Get(m_isolate);
+    return script->GetWasmLocal(index, value);
+  }
+
+  bool getWasmStackValue(uint32_t index, uint64_t* value) const override {
+    v8::HandleScope scope(m_isolate);
+    v8::Local<v8::debug::WasmScript> script = m_script.Get(m_isolate);
+    return script->GetWasmStackValue(index, value);
+  }
+
+  bool getWasmMemory(uint32_t offset, uint8_t* buffer,
+                     uint32_t size) const override {
+    v8::HandleScope scope(m_isolate);
+    v8::Local<v8::debug::WasmScript> script = m_script.Get(m_isolate);
+    return script->GetWasmMemory(offset, buffer, size);
+  }
+
+  bool addWasmBreakpoint(uint32_t offset) override {
+    v8::HandleScope scope(m_isolate);
+    v8::Local<v8::debug::WasmScript> script = m_script.Get(m_isolate);
+    int breakpointId = 0;
+    return script->AddWasmBreakpoint(offset, &breakpointId);
+  }
+
+  bool removeWasmBreakpoint(uint32_t offset) override {
+    v8::HandleScope scope(m_isolate);
+    v8::Local<v8::debug::WasmScript> script = m_script.Get(m_isolate);
+    return script->RemoveWasmBreakpoint(offset);
+  }
 
  private:
   static const String16& emptyString() {

@@ -13,6 +13,10 @@
 #include "src/wasm/wasm-tier.h"
 #include "src/zone/accounting-allocator.h"
 
+namespace v8_inspector {
+class GdbServer;
+}
+
 namespace v8 {
 namespace internal {
 
@@ -277,6 +281,8 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // If an engine-wide GC is currently running, this pointer stores information
   // about that.
   std::unique_ptr<CurrentGCInfo> current_gc_info_;
+
+  std::unique_ptr<v8_inspector::GdbServer> gdb_server_;
 
   // End of fields protected by {mutex_}.
   //////////////////////////////////////////////////////////////////////////////

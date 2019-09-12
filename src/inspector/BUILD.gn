@@ -65,9 +65,7 @@ config("inspector_config") {
   visibility = [ ":*" ]  # Only targets in this file can depend on this.
 
   configs = [ "../../:internal_config" ]
-  include_dirs = [
-    "../../include",
-  ]
+  include_dirs = [ "../../include" ]
 }
 
 v8_header_set("inspector_test_headers") {
@@ -97,8 +95,8 @@ v8_source_set("inspector") {
   deps = [
     ":inspector_string_conversions",
     "../..:v8_version",
-    "../../third_party/inspector_protocol:encoding",
     "../../third_party/inspector_protocol:bindings",
+    "../../third_party/inspector_protocol:encoding",
   ]
 
   public_deps = [
@@ -117,6 +115,20 @@ v8_source_set("inspector") {
   sources += [
     "custom-preview.cc",
     "custom-preview.h",
+    "gdb-server/gdb-server-thread.cc",
+    "gdb-server/gdb-server-thread.h",
+    "gdb-server/gdb-server.cc",
+    "gdb-server/gdb-server.h",
+    "gdb-server/packet.cc",
+    "gdb-server/packet.h",
+    "gdb-server/session.cc",
+    "gdb-server/session.h",
+    "gdb-server/target.cc",
+    "gdb-server/target.h",
+    "gdb-server/transport.cc",
+    "gdb-server/transport.h",
+    "gdb-server/util.cc",
+    "gdb-server/util.h",
     "injected-script.cc",
     "injected-script.h",
     "inspected-context.cc",

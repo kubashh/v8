@@ -459,6 +459,33 @@ class InterpreterHandle {
     }
     return local_scope_object;
   }
+
+  bool GetWasmGlobal(uint32_t index, uint64_t* value) {
+    WasmInterpreter::Thread* thread = interpreter()->GetThread(0);
+    uint32_t global_count = thread->GetGlobalCount();
+    if (index >= global_count) {
+      return false;
+    }
+    *value = thread->GetGlobalValue(index).to_i32();
+    return true;
+  }
+
+  bool GetWasmLocal(uint32_t index, uint64_t* value) {
+    WasmInterpreter::Thread* thread = interpreter()->GetThread(0);
+    int frames_count = thread->GetFrameCount();
+    WasmInterpreter::FramePtr frame = thread->GetFrame(frames_count - 1);
+    int num_locals = frame->GetLocalCount();
+    if (num_locals > 0) {
+      *value = frame->GetLocalValue(index).to_i32();
+      return true;
+    }
+    return false;
+  }
+
+  bool GetWasmStackValue(uint32_t index, uint64_t* value) {
+    // TODO(paolosev)
+    return false;
+  }
 };
 
 }  // namespace
@@ -645,6 +672,27 @@ Handle<Code> WasmDebugInfo::GetCWasmEntry(Handle<WasmDebugInfo> debug_info,
     entries->set(index, *new_entry_code);
   }
   return handle(Code::cast(entries->get(index)), isolate);
+}
+
+// static
+bool WasmDebugInfo::GetWasmGlobal(Handle<WasmDebugInfo> debug_info,
+                                  uint32_t index, uint64_t* value) {
+  wasm::InterpreterHandle* interpreter = GetInterpreterHandle(*debug_info);
+  return interpreter->GetWasmGlobal(index, value);
+}
+
+// static
+bool WasmDebugInfo::GetWasmLocal(Handle<WasmDebugInfo> debug_info,
+                                 uint32_t index, uint64_t* value) {
+  wasm::InterpreterHandle* interpreter = GetInterpreterHandle(*debug_info);
+  return interpreter->GetWasmLocal(index, value);
+}
+
+// static
+bool WasmDebugInfo::GetWasmStackValue(Handle<WasmDebugInfo> debug_info,
+                                      uint32_t index, uint64_t* value) {
+  wasm::InterpreterHandle* interpreter = GetInterpreterHandle(*debug_info);
+  return interpreter->GetWasmStackValue(index, value);
 }
 
 }  // namespace internal

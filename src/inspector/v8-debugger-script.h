@@ -92,6 +92,15 @@ class V8DebuggerScript {
   virtual void MakeWeak() = 0;
   virtual bool setBreakpointOnRun(int* id) const = 0;
 
+  virtual std::vector<int> getWasmFunctionsOffsets() const = 0;
+  virtual bool getWasmGlobal(uint32_t index, uint64_t* value) const = 0;
+  virtual bool getWasmLocal(uint32_t index, uint64_t* value) const = 0;
+  virtual bool getWasmStackValue(uint32_t index, uint64_t* value) const = 0;
+  virtual bool getWasmMemory(uint32_t offset, uint8_t* buffer,
+                             uint32_t size) const = 0;
+  virtual bool addWasmBreakpoint(uint32_t offset) = 0;
+  virtual bool removeWasmBreakpoint(uint32_t offset) = 0;
+
  protected:
   V8DebuggerScript(v8::Isolate*, String16 id, String16 url);
 

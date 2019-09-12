@@ -23,9 +23,12 @@ class V8DebuggerScript;
 class V8InspectorImpl;
 class V8InspectorSessionImpl;
 class V8Regex;
+class GdbServer;
 
+using protocol::Array;
 using protocol::Maybe;
 using protocol::Response;
+using protocol::Debugger::CallFrame;
 
 class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
  public:
@@ -158,6 +161,18 @@ class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
 
   v8::Isolate* isolate() { return m_isolate; }
 
+  void setGdbServer(GdbServer* gdbServer) { m_gdbServer = gdbServer; }
+  std::vector<int> getWasmFunctionsOffsets(uint32_t moduleId);
+  bool getWasmGlobal(uint32_t moduleId, uint32_t index, uint64_t* value);
+  bool getWasmLocal(uint32_t moduleId, uint32_t index, uint64_t* value);
+  bool getWasmStackValue(uint32_t moduleId, uint32_t index, uint64_t* value);
+  bool getWasmMemory(uint32_t offset, uint8_t* buffer, uint32_t size);
+  bool getWasmCallStack(std::vector<uint64_t>* callStackPCs);
+  bool addWasmBreakpoint(uint32_t moduleId, uint32_t offset);
+  bool removeWasmBreakpoint(uint32_t moduleId, uint32_t offset);
+
+  void removeAllBreakpoints();
+
  private:
   void enableImpl();
 
@@ -187,6 +202,9 @@ class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
   bool isPaused() const;
 
   void setScriptInstrumentationBreakpointIfNeeded(V8DebuggerScript* script);
+
+  bool getWasmCallStack(std::vector<uint64_t>* callStackPCs,
+                        const Array<CallFrame>* protocolCallFrames);
 
   using ScriptsMap =
       std::unordered_map<String16, std::unique_ptr<V8DebuggerScript>>;
@@ -228,6 +246,8 @@ class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
   std::unique_ptr<V8Regex> m_blackboxPattern;
   std::unordered_map<String16, std::vector<std::pair<int, int>>>
       m_blackboxedPositions;
+
+  GdbServer* m_gdbServer;
 
   DISALLOW_COPY_AND_ASSIGN(V8DebuggerAgentImpl);
 };

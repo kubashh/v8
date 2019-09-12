@@ -26,7 +26,7 @@ namespace debug {
  */
 class V8_EXPORT_PRIVATE Location {
  public:
-  Location(int line_number, int column_number);
+  Location(int line_number, int column_number, int offset = -1);
   /**
    * Create empty location.
    */
@@ -35,11 +35,13 @@ class V8_EXPORT_PRIVATE Location {
   int GetLineNumber() const;
   int GetColumnNumber() const;
   bool IsEmpty() const;
+  int GetOffset() const;
 
  private:
   int line_number_;
   int column_number_;
   bool is_empty_;
+  int offset_;
 };
 
 /**

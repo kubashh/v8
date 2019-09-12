@@ -8,6 +8,7 @@
 
 #include "src/base/safe_conversions.h"
 #include "src/debug/debug-interface.h"
+#include "src/inspector/gdb-server/gdb-server.h"
 #include "src/inspector/injected-script.h"
 #include "src/inspector/inspected-context.h"
 #include "src/inspector/protocol/Protocol.h"
@@ -61,6 +62,8 @@ static const char kDebuggerNotPaused[] =
 
 static const size_t kBreakpointHintMaxLength = 128;
 static const intptr_t kBreakpointHintMaxSearchOffset = 80 * 10;
+
+static const int kMaxCallStackSize = 20;
 
 namespace {
 
@@ -325,7 +328,8 @@ V8DebuggerAgentImpl::V8DebuggerAgentImpl(
       m_enabled(false),
       m_state(state),
       m_frontend(frontendChannel),
-      m_isolate(m_inspector->isolate()) {}
+      m_isolate(m_inspector->isolate()),
+      m_gdbServer(nullptr) {}
 
 V8DebuggerAgentImpl::~V8DebuggerAgentImpl() = default;
 
@@ -387,11 +391,7 @@ Response V8DebuggerAgentImpl::disable() {
   m_scripts.clear();
   m_cachedScriptIds.clear();
   m_cachedScriptSize = 0;
-  for (const auto& it : m_debuggerBreakpointIdToBreakpointId) {
-    v8::debug::RemoveBreakpoint(m_isolate, it.first);
-  }
-  m_breakpointIdToDebuggerBreakpointIds.clear();
-  m_debuggerBreakpointIdToBreakpointId.clear();
+  removeAllBreakpoints();
   m_debugger->setAsyncCallStackDepth(this, 0);
   clearBreakDetails();
   m_skipAllPauses = false;
@@ -401,6 +401,14 @@ Response V8DebuggerAgentImpl::disable() {
   m_state->setBoolean(DebuggerAgentState::debuggerEnabled, false);
   m_debugger->disable();
   return Response::OK();
+}
+
+void V8DebuggerAgentImpl::removeAllBreakpoints() {
+  for (const auto& it : m_debuggerBreakpointIdToBreakpointId) {
+    v8::debug::RemoveBreakpoint(m_isolate, it.first);
+  }
+  m_breakpointIdToDebuggerBreakpointIds.clear();
+  m_debuggerBreakpointIdToBreakpointId.clear();
 }
 
 void V8DebuggerAgentImpl::restore() {
@@ -1315,6 +1323,7 @@ Response V8DebuggerAgentImpl::currentCallFrames(
             .setScriptId(String16::fromInteger(script->Id()))
             .setLineNumber(loc.GetLineNumber())
             .setColumnNumber(loc.GetColumnNumber())
+            .setOffset(loc.GetOffset())
             .build();
     TranslateLocation(location.get(), m_debugger->wasmTranslation());
     String16 scriptId = String16::fromInteger(script->Id());
@@ -1657,6 +1666,12 @@ void V8DebuggerAgentImpl::didPause(
   if (!response.isSuccess())
     protocolCallFrames = v8::base::make_unique<Array<CallFrame>>();
 
+  if (m_gdbServer) {
+    std::vector<uint64_t> callFrames;
+    getWasmCallStack(&callFrames, protocolCallFrames.get());
+    m_gdbServer->onPaused(callFrames);
+  }
+
   m_frontend.paused(std::move(protocolCallFrames), breakReason,
                     std::move(breakAuxData), std::move(hitBreakpointIds),
                     currentAsyncStackTrace(), currentExternalStackTrace(),
@@ -1738,6 +1753,98 @@ void V8DebuggerAgentImpl::ScriptCollected(const V8DebuggerScript* script) {
     m_scripts.erase(scriptId);
     m_cachedScriptIds.pop_front();
   }
+}
+
+std::vector<int> V8DebuggerAgentImpl::getWasmFunctionsOffsets(
+    uint32_t moduleId) {
+  std::vector<int> result;
+  ScriptsMap::iterator scriptIterator =
+      m_scripts.find(std::to_string(moduleId).c_str());
+  if (scriptIterator != m_scripts.end()) {
+    V8DebuggerScript* script = scriptIterator->second.get();
+    result = script->getWasmFunctionsOffsets();
+  }
+  return result;
+}
+
+bool V8DebuggerAgentImpl::getWasmGlobal(uint32_t moduleId, uint32_t index,
+                                        uint64_t* value) {
+  ScriptsMap::iterator scriptIterator =
+      m_scripts.find(std::to_string(moduleId).c_str());
+  if (scriptIterator == m_scripts.end()) return false;
+  V8DebuggerScript* script = scriptIterator->second.get();
+  return script->getWasmGlobal(index, value);
+}
+
+bool V8DebuggerAgentImpl::getWasmLocal(uint32_t moduleId, uint32_t index,
+                                       uint64_t* value) {
+  ScriptsMap::iterator scriptIterator =
+      m_scripts.find(std::to_string(moduleId).c_str());
+  if (scriptIterator == m_scripts.end()) return false;
+  V8DebuggerScript* script = scriptIterator->second.get();
+  return script->getWasmLocal(index, value);
+}
+
+bool V8DebuggerAgentImpl::getWasmStackValue(uint32_t moduleId, uint32_t index,
+                                            uint64_t* value) {
+  ScriptsMap::iterator scriptIterator =
+      m_scripts.find(std::to_string(moduleId).c_str());
+  if (scriptIterator == m_scripts.end()) return false;
+  V8DebuggerScript* script = scriptIterator->second.get();
+  return script->getWasmStackValue(index, value);
+}
+
+bool V8DebuggerAgentImpl::getWasmMemory(uint32_t offset, uint8_t* buffer,
+                                        uint32_t size) {
+  ScriptsMap::iterator scriptIterator = m_scripts.begin();
+  if (scriptIterator == m_scripts.end()) return false;
+  V8DebuggerScript* script = scriptIterator->second.get();
+  return script->getWasmMemory(offset, buffer, size);
+}
+
+bool V8DebuggerAgentImpl::getWasmCallStack(
+    std::vector<uint64_t>* callStackPCs) {
+  std::unique_ptr<Array<CallFrame>> protocolCallFrames;
+  Response response = currentCallFrames(&protocolCallFrames);
+  if (!response.isSuccess()) return false;
+  return getWasmCallStack(callStackPCs, protocolCallFrames.get());
+}
+
+bool V8DebuggerAgentImpl::getWasmCallStack(
+    std::vector<uint64_t>* callStackPCs,
+    const Array<CallFrame>* protocolCallFrames) {
+  callStackPCs->clear();
+  for (const auto& frame : *protocolCallFrames) {
+    int offset = frame->getLocation()->getOffset(-1);
+    if (offset < 0) break;
+    String16 scriptId = frame->getLocation()->getScriptId();
+    bool ok = false;
+    int module_id = scriptId.toInteger(&ok);
+    uint64_t pc = ((uint64_t)module_id << 32) | offset;
+    callStackPCs->push_back(pc);
+    if (callStackPCs->size() >= kMaxCallStackSize) {
+      break;
+    }
+  }
+  return true;
+}
+
+bool V8DebuggerAgentImpl::addWasmBreakpoint(uint32_t moduleId,
+                                            uint32_t offset) {
+  ScriptsMap::iterator scriptIterator =
+      m_scripts.find(std::to_string(moduleId).c_str());
+  if (scriptIterator == m_scripts.end()) return false;
+  V8DebuggerScript* script = scriptIterator->second.get();
+  return script->addWasmBreakpoint(offset);
+}
+
+bool V8DebuggerAgentImpl::removeWasmBreakpoint(uint32_t moduleId,
+                                               uint32_t offset) {
+  ScriptsMap::iterator scriptIterator =
+      m_scripts.find(std::to_string(moduleId).c_str());
+  if (scriptIterator == m_scripts.end()) return false;
+  V8DebuggerScript* script = scriptIterator->second.get();
+  return script->removeWasmBreakpoint(offset);
 }
 
 }  // namespace v8_inspector

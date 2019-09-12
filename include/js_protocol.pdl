@@ -78,6 +78,8 @@ domain Debugger
       integer lineNumber
       # Column number in the script (0-based).
       optional integer columnNumber
+      #
+      optional integer offset
 
   # Location in the source code.
   experimental type ScriptPosition extends object

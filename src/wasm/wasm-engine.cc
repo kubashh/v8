@@ -9,6 +9,7 @@
 #include "src/diagnostics/compilation-statistics.h"
 #include "src/execution/frames.h"
 #include "src/execution/v8threads.h"
+#include "src/inspector/gdb-server/gdb-server.h"
 #include "src/logging/counters.h"
 #include "src/objects/heap-number.h"
 #include "src/objects/js-promise.h"
@@ -214,6 +215,8 @@ struct WasmEngine::NativeModuleInfo {
 WasmEngine::WasmEngine() : code_manager_(FLAG_wasm_max_code_space * MB) {}
 
 WasmEngine::~WasmEngine() {
+  gdb_server_ = nullptr;
+
   // Synchronize on all background compile tasks.
   background_compile_task_manager_.CancelAndWait();
   // All AsyncCompileJobs have been canceled.
@@ -304,6 +307,11 @@ MaybeHandle<WasmModuleObject> WasmEngine::SyncCompile(
 
   Handle<Script> script =
       CreateWasmScript(isolate, bytes, native_module->module()->source_map_url);
+  int module_id = script->id();
+  uint32_t module_code_offset = native_module->module()->code_offset;
+  WasmName name = bytes.GetNameOrNull(native_module->module()->name);
+  std::string module_name(name.begin(), name.end());
+  std::string source_map_url = native_module->module()->source_map_url;
 
   // Create the module object.
   // TODO(clemensh): For the same module (same bytes / same hash), we should
@@ -318,6 +326,10 @@ MaybeHandle<WasmModuleObject> WasmEngine::SyncCompile(
       isolate, std::move(native_module), script, export_wrappers);
 
   // Finish the Wasm script now and make it public to the debugger.
+  if (gdb_server_) {
+    gdb_server_->onWasmModuleAdded(module_id, module_code_offset, module_name,
+                                   source_map_url);
+  }
   isolate->debug()->OnAfterCompile(script);
   return module_object;
 }
@@ -672,6 +684,11 @@ void WasmEngine::LogOutstandingCodesForIsolate(Isolate* isolate) {
 std::shared_ptr<NativeModule> WasmEngine::NewNativeModule(
     Isolate* isolate, const WasmFeatures& enabled,
     std::shared_ptr<const WasmModule> module) {
+  if (!gdb_server_) {
+    gdb_server_ = std::make_unique<v8_inspector::GdbServer>(
+        reinterpret_cast<v8::Isolate*>(isolate));
+  }
+
   size_t code_size_estimate =
       wasm::WasmCodeManager::EstimateNativeModuleCodeSize(module.get());
   return NewNativeModule(isolate, enabled, code_size_estimate,
