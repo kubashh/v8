@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1855b7f5_a69420a9",
+        "filename": "test/mjsunit/wasm/module-memory.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-09-12T06:44:15Z",
+      "side": 0,
+      "message": "Can we keep checking that read at offset 65533 does not trap, just as a sanity check?\n\nAnd I would propose to slighly refactor the read and write methods to receive the offset as a parameter. It took me a while to understand that the for loop modifies the function-local {offset} variable.\n\nI would propose:\n\nlet read \u003d offset \u003d\u003e module.exports.geti(0, offset);\nlet write \u003d offset \u003d\u003e module.exports.geti(offset, 0);\n\nassertEquals(0, read(65533));\nassertEquals(0, write(65533));\n\nfor (let offset \u003d ...) {\n  ...\n  assertTraps(..., () \u003d\u003e read(offset));\n  ...\n}",
+      "revId": "e9730043cf00e78a0229b584b60d785cdb2a524d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
