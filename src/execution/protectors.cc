@@ -44,5 +44,16 @@ DECLARED_PROTECTORS_ON_NATIVE_CONTEXT(
 DECLARED_PROTECTORS_ON_ISOLATE(INVALIDATE_PROTECTOR_ON_ISOLATE_DEFINITION)
 #undef INVALIDATE_PROTECTOR_ON_ISOLATE_DEFINITION
 
+bool Protectors::IsPromiseThenLookupChainIntact(Isolate* isolate,
+                                                Handle<JSReceiver> receiver) {
+  DisallowHeapAllocation no_gc;
+  if (!receiver->IsJSPromise()) return false;
+  if (!isolate->IsInAnyContext(receiver->map().prototype(),
+                               Context::PROMISE_PROTOTYPE_INDEX)) {
+    return false;
+  }
+  return IsPromiseThenLookupChainIntact(isolate);
+}
+
 }  // namespace internal
 }  // namespace v8

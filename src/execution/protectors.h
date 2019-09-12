@@ -21,6 +21,7 @@ class Protectors : public AllStatic {
 #define DECLARED_PROTECTORS_ON_ISOLATE(V)                                     \
   V(ArraySpeciesLookupChain, ArraySpeciesProtector, array_species_protector)  \
   V(ArrayConstructor, ArrayConstructorProtector, array_constructor_protector) \
+  V(PromiseThenLookupChain, PromiseThenProtector, promise_then_protector)     \
   V(PromiseSpeciesLookupChain, PromiseSpeciesProtector,                       \
     promise_species_protector)                                                \
   V(TypedArraySpeciesLookupChain, TypedArraySpeciesProtector,                 \
@@ -39,6 +40,10 @@ class Protectors : public AllStatic {
 
   DECLARED_PROTECTORS_ON_ISOLATE(DECLARE_PROTECTOR_ON_ISOLATE)
 #undef DECLARE_PROTECTOR_ON_ISOLATE
+
+  // More nuanced protector checks follow.
+  static bool IsPromiseThenLookupChainIntact(Isolate* isolate,
+                                             Handle<JSReceiver> receiver);
 };
 
 }  // namespace internal

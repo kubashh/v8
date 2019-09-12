@@ -5929,8 +5929,8 @@ MaybeHandle<Object> JSPromise::Resolve(Handle<JSPromise> promise,
 
   // 8. Let then be Get(resolution, "then").
   MaybeHandle<Object> then;
-  if (isolate->IsPromiseThenLookupChainIntact(
-          Handle<JSReceiver>::cast(resolution))) {
+  if (Protectors::IsPromiseThenLookupChainIntact(
+          isolate, Handle<JSReceiver>::cast(resolution))) {
     // We can skip the "then" lookup on {resolution} if its [[Prototype]]
     // is the (initial) Promise.prototype and the Promise#then protector
     // is intact, as that guards the lookup path for the "then" property
