@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "95edd3d2_db492cd9",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1753,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-12T16:03:43Z",
+      "side": 1,
+      "message": "Indeed a better name.",
+      "parentUuid": "473d9ea1_fd36c6c8",
+      "range": {
+        "startLine": 1753,
+        "startChar": 42,
+        "endLine": 1753,
+        "endChar": 61
+      },
+      "revId": "a82811811c3b1d8e8a60667c168afe6d0da0b46e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5b135dae_8bfe3620",
         "filename": "src/heap/heap.h",
         "patchSetId": 3
@@ -82,6 +106,30 @@
       "writtenOn": "2019-09-12T15:14:09Z",
       "side": 1,
       "message": "This is not related to your change, but as a drive-by fix could you please remove this version of the function and only keep the version that accepts \"origin\"?",
+      "range": {
+        "startLine": 1765,
+        "startChar": 42,
+        "endLine": 1765,
+        "endChar": 67
+      },
+      "revId": "a82811811c3b1d8e8a60667c168afe6d0da0b46e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ff27548_ded7c8ac",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-12T16:03:43Z",
+      "side": 1,
+      "message": "If we add a default parameter for origin, we can delete both functions.",
+      "parentUuid": "5b135dae_8bfe3620",
       "range": {
         "startLine": 1765,
         "startChar": 42,
