@@ -1442,6 +1442,24 @@ void Heap::ReportExternalMemoryPressure() {
       static_cast<GCCallbackFlags>(
           kGCCallbackFlagSynchronousPhantomCallbackProcessing |
           kGCCallbackFlagCollectAllExternalMemory);
+
+  // Check if there is a lot of exteral memory retained by the new space
+  // objects. If so, it pays off to do a scavenge first. As a heuristic we
+  // take as the threshold the maximum of the new space capacity and half of
+  // the total external memory.
+  size_t new_space_external_memory = new_space()->ExternalBackingStoreBytes();
+  if (new_space_external_memory > new_space()->Capacity() ||
+      static_cast<int64_t>(new_space_external_memory) >
+          isolate()->isolate_data()->external_memory_ / 2) {
+    CollectGarbage(NEW_SPACE, GarbageCollectionReason::kExternalMemoryPressure);
+
+    if (isolate()->isolate_data()->external_memory_ <
+        isolate()->isolate_data()->external_memory_limit_) {
+      // Scavenge freed external memory.
+      return;
+    }
+  }
+
   if (isolate()->isolate_data()->external_memory_ >
       (isolate()->isolate_data()->external_memory_at_last_mark_compact_ +
        external_memory_hard_limit())) {
