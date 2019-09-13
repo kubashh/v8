@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac9384fb_c70b7da2",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-09-13T13:01:49Z",
+      "side": 1,
+      "message": "This lazy frame_state should go to a continuation executing the object check, instead of continuing after the GetIterator bytecode.",
+      "range": {
+        "startLine": 1478,
+        "startChar": 50,
+        "endLine": 1478,
+        "endChar": 61
+      },
+      "revId": "91e3243d60153adb17947fb57bd85311924a47b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
