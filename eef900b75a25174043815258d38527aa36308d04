@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0df7d9d8_55f88241",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-09-13T08:30:09Z",
+      "side": 1,
+      "message": "suggestion: s/CbzOrTbzMatchInfo/CbzOrTbzMatchTrait/",
+      "range": {
+        "startLine": 1965,
+        "startChar": 7,
+        "endLine": 1965,
+        "endChar": 24
+      },
+      "revId": "eef900b75a25174043815258d38527aa36308d04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
