@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c9df9743_d678710f",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-16T15:13:09Z",
+      "side": 1,
+      "message": "Done. Also changed the other VariableList in this file to keep consistency.",
+      "parentUuid": "f2177996_c1929c91",
+      "range": {
+        "startLine": 240,
+        "startChar": 2,
+        "endLine": 242,
+        "endChar": 0
+      },
+      "revId": "0daade8dc62674497126bec84667676939223562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1321ebb_e694ae5f",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "0daade8dc62674497126bec84667676939223562",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1004cc2a_96536818",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-16T15:13:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1321ebb_e694ae5f",
+      "range": {
+        "startLine": 320,
+        "startChar": 4,
+        "endLine": 321,
+        "endChar": 27
+      },
+      "revId": "0daade8dc62674497126bec84667676939223562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
