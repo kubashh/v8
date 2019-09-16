@@ -153,8 +153,6 @@ bool DeleteObjectPropertyFast(Isolate* isolate, Handle<JSReceiver> receiver,
       // Slot clearing is the reason why this entire function cannot currently
       // be implemented in the DeleteProperty stub.
       if (index.is_inobject() && !receiver_map->IsUnboxedDoubleField(index)) {
-        isolate->heap()->ClearRecordedSlot(*receiver,
-                                           receiver->RawField(index.offset()));
         MemoryChunk* chunk = MemoryChunk::FromHeapObject(*receiver);
         chunk->InvalidateRecordedSlots(*receiver);
       }
