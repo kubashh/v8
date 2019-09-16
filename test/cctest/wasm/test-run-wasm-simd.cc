@@ -1022,7 +1022,6 @@ WASM_SIMD_TEST_NO_LOWERING(F64x2ReplaceLane) {
   }
 }
 
-#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
 bool IsExtreme(double x) {
   double abs_x = std::fabs(x);
   const double kSmallFloatThreshold = 1.0e-298;
@@ -1145,6 +1144,7 @@ WASM_SIMD_TEST_NO_LOWERING(F64x2Neg) {
   RunF64x2UnOpTest(execution_tier, lower_simd, kExprF64x2Neg, Negate);
 }
 
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
 WASM_SIMD_TEST_NO_LOWERING(F64x2Sqrt) {
   RunF64x2UnOpTest(execution_tier, lower_simd, kExprF64x2Sqrt, Sqrt);
 }

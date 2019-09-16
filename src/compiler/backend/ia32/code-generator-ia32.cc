@@ -1442,6 +1442,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ mov(esp, tmp);
       break;
     }
+    case kSSEF64x2Abs:  // fallthrough
     case kSSEFloat64Abs: {
       // TODO(bmeurer): Use 128-bit constants.
       __ pcmpeqd(kScratchDoubleReg, kScratchDoubleReg);
@@ -1449,6 +1450,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ andpd(i.OutputDoubleRegister(), kScratchDoubleReg);
       break;
     }
+    case kSSEF64x2Neg:  // fallthrough
     case kSSEFloat64Neg: {
       // TODO(bmeurer): Use 128-bit constants.
       __ pcmpeqd(kScratchDoubleReg, kScratchDoubleReg);
@@ -1591,6 +1593,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ vxorps(i.OutputDoubleRegister(), kScratchDoubleReg, i.InputOperand(0));
       break;
     }
+    case kAVXF64x2Abs:  // fallthrough
     case kAVXFloat64Abs: {
       // TODO(bmeurer): Use RIP relative 128-bit constants.
       __ pcmpeqd(kScratchDoubleReg, kScratchDoubleReg);
@@ -1599,6 +1602,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ vandpd(i.OutputDoubleRegister(), kScratchDoubleReg, i.InputOperand(0));
       break;
     }
+    case kAVXF64x2Neg:  // fallthrough
     case kAVXFloat64Neg: {
       // TODO(bmeurer): Use RIP relative 128-bit constants.
       __ pcmpeqd(kScratchDoubleReg, kScratchDoubleReg);
