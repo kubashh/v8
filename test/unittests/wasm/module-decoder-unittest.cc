@@ -1070,6 +1070,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionMultipleTables) {
               FUNC_INDEX(0),             // function
               TABLE_INDEX(1),            // element for table 1
               WASM_INIT_EXPR_I32V_1(7),  // index
+              kExternalFunction,         // type
               2,                         // elements count
               FUNC_INDEX(0),             // entry 0
               FUNC_INDEX(0)),            // entry 1
@@ -1116,15 +1117,18 @@ TEST_F(WasmModuleVerifyTest, ElementSectionMixedTables) {
               FUNC_INDEX(0),              // function
               TABLE_INDEX(1),             // element for table 1
               WASM_INIT_EXPR_I32V_1(7),   // index
+              kExternalFunction,          // type
               2,                          // elements count
               FUNC_INDEX(0),              // entry 0
               FUNC_INDEX(0),              // entry 1
               TABLE_INDEX(2),             // element for table 2
               WASM_INIT_EXPR_I32V_1(12),  // index
+              kExternalFunction,          // type
               1,                          // elements count
               FUNC_INDEX(0),              // function
               TABLE_INDEX(3),             // element for table 1
               WASM_INIT_EXPR_I32V_1(17),  // index
+              kExternalFunction,          // type
               2,                          // elements count
               FUNC_INDEX(0),              // entry 0
               FUNC_INDEX(0)),             // entry 1
@@ -1157,6 +1161,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionMultipleTablesArbitraryOrder) {
               FUNC_INDEX(0),             // function
               TABLE_INDEX(1),            // element for table 0
               WASM_INIT_EXPR_I32V_1(7),  // index
+              kExternalFunction,         // type
               2,                         // elements count
               FUNC_INDEX(0),             // entry 0
               FUNC_INDEX(0),             // entry 1
@@ -1203,10 +1208,12 @@ TEST_F(WasmModuleVerifyTest, ElementSectionMixedTablesArbitraryOrder) {
               4,                          // entry count
               TABLE_INDEX(2),             // element for table 0
               WASM_INIT_EXPR_I32V_1(10),  // index
+              kExternalFunction,          // type
               1,                          // elements count
               FUNC_INDEX(0),              // function
               TABLE_INDEX(3),             // element for table 1
               WASM_INIT_EXPR_I32V_1(17),  // index
+              kExternalFunction,          // type
               2,                          // elements count
               FUNC_INDEX(0),              // entry 0
               FUNC_INDEX(0),              // entry 1
@@ -1216,6 +1223,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionMixedTablesArbitraryOrder) {
               FUNC_INDEX(0),              // function
               TABLE_INDEX(1),             // element for table 1
               WASM_INIT_EXPR_I32V_1(7),   // index
+              kExternalFunction,          // type
               2,                          // elements count
               FUNC_INDEX(0),              // entry 0
               FUNC_INDEX(0)),             // entry 1
@@ -1246,6 +1254,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionInitAnyRefTableWithFuncRef) {
               FUNC_INDEX(0),             // function
               TABLE_INDEX(1),            // element for table 1
               WASM_INIT_EXPR_I32V_1(7),  // index
+              kExternalFunction,         // type
               2,                         // elements count
               FUNC_INDEX(0),             // entry 0
               FUNC_INDEX(0)),            // entry 1
@@ -1293,6 +1302,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionDontInitAnyRefImportedTable) {
               FUNC_INDEX(0),              // function
               TABLE_INDEX(1),             // element for table 1
               WASM_INIT_EXPR_I32V_1(17),  // index
+              kExternalFunction,          // type
               2,                          // elements count
               FUNC_INDEX(0),              // entry 0
               FUNC_INDEX(0)),             // entry 1
@@ -2343,6 +2353,26 @@ TEST_F(WasmModuleVerifyTest, PassiveDataSegment) {
   EXPECT_OFF_END_FAILURE(data, arraysize(data) - 5);
 }
 
+TEST_F(WasmModuleVerifyTest, ActiveElementSegmentWithElements) {
+  static const byte data[] = {
+      // sig#0 -----------------------------------------------------------------
+      SIGNATURES_SECTION_VOID_VOID,
+      // funcs -----------------------------------------------------------------
+      ONE_EMPTY_FUNCTION(SIG_INDEX(0)),
+      // table declaration -----------------------------------------------------
+      SECTION(Table, ENTRY_COUNT(1), kLocalFuncRef, 0, 1),
+      // element segments  -----------------------------------------------------
+      SECTION(Element, ENTRY_COUNT(1), ACTIVE_WITH_ELEMENTS, TABLE_INDEX0,
+              WASM_INIT_EXPR_I32V_1(0), kLocalFuncRef, U32V_1(3),
+              REF_FUNC_ELEMENT(0), REF_FUNC_ELEMENT(0), REF_NULL_ELEMENT),
+      // code ------------------------------------------------------------------
+      ONE_EMPTY_BODY};
+  EXPECT_FAILURE(data);
+  WASM_FEATURE_SCOPE(bulk_memory);
+  EXPECT_VERIFIES(data);
+  EXPECT_OFF_END_FAILURE(data, arraysize(data) - 5);
+}
+
 TEST_F(WasmModuleVerifyTest, PassiveElementSegment) {
   static const byte data[] = {
       // sig#0 -----------------------------------------------------------------
@@ -2352,8 +2382,9 @@ TEST_F(WasmModuleVerifyTest, PassiveElementSegment) {
       // table declaration -----------------------------------------------------
       SECTION(Table, ENTRY_COUNT(1), kLocalFuncRef, 0, 1),
       // element segments  -----------------------------------------------------
-      SECTION(Element, ENTRY_COUNT(1), PASSIVE, kLocalFuncRef, U32V_1(3),
-              REF_FUNC_ELEMENT(0), REF_FUNC_ELEMENT(0), REF_NULL_ELEMENT),
+      SECTION(Element, ENTRY_COUNT(1), PASSIVE_WITH_ELEMENTS, kLocalFuncRef,
+              U32V_1(3), REF_FUNC_ELEMENT(0), REF_FUNC_ELEMENT(0),
+              REF_NULL_ELEMENT),
       // code ------------------------------------------------------------------
       ONE_EMPTY_BODY};
   EXPECT_FAILURE(data);
@@ -2371,11 +2402,31 @@ TEST_F(WasmModuleVerifyTest, PassiveElementSegmentAnyRef) {
       // table declaration -----------------------------------------------------
       SECTION(Table, ENTRY_COUNT(1), kLocalFuncRef, 0, 1),
       // element segments  -----------------------------------------------------
-      SECTION(Element, ENTRY_COUNT(1), PASSIVE, kLocalAnyRef, U32V_1(0)),
+      SECTION(Element, ENTRY_COUNT(1), PASSIVE_WITH_ELEMENTS, kLocalAnyRef,
+              U32V_1(0)),
       // code ------------------------------------------------------------------
       ONE_EMPTY_BODY};
   WASM_FEATURE_SCOPE(bulk_memory);
   EXPECT_FAILURE(data);
+}
+
+TEST_F(WasmModuleVerifyTest, PassiveElementSegmentWithIndices) {
+  static const byte data[] = {
+      // sig#0 -----------------------------------------------------------------
+      SIGNATURES_SECTION_VOID_VOID,
+      // funcs -----------------------------------------------------------------
+      ONE_EMPTY_FUNCTION(SIG_INDEX(0)),
+      // table declaration -----------------------------------------------------
+      SECTION(Table, ENTRY_COUNT(1), kLocalFuncRef, 0, 1),
+      // element segments  -----------------------------------------------------
+      SECTION(Element, ENTRY_COUNT(1), PASSIVE, kExternalFunction,
+              ENTRY_COUNT(3), U32V_1(0), U32V_1(0), U32V_1(0)),
+      // code ------------------------------------------------------------------
+      ONE_EMPTY_BODY};
+  EXPECT_FAILURE(data);
+  WASM_FEATURE_SCOPE(bulk_memory);
+  EXPECT_VERIFIES(data);
+  EXPECT_OFF_END_FAILURE(data, arraysize(data) - 5);
 }
 
 TEST_F(WasmModuleVerifyTest, DataCountSectionCorrectPlacement) {
