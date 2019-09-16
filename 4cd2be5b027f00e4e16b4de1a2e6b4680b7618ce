@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c34de2c1_132bdaa9",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-16T06:31:55Z",
+      "side": 1,
+      "message": "This one too?",
+      "revId": "4cd2be5b027f00e4e16b4de1a2e6b4680b7618ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d00e764_bb21f5ba",
+        "filename": "src/execution/protectors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-16T06:31:55Z",
+      "side": 1,
+      "message": "Please be more specific what that means. Also, wdyt of just inlining this in the single callsite?",
+      "revId": "4cd2be5b027f00e4e16b4de1a2e6b4680b7618ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
