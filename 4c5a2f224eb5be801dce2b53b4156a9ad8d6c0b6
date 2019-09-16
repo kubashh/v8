@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c108b9df_c4295aa4",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5893,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-16T12:33:35Z",
+      "side": 1,
+      "message": "Does this look correct?",
+      "revId": "4c5a2f224eb5be801dce2b53b4156a9ad8d6c0b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
