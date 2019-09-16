@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2177996_c1929c91",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-09-16T14:16:41Z",
+      "side": 1,
+      "message": "Why not Label loop(this, {var_from_cursor, ...};",
+      "range": {
+        "startLine": 240,
+        "startChar": 2,
+        "endLine": 242,
+        "endChar": 0
+      },
+      "revId": "0daade8dc62674497126bec84667676939223562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1321ebb_e694ae5f",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-09-16T14:16:41Z",
+      "side": 1,
+      "message": "here you can use:\n\nLabel loop(this, \u0026var_i);",
+      "range": {
+        "startLine": 320,
+        "startChar": 4,
+        "endLine": 321,
+        "endChar": 27
+      },
+      "revId": "0daade8dc62674497126bec84667676939223562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
