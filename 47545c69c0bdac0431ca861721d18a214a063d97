@@ -16,6 +16,24 @@
       "revId": "47545c69c0bdac0431ca861721d18a214a063d97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e9389b9_4462774c",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-16T13:09:59Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "ca53679b_dfad92c3",
+      "revId": "47545c69c0bdac0431ca861721d18a214a063d97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
