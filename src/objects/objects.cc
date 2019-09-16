@@ -5886,17 +5886,19 @@ MaybeHandle<Object> JSPromise::Resolve(Handle<JSPromise> promise,
 
   // 8. Let then be Get(resolution, "then").
   MaybeHandle<Object> then;
-  if (isolate->IsPromiseThenLookupChainIntact(
-          Handle<JSReceiver>::cast(resolution))) {
+  Handle<JSReceiver> receiver(Handle<JSReceiver>::cast(resolution));
+  if (receiver->IsJSPromise() &&
+      isolate->IsInAnyContext(receiver->map().prototype(),
+                              Context::PROMISE_PROTOTYPE_INDEX) &&
+      Protectors::IsPromiseThenLookupChainIntact(isolate)) {
     // We can skip the "then" lookup on {resolution} if its [[Prototype]]
     // is the (initial) Promise.prototype and the Promise#then protector
     // is intact, as that guards the lookup path for the "then" property
     // on JSPromise instances which have the (initial) %PromisePrototype%.
     then = isolate->promise_then();
   } else {
-    then =
-        JSReceiver::GetProperty(isolate, Handle<JSReceiver>::cast(resolution),
-                                isolate->factory()->then_string());
+    then = JSReceiver::GetProperty(isolate, receiver,
+                                   isolate->factory()->then_string());
   }
 
   // 9. If then is an abrupt completion, then
