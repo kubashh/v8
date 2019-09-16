@@ -154,6 +154,14 @@ class VerboseProgressIndicator(SimpleProgressIndicator):
     self._print_processes_linux()
 
 
+class CIProgressIndicator(VerboseProgressIndicator):
+  def __init__(self):
+    super(CIProgressIndicator, self).__init__()
+
+  def _on_result_for(self, test, result):
+    super(VerboseProgressIndicator, self)._on_result_for(test, result)
+
+
 class DotsProgressIndicator(SimpleProgressIndicator):
   def __init__(self):
     super(DotsProgressIndicator, self).__init__()

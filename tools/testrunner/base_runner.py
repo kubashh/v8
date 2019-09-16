@@ -166,6 +166,7 @@ MODES = {
 
 PROGRESS_INDICATORS = {
   'verbose': progress.VerboseProgressIndicator,
+  'ci': progress.CIProgressIndicator,
   'dots': progress.DotsProgressIndicator,
   'color': progress.ColorProgressIndicator,
   'mono': progress.MonochromeProgressIndicator,
