@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca53679b_dfad92c3",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-16T12:49:09Z",
+      "side": 0,
+      "message": "Please preserve this comment at the now-inlined use site.",
+      "revId": "47545c69c0bdac0431ca861721d18a214a063d97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
