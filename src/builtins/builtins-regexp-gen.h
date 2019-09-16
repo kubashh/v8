@@ -139,11 +139,11 @@ class RegExpBuiltinsAssembler : public CodeStubAssembler {
 
   // Performs fast path checks on the given object itself, but omits prototype
   // checks.
-  Node* IsFastRegExpNoPrototype(SloppyTNode<Context> context,
-                                SloppyTNode<Object> object);
-  Node* IsFastRegExpNoPrototype(SloppyTNode<Context> context,
-                                SloppyTNode<Object> object,
-                                SloppyTNode<Map> map);
+  TNode<BoolT> IsFastRegExpNoPrototype(SloppyTNode<Context> context,
+                                       SloppyTNode<Object> object);
+  TNode<BoolT> IsFastRegExpNoPrototype(SloppyTNode<Context> context,
+                                       SloppyTNode<Object> object,
+                                       SloppyTNode<Map> map);
 
   // For debugging only. Uses a slow GetProperty call to fetch object.exec.
   TNode<BoolT> IsFastRegExpWithOriginalExec(TNode<Context> context,

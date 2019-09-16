@@ -908,14 +908,14 @@ TNode<BoolT> RegExpBuiltinsAssembler::IsReceiverInitialRegExpPrototype(
   return TaggedEqual(receiver, initial_prototype);
 }
 
-Node* RegExpBuiltinsAssembler::IsFastRegExpNoPrototype(
+TNode<BoolT> RegExpBuiltinsAssembler::IsFastRegExpNoPrototype(
     SloppyTNode<Context> context, SloppyTNode<Object> object,
     SloppyTNode<Map> map) {
   Label out(this);
-  VARIABLE(var_result, MachineRepresentation::kWord32);
+  TVARIABLE(BoolT, var_result);
 
 #ifdef V8_ENABLE_FORCE_SLOW_PATH
-  var_result.Bind(Int32Constant(0));
+  var_result = Int32FalseConstant();
   GotoIfForceSlowPath(&out);
 #endif
 
@@ -926,13 +926,13 @@ Node* RegExpBuiltinsAssembler::IsFastRegExpNoPrototype(
       LoadObjectField(regexp_fun, JSFunction::kPrototypeOrInitialMapOffset);
   TNode<BoolT> const has_initialmap = TaggedEqual(map, initial_map);
 
-  var_result.Bind(has_initialmap);
+  var_result = has_initialmap;
   GotoIfNot(has_initialmap, &out);
 
   // The smi check is required to omit ToLength(lastIndex) calls with possible
   // user-code execution on the fast path.
   TNode<Object> last_index = FastLoadLastIndexBeforeSmiCheck(CAST(object));
-  var_result.Bind(TaggedIsPositiveSmi(last_index));
+  var_result = TaggedIsPositiveSmi(last_index);
   Goto(&out);
 
   BIND(&out);
@@ -984,7 +984,7 @@ TNode<BoolT> RegExpBuiltinsAssembler::IsFastRegExpWithOriginalExec(
   return var_result.value();
 }
 
-Node* RegExpBuiltinsAssembler::IsFastRegExpNoPrototype(
+TNode<BoolT> RegExpBuiltinsAssembler::IsFastRegExpNoPrototype(
     SloppyTNode<Context> context, SloppyTNode<Object> object) {
   CSA_ASSERT(this, TaggedIsNotSmi(object));
   return IsFastRegExpNoPrototype(context, object, LoadMap(CAST(object)));
@@ -1075,15 +1075,6 @@ void RegExpBuiltinsAssembler::BranchIfFastRegExpResult(Node* const context,
          if_ismodified);
 }
 
-// Slow path stub for RegExpPrototypeExec to decrease code size.
-TF_BUILTIN(RegExpPrototypeExecSlow, RegExpBuiltinsAssembler) {
-  TNode<JSRegExp> regexp = CAST(Parameter(Descriptor::kReceiver));
-  TNode<String> string = CAST(Parameter(Descriptor::kString));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-
-  Return(RegExpPrototypeExecBody(context, regexp, string, false));
-}
-
 // Fast path stub for ATOM regexps. String matching is done by StringIndexOf,
 // and {match_info} is updated on success.
 // The slow path is implemented in RegExp::AtomExec.
@@ -1161,33 +1152,6 @@ TF_BUILTIN(RegExpExecInternal, RegExpBuiltinsAssembler) {
   CSA_ASSERT(this, IsNumberPositive(last_index));
 
   Return(RegExpExecInternal(context, regexp, string, last_index, match_info));
-}
-
-// ES#sec-regexp.prototype.exec
-// RegExp.prototype.exec ( string )
-TF_BUILTIN(RegExpPrototypeExec, RegExpBuiltinsAssembler) {
-  TNode<Object> maybe_receiver = CAST(Parameter(Descriptor::kReceiver));
-  TNode<Object> maybe_string = CAST(Parameter(Descriptor::kString));
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-
-  // Ensure {maybe_receiver} is a JSRegExp.
-  ThrowIfNotInstanceType(context, maybe_receiver, JS_REGEXP_TYPE,
-                         "RegExp.prototype.exec");
-  TNode<JSRegExp> receiver = CAST(maybe_receiver);
-
-  // Convert {maybe_string} to a String.
-  TNode<String> string = ToString_Inline(context, maybe_string);
-
-  Label if_isfastpath(this), if_isslowpath(this);
-  Branch(IsFastRegExpNoPrototype(context, receiver), &if_isfastpath,
-         &if_isslowpath);
-
-  BIND(&if_isfastpath);
-  Return(RegExpPrototypeExecBody(context, receiver, string, true));
-
-  BIND(&if_isslowpath);
-  Return(CallBuiltin(Builtins::kRegExpPrototypeExecSlow, context, receiver,
-                     string));
 }
 
 TNode<String> RegExpBuiltinsAssembler::FlagsGetter(TNode<Context> context,
