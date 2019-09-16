@@ -245,6 +245,11 @@ class WasmModuleObject : public JSObject {
                                                   Handle<WasmModuleObject>,
                                                   int position);
 
+  bool GetWasmGlobal(uint32_t index, uint64_t* value) const;
+  bool GetWasmLocal(uint32_t index, uint64_t* value) const;
+  bool GetWasmStackValue(uint32_t index, uint64_t* value) const;
+  bool GetWasmMemory(uint32_t offset, uint8_t* buffer, uint32_t size) const;
+
   OBJECT_CONSTRUCTORS(WasmModuleObject, JSObject);
 };
 
@@ -916,6 +921,13 @@ class WasmDebugInfo : public Struct {
 
   V8_EXPORT_PRIVATE static Handle<Code> GetCWasmEntry(Handle<WasmDebugInfo>,
                                                       wasm::FunctionSig*);
+
+  static bool GetWasmGlobal(Handle<WasmDebugInfo> debug_info, uint32_t index,
+                            uint64_t* value);
+  static bool GetWasmLocal(Handle<WasmDebugInfo> debug_info, uint32_t index,
+                           uint64_t* value);
+  static bool GetWasmStackValue(Handle<WasmDebugInfo> debug_info,
+                                uint32_t index, uint64_t* value);
 
   OBJECT_CONSTRUCTORS(WasmDebugInfo, Struct);
 };
