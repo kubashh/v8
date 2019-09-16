@@ -24,8 +24,10 @@ class V8InspectorImpl;
 class V8InspectorSessionImpl;
 class V8Regex;
 
+using protocol::Array;
 using protocol::Maybe;
 using protocol::Response;
+using protocol::Debugger::CallFrame;
 
 class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
  public:
@@ -187,6 +189,9 @@ class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
   bool isPaused() const;
 
   void setScriptInstrumentationBreakpointIfNeeded(V8DebuggerScript* script);
+
+  bool getWasmCallStack(std::vector<uint64_t>* callStackPCs,
+                        const Array<CallFrame>* protocolCallFrames);
 
   using ScriptsMap =
       std::unordered_map<String16, std::unique_ptr<V8DebuggerScript>>;

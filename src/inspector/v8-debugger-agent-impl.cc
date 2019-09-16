@@ -23,8 +23,6 @@
 #include "src/inspector/v8-stack-trace-impl.h"
 #include "src/inspector/v8-value-utils.h"
 
-#include "include/v8-inspector.h"
-
 namespace v8_inspector {
 
 using protocol::Array;
@@ -402,6 +400,14 @@ Response V8DebuggerAgentImpl::disable() {
   m_debugger->disable();
   return Response::OK();
 }
+
+// void V8DebuggerAgentImpl::removeAllBreakpoints() {
+//  for (const auto& it : m_debuggerBreakpointIdToBreakpointId) {
+//    v8::debug::RemoveBreakpoint(m_isolate, it.first);
+//  }
+//  m_breakpointIdToDebuggerBreakpointIds.clear();
+//  m_debuggerBreakpointIdToBreakpointId.clear();
+//}
 
 void V8DebuggerAgentImpl::restore() {
   DCHECK(!m_enabled);
