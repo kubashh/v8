@@ -819,7 +819,8 @@ void InstructionSelector::VisitWord32Ror(Node* node) {
   V(Float64ExtractLowWord32, kSSEFloat64ExtractLowWord32)   \
   V(Float64ExtractHighWord32, kSSEFloat64ExtractHighWord32) \
   V(SignExtendWord8ToInt32, kIA32Movsxbl)                   \
-  V(SignExtendWord16ToInt32, kIA32Movsxwl)
+  V(SignExtendWord16ToInt32, kIA32Movsxwl)                  \
+  V(F64x2Sqrt, kIA32F64x2Sqrt)
 
 #define RR_OP_LIST(V)                                                         \
   V(TruncateFloat64ToWord32, kArchTruncateDoubleToI)                          \
