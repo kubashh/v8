@@ -868,12 +868,28 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 
   void addps(XMMRegister dst, Operand src);
   void addps(XMMRegister dst, XMMRegister src) { addps(dst, Operand(src)); }
+  void addpd(XMMRegister dst, Operand src) {
+    sse2_instr(dst, src, 0x66, 0x0F, 0x58);
+  }
+  void addpd(XMMRegister dst, XMMRegister src) { addpd(dst, Operand(src)); }
   void subps(XMMRegister dst, Operand src);
   void subps(XMMRegister dst, XMMRegister src) { subps(dst, Operand(src)); }
+  void subpd(XMMRegister dst, Operand src) {
+    sse2_instr(dst, src, 0x66, 0x0F, 0x5c);
+  }
+  void subpd(XMMRegister dst, XMMRegister src) { subps(dst, Operand(src)); }
   void mulps(XMMRegister dst, Operand src);
   void mulps(XMMRegister dst, XMMRegister src) { mulps(dst, Operand(src)); }
+  void mulpd(XMMRegister dst, Operand src) {
+    sse2_instr(dst, src, 0x66, 0x0F, 0x59);
+  }
+  void mulpd(XMMRegister dst, XMMRegister src) { mulps(dst, Operand(src)); }
   void divps(XMMRegister dst, Operand src);
   void divps(XMMRegister dst, XMMRegister src) { divps(dst, Operand(src)); }
+  void divpd(XMMRegister dst, Operand src) {
+    sse2_instr(dst, src, 0x66, 0x0F, 0x5e);
+  }
+  void divpd(XMMRegister dst, XMMRegister src) { divps(dst, Operand(src)); }
   void rcpps(XMMRegister dst, Operand src);
   void rcpps(XMMRegister dst, XMMRegister src) { rcpps(dst, Operand(src)); }
   void sqrtps(XMMRegister dst, Operand src);

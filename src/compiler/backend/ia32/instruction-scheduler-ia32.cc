@@ -108,6 +108,14 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kAVXF64x2Abs:
     case kSSEF64x2Neg:
     case kAVXF64x2Neg:
+    case kSSEF64x2Add:
+    case kAVXF64x2Add:
+    case kSSEF64x2Sub:
+    case kAVXF64x2Sub:
+    case kSSEF64x2Mul:
+    case kAVXF64x2Mul:
+    case kSSEF64x2Div:
+    case kAVXF64x2Div:
     case kSSEF32x4Splat:
     case kAVXF32x4Splat:
     case kSSEF32x4ExtractLane:
