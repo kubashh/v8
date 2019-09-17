@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4434f700_030ad5f4",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-09-17T16:28:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6a97be50_a693a881",
+      "revId": "cf4c2b3101e59acadda2fdba854523e6c5a43ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28fd3d43_edceeadc",
         "filename": "src/builtins/regexp-exec.tq",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "cf4c2b3101e59acadda2fdba854523e6c5a43ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "367d98b2_bdc5491b",
+        "filename": "src/builtins/regexp-exec.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-09-17T16:28:13Z",
+      "side": 1,
+      "message": "return cond ? x : y is working",
+      "parentUuid": "28fd3d43_edceeadc",
+      "revId": "cf4c2b3101e59acadda2fdba854523e6c5a43ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
