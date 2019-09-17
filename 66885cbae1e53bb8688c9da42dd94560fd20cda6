@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16946068_562ee746",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-09-17T07:28:26Z",
+      "side": 1,
+      "message": "We still need to output the passing tests to a given file so that we can access the passing tests if we want, other than that it looks nice!",
+      "revId": "66885cbae1e53bb8688c9da42dd94560fd20cda6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
