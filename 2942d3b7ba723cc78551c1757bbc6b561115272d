@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53ea97c3_ec0b47ca",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-17T07:29:59Z",
+      "side": 1,
+      "message": "What about simply copying the flag from the ScopeIterator::current_scope_ to ContextChainElement so we can later restore it exactly when we create a ScopeInfo from the ContextChainElement?",
+      "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b33dba20_e5c8f90c",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-17T07:29:59Z",
+      "side": 1,
+      "message": "I\u0027m confused about this code: Why is this sticky? Won\u0027t this mark all ScopeInfo starting from the first wrapped scope info as skipping, possibly invalidly?\n\nE.g., something like:\n\nclass {\n  #a \u003d 5;\n  [class B extends class { m() { return this.#a } } {\n    #a \n   }](){}\n}",
+      "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f3e7c59_fc8eabac",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-17T07:29:59Z",
+      "side": 1,
+      "message": "We should not blacklist variables that we\u0027ll skip anyway. E.g.:\n\nclass A { \n  #a;\n  // #a in C::m() should see A::#a since B::#a shouldn\u0027t be added to its blacklist\n  class B extends class C { m() { #a }} {\n    #a; // Suppose that no reference to #a causes this to be stack allocated.\n  }\n}",
+      "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52a4e960_7c2f9512",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-17T07:29:59Z",
+      "side": 1,
+      "message": "DCHECK_LT(0, length());\nSetFlags(Flags() | ... );",
+      "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
