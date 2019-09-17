@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ab26cac_d1a62cc8",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 4807,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-17T09:11:12Z",
+      "side": 1,
+      "message": "ParseSuperExpression?",
+      "range": {
+        "startLine": 4807,
+        "startChar": 25,
+        "endLine": 4807,
+        "endChar": 40
+      },
+      "revId": "b453748a975e6b78ace815ca39b353ebbd396b3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
