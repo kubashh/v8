@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "33b22b93_dcc0fd50",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-17T14:38:55Z",
+      "side": 1,
+      "message": "From reading this function it wasn\u0027t clear to me why we Force context allocation on the receiver when UsesSuperCallReference (CallsSuper? HasSuperCall?). See it\u0027s probably my fault because of the UsesThis() above.\n\nWhat about adding a helper\n\nvoid ContextAllocateReceiver() {\n  DCHECK_NE(this, GetReceiverScope());\n  GetReceiverScope()-\u003ereceiver()-\u003eForceContextAllocation();\n}\n\nremoving UsesThis() and replacing its call with set_has_this_reference() and ContextAllocateReceiver(); and replacing UsesSuperCallReference also with ContextAllocateReceiver();\n\nBasically it\u0027s confusing since you here lose the context that this is really only there for ArrowHeads.",
+      "revId": "b453748a975e6b78ace815ca39b353ebbd396b3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55358468_49ced01b",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-17T14:38:55Z",
+      "side": 1,
+      "message": "Do we need an additional bit beyond receiver_scope-\u003ereceiver()-\u003eis_used()?",
+      "revId": "b453748a975e6b78ace815ca39b353ebbd396b3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4dc96ea_5f617268",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 4745,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-17T14:38:55Z",
+      "side": 1,
+      "message": "I\u0027m a little worried that this will impact the performance of any statement list, which is somewhat performance critical. What about templatizing it with StatementListType and having a kDerivedConstructorTopLevel where we do the check below? (In that case we can even drop the \"use strict\" scanning since we\u0027re already string ... :))",
+      "revId": "b453748a975e6b78ace815ca39b353ebbd396b3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0996b716_3d12b66f",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 4801,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-17T14:38:55Z",
+      "side": 1,
+      "message": "Won\u0027t you already fully support doing this for any statement in the list rather than the first, since you simply don\u0027t want to see a \"this\" use before the super statement?\n\nI guess doing a precheck supporting only the first statement is faster, but possibly unexpected. No strong opinions though.",
+      "revId": "b453748a975e6b78ace815ca39b353ebbd396b3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5ab26cac_d1a62cc8",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 17
