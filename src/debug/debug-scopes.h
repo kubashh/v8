@@ -79,6 +79,8 @@ class ScopeIterator {
 
   bool ClosureScopeHasThisReference() const;
 
+  bool InnerPrivateNameLookupSkipsOuterClass() const;
+
   // Populate the set with collected non-local variable names.
   Handle<StringSet> GetLocals() { return locals_; }
 
@@ -117,6 +119,8 @@ class ScopeIterator {
   Scope* start_scope_ = nullptr;
   Scope* current_scope_ = nullptr;
   bool seen_script_scope_ = false;
+  bool inner_private_name_lookup_computed_ = false;
+  bool inner_private_name_lookup_skips_outer_class_ = false;
 
   inline JavaScriptFrame* GetFrame() const {
     return frame_inspector_->javascript_frame();

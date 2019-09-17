@@ -184,6 +184,10 @@ class ScopeInfo : public FixedArray {
   // closest outer class when resolving private names.
   bool PrivateNameLookupSkipsOuterClass() const;
 
+  // Manually mark a ScopeInfo as skipping the closest outer class when
+  // resolving private names. Used by debug-evaluate.
+  void SetPrivateNameLookupSkipsOuterClass();
+
 #ifdef DEBUG
   bool Equals(ScopeInfo other) const;
 #endif
