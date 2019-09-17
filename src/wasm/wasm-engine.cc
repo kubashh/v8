@@ -19,7 +19,10 @@
 #include "src/wasm/module-decoder.h"
 #include "src/wasm/module-instantiate.h"
 #include "src/wasm/streaming-decoder.h"
+#include "src/wasm/wasm-interpreter.h"
 #include "src/wasm/wasm-objects-inl.h"
+
+#include "src/wasm/gdb-server/gdb-server.h"
 
 namespace v8 {
 namespace internal {
@@ -214,6 +217,8 @@ struct WasmEngine::NativeModuleInfo {
 WasmEngine::WasmEngine() : code_manager_(FLAG_wasm_max_code_space * MB) {}
 
 WasmEngine::~WasmEngine() {
+  gdb_server_ = nullptr;
+
   // Synchronize on all background compile tasks.
   background_compile_task_manager_.CancelAndWait();
   // All AsyncCompileJobs have been canceled.
@@ -304,6 +309,11 @@ MaybeHandle<WasmModuleObject> WasmEngine::SyncCompile(
 
   Handle<Script> script =
       CreateWasmScript(isolate, bytes, native_module->module()->source_map_url);
+  int module_id = script->id();
+  uint32_t module_code_offset = native_module->module()->code_offset;
+  WasmName name = bytes.GetNameOrNull(native_module->module()->name);
+  std::string module_name(name.begin(), name.end());
+  std::string source_map_url = native_module->module()->source_map_url;
 
   // Create the module object.
   // TODO(clemensh): For the same module (same bytes / same hash), we should
@@ -318,6 +328,10 @@ MaybeHandle<WasmModuleObject> WasmEngine::SyncCompile(
       isolate, std::move(native_module), script, export_wrappers);
 
   // Finish the Wasm script now and make it public to the debugger.
+  if (gdb_server_) {
+    gdb_server_->onWasmModuleAdded(module_id, module_code_offset, module_name,
+                                   source_map_url);
+  }
   isolate->debug()->OnAfterCompile(script);
   return module_object;
 }
@@ -672,6 +686,10 @@ void WasmEngine::LogOutstandingCodesForIsolate(Isolate* isolate) {
 std::shared_ptr<NativeModule> WasmEngine::NewNativeModule(
     Isolate* isolate, const WasmFeatures& enabled,
     std::shared_ptr<const WasmModule> module) {
+  if (!gdb_server_) {
+    gdb_server_ = std::make_unique<gdb_server::GdbServer>(isolate, this);
+  }
+
   size_t code_size_estimate =
       wasm::WasmCodeManager::EstimateNativeModuleCodeSize(module.get());
   return NewNativeModule(isolate, enabled, code_size_estimate,
@@ -973,6 +991,10 @@ std::shared_ptr<WasmEngine> WasmEngine::GetWasmEngine() {
   if (FLAG_wasm_shared_engine) return *GetSharedWasmEngine();
   return std::make_shared<WasmEngine>();
 }
+
+void WasmEngine::Suspend() { WasmInterpreter::Suspend(); }
+
+void WasmEngine::Resume() { WasmInterpreter::Resume(); }
 
 // {max_mem_pages} is declared in wasm-limits.h.
 uint32_t max_mem_pages() {

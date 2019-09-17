@@ -162,6 +162,13 @@ class WasmScript : public Script {
 
   debug::WasmDisassembly DisassembleFunction(int function_index) const;
   uint32_t GetFunctionHash(int function_index);
+
+  bool GetWasmGlobal(uint32_t index, uint64_t* value) const;
+  bool GetWasmLocal(uint32_t index, uint64_t* value) const;
+  bool GetWasmStackValue(uint32_t index, uint64_t* value) const;
+  bool GetWasmMemory(uint32_t offset, uint8_t* buffer, uint32_t size) const;
+  bool AddWasmBreakpoint(uint32_t offset, debug::BreakpointId* id);
+  void RemoveWasmBreakpoint(debug::BreakpointId id);
 };
 
 V8_EXPORT_PRIVATE void GetLoadedScripts(
