@@ -212,6 +212,13 @@ DebugEvaluate::ContextBuilder::ContextBuilder(Isolate* isolate,
     ContextChainElement element = *rit;
     scope_info = ScopeInfo::CreateForWithScope(isolate, scope_info);
     scope_info->SetIsDebugEvaluateScope();
+    // If the function scope the debug break is in skips the outer class for
+    // private name lookup, the outermost wrapped context's ScopeInfo also needs
+    // to skip. Private names are always context-allocated.
+    if (scope_iterator_.InnerPrivateNameLookupSkipsOuterClass() &&
+        rit == context_chain_.rbegin()) {
+      scope_info->SetPrivateNameLookupSkipsOuterClass();
+    }
     evaluation_context_ = factory->NewDebugEvaluateContext(
         evaluation_context_, scope_info, element.materialized_object,
         element.wrapped_context, element.blacklist);

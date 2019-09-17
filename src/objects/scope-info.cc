@@ -624,6 +624,14 @@ bool ScopeInfo::PrivateNameLookupSkipsOuterClass() const {
   return PrivateNameLookupSkipsOuterClassField::decode(Flags());
 }
 
+void ScopeInfo::SetPrivateNameLookupSkipsOuterClass() {
+  if (length() > 0) {
+    SetFlags(Flags() | PrivateNameLookupSkipsOuterClassField::encode(true));
+  } else {
+    UNREACHABLE();
+  }
+}
+
 bool ScopeInfo::HasContext() const { return ContextLength() > 0; }
 
 Object ScopeInfo::FunctionName() const {

@@ -388,12 +388,27 @@ void ScopeIterator::AdvanceContext() {
   // a context. All the locals collected along the way build the
   // blacklist for debug-evaluate for this context.
   locals_ = StringSet::New(isolate_);
+  Scope* inner_scope = nullptr;
   do {
     if (!current_scope_ || !current_scope_->outer_scope()) break;
 
+    inner_scope = current_scope_;
     current_scope_ = current_scope_->outer_scope();
     CollectLocalsFromCurrentScope();
   } while (!current_scope_->NeedsContext());
+
+  // Remember if the function scope debug-evaluate is running in needs to skip
+  // the outer class for private name lookup. As the entire context chain is
+  // wrapped by debug-evaluate, this bit is set on the outermost ScopeInfo of
+  // the wrapped chain in ContextBuilder.
+  if (!inner_private_name_lookup_computed_ && inner_scope) {
+    inner_private_name_lookup_skips_outer_class_ =
+        inner_scope->private_name_lookup_skips_outer_class();
+    DCHECK_IMPLIES(inner_private_name_lookup_skips_outer_class_,
+                   current_scope_ && current_scope_->is_class_scope() &&
+                       current_scope_->NeedsContext());
+    inner_private_name_lookup_computed_ = true;
+  }
 }
 
 void ScopeIterator::Next() {
@@ -590,6 +605,10 @@ bool ScopeIterator::SetVariableValue(Handle<String> name,
 bool ScopeIterator::ClosureScopeHasThisReference() const {
   return !closure_scope_->has_this_declaration() &&
          closure_scope_->HasThisReference();
+}
+
+bool ScopeIterator::InnerPrivateNameLookupSkipsOuterClass() const {
+  return inner_private_name_lookup_skips_outer_class_;
 }
 
 void ScopeIterator::CollectLocalsFromCurrentScope() {
