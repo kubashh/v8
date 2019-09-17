@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df5f9ff7_a18a1d8b",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2019-09-17T08:52:29Z",
+      "side": 1,
+      "message": "Nit; Should we aim even for a more aggressive heuristic and simplify the heuristic? Maybe compare against a constant?",
+      "range": {
+        "startLine": 1451,
+        "startChar": 34,
+        "endLine": 1451,
+        "endChar": 43
+      },
+      "revId": "f79814c84d7acc7acc428bff86cdd661edb9ad20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
