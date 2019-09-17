@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b3d22dc_29bf81b2",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2019-09-17T14:27:22Z",
+      "side": 1,
+      "message": "Hello,\n\nSince \"code\" is now of type \"kCallCodeObject\", passing it to \"CallCFunction\" is causing\na crash on AIX. AIX expects a pointer to a function descriptor on any code_entry (of type kCallAddress) passed to \"CallCFunction\".\nIs there a convenient way to call this entry with kCallCodeObject instead of the default kCallAddress? Maybe use CallStub instead of CallCFunction?",
+      "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
