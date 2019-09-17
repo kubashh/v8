@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1153b8a8_a41bf1e8",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-09-17T09:22:34Z",
+      "side": 1,
+      "message": "no need to optimize this yet just use a context manager and open the file in append only mode and write every time a result arrives",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 39
+      },
+      "revId": "842b0a32933429e170f2b190a1524fa43d68643e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
