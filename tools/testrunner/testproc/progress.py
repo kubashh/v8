@@ -56,8 +56,15 @@ class ResultsTracker(base.TestProcObserver):
 
 
 class ProgressIndicator(base.TestProcObserver):
+  def __init__(self):
+    super(base.TestProcObserver, self).__init__()
+    self.options = None
+
   def finished(self):
     pass
+
+  def configure(self, options):
+    self.options = options
 
 
 class SimpleProgressIndicator(ProgressIndicator):
@@ -152,6 +159,28 @@ class VerboseProgressIndicator(SimpleProgressIndicator):
   def _on_event(self, event):
     self._print(event)
     self._print_processes_linux()
+
+
+class CIProgressIndicator(VerboseProgressIndicator):
+  def __init__(self):
+    super(CIProgressIndicator, self).__init__()
+    self.completion_file = None
+
+  def configure(self, options):
+    super(CIProgressIndicator, self).configure(options)
+    if self.options.ci_test_completion:
+      self.completion_file = open(self.options.ci_test_completion, "w")
+
+  def _print(self, text):
+    if self.options.ci_test_completion:
+      self.completion_file.write(text)
+      self.completion_file.write("\n")
+      self.completion_file.flush()
+
+  def finished(self):
+    if self.completion_file:
+      self.completion_file.close()
+    super(CIProgressIndicator, self).finished()
 
 
 class DotsProgressIndicator(SimpleProgressIndicator):
