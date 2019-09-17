@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1c4ccf58_cd4a0981",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2019-09-17T23:42:10Z",
+      "side": 1,
+      "message": "That doesn\u0027t work because of how the wrapped context chain is connected to the existing context chain. Please see the full explanation below.",
+      "parentUuid": "53ea97c3_ec0b47ca",
+      "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b33dba20_e5c8f90c",
         "filename": "src/debug/debug-scopes.cc",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-09-17T07:29:59Z",
       "side": 1,
       "message": "I\u0027m confused about this code: Why is this sticky? Won\u0027t this mark all ScopeInfo starting from the first wrapped scope info as skipping, possibly invalidly?\n\nE.g., something like:\n\nclass {\n  #a \u003d 5;\n  [class B extends class { m() { return this.#a } } {\n    #a \n   }](){}\n}",
+      "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82897eef_18820064",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2019-09-17T23:42:10Z",
+      "side": 1,
+      "message": "The first wrapped scope info is indeed what needs to be marked. It\u0027s probably easiest to walk through an example. Consider a slightly modified example to give names to all the scopes:\n\n  let C;\n  class A {\n    #a \u003d 5;\n    static B \u003d class B extends (C \u003d class C { m(o) { debugger; } }) {\n      #a\n    }\n  }\n\nThe original context chain, from outer -\u003e inner at the debug break, is:\n\n  global -\u003e class A -\u003e class B\n\nBoth A and B have forced contexts because of their private fields.\n\nDuring reparsing for debug-evaluate, the scope chain is:\n\n  global -\u003e class A [has context] -\u003e class B [has context] -\u003e class C [skips] -\u003e function m\n\nwhere [skips] means the scope skips the outer class scope for private name lookup.\n\nDebug-evaluate then wraps that scope chain with wrapped contexts and ScopeInfos that are actually `with` scopes:\n\n  global -\u003e class A -\u003e class B -\u003e with (wrapped class A)\n                               -\u003e with (wrapped class B)\n                               -\u003e with (wrapped class C)\n                               -\u003e with (wrapped function m)\n\nLooking at the above context chain, when debug-evaluating \"o.#a\", it\u0027s the the ScopeInfo corresponding to the wrapped class A context that needs to have the skip bit, since the unwrapped class B needs to be skipped during lookup.\n\nFor the above question about copying the skip bit exactly to the right wrapped context: when looking up a private name, all the debug-evaluate with scopes are skipped since they aren\u0027t class scopes. Putting the skip bit on wrapped class C with ScopeInfo has no effect.\n\nPut another way, the wrapped contexts do nothing as far as #-names are concerned. This seems fine since #-names being implemented as context-allocated variables is an implementation detail: they aren\u0027t actually variables.\n\nSo we need to do two things:\n\n1. Remember if the immediately outer context at the point of the debug break is a class scope that needs to be skipped. Since ScopeIterator walks the whole reparsed scope chain, we remember that bit when we advance just beyond the inner closure scope.\n\n2. Set the skip bit, if necessary, on the outermost wrapped context\u0027s ScopeInfo, since the entire context chain is wrapped and put right under the original context.\n\nDoes that make sense?",
+      "parentUuid": "b33dba20_e5c8f90c",
       "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1c4abcea_a87152a7",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2019-09-17T23:42:10Z",
+      "side": 1,
+      "message": "Wrapped debug-evaluate scopes don\u0027t show up as class scopes and are skipped when resolving private names. On top of that, class scopes with #-names have forced context allocation, so they\u0027d never have VariableLocation::LOCAL.",
+      "parentUuid": "6f3e7c59_fc8eabac",
+      "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52a4e960_7c2f9512",
         "filename": "src/objects/scope-info.cc",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c07b03b_9b453d51",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2019-09-17T23:42:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52a4e960_7c2f9512",
+      "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
