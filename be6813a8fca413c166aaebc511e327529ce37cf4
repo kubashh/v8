@@ -16,6 +16,24 @@
       "revId": "be6813a8fca413c166aaebc511e327529ce37cf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd45cfa6_286e80fd",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-09-17T13:23:47Z",
+      "side": 1,
+      "message": "Not for now. I only added a minimal extension to the anyref specification to make it comply with the bulk-memory specification, i.e. I just removed all conflicts. {functions_as_elements}, which means flag value \u003e\u003d 4 according to the bulk-memory specification, is not necessary for anyref, and therefore I did not add it. Eventually when anyref is rebased on the bulk-memory specification, we have to extend the code here as well. Until then, this behavior here is correct.",
+      "parentUuid": "ffd3fd91_66fe3eb9",
+      "revId": "be6813a8fca413c166aaebc511e327529ce37cf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
