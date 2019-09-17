@@ -219,6 +219,8 @@ struct V8_EXPORT_PRIVATE WasmModule {
       function_names;
   std::string source_map_url;
 
+  uint32_t code_offset = 0;
+
   explicit WasmModule(std::unique_ptr<Zone> signature_zone = nullptr);
 
   WireBytesRef LookupFunctionName(const ModuleWireBytes& wire_bytes,
