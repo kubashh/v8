@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffd3fd91_66fe3eb9",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-09-17T13:13:32Z",
+      "side": 1,
+      "message": "Isn\u0027t anyref also required for this?",
+      "revId": "be6813a8fca413c166aaebc511e327529ce37cf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
