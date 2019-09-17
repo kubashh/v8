@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a97be50_a693a881",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-17T06:00:50Z",
+      "side": 1,
+      "message": "Note: I think you\u0027ll clash with another currently-inflight CL that TNode-ifies builtins-regexp-gen.cc.",
+      "revId": "cf4c2b3101e59acadda2fdba854523e6c5a43ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "28fd3d43_edceeadc",
+        "filename": "src/builtins/regexp-exec.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-17T06:00:50Z",
+      "side": 1,
+      "message": "Small nit: is \u0027return cond ? x : y\u0027 possible when x is a macro and y is a builtin? If so that might be slightly nicer, otherwise please put the second \u0027return\u0027 in the \u0027else {}\u0027 branch.",
+      "revId": "cf4c2b3101e59acadda2fdba854523e6c5a43ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
