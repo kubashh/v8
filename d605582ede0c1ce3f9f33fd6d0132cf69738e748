@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "fb68f73f_1e68d04f",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-18T12:23:11Z",
+      "side": 1,
+      "message": "Minor performance tuning probably doesn\u0027t matter here, but on general principle I\u0027d move this out of the loop block, and mark it as Label::kDeferred.",
+      "range": {
+        "startLine": 265,
+        "startChar": 33,
+        "endLine": 265,
+        "endChar": 51
+      },
+      "revId": "d605582ede0c1ce3f9f33fd6d0132cf69738e748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cffec39c_4e30affa",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-18T12:23:11Z",
+      "side": 1,
+      "message": "This cast is unsafe, you\u0027ll need to do a smi check before you can load the instance type:\n\n  GotoIf(IsSmi(next_value), \u0026if_nextisnotstring);",
+      "range": {
+        "startLine": 266,
+        "startChar": 54,
+        "endLine": 266,
+        "endChar": 70
+      },
+      "revId": "d605582ede0c1ce3f9f33fd6d0132cf69738e748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbda1900_59d08485",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-18T12:23:11Z",
+      "side": 1,
+      "message": "nit: you can shorten this to:\n\n  GotoIfNot(IsStringInstanceType(next_value_type), \u0026if_nextisnotstring);\n\nand drop the if_nextisstring label and simply continue with that case here.",
+      "range": {
+        "startLine": 267,
+        "startChar": 4,
+        "endLine": 268,
+        "endChar": 32
+      },
+      "revId": "d605582ede0c1ce3f9f33fd6d0132cf69738e748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46f718f5_f47b0032",
         "filename": "src/builtins/builtins-iterator-gen.cc",
         "patchSetId": 2
@@ -37,6 +106,30 @@
       "side": 1,
       "message": "as in https://tc39.es/proposal-intl-list-format/#sec-createstringlistfromiterable",
       "parentUuid": "46f718f5_f47b0032",
+      "range": {
+        "startLine": 271,
+        "startChar": 12,
+        "endLine": 271,
+        "endChar": 15
+      },
+      "revId": "d605582ede0c1ce3f9f33fd6d0132cf69738e748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5db17b18_a5608d33",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-18T12:23:11Z",
+      "side": 1,
+      "message": "You can use ArrayFrom (in builtins-array-gen.cc) as inspiration. Looks like the structure you\u0027ll need is is roughly:\n\n  TVARIABLE(Object, var_exception);\n  Label if_exception(this, Label::kDeferred);\n  TNode\u003cObject\u003e ret \u003d\n      CallRuntime(Runtime::kThrowTypeError, context, ...);\n  GotoIfException(ret, \u0026if_exception, \u0026var_exception);\n  Unreachable();\n\n  // elsewhere...\n  BIND(\u0026if_exception);\n  iterator_assembler.IteratorCloseOnException(context, iterator_record,\n                                              var_exception.value());\n\nPlease make sure we have test coverage for this :-)",
+      "parentUuid": "5e7e3285_b96fde78",
       "range": {
         "startLine": 271,
         "startChar": 12,
