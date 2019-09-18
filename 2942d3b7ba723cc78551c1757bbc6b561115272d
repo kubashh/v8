@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "7f7b6e7a_fb148181",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-18T11:32:06Z",
+      "side": 1,
+      "message": "I hadn\u0027t realized that we duplicated the chain wrapped in with scopes on top of the actual chain. Duplicating the chain, rather than replacing it with a with-wrapped version, seems like a bug to me... We\u0027ll look through the same scope twice.\n\nWrapped context don\u0027t need to do something for #-vars because of the current implementation detail that they are anyway context allocated; see my other comment.\n\nThe fact that wrapped contexts don\u0027t have the right kind I think will almost certainly lead to bugs; e.g., I think the following happens currently:\n\nfunction f() {\n  let x; ()\u003d\u003ex; // create a context-allocated x.\n  function g() {\n    if (true) debugger;\n    return x;\n  } \n  g();\n}\nf()\non debugger, eval: function x() {}\n\nI actually talked to this with Yang and Simon today and I think we have to rewrite how debug evaluate works to fix all of this stuff. I\u0027m not sure it\u0027s worthwhile trying to fix this up independently of rewriting how debug evaluate resolves variables etc.",
+      "parentUuid": "82897eef_18820064",
+      "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f3e7c59_fc8eabac",
         "filename": "src/debug/debug-scopes.cc",
         "patchSetId": 3
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Wrapped debug-evaluate scopes don\u0027t show up as class scopes and are skipped when resolving private names. On top of that, class scopes with #-names have forced context allocation, so they\u0027d never have VariableLocation::LOCAL.",
       "parentUuid": "6f3e7c59_fc8eabac",
+      "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "004e7f56_fab17263",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-18T11:32:06Z",
+      "side": 1,
+      "message": "That they have forced context allocation seems like a current implementation artifact to me. If they are unused, and hence not context allocate them, we should not install them on the object at all to save space.",
+      "parentUuid": "1c4abcea_a87152a7",
       "revId": "2942d3b7ba723cc78551c1757bbc6b561115272d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
