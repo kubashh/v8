@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46f718f5_f47b0032",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-09-18T00:37:17Z",
+      "side": 1,
+      "message": "Need help. not sure how to write this part of code.",
+      "range": {
+        "startLine": 271,
+        "startChar": 12,
+        "endLine": 271,
+        "endChar": 15
+      },
+      "revId": "d605582ede0c1ce3f9f33fd6d0132cf69738e748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
