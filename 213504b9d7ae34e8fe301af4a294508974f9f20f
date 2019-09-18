@@ -16,6 +16,24 @@
       "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7613326a_ac6680e3",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-18T05:15:28Z",
+      "side": 1,
+      "message": "Not sure I understand fully:\n\n- Prior to this CL, the target was always a Code object containing jitted irregexp code.\n- With this CL, the target can also be a trampoline builtin (with an off-heap instruction stream).\n\nThe former suggests that calling the Code object is not problematic, rather the off-heap builtin. Does that make sense?",
+      "parentUuid": "1b3d22dc_29bf81b2",
+      "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
