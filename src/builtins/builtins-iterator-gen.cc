@@ -241,6 +241,57 @@ TF_BUILTIN(IterableToList, IteratorBuiltinsAssembler) {
   Return(IterableToList(context, iterable, iterator_fn));
 }
 
+TNode<JSArray> IteratorBuiltinsAssembler::StringListFromIterable(
+    TNode<Context> context, TNode<Object> iterable) {
+  // 2. Let iteratorRecord be ? GetIterator(items).
+  IteratorRecord iterator_record = GetIterator(context, iterable);
+
+  // 3. Let list be a new empty List.
+  GrowableFixedArray list(state());
+
+  Variable* vars[] = {list.var_array(), list.var_length(), list.var_capacity()};
+  Label loop_start(this, 3, vars), done(this);
+  Goto(&loop_start);
+  // 4. Let next be true.
+  // 5. Repeat, while next is not false
+  BIND(&loop_start);
+  {
+    //  a. Set next to ? IteratorStep(iteratorRecord).
+    TNode<JSReceiver> next = IteratorStep(context, iterator_record, &done);
+    //  b. If next is not false, then
+    //   i. Let nextValue be ? IteratorValue(next).
+    TNode<Object> next_value = IteratorValue(context, next);
+    //   ii. If Type(nextValue) is not String, then
+    Label if_nextisstring(this), if_nextisnotstring(this);
+    TNode<Uint16T> next_value_type = LoadInstanceType(CAST(next_value));
+    Branch(IsStringInstanceType(next_value_type), &if_nextisstring,
+           &if_nextisnotstring);
+    BIND(&if_nextisstring);
+    {
+      // 1. Let error be ThrowCompletion(a newly created TypeError object).
+      // 2. Return ? IteratorClose(iteratorRecord, error).
+      //
+      // Do not know how to write this part.
+    }
+
+    BIND(&if_nextisnotstring);
+    //   iii. Append nextValue to the end of the List list.
+    list.Push(next_value);
+    Goto(&loop_start);
+  }
+
+  BIND(&done);
+  // 6. Return list.
+  return list.ToJSArray(context);
+}
+
+TF_BUILTIN(StringListFromIterable, IteratorBuiltinsAssembler) {
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> iterable = CAST(Parameter(Descriptor::kIterable));
+
+  Return(StringListFromIterable(context, iterable));
+}
+
 // This builtin always returns a new JSArray and is thus safe to use even in the
 // presence of code that may call back into user-JS. This builtin will take the
 // fast path if the iterable is a fast array and the Array prototype and the
