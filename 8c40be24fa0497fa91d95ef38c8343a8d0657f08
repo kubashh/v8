@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9236a96b_b3128a14",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3683,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-18T08:48:44Z",
+      "side": 1,
+      "message": "This doesn\u0027t have any effect if we perform GC right after it.",
+      "range": {
+        "startLine": 3679,
+        "startChar": 4,
+        "endLine": 3683,
+        "endChar": 5
+      },
+      "revId": "8c40be24fa0497fa91d95ef38c8343a8d0657f08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42db4adf_0d4d4923",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3702,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-18T08:48:44Z",
+      "side": 1,
+      "message": "Not needed.",
+      "range": {
+        "startLine": 3702,
+        "startChar": 1,
+        "endLine": 3702,
+        "endChar": 45
+      },
+      "revId": "8c40be24fa0497fa91d95ef38c8343a8d0657f08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72eae36f_1e59a423",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3704,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-18T08:48:44Z",
+      "side": 1,
+      "message": "This should depend on |promote|?",
+      "range": {
+        "startLine": 3703,
+        "startChar": 1,
+        "endLine": 3704,
+        "endChar": 33
+      },
+      "revId": "8c40be24fa0497fa91d95ef38c8343a8d0657f08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
