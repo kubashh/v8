@@ -142,6 +142,24 @@
       "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17c0e4f8_bf05cc3d",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-19T15:12:43Z",
+      "side": 1,
+      "message": "There is currently in-progress work by anapesko@ that will add a builtin trampoline for the jitting case as well. That would solve this issue (although we still need a way to call a builtin with C linkage *without* a function descriptor).",
+      "parentUuid": "c2640f22_28091a08",
+      "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
