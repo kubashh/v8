@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c50f89d8_a7c02e9c",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-09-19T19:03:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "547735a6_abac115e",
+      "range": {
+        "startLine": 285,
+        "startChar": 22,
+        "endLine": 286,
+        "endChar": 41
+      },
+      "revId": "32a87cb893fad9047167849d8fa26aafc5779455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68b25a36_128bd0f3",
         "filename": "src/builtins/builtins-iterator-gen.h",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "32a87cb893fad9047167849d8fa26aafc5779455",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "863a8fd0_08a4f5c9",
+        "filename": "src/builtins/builtins-iterator-gen.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-09-19T19:03:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68b25a36_128bd0f3",
+      "range": {
+        "startLine": 71,
+        "startChar": 5,
+        "endLine": 71,
+        "endChar": 38
+      },
+      "revId": "32a87cb893fad9047167849d8fa26aafc5779455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c8b5dfc6_5e2ccfa5",
+        "filename": "src/objects/js-list-format.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-09-19T19:03:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9594475c_bac85f8e",
+      "range": {
+        "startLine": 266,
+        "startChar": 4,
+        "endLine": 266,
+        "endChar": 9
+      },
+      "revId": "32a87cb893fad9047167849d8fa26aafc5779455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6bcc2d68_8991c68a",
         "filename": "test/intl/regress-9747.js",
         "patchSetId": 6
@@ -91,6 +163,30 @@
       "revId": "32a87cb893fad9047167849d8fa26aafc5779455",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f75153b_1c91b7d4",
+        "filename": "test/intl/regress-9747.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-09-19T19:03:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bcc2d68_8991c68a",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "32a87cb893fad9047167849d8fa26aafc5779455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
