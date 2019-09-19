@@ -52,6 +52,24 @@
       "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3a5f385_79606801",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-19T07:08:16Z",
+      "side": 1,
+      "message": "It sounds like a solution is to add \u0027__ function_descriptor()\u0027 to the RegExpInterpreterTrampoline on ppc? It is only ever called from this callsite.",
+      "parentUuid": "d0d100c1_963135fa",
+      "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
