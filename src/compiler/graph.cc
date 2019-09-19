@@ -68,9 +68,10 @@ Node* Graph::CloneNode(const Node* node) {
 
 
 NodeId Graph::NextNodeId() {
-  NodeId const id = next_node_id_;
-  CHECK(!base::bits::UnsignedAddOverflow32(id, 1, &next_node_id_));
-  return id;
+  // The node id is stored internally as Node::IdField, wich has fewer bits than
+  // NodeId. Hence the addition below won't ever overflow.
+  DCHECK_LT(next_node_id_, std::numeric_limits<NodeId>::max());
+  return next_node_id_++;
 }
 
 void Graph::Print() const { StdoutStream{} << AsRPO(*this); }
