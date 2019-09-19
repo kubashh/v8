@@ -88,6 +88,24 @@
       "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f96c69c_a96ee06e",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2019-09-19T11:56:03Z",
+      "side": 1,
+      "message": "I tried modifying the \"Generate_RegExpInterpreterTrampoline\" function and added \"masm-\u003efunction_descriptor();\" right before the jump instruction but I get the following error when compiling: RegExpInterpreterTrampoline is not isolate-independent.",
+      "parentUuid": "6611fd3e_23c42d59",
+      "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
