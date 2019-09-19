@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "568e6cd7_66f74d7e",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-19T08:02:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33b22b93_dcc0fd50",
+      "revId": "b453748a975e6b78ace815ca39b353ebbd396b3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55358468_49ced01b",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 17
@@ -33,6 +51,24 @@
       "revId": "b453748a975e6b78ace815ca39b353ebbd396b3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5151bab8_40d93e71",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-19T08:02:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55358468_49ced01b",
+      "revId": "b453748a975e6b78ace815ca39b353ebbd396b3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "04760c25_52426aa1",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 4745,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-19T08:02:19Z",
+      "side": 1,
+      "message": "I just made a regular function. Please let me know if you would prefer something templated.",
+      "parentUuid": "a4dc96ea_5f617268",
+      "revId": "b453748a975e6b78ace815ca39b353ebbd396b3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0996b716_3d12b66f",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 17
@@ -67,6 +121,24 @@
       "revId": "b453748a975e6b78ace815ca39b353ebbd396b3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff25686e_26d247d4",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 4801,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-19T08:02:19Z",
+      "side": 1,
+      "message": "I was worried about performance impact, but now that we only do this for top level statements in a derived constructor it definitely makes sense to check more frequently.",
+      "parentUuid": "0996b716_3d12b66f",
+      "revId": "b453748a975e6b78ace815ca39b353ebbd396b3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
