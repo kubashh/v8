@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "dba8b1f6_a24e74ea",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 5588,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-19T14:24:44Z",
+      "side": 1,
+      "message": "What about eval(\"(()\u003d\u003ethis)()\")\n\nYou probably, for simplicity, just want to check whether an inner scope of the GetReceiverScope() calls eval.",
+      "revId": "cf6a855962d40d67c2900f4c0c7d5c85ab21e3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ed1c3d5_85460b78",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 20
