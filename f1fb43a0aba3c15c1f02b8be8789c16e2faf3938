@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9983803e_cc767fcc",
+        "filename": "src/objects/js-list-format.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-19T15:31:02Z",
+      "side": 0,
+      "message": "This template is now unused, please drop it from message-template.h",
+      "range": {
+        "startLine": 276,
+        "startChar": 40,
+        "endLine": 276,
+        "endChar": 57
+      },
+      "revId": "f1fb43a0aba3c15c1f02b8be8789c16e2faf3938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
