@@ -124,6 +124,24 @@
       "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2640f22_28091a08",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-09-19T14:42:30Z",
+      "side": 1,
+      "message": "I think the problem here is that regexp has function descriptor but the trampoline doesn\u0027t. So if they share the same entry (CallCFunction or CallCFunction without fd), one of them would not work correctly. We need a way to tell if the code being called is regexp or trampoline.",
+      "parentUuid": "4c3dfde9_400b6174",
+      "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
