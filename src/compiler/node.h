@@ -201,7 +201,7 @@ class V8_EXPORT_PRIVATE Node final {
     }
 
     using InlineField = BitField<bool, 0, 1>;
-    using InputIndexField = BitField<unsigned, 1, 17>;
+    using InputIndexField = BitField<unsigned, 1, 25>;
     // Leaving some space in the bitset in case we ever decide to record
     // the output index.
   };
@@ -291,7 +291,6 @@ class V8_EXPORT_PRIVATE Node final {
   using InlineCountField = BitField<unsigned, 24, 4>;
   using InlineCapacityField = BitField<unsigned, 28, 4>;
   static const int kOutlineMarker = InlineCountField::kMax;
-  static const int kMaxInlineCount = InlineCountField::kMax - 1;
   static const int kMaxInlineCapacity = InlineCapacityField::kMax - 1;
 
   const Operator* op_;

@@ -68,9 +68,8 @@ Node* Graph::CloneNode(const Node* node) {
 
 
 NodeId Graph::NextNodeId() {
-  NodeId const id = next_node_id_;
-  CHECK(!base::bits::UnsignedAddOverflow32(id, 1, &next_node_id_));
-  return id;
+  DCHECK_LT(next_node_id_, std::numeric_limits<NodeId>::max());
+  return next_node_id_++;
 }
 
 void Graph::Print() const { StdoutStream{} << AsRPO(*this); }
