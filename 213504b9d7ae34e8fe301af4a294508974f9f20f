@@ -106,6 +106,24 @@
       "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c3dfde9_400b6174",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-19T13:13:46Z",
+      "side": 1,
+      "message": "Yes, it\u0027s a builtin (and thus embedded). It\u0027d be great to keep this single call site, that was the entire point of the refactoring done in this CL. \n\nIt sounds like we need new functionality to support the complexities around function descriptors on ppc, sadly. A special case of CallCFunction that doesn\u0027t expect a function descriptor.",
+      "parentUuid": "0f96c69c_a96ee06e",
+      "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
