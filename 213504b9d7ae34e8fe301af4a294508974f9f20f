@@ -70,6 +70,24 @@
       "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6611fd3e_23c42d59",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-09-19T11:50:08Z",
+      "side": 1,
+      "message": "Sound like a solution. But is RegExpInterpreterTrampoline going to be part of the embedded builtins? (currently or in the future). If that\u0027s the case, function descriptor will cause reloc issue.",
+      "parentUuid": "d3a5f385_79606801",
+      "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
