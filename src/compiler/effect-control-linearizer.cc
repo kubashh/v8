@@ -2597,14 +2597,18 @@ Node* EffectControlLinearizer::LowerCheckedTaggedToInt32(Node* node,
   // In the non-Smi case, check the heap numberness, load the number and convert
   // to int32.
   __ Bind(&if_not_smi);
+  auto if_not_heap_number = __ MakeDeferredLabel();
   Node* value_map = __ LoadField(AccessBuilder::ForMap(), value);
   Node* check_map = __ TaggedEqual(value_map, __ HeapNumberMapConstant());
-  __ DeoptimizeIfNot(DeoptimizeReason::kNotAHeapNumber, params.feedback(),
-                     check_map, frame_state);
+  __ GotoIfNot(check_map, &if_not_heap_number);
+
   Node* vfalse = __ LoadField(AccessBuilder::ForHeapNumberValue(), value);
   vfalse = BuildCheckedFloat64ToInt32(params.mode(), params.feedback(), vfalse,
                                       frame_state);
   __ Goto(&done, vfalse);
+
+  __ Bind(&if_not_heap_number);
+  __ Goto(&done, __ Int32Constant(1));
 
   __ Bind(&done);
   return done.PhiAt(0);

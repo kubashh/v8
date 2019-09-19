@@ -1361,6 +1361,25 @@ uint32_t String::ComputeAndSetHash() {
   return result;
 }
 
+int32_t String::ToInt32(Address key_addr) {
+  DisallowHeapAllocation no_gc;
+  String key(key_addr);
+  uint32_t index;
+  bool found = key.AsArrayIndex(&index);
+
+  if (!found) {
+    return -1;
+  }
+
+  if (index <= INT_MAX) return index;
+
+  if (index <= JSArray::kMaxArrayIndex) {
+    return -2;
+  }
+
+  return -1;
+}
+
 bool String::ComputeArrayIndex(uint32_t* index) {
   int length = this->length();
   if (length == 0 || length > kMaxArrayIndexSize) return false;
