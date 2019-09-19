@@ -155,7 +155,7 @@ void Simulator::CallImpl(Address entry, CallArgument* args) {
   set_sp(original_stack);
 }
 
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
 namespace {
 int PopLowestIndexAsCode(CPURegList* list) {
   if (list->IsEmpty()) {
@@ -175,7 +175,7 @@ void Simulator::CheckPCSComplianceAndRun() {
   // Adjust JS-based stack limit to C-based stack limit.
   isolate_->stack_guard()->AdjustStackLimitForSimulator();
 
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
   DCHECK_EQ(kNumberOfCalleeSavedRegisters, kCalleeSaved.Count());
   DCHECK_EQ(kNumberOfCalleeSavedVRegisters, kCalleeSavedV.Count());
 
@@ -197,7 +197,7 @@ void Simulator::CheckPCSComplianceAndRun() {
 #endif
   // Start the simulation!
   Run();
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
   DCHECK_EQ(original_stack, sp());
   // Check that callee-saved registers have been preserved.
   register_list = kCalleeSaved;
@@ -228,7 +228,7 @@ void Simulator::CheckPCSComplianceAndRun() {
 #endif
 }
 
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
 // The least significant byte of the curruption value holds the corresponding
 // register's code.
 void Simulator::CorruptRegisters(CPURegList* list, uint64_t value) {
@@ -532,7 +532,7 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
       int64_t result =
           target(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
       TraceSim("Returned: 0x%16\n", result);
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
       CorruptAllCallerSavedCPURegisters();
 #endif
       set_xreg(0, result);
@@ -564,7 +564,7 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
           external, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
       TraceSim("Returned: {%p, %p}\n", reinterpret_cast<void*>(result.x),
                reinterpret_cast<void*>(result.y));
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
       CorruptAllCallerSavedCPURegisters();
 #endif
       set_xreg(0, static_cast<int64_t>(result.x));
@@ -578,7 +578,7 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
       TraceSim("Arguments: 0x%016" PRIx64 "\n", xreg(0));
       UnsafeDirectApiCall(external, xreg(0));
       TraceSim("No return value.");
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
       CorruptAllCallerSavedCPURegisters();
 #endif
       break;
@@ -592,7 +592,7 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
       TraceSim("Arguments: %f, %f\n", dreg(0), dreg(1));
       int64_t result = target(dreg(0), dreg(1));
       TraceSim("Returned: %" PRId64 "\n", result);
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
       CorruptAllCallerSavedCPURegisters();
 #endif
       set_xreg(0, result);
@@ -607,7 +607,7 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
       TraceSim("Argument: %f\n", dreg(0));
       double result = target(dreg(0));
       TraceSim("Returned: %f\n", result);
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
       CorruptAllCallerSavedCPURegisters();
 #endif
       set_dreg(0, result);
@@ -622,7 +622,7 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
       TraceSim("Arguments: %f, %f\n", dreg(0), dreg(1));
       double result = target(dreg(0), dreg(1));
       TraceSim("Returned: %f\n", result);
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
       CorruptAllCallerSavedCPURegisters();
 #endif
       set_dreg(0, result);
@@ -637,7 +637,7 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
       TraceSim("Arguments: %f, %d\n", dreg(0), wreg(0));
       double result = target(dreg(0), wreg(0));
       TraceSim("Returned: %f\n", result);
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
       CorruptAllCallerSavedCPURegisters();
 #endif
       set_dreg(0, result);
@@ -651,7 +651,7 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
                xreg(1));
       UnsafeDirectGetterCall(external, xreg(0), xreg(1));
       TraceSim("No return value.");
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
       CorruptAllCallerSavedCPURegisters();
 #endif
       break;
@@ -664,7 +664,7 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
       TraceSim("Arguments: 0x%016" PRIx64 ", %p\n", xreg(0), arg1);
       UnsafeProfilingApiCall(external, xreg(0), arg1);
       TraceSim("No return value.");
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
       CorruptAllCallerSavedCPURegisters();
 #endif
       break;
@@ -681,7 +681,7 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
                xreg(1), arg2);
       target(xreg(0), xreg(1), arg2);
       TraceSim("No return value.");
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
       CorruptAllCallerSavedCPURegisters();
 #endif
       break;
@@ -5866,7 +5866,7 @@ void Simulator::DoPrintf(Instruction* instr) {
 
   fprintf(stream_, "%s", clr_normal);
 
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
   CorruptAllCallerSavedCPURegisters();
 #endif
 
