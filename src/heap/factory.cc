@@ -1421,7 +1421,7 @@ Handle<Context> Factory::NewContext(RootIndex map_root_index, int size,
   Map map = Map::cast(isolate()->root(map_root_index));
   HeapObject result = AllocateRawWithImmortalMap(size, allocation, map);
   Handle<Context> context(Context::cast(result), isolate());
-  context->set_length(variadic_part_length);
+  context->initialize_length(variadic_part_length, true);
   DCHECK_EQ(context->SizeFromMap(map), size);
   if (size > Context::kTodoHeaderSize) {
     ObjectSlot start = context->RawField(Context::kTodoHeaderSize);
