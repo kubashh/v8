@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "0347000a_676fadeb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-20T10:52:04Z",
+      "side": 1,
+      "message": "Precisely, I am trying to land this small CL that just adds a bit in the length field, later I will remove the extension slots and save memory. It will probably also improve a bit performance, since interpreter-assembler.cc:GotoIfHasContextExtensionUpToDepth checks a single bit now, instead of comparing pointers.",
+      "parentUuid": "29eb7202_99aa6d4b",
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eefa520d_a9e644d3",
         "filename": "src/heap/factory.cc",
         "patchSetId": 2
@@ -102,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "65898143_66ebad2f",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-20T10:52:04Z",
+      "side": 1,
+      "message": "No need for the enum at the moment.",
+      "parentUuid": "05812421_1017fdf4",
+      "range": {
+        "startLine": 1424,
+        "startChar": 11,
+        "endLine": 1424,
+        "endChar": 28
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fe42f1f_276b6a3f",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 2
@@ -119,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "24436738_36ce8528",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-20T10:52:04Z",
+      "side": 1,
+      "message": "My mistake, I will revert that.",
+      "parentUuid": "2fe42f1f_276b6a3f",
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f73d3848_e0e8ce7e",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 2
@@ -130,6 +190,24 @@
       "writtenOn": "2019-09-20T10:44:25Z",
       "side": 1,
       "message": "I\u0027d prefer this was scoped withini the context_search scope since it\u0027s still part of that loop.",
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "279c14c3_d3ad8aab",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-20T10:52:04Z",
+      "side": 1,
+      "message": "Ok.",
+      "parentUuid": "f73d3848_e0e8ce7e",
       "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -183,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "09c5b404_4fe93972",
+        "filename": "src/objects/contexts-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-20T10:52:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e69ccfd_1c46f996",
+      "range": {
+        "startLine": 110,
+        "startChar": 9,
+        "endLine": 110,
+        "endChar": 33
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42e3bdef_1af21dc8",
         "filename": "src/objects/contexts-inl.h",
         "patchSetId": 2
@@ -230,6 +332,30 @@
     },
     {
       "key": {
+        "uuid": "f09c92d6_76eaebc5",
+        "filename": "src/objects/contexts-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-20T10:52:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe6c9311_1e3404de",
+      "range": {
+        "startLine": 117,
+        "startChar": 23,
+        "endLine": 117,
+        "endChar": 29
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "93e9dbc5_dea240e5",
         "filename": "src/objects/contexts-inl.h",
         "patchSetId": 2
@@ -274,6 +400,30 @@
       "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ee01a2e_8bc97c03",
+        "filename": "src/objects/contexts-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-20T10:52:04Z",
+      "side": 1,
+      "message": "I removed the TODO.",
+      "parentUuid": "b5cc0e66_9f03e89f",
+      "range": {
+        "startLine": 118,
+        "startChar": 2,
+        "endLine": 118,
+        "endChar": 62
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
