@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "874704b9_d78df4db",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-20T11:06:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65898143_66ebad2f",
+      "range": {
+        "startLine": 1424,
+        "startChar": 11,
+        "endLine": 1424,
+        "endChar": 28
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fe42f1f_276b6a3f",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 2
@@ -211,6 +235,24 @@
       "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38add308_b7a988d9",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-20T11:06:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "279c14c3_d3ad8aab",
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -471,6 +513,30 @@
       "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6ab7e99_87d77a51",
+        "filename": "src/objects/contexts.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-20T11:06:05Z",
+      "side": 1,
+      "message": "No need for set_has_extension actually.",
+      "parentUuid": "1dfa87a0_6135ebb1",
+      "range": {
+        "startLine": 458,
+        "startChar": 17,
+        "endLine": 458,
+        "endChar": 34
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
