@@ -140,6 +140,52 @@
       "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93e9dbc5_dea240e5",
+        "filename": "src/objects/contexts-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-20T10:29:44Z",
+      "side": 1,
+      "message": "what does this mean? is the TODO to check if object.IsTheHole()?",
+      "range": {
+        "startLine": 118,
+        "startChar": 2,
+        "endLine": 118,
+        "endChar": 62
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "091acd7b_e3ac12ea",
+        "filename": "src/objects/contexts.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-20T10:29:44Z",
+      "side": 1,
+      "message": "normally we would split this into two methods, set_length and set_has_extension, which each set the appropriate bits on the bitfield.",
+      "range": {
+        "startLine": 458,
+        "startChar": 17,
+        "endLine": 458,
+        "endChar": 34
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
