@@ -16,6 +16,24 @@
       "revId": "b13c3a359ef37de76a3d8999f61bd370e6ea8708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c6de26f_741ac82e",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1356117
+      },
+      "writtenOn": "2019-09-20T13:14:56Z",
+      "side": 1,
+      "message": "We used to do it with a DEFINE_NEG_IMPLICATION, but then we changed it to this. The consensus was that it wouldn\u0027t be clear what would happen with the flags when they\u0027re added in different order, and we wanted to explicitly warn the user if they tried to turn on both flags, either by crashing or just printing the warning message, but, well, tests failed ¯\\_(ツ)_/¯",
+      "parentUuid": "aeee6a6d_a844377e",
+      "revId": "b13c3a359ef37de76a3d8999f61bd370e6ea8708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
