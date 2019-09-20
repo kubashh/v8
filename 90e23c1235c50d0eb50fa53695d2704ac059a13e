@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "381adddc_62a07f96",
+        "filename": "src/objects/contexts-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-09-20T13:23:12Z",
+      "side": 1,
+      "message": "for readability, can you split this up into something like\n\n    int value \u003d 0;\n    value \u003d LengthField::update(value, len);\n    value \u003d HasExtensionField::update(value, flag);",
+      "range": {
+        "startLine": 61,
+        "startChar": 32,
+        "endLine": 62,
+        "endChar": 68
+      },
+      "revId": "90e23c1235c50d0eb50fa53695d2704ac059a13e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
