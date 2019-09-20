@@ -16,6 +16,24 @@
       "revId": "4ef88165e9527e18c112fd9378a6bb5170f21ca6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19a03370_14860628",
+        "filename": "src/parsing/preparse-data.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-09-20T00:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ac7d538_90e73235",
+      "revId": "4ef88165e9527e18c112fd9378a6bb5170f21ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
