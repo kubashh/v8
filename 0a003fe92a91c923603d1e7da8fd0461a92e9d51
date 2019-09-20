@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eefa520d_a9e644d3",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-20T09:58:26Z",
+      "side": 1,
+      "message": "Should the method be called initialize_length_and_extension_bit?\n\nNit: we generally prefer enum class with descriptive name instead of boolean values. It improve readability, e.g.\n\ncontext-\u003einitialize_length_and_extenstion(variadic_part_length, HasExtension::kYes);",
+      "range": {
+        "startLine": 1424,
+        "startChar": 11,
+        "endLine": 1424,
+        "endChar": 28
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53f353d4_c530b96f",
+        "filename": "src/objects/contexts-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-20T09:58:26Z",
+      "side": 1,
+      "message": "How is it possible that the extension bit is set but the extension is the hole?",
+      "range": {
+        "startLine": 110,
+        "startChar": 9,
+        "endLine": 110,
+        "endChar": 33
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42e3bdef_1af21dc8",
+        "filename": "src/objects/contexts-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-09-20T09:58:26Z",
+      "side": 1,
+      "message": "DCHECK that object is not the hole?",
+      "range": {
+        "startLine": 117,
+        "startChar": 23,
+        "endLine": 117,
+        "endChar": 29
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
