@@ -1134,6 +1134,9 @@ class ModuleDecoderImpl : public Decoder {
       // Shift the offset by the section header length
       offset += section_iter.payload_start() - section_iter.section_start();
       if (section_iter.section_code() != SectionCode::kUnknownSectionCode) {
+        if (section_iter.section_code() == SectionCode::kCodeSectionCode) {
+          module_->code_offset = offset;
+        }
         DecodeSection(section_iter.section_code(), section_iter.payload(),
                       offset, verify_functions);
       }
