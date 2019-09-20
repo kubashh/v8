@@ -455,7 +455,10 @@ class Context : public HeapObject {
 
   // [length]: length of the context.
   V8_INLINE int length() const;
-  V8_INLINE void set_length(int value);
+  V8_INLINE void initialize_length(int len, bool extension);
+
+  using LengthField = BitField<int, 0, kSmiValueSize - 1>;
+  using HasExtensionField = BitField<int, kSmiValueSize - 1, 1>;
 
   // Setter and getter for elements.
   V8_INLINE Object get(int index) const;
@@ -662,6 +665,7 @@ class Context : public HeapObject {
 #endif
 
   OBJECT_CONSTRUCTORS(Context, HeapObject);
+  DECL_INT_ACCESSORS(length_and_extension_flag)
 };
 
 class NativeContext : public Context {
