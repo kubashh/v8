@@ -160,6 +160,24 @@
       "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fce23819_e6521711",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2019-09-20T12:37:27Z",
+      "side": 1,
+      "message": "I\u0027m just curious on the need for a trampoline in this scenario. Is it not possible to call the Interpreter or the jitted irregexp code directly? Reason for asking is, we are calling a trampoline with a \"CallCFunction\" but a trampoline isn\u0027t a CFunction.\nOn the other hand, the trampoline should do a \"CallCFunction\" instead of a \"Jump\" as it\u0027s calling a real CFunction (Im assuming the Interpreter and the jitted irregexp code are both CFunctions).",
+      "parentUuid": "17c0e4f8_bf05cc3d",
+      "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
