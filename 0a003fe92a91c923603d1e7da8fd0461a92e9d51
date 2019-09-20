@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "301b9f62_6c0c49a1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-20T10:50:04Z",
+      "side": 1,
+      "message": "Sounds reasonable, can we add that to the comment and bug?",
+      "parentUuid": "29eb7202_99aa6d4b",
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eefa520d_a9e644d3",
         "filename": "src/heap/factory.cc",
         "patchSetId": 2
