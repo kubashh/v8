@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "8286bbe6_c2ecdddd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-20T10:44:25Z",
+      "side": 1,
+      "message": "Are there an benchmark results that show this improves performance?",
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eefa520d_a9e644d3",
         "filename": "src/heap/factory.cc",
         "patchSetId": 2
@@ -43,6 +60,40 @@
         "endLine": 1424,
         "endChar": 28
       },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fe42f1f_276b6a3f",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-20T10:44:25Z",
+      "side": 1,
+      "message": "Any reason  to move this to VariableList? A CL just landed moving these to initializer lists in the Lable constructor where possible",
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f73d3848_e0e8ce7e",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-20T10:44:25Z",
+      "side": 1,
+      "message": "I\u0027d prefer this was scoped withini the context_search scope since it\u0027s still part of that loop.",
       "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
