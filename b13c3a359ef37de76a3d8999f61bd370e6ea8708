@@ -34,6 +34,24 @@
       "revId": "b13c3a359ef37de76a3d8999f61bd370e6ea8708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2666d47d_4261e857",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-09-20T13:18:29Z",
+      "side": 1,
+      "message": "Ack. Thanks for the background!",
+      "parentUuid": "5c6de26f_741ac82e",
+      "revId": "b13c3a359ef37de76a3d8999f61bd370e6ea8708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
