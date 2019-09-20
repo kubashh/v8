@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "b5cc0e66_9f03e89f",
+        "filename": "src/objects/contexts-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-20T10:39:59Z",
+      "side": 1,
+      "message": "At the moment, there are a lot o set_extension calls from heap/factory by contexts that do not have an extension. In a later CL, I want to set the extension bit only for these contexts that might potentially have an extension (those that we can only be sure dynamically).",
+      "parentUuid": "93e9dbc5_dea240e5",
+      "range": {
+        "startLine": 118,
+        "startChar": 2,
+        "endLine": 118,
+        "endChar": 62
+      },
+      "revId": "0a003fe92a91c923603d1e7da8fd0461a92e9d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "091acd7b_e3ac12ea",
         "filename": "src/objects/contexts.h",
         "patchSetId": 2
