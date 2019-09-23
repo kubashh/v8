@@ -16,6 +16,23 @@
       "revId": "d7b67ce2068cf5e429b0ebf683436276514f3a6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d450ca3_7e75e12e",
+        "filename": "src/objects/contexts.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-23T06:44:29Z",
+      "side": 1,
+      "message": "So this enum class encodes exactly opposite to the bit field, right? In the bitfield, 0 means \u0027no\u0027 and 1 means \u0027yes\u0027. In the enum, 0 means \u0027yes\u0027 and 1 means \u0027no\u0027. Wouldn\u0027t it be simpler to \n\n enum class HasExtension {\n  kNo \u003d 0,\n  kYes \u003d 1,\n };\n\nand store the enum value directly in the bitfield?\n\n using HasExtensionField \u003d BitField\u003cHasExtension, kSmiValueSize - 2, 1\u003e;\n\nAlso, why \u0027kSmiValueSize - 2\u0027? Is one bit now unused?",
+      "revId": "d7b67ce2068cf5e429b0ebf683436276514f3a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
