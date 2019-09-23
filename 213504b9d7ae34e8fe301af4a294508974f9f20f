@@ -178,6 +178,24 @@
       "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "372782de_0520872c",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-23T05:48:13Z",
+      "side": 1,
+      "message": "I filed https://crbug.com/v8/9766, let\u0027s discuss there :)",
+      "parentUuid": "fce23819_e6521711",
+      "revId": "213504b9d7ae34e8fe301af4a294508974f9f20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
