@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "76d30799_6e8cd458",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-23T16:16:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d42a4d4_defdae75",
+      "range": {
+        "startLine": 1160,
+        "startChar": 0,
+        "endLine": 1160,
+        "endChar": 54
+      },
+      "revId": "94342c44b95fdd5629ab14eead3b8cc59792ca7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1db3bf87_972f74b2",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 3
@@ -69,6 +93,30 @@
       "revId": "94342c44b95fdd5629ab14eead3b8cc59792ca7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fff58b1_ef22a1d5",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1172,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-23T16:16:46Z",
+      "side": 1,
+      "message": "I took a second look at it and rcx is actually free by this point. It is used below in AdvanceBytecodeOffsetOrReturn but as a scratch register.",
+      "parentUuid": "1db3bf87_972f74b2",
+      "range": {
+        "startLine": 1172,
+        "startChar": 6,
+        "endLine": 1172,
+        "endChar": 9
+      },
+      "revId": "94342c44b95fdd5629ab14eead3b8cc59792ca7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
