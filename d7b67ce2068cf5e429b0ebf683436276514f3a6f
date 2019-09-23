@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "891ba0ac_b43912cc",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1439,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-23T06:37:47Z",
+      "side": 1,
+      "message": "Drive-by: We only use SloppyTNode for convenience when old (untyped) callsites exit. New code should use TNode.",
+      "revId": "d7b67ce2068cf5e429b0ebf683436276514f3a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
