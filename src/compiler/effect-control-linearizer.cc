@@ -189,6 +189,7 @@ class EffectControlLinearizer {
   Node* LowerLoadFieldByIndex(Node* node);
   Node* LowerLoadTypedElement(Node* node);
   Node* LowerLoadDataViewElement(Node* node);
+  Node* LowerLoadStackArgument(Node* node);
   void LowerStoreTypedElement(Node* node);
   void LowerStoreDataViewElement(Node* node);
   void LowerStoreSignedSmallElement(Node* node);
@@ -1253,6 +1254,9 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       break;
     case IrOpcode::kLoadDataViewElement:
       result = LowerLoadDataViewElement(node);
+      break;
+    case IrOpcode::kLoadStackArgument:
+      result = LowerLoadStackArgument(node);
       break;
     case IrOpcode::kStoreTypedElement:
       LowerStoreTypedElement(node);
@@ -5051,6 +5055,16 @@ Node* EffectControlLinearizer::LowerLoadTypedElement(Node* node) {
   return __ LoadElement(AccessBuilder::ForTypedArrayElement(
                             array_type, true, LoadSensitivity::kCritical),
                         data_ptr, index);
+}
+
+Node* EffectControlLinearizer::LowerLoadStackArgument(Node* node) {
+  Node* base = node->InputAt(0);
+  Node* index = node->InputAt(1);
+
+  Node* argument =
+      __ LoadElement(AccessBuilder::ForStackArgument(), base, index);
+
+  return __ BitcastWordToTagged(argument);
 }
 
 void EffectControlLinearizer::LowerStoreTypedElement(Node* node) {
