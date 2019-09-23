@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4f268e90_59043d6f",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1439,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-23T07:37:04Z",
+      "side": 1,
+      "message": "Thanks, I am still getting up to speed with TNodes.",
+      "parentUuid": "891ba0ac_b43912cc",
+      "revId": "d7b67ce2068cf5e429b0ebf683436276514f3a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2d450ca3_7e75e12e",
         "filename": "src/objects/contexts.h",
         "patchSetId": 9
@@ -30,6 +48,24 @@
       "writtenOn": "2019-09-23T06:44:29Z",
       "side": 1,
       "message": "So this enum class encodes exactly opposite to the bit field, right? In the bitfield, 0 means \u0027no\u0027 and 1 means \u0027yes\u0027. In the enum, 0 means \u0027yes\u0027 and 1 means \u0027no\u0027. Wouldn\u0027t it be simpler to \n\n enum class HasExtension {\n  kNo \u003d 0,\n  kYes \u003d 1,\n };\n\nand store the enum value directly in the bitfield?\n\n using HasExtensionField \u003d BitField\u003cHasExtension, kSmiValueSize - 2, 1\u003e;\n\nAlso, why \u0027kSmiValueSize - 2\u0027? Is one bit now unused?",
+      "revId": "d7b67ce2068cf5e429b0ebf683436276514f3a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae6e05e5_faddc173",
+        "filename": "src/objects/contexts.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2019-09-23T07:37:04Z",
+      "side": 1,
+      "message": "I didn\u0027t want to depend on the enumeration values. So, what is store in the bitfield is the boolean `value \u003d\u003d kYes`.\n\nIf you check Patch Set 1. I did use `kSmiValueSize - 1` before. But, that do not pass some DCHECKs around the code. The problem is that it might create a number that is too big for a smi. Two possible solutions: 1. flip the last bit for smi as well, forcing the number to be negative or 2. `kSmiValueSize - 2`. I\u0027ve chosen the latter.",
+      "parentUuid": "2d450ca3_7e75e12e",
       "revId": "d7b67ce2068cf5e429b0ebf683436276514f3a6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
