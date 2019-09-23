@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb5d1055_287a9051",
+        "filename": "src/compiler/backend/mips/code-generator-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-23T13:37:57Z",
+      "side": 1,
+      "message": "nit: we prefer {} whenever an if-statement needs a line break.",
+      "range": {
+        "startLine": 808,
+        "startChar": 28,
+        "endLine": 808,
+        "endChar": 29
+      },
+      "revId": "7cc5c9bd86bdb5c8b8706b211c10b9044b3e644a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
