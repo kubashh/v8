@@ -16,6 +16,24 @@
       "revId": "d5df2dc9a7befd8b1ff6110e0e0a742c67545c4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b3d89cd_abd1a294",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-09-24T14:26:11Z",
+      "side": 1,
+      "message": "Same as the other one. Effect-control-linearizer has changed and we can\u0027t just do a plain revert.",
+      "parentUuid": "0941a679_b264d683",
+      "revId": "d5df2dc9a7befd8b1ff6110e0e0a742c67545c4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
