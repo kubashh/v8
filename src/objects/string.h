@@ -321,6 +321,10 @@ class String : public TorqueGeneratedString<String, Name> {
   inline bool AsArrayIndex(uint32_t* index);
   uint32_t inline ToValidIndex(Object number);
 
+  // TODO(gsathya): Change this to ToArrayIndex once CSA can handle
+  // UintPtr for element index access.
+  static int32_t ToInt32(Address key);
+
   // Trimming.
   enum TrimMode { kTrim, kTrimStart, kTrimEnd };
   static Handle<String> Trim(Isolate* isolate, Handle<String> string,
