@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "450009bf_ae208a80",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-24T14:32:18Z",
+      "side": 1,
+      "message": "Well not automatically but through the gerrit UI, but this CL we are currently looking at basically *is* the revert, right? I\u0027m just saying it would be good to point that out in the commit message.\n\nPlus the other clarification requested above :)",
+      "parentUuid": "49759995_3191a7e6",
+      "revId": "18c54a458825d1338016dd691c7b84b8abca1320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a632c149_fa5259dc",
         "filename": "src/compiler/access-builder.h",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "I\u0027m not too sure about that. Georg can you advise?",
       "parentUuid": "a632c149_fa5259dc",
+      "revId": "18c54a458825d1338016dd691c7b84b8abca1320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bb4a9be_ef0b12ae",
+        "filename": "src/compiler/access-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-24T14:32:18Z",
+      "side": 1,
+      "message": "Anyways, since this is a revert I\u0027m fine with keeping IntPtr for now.",
+      "parentUuid": "a2bc7ded_a4b1beb7",
       "revId": "18c54a458825d1338016dd691c7b84b8abca1320",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
