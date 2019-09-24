@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0941a679_b264d683",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-24T14:02:08Z",
+      "side": 1,
+      "message": "Some comments here as in https://chromium-review.googlesource.com/c/v8/v8/+/1817612, is this a plain revert?",
+      "revId": "d5df2dc9a7befd8b1ff6110e0e0a742c67545c4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
