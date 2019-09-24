@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "588b8ee4_e0198887",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-24T14:01:06Z",
+      "side": 1,
+      "message": "What will it mean instead? Tagged --\u003e Full or Compressed? Please add that to the message here and in the other CL.\n\nAnd perhaps add a link to the change that removed these operators (https://chromium-review.googlesource.com/c/v8/v8/+/1593301). Couldn\u0027t we just revert that CL?",
+      "revId": "18c54a458825d1338016dd691c7b84b8abca1320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a632c149_fa5259dc",
+        "filename": "src/compiler/access-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-24T14:01:06Z",
+      "side": 1,
+      "message": "q: Would Pointer (rather than IntPtr) make more sense here? After all, this method is used to store a real pointer and not a pointer-sized int.",
+      "revId": "18c54a458825d1338016dd691c7b84b8abca1320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4f993b4_f559aedd",
+        "filename": "src/compiler/access-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-09-24T14:01:06Z",
+      "side": 1,
+      "message": "Seems to be dead code.",
+      "revId": "18c54a458825d1338016dd691c7b84b8abca1320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
