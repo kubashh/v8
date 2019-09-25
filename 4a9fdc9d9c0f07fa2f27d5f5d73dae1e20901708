@@ -22,6 +22,30 @@
       "revId": "4a9fdc9d9c0f07fa2f27d5f5d73dae1e20901708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50543092_f2bf3585",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6210,
+      "author": {
+        "id": 1317343
+      },
+      "writtenOn": "2019-09-25T10:05:53Z",
+      "side": 1,
+      "message": "Done, thank you for the code review.",
+      "parentUuid": "424d1a18_ad2fd920",
+      "range": {
+        "startLine": 6209,
+        "startChar": 6,
+        "endLine": 6210,
+        "endChar": 77
+      },
+      "revId": "4a9fdc9d9c0f07fa2f27d5f5d73dae1e20901708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
