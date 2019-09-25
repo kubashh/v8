@@ -3447,7 +3447,7 @@ class RememberedSetUpdatingItem : public UpdatingItem {
             if (!filter.IsValid(slot.address())) return REMOVE_SLOT;
             return UpdateSlot<AccessMode::NON_ATOMIC>(slot);
           },
-          SlotSet::PREFREE_EMPTY_BUCKETS);
+          SlotSet::FREE_EMPTY_BUCKETS);
       chunk_->ReleaseSlotSet<OLD_TO_OLD>();
     }
     if ((updating_mode_ == RememberedSetUpdatingMode::ALL) &&
