@@ -4284,12 +4284,16 @@ void TurboAssembler::Call(Handle<Code> code, RelocInfo::Mode rmode,
 
 void TurboAssembler::LoadEntryFromBuiltinIndex(Register builtin_index) {
   STATIC_ASSERT(kSystemPointerSize == 8);
-  STATIC_ASSERT(kSmiShiftSize == 31);
   STATIC_ASSERT(kSmiTagSize == 1);
   STATIC_ASSERT(kSmiTag == 0);
 
   // The builtin_index register contains the builtin index as a Smi.
+#if defined(V8_COMPRESS_POINTERS) || defined(V8_31BIT_SMIS_ON_64BIT_ARCH)
+  STATIC_ASSERT(kSmiShiftSize == 0);
+#else
+  STATIC_ASSERT(kSmiShiftSize == 31);
   SmiUntag(builtin_index, builtin_index);
+#endif
   Dlsa(builtin_index, kRootRegister, builtin_index, kSystemPointerSizeLog2);
   Ld(builtin_index,
      MemOperand(builtin_index, IsolateData::builtin_entry_table_offset()));
