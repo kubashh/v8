@@ -6212,8 +6212,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
                         ? call
                         : graph()->NewNode(mcgraph()->common()->Projection(pos),
                                            call, Control());
-      SetEffect(graph()->NewNode(mcgraph()->machine()->Store(store_rep),
-                                 arg_buffer, Int32Constant(offset), value,
+      SetEffect(graph()->NewNode(GetSafeStoreOperator(offset, type), arg_buffer,
+                                 Int32Constant(offset), value,
                                  Effect(), Control()));
       offset += wasm::ValueTypes::ElementSizeInBytes(type);
       pos++;
