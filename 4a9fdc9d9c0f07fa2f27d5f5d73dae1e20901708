@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "424d1a18_ad2fd920",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6210,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-09-25T09:36:33Z",
+      "side": 1,
+      "message": "This is now an unused variable, please drop it.",
+      "range": {
+        "startLine": 6209,
+        "startChar": 6,
+        "endLine": 6210,
+        "endChar": 77
+      },
+      "revId": "4a9fdc9d9c0f07fa2f27d5f5d73dae1e20901708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
