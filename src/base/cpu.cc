@@ -16,7 +16,7 @@
 #if V8_OS_QNX
 #include <sys/syspage.h>  // cpuinfo
 #endif
-#if V8_OS_LINUX && V8_HOST_ARCH_PPC
+#if (V8_OS_LINUX && V8_HOST_ARCH_PPC) || V8_OS_ANDROID
 #include <elf.h>
 #endif
 #if V8_OS_AIX
