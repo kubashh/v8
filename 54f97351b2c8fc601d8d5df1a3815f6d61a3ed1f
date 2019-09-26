@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b35ce9f0_88997b21",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2647,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-09-26T11:19:41Z",
+      "side": 1,
+      "message": "You need to pass `params.feedback()` here.",
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e64329be_6ce36e6c",
+        "filename": "src/compiler/redundancy-elimination.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-09-26T11:19:41Z",
+      "side": 1,
+      "message": "Nit: Can you split this into separate cases, since that\u0027s easier to read.\n\nAnd: You can also introduce a case for CheckedTaggedToInt32(node) implies CheckedTaggedToArrayIndex(node)",
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
