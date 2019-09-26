@@ -102,6 +102,7 @@ class EffectControlLinearizer {
   Node* LowerCheckedFloat64ToInt32(Node* node, Node* frame_state);
   Node* LowerCheckedFloat64ToInt64(Node* node, Node* frame_state);
   Node* LowerCheckedTaggedSignedToInt32(Node* node, Node* frame_state);
+  Node* LowerCheckedTaggedToArrayIndex(Node* node, Node* frame_state);
   Node* LowerCheckedTaggedToInt32(Node* node, Node* frame_state);
   Node* LowerCheckedTaggedToInt64(Node* node, Node* frame_state);
   Node* LowerCheckedTaggedToFloat64(Node* node, Node* frame_state);
@@ -1007,6 +1008,9 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
               frame_state_zapper_->op()->mnemonic());
       }
       result = LowerCheckedTaggedSignedToInt32(node, frame_state);
+      break;
+    case IrOpcode::kCheckedTaggedToArrayIndex:
+      result = LowerCheckedTaggedToArrayIndex(node, frame_state);
       break;
     case IrOpcode::kCheckedTaggedToInt32:
       result = LowerCheckedTaggedToInt32(node, frame_state);
@@ -2578,6 +2582,75 @@ Node* EffectControlLinearizer::LowerCheckedTaggedSignedToInt32(
   __ DeoptimizeIfNot(DeoptimizeReason::kNotASmi, params.feedback(), check,
                      frame_state);
   return ChangeSmiToInt32(value);
+}
+
+Node* EffectControlLinearizer::LowerCheckedTaggedToArrayIndex(
+    Node* node, Node* frame_state) {
+  CheckParameters const& params = CheckParametersOf(node->op());
+  Node* value = node->InputAt(0);
+
+  auto if_not_smi = __ MakeDeferredLabel();
+  auto done = __ MakeLabel(MachineRepresentation::kWord32);
+
+  Node* check = ObjectIsSmi(value);
+  __ GotoIfNot(check, &if_not_smi);
+  // In the Smi case, just convert to int32.
+  __ Goto(&done, ChangeSmiToInt32(value));
+
+  // In the non-Smi case, check the heap numberness, load the number and convert
+  // to int32.
+  __ Bind(&if_not_smi);
+  auto if_not_heap_number = __ MakeDeferredLabel();
+  Node* value_map = __ LoadField(AccessBuilder::ForMap(), value);
+  Node* check_map = __ TaggedEqual(value_map, __ HeapNumberMapConstant());
+  __ GotoIfNot(check_map, &if_not_heap_number);
+
+  Node* vfalse = __ LoadField(AccessBuilder::ForHeapNumberValue(), value);
+  vfalse =
+      BuildCheckedFloat64ToInt32(CheckForMinusZeroMode::kDontCheckForMinusZero,
+                                 params.feedback(), vfalse, frame_state);
+  __ Goto(&done, vfalse);
+
+  __ Bind(&if_not_heap_number);
+  auto calculate_index = __ MakeDeferredLabel();
+  Node* value_instance_type =
+      __ LoadField(AccessBuilder::ForMapInstanceType(), value_map);
+  check = __ Uint32LessThan(value_instance_type,
+                            __ Uint32Constant(FIRST_NONSTRING_TYPE));
+  __ DeoptimizeIfNot(DeoptimizeReason::kNotAString, params.feedback(), check,
+                     frame_state);
+  Node* hash = __ LoadField(AccessBuilder::ForNameHashField(), value);
+  Node* has_cached_index = __ Word32Equal(
+      __ Word32And(hash,
+                   __ Int32Constant(Name::kDoesNotContainCachedArrayIndexMask)),
+      __ Int32Constant(0));
+  __ GotoIfNot(has_cached_index, &calculate_index);
+
+  Node* index = __ Word32Shr(
+      __ Word32And(hash, __ Int32Constant(String::ArrayIndexValueBits::kMask)),
+      __ Int32Constant(String::ArrayIndexValueBits::kShift));
+
+  __ Goto(&done, index);
+
+  __ Bind(&calculate_index);
+  {
+    MachineSignature::Builder builder(graph()->zone(), 1, 1);
+    builder.AddReturn(MachineType::Int32());
+    builder.AddParam(MachineType::AnyTagged());
+    Node* string_to_int32_function =
+        __ ExternalConstant(ExternalReference::string_to_int32_function());
+    auto call_descriptor =
+        Linkage::GetSimplifiedCDescriptor(graph()->zone(), builder.Build());
+    Node* index = __ Call(common()->Call(call_descriptor),
+                          string_to_int32_function, value);
+
+    __ DeoptimizeIf(DeoptimizeReason::kNotAnArrayIndex, FeedbackSource(),
+                    __ Int32LessThan(index, __ Int32Constant(0)), frame_state);
+
+    __ Goto(&done, index);
+  }
+  __ Bind(&done);
+  return done.PhiAt(0);
 }
 
 Node* EffectControlLinearizer::LowerCheckedTaggedToInt32(Node* node,
