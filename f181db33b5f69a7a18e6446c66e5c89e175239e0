@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7272a0c0_2e6e7e7c",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-09-26T06:35:28Z",
+      "side": 1,
+      "message": "In ComputeFlagListHash, we compute a hash from the flags. This is dependent on their order. Sorting them like this will break the hash.\n\nI\u0027d be fine with copying the whole list of flags and then sorting.",
+      "range": {
+        "startLine": 585,
+        "startChar": 14,
+        "endLine": 585,
+        "endChar": 19
+      },
+      "revId": "f181db33b5f69a7a18e6446c66e5c89e175239e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
