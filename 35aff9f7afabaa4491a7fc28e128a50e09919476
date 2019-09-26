@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "acb1a02a_bab14d6c",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2585,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-26T09:13:00Z",
+      "side": 1,
+      "message": "As far as I understand this function is only called on the scope that we\u0027re compiling (during AllocateVariables). And we\u0027re only resolving private name references that weren\u0027t able to resolve for any of the classes we\u0027ve parsed ourselves; and it will resolve in outer scopes. Those scopes are already entirely context allocated, so the class var is deserialized from ScopeInfo and is already set to is_used and ForcedContextAllocated etc?\n\nCan we drop everything in this branch except proxy-\u003eBindTo(var)?\n\nAt the same time we can *only* get errors in the branch above if we\u0027re actually parsing top-level code, in which case we\u0027ll immediately fail if there\u0027s *any* unresolved private variable left? So I presume we could turn that into a CHECK if we\u0027re not on top-level?",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57042a51_9d6d89cb",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2696,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-26T09:13:00Z",
+      "side": 1,
+      "message": "By letting the variable be processed automatically as part of locals_ this will cause the class variable \".\" to be context allocated in the context of \"eval\" even if there are no private names.\n\nProbably we should track whether a class scope has seen a static private method or accessor with a simple flag, and nuke the \".\" variable if not before we eval allocate it.",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb705ac6_be2a4692",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2717,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-26T09:13:00Z",
+      "side": 1,
+      "message": "If we have the bit mentioned above, we can simply check it here rather than walk the map.",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62395df7_2b77d461",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2176,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-26T09:13:00Z",
+      "side": 1,
+      "message": "Spurious change: symbol, it",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3faff06_7a7a99ec",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3934,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-26T09:13:00Z",
+      "side": 1,
+      "message": "enum instead of bool",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5c9cb56_06b46e54",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 4516,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-26T09:13:00Z",
+      "side": 1,
+      "message": "Since no code is shared, and since we\u0027re not actually doing a brand check but a receiver check, I think it makes sense to split this into 2 functions. The static variant (StaticPrivateReceiverCheck or so) can simply take the MessageTemplate as input as opposed to the flag.",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
