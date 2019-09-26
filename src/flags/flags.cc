@@ -210,6 +210,8 @@ Flag flags[] = {
 
 const size_t num_flags = sizeof(flags) / sizeof(*flags);
 
+bool isAlphaSorted = false;
+
 }  // namespace
 
 static const char* Type2String(Flag::FlagType type) {
@@ -578,6 +580,13 @@ void FlagList::PrintHelp() {
         "  --flag value  (non-bool flags only)\n"
         "  --            (captures all remaining args in JavaScript)\n\n"
         "Options:\n";
+
+  if (!isAlphaSorted) {
+    std::sort(flags, flags + num_flags, [](Flag& a, Flag& b) {
+      return std::strcmp(a.name(), b.name()) < 0;
+    });
+    isAlphaSorted = true;
+  }
 
   for (const Flag& f : flags) {
     os << "  --";
