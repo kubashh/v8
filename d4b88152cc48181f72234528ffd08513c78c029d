@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c877de8_0b095835",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-09-26T13:02:45Z",
+      "side": 1,
+      "message": "Why not at the very end? This is very unlikely to happen so might as well push it past the compile_lazy code which is much more likely to happen (and so is more desirable to be in the cache).\n\nSame for other 2",
+      "range": {
+        "startLine": 1199,
+        "startChar": 1,
+        "endLine": 1199,
+        "endChar": 27
+      },
+      "revId": "d4b88152cc48181f72234528ffd08513c78c029d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
