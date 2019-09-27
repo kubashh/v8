@@ -785,18 +785,15 @@ static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
   __ bind(&no_match);
 }
 
-static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
-                                           Register scratch) {
+static void FastPathCheckForOptimizedCodeSlot(
+    MacroAssembler* masm, Register scratch, Label* maybe_optimized,
+    Label* optimized_code_slot_is_weak_ref) {
   // ----------- S t a t e -------------
   //  -- edx : new target (preserved for callee if needed, and caller)
   //  -- edi : target function (preserved for callee if needed, and caller)
   //  -- ecx : feedback vector (also used as scratch, value is not preserved)
-  // -----------------------------------
   DCHECK(!AreAliased(edx, edi, scratch));
 
-  Label optimized_code_slot_is_weak_ref, fallthrough;
-
-  Register closure = edi;
   // Scratch contains feedback_vector.
   Register feedback_vector = scratch;
 
@@ -807,9 +804,9 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
                       FeedbackVector::kOptimizedCodeWeakOrSmiOffset));
 
   // Check if the code entry is a Smi. If yes, we interpret it as an
-  // optimisation marker. Otherwise, interpret it as a weak reference to a code
-  // object.
-  __ JumpIfNotSmi(optimized_code_entry, &optimized_code_slot_is_weak_ref);
+  // optimization marker. Otherwise, interpret it as a weak reference to a
+  // code object.
+  __ JumpIfNotSmi(optimized_code_entry, optimized_code_slot_is_weak_ref);
 
   {
     // Optimized code slot is an optimization marker.
@@ -817,40 +814,56 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
     // Fall through if no optimization trigger.
     __ cmp(optimized_code_entry,
            Immediate(Smi::FromEnum(OptimizationMarker::kNone)));
-    __ j(equal, &fallthrough);
+    __ j(not_equal, maybe_optimized);
+  }
+}
 
-    // TODO(v8:8394): The logging of first execution will break if
-    // feedback vectors are not allocated. We need to find a different way of
-    // logging these events if required.
-    TailCallRuntimeIfMarkerEquals(masm, optimized_code_entry,
-                                  OptimizationMarker::kLogFirstExecution,
-                                  Runtime::kFunctionFirstExecution);
-    TailCallRuntimeIfMarkerEquals(masm, optimized_code_entry,
-                                  OptimizationMarker::kCompileOptimized,
-                                  Runtime::kCompileOptimized_NotConcurrent);
-    TailCallRuntimeIfMarkerEquals(
-        masm, optimized_code_entry,
-        OptimizationMarker::kCompileOptimizedConcurrent,
-        Runtime::kCompileOptimized_Concurrent);
+static void GenerateMaybeTailCallOptimizedCodeSlot(
+    MacroAssembler* masm, Register scratch,
+    Label* optimized_code_slot_is_weak_ref, Label* fallthrough) {
+  // ----------- S t a t e -------------
+  //  -- edx : new target (preserved for callee if needed, and caller)
+  //  -- edi : target function (preserved for callee if needed, and caller)
+  //  -- ecx : feedback vector (also used as scratch, value is not preserved)
+  // -----------------------------------
+  DCHECK(!AreAliased(edx, edi, scratch));
 
-    {
-      // Otherwise, the marker is InOptimizationQueue, so fall through hoping
-      // that an interrupt will eventually update the slot with optimized code.
-      if (FLAG_debug_code) {
-        __ cmp(
-            optimized_code_entry,
-            Immediate(Smi::FromEnum(OptimizationMarker::kInOptimizationQueue)));
-        __ Assert(equal, AbortReason::kExpectedOptimizationSentinel);
-      }
-      __ jmp(&fallthrough);
+  Register closure = edi;
+
+  // Load the optimized code from the feedback vector and re-use the register.
+  Register optimized_code_entry = scratch;
+
+  // TODO(v8:8394): The logging of first execution will break if
+  // feedback vectors are not allocated. We need to find a different way of
+  // logging these events if required.
+  TailCallRuntimeIfMarkerEquals(masm, optimized_code_entry,
+                                OptimizationMarker::kLogFirstExecution,
+                                Runtime::kFunctionFirstExecution);
+  TailCallRuntimeIfMarkerEquals(masm, optimized_code_entry,
+                                OptimizationMarker::kCompileOptimized,
+                                Runtime::kCompileOptimized_NotConcurrent);
+  TailCallRuntimeIfMarkerEquals(masm, optimized_code_entry,
+                                OptimizationMarker::kCompileOptimizedConcurrent,
+                                Runtime::kCompileOptimized_Concurrent);
+
+  {
+    // Otherwise, the marker is InOptimizationQueue, so fall through hoping
+    // that an interrupt will eventually update the slot with optimized
+    // code.
+    if (FLAG_debug_code) {
+      __ cmp(
+          optimized_code_entry,
+          Immediate(Smi::FromEnum(OptimizationMarker::kInOptimizationQueue)));
+      __ Assert(equal, AbortReason::kExpectedOptimizationSentinel);
     }
+    __ jmp(fallthrough);
   }
 
   {
     // Optimized code slot is a weak reference.
-    __ bind(&optimized_code_slot_is_weak_ref);
+    __ bind(optimized_code_slot_is_weak_ref);
 
-    __ LoadWeakValue(optimized_code_entry, &fallthrough);
+    __ LoadWeakValue(optimized_code_entry, fallthrough);
 
     __ push(edx);
 
@@ -863,8 +876,8 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
             Immediate(1 << Code::kMarkedForDeoptimizationBit));
     __ j(not_zero, &found_deoptimized_code);
 
-    // Optimized code is good, get it into the closure and link the closure into
-    // the optimized functions list, then tail call the optimized code.
+    // Optimized code is good, get it into the closure and link the closure
+    // into the optimized functions list, then tail call the optimized code.
     ReplaceClosureCodeWithOptimizedCode(masm, optimized_code_entry, closure,
                                         edx, eax);
     static_assert(kJavaScriptCallCodeStartRegister == ecx, "ABI mismatch");
@@ -872,16 +885,12 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
     __ pop(edx);
     __ jmp(ecx);
 
-    // Optimized code slot contains deoptimized code, evict it and re-enter the
-    // closure's code.
+    // Optimized code slot contains deoptimized code, evict it and re-enter
+    // the closure's code.
     __ bind(&found_deoptimized_code);
     __ pop(edx);
     GenerateTailCallToReturnedCode(masm, Runtime::kEvictOptimizedCodeSlot);
   }
-
-  // Fall-through if the optimized code cell is clear and there is no
-  // optimization marker.
-  __ bind(&fallthrough);
 }
 
 // Advance the current bytecode offset. This simulates what all bytecode
@@ -982,9 +991,15 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ CmpInstanceType(eax, FEEDBACK_VECTOR_TYPE);
   __ j(not_equal, &push_stack_frame);
 
-  // Read off the optimized code slot in the closure's feedback vector, and if
-  // there is optimized code or an optimization marker, call that instead.
-  MaybeTailCallOptimizedCodeSlot(masm, ecx);
+  Label maybe_optimized;
+  Label optimized_code_slot_is_weak_ref;
+  // Read off the optimized code slot in the feedback vector, and if there
+  // is optimized code or an optimization marker, call that instead.
+  FastPathCheckForOptimizedCodeSlot(masm, ecx, &maybe_optimized,
+                                    &optimized_code_slot_is_weak_ref);
+
+  Label fast_path;
+  __ bind(&fast_path);
 
   // Load the feedback vector and increment the invocation count.
   __ mov(feedback_vector,
@@ -1116,6 +1131,10 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // The return value is in eax.
   LeaveInterpreterFrame(masm, edx, ecx);
   __ ret(0);
+
+  __ bind(&maybe_optimized);
+  GenerateMaybeTailCallOptimizedCodeSlot(
+      masm, ecx, &optimized_code_slot_is_weak_ref, &fast_path);
 
   __ bind(&compile_lazy);
   GenerateTailCallToReturnedCode(masm, Runtime::kCompileLazy);
