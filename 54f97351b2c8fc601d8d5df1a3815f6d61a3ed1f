@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "39855a6b_d48efd4c",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2595,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-09-27T14:46:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a107f93_f5e42004",
+      "range": {
+        "startLine": 2595,
+        "startChar": 8,
+        "endLine": 2595,
+        "endChar": 13
+      },
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47c2b0ed_7f42c06c",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b943347f_1073f6be",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2605,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-09-27T14:46:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47c2b0ed_7f42c06c",
+      "range": {
+        "startLine": 2605,
+        "startChar": 8,
+        "endLine": 2605,
+        "endChar": 17
+      },
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b6c3bf54_378afae2",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2618,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-09-27T14:46:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d52e1454_a98b846c",
+      "range": {
+        "startLine": 2618,
+        "startChar": 2,
+        "endLine": 2618,
+        "endChar": 7
+      },
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a7f2a8a_21682c9f",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "323445f4_6f0f7ebc",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2639,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-09-27T14:46:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a7f2a8a_21682c9f",
+      "range": {
+        "startLine": 2639,
+        "startChar": 34,
+        "endLine": 2639,
+        "endChar": 43
+      },
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -129,6 +225,24 @@
     },
     {
       "key": {
+        "uuid": "55c3ca45_f5329c64",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2647,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-09-27T14:46:08Z",
+      "side": 1,
+      "message": "Updated but can seem to generate a deopt loop with this code:\n\n  let notAnArrayIndex \u003d false;\n  let arr \u003d [1, 2, 3];\n  \n  function f() {\n    let index;\n    if (notAnArrayIndex) {\n      index \u003d \u00274294967296\u0027;\n    } else {\n      index \u003d \u00271\u0027;\n    }\n    return arr[index];\n  }\n\n  %PrepareFunctionForOptimization(f);\n  print(f());\n  print(f());\n\n  %OptimizeFunctionOnNextCall(f);\n  // causes deopt\n  notAnArrayIndex \u003d true;\n  print(f());\n\n  notAnArrayIndex \u003d false;\n  print(f());\n  print(f());\n\n  %OptimizeFunctionOnNextCall(f);\n  print(f());\n\n  // why no deopt here?\n  notAnArrayIndex \u003d true;\n  print(f());\n\nWhat am I missing?",
+      "parentUuid": "15ab1ca8_68b72973",
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0259cc20_b31fad70",
         "filename": "src/compiler/operation-typer.cc",
         "patchSetId": 7
@@ -152,6 +266,30 @@
     },
     {
       "key": {
+        "uuid": "b8c2d5e9_41cd95af",
+        "filename": "src/compiler/operation-typer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-09-27T14:46:08Z",
+      "side": 1,
+      "message": "I think Unsigned31 is perfect as we support only upto that in the builtins (as the builtins can\u0027t handle uintptr for certain cases yet)",
+      "parentUuid": "0259cc20_b31fad70",
+      "range": {
+        "startLine": 1254,
+        "startChar": 39,
+        "endLine": 1254,
+        "endChar": 59
+      },
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e64329be_6ce36e6c",
         "filename": "src/compiler/redundancy-elimination.cc",
         "patchSetId": 7
@@ -166,6 +304,24 @@
       "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fc0afaa_b6555e8b",
+        "filename": "src/compiler/redundancy-elimination.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-09-27T14:46:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e64329be_6ce36e6c",
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
