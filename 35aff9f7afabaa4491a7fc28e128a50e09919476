@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fcded30b_7a8bfcfd",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2585,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-09-27T16:11:36Z",
+      "side": 1,
+      "message": "The error branch above is also hit in cases like this:\n\nclass C {\n  getA() { return eval(\u0027this.#a\u0027); }\n}\n\nlet c \u003d (new C).getA();\n\nSo I guess we have to keep it. But dropping the branch below works indeed since we only need to mark these before serialization.",
+      "parentUuid": "acb1a02a_bab14d6c",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57042a51_9d6d89cb",
         "filename": "src/ast/scopes.cc",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2019-09-26T09:13:00Z",
       "side": 1,
       "message": "By letting the variable be processed automatically as part of locals_ this will cause the class variable \".\" to be context allocated in the context of \"eval\" even if there are no private names.\n\nProbably we should track whether a class scope has seen a static private method or accessor with a simple flag, and nuke the \".\" variable if not before we eval allocate it.",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d80e4c4d_e1e48ece",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2696,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-09-27T16:11:36Z",
+      "side": 1,
+      "message": "\u003e this will cause the class variable \".\" to be context allocated in the context of \"eval\" even if there are no private names.\n\nIt looks like we still need this because this should throw TypeError instead of ReferenceError (so C need to pass the hole check)\n\nnew class C { constructor() { eval(\"C \u003d 1\") } }\n\nI still changed to use a bit about the existence of static private methods for recording whether the class variable index should be serialized, since it\u0027s simpler and we also only need to maintain it before the serialization. But I did not use it to determine whether it\u0027s OK to nuke the class variable because of the example above.",
+      "parentUuid": "57042a51_9d6d89cb",
       "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3daafbb8_eeed6925",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2717,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-09-27T16:11:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb705ac6_be2a4692",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62395df7_2b77d461",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 11
@@ -67,6 +121,24 @@
       "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95444872_0c01176c",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2176,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-09-27T16:11:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62395df7_2b77d461",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "3de988b7_6212f47b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3934,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-09-27T16:11:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3faff06_7a7a99ec",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5c9cb56_06b46e54",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 11
@@ -101,6 +191,24 @@
       "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0defa1a3_a9d36bd3",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 4516,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-09-27T16:11:36Z",
+      "side": 1,
+      "message": "\u003e Since no code is shared, and since we\u0027re not actually doing a brand check but a receiver check, I think it makes sense to split this into 2 functions. The static variant (StaticPrivateReceiverCheck or so) can simply take the MessageTemplate as input as opposed to the flag.\n\nI split this into two functions instead.",
+      "parentUuid": "e5c9cb56_06b46e54",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
