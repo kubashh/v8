@@ -208,7 +208,7 @@ Flag flags[] = {
 #include "src/flags/flag-definitions.h"  // NOLINT(build/include)
 };
 
-const size_t num_flags = sizeof(flags) / sizeof(*flags);
+const size_t kNumFlags = sizeof(flags) / sizeof(*flags);
 
 }  // namespace
 
@@ -271,7 +271,7 @@ std::ostream& operator<<(std::ostream& os, const Flag& flag) {  // NOLINT
 // static
 std::vector<const char*>* FlagList::argv() {
   std::vector<const char*>* args = new std::vector<const char*>(8);
-  for (size_t i = 0; i < num_flags; ++i) {
+  for (size_t i = 0; i < kNumFlags; ++i) {
     Flag* f = &flags[i];
     if (!f->IsDefault()) {
       {
@@ -344,7 +344,7 @@ static bool EqualNames(const char* a, const char* b) {
 }
 
 static Flag* FindFlag(const char* name) {
-  for (size_t i = 0; i < num_flags; ++i) {
+  for (size_t i = 0; i < kNumFlags; ++i) {
     if (EqualNames(name, flags[i].name())) return &flags[i];
   }
   return nullptr;
@@ -551,7 +551,7 @@ int FlagList::SetFlagsFromString(const char* str, size_t len) {
 
 // static
 void FlagList::ResetAllFlags() {
-  for (size_t i = 0; i < num_flags; ++i) {
+  for (size_t i = 0; i < kNumFlags; ++i) {
     flags[i].Reset();
   }
 }
@@ -579,7 +579,14 @@ void FlagList::PrintHelp() {
         "  --            (captures all remaining args in JavaScript)\n\n"
         "Options:\n";
 
-  for (const Flag& f : flags) {
+  // Sort flags alphabetically
+  Flag sorted_flags[kNumFlags];
+  std::copy(flags, flags + kNumFlags, sorted_flags);
+  std::sort(sorted_flags, sorted_flags + kNumFlags, [](Flag& a, Flag& b) {
+    return std::strcmp(a.name(), b.name()) < 0;
+  });
+
+  for (const Flag& f : sorted_flags) {
     os << "  --";
     for (const char* c = f.name(); *c != '\0'; ++c) {
       os << NormalizeChar(*c);
@@ -600,7 +607,7 @@ void ComputeFlagListHash() {
   if (FLAG_embedded_builtins) {
     modified_args_as_string << "embedded";
   }
-  for (size_t i = 0; i < num_flags; ++i) {
+  for (size_t i = 0; i < kNumFlags; ++i) {
     Flag* current = &flags[i];
     if (current->type() == Flag::TYPE_BOOL &&
         current->bool_variable() == &FLAG_profile_deserialization) {
