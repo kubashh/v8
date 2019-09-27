@@ -15,5 +15,4 @@ function f() {
 %PrepareFunctionForOptimization(f, "allow heuristic optimization");
 f();
 f();
-f();
 assertOptimized(f);

@@ -14,6 +14,7 @@
 #include "src/execution/frames-inl.h"
 #include "src/execution/isolate-inl.h"
 #include "src/execution/messages.h"
+#include "src/execution/runtime-profiler.h"
 #include "src/handles/maybe-handles.h"
 #include "src/init/bootstrapper.h"
 #include "src/logging/counters.h"
@@ -296,9 +297,10 @@ RUNTIME_FUNCTION(Runtime_BytecodeBudgetInterrupt) {
     function->feedback_vector().set_invocation_count(1);
     return ReadOnlyRoots(isolate).undefined_value();
   }
-  // Handle interrupts.
   {
     SealHandleScope shs(isolate);
+    isolate->counters()->runtime_profiler_ticks()->Increment();
+    isolate->runtime_profiler()->MarkCandidatesForOptimization();
     return isolate->stack_guard()->HandleInterrupts();
   }
 }
