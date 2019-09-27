@@ -150,7 +150,8 @@ ClassScope::ClassScope(Zone* zone, Scope* outer_scope)
   set_language_mode(LanguageMode::kStrict);
 }
 
-ClassScope::ClassScope(Zone* zone, AstValueFactory* ast_value_factory,
+ClassScope::ClassScope(Isolate* isolate, Zone* zone,
+                       AstValueFactory* ast_value_factory,
                        Handle<ScopeInfo> scope_info)
     : Scope(zone, CLASS_SCOPE, scope_info),
       rare_data_and_is_parsing_heritage_(nullptr) {
@@ -160,6 +161,25 @@ ClassScope::ClassScope(Zone* zone, AstValueFactory* ast_value_factory,
         LookupInScopeInfo(ast_value_factory->dot_brand_string(), this);
     DCHECK_NOT_NULL(brand);
     EnsureRareData()->brand = brand;
+  }
+
+  // If the class variable is context-allocated and its index is
+  // saved for deserialization, deserialize it.
+  if (scope_info->HasSavedClassVariableIndex()) {
+    int index = scope_info->SavedClassVariableContextLocalIndex();
+    DCHECK_GE(index, 0);
+    DCHECK_LT(index, scope_info->ContextLocalCount());
+    String name = scope_info->ContextLocalName(index);
+    DCHECK_EQ(scope_info->ContextLocalMode(index), VariableMode::kConst);
+    DCHECK_EQ(scope_info->ContextLocalInitFlag(index),
+              InitializationFlag::kNeedsInitialization);
+    DCHECK_EQ(scope_info->ContextLocalMaybeAssignedFlag(index),
+              MaybeAssignedFlag::kMaybeAssigned);
+    Variable* var = DeclareClassVariable(
+        ast_value_factory, ast_value_factory->GetString(handle(name, isolate)),
+        kNoSourcePosition);
+    var->AllocateTo(VariableLocation::CONTEXT,
+                    Context::MIN_CONTEXT_SLOTS + index);
   }
 }
 
@@ -358,8 +378,8 @@ Scope* Scope::DeserializeScopeChain(Isolate* isolate, Zone* zone,
       outer_scope = new (zone)
           DeclarationScope(zone, EVAL_SCOPE, handle(scope_info, isolate));
     } else if (scope_info.scope_type() == CLASS_SCOPE) {
-      outer_scope = new (zone)
-          ClassScope(zone, ast_value_factory, handle(scope_info, isolate));
+      outer_scope = new (zone) ClassScope(isolate, zone, ast_value_factory,
+                                          handle(scope_info, isolate));
     } else if (scope_info.scope_type() == BLOCK_SCOPE) {
       if (scope_info.is_declaration_scope()) {
         outer_scope = new (zone)
@@ -1749,6 +1769,14 @@ void Scope::Print(int n) {
         PrintVar(n1, brand);
       }
     }
+    if (class_scope->class_variable() != nullptr) {
+      Indent(n1, "// class var");
+      PrintF("%s%s:\n",
+             class_scope->class_variable()->is_used() ? ", used" : ", unused",
+             class_scope->ShouldSaveClassVariableIndex() ? ", index saved"
+                                                         : ", index not saved");
+      PrintVar(n1, class_scope->class_variable());
+    }
   }
 
   // Print inner scopes (disable by providing negative n).
@@ -2114,8 +2142,7 @@ bool Scope::MustAllocateInContext(Variable* var) {
   if (mode == VariableMode::kTemporary) return false;
   if (is_catch_scope()) return true;
   if (is_script_scope() || is_eval_scope()) {
-    if (IsLexicalVariableMode(mode) ||
-        IsPrivateMethodOrAccessorVariableMode(mode)) {
+    if (IsLexicalVariableMode(mode)) {
       return true;
     }
   }
@@ -2209,6 +2236,14 @@ void Scope::AllocateNonParameterLocal(Variable* var) {
 }
 
 void Scope::AllocateNonParameterLocalsAndDeclaredGlobals() {
+  // If we are certain that the class variable is not going to be used,
+  // don't allocate it.
+  if (is_class_scope() && !AsClassScope()->class_variable()->is_used() &&
+      !inner_scope_calls_eval_) {
+    locals_.Remove(AsClassScope()->class_variable());
+    variables_.Remove(AsClassScope()->class_variable());
+  }
+
   for (Variable* local : locals_) {
     AllocateNonParameterLocal(local);
   }
@@ -2423,6 +2458,9 @@ Variable* ClassScope::DeclarePrivateName(const AstRawString* name,
       MaybeAssignedFlag::kMaybeAssigned, is_static_flag, was_added);
   if (*was_added) {
     locals_.Add(result);
+    has_static_private_methods_ |=
+        (result->is_static() &&
+         IsPrivateMethodOrAccessorVariableMode(result->mode()));
   } else if (IsComplementaryAccessorPair(result->mode(), mode) &&
              result->is_static_flag() == is_static_flag) {
     *was_added = true;
@@ -2559,7 +2597,6 @@ bool ClassScope::ResolvePrivateNames(ParseInfo* info) {
           MessageTemplate::kInvalidPrivateFieldResolution, proxy->raw_name());
       return false;
     } else {
-      var->set_is_used();
       proxy->BindTo(var);
     }
   }
@@ -2602,6 +2639,14 @@ VariableProxy* ClassScope::ResolvePrivateNamesPartially() {
       if (var != nullptr) {
         var->set_is_used();
         proxy->BindTo(var);
+        // If the variable being accsssed is a static private method, we need to
+        // save the class variable in the context to check that the receiver is
+        // the class during runtime.
+        if (var->is_static() &&
+            IsPrivateMethodOrAccessorVariableMode(var->mode())) {
+          class_variable_->set_is_used();
+          class_variable_->ForceContextAllocation();
+        }
       }
     }
 
@@ -2642,6 +2687,33 @@ Variable* ClassScope::DeclareBrandVariable(AstValueFactory* ast_value_factory,
   EnsureRareData()->brand = brand;
   brand->set_initializer_position(class_token_pos);
   return brand;
+}
+
+Variable* ClassScope::DeclareClassVariable(AstValueFactory* ast_value_factory,
+                                           const AstRawString* name,
+                                           int class_token_pos) {
+  DCHECK_NULL(class_variable_);
+  bool was_added;
+  class_variable_ =
+      Declare(zone(), name == nullptr ? ast_value_factory->dot_string() : name,
+              VariableMode::kConst, NORMAL_VARIABLE,
+              InitializationFlag::kNeedsInitialization,
+              MaybeAssignedFlag::kMaybeAssigned, &was_added);
+  DCHECK(was_added);
+  class_variable_->set_initializer_position(class_token_pos);
+  return class_variable_;
+}
+
+bool ClassScope::ShouldSaveClassVariableIndex() {
+  // If any inner scope accesses static private names directly, the class
+  // variable will be forced to be context-allocated.
+  if (class_variable_->has_forced_context_allocation()) {
+    return true;
+  }
+
+  // The inner scope may also calls eval which may results in access to
+  // static private names.
+  return has_static_private_methods_ && inner_scope_calls_eval_;
 }
 
 PrivateNameScopeIterator::PrivateNameScopeIterator(Scope* start)
