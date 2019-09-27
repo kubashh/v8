@@ -190,6 +190,9 @@ class V8_EXPORT_PRIVATE WasmInterpreter {
   // previous state of the breakpoint at {pc}.
   bool SetBreakpoint(const WasmFunction* function, pc_t pc, bool enabled);
 
+  // Remove a breakpoint at {pc} in {function}.
+  void ClearBreakpoint(const WasmFunction* function, pc_t pc);
+
   // Gets the current state of the breakpoint at {function}.
   bool GetBreakpoint(const WasmFunction* function, pc_t pc);
 

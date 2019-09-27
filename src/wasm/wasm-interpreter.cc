@@ -4175,6 +4175,14 @@ bool WasmInterpreter::SetBreakpoint(const WasmFunction* function, pc_t pc,
   return prev;
 }
 
+void WasmInterpreter::ClearBreakpoint(const WasmFunction* function, pc_t pc) {
+  InterpreterCode* code = internals_->codemap_.GetCode(function);
+  size_t size = static_cast<size_t>(code->end - code->start);
+  // Check bounds for {pc}.
+  if (pc < code->locals.encoded_size || pc >= size) return;
+  code->start[pc] = code->orig_start[pc];
+}
+
 bool WasmInterpreter::GetBreakpoint(const WasmFunction* function, pc_t pc) {
   InterpreterCode* code = internals_->codemap_.GetCode(function);
   size_t size = static_cast<size_t>(code->end - code->start);
