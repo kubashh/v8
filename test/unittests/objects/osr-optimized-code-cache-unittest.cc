@@ -40,6 +40,8 @@ const int kMaxEntries = kMaxLength / OSROptimizedCodeCache::kEntryLength;
 }  // namespace
 
 TEST_F(TestWithNativeContext, AddCodeToEmptyCache) {
+  if (!i::FLAG_opt) return;
+
   i::FLAG_allow_natives_syntax = true;
 
   i::ScopedVector<char> source(1024);
@@ -71,6 +73,8 @@ TEST_F(TestWithNativeContext, AddCodeToEmptyCache) {
 }
 
 TEST_F(TestWithNativeContext, GrowCodeCache) {
+  if (!i::FLAG_opt) return;
+
   i::FLAG_allow_natives_syntax = true;
 
   i::ScopedVector<char> source(1024);
@@ -112,6 +116,8 @@ TEST_F(TestWithNativeContext, GrowCodeCache) {
 }
 
 TEST_F(TestWithNativeContext, FindCachedEntry) {
+  if (!i::FLAG_opt) return;
+
   i::FLAG_allow_natives_syntax = true;
 
   i::ScopedVector<char> source(1024);
@@ -155,6 +161,8 @@ TEST_F(TestWithNativeContext, FindCachedEntry) {
 }
 
 TEST_F(TestWithNativeContext, MaxCapacityCache) {
+  if (!i::FLAG_opt) return;
+
   i::FLAG_allow_natives_syntax = true;
 
   i::ScopedVector<char> source(1024);
@@ -224,6 +232,8 @@ TEST_F(TestWithNativeContext, MaxCapacityCache) {
 }
 
 TEST_F(TestWithNativeContext, ReuseClearedEntry) {
+  if (!i::FLAG_opt) return;
+
   i::FLAG_allow_natives_syntax = true;
 
   i::ScopedVector<char> source(1024);
@@ -299,6 +309,8 @@ TEST_F(TestWithNativeContext, ReuseClearedEntry) {
 }
 
 TEST_F(TestWithNativeContext, EvictDeoptedEntriesNoCompact) {
+  if (!i::FLAG_opt) return;
+
   i::FLAG_allow_natives_syntax = true;
 
   i::ScopedVector<char> source(1024);
@@ -356,6 +368,8 @@ TEST_F(TestWithNativeContext, EvictDeoptedEntriesNoCompact) {
 }
 
 TEST_F(TestWithNativeContext, EvictDeoptedEntriesCompact) {
+  if (!i::FLAG_opt) return;
+
   i::FLAG_allow_natives_syntax = true;
 
   i::ScopedVector<char> source(1024);
