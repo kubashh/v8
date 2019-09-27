@@ -5,6 +5,8 @@
 #ifndef V8_UTILS_LOCKED_QUEUE_H_
 #define V8_UTILS_LOCKED_QUEUE_H_
 
+#include "src/base/optional.h"
+#include "src/base/platform/condition-variable.h"
 #include "src/base/platform/platform.h"
 #include "src/utils/allocation.h"
 
@@ -22,7 +24,10 @@ class LockedQueue final {
   inline LockedQueue();
   inline ~LockedQueue();
   inline void Enqueue(const Record& record);
+  inline void Enqueue(Record&& record);
   inline bool Dequeue(Record* record);
+  inline base::Optional<Record> Dequeue();
+  inline base::Optional<Record> DequeueWait(const base::TimeDelta& timeout);
   inline bool IsEmpty() const;
   inline bool Peek(Record* record) const;
 
@@ -31,6 +36,7 @@ class LockedQueue final {
 
   mutable base::Mutex head_mutex_;
   base::Mutex tail_mutex_;
+  base::ConditionVariable cv_;
   Node* head_;
   Node* tail_;
 
