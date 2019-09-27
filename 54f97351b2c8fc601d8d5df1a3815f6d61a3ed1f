@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "2a107f93_f5e42004",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2595,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-27T11:38:49Z",
+      "side": 1,
+      "message": "Just inline this.",
+      "range": {
+        "startLine": 2595,
+        "startChar": 8,
+        "endLine": 2595,
+        "endChar": 13
+      },
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47c2b0ed_7f42c06c",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2605,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-27T11:38:49Z",
+      "side": 1,
+      "message": "Let\u0027s call it is_heapnumber or value_is_heapnumber.",
+      "range": {
+        "startLine": 2605,
+        "startChar": 8,
+        "endLine": 2605,
+        "endChar": 17
+      },
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d52e1454_a98b846c",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2618,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-27T11:38:49Z",
+      "side": 1,
+      "message": "Let\u0027s call it is_string or value_is_string.",
+      "range": {
+        "startLine": 2618,
+        "startChar": 2,
+        "endLine": 2618,
+        "endChar": 7
+      },
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a7f2a8a_21682c9f",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2639,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-27T11:38:49Z",
+      "side": 1,
+      "message": "Can\u0027t you use the more precise TaggedPointer here?",
+      "range": {
+        "startLine": 2639,
+        "startChar": 34,
+        "endLine": 2639,
+        "endChar": 43
+      },
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b35ce9f0_88997b21",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 7
@@ -13,6 +105,47 @@
       "writtenOn": "2019-09-26T11:19:41Z",
       "side": 1,
       "message": "You need to pass `params.feedback()` here.",
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15ab1ca8_68b72973",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2647,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-27T11:38:49Z",
+      "side": 1,
+      "message": "Yes, otherwise there is a deopt loop. Please add a test against that as well.",
+      "parentUuid": "b35ce9f0_88997b21",
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0259cc20_b31fad70",
+        "filename": "src/compiler/operation-typer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-27T11:38:49Z",
+      "side": 1,
+      "message": "You can make this more precise, using either Unsigned31 (which corresponds to the current implementation where the max value is 2^31-1), or JSArrayLengthType, or even better a new JSArrayIndexType which is like JSArrayLengthType but excludes 2^32-1.",
+      "range": {
+        "startLine": 1254,
+        "startChar": 39,
+        "endLine": 1254,
+        "endChar": 59
+      },
       "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
