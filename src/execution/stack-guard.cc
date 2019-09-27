@@ -305,8 +305,6 @@ Object StackGuard::HandleInterrupts() {
   }
 
   isolate_->counters()->stack_interrupts()->Increment();
-  isolate_->counters()->runtime_profiler_ticks()->Increment();
-  isolate_->runtime_profiler()->MarkCandidatesForOptimization();
 
   return ReadOnlyRoots(isolate_).undefined_value();
 }
