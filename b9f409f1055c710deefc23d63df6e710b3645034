@@ -16,6 +16,24 @@
       "revId": "b9f409f1055c710deefc23d63df6e710b3645034",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9d0d1c9_b557580b",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-27T16:19:08Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the StackCheck bytecode be being used to handle those interrupts for long-running scripts?",
+      "parentUuid": "0e2251b8_dece9924",
+      "revId": "b9f409f1055c710deefc23d63df6e710b3645034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
