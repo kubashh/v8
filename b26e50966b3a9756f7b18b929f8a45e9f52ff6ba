@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ecdd8e4_fbb0aa5f",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-09-27T13:31:43Z",
+      "side": 1,
+      "message": "There\u0027s a todo left here.",
+      "revId": "b26e50966b3a9756f7b18b929f8a45e9f52ff6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72c6157e_ce10cf41",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-09-27T13:31:43Z",
+      "side": 1,
+      "message": "This should have comments.",
+      "revId": "b26e50966b3a9756f7b18b929f8a45e9f52ff6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9318082_bbe77fbe",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-09-27T13:31:43Z",
+      "side": 1,
+      "message": "Some comments here would be neat.",
+      "revId": "b26e50966b3a9756f7b18b929f8a45e9f52ff6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
