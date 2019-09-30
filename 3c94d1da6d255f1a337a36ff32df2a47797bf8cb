@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c891f1cf_20bb4e00",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2888,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T12:47:35Z",
+      "side": 1,
+      "message": "As discussed offline, we shouldn\u0027t need to check this flag, the process of setting TERMINATE_EXECUTION interrupt should lower the stack guard and cause this to trigger.",
+      "revId": "3c94d1da6d255f1a337a36ff32df2a47797bf8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
