@@ -52,6 +52,24 @@
       "revId": "b9f409f1055c710deefc23d63df6e710b3645034",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ab8f0ef_f40a7077",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-09-30T13:49:51Z",
+      "side": 1,
+      "message": "Done. I fixed a bug when moving from a postponed interrupt scope to a scope that allows interrupts. Now stack check handles this.",
+      "parentUuid": "65dcec9c_7cde725e",
+      "revId": "b9f409f1055c710deefc23d63df6e710b3645034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
