@@ -243,6 +243,24 @@
     },
     {
       "key": {
+        "uuid": "74ef0921_daff08c3",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2647,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-30T10:24:16Z",
+      "side": 1,
+      "message": "I assume you mean \"can\u0027t seem\".\n\nActually I think we don\u0027t need to pass the feedback source. That\u0027s only used in the context of call ICs where the interpreter-collected feedback won\u0027t change after a deopt. If I understand correctly, here the interpreter-collected feedback will change after the deopt to MEGAMORPHIC, right?",
+      "parentUuid": "55c3ca45_f5329c64",
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0259cc20_b31fad70",
         "filename": "src/compiler/operation-typer.cc",
         "patchSetId": 7
@@ -278,6 +296,30 @@
       "side": 1,
       "message": "I think Unsigned31 is perfect as we support only upto that in the builtins (as the builtins can\u0027t handle uintptr for certain cases yet)",
       "parentUuid": "0259cc20_b31fad70",
+      "range": {
+        "startLine": 1254,
+        "startChar": 39,
+        "endLine": 1254,
+        "endChar": 59
+      },
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "03648aaf_71902c91",
+        "filename": "src/compiler/operation-typer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-30T10:24:16Z",
+      "side": 1,
+      "message": "Yes, but then it\u0027s crucial that you don\u0027t forget to update this once we support more (otherwise we get a serious security bug).",
+      "parentUuid": "b8c2d5e9_41cd95af",
       "range": {
         "startLine": 1254,
         "startChar": 39,
