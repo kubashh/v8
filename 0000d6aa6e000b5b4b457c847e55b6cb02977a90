@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50f565a7_7a65e2c1",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T16:56:27Z",
+      "side": 1,
+      "message": "Maybe add a comment stating the preconditions that the code entry slot has a non-zero optimization marker.",
+      "revId": "0000d6aa6e000b5b4b457c847e55b6cb02977a90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08a79e6f_0871eb02",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T16:56:27Z",
+      "side": 1,
+      "message": "This is not checking it\u0027s cleared, it\u0027s checking if it has optimized code.",
+      "revId": "0000d6aa6e000b5b4b457c847e55b6cb02977a90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c381aa53_ae6b8937",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T16:56:27Z",
+      "side": 1,
+      "message": "Comment that if we fell through there is no runnable optimized code",
+      "revId": "0000d6aa6e000b5b4b457c847e55b6cb02977a90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d49f3b18_379fd5a8",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T16:56:27Z",
+      "side": 1,
+      "message": "Unecessary change?",
+      "revId": "0000d6aa6e000b5b4b457c847e55b6cb02977a90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
