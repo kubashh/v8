@@ -140,6 +140,30 @@
       "revId": "8ff1a779aa80149dbdc95c66ffb80691ba578f9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c1578c4_1a8f0080",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T11:12:20Z",
+      "side": 1,
+      "message": "Dan and I found the CHECK which is here:\nhttps://cs.chromium.org/chromium/src/v8/src/codegen/x64/assembler-x64.cc?type\u003dcs\u0026q\u003dbind_to+x64\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d572\n\nso I think what you have here is fine.",
+      "parentUuid": "d22dc864_5e71be71",
+      "range": {
+        "startLine": 2307,
+        "startChar": 4,
+        "endLine": 2307,
+        "endChar": 44
+      },
+      "revId": "8ff1a779aa80149dbdc95c66ffb80691ba578f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
