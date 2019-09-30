@@ -560,13 +560,13 @@ TEST(PostponeTerminateException) {
 
 static void AssertTerminatedCodeRun(v8::Isolate* isolate) {
   v8::TryCatch try_catch(isolate);
-  CompileRun("for (var i = 0; i < 10000; i++);");
+  CompileRun("for (var i = 0; i < 1; i++);");
   CHECK(try_catch.HasTerminated());
 }
 
 static void AssertFinishedCodeRun(v8::Isolate* isolate) {
   v8::TryCatch try_catch(isolate);
-  CompileRun("for (var i = 0; i < 10000; i++);");
+  CompileRun("for (var i = 0; i < 1; i++);");
   CHECK(!try_catch.HasTerminated());
 }
 

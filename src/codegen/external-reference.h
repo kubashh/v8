@@ -38,6 +38,7 @@ class StatsCounter;
   V(allocation_sites_list_address, "Heap::allocation_sites_list_address()")    \
   V(address_of_jslimit, "StackGuard::address_of_jslimit()")                    \
   V(address_of_real_jslimit, "StackGuard::address_of_real_jslimit()")          \
+  V(address_of_interrupt_flags, "StackGuard::address_of_interrupt_flags()")    \
   V(heap_is_marking_flag_address, "heap_is_marking_flag_address")              \
   V(new_space_allocation_top_address, "Heap::NewSpaceAllocationTopAddress()")  \
   V(new_space_allocation_limit_address,                                        \
