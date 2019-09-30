@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "c4b060bd_d0b7ac9a",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2585,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-30T13:03:47Z",
+      "side": 1,
+      "message": "I see, the branch above for eval makes sense. I suppose we could have a separate path for eval; or DCHECK that this can only fail in the case of eval or top-level.",
+      "parentUuid": "fcded30b_7a8bfcfd",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57042a51_9d6d89cb",
         "filename": "src/ast/scopes.cc",
         "patchSetId": 11
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "\u003e this will cause the class variable \".\" to be context allocated in the context of \"eval\" even if there are no private names.\n\nIt looks like we still need this because this should throw TypeError instead of ReferenceError (so C need to pass the hole check)\n\nnew class C { constructor() { eval(\"C \u003d 1\") } }\n\nI still changed to use a bit about the existence of static private methods for recording whether the class variable index should be serialized, since it\u0027s simpler and we also only need to maintain it before the serialization. But I did not use it to determine whether it\u0027s OK to nuke the class variable because of the example above.",
       "parentUuid": "57042a51_9d6d89cb",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7636c7d2_7bd01af0",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2696,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-30T13:03:47Z",
+      "side": 1,
+      "message": "I\u0027m talking specifically about the \".\" name you create for unnamed classes \"class {}\" without private methods. Eval cannot reference the \".\" class name (it only would through private methods; but if there aren\u0027t, that\u0027s not possible).",
+      "parentUuid": "d80e4c4d_e1e48ece",
       "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3375aad5_7c6b8dbe",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2241,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-30T13:03:47Z",
+      "side": 1,
+      "message": "Is there a reason to remove it from the list? If a variable isn\u0027t used it should be dropped automatically?\n\nIf this was a response to the \".\" (class {}) variable in case of eval; that simply needs special code because \"eval\" + no private methods simply doesn\u0027t know that it can\u0027t use \".\" in any other way.",
+      "revId": "0842c08b16edd8ddf1faa275307d739b689c424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
