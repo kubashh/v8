@@ -22,6 +22,30 @@
       "revId": "a9116d53c76884bdba67a527ec2168b7be2a1dae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1545fa4d_aca48f7c",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-09-30T03:48:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "48809a7f_6bd1e53d",
+      "range": {
+        "startLine": 1243,
+        "startChar": 16,
+        "endLine": 1243,
+        "endChar": 32
+      },
+      "revId": "a9116d53c76884bdba67a527ec2168b7be2a1dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
