@@ -536,6 +536,16 @@ void WasmDebugInfo::SetBreakpoint(Handle<WasmDebugInfo> debug_info,
   handle->interpreter()->SetBreakpoint(func, offset, true);
 }
 
+void WasmDebugInfo::ClearBreakpoint(Handle<WasmDebugInfo> debug_info,
+                                    int func_index, int offset) {
+  Isolate* isolate = debug_info->GetIsolate();
+  auto* handle = GetOrCreateInterpreterHandle(isolate, debug_info);
+  // TODO(leese): If there are no more breakpoints left it would be good to
+  // undo redirecting to the interpreter.
+  const wasm::WasmFunction* func = &handle->module()->functions[func_index];
+  handle->interpreter()->ClearBreakpoint(func, offset);
+}
+
 void WasmDebugInfo::RedirectToInterpreter(Handle<WasmDebugInfo> debug_info,
                                           Vector<int> func_indexes) {
   Isolate* isolate = debug_info->GetIsolate();

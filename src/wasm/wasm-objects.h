@@ -165,11 +165,20 @@ class WasmModuleObject : public JSObject {
                                               int* position,
                                               Handle<BreakPoint> break_point);
 
+  // Remove a previously set breakpoint at the given byte position inside the
+  // given module. If this breakpoint is not found this function returns false.
+  V8_EXPORT_PRIVATE static bool ClearBreakPoint(Handle<WasmModuleObject>,
+                                                int position,
+                                                Handle<BreakPoint> break_point);
+
   // Check whether this module was generated from asm.js source.
   inline bool is_asm_js();
 
   static void AddBreakpoint(Handle<WasmModuleObject>, int position,
                             Handle<BreakPoint> break_point);
+
+  static bool RemoveBreakpoint(Handle<WasmModuleObject>, int position,
+                               Handle<BreakPoint> break_point);
 
   static void SetBreakpointsOnNewInstance(Handle<WasmModuleObject>,
                                           Handle<WasmInstanceObject>);
@@ -784,7 +793,7 @@ class WasmExportedFunctionData : public Struct {
   DECL_PRINTER(WasmExportedFunctionData)
   DECL_VERIFIER(WasmExportedFunctionData)
 
-// Layout description.
+  // Layout description.
   DEFINE_FIELD_OFFSET_CONSTANTS(
       HeapObject::kHeaderSize,
       TORQUE_GENERATED_WASM_EXPORTED_FUNCTION_DATA_FIELDS)
@@ -832,7 +841,7 @@ class WasmDebugInfo : public Struct {
   DECL_PRINTER(WasmDebugInfo)
   DECL_VERIFIER(WasmDebugInfo)
 
-// Layout description.
+  // Layout description.
   DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
                                 TORQUE_GENERATED_WASM_DEBUG_INFO_FIELDS)
 
@@ -850,6 +859,11 @@ class WasmDebugInfo : public Struct {
   // interpreter and will always pause at the given offset.
   V8_EXPORT_PRIVATE static void SetBreakpoint(Handle<WasmDebugInfo>,
                                               int func_index, int offset);
+
+  // Clear a previously set breakpoint in the given function at the given byte
+  // offset within that function.
+  V8_EXPORT_PRIVATE static void ClearBreakpoint(
+      Handle<WasmDebugInfo> debug_info, int func_index, int offset);
 
   // Make a set of functions always execute in the interpreter without setting
   // breakpoints.
