@@ -2876,7 +2876,24 @@ IGNITION_HANDLER(CreateRestParameter, InterpreterAssembler) {
 // Performs a stack guard check.
 IGNITION_HANDLER(StackCheck, InterpreterAssembler) {
   TNode<Context> context = GetContext();
-  PerformStackCheck(context);
+  Label done(this), call_runtime(this, Label::kDeferred);
+  PerformStackCheck(context, &call_runtime);
+
+  TNode<IntPtrT> interrupt_flags = UncheckedCast<IntPtrT>(
+      Load(MachineType::Pointer(),
+           ExternalConstant(
+               ExternalReference::address_of_interrupt_flags(isolate()))));
+  TNode<BoolT> terminate_flag_not_set = WordEqual(
+      WordAnd(interrupt_flags,
+              IntPtrConstant(StackGuard::InterruptFlag::TERMINATE_EXECUTION)),
+      IntPtrConstant(0));
+  Branch(terminate_flag_not_set, &done, &call_runtime);
+
+  BIND(&call_runtime);
+  CallRuntime(Runtime::kStackGuard, context);
+  Goto(&done);
+
+  BIND(&done);
   Dispatch();
 }
 

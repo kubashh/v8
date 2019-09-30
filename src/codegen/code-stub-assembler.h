@@ -3565,7 +3565,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return val;
   }
 
-  void PerformStackCheck(TNode<Context> context);
+  void PerformStackCheck(TNode<Context> context, Label* call_runtime = nullptr);
 
   void SetPropertyLength(TNode<Context> context, TNode<Object> array,
                          TNode<Number> length);
