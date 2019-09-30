@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96ad49ae_fa6fcf61",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T10:41:04Z",
+      "side": 1,
+      "message": "As discussed, let\u0027s avoid the need for this label by splitting the code into two.",
+      "range": {
+        "startLine": 891,
+        "startChar": 4,
+        "endLine": 891,
+        "endChar": 42
+      },
+      "revId": "e893992a8b672be0008d3795d30b0610945099fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
