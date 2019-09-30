@@ -6,6 +6,7 @@
 #define V8_BASE_SMALL_VECTOR_H_
 
 #include <algorithm>
+#include <iterator>
 #include <type_traits>
 #include <utility>
 
@@ -25,6 +26,11 @@ class SmallVector {
   STATIC_ASSERT(std::is_trivially_destructible<T>::value);
 
  public:
+  using iterator = T*;
+  using const_iterator = const T*;
+  using reverse_iterator = std::reverse_iterator<iterator>;
+  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
   static constexpr size_t kInlineSize = kSize;
 
   SmallVector() = default;
