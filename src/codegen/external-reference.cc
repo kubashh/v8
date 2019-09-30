@@ -340,6 +340,14 @@ ExternalReference ExternalReference::address_of_real_jslimit(Isolate* isolate) {
   return ExternalReference(address);
 }
 
+ExternalReference ExternalReference::address_of_interrupt_flags(
+    Isolate* isolate) {
+  Address address = isolate->stack_guard()->address_of_interrupt_flags();
+  // For efficient generated code, this should be root-register-addressable.
+  DCHECK(isolate->root_register_addressable_region().contains(address));
+  return ExternalReference(address);
+}
+
 ExternalReference ExternalReference::heap_is_marking_flag_address(
     Isolate* isolate) {
   return ExternalReference(isolate->heap()->IsMarkingFlagAddress());

@@ -13424,8 +13424,10 @@ void CodeStubAssembler::Print(const char* prefix, Node* tagged_value) {
   CallRuntime(Runtime::kDebugPrint, NoContextConstant(), tagged_value);
 }
 
-void CodeStubAssembler::PerformStackCheck(TNode<Context> context) {
-  Label ok(this), stack_check_interrupt(this, Label::kDeferred);
+void CodeStubAssembler::PerformStackCheck(TNode<Context> context,
+                                          Label* call_runtime) {
+  Label ok(this), stack_check_interrupt(this, Label::kDeferred),
+      check_terminate_flag(this);
 
   TNode<UintPtrT> stack_limit = UncheckedCast<UintPtrT>(
       Load(MachineType::Pointer(),
@@ -13435,8 +13437,12 @@ void CodeStubAssembler::PerformStackCheck(TNode<Context> context) {
   Branch(sp_within_limit, &ok, &stack_check_interrupt);
 
   BIND(&stack_check_interrupt);
-  CallRuntime(Runtime::kStackGuard, context);
-  Goto(&ok);
+  if (call_runtime != nullptr) {
+    Goto(call_runtime);
+  } else {
+    CallRuntime(Runtime::kStackGuard, context);
+    Goto(&ok);
+  }
 
   BIND(&ok);
 }

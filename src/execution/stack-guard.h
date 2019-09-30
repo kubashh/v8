@@ -81,6 +81,9 @@ class V8_EXPORT_PRIVATE StackGuard final {
   Address address_of_real_jslimit() {
     return reinterpret_cast<Address>(&thread_local_.real_jslimit_);
   }
+  Address address_of_interrupt_flags() {
+    return reinterpret_cast<Address>(&thread_local_.interrupt_flags_);
+  }
 
   // If the stack guard is triggered, but it is not an actual
   // stack overflow, then handle the interruption accordingly.
