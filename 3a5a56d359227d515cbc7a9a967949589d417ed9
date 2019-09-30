@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1bbb9f9c_c6c86415",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-09-30T15:39:17Z",
+      "side": 1,
+      "message": "Please see the style guide for formatting of commit messages. Especially, wrap at 72 characters and add a subject line (preferably \u003c\u003d 50 chars, max. 72 chars).\nhttp://go/chromium-commit-messages\n\nAlso, please add some text why we need to make this change, i.e. in which context you plan to use it. It might also help to create a tracking bug for this, so reviewers have more context.",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db3b840a_4fcadd16",
+        "filename": "src/utils/locked-queue-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-09-30T15:39:17Z",
+      "side": 1,
+      "message": "Why {NotifyAll}, not {NotifyOne}?",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8775d3a_8c962fa2",
+        "filename": "src/utils/locked-queue-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-09-30T15:39:17Z",
+      "side": 1,
+      "message": "If you do this in a loop, you might wait much longer than the given timeout, right?",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ff79b95_661e4424",
+        "filename": "src/utils/locked-queue.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-09-30T15:39:17Z",
+      "side": 1,
+      "message": "Can you try to forward-declare base::Optional instead of adding the include? If it\u0027s only used as a return type, that should work.",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3056c822_46cf7727",
+        "filename": "src/utils/locked-queue.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-09-30T15:39:17Z",
+      "side": 1,
+      "message": "TimeDelta is small enough to pass by value. We are not totally consistent there, but it seems like most other code already does this.",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
