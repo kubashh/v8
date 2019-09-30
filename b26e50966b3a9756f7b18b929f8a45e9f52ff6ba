@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "677159d5_9e1140ea",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-09-30T08:41:58Z",
+      "side": 1,
+      "message": "Is there a particular reason for this to be static?",
+      "revId": "b26e50966b3a9756f7b18b929f8a45e9f52ff6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9318082_bbe77fbe",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 1
@@ -47,6 +64,23 @@
       "writtenOn": "2019-09-27T13:31:43Z",
       "side": 1,
       "message": "Some comments here would be neat.",
+      "revId": "b26e50966b3a9756f7b18b929f8a45e9f52ff6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92fb5838_ef0b0c3e",
+        "filename": "test/cctest/wasm/test-wasm-breakpoints.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-09-30T08:41:58Z",
+      "side": 1,
+      "message": "Use an empty lambda instead? It\u0027s got a single use after all.",
       "revId": "b26e50966b3a9756f7b18b929f8a45e9f52ff6ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
