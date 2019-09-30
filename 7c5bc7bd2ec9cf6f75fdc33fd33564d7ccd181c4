@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45251507_c2523a74",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2604,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-30T12:32:04Z",
+      "side": 1,
+      "message": "What about putting the deferred code into a code stub so we don\u0027t blow up generated code size unnecessary? (Possibly simply doing more in C?)",
+      "revId": "7c5bc7bd2ec9cf6f75fdc33fd33564d7ccd181c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd5c38f3_ad3eeba3",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-09-30T12:32:04Z",
+      "side": 1,
+      "message": "I kinda prefer one-line exit-points:\n\nuint32_t index;\nif (key.AsArrayIndex(\u0026index)) return -1;\nif (index \u003c\u003d INT_MAX) return index;\nif (index \u003c\u003d JSArray::kMaxArrayIndex) -2;\nreturn -1;",
+      "revId": "7c5bc7bd2ec9cf6f75fdc33fd33564d7ccd181c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
