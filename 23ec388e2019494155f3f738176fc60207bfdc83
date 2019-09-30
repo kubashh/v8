@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c88a20c3_92f4489c",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T13:14:14Z",
+      "side": 1,
+      "message": "I\u0027d drop the Generate and call this TailCallOptimizedCodeSlot",
+      "range": {
+        "startLine": 888,
+        "startChar": 12,
+        "endLine": 888,
+        "endChar": 45
+      },
+      "revId": "23ec388e2019494155f3f738176fc60207bfdc83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdfcae47_a1f72f43",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T13:14:14Z",
+      "side": 1,
+      "message": "MaybeOptimizeCode (it can still fall through if the function is in the optimization queue)",
+      "range": {
+        "startLine": 924,
+        "startChar": 12,
+        "endLine": 924,
+        "endChar": 32
+      },
+      "revId": "23ec388e2019494155f3f738176fc60207bfdc83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "806be7fc_810a0d9e",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T13:14:14Z",
+      "side": 1,
+      "message": "No need for a label or jump here, just do the fallthrough and jump / label in the caller code.",
+      "range": {
+        "startLine": 926,
+        "startChar": 32,
+        "endLine": 926,
+        "endChar": 51
+      },
+      "revId": "23ec388e2019494155f3f738176fc60207bfdc83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8448f74_a51d6cb4",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T13:14:14Z",
+      "side": 1,
+      "message": "This should be called maybe_has_optimized_code",
+      "range": {
+        "startLine": 1068,
+        "startChar": 41,
+        "endLine": 1068,
+        "endChar": 72
+      },
+      "revId": "23ec388e2019494155f3f738176fc60207bfdc83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e864047e_8ddde140",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T13:14:14Z",
+      "side": 1,
+      "message": "I think just \"// Check if optimized code marker is cleared.\"",
+      "range": {
+        "startLine": 1070,
+        "startChar": 2,
+        "endLine": 1071,
+        "endChar": 77
+      },
+      "revId": "23ec388e2019494155f3f738176fc60207bfdc83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13dc15db_3633d5ad",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T13:14:14Z",
+      "side": 1,
+      "message": "This isn\u0027t maybe_optimized, it\u0027s has_optimization_marker",
+      "range": {
+        "startLine": 1074,
+        "startChar": 12,
+        "endLine": 1074,
+        "endChar": 27
+      },
+      "revId": "23ec388e2019494155f3f738176fc60207bfdc83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "998c5311_e4628bdc",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T13:14:14Z",
+      "side": 1,
+      "message": "Load code entry from the weak reference, if it was cleared, resume execution of unoptimized code.",
+      "range": {
+        "startLine": 1192,
+        "startChar": 5,
+        "endLine": 1192,
+        "endChar": 44
+      },
+      "revId": "23ec388e2019494155f3f738176fc60207bfdc83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
