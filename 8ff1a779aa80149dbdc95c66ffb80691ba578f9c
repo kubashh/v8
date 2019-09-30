@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7cf3a29c_d598afae",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T11:01:08Z",
+      "side": 1,
+      "message": "I\u0027m not sure how we could push it after done, since done is a fallthrough to the code that comes next after InvokeFunctionCode (assuming this was called with InvokeFlag::CALL_FUNCTION instead of JUMP_FUNCTION) and if it was JUMP_FUNCTION then this is the ideal place for it since there is no executed code after this point.",
+      "parentUuid": "cd9ab3ae_7e06ab36",
+      "range": {
+        "startLine": 1688,
+        "startChar": 1,
+        "endLine": 1691,
+        "endChar": 26
+      },
+      "revId": "8ff1a779aa80149dbdc95c66ffb80691ba578f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "833dc6ee_5cfa4555",
         "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a4f050db_ecc7d4aa",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2258,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T11:01:08Z",
+      "side": 1,
+      "message": "This is calling the macro-assembler version of Cbnz [1] which does the check as to whether the label is in-range and if not, devolves to the cmp/bnz logic. Given this is a forward jump, I think it will aim to do it in the short range, and insert a veneer jump if we go over the budget. \n\nI agree it is worth looking at the assembly here, but I\u0027m not sure I\u0027d make any change unless it looks really bad compared to cmp/bnz\n\n[1] https://cs.chromium.org/chromium/src/v8/src/codegen/arm64/macro-assembler-arm64.cc?q\u003dCbnz\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d990",
+      "parentUuid": "833dc6ee_5cfa4555",
+      "range": {
+        "startLine": 2258,
+        "startChar": 4,
+        "endLine": 2258,
+        "endChar": 26
+      },
+      "revId": "8ff1a779aa80149dbdc95c66ffb80691ba578f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b422b0ca_710f70f7",
         "filename": "src/codegen/x64/macro-assembler-x64.cc",
         "patchSetId": 5
@@ -59,6 +107,30 @@
       "writtenOn": "2019-09-30T08:59:34Z",
       "side": 1,
       "message": "this also has a limit of +/- 128 bytes, which is worth checking. I suspect it\u0027s ok, but not sure how much code is generated for InvokePrologue, LoadTaggedPointerField and CallCodeObject.",
+      "range": {
+        "startLine": 2307,
+        "startChar": 4,
+        "endLine": 2307,
+        "endChar": 44
+      },
+      "revId": "8ff1a779aa80149dbdc95c66ffb80691ba578f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d22dc864_5e71be71",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-09-30T11:01:08Z",
+      "side": 1,
+      "message": "I think this should cause a DCHECK if you try to do a Near jump and bind the label at a PC too far away for a near jump, although I can\u0027t find that check right now.",
+      "parentUuid": "b422b0ca_710f70f7",
       "range": {
         "startLine": 2307,
         "startChar": 4,
