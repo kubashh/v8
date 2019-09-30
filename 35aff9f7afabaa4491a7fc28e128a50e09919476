@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "beef4da7_e59bb0f9",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2585,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-09-30T20:38:10Z",
+      "side": 1,
+      "message": "I added a check for eval or top-level (I assume top-level means outer_scope-\u003eis_script_scope()?)",
+      "parentUuid": "c4b060bd_d0b7ac9a",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57042a51_9d6d89cb",
         "filename": "src/ast/scopes.cc",
         "patchSetId": 11
