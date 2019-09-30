@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd9ab3ae_7e06ab36",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-09-30T08:59:34Z",
+      "side": 1,
+      "message": "ideally we\u0027d push this after the done label as well, as debugging is rarer (and less important for performance) than the mismatch argument case, but we can look into that later.",
+      "range": {
+        "startLine": 1688,
+        "startChar": 1,
+        "endLine": 1691,
+        "endChar": 26
+      },
+      "revId": "8ff1a779aa80149dbdc95c66ffb80691ba578f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "833dc6ee_5cfa4555",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2258,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-09-30T08:59:34Z",
+      "side": 1,
+      "message": "Can you check the generated assembly here?\n\ncbnz can only branch 4-130 bytes, so if the intervening code is too long, you might end up generating longer code or with extra branches in the middle of your fast path. It might end up being better to just to do a:\ncmp(x4, 0)\nbnz(\u0026debug_hook)\n\nRoss: Feel free to jump if I\u0027ve got the wrong end of the stick on how this works.",
+      "range": {
+        "startLine": 2258,
+        "startChar": 4,
+        "endLine": 2258,
+        "endChar": 26
+      },
+      "revId": "8ff1a779aa80149dbdc95c66ffb80691ba578f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b422b0ca_710f70f7",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-09-30T08:59:34Z",
+      "side": 1,
+      "message": "this also has a limit of +/- 128 bytes, which is worth checking. I suspect it\u0027s ok, but not sure how much code is generated for InvokePrologue, LoadTaggedPointerField and CallCodeObject.",
+      "range": {
+        "startLine": 2307,
+        "startChar": 4,
+        "endLine": 2307,
+        "endChar": 44
+      },
+      "revId": "8ff1a779aa80149dbdc95c66ffb80691ba578f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
