@@ -279,6 +279,24 @@
     },
     {
       "key": {
+        "uuid": "8f30160d_097cc697",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2647,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-09-30T11:11:16Z",
+      "side": 1,
+      "message": "Never mind, we need it because CheckBounds is used in other places, in particular in the call reducer (e.g. for String.prototype.charCodeAt).",
+      "parentUuid": "2786f4e6_7d7bb7a9",
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0259cc20_b31fad70",
         "filename": "src/compiler/operation-typer.cc",
         "patchSetId": 7
