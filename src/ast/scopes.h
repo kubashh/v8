@@ -1248,7 +1248,7 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
  public:
   ClassScope(Zone* zone, Scope* outer_scope);
   // Deserialization.
-  ClassScope(Zone* zone, AstValueFactory* ast_value_factory,
+  ClassScope(Isolate* isolate, Zone* zone, AstValueFactory* ast_value_factory,
              Handle<ScopeInfo> scope_info);
 
   struct HeritageParsingScope {
@@ -1298,12 +1298,26 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
   Variable* DeclareBrandVariable(AstValueFactory* ast_value_factory,
                                  IsStaticFlag is_static_flag,
                                  int class_token_pos);
+  Variable* DeclareClassVariable(AstValueFactory* ast_value_factory,
+                                 const AstRawString* name, int class_token_pos);
   Variable* brand() {
     return GetRareData() == nullptr ? nullptr : GetRareData()->brand;
   }
 
+  // Returns whether the index of class variable of this class scope should be
+  // recorded in the ScopeInfo.
+  bool ShouldSaveClassVariableIndex();
+
+  Variable* class_variable() { return class_variable_; }
+
   V8_INLINE bool IsParsingHeritage() {
     return rare_data_and_is_parsing_heritage_.GetPayload();
+  }
+
+  // Only maintained when the scope is parsed, not when the scope is
+  // deserialized.
+  bool has_static_private_methods() const {
+    return has_static_private_methods_;
   }
 
  private:
@@ -1342,6 +1356,10 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
   }
 
   PointerWithPayload<RareData, bool, 1> rare_data_and_is_parsing_heritage_;
+  Variable* class_variable_ = nullptr;
+  // This is only maintained when the scope is parsed, not when the
+  // scope is deserialized.
+  bool has_static_private_methods_ = false;
 };
 
 // Iterate over the private name scope chain. The iteration proceeds from the
