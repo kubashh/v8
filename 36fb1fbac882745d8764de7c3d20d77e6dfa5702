@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b84a5441_8406d0f1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-01T09:39:55Z",
+      "side": 1,
+      "message": "Please add a more verbose explanation and tag the subject with [regexp]. Which loop? What are the consequences of \u0027moving if up\u0027?",
+      "revId": "36fb1fbac882745d8764de7c3d20d77e6dfa5702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f67a9956_da67c0c6",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-01T09:39:55Z",
+      "side": 1,
+      "message": "Is this optimization (moving the if outside the loop) valid? What happens if `start` is initially \u003c128, then is incremented to be \u003e\u003d128?",
+      "range": {
+        "startLine": 747,
+        "startChar": 11,
+        "endLine": 747,
+        "endChar": 23
+      },
+      "revId": "36fb1fbac882745d8764de7c3d20d77e6dfa5702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4601fa2f_97ea91f2",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-01T09:39:55Z",
+      "side": 1,
+      "message": "Orthogonal to your CL: I think it\u0027d be great to reuse the kMaxOneCharStringValue constant currently defined in ast-value-factory.h. We could e.g. promote it to globals.h.",
+      "revId": "36fb1fbac882745d8764de7c3d20d77e6dfa5702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b99927f9_baa2ab4b",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-01T09:39:55Z",
+      "side": 1,
+      "message": "nit: for more clarity please `for (UChar32 ch \u003d start; ch \u003c\u003d end; ch++)`",
+      "revId": "36fb1fbac882745d8764de7c3d20d77e6dfa5702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
