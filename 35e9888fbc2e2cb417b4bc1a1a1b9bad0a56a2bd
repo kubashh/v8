@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02480aac_57cfac4d",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-10-01T13:03:40Z",
+      "side": 1,
+      "message": "nit - let\u0027s just call this optimization_marker",
+      "range": {
+        "startLine": 923,
+        "startChar": 39,
+        "endLine": 923,
+        "endChar": 59
+      },
+      "revId": "35e9888fbc2e2cb417b4bc1a1a1b9bad0a56a2bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5948a8c_e3701535",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-10-01T13:03:40Z",
+      "side": 1,
+      "message": "// Check if there is an optimization marker, if so carry onto the the MaybeOptimizeCode path.",
+      "revId": "35e9888fbc2e2cb417b4bc1a1a1b9bad0a56a2bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
