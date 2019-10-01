@@ -2,6 +2,165 @@
   "comments": [
     {
       "key": {
+        "uuid": "7be02f22_df6244f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "Please add a \"[wasm] \" prefix. This makes it easier for sheriffs (and everyone else) so read over lists of commits when looking for the cause of a crash. Also, some of the team read over all mails on v8-reviews@, and these prefixes help to know which of the CLs might be interesting for individuals.",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0d58433_726bb694",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "Do we have a tracking bug to reference here?",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28b21bc8_5ccecee7",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "We usually add a \"// static\" comment before such method definitions. It looks like I forgot that on other methods here. Feel free to also add it there.",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82340ad8_3e49fcb8",
+        "filename": "src/wasm/wasm-interpreter.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "What\u0027s the difference between this and {SetBreakpoint(function, pc, false)}? Should we implement one using the other? Or can we just drop the new method?",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d75d9236_44575c55",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "Again, \"// static\" would help when reading this.",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aab2ced_ace7e949",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "Should we check the return type and return {false} if {RemoveBreakpoint} returns {false}?",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e90c3808_1b1118af",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "nit: another \"// static\" before this definition.",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f1f963b_e4daa25f",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "nit: this could be one line",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 421,
+        "endChar": 3
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af75e883_a9b44437",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need the {handle} function here, just call the constructor directly:\nHandle\u003cFixedArray\u003e breakpoint_infos{module_object-\u003ebreakpoint_infos(), isolate};\n(or the same with parenthesis instead of curly braces if you prefer that)",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2aeb0d6d_e7b64a63",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -25,6 +184,29 @@
     },
     {
       "key": {
+        "uuid": "25f03de6_945a4b49",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "nit: this could be one line",
+      "range": {
+        "startLine": 428,
+        "startChar": 0,
+        "endLine": 430,
+        "endChar": 3
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "941d7662_6113113d",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -41,6 +223,69 @@
         "startChar": 3,
         "endLine": 436,
         "endChar": 56
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92f2efd1_7c15b637",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "The semantic difference to {ClearBreakPoint} is not clear here. I know that we have the same situation with {SetBreakPoint} and {AddBreakpoint} already, but maybe now is a good time to clean this up a bit. For a start, it might be enough to name this {Add,Remove}BreakpointObject, or rename otherwise.\nAlso, can we make these helpers private?",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c447217c_9e6f355e",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "nit: surrounding code skips these identifiers if they don\u0027t add to the semantics.",
+      "range": {
+        "startLine": 866,
+        "startChar": 28,
+        "endLine": 866,
+        "endChar": 38
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9510744_1651aae9",
+        "filename": "test/cctest/wasm/test-wasm-breakpoints.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "copy/paste error: should be \"clear\"",
+      "range": {
+        "startLine": 157,
+        "startChar": 10,
+        "endLine": 157,
+        "endChar": 13
       },
       "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",

@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "05460c54_e9a2e1b3",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T16:47:37Z",
+      "side": 1,
+      "message": "The reason is that it\u0027s not allowed to mix handles with raw pointers. Any interface either takes only handles, or only raw pointers (in which case it is not allowed to allocate anything, since this might trigger a GC). If the method would not be static, the {this} pointer would be a raw pointer, but we might need to allocate.",
+      "parentUuid": "b67a3a51_e9307f89",
+      "revId": "b26e50966b3a9756f7b18b929f8a45e9f52ff6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9318082_bbe77fbe",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 1
