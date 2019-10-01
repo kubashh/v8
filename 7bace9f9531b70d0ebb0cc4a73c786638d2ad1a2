@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2aeb0d6d_e7b64a63",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-10-01T15:40:48Z",
+      "side": 1,
+      "message": "oops :)",
+      "range": {
+        "startLine": 427,
+        "startChar": 46,
+        "endLine": 427,
+        "endChar": 47
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "941d7662_6113113d",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-10-01T15:40:48Z",
+      "side": 1,
+      "message": "If we set multiple breakpoints in the same position,after BreakPointInfo::ClearBreakPoint() \u0027info.break_points()\u0027 could still be a FixedArray object, if I am not wrong. Shouldn\u0027t we remove the BreakPointInfo from the breakpoint_infos array only if it has become undefined?",
+      "range": {
+        "startLine": 436,
+        "startChar": 3,
+        "endLine": 436,
+        "endChar": 56
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

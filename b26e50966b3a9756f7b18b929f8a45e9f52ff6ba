@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "c97144b8_0ddc9316",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-10-01T15:40:48Z",
+      "side": 1,
+      "message": "Yes, my comment is not very clear. BreakPointInfo has a \u0027source_position\u0027 and an Object \u0027break_points\u0027 that represents the sets of BreakPoints set in that position.\nInitially \u0027break_points\u0027 is Undefined, then when the first breakpoint is set it contains the BreakPoint object, and if more breakpoints are set it is replaced by a FixedArray.\nHere we are removing the breakpoint from a BreakPointInfo, which will do the reverse operation, possiby resetting \u0027break_points\u0027 to Undefined when there are no more breakpoints.\nI was wondering whether in this case we should also remove the BreakPointInfo object from the \u0027breakpoint_infos\u0027 array here or just leave it there, ready to be reused in case we\u0027ll add a new breakpoint in that location.",
+      "parentUuid": "3ecdd8e4_fbb0aa5f",
+      "revId": "b26e50966b3a9756f7b18b929f8a45e9f52ff6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72c6157e_ce10cf41",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 1
