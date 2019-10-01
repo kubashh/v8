@@ -6,6 +6,8 @@
 #define V8_UTILS_LOCKED_QUEUE_INL_H_
 
 #include "src/base/atomic-utils.h"
+#include "src/base/optional.h"
+#include "src/base/platform/time.h"
 #include "src/utils/locked-queue.h"
 
 namespace v8 {
@@ -38,6 +40,19 @@ inline LockedQueue<Record>::~LockedQueue() {
 }
 
 template <typename Record>
+inline void LockedQueue<Record>::Enqueue(Record&& record) {
+  Node* n = new Node();
+  CHECK_NOT_NULL(n);
+  n->value = std::move(record);
+  {
+    base::MutexGuard guard(&tail_mutex_);
+    tail_->next.SetValue(n);
+    tail_ = n;
+    cv_.NotifyOne();
+  }
+}
+
+template <typename Record>
 inline void LockedQueue<Record>::Enqueue(const Record& record) {
   Node* n = new Node();
   CHECK_NOT_NULL(n);
@@ -46,6 +61,7 @@ inline void LockedQueue<Record>::Enqueue(const Record& record) {
     base::MutexGuard guard(&tail_mutex_);
     tail_->next.SetValue(n);
     tail_ = n;
+    cv_.NotifyOne();
   }
 }
 
@@ -57,11 +73,50 @@ inline bool LockedQueue<Record>::Dequeue(Record* record) {
     old_head = head_;
     Node* const next_node = head_->next.Value();
     if (next_node == nullptr) return false;
-    *record = next_node->value;
+    *record = std::move(next_node->value);
     head_ = next_node;
   }
   delete old_head;
   return true;
+}
+
+template <typename Record>
+inline base::Optional<Record> LockedQueue<Record>::Dequeue() {
+  Node* old_head = nullptr;
+  Record r;
+  {
+    base::MutexGuard guard(&head_mutex_);
+    old_head = head_;
+    Node* const next_node = head_->next.Value();
+    if (next_node == nullptr) return base::nullopt;
+    r = std::move(next_node->value);
+    head_ = next_node;
+  }
+  delete old_head;
+  return r;
+}
+
+template <typename Record>
+inline base::Optional<Record> LockedQueue<Record>::DequeueWait(
+    base::TimeDelta timeout) {
+  Node* old_head = nullptr;
+  Record r;
+  {
+    base::MutexGuard guard(&head_mutex_);
+    old_head = head_;
+    Node* next_node = nullptr;
+    while (next_node == nullptr) {
+      next_node = head_->next.Value();
+      if (next_node == nullptr) {
+        if (!cv_.WaitFor(&head_mutex_, timeout)) return base::nullopt;
+        continue;
+      }
+      r = std::move(next_node->value);
+    }
+    head_ = next_node;
+  }
+  delete old_head;
+  return r;
 }
 
 template <typename Record>
