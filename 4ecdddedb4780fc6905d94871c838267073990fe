@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f99a0c25_bdad0ac6",
+        "filename": "src/wasm/gdb-server/target.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-01T14:43:33Z",
+      "side": 1,
+      "message": "Is this case ever hit? I don\u0027t think we want to support reading Wasm memory through this API.",
+      "range": {
+        "startLine": 364,
+        "startChar": 16,
+        "endLine": 364,
+        "endChar": 78
+      },
+      "revId": "4ecdddedb4780fc6905d94871c838267073990fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
