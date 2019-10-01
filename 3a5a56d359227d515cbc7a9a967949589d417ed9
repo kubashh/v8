@@ -179,6 +179,24 @@
     },
     {
       "key": {
+        "uuid": "b3568dda_3120bb9a",
+        "filename": "src/utils/locked-queue-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T13:57:46Z",
+      "side": 1,
+      "message": "True, the spurious wakeups are still a problem. I guess you have to manually reduce the timeout for subsequent waits. It looks like we don\u0027t expose a guaranteed monotonic clock, so you would have to use {Time::NowFromSystemTime()}. You can add {Time} and {TimeDelta} to get the end time, and then recompute the timeout after each {WaitFor}.",
+      "parentUuid": "5b59c4f1_a4ea7700",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ff79b95_661e4424",
         "filename": "src/utils/locked-queue.h",
         "patchSetId": 4

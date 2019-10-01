@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ea34c0e_4d01039c",
+        "filename": "src/utils/locked-queue.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T13:57:46Z",
+      "side": 1,
+      "message": "WDYT about removing this {Dequeue} implementation? It looks like we could easily replace the few uses by the new API.\nIf you want to do this in a follow-up CL, then please leave a TODO.",
+      "revId": "2fa35e82a25940b940e2a87942abd7b47b39e2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa8464fb_45bef96f",
+        "filename": "test/unittests/utils/locked-queue-unittest.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T13:57:46Z",
+      "side": 1,
+      "message": "This is the only use of {element}. Inlining (like the {Enqueue} below) would increase readability IMO.",
+      "revId": "2fa35e82a25940b940e2a87942abd7b47b39e2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c6b8887_8600d90c",
+        "filename": "test/unittests/utils/locked-queue-unittest.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T13:57:46Z",
+      "side": 1,
+      "message": "It seems weird that {empty} now has a value. Maybe just use a new local?",
+      "revId": "2fa35e82a25940b940e2a87942abd7b47b39e2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
