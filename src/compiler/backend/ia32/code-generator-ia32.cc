@@ -1904,6 +1904,46 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Sqrtpd(i.OutputSimd128Register(), i.InputOperand(0));
       break;
     }
+    case kSSEF64x2Add: {
+      __ addpd(i.InputDoubleRegister(0), i.InputOperand(1));
+      break;
+    }
+    case kAVXF64x2Add: {
+      CpuFeatureScope avx_scope(tasm(), AVX);
+      __ vaddpd(i.OutputDoubleRegister(), i.InputDoubleRegister(0),
+                i.InputOperand(1));
+      break;
+    }
+    case kSSEF64x2Sub: {
+      __ subpd(i.InputDoubleRegister(0), i.InputOperand(1));
+      break;
+    }
+    case kAVXF64x2Sub: {
+      CpuFeatureScope avx_scope(tasm(), AVX);
+      __ vsubpd(i.OutputDoubleRegister(), i.InputDoubleRegister(0),
+                i.InputOperand(1));
+      break;
+    }
+    case kSSEF64x2Mul: {
+      __ mulpd(i.InputDoubleRegister(0), i.InputOperand(1));
+      break;
+    }
+    case kAVXF64x2Mul: {
+      CpuFeatureScope avx_scope(tasm(), AVX);
+      __ vmulpd(i.OutputDoubleRegister(), i.InputDoubleRegister(0),
+                i.InputOperand(1));
+      break;
+    }
+    case kSSEF64x2Div: {
+      __ divpd(i.InputDoubleRegister(0), i.InputOperand(1));
+      break;
+    }
+    case kAVXF64x2Div: {
+      CpuFeatureScope avx_scope(tasm(), AVX);
+      __ vdivpd(i.OutputDoubleRegister(), i.InputDoubleRegister(0),
+                i.InputOperand(1));
+      break;
+    }
     case kSSEF32x4Splat: {
       DCHECK_EQ(i.OutputDoubleRegister(), i.InputDoubleRegister(0));
       XMMRegister dst = i.OutputSimd128Register();
