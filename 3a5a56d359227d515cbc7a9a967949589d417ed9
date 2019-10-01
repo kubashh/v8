@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "e2562274_1bc13116",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T09:03:48Z",
+      "side": 1,
+      "message": "When showing the commit message, Gerrit shows a vertical line at 72 characters. But when editing, there is indeed no such help.\nUsually you write the commit message in your preferred text editor when uploading the CL, and there you can configure for automatic wrapping at 72 characters.",
+      "parentUuid": "4e121eba_57e81686",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db3b840a_4fcadd16",
         "filename": "src/utils/locked-queue-inl.h",
         "patchSetId": 4
@@ -89,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "01f73209_aaa5483e",
+        "filename": "src/utils/locked-queue-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T09:03:48Z",
+      "side": 1,
+      "message": "It looks like it can happen that {WaitFor} returns before the timeout, but there is still no element in the queue. Then we wait again (in a loop).\nUsing {NotifyOne} instead of {NotifyAll} (which is still unaddressed) might fix this.\nAny way, this method should be changed as well. If it\u0027s guaranteed that we can\u0027t wait repeatedly, then the {WaitFor} should not be in a loop.",
+      "parentUuid": "cf7c91f4_bf6612e9",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ff79b95_661e4424",
         "filename": "src/utils/locked-queue.h",
         "patchSetId": 4
@@ -124,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "6426e5d3_b1914e4c",
+        "filename": "src/utils/locked-queue.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T09:03:48Z",
+      "side": 1,
+      "message": "That is true for function definitions, but I am pretty sure that it\u0027s OK to have incomplete types in declarations. Did you try?",
+      "parentUuid": "c5de4098_0a608a6c",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3056c822_46cf7727",
         "filename": "src/utils/locked-queue.h",
         "patchSetId": 4
@@ -153,6 +207,24 @@
       "side": 1,
       "message": "I could, but then TimeDelta can\u0027t be just forward declared anymore. Additionally, WaitFor takes a const-ref as well, so I\u0027ll just introduce another copy at my layer of the API. Is that worth it?",
       "parentUuid": "3056c822_46cf7727",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2e40c8a_25afdf89",
+        "filename": "src/utils/locked-queue.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-01T09:03:48Z",
+      "side": 1,
+      "message": "Yes, we should do \"the right thing\" and clean up other code later, instead of introducing more suboptimal code.\n\nSimilar to above, the forward declaration should be enough to *declare* the method here. For the definition, you need to include the right header then.",
+      "parentUuid": "909ef9d1_5086139b",
       "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
