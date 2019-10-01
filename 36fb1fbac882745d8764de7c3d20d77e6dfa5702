@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "f95bf9d3_bf3b427d",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-10-01T19:13:55Z",
+      "side": 1,
+      "message": "Logically, you are right. But for the case of \"case mapping\" range, there are no such thing exist since 0x7E is not a letter.",
+      "parentUuid": "f67a9956_da67c0c6",
+      "range": {
+        "startLine": 747,
+        "startChar": 11,
+        "endLine": 747,
+        "endChar": 23
+      },
+      "revId": "36fb1fbac882745d8764de7c3d20d77e6dfa5702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b99927f9_baa2ab4b",
         "filename": "src/regexp/regexp-compiler.cc",
         "patchSetId": 1
