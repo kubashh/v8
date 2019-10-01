@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4e121eba_57e81686",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-01T07:57:21Z",
+      "side": 1,
+      "message": "Is there any tooling to help with commit message formatting? Gerrit for instance doesn\u0027t help.",
+      "parentUuid": "1bbb9f9c_c6c86415",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db3b840a_4fcadd16",
         "filename": "src/utils/locked-queue-inl.h",
         "patchSetId": 4
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "cf7c91f4_bf6612e9",
+        "filename": "src/utils/locked-queue-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-01T07:57:21Z",
+      "side": 1,
+      "message": "WaitFor returns false if the timeout expires, in which case we return from the function.",
+      "parentUuid": "a8775d3a_8c962fa2",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ff79b95_661e4424",
         "filename": "src/utils/locked-queue.h",
         "patchSetId": 4
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "c5de4098_0a608a6c",
+        "filename": "src/utils/locked-queue.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-01T07:57:21Z",
+      "side": 1,
+      "message": "Return types can\u0027t be incomplete.",
+      "parentUuid": "3ff79b95_661e4424",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3056c822_46cf7727",
         "filename": "src/utils/locked-queue.h",
         "patchSetId": 4
@@ -81,6 +135,24 @@
       "writtenOn": "2019-09-30T15:39:17Z",
       "side": 1,
       "message": "TimeDelta is small enough to pass by value. We are not totally consistent there, but it seems like most other code already does this.",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "909ef9d1_5086139b",
+        "filename": "src/utils/locked-queue.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-01T07:57:21Z",
+      "side": 1,
+      "message": "I could, but then TimeDelta can\u0027t be just forward declared anymore. Additionally, WaitFor takes a const-ref as well, so I\u0027ll just introduce another copy at my layer of the API. Is that worth it?",
+      "parentUuid": "3056c822_46cf7727",
       "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
