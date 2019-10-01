@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "3fd6668a_cb85a949",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-01T13:23:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2562274_1bc13116",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db3b840a_4fcadd16",
         "filename": "src/utils/locked-queue-inl.h",
         "patchSetId": 4
@@ -69,6 +87,24 @@
       "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f77abba2_948bf216",
+        "filename": "src/utils/locked-queue-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-01T13:23:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db3b840a_4fcadd16",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -119,6 +155,24 @@
       "side": 1,
       "message": "It looks like it can happen that {WaitFor} returns before the timeout, but there is still no element in the queue. Then we wait again (in a loop).\nUsing {NotifyOne} instead of {NotifyAll} (which is still unaddressed) might fix this.\nAny way, this method should be changed as well. If it\u0027s guaranteed that we can\u0027t wait repeatedly, then the {WaitFor} should not be in a loop.",
       "parentUuid": "cf7c91f4_bf6612e9",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b59c4f1_a4ea7700",
+        "filename": "src/utils/locked-queue-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-01T13:23:12Z",
+      "side": 1,
+      "message": "Yes, that\u0027s correct. When there\u0027s a spurious wakeup breaking the wait then timeout effectively is reset. I\u0027m not entirely sure there is anything we can (reasonably) do about it, did you have something in mind?",
+      "parentUuid": "01f73209_aaa5483e",
       "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -178,6 +232,24 @@
     },
     {
       "key": {
+        "uuid": "e0378f90_8cb0c817",
+        "filename": "src/utils/locked-queue.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-01T13:23:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6426e5d3_b1914e4c",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3056c822_46cf7727",
         "filename": "src/utils/locked-queue.h",
         "patchSetId": 4
@@ -228,6 +300,24 @@
       "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6700d173_6ef5f8f9",
+        "filename": "src/utils/locked-queue.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-01T13:23:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2e40c8a_25afdf89",
+      "revId": "3a5a56d359227d515cbc7a9a967949589d417ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
