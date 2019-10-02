@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "0ea25689_17fc95f5",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-02T06:37:17Z",
+      "side": 1,
+      "message": "So you are saying that due to the way the ascii range is constructed, it is guaranteed that there is no range s.t. start \u003c 128 and end \u003e\u003d 128? Could you please add a DCHECK + explanatory comment?",
+      "parentUuid": "f95bf9d3_bf3b427d",
+      "range": {
+        "startLine": 747,
+        "startChar": 11,
+        "endLine": 747,
+        "endChar": 23
+      },
+      "revId": "36fb1fbac882745d8764de7c3d20d77e6dfa5702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b99927f9_baa2ab4b",
         "filename": "src/regexp/regexp-compiler.cc",
         "patchSetId": 1
