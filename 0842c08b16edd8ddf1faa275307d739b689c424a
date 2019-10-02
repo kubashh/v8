@@ -70,6 +70,24 @@
       "revId": "0842c08b16edd8ddf1faa275307d739b689c424a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91cfad98_b229f4c0",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2241,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-10-02T19:32:10Z",
+      "side": 1,
+      "message": "Update: I tried lazily creating the anonymous class variable instead (as this brings us closer to the old behavior, where no class variables are created for anonymous classes). I am currently running into DCHECKs for restoring the class variable property during the full parse. For example:\n\nclass Outer {\n  #outer() { return \u0027Outer\u0027; }\n  test() {\n    return class {\n      static #inner() { return \u0027Inner\u0027; }\n      static run() { return this.#inner(); }\n    };\n  }\n}\n\nconst obj \u003d new Outer;\nconst C \u003d obj.test();\n\nHere when we reparse the anonymous class, since `run()` will be skipped, we need something else to remind us that this class has explicit static private method access and that we should declare the class variable. We also need something similar for possible eval of static private method, since inner_scope_calls_eval_ is restored from the preparsed data after the reparse.",
+      "parentUuid": "b043396e_0c9fb85d",
+      "revId": "0842c08b16edd8ddf1faa275307d739b689c424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
