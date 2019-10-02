@@ -229,6 +229,14 @@
   # operations.
   'test-run-wasm-atomics/*': [SKIP],
   'test-run-wasm-atomics64/*': [SKIP],
+  'test-regexp/PeepholeSkipUntilCharAnd': [SKIP],
+  'test-regexp/PeepholeSkipUntilBitInTablea': [SKIP],
+  'test-regexp/PeepholeSkipUntilCharOrChar': [SKIP],
+  'test-regexp/PeepholeSkipUntilCharPosChecked': [SKIP],
+  'test-regexp/PeepholeSkipUntilChar': [SKIP],
+  'test-regexp/PeepholeSkipUntilGtOrNotBitInTable': [SKIP],
+  'test-regexp/PeepholeLabelFixupsInside': [SKIP],
+  'test-regexp/PeepholeLabelFixupsComplex': [SKIP],
 }],  # 'byteorder == big'
 
 ##############################################################################
