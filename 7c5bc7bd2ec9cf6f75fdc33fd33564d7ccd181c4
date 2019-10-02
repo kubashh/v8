@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "cf978056_db82e93b",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2604,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-02T14:38:41Z",
+      "side": 1,
+      "message": "So function f(i) { return a[i]; } would inline this code right? It seems pretty excessive since it\u0027ll almost always be a smi.",
+      "parentUuid": "121e53d9_07eb37fd",
+      "revId": "7c5bc7bd2ec9cf6f75fdc33fd33564d7ccd181c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd5c38f3_ad3eeba3",
         "filename": "src/objects/string.cc",
         "patchSetId": 9
