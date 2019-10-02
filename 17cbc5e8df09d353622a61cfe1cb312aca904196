@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "176668a4_502caade",
+        "filename": "test/mjsunit/check-bounds-array-index.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-10-02T12:06:31Z",
+      "side": 1,
+      "message": "I\u0027d make that positive (to avoid double negation which is always somewhat confusing), and also make it an argument to f, i.e.:\n\nfunction f(use_array_index) {\n return arr[use_array_index ? \u00271\u0027 : \u00274294967296\u0027];\n}",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "17cbc5e8df09d353622a61cfe1cb312aca904196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b142621_850cb3f6",
+        "filename": "test/mjsunit/check-bounds-array-index.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-10-02T12:06:31Z",
+      "side": 1,
+      "message": "Instead of the comment you can do assertDeoptimized(...)",
+      "revId": "17cbc5e8df09d353622a61cfe1cb312aca904196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
