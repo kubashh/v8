@@ -297,6 +297,24 @@
     },
     {
       "key": {
+        "uuid": "2807a26b_49bb30e3",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2647,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-02T10:51:03Z",
+      "side": 1,
+      "message": "Added tests (and verified that the String.charCodeAt did fail without this change)",
+      "parentUuid": "8f30160d_097cc697",
+      "revId": "54f97351b2c8fc601d8d5df1a3815f6d61a3ed1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0259cc20_b31fad70",
         "filename": "src/compiler/operation-typer.cc",
         "patchSetId": 7

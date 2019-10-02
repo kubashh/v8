@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "121e53d9_07eb37fd",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2604,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-02T10:51:03Z",
+      "side": 1,
+      "message": "Discussed with georg about this offline and we don\u0027t have a good intuition about this now so we thought it might be fine to land this for now and then check the benchmarks for any regressions before spending more time on this.",
+      "parentUuid": "45251507_c2523a74",
+      "revId": "7c5bc7bd2ec9cf6f75fdc33fd33564d7ccd181c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd5c38f3_ad3eeba3",
         "filename": "src/objects/string.cc",
         "patchSetId": 9
@@ -33,6 +51,24 @@
       "revId": "7c5bc7bd2ec9cf6f75fdc33fd33564d7ccd181c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acf22486_c25270df",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-02T10:51:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd5c38f3_ad3eeba3",
+      "revId": "7c5bc7bd2ec9cf6f75fdc33fd33564d7ccd181c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
