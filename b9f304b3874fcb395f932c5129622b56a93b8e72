@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fd0a20a6_004cd9a7",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-10-02T13:51:45Z",
+      "side": 1,
+      "message": "Will try that.",
+      "parentUuid": "d6736f44_29bb9230",
+      "revId": "b9f304b3874fcb395f932c5129622b56a93b8e72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2776b95_4fc4fe92",
         "filename": "src/regexp/regexp-bytecode-peephole.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-10-02T13:24:17Z",
       "side": 1,
       "message": "How does this work? Doesn\u0027t the static assert also fail on compilation?\n\nI wonder, what is blocking BE support? Wouldn\u0027t it simply be a matter of fixing the read and shift for BE?",
+      "revId": "b9f304b3874fcb395f932c5129622b56a93b8e72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "399353c4_8b3583c8",
+        "filename": "src/regexp/regexp-bytecode-peephole.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-10-02T13:51:45Z",
+      "side": 1,
+      "message": "Apparently, this doesn\u0027t fix compilation and I will fix it in a bit.\n\nI try to fix this read/shift here but it turns out there are segmentation faults before hitting this. I still need sometime to figure out the overall picture to fix this.",
+      "parentUuid": "a2776b95_4fc4fe92",
       "revId": "b9f304b3874fcb395f932c5129622b56a93b8e72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
