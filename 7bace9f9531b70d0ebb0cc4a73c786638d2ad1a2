@@ -352,6 +352,30 @@
     },
     {
       "key": {
+        "uuid": "4020d781_2399703a",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-10-02T17:58:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2aeb0d6d_e7b64a63",
+      "range": {
+        "startLine": 427,
+        "startChar": 46,
+        "endLine": 427,
+        "endChar": 47
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25f03de6_945a4b49",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -434,6 +458,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "941d7662_6113113d",
+      "range": {
+        "startLine": 436,
+        "startChar": 3,
+        "endLine": 436,
+        "endChar": 56
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c75ece48_84fd0424",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-10-02T17:58:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "146a6f64_806141fa",
       "range": {
         "startLine": 436,
         "startChar": 3,
