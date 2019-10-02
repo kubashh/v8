@@ -1268,6 +1268,11 @@ DEFINE_UINT(serialization_chunk_size, 4096,
 DEFINE_BOOL(regexp_optimization, true, "generate optimized regexp code")
 DEFINE_BOOL(regexp_mode_modifiers, false, "enable inline flags in regexp.")
 DEFINE_BOOL(regexp_interpret_all, false, "interpret all regexp code")
+#ifdef V8_TARGET_BIG_ENDIAN
+#define REGEXP_TIER_UP false
+#else
+#define REGEXP_TIER_UP true
+#endif
 DEFINE_BOOL(regexp_tier_up, true,
             "enable regexp interpreter and tier up to the compiler after the "
             "number of executions set by the tier up ticks flag")
