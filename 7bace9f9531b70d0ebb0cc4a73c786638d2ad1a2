@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "0fb91965_10bbe433",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28b21bc8_5ccecee7",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82340ad8_3e49fcb8",
         "filename": "src/wasm/wasm-interpreter.h",
         "patchSetId": 2
@@ -67,6 +85,24 @@
       "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72e040f9_c8e480fd",
+        "filename": "src/wasm/wasm-interpreter.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "It appears to be the same; removing.",
+      "parentUuid": "82340ad8_3e49fcb8",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "9fc04b72_76aaf70b",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d75d9236_44575c55",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0aab2ced_ace7e949",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -104,6 +158,24 @@
     },
     {
       "key": {
+        "uuid": "44fd14bc_eda7208e",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "Seems reasonable, though SetBreakpoint doesn\u0027t do this. Should it be changed as well?",
+      "parentUuid": "0aab2ced_ace7e949",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e90c3808_1b1118af",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -118,6 +190,24 @@
       "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e52302d0_5ae73b78",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e90c3808_1b1118af",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -144,6 +234,30 @@
     },
     {
       "key": {
+        "uuid": "7c7b3955_00aa5baa",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f1f963b_e4daa25f",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 421,
+        "endChar": 3
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af75e883_a9b44437",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -158,6 +272,24 @@
       "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af718f00_02baf93b",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "I prefer the parentheses, as does the style guide: https://chromium.googlesource.com/chromium/src/+/HEAD/styleguide/c++/c++-dos-and-donts.md#variable-initialization",
+      "parentUuid": "af75e883_a9b44437",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -207,6 +339,30 @@
     },
     {
       "key": {
+        "uuid": "6547006d_bee2ebff",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25f03de6_945a4b49",
+      "range": {
+        "startLine": 428,
+        "startChar": 0,
+        "endLine": 430,
+        "endChar": 3
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "941d7662_6113113d",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -230,6 +386,30 @@
     },
     {
       "key": {
+        "uuid": "146a6f64_806141fa",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "941d7662_6113113d",
+      "range": {
+        "startLine": 436,
+        "startChar": 3,
+        "endLine": 436,
+        "endChar": 56
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92f2efd1_7c15b637",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 2
@@ -244,6 +424,24 @@
       "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35389ab1_dd3bd4d9",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "Renamed below as AddBreakpointToInfo, RemoveBreakpointFromInfo. AddBreakpointObject didn\u0027t seem any clearer to me compared to AddBreakpoint, but I\u0027m open to using something else if you think it\u0027s better.",
+      "parentUuid": "92f2efd1_7c15b637",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -270,6 +468,30 @@
     },
     {
       "key": {
+        "uuid": "59b92494_d9efb267",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c447217c_9e6f355e",
+      "range": {
+        "startLine": 866,
+        "startChar": 28,
+        "endLine": 866,
+        "endChar": 38
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9510744_1651aae9",
         "filename": "test/cctest/wasm/test-wasm-breakpoints.cc",
         "patchSetId": 2
@@ -290,6 +512,30 @@
       "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8a5a203_bb6a3a54",
+        "filename": "test/cctest/wasm/test-wasm-breakpoints.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-02T15:30:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9510744_1651aae9",
+      "range": {
+        "startLine": 157,
+        "startChar": 10,
+        "endLine": 157,
+        "endChar": 13
+      },
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
