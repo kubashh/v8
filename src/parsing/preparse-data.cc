@@ -28,6 +28,7 @@ using NeedsPrivateNameContextChainRecalcField =
     InnerScopeCallsEvalField::Next<bool, 1>;
 using CanElideThisHoleChecks =
     NeedsPrivateNameContextChainRecalcField::Next<bool, 1>;
+using NeedsAnonymousClassVariableField = CanElideThisHoleChecks::Next<bool, 1>;
 
 using VariableMaybeAssignedField = BitField8<bool, 0, 1>;
 using VariableContextAllocatedField = VariableMaybeAssignedField::Next<bool, 1>;
@@ -367,7 +368,11 @@ void PreparseDataBuilder::SaveDataForScope(Scope* scope) {
               ->needs_private_name_context_chain_recalc()) |
       CanElideThisHoleChecks::encode(
           scope->is_declaration_scope() &&
-          scope->AsDeclarationScope()->can_elide_this_hole_checks());
+          scope->AsDeclarationScope()->can_elide_this_hole_checks()) |
+      NeedsAnonymousClassVariableField::encode(
+          scope->is_class_scope() &&
+          scope->AsClassScope()->is_anonymous_class() &&
+          scope->AsClassScope()->should_save_class_variable_index());
   byte_data_.Reserve(kUint8Size);
   byte_data_.WriteUint8(scope_data_flags);
 
@@ -573,7 +578,7 @@ BaseConsumedPreparseData<Data>::GetDataForSkippableFunction(
 
 template <class Data>
 void BaseConsumedPreparseData<Data>::RestoreScopeAllocationData(
-    DeclarationScope* scope) {
+    DeclarationScope* scope, AstValueFactory* ast_value_factory) {
   DCHECK_EQ(scope->scope_type(), ScopeType::FUNCTION_SCOPE);
   typename ByteData::ReadingScope reading_scope(this);
 
@@ -588,14 +593,15 @@ void BaseConsumedPreparseData<Data>::RestoreScopeAllocationData(
   DCHECK_EQ(end_position_from_data, scope->end_position());
 #endif
 
-  RestoreDataForScope(scope);
+  RestoreDataForScope(scope, ast_value_factory);
 
   // Check that we consumed all scope data.
   DCHECK_EQ(scope_data_->RemainingBytes(), 0);
 }
 
 template <typename Data>
-void BaseConsumedPreparseData<Data>::RestoreDataForScope(Scope* scope) {
+void BaseConsumedPreparseData<Data>::RestoreDataForScope(
+    Scope* scope, AstValueFactory* ast_value_factory) {
   if (scope->is_declaration_scope() &&
       scope->AsDeclarationScope()->is_skipped_function()) {
     return;
@@ -623,17 +629,23 @@ void BaseConsumedPreparseData<Data>::RestoreDataForScope(Scope* scope) {
   if (CanElideThisHoleChecks::decode(scope_data_flags)) {
     scope->AsDeclarationScope()->set_can_elide_this_hole_checks();
   }
+  if (NeedsAnonymousClassVariableField::decode(scope_data_flags)) {
+    Variable* var = scope->AsClassScope()->DeclareClassVariable(
+        ast_value_factory, nullptr, kNoSourcePosition);
+    var->set_is_used();
+    var->ForceContextAllocation();
+    scope->AsClassScope()->set_has_reparsed_anonymous_class_variable();
+  }
 
   if (scope->is_function_scope()) {
     Variable* function = scope->AsDeclarationScope()->function_var();
     if (function != nullptr) RestoreDataForVariable(function);
   }
-
   for (Variable* var : *scope->locals()) {
     if (IsSerializableVariableMode(var->mode())) RestoreDataForVariable(var);
   }
 
-  RestoreDataForInnerScopes(scope);
+  RestoreDataForInnerScopes(scope, ast_value_factory);
 }
 
 template <typename Data>
@@ -672,10 +684,11 @@ void BaseConsumedPreparseData<Data>::RestoreDataForVariable(Variable* var) {
 }
 
 template <typename Data>
-void BaseConsumedPreparseData<Data>::RestoreDataForInnerScopes(Scope* scope) {
+void BaseConsumedPreparseData<Data>::RestoreDataForInnerScopes(
+    Scope* scope, AstValueFactory* ast_value_factory) {
   for (Scope* inner = scope->inner_scope(); inner != nullptr;
        inner = inner->sibling()) {
-    RestoreDataForScope(inner);
+    RestoreDataForScope(inner, ast_value_factory);
   }
 }
 
