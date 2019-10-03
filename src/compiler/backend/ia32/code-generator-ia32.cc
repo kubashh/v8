@@ -2155,7 +2155,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       // propagate -0's and NaNs, which may be non-canonical.
       __ orps(kScratchDoubleReg, dst);
       // Canonicalize NaNs by quieting and clearing the payload.
-      __ cmpps(dst, kScratchDoubleReg, 3);
+      __ cmpunordps(dst, kScratchDoubleReg);
       __ orps(kScratchDoubleReg, dst);
       __ psrld(dst, 10);
       __ andnps(dst, kScratchDoubleReg);
@@ -2166,14 +2166,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       XMMRegister dst = i.OutputSimd128Register();
       Operand src1 = i.InputOperand(1);
       // See comment above for correction of minps.
-      __ movups(kScratchDoubleReg, src1);
+      __ movaps(kScratchDoubleReg, src1);
       __ vminps(kScratchDoubleReg, kScratchDoubleReg, dst);
       __ vminps(dst, dst, src1);
-      __ vorps(dst, dst, kScratchDoubleReg);
-      __ vcmpneqps(kScratchDoubleReg, dst, dst);
-      __ vorps(dst, dst, kScratchDoubleReg);
-      __ vpsrld(kScratchDoubleReg, kScratchDoubleReg, 10);
-      __ vandnps(dst, kScratchDoubleReg, dst);
+      __ vorps(kScratchDoubleReg, kScratchDoubleReg, dst);
+      __ vcmpunordps(dst, dst, kScratchDoubleReg);
+      __ vorps(kScratchDoubleReg, kScratchDoubleReg, dst);
+      __ vpsrld(dst, dst, 10);
+      __ vandnps(dst, dst, kScratchDoubleReg);
       break;
     }
     case kSSEF32x4Max: {
@@ -2192,7 +2192,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       // Propagate sign discrepancy and (subtle) quiet NaNs.
       __ subps(kScratchDoubleReg, dst);
       // Canonicalize NaNs by clearing the payload.
-      __ cmpps(dst, kScratchDoubleReg, 3);
+      __ cmpunordps(dst, kScratchDoubleReg);
       __ psrld(dst, 10);
       __ andnps(dst, kScratchDoubleReg);
       break;
@@ -2208,7 +2208,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ vxorps(dst, dst, kScratchDoubleReg);
       __ vorps(kScratchDoubleReg, kScratchDoubleReg, dst);
       __ vsubps(kScratchDoubleReg, kScratchDoubleReg, dst);
-      __ vcmpneqps(dst, kScratchDoubleReg, kScratchDoubleReg);
+      __ vcmpunordps(dst, kScratchDoubleReg, kScratchDoubleReg);
       __ vpsrld(dst, dst, 10);
       __ vandnps(dst, dst, kScratchDoubleReg);
       break;
