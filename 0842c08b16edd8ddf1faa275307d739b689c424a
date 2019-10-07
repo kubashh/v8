@@ -106,6 +106,24 @@
       "revId": "0842c08b16edd8ddf1faa275307d739b689c424a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82c52222_fd662c51",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2241,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-10-07T15:26:51Z",
+      "side": 1,
+      "message": "The current patch set adds a ShouldSaveClassVariableIndexField to the preparse flag and re-declare the edge-case class variable after the flag is decoded. It still changes the order in which the class variable is declared - it\u0027s now always the last one in the scope, if it\u0027s ever declared. Since we go through\n\nparse by skipping inner functions -\u003e reapply preparse data (with info about inner functions) -\u003e scope analysis\n\nThis seems to be the best way I can think of.\n\nIt currently passes the tests (as well as test262 locally) so I assume there are no issues. WDYT?",
+      "parentUuid": "8284369c_f26d881d",
+      "revId": "0842c08b16edd8ddf1faa275307d739b689c424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
