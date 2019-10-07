@@ -182,20 +182,35 @@ TEST(DisasmPoisonMonomorphicLoadFloat64) {
   // Matches that the property access sequence is instrumented with
   // poisoning.
 #if defined(V8_COMPRESS_POINTERS)
+  std::vector<std::string> patterns_array_start;
+  if (FLAG_turboprop) {
+    patterns_array_start = {
+        "ldursw x<<Map:[0-9]+>>, \\[<<Obj:x[0-9]+>>, #-1\\]",  // load map
+        "add x<<Map>>, x26, x<<Map>>",
+        "ldr x<<ExpMap:[0-9]+>>, pc",  // load expected map
+        "cmp w<<Map>>, w<<ExpMap>>",   // compare maps
+    };
+  } else {
+    patterns_array_start = {
+        "ldur <<Map:w[0-9]+>>, \\[<<Obj:x[0-9]+>>, #-1\\]",  // load map
+        "ldr <<ExpMap:w[0-9]+>>, pc",  // load expected map
+        "cmp <<Map>>, <<ExpMap>>",     // compare maps
+    };
+  }
   std::vector<std::string> patterns_array = {
-      "ldur <<Map:w[0-9]+>>, \\[<<Obj:x[0-9]+>>, #-1\\]",  // load map
-      "ldr <<ExpMap:w[0-9]+>>, pc",                        // load expected map
-      "cmp <<Map>>, <<ExpMap>>",                           // compare maps
-      "b.ne",                                              // deopt if differ
-      "csel " + kPReg + ", xzr, " + kPReg + ", ne",        // update the poison
-      "csdb",                                              // spec. barrier
-      "ldursw <<F1:x[0-9]+>>, \\[<<Obj>>, #11\\]",         // load heap number
-      "add <<F1>>, x26, <<F1>>",                           // Decompress ref
-      "and <<F1>>, <<F1>>, " + kPReg,                      // apply the poison
-      "add <<Addr:x[0-9]+>>, <<F1>>, #0x[0-9a-f]+",        // addr. calculation
-      "and <<Addr>>, <<Addr>>, " + kPReg,                  // apply the poison
-      "ldr d[0-9]+, \\[<<Addr>>\\]",                       // load Float64
+      "b.ne",                                        // deopt if differ
+      "csel " + kPReg + ", xzr, " + kPReg + ", ne",  // update the poison
+      "csdb",                                        // spec. barrier
+      "ldursw <<F1:x[0-9]+>>, \\[<<Obj>>, #11\\]",   // load heap number
+      "add <<F1>>, x26, <<F1>>",                     // Decompress ref
+      "and <<F1>>, <<F1>>, " + kPReg,                // apply the poison
+      "add <<Addr:x[0-9]+>>, <<F1>>, #0x[0-9a-f]+",  // addr. calculation
+      "and <<Addr>>, <<Addr>>, " + kPReg,            // apply the poison
+      "ldr d[0-9]+, \\[<<Addr>>\\]",                 // load Float64
   };
+  patterns_array.insert(std::begin(patterns_array),
+                        std::begin(patterns_array_start),
+                        std::end(patterns_array_start));
 #else
   std::vector<std::string> patterns_array = {
       "ldur <<Map:x[0-9]+>>, \\[<<Obj:x[0-9]+>>, #-1\\]",  // load map
