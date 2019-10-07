@@ -88,6 +88,24 @@
       "revId": "0842c08b16edd8ddf1faa275307d739b689c424a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8284369c_f26d881d",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2241,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-07T07:31:19Z",
+      "side": 1,
+      "message": "Yeah you\u0027d need to add this information to the preparse data, similar to how we remember that we need to context allocate in the first place. In this particular case I guess it needs to be in some flags field.\n\nI hope this can\u0027t change the order in which variables are declared (based on what\u0027s parsed)? Otherwise we might have issues with reapplying preparse information. If there\u0027s an issue, perhaps we can push the variable declaration to the front of the list so it\u0027s always handled first.\n\nIf this works; great. If it doesn\u0027t, I suppose we can drop this simplification. In that case simply mark the variable as I mentioned.",
+      "parentUuid": "91cfad98_b229f4c0",
+      "revId": "0842c08b16edd8ddf1faa275307d739b689c424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
