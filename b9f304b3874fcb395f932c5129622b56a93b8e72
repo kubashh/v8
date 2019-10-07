@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "8b1aef4d_30b604b2",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-07T07:48:27Z",
+      "side": 1,
+      "message": "The default should remain \u0027true\u0027 everywhere but affected BE platforms. I\u0027d suggest leaving tier_up untouched, define REGEXP_PEEPHOLE_OPTIMIZATION_BOOL based on V8_TARGET_BIG_ENDIAN, and use that as the default value. Please remove the implication.",
+      "parentUuid": "fd0a20a6_004cd9a7",
+      "revId": "b9f304b3874fcb395f932c5129622b56a93b8e72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2776b95_4fc4fe92",
         "filename": "src/regexp/regexp-bytecode-peephole.cc",
         "patchSetId": 2
@@ -69,6 +87,24 @@
       "revId": "b9f304b3874fcb395f932c5129622b56a93b8e72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25f2616a_6b4bddbe",
+        "filename": "src/regexp/regexp-bytecode-peephole.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-07T07:48:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "399353c4_8b3583c8",
+      "revId": "b9f304b3874fcb395f932c5129622b56a93b8e72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
