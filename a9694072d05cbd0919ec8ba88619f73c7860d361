@@ -22,6 +22,30 @@
       "revId": "a9694072d05cbd0919ec8ba88619f73c7860d361",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "137e9a20_bb0dd8f5",
+        "filename": "test/cctest/test-poison-disasm-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-07T15:38:20Z",
+      "side": 1,
+      "message": "This comment is not useful now. I created a new CL that fixes the issue (https://chromium-review.googlesource.com/c/v8/v8/+/1845223) which was unrelated to this reland.",
+      "parentUuid": "d5c05463_5faf3fd3",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 23
+      },
+      "revId": "a9694072d05cbd0919ec8ba88619f73c7860d361",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
