@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "25f0b2c4_3a3b3229",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2258,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-07T16:14:50Z",
+      "side": 1,
+      "message": "I manually checked the generated builtins and we are generating the cbnz without the veneer.",
+      "parentUuid": "a4f050db_ecc7d4aa",
+      "range": {
+        "startLine": 2258,
+        "startChar": 4,
+        "endLine": 2258,
+        "endChar": 26
+      },
+      "revId": "8ff1a779aa80149dbdc95c66ffb80691ba578f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b422b0ca_710f70f7",
         "filename": "src/codegen/x64/macro-assembler-x64.cc",
         "patchSetId": 5
@@ -155,6 +179,30 @@
       "side": 1,
       "message": "Dan and I found the CHECK which is here:\nhttps://cs.chromium.org/chromium/src/v8/src/codegen/x64/assembler-x64.cc?type\u003dcs\u0026q\u003dbind_to+x64\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d572\n\nso I think what you have here is fine.",
       "parentUuid": "d22dc864_5e71be71",
+      "range": {
+        "startLine": 2307,
+        "startChar": 4,
+        "endLine": 2307,
+        "endChar": 44
+      },
+      "revId": "8ff1a779aa80149dbdc95c66ffb80691ba578f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "200f5f9e_b43f6614",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-07T16:14:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4c1578c4_1a8f0080",
       "range": {
         "startLine": 2307,
         "startChar": 4,
