@@ -16,6 +16,24 @@
       "revId": "bc2a4a2362d869edc6256623e0d122880b0eeb88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17ad831f_92e23930",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-10-07T13:16:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a97e9d4_5d00c736",
+      "revId": "bc2a4a2362d869edc6256623e0d122880b0eeb88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
