@@ -1169,6 +1169,9 @@ class ThreadImpl {
     // If state_ is STOPPED, the current activation must be fully unwound.
     DCHECK_IMPLIES(state_ == WasmInterpreter::STOPPED,
                    current_activation().fp == frames_.size());
+    if (wait_to_suspend_ && state_ != WasmInterpreter::RUNNING) {
+      wait_to_suspend_ = false;
+    }
     return state_;
   }
 
@@ -1181,6 +1184,27 @@ class ThreadImpl {
     state_ = WasmInterpreter::STOPPED;
     trap_reason_ = kTrapCount;
     possible_nondeterminism_ = false;
+  }
+
+  static void Suspend() {
+    // This might be called on any thread
+    wait_to_suspend_ = true;
+  }
+
+  static void Resume() {}
+
+  std::vector<uint64_t> GetCallStack() {
+    DCHECK(state_ != WasmInterpreter::RUNNING);
+    v8::internal::Script script = instance_object_->module_object().script();
+    uint64_t module_id = script.id();
+
+    std::vector<uint64_t> result;
+    for (int i = static_cast<int>(frames_.size() - 1); i >= 0; i--) {
+      const auto& frame = frames_[i];
+      result.push_back((module_id << 32) |
+                       (frame.pc + frame.code->function->code.offset()));
+    }
+    return result;
   }
 
   int GetFrameCount() {
@@ -1415,6 +1439,8 @@ class ThreadImpl {
   // Store the stack height of each activation (for unwind and frame
   // inspection).
   ZoneVector<Activation> activations_;
+
+  static bool wait_to_suspend_;
 
   CodeMap* codemap() const { return codemap_; }
   const WasmModule* module() const { return codemap_->module(); }
@@ -2838,6 +2864,10 @@ class ThreadImpl {
     hit_break = true;                                                 \
     max = 0;                                                          \
   }
+      if (wait_to_suspend_) {
+        hit_break = true;
+        max = 0;
+      }
 
       DCHECK_GT(limit, pc);
       DCHECK_NOT_NULL(code->start);
@@ -3911,6 +3941,9 @@ class InterpretedFrameImpl {
   }
 };
 
+// static
+bool ThreadImpl::wait_to_suspend_ = false;
+
 namespace {
 
 // Converters between WasmInterpreter::Thread and WasmInterpreter::ThreadImpl.
@@ -3959,6 +3992,9 @@ WasmInterpreter::Thread::RaiseException(Isolate* isolate,
 }
 pc_t WasmInterpreter::Thread::GetBreakpointPc() {
   return ToImpl(this)->GetBreakpointPc();
+}
+std::vector<uint64_t> WasmInterpreter::Thread::GetCallStack() {
+  return ToImpl(this)->GetCallStack();
 }
 int WasmInterpreter::Thread::GetFrameCount() {
   return ToImpl(this)->GetFrameCount();
@@ -4068,6 +4104,12 @@ void WasmInterpreter::Run() { internals_->threads_[0].Run(); }
 
 void WasmInterpreter::Pause() { internals_->threads_[0].Pause(); }
 
+// static
+void WasmInterpreter::Suspend() { ThreadImpl::Suspend(); }
+
+// static
+void WasmInterpreter::Resume() { ThreadImpl::Resume(); }
+
 bool WasmInterpreter::SetBreakpoint(const WasmFunction* function, pc_t pc,
                                     bool enabled) {
   InterpreterCode* code = internals_->codemap_.GetCode(function);
@@ -4087,6 +4129,14 @@ bool WasmInterpreter::SetBreakpoint(const WasmFunction* function, pc_t pc,
     code->start[pc] = code->orig_start[pc];
   }
   return prev;
+}
+
+void WasmInterpreter::ClearBreakpoint(const WasmFunction* function, pc_t pc) {
+  InterpreterCode* code = internals_->codemap_.GetCode(function);
+  size_t size = static_cast<size_t>(code->end - code->start);
+  // Check bounds for {pc}.
+  if (pc < code->locals.encoded_size || pc >= size) return;
+  code->start[pc] = code->orig_start[pc];
 }
 
 bool WasmInterpreter::GetBreakpoint(const WasmFunction* function, pc_t pc) {
