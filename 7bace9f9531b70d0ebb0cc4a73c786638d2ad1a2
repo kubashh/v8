@@ -212,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "bbb848ff_cb549be2",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-08T12:52:28Z",
+      "side": 1,
+      "message": "Does it make sense for {SetBreakPoint}? {AddBreakpointToInfo} has no return value, so what would we check there?\nWe could change the existing DCHECK to return {false} instead, but if we don\u0027t use it that way currently, I don\u0027t think there is any value in doing so. So I would propose to leave {SetBreakpoint} as is.",
+      "parentUuid": "44fd14bc_eda7208e",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e90c3808_1b1118af",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -323,6 +341,24 @@
       "side": 1,
       "message": "I prefer the parentheses, as does the style guide: https://chromium.googlesource.com/chromium/src/+/HEAD/styleguide/c++/c++-dos-and-donts.md#variable-initialization",
       "parentUuid": "af75e883_a9b44437",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "16769af5_d0dfb63d",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-08T12:52:28Z",
+      "side": 1,
+      "message": "Thanks for linking that list, I either didn\u0027t read this yet or forgot about it :)\nIt looks like the style guide would actually prefer\nHandle\u003cFixedArray\u003e breakpoint_infos \u003d {module_object-\u003ebreakpoint_infos(), isolate};\n(since this is \"simple initialization\") even though I didn\u0027t see this syntax in v8 yet.\nAnyway, the latest code looks good to me!",
+      "parentUuid": "af718f00_02baf93b",
       "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -523,6 +559,24 @@
       "side": 1,
       "message": "Renamed below as AddBreakpointToInfo, RemoveBreakpointFromInfo. AddBreakpointObject didn\u0027t seem any clearer to me compared to AddBreakpoint, but I\u0027m open to using something else if you think it\u0027s better.",
       "parentUuid": "92f2efd1_7c15b637",
+      "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f8ff4427_77bfe1ca",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-08T12:52:28Z",
+      "side": 1,
+      "message": "Looking good, thanks!",
+      "parentUuid": "35389ab1_dd3bd4d9",
       "revId": "7bace9f9531b70d0ebb0cc4a73c786638d2ad1a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
