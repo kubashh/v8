@@ -22,6 +22,8 @@
 #include "src/wasm/wasm-objects-inl.h"
 #include "src/zone/accounting-allocator.h"
 
+#include "src/wasm/gdb-server/gdb-server.h"
+
 namespace v8 {
 namespace internal {
 namespace wasm {
@@ -182,6 +184,7 @@ class InterpreterHandle {
     WasmInterpreter::Thread* thread = interpreter_.GetThread(0);
     thread->InitFrame(&module()->functions[func_index],
                       argument_values.begin());
+    gdb_server::GdbServer* gdb_server = isolate_->wasm_engine()->gdb_server();
     bool finished = false;
     while (!finished) {
       // TODO(clemensh): Add occasional StackChecks.
@@ -189,6 +192,9 @@ class InterpreterHandle {
       switch (state) {
         case WasmInterpreter::State::PAUSED:
           NotifyDebugEventListeners(thread);
+          if (gdb_server) {
+            gdb_server->onPaused(thread->GetCallStack());
+          }
           break;
         case WasmInterpreter::State::FINISHED:
           // Perfect, just break the switch and exit the loop.
@@ -459,6 +465,59 @@ class InterpreterHandle {
     }
     return local_scope_object;
   }
+
+  bool WasmValueToUint64(const WasmValue& wasm_value, uint64_t* value) {
+    switch (wasm_value.type()) {
+      case kWasmI32:
+        *value = wasm_value.to_i32();
+        return true;
+      case kWasmI64:
+        *value = wasm_value.to_i64();
+        return true;
+      case kWasmF32:  // TODO(paolosev)
+        *value = wasm_value.to_f32();
+        return true;
+      case kWasmF64:  // TODO(paolosev)
+        *value = wasm_value.to_f64();
+        return true;
+      case kWasmS128:
+      case kWasmAnyRef:
+      default:
+        // Not supported
+        return false;
+    }
+  }
+
+  bool GetWasmGlobal(uint32_t index, uint64_t* value) {
+    WasmInterpreter::Thread* thread = interpreter()->GetThread(0);
+    uint32_t global_count = thread->GetGlobalCount();
+    if (index >= global_count) {
+      return false;
+    }
+    WasmValue wasm_value = thread->GetGlobalValue(index);
+    return WasmValueToUint64(wasm_value, value);
+  }
+
+  bool GetWasmLocal(uint32_t frame_index, uint32_t index, uint64_t* value) {
+    WasmInterpreter::Thread* thread = interpreter()->GetThread(0);
+    int frames_count = thread->GetFrameCount();
+    if (static_cast<int>(frame_index) >= frames_count) {
+      return false;
+    }
+    WasmInterpreter::FramePtr frame =
+        thread->GetFrame(frames_count - 1 - frame_index);
+    uint32_t num_locals = frame->GetLocalCount();
+    if (num_locals > index) {
+      WasmValue wasm_value = frame->GetLocalValue(index);
+      return WasmValueToUint64(wasm_value, value);
+    }
+    return false;
+  }
+
+  bool GetWasmStackValue(uint32_t index, uint64_t* value) {
+    // TODO(paolosev): Is this really used?
+    return false;
+  }
 };
 
 }  // namespace
@@ -531,6 +590,15 @@ void WasmDebugInfo::SetBreakpoint(Handle<WasmDebugInfo> debug_info,
   RedirectToInterpreter(debug_info, Vector<int>(&func_index, 1));
   const wasm::WasmFunction* func = &handle->module()->functions[func_index];
   handle->interpreter()->SetBreakpoint(func, offset, true);
+}
+
+void WasmDebugInfo::ClearBreakpoint(Handle<WasmDebugInfo> debug_info,
+                                    int func_index, int offset) {
+  Isolate* isolate = debug_info->GetIsolate();
+  auto* handle = GetOrCreateInterpreterHandle(isolate, debug_info);
+  RedirectToInterpreter(debug_info, Vector<int>(&func_index, 1));
+  const wasm::WasmFunction* func = &handle->module()->functions[func_index];
+  handle->interpreter()->ClearBreakpoint(func, offset);
 }
 
 void WasmDebugInfo::RedirectToInterpreter(Handle<WasmDebugInfo> debug_info,
@@ -645,6 +713,28 @@ Handle<Code> WasmDebugInfo::GetCWasmEntry(Handle<WasmDebugInfo> debug_info,
     entries->set(index, *new_entry_code);
   }
   return handle(Code::cast(entries->get(index)), isolate);
+}
+
+// static
+bool WasmDebugInfo::GetWasmGlobal(Handle<WasmDebugInfo> debug_info,
+                                  uint32_t index, uint64_t* value) {
+  wasm::InterpreterHandle* interpreter = GetInterpreterHandle(*debug_info);
+  return interpreter->GetWasmGlobal(index, value);
+}
+
+// static
+bool WasmDebugInfo::GetWasmLocal(Handle<WasmDebugInfo> debug_info,
+                                 uint32_t frame_index, uint32_t index,
+                                 uint64_t* value) {
+  wasm::InterpreterHandle* interpreter = GetInterpreterHandle(*debug_info);
+  return interpreter->GetWasmLocal(frame_index, index, value);
+}
+
+// static
+bool WasmDebugInfo::GetWasmStackValue(Handle<WasmDebugInfo> debug_info,
+                                      uint32_t index, uint64_t* value) {
+  wasm::InterpreterHandle* interpreter = GetInterpreterHandle(*debug_info);
+  return interpreter->GetWasmStackValue(index, value);
 }
 
 }  // namespace internal

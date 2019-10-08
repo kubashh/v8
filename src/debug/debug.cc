@@ -764,6 +764,17 @@ void Debug::RemoveBreakpoint(int id) {
   ClearBreakPoint(breakpoint);
 }
 
+bool Debug::RemoveWasmBreakpoint(Handle<Script> script, uint32_t offset,
+                                 int id) {
+  DCHECK(script->type() == Script::TYPE_WASM);
+  Handle<BreakPoint> breakpoint = isolate_->factory()->NewBreakPoint(
+      id, isolate_->factory()->empty_string());
+  Handle<WasmModuleObject> module_object(
+      WasmModuleObject::cast(script->wasm_module_object()), isolate_);
+  return WasmModuleObject::ClearBreakPoint(
+      module_object, static_cast<int>(offset), breakpoint);
+}
+
 // Clear out all the debug break code.
 void Debug::ClearAllBreakPoints() {
   ClearAllDebugInfos([=](Handle<DebugInfo> info) {
