@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3dde7345_d731ca23",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3297,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-10-08T21:16:07Z",
+      "side": 1,
+      "message": "Do we want tests for ExtractLaneS?",
+      "range": {
+        "startLine": 3297,
+        "startChar": 15,
+        "endLine": 3297,
+        "endChar": 32
+      },
+      "revId": "07365cc55d89fa705efcbdabb2bad9fb0332c987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
