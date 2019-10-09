@@ -157,6 +157,24 @@
       "revId": "44a0615e5cbf1a8812bca179b3ce3bf7c67d392c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "29a33e6a_f698d9f9",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2409,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-09T11:35:07Z",
+      "side": 1,
+      "message": "It\u0027s not hard to implement but it would be long since we basically have to do the same check that we moved to the parent function. Something like:\n\n#if DEBUG\nLabel check_ok;\nExternalReference debug_hook_active \u003d\n    ExternalReference::debug_hook_on_function_call_address(isolate());\nOperand debug_hook_active_operand \u003d\n    ExternalReferenceAsOperand(debug_hook_active);\ncmpb(debug_hook_active_operand, Immediate(0));\nj(not_equal, \u0026check_ok);\nint3();\nbind(\u0026check_ok);\n#endif",
+      "parentUuid": "90295af2_faa888cc",
+      "revId": "44a0615e5cbf1a8812bca179b3ce3bf7c67d392c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
