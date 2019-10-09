@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d05d335_bc226bd8",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2019-10-09T10:43:50Z",
+      "side": 1,
+      "message": "Just curious: how does \u0027minimal_symbols\u0027 factor into switching off goma?",
+      "range": {
+        "startLine": 432,
+        "startChar": 0,
+        "endLine": 432,
+        "endChar": 63
+      },
+      "revId": "660553619f64db57175b7e4018cdc49d4ac30541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
