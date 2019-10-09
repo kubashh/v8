@@ -22,6 +22,30 @@
       "revId": "dafdf4ee6c954a33e466fd57dec6b035f498b440",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01c4e7d9_95d99b8a",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 8558,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-09T11:02:55Z",
+      "side": 1,
+      "message": "\u003e I was rather thinking of:\n\u003e - Exposing a v8::RegExp::Exec and use it from Chromium. Chromium currently loads the \"exec\" property to call as a function.\n\u003e - Add an optional backtracking limit to v8::RegExp::Exec to limit backtracking only for that invocation.\n\nThat would mean we\u0027d need to recompile for each such call (or track somewhere what limit the regexp was compiled for). It sounds more complicated to me than the current solution based on a global per-isolate limit, don\u0027t you think?\n\n\u003e This way, we would not change the way RegExp works when called from JavaScript.\n\nWhat would be the advantage of special-casing calls from the API?",
+      "parentUuid": "45606d38_cbc1b12d",
+      "range": {
+        "startLine": 8558,
+        "startChar": 7,
+        "endLine": 8558,
+        "endChar": 30
+      },
+      "revId": "dafdf4ee6c954a33e466fd57dec6b035f498b440",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
