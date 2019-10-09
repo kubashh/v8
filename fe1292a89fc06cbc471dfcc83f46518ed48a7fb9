@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d9f2eda_73b260ad",
+        "filename": "src/init/icu_util.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-10-09T14:44:07Z",
+      "side": 1,
+      "message": "nit: I\u0027d prefer an explicit type: std::unique_ptr\u003cchar[]\u003e",
+      "range": {
+        "startLine": 48,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 6
+      },
+      "revId": "fe1292a89fc06cbc471dfcc83f46518ed48a7fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fa3be1a_1fb68b58",
+        "filename": "src/init/startup-data-util.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-10-09T14:44:07Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 91,
+        "startChar": 2,
+        "endLine": 91,
+        "endChar": 6
+      },
+      "revId": "fe1292a89fc06cbc471dfcc83f46518ed48a7fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
