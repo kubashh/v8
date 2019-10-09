@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "990e4993_419ae214",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-10-09T15:12:41Z",
+      "side": 1,
+      "message": "Nice!",
+      "range": {
+        "startLine": 549,
+        "startChar": 27,
+        "endLine": 549,
+        "endChar": 57
+      },
+      "revId": "95140693a145ed776a7b805b4d4983662c86e01b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d16702e7_fc53f6ab",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2137,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-10-09T15:12:41Z",
+      "side": 1,
+      "message": "Nit: You can add a comment here and on the next line, stating that these empty Hints stand for kValue and k respectively (if I read your previous comment correctly). Same holds for the kArrayReduce(Right) cases.",
+      "range": {
+        "startLine": 2137,
+        "startChar": 0,
+        "endLine": 2137,
+        "endChar": 41
+      },
+      "revId": "95140693a145ed776a7b805b4d4983662c86e01b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
