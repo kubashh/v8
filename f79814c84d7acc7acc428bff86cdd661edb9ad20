@@ -22,6 +22,30 @@
       "revId": "f79814c84d7acc7acc428bff86cdd661edb9ad20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43f2f9c0_b3bdebf6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-10-09T17:30:20Z",
+      "side": 1,
+      "message": "Changed to 2 * kMaxSemiSpaceSize. We want to depend on the new space capacity to properly amortize the work.",
+      "parentUuid": "df5f9ff7_a18a1d8b",
+      "range": {
+        "startLine": 1451,
+        "startChar": 34,
+        "endLine": 1451,
+        "endChar": 43
+      },
+      "revId": "f79814c84d7acc7acc428bff86cdd661edb9ad20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
