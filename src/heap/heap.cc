@@ -4966,6 +4966,29 @@ HeapObject Heap::AllocateRawCodeInLargeObjectSpace(int size) {
   return HeapObject();
 }
 
+void* Heap::AllocateExternalBackingStore(
+    const std::function<void*(size_t)>& allocate, size_t byte_length) {
+  size_t new_space_backing_store_bytes =
+      new_space()->ExternalBackingStoreBytes();
+  if (new_space_backing_store_bytes >= 2 * kMaxSemiSpaceSize &&
+      new_space_backing_store_bytes >= byte_length) {
+    // Performing a young generation GC amortizes over the allocated backing
+    // store bytes and may free enough external bytes for this allocation.
+    CollectGarbage(NEW_SPACE, GarbageCollectionReason::kExternalMemoryPressure);
+  }
+  // TODO(ulan): Also start incremental full GC based external bytes.
+  void* result = allocate(byte_length);
+  if (result) return result;
+  for (int i = 0; i < 2; i++) {
+    CollectGarbage(OLD_SPACE, GarbageCollectionReason::kExternalMemoryPressure);
+    result = allocate(byte_length);
+    if (result) return result;
+  }
+  isolate()->counters()->gc_last_resort_from_handles()->Increment();
+  CollectAllAvailableGarbage(GarbageCollectionReason::kExternalMemoryPressure);
+  return allocate(byte_length);
+}
+
 void Heap::SetUp() {
 #ifdef V8_ENABLE_ALLOCATION_TIMEOUT
   allocation_timeout_ = NextAllocationTimeout();

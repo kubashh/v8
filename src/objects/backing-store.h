@@ -128,6 +128,11 @@ class V8_EXPORT_PRIVATE BackingStore : public BackingStoreBase {
     type_specific_data_.v8_api_array_buffer_allocator = nullptr;
   }
 
+  static void* AllocateBufferWithRetries(Isolate* isolate,
+                                         v8::ArrayBuffer::Allocator* allocator,
+                                         size_t byte_length,
+                                         InitializedFlag initialized);
+
   void* buffer_start_ = nullptr;
   std::atomic<size_t> byte_length_{0};
   size_t byte_capacity_ = 0;

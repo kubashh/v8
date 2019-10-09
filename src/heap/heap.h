@@ -1238,6 +1238,10 @@ class Heap {
   std::shared_ptr<BackingStore> UnregisterBackingStore(JSArrayBuffer buffer);
   std::shared_ptr<BackingStore> LookupBackingStore(JSArrayBuffer buffer);
 
+  // Allocate array buffer backing store with GCs if necessary.
+  void* AllocateExternalBackingStore(
+      const std::function<void*(size_t)>& allocate, size_t byte_length);
+
   // ===========================================================================
   // Allocation site tracking. =================================================
   // ===========================================================================
@@ -1781,10 +1785,6 @@ class Heap {
   AllocatePartialMap(InstanceType instance_type, int instance_size);
 
   void FinalizePartialMap(Map map);
-
-  // Allocate empty fixed typed array of given type.
-  V8_WARN_UNUSED_RESULT AllocationResult
-  AllocateEmptyFixedTypedArray(ExternalArrayType array_type);
 
   void set_force_oom(bool value) { force_oom_ = value; }
 
