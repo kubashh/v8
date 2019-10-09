@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "1f080259_d223883d",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2604,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-10-09T12:13:30Z",
+      "side": 1,
+      "message": "Yes, I think it would, and I can see that it\u0027s a little overkill. Sathya, let\u0027s move as much into the external function as possible.",
+      "parentUuid": "cf978056_db82e93b",
+      "revId": "7c5bc7bd2ec9cf6f75fdc33fd33564d7ccd181c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd5c38f3_ad3eeba3",
         "filename": "src/objects/string.cc",
         "patchSetId": 9
