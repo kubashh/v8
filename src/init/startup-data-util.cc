@@ -82,19 +82,15 @@ void LoadFromFiles(const char* natives_blob, const char* snapshot_blob) {
 
 void InitializeExternalStartupData(const char* directory_path) {
 #ifdef V8_USE_EXTERNAL_STARTUP_DATA
-  char* natives;
-  char* snapshot;
   const char* snapshot_name = "snapshot_blob.bin";
 #ifdef V8_MULTI_SNAPSHOTS
   if (!FLAG_untrusted_code_mitigations) {
     snapshot_name = "snapshot_blob_trusted.bin";
   }
 #endif
-  LoadFromFiles(
-      base::RelativePath(&natives, directory_path, "natives_blob.bin"),
-      base::RelativePath(&snapshot, directory_path, snapshot_name));
-  free(natives);
-  free(snapshot);
+  auto natives = base::RelativePath(directory_path, "natives_blob.bin");
+  auto snapshot = base::RelativePath(directory_path, snapshot_name);
+  LoadFromFiles(natives.get(), snapshot.get());
 #endif  // V8_USE_EXTERNAL_STARTUP_DATA
 }
 
