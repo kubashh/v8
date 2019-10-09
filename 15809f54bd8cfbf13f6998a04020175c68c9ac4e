@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "288676a4_88fd7d0f",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 4485,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-09T13:39:01Z",
+      "side": 1,
+      "message": "I guess you can move this into the branch above since otherwise we won\u0027t have a variable?",
+      "revId": "15809f54bd8cfbf13f6998a04020175c68c9ac4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
