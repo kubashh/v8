@@ -45,6 +45,30 @@
       "revId": "95140693a145ed776a7b805b4d4983662c86e01b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89a3084c_b5d15f15",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2137,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-10-09T15:21:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d16702e7_fc53f6ab",
+      "range": {
+        "startLine": 2137,
+        "startChar": 0,
+        "endLine": 2137,
+        "endChar": 41
+      },
+      "revId": "95140693a145ed776a7b805b4d4983662c86e01b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
