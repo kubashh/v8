@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45606d38_cbc1b12d",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 8558,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-10-09T10:58:51Z",
+      "side": 1,
+      "message": "I was rather thinking of:\n- Exposing a v8::RegExp::Exec and use it from Chromium. Chromium currently loads the \"exec\" property to call as a function.\n- Add an optional backtracking limit to v8::RegExp::Exec to limit backtracking only for that invocation.\n\nThis way, we would not change the way RegExp works when called from JavaScript.",
+      "range": {
+        "startLine": 8558,
+        "startChar": 7,
+        "endLine": 8558,
+        "endChar": 30
+      },
+      "revId": "dafdf4ee6c954a33e466fd57dec6b035f498b440",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
