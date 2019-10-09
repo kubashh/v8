@@ -1374,7 +1374,8 @@ void InstructionSelector::VisitUint32Mod(Node* node) {
   V(Float32Max, kArmFloat32Max) \
   V(Float64Max, kArmFloat64Max) \
   V(Float32Min, kArmFloat32Min) \
-  V(Float64Min, kArmFloat64Min)
+  V(Float64Min, kArmFloat64Min) \
+  V(S8x16Swizzle, kArmS8x16Swizzle)
 
 #define RR_VISITOR(Name, opcode)                      \
   void InstructionSelector::Visit##Name(Node* node) { \
