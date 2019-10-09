@@ -22,6 +22,30 @@
       "revId": "4ecdddedb4780fc6905d94871c838267073990fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bcf1b7f_bf5c2bf5",
+        "filename": "src/wasm/gdb-server/target.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-10-09T05:53:30Z",
+      "side": 1,
+      "message": "(sorry for the late reply, I had missed this comment)\n\nThere are cases where LLDB sends the \u0027m\u0027 packet to read from the memory space and not only from the code space. This happens when executing a command like \u0027var\u0027 to display the value of variables in the scope. For example:\n\n\u003e\tliblldb.dll!lldb_private::process_gdb_remote::ProcessGDBRemote::DoReadMemory(unsigned __int64 addr, void * buf, unsigned __int64 size, lldb_private::Status \u0026 error) Line 2740\tC++\n \tliblldb.dll!lldb_private::Process::ReadMemoryFromInferior(unsigned __int64 addr, void * buf, unsigned __int64 size, lldb_private::Status \u0026 error) Line 2094\tC++\n \tliblldb.dll!lldb_private::MemoryCache::Read(unsigned __int64 addr, void * dst, unsigned __int64 dst_len, lldb_private::Status \u0026 error) Line 229\tC++\n \tliblldb.dll!lldb_private::Process::ReadMemory(unsigned __int64 addr, void * buf, unsigned __int64 size, lldb_private::Status \u0026 error) Line 1956\tC++\n \tliblldb.dll!lldb_private::Value::GetValueAsData(lldb_private::ExecutionContext * \n...\n \tliblldb.dll!lldb_private::ValueObject::GetNumChildren(unsigned int max) Line 552\tC++\n...\n \tliblldb.dll!lldb_private::ValueObjectPrinter::PrintValueObject() Line 93\tC++",
+      "parentUuid": "f99a0c25_bdad0ac6",
+      "range": {
+        "startLine": 364,
+        "startChar": 16,
+        "endLine": 364,
+        "endChar": 78
+      },
+      "revId": "4ecdddedb4780fc6905d94871c838267073990fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
