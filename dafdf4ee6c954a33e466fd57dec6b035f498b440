@@ -70,6 +70,30 @@
       "revId": "dafdf4ee6c954a33e466fd57dec6b035f498b440",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bedca064_f1553fde",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 8558,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-09T11:23:06Z",
+      "side": 1,
+      "message": "\u003e Special casing calls from the API does not change the behavior from JavaScript, which could cause confusion for users.\n\nSure, if the same isolate is used as a generic JS VM and for special-cased regexp calls from the API. That appears to be the case here so we\u0027re out of luck :(\n\n\u003e \n\u003e I was thinking that we could change `CheckPreemption` or `Backtrack` to always keep track of a counter. We\u0027d then preempt if the counter hits a limit, and jump to `CheckStackGuardState`, which can trigger failure.\n\nI meant: independent of impl details, we\u0027d need to either track *which limit the regexp was compiled for* and recompile if necessary, or pass the limit to regexp code as a runtime argument.\n\nThe latter adds counter maintenance to each backtrack op and yet-another argument to regexp code (we already have 9). \n\nI assume overhead would be fairly low, but again we\u0027d penalize all regexp users for something only used by a single specialized use-case.\n\n\u003e I\u0027m also thinking that throwing an exception is not the right thing to do. It may not be expected by the user. Returning a non-match might be better.\n\nFair enough.",
+      "parentUuid": "ff8a6779_2151f52f",
+      "range": {
+        "startLine": 8558,
+        "startChar": 7,
+        "endLine": 8558,
+        "endChar": 30
+      },
+      "revId": "dafdf4ee6c954a33e466fd57dec6b035f498b440",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
