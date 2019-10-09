@@ -22,6 +22,30 @@
       "revId": "660553619f64db57175b7e4018cdc49d4ac30541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a49d9214_83ab6ca5",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-10-09T12:28:01Z",
+      "side": 1,
+      "message": "I c/p\u0027ed from https://webrtc-review.googlesource.com/c/src/+/155440\n\nI\u0027ve read or heard also that it\u0027s recommended to use minimal symbols, but can\u0027t recall where. Anyways, it makes linking faster, but backtraces might look poor.",
+      "parentUuid": "5d05d335_bc226bd8",
+      "range": {
+        "startLine": 432,
+        "startChar": 0,
+        "endLine": 432,
+        "endChar": 63
+      },
+      "revId": "660553619f64db57175b7e4018cdc49d4ac30541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
