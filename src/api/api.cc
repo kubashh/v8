@@ -8070,6 +8070,11 @@ void Isolate::SetGetExternallyAllocatedMemoryInBytesCallback(
   isolate->heap()->SetGetExternallyAllocatedMemoryInBytesCallback(callback);
 }
 
+void Isolate::SetRegExpBacktrackLimit(uint32_t regexp_backtrack_limit) {
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
+  isolate->SetRegExpBacktrackLimit(regexp_backtrack_limit);
+}
+
 void Isolate::TerminateExecution() {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
   isolate->stack_guard()->RequestTerminateExecution();

@@ -358,6 +358,9 @@ IrregexpInterpreter::Result RawMatch(Isolate* isolate, ByteArray code_array,
 
   BacktrackStack backtrack_stack;
 
+  const uint32_t backtrack_limit = isolate->regexp_backtrack_limit();
+  uint32_t backtrack_count = 0;
+
 #ifdef DEBUG
   if (FLAG_trace_regexp_bytecodes) {
     PrintF("\n\nStart bytecode interpreter\n\n");
@@ -434,6 +437,11 @@ IrregexpInterpreter::Result RawMatch(Isolate* isolate, ByteArray code_array,
       DISPATCH();
     }
     BYTECODE(POP_BT) {
+      STATIC_ASSERT(Isolate::kRegExpNoBacktrackLimit == 0);
+      if (++backtrack_count == backtrack_limit) {
+        return IrregexpInterpreter::EXCEPTION;
+      }
+
       IrregexpInterpreter::Result return_code =
           HandleInterrupts(isolate, call_origin, &code_array, &subject_string,
                            &code_base, &subject, &pc);

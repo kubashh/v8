@@ -8548,6 +8548,16 @@ class V8_EXPORT Isolate {
       GetExternallyAllocatedMemoryInBytesCallback callback);
 
   /**
+   * Sets the number of backtracks that a single regexp execution may perform.
+   * The first backtrack at or beyond the limit will throw a RangeError
+   * exception. Passing a limit of 0 disables backtrack limit checks.
+   *
+   * Note that it is unspecified when the limit is read by the V8 engine, and it
+   * should thus be set once at startup and never changed.
+   */
+  void SetRegExpBacktrackLimit(uint32_t regexp_backtrack_limit);
+
+  /**
    * Forcefully terminate the current thread of JavaScript execution
    * in the given isolate.
    *

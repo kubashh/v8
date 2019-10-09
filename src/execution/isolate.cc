@@ -3351,6 +3351,7 @@ bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
 
   stress_deopt_count_ = FLAG_deopt_every_n_times;
   force_slow_path_ = FLAG_force_slow_path;
+  regexp_backtrack_limit_ = static_cast<uint32_t>(FLAG_regexp_backtrack_limit);
 
   has_fatal_error_ = false;
 

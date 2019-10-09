@@ -1286,6 +1286,8 @@ DEFINE_BOOL(trace_regexp_assembler, false,
             "trace regexp macro assembler calls.")
 DEFINE_BOOL(trace_regexp_parser, false, "trace regexp parsing")
 DEFINE_BOOL(trace_regexp_tier_up, false, "trace regexp tiering up execution")
+DEFINE_INT(regexp_backtrack_limit, 0,
+           "limit backtracking in the regexp engine (0 disables the limit)")
 
 // Testing flags test/cctest/test-{flags,api,serialization}.cc
 DEFINE_BOOL(testing_bool_flag, true, "testing_bool_flag")

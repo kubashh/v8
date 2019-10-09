@@ -829,6 +829,15 @@ class Isolate final : private HiddenFactory {
   V8_EXPORT_PRIVATE Handle<JSMessageObject> CreateMessage(
       Handle<Object> exception, MessageLocation* location);
 
+  // When the regexp backtrack limit is set to this value, the backtrack limit
+  // is disabled.
+  static constexpr uint32_t kRegExpNoBacktrackLimit = 0;
+  uint32_t regexp_backtrack_limit() const { return regexp_backtrack_limit_; }
+
+  void SetRegExpBacktrackLimit(uint32_t regexp_backtrack_limit) {
+    regexp_backtrack_limit_ = regexp_backtrack_limit;
+  }
+
   // Out of resource exception helpers.
   Object StackOverflow();
   Object TerminateExecution();
@@ -1774,6 +1783,8 @@ class Isolate final : private HiddenFactory {
   ManagedPtrDestructor* managed_ptr_destructors_head_ = nullptr;
 
   size_t total_regexp_code_generated_ = 0;
+
+  uint32_t regexp_backtrack_limit_ = kRegExpNoBacktrackLimit;
 
   size_t elements_deletion_counter_ = 0;
 
