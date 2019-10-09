@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6aa4451e_1d5ddb60",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-09T11:19:40Z",
+      "side": 1,
+      "message": "Can you add why TaggedIsAsyncGenerator is not needed?",
+      "revId": "52eb49a120e286679df84b2403d9f420f5c40f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48f71138_ac0e9712",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-09T11:19:40Z",
+      "side": 1,
+      "message": "I think we are preferring LoadObjectField\u003cSmi\u003e(... instead of CAST(LoadObjectField(...",
+      "range": {
+        "startLine": 28,
+        "startChar": 11,
+        "endLine": 29,
+        "endChar": 23
+      },
+      "revId": "52eb49a120e286679df84b2403d9f420f5c40f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e1c0e5f_e5effd12",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-09T11:19:40Z",
+      "side": 1,
+      "message": "LoadObjectField\u003cHeapObject\u003e",
+      "range": {
+        "startLine": 92,
+        "startChar": 11,
+        "endLine": 93,
+        "endChar": 23
+      },
+      "revId": "52eb49a120e286679df84b2403d9f420f5c40f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8dc722d_9c273c2b",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-09T11:19:40Z",
+      "side": 1,
+      "message": "LoadObjectField\u003cSmi\u003e",
+      "range": {
+        "startLine": 98,
+        "startChar": 11,
+        "endLine": 99,
+        "endChar": 23
+      },
+      "revId": "52eb49a120e286679df84b2403d9f420f5c40f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1709f88b_47020714",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-09T11:19:40Z",
+      "side": 1,
+      "message": "LoadObjectField\u003cJSPromise\u003e(",
+      "range": {
+        "startLine": 104,
+        "startChar": 11,
+        "endLine": 105,
+        "endChar": 23
+      },
+      "revId": "52eb49a120e286679df84b2403d9f420f5c40f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "488efc22_d8c7c715",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-09T11:19:40Z",
+      "side": 1,
+      "message": "LoadObjectField\u003cHeapObject\u003e(",
+      "range": {
+        "startLine": 261,
+        "startChar": 6,
+        "endLine": 261,
+        "endChar": 26
+      },
+      "revId": "52eb49a120e286679df84b2403d9f420f5c40f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b23c7b3_bfba1f60",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-09T11:19:40Z",
+      "side": 1,
+      "message": "LoadObjectField\u003cHeapObject\u003e(",
+      "range": {
+        "startLine": 275,
+        "startChar": 8,
+        "endLine": 275,
+        "endChar": 28
+      },
+      "revId": "52eb49a120e286679df84b2403d9f420f5c40f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b528d403_d9a40daa",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-09T11:19:40Z",
+      "side": 1,
+      "message": "You didn\u0027t introduce it, but since you are here\nLoadObjectField\u003cAsyncGeneratorRequest\u003e",
+      "range": {
+        "startLine": 299,
+        "startChar": 6,
+        "endLine": 299,
+        "endChar": 26
+      },
+      "revId": "52eb49a120e286679df84b2403d9f420f5c40f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
