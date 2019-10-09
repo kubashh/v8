@@ -139,6 +139,24 @@
       "revId": "44a0615e5cbf1a8812bca179b3ce3bf7c67d392c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90295af2_faa888cc",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2409,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-09T10:56:22Z",
+      "side": 1,
+      "message": "Hm then we currently do not notice if we somehow get the check wrong (due to future refactoring) and call kDebugOnFunctionCall when we should not. Would be kinda nice to have but I guess I\u0027m okay with the current impl if it\u0027s non-trivial to add.",
+      "parentUuid": "8fc9fb14_276a635e",
+      "revId": "44a0615e5cbf1a8812bca179b3ce3bf7c67d392c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
