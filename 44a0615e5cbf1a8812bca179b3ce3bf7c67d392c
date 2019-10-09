@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "623d45ab_bd2d3545",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-09T10:26:21Z",
+      "side": 1,
+      "message": "And the motivation is to make the common case stay in straight-line code? Please add that.",
+      "revId": "44a0615e5cbf1a8812bca179b3ce3bf7c67d392c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95575ff9_ba541903",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-09T10:26:21Z",
+      "side": 1,
+      "message": "Nit: end with a \u0027.\u0027 here and in other files.",
+      "revId": "44a0615e5cbf1a8812bca179b3ce3bf7c67d392c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e16bdff_a1aa26d5",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-09T10:26:21Z",
+      "side": 1,
+      "message": "DebugHook is kinda generic, what about CallDebugOnFunctionCall or so?",
+      "revId": "44a0615e5cbf1a8812bca179b3ce3bf7c67d392c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12eec732_e1077667",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2409,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-09T10:26:21Z",
+      "side": 1,
+      "message": "Do we have a DCHECK in Runtime::kDebugOnFunctionCall that ExternalReference::debug_hook_on_function_call_address is actually set? Just to avoid misuse since the check is now separated from the call.",
+      "revId": "44a0615e5cbf1a8812bca179b3ce3bf7c67d392c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
