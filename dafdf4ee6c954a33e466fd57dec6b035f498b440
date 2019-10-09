@@ -46,6 +46,30 @@
       "revId": "dafdf4ee6c954a33e466fd57dec6b035f498b440",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff8a6779_2151f52f",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 8558,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-10-09T11:13:51Z",
+      "side": 1,
+      "message": "Special casing calls from the API does not change the behavior from JavaScript, which could cause confusion for users.\n\nI was thinking that we could change `CheckPreemption` or `Backtrack` to always keep track of a counter. We\u0027d then preempt if the counter hits a limit, and jump to `CheckStackGuardState`, which can trigger failure.\n\nI\u0027m also thinking that throwing an exception is not the right thing to do. It may not be expected by the user. Returning a non-match might be better.",
+      "parentUuid": "01c4e7d9_95d99b8a",
+      "range": {
+        "startLine": 8558,
+        "startChar": 7,
+        "endLine": 8558,
+        "endChar": 30
+      },
+      "revId": "dafdf4ee6c954a33e466fd57dec6b035f498b440",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
