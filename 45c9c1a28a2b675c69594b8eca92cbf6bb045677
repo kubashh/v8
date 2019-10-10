@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf10b9a5_cfc95214",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-10-10T12:45:50Z",
+      "side": 1,
+      "message": "Please use proper capitalization.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "45c9c1a28a2b675c69594b8eca92cbf6bb045677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e56ac2ea_05c04de5",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-10-10T12:45:50Z",
+      "side": 1,
+      "message": "Please move this out of the #if defined(__APPLE__)",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 6
+      },
+      "revId": "45c9c1a28a2b675c69594b8eca92cbf6bb045677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b22d261b_9a4b12fd",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-10-10T12:45:50Z",
+      "side": 1,
+      "message": "Peter: fyi. The result of OS::GetCurrentThreadId is not necessarily unique because of all these truncations. This might be relevant for https://chromium.googlesource.com/v8/v8.git/+/78e2f3ffd276f68958aff1d01d57bcc41293c576",
+      "range": {
+        "startLine": 528,
+        "startChar": 8,
+        "endLine": 528,
+        "endChar": 25
+      },
+      "revId": "45c9c1a28a2b675c69594b8eca92cbf6bb045677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
