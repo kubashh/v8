@@ -763,7 +763,7 @@ namespace internal {
                                                                                \
   /* Promise */                                                                \
   /* ES #sec-fulfillpromise */                                                 \
-  TFS(FulfillPromise, kPromise, kValue)                                        \
+  /*TFS(FulfillPromise, kPromise, kValue) */                                   \
   /* ES #sec-rejectpromise */                                                  \
   TFS(RejectPromise, kPromise, kReason, kDebugEvent)                           \
   /* ES #sec-promise-resolve-functions */                                      \

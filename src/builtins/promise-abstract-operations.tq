@@ -1,0 +1,57 @@
+// Copyright 2019 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include 'src/builtins/builtins-promise-gen.h'
+
+// https://tc39.es/ecma262/#sec-promise-abstract-operations
+namespace promise_abstract_operations {
+
+  const kPromisePending: constexpr int31
+  generates 'Promise::kPending';
+
+  const kPromiseFulfilled: constexpr int31
+  generates 'Promise::kFulfilled';
+
+  const kPromiseReactionkFulfill: constexpr int31
+  generates 'PromiseReaction::kFulfill';
+
+  const kJSPromiseReactionsOrResultOffset: constexpr int31
+  generates 'JSPromise::kReactionsOrResultOffset';
+
+  extern macro PromiseBuiltinsAssembler::PromiseStatus(Object): int32;
+  extern macro PromiseBuiltinsAssembler::PromiseSetStatus(
+      Object, constexpr int31): void;
+  extern macro PromiseBuiltinsAssembler::LoadObjectField(
+      HeapObject, constexpr int31): Object;
+  extern macro PromiseBuiltinsAssembler::StoreObjectField(
+      Object, constexpr int31, Object): void;
+  extern macro PromiseBuiltinsAssembler::TriggerPromiseReactions(
+      Context, Object, Object, constexpr int31): Object;
+
+  // https://tc39.es/ecma262/#sec-fulfillpromise
+  transitioning builtin
+  FulfillPromise(implicit context: Context)(promise: HeapObject, value: Object):
+      Object {
+    assert(IsJSPromise(promise));
+
+    // Assert: The value of promise.[[PromiseState]] is "pending".
+    assert(PromiseStatus(promise) == kPromisePending);
+
+    // 2. Let reactions be promise.[[PromiseFulfillReactions]].
+    const reactions: Object =
+        LoadObjectField(promise, kJSPromiseReactionsOrResultOffset);
+
+    // 3. Set promise.[[PromiseResult]] to value.
+    // 4. Set promise.[[PromiseFulfillReactions]] to undefined.
+    // 5. Set promise.[[PromiseRejectReactions]] to undefined.
+    StoreObjectField(promise, kJSPromiseReactionsOrResultOffset, value);
+
+    // 6. Set promise.[[PromiseState]] to "fulfilled".
+    PromiseSetStatus(promise, kPromiseFulfilled);
+
+    // 7. Return TriggerPromiseReactions(reactions, value).
+    return TriggerPromiseReactions(
+        context, reactions, value, kPromiseReactionkFulfill);
+  }
+}

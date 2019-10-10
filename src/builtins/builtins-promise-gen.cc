@@ -357,11 +357,11 @@ void PromiseBuiltinsAssembler::PromiseSetHasHandler(Node* promise) {
 }
 
 TNode<BoolT> PromiseBuiltinsAssembler::IsPromiseStatus(
-    TNode<Word32T> actual, v8::Promise::PromiseState expected) {
+    TNode<Int32T> actual, v8::Promise::PromiseState expected) {
   return Word32Equal(actual, Int32Constant(expected));
 }
 
-TNode<Word32T> PromiseBuiltinsAssembler::PromiseStatus(Node* promise) {
+TNode<Int32T> PromiseBuiltinsAssembler::PromiseStatus(Node* promise) {
   STATIC_ASSERT(JSPromise::kStatusShift == 0);
   TNode<Smi> const flags =
       CAST(LoadObjectField(promise, JSPromise::kFlagsOffset));
@@ -404,7 +404,7 @@ void PromiseBuiltinsAssembler::PerformPromiseThen(
                IsUndefined(result_promise_or_capability)));
 
   Label if_pending(this), if_notpending(this), done(this);
-  TNode<Word32T> const status = PromiseStatus(promise);
+  TNode<Int32T> const status = PromiseStatus(promise);
   Branch(IsPromiseStatus(status, v8::Promise::kPending), &if_pending,
          &if_notpending);
 
@@ -564,7 +564,7 @@ PromiseBuiltinsAssembler::AllocatePromiseResolveThenableJobTask(
 }
 
 // ES #sec-triggerpromisereactions
-Node* PromiseBuiltinsAssembler::TriggerPromiseReactions(
+TNode<Object> PromiseBuiltinsAssembler::TriggerPromiseReactions(
     Node* context, Node* reactions, Node* argument,
     PromiseReaction::Type type) {
   // We need to reverse the {reactions} here, since we record them on the
@@ -1850,7 +1850,7 @@ TF_BUILTIN(PromisePrototypeFinally, PromiseBuiltinsAssembler) {
 }
 
 // ES #sec-fulfillpromise
-TF_BUILTIN(FulfillPromise, PromiseBuiltinsAssembler) {
+/*TF_BUILTIN(FulfillPromise, PromiseBuiltinsAssembler) {
   Node* const promise = Parameter(Descriptor::kPromise);
   Node* const value = Parameter(Descriptor::kValue);
   Node* const context = Parameter(Descriptor::kContext);
@@ -1873,7 +1873,7 @@ TF_BUILTIN(FulfillPromise, PromiseBuiltinsAssembler) {
   // 7. Return TriggerPromiseReactions(reactions, value).
   Return(TriggerPromiseReactions(context, reactions, value,
                                  PromiseReaction::kFulfill));
-}
+}*/
 
 // ES #sec-rejectpromise
 TF_BUILTIN(RejectPromise, PromiseBuiltinsAssembler) {

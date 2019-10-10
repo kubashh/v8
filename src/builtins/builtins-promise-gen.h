@@ -74,7 +74,7 @@ class V8_EXPORT_PRIVATE PromiseBuiltinsAssembler : public CodeStubAssembler {
   Node* CreatePromiseGetCapabilitiesExecutorContext(Node* promise_capability,
                                                     Node* native_context);
 
- protected:
+  // protected:
   void PromiseInit(Node* promise);
 
   void PromiseSetHasHandler(Node* promise);
@@ -88,8 +88,9 @@ class V8_EXPORT_PRIVATE PromiseBuiltinsAssembler : public CodeStubAssembler {
   TNode<Context> CreatePromiseContext(TNode<NativeContext> native_context,
                                       int slots);
 
-  Node* TriggerPromiseReactions(Node* context, Node* promise, Node* result,
-                                PromiseReaction::Type type);
+  TNode<Object> TriggerPromiseReactions(Node* context, Node* promise,
+                                        Node* result,
+                                        PromiseReaction::Type type);
 
   // We can skip the "resolve" lookup on {constructor} if it's the (initial)
   // Promise constructor and the Promise.resolve() protector is intact, as
@@ -159,13 +160,13 @@ class V8_EXPORT_PRIVATE PromiseBuiltinsAssembler : public CodeStubAssembler {
   void SetPromiseHandledByIfTrue(Node* context, Node* condition, Node* promise,
                                  const NodeGenerator& handled_by);
 
-  TNode<Word32T> PromiseStatus(Node* promise);
+  TNode<Int32T> PromiseStatus(Node* promise);
 
   void PromiseReactionJob(Node* context, Node* argument, Node* handler,
                           Node* promise_or_capability,
                           PromiseReaction::Type type);
 
-  TNode<BoolT> IsPromiseStatus(TNode<Word32T> actual,
+  TNode<BoolT> IsPromiseStatus(TNode<Int32T> actual,
                                v8::Promise::PromiseState expected);
   void PromiseSetStatus(Node* promise, v8::Promise::PromiseState status);
 
