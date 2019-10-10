@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "21662912_3dbeea91",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-10-10T14:10:39Z",
+      "side": 1,
+      "message": "Once https://chromium-review.googlesource.com/c/v8/v8/+/1846571 lands, this will not be necessary either (because we\u0027ll then set the home objects right after the closures are created), so I think we can also just remove this micro-optimization in this patch?",
+      "parentUuid": "708c084b_21453ee2",
+      "revId": "3762c239c52ee4a4a8f2afa8f871fd8ad3294fa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31035a67_da05679d",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 18
