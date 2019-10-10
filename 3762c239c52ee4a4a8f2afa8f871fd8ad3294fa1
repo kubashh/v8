@@ -69,6 +69,24 @@
       "revId": "3762c239c52ee4a4a8f2afa8f871fd8ad3294fa1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebbb2e62_61033bc4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 3939,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-10-10T14:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31035a67_da05679d",
+      "revId": "3762c239c52ee4a4a8f2afa8f871fd8ad3294fa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
