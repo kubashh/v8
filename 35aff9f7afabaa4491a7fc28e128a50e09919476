@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "d0394de8_cfac3abb",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2585,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-10-10T00:41:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "beef4da7_e59bb0f9",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57042a51_9d6d89cb",
         "filename": "src/ast/scopes.cc",
         "patchSetId": 11
@@ -123,6 +141,24 @@
       "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89289bcc_e3798897",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2696,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-10-10T00:41:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7636c7d2_7bd01af0",
+      "revId": "35aff9f7afabaa4491a7fc28e128a50e09919476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

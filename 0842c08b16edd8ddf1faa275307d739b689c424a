@@ -142,6 +142,24 @@
       "revId": "0842c08b16edd8ddf1faa275307d739b689c424a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "691ddc19_badd22b6",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2241,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-10-10T00:41:08Z",
+      "side": 1,
+      "message": "Yes, that was the intention",
+      "parentUuid": "49aa28d3_86f9cc0c",
+      "revId": "0842c08b16edd8ddf1faa275307d739b689c424a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
