@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da256c14_0ca9b13c",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1322339
+      },
+      "writtenOn": "2019-10-10T04:06:39Z",
+      "side": 0,
+      "message": "while I was already at it. Since, we no longer have premonomorphic state, I think we can remove these methods.\nWDYT?",
+      "range": {
+        "startLine": 309,
+        "startChar": 2,
+        "endLine": 309,
+        "endChar": 72
+      },
+      "revId": "a3decdc71b5daf2583bbd05a1868c8154543192f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
