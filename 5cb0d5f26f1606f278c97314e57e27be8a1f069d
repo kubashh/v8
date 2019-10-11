@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8ae19e9_a34095f3",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-11T15:53:16Z",
+      "side": 1,
+      "message": "Please also rename here to \"vals_and_control\".",
+      "range": {
+        "startLine": 258,
+        "startChar": 73,
+        "endLine": 258,
+        "endChar": 77
+      },
+      "revId": "5cb0d5f26f1606f278c97314e57e27be8a1f069d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29ee7c89_9f1187a6",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-11T15:53:16Z",
+      "side": 1,
+      "message": "Please also rename here to \"effects_and_control\".",
+      "range": {
+        "startLine": 266,
+        "startChar": 57,
+        "endLine": 266,
+        "endChar": 64
+      },
+      "revId": "5cb0d5f26f1606f278c97314e57e27be8a1f069d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2eee9f5_91d8784b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3182,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-11T15:53:16Z",
+      "side": 1,
+      "message": "also \"vals_and_control\"? or just \"inputs\"?",
+      "range": {
+        "startLine": 3182,
+        "startChar": 32,
+        "endLine": 3182,
+        "endChar": 36
+      },
+      "revId": "5cb0d5f26f1606f278c97314e57e27be8a1f069d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bf29633_fc6e98cd",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3201,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-11T15:53:16Z",
+      "side": 1,
+      "message": "also \"effects_and_control\"? or just \"inputs\"?\n(and the same for all other changes below. especially \"... effects \u003d {...effect, ...control}\" is confusing).",
+      "range": {
+        "startLine": 3201,
+        "startChar": 32,
+        "endLine": 3201,
+        "endChar": 39
+      },
+      "revId": "5cb0d5f26f1606f278c97314e57e27be8a1f069d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
