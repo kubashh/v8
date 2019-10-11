@@ -513,6 +513,10 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void movzx_w(Register dst, Operand src);
 
   void movq(XMMRegister dst, Operand src);
+
+  // Repeated store of doublewords (fill ECX doublewords at [EDI] with EAX).
+  void repstosl();
+
   // Conditional moves
   void cmov(Condition cc, Register dst, Register src) {
     cmov(cc, dst, Operand(src));
