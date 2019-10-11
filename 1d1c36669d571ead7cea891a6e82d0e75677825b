@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9684b9e2_9dbbf337",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-11T19:40:27Z",
+      "side": 1,
+      "message": "I don\u0027t think we want to do this. torque should be generating all this for us by just accessing `promise.flags`\n\nSimilar for other loads and stores",
+      "range": {
+        "startLine": 44,
+        "startChar": 18,
+        "endLine": 44,
+        "endChar": 33
+      },
+      "revId": "1d1c36669d571ead7cea891a6e82d0e75677825b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
