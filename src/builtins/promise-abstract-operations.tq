@@ -1,0 +1,83 @@
+// Copyright 2019 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include 'src/builtins/builtins-promise-gen.h'
+
+// https://tc39.es/ecma262/#sec-promise-abstract-operations
+namespace promise_abstract_operations {
+
+  // Promise constants
+  const kPromisePending: constexpr int31
+  generates 'Promise::kPending';
+
+  const kPromiseFulfilled: constexpr int31
+  generates 'Promise::kFulfilled';
+
+  // PromiseReaction constants
+  const kPromiseReactionkFulfill: constexpr int31
+  generates 'PromiseReaction::kFulfill';
+
+  // JSPromise constants
+  const kJSPromiseStatusMask: constexpr int31
+  generates 'JSPromise::kStatusMask';
+
+  const kJSPromiseStatusShift: constexpr int31
+  generates 'JSPromise::kStatusShift';
+
+  // JSPromise Offsets
+  const kJSPromiseFlagsOffset: constexpr int31
+  generates 'JSPromise::kFlagsOffset';
+
+  const kJSPromiseReactionsOrResultOffset: constexpr int31
+  generates 'JSPromise::kReactionsOrResultOffset';
+
+  extern macro PromiseBuiltinsAssembler::TriggerPromiseReactions(
+      Context, Object, Object, constexpr int31): Object;
+
+  macro PromiseStatus(promise: HeapObject): int32 {
+    StaticAssert(kJSPromiseStatusShift == 0);
+    const flags: Smi =
+        Cast<Smi>(LoadObjectField(promise, kJSPromiseFlagsOffset))
+        otherwise unreachable;
+    return Word32And(SmiToInt32(flags), kJSPromiseStatusMask);
+  }
+
+  macro PromiseSetStatus(promise: HeapObject, status: constexpr int31): void {
+    assert(PromiseStatus(promise) == kPromisePending);
+    assert(status != kPromisePending);
+
+    const mask: Smi = SmiConstant(status);
+    const flags: Smi =
+        Cast<Smi>(LoadObjectField(promise, kJSPromiseFlagsOffset))
+        otherwise unreachable;
+    StoreObjectFieldNoWriteBarrier(
+        promise, kJSPromiseFlagsOffset, SmiOr(flags, mask));
+  }
+
+  // https://tc39.es/ecma262/#sec-fulfillpromise
+  transitioning builtin
+  FulfillPromise(implicit context: Context)(promise: HeapObject, value: Object):
+      Object {
+    assert(IsJSPromise(promise));
+
+    // Assert: The value of promise.[[PromiseState]] is "pending".
+    assert(PromiseStatus(promise) == kPromisePending);
+
+    // 2. Let reactions be promise.[[PromiseFulfillReactions]].
+    const reactions: Object =
+        LoadObjectField(promise, kJSPromiseReactionsOrResultOffset);
+
+    // 3. Set promise.[[PromiseResult]] to value.
+    // 4. Set promise.[[PromiseFulfillReactions]] to undefined.
+    // 5. Set promise.[[PromiseRejectReactions]] to undefined.
+    StoreObjectField(promise, kJSPromiseReactionsOrResultOffset, value);
+
+    // 6. Set promise.[[PromiseState]] to "fulfilled".
+    PromiseSetStatus(promise, kPromiseFulfilled);
+
+    // 7. Return TriggerPromiseReactions(reactions, value).
+    return TriggerPromiseReactions(
+        context, reactions, value, kPromiseReactionkFulfill);
+  }
+}
