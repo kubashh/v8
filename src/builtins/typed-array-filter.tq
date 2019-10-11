@@ -22,7 +22,7 @@ namespace typed_array_filter {
 
       // 3. Let len be O.[[ArrayLength]].
       // TODO(v8:4153): Support huge TypedArrays here.
-      const len = Cast<Smi>(Convert<Number>(src.length)) otherwise unreachable;
+      const len: uintptr = src.length;
 
       // 4. If IsCallable(callbackfn) is false, throw a TypeError exception.
       const callbackfn = Cast<Callable>(arguments[0])
@@ -38,7 +38,7 @@ namespace typed_array_filter {
       // 7. Let k be 0.
       // 8. Let captured be 0.
       // 9. Repeat, while k < len
-      for (let k: Smi = 0; k < len; k++) {
+      for (let k: uintptr = 0; k < len; k++) {
         witness.Recheck() otherwise IsDetached;
 
         // a. Let Pk be ! ToString(k).
@@ -47,8 +47,9 @@ namespace typed_array_filter {
 
         // c. Let selected be ToBoolean(? Call(callbackfn, T, « kValue, k, O
         // »)).
-        const selected: JSAny =
-            Call(context, callbackfn, thisArg, value, k, witness.GetStable());
+        const selected: JSAny = Call(
+            context, callbackfn, thisArg, value, Convert<Smi>(k),
+            witness.GetStable());
 
         // d. If selected is true, then
         //    i. Append kValue to the end of kept.
@@ -59,16 +60,16 @@ namespace typed_array_filter {
       }
 
       // 10. Let A be ? TypedArraySpeciesCreate(O, captured).
-      const lengthSmi = Convert<PositiveSmi>(kept.length);
+      const length: uintptr = kept.length;
       const typedArray: JSTypedArray =
           typed_array_createtypedarray::TypedArraySpeciesCreateByLength(
-              kBuiltinName, array, lengthSmi);
+              kBuiltinName, array, length);
 
       // 11. Let n be 0.
       // 12. For each element e of kept, do
       //   a. Perform ! Set(A, ! ToString(n), e, true).
       //   b. Increment n by 1.
-      TypedArrayCopyElements(context, typedArray, kept.ToJSArray(), lengthSmi);
+      TypedArrayCopyElements(context, typedArray, kept.ToJSArray(), length);
 
       // 13. Return A.
       return typedArray;

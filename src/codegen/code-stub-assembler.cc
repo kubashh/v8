@@ -927,9 +927,9 @@ TNode<Number> CodeStubAssembler::NumberMin(SloppyTNode<Number> a,
   return result.value();
 }
 
-TNode<IntPtrT> CodeStubAssembler::ConvertToRelativeIndex(
-    TNode<Context> context, TNode<Object> index, TNode<IntPtrT> length) {
-  TVARIABLE(IntPtrT, result);
+TNode<UintPtrT> CodeStubAssembler::ConvertToRelativeIndex(
+    TNode<Context> context, TNode<Object> index, TNode<UintPtrT> length) {
+  TVARIABLE(UintPtrT, result);
 
   TNode<Number> const index_int =
       ToInteger_Inline(context, index, CodeStubAssembler::kTruncateMinusZero);
@@ -941,11 +941,13 @@ TNode<IntPtrT> CodeStubAssembler::ConvertToRelativeIndex(
 
   BIND(&if_issmi);
   {
-    TNode<Smi> const index_smi = CAST(index_int);
-    result = Select<IntPtrT>(
-        IntPtrLessThan(SmiUntag(index_smi), zero),
-        [=] { return IntPtrMax(IntPtrAdd(length, SmiUntag(index_smi)), zero); },
-        [=] { return IntPtrMin(SmiUntag(index_smi), length); });
+    TNode<IntPtrT> const index_intptr = SmiUntag(CAST(index_int));
+    result = Unsigned(Select<IntPtrT>(
+        IntPtrLessThan(index_intptr, zero),
+        [=] {
+          return IntPtrMax(IntPtrAdd(Signed(length), index_intptr), zero);
+        },
+        [=] { return IntPtrMin(index_intptr, Signed(length)); }));
     Goto(&done);
   }
 
@@ -957,8 +959,8 @@ TNode<IntPtrT> CodeStubAssembler::ConvertToRelativeIndex(
     TNode<HeapNumber> const index_hn = CAST(index_int);
     TNode<Float64T> const float_zero = Float64Constant(0.);
     TNode<Float64T> const index_float = LoadHeapNumberValue(index_hn);
-    result = SelectConstant<IntPtrT>(Float64LessThan(index_float, float_zero),
-                                     zero, length);
+    result = SelectConstant<UintPtrT>(Float64LessThan(index_float, float_zero),
+                                      Unsigned(zero), length);
     Goto(&done);
   }
   BIND(&done);

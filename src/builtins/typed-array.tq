@@ -22,20 +22,17 @@ namespace typed_array {
 
   struct TypedArrayElementsInfo {
     // Calculates the number of bytes required for specified number of elements.
-    CalculateByteLength(lengthSmi: PositiveSmi): uintptr labels IfInvalid {
-      const length = Convert<uintptr>(lengthSmi);
+    CalculateByteLength(length: uintptr): uintptr labels IfInvalid {
       const byteLength = length << this.sizeLog2;
-      // If an overflow ocurred, the byte length exceeds
-      // JSArrayBuffer::kMaxByteLength and is invalid.
-      if (byteLength >>> this.sizeLog2 != length) goto IfInvalid;
+      if (byteLength > kArrayBufferMaxByteLength) goto IfInvalid;
       return byteLength;
     }
 
     // Calculates the maximum number of elements supported by a specified number
     // of bytes.
-    CalculateLength(byteLength: uintptr): PositiveSmi labels IfInvalid {
-      return Convert<PositiveSmi>(byteLength >>> this.sizeLog2)
-          otherwise IfInvalid;
+    CalculateLength(byteLength: uintptr): uintptr labels IfInvalid {
+      if (byteLength > kArrayBufferMaxByteLength) goto IfInvalid;
+      return byteLength >>> this.sizeLog2;
     }
 
     // Determines if `bytes` (byte offset or length) cannot be evenly divided by
@@ -74,8 +71,8 @@ namespace typed_array {
   extern macro TypedArrayBuiltinsAssembler::StoreJSTypedArrayElementFromTagged(
       Context, JSTypedArray, Smi, JSAny, constexpr ElementsKind);
 
-  type LoadFn = builtin(Context, JSTypedArray, Smi) => JSAny;
-  type StoreFn = builtin(Context, JSTypedArray, Smi, JSAny) => JSAny;
+  type LoadFn = builtin(Context, JSTypedArray, uintptr) => JSAny;
+  type StoreFn = builtin(Context, JSTypedArray, uintptr, JSAny) => JSAny;
 
   extern macro TypedArrayBuiltinsAssembler::SetJSTypedArrayOnHeapDataPtr(
       JSTypedArray, ByteArray, uintptr): void;
@@ -105,7 +102,7 @@ namespace typed_array {
       this.unstable = %RawDownCast<AttachedJSTypedArray>(this.stable);
     }
 
-    Load(implicit context: Context)(k: Smi): JSAny {
+    Load(implicit context: Context)(k: uintptr): JSAny {
       const lf: LoadFn = this.loadfn;
       return lf(context, this.unstable, k);
     }
@@ -195,13 +192,13 @@ namespace typed_array {
   }
 
   builtin LoadFixedElement<T: type>(
-      _context: Context, array: JSTypedArray, index: Smi): JSAny {
+      _context: Context, array: JSTypedArray, index: uintptr): JSAny {
     return LoadFixedTypedArrayElementAsTagged(
         array.data_ptr, index, KindForArrayType<T>());
   }
 
   builtin StoreFixedElement<T: type>(
-      context: Context, typedArray: JSTypedArray, index: Smi,
+      context: Context, typedArray: JSTypedArray, index: uintptr,
       value: JSAny): JSAny {
     typed_array::StoreJSTypedArrayElementFromTagged(
         context, typedArray, index, value, KindForArrayType<T>());
@@ -305,7 +302,7 @@ namespace typed_array {
 
     // 4. Let len be obj.[[ArrayLength]].
     // TODO(v8:4153): Support huge TypedArrays here.
-    const len = Cast<Smi>(Convert<Number>(array.length)) otherwise unreachable;
+    const len: uintptr = array.length;
 
     // Arrays of length 1 or less are considered sorted.
     if (len < 2) return array;
@@ -366,7 +363,7 @@ namespace typed_array {
     const work1: FixedArray = AllocateZeroedFixedArray(Convert<intptr>(len));
     const work2: FixedArray = AllocateZeroedFixedArray(Convert<intptr>(len));
 
-    for (let i: Smi = 0; i < len; ++i) {
+    for (let i: uintptr = 0; i < len; ++i) {
       const element: JSAny = loadfn(context, array, i);
       work1.objects[i] = element;
       work2.objects[i] = element;
@@ -375,7 +372,7 @@ namespace typed_array {
     TypedArrayMergeSort(work2, 0, len, work1);
 
     // work1 contains the sorted numbers. Write them back.
-    for (let i: Smi = 0; i < len; ++i)
+    for (let i: uintptr = 0; i < len; ++i)
       storefn(context, array, i, UnsafeCast<JSAny>(work1.objects[i]));
 
     return array;

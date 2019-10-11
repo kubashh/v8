@@ -590,9 +590,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   // After converting an index to an integer, calculate a relative index: if
   // index < 0, max(length + index, 0); else min(index, length)
-  TNode<IntPtrT> ConvertToRelativeIndex(TNode<Context> context,
-                                        TNode<Object> index,
-                                        TNode<IntPtrT> length);
+  TNode<UintPtrT> ConvertToRelativeIndex(TNode<Context> context,
+                                         TNode<Object> index,
+                                         TNode<UintPtrT> length);
 
   // Returns true iff the given value fits into smi range and is >= 0.
   TNode<BoolT> IsValidPositiveSmi(TNode<IntPtrT> value);
