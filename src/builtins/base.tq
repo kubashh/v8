@@ -2456,6 +2456,12 @@ Cast<JSPrimitiveWrapper>(o: HeapObject): JSPrimitiveWrapper
   goto CastError;
 }
 
+Cast<JSPromise>(o: HeapObject): JSPromise
+    labels CastError {
+  if (IsJSPromise(o)) return %RawDownCast<JSPromise>(o);
+  goto CastError;
+}
+
 Cast<JSArgumentsObjectWithLength>(implicit context: Context)(o: HeapObject):
     JSArgumentsObjectWithLength
     labels CastError {
@@ -3346,6 +3352,7 @@ extern macro IsCallable(HeapObject): bool;
 extern macro IsConstructor(HeapObject): bool;
 extern macro IsFeedbackVector(HeapObject): bool;
 extern macro IsJSArray(HeapObject): bool;
+extern macro IsJSPromise(HeapObject): bool;
 extern macro IsJSProxy(HeapObject): bool;
 extern macro IsJSRegExp(HeapObject): bool;
 extern macro IsJSRegExpStringIterator(HeapObject): bool;
