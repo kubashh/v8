@@ -1424,7 +1424,7 @@ class V8_EXPORT UnboundScript {
 /**
  * A compiled JavaScript module, not yet tied to a Context.
  */
-class V8_EXPORT UnboundModuleScript {
+class V8_EXPORT UnboundModuleScript : public Data {
   // Only used as a container for code caching.
 };
 
@@ -1447,7 +1447,7 @@ class V8_EXPORT Location {
 /**
  * A compiled JavaScript module.
  */
-class V8_EXPORT Module {
+class V8_EXPORT Module : public Data {
  public:
   /**
    * The different states a module can be in.
@@ -7618,7 +7618,9 @@ class V8_EXPORT EmbedderHeapTracer {
   virtual void RegisterV8References(
       const std::vector<std::pair<void*, void*> >& embedder_fields) = 0;
 
+  V8_DEPRECATE_SOON("Use version taking TracedReferenceBase<v8::Data> argument")
   void RegisterEmbedderReference(const TracedReferenceBase<v8::Value>& ref);
+  void RegisterEmbedderReference(const TracedReferenceBase<v8::Data>& ref);
 
   /**
    * Called at the beginning of a GC cycle.
