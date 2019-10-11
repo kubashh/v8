@@ -16,6 +16,24 @@
       "revId": "71996825a3e32903ee5659f7cdcecd9bf70e78e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13b0152b_dd4b8918",
+        "filename": "test/mkgrokdump/mkgrokdump.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-10-11T17:42:47Z",
+      "side": 1,
+      "message": "Good point, thanks.",
+      "parentUuid": "e4e2e059_f522705e",
+      "revId": "71996825a3e32903ee5659f7cdcecd9bf70e78e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
