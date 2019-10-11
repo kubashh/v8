@@ -809,6 +809,11 @@ extern operator '[]=' macro StoreContextElement(
 extern operator '[]' macro LoadContextElement(Context, intptr): Object;
 extern operator '[]' macro LoadContextElement(Context, Smi): Object;
 
+extern macro LoadObjectField(HeapObject, constexpr int31): Object;
+extern macro StoreObjectField(Object, constexpr int31, Object): void;
+extern macro StoreObjectFieldNoWriteBarrier(
+    Object, constexpr int31, Object): void;
+
 extern class JSArrayBuffer extends JSObject {
   byte_length: uintptr;
   backing_store: RawPtr;
@@ -3346,6 +3351,7 @@ extern macro IsCallable(HeapObject): bool;
 extern macro IsConstructor(HeapObject): bool;
 extern macro IsFeedbackVector(HeapObject): bool;
 extern macro IsJSArray(HeapObject): bool;
+extern macro IsJSPromise(HeapObject): bool;
 extern macro IsJSProxy(HeapObject): bool;
 extern macro IsJSRegExp(HeapObject): bool;
 extern macro IsJSRegExpStringIterator(HeapObject): bool;
