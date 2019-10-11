@@ -74,6 +74,12 @@ class V8_EXPORT_PRIVATE PromiseBuiltinsAssembler : public CodeStubAssembler {
   Node* CreatePromiseGetCapabilitiesExecutorContext(Node* promise_capability,
                                                     Node* native_context);
 
+  // The below methods are only temporarily public until they are
+  // migrated to torque.
+  TNode<Object> TriggerPromiseReactions(Node* context, Node* promise,
+                                        Node* result,
+                                        PromiseReaction::Type type);
+
  protected:
   void PromiseInit(Node* promise);
 
@@ -87,9 +93,6 @@ class V8_EXPORT_PRIVATE PromiseBuiltinsAssembler : public CodeStubAssembler {
 
   TNode<Context> CreatePromiseContext(TNode<NativeContext> native_context,
                                       int slots);
-
-  Node* TriggerPromiseReactions(Node* context, Node* promise, Node* result,
-                                PromiseReaction::Type type);
 
   // We can skip the "resolve" lookup on {constructor} if it's the (initial)
   // Promise constructor and the Promise.resolve() protector is intact, as
