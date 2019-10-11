@@ -3487,10 +3487,13 @@ Node* EffectControlLinearizer::LowerArgumentsLength(Node* node) {
     __ Goto(&if_adaptor_frame);
 
     __ Bind(&if_adaptor_frame);
+    // Here we load the length from the frame as a compressed SMI:
     Node* arguments_length = __ Load(
         MachineType::TypeCompressedTaggedSigned(), arguments_frame,
         __ IntPtrConstant(ArgumentsAdaptorFrameConstants::kLengthOffset));
 
+    // Here we use it as a 64-bit value, assuming the top bits are not
+    // corrupted:
     Node* rest_length =
         __ IntSub(arguments_length, __ SmiConstant(formal_parameter_count));
     __ GotoIf(__ IntLessThan(rest_length, __ SmiConstant(0)), &done,
