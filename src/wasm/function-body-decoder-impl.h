@@ -1945,6 +1945,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             control_.clear();
             break;
           }
+          if (c->is_onearmed_if()) PushMergeValues(c, &c->start_merge);
           PopControl(c);
           break;
         }
