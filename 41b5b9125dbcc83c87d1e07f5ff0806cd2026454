@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc797c91_f62f21e1",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1119624
+      },
+      "writtenOn": "2019-10-11T18:52:35Z",
+      "side": 1,
+      "message": "drive by comment as arm is red, shouldn\u0027t this be `index + offset`. Same for arm64.",
+      "revId": "41b5b9125dbcc83c87d1e07f5ff0806cd2026454",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
