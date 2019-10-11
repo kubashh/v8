@@ -255,24 +255,18 @@ Node* WasmGraphBuilder::Merge(unsigned count, Node** controls) {
   return graph()->NewNode(mcgraph()->common()->Merge(count), count, controls);
 }
 
-Node* WasmGraphBuilder::Phi(wasm::ValueType type, unsigned count, Node** vals,
-                            Node* control) {
-  DCHECK(IrOpcode::IsMergeOpcode(control->opcode()));
-  Vector<Node*> buf = Realloc(vals, count, count + 1);
-  buf[count] = control;
+Node* WasmGraphBuilder::Phi(wasm::ValueType type, unsigned count, Node** vals) {
+  DCHECK(IrOpcode::IsMergeOpcode(vals[count]->opcode()));
   return graph()->NewNode(
       mcgraph()->common()->Phi(wasm::ValueTypes::MachineRepresentationFor(type),
                                count),
-      count + 1, buf.begin());
+      count + 1, vals);
 }
 
-Node* WasmGraphBuilder::EffectPhi(unsigned count, Node** effects,
-                                  Node* control) {
-  DCHECK(IrOpcode::IsMergeOpcode(control->opcode()));
-  Vector<Node*> buf = Realloc(effects, count, count + 1);
-  buf[count] = control;
+Node* WasmGraphBuilder::EffectPhi(unsigned count, Node** effects) {
+  DCHECK(IrOpcode::IsMergeOpcode(effects[count]->opcode()));
   return graph()->NewNode(mcgraph()->common()->EffectPhi(count), count + 1,
-                          buf.begin());
+                          effects);
 }
 
 Node* WasmGraphBuilder::RefNull() {
@@ -3181,14 +3175,16 @@ Node* WasmGraphBuilder::CreateOrMergeIntoPhi(MachineRepresentation rep,
   if (IsPhiWithMerge(tnode, merge)) {
     AppendToPhi(tnode, fnode);
   } else if (tnode != fnode) {
+    // Note that it is not safe to use {Buffer} here since this method is used
+    // via {CheckForException} while the {Buffer} is in use by another method.
     uint32_t count = merge->InputCount();
     // + 1 for the merge node.
-    Vector<Node*> vals = Buffer(count + 1);
+    base::SmallVector<Node*, 9> vals(count + 1);
     for (uint32_t j = 0; j < count - 1; j++) vals[j] = tnode;
     vals[count - 1] = fnode;
     vals[count] = merge;
-    return graph()->NewNode(mcgraph()->common()->Phi(rep, count), count + 1,
-                            vals.begin());
+    tnode = graph()->NewNode(mcgraph()->common()->Phi(rep, count), count + 1,
+                             vals.begin());
   }
   return tnode;
 }
@@ -3198,13 +3194,18 @@ Node* WasmGraphBuilder::CreateOrMergeIntoEffectPhi(Node* merge, Node* tnode,
   if (IsPhiWithMerge(tnode, merge)) {
     AppendToPhi(tnode, fnode);
   } else if (tnode != fnode) {
+    // Note that it is not safe to use {Buffer} here since this method is used
+    // via {CheckForException} while the {Buffer} is in use by another method.
     uint32_t count = merge->InputCount();
-    Vector<Node*> effects = Buffer(count);
+    // + 1 for the merge node.
+    base::SmallVector<Node*, 9> effects(count + 1);
     for (uint32_t j = 0; j < count - 1; j++) {
       effects[j] = tnode;
     }
     effects[count - 1] = fnode;
-    tnode = EffectPhi(count, effects.begin(), merge);
+    effects[count] = merge;
+    tnode = graph()->NewNode(mcgraph()->common()->EffectPhi(count), count + 1,
+                             effects.begin());
   }
   return tnode;
 }
