@@ -52,6 +52,7 @@ TEST(DisasmX64) {
   Assembler assm(AssemblerOptions{},
                  ExternalAssemblerBuffer(buffer, sizeof buffer));
 
+  __ repstosq();
   // Short immediate instructions
   __ addq(rax, Immediate(12345678));
   __ orq(rax, Immediate(12345678));
@@ -181,6 +182,8 @@ TEST(DisasmX64) {
   __ decb(Operand(rbx, rcx, times_4, 10000));
   __ decq(rdx);
   __ cdq();
+
+  __ repstosq();
 
   __ nop();
   __ idivq(rdx);

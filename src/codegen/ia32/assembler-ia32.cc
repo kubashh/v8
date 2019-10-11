@@ -661,6 +661,12 @@ void Assembler::movq(XMMRegister dst, Operand src) {
   emit_operand(dst, src);
 }
 
+void Assembler::repstosl() {
+  EnsureSpace ensure_space(this);
+  EMIT(0xF3);
+  EMIT(0xAB);
+}
+
 void Assembler::cmov(Condition cc, Register dst, Operand src) {
   EnsureSpace ensure_space(this);
   // Opcode: 0f 40 + cc /r.
