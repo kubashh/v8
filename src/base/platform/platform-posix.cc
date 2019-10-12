@@ -25,6 +25,9 @@
     defined(__NetBSD__) || defined(__OpenBSD__)
 #include <sys/sysctl.h>  // NOLINT, for sysctl
 #endif
+#if defined(__FreeBSD__)
+#include <sys/thr.h>
+#endif
 
 #if defined(ANDROID) && !defined(V8_ANDROID_LOG_STDOUT)
 #define LOG_TAG "v8"
@@ -519,6 +522,10 @@ int OS::GetCurrentThreadId() {
   return static_cast<int>(zx_thread_self());
 #elif V8_OS_SOLARIS
   return static_cast<int>(pthread_self());
+#elif V8_OS_FREEBSD
+  long tid;  // NOLINT: fits better for the use
+  thr_self(&tid);
+  return static_cast<int>(tid);
 #else
   return static_cast<int>(reinterpret_cast<intptr_t>(pthread_self()));
 #endif
