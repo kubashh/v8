@@ -257,6 +257,24 @@
       "revId": "40380e37fed4f5bfbb6f54fec4072cbe65a087b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "176ec77e_0bc2d224",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-12T07:49:30Z",
+      "side": 1,
+      "message": "I don\u0027t have any strong opinions here, will defer to the torque experts",
+      "parentUuid": "26e71c19_0ddbbcc7",
+      "revId": "40380e37fed4f5bfbb6f54fec4072cbe65a087b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

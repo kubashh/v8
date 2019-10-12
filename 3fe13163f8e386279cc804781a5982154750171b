@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebd13440_f962e3a9",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-12T07:49:30Z",
+      "side": 1,
+      "message": "Should this be Undefined? (with a cast on TriggerPromiseReactions)",
+      "range": {
+        "startLine": 50,
+        "startChar": 59,
+        "endLine": 50,
+        "endChar": 65
+      },
+      "revId": "3fe13163f8e386279cc804781a5982154750171b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d0909be_81da38a2",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-12T07:49:30Z",
+      "side": 1,
+      "message": "Should this be JSPromise?",
+      "range": {
+        "startLine": 50,
+        "startChar": 40,
+        "endLine": 50,
+        "endChar": 50
+      },
+      "revId": "3fe13163f8e386279cc804781a5982154750171b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
