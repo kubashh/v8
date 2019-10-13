@@ -1225,12 +1225,7 @@ bool Object::ToInt32(int32_t* value) {
     return true;
   }
   if (IsHeapNumber()) {
-    double num = HeapNumber::cast(*this).value();
-    // Check range before conversion to avoid undefined behavior.
-    if (num >= kMinInt && num <= kMaxInt && FastI2D(FastD2I(num)) == num) {
-      *value = FastD2I(num);
-      return true;
-    }
+    return HeapNumber::cast(*this).ToInt32(value);
   }
   return false;
 }

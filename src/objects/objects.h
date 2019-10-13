@@ -310,6 +310,7 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   V8_INLINE bool IsMinusZero() const;
   V8_EXPORT_PRIVATE bool ToInt32(int32_t* value);
   inline bool ToUint32(uint32_t* value) const;
+  inline static int32_t ToInt32Slow(Address addr);
 
   inline Representation OptimalRepresentation(Isolate* isolate) const;
 

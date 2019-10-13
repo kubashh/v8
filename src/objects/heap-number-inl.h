@@ -44,6 +44,16 @@ int HeapNumber::get_sign() {
   return ReadField<int>(kExponentOffset) & kSignMask;
 }
 
+bool HeapNumber::ToInt32(int32_t* result) const {
+  double num = value();
+  // Check range before conversion to avoid undefined behavior.
+  if (num >= kMinInt && num <= kMaxInt && FastI2D(FastD2I(num)) == num) {
+    *result = FastD2I(num);
+    return true;
+  }
+  return false;
+}
+
 }  // namespace internal
 }  // namespace v8
 

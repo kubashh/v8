@@ -603,6 +603,35 @@ bool Object::ToUint32(uint32_t* value) const {
   return false;
 }
 
+int32_t Object::ToInt32Slow(Address addr) {
+  DisallowHeapAllocation no_gc;
+  Object key(addr);
+
+  // Smi case should be handled by the fast path.
+  DCHECK(!key.IsSmi());
+
+  if (key.IsHeapNumber()) {
+    int32_t value;
+    return HeapNumber::cast(key).ToInt32(&value) ? value : -1;
+  }
+
+  if (!key.IsString()) return -1;
+  uint32_t index;
+  if (!String::cast(key).AsArrayIndex(&index)) return -1;
+  if (index <= INT_MAX) return index;
+
+  // TODO(gsathya): This check exists because we only support upto
+  // INT_MAX for element access in the builtins. We return -2 to
+  // distinguish the case where index <= JSArray::kMaxArrayIndex and
+  // index > INT_MAX so the builtin can handle this appropriately.
+  //
+  // Once we change the builtins to correctly support element access
+  // for indices up to JSArray::kMaxArrayIndex, this check can go
+  // away.
+  if (index <= JSArray::kMaxArrayIndex) return -2;
+  return -1;
+}
+
 // static
 MaybeHandle<JSReceiver> Object::ToObject(Isolate* isolate,
                                          Handle<Object> object,

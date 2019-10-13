@@ -27,6 +27,8 @@ class HeapNumber : public HeapObject {
   inline int get_exponent();
   inline int get_sign();
 
+  inline bool ToInt32(int32_t* result) const;
+
   // Layout description.
   static const int kValueOffset = HeapObject::kHeaderSize;
   // IEEE doubles are two 32 bit words.  The first is just mantissa, the second
