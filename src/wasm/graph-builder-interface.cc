@@ -888,20 +888,20 @@ class WasmGraphBuildingInterface {
               FunctionSig* sig, uint32_t sig_index, const Value args[],
               Value returns[]) {
     int param_count = static_cast<int>(sig->parameter_count());
-    Vector<TFNode*> arg_nodes = builder_->Buffer(param_count + 1);
-    TFNode** return_nodes = nullptr;
+    int return_count = static_cast<int>(sig->return_count());
+    compiler::WasmGraphBuilder::ArgsVector arg_nodes(param_count + 1);
+    compiler::WasmGraphBuilder::RetsVector return_nodes(return_count);
     arg_nodes[0] = index_node;
     for (int i = 0; i < param_count; ++i) {
       arg_nodes[i + 1] = args[i].node;
     }
     if (index_node) {
-      BUILD(CallIndirect, table_index, sig_index, arg_nodes.begin(),
-            &return_nodes, decoder->position());
+      BUILD(CallIndirect, table_index, sig_index, &arg_nodes, &return_nodes,
+            decoder->position());
     } else {
-      BUILD(CallDirect, sig_index, arg_nodes.begin(), &return_nodes,
+      BUILD(CallDirect, sig_index, &arg_nodes, &return_nodes,
             decoder->position());
     }
-    int return_count = static_cast<int>(sig->return_count());
     for (int i = 0; i < return_count; ++i) {
       returns[i].node = return_nodes[i];
     }
@@ -914,16 +914,16 @@ class WasmGraphBuildingInterface {
                     TFNode* index_node, FunctionSig* sig, uint32_t sig_index,
                     const Value args[]) {
     int arg_count = static_cast<int>(sig->parameter_count());
-    Vector<TFNode*> arg_nodes = builder_->Buffer(arg_count + 1);
+    compiler::WasmGraphBuilder::ArgsVector arg_nodes(arg_count + 1);
     arg_nodes[0] = index_node;
     for (int i = 0; i < arg_count; ++i) {
       arg_nodes[i + 1] = args[i].node;
     }
     if (index_node) {
-      BUILD(ReturnCallIndirect, table_index, sig_index, arg_nodes.begin(),
+      BUILD(ReturnCallIndirect, table_index, sig_index, &arg_nodes,
             decoder->position());
     } else {
-      BUILD(ReturnCall, sig_index, arg_nodes.begin(), decoder->position());
+      BUILD(ReturnCall, sig_index, &arg_nodes, decoder->position());
     }
   }
 };
