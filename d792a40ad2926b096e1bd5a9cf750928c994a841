@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0ad38b1_f103ae45",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2019-10-14T12:42:44Z",
+      "side": 1,
+      "message": "STP\u0027s range is [-512,504], is it possible to have so many stack parameters that it goes out of range?\n\nJust to be safe, I think using the MacroAssembler methods for STP and STR would be better.",
+      "revId": "d792a40ad2926b096e1bd5a9cf750928c994a841",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
