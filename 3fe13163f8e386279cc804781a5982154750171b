@@ -2,6 +2,109 @@
   "comments": [
     {
       "key": {
+        "uuid": "8732a094_8e64fcaf",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T09:04:27Z",
+      "side": 1,
+      "message": "The namespace-per-file rule is obsolete, I\u0027d suggest a reasonable shared namespace like \"promise\".",
+      "range": {
+        "startLine": 8,
+        "startChar": 10,
+        "endLine": 8,
+        "endChar": 37
+      },
+      "revId": "3fe13163f8e386279cc804781a5982154750171b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c969fe0e_3e2341c2",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T09:04:27Z",
+      "side": 1,
+      "message": "We could define better types for these, something like:\n\ntype PromiseState extends int31 constexpr \u0027Promise::PromiseState\u0027;",
+      "range": {
+        "startLine": 11,
+        "startChar": 25,
+        "endLine": 11,
+        "endChar": 40
+      },
+      "revId": "3fe13163f8e386279cc804781a5982154750171b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "851f1cc1_fdd19520",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T09:04:27Z",
+      "side": 1,
+      "message": "How about: \n\n  extern macro PromiseBuiltinsAssembler::TriggerPromiseReactions(\n      implicit context: Context)(Smi | PromiseReactions, JSAny, \n    PromiseReactionType): Undefined;\n\ngiven a type definition\n\n  type PromiseReactionType extends int31 constexpr \u0027PromiseReaction::Type\u0027;",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 29,
+        "endChar": 56
+      },
+      "revId": "3fe13163f8e386279cc804781a5982154750171b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7df44be_4c6cedfe",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T09:04:27Z",
+      "side": 1,
+      "message": "This is not necessary anymore once\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1857226/\nlands.",
+      "revId": "3fe13163f8e386279cc804781a5982154750171b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83a77c82_d7ebb590",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T09:04:27Z",
+      "side": 1,
+      "message": "The getter and the setter could be methods on JSPromise.",
+      "revId": "3fe13163f8e386279cc804781a5982154750171b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ebd13440_f962e3a9",
         "filename": "src/builtins/promise-abstract-operations.tq",
         "patchSetId": 5
@@ -41,6 +144,77 @@
         "startChar": 40,
         "endLine": 50,
         "endChar": 50
+      },
+      "revId": "3fe13163f8e386279cc804781a5982154750171b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6745d819_5e732dc3",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T09:04:27Z",
+      "side": 1,
+      "message": "I\u0027d think that value should have type JSAny for any user-exposed JavaScript value.\n@Sathya: You\u0027re talking about the return type, no? I think that TriggerPromiseReactions should already have return type Undefined. Or could we drop this pointless returning of Undefined altogether?",
+      "parentUuid": "ebd13440_f962e3a9",
+      "range": {
+        "startLine": 50,
+        "startChar": 59,
+        "endLine": 50,
+        "endChar": 65
+      },
+      "revId": "3fe13163f8e386279cc804781a5982154750171b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11a651ae_5e9bd7cb",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T09:04:27Z",
+      "side": 1,
+      "message": "+1, then we can remove the cast below.",
+      "parentUuid": "1d0909be_81da38a2",
+      "range": {
+        "startLine": 50,
+        "startChar": 40,
+        "endLine": 50,
+        "endChar": 50
+      },
+      "revId": "3fe13163f8e386279cc804781a5982154750171b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1dee4be_e7bbf1a4",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T09:04:27Z",
+      "side": 1,
+      "message": "I think this type should be (Smi | PromiseReaction). The type of JSPromise::reactions_or_result in general should probably be (Smi | PromiseReaction | JSAny).",
+      "range": {
+        "startLine": 57,
+        "startChar": 21,
+        "endLine": 57,
+        "endChar": 27
       },
       "revId": "3fe13163f8e386279cc804781a5982154750171b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
