@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "49809883_6d2d0d55",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-14T12:11:05Z",
+      "side": 1,
+      "message": "Ack, thanks, that\u0027s a nice improvement. Done.",
+      "parentUuid": "ec2b49ec_bff3f669",
+      "revId": "b00d10748edf53c251ddc6e1d8a605c9931cd89d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28d2cc4c_c0a183de",
         "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
         "patchSetId": 4
@@ -51,6 +69,24 @@
       "revId": "b00d10748edf53c251ddc6e1d8a605c9931cd89d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3f90780_516b2282",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-14T12:11:05Z",
+      "side": 1,
+      "message": "Yes, we could use temp scratch registers. I will upload a follow-up CL to optimize this, because this gets a bit more involved. Like you mentioned, the TurboAssembler::Sub call might fail if we already took both available temp registers.\n\nFor now, the existing code should be fine, right? TurboAssembler::Sub method already checks whether the immediate is out of range and uses a temp register for that case.",
+      "parentUuid": "90990e46_79aedb8d",
+      "revId": "b00d10748edf53c251ddc6e1d8a605c9931cd89d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
