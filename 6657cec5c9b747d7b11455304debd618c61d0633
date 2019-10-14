@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f27def16_885c75ac",
+        "filename": "src/builtins/regexp.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T12:47:10Z",
+      "side": 1,
+      "message": "How about defining a type\n\ntype UseCounterFeature extends int31 constexpr \u0027v8::Isolate::UseCounterFeature\u0027;\n\nAnd then using \"constexpr UseCounterFeature\" below.",
+      "revId": "6657cec5c9b747d7b11455304debd618c61d0633",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "513c26a0_2634032e",
+        "filename": "src/builtins/regexp.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T12:47:10Z",
+      "side": 1,
+      "message": "JSAny?",
+      "range": {
+        "startLine": 188,
+        "startChar": 63,
+        "endLine": 188,
+        "endChar": 69
+      },
+      "revId": "6657cec5c9b747d7b11455304debd618c61d0633",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fa46513_8d111e14",
+        "filename": "src/builtins/regexp.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T12:47:10Z",
+      "side": 1,
+      "message": "You can delete these 3 lines, and it might improve performance: Cast\u003cJSReceiver\u003e() already contains a Smi-check.",
+      "range": {
+        "startLine": 189,
+        "startChar": 4,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "6657cec5c9b747d7b11455304debd618c61d0633",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a545be2_cda358e0",
+        "filename": "src/builtins/regexp.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-14T12:47:10Z",
+      "side": 1,
+      "message": "return Is\u003cJSRegExp\u003e(receiver);",
+      "range": {
+        "startLine": 197,
+        "startChar": 6,
+        "endLine": 200,
+        "endChar": 19
+      },
+      "revId": "6657cec5c9b747d7b11455304debd618c61d0633",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
