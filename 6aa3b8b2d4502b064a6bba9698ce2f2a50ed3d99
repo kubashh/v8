@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0420b0d_e1fe0669",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-10-14T23:29:19Z",
+      "side": 1,
+      "message": "Looks like this with the #if above can be removed because they both gate the same set of tests? Or did I miss something?",
+      "revId": "6aa3b8b2d4502b064a6bba9698ce2f2a50ed3d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26a40a54_350cbac7",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-10-14T23:29:19Z",
+      "side": 1,
+      "message": "Nit: Is it possible to avoid nested #ifs so it\u0027s clear which tests run on which arches? Moving this statement to below is cleaner.",
+      "revId": "6aa3b8b2d4502b064a6bba9698ce2f2a50ed3d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdd5c4b7_1e42e76e",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-10-14T23:29:19Z",
+      "side": 1,
+      "message": "This #endif, and the #if below can be removed as well.",
+      "revId": "6aa3b8b2d4502b064a6bba9698ce2f2a50ed3d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
