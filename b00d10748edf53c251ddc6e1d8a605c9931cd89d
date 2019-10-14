@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec2b49ec_bff3f669",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1334495
+      },
+      "writtenOn": "2019-10-14T10:32:06Z",
+      "side": 1,
+      "message": "For fewer instructions, you could use \u0027stp\u0027 to store pairs of registers and store the last register with \u0027str\u0027 if necessary,",
+      "revId": "b00d10748edf53c251ddc6e1d8a605c9931cd89d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28d2cc4c_c0a183de",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1334495
+      },
+      "writtenOn": "2019-10-14T10:32:06Z",
+      "side": 1,
+      "message": "Can you use the macro assembler scratch registers here? That way you can avoid Push/Pop x0/x1.",
+      "revId": "b00d10748edf53c251ddc6e1d8a605c9931cd89d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
