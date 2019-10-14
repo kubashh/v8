@@ -318,6 +318,7 @@ std::ostream& operator<<(std::ostream& os, const Node& n);
 
 // Typedefs to shorten commonly used Node containers.
 using NodeDeque = ZoneDeque<Node*>;
+using NodeQueue = ZoneQueue<Node*>;
 using NodeSet = ZoneSet<Node*>;
 using NodeVector = ZoneVector<Node*>;
 using NodeVectorVector = ZoneVector<NodeVector>;
