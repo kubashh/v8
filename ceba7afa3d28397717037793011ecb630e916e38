@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "b463beb8_1fdfe1c0",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-14T13:43:15Z",
+      "side": 1,
+      "message": "This could be simplified to\nVector\u003cTFNode*\u003e caught_vector \u003d VectorOf(caught_values);",
+      "revId": "ceba7afa3d28397717037793011ecb630e916e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c247eef_b4e92948",
         "filename": "src/wasm/graph-builder-interface.cc",
         "patchSetId": 1
