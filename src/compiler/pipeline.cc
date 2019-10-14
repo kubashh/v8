@@ -36,6 +36,7 @@
 #include "src/compiler/control-flow-optimizer.h"
 #include "src/compiler/csa-load-elimination.h"
 #include "src/compiler/dead-code-elimination.h"
+#include "src/compiler/decompression-avoider.h"
 #include "src/compiler/decompression-elimination.h"
 #include "src/compiler/effect-control-linearizer.h"
 #include "src/compiler/escape-analysis-reducer.h"
@@ -1793,6 +1794,18 @@ struct MachineOperatorOptimizationPhase {
   }
 };
 
+struct DecompressionAvoidancePhase {
+  static const char* phase_name() { return "V8.TFDecompressionAvoidance"; }
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    if (COMPRESS_POINTERS_BOOL && !FLAG_turbo_decompression_elimination) {
+      DecompressionAvoider decompression_avoider(temp_zone, data->graph(),
+                                                 data->machine());
+      decompression_avoider.ChangeLoads();
+    }
+  }
+};
+
 struct MidTierMachineLoweringPhase {
   static const char* phase_name() { return "V8.TFMidTierMachineLoweringPhase"; }
 
@@ -2423,6 +2436,9 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
   // possible).
   Run<MachineOperatorOptimizationPhase>();
   RunPrintAndVerify(MachineOperatorOptimizationPhase::phase_name(), true);
+
+  Run<DecompressionAvoidancePhase>();
+  RunPrintAndVerify(DecompressionAvoidancePhase::phase_name(), true);
 
   data->source_positions()->RemoveDecorator();
   if (data->info()->trace_turbo_json_enabled()) {
