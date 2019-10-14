@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce82998b_c6e6f8aa",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-14T13:23:43Z",
+      "side": 1,
+      "message": "I think we should be good with just a forward declaration here:\n\nnamespace base {\ntemplate\u003ctypename T, size_t kSize\u003e\nclass SmallVector;\n}  // namespace base\n\nIt\u0027s a bit ugly, but recommended by the style guide and might help reducing the number of includes. WDYT?",
+      "revId": "cff9a44e41a5ea0639331420eded918a83e885a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e370357_29a478a5",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-14T13:23:43Z",
+      "side": 1,
+      "message": "As discussed offline, I would propose to pass the {ArgsVector} as const reference, or even as {Vector\u003cNode*\u003e}, and avoid modifying it. We would need to make a local copy internally then.",
+      "revId": "cff9a44e41a5ea0639331420eded918a83e885a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d61ceb31_5089ee1f",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-14T13:23:43Z",
+      "side": 1,
+      "message": "Should we make these {size_t} now?",
+      "range": {
+        "startLine": 890,
+        "startChar": 4,
+        "endLine": 891,
+        "endChar": 61
+      },
+      "revId": "cff9a44e41a5ea0639331420eded918a83e885a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
