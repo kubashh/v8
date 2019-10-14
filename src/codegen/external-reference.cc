@@ -220,6 +220,8 @@ FUNCTION_REFERENCE(incremental_marking_record_write_function,
 FUNCTION_REFERENCE(insert_remembered_set_function,
                    Heap::InsertIntoRememberedSetFromCode)
 
+FUNCTION_REFERENCE(write_barrier_debug_function, Heap::WriteBarrierDebug)
+
 FUNCTION_REFERENCE(delete_handle_scope_extensions,
                    HandleScope::DeleteExtensions)
 

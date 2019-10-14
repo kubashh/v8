@@ -856,6 +856,7 @@ class Heap {
   void ClearRecordedSlot(HeapObject object, ObjectSlot slot);
   void ClearRecordedSlotRange(Address start, Address end);
   static int InsertIntoRememberedSetFromCode(MemoryChunk* chunk, Address slot);
+  static int WriteBarrierDebug(MemoryChunk* chunk, Address slot);
 
 #ifdef DEBUG
   void VerifyClearedSlot(HeapObject object, ObjectSlot slot);

@@ -143,6 +143,7 @@ class StatsCounter;
   V(incremental_marking_record_write_function,                                \
     "IncrementalMarking::RecordWrite")                                        \
   V(insert_remembered_set_function, "Heap::InsertIntoRememberedSetFromCode")  \
+  V(write_barrier_debug_function, "Heap::WriteBarrierDebug")                  \
   V(invalidate_prototype_chains_function,                                     \
     "JSObject::InvalidatePrototypeChains()")                                  \
   V(invoke_accessor_getter_callback, "InvokeAccessorGetterCallback")          \

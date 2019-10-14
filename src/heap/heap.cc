@@ -5542,6 +5542,9 @@ int Heap::InsertIntoRememberedSetFromCode(MemoryChunk* chunk, Address slot) {
   return 0;
 }
 
+// static
+int Heap::WriteBarrierDebug(MemoryChunk* chunk, Address slot) { return 0; }
+
 #ifdef DEBUG
 void Heap::VerifyClearedSlot(HeapObject object, ObjectSlot slot) {
 #ifndef V8_DISABLE_WRITE_BARRIERS

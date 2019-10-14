@@ -295,6 +295,15 @@ class RecordWriteCodeStubAssembler : public CodeStubAssembler {
     }
   }
 
+  void WriteBarrierDebug(Node* arg0, Node* arg1) {
+    TNode<ExternalReference> function =
+        ExternalConstant(ExternalReference::write_barrier_debug_function());
+    CallCFunctionWithCallerSavedRegisters(
+        function, MachineType::Int32(), kSaveFPRegs,
+        std::make_pair(MachineType::Pointer(), arg0),
+        std::make_pair(MachineType::Pointer(), arg1));
+  }
+
   void CallCFunction3WithCallerSavedRegistersMode(
       MachineType return_type, MachineType arg0_type, MachineType arg1_type,
       MachineType arg2_type, Node* function, Node* arg0, Node* arg1, Node* arg2,
@@ -338,9 +347,11 @@ class RecordWriteCodeStubAssembler : public CodeStubAssembler {
 
     // Load address of SlotSet
     TNode<IntPtrT> slot_set_array = LoadSlotSetArray(page, &slow_path);
+    // WriteBarrierDebug(object, slot);
     TNode<IntPtrT> slot_offset = IntPtrSub(slot, page);
 
     // Load bucket
+    // WriteBarrierDebug(object, slot);
     TNode<IntPtrT> bucket = LoadBucket(slot_set_array, slot_offset, &slow_path);
 
     // Update cell
@@ -381,6 +392,7 @@ class RecordWriteCodeStubAssembler : public CodeStubAssembler {
                                  SlotSet::kCellSizeBytesLog2),
         IntPtrConstant((SlotSet::kCellsPerBucket - 1)
                        << SlotSet::kCellSizeBytesLog2));
+    WriteBarrierDebug(bucket, slot_offset);
     TNode<IntPtrT> cell_address =
         UncheckedCast<IntPtrT>(IntPtrAdd(bucket, cell_offset));
     TNode<IntPtrT> old_cell_value =
