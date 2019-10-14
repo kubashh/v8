@@ -16,6 +16,24 @@
       "revId": "41b5b9125dbcc83c87d1e07f5ff0806cd2026454",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcc5e7bb_9b6fbd46",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-14T10:17:33Z",
+      "side": 1,
+      "message": "Yes, thanks. Fixed.\nAlso the code below was not quite correct.",
+      "parentUuid": "bc797c91_f62f21e1",
+      "revId": "41b5b9125dbcc83c87d1e07f5ff0806cd2026454",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

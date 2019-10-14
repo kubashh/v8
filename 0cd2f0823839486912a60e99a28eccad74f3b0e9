@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e2f86c4_4a8d40da",
+        "filename": "src/diagnostics/x64/disasm-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2443,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-14T10:17:33Z",
+      "side": 0,
+      "message": "note: this output was redundant. \"REX.W\" is already printed when the rex prefix is parsed.",
+      "revId": "0cd2f0823839486912a60e99a28eccad74f3b0e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
