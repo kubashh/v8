@@ -16,6 +16,24 @@
       "revId": "d792a40ad2926b096e1bd5a9cf750928c994a841",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "807f71c5_62689af8",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-14T13:06:49Z",
+      "side": 1,
+      "message": "In extreme cases that could happen, yes. Thanks for pointing that out. Using the MacroAssembler method would kind of defeat the purpose of this fast path, so I now check whether the immediate is in range via {IsImmLSPair} instead.",
+      "parentUuid": "b0ad38b1_f103ae45",
+      "revId": "d792a40ad2926b096e1bd5a9cf750928c994a841",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
