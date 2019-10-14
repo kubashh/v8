@@ -16,6 +16,24 @@
       "revId": "568d51008332e4c4e31dca151bf3739798c6728a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1aaad91_941c3f55",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-10-14T06:58:03Z",
+      "side": 1,
+      "message": "Fixed here: https://crrev.com/c/1857223",
+      "parentUuid": "dbc91d39_a199742e",
+      "revId": "568d51008332e4c4e31dca151bf3739798c6728a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
