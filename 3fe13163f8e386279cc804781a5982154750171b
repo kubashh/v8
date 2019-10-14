@@ -199,6 +199,30 @@
     },
     {
       "key": {
+        "uuid": "46ab8304_671f707e",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-14T09:20:30Z",
+      "side": 1,
+      "message": "Yes, sorry I was talking about the return type. Thanks!",
+      "parentUuid": "6745d819_5e732dc3",
+      "range": {
+        "startLine": 50,
+        "startChar": 59,
+        "endLine": 50,
+        "endChar": 65
+      },
+      "revId": "3fe13163f8e386279cc804781a5982154750171b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b1dee4be_e7bbf1a4",
         "filename": "src/builtins/promise-abstract-operations.tq",
         "patchSetId": 5
