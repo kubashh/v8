@@ -45,6 +45,57 @@
       "revId": "c9e3299d075748573969e3825d3fff342a9eea2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "486d8a7f_b7c831a5",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1334495
+      },
+      "writtenOn": "2019-10-14T17:50:11Z",
+      "side": 1,
+      "message": "The stack is growing upwards, so you want to \u0027- kStackSlotSize\u0027, to get the slot one \u0027before\u0027 the start.",
+      "revId": "c9e3299d075748573969e3825d3fff342a9eea2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c6d3e20_ee0de275",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1334495
+      },
+      "writtenOn": "2019-10-14T17:50:11Z",
+      "side": 1,
+      "message": "This should be PostIndex. The first address \u0027last_stack_slot\u0027 is at the \u0027start\u0027 of the last slot . That\u0027s one of the slots we want to clear.",
+      "revId": "c9e3299d075748573969e3825d3fff342a9eea2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68520110_f85dc475",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1334495
+      },
+      "writtenOn": "2019-10-14T17:50:11Z",
+      "side": 1,
+      "message": "These are popped in the wrong order, swap x1 and x0.",
+      "revId": "c9e3299d075748573969e3825d3fff342a9eea2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
