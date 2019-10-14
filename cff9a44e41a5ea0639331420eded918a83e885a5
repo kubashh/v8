@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c0a744b7_5cf8d564",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-10-14T14:35:02Z",
+      "side": 1,
+      "message": "Done. Yeah, I was torn between the include and a forward declaration as well. I am also a fan of reducing includes in headers.",
+      "parentUuid": "ce82998b_c6e6f8aa",
+      "revId": "cff9a44e41a5ea0639331420eded918a83e885a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e370357_29a478a5",
         "filename": "src/compiler/wasm-compiler.h",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "cff9a44e41a5ea0639331420eded918a83e885a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee336641_dca5c77f",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-10-14T14:35:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e370357_29a478a5",
+      "revId": "cff9a44e41a5ea0639331420eded918a83e885a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -56,6 +92,30 @@
       "revId": "cff9a44e41a5ea0639331420eded918a83e885a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b7920b4_7a04fb79",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-10-14T14:35:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d61ceb31_5089ee1f",
+      "range": {
+        "startLine": 890,
+        "startChar": 4,
+        "endLine": 891,
+        "endChar": 61
+      },
+      "revId": "cff9a44e41a5ea0639331420eded918a83e885a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
