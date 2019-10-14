@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c247eef_b4e92948",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-10-14T13:31:03Z",
+      "side": 1,
+      "message": "Note that this is needed to make the effect chain on the exceptional path work. This is an existing bug that just didn\u0027t trigger so far because we never had effectful operations on the non-exception path like we do in {GetExceptionValues}.",
+      "range": {
+        "startLine": 662,
+        "startChar": 4,
+        "endLine": 662,
+        "endChar": 41
+      },
+      "revId": "ceba7afa3d28397717037793011ecb630e916e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
