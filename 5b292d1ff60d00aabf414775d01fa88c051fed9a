@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67e0eb89_92c7b9ce",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-14T17:17:19Z",
+      "side": 1,
+      "message": "For the index, machine graph verifier states that needs a PointerRepresentation (https://cs.chromium.org/chromium/src/v8/src/compiler/machine-graph-verifier.cc?l\u003d586\u0026rcl\u003d71bbf6321fea2c9e274f1886342ef2e4c1ae1752). That would mean this should be 64 bits.\nIs that PointerRepresentation correct? Do we need 64 bit index?\n\nIt\u0027s the same for the Store case below.",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 53
+      },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
