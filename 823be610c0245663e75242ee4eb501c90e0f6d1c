@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a5b2f4f_d84f57fe",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3499,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-14T14:09:20Z",
+      "side": 1,
+      "message": "Nice catch! I think the right fix would be to (introduce and) use SmiSub and SmiLessThan in the last two lines.",
+      "revId": "823be610c0245663e75242ee4eb501c90e0f6d1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
