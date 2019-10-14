@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3d9a014_522f4408",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 3135,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-10-14T08:41:50Z",
+      "side": 0,
+      "message": "Please keep the whitelist.",
+      "range": {
+        "startLine": 3135,
+        "startChar": 9,
+        "endLine": 3135,
+        "endChar": 36
+      },
+      "revId": "1b94fcac4d4771b00b2283ad5d3746662a4348cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
