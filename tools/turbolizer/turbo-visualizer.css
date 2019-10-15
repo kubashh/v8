@@ -375,15 +375,21 @@ input:hover,
   height: 0px;
 }
 
+/* Empty on purpose since we need it created for the width to change automatically */
+#graph-toolbox{
+
+}
+
 .graph-toolbox {
-  position: relative;
+  position: fixed;
   border-bottom: 2px solid #eee8d5;
   z-index: 5;
-  background: rgba(100%, 100%, 100%, 0.7);
+  background: rgba(100%, 100%, 100%);
   box-sizing: border-box;
   padding: 3px;
   margin-left: 4px;
   margin-right: 4px;
+  overflow-x: hidden;
 }
 
 .disassembly-toolbox {

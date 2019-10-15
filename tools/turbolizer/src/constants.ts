@@ -8,14 +8,13 @@ export const SOURCE_PANE_ID = 'left';
 export const SOURCE_COLLAPSE_ID = 'source-shrink';
 export const SOURCE_EXPAND_ID = 'source-expand';
 export const INTERMEDIATE_PANE_ID = 'middle';
+export const GRAPH_TOOLBOX_ID = 'graph-toolbox';
 export const GRAPH_PANE_ID = 'graph';
 export const SCHEDULE_PANE_ID = 'schedule';
 export const GENERATED_PANE_ID = 'right';
 export const DISASSEMBLY_PANE_ID = 'disassembly';
 export const DISASSEMBLY_COLLAPSE_ID = 'disassembly-shrink';
 export const DISASSEMBLY_EXPAND_ID = 'disassembly-expand';
-export const COLLAPSE_PANE_BUTTON_VISIBLE = 'button-input';
-export const COLLAPSE_PANE_BUTTON_INVISIBLE = 'button-input-invisible';
 export const UNICODE_BLOCK = '&#9611;';
 export const PROF_COLS = [
   { perc: 0, col: { r: 255, g: 255, b: 255 } },

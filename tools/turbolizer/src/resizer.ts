@@ -92,6 +92,7 @@ export class Resizer {
   left: HTMLElement;
   right: HTMLElement;
   middle: HTMLElement;
+  graphToolbox: HTMLElement;
   sepLeft: number;
   sepRight: number;
   sepLeftSnap: number;
@@ -181,6 +182,14 @@ export class Resizer {
     this.resizerRight.classed("snapped", rightSnapped);
     this.left.style.width = this.sepLeft + 'px';
     this.middle.style.width = (this.sepRight - this.sepLeft) + 'px';
+    // Query for the graphToolbox. We have to do it here since the graph-toolbox doesn't exist during the Resizer creation.
+    if (this.graphToolbox == null) {
+      this.graphToolbox = document.getElementById(C.GRAPH_TOOLBOX_ID)
+    }
+    // Update the toolbox, if it exists.
+    if (this.graphToolbox != null) {
+      this.graphToolbox.style.width = (this.sepRight - this.sepLeft - 20) + 'px';
+    }
     this.right.style.width = (this.clientWidth - this.sepRight) + 'px';
     this.resizerLeft.style('left', this.sepLeft + 'px');
     this.resizerRight.style('right', (this.clientWidth - this.sepRight - 1) + 'px');

@@ -12,7 +12,7 @@ import { View, PhaseView } from "../src/view";
 const multiviewID = "multiview";
 
 const toolboxHTML = `
-<div class="graph-toolbox">
+<div id="graph-toolbox" class="graph-toolbox">
   <select id="phase-select">
     <option disabled selected>(please open a file)</option>
   </select>
