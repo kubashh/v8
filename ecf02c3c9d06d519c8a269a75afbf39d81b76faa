@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39410557_7e63fd21",
+        "filename": "test/unittests/wasm/trap-handler-x64-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-10-15T17:56:48Z",
+      "side": 1,
+      "message": "Please add this before the #endif, otherwise this will silently go wrong on unsupported platforms:\n\n #else\n #error Unsupported platform",
+      "revId": "ecf02c3c9d06d519c8a269a75afbf39d81b76faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
