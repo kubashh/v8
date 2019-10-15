@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef940d1a_0b7a46bb",
+        "filename": "test/mjsunit/wasm/multi-value.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-10-15T13:45:42Z",
+      "side": 1,
+      "message": "Nit: You could have added a comment here describing why you expect a compilation error here. I don\u0027t think it\u0027s obvious.",
+      "revId": "c66426aad54ec0d0bd2facf685e149876ca8fcbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
