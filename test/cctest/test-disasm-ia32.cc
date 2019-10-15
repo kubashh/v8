@@ -395,6 +395,7 @@ TEST(DisasmIa320) {
     __ cvtsd2ss(xmm0, xmm1);
     __ cvtsd2ss(xmm0, Operand(ebx, ecx, times_4, 10000));
     __ movq(xmm0, Operand(edx, 4));
+    __ repstosl();
 
     // logic operation
     __ andps(xmm0, xmm1);
