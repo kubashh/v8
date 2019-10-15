@@ -45,6 +45,29 @@
       "revId": "4a5d8cfbfbadf9d92656cddd46a1bf26361bf89c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79fb7a19_566e7ac7",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-15T09:21:53Z",
+      "side": 1,
+      "message": "The type here can also be inferred, and it\u0027s obvious to the reader due to the cast.",
+      "range": {
+        "startLine": 21,
+        "startChar": 19,
+        "endLine": 21,
+        "endChar": 42
+      },
+      "revId": "4a5d8cfbfbadf9d92656cddd46a1bf26361bf89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
