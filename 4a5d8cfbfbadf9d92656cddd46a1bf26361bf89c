@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4176de03_13869d15",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-15T09:10:48Z",
+      "side": 1,
+      "message": "I\u0027m actually surprised this is needed, I\u0027d have expected the \u003d\u003d of int32 to work.",
+      "range": {
+        "startLine": 2080,
+        "startChar": 0,
+        "endLine": 2084,
+        "endChar": 0
+      },
+      "revId": "4a5d8cfbfbadf9d92656cddd46a1bf26361bf89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa1f5f1b_b50390d9",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 2938,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-15T09:10:48Z",
+      "side": 1,
+      "message": "The conditional potentially causes runtime overhead, and it\u0027s not necessary. The default implementation of UnsafeCast should do it, you just need to define a Cast operator for the union type, which is unfortunately not auto-generated yet. The Cast will then be used by Is\u003c\u003e, which is in turn used by the default UnsafeCast...\nSomething like this (also see Cast\u003cNumber | TheHole\u003e as an example).\n\nCast\u003cSmi | PromiseReaction\u003e(o: Object): Smi | PromiseReaction labels CastError {\n  typeswitch (o) {\n    case (o: Smi): {\n      return o;\n    }\n    case (o: PromiseReaction): {\n      return o;\n    }\n    case (Object): {\n      goto CastError;\n    }\n  }\n}",
+      "range": {
+        "startLine": 2929,
+        "startChar": 0,
+        "endLine": 2938,
+        "endChar": 0
+      },
+      "revId": "4a5d8cfbfbadf9d92656cddd46a1bf26361bf89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
