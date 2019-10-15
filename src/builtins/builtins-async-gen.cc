@@ -278,7 +278,7 @@ void AsyncBuiltinsAssembler::InitializeNativeClosure(
 }
 
 TNode<JSFunction> AsyncBuiltinsAssembler::CreateUnwrapClosure(
-    TNode<NativeContext> native_context, TNode<Oddball> done) {
+    TNode<NativeContext> native_context, TNode<HeapObject> done) {
   const TNode<Map> map = CAST(LoadContextElement(
       native_context, Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX));
   const TNode<SharedFunctionInfo> on_fulfilled_shared = CAST(LoadContextElement(
@@ -290,7 +290,7 @@ TNode<JSFunction> AsyncBuiltinsAssembler::CreateUnwrapClosure(
 }
 
 TNode<Context> AsyncBuiltinsAssembler::AllocateAsyncIteratorValueUnwrapContext(
-    TNode<NativeContext> native_context, TNode<Oddball> done) {
+    TNode<NativeContext> native_context, TNode<HeapObject> done) {
   CSA_ASSERT(this, IsBoolean(done));
 
   TNode<Context> context =

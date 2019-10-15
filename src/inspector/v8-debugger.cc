@@ -522,13 +522,19 @@ void V8Debugger::ScriptCompiled(v8::Local<v8::debug::Script> script,
        &wasmTranslation](V8InspectorSessionImpl* session) {
         auto agent = session->debuggerAgent();
         if (!agent->enabled()) return;
-        if (script->IsWasm() && script->SourceMappingURL().IsEmpty()) {
+        if (script->IsWasm() && script->SourceMappingURL().IsEmpty() &&
+            !(agent->supportsWasmDwarf() &&
+              script.As<v8::debug::WasmScript>()->HasDwarf())) {
           wasmTranslation.AddScript(script.As<v8::debug::WasmScript>(), agent);
         } else {
-          agent->didParseSource(
-              V8DebuggerScript::Create(isolate, script, is_live_edited, agent,
-                                       client),
-              !has_compile_error);
+          auto debuggerScript = V8DebuggerScript::Create(
+              isolate, script, is_live_edited, agent, client);
+          if (script->IsWasm() && script->SourceMappingURL().IsEmpty()) {
+            DCHECK(agent->supportsWasmDwarf());
+            DCHECK(script.As<v8::debug::WasmScript>()->HasDwarf());
+            debuggerScript->setSourceMappingURL("wasm://dwarf");
+          }
+          agent->didParseSource(std::move(debuggerScript), !has_compile_error);
         }
       });
 }

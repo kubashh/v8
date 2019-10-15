@@ -16,8 +16,8 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
   builder.addMemory(num_pages, num_pages, true);
   builder.addFunction("geti", kSig_i_ii)
     .addBody([
-      kExprLocalGet, 0,
-      kExprLocalGet, 1,
+      kExprGetLocal, 0,
+      kExprGetLocal, 1,
       kExprI32Mul,
       kExprI32LoadMem, 0, 0,
     ])

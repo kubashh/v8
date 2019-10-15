@@ -477,7 +477,7 @@ int ObjectLiteral::InitDepthAndFlags() {
 void ObjectLiteral::BuildBoilerplateDescription(Isolate* isolate) {
   if (!boilerplate_description_.is_null()) return;
 
-  int index_keys = 0;
+  int boilerplate_backing_size = 0;
   bool has_seen_proto = false;
   for (int i = 0; i < properties()->length(); i++) {
     ObjectLiteral::Property* property = properties()->at(i);
@@ -487,14 +487,26 @@ void ObjectLiteral::BuildBoilerplateDescription(Isolate* isolate) {
     }
     if (property->is_computed_name()) continue;
 
+    // We don't create a property backing for non-property-name keys.
     Literal* key = property->key()->AsLiteral();
-    if (!key->IsPropertyName()) index_keys++;
+    if (!key->IsPropertyName()) continue;
+
+    MaterializedLiteral* m_literal = property->value()->AsMaterializedLiteral();
+    if (kDoubleSize > kTaggedSize && FLAG_unbox_double_fields &&
+        (!m_literal ||
+         (m_literal->IsNumberLiteral() && !m_literal->IsSmiLiteral()))) {
+      // We have to allocate more space for double-valued fields. If the value
+      // is not a known literal, we pessimistically assume it is a double.
+      boilerplate_backing_size += kDoubleSize / kTaggedSize;
+    } else if (m_literal) {
+      boilerplate_backing_size += 1;
+    }
   }
 
   Handle<ObjectBoilerplateDescription> boilerplate_description =
       isolate->factory()->NewObjectBoilerplateDescription(
-          boilerplate_properties_, properties()->length(), index_keys,
-          has_seen_proto);
+          boilerplate_properties_, properties()->length(),
+          boilerplate_backing_size);
 
   int position = 0;
   for (int i = 0; i < properties()->length(); i++) {

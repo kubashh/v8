@@ -117,16 +117,6 @@ class Representation {
            other.IsTagged();
   }
 
-  // Return the most generic representation that this representation can be
-  // changed to in-place. If in-place representation changes are disabled, then
-  // this will return the current representation.
-  Representation MostGenericInPlaceChange() const {
-    if (!FLAG_modify_field_representation_inplace) return *this;
-    // Everything but unboxed doubles can be in-place changed to Tagged.
-    if (FLAG_unbox_double_fields && IsDouble()) return Representation::Double();
-    return Representation::Tagged();
-  }
-
   bool is_more_general_than(const Representation& other) const {
     if (IsHeapObject()) return other.IsNone();
     return kind_ > other.kind_;
@@ -143,11 +133,13 @@ class Representation {
   }
 
   int size() const {
-    DCHECK(!IsNone());
+    // DCHECK(!IsNone());
     if (IsDouble()) return kDoubleSize;
-    DCHECK(IsTagged() || IsSmi() || IsHeapObject());
+    DCHECK(IsNone() || IsTagged() || IsSmi() || IsHeapObject());
     return kTaggedSize;
   }
+
+  int size_in_words() const { return size() / kTaggedSize; }
 
   Kind kind() const { return static_cast<Kind>(kind_); }
   bool IsNone() const { return kind_ == kNone; }
@@ -228,12 +220,12 @@ class PropertyDetails {
   // Property details for fast mode properties.
   PropertyDetails(PropertyKind kind, PropertyAttributes attributes,
                   PropertyLocation location, PropertyConstness constness,
-                  Representation representation, int field_index = 0) {
+                  Representation representation, int field_slot_index = 0) {
     value_ = KindField::encode(kind) | AttributesField::encode(attributes) |
              LocationField::encode(location) |
              ConstnessField::encode(constness) |
              RepresentationField::encode(EncodeRepresentation(representation)) |
-             FieldIndexField::encode(field_index);
+             FieldSlotIndexField::encode(field_slot_index);
   }
 
   static PropertyDetails Empty(
@@ -244,7 +236,7 @@ class PropertyDetails {
   int pointer() const { return DescriptorPointer::decode(value_); }
 
   PropertyDetails set_pointer(int i) const {
-    return PropertyDetails(value_, i);
+    return PropertyDetails(DescriptorPointer::update(value_, i));
   }
 
   PropertyDetails set_cell_type(PropertyCellType type) const {
@@ -260,15 +252,20 @@ class PropertyDetails {
   }
 
   PropertyDetails CopyWithRepresentation(Representation representation) const {
-    return PropertyDetails(value_, representation);
+    return PropertyDetails(RepresentationField::update(
+        value_, EncodeRepresentation(representation)));
   }
   PropertyDetails CopyWithConstness(PropertyConstness constness) const {
-    return PropertyDetails(value_, constness);
+    return PropertyDetails(ConstnessField::update(value_, constness));
+  }
+  PropertyDetails CopyWithSlotIndex(int field_slot_index) const {
+    return PropertyDetails(
+        FieldSlotIndexField::update(value_, field_slot_index));
   }
   PropertyDetails CopyAddAttributes(PropertyAttributes new_attributes) const {
     new_attributes =
         static_cast<PropertyAttributes>(attributes() | new_attributes);
-    return PropertyDetails(value_, new_attributes);
+    return PropertyDetails(AttributesField::update(value_, new_attributes));
   }
 
   // Conversion for storing details as Object.
@@ -304,9 +301,9 @@ class PropertyDetails {
     return DecodeRepresentation(RepresentationField::decode(value_));
   }
 
-  int field_index() const { return FieldIndexField::decode(value_); }
+  int field_slot_index() const { return FieldSlotIndexField::decode(value_); }
 
-  inline int field_width_in_words() const;
+  inline int field_width_in_words(int in_object_field_slots) const;
 
   static bool IsValidIndex(int index) {
     return DictionaryStorageField::is_valid(index);
@@ -341,12 +338,12 @@ class PropertyDetails {
   using RepresentationField = AttributesField::Next<uint32_t, 3>;
   using DescriptorPointer =
       RepresentationField::Next<uint32_t, kDescriptorIndexBitCount>;
-  using FieldIndexField =
+  using FieldSlotIndexField =
       DescriptorPointer::Next<uint32_t, kDescriptorIndexBitCount>;
 
   // All bits for both fast and slow objects must fit in a smi.
   STATIC_ASSERT(DictionaryStorageField::kLastUsedBit < 31);
-  STATIC_ASSERT(FieldIndexField::kLastUsedBit < 31);
+  STATIC_ASSERT(FieldSlotIndexField::kLastUsedBit < 31);
 
   static const int kInitialIndex = 1;
 
@@ -357,11 +354,11 @@ class PropertyDetails {
 
   enum PrintMode {
     kPrintAttributes = 1 << 0,
-    kPrintFieldIndex = 1 << 1,
+    kPrintFieldSlotIndex = 1 << 1,
     kPrintRepresentation = 1 << 2,
     kPrintPointer = 1 << 3,
 
-    kForProperties = kPrintFieldIndex,
+    kForProperties = kPrintFieldSlotIndex,
     kForTransitions = kPrintAttributes,
     kPrintFull = -1,
   };
@@ -369,19 +366,7 @@ class PropertyDetails {
   void PrintAsFastTo(std::ostream& out, PrintMode mode = kPrintFull);
 
  private:
-  PropertyDetails(int value, int pointer) {
-    value_ = DescriptorPointer::update(value, pointer);
-  }
-  PropertyDetails(int value, Representation representation) {
-    value_ = RepresentationField::update(value,
-                                         EncodeRepresentation(representation));
-  }
-  PropertyDetails(int value, PropertyConstness constness) {
-    value_ = ConstnessField::update(value, constness);
-  }
-  PropertyDetails(int value, PropertyAttributes attributes) {
-    value_ = AttributesField::update(value, attributes);
-  }
+  explicit PropertyDetails(uint32_t value) : value_(value) {}
 
   uint32_t value_;
 };

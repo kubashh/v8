@@ -388,9 +388,6 @@ bool is_inbounds(float_t v) {
   constexpr bool kUpperBoundIsMax =
       static_cast<biggest_int_t>(kUpperBound) ==
       static_cast<biggest_int_t>(std::numeric_limits<int_t>::max());
-  // Using USE(var) is only a workaround for a GCC 8.1 bug.
-  USE(kLowerBoundIsMin);
-  USE(kUpperBoundIsMax);
   return (kLowerBoundIsMin ? (kLowerBound <= v) : (kLowerBound < v)) &&
          (kUpperBoundIsMax ? (v <= kUpperBound) : (v < kUpperBound));
 }

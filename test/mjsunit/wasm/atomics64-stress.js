@@ -191,18 +191,18 @@ class Operation {
         // Load address of low 32 bits.
         kExprI32Const, 0,
         // Load expected value.
-        kExprLocalGet, 0, kExprI32StoreMem, 2, 0,
+        kExprGetLocal, 0, kExprI32StoreMem, 2, 0,
         // Load address of high 32 bits.
         kExprI32Const, 4,
         // Load expected value.
-        kExprLocalGet, 1, kExprI32StoreMem, 2, 0,
+        kExprGetLocal, 1, kExprI32StoreMem, 2, 0,
         // Load address of where our window starts.
         kExprI32Const, 0,
         // Load input if there is one.
         ...(this.hasInput ?
                 [
-                  kExprLocalGet, 3, kExprI64UConvertI32, kExprI64Const, 32,
-                  kExprI64Shl, kExprLocalGet, 2, kExprI64UConvertI32,
+                  kExprGetLocal, 3, kExprI64UConvertI32, kExprI64Const, 32,
+                  kExprI64Shl, kExprGetLocal, 2, kExprI64UConvertI32,
                   kExprI64Ior
                 ] :
                 []),
@@ -299,19 +299,19 @@ function generateFunctionBodyForSequence(sequence) {
   if (!kDebug) {
     body.push(
         // Decrement the wait count.
-        kExprLocalGet, 2, kExprI32Const, 1, kAtomicPrefix, kExprI32AtomicSub, 2,
+        kExprGetLocal, 2, kExprI32Const, 1, kAtomicPrefix, kExprI32AtomicSub, 2,
         0,
         // Spin until zero.
-        kExprLoop, kWasmStmt, kExprLocalGet, 2, kAtomicPrefix,
+        kExprLoop, kWasmStmt, kExprGetLocal, 2, kAtomicPrefix,
         kExprI32AtomicLoad, 2, 0, kExprI32Const, 0, kExprI32GtU, kExprBrIf, 0,
         kExprEnd);
   }
   for (let operation of sequence) {
     body.push(
         // Pre-load address of results sequence pointer for later.
-        kExprLocalGet, 1,
+        kExprGetLocal, 1,
         // Load address where atomic pointers are stored.
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         // Load the second argument if it had any.
         ...(operation.hasInput ?
                 [
@@ -326,10 +326,10 @@ function generateFunctionBodyForSequence(sequence) {
         // Store read intermediate to sequence.
         kExprI64StoreMem, 3, 0,
         // Increment result sequence pointer.
-        kExprLocalGet, 1, kExprI32Const, 8, kExprI32Add, kExprLocalSet, 1);
+        kExprGetLocal, 1, kExprI32Const, 8, kExprI32Add, kExprSetLocal, 1);
   }
   // Return end of sequence index.
-  body.push(kExprLocalGet, 1, kExprReturn);
+  body.push(kExprGetLocal, 1, kExprReturn);
   return body;
 }
 

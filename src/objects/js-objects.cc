@@ -216,10 +216,11 @@ V8_WARN_UNUSED_RESULT Maybe<bool> FastAssign(
   }
 
   Handle<DescriptorArray> descriptors(map->instance_descriptors(), isolate);
+  int length = map->NumberOfOwnDescriptors();
 
   bool stable = true;
 
-  for (InternalIndex i : map->IterateOwnDescriptors()) {
+  for (int i = 0; i < length; i++) {
     Handle<Name> next_key(descriptors->GetKey(i), isolate);
     Handle<Object> prop_value;
     // Directly decode from the descriptor array if |from| did not change shape.
@@ -1857,7 +1858,7 @@ V8_WARN_UNUSED_RESULT Maybe<bool> FastGetOwnValuesOrEntries(
 
   bool stable = object->map() == *map;
 
-  for (InternalIndex index : InternalIndex::Range(number_of_own_descriptors)) {
+  for (int index = 0; index < number_of_own_descriptors; index++) {
     Handle<Name> next_key(descriptors->GetKey(index), isolate);
     if (!next_key->IsString()) continue;
     Handle<Object> prop_value;
@@ -1871,7 +1872,8 @@ V8_WARN_UNUSED_RESULT Maybe<bool> FastGetOwnValuesOrEntries(
           prop_value = handle(descriptors->GetStrongValue(index), isolate);
         } else {
           Representation representation = details.representation();
-          FieldIndex field_index = FieldIndex::ForDescriptor(*map, index);
+          FieldIndex field_index =
+              FieldIndex::ForDescriptor(isolate, *map, index);
           prop_value =
               JSObject::FastPropertyAt(object, representation, field_index);
         }
@@ -2119,15 +2121,15 @@ int JSObject::GetHeaderSize(InstanceType type,
       return JSWeakSet::kSize;
     case JS_PROMISE_TYPE:
       return JSPromise::kSize;
-    case JS_REG_EXP_TYPE:
+    case JS_REGEXP_TYPE:
       return JSRegExp::kSize;
-    case JS_REG_EXP_STRING_ITERATOR_TYPE:
+    case JS_REGEXP_STRING_ITERATOR_TYPE:
       return JSRegExpStringIterator::kSize;
     case JS_CONTEXT_EXTENSION_OBJECT_TYPE:
       return JSObject::kHeaderSize;
     case JS_MESSAGE_OBJECT_TYPE:
       return JSMessageObject::kSize;
-    case JS_ARGUMENTS_OBJECT_TYPE:
+    case JS_ARGUMENTS_TYPE:
       return JSObject::kHeaderSize;
     case JS_ERROR_TYPE:
       return JSObject::kHeaderSize;
@@ -2136,38 +2138,38 @@ int JSObject::GetHeaderSize(InstanceType type,
     case JS_MODULE_NAMESPACE_TYPE:
       return JSModuleNamespace::kHeaderSize;
 #ifdef V8_INTL_SUPPORT
-    case JS_V8_BREAK_ITERATOR_TYPE:
+    case JS_INTL_V8_BREAK_ITERATOR_TYPE:
       return JSV8BreakIterator::kSize;
-    case JS_COLLATOR_TYPE:
+    case JS_INTL_COLLATOR_TYPE:
       return JSCollator::kSize;
-    case JS_DATE_TIME_FORMAT_TYPE:
+    case JS_INTL_DATE_TIME_FORMAT_TYPE:
       return JSDateTimeFormat::kSize;
-    case JS_LIST_FORMAT_TYPE:
+    case JS_INTL_LIST_FORMAT_TYPE:
       return JSListFormat::kSize;
-    case JS_LOCALE_TYPE:
+    case JS_INTL_LOCALE_TYPE:
       return JSLocale::kSize;
-    case JS_NUMBER_FORMAT_TYPE:
+    case JS_INTL_NUMBER_FORMAT_TYPE:
       return JSNumberFormat::kSize;
-    case JS_PLURAL_RULES_TYPE:
+    case JS_INTL_PLURAL_RULES_TYPE:
       return JSPluralRules::kSize;
-    case JS_RELATIVE_TIME_FORMAT_TYPE:
+    case JS_INTL_RELATIVE_TIME_FORMAT_TYPE:
       return JSRelativeTimeFormat::kSize;
-    case JS_SEGMENT_ITERATOR_TYPE:
+    case JS_INTL_SEGMENT_ITERATOR_TYPE:
       return JSSegmentIterator::kSize;
-    case JS_SEGMENTER_TYPE:
+    case JS_INTL_SEGMENTER_TYPE:
       return JSSegmenter::kSize;
 #endif  // V8_INTL_SUPPORT
-    case WASM_GLOBAL_OBJECT_TYPE:
+    case WASM_GLOBAL_TYPE:
       return WasmGlobalObject::kSize;
-    case WASM_INSTANCE_OBJECT_TYPE:
+    case WASM_INSTANCE_TYPE:
       return WasmInstanceObject::kSize;
-    case WASM_MEMORY_OBJECT_TYPE:
+    case WASM_MEMORY_TYPE:
       return WasmMemoryObject::kSize;
-    case WASM_MODULE_OBJECT_TYPE:
+    case WASM_MODULE_TYPE:
       return WasmModuleObject::kSize;
-    case WASM_TABLE_OBJECT_TYPE:
+    case WASM_TABLE_TYPE:
       return WasmTableObject::kSize;
-    case WASM_EXCEPTION_OBJECT_TYPE:
+    case WASM_EXCEPTION_TYPE:
       return WasmExceptionObject::kSize;
     default:
       UNREACHABLE();
@@ -2375,7 +2377,7 @@ void JSObject::JSObjectShortPrint(StringStream* accumulator) {
       accumulator->Add("<JSWeakSet>");
       break;
     }
-    case JS_REG_EXP_TYPE: {
+    case JS_REGEXP_TYPE: {
       accumulator->Add("<JSRegExp");
       JSRegExp regexp = JSRegExp::cast(*this);
       if (regexp.source().IsString()) {
@@ -2504,7 +2506,7 @@ void JSObject::PrintInstanceMigration(FILE* file, Map original_map,
   PrintF(file, "[migrating]");
   DescriptorArray o = original_map.instance_descriptors();
   DescriptorArray n = new_map.instance_descriptors();
-  for (InternalIndex i : original_map.IterateOwnDescriptors()) {
+  for (int i = 0; i < original_map.NumberOfOwnDescriptors(); i++) {
     Representation o_r = o.GetDetails(i).representation();
     Representation n_r = n.GetDetails(i).representation();
     if (!o_r.Equals(n_r)) {
@@ -2627,9 +2629,9 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
     // double boxes).
     FieldIndex index =
         FieldIndex::ForDescriptor(isolate, *new_map, new_map->LastAdded());
-    if (index.is_inobject() || index.outobject_array_index() <
-                                   object->property_array(isolate).length()) {
-      // We still need to allocate HeapNumbers for double fields
+    if (index.is_inobject() ||
+        index.slot_index() < object->property_array(isolate).length()) {
+      // We still need to allocate MutableHeapNumbers for double fields
       // if either double field unboxing is disabled or the double field
       // is in the PropertyArray backing store (where we don't support
       // double field unboxing).
@@ -2643,7 +2645,7 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
 
     // This migration is a transition from a map that has run out of property
     // space. Extend the backing store.
-    int grow_by = new_map->UnusedPropertyFields() + 1;
+    int grow_by = new_map->UnusedFieldSlots() + 1;
     Handle<PropertyArray> old_storage(object->property_array(isolate), isolate);
     Handle<PropertyArray> new_storage =
         isolate->factory()->CopyPropertyArrayAndGrow(old_storage, grow_by);
@@ -2658,7 +2660,7 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
     DCHECK_EQ(kField, details.location());
     DCHECK_EQ(kData, details.kind());
     DCHECK(!index.is_inobject());  // Must be a backing store index.
-    new_storage->set(index.outobject_array_index(), *value);
+    new_storage->set(index.slot_index(), *value);
 
     // From here on we cannot fail and we shouldn't GC anymore.
     DisallowHeapAllocation no_allocation;
@@ -2671,24 +2673,24 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
 
   int old_number_of_fields;
   int number_of_fields = new_map->NumberOfFields();
-  int inobject = new_map->GetInObjectProperties();
-  int unused = new_map->UnusedPropertyFields();
+  int new_inobject = new_map->TotalInObjectFieldSlots();
+  int unused = new_map->UnusedFieldSlots();
 
   // Nothing to do if no functions were converted to fields and no smis were
   // converted to doubles.
-  if (!old_map->InstancesNeedRewriting(*new_map, number_of_fields, inobject,
+  if (!old_map->InstancesNeedRewriting(*new_map, number_of_fields, new_inobject,
                                        unused, &old_number_of_fields)) {
     object->synchronized_set_map(*new_map);
     return;
   }
 
-  int total_size = number_of_fields + unused;
-  int external = total_size - inobject;
+  int total_size = new_map->TotalUsedFieldSlots() + unused;
+  int external = total_size - new_inobject;
   Handle<PropertyArray> array = isolate->factory()->NewPropertyArray(external);
 
   // We use this array to temporarily store the inobject properties.
   Handle<FixedArray> inobject_props =
-      isolate->factory()->NewFixedArray(inobject);
+      isolate->factory()->NewFixedArray(new_inobject);
 
   Handle<DescriptorArray> old_descriptors(
       old_map->instance_descriptors(isolate), isolate);
@@ -2701,7 +2703,8 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
   // number of properties.
   DCHECK(old_nof <= new_nof);
 
-  for (InternalIndex i : InternalIndex::Range(old_nof)) {
+  int last_in_object_prop = -1;
+  for (int i = 0; i < old_nof; i++) {
     PropertyDetails details = new_descriptors->GetDetails(i);
     if (details.location() != kField) continue;
     DCHECK_EQ(kData, details.kind());
@@ -2743,15 +2746,16 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
       }
     }
     DCHECK(!(representation.IsDouble() && value->IsSmi()));
-    int target_index = new_descriptors->GetFieldIndex(i);
-    if (target_index < inobject) {
+    int target_index = new_descriptors->GetFieldSlotIndex(i);
+    if (target_index < new_inobject) {
       inobject_props->set(target_index, *value);
+      last_in_object_prop = i;
     } else {
-      array->set(target_index - inobject, *value);
+      array->set(target_index - new_inobject, *value);
     }
   }
 
-  for (InternalIndex i : InternalIndex::Range(old_nof, new_nof)) {
+  for (int i = old_nof; i < new_nof; i++) {
     PropertyDetails details = new_descriptors->GetDetails(i);
     if (details.location() != kField) continue;
     DCHECK_EQ(kData, details.kind());
@@ -2761,11 +2765,12 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
     } else {
       value = isolate->factory()->uninitialized_value();
     }
-    int target_index = new_descriptors->GetFieldIndex(i);
-    if (target_index < inobject) {
+    int target_index = new_descriptors->GetFieldSlotIndex(i);
+    if (target_index < new_inobject) {
       inobject_props->set(target_index, *value);
+      last_in_object_prop = i;
     } else {
-      array->set(target_index - inobject, *value);
+      array->set(target_index - new_inobject, *value);
     }
   }
 
@@ -2774,6 +2779,8 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
 
   Heap* heap = isolate->heap();
 
+  int old_inobject = old_map->TotalInObjectFieldSlots();
+
   // Invalidate slots manually later in case of tagged to untagged translation.
   // In all other cases the recorded slot remains dereferenceable.
   heap->NotifyObjectLayoutChange(*object, no_allocation,
@@ -2781,10 +2788,20 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
 
   // Copy (real) inobject properties. If necessary, stop at number_of_fields to
   // avoid overwriting |one_pointer_filler_map|.
-  int limit = Min(inobject, number_of_fields);
-  for (int i = 0; i < limit; i++) {
-    FieldIndex index = FieldIndex::ForPropertyIndex(*new_map, i);
-    Object value = inobject_props->get(isolate, i);
+  int limit = Min(new_inobject, number_of_fields);
+  for (int inobject_index = 0, property_index = 0; inobject_index < limit;
+       inobject_index++, property_index++) {
+    PropertyDetails details = new_descriptors->GetDetails(property_index);
+    while (details.location() == PropertyLocation::kDescriptor) {
+      DCHECK_LT(property_index, new_nof - 1);
+      details = new_descriptors->GetDetails(++property_index);
+    }
+    FieldIndex index = FieldIndex::ForDetails(*new_map, details);
+    // With two-field double unboxing, we may end up with fewer in-object fields
+    // than field slots, so terminate early once we find an out-of-object field.
+    if (!index.is_inobject()) break;
+
+    Object value = inobject_props->get(isolate, index.slot_index());
     // Can't use JSObject::FastPropertyAtPut() because proper map was not set
     // yet.
     if (new_map->IsUnboxedDoubleField(isolate, index)) {
@@ -2792,21 +2809,83 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
       // Ensure that all bits of the double value are preserved.
       object->RawFastDoublePropertyAsBitsAtPut(
           index, HeapNumber::cast(value).value_as_bits());
-      if (i < old_number_of_fields && !old_map->IsUnboxedDoubleField(index)) {
+      if (index.slot_index() < old_inobject &&
+          !old_map->IsUnboxedDoubleField(index)) {
         // Transition from tagged to untagged slot.
         MemoryChunk* chunk = MemoryChunk::FromHeapObject(*object);
         chunk->InvalidateRecordedSlots(*object);
       } else {
 #ifdef DEBUG
         heap->VerifyClearedSlot(*object, object->RawField(index.offset()));
+        if (kDoubleSize > kTaggedSize) {
+          DCHECK_EQ(kDoubleSize, 2 * kTaggedSize);
+          heap->VerifyClearedSlot(
+              *object, object->RawField(index.offset()) + kTaggedSize);
+        }
 #endif
       }
     } else {
-      object->RawFastPropertyAtPut(index, value);
+      object->RawFastInobjectPropertyAtPut(index, value);
     }
   }
 
   object->SetProperties(*array);
+
+  if (kDoubleSize > kTaggedSize && FLAG_unbox_double_fields) {
+    if (old_map->UsedInObjectFieldSlots() > new_map->UsedInObjectFieldSlots()) {
+      // We may be using fewer in-object slots due to double->tagged
+      // transitions, so we need to insert a filler for these slots.
+      bool in_progress = new_map->IsInobjectSlackTrackingInProgress();
+      Object filler;
+      if (in_progress) {
+        filler = ReadOnlyRoots(heap).one_pointer_filler_map();
+      } else {
+        filler = ReadOnlyRoots(heap).undefined_value();
+      }
+      for (int i = new_map->UsedInObjectFieldSlots();
+           i < old_map->UsedInObjectFieldSlots(); ++i) {
+        object->RawFastPropertyAtPut(
+            FieldIndex::ForFieldSlot(*new_map, i, FieldIndex::kTagged), filler);
+      }
+    }
+
+    if (last_in_object_prop != -1 && new_map->HasOutOfObjectProperties()) {
+      PropertyDetails last_in_object_prop_details =
+          new_descriptors->GetDetails(last_in_object_prop);
+      PropertyDetails first_out_of_object_prop_details =
+          new_descriptors->GetDetails(last_in_object_prop + 1);
+      int slot_after_last_offset =
+          last_in_object_prop_details.field_slot_index() +
+          last_in_object_prop_details.field_width_in_words(new_inobject);
+      if (slot_after_last_offset <
+          first_out_of_object_prop_details.field_slot_index()) {
+        // We will have skipped a slot because the next is double size.
+        DCHECK_EQ(
+            first_out_of_object_prop_details.representation().size_in_words(),
+            2);
+        // We can skip exactly one slot, so the offset of that slot must be one
+        // tagged slot size before the instance size.
+        DCHECK_EQ(new_map->GetInObjectFieldSlotOffset(slot_after_last_offset),
+                  new_map->instance_size() - kTaggedSize);
+
+        // PrintF("Found skipped slot (%d / %d -> %d).\n",
+        //        last_in_object_prop_details.field_slot_index(),
+        //        last_in_object_prop_details.field_width_in_words(new_inobject),
+        //        first_out_of_object_prop_details.field_slot_index());
+
+        // We have to manually calculate the field index as we're not filling in
+        // a 'real' field.
+        object->RawFastPropertyAtPut(
+            FieldIndex::ForInObjectOffset(
+                new_map->GetInObjectFieldSlotOffset(slot_after_last_offset),
+                FieldIndex::kTagged),
+            ReadOnlyRoots(heap).one_pointer_filler_map());
+      }
+    }
+  } else {
+    DCHECK_LE(old_map->UsedInObjectFieldSlots(),
+              new_map->UsedInObjectFieldSlots());
+  }
 
   // Create filler object past the new instance size.
   int old_instance_size = old_map->instance_size();
@@ -2852,7 +2931,7 @@ void MigrateFastToSlow(Isolate* isolate, Handle<JSObject> object,
       NameDictionary::New(isolate, property_count);
 
   Handle<DescriptorArray> descs(map->instance_descriptors(isolate), isolate);
-  for (InternalIndex i : InternalIndex::Range(real_size)) {
+  for (int i = 0; i < real_size; i++) {
     PropertyDetails details = descs->GetDetails(i);
     Handle<Name> key(descs->GetKey(isolate, i), isolate);
     Handle<Object> value;
@@ -2918,13 +2997,14 @@ void MigrateFastToSlow(Isolate* isolate, Handle<JSObject> object,
 
   // Ensure that in-object space of slow-mode object does not contain random
   // garbage.
-  int inobject_properties = new_map->GetInObjectProperties();
+  int inobject_properties = new_map->TotalInObjectFieldSlots();
   if (inobject_properties) {
     MemoryChunk* chunk = MemoryChunk::FromHeapObject(*object);
     chunk->InvalidateRecordedSlots(*object);
 
     for (int i = 0; i < inobject_properties; i++) {
-      FieldIndex index = FieldIndex::ForPropertyIndex(*new_map, i);
+      FieldIndex index = FieldIndex::ForInObjectOffset(
+          map->GetInObjectFieldSlotOffset(i), FieldIndex::kTagged);
       object->RawFastPropertyAtPut(index, Smi::kZero);
     }
   }
@@ -3016,7 +3096,8 @@ MaybeHandle<NativeContext> JSObject::GetFunctionRealm(Handle<JSObject> object) {
 }
 
 void JSObject::AllocateStorageForMap(Handle<JSObject> object, Handle<Map> map) {
-  DCHECK(object->map().GetInObjectProperties() == map->GetInObjectProperties());
+  DCHECK(object->map().TotalInObjectFieldSlots() ==
+         map->TotalInObjectFieldSlots());
   ElementsKind obj_kind = object->map().elements_kind();
   ElementsKind map_kind = map->elements_kind();
   if (map_kind != obj_kind) {
@@ -3031,10 +3112,10 @@ void JSObject::AllocateStorageForMap(Handle<JSObject> object, Handle<Map> map) {
     }
     map = Map::ReconfigureElementsKind(object->GetIsolate(), map, to_kind);
   }
-  int number_of_fields = map->NumberOfFields();
-  int inobject = map->GetInObjectProperties();
-  int unused = map->UnusedPropertyFields();
-  int total_size = number_of_fields + unused;
+  int number_of_field_slots = map->TotalUsedFieldSlots();
+  int inobject = map->TotalInObjectFieldSlots();
+  int unused = map->UnusedFieldSlots();
+  int total_size = number_of_field_slots + unused;
   int external = total_size - inobject;
   // Allocate mutable double boxes if necessary. It is always necessary if we
   // have external properties, but is also necessary if we only have inobject
@@ -3051,7 +3132,7 @@ void JSObject::AllocateStorageForMap(Handle<JSObject> object, Handle<Map> map) {
     Handle<PropertyArray> array =
         isolate->factory()->NewPropertyArray(external);
 
-    for (InternalIndex i : map->IterateOwnDescriptors()) {
+    for (int i = 0; i < map->NumberOfOwnDescriptors(); i++) {
       PropertyDetails details = descriptors->GetDetails(i);
       Representation representation = details.representation();
       if (!representation.IsDouble()) continue;
@@ -3059,9 +3140,9 @@ void JSObject::AllocateStorageForMap(Handle<JSObject> object, Handle<Map> map) {
       if (map->IsUnboxedDoubleField(index)) continue;
       auto box = isolate->factory()->NewHeapNumberWithHoleNaN();
       if (index.is_inobject()) {
-        storage->set(index.property_index(), *box);
+        storage->set(index.slot_index(), *box);
       } else {
-        array->set(index.outobject_array_index(), *box);
+        array->set(index.slot_index(), *box);
       }
     }
 
@@ -3069,7 +3150,8 @@ void JSObject::AllocateStorageForMap(Handle<JSObject> object, Handle<Map> map) {
 
     if (!FLAG_unbox_double_fields) {
       for (int i = 0; i < inobject; i++) {
-        FieldIndex index = FieldIndex::ForPropertyIndex(*map, i);
+        FieldIndex index = FieldIndex::ForDescriptor(*map, i);
+        if (!index.is_inobject()) break;
         Object value = storage->get(i);
         object->RawFastPropertyAtPut(index, value);
       }
@@ -3287,8 +3369,7 @@ void JSObject::NormalizeProperties(Isolate* isolate, Handle<JSObject> object,
 }
 
 void JSObject::MigrateSlowToFast(Handle<JSObject> object,
-                                 int unused_property_fields,
-                                 const char* reason) {
+                                 int unused_field_slots, const char* reason) {
   if (object->HasFastProperties()) return;
   DCHECK(!object->IsJSGlobalObject());
   Isolate* isolate = object->GetIsolate();
@@ -3300,11 +3381,14 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
   int number_of_elements = dictionary->NumberOfElements();
   if (number_of_elements > kMaxNumberOfDescriptors) return;
 
+  Handle<Map> old_map(object->map(), isolate);
+
   Handle<FixedArray> iteration_order =
       NameDictionary::IterationIndices(isolate, dictionary);
 
   int instance_descriptor_length = iteration_order->length();
-  int number_of_fields = 0;
+  int in_object_field_slots = old_map->TotalInObjectFieldSlots();
+  int number_of_field_slots = 0;
 
   // Compute the length of the instance descriptor.
   ReadOnlyRoots roots(isolate);
@@ -3312,15 +3396,12 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
     int index = Smi::ToInt(iteration_order->get(i));
     DCHECK(dictionary->IsKey(roots, dictionary->KeyAt(index)));
 
-    PropertyKind kind = dictionary->DetailsAt(index).kind();
-    if (kind == kData) {
-      number_of_fields += 1;
+    PropertyDetails details = dictionary->DetailsAt(index);
+    if (details.kind() == kData) {
+      // All fields are tagged, so no need to check double unboxing here.
+      number_of_field_slots += 1;
     }
   }
-
-  Handle<Map> old_map(object->map(), isolate);
-
-  int inobject_props = old_map->GetInObjectProperties();
 
   // Allocate new map.
   Handle<Map> new_map = Map::CopyDropDescriptors(isolate, old_map);
@@ -3334,9 +3415,9 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
 
   if (instance_descriptor_length == 0) {
     DisallowHeapAllocation no_gc;
-    DCHECK_LE(unused_property_fields, inobject_props);
+    DCHECK_LE(unused_field_slots, in_object_field_slots);
     // Transform the object.
-    new_map->SetInObjectUnusedPropertyFields(inobject_props);
+    new_map->SetInObjectUnusedFieldSlots(in_object_field_slots);
     object->synchronized_set_map(*new_map);
     object->SetProperties(ReadOnlyRoots(isolate).empty_fixed_array());
     // Check that it really works.
@@ -3352,11 +3433,11 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
       DescriptorArray::Allocate(isolate, instance_descriptor_length, 0);
 
   int number_of_allocated_fields =
-      number_of_fields + unused_property_fields - inobject_props;
+      number_of_field_slots + unused_field_slots - in_object_field_slots;
   if (number_of_allocated_fields < 0) {
     // There is enough inobject space for all fields (including unused).
     number_of_allocated_fields = 0;
-    unused_property_fields = inobject_props - number_of_fields;
+    unused_field_slots = in_object_field_slots - number_of_field_slots;
   }
 
   // Allocate the property array for the fields.
@@ -3405,18 +3486,19 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
     }
     details = d.GetDetails();
     if (details.location() == kField) {
-      if (current_offset < inobject_props) {
+      if (current_offset < in_object_field_slots) {
         object->InObjectPropertyAtPut(current_offset, value,
                                       UPDATE_WRITE_BARRIER);
       } else {
-        int offset = current_offset - inobject_props;
+        int offset = current_offset - in_object_field_slots;
         fields->set(offset, value);
       }
-      current_offset += details.field_width_in_words();
+      DCHECK(!details.representation().IsDouble());
+      current_offset += 1;
     }
-    descriptors->Set(InternalIndex(i), &d);
+    descriptors->Set(i, &d);
   }
-  DCHECK(current_offset == number_of_fields);
+  DCHECK(current_offset == number_of_field_slots);
 
   descriptors->Sort();
 
@@ -3426,9 +3508,9 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
   DisallowHeapAllocation no_gc;
   new_map->InitializeDescriptors(isolate, *descriptors, *layout_descriptor);
   if (number_of_allocated_fields == 0) {
-    new_map->SetInObjectUnusedPropertyFields(unused_property_fields);
+    new_map->SetInObjectUnusedFieldSlots(unused_field_slots);
   } else {
-    new_map->SetOutOfObjectUnusedPropertyFields(unused_property_fields);
+    new_map->SetOutOfObjectUnusedFieldSlots(unused_field_slots);
   }
 
   if (FLAG_trace_maps) {
@@ -3445,8 +3527,6 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
 }
 
 void JSObject::RequireSlowElements(NumberDictionary dictionary) {
-  DCHECK_NE(dictionary,
-            ReadOnlyRoots(GetIsolate()).empty_slow_element_dictionary());
   if (dictionary.requires_slow_elements()) return;
   dictionary.set_requires_slow_elements();
   if (map().is_prototype_map()) {
@@ -3609,7 +3689,8 @@ bool TestFastPropertiesIntegrityLevel(Map map, PropertyAttributes level) {
   DCHECK(!map.is_dictionary_map());
 
   DescriptorArray descriptors = map.instance_descriptors();
-  for (InternalIndex i : map.IterateOwnDescriptors()) {
+  int number_of_own_descriptors = map.NumberOfOwnDescriptors();
+  for (int i = 0; i < number_of_own_descriptors; i++) {
     if (descriptors.GetKey(i).IsPrivate()) continue;
     PropertyDetails details = descriptors.GetDetails(i);
     if (details.IsConfigurable()) return false;
@@ -3714,9 +3795,7 @@ Maybe<bool> JSObject::PreventExtensions(Handle<JSObject> object,
            object->HasSlowArgumentsElements());
 
     // Make sure that we never go back to fast case.
-    if (*dictionary != ReadOnlyRoots(isolate).empty_slow_element_dictionary()) {
-      object->RequireSlowElements(*dictionary);
-    }
+    object->RequireSlowElements(*dictionary);
   }
 
   // Do a map transition, other objects with this map may still
@@ -4143,9 +4222,10 @@ MaybeHandle<Object> JSObject::SetAccessor(Handle<JSObject> object,
 
 Object JSObject::SlowReverseLookup(Object value) {
   if (HasFastProperties()) {
+    int number_of_own_descriptors = map().NumberOfOwnDescriptors();
     DescriptorArray descs = map().instance_descriptors();
     bool value_is_number = value.IsNumber();
-    for (InternalIndex i : map().IterateOwnDescriptors()) {
+    for (int i = 0; i < number_of_own_descriptors; i++) {
       PropertyDetails details = descs.GetDetails(i);
       if (details.location() == kField) {
         DCHECK_EQ(kData, details.kind());
@@ -5193,16 +5273,16 @@ bool CanSubclassHaveInobjectProperties(InstanceType instance_type) {
     case JS_FUNCTION_TYPE:
     case JS_GENERATOR_OBJECT_TYPE:
 #ifdef V8_INTL_SUPPORT
-    case JS_COLLATOR_TYPE:
-    case JS_DATE_TIME_FORMAT_TYPE:
-    case JS_LIST_FORMAT_TYPE:
-    case JS_LOCALE_TYPE:
-    case JS_NUMBER_FORMAT_TYPE:
-    case JS_PLURAL_RULES_TYPE:
-    case JS_RELATIVE_TIME_FORMAT_TYPE:
-    case JS_SEGMENT_ITERATOR_TYPE:
-    case JS_SEGMENTER_TYPE:
-    case JS_V8_BREAK_ITERATOR_TYPE:
+    case JS_INTL_COLLATOR_TYPE:
+    case JS_INTL_DATE_TIME_FORMAT_TYPE:
+    case JS_INTL_LIST_FORMAT_TYPE:
+    case JS_INTL_LOCALE_TYPE:
+    case JS_INTL_NUMBER_FORMAT_TYPE:
+    case JS_INTL_PLURAL_RULES_TYPE:
+    case JS_INTL_RELATIVE_TIME_FORMAT_TYPE:
+    case JS_INTL_SEGMENT_ITERATOR_TYPE:
+    case JS_INTL_SEGMENTER_TYPE:
+    case JS_INTL_V8_BREAK_ITERATOR_TYPE:
 #endif
     case JS_ASYNC_FUNCTION_OBJECT_TYPE:
     case JS_ASYNC_GENERATOR_OBJECT_TYPE:
@@ -5211,9 +5291,9 @@ bool CanSubclassHaveInobjectProperties(InstanceType instance_type) {
     case JS_OBJECT_TYPE:
     case JS_ERROR_TYPE:
     case JS_FINALIZATION_GROUP_TYPE:
-    case JS_ARGUMENTS_OBJECT_TYPE:
+    case JS_ARGUMENTS_TYPE:
     case JS_PROMISE_TYPE:
-    case JS_REG_EXP_TYPE:
+    case JS_REGEXP_TYPE:
     case JS_SET_TYPE:
     case JS_SPECIAL_API_OBJECT_TYPE:
     case JS_TYPED_ARRAY_TYPE:
@@ -5221,11 +5301,11 @@ bool CanSubclassHaveInobjectProperties(InstanceType instance_type) {
     case JS_WEAK_MAP_TYPE:
     case JS_WEAK_REF_TYPE:
     case JS_WEAK_SET_TYPE:
-    case WASM_GLOBAL_OBJECT_TYPE:
-    case WASM_INSTANCE_OBJECT_TYPE:
-    case WASM_MEMORY_OBJECT_TYPE:
-    case WASM_MODULE_OBJECT_TYPE:
-    case WASM_TABLE_OBJECT_TYPE:
+    case WASM_GLOBAL_TYPE:
+    case WASM_INSTANCE_TYPE:
+    case WASM_MEMORY_TYPE:
+    case WASM_MODULE_TYPE:
+    case WASM_TABLE_TYPE:
       return true;
 
     case BIGINT_TYPE:
@@ -5313,13 +5393,13 @@ bool FastInitializeDerivedMap(Isolate* isolate, Handle<JSFunction> new_target,
       instance_type, true, embedder_fields, expected_nof_properties,
       &instance_size, &in_object_properties);
 
-  int pre_allocated = constructor_initial_map->GetInObjectProperties() -
-                      constructor_initial_map->UnusedPropertyFields();
+  int pre_allocated = constructor_initial_map->TotalInObjectFieldSlots() -
+                      constructor_initial_map->UnusedFieldSlots();
   CHECK_LE(constructor_initial_map->UsedInstanceSize(), instance_size);
-  int unused_property_fields = in_object_properties - pre_allocated;
+  int unused_field_slots = in_object_properties - pre_allocated;
   Handle<Map> map =
       Map::CopyInitialMap(isolate, constructor_initial_map, instance_size,
-                          in_object_properties, unused_property_fields);
+                          in_object_properties, unused_field_slots);
   map->set_new_target_is_base(false);
   Handle<HeapObject> prototype(new_target->instance_prototype(), isolate);
   JSFunction::SetInitialMap(new_target, map, prototype);
@@ -5531,7 +5611,8 @@ int JSFunction::CalculateExpectedNofProperties(Isolate* isolate,
         Compiler::Compile(func, Compiler::CLEAR_EXCEPTION,
                           &is_compiled_scope)) {
       DCHECK(shared->is_compiled());
-      int count = shared->expected_nof_properties();
+      int count = shared->expected_nof_properties() *
+                  (FLAG_unbox_double_fields ? kDoubleSize / kTaggedSize : 1);
       // Check that the estimate is sane.
       if (expected_nof_properties <= JSObject::kMaxInObjectProperties - count) {
         expected_nof_properties += count;
@@ -5548,7 +5629,8 @@ int JSFunction::CalculateExpectedNofProperties(Isolate* isolate,
   // later, so we can afford to adjust the estimate generously,
   // meaning we over-allocate by at least 8 slots in the beginning.
   if (expected_nof_properties > 0) {
-    expected_nof_properties += 8;
+    expected_nof_properties +=
+        8 * (FLAG_unbox_double_fields ? kDoubleSize / kTaggedSize : 1);
     if (expected_nof_properties > JSObject::kMaxInObjectProperties) {
       expected_nof_properties = JSObject::kMaxInObjectProperties;
     }

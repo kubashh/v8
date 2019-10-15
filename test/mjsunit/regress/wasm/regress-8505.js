@@ -171,8 +171,8 @@ function wasmBinop(name, sig) {
   builder.addImport('Math', name, sig_index);
   builder.addFunction('main', sig_index)
       .addBody([
-        kExprLocalGet, 0,  // --
-        kExprLocalGet, 1,  // --
+        kExprGetLocal, 0,  // --
+        kExprGetLocal, 1,  // --
         kExprCallFunction, 0
       ])  // --
       .exportAs('main');

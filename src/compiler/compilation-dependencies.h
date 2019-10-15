@@ -55,11 +55,11 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
 
   // Record the assumption that the field representation of a field does not
   // change. The field is identified by the arguments.
-  void DependOnFieldRepresentation(const MapRef& map, InternalIndex descriptor);
+  void DependOnFieldRepresentation(const MapRef& map, int descriptor);
 
   // Record the assumption that the field type of a field does not change. The
   // field is identified by the arguments.
-  void DependOnFieldType(const MapRef& map, InternalIndex descriptor);
+  void DependOnFieldType(const MapRef& map, int descriptor);
 
   // Return a field's constness and, if kConst, record the assumption that it
   // remains kConst. The field is identified by the arguments.
@@ -68,8 +68,7 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   // kConst if the map is stable (and register stability dependency in that
   // case).  This is to ensure that fast elements kind transitions cannot be
   // used to mutate fields without deoptimization of the dependent code.
-  PropertyConstness DependOnFieldConstness(const MapRef& map,
-                                           InternalIndex descriptor);
+  PropertyConstness DependOnFieldConstness(const MapRef& map, int descriptor);
 
   // Record the assumption that neither {cell}'s {CellType} changes, nor the
   // {IsReadOnly()} flag of {cell}'s {PropertyDetails}.
@@ -120,9 +119,9 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   CompilationDependency const* TransitionDependencyOffTheRecord(
       const MapRef& target_map) const;
   CompilationDependency const* FieldRepresentationDependencyOffTheRecord(
-      const MapRef& map, InternalIndex descriptor) const;
+      const MapRef& map, int descriptor) const;
   CompilationDependency const* FieldTypeDependencyOffTheRecord(
-      const MapRef& map, InternalIndex descriptor) const;
+      const MapRef& map, int descriptor) const;
 
   // Exposed only for testing purposes.
   bool AreValid() const;

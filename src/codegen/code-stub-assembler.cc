@@ -1812,13 +1812,13 @@ TNode<IntPtrT> CodeStubAssembler::LoadMapInstanceSizeInWords(
       map, Map::kInstanceSizeInWordsOffset, MachineType::Uint8()));
 }
 
-TNode<IntPtrT> CodeStubAssembler::LoadMapInobjectPropertiesStartInWords(
+TNode<IntPtrT> CodeStubAssembler::LoadMapInobjectFieldStorageStartInWords(
     SloppyTNode<Map> map) {
   CSA_SLOW_ASSERT(this, IsMap(map));
-  // See Map::GetInObjectPropertiesStartInWords() for details.
+  // See Map::GetInObjectFieldStorageStartInWords() for details.
   CSA_ASSERT(this, IsJSObjectMap(map));
   return ChangeInt32ToIntPtr(LoadObjectField(
-      map, Map::kInObjectPropertiesStartOrConstructorFunctionIndexOffset,
+      map, Map::kInObjectFieldStorageStartOrConstructorFunctionIndexOffset,
       MachineType::Uint8()));
 }
 
@@ -1828,7 +1828,7 @@ TNode<IntPtrT> CodeStubAssembler::LoadMapConstructorFunctionIndex(
   // See Map::GetConstructorFunctionIndex() for details.
   CSA_ASSERT(this, IsPrimitiveInstanceType(LoadMapInstanceType(map)));
   return ChangeInt32ToIntPtr(LoadObjectField(
-      map, Map::kInObjectPropertiesStartOrConstructorFunctionIndexOffset,
+      map, Map::kInObjectFieldStorageStartOrConstructorFunctionIndexOffset,
       MachineType::Uint8()));
 }
 
@@ -2215,12 +2215,12 @@ TNode<RawPtrT> CodeStubAssembler::LoadJSTypedArrayDataPtr(
   if (COMPRESS_POINTERS_BOOL) {
     TNode<Int32T> compressed_base =
         LoadObjectField<Int32T>(typed_array, JSTypedArray::kBasePointerOffset);
-    // Zero-extend TaggedT to WordT according to current compression scheme
+    // Sign extend Int32T to IntPtrT according to current compression scheme
     // so that the addition with |external_pointer| (which already contains
     // compensated offset value) below will decompress the tagged value.
     // See JSTypedArray::ExternalPointerCompensationForOnHeapArray() for
     // details.
-    base_pointer = Signed(ChangeUint32ToWord(compressed_base));
+    base_pointer = ChangeInt32ToIntPtr(compressed_base);
   } else {
     base_pointer =
         LoadObjectField<IntPtrT>(typed_array, JSTypedArray::kBasePointerOffset);
@@ -6300,11 +6300,6 @@ TNode<BoolT> CodeStubAssembler::IsJSStringIterator(
   return HasInstanceType(object, JS_STRING_ITERATOR_TYPE);
 }
 
-TNode<BoolT> CodeStubAssembler::IsJSRegExpStringIterator(
-    SloppyTNode<HeapObject> object) {
-  return HasInstanceType(object, JS_REG_EXP_STRING_ITERATOR_TYPE);
-}
-
 TNode<BoolT> CodeStubAssembler::IsMap(SloppyTNode<HeapObject> map) {
   return IsMetaMap(LoadMap(map));
 }
@@ -6533,7 +6528,7 @@ TNode<BoolT> CodeStubAssembler::IsBigInt(SloppyTNode<HeapObject> object) {
 TNode<BoolT> CodeStubAssembler::IsPrimitiveInstanceType(
     SloppyTNode<Int32T> instance_type) {
   return Int32LessThanOrEqual(instance_type,
-                              Int32Constant(LAST_PRIMITIVE_HEAP_OBJECT_TYPE));
+                              Int32Constant(LAST_PRIMITIVE_TYPE));
 }
 
 TNode<BoolT> CodeStubAssembler::IsPrivateSymbol(
@@ -6638,7 +6633,7 @@ TNode<BoolT> CodeStubAssembler::IsJSDataView(TNode<HeapObject> object) {
 }
 
 TNode<BoolT> CodeStubAssembler::IsJSRegExp(SloppyTNode<HeapObject> object) {
-  return HasInstanceType(object, JS_REG_EXP_TYPE);
+  return HasInstanceType(object, JS_REGEXP_TYPE);
 }
 
 TNode<BoolT> CodeStubAssembler::IsNumber(SloppyTNode<Object> object) {
@@ -8941,13 +8936,13 @@ void CodeStubAssembler::LoadPropertyFromFastObject(
          &if_in_descriptor);
   BIND(&if_in_field);
   {
-    TNode<IntPtrT> field_index =
-        Signed(DecodeWordFromWord32<PropertyDetails::FieldIndexField>(details));
+    TNode<IntPtrT> field_index = Signed(
+        DecodeWordFromWord32<PropertyDetails::FieldSlotIndexField>(details));
     TNode<Uint32T> representation =
         DecodeWord32<PropertyDetails::RepresentationField>(details);
 
     field_index =
-        IntPtrAdd(field_index, LoadMapInobjectPropertiesStartInWords(map));
+        IntPtrAdd(field_index, LoadMapInobjectFieldStorageStartInWords(map));
     TNode<IntPtrT> instance_size_in_words = LoadMapInstanceSizeInWords(map);
 
     Label if_inobject(this), if_backing_store(this);
@@ -12140,7 +12135,7 @@ TNode<Oddball> CodeStubAssembler::StrictEqual(
 
               BIND(&if_lhsisoddball);
               {
-                STATIC_ASSERT(LAST_PRIMITIVE_HEAP_OBJECT_TYPE == ODDBALL_TYPE);
+                STATIC_ASSERT(LAST_PRIMITIVE_TYPE == ODDBALL_TYPE);
                 GotoIf(IsBooleanMap(rhs_map), &if_not_equivalent_types);
                 GotoIf(Int32LessThan(rhs_instance_type,
                                      Int32Constant(ODDBALL_TYPE)),
@@ -12877,6 +12872,15 @@ TNode<JSObject> CodeStubAssembler::AllocateJSIteratorResult(
                        RootIndex::kEmptyFixedArray);
   StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kValueOffset, value);
   StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kDoneOffset, done);
+  if (JSIteratorResult::kSize == 7 * kTaggedSize) {
+    StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kPaddingOffset,
+                                   UndefinedConstant());
+    StoreObjectFieldNoWriteBarrier(
+        result, JSIteratorResult::kPaddingOffset + kTaggedSize,
+        UndefinedConstant());
+  } else {
+    DCHECK_EQ(JSIteratorResult::kSize, 5 * kTaggedSize);
+  }
   return CAST(result);
 }
 
@@ -12911,6 +12915,15 @@ TNode<JSObject> CodeStubAssembler::AllocateJSIteratorResultForEntry(
   StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kValueOffset, array);
   StoreObjectFieldRoot(result, JSIteratorResult::kDoneOffset,
                        RootIndex::kFalseValue);
+  if (JSIteratorResult::kSize == 7 * kTaggedSize) {
+    StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kPaddingOffset,
+                                   UndefinedConstant());
+    StoreObjectFieldNoWriteBarrier(
+        result, JSIteratorResult::kPaddingOffset + kTaggedSize,
+        UndefinedConstant());
+  } else {
+    DCHECK_EQ(JSIteratorResult::kSize, 5 * kTaggedSize);
+  }
   return CAST(result);
 }
 

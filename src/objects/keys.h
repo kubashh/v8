@@ -93,7 +93,6 @@ class KeyAccumulator final {
   void set_last_non_empty_prototype(Handle<JSReceiver> object) {
     last_non_empty_prototype_ = object;
   }
-  void set_may_have_elements(bool value) { may_have_elements_ = value; }
   // Shadowing keys are used to filter keys. This happens when non-enumerable
   // keys appear again on the prototype chain.
   void AddShadowingKey(Object key);
@@ -126,7 +125,6 @@ class KeyAccumulator final {
   // For all the keys on the first receiver adding a shadowing key we can skip
   // the shadow check.
   bool skip_shadow_check_ = true;
-  bool may_have_elements_ = true;
 
   DISALLOW_COPY_AND_ASSIGN(KeyAccumulator);
 };
@@ -151,7 +149,6 @@ class FastKeyAccumulator {
 
   bool is_receiver_simple_enum() { return is_receiver_simple_enum_; }
   bool has_empty_prototype() { return has_empty_prototype_; }
-  bool may_have_elements() { return may_have_elements_; }
 
   MaybeHandle<FixedArray> GetKeys(
       GetKeysConversion convert = GetKeysConversion::kKeepNumbers);
@@ -163,8 +160,6 @@ class FastKeyAccumulator {
 
   MaybeHandle<FixedArray> GetOwnKeysWithUninitializedEnumCache();
 
-  bool MayHaveElements(JSReceiver receiver);
-
   Isolate* isolate_;
   Handle<JSReceiver> receiver_;
   Handle<JSReceiver> last_non_empty_prototype_;
@@ -174,7 +169,6 @@ class FastKeyAccumulator {
   bool skip_indices_ = false;
   bool is_receiver_simple_enum_ = false;
   bool has_empty_prototype_ = false;
-  bool may_have_elements_ = true;
 
   DISALLOW_COPY_AND_ASSIGN(FastKeyAccumulator);
 };

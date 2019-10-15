@@ -87,11 +87,6 @@ class ObjectData : public ZoneObject {
   ObjectDataKind kind() const { return kind_; }
   bool is_smi() const { return kind_ == kSmi; }
 
-#ifdef DEBUG
-  enum class Usage{kUnused, kOnlyIdentityUsed, kDataUsed};
-  mutable Usage used_status = Usage::kUnused;
-#endif  // DEBUG
-
  private:
   Handle<Object> const object_;
   ObjectDataKind const kind_;
@@ -402,20 +397,19 @@ ObjectData* JSObjectData::GetOwnDataProperty(JSHeapBroker* broker,
                                              Representation representation,
                                              FieldIndex field_index,
                                              SerializationPolicy policy) {
-  auto p = own_properties_.find(field_index.property_index());
+  auto p = own_properties_.find(field_index.offset());
   if (p != own_properties_.end()) return p->second;
 
   if (policy == SerializationPolicy::kAssumeSerialized) {
     TRACE_MISSING(broker, "knowledge about property with index "
-                              << field_index.property_index() << " on "
-                              << this);
+                              << field_index.slot_index() << " on " << this);
     return nullptr;
   }
 
   ObjectRef property = GetOwnDataPropertyFromHeap(
       broker, Handle<JSObject>::cast(object()), representation, field_index);
   ObjectData* result(property.data());
-  own_properties_.insert(std::make_pair(field_index.property_index(), result));
+  own_properties_.insert(std::make_pair(field_index.offset(), result));
   return result;
 }
 
@@ -839,7 +833,8 @@ bool IsFastLiteralHelper(Handle<JSObject> boilerplate, int max_depth,
   // Check the in-object properties.
   Handle<DescriptorArray> descriptors(boilerplate->map().instance_descriptors(),
                                       isolate);
-  for (InternalIndex i : boilerplate->map().IterateOwnDescriptors()) {
+  int limit = boilerplate->map().NumberOfOwnDescriptors();
+  for (int i = 0; i < limit; i++) {
     PropertyDetails details = descriptors->GetDetails(i);
     if (details.location() != kField) continue;
     DCHECK_EQ(kData, details.kind());
@@ -950,17 +945,21 @@ class MapData : public HeapObjectData {
   uint32_t bit_field3() const { return bit_field3_; }
   bool can_be_deprecated() const { return can_be_deprecated_; }
   bool can_transition() const { return can_transition_; }
-  int in_object_properties_start_in_words() const {
+  int in_object_field_storage_start_in_words() const {
     CHECK(InstanceTypeChecker::IsJSObject(instance_type()));
-    return in_object_properties_start_in_words_;
+    return in_object_field_storage_start_in_words_;
   }
-  int in_object_properties() const {
+  int total_in_object_field_slots() const {
     CHECK(InstanceTypeChecker::IsJSObject(instance_type()));
-    return in_object_properties_;
+    return total_in_object_field_slots_;
+  }
+  int total_out_of_object_field_slots() const {
+    CHECK(InstanceTypeChecker::IsJSObject(instance_type()));
+    return total_out_of_object_field_slots_;
   }
   int constructor_function_index() const { return constructor_function_index_; }
-  int NextFreePropertyIndex() const { return next_free_property_index_; }
-  int UnusedPropertyFields() const { return unused_property_fields_; }
+  int NextFreeFieldSlot() const { return next_free_property_index_; }
+  int UnusedFieldSlots() const { return unused_field_slots_; }
   bool supports_fast_array_iteration() const {
     return supports_fast_array_iteration_;
   }
@@ -981,10 +980,9 @@ class MapData : public HeapObjectData {
 
   // Serialize a single (or all) own slot(s) of the descriptor array and recurse
   // on field owner(s).
-  void SerializeOwnDescriptor(JSHeapBroker* broker,
-                              InternalIndex descriptor_index);
+  void SerializeOwnDescriptor(JSHeapBroker* broker, int descriptor_index);
   void SerializeOwnDescriptors(JSHeapBroker* broker);
-  ObjectData* GetStrongValue(InternalIndex descriptor_index) const;
+  ObjectData* GetStrongValue(int descriptor_index) const;
   DescriptorArrayData* instance_descriptors() const {
     return instance_descriptors_;
   }
@@ -1023,11 +1021,12 @@ class MapData : public HeapObjectData {
   uint32_t const bit_field3_;
   bool const can_be_deprecated_;
   bool const can_transition_;
-  int const in_object_properties_start_in_words_;
-  int const in_object_properties_;
+  int const in_object_field_storage_start_in_words_;
+  int const total_in_object_field_slots_;
+  int const total_out_of_object_field_slots_;
   int const constructor_function_index_;
   int const next_free_property_index_;
-  int const unused_property_fields_;
+  int const unused_field_slots_;
   bool const supports_fast_array_iteration_;
   bool const supports_fast_array_resize_;
   bool const is_abandoned_prototype_map_;
@@ -1111,9 +1110,8 @@ bool IsReadOnlyLengthDescriptor(Isolate* isolate, Handle<Map> jsarray_map) {
   DCHECK(!jsarray_map->is_dictionary_map());
   Handle<Name> length_string = isolate->factory()->length_string();
   DescriptorArray descriptors = jsarray_map->instance_descriptors();
-  // TODO(jkummerow): We could skip the search and hardcode number == 0.
-  InternalIndex number = descriptors.Search(*length_string, *jsarray_map);
-  DCHECK(number.is_found());
+  int number = descriptors.Search(*length_string, *jsarray_map);
+  DCHECK_NE(DescriptorArray::kNotFound, number);
   return descriptors.GetDetails(number).IsReadOnly();
 }
 
@@ -1143,16 +1141,19 @@ MapData::MapData(JSHeapBroker* broker, ObjectData** storage, Handle<Map> object)
                              ? object->CanBeDeprecated()
                              : false),
       can_transition_(object->CanTransition()),
-      in_object_properties_start_in_words_(
-          object->IsJSObjectMap() ? object->GetInObjectPropertiesStartInWords()
-                                  : 0),
-      in_object_properties_(
-          object->IsJSObjectMap() ? object->GetInObjectProperties() : 0),
+      in_object_field_storage_start_in_words_(
+          object->IsJSObjectMap()
+              ? object->GetInObjectFieldStorageStartInWords()
+              : 0),
+      total_in_object_field_slots_(
+          object->IsJSObjectMap() ? object->TotalInObjectFieldSlots() : 0),
+      total_out_of_object_field_slots_(
+          object->IsJSObjectMap() ? object->TotalOutOfObjectFieldSlots() : 0),
       constructor_function_index_(object->IsPrimitiveMap()
                                       ? object->GetConstructorFunctionIndex()
                                       : Map::kNoConstructorFunctionIndex),
-      next_free_property_index_(object->NextFreePropertyIndex()),
-      unused_property_fields_(object->UnusedPropertyFields()),
+      next_free_property_index_(object->NextFreeFieldSlot()),
+      unused_field_slots_(object->UnusedFieldSlots()),
       supports_fast_array_iteration_(
           SupportsFastArrayIteration(broker->isolate(), object)),
       supports_fast_array_resize_(
@@ -1987,20 +1988,20 @@ void MapData::SerializeOwnDescriptors(JSHeapBroker* broker) {
   Handle<Map> map = Handle<Map>::cast(object());
 
   int const number_of_own = map->NumberOfOwnDescriptors();
-  for (InternalIndex i : InternalIndex::Range(number_of_own)) {
+  for (int i = 0; i < number_of_own; ++i) {
     SerializeOwnDescriptor(broker, i);
   }
 }
 
-ObjectData* MapData::GetStrongValue(InternalIndex descriptor_index) const {
-  auto data = instance_descriptors_->contents().find(descriptor_index.as_int());
+ObjectData* MapData::GetStrongValue(int descriptor_index) const {
+  auto data = instance_descriptors_->contents().find(descriptor_index);
   if (data == instance_descriptors_->contents().end()) return nullptr;
 
   return data->second.value;
 }
 
 void MapData::SerializeOwnDescriptor(JSHeapBroker* broker,
-                                     InternalIndex descriptor_index) {
+                                     int descriptor_index) {
   TraceScope tracer(broker, this, "MapData::SerializeOwnDescriptor");
   Handle<Map> map = Handle<Map>::cast(object());
 
@@ -2011,8 +2012,8 @@ void MapData::SerializeOwnDescriptor(JSHeapBroker* broker,
 
   ZoneMap<int, PropertyDescriptor>& contents =
       instance_descriptors()->contents();
-  CHECK_LT(descriptor_index.as_int(), map->NumberOfOwnDescriptors());
-  if (contents.find(descriptor_index.as_int()) != contents.end()) return;
+  CHECK_LT(descriptor_index, map->NumberOfOwnDescriptors());
+  if (contents.find(descriptor_index) != contents.end()) return;
 
   Isolate* const isolate = broker->isolate();
   auto descriptors =
@@ -2037,14 +2038,14 @@ void MapData::SerializeOwnDescriptor(JSHeapBroker* broker,
         broker->GetOrCreateData(descriptors->GetFieldType(descriptor_index));
     d.is_unboxed_double_field = map->IsUnboxedDoubleField(d.field_index);
   }
-  contents[descriptor_index.as_int()] = d;
+  contents[descriptor_index] = d;
 
   if (d.details.location() == kField) {
     // Recurse on the owner map.
     d.field_owner->SerializeOwnDescriptor(broker, descriptor_index);
   }
 
-  TRACE(broker, "Copied descriptor " << descriptor_index.as_int() << " into "
+  TRACE(broker, "Copied descriptor " << descriptor_index << " into "
                                      << instance_descriptors_ << " ("
                                      << contents.size() << " total)");
 }
@@ -2132,7 +2133,8 @@ void JSObjectData::SerializeRecursiveAsBoilerplate(JSHeapBroker* broker,
   // Check the in-object properties.
   Handle<DescriptorArray> descriptors(boilerplate->map().instance_descriptors(),
                                       isolate);
-  for (InternalIndex i : boilerplate->map().IterateOwnDescriptors()) {
+  int const limit = boilerplate->map().NumberOfOwnDescriptors();
+  for (int i = 0; i < limit; i++) {
     PropertyDetails details = descriptors->GetDetails(i);
     if (details.location() != kField) continue;
     DCHECK_EQ(kData, details.kind());
@@ -2140,12 +2142,14 @@ void JSObjectData::SerializeRecursiveAsBoilerplate(JSHeapBroker* broker,
     FieldIndex field_index = FieldIndex::ForDescriptor(boilerplate->map(), i);
     // Make sure {field_index} agrees with {inobject_properties} on the index of
     // this field.
-    DCHECK_EQ(field_index.property_index(),
+    DCHECK_EQ(field_index.slot_index(),
               static_cast<int>(inobject_fields_.size()));
     if (boilerplate->IsUnboxedDoubleField(field_index)) {
       uint64_t value_bits =
           boilerplate->RawFastDoublePropertyAsBitsAt(field_index);
-      inobject_fields_.push_back(JSObjectField{value_bits});
+      for (int i = 0; i < kDoubleSize / kTaggedSize; ++i) {
+        inobject_fields_.push_back(JSObjectField{value_bits});
+      }
     } else {
       Handle<Object> value(boilerplate->RawFastPropertyAt(field_index),
                            isolate);
@@ -2195,12 +2199,6 @@ void JSRegExpData::SerializeAsRegExpBoilerplate(JSHeapBroker* broker) {
 }
 
 bool ObjectRef::equals(const ObjectRef& other) const {
-#ifdef DEBUG
-  if (broker()->mode() == JSHeapBroker::kSerialized &&
-      data_->used_status == ObjectData::Usage::kUnused) {
-    data_->used_status = ObjectData::Usage::kOnlyIdentityUsed;
-  }
-#endif  // DEBUG
   return data_ == other.data_;
 }
 
@@ -2260,7 +2258,7 @@ JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
   TRACE(this, "Constructing heap broker");
 }
 
-std::ostream& JSHeapBroker::Trace() const {
+std::ostream& JSHeapBroker::Trace() {
   return trace_out_ << "[" << this << "] "
                     << std::string(trace_indentation_ * 2, ' ');
 }
@@ -2271,92 +2269,10 @@ void JSHeapBroker::StopSerializing() {
   mode_ = kSerialized;
 }
 
-#ifdef DEBUG
-void JSHeapBroker::PrintRefsAnalysis() const {
-  // Usage counts
-  size_t used_total = 0, unused_total = 0, identity_used_total = 0;
-  for (RefsMap::Entry* ref = refs_->Start(); ref != nullptr;
-       ref = refs_->Next(ref)) {
-    switch (ref->value->used_status) {
-      case ObjectData::Usage::kUnused:
-        ++unused_total;
-        break;
-      case ObjectData::Usage::kOnlyIdentityUsed:
-        ++identity_used_total;
-        break;
-      case ObjectData::Usage::kDataUsed:
-        ++used_total;
-        break;
-    }
-  }
-
-  // Ref types analysis
-  TRACE_BROKER_MEMORY(
-      this, "Refs: " << refs_->occupancy() << "; data used: " << used_total
-                     << "; only identity used: " << identity_used_total
-                     << "; unused: " << unused_total);
-  size_t used_smis = 0, unused_smis = 0, identity_used_smis = 0;
-  size_t used[LAST_TYPE + 1] = {0};
-  size_t unused[LAST_TYPE + 1] = {0};
-  size_t identity_used[LAST_TYPE + 1] = {0};
-  for (RefsMap::Entry* ref = refs_->Start(); ref != nullptr;
-       ref = refs_->Next(ref)) {
-    if (ref->value->is_smi()) {
-      switch (ref->value->used_status) {
-        case ObjectData::Usage::kUnused:
-          ++unused_smis;
-          break;
-        case ObjectData::Usage::kOnlyIdentityUsed:
-          ++identity_used_smis;
-          break;
-        case ObjectData::Usage::kDataUsed:
-          ++used_smis;
-          break;
-      }
-    } else {
-      InstanceType instance_type =
-          static_cast<const HeapObjectData*>(ref->value)
-              ->map()
-              ->instance_type();
-      CHECK_LE(FIRST_TYPE, instance_type);
-      CHECK_LE(instance_type, LAST_TYPE);
-      switch (ref->value->used_status) {
-        case ObjectData::Usage::kUnused:
-          ++unused[instance_type];
-          break;
-        case ObjectData::Usage::kOnlyIdentityUsed:
-          ++identity_used[instance_type];
-          break;
-        case ObjectData::Usage::kDataUsed:
-          ++used[instance_type];
-          break;
-      }
-    }
-  }
-
-  TRACE_BROKER_MEMORY(
-      this, "Smis: " << used_smis + identity_used_smis + unused_smis
-                     << "; data used: " << used_smis << "; only identity used: "
-                     << identity_used_smis << "; unused: " << unused_smis);
-  for (uint16_t i = FIRST_TYPE; i <= LAST_TYPE; ++i) {
-    size_t total = used[i] + identity_used[i] + unused[i];
-    if (total == 0) continue;
-    TRACE_BROKER_MEMORY(
-        this, InstanceType(i) << ": " << total << "; data used: " << used[i]
-                              << "; only identity used: " << identity_used[i]
-                              << "; unused: " << unused[i]);
-  }
-}
-#endif  // DEBUG
-
 void JSHeapBroker::Retire() {
   CHECK_EQ(mode_, kSerialized);
   TRACE(this, "Retiring");
   mode_ = kRetired;
-
-#ifdef DEBUG
-  PrintRefsAnalysis();
-#endif  // DEBUG
 }
 
 bool JSHeapBroker::SerializingAllowed() const { return mode() == kSerializing; }
@@ -2876,7 +2792,7 @@ double JSObjectRef::RawFastDoublePropertyAt(FieldIndex index) const {
   }
   JSObjectData* object_data = data()->AsJSObject();
   CHECK(index.is_inobject());
-  return object_data->GetInobjectField(index.property_index()).AsDouble();
+  return object_data->GetInobjectField(index.slot_index()).AsDouble();
 }
 
 uint64_t JSObjectRef::RawFastDoublePropertyAsBitsAt(FieldIndex index) const {
@@ -2886,7 +2802,7 @@ uint64_t JSObjectRef::RawFastDoublePropertyAsBitsAt(FieldIndex index) const {
   }
   JSObjectData* object_data = data()->AsJSObject();
   CHECK(index.is_inobject());
-  return object_data->GetInobjectField(index.property_index()).AsBitsOfDouble();
+  return object_data->GetInobjectField(index.slot_index()).AsBitsOfDouble();
 }
 
 ObjectRef JSObjectRef::RawFastPropertyAt(FieldIndex index) const {
@@ -2899,8 +2815,7 @@ ObjectRef JSObjectRef::RawFastPropertyAt(FieldIndex index) const {
   JSObjectData* object_data = data()->AsJSObject();
   CHECK(index.is_inobject());
   return ObjectRef(
-      broker(),
-      object_data->GetInobjectField(index.property_index()).AsObject());
+      broker(), object_data->GetInobjectField(index.slot_index()).AsObject());
 }
 
 bool AllocationSiteRef::IsFastLiteral() const {
@@ -2945,34 +2860,33 @@ void JSObjectRef::EnsureElementsTenured() {
   CHECK(data()->AsJSObject()->cow_or_empty_elements_tenured());
 }
 
-FieldIndex MapRef::GetFieldIndexFor(InternalIndex descriptor_index) const {
+FieldIndex MapRef::GetFieldIndexFor(int descriptor_index) const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleDereference allow_handle_dereference;
     return FieldIndex::ForDescriptor(*object(), descriptor_index);
   }
   DescriptorArrayData* descriptors = data()->AsMap()->instance_descriptors();
-  return descriptors->contents().at(descriptor_index.as_int()).field_index;
+  return descriptors->contents().at(descriptor_index).field_index;
 }
 
-int MapRef::GetInObjectPropertyOffset(int i) const {
+int MapRef::GetInObjectFieldSlotOffset(int i) const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleDereference allow_handle_dereference;
-    return object()->GetInObjectPropertyOffset(i);
+    return object()->GetInObjectFieldSlotOffset(i);
   }
-  return (GetInObjectPropertiesStartInWords() + i) * kTaggedSize;
+  return (GetInObjectFieldStorageStartInWords() + i) * kTaggedSize;
 }
 
-PropertyDetails MapRef::GetPropertyDetails(
-    InternalIndex descriptor_index) const {
+PropertyDetails MapRef::GetPropertyDetails(int descriptor_index) const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleDereference allow_handle_dereference;
     return object()->instance_descriptors().GetDetails(descriptor_index);
   }
   DescriptorArrayData* descriptors = data()->AsMap()->instance_descriptors();
-  return descriptors->contents().at(descriptor_index.as_int()).details;
+  return descriptors->contents().at(descriptor_index).details;
 }
 
-NameRef MapRef::GetPropertyKey(InternalIndex descriptor_index) const {
+NameRef MapRef::GetPropertyKey(int descriptor_index) const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleAllocation handle_allocation;
     AllowHandleDereference allow_handle_dereference;
@@ -2982,8 +2896,7 @@ NameRef MapRef::GetPropertyKey(InternalIndex descriptor_index) const {
                broker()->isolate()));
   }
   DescriptorArrayData* descriptors = data()->AsMap()->instance_descriptors();
-  return NameRef(broker(),
-                 descriptors->contents().at(descriptor_index.as_int()).key);
+  return NameRef(broker(), descriptors->contents().at(descriptor_index).key);
 }
 
 bool MapRef::IsFixedCowArrayMap() const {
@@ -2993,10 +2906,10 @@ bool MapRef::IsFixedCowArrayMap() const {
 }
 
 bool MapRef::IsPrimitiveMap() const {
-  return instance_type() <= LAST_PRIMITIVE_HEAP_OBJECT_TYPE;
+  return instance_type() <= LAST_PRIMITIVE_TYPE;
 }
 
-MapRef MapRef::FindFieldOwner(InternalIndex descriptor_index) const {
+MapRef MapRef::FindFieldOwner(int descriptor_index) const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleAllocation handle_allocation;
     AllowHandleDereference allow_handle_dereference;
@@ -3006,12 +2919,11 @@ MapRef MapRef::FindFieldOwner(InternalIndex descriptor_index) const {
     return MapRef(broker(), owner);
   }
   DescriptorArrayData* descriptors = data()->AsMap()->instance_descriptors();
-  return MapRef(
-      broker(),
-      descriptors->contents().at(descriptor_index.as_int()).field_owner);
+  return MapRef(broker(),
+                descriptors->contents().at(descriptor_index).field_owner);
 }
 
-ObjectRef MapRef::GetFieldType(InternalIndex descriptor_index) const {
+ObjectRef MapRef::GetFieldType(int descriptor_index) const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleAllocation handle_allocation;
     AllowHandleDereference allow_handle_dereference;
@@ -3021,21 +2933,18 @@ ObjectRef MapRef::GetFieldType(InternalIndex descriptor_index) const {
     return ObjectRef(broker(), field_type);
   }
   DescriptorArrayData* descriptors = data()->AsMap()->instance_descriptors();
-  return ObjectRef(
-      broker(),
-      descriptors->contents().at(descriptor_index.as_int()).field_type);
+  return ObjectRef(broker(),
+                   descriptors->contents().at(descriptor_index).field_type);
 }
 
-bool MapRef::IsUnboxedDoubleField(InternalIndex descriptor_index) const {
+bool MapRef::IsUnboxedDoubleField(int descriptor_index) const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleDereference allow_handle_dereference;
     return object()->IsUnboxedDoubleField(
         FieldIndex::ForDescriptor(*object(), descriptor_index));
   }
   DescriptorArrayData* descriptors = data()->AsMap()->instance_descriptors();
-  return descriptors->contents()
-      .at(descriptor_index.as_int())
-      .is_unboxed_double_field;
+  return descriptors->contents().at(descriptor_index).is_unboxed_double_field;
 }
 
 uint16_t StringRef::GetFirstChar() {
@@ -3280,8 +3189,8 @@ BIMODAL_ACCESSOR_B(Map, bit_field, has_indexed_interceptor,
 BIMODAL_ACCESSOR_B(Map, bit_field, is_constructor, Map::IsConstructorBit)
 BIMODAL_ACCESSOR_B(Map, bit_field, is_undetectable, Map::IsUndetectableBit)
 BIMODAL_ACCESSOR_C(Map, int, instance_size)
-BIMODAL_ACCESSOR_C(Map, int, NextFreePropertyIndex)
-BIMODAL_ACCESSOR_C(Map, int, UnusedPropertyFields)
+BIMODAL_ACCESSOR_C(Map, int, NextFreeFieldSlot)
+BIMODAL_ACCESSOR_C(Map, int, UnusedFieldSlots)
 BIMODAL_ACCESSOR(Map, HeapObject, prototype)
 BIMODAL_ACCESSOR_C(Map, InstanceType, instance_type)
 BIMODAL_ACCESSOR(Map, Object, GetConstructor)
@@ -3413,7 +3322,7 @@ BIMODAL_ACCESSOR_C(String, int, length)
 
 BIMODAL_ACCESSOR(FeedbackCell, HeapObject, value)
 
-ObjectRef MapRef::GetStrongValue(InternalIndex descriptor_index) const {
+ObjectRef MapRef::GetStrongValue(int descriptor_index) const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleDereference allow_handle_dereference;
     return ObjectRef(broker(),
@@ -3480,14 +3389,19 @@ bool MapRef::CanTransition() const {
   return data()->AsMap()->can_transition();
 }
 
-int MapRef::GetInObjectPropertiesStartInWords() const {
-  IF_BROKER_DISABLED_ACCESS_HANDLE_C(Map, GetInObjectPropertiesStartInWords);
-  return data()->AsMap()->in_object_properties_start_in_words();
+int MapRef::GetInObjectFieldStorageStartInWords() const {
+  IF_BROKER_DISABLED_ACCESS_HANDLE_C(Map, GetInObjectFieldStorageStartInWords);
+  return data()->AsMap()->in_object_field_storage_start_in_words();
 }
 
-int MapRef::GetInObjectProperties() const {
-  IF_BROKER_DISABLED_ACCESS_HANDLE_C(Map, GetInObjectProperties);
-  return data()->AsMap()->in_object_properties();
+int MapRef::TotalInObjectFieldSlots() const {
+  IF_BROKER_DISABLED_ACCESS_HANDLE_C(Map, TotalInObjectFieldSlots);
+  return data()->AsMap()->total_in_object_field_slots();
+}
+
+int MapRef::TotalOutOfObjectFieldSlots() const {
+  IF_BROKER_DISABLED_ACCESS_HANDLE_C(Map, TotalOutOfObjectFieldSlots);
+  return data()->AsMap()->total_out_of_object_field_slots();
 }
 
 int ScopeInfoRef::ContextLength() const {
@@ -3847,32 +3761,12 @@ void JSRegExpRef::SerializeAsRegExpBoilerplate() {
   JSObjectRef::data()->AsJSRegExp()->SerializeAsRegExpBoilerplate(broker());
 }
 
-Handle<Object> ObjectRef::object() const {
-#ifdef DEBUG
-  if (broker()->mode() == JSHeapBroker::kSerialized &&
-      data_->used_status == ObjectData::Usage::kUnused) {
-    data_->used_status = ObjectData::Usage::kOnlyIdentityUsed;
-  }
-#endif  // DEBUG
-  return data_->object();
-}
+Handle<Object> ObjectRef::object() const { return data_->object(); }
 
-#ifdef DEBUG
-#define DEF_OBJECT_GETTER(T)                                                 \
-  Handle<T> T##Ref::object() const {                                         \
-    if (broker()->mode() == JSHeapBroker::kSerialized &&                     \
-        data_->used_status == ObjectData::Usage::kUnused) {                  \
-      data_->used_status = ObjectData::Usage::kOnlyIdentityUsed;             \
-    }                                                                        \
-    return Handle<T>(reinterpret_cast<Address*>(data_->object().address())); \
-  }
-#else
 #define DEF_OBJECT_GETTER(T)                                                 \
   Handle<T> T##Ref::object() const {                                         \
     return Handle<T>(reinterpret_cast<Address*>(data_->object().address())); \
   }
-#endif  // DEBUG
-
 HEAP_BROKER_OBJECT_LIST(DEF_OBJECT_GETTER)
 #undef DEF_OBJECT_GETTER
 
@@ -3884,12 +3778,7 @@ ObjectData* ObjectRef::data() const {
       CHECK_NE(data_->kind(), kSerializedHeapObject);
       return data_;
     case JSHeapBroker::kSerializing:
-      CHECK_NE(data_->kind(), kUnserializedHeapObject);
-      return data_;
     case JSHeapBroker::kSerialized:
-#ifdef DEBUG
-      data_->used_status = ObjectData::Usage::kDataUsed;
-#endif  // DEBUG
       CHECK_NE(data_->kind(), kUnserializedHeapObject);
       return data_;
     case JSHeapBroker::kRetired:
@@ -4041,19 +3930,19 @@ void MapRef::SerializeOwnDescriptors() {
   data()->AsMap()->SerializeOwnDescriptors(broker());
 }
 
-void MapRef::SerializeOwnDescriptor(InternalIndex descriptor_index) {
+void MapRef::SerializeOwnDescriptor(int descriptor_index) {
   if (broker()->mode() == JSHeapBroker::kDisabled) return;
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
   data()->AsMap()->SerializeOwnDescriptor(broker(), descriptor_index);
 }
 
-bool MapRef::serialized_own_descriptor(InternalIndex descriptor_index) const {
-  CHECK_LT(descriptor_index.as_int(), NumberOfOwnDescriptors());
+bool MapRef::serialized_own_descriptor(int descriptor_index) const {
+  CHECK_LT(descriptor_index, NumberOfOwnDescriptors());
   if (broker()->mode() == JSHeapBroker::kDisabled) return true;
   DescriptorArrayData* desc_array_data =
       data()->AsMap()->instance_descriptors();
   if (!desc_array_data) return false;
-  return desc_array_data->contents().find(descriptor_index.as_int()) !=
+  return desc_array_data->contents().find(descriptor_index) !=
          desc_array_data->contents().end();
 }
 

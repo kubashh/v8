@@ -16,12 +16,12 @@ var func_idx = builder.addFunction('helper', kSig_v_v)
     .addBody([
         kExprNop,
         kExprI32Const, 12,
-        kExprLocalSet, 0,
+        kExprSetLocal, 0,
     ]).index;
 
 builder.addFunction('main', kSig_v_i)
     .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprIf, kWasmStmt,
           kExprBlock, kWasmStmt,
             kExprCallFunction, func_idx,

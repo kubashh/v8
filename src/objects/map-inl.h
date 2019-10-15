@@ -112,7 +112,7 @@ bool Map::IsMostGeneralFieldType(Representation representation,
 bool Map::CanHaveFastTransitionableElementsKind(InstanceType instance_type) {
   return instance_type == JS_ARRAY_TYPE ||
          instance_type == JS_PRIMITIVE_WRAPPER_TYPE ||
-         instance_type == JS_ARGUMENTS_OBJECT_TYPE;
+         instance_type == JS_ARGUMENTS_TYPE;
 }
 
 bool Map::CanHaveFastTransitionableElementsKind() const {
@@ -152,23 +152,34 @@ bool Map::IsUnboxedDoubleField(FieldIndex index) const {
 bool Map::IsUnboxedDoubleField(Isolate* isolate, FieldIndex index) const {
   if (!FLAG_unbox_double_fields) return false;
   if (!index.is_inobject()) return false;
-  return !layout_descriptor(isolate).IsTagged(index.property_index());
+  return !layout_descriptor(isolate).IsTagged(index.slot_index());
+}
+
+bool Map::IsUnboxedDoubleField(int slot_index) const {
+  Isolate* isolate = GetIsolateForPtrCompr(*this);
+  return IsUnboxedDoubleField(isolate, slot_index);
+}
+
+bool Map::IsUnboxedDoubleField(Isolate* isolate, int slot_index) const {
+  if (!FLAG_unbox_double_fields) return false;
+  if (slot_index >= TotalInObjectFieldSlots()) return false;
+  return !layout_descriptor(isolate).IsTagged(slot_index);
 }
 
 bool Map::TooManyFastProperties(StoreOrigin store_origin) const {
-  if (UnusedPropertyFields() != 0) return false;
+  if (UnusedInObjectFieldSlots() != 0) return false;
   if (is_prototype_map()) return false;
   if (store_origin == StoreOrigin::kNamed) {
-    int limit = Max(kMaxFastProperties, GetInObjectProperties());
+    int limit = Max(kMaxFastProperties, TotalInObjectFieldSlots());
     FieldCounts counts = GetFieldCounts();
     // Only count mutable fields so that objects with large numbers of
     // constant functions do not go to dictionary mode. That would be bad
     // because such objects have often been used as modules.
-    int external = counts.mutable_count() - GetInObjectProperties();
+    int external = counts.mutable_count() - TotalInObjectFieldSlots();
     return external > limit || counts.GetTotal() > kMaxNumberOfDescriptors;
   } else {
-    int limit = Max(kFastPropertiesSoftLimit, GetInObjectProperties());
-    int external = NumberOfFields() - GetInObjectProperties();
+    int limit = Max(kFastPropertiesSoftLimit, TotalInObjectFieldSlots());
+    int external = NumberOfFields() - TotalInObjectFieldSlots();
     return external > limit;
   }
 }
@@ -177,10 +188,10 @@ PropertyDetails Map::GetLastDescriptorDetails(Isolate* isolate) const {
   return instance_descriptors(isolate).GetDetails(LastAdded());
 }
 
-InternalIndex Map::LastAdded() const {
+int Map::LastAdded() const {
   int number_of_own_descriptors = NumberOfOwnDescriptors();
   DCHECK_GT(number_of_own_descriptors, 0);
-  return InternalIndex(number_of_own_descriptors - 1);
+  return number_of_own_descriptors - 1;
 }
 
 int Map::NumberOfOwnDescriptors() const {
@@ -192,10 +203,6 @@ void Map::SetNumberOfOwnDescriptors(int number) {
   CHECK_LE(static_cast<unsigned>(number),
            static_cast<unsigned>(kMaxNumberOfDescriptors));
   set_bit_field3(NumberOfOwnDescriptorsBits::update(bit_field3(), number));
-}
-
-InternalIndex::Range Map::IterateOwnDescriptors() const {
-  return InternalIndex::Range(NumberOfOwnDescriptors());
 }
 
 int Map::EnumLength() const { return EnumLengthBits::decode(bit_field3()); }
@@ -256,47 +263,73 @@ void Map::set_instance_size(int value) {
   set_instance_size_in_words(value);
 }
 
-int Map::inobject_properties_start_or_constructor_function_index() const {
+int Map::inobject_field_storage_start_or_constructor_function_index() const {
   return RELAXED_READ_BYTE_FIELD(
-      *this, kInObjectPropertiesStartOrConstructorFunctionIndexOffset);
+      *this, kInObjectFieldStorageStartOrConstructorFunctionIndexOffset);
 }
 
-void Map::set_inobject_properties_start_or_constructor_function_index(
+void Map::set_inobject_field_storage_start_or_constructor_function_index(
     int value) {
   CHECK_LT(static_cast<unsigned>(value), 256);
   RELAXED_WRITE_BYTE_FIELD(
-      *this, kInObjectPropertiesStartOrConstructorFunctionIndexOffset,
+      *this, kInObjectFieldStorageStartOrConstructorFunctionIndexOffset,
       static_cast<byte>(value));
 }
 
-int Map::GetInObjectPropertiesStartInWords() const {
+int Map::GetInObjectFieldStorageStartInWords() const {
   DCHECK(IsJSObjectMap());
-  return inobject_properties_start_or_constructor_function_index();
+  return inobject_field_storage_start_or_constructor_function_index();
 }
 
-void Map::SetInObjectPropertiesStartInWords(int value) {
+void Map::SetInObjectFieldStorageStartInWords(int value) {
   CHECK(IsJSObjectMap());
-  set_inobject_properties_start_or_constructor_function_index(value);
+  set_inobject_field_storage_start_or_constructor_function_index(value);
 }
 
-int Map::GetInObjectProperties() const {
+bool Map::HasOutOfObjectProperties() const {
+  bool ret = used_or_unused_instance_size_in_words() < JSObject::kFieldsAdded;
+  DCHECK_EQ(ret, TotalInObjectFieldSlots() < TotalUsedFieldSlots());
+  return ret;
+}
+
+int Map::TotalInObjectFieldSlots() const {
   DCHECK(IsJSObjectMap());
-  return instance_size_in_words() - GetInObjectPropertiesStartInWords();
+  return instance_size_in_words() - GetInObjectFieldStorageStartInWords();
+}
+
+int Map::TotalOutOfObjectFieldSlots() const {
+  return TotalFieldSlots() - TotalInObjectFieldSlots();
+}
+
+int Map::TotalFieldSlots() const {
+  if (!HasOutOfObjectProperties()) return TotalInObjectFieldSlots();
+  return UnusedOutOfObjectFieldSlots() + TotalUsedFieldSlots();
+}
+
+int Map::TotalUsedFieldSlots() const {
+  DCHECK(IsJSObjectMap());
+  // Fields are in order, so the next free slot is equivalent to the current
+  // total used slots.
+  return NextFreeFieldSlot();
 }
 
 int Map::GetConstructorFunctionIndex() const {
   DCHECK(IsPrimitiveMap());
-  return inobject_properties_start_or_constructor_function_index();
+  return inobject_field_storage_start_or_constructor_function_index();
 }
 
 void Map::SetConstructorFunctionIndex(int value) {
   CHECK(IsPrimitiveMap());
-  set_inobject_properties_start_or_constructor_function_index(value);
+  set_inobject_field_storage_start_or_constructor_function_index(value);
 }
 
-int Map::GetInObjectPropertyOffset(int index) const {
-  return (GetInObjectPropertiesStartInWords() + index) * kTaggedSize;
+int Map::GetInObjectFieldSlotOffset(int index) const {
+  return (GetInObjectFieldStorageStartInWords() + index) * kTaggedSize;
 }
+
+Map::Fields Map::fields() const { return Fields(this); }
+
+Map::Fields::Fields(const Map* map) : map_(map) {}
 
 Handle<Map> Map::AddMissingTransitionsForTesting(
     Isolate* isolate, Handle<Map> split_map,
@@ -314,7 +347,7 @@ void Map::set_instance_type(InstanceType value) {
   WriteField<uint16_t>(kInstanceTypeOffset, value);
 }
 
-int Map::UnusedPropertyFields() const {
+int Map::UnusedFieldSlots() const {
   int value = used_or_unused_instance_size_in_words();
   DCHECK_IMPLIES(!IsJSObjectMap(), value == 0);
   int unused;
@@ -328,8 +361,8 @@ int Map::UnusedPropertyFields() const {
   return unused;
 }
 
-int Map::UnusedInObjectProperties() const {
-  // Like Map::UnusedPropertyFields(), but returns 0 for out of object
+int Map::UnusedInObjectFieldSlots() const {
+  // Like Map::UnusedFieldSlots(), but returns 0 for out of object
   // properties.
   int value = used_or_unused_instance_size_in_words();
   DCHECK_IMPLIES(!IsJSObjectMap(), value == 0);
@@ -337,6 +370,27 @@ int Map::UnusedInObjectProperties() const {
     return instance_size_in_words() - value;
   }
   return 0;
+}
+
+int Map::UnusedOutOfObjectFieldSlots() const {
+  // Like Map::UnusedFieldSlots(), but returns 0 for out of object
+  // properties.
+  int value = used_or_unused_instance_size_in_words();
+  DCHECK_IMPLIES(!IsJSObjectMap(), value == 0);
+  if (value < JSObject::kFieldsAdded) {
+    return value;
+  }
+  return 0;
+}
+
+int Map::UsedInObjectFieldSlots() const {
+  return TotalInObjectFieldSlots() - UnusedInObjectFieldSlots();
+}
+
+int Map::UsedOutOfObjectFieldSlots() const {
+  return HasOutOfObjectProperties()
+             ? TotalUsedFieldSlots() - TotalInObjectFieldSlots()
+             : 0;
 }
 
 int Map::used_or_unused_instance_size_in_words() const {
@@ -359,38 +413,38 @@ int Map::UsedInstanceSize() const {
   return words * kTaggedSize;
 }
 
-void Map::SetInObjectUnusedPropertyFields(int value) {
+void Map::SetInObjectUnusedFieldSlots(int value) {
   STATIC_ASSERT(JSObject::kFieldsAdded == JSObject::kHeaderSize / kTaggedSize);
   if (!IsJSObjectMap()) {
     CHECK_EQ(0, value);
     set_used_or_unused_instance_size_in_words(0);
-    DCHECK_EQ(0, UnusedPropertyFields());
+    DCHECK_EQ(0, UnusedFieldSlots());
     return;
   }
   CHECK_LE(0, value);
-  DCHECK_LE(value, GetInObjectProperties());
-  int used_inobject_properties = GetInObjectProperties() - value;
+  DCHECK_LE(value, TotalInObjectFieldSlots());
+  int used_inobject_properties = TotalInObjectFieldSlots() - value;
   set_used_or_unused_instance_size_in_words(
-      GetInObjectPropertyOffset(used_inobject_properties) / kTaggedSize);
-  DCHECK_EQ(value, UnusedPropertyFields());
+      GetInObjectFieldSlotOffset(used_inobject_properties) / kTaggedSize);
+  DCHECK_EQ(value, UnusedFieldSlots());
 }
 
-void Map::SetOutOfObjectUnusedPropertyFields(int value) {
+void Map::SetOutOfObjectUnusedFieldSlots(int value) {
   STATIC_ASSERT(JSObject::kFieldsAdded == JSObject::kHeaderSize / kTaggedSize);
   CHECK_LT(static_cast<unsigned>(value), JSObject::kFieldsAdded);
   // For out of object properties "used_instance_size_in_words" byte encodes
   // the slack in the property array.
   set_used_or_unused_instance_size_in_words(value);
-  DCHECK_EQ(value, UnusedPropertyFields());
+  DCHECK_EQ(value, UnusedFieldSlots());
 }
 
-void Map::CopyUnusedPropertyFields(Map map) {
+void Map::CopyUnusedFieldSlots(Map map) {
   set_used_or_unused_instance_size_in_words(
       map.used_or_unused_instance_size_in_words());
-  DCHECK_EQ(UnusedPropertyFields(), map.UnusedPropertyFields());
+  DCHECK_EQ(UnusedFieldSlots(), map.UnusedFieldSlots());
 }
 
-void Map::CopyUnusedPropertyFieldsAdjustedForInstanceSize(Map map) {
+void Map::CopyUnusedFieldSlotsAdjustedForInstanceSize(Map map) {
   int value = map.used_or_unused_instance_size_in_words();
   if (value >= JSPrimitiveWrapper::kFieldsAdded) {
     // Unused in-object fields. Adjust the offset from the object’s start
@@ -398,39 +452,73 @@ void Map::CopyUnusedPropertyFieldsAdjustedForInstanceSize(Map map) {
     value += instance_size_in_words() - map.instance_size_in_words();
   }
   set_used_or_unused_instance_size_in_words(value);
-  DCHECK_EQ(UnusedPropertyFields(), map.UnusedPropertyFields());
+  DCHECK_EQ(UnusedFieldSlots(), map.UnusedFieldSlots());
 }
 
-void Map::AccountAddedPropertyField() {
+void Map::AccountAddedPropertyField(PropertyDetails details) {
   // Update used instance size and unused property fields number.
   STATIC_ASSERT(JSObject::kFieldsAdded == JSObject::kHeaderSize / kTaggedSize);
 #ifdef DEBUG
-  int new_unused = UnusedPropertyFields() - 1;
+  DCHECK_EQ(details.location(), PropertyLocation::kField);
+  // Check that this is the last property by confirming that the next slot is
+  // the start of the unused slots.
+  // DCHECK_EQ(details.field_slot_index() +
+  //               details.field_width_in_words(details.field_slot_index() <
+  //                                            TotalInObjectFieldSlots()),
+  //           HasOutOfObjectProperties()
+  //               ? TotalInObjectFieldSlots() + UnusedFieldSlots()
+  //               : TotalInObjectFieldSlots() - UnusedInObjectFieldSlots());
+
+  int new_unused = UnusedFieldSlots();
+  if (FLAG_unbox_double_fields &&
+      details.representation().size_in_words() > 1) {
+    DCHECK_EQ(details.representation().size_in_words(), 2);
+    DCHECK_EQ(kDoubleSize, kTaggedSize * 2);
+    if (UnusedInObjectFieldSlots() == 1) {
+      // Skip the inline slot and allocate in the property array. That means
+      // a new property array with one field used, the other two unused.
+      new_unused = JSObject::kFieldsAdded - 1;
+    } else if (details.field_slot_index() < TotalInObjectFieldSlots()) {
+      // An in-object double will take multiple slots.
+      new_unused -= 2;
+    } else {
+      new_unused -= 1;
+    }
+  } else {
+    new_unused -= 1;
+  }
   if (new_unused < 0) new_unused += JSObject::kFieldsAdded;
 #endif
   int value = used_or_unused_instance_size_in_words();
   if (value >= JSObject::kFieldsAdded) {
-    if (value == instance_size_in_words()) {
+    if (value == instance_size_in_words() ||
+        (kDoubleSize != kTaggedSize && FLAG_unbox_double_fields &&
+         value == instance_size_in_words() - 1 &&
+         details.representation().size_in_words() > 1)) {
       AccountAddedOutOfObjectPropertyField(0);
+      DCHECK(HasOutOfObjectProperties());
     } else {
       // The property is added in-object, so simply increment the counter.
-      set_used_or_unused_instance_size_in_words(value + 1);
+      set_used_or_unused_instance_size_in_words(
+          value + details.field_width_in_words(TotalInObjectFieldSlots()));
+      DCHECK(!HasOutOfObjectProperties());
     }
   } else {
     AccountAddedOutOfObjectPropertyField(value);
+    DCHECK(HasOutOfObjectProperties());
   }
-  DCHECK_EQ(new_unused, UnusedPropertyFields());
+  DCHECK_EQ(new_unused, UnusedFieldSlots());
 }
 
 void Map::AccountAddedOutOfObjectPropertyField(int unused_in_property_array) {
   unused_in_property_array--;
   if (unused_in_property_array < 0) {
-    unused_in_property_array += JSObject::kFieldsAdded;
+    unused_in_property_array = JSObject::kFieldsAdded - 1;
   }
   CHECK_LT(static_cast<unsigned>(unused_in_property_array),
            JSObject::kFieldsAdded);
   set_used_or_unused_instance_size_in_words(unused_in_property_array);
-  DCHECK_EQ(unused_in_property_array, UnusedPropertyFields());
+  DCHECK_EQ(unused_in_property_array, UnusedFieldSlots());
 }
 
 byte Map::bit_field() const { return ReadField<byte>(kBitFieldOffset); }
@@ -544,7 +632,8 @@ void Map::mark_unstable() {
 bool Map::is_stable() const { return !IsUnstableBit::decode(bit_field3()); }
 
 bool Map::CanBeDeprecated() const {
-  for (InternalIndex i : IterateOwnDescriptors()) {
+  int descriptor = LastAdded();
+  for (int i = 0; i <= descriptor; i++) {
     PropertyDetails details = instance_descriptors().GetDetails(i);
     if (details.representation().IsNone()) return true;
     if (details.representation().IsSmi()) return true;
@@ -588,7 +677,7 @@ bool Map::IsNullOrUndefinedMap() const {
 }
 
 bool Map::IsPrimitiveMap() const {
-  return instance_type() <= LAST_PRIMITIVE_HEAP_OBJECT_TYPE;
+  return instance_type() <= LAST_PRIMITIVE_TYPE;
 }
 
 LayoutDescriptor Map::layout_descriptor_gc_safe() const {
@@ -690,8 +779,8 @@ void Map::AppendDescriptor(Isolate* isolate, Descriptor* desc) {
   }
   PropertyDetails details = desc->GetDetails();
   if (details.location() == kField) {
-    DCHECK_GT(UnusedPropertyFields(), 0);
-    AccountAddedPropertyField();
+    DCHECK_GT(UnusedFieldSlots(), 0);
+    AccountAddedPropertyField(details);
   }
 
 // This function does not support appending double field descriptors and
@@ -768,8 +857,8 @@ void Map::SetConstructor(Object constructor, WriteBarrierMode mode) {
 
 Handle<Map> Map::CopyInitialMap(Isolate* isolate, Handle<Map> map) {
   return CopyInitialMap(isolate, map, map->instance_size(),
-                        map->GetInObjectProperties(),
-                        map->UnusedPropertyFields());
+                        map->TotalInObjectFieldSlots(),
+                        map->UnusedFieldSlots());
 }
 
 bool Map::IsInobjectSlackTrackingInProgress() const {

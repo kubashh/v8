@@ -343,8 +343,7 @@ bool IsCompatibleSignature(const Signature& sig, const TypeVector& types,
 
 class ImplementationVisitor {
  public:
-  void GenerateBuiltinDefinitionsAndInterfaceDescriptors(
-      const std::string& output_directory);
+  void GenerateBuiltinDefinitions(const std::string& output_directory);
   void GenerateClassFieldOffsets(const std::string& output_directory);
   void GeneratePrintDefinitions(const std::string& output_directory);
   void GenerateClassDefinitions(const std::string& output_directory);

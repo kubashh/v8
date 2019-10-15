@@ -8,9 +8,9 @@ const builder = new WasmModuleBuilder();
 builder.addMemory(1, undefined, false);
 builder.addFunction('load', kSig_i_ii)
     .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprI64SConvertI32,
-        kExprLocalGet, 1,
+        kExprGetLocal, 1,
         kExprI64SConvertI32,
         kExprI64Shl,
         kExprI32ConvertI64,

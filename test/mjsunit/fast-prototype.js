@@ -40,7 +40,7 @@ function Sub() {
 
 function AddProps(obj) {
   for (var i = 0; i < 26; i++) {
-    obj["x" + i] = 0;
+    obj["x" + i] = 4.2;
   }
 }
 %EnsureFeedbackVectorForFunction(AddProps);

@@ -277,10 +277,9 @@ class InterpreterHandle {
     if (isolate_->debug()->break_points_active()) {
       Handle<WasmModuleObject> module_object(
           GetInstanceObject()->module_object(), isolate_);
-      Handle<Script> script(module_object->script(), isolate_);
       int position = GetTopPosition(module_object);
       Handle<FixedArray> breakpoints;
-      if (WasmModuleObject::CheckBreakPoints(isolate_, script, position)
+      if (WasmModuleObject::CheckBreakPoints(isolate_, module_object, position)
               .ToHandle(&breakpoints)) {
         // We hit one or several breakpoints. Clear stepping, notify the
         // listeners and return.
@@ -528,7 +527,6 @@ wasm::WasmInterpreter* WasmDebugInfo::SetupForTesting(
   return interp_handle->raw()->interpreter();
 }
 
-// static
 void WasmDebugInfo::SetBreakpoint(Handle<WasmDebugInfo> debug_info,
                                   int func_index, int offset) {
   Isolate* isolate = debug_info->GetIsolate();
@@ -538,18 +536,6 @@ void WasmDebugInfo::SetBreakpoint(Handle<WasmDebugInfo> debug_info,
   handle->interpreter()->SetBreakpoint(func, offset, true);
 }
 
-// static
-void WasmDebugInfo::ClearBreakpoint(Handle<WasmDebugInfo> debug_info,
-                                    int func_index, int offset) {
-  Isolate* isolate = debug_info->GetIsolate();
-  auto* handle = GetOrCreateInterpreterHandle(isolate, debug_info);
-  // TODO(leese): If there are no more breakpoints left it would be good to
-  // undo redirecting to the interpreter.
-  const wasm::WasmFunction* func = &handle->module()->functions[func_index];
-  handle->interpreter()->SetBreakpoint(func, offset, false);
-}
-
-// static
 void WasmDebugInfo::RedirectToInterpreter(Handle<WasmDebugInfo> debug_info,
                                           Vector<int> func_indexes) {
   Isolate* isolate = debug_info->GetIsolate();

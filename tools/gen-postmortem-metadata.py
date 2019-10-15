@@ -123,9 +123,9 @@ consts_misc = [
     { 'name': 'prop_attributes_shift',
         'value': 'PropertyDetails::AttributesField::kShift' },
     { 'name': 'prop_index_mask',
-        'value': 'PropertyDetails::FieldIndexField::kMask' },
+        'value': 'PropertyDetails::FieldSlotIndexField::kMask' },
     { 'name': 'prop_index_shift',
-        'value': 'PropertyDetails::FieldIndexField::kShift' },
+        'value': 'PropertyDetails::FieldSlotIndexField::kShift' },
     { 'name': 'prop_representation_mask',
         'value': 'PropertyDetails::RepresentationField::kMask' },
     { 'name': 'prop_representation_shift',
@@ -259,12 +259,10 @@ extras_accessors = [
     'JSArrayBuffer, byte_length, size_t, kByteLengthOffset',
     'JSArrayBufferView, byte_length, size_t, kByteLengthOffset',
     'JSArrayBufferView, byte_offset, size_t, kByteOffsetOffset',
-    'JSDate, value, Object, kValueOffset',
-    'JSRegExp, source, Object, kSourceOffset',
     'JSTypedArray, external_pointer, uintptr_t, kExternalPointerOffset',
     'JSTypedArray, length, Object, kLengthOffset',
     'Map, instance_size_in_words, char, kInstanceSizeInWordsOffset',
-    'Map, inobject_properties_start_or_constructor_function_index, char, kInObjectPropertiesStartOrConstructorFunctionIndexOffset',
+    'Map, inobject_field_storage_start_or_constructor_function_index, char, kInObjectFieldStorageStartOrConstructorFunctionIndexOffset',
     'Map, instance_type, uint16_t, kInstanceTypeOffset',
     'Map, bit_field, char, kBitFieldOffset',
     'Map, bit_field2, char, kBitField2Offset',
@@ -285,7 +283,6 @@ extras_accessors = [
     'Code, instruction_start, uintptr_t, kHeaderSize',
     'Code, instruction_size, int, kInstructionSizeOffset',
     'String, length, int32_t, kLengthOffset',
-    'DescriptorArray, header_size, uintptr_t, kHeaderSize',
 ];
 
 #
@@ -296,8 +293,7 @@ extras_accessors = [
 expected_classes = [
     'ConsString', 'FixedArray', 'HeapNumber', 'JSArray', 'JSFunction',
     'JSObject', 'JSRegExp', 'JSPrimitiveWrapper', 'Map', 'Oddball', 'Script',
-    'SeqOneByteString', 'SharedFunctionInfo', 'ScopeInfo', 'JSPromise',
-    'DescriptorArray'
+    'SeqOneByteString', 'SharedFunctionInfo', 'ScopeInfo', 'JSPromise'
 ];
 
 
@@ -386,10 +382,8 @@ def load_objects():
 def load_objects_from_file(objfilename, checktypes):
         objfile = open(objfilename, 'r');
         in_insttype = False;
-        in_torque_insttype = False
 
         typestr = '';
-        torque_typestr = ''
         uncommented_file = ''
 
         #
@@ -403,27 +397,15 @@ def load_objects_from_file(objfilename, checktypes):
                         in_insttype = True;
                         continue;
 
-                if (line.startswith('#define TORQUE_ASSIGNED_INSTANCE_TYPE_LIST')):
-                        in_torque_insttype = True
-                        continue
-
                 if (in_insttype and line.startswith('};')):
                         in_insttype = False;
                         continue;
-
-                if (in_torque_insttype and (not line or line.isspace())):
-                          in_torque_insttype = False
-                          continue
 
                 line = re.sub('//.*', '', line.strip());
 
                 if (in_insttype):
                         typestr += line;
                         continue;
-
-                if (in_torque_insttype):
-                        torque_typestr += line
-                        continue
 
                 uncommented_file += '\n' + line
 
@@ -452,9 +434,6 @@ def load_objects_from_file(objfilename, checktypes):
         entries = typestr.split(',');
         for entry in entries:
                 types[re.sub('\s*=.*', '', entry).lstrip()] = True;
-        entries = torque_typestr.split('\\')
-        for entry in entries:
-                types[re.sub(r' *V\(|\) *', '', entry)] = True
 
         #
         # Infer class names for each type based on a systematic transformation.
@@ -464,7 +443,10 @@ def load_objects_from_file(objfilename, checktypes):
         # way around.
         #
         for type in types:
-                usetype = type
+                #
+                # REGEXP behaves like REG_EXP, as in JS_REGEXP_TYPE => JSRegExp.
+                #
+                usetype = re.sub('_REGEXP_', '_REG_EXP_', type);
 
                 #
                 # Remove the "_TYPE" suffix and then convert to camel case,

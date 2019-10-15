@@ -5,7 +5,8 @@
 #include "src/base/platform/semaphore.h"
 
 #if V8_OS_MACOSX
-#include <dispatch/dispatch.h>
+#include <mach/mach_init.h>
+#include <mach/task.h>
 #endif
 
 #include <errno.h>
@@ -20,23 +21,53 @@ namespace base {
 #if V8_OS_MACOSX
 
 Semaphore::Semaphore(int count) {
-  native_handle_ = dispatch_semaphore_create(count);
-  DCHECK(native_handle_);
+  kern_return_t result = semaphore_create(
+      mach_task_self(), &native_handle_, SYNC_POLICY_FIFO, count);
+  DCHECK_EQ(KERN_SUCCESS, result);
+  USE(result);
 }
 
-Semaphore::~Semaphore() { dispatch_release(native_handle_); }
 
-void Semaphore::Signal() { dispatch_semaphore_signal(native_handle_); }
+Semaphore::~Semaphore() {
+  kern_return_t result = semaphore_destroy(mach_task_self(), native_handle_);
+  DCHECK_EQ(KERN_SUCCESS, result);
+  USE(result);
+}
+
+void Semaphore::Signal() {
+  kern_return_t result = semaphore_signal(native_handle_);
+  DCHECK_EQ(KERN_SUCCESS, result);
+  USE(result);
+}
+
 
 void Semaphore::Wait() {
-  dispatch_semaphore_wait(native_handle_, DISPATCH_TIME_FOREVER);
+  while (true) {
+    kern_return_t result = semaphore_wait(native_handle_);
+    if (result == KERN_SUCCESS) return;  // Semaphore was signalled.
+    DCHECK_EQ(KERN_ABORTED, result);
+  }
 }
 
 
 bool Semaphore::WaitFor(const TimeDelta& rel_time) {
-  dispatch_time_t timeout =
-      dispatch_time(DISPATCH_TIME_NOW, rel_time.InNanoseconds());
-  return dispatch_semaphore_wait(native_handle_, timeout) == 0;
+  TimeTicks now = TimeTicks::Now();
+  TimeTicks end = now + rel_time;
+  while (true) {
+    mach_timespec_t ts;
+    if (now >= end) {
+      // Return immediately if semaphore was not signalled.
+      ts.tv_sec = 0;
+      ts.tv_nsec = 0;
+    } else {
+      ts = (end - now).ToMachTimespec();
+    }
+    kern_return_t result = semaphore_timedwait(native_handle_, ts);
+    if (result == KERN_SUCCESS) return true;  // Semaphore was signalled.
+    if (result == KERN_OPERATION_TIMED_OUT) return false;  // Timeout.
+    DCHECK_EQ(KERN_ABORTED, result);
+    now = TimeTicks::Now();
+  }
 }
 
 #elif V8_OS_POSIX

@@ -1683,13 +1683,8 @@ Object Isolate::UnwindAndFindHandler() {
         int return_offset = static_cast<int>(frame->pc() - instruction_start);
         int handler_offset = table.LookupReturn(return_offset);
         DCHECK_NE(-1, handler_offset);
-        // Compute the stack pointer from the frame pointer. This ensures that
-        // argument slots on the stack are dropped as returning would.
-        Address return_sp = frame->fp() +
-                            StandardFrameConstants::kFixedFrameSizeAboveFp -
-                            code.stack_slots() * kSystemPointerSize;
         return FoundHandler(Context(), instruction_start, handler_offset,
-                            code.constant_pool(), return_sp, frame->fp());
+                            code.constant_pool(), frame->sp(), frame->fp());
       }
 
       case StackFrame::WASM_COMPILED: {
@@ -1704,20 +1699,22 @@ Object Isolate::UnwindAndFindHandler() {
         // currently being executed.
         wasm::WasmCodeRefScope code_ref_scope;
         WasmCompiledFrame* wasm_frame = static_cast<WasmCompiledFrame*>(frame);
-        wasm::WasmCode* wasm_code =
-            wasm_engine()->code_manager()->LookupCode(frame->pc());
-        int offset = wasm_frame->LookupExceptionHandlerInTable();
+        int stack_slots = 0;  // Will contain stack slot count of frame.
+        int offset = wasm_frame->LookupExceptionHandlerInTable(&stack_slots);
         if (offset < 0) break;
         // Compute the stack pointer from the frame pointer. This ensures that
         // argument slots on the stack are dropped as returning would.
         Address return_sp = frame->fp() +
                             StandardFrameConstants::kFixedFrameSizeAboveFp -
-                            wasm_code->stack_slots() * kSystemPointerSize;
+                            stack_slots * kSystemPointerSize;
 
         // This is going to be handled by Wasm, so we need to set the TLS flag
         // again. It was cleared above assuming the frame would be unwound.
         trap_handler::SetThreadInWasm();
 
+        // Gather information from the frame.
+        wasm::WasmCode* wasm_code =
+            wasm_engine()->code_manager()->LookupCode(frame->pc());
         return FoundHandler(Context(), wasm_code->instruction_start(), offset,
                             wasm_code->constant_pool(), return_sp, frame->fp());
       }
@@ -1736,14 +1733,18 @@ Object Isolate::UnwindAndFindHandler() {
         // For optimized frames we perform a lookup in the handler table.
         if (!catchable_by_js) break;
         OptimizedFrame* js_frame = static_cast<OptimizedFrame*>(frame);
-        Code code = frame->LookupCode();
-        int offset = js_frame->LookupExceptionHandlerInTable(nullptr, nullptr);
+        int stack_slots = 0;  // Will contain stack slot count of frame.
+        int offset =
+            js_frame->LookupExceptionHandlerInTable(&stack_slots, nullptr);
         if (offset < 0) break;
         // Compute the stack pointer from the frame pointer. This ensures
         // that argument slots on the stack are dropped as returning would.
         Address return_sp = frame->fp() +
                             StandardFrameConstants::kFixedFrameSizeAboveFp -
-                            code.stack_slots() * kSystemPointerSize;
+                            stack_slots * kSystemPointerSize;
+
+        // Gather information from the frame.
+        Code code = frame->LookupCode();
 
         // TODO(bmeurer): Turbofanned BUILTIN frames appear as OPTIMIZED,
         // but do not have a code kind of OPTIMIZED_FUNCTION.
@@ -1774,14 +1775,15 @@ Object Isolate::UnwindAndFindHandler() {
           break;
         }
 
-        int offset = stub_frame->LookupExceptionHandlerInTable();
+        int stack_slots = 0;  // Will contain stack slot count of frame.
+        int offset = stub_frame->LookupExceptionHandlerInTable(&stack_slots);
         if (offset < 0) break;
 
         // Compute the stack pointer from the frame pointer. This ensures
         // that argument slots on the stack are dropped as returning would.
         Address return_sp = frame->fp() +
                             StandardFrameConstants::kFixedFrameSizeAboveFp -
-                            code.stack_slots() * kSystemPointerSize;
+                            stack_slots * kSystemPointerSize;
 
         return FoundHandler(Context(), code.InstructionStart(), offset,
                             code.constant_pool(), return_sp, frame->fp());
@@ -3465,9 +3467,7 @@ bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
     set_event_logger(Logger::DefaultEventLoggerSentinel);
   }
 
-  if (FLAG_trace_turbo || FLAG_trace_turbo_graph || FLAG_turbo_profiling) {
-    PrintF("Concurrent recompilation has been disabled for tracing.\n");
-  } else if (OptimizingCompileDispatcher::Enabled()) {
+  if (OptimizingCompileDispatcher::Enabled()) {
     optimizing_compile_dispatcher_ = new OptimizingCompileDispatcher(this);
   }
 

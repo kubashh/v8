@@ -83,7 +83,7 @@ void PendingOptimizationTable::MarkedForOptimization(
     function->ShortPrint();
     PrintF(
         " should be prepared for optimization with "
-        "%%PrepareFunctionForOptimization before  "
+        "%%PrepareFunctionForOptimize before  "
         "%%OptimizeFunctionOnNextCall / %%OptimizeOSR ");
     UNREACHABLE();
   }

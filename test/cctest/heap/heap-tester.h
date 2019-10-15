@@ -14,7 +14,6 @@
   V(CompactionFullAbortedPage)                            \
   V(CompactionPartiallyAbortedPage)                       \
   V(CompactionPartiallyAbortedPageIntraAbortedPointers)   \
-  V(CompactionPartiallyAbortedPageWithInvalidatedSlots)   \
   V(CompactionPartiallyAbortedPageWithStoreBufferEntries) \
   V(CompactionSpaceDivideMultiplePages)                   \
   V(CompactionSpaceDivideSinglePage)                      \
@@ -43,6 +42,9 @@
   V(Promotion)                                            \
   V(Regression39128)                                      \
   V(ResetWeakHandle)                                      \
+  V(StoreBuffer_CreateFromOldToYoung)                     \
+  V(StoreBuffer_Overflow)                                 \
+  V(StoreBuffer_NotUsedOnAgingObjectWithRefsToYounger)    \
   V(StressHandles)                                        \
   V(TestMemoryReducerSampleJsCalls)                       \
   V(TestSizeOfObjects)                                    \
@@ -57,6 +59,7 @@
   V(Regress791582)                                        \
   V(Regress845060)                                        \
   V(RegressMissingWriteBarrierInAllocate)                 \
+  V(RememberedSet_LargePage)                              \
   V(WriteBarriersInCopyJSObject)
 
 #define HEAP_TEST(Name)                                                   \
@@ -103,7 +106,6 @@ class HeapTester {
   // test-heap.cc
   static AllocationResult AllocateByteArrayForTest(Heap* heap, int length,
                                                    AllocationType allocation);
-  static bool CodeEnsureLinearAllocationArea(Heap* heap, int size_in_bytes);
 
   // test-mark-compact.cc
   static AllocationResult AllocateMapForTest(v8::internal::Isolate* isolate);

@@ -79,8 +79,7 @@ void CompileCurrentAst(TorqueCompilerOptions options) {
 
   ReportAllUnusedMacros();
 
-  implementation_visitor.GenerateBuiltinDefinitionsAndInterfaceDescriptors(
-      output_directory);
+  implementation_visitor.GenerateBuiltinDefinitions(output_directory);
   implementation_visitor.GenerateClassFieldOffsets(output_directory);
   implementation_visitor.GeneratePrintDefinitions(output_directory);
   implementation_visitor.GenerateClassDefinitions(output_directory);

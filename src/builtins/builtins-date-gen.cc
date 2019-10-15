@@ -18,23 +18,23 @@ class DateBuiltinsAssembler : public CodeStubAssembler {
       : CodeStubAssembler(state) {}
 
  protected:
-  void Generate_DatePrototype_GetField(TNode<Context> context,
-                                       TNode<Object> receiver, int field_index);
+  void Generate_DatePrototype_GetField(Node* context, Node* receiver,
+                                       int field_index);
 };
 
-void DateBuiltinsAssembler::Generate_DatePrototype_GetField(
-    TNode<Context> context, TNode<Object> receiver, int field_index) {
+void DateBuiltinsAssembler::Generate_DatePrototype_GetField(Node* context,
+                                                            Node* receiver,
+                                                            int field_index) {
   Label receiver_not_date(this, Label::kDeferred);
 
   GotoIf(TaggedIsSmi(receiver), &receiver_not_date);
-  TNode<Uint16T> receiver_instance_type = LoadInstanceType(CAST(receiver));
+  TNode<Uint16T> receiver_instance_type = LoadInstanceType(receiver);
   GotoIfNot(InstanceTypeEqual(receiver_instance_type, JS_DATE_TYPE),
             &receiver_not_date);
 
-  TNode<JSDate> date_receiver = CAST(receiver);
   // Load the specified date field, falling back to the runtime as necessary.
   if (field_index == JSDate::kDateValue) {
-    Return(LoadObjectField(date_receiver, JSDate::kValueOffset));
+    Return(LoadObjectField(receiver, JSDate::kValueOffset));
   } else {
     if (field_index < JSDate::kFirstUncachedField) {
       Label stamp_mismatch(this, Label::kDeferred);
@@ -42,9 +42,9 @@ void DateBuiltinsAssembler::Generate_DatePrototype_GetField(
           ExternalConstant(ExternalReference::date_cache_stamp(isolate())));
 
       TNode<Object> cache_stamp =
-          LoadObjectField(date_receiver, JSDate::kCacheStampOffset);
+          LoadObjectField(receiver, JSDate::kCacheStampOffset);
       GotoIf(TaggedNotEqual(date_cache_stamp, cache_stamp), &stamp_mismatch);
-      Return(LoadObjectField(date_receiver,
+      Return(LoadObjectField(receiver,
                              JSDate::kValueOffset + field_index * kTaggedSize));
 
       BIND(&stamp_mismatch);
@@ -53,10 +53,10 @@ void DateBuiltinsAssembler::Generate_DatePrototype_GetField(
     TNode<Smi> field_index_smi = SmiConstant(field_index);
     TNode<ExternalReference> function =
         ExternalConstant(ExternalReference::get_date_field_function());
-    TNode<Object> result = CAST(CallCFunction(
+    Node* result = CallCFunction(
         function, MachineType::AnyTagged(),
-        std::make_pair(MachineType::AnyTagged(), date_receiver),
-        std::make_pair(MachineType::AnyTagged(), field_index_smi)));
+        std::make_pair(MachineType::AnyTagged(), receiver),
+        std::make_pair(MachineType::AnyTagged(), field_index_smi));
     Return(result);
   }
 
@@ -66,128 +66,128 @@ void DateBuiltinsAssembler::Generate_DatePrototype_GetField(
 }
 
 TF_BUILTIN(DatePrototypeGetDate, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kDay);
 }
 
 TF_BUILTIN(DatePrototypeGetDay, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kWeekday);
 }
 
 TF_BUILTIN(DatePrototypeGetFullYear, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kYear);
 }
 
 TF_BUILTIN(DatePrototypeGetHours, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kHour);
 }
 
 TF_BUILTIN(DatePrototypeGetMilliseconds, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kMillisecond);
 }
 
 TF_BUILTIN(DatePrototypeGetMinutes, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kMinute);
 }
 
 TF_BUILTIN(DatePrototypeGetMonth, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kMonth);
 }
 
 TF_BUILTIN(DatePrototypeGetSeconds, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kSecond);
 }
 
 TF_BUILTIN(DatePrototypeGetTime, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kDateValue);
 }
 
 TF_BUILTIN(DatePrototypeGetTimezoneOffset, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kTimezoneOffset);
 }
 
 TF_BUILTIN(DatePrototypeGetUTCDate, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kDayUTC);
 }
 
 TF_BUILTIN(DatePrototypeGetUTCDay, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kWeekdayUTC);
 }
 
 TF_BUILTIN(DatePrototypeGetUTCFullYear, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kYearUTC);
 }
 
 TF_BUILTIN(DatePrototypeGetUTCHours, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kHourUTC);
 }
 
 TF_BUILTIN(DatePrototypeGetUTCMilliseconds, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kMillisecondUTC);
 }
 
 TF_BUILTIN(DatePrototypeGetUTCMinutes, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kMinuteUTC);
 }
 
 TF_BUILTIN(DatePrototypeGetUTCMonth, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kMonthUTC);
 }
 
 TF_BUILTIN(DatePrototypeGetUTCSeconds, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kSecondUTC);
 }
 
 TF_BUILTIN(DatePrototypeValueOf, DateBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   Generate_DatePrototype_GetField(context, receiver, JSDate::kDateValue);
 }
 
 TF_BUILTIN(DatePrototypeToPrimitive, CodeStubAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
   TNode<Object> hint = CAST(Parameter(Descriptor::kHint));
 
   // Check if the {receiver} is actually a JSReceiver.
   Label receiver_is_invalid(this, Label::kDeferred);
   GotoIf(TaggedIsSmi(receiver), &receiver_is_invalid);
-  GotoIfNot(IsJSReceiver(CAST(receiver)), &receiver_is_invalid);
+  GotoIfNot(IsJSReceiver(receiver), &receiver_is_invalid);
 
   // Dispatch to the appropriate OrdinaryToPrimitive builtin.
   Label hint_is_number(this), hint_is_string(this),

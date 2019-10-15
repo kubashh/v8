@@ -14,7 +14,7 @@
 
   var module = new WasmModuleBuilder();
   module.addFunction(undefined, kSig_i_i)
-    .addBody([kExprLocalGet, 0, kExprI32Const, 1, kExprI32Add])
+    .addBody([kExprGetLocal, 0, kExprI32Const, 1, kExprI32Add])
     .exportAs("increment");
 
   var buffer = module.toBuffer(true);

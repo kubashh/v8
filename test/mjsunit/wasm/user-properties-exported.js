@@ -13,7 +13,7 @@ load("test/mjsunit/wasm/user-properties-common.js");
   var builder = new WasmModuleBuilder();
   builder.addFunction("exp", kSig_i_i)
     .addBody([
-      kExprLocalGet, 0,
+      kExprGetLocal, 0,
       kExprCallFunction, 0])
     .exportAs("exp");
   let module1 = builder.toModule();

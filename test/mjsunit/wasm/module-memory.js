@@ -18,18 +18,18 @@ function genModule(memory) {
       // main body: while(i) { if(mem[i]) return -1; i -= 4; } return 0;
       // TODO(titzer): this manual bytecode has a copy of test-run-wasm.cc
       /**/ kExprLoop, kWasmStmt,           // --
-      /*  */ kExprLocalGet, 0,             // --
+      /*  */ kExprGetLocal, 0,             // --
       /*  */ kExprIf, kWasmStmt,           // --
-      /*    */ kExprLocalGet, 0,           // --
+      /*    */ kExprGetLocal, 0,           // --
       /*    */ kExprI32LoadMem, 0, 0,      // --
       /*    */ kExprIf, kWasmStmt,         // --
       /*      */ kExprI32Const, 127,       // --
       /*      */ kExprReturn,              // --
       /*      */ kExprEnd,                 // --
-      /*    */ kExprLocalGet, 0,           // --
+      /*    */ kExprGetLocal, 0,           // --
       /*    */ kExprI32Const, 4,           // --
       /*    */ kExprI32Sub,                // --
-      /*    */ kExprLocalSet, 0,           // --
+      /*    */ kExprSetLocal, 0,           // --
       /*    */ kExprBr, 1,                 // --
       /*    */ kExprEnd,                   // --
       /*  */ kExprEnd,                     // --
@@ -135,11 +135,11 @@ function testOOBThrows() {
   builder.addMemory(1, 1, true);
   builder.addFunction("geti", kSig_i_ii)
     .addBody([
-      kExprLocalGet, 0,
-      kExprLocalGet, 1,
+      kExprGetLocal, 0,
+      kExprGetLocal, 1,
       kExprI32LoadMem, 0, 0,
       kExprI32StoreMem, 0, 0,
-      kExprLocalGet, 1,
+      kExprGetLocal, 1,
       kExprI32LoadMem, 0, 0,
     ])
     .exportFunc();

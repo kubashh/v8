@@ -1018,12 +1018,6 @@ IrregexpInterpreter::Result IrregexpInterpreter::MatchForCallFromJs(
   String subject_string = String::cast(Object(subject));
   JSRegExp regexp_obj = JSRegExp::cast(Object(regexp));
 
-  if (regexp_obj.MarkedForTierUp()) {
-    // Returning RETRY will re-enter through runtime, where actual recompilation
-    // for tier-up takes place.
-    return IrregexpInterpreter::RETRY;
-  }
-
   return Match(isolate, regexp_obj, subject_string, registers, registers_length,
                start_position, call_origin);
 }

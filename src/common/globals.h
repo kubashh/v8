@@ -77,9 +77,9 @@ constexpr int kStackSpaceRequiredForCompilation = 40;
 
 // Determine whether double field unboxing feature is enabled.
 #if V8_TARGET_ARCH_64_BIT && !defined(V8_COMPRESS_POINTERS)
-#define V8_DOUBLE_FIELDS_UNBOXING true
-#else
 #define V8_DOUBLE_FIELDS_UNBOXING false
+#else
+#define V8_DOUBLE_FIELDS_UNBOXING true
 #endif
 
 // Determine whether tagged pointers are 8 bytes (used in Torque layouts for
@@ -231,7 +231,7 @@ constexpr int kTaggedSizeLog2 = 2;
 
 // These types define raw and atomic storage types for tagged values stored
 // on V8 heap.
-using Tagged_t = uint32_t;
+using Tagged_t = int32_t;
 using AtomicTagged_t = base::Atomic32;
 
 #else

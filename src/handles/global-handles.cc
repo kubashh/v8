@@ -901,13 +901,8 @@ void GlobalHandles::IdentifyWeakUnmodifiedObjects(
       DCHECK(node->is_root());
       if (is_unmodified(node->location())) {
         v8::Value* value = ToApi<v8::Value>(node->handle());
-        if (node->has_destructor()) {
-          node->set_root(tracer->IsRootForNonTracingGC(
-              *reinterpret_cast<v8::TracedGlobal<v8::Value>*>(&value)));
-        } else {
-          node->set_root(tracer->IsRootForNonTracingGC(
-              *reinterpret_cast<v8::TracedReference<v8::Value>*>(&value)));
-        }
+        node->set_root(tracer->IsRootForNonTracingGC(
+            *reinterpret_cast<v8::TracedGlobal<v8::Value>*>(&value)));
       }
     }
   }
@@ -995,7 +990,7 @@ void GlobalHandles::IterateYoungWeakUnmodifiedRootsForPhantomHandles(
         } else {
           v8::Value* value = ToApi<v8::Value>(node->handle());
           tracer->ResetHandleInNonTracingGC(
-              *reinterpret_cast<v8::TracedReference<v8::Value>*>(&value));
+              *reinterpret_cast<v8::TracedGlobal<v8::Value>*>(&value));
           DCHECK(!node->IsInUse());
         }
 
@@ -1276,13 +1271,8 @@ void GlobalHandles::IterateTracedNodes(
   for (TracedNode* node : *traced_nodes_) {
     if (node->IsInUse()) {
       v8::Value* value = ToApi<v8::Value>(node->handle());
-      if (node->has_destructor()) {
-        visitor->VisitTracedGlobalHandle(
-            *reinterpret_cast<v8::TracedGlobal<v8::Value>*>(&value));
-      } else {
-        visitor->VisitTracedReference(
-            *reinterpret_cast<v8::TracedReference<v8::Value>*>(&value));
-      }
+      visitor->VisitTracedGlobalHandle(
+          *reinterpret_cast<v8::TracedGlobal<v8::Value>*>(&value));
     }
   }
 }

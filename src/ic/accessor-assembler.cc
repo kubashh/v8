@@ -162,8 +162,8 @@ void AccessorAssembler::HandleLoadICHandlerCase(
   BIND(&if_smi_handler);
   {
     HandleLoadICSmiHandlerCase(p, var_holder.value(), var_smi_handler.value(),
-                               handler, miss, exit_point, ic_mode,
-                               on_nonexistent, support_elements, access_mode);
+                               handler, miss, exit_point, on_nonexistent,
+                               support_elements, access_mode);
   }
 
   BIND(&call_handler);
@@ -303,7 +303,7 @@ TNode<MaybeObject> AccessorAssembler::LoadDescriptorValueOrFieldType(
 void AccessorAssembler::HandleLoadICSmiHandlerCase(
     const LazyLoadICParameters* p, SloppyTNode<HeapObject> holder,
     SloppyTNode<Smi> smi_handler, SloppyTNode<Object> handler, Label* miss,
-    ExitPoint* exit_point, ICMode ic_mode, OnNonExistent on_nonexistent,
+    ExitPoint* exit_point, OnNonExistent on_nonexistent,
     ElementSupport support_elements, LoadAccessMode access_mode) {
   VARIABLE(var_double_value, MachineRepresentation::kFloat64);
   Label rebox_double(this, &var_double_value);
@@ -419,11 +419,11 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
 
   if (access_mode == LoadAccessMode::kHas) {
     HandleLoadICSmiHandlerHasNamedCase(p, holder, handler_kind, miss,
-                                       exit_point, ic_mode);
+                                       exit_point);
   } else {
     HandleLoadICSmiHandlerLoadNamedCase(
         p, holder, handler_kind, handler_word, &rebox_double, &var_double_value,
-        handler, miss, exit_point, ic_mode, on_nonexistent, support_elements);
+        handler, miss, exit_point, on_nonexistent, support_elements);
   }
 }
 
@@ -431,13 +431,12 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
     const LazyLoadICParameters* p, TNode<HeapObject> holder,
     TNode<IntPtrT> handler_kind, TNode<WordT> handler_word, Label* rebox_double,
     Variable* var_double_value, SloppyTNode<Object> handler, Label* miss,
-    ExitPoint* exit_point, ICMode ic_mode, OnNonExistent on_nonexistent,
+    ExitPoint* exit_point, OnNonExistent on_nonexistent,
     ElementSupport support_elements) {
   Label constant(this), field(this), normal(this, Label::kDeferred),
-      slow(this, Label::kDeferred), interceptor(this, Label::kDeferred),
-      nonexistent(this), accessor(this, Label::kDeferred),
-      global(this, Label::kDeferred), module_export(this, Label::kDeferred),
-      proxy(this, Label::kDeferred),
+      interceptor(this, Label::kDeferred), nonexistent(this),
+      accessor(this, Label::kDeferred), global(this, Label::kDeferred),
+      module_export(this, Label::kDeferred), proxy(this, Label::kDeferred),
       native_data_property(this, Label::kDeferred),
       api_getter(this, Label::kDeferred);
 
@@ -469,8 +468,6 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
 
   GotoIf(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kGlobal)),
          &global);
-
-  GotoIf(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kSlow)), &slow);
 
   GotoIf(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kProxy)), &proxy);
 
@@ -599,18 +596,6 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
                                   p->context(), p->name(), p->receiver(),
                                   holder, p->slot(), p->vector());
   }
-  BIND(&slow);
-  {
-    Comment("load_slow");
-    if (ic_mode == ICMode::kGlobalIC) {
-      exit_point->ReturnCallRuntime(Runtime::kLoadGlobalIC_Slow, p->context(),
-                                    p->name(), p->slot(), p->vector());
-
-    } else {
-      exit_point->ReturnCallRuntime(Runtime::kGetProperty, p->context(),
-                                    p->receiver(), p->name());
-    }
-  }
 
   BIND(&module_export);
   {
@@ -642,10 +627,9 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
 
 void AccessorAssembler::HandleLoadICSmiHandlerHasNamedCase(
     const LazyLoadICParameters* p, TNode<HeapObject> holder,
-    TNode<IntPtrT> handler_kind, Label* miss, ExitPoint* exit_point,
-    ICMode ic_mode) {
+    TNode<IntPtrT> handler_kind, Label* miss, ExitPoint* exit_point) {
   Label return_true(this), return_false(this), return_lookup(this),
-      normal(this), global(this), slow(this);
+      normal(this), global(this);
 
   GotoIf(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kField)),
          &return_true);
@@ -673,8 +657,6 @@ void AccessorAssembler::HandleLoadICSmiHandlerHasNamedCase(
   GotoIf(WordEqual(handler_kind,
                    IntPtrConstant(LoadHandler::kApiGetterHolderIsPrototype)),
          &return_true);
-
-  GotoIf(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kSlow)), &slow);
 
   Branch(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kGlobal)), &global,
          &return_lookup);
@@ -721,18 +703,6 @@ void AccessorAssembler::HandleLoadICSmiHandlerHasNamedCase(
     GotoIf(IsTheHole(value), miss);
 
     exit_point->Return(TrueConstant());
-  }
-
-  BIND(&slow);
-  {
-    Comment("load_slow");
-    if (ic_mode == ICMode::kGlobalIC) {
-      exit_point->ReturnCallRuntime(Runtime::kLoadGlobalIC_Slow, p->context(),
-                                    p->name(), p->slot(), p->vector());
-    } else {
-      exit_point->ReturnCallRuntime(Runtime::kHasProperty, p->context(),
-                                    p->receiver(), p->name());
-    }
   }
 }
 
@@ -1269,10 +1239,10 @@ void AccessorAssembler::OverwriteExistingFastDataProperty(
                    slow);
 
     TNode<UintPtrT> field_index =
-        DecodeWordFromWord32<PropertyDetails::FieldIndexField>(details);
-    field_index = Unsigned(
-        IntPtrAdd(field_index,
-                  Unsigned(LoadMapInobjectPropertiesStartInWords(object_map))));
+        DecodeWordFromWord32<PropertyDetails::FieldSlotIndexField>(details);
+    field_index = Unsigned(IntPtrAdd(
+        field_index,
+        Unsigned(LoadMapInobjectFieldStorageStartInWords(object_map))));
     TNode<IntPtrT> instance_size_in_words =
         LoadMapInstanceSizeInWords(object_map);
 
@@ -2512,6 +2482,8 @@ enum AccessorAssembler::StubCacheTable : int {
 };
 
 Node* AccessorAssembler::StubCachePrimaryOffset(Node* name, Node* map) {
+  // See v8::internal::StubCache::PrimaryOffset().
+  STATIC_ASSERT(StubCache::kCacheIndexShift == Name::kHashShift);
   // Compute the hash of the name (use entire hash field).
   TNode<Uint32T> hash_field = LoadNameHashField(name);
   CSA_ASSERT(this,
@@ -2552,8 +2524,7 @@ void AccessorAssembler::TryProbeStubCacheTable(
   StubCache::Table table = static_cast<StubCache::Table>(table_id);
   // The {table_offset} holds the entry offset times four (due to masking
   // and shifting optimizations).
-  const int kMultiplier =
-      sizeof(StubCache::Entry) >> StubCache::kCacheIndexShift;
+  const int kMultiplier = sizeof(StubCache::Entry) >> Name::kHashShift;
   entry_offset = IntPtrMul(entry_offset, IntPtrConstant(kMultiplier));
 
   TNode<ExternalReference> key_base = ExternalConstant(
@@ -3931,10 +3902,10 @@ void AccessorAssembler::GenerateCloneObjectIC() {
 
     // Lastly, clone any in-object properties.
     TNode<IntPtrT> source_start =
-        LoadMapInobjectPropertiesStartInWords(source_map);
+        LoadMapInobjectFieldStorageStartInWords(source_map);
     TNode<IntPtrT> source_size = LoadMapInstanceSizeInWords(source_map);
     TNode<IntPtrT> result_start =
-        LoadMapInobjectPropertiesStartInWords(result_map);
+        LoadMapInobjectFieldStorageStartInWords(result_map);
     TNode<IntPtrT> field_offset_difference =
         TimesTaggedSize(IntPtrSub(result_start, source_start));
 

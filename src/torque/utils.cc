@@ -212,25 +212,19 @@ bool IsValidTypeName(const std::string& s) {
 }
 
 std::string CapifyStringWithUnderscores(const std::string& camellified_string) {
-  // Special case: JSAbc yields JS_ABC, not JSABC, for any Abc.
-  size_t js_position = camellified_string.find("JS");
-
   std::string result;
-  bool previousWasLowerOrDigit = false;
-  for (size_t index = 0; index < camellified_string.size(); ++index) {
-    char current = camellified_string[index];
-    if ((previousWasLowerOrDigit && isupper(current)) ||
-        (js_position != std::string::npos &&
-         index == js_position + strlen("JS"))) {
+  bool previousWasLower = false;
+  for (auto current : camellified_string) {
+    if (previousWasLower && isupper(current)) {
       result += "_";
     }
     if (current == '.' || current == '-') {
       result += "_";
-      previousWasLowerOrDigit = false;
+      previousWasLower = false;
       continue;
     }
     result += toupper(current);
-    previousWasLowerOrDigit = islower(current) || isdigit(current);
+    previousWasLower = (islower(current));
   }
   return result;
 }

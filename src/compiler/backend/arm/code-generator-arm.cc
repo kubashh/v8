@@ -153,6 +153,9 @@ class ArmOperandConverter final : public InstructionOperandConverter {
   NeonMemOperand NeonInputOperand(size_t first_index) {
     const size_t index = first_index;
     switch (AddressingModeField::decode(instr_->opcode())) {
+      case kMode_Offset_RR:
+        return NeonMemOperand(InputRegister(index + 0),
+                              InputRegister(index + 1));
       case kMode_Operand2_R:
         return NeonMemOperand(InputRegister(index + 0));
       default:
@@ -2048,7 +2051,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArmI16x8ExtractLane: {
-      __ ExtractLane(i.OutputRegister(), i.InputSimd128Register(0), NeonU16,
+      __ ExtractLane(i.OutputRegister(), i.InputSimd128Register(0), NeonS16,
                      i.InputInt8(1));
       break;
     }
@@ -2214,7 +2217,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArmI8x16ExtractLane: {
-      __ ExtractLane(i.OutputRegister(), i.InputSimd128Register(0), NeonU8,
+      __ ExtractLane(i.OutputRegister(), i.InputSimd128Register(0), NeonS8,
                      i.InputInt8(1));
       break;
     }

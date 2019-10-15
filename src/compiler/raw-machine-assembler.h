@@ -131,7 +131,7 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
   std::pair<MachineType, const Operator*> InsertDecompressionIfNeeded(
       MachineType type) {
     const Operator* decompress_op = nullptr;
-    if (COMPRESS_POINTERS_BOOL && FLAG_turbo_decompression_elimination) {
+    if (COMPRESS_POINTERS_BOOL) {
       switch (type.representation()) {
         case MachineRepresentation::kTaggedPointer:
           type = MachineType::CompressedPointer();
@@ -188,7 +188,7 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
 
   std::pair<MachineRepresentation, Node*> InsertCompressionIfNeeded(
       MachineRepresentation rep, Node* value) {
-    if (COMPRESS_POINTERS_BOOL && FLAG_turbo_decompression_elimination) {
+    if (COMPRESS_POINTERS_BOOL) {
       switch (rep) {
         case MachineRepresentation::kTaggedPointer:
           rep = MachineRepresentation::kCompressedPointer;
@@ -237,7 +237,7 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
             object, value);
   }
   void OptimizedStoreMap(Node* object, Node* value) {
-    if (COMPRESS_POINTERS_BOOL && FLAG_turbo_decompression_elimination) {
+    if (COMPRESS_POINTERS_BOOL) {
       DCHECK(AccessBuilder::ForMap().machine_type.IsCompressedPointer());
       value =
           AddNode(machine()->ChangeTaggedPointerToCompressedPointer(), value);

@@ -57,9 +57,11 @@ class WasmJSFunctionData;
 // +-------------------------------+
 // | Inner PreparseData N          |
 // +-------------------------------+
-class PreparseData
-    : public TorqueGeneratedPreparseData<PreparseData, HeapObject> {
+class PreparseData : public HeapObject {
  public:
+  DECL_INT_ACCESSORS(data_length)
+  DECL_INT_ACCESSORS(children_length)
+
   inline int inner_start_offset() const;
   inline ObjectSlot inner_data_start() const;
 
@@ -74,9 +76,12 @@ class PreparseData
   // Clear uninitialized padding space.
   inline void clear_padding();
 
+  DECL_CAST(PreparseData)
   DECL_PRINTER(PreparseData)
   DECL_VERIFIER(PreparseData)
 
+  DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
+                                TORQUE_GENERATED_PREPARSE_DATA_FIELDS)
   static const int kDataStartOffset = kSize;
 
   class BodyDescriptor;
@@ -89,7 +94,7 @@ class PreparseData
     return InnerOffset(data_length) + children_length * kTaggedSize;
   }
 
-  TQ_OBJECT_CONSTRUCTORS(PreparseData)
+  OBJECT_CONSTRUCTORS(PreparseData, HeapObject);
 
  private:
   inline Object get_child_raw(int index) const;
@@ -197,7 +202,7 @@ class SharedFunctionInfo : public HeapObject {
   // Set up the link between shared function info and the script. The shared
   // function info is added to the list on the script.
   V8_EXPORT_PRIVATE static void SetScript(
-      Handle<SharedFunctionInfo> shared, Handle<HeapObject> script_object,
+      Handle<SharedFunctionInfo> shared, Handle<Object> script_object,
       int function_literal_id, bool reset_preparsed_scope_data = true);
 
   // Layout description of the optimized code map.
@@ -363,10 +368,10 @@ class SharedFunctionInfo : public HeapObject {
   // [script_or_debug_info]: One of:
   //  - Script from which the function originates.
   //  - a DebugInfo which holds the actual script [HasDebugInfo()].
-  DECL_ACCESSORS(script_or_debug_info, HeapObject)
+  DECL_ACCESSORS(script_or_debug_info, Object)
 
-  inline HeapObject script() const;
-  inline void set_script(HeapObject script);
+  inline Object script() const;
+  inline void set_script(Object script);
 
   // The function is subject to debugging if a debug info is attached.
   inline bool HasDebugInfo() const;

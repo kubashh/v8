@@ -34,7 +34,7 @@ Maybe<bool> IsProperty(v8::Isolate* isolate, v8::Local<v8::Context> ctx,
       v8::String::NewFromUtf8(isolate, value).ToLocalChecked()));
 }
 
-Maybe<GCOptions> Parse(v8::Isolate* isolate,
+Maybe<GCOptions> Parse(v8::Isolate* isolate, v8::Local<v8::Context> ctx,
                        const v8::FunctionCallbackInfo<v8::Value>& args) {
   // Default values.
   auto options =
@@ -42,10 +42,9 @@ Maybe<GCOptions> Parse(v8::Isolate* isolate,
                 ExecutionType::kSync};
   bool found_options_object = false;
 
-  if (args.Length() > 0 && args[0]->IsObject()) {
-    v8::HandleScope scope(isolate);
-    auto ctx = isolate->GetCurrentContext();
+  if (args[0]->IsObject()) {
     auto param = v8::Local<v8::Object>::Cast(args[0]);
+
     auto maybe_type = IsProperty(isolate, ctx, param, "type", "minor");
     if (maybe_type.IsNothing()) return Nothing<GCOptions>();
     if (maybe_type.ToChecked()) {
@@ -94,11 +93,12 @@ class AsyncGC final : public CancelableTask {
  public:
   ~AsyncGC() final = default;
 
-  AsyncGC(v8::Isolate* isolate, v8::Local<v8::Promise::Resolver> resolver,
+  AsyncGC(v8::Isolate* isolate, v8::Local<v8::Context> ctx,
+          v8::Local<v8::Promise::Resolver> resolver,
           v8::Isolate::GarbageCollectionType type)
       : CancelableTask(reinterpret_cast<Isolate*>(isolate)),
         isolate_(isolate),
-        ctx_(isolate, isolate->GetCurrentContext()),
+        ctx_(isolate, ctx),
         resolver_(isolate, resolver),
         type_(type) {}
 
@@ -129,16 +129,10 @@ v8::Local<v8::FunctionTemplate> GCExtension::GetNativeFunctionTemplate(
 
 void GCExtension::GC(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+  auto ctx = isolate->GetCurrentContext();
 
-  // Immediate bailout if no arguments are provided.
-  if (args.Length() == 0) {
-    InvokeGC(isolate,
-             v8::Isolate::GarbageCollectionType::kFullGarbageCollection,
-             v8::EmbedderHeapTracer::EmbedderStackState::kUnknown);
-    return;
-  }
-
-  auto maybe_options = Parse(isolate, args);
+  auto maybe_options = Parse(isolate, ctx, args);
   if (maybe_options.IsNothing()) return;
   GCOptions options = maybe_options.ToChecked();
   switch (options.execution) {
@@ -147,7 +141,6 @@ void GCExtension::GC(const v8::FunctionCallbackInfo<v8::Value>& args) {
                v8::EmbedderHeapTracer::EmbedderStackState::kUnknown);
       break;
     case ExecutionType::kAsync: {
-      v8::HandleScope scope(isolate);
       auto resolver = v8::Promise::Resolver::New(isolate->GetCurrentContext())
                           .ToLocalChecked();
       args.GetReturnValue().Set(resolver->GetPromise());
@@ -155,7 +148,7 @@ void GCExtension::GC(const v8::FunctionCallbackInfo<v8::Value>& args) {
           V8::GetCurrentPlatform()->GetForegroundTaskRunner(isolate);
       CHECK(task_runner->NonNestableTasksEnabled());
       task_runner->PostNonNestableTask(
-          std::make_unique<AsyncGC>(isolate, resolver, options.type));
+          std::make_unique<AsyncGC>(isolate, ctx, resolver, options.type));
     } break;
   }
 }

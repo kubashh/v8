@@ -415,13 +415,6 @@ class Callee {
   base::Optional<FunctionBlueprint> const blueprint_;
 };
 
-// If a list of arguments (hints) is shorter than the function's parameter
-// count, this enum expresses what we know about the missing arguments.
-enum MissingArgumentsPolicy {
-  kMissingArgumentsAreUndefined,  // ... as in the JS undefined value
-  kMissingArgumentsAreUnknown,
-};
-
 // The SerializerForBackgroundCompilation makes sure that the relevant function
 // data such as bytecode, SharedFunctionInfo and FeedbackVector, used by later
 // optimizations in the compiler, is copied to the heap broker.
@@ -440,7 +433,6 @@ class SerializerForBackgroundCompilation {
       ZoneStats* zone_stats, JSHeapBroker* broker,
       CompilationDependencies* dependencies, CompilationSubject function,
       base::Optional<Hints> new_target, const HintsVector& arguments,
-      MissingArgumentsPolicy padding,
       SerializerForBackgroundCompilationFlags flags);
 
   bool BailoutOnUninitialized(ProcessedFeedback const& feedback);
@@ -456,19 +448,19 @@ class SerializerForBackgroundCompilation {
                                     base::Optional<Hints> new_target,
                                     const HintsVector& arguments,
                                     SpeculationMode speculation_mode,
-                                    MissingArgumentsPolicy padding);
+                                    bool with_spread);
   void ProcessCalleeForCallOrConstruct(Handle<Object> callee,
                                        base::Optional<Hints> new_target,
                                        const HintsVector& arguments,
                                        SpeculationMode speculation_mode,
-                                       MissingArgumentsPolicy padding);
+                                       bool with_spread = false);
   void ProcessCallOrConstruct(Hints callee, base::Optional<Hints> new_target,
                               const HintsVector& arguments, FeedbackSlot slot,
-                              MissingArgumentsPolicy padding);
-  void ProcessCallVarArgs(
-      ConvertReceiverMode receiver_mode, Hints const& callee,
-      interpreter::Register first_reg, int reg_count, FeedbackSlot slot,
-      MissingArgumentsPolicy padding = kMissingArgumentsAreUndefined);
+                              bool with_spread = false);
+  void ProcessCallVarArgs(ConvertReceiverMode receiver_mode,
+                          Hints const& callee, interpreter::Register first_reg,
+                          int reg_count, FeedbackSlot slot,
+                          bool with_spread = false);
   void ProcessApiCall(Handle<SharedFunctionInfo> target,
                       const HintsVector& arguments);
   void ProcessReceiverMapForApiCall(FunctionTemplateInfoRef target,
@@ -476,8 +468,7 @@ class SerializerForBackgroundCompilation {
   void ProcessBuiltinCall(Handle<SharedFunctionInfo> target,
                           base::Optional<Hints> new_target,
                           const HintsVector& arguments,
-                          SpeculationMode speculation_mode,
-                          MissingArgumentsPolicy padding);
+                          SpeculationMode speculation_mode, bool with_spread);
 
   void ProcessJump(interpreter::BytecodeArrayIterator* iterator);
 
@@ -545,8 +536,7 @@ class SerializerForBackgroundCompilation {
 
   Hints RunChildSerializer(CompilationSubject function,
                            base::Optional<Hints> new_target,
-                           const HintsVector& arguments,
-                           MissingArgumentsPolicy padding);
+                           const HintsVector& arguments, bool with_spread);
 
   // When (forward-)branching bytecodes are encountered, e.g. a conditional
   // jump, we call ContributeToJumpTargetEnvironment to "remember" the current
@@ -736,8 +726,7 @@ class SerializerForBackgroundCompilation::Environment : public ZoneObject {
  public:
   Environment(Zone* zone, CompilationSubject function);
   Environment(Zone* zone, Isolate* isolate, CompilationSubject function,
-              base::Optional<Hints> new_target, const HintsVector& arguments,
-              MissingArgumentsPolicy padding);
+              base::Optional<Hints> new_target, const HintsVector& arguments);
 
   bool IsDead() const { return ephemeral_hints_.empty(); }
 
@@ -839,8 +828,7 @@ SerializerForBackgroundCompilation::Environment::Environment(
 
 SerializerForBackgroundCompilation::Environment::Environment(
     Zone* zone, Isolate* isolate, CompilationSubject function,
-    base::Optional<Hints> new_target, const HintsVector& arguments,
-    MissingArgumentsPolicy padding)
+    base::Optional<Hints> new_target, const HintsVector& arguments)
     : Environment(zone, function) {
   // Copy the hints for the actually passed arguments, at most up to
   // the parameter_count.
@@ -849,14 +837,11 @@ SerializerForBackgroundCompilation::Environment::Environment(
     ephemeral_hints_[i] = arguments[i];
   }
 
-  if (padding == kMissingArgumentsAreUndefined) {
-    Hints undefined_hint =
-        Hints::SingleConstant(isolate->factory()->undefined_value(), zone);
-    for (size_t i = arguments.size(); i < param_count; ++i) {
-      ephemeral_hints_[i] = undefined_hint;
-    }
-  } else {
-    DCHECK_EQ(padding, kMissingArgumentsAreUnknown);
+  // Pad the rest with "undefined".
+  Hints undefined_hint =
+      Hints::SingleConstant(isolate->factory()->undefined_value(), zone);
+  for (size_t i = arguments.size(); i < param_count; ++i) {
+    ephemeral_hints_[i] = undefined_hint;
   }
 
   interpreter::Register new_target_reg =
@@ -967,14 +952,12 @@ SerializerForBackgroundCompilation::SerializerForBackgroundCompilation(
     ZoneStats* zone_stats, JSHeapBroker* broker,
     CompilationDependencies* dependencies, CompilationSubject function,
     base::Optional<Hints> new_target, const HintsVector& arguments,
-    MissingArgumentsPolicy padding,
     SerializerForBackgroundCompilationFlags flags)
     : broker_(broker),
       dependencies_(dependencies),
       zone_scope_(zone_stats, ZONE_NAME),
-      environment_(new (zone())
-                       Environment(zone(), broker_->isolate(), function,
-                                   new_target, arguments, padding)),
+      environment_(new (zone()) Environment(zone(), broker_->isolate(),
+                                            function, new_target, arguments)),
       jump_target_environments_(zone()),
       flags_(flags),
       osr_offset_(BailoutId::None()) {
@@ -1009,8 +992,6 @@ bool SerializerForBackgroundCompilation::BailoutOnUninitialized(
 
 Hints SerializerForBackgroundCompilation::Run() {
   TraceScope tracer(broker(), this, "SerializerForBackgroundCompilation::Run");
-  TRACE_BROKER_MEMORY(broker(), "[serializer start] Broker zone usage: "
-                                    << broker()->zone()->allocation_size());
   SharedFunctionInfoRef shared(broker(), environment()->function().shared());
   FeedbackVectorRef feedback_vector_ref(broker(), feedback_vector());
   if (shared.IsSerializedForCompilation(feedback_vector_ref)) {
@@ -1032,9 +1013,6 @@ Hints SerializerForBackgroundCompilation::Run() {
 
   feedback_vector_ref.Serialize();
   TraverseBytecode();
-
-  TRACE_BROKER_MEMORY(broker(), "[serializer end] Broker zone usage: "
-                                    << broker()->zone()->allocation_size());
   return environment()->return_value_hints();
 }
 
@@ -1159,8 +1137,7 @@ void SerializerForBackgroundCompilation::VisitGetIterator(
   const Hints& callee = Hints();
   FeedbackSlot call_slot = iterator->GetSlotOperand(2);
   HintsVector parameters({receiver}, zone());
-  ProcessCallOrConstruct(callee, base::nullopt, parameters, call_slot,
-                         kMissingArgumentsAreUndefined);
+  ProcessCallOrConstruct(callee, base::nullopt, parameters, call_slot);
 }
 
 void SerializerForBackgroundCompilation::VisitGetSuperConstructor(
@@ -1683,8 +1660,7 @@ void SerializerForBackgroundCompilation::VisitCallUndefinedReceiver0(
   Hints receiver = Hints::SingleConstant(
       broker()->isolate()->factory()->undefined_value(), zone());
   HintsVector parameters({receiver}, zone());
-  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot,
-                         kMissingArgumentsAreUndefined);
+  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot);
 }
 
 void SerializerForBackgroundCompilation::VisitCallUndefinedReceiver1(
@@ -1698,8 +1674,7 @@ void SerializerForBackgroundCompilation::VisitCallUndefinedReceiver1(
   Hints receiver = Hints::SingleConstant(
       broker()->isolate()->factory()->undefined_value(), zone());
   HintsVector parameters({receiver, arg0}, zone());
-  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot,
-                         kMissingArgumentsAreUndefined);
+  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot);
 }
 
 void SerializerForBackgroundCompilation::VisitCallUndefinedReceiver2(
@@ -1715,8 +1690,7 @@ void SerializerForBackgroundCompilation::VisitCallUndefinedReceiver2(
   Hints receiver = Hints::SingleConstant(
       broker()->isolate()->factory()->undefined_value(), zone());
   HintsVector parameters({receiver, arg0, arg1}, zone());
-  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot,
-                         kMissingArgumentsAreUndefined);
+  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot);
 }
 
 void SerializerForBackgroundCompilation::VisitCallAnyReceiver(
@@ -1760,8 +1734,7 @@ void SerializerForBackgroundCompilation::VisitCallProperty0(
   FeedbackSlot slot = iterator->GetSlotOperand(2);
 
   HintsVector parameters({receiver}, zone());
-  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot,
-                         kMissingArgumentsAreUndefined);
+  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot);
 }
 
 void SerializerForBackgroundCompilation::VisitCallProperty1(
@@ -1775,8 +1748,7 @@ void SerializerForBackgroundCompilation::VisitCallProperty1(
   FeedbackSlot slot = iterator->GetSlotOperand(3);
 
   HintsVector parameters({receiver, arg0}, zone());
-  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot,
-                         kMissingArgumentsAreUndefined);
+  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot);
 }
 
 void SerializerForBackgroundCompilation::VisitCallProperty2(
@@ -1792,8 +1764,7 @@ void SerializerForBackgroundCompilation::VisitCallProperty2(
   FeedbackSlot slot = iterator->GetSlotOperand(4);
 
   HintsVector parameters({receiver, arg0, arg1}, zone());
-  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot,
-                         kMissingArgumentsAreUndefined);
+  ProcessCallOrConstruct(callee, base::nullopt, parameters, slot);
 }
 
 void SerializerForBackgroundCompilation::VisitCallWithSpread(
@@ -1804,7 +1775,7 @@ void SerializerForBackgroundCompilation::VisitCallWithSpread(
   int reg_count = static_cast<int>(iterator->GetRegisterCountOperand(2));
   FeedbackSlot slot = iterator->GetSlotOperand(3);
   ProcessCallVarArgs(ConvertReceiverMode::kAny, callee, first_reg, reg_count,
-                     slot, kMissingArgumentsAreUnknown);
+                     slot, true);
 }
 
 void SerializerForBackgroundCompilation::VisitCallJSRuntime(
@@ -1824,35 +1795,55 @@ void SerializerForBackgroundCompilation::VisitCallJSRuntime(
 
 Hints SerializerForBackgroundCompilation::RunChildSerializer(
     CompilationSubject function, base::Optional<Hints> new_target,
-    const HintsVector& arguments, MissingArgumentsPolicy padding) {
-  SerializerForBackgroundCompilation child_serializer(
-      zone_scope_.zone_stats(), broker(), dependencies(), function, new_target,
-      arguments, padding, flags());
-  // The Hints returned by the call to Run are allocated in the zone
-  // created by the child serializer. Adding those hints to a hints
-  // object created in our zone will preserve the information.
+    const HintsVector& arguments, bool with_spread) {
+  if (with_spread) {
+    DCHECK_LT(0, arguments.size());
+    // Pad the missing arguments in case we were called with spread operator.
+    // Drop the last actually passed argument, which contains the spread.
+    // We don't know what the spread element produces. Therefore we pretend
+    // that the function is called with the maximal number of parameters and
+    // that we have no information about the parameters that were not
+    // explicitly provided.
+    HintsVector padded = arguments;
+    padded.pop_back();  // Remove the spread element.
+    // Fill the rest with empty hints.
+    padded.resize(
+        function.blueprint().shared()->GetBytecodeArray().parameter_count(),
+        Hints());
+    return RunChildSerializer(function, new_target, padded, false);
+  }
+
   Hints hints;
-  hints.AddFromChildSerializer(child_serializer.Run(), zone());
+  {
+    // The Hints returned by the call to Run are allocated in the zone
+    // created by the child serializer. Adding those hints to a hints
+    // object created in our zone will preserve the information.
+    SerializerForBackgroundCompilation child_serializer(
+        zone_scope_.zone_stats(), broker(), dependencies(), function,
+        new_target, arguments, flags());
+    hints.AddFromChildSerializer(child_serializer.Run(), zone());
+  }
   return hints;
 }
 
 void SerializerForBackgroundCompilation::ProcessSFIForCallOrConstruct(
     Callee const& callee, base::Optional<Hints> new_target,
     const HintsVector& arguments, SpeculationMode speculation_mode,
-    MissingArgumentsPolicy padding) {
+    bool with_spread) {
   Handle<SharedFunctionInfo> shared = callee.shared(broker()->isolate());
   if (shared->IsApiFunction()) {
     ProcessApiCall(shared, arguments);
     DCHECK(!shared->IsInlineable());
   } else if (shared->HasBuiltinId()) {
     ProcessBuiltinCall(shared, new_target, arguments, speculation_mode,
-                       padding);
+                       with_spread);
     DCHECK(!shared->IsInlineable());
   } else if (shared->IsInlineable() && callee.HasFeedbackVector()) {
     CompilationSubject subject =
         callee.ToCompilationSubject(broker()->isolate(), zone());
     environment()->accumulator_hints().Add(
-        RunChildSerializer(subject, new_target, arguments, padding), zone());
+        RunChildSerializer(subject, new_target, arguments, with_spread),
+        zone());
   }
 }
 
@@ -1895,7 +1886,7 @@ JSReceiverRef UnrollBoundFunction(JSBoundFunctionRef const& bound_function,
 void SerializerForBackgroundCompilation::ProcessCalleeForCallOrConstruct(
     Handle<Object> callee, base::Optional<Hints> new_target,
     const HintsVector& arguments, SpeculationMode speculation_mode,
-    MissingArgumentsPolicy padding) {
+    bool with_spread) {
   const HintsVector* actual_arguments = &arguments;
   HintsVector expanded_arguments(zone());
   if (callee->IsJSBoundFunction()) {
@@ -1913,13 +1904,12 @@ void SerializerForBackgroundCompilation::ProcessCalleeForCallOrConstruct(
   function.Serialize();
   Callee new_callee(function.object());
   ProcessSFIForCallOrConstruct(new_callee, new_target, *actual_arguments,
-                               speculation_mode, padding);
+                               speculation_mode, with_spread);
 }
 
 void SerializerForBackgroundCompilation::ProcessCallOrConstruct(
     Hints callee, base::Optional<Hints> new_target,
-    const HintsVector& arguments, FeedbackSlot slot,
-    MissingArgumentsPolicy padding) {
+    const HintsVector& arguments, FeedbackSlot slot, bool with_spread) {
   SpeculationMode speculation_mode = SpeculationMode::kDisallowSpeculation;
   if (!slot.IsInvalid()) {
     FeedbackSource source(feedback_vector(), slot);
@@ -1951,20 +1941,20 @@ void SerializerForBackgroundCompilation::ProcessCallOrConstruct(
   // For JSCallReducer::ReduceJSCall and JSCallReducer::ReduceJSConstruct.
   for (auto constant : callee.constants()) {
     ProcessCalleeForCallOrConstruct(constant, new_target, arguments,
-                                    speculation_mode, padding);
+                                    speculation_mode, with_spread);
   }
 
   // For JSCallReducer::ReduceJSCall and JSCallReducer::ReduceJSConstruct.
   for (auto hint : callee.function_blueprints()) {
     ProcessSFIForCallOrConstruct(Callee(hint), new_target, arguments,
-                                 speculation_mode, padding);
+                                 speculation_mode, with_spread);
   }
 }
 
 void SerializerForBackgroundCompilation::ProcessCallVarArgs(
     ConvertReceiverMode receiver_mode, Hints const& callee,
     interpreter::Register first_reg, int reg_count, FeedbackSlot slot,
-    MissingArgumentsPolicy padding) {
+    bool with_spread) {
   HintsVector arguments(zone());
   // The receiver is either given in the first register or it is implicitly
   // the {undefined} value.
@@ -1974,7 +1964,7 @@ void SerializerForBackgroundCompilation::ProcessCallVarArgs(
   }
   environment()->ExportRegisterHints(first_reg, reg_count, &arguments);
 
-  ProcessCallOrConstruct(callee, base::nullopt, arguments, slot, padding);
+  ProcessCallOrConstruct(callee, base::nullopt, arguments, slot);
 }
 
 void SerializerForBackgroundCompilation::ProcessApiCall(
@@ -1992,17 +1982,17 @@ void SerializerForBackgroundCompilation::ProcessApiCall(
   FunctionTemplateInfoRef target_template_info(
       broker(), handle(target->function_data(), broker()->isolate()));
   if (!target_template_info.has_call_code()) return;
+
   target_template_info.SerializeCallCode();
 
   SharedFunctionInfoRef target_ref(broker(), target);
   target_ref.SerializeFunctionTemplateInfo();
 
   if (target_template_info.accept_any_receiver() &&
-      target_template_info.is_signature_undefined()) {
+      target_template_info.is_signature_undefined())
     return;
-  }
 
-  if (arguments.empty()) return;
+  CHECK_GE(arguments.size(), 1);
   Hints const& receiver_hints = arguments[0];
   for (auto hint : receiver_hints.constants()) {
     if (hint->IsUndefined()) {
@@ -2048,7 +2038,7 @@ void SerializerForBackgroundCompilation::ProcessHintsForObjectCreate(
 void SerializerForBackgroundCompilation::ProcessBuiltinCall(
     Handle<SharedFunctionInfo> target, base::Optional<Hints> new_target,
     const HintsVector& arguments, SpeculationMode speculation_mode,
-    MissingArgumentsPolicy padding) {
+    bool with_spread) {
   DCHECK(target->HasBuiltinId());
   const int builtin_id = target->builtin_id();
   const char* name = Builtins::name(builtin_id);
@@ -2128,46 +2118,16 @@ void SerializerForBackgroundCompilation::ProcessBuiltinCall(
     case Builtins::kArrayPrototypeFind:
     case Builtins::kArrayPrototypeFindIndex:
     case Builtins::kArrayMap:
+    case Builtins::kArrayReduce:
+    case Builtins::kArrayReduceRight:
     case Builtins::kArraySome:
       if (arguments.size() >= 2 &&
           speculation_mode != SpeculationMode::kDisallowSpeculation) {
         Hints const& callback = arguments[1];
-        // "Call(callbackfn, T, « kValue, k, O »)"
-        HintsVector new_arguments(zone());
-        new_arguments.push_back(
-            arguments.size() < 3
-                ? Hints::SingleConstant(
-                      broker()->isolate()->factory()->undefined_value(), zone())
-                : arguments[2]);                // T
-        new_arguments.push_back(Hints());       // kValue
-        new_arguments.push_back(Hints());       // k
-        new_arguments.push_back(arguments[0]);  // O
         for (auto constant : callback.constants()) {
-          ProcessCalleeForCallOrConstruct(constant, base::nullopt,
-                                          new_arguments,
-                                          SpeculationMode::kDisallowSpeculation,
-                                          kMissingArgumentsAreUndefined);
-        }
-      }
-      break;
-    case Builtins::kArrayReduce:
-    case Builtins::kArrayReduceRight:
-      if (arguments.size() >= 2 &&
-          speculation_mode != SpeculationMode::kDisallowSpeculation) {
-        Hints const& callback = arguments[1];
-        // "Call(callbackfn, undefined, « accumulator, kValue, k, O »)"
-        HintsVector new_arguments(zone());
-        new_arguments.push_back(Hints::SingleConstant(
-            broker()->isolate()->factory()->undefined_value(), zone()));
-        new_arguments.push_back(Hints());       // accumulator
-        new_arguments.push_back(Hints());       // kValue
-        new_arguments.push_back(Hints());       // k
-        new_arguments.push_back(arguments[0]);  // O
-        for (auto constant : callback.constants()) {
-          ProcessCalleeForCallOrConstruct(constant, base::nullopt,
-                                          new_arguments,
-                                          SpeculationMode::kDisallowSpeculation,
-                                          kMissingArgumentsAreUndefined);
+          ProcessCalleeForCallOrConstruct(
+              constant, base::nullopt, HintsVector(zone()),
+              SpeculationMode::kDisallowSpeculation, false);
         }
       }
       break;
@@ -2175,36 +2135,12 @@ void SerializerForBackgroundCompilation::ProcessBuiltinCall(
     // TODO(neis): Might need something like a FunctionBlueprint but for
     // creating bound functions rather than creating closures.
     case Builtins::kFunctionPrototypeApply:
-      if (arguments.size() >= 1) {
-        // Drop hints for all arguments except the user-given receiver.
-        Hints new_receiver =
-            arguments.size() >= 2
-                ? arguments[1]
-                : Hints::SingleConstant(
-                      broker()->isolate()->factory()->undefined_value(),
-                      zone());
-        HintsVector new_arguments({new_receiver}, zone());
-        for (auto constant : arguments[0].constants()) {
-          ProcessCalleeForCallOrConstruct(constant, base::nullopt,
-                                          new_arguments,
-                                          SpeculationMode::kDisallowSpeculation,
-                                          kMissingArgumentsAreUnknown);
-        }
-      }
-      break;
     case Builtins::kPromiseConstructor:
       if (arguments.size() >= 1) {
-        // "Call(executor, undefined, « resolvingFunctions.[[Resolve]],
-        //                              resolvingFunctions.[[Reject]] »)"
-        HintsVector new_arguments(
-            {Hints::SingleConstant(
-                broker()->isolate()->factory()->undefined_value(), zone())},
-            zone());
         for (auto constant : arguments[0].constants()) {
-          ProcessCalleeForCallOrConstruct(constant, base::nullopt,
-                                          new_arguments,
-                                          SpeculationMode::kDisallowSpeculation,
-                                          kMissingArgumentsAreUnknown);
+          ProcessCalleeForCallOrConstruct(
+              constant, base::nullopt, HintsVector(zone()),
+              SpeculationMode::kDisallowSpeculation, false);
         }
       }
       break;
@@ -2215,7 +2151,7 @@ void SerializerForBackgroundCompilation::ProcessBuiltinCall(
         for (auto constant : arguments[0].constants()) {
           ProcessCalleeForCallOrConstruct(
               constant, base::nullopt, new_arguments,
-              SpeculationMode::kDisallowSpeculation, padding);
+              SpeculationMode::kDisallowSpeculation, with_spread);
         }
       }
       break;
@@ -2223,9 +2159,8 @@ void SerializerForBackgroundCompilation::ProcessBuiltinCall(
     case Builtins::kReflectConstruct:
       if (arguments.size() >= 2) {
         for (auto constant : arguments[1].constants()) {
-          if (constant->IsJSFunction()) {
+          if (constant->IsJSFunction())
             JSFunctionRef(broker(), constant).Serialize();
-          }
         }
       }
       break;
@@ -2396,9 +2331,8 @@ void ProcessMapForFunctionBind(MapRef map) {
                                    JSFunction::kNameDescriptorIndex) +
                             1;
   if (map.NumberOfOwnDescriptors() >= min_nof_descriptors) {
-    map.SerializeOwnDescriptor(
-        InternalIndex(JSFunction::kLengthDescriptorIndex));
-    map.SerializeOwnDescriptor(InternalIndex(JSFunction::kNameDescriptorIndex));
+    map.SerializeOwnDescriptor(JSFunction::kLengthDescriptorIndex);
+    map.SerializeOwnDescriptor(JSFunction::kNameDescriptorIndex);
   }
 }
 }  // namespace
@@ -2504,8 +2438,7 @@ void SerializerForBackgroundCompilation::VisitConstruct(
   HintsVector arguments(zone());
   environment()->ExportRegisterHints(first_reg, reg_count, &arguments);
 
-  ProcessCallOrConstruct(callee, new_target, arguments, slot,
-                         kMissingArgumentsAreUndefined);
+  ProcessCallOrConstruct(callee, new_target, arguments, slot);
 }
 
 void SerializerForBackgroundCompilation::VisitConstructWithSpread(
@@ -2519,10 +2452,8 @@ void SerializerForBackgroundCompilation::VisitConstructWithSpread(
 
   HintsVector arguments(zone());
   environment()->ExportRegisterHints(first_reg, reg_count, &arguments);
-  DCHECK(!arguments.empty());
-  arguments.pop_back();  // Remove the spread element.
-  ProcessCallOrConstruct(callee, new_target, arguments, slot,
-                         kMissingArgumentsAreUnknown);
+
+  ProcessCallOrConstruct(callee, new_target, arguments, slot, true);
 }
 
 void SerializerForBackgroundCompilation::ProcessGlobalAccess(FeedbackSlot slot,

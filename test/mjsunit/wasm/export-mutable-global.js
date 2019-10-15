@@ -59,10 +59,10 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
     let global_builder = builder.addGlobal(type, true).exportAs(name);
     if (value) global_builder.init = value;
     builder.addFunction("get " + name, makeSig([], [type]))
-      .addBody([kExprGlobalGet, index])
+      .addBody([kExprGetGlobal, index])
       .exportFunc();
     builder.addFunction("set " + name, makeSig([type], []))
-      .addBody([kExprLocalGet, 0, kExprGlobalSet, index])
+      .addBody([kExprGetLocal, 0, kExprSetGlobal, index])
       .exportFunc();
   }
   var instance = builder.instantiate();

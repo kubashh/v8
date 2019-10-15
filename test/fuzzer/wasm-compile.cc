@@ -322,7 +322,7 @@ class WasmGenerator {
       return Generate<wanted_type>(data);
     }
 
-    if (opcode != kExprLocalGet) Generate(local.type, data);
+    if (opcode != kExprGetLocal) Generate(local.type, data);
     builder_->EmitWithU32V(opcode, local.index);
     if (wanted_type != kWasmStmt && local.type != wanted_type) {
       Convert(local.type, wanted_type);
@@ -332,14 +332,14 @@ class WasmGenerator {
   template <ValueType wanted_type>
   void get_local(DataRange* data) {
     static_assert(wanted_type != kWasmStmt, "illegal type");
-    local_op<wanted_type>(data, kExprLocalGet);
+    local_op<wanted_type>(data, kExprGetLocal);
   }
 
-  void set_local(DataRange* data) { local_op<kWasmStmt>(data, kExprLocalSet); }
+  void set_local(DataRange* data) { local_op<kWasmStmt>(data, kExprSetLocal); }
 
   template <ValueType wanted_type>
   void tee_local(DataRange* data) {
-    local_op<wanted_type>(data, kExprLocalTee);
+    local_op<wanted_type>(data, kExprTeeLocal);
   }
 
   template <size_t num_bytes>
@@ -377,7 +377,7 @@ class WasmGenerator {
     }
 
     if (is_set) Generate(global.type, data);
-    builder_->EmitWithU32V(is_set ? kExprGlobalSet : kExprGlobalGet,
+    builder_->EmitWithU32V(is_set ? kExprSetGlobal : kExprGetGlobal,
                            global.index);
     if (!is_set && global.type != wanted_type) {
       Convert(global.type, wanted_type);

@@ -311,10 +311,11 @@ HeapObject Deserializer::PostProcessNewObject(HeapObject obj,
       // Serializer writes backing store ref in |backing_store| field.
       size_t store_index = reinterpret_cast<size_t>(buffer.backing_store());
       auto backing_store = backing_stores_[store_index];
-      SharedFlag shared = backing_store && backing_store->is_shared()
-                              ? SharedFlag::kShared
-                              : SharedFlag::kNotShared;
-      buffer.Setup(shared, backing_store);
+      if (backing_store) {
+        buffer.Attach(backing_store);
+      } else {
+        buffer.SetupEmpty(SharedFlag::kNotShared);
+      }
     }
   } else if (obj.IsBytecodeArray()) {
     // TODO(mythria): Remove these once we store the default values for these

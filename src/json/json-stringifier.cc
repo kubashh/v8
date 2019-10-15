@@ -771,7 +771,7 @@ JsonStringifier::Result JsonStringifier::SerializeJSObject(
     builder_.AppendCharacter('{');
     Indent();
     bool comma = false;
-    for (InternalIndex i : map->IterateOwnDescriptors()) {
+    for (int i = 0; i < map->NumberOfOwnDescriptors(); i++) {
       Handle<Name> name(map->instance_descriptors().GetKey(i), isolate_);
       // TODO(rossberg): Should this throw?
       if (!name->IsString()) continue;

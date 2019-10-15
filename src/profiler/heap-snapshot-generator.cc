@@ -1306,7 +1306,8 @@ void V8HeapExplorer::ExtractPropertyReferences(JSObject js_obj,
   Isolate* isolate = js_obj.GetIsolate();
   if (js_obj.HasFastProperties()) {
     DescriptorArray descs = js_obj.map().instance_descriptors();
-    for (InternalIndex i : js_obj.map().IterateOwnDescriptors()) {
+    int real_size = js_obj.map().NumberOfOwnDescriptors();
+    for (int i = 0; i < real_size; i++) {
       PropertyDetails details = descs.GetDetails(i);
       switch (details.location()) {
         case kField: {

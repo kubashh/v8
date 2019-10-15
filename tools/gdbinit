@@ -138,13 +138,7 @@ Find the location of a given address in V8 pages.
 Usage: heap_find address
 end
 
-# The 'disassembly-flavor' command is only available on i386 and x84_64.
-python
-try:
-  gdb.execute("set disassembly-flavor intel")
-except gdb.error:
-  pass
-end
+set disassembly-flavor intel
 set disable-randomization off
 
 # Install a handler whenever the debugger stops due to a signal. It walks up the

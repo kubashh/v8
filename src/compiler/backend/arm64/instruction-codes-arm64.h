@@ -70,7 +70,6 @@ namespace compiler {
   V(Arm64Sxtb)                              \
   V(Arm64Sxth)                              \
   V(Arm64Sxtw)                              \
-  V(Arm64Sbfx)                              \
   V(Arm64Sbfx32)                            \
   V(Arm64Ubfx)                              \
   V(Arm64Ubfx32)                            \

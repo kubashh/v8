@@ -259,25 +259,25 @@ void HeapObject::HeapObjectVerify(Isolate* isolate) {
     case JS_CONTEXT_EXTENSION_OBJECT_TYPE:
       JSObject::cast(*this).JSObjectVerify(isolate);
       break;
-    case WASM_MODULE_OBJECT_TYPE:
+    case WASM_MODULE_TYPE:
       WasmModuleObject::cast(*this).WasmModuleObjectVerify(isolate);
       break;
-    case WASM_TABLE_OBJECT_TYPE:
+    case WASM_TABLE_TYPE:
       WasmTableObject::cast(*this).WasmTableObjectVerify(isolate);
       break;
-    case WASM_MEMORY_OBJECT_TYPE:
+    case WASM_MEMORY_TYPE:
       WasmMemoryObject::cast(*this).WasmMemoryObjectVerify(isolate);
       break;
-    case WASM_GLOBAL_OBJECT_TYPE:
+    case WASM_GLOBAL_TYPE:
       WasmGlobalObject::cast(*this).WasmGlobalObjectVerify(isolate);
       break;
-    case WASM_EXCEPTION_OBJECT_TYPE:
+    case WASM_EXCEPTION_TYPE:
       WasmExceptionObject::cast(*this).WasmExceptionObjectVerify(isolate);
       break;
-    case WASM_INSTANCE_OBJECT_TYPE:
+    case WASM_INSTANCE_TYPE:
       WasmInstanceObject::cast(*this).WasmInstanceObjectVerify(isolate);
       break;
-    case JS_ARGUMENTS_OBJECT_TYPE:
+    case JS_ARGUMENTS_TYPE:
       JSArgumentsObject::cast(*this).JSArgumentsObjectVerify(isolate);
       break;
     case JS_GENERATOR_OBJECT_TYPE:
@@ -366,10 +366,10 @@ void HeapObject::HeapObjectVerify(Isolate* isolate) {
     case JS_PROMISE_TYPE:
       JSPromise::cast(*this).JSPromiseVerify(isolate);
       break;
-    case JS_REG_EXP_TYPE:
+    case JS_REGEXP_TYPE:
       JSRegExp::cast(*this).JSRegExpVerify(isolate);
       break;
-    case JS_REG_EXP_STRING_ITERATOR_TYPE:
+    case JS_REGEXP_STRING_ITERATOR_TYPE:
       JSRegExpStringIterator::cast(*this).JSRegExpStringIteratorVerify(isolate);
       break;
     case FILLER_TYPE:
@@ -426,34 +426,34 @@ void HeapObject::HeapObjectVerify(Isolate* isolate) {
       CodeDataContainer::cast(*this).CodeDataContainerVerify(isolate);
       break;
 #ifdef V8_INTL_SUPPORT
-    case JS_V8_BREAK_ITERATOR_TYPE:
+    case JS_INTL_V8_BREAK_ITERATOR_TYPE:
       JSV8BreakIterator::cast(*this).JSV8BreakIteratorVerify(isolate);
       break;
-    case JS_COLLATOR_TYPE:
+    case JS_INTL_COLLATOR_TYPE:
       JSCollator::cast(*this).JSCollatorVerify(isolate);
       break;
-    case JS_DATE_TIME_FORMAT_TYPE:
+    case JS_INTL_DATE_TIME_FORMAT_TYPE:
       JSDateTimeFormat::cast(*this).JSDateTimeFormatVerify(isolate);
       break;
-    case JS_LIST_FORMAT_TYPE:
+    case JS_INTL_LIST_FORMAT_TYPE:
       JSListFormat::cast(*this).JSListFormatVerify(isolate);
       break;
-    case JS_LOCALE_TYPE:
+    case JS_INTL_LOCALE_TYPE:
       JSLocale::cast(*this).JSLocaleVerify(isolate);
       break;
-    case JS_NUMBER_FORMAT_TYPE:
+    case JS_INTL_NUMBER_FORMAT_TYPE:
       JSNumberFormat::cast(*this).JSNumberFormatVerify(isolate);
       break;
-    case JS_PLURAL_RULES_TYPE:
+    case JS_INTL_PLURAL_RULES_TYPE:
       JSPluralRules::cast(*this).JSPluralRulesVerify(isolate);
       break;
-    case JS_RELATIVE_TIME_FORMAT_TYPE:
+    case JS_INTL_RELATIVE_TIME_FORMAT_TYPE:
       JSRelativeTimeFormat::cast(*this).JSRelativeTimeFormatVerify(isolate);
       break;
-    case JS_SEGMENT_ITERATOR_TYPE:
+    case JS_INTL_SEGMENT_ITERATOR_TYPE:
       JSSegmentIterator::cast(*this).JSSegmentIteratorVerify(isolate);
       break;
-    case JS_SEGMENTER_TYPE:
+    case JS_INTL_SEGMENTER_TYPE:
       JSSegmenter::cast(*this).JSSegmenterVerify(isolate);
       break;
 #endif  // V8_INTL_SUPPORT
@@ -513,6 +513,8 @@ void BytecodeArray::BytecodeArrayVerify(Isolate* isolate) {
 
 USE_TORQUE_VERIFIER(FreeSpace)
 
+USE_TORQUE_VERIFIER(FeedbackCell)
+
 void FeedbackVector::FeedbackVectorVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::FeedbackVectorVerify(*this, isolate);
   MaybeObject code = optimized_code_weak_or_smi();
@@ -571,25 +573,25 @@ void JSObject::JSObjectVerify(Isolate* isolate) {
 
   CHECK_IMPLIES(HasSloppyArgumentsElements(), IsJSArgumentsObject());
   if (HasFastProperties()) {
-    int actual_unused_property_fields = map().GetInObjectProperties() +
-                                        property_array().length() -
-                                        map().NextFreePropertyIndex();
-    if (map().UnusedPropertyFields() != actual_unused_property_fields) {
+    int actual_unused_field_slots = map().TotalInObjectFieldSlots() +
+                                    property_array().length() -
+                                    map().TotalUsedFieldSlots();
+    if (map().UnusedFieldSlots() != actual_unused_field_slots) {
       // There are two reasons why this can happen:
       // - in the middle of StoreTransitionStub when the new extended backing
       //   store is already set into the object and the allocation of the
       //   HeapNumber triggers GC while the map isn't updated yet.
       // - deletion of the last property can leave additional backing store
       //   capacity behind.
-      CHECK_GT(actual_unused_property_fields, map().UnusedPropertyFields());
-      int delta = actual_unused_property_fields - map().UnusedPropertyFields();
+      CHECK_GT(actual_unused_field_slots, map().UnusedFieldSlots());
+      int delta = actual_unused_field_slots - map().UnusedFieldSlots();
       CHECK_EQ(0, delta % JSObject::kFieldsAdded);
     }
     DescriptorArray descriptors = map().instance_descriptors();
     bool is_transitionable_fast_elements_kind =
         IsTransitionableFastElementsKind(map().elements_kind());
 
-    for (InternalIndex i : map().IterateOwnDescriptors()) {
+    for (int i = 0; i < map().NumberOfOwnDescriptors(); i++) {
       PropertyDetails details = descriptors.GetDetails(i);
       if (details.location() == kField) {
         DCHECK_EQ(kData, details.kind());
@@ -667,9 +669,25 @@ void Map::MapVerify(Isolate* isolate) {
     CHECK(!is_dictionary_map());
     CHECK(!is_access_check_needed());
     DescriptorArray const descriptors = instance_descriptors();
-    for (InternalIndex i : IterateOwnDescriptors()) {
+    for (int i = 0; i < NumberOfOwnDescriptors(); ++i) {
       CHECK(!descriptors.GetKey(i).IsInterestingSymbol());
     }
+  }
+  if (IsJSObjectMap() && !is_dictionary_map()) {
+    CHECK_EQ(TotalUsedFieldSlots() + UnusedFieldSlots(), TotalFieldSlots());
+    CHECK_EQ(UsedInObjectFieldSlots() + UnusedInObjectFieldSlots(),
+             TotalInObjectFieldSlots());
+    CHECK_EQ(UsedOutOfObjectFieldSlots() + UnusedOutOfObjectFieldSlots(),
+             TotalOutOfObjectFieldSlots());
+
+    CHECK_EQ(UsedInObjectFieldSlots() + UsedOutOfObjectFieldSlots(),
+             TotalUsedFieldSlots());
+    CHECK_EQ(UnusedInObjectFieldSlots() + UnusedOutOfObjectFieldSlots(),
+             UnusedFieldSlots());
+    CHECK_EQ(TotalInObjectFieldSlots() + TotalOutOfObjectFieldSlots(),
+             TotalFieldSlots());
+
+    // CHECK_EQ(TotalOutOfObjectFieldSlots() % JSObject::kFieldsAdded, 0);
   }
   CHECK_IMPLIES(has_named_interceptor(), may_have_interesting_symbols());
   CHECK_IMPLIES(is_dictionary_map(), may_have_interesting_symbols());
@@ -691,7 +709,7 @@ void Map::DictionaryMapVerify(Isolate* isolate) {
   CHECK_EQ(kInvalidEnumCacheSentinel, EnumLength());
   CHECK_EQ(ReadOnlyRoots(isolate).empty_descriptor_array(),
            instance_descriptors());
-  CHECK_EQ(0, UnusedPropertyFields());
+  CHECK_EQ(0, UnusedFieldSlots());
   CHECK_EQ(Map::GetVisitorId(*this), visitor_id());
 }
 
@@ -801,10 +819,10 @@ void DescriptorArray::DescriptorArrayVerify(Isolate* isolate) {
 
     // Check that properties with private symbols names are non-enumerable, and
     // that fields are in order.
-    int expected_field_index = 0;
-    for (InternalIndex descriptor :
-         InternalIndex::Range(number_of_descriptors())) {
-      Object key = *(GetDescriptorSlot(descriptor.as_int()) + kEntryKeyIndex);
+    int previous_field_slot = -1;
+    for (int descriptor = 0; descriptor < number_of_descriptors();
+         descriptor++) {
+      Object key = *(GetDescriptorSlot(descriptor) + kEntryKeyIndex);
       // number_of_descriptors() may be out of sync with the actual descriptors
       // written during descriptor array construction.
       if (key.IsUndefined(isolate)) continue;
@@ -815,13 +833,13 @@ void DescriptorArray::DescriptorArrayVerify(Isolate* isolate) {
       MaybeObject value = GetValue(descriptor);
       HeapObject heap_object;
       if (details.location() == kField) {
-        CHECK_EQ(details.field_index(), expected_field_index);
+        CHECK_GT(details.field_slot_index(), previous_field_slot);
+        previous_field_slot = details.field_slot_index();
         CHECK(
             value == MaybeObject::FromObject(FieldType::None()) ||
             value == MaybeObject::FromObject(FieldType::Any()) ||
             value->IsCleared() ||
             (value->GetHeapObjectIfWeak(&heap_object) && heap_object.IsMap()));
-        expected_field_index += details.field_width_in_words();
       } else {
         CHECK(!value->IsWeakOrCleared());
         CHECK(!value->cast<Object>().IsMap());
@@ -1686,6 +1704,8 @@ void StoreHandler::StoreHandlerVerify(Isolate* isolate) {
 
 USE_TORQUE_VERIFIER(AccessorInfo)
 
+USE_TORQUE_VERIFIER(AccessorPair)
+
 void CallHandlerInfo::CallHandlerInfoVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::CallHandlerInfoVerify(*this, isolate);
   CHECK(map() == ReadOnlyRoots(isolate).side_effect_call_handler_info_map() ||
@@ -1738,6 +1758,8 @@ void NormalizedMapCache::NormalizedMapCacheVerify(Isolate* isolate) {
   }
 }
 
+USE_TORQUE_VERIFIER(DebugInfo)
+
 USE_TORQUE_VERIFIER(StackFrameInfo)
 
 void PreparseData::PreparseDataVerify(Isolate* isolate) {
@@ -1788,8 +1810,8 @@ void JSObject::IncrementSpillStatistics(Isolate* isolate,
   // Named properties
   if (HasFastProperties()) {
     info->number_of_objects_with_fast_properties_++;
-    info->number_of_fast_used_fields_ += map().NextFreePropertyIndex();
-    info->number_of_fast_unused_fields_ += map().UnusedPropertyFields();
+    info->number_of_fast_used_fields_ += map().TotalUsedFieldSlots();
+    info->number_of_fast_unused_fields_ += map().UnusedFieldSlots();
   } else if (IsJSGlobalObject()) {
     GlobalDictionary dict = JSGlobalObject::cast(*this).global_dictionary();
     info->number_of_slow_used_properties_ += dict.NumberOfElements();

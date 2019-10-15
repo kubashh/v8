@@ -199,11 +199,11 @@ class WasmGraphBuilder {
   Node* TerminateLoop(Node* effect, Node* control);
   Node* TerminateThrow(Node* effect, Node* control);
   Node* Merge(unsigned count, Node** controls);
-  Node* Phi(wasm::ValueType type, unsigned count, Node** vals_and_control);
+  Node* Phi(wasm::ValueType type, unsigned count, Node** vals, Node* control);
   Node* CreateOrMergeIntoPhi(MachineRepresentation rep, Node* merge,
                              Node* tnode, Node* fnode);
   Node* CreateOrMergeIntoEffectPhi(Node* merge, Node* tnode, Node* fnode);
-  Node* EffectPhi(unsigned count, Node** effects_and_control);
+  Node* EffectPhi(unsigned count, Node** effects, Node* control);
   Node* RefNull();
   Node* RefFunc(uint32_t function_index);
   Node* Uint32Constant(uint32_t value);
@@ -287,8 +287,8 @@ class WasmGraphBuilder {
 
   Node* Invert(Node* node);
 
-  Node* GlobalGet(uint32_t index);
-  Node* GlobalSet(uint32_t index, Node* val);
+  Node* GetGlobal(uint32_t index);
+  Node* SetGlobal(uint32_t index, Node* val);
   Node* TableGet(uint32_t table_index, Node* index,
                  wasm::WasmCodePosition position);
   Node* TableSet(uint32_t table_index, Node* index, Node* val,

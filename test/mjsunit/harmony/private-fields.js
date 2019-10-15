@@ -476,12 +476,3 @@
   let c = new C;
   assertThrows(() => c.getA(), SyntaxError);
 }
-
-{
-  assertThrows(() => {
-    class A {
-      [this.#a] = 1;
-      #a = 2;
-    }
-  }, TypeError);
-}

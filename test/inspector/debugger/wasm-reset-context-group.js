@@ -12,7 +12,7 @@ var builder = new WasmModuleBuilder();
 builder.addFunction('wasm_func', kSig_i_i)
     .addBody([
       // clang-format off
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprI32Const, 1,
         kExprI32Sub,
       // clang-format on

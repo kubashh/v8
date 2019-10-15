@@ -1024,8 +1024,8 @@ TF_BUILTIN(TypedArrayFrom, TypedArrayBuiltinsAssembler) {
             GetProperty(context, final_source.value(), index);
 
         TNode<Object> const mapped_value =
-            CallJS(CodeFactory::Call(isolate()), context, map_fn, this_arg,
-                   k_value, index);
+            CAST(CallJS(CodeFactory::Call(isolate()), context, map_fn, this_arg,
+                        k_value, index));
 
         DispatchTypedArrayByElementsKind(
             elements_kind,

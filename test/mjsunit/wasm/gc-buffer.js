@@ -14,7 +14,7 @@ function run(f) {
     builder.addImport("mod", "the_name_of_my_import", kSig_i_i);
     builder.addFunction("main", kSig_i_i)
       .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprCallFunction, 0])
       .exportAs("main");
     print("module");

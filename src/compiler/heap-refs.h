@@ -562,13 +562,14 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
 
   int instance_size() const;
   InstanceType instance_type() const;
-  int GetInObjectProperties() const;
-  int GetInObjectPropertiesStartInWords() const;
+  int TotalInObjectFieldSlots() const;
+  int TotalOutOfObjectFieldSlots() const;
+  int GetInObjectFieldStorageStartInWords() const;
   int NumberOfOwnDescriptors() const;
-  int GetInObjectPropertyOffset(int index) const;
+  int GetInObjectFieldSlotOffset(int index) const;
   int constructor_function_index() const;
-  int NextFreePropertyIndex() const;
-  int UnusedPropertyFields() const;
+  int NextFreeFieldSlot() const;
+  int UnusedFieldSlots() const;
   ElementsKind elements_kind() const;
   bool is_stable() const;
   bool is_extensible() const;
@@ -611,15 +612,15 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
 
   // Concerning the underlying instance_descriptors:
   void SerializeOwnDescriptors();
-  void SerializeOwnDescriptor(InternalIndex descriptor_index);
-  bool serialized_own_descriptor(InternalIndex descriptor_index) const;
-  MapRef FindFieldOwner(InternalIndex descriptor_index) const;
-  PropertyDetails GetPropertyDetails(InternalIndex descriptor_index) const;
-  NameRef GetPropertyKey(InternalIndex descriptor_index) const;
-  FieldIndex GetFieldIndexFor(InternalIndex descriptor_index) const;
-  ObjectRef GetFieldType(InternalIndex descriptor_index) const;
-  bool IsUnboxedDoubleField(InternalIndex descriptor_index) const;
-  ObjectRef GetStrongValue(InternalIndex descriptor_number) const;
+  void SerializeOwnDescriptor(int descriptor_index);
+  bool serialized_own_descriptor(int descriptor_index) const;
+  MapRef FindFieldOwner(int descriptor_index) const;
+  PropertyDetails GetPropertyDetails(int descriptor_index) const;
+  NameRef GetPropertyKey(int descriptor_index) const;
+  FieldIndex GetFieldIndexFor(int descriptor_index) const;
+  ObjectRef GetFieldType(int descriptor_index) const;
+  bool IsUnboxedDoubleField(int descriptor_index) const;
+  ObjectRef GetStrongValue(int descriptor_number) const;
 
   void SerializeRootMap();
   base::Optional<MapRef> FindRootMap() const;

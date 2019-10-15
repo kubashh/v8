@@ -279,13 +279,9 @@ void FastKeyAccumulator::Prepare() {
   is_receiver_simple_enum_ = false;
   has_empty_prototype_ = true;
   JSReceiver last_prototype;
-  may_have_elements_ = MayHaveElements(*receiver_);
   for (PrototypeIterator iter(isolate_, *receiver_); !iter.IsAtEnd();
        iter.Advance()) {
     JSReceiver current = iter.GetCurrent<JSReceiver>();
-    if (!may_have_elements_) {
-      may_have_elements_ = MayHaveElements(current);
-    }
     bool has_no_properties = CheckAndInitalizeEmptyEnumCache(current);
     if (has_no_properties) continue;
     last_prototype = current;
@@ -342,12 +338,13 @@ Handle<FixedArray> GetFastEnumPropertyKeys(Isolate* isolate,
   Handle<DescriptorArray> descriptors =
       Handle<DescriptorArray>(map->instance_descriptors(), isolate);
   isolate->counters()->enum_cache_misses()->Increment();
+  int nod = map->NumberOfOwnDescriptors();
 
   // Create the keys array.
   int index = 0;
   bool fields_only = true;
   keys = isolate->factory()->NewFixedArray(enum_length);
-  for (InternalIndex i : map->IterateOwnDescriptors()) {
+  for (int i = 0; i < nod; i++) {
     DisallowHeapAllocation no_gc;
     PropertyDetails details = descriptors->GetDetails(i);
     if (details.IsDontEnum()) continue;
@@ -364,7 +361,7 @@ Handle<FixedArray> GetFastEnumPropertyKeys(Isolate* isolate,
   if (fields_only) {
     indices = isolate->factory()->NewFixedArray(enum_length);
     index = 0;
-    for (InternalIndex i : map->IterateOwnDescriptors()) {
+    for (int i = 0; i < nod; i++) {
       DisallowHeapAllocation no_gc;
       PropertyDetails details = descriptors->GetDetails(i);
       if (details.IsDontEnum()) continue;
@@ -502,19 +499,10 @@ MaybeHandle<FixedArray> FastKeyAccumulator::GetKeysSlow(
   accumulator.set_is_for_in(is_for_in_);
   accumulator.set_skip_indices(skip_indices_);
   accumulator.set_last_non_empty_prototype(last_non_empty_prototype_);
-  accumulator.set_may_have_elements(may_have_elements_);
 
   MAYBE_RETURN(accumulator.CollectKeys(receiver_, receiver_),
                MaybeHandle<FixedArray>());
   return accumulator.GetKeys(keys_conversion);
-}
-
-bool FastKeyAccumulator::MayHaveElements(JSReceiver receiver) {
-  if (!receiver.IsJSObject()) return true;
-  JSObject object = JSObject::cast(receiver);
-  if (object.HasEnumerableElements()) return true;
-  if (object.HasIndexedInterceptor()) return true;
-  return false;
 }
 
 namespace {
@@ -530,14 +518,13 @@ V8_WARN_UNUSED_RESULT ExceptionStatus FilterForEnumerableProperties(
 
   uint32_t length = accessor->GetCapacity(*result, result->elements());
   for (uint32_t i = 0; i < length; i++) {
-    InternalIndex entry(i);
-    if (!accessor->HasEntry(*result, entry)) continue;
+    if (!accessor->HasEntry(*result, i)) continue;
 
     // args are invalid after args.Call(), create a new one in every iteration.
     PropertyCallbackArguments args(accumulator->isolate(), interceptor->data(),
                                    *receiver, *object, Just(kDontThrow));
 
-    Handle<Object> element = accessor->Get(result, entry);
+    Handle<Object> element = accessor->Get(result, i);
     Handle<Object> attributes;
     if (type == kIndexed) {
       uint32_t number;
@@ -637,7 +624,7 @@ base::Optional<int> CollectOwnPropertyNamesInternal(
   int first_skipped = -1;
   PropertyFilter filter = keys->filter();
   KeyCollectionMode mode = keys->mode();
-  for (InternalIndex i : InternalIndex::Range(start_index, limit)) {
+  for (int i = start_index; i < limit; i++) {
     bool is_shadowing_key = false;
     PropertyDetails details = descs->GetDetails(i);
 
@@ -658,7 +645,7 @@ base::Optional<int> CollectOwnPropertyNamesInternal(
 
     Name key = descs->GetKey(i);
     if (skip_symbols == key.IsSymbol()) {
-      if (first_skipped == -1) first_skipped = i.as_int();
+      if (first_skipped == -1) first_skipped = i;
       continue;
     }
     if (key.FilterKey(keys->filter())) continue;
@@ -705,7 +692,7 @@ Maybe<bool> KeyAccumulator::CollectOwnPropertyNames(Handle<JSReceiver> receiver,
         if (map.prototype(isolate_) != ReadOnlyRoots(isolate_).null_value()) {
           Handle<DescriptorArray> descs =
               Handle<DescriptorArray>(map.instance_descriptors(), isolate_);
-          for (InternalIndex i : InternalIndex::Range(nof_descriptors)) {
+          for (int i = 0; i < nof_descriptors; i++) {
             PropertyDetails details = descs->GetDetails(i);
             if (!details.IsDontEnum()) continue;
             Object key = descs->GetKey(i);
@@ -838,9 +825,7 @@ Maybe<bool> KeyAccumulator::CollectOwnKeys(Handle<JSReceiver> receiver,
     return Just(true);
   }
 
-  if (may_have_elements_) {
-    MAYBE_RETURN(CollectOwnElementIndices(receiver, object), Nothing<bool>());
-  }
+  MAYBE_RETURN(CollectOwnElementIndices(receiver, object), Nothing<bool>());
   MAYBE_RETURN(CollectOwnPropertyNames(receiver, object), Nothing<bool>());
   return Just(true);
 }

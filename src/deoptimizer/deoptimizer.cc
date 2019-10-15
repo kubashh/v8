@@ -3651,12 +3651,13 @@ void TranslatedState::EnsurePropertiesAllocatedAndMarked(
 
   // Set markers for the double properties.
   Handle<DescriptorArray> descriptors(map->instance_descriptors(), isolate());
-  for (InternalIndex i : map->IterateOwnDescriptors()) {
+  int descriptor_count = map->NumberOfOwnDescriptors();
+  for (int i = 0; i < descriptor_count; i++) {
     FieldIndex index = FieldIndex::ForDescriptor(*map, i);
     if (descriptors->GetDetails(i).representation().IsDouble() &&
         !index.is_inobject()) {
       CHECK(!map->IsUnboxedDoubleField(index));
-      int outobject_index = index.outobject_array_index();
+      int outobject_index = index.slot_index();
       int array_index = outobject_index * kTaggedSize;
       object_storage->set(array_index, kStoreMutableHeapNumber);
     }
@@ -3683,14 +3684,15 @@ void TranslatedState::EnsureJSObjectAllocated(TranslatedValue* slot,
   Handle<ByteArray> object_storage = AllocateStorageFor(slot);
   // Now we handle the interesting (JSObject) case.
   Handle<DescriptorArray> descriptors(map->instance_descriptors(), isolate());
+  int field_count = map->NumberOfOwnDescriptors();
 
   // Set markers for the double properties.
-  for (InternalIndex i : map->IterateOwnDescriptors()) {
+  for (int i = 0; i < field_count; i++) {
     FieldIndex index = FieldIndex::ForDescriptor(*map, i);
     if (descriptors->GetDetails(i).representation().IsDouble() &&
         index.is_inobject()) {
-      CHECK_GE(index.index(), FixedArray::kHeaderSize / kTaggedSize);
-      int array_index = index.index() * kTaggedSize - FixedArray::kHeaderSize;
+      CHECK_GE(index.slot_index(), 0);
+      int array_index = index.slot_index() * kTaggedSize;
       uint8_t marker = map->IsUnboxedDoubleField(index)
                            ? kStoreUnboxedDouble
                            : kStoreMutableHeapNumber;

@@ -35,7 +35,6 @@ bool InvalidatedSlotsFilter::IsValid(Address slot) {
   HeapObject invalidated_object = HeapObject::FromAddress(invalidated_start_);
 
   if (invalidated_size_ == 0) {
-    DCHECK(invalidated_object.map().IsMap());
     invalidated_size_ = invalidated_object.Size();
   }
 

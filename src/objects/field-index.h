@@ -5,8 +5,6 @@
 #ifndef V8_OBJECTS_FIELD_INDEX_H_
 #define V8_OBJECTS_FIELD_INDEX_H_
 
-// TODO(jkummerow): Consider forward-declaring instead.
-#include "src/objects/internal-index.h"
 #include "src/objects/property-details.h"
 #include "src/utils/utils.h"
 
@@ -16,7 +14,7 @@ namespace internal {
 class Map;
 
 // Wrapper class to hold a field index, usually but not necessarily generated
-// from a property index. When available, the wrapper class captures additional
+// from a property. When available, the wrapper class captures additional
 // information to allow the field index to be translated back into the property
 // index it was originally generated from.
 class FieldIndex final {
@@ -25,14 +23,16 @@ class FieldIndex final {
 
   FieldIndex() : bit_field_(0) {}
 
-  static inline FieldIndex ForPropertyIndex(
-      Map map, int index,
-      Representation representation = Representation::Tagged());
   static inline FieldIndex ForInObjectOffset(int offset, Encoding encoding);
-  static inline FieldIndex ForDescriptor(Map map,
-                                         InternalIndex descriptor_index);
-  static inline FieldIndex ForDescriptor(Isolate* isolate, Map map,
-                                         InternalIndex descriptor_index);
+  static inline FieldIndex ForDescriptor(const Map map, int descriptor_index);
+  static inline FieldIndex ForDescriptor(Isolate* isolate, const Map map,
+                                         int descriptor_index);
+  static inline FieldIndex ForDetails(const Map map, PropertyDetails details);
+  static inline FieldIndex ForFieldSlot(const Map map, int field_slot_index);
+  static inline FieldIndex ForFieldSlot(const Map map, int field_slot_index,
+                                        Representation representation);
+  static inline FieldIndex ForFieldSlot(const Map map, int field_slot_index,
+                                        Encoding encoding);
 
   inline int GetLoadByFieldIndex() const;
 
@@ -42,25 +42,11 @@ class FieldIndex final {
 
   int offset() const { return OffsetBits::decode(bit_field_); }
 
-  // Zero-indexed from beginning of the object.
-  int index() const {
+  // Zero-indexed from beginning of the object's field slots for inline fields,
+  // or from the beginning of the property array data for out-of-object slots.
+  int slot_index() const {
     DCHECK(IsAligned(offset(), kTaggedSize));
-    return offset() / kTaggedSize;
-  }
-
-  int outobject_array_index() const {
-    DCHECK(!is_inobject());
-    return index() - first_inobject_property_offset() / kTaggedSize;
-  }
-
-  // Zero-based from the first inobject property. Overflows to out-of-object
-  // properties.
-  int property_index() const {
-    int result = index() - first_inobject_property_offset() / kTaggedSize;
-    if (!is_inobject()) {
-      result += InObjectPropertyBits::decode(bit_field_);
-    }
-    return result;
+    return (offset() - first_inobject_property_offset()) / kTaggedSize;
   }
 
   int GetFieldAccessStubKey() const {

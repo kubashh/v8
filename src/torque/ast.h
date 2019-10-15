@@ -90,8 +90,7 @@ namespace torque {
   AST_STATEMENT_NODE_KIND_LIST(V)       \
   AST_DECLARATION_NODE_KIND_LIST(V)     \
   V(Identifier)                         \
-  V(LabelBlock)                         \
-  V(ClassBody)
+  V(LabelBlock)
 
 struct AstNode {
  public:
@@ -793,12 +792,6 @@ struct TypeDeclaration : Declaration {
   Identifier* name;
 };
 
-struct InstanceTypeConstraints {
-  InstanceTypeConstraints() : value(-1), num_flags_bits(-1) {}
-  int value;
-  int num_flags_bits;
-};
-
 struct AbstractTypeDeclaration : TypeDeclaration {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(AbstractTypeDeclaration)
   AbstractTypeDeclaration(SourcePosition pos, Identifier* name, bool transient,
@@ -1076,38 +1069,24 @@ struct StructDeclaration : TypeDeclaration {
   bool IsGeneric() const { return !generic_parameters.empty(); }
 };
 
-struct ClassBody : AstNode {
-  DEFINE_AST_NODE_LEAF_BOILERPLATE(ClassBody)
-  ClassBody(SourcePosition pos, std::vector<Declaration*> methods,
-            std::vector<ClassFieldExpression> fields)
-      : AstNode(kKind, pos),
-        methods(std::move(methods)),
-        fields(std::move(fields)) {}
-  std::vector<Declaration*> methods;
-  std::vector<ClassFieldExpression> fields;
-};
-
 struct ClassDeclaration : TypeDeclaration {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(ClassDeclaration)
   ClassDeclaration(SourcePosition pos, Identifier* name, ClassFlags flags,
                    base::Optional<TypeExpression*> super,
                    base::Optional<std::string> generates,
                    std::vector<Declaration*> methods,
-                   std::vector<ClassFieldExpression> fields,
-                   InstanceTypeConstraints instance_type_constraints)
+                   std::vector<ClassFieldExpression> fields)
       : TypeDeclaration(kKind, pos, name),
         flags(flags),
         super(super),
         generates(std::move(generates)),
         methods(std::move(methods)),
-        fields(std::move(fields)),
-        instance_type_constraints(std::move(instance_type_constraints)) {}
+        fields(std::move(fields)) {}
   ClassFlags flags;
   base::Optional<TypeExpression*> super;
   base::Optional<std::string> generates;
   std::vector<Declaration*> methods;
   std::vector<ClassFieldExpression> fields;
-  InstanceTypeConstraints instance_type_constraints;
 };
 
 struct CppIncludeDeclaration : Declaration {

@@ -14,7 +14,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("push_and_drop_exnref", kSig_v_v)
       .addLocals({except_count: 1})
       .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprDrop,
       ]).exportFunc();
   let instance = builder.instantiate();
@@ -29,7 +29,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   let except = builder.addException(kSig_v_v);
   builder.addFunction("throw_if_param_not_zero", kSig_i_i)
       .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprI32Const, 0,
         kExprI32Ne,
         kExprIf, kWasmStmt,
@@ -68,7 +68,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("simple_throw_catch_to_0_1", kSig_i_i)
       .addBody([
         kExprTry, kWasmI32,
-          kExprLocalGet, 0,
+          kExprGetLocal, 0,
           kExprI32Eqz,
           kExprIf, kWasmStmt,
             kExprThrow, except,
@@ -99,12 +99,12 @@ load("test/mjsunit/wasm/exceptions-utils.js");
           kExprBlock, kWasmStmt,
             kExprTry, kWasmStmt,
               kExprTry, kWasmStmt,
-                kExprLocalGet, 0,
+                kExprGetLocal, 0,
                 kExprI32Eqz,
                 kExprIf, kWasmStmt,
                   kExprThrow, except1,
                 kExprElse,
-                  kExprLocalGet, 0,
+                  kExprGetLocal, 0,
                   kExprI32Const, 1,
                   kExprI32Eq,
                   kExprIf, kWasmStmt,
@@ -149,12 +149,12 @@ load("test/mjsunit/wasm/exceptions-utils.js");
         kExprBlock, kWasmStmt,
           kExprBlock, kWasmStmt,
             kExprTry, kWasmStmt,
-              kExprLocalGet, 0,
+              kExprGetLocal, 0,
               kExprI32Eqz,
               kExprIf, kWasmStmt,
                 kExprThrow, except1,
               kExprElse,
-                kExprLocalGet, 0,
+                kExprGetLocal, 0,
                 kExprI32Const, 1,
                 kExprI32Eq,
                 kExprIf, kWasmStmt,
@@ -194,15 +194,15 @@ load("test/mjsunit/wasm/exceptions-utils.js");
       .addBody([
         kExprBlock, kWasmI32,
           kExprTry, kWasmStmt,
-            kExprLocalGet, 0,
+            kExprGetLocal, 0,
             kExprI32Eqz,
             kExprIf, kWasmStmt,
               kExprThrow, except,
             kExprEnd,
           kExprCatch,
-            kExprLocalSet, 1,
+            kExprSetLocal, 1,
             kExprI32Const, 23,
-            kExprLocalGet, 1,
+            kExprGetLocal, 1,
             kExprBrOnExn, 1, except,
             kExprRethrow,
           kExprEnd,
@@ -239,7 +239,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("throw_catch_param", kSig_i_i)
       .addBody([
         kExprTry, kWasmI32,
-          kExprLocalGet, 0,
+          kExprGetLocal, 0,
           kExprThrow, except,
           kExprI32Const, 2,
         kExprCatch,
@@ -261,7 +261,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   let except = builder.addException(kSig_v_i);
   builder.addFunction("throw_param", kSig_v_i)
       .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprThrow, except,
       ]).exportFunc();
   let instance = builder.instantiate();
@@ -278,7 +278,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("throw_catch_param", kSig_f_f)
       .addBody([
         kExprTry, kWasmF32,
-          kExprLocalGet, 0,
+          kExprGetLocal, 0,
           kExprThrow, except,
           kExprF32Const, 0, 0, 0, 0,
         kExprCatch,
@@ -299,7 +299,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   let except = builder.addException(kSig_v_f);
   builder.addFunction("throw_param", kSig_v_f)
       .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprThrow, except,
       ]).exportFunc();
   let instance = builder.instantiate();
@@ -316,18 +316,18 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("throw_catch_param", kSig_i_i)
       .addLocals({i64_count: 1})
       .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprI64UConvertI32,
-        kExprLocalSet, 1,
+        kExprSetLocal, 1,
         kExprTry, kWasmI64,
-          kExprLocalGet, 1,
+          kExprGetLocal, 1,
           kExprThrow, except,
           kExprI64Const, 23,
         kExprCatch,
           kExprBrOnExn, 0, except,
           kExprRethrow,
         kExprEnd,
-        kExprLocalGet, 1,
+        kExprGetLocal, 1,
         kExprI64Eq,
       ]).exportFunc();
   let instance = builder.instantiate();
@@ -344,11 +344,11 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   let except = builder.addException(kSig_v_l);
   builder.addFunction("throw_param", kSig_v_ii)
       .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprI64UConvertI32,
         kExprI64Const, 32,
         kExprI64Shl,
-        kExprLocalGet, 1,
+        kExprGetLocal, 1,
         kExprI64UConvertI32,
         kExprI64Ior,
         kExprThrow, except,
@@ -367,7 +367,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("throw_catch_param", kSig_d_d)
       .addBody([
         kExprTry, kWasmF64,
-          kExprLocalGet, 0,
+          kExprGetLocal, 0,
           kExprThrow, except,
           kExprF64Const, 0, 0, 0, 0, 0, 0, 0, 0,
         kExprCatch,
@@ -388,7 +388,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   let except = builder.addException(kSig_v_d);
   builder.addFunction("throw_param", kSig_v_f)
       .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprF64ConvertF32,
         kExprThrow, except,
       ]).exportFunc();
@@ -406,10 +406,10 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("throw_expr_with_params", kSig_v_ddi)
       .addBody([
         // p2 * (p0 + min(p0, p1))|0 - 20
-        kExprLocalGet, 2,
-        kExprLocalGet, 0,
-        kExprLocalGet, 0,
-        kExprLocalGet, 1,
+        kExprGetLocal, 2,
+        kExprGetLocal, 0,
+        kExprGetLocal, 0,
+        kExprGetLocal, 1,
         kExprF64Min,
         kExprF64Add,
         kExprI32SConvertF64,
@@ -468,7 +468,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   let kWasmThrowFunction =
     builder.addFunction("throw", kSig_v_i)
       .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprThrow, except,
       ])
       .index;
@@ -478,11 +478,11 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("same_scope", kSig_i_i)
     .addBody([
       kExprTry, kWasmI32,
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprI32Const, 0,
         kExprI32Ne,
         kExprIf, kWasmStmt,
-          kExprLocalGet, 0,
+          kExprGetLocal, 0,
           kExprThrow, except,
           kExprUnreachable,
         kExprEnd,
@@ -497,7 +497,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("same_scope_ignore", kSig_i_i)
     .addBody([
         kExprTry, kWasmI32,
-          kExprLocalGet, 0,
+          kExprGetLocal, 0,
           kExprThrow, except,
           kExprUnreachable,
         kExprCatch,
@@ -545,7 +545,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
         kExprTry, kWasmI32,
           kExprTry, kWasmI32,
             kExprTry, kWasmI32,
-              kExprLocalGet, 0,
+              kExprGetLocal, 0,
               kExprI32Const, 1,
               kExprI32Eq,
               kExprIf, kWasmStmt,
@@ -555,9 +555,9 @@ load("test/mjsunit/wasm/exceptions-utils.js");
               kExprEnd,
               kExprI32Const, 2,
             kExprCatch,
-              kExprLocalSet, 2,
+              kExprSetLocal, 2,
               kExprBlock, kWasmI32,
-                kExprLocalGet, 2,
+                kExprGetLocal, 2,
                 kExprBrOnExn, 0, except,
                 kExprRethrow,
               kExprEnd,
@@ -566,12 +566,12 @@ load("test/mjsunit/wasm/exceptions-utils.js");
               kExprThrow, except,
               kExprUnreachable,
             kExprEnd,
-            kExprLocalTee, 1,
-            kExprLocalGet, 0,
+            kExprTeeLocal, 1,
+            kExprGetLocal, 0,
             kExprI32Const, 2,
             kExprI32Eq,
             kExprIf, kWasmStmt,
-              kExprLocalGet, 1,
+              kExprGetLocal, 1,
               kExprI32Const, 8,
               kExprI32Ior,
               kExprThrow, except,
@@ -580,9 +580,9 @@ load("test/mjsunit/wasm/exceptions-utils.js");
             kExprI32Const, 16,
             kExprI32Ior,
           kExprCatch,
-            kExprLocalSet, 2,
+            kExprSetLocal, 2,
             kExprBlock, kWasmI32,
-              kExprLocalGet, 2,
+              kExprGetLocal, 2,
               kExprBrOnExn, 0, except,
               kExprRethrow,
             kExprEnd,
@@ -591,12 +591,12 @@ load("test/mjsunit/wasm/exceptions-utils.js");
             kExprThrow, except,
             kExprUnreachable,
           kExprEnd,
-          kExprLocalTee, 1,
-          kExprLocalGet, 0,
+          kExprTeeLocal, 1,
+          kExprGetLocal, 0,
           kExprI32Const, 3,
           kExprI32Eq,
           kExprIf, kWasmStmt,
-            kExprLocalGet, 1,
+            kExprGetLocal, 1,
             kExprI32Const, /*64=*/ 192, 0,
             kExprI32Ior,
             kExprThrow, except,
@@ -605,9 +605,9 @@ load("test/mjsunit/wasm/exceptions-utils.js");
           kExprI32Const, /*128=*/ 128, 1,
           kExprI32Ior,
         kExprCatch,
-          kExprLocalSet, 2,
+          kExprSetLocal, 2,
           kExprBlock, kWasmI32,
-            kExprLocalGet, 2,
+            kExprGetLocal, 2,
             kExprBrOnExn, 0, except,
             kExprRethrow,
           kExprEnd,
@@ -621,7 +621,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("from_direct_callee", kSig_i_i)
     .addBody([
       kExprTry, kWasmI32,
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprCallFunction, kWasmThrowFunction,
         kExprUnreachable,
       kExprCatch,
@@ -637,8 +637,8 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("from_indirect_callee", kSig_i_ii)
     .addBody([
       kExprTry, kWasmI32,
-        kExprLocalGet, 0,
-        kExprLocalGet, 1,
+        kExprGetLocal, 0,
+        kExprGetLocal, 1,
         kExprCallIndirect, sig_v_i, kTableZero,
         kExprUnreachable,
       kExprCatch,
@@ -653,7 +653,7 @@ load("test/mjsunit/wasm/exceptions-utils.js");
   builder.addFunction("i_from_js", kSig_i_i)
     .addBody([
       kExprTry, kWasmI32,
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprCallFunction, kJSThrowI,
         kExprUnreachable,
       kExprCatch,

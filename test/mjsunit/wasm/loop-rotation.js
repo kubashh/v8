@@ -12,10 +12,10 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
   builder.addFunction("main", kSig_v_i)
     .addBody([
       kExprLoop, kWasmStmt,
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprI32Const, 1,
         kExprI32Sub,
-        kExprLocalTee, 0,
+        kExprTeeLocal, 0,
         kExprBrIf, 0,
       kExprEnd,
     ])
@@ -33,10 +33,10 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
   builder.addFunction("main", kSig_v_i)
     .addBody([
       kExprLoop, kWasmStmt,
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprI32Const, 1,
         kExprI32Sub,
-        kExprLocalTee, 0,
+        kExprTeeLocal, 0,
         kExprBrIf, 1,
         kExprBr, 0,
       kExprEnd,
@@ -56,10 +56,10 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
   builder.addFunction("main", kSig_v_i)
     .addBody([
       kExprLoop, kWasmStmt,
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprI32Const, 1,
         kExprI32Sub,
-        kExprLocalTee, 0,
+        kExprTeeLocal, 0,
       kExprBrIf, 1,
         kExprI32Const, 0,
         kExprI32Const, 0,

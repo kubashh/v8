@@ -955,8 +955,7 @@ void RegExpBytecodePeephole::EmitArgument(int start_pc, const byte* bytecode,
       //
       // We load 4 bytes from position - 1 and shift out the bytecode.
 #ifdef V8_TARGET_BIG_ENDIAN
-      UNIMPLEMENTED();
-      int32_t val = 0;
+#error Big-endian support is not yet implemented.
 #else
       int32_t val = GetValue<int32_t>(bytecode, arg_pos - 1) >> kBitsPerByte;
 #endif  // V8_TARGET_BIG_ENDIAN
@@ -971,13 +970,11 @@ void RegExpBytecodePeephole::EmitArgument(int start_pc, const byte* bytecode,
               GetValue<int32_t>(&(*optimized_bytecode_buffer_.begin()),
                                 Length() - sizeof(uint32_t));
 #ifdef V8_TARGET_BIG_ENDIAN
-      UNIMPLEMENTED();
-      USE(prev_val);
+#error Big-endian support is not yet implemented.
 #else
           DCHECK_EQ(prev_val & 0xFFFFFF00, 0);
-          OverwriteValue<uint32_t>(
-              pc() - sizeof(uint32_t),
-              (static_cast<uint32_t>(val) << 8) | (prev_val & 0xFF));
+          OverwriteValue<uint32_t>(pc() - sizeof(uint32_t),
+                                   (val << 8) | (prev_val & 0xFF));
 #endif  // V8_TARGET_BIG_ENDIAN
           break;
         }

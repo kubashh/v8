@@ -16,13 +16,12 @@ namespace v8 {
 namespace internal {
 
 // An abstract superclass, a marker class really, for simple structure classes.
-// It doesn't carry any functionality but allows struct classes to be
+// It doesn't carry much functionality but allows struct classes to be
 // identified in the type system.
 class Struct : public TorqueGeneratedStruct<Struct, HeapObject> {
  public:
   inline void InitializeBody(int object_size);
   void BriefPrintDetails(std::ostream& os);
-  STATIC_ASSERT(kHeaderSize == HeapObject::kHeaderSize);
 
   TQ_OBJECT_CONSTRUCTORS(Struct)
 };
@@ -47,8 +46,13 @@ class Tuple3 : public TorqueGeneratedTuple3<Tuple3, Tuple2> {
 //   * a FunctionTemplateInfo: a real (lazy) accessor
 //   * undefined: considered an accessor by the spec, too, strangely enough
 //   * null: an accessor which has not been set
-class AccessorPair : public TorqueGeneratedAccessorPair<AccessorPair, Struct> {
+class AccessorPair : public Struct {
  public:
+  DECL_ACCESSORS(getter, Object)
+  DECL_ACCESSORS(setter, Object)
+
+  DECL_CAST(AccessorPair)
+
   static Handle<AccessorPair> Copy(Isolate* isolate, Handle<AccessorPair> pair);
 
   inline Object get(AccessorComponent component);
@@ -67,8 +71,13 @@ class AccessorPair : public TorqueGeneratedAccessorPair<AccessorPair, Struct> {
 
   // Dispatched behavior.
   DECL_PRINTER(AccessorPair)
+  DECL_VERIFIER(AccessorPair)
 
-  TQ_OBJECT_CONSTRUCTORS(AccessorPair)
+  // Layout description.
+  DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
+                                TORQUE_GENERATED_ACCESSOR_PAIR_FIELDS)
+
+  OBJECT_CONSTRUCTORS(AccessorPair, Struct);
 };
 
 class ClassPositions

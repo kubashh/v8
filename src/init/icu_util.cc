@@ -40,22 +40,25 @@ bool InitializeICUDefaultLocation(const char* exec_path,
                                   const char* icu_data_file) {
 #if !defined(V8_INTL_SUPPORT)
   return true;
-#elif ICU_UTIL_DATA_IMPL == ICU_UTIL_DATA_FILE
+#else
+#if ICU_UTIL_DATA_IMPL == ICU_UTIL_DATA_FILE
   if (icu_data_file) {
     return InitializeICU(icu_data_file);
   }
+  char* icu_data_file_default;
 #if defined(V8_TARGET_LITTLE_ENDIAN)
-  std::unique_ptr<char[]> icu_data_file_default =
-      base::RelativePath(exec_path, "icudtl.dat");
+  base::RelativePath(&icu_data_file_default, exec_path, "icudtl.dat");
 #elif defined(V8_TARGET_BIG_ENDIAN)
-  std::unique_ptr<char[]> icu_data_file_default =
-      base::RelativePath(exec_path, "icudtb.dat");
+  base::RelativePath(&icu_data_file_default, exec_path, "icudtb.dat");
 #else
 #error Unknown byte ordering
 #endif
-  return InitializeICU(icu_data_file_default.get());
+  bool result = InitializeICU(icu_data_file_default);
+  free(icu_data_file_default);
+  return result;
 #else
   return InitializeICU(nullptr);
+#endif
 #endif
 }
 

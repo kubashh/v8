@@ -247,7 +247,7 @@ bool TransitionsAccessor::CanHaveMoreTransitions() {
 bool TransitionsAccessor::IsMatchingMap(Map target, Name name,
                                         PropertyKind kind,
                                         PropertyAttributes attributes) {
-  InternalIndex descriptor = target.LastAdded();
+  int descriptor = target.LastAdded();
   DescriptorArray descriptors = target.instance_descriptors();
   Name key = descriptors.GetKey(descriptor);
   if (key != name) return false;

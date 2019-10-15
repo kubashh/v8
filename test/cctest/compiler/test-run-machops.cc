@@ -411,15 +411,13 @@ TEST(CompressDecompressTaggedAnyPointer) {
 }
 
 TEST(CompressDecompressTaggedAnySigned) {
-  RawMachineAssemblerTester<void*> m;
+  RawMachineAssemblerTester<Address> m;
   Smi smi = Smi::FromInt(123);
   Node* node = m.Int64Constant(static_cast<int64_t>(smi.ptr()));
   m.Return(m.ChangeCompressedToTagged(m.ChangeTaggedToCompressed(node)));
-
-  Object result = Object(reinterpret_cast<Address>(m.Call()));
   Address smiPointer =
       DecompressTaggedAny(m.isolate(), CompressTagged(smi.ptr()));
-  CHECK_EQ(smiPointer, result.ptr());
+  CHECK_EQ(smiPointer, m.Call());
 }
 
 TEST(CompressDecompressTaggedPointer) {
@@ -436,15 +434,13 @@ TEST(CompressDecompressTaggedPointer) {
 }
 
 TEST(CompressDecompressTaggedSigned) {
-  RawMachineAssemblerTester<void*> m;
+  RawMachineAssemblerTester<int64_t> m;
   Smi smi = Smi::FromInt(123);
-  Address smiPointer = smi.ptr();
-  Node* node = m.Int64Constant(static_cast<int64_t>(smiPointer));
+  int64_t smiPointer = static_cast<int64_t>(smi.ptr());
+  Node* node = m.Int64Constant(smiPointer);
   m.Return(m.ChangeCompressedSignedToTaggedSigned(
       m.ChangeTaggedSignedToCompressedSigned(node)));
-
-  Object result = Object(reinterpret_cast<Address>(m.Call()));
-  CHECK_EQ(smiPointer, result.ptr());
+  CHECK_EQ(smiPointer, m.Call());
 }
 #endif  // V8_COMPRESS_POINTERS
 

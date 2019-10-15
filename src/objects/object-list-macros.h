@@ -139,14 +139,12 @@ class ZoneForwardList;
   V(JSCollection)                              \
   V(JSCollectionIterator)                      \
   V(JSContextExtensionObject)                  \
-  V(JSCustomElementsObject)                    \
   V(JSDataView)                                \
   V(JSDate)                                    \
   V(JSError)                                   \
   V(JSFinalizationGroup)                       \
   V(JSFinalizationGroupCleanupIterator)        \
   V(JSFunction)                                \
-  V(JSFunctionOrBoundFunction)                 \
   V(JSGeneratorObject)                         \
   V(JSGlobalObject)                            \
   V(JSGlobalProxy)                             \
@@ -166,7 +164,6 @@ class ZoneForwardList;
   V(JSSet)                                     \
   V(JSSetIterator)                             \
   V(JSSloppyArgumentsObject)                   \
-  V(JSSpecialObject)                           \
   V(JSStringIterator)                          \
   V(JSTypedArray)                              \
   V(JSWeakCollection)                          \
@@ -192,7 +189,6 @@ class ZoneForwardList;
   V(OrderedNameDictionary)                     \
   V(OSROptimizedCodeCache)                     \
   V(PreparseData)                              \
-  V(PrimitiveHeapObject)                       \
   V(PromiseReactionJobTask)                    \
   V(PropertyArray)                             \
   V(PropertyCell)                              \

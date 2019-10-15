@@ -14,8 +14,8 @@ function WasmAtomicNotify(memory, offset, index, num) {
   builder.addImportedMemory("m", "memory", 0, 20, "shared");
   builder.addFunction("main", kSig_i_ii)
     .addBody([
-      kExprLocalGet, 0,
-      kExprLocalGet, 1,
+      kExprGetLocal, 0,
+      kExprGetLocal, 1,
       kAtomicPrefix,
       kExprAtomicNotify, /* alignment */ 0, offset])
     .exportAs("main");
@@ -32,9 +32,9 @@ function WasmI32AtomicWait(memory, offset, index, val, timeout) {
   builder.addFunction("main",
     makeSig([kWasmI32, kWasmI32, kWasmF64], [kWasmI32]))
     .addBody([
-      kExprLocalGet, 0,
-      kExprLocalGet, 1,
-      kExprLocalGet, 2,
+      kExprGetLocal, 0,
+      kExprGetLocal, 1,
+      kExprGetLocal, 2,
       kExprI64SConvertF64,
       kAtomicPrefix,
       kExprI32AtomicWait, /* alignment */ 0, offset])
@@ -56,17 +56,17 @@ function WasmI64AtomicWait(memory, offset, index, val_low,
     makeSig([kWasmI32, kWasmI32, kWasmI32, kWasmF64], [kWasmI32]))
     .addLocals({i64_count: 1}) // local that is passed as value param to wait
     .addBody([
-      kExprLocalGet, 1,
+      kExprGetLocal, 1,
       kExprI64UConvertI32,
       kExprI64Const, 32,
       kExprI64Shl,
-      kExprLocalGet, 2,
+      kExprGetLocal, 2,
       kExprI64UConvertI32,
       kExprI64Ior,
-      kExprLocalSet, 4, // Store the created I64 value in local
-      kExprLocalGet, 0,
-      kExprLocalGet, 4,
-      kExprLocalGet, 3,
+      kExprSetLocal, 4, // Store the created I64 value in local
+      kExprGetLocal, 0,
+      kExprGetLocal, 4,
+      kExprGetLocal, 3,
       kExprI64SConvertF64,
       kAtomicPrefix,
       kExprI64AtomicWait, /* alignment */ 0, offset])

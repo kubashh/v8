@@ -255,19 +255,24 @@ Node* WasmGraphBuilder::Merge(unsigned count, Node** controls) {
   return graph()->NewNode(mcgraph()->common()->Merge(count), count, controls);
 }
 
-Node* WasmGraphBuilder::Phi(wasm::ValueType type, unsigned count,
-                            Node** vals_and_control) {
-  DCHECK(IrOpcode::IsMergeOpcode(vals_and_control[count]->opcode()));
+Node* WasmGraphBuilder::Phi(wasm::ValueType type, unsigned count, Node** vals,
+                            Node* control) {
+  DCHECK(IrOpcode::IsMergeOpcode(control->opcode()));
+  Vector<Node*> buf = Realloc(vals, count, count + 1);
+  buf[count] = control;
   return graph()->NewNode(
       mcgraph()->common()->Phi(wasm::ValueTypes::MachineRepresentationFor(type),
                                count),
-      count + 1, vals_and_control);
+      count + 1, buf.begin());
 }
 
-Node* WasmGraphBuilder::EffectPhi(unsigned count, Node** effects_and_control) {
-  DCHECK(IrOpcode::IsMergeOpcode(effects_and_control[count]->opcode()));
+Node* WasmGraphBuilder::EffectPhi(unsigned count, Node** effects,
+                                  Node* control) {
+  DCHECK(IrOpcode::IsMergeOpcode(control->opcode()));
+  Vector<Node*> buf = Realloc(effects, count, count + 1);
+  buf[count] = control;
   return graph()->NewNode(mcgraph()->common()->EffectPhi(count), count + 1,
-                          effects_and_control);
+                          buf.begin());
 }
 
 Node* WasmGraphBuilder::RefNull() {
@@ -3176,16 +3181,14 @@ Node* WasmGraphBuilder::CreateOrMergeIntoPhi(MachineRepresentation rep,
   if (IsPhiWithMerge(tnode, merge)) {
     AppendToPhi(tnode, fnode);
   } else if (tnode != fnode) {
-    // Note that it is not safe to use {Buffer} here since this method is used
-    // via {CheckForException} while the {Buffer} is in use by another method.
     uint32_t count = merge->InputCount();
     // + 1 for the merge node.
-    base::SmallVector<Node*, 9> inputs(count + 1);
-    for (uint32_t j = 0; j < count - 1; j++) inputs[j] = tnode;
-    inputs[count - 1] = fnode;
-    inputs[count] = merge;
-    tnode = graph()->NewNode(mcgraph()->common()->Phi(rep, count), count + 1,
-                             inputs.begin());
+    Vector<Node*> vals = Buffer(count + 1);
+    for (uint32_t j = 0; j < count - 1; j++) vals[j] = tnode;
+    vals[count - 1] = fnode;
+    vals[count] = merge;
+    return graph()->NewNode(mcgraph()->common()->Phi(rep, count), count + 1,
+                            vals.begin());
   }
   return tnode;
 }
@@ -3195,18 +3198,13 @@ Node* WasmGraphBuilder::CreateOrMergeIntoEffectPhi(Node* merge, Node* tnode,
   if (IsPhiWithMerge(tnode, merge)) {
     AppendToPhi(tnode, fnode);
   } else if (tnode != fnode) {
-    // Note that it is not safe to use {Buffer} here since this method is used
-    // via {CheckForException} while the {Buffer} is in use by another method.
     uint32_t count = merge->InputCount();
-    // + 1 for the merge node.
-    base::SmallVector<Node*, 9> inputs(count + 1);
+    Vector<Node*> effects = Buffer(count);
     for (uint32_t j = 0; j < count - 1; j++) {
-      inputs[j] = tnode;
+      effects[j] = tnode;
     }
-    inputs[count - 1] = fnode;
-    inputs[count] = merge;
-    tnode = graph()->NewNode(mcgraph()->common()->EffectPhi(count), count + 1,
-                             inputs.begin());
+    effects[count - 1] = fnode;
+    tnode = EffectPhi(count, effects.begin(), merge);
   }
   return tnode;
 }
@@ -3364,7 +3362,7 @@ Node* WasmGraphBuilder::BuildCallToRuntime(Runtime::FunctionId f,
                                        parameter_count, effect_, Control());
 }
 
-Node* WasmGraphBuilder::GlobalGet(uint32_t index) {
+Node* WasmGraphBuilder::GetGlobal(uint32_t index) {
   const wasm::WasmGlobal& global = env_->module->globals[index];
   if (wasm::ValueTypes::IsReferenceType(global.type)) {
     if (global.mutability && global.imported) {
@@ -3394,7 +3392,7 @@ Node* WasmGraphBuilder::GlobalGet(uint32_t index) {
   return result;
 }
 
-Node* WasmGraphBuilder::GlobalSet(uint32_t index, Node* val) {
+Node* WasmGraphBuilder::SetGlobal(uint32_t index, Node* val) {
   const wasm::WasmGlobal& global = env_->module->globals[index];
   if (wasm::ValueTypes::IsReferenceType(global.type)) {
     if (global.mutability && global.imported) {
@@ -4474,9 +4472,6 @@ Node* WasmGraphBuilder::SimdOp(wasm::WasmOpcode opcode, Node* const* inputs) {
       return graph()->NewNode(mcgraph()->machine()->S1x16AnyTrue(), inputs[0]);
     case wasm::kExprS1x16AllTrue:
       return graph()->NewNode(mcgraph()->machine()->S1x16AllTrue(), inputs[0]);
-    case wasm::kExprS8x16Swizzle:
-      return graph()->NewNode(mcgraph()->machine()->S8x16Swizzle(), inputs[0],
-                              inputs[1]);
     default:
       FATAL_UNSUPPORTED_OPCODE(opcode);
   }
@@ -4510,23 +4505,13 @@ Node* WasmGraphBuilder::SimdLaneOp(wasm::WasmOpcode opcode, uint8_t lane,
     case wasm::kExprI32x4ReplaceLane:
       return graph()->NewNode(mcgraph()->machine()->I32x4ReplaceLane(lane),
                               inputs[0], inputs[1]);
-    case wasm::kExprI16x8ExtractLaneS:
-      return graph()->NewNode(
-          mcgraph()->machine()->SignExtendWord16ToInt32(),
-          graph()->NewNode(mcgraph()->machine()->I16x8ExtractLane(lane),
-                           inputs[0]));
-    case wasm::kExprI16x8ExtractLaneU:
+    case wasm::kExprI16x8ExtractLane:
       return graph()->NewNode(mcgraph()->machine()->I16x8ExtractLane(lane),
                               inputs[0]);
     case wasm::kExprI16x8ReplaceLane:
       return graph()->NewNode(mcgraph()->machine()->I16x8ReplaceLane(lane),
                               inputs[0], inputs[1]);
-    case wasm::kExprI8x16ExtractLaneS:
-      return graph()->NewNode(
-          mcgraph()->machine()->SignExtendWord8ToInt32(),
-          graph()->NewNode(mcgraph()->machine()->I8x16ExtractLane(lane),
-                           inputs[0]));
-    case wasm::kExprI8x16ExtractLaneU:
+    case wasm::kExprI8x16ExtractLane:
       return graph()->NewNode(mcgraph()->machine()->I8x16ExtractLane(lane),
                               inputs[0]);
     case wasm::kExprI8x16ReplaceLane:

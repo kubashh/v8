@@ -541,13 +541,10 @@ Handle<EmbedderDataArray> Factory::NewEmbedderDataArray(int length) {
 }
 
 Handle<ObjectBoilerplateDescription> Factory::NewObjectBoilerplateDescription(
-    int boilerplate, int all_properties, int index_keys, bool has_seen_proto) {
+    int boilerplate, int all_properties, int backing_store_size) {
   DCHECK_GE(boilerplate, 0);
-  DCHECK_GE(all_properties, index_keys);
-  DCHECK_GE(index_keys, 0);
+  DCHECK_GE(backing_store_size, 0);
 
-  int backing_store_size =
-      all_properties - index_keys - (has_seen_proto ? 1 : 0);
   DCHECK_GE(backing_store_size, 0);
   bool has_different_size_backing_store = boilerplate != backing_store_size;
 
@@ -566,8 +563,6 @@ Handle<ObjectBoilerplateDescription> Factory::NewObjectBoilerplateDescription(
                                size, AllocationType::kOld));
 
   if (has_different_size_backing_store) {
-    DCHECK_IMPLIES((boilerplate == (all_properties - index_keys)),
-                   has_seen_proto);
     description->set_backing_store_size(backing_store_size);
   }
 
@@ -1913,19 +1908,19 @@ Map Factory::InitializeMap(Map map, InstanceType type, int instance_size,
   map.set_instance_size(instance_size);
   if (map.IsJSObjectMap()) {
     DCHECK(!ReadOnlyHeap::Contains(map));
-    map.SetInObjectPropertiesStartInWords(instance_size / kTaggedSize -
-                                          inobject_properties);
-    DCHECK_EQ(map.GetInObjectProperties(), inobject_properties);
+    map.SetInObjectFieldStorageStartInWords(instance_size / kTaggedSize -
+                                            inobject_properties);
+    DCHECK_EQ(map.TotalInObjectFieldSlots(), inobject_properties);
     map.set_prototype_validity_cell(*invalid_prototype_validity_cell());
   } else {
     DCHECK_EQ(inobject_properties, 0);
-    map.set_inobject_properties_start_or_constructor_function_index(0);
+    map.set_inobject_field_storage_start_or_constructor_function_index(0);
     map.set_prototype_validity_cell(Smi::FromInt(Map::kPrototypeChainValid));
   }
   map.set_dependent_code(DependentCode::cast(*empty_weak_fixed_array()),
                          SKIP_WRITE_BARRIER);
   map.set_raw_transitions(MaybeObject::FromSmi(Smi::zero()));
-  map.SetInObjectUnusedPropertyFields(inobject_properties);
+  map.SetInObjectUnusedFieldSlots(inobject_properties);
   map.SetInstanceDescriptors(isolate(), *empty_descriptor_array(), 0);
   if (FLAG_unbox_double_fields) {
     map.set_layout_descriptor(LayoutDescriptor::FastPointerLayout());
@@ -1958,16 +1953,16 @@ Handle<JSObject> Factory::CopyJSObjectWithAllocationSite(
 
   // We can only clone regexps, normal objects, api objects, errors or arrays.
   // Copying anything else will break invariants.
-  CHECK(map->instance_type() == JS_REG_EXP_TYPE ||
+  CHECK(map->instance_type() == JS_REGEXP_TYPE ||
         map->instance_type() == JS_OBJECT_TYPE ||
         map->instance_type() == JS_ERROR_TYPE ||
         map->instance_type() == JS_ARRAY_TYPE ||
         map->instance_type() == JS_API_OBJECT_TYPE ||
-        map->instance_type() == WASM_GLOBAL_OBJECT_TYPE ||
-        map->instance_type() == WASM_INSTANCE_OBJECT_TYPE ||
-        map->instance_type() == WASM_MEMORY_OBJECT_TYPE ||
-        map->instance_type() == WASM_MODULE_OBJECT_TYPE ||
-        map->instance_type() == WASM_TABLE_OBJECT_TYPE ||
+        map->instance_type() == WASM_GLOBAL_TYPE ||
+        map->instance_type() == WASM_INSTANCE_TYPE ||
+        map->instance_type() == WASM_MEMORY_TYPE ||
+        map->instance_type() == WASM_MODULE_TYPE ||
+        map->instance_type() == WASM_TABLE_TYPE ||
         map->instance_type() == JS_SPECIAL_API_OBJECT_TYPE);
   DCHECK(site.is_null() || AllocationSite::CanTrack(map->instance_type()));
 
@@ -2405,7 +2400,7 @@ Handle<JSFunction> Factory::NewFunction(const NewFunctionArgs& args) {
       case JS_ARRAY_TYPE:
         elements_kind = PACKED_SMI_ELEMENTS;
         break;
-      case JS_ARGUMENTS_OBJECT_TYPE:
+      case JS_ARGUMENTS_TYPE:
         elements_kind = PACKED_ELEMENTS;
         break;
       default:
@@ -2750,12 +2745,12 @@ Handle<JSGlobalObject> Factory::NewJSGlobalObject(
   // Make sure no field properties are described in the initial map.
   // This guarantees us that normalizing the properties does not
   // require us to change property values to PropertyCells.
-  DCHECK_EQ(map->NextFreePropertyIndex(), 0);
+  DCHECK_EQ(map->NextFreeFieldSlot(), 0);
 
   // Make sure we don't have a ton of pre-allocated slots in the
   // global objects. They will be unused once we normalize the object.
-  DCHECK_EQ(map->UnusedPropertyFields(), 0);
-  DCHECK_EQ(map->GetInObjectProperties(), 0);
+  DCHECK_EQ(map->UnusedFieldSlots(), 0);
+  DCHECK_EQ(map->TotalInObjectFieldSlots(), 0);
 
   // Initial size of the backing store to avoid resize of the storage during
   // bootstrapping. The size differs between the JS global object ad the
@@ -2770,7 +2765,7 @@ Handle<JSGlobalObject> Factory::NewJSGlobalObject(
   // The global object might be created from an object template with accessors.
   // Fill these accessors into the dictionary.
   Handle<DescriptorArray> descs(map->instance_descriptors(), isolate());
-  for (InternalIndex i : InternalIndex::Range(map->NumberOfOwnDescriptors())) {
+  for (int i = 0; i < map->NumberOfOwnDescriptors(); i++) {
     PropertyDetails details = descs->GetDetails(i);
     // Only accessors are expected.
     DCHECK_EQ(kAccessor, details.kind());
@@ -3005,7 +3000,7 @@ Handle<JSModuleNamespace> Factory::NewJSModuleNamespace() {
   Handle<JSModuleNamespace> module_namespace(
       Handle<JSModuleNamespace>::cast(NewJSObjectFromMap(map)));
   FieldIndex index = FieldIndex::ForDescriptor(
-      *map, InternalIndex(JSModuleNamespace::kToStringTagFieldIndex));
+      *map, JSModuleNamespace::kToStringTagFieldIndex);
   module_namespace->FastPropertyAtPut(index,
                                       ReadOnlyRoots(isolate()).Module_string());
   return module_namespace;
@@ -3088,42 +3083,41 @@ Handle<SyntheticModule> Factory::NewSyntheticModule(
   return module;
 }
 
-Handle<JSArrayBuffer> Factory::NewJSArrayBuffer(
-    std::shared_ptr<BackingStore> backing_store, AllocationType allocation) {
+Handle<JSArrayBuffer> Factory::NewJSArrayBuffer(AllocationType allocation) {
   Handle<Map> map(isolate()->native_context()->array_buffer_fun().initial_map(),
                   isolate());
   auto result =
       Handle<JSArrayBuffer>::cast(NewJSObjectFromMap(map, allocation));
-  result->Setup(SharedFlag::kNotShared, std::move(backing_store));
+  result->SetupEmpty(SharedFlag::kNotShared);
   return result;
 }
 
 MaybeHandle<JSArrayBuffer> Factory::NewJSArrayBufferAndBackingStore(
     size_t byte_length, InitializedFlag initialized,
     AllocationType allocation) {
-  std::unique_ptr<BackingStore> backing_store = nullptr;
+  // TODO(titzer): Don't bother allocating a 0-length backing store.
+  // This is currently required because the embedder API for
+  // TypedArray::HasBuffer() checks if the backing store is nullptr.
+  // That check should be changed.
 
-  if (byte_length > 0) {
-    backing_store = BackingStore::Allocate(isolate(), byte_length,
-                                           SharedFlag::kNotShared, initialized);
-    if (!backing_store) return MaybeHandle<JSArrayBuffer>();
-  }
+  std::unique_ptr<BackingStore> backing_store = BackingStore::Allocate(
+      isolate(), byte_length, SharedFlag::kNotShared, initialized);
+  if (!backing_store) return MaybeHandle<JSArrayBuffer>();
   Handle<Map> map(isolate()->native_context()->array_buffer_fun().initial_map(),
                   isolate());
   auto array_buffer =
       Handle<JSArrayBuffer>::cast(NewJSObjectFromMap(map, allocation));
-  array_buffer->Setup(SharedFlag::kNotShared, std::move(backing_store));
+  array_buffer->Attach(std::move(backing_store));
   return array_buffer;
 }
 
-Handle<JSArrayBuffer> Factory::NewJSSharedArrayBuffer(
-    std::shared_ptr<BackingStore> backing_store) {
+Handle<JSArrayBuffer> Factory::NewJSSharedArrayBuffer() {
   Handle<Map> map(
       isolate()->native_context()->shared_array_buffer_fun().initial_map(),
       isolate());
   auto result = Handle<JSArrayBuffer>::cast(
       NewJSObjectFromMap(map, AllocationType::kYoung));
-  result->Setup(SharedFlag::kShared, std::move(backing_store));
+  result->SetupEmpty(SharedFlag::kShared);
   return result;
 }
 
@@ -3816,8 +3810,9 @@ Handle<JSObject> Factory::NewArgumentsObject(Handle<JSFunction> callee,
   return result;
 }
 
-Handle<Map> Factory::ObjectLiteralMapFromCache(Handle<NativeContext> context,
-                                               int number_of_properties) {
+Handle<Map> Factory::ObjectLiteralMapFromCache(
+    Handle<NativeContext> context, int number_of_properties,
+    int preferred_backing_store_size) {
   if (number_of_properties == 0) {
     // Reuse the initial map of the Object function if the literal has no
     // predeclared properties.
@@ -3850,7 +3845,10 @@ Handle<Map> Factory::ObjectLiteralMapFromCache(Handle<NativeContext> context,
 
   // Create a new map and add it to the cache.
   Handle<WeakFixedArray> cache = Handle<WeakFixedArray>::cast(maybe_cache);
-  Handle<Map> map = Map::Create(isolate(), number_of_properties);
+  Handle<Map> map = Map::Create(
+      isolate(),
+      number_of_properties *
+          (FLAG_unbox_double_fields ? kDoubleSize / kTaggedSize : 1));
   DCHECK(!map->is_dictionary_map());
   cache->Set(cache_index, HeapObjectReference::Weak(*map));
   return map;

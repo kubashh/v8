@@ -22,9 +22,11 @@ namespace internal {
 TQ_OBJECT_CONSTRUCTORS_IMPL(Struct)
 TQ_OBJECT_CONSTRUCTORS_IMPL(Tuple2)
 TQ_OBJECT_CONSTRUCTORS_IMPL(Tuple3)
-TQ_OBJECT_CONSTRUCTORS_IMPL(AccessorPair)
+OBJECT_CONSTRUCTORS_IMPL(AccessorPair, Struct)
 
 TQ_OBJECT_CONSTRUCTORS_IMPL(ClassPositions)
+
+CAST_ACCESSOR(AccessorPair)
 
 void Struct::InitializeBody(int object_size) {
   Object value = GetReadOnlyRoots().undefined_value();
@@ -32,6 +34,9 @@ void Struct::InitializeBody(int object_size) {
     WRITE_FIELD(*this, offset, value);
   }
 }
+
+ACCESSORS(AccessorPair, getter, Object, kGetterOffset)
+ACCESSORS(AccessorPair, setter, Object, kSetterOffset)
 
 TQ_SMI_ACCESSORS(ClassPositions, start)
 TQ_SMI_ACCESSORS(ClassPositions, end)

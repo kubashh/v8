@@ -87,8 +87,6 @@ void ResetCompilationErrorDiagnostics(MessageWriter writer) {
 class DiagnosticCollector {
  public:
   void AddTorqueMessage(const TorqueMessage& message) {
-    if (!ShouldAddMessageOfKind(message.kind)) return;
-
     SourceId id =
         message.position ? message.position->source : SourceId::Invalid();
     auto& notification = GetOrCreateNotificationForSource(id);
@@ -122,20 +120,6 @@ class DiagnosticCollector {
     return notification;
   }
 
-  bool ShouldAddMessageOfKind(TorqueMessage::Kind kind) {
-    // An error can easily cause a lot of false positive lint messages, due to
-    // unused variables, macros, etc. Thus we suppress subsequent lint messages
-    // when there are errors.
-    switch (kind) {
-      case TorqueMessage::Kind::kError:
-        suppress_lint_messages_ = true;
-        return true;
-      case TorqueMessage::Kind::kLint:
-        if (suppress_lint_messages_) return false;
-        return true;
-    }
-  }
-
   void PopulateRangeFromSourcePosition(Range range,
                                        const SourcePosition& position) {
     range.start().set_line(position.start.line);
@@ -154,7 +138,6 @@ class DiagnosticCollector {
   }
 
   std::map<SourceId, PublishDiagnosticsNotification> notifications_;
-  bool suppress_lint_messages_ = false;
 };
 
 void SendCompilationDiagnostics(const TorqueCompilerResult& result,

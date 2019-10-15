@@ -1165,7 +1165,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Load the instance size of a Map.
   TNode<IntPtrT> LoadMapInstanceSizeInWords(SloppyTNode<Map> map);
   // Load the inobject properties start of a Map (valid only for JSObjects).
-  TNode<IntPtrT> LoadMapInobjectPropertiesStartInWords(SloppyTNode<Map> map);
+  TNode<IntPtrT> LoadMapInobjectFieldStorageStartInWords(SloppyTNode<Map> map);
   // Load the constructor function index of a Map (only for primitive maps).
   TNode<IntPtrT> LoadMapConstructorFunctionIndex(SloppyTNode<Map> map);
   // Load the constructor of a Map (equivalent to Map::GetConstructor()).
@@ -2455,7 +2455,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<BoolT> IsJSPromise(SloppyTNode<HeapObject> object);
   TNode<BoolT> IsJSProxy(SloppyTNode<HeapObject> object);
   TNode<BoolT> IsJSStringIterator(SloppyTNode<HeapObject> object);
-  TNode<BoolT> IsJSRegExpStringIterator(SloppyTNode<HeapObject> object);
   TNode<BoolT> IsJSReceiverInstanceType(SloppyTNode<Int32T> instance_type);
   TNode<BoolT> IsJSReceiverMap(SloppyTNode<Map> map);
   TNode<BoolT> IsJSReceiver(SloppyTNode<HeapObject> object);

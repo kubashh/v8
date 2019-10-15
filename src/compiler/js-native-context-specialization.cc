@@ -2479,12 +2479,16 @@ JSNativeContextSpecialization::BuildPropertyStore(
       // with this transitioning store.
       MapRef transition_map_ref(broker(), transition_map);
       MapRef original_map = transition_map_ref.GetBackPointer().AsMap();
-      if (original_map.UnusedPropertyFields() == 0) {
+
+      // Compute the length of the old {properties} and the new properties.
+      int old_length = original_map.TotalOutOfObjectFieldSlots();
+      int new_length = transition_map_ref.TotalOutOfObjectFieldSlots();
+      if (old_length < new_length) {
         DCHECK(!field_index.is_inobject());
 
         // Reallocate the properties {storage}.
         storage = effect = BuildExtendPropertiesBackingStore(
-            original_map, storage, effect, control);
+            original_map, storage, effect, control, old_length, new_length);
 
         // Perform the actual store.
         effect = graph()->NewNode(simplified()->StoreField(field_access),
@@ -2494,6 +2498,12 @@ JSNativeContextSpecialization::BuildPropertyStore(
         field_access = AccessBuilder::ForJSObjectPropertiesOrHashKnownPointer();
         value = storage;
         storage = receiver;
+      } else {
+        DCHECK_EQ(old_length, new_length);
+        if (FLAG_unbox_double_fields && field_index.is_inobject() &&
+            field_representation == MachineRepresentation::kFloat64) {
+          DCHECK_GE(original_map.UnusedFieldSlots(), kDoubleSize / kTaggedSize);
+        }
       }
       effect = graph()->NewNode(
           common()->BeginRegion(RegionObservability::kObservable), effect);
@@ -3185,7 +3195,8 @@ Node* JSNativeContextSpecialization::BuildIndexedStringLoad(
 }
 
 Node* JSNativeContextSpecialization::BuildExtendPropertiesBackingStore(
-    const MapRef& map, Node* properties, Node* effect, Node* control) {
+    const MapRef& map, Node* properties, Node* effect, Node* control,
+    int length, int new_length) {
   // TODO(bmeurer/jkummerow): Property deletions can undo map transitions
   // while keeping the backing store around, meaning that even though the
   // map might believe that objects have no unused property fields, there
@@ -3195,10 +3206,7 @@ Node* JSNativeContextSpecialization::BuildExtendPropertiesBackingStore(
   // difficult for escape analysis to get rid of the backing stores used
   // for intermediate states of chains of property additions. That makes
   // it unclear what the best approach is here.
-  DCHECK_EQ(0, map.UnusedPropertyFields());
-  // Compute the length of the old {properties} and the new properties.
-  int length = map.NextFreePropertyIndex() - map.GetInObjectProperties();
-  int new_length = length + JSObject::kFieldsAdded;
+
   // Collect the field values from the {properties}.
   ZoneVector<Node*> values(zone());
   values.reserve(new_length);

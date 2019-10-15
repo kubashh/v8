@@ -9,7 +9,7 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
   builder.addMemory(16, 32, false);
   builder.addFunction('test', kSig_i_i)
       .addBodyWithEnd([
-              kExprLocalGet, 0x00,
+              kExprGetLocal, 0x00,
               kExprI32Const, 0x29,
             kExprI32Shl,
             kExprI32Const, 0x18,

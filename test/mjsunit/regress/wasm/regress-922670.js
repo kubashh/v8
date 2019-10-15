@@ -10,10 +10,10 @@ builder.addFunction(undefined, sig)
   .addLocals({i64_count: 1})
   .addBody([
     kExprLoop, kWasmI32,
-      kExprLocalGet, 1,
+      kExprGetLocal, 1,
       kExprI64Const, 1,
       kExprLoop, kWasmI32,
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprI32Const, 1,
         kExprI32Const, 1,
         kExprIf, kWasmI32,

@@ -305,6 +305,9 @@ class FeedbackVector : public HeapObject {
   // The object that indicates a megamorphic state.
   static inline Handle<Symbol> MegamorphicSentinel(Isolate* isolate);
 
+  // The object that indicates a premonomorphic state.
+  static inline Handle<Symbol> PremonomorphicSentinel(Isolate* isolate);
+
   // A raw version of the uninitialized sentinel that's safe to read during
   // garbage collection (e.g., for patching the cache).
   static inline Symbol RawUninitializedSentinel(Isolate* isolate);
@@ -564,7 +567,7 @@ class FeedbackMetadata : public HeapObject {
 // possibly be confused with a pointer.
 // NOLINTNEXTLINE(runtime/references) (false positive)
 STATIC_ASSERT((Name::kEmptyHashField & kHeapObjectTag) == kHeapObjectTag);
-STATIC_ASSERT(Name::kEmptyHashField == 0x7);
+STATIC_ASSERT(Name::kEmptyHashField == 0x3);
 // Verify that a set hash field will not look like a tagged object.
 STATIC_ASSERT(Name::kHashNotComputedMask == kHeapObjectTag);
 
@@ -660,6 +663,7 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   // Clear() returns true if the state of the underlying vector was changed.
   bool Clear();
   void ConfigureUninitialized();
+  void ConfigurePremonomorphic(Handle<Map> receiver_map);
   // ConfigureMegamorphic() returns true if the state of the underlying vector
   // was changed. Extra feedback is cleared if the 0 parameter version is used.
   bool ConfigureMegamorphic();

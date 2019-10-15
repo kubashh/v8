@@ -31,19 +31,16 @@ namespace internal {
 
 OBJECT_CONSTRUCTORS_IMPL(JSReceiver, HeapObject)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSObject)
-TQ_OBJECT_CONSTRUCTORS_IMPL(JSCustomElementsObject)
-TQ_OBJECT_CONSTRUCTORS_IMPL(JSSpecialObject)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSAsyncFromSyncIterator)
-TQ_OBJECT_CONSTRUCTORS_IMPL(JSFunctionOrBoundFunction)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSBoundFunction)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSDate)
-OBJECT_CONSTRUCTORS_IMPL(JSFunction, JSFunctionOrBoundFunction)
-OBJECT_CONSTRUCTORS_IMPL(JSGlobalObject, JSSpecialObject)
+OBJECT_CONSTRUCTORS_IMPL(JSFunction, JSObject)
+OBJECT_CONSTRUCTORS_IMPL(JSGlobalObject, JSObject)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSGlobalProxy)
 JSIteratorResult::JSIteratorResult(Address ptr) : JSObject(ptr) {}
 OBJECT_CONSTRUCTORS_IMPL(JSMessageObject, JSObject)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSPrimitiveWrapper)
-TQ_OBJECT_CONSTRUCTORS_IMPL(JSStringIterator)
+OBJECT_CONSTRUCTORS_IMPL(JSStringIterator, JSObject)
 
 NEVER_READ_ONLY_SPACE_IMPL(JSReceiver)
 
@@ -52,6 +49,7 @@ CAST_ACCESSOR(JSGlobalObject)
 CAST_ACCESSOR(JSIteratorResult)
 CAST_ACCESSOR(JSMessageObject)
 CAST_ACCESSOR(JSReceiver)
+CAST_ACCESSOR(JSStringIterator)
 
 MaybeHandle<Object> JSReceiver::GetProperty(Isolate* isolate,
                                             Handle<JSReceiver> receiver,
@@ -275,7 +273,7 @@ int JSObject::GetEmbedderFieldCount(Map map) {
   // kSystemPointerSize) anyway.
   return (((instance_size - GetEmbedderFieldsStartOffset(map)) >>
            kTaggedSizeLog2) -
-          map.GetInObjectProperties()) /
+          map.TotalInObjectFieldSlots()) /
          kEmbedderDataSlotSizeInTaggedSlots;
 }
 
@@ -324,7 +322,9 @@ Object JSObject::RawFastPropertyAt(Isolate* isolate, FieldIndex index) const {
   if (index.is_inobject()) {
     return TaggedField<Object>::load(isolate, *this, index.offset());
   } else {
-    return property_array(isolate).get(isolate, index.outobject_array_index());
+    DCHECK_EQ(property_array().OffsetOfElementAt(index.slot_index()),
+              index.offset());
+    return TaggedField<Object>::load(isolate, property_array(), index.offset());
   }
 }
 
@@ -352,18 +352,16 @@ void JSObject::RawFastPropertyAtPut(FieldIndex index, Object value,
     RawFastInobjectPropertyAtPut(index, value, mode);
   } else {
     DCHECK_EQ(UPDATE_WRITE_BARRIER, mode);
-    property_array().set(index.outobject_array_index(), value);
+    DCHECK_EQ(property_array().OffsetOfElementAt(index.slot_index()),
+              index.offset());
+    RELAXED_WRITE_FIELD(property_array(), index.offset(), value);
+    WRITE_BARRIER(property_array(), index.offset(), value);
   }
 }
 
 void JSObject::RawFastDoublePropertyAsBitsAtPut(FieldIndex index,
                                                 uint64_t bits) {
-  // Double unboxing is enabled only on 64-bit platforms without pointer
-  // compression.
-  DCHECK_EQ(kDoubleSize, kTaggedSize);
-  Address field_addr = FIELD_ADDR(*this, index.offset());
-  base::Relaxed_Store(reinterpret_cast<base::AtomicWord*>(field_addr),
-                      static_cast<base::AtomicWord>(bits));
+  WriteField<uint64_t>(index.offset(), bits);
 }
 
 void JSObject::FastPropertyAtPut(FieldIndex index, Object value) {
@@ -377,7 +375,7 @@ void JSObject::FastPropertyAtPut(FieldIndex index, Object value) {
   }
 }
 
-void JSObject::WriteToField(InternalIndex descriptor, PropertyDetails details,
+void JSObject::WriteToField(int descriptor, PropertyDetails details,
                             Object value) {
   DCHECK_EQ(kField, details.location());
   DCHECK_EQ(kData, details.kind());
@@ -408,19 +406,19 @@ void JSObject::WriteToField(InternalIndex descriptor, PropertyDetails details,
   }
 }
 
-int JSObject::GetInObjectPropertyOffset(int index) {
-  return map().GetInObjectPropertyOffset(index);
+int JSObject::GetInObjectFieldSlotOffset(int index) {
+  return map().GetInObjectFieldSlotOffset(index);
 }
 
 Object JSObject::InObjectPropertyAt(int index) {
-  int offset = GetInObjectPropertyOffset(index);
+  int offset = GetInObjectFieldSlotOffset(index);
   return TaggedField<Object>::load(*this, offset);
 }
 
 Object JSObject::InObjectPropertyAtPut(int index, Object value,
                                        WriteBarrierMode mode) {
   // Adjust for the number of properties stored in the object.
-  int offset = GetInObjectPropertyOffset(index);
+  int offset = GetInObjectFieldSlotOffset(index);
   WRITE_FIELD(*this, offset, value);
   CONDITIONAL_WRITE_BARRIER(*this, offset, value, mode);
   return value;
@@ -436,7 +434,7 @@ void JSObject::InitializeBody(Map map, int start_offset,
   int offset = start_offset;
   if (filler_value != pre_allocated_value) {
     int end_of_pre_allocated_offset =
-        size - (map.UnusedPropertyFields() * kTaggedSize);
+        size - (map.UnusedFieldSlots() * kTaggedSize);
     DCHECK_LE(kHeaderSize, end_of_pre_allocated_offset);
     while (offset < end_of_pre_allocated_offset) {
       WRITE_FIELD(*this, offset, pre_allocated_value);
@@ -1011,7 +1009,8 @@ inline int JSGlobalProxy::SizeWithEmbedderFields(int embedder_field_count) {
 ACCESSORS(JSIteratorResult, value, Object, kValueOffset)
 ACCESSORS(JSIteratorResult, done, Object, kDoneOffset)
 
-TQ_SMI_ACCESSORS(JSStringIterator, index)
+ACCESSORS(JSStringIterator, string, String, kStringOffset)
+SMI_ACCESSORS(JSStringIterator, index, kNextIndexOffset)
 
 // If the fast-case backing storage takes up much more memory than a dictionary
 // backing storage would, the object should have slow elements.

@@ -738,7 +738,7 @@ class JavaScriptFrame : public StandardFrame {
 
   // Lookup exception handler for current {pc}, returns -1 if none found. Also
   // returns data associated with the handler site specific to the frame type:
-  //  - OptimizedFrame  : Data is not used and will not return a value.
+  //  - OptimizedFrame  : Data is the stack slot count of the entire frame.
   //  - InterpretedFrame: Data is the register index holding the context.
   virtual int LookupExceptionHandlerInTable(
       int* data, HandlerTable::CatchPrediction* prediction);
@@ -788,8 +788,10 @@ class StubFrame : public StandardFrame {
   Code unchecked_code() const override;
 
   // Lookup exception handler for current {pc}, returns -1 if none found. Only
-  // TurboFan stub frames are supported.
-  int LookupExceptionHandlerInTable();
+  // TurboFan stub frames are supported. Also returns data associated with the
+  // handler site:
+  //  - TurboFan stub: Data is the stack slot count of the entire frame.
+  int LookupExceptionHandlerInTable(int* data);
 
  protected:
   inline explicit StubFrame(StackFrameIteratorBase* iterator);
@@ -941,8 +943,9 @@ class WasmCompiledFrame : public StandardFrame {
   void Print(StringStream* accumulator, PrintMode mode,
              int index) const override;
 
-  // Lookup exception handler for current {pc}, returns -1 if none found.
-  int LookupExceptionHandlerInTable();
+  // Lookup exception handler for current {pc}, returns -1 if none found. Also
+  // returns the stack slot count of the entire frame.
+  int LookupExceptionHandlerInTable(int* data);
 
   // Determine the code for the frame.
   Code unchecked_code() const override;

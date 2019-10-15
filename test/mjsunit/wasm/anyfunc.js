@@ -10,7 +10,7 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
   print(arguments.callee.name);
   const builder = new WasmModuleBuilder();
   builder.addFunction('main', kSig_a_a)
-      .addBody([kExprLocalGet, 0])
+      .addBody([kExprGetLocal, 0])
       .exportFunc();
 
   const instance = builder.instantiate();
@@ -27,7 +27,7 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
   const sig_index = builder.addType(kSig_v_a);
   const imp_index = builder.addImport('q', 'func', sig_index);
   builder.addFunction('main', sig_index)
-      .addBody([kExprLocalGet, 0, kExprCallFunction, imp_index])
+      .addBody([kExprGetLocal, 0, kExprCallFunction, imp_index])
       .exportFunc();
 
   const main = builder.instantiate({q: {func: checkFunction}}).exports.main;
@@ -50,28 +50,28 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
   builder.addFunction('main', ref_sig)
       .addLocals({anyfunc_count: 10})
       .addBody([
-        kExprLocalGet,     0,
-        kExprLocalSet,     1,  // Set local
-        kExprLocalGet,     0,
-        kExprLocalSet,     2,  // Set local
-        kExprLocalGet,     0,
-        kExprLocalSet,     3,  // Set local
-        kExprLocalGet,     0,
-        kExprLocalSet,     4,  // Set local
-        kExprLocalGet,     0,
-        kExprLocalSet,     5,  // Set local
-        kExprLocalGet,     0,
-        kExprLocalSet,     6,  // Set local
-        kExprLocalGet,     0,
-        kExprLocalSet,     7,  // Set local
-        kExprLocalGet,     0,
-        kExprLocalSet,     8,  // Set local
-        kExprLocalGet,     0,
-        kExprLocalSet,     9,  // Set local
-        kExprLocalGet,     0,
-        kExprLocalSet,     10,        // Set local
+        kExprGetLocal,     0,
+        kExprSetLocal,     1,  // Set local
+        kExprGetLocal,     0,
+        kExprSetLocal,     2,  // Set local
+        kExprGetLocal,     0,
+        kExprSetLocal,     3,  // Set local
+        kExprGetLocal,     0,
+        kExprSetLocal,     4,  // Set local
+        kExprGetLocal,     0,
+        kExprSetLocal,     5,  // Set local
+        kExprGetLocal,     0,
+        kExprSetLocal,     6,  // Set local
+        kExprGetLocal,     0,
+        kExprSetLocal,     7,  // Set local
+        kExprGetLocal,     0,
+        kExprSetLocal,     8,  // Set local
+        kExprGetLocal,     0,
+        kExprSetLocal,     9,  // Set local
+        kExprGetLocal,     0,
+        kExprSetLocal,     10,        // Set local
         kExprCallFunction, gc_index,  // call gc
-        kExprLocalGet,     9,
+        kExprGetLocal,     9,
         kExprCallFunction, imp_index  // call import
       ])
       .exportFunc();
@@ -97,7 +97,7 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
   builder.addFunction('main', ref_sig)
       .addBody([
         kExprCallFunction, gc_index,                    // call gc
-        kExprLocalGet, 0, kExprCallFunction, imp_index  // call import
+        kExprGetLocal, 0, kExprCallFunction, imp_index  // call import
       ])
       .exportFunc();
 
@@ -118,7 +118,7 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
       makeSig([kWasmI32, kWasmAnyFunc, kWasmI32], [kWasmAnyFunc]);
   const sig_index = builder.addType(kSig_a_iai);
   builder.addFunction('main', sig_index)
-      .addBody([kExprLocalGet, 1])
+      .addBody([kExprGetLocal, 1])
       .exportFunc();
 
   const main = builder.instantiate().exports.main;
@@ -140,7 +140,7 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
   const sig_index = builder.addType(kSig_a_v);
   builder.addFunction('main', sig_index)
       .addLocals({anyfunc_count: 1})
-      .addBody([kExprLocalGet, 0])
+      .addBody([kExprGetLocal, 0])
       .exportFunc();
 
   const main = builder.instantiate().exports.main;
@@ -152,7 +152,7 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
   const builder = new WasmModuleBuilder();
   const sig_index = builder.addType(kSig_a_a);
   builder.addFunction('main', sig_index)
-      .addBody([kExprRefNull, kExprLocalSet, 0, kExprLocalGet, 0])
+      .addBody([kExprRefNull, kExprSetLocal, 0, kExprGetLocal, 0])
       .exportFunc();
 
   const main = builder.instantiate().exports.main;
@@ -187,7 +187,7 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
   const sig_index = builder.addType(kSig_r_v);
   builder.addFunction('main', sig_index)
       .addLocals({anyfunc_count: 1})
-      .addBody([kExprLocalGet, 0])
+      .addBody([kExprGetLocal, 0])
       .exportFunc();
 
   const main = builder.instantiate().exports.main;
@@ -200,7 +200,7 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
   const sig_index = builder.addType(kSig_r_v);
   builder.addFunction('main', sig_index)
       .addLocals({anyfunc_count: 1})
-      .addBody([kExprLocalGet, 0, kExprReturn])
+      .addBody([kExprGetLocal, 0, kExprReturn])
       .exportFunc();
 
   const main = builder.instantiate().exports.main;

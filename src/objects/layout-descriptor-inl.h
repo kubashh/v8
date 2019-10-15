@@ -48,7 +48,7 @@ bool LayoutDescriptor::InobjectUnboxedField(int inobject_properties,
     return false;
   }
   // We care only about in-object properties.
-  return details.field_index() < inobject_properties;
+  return details.field_slot_index() < inobject_properties;
 }
 
 LayoutDescriptor LayoutDescriptor::FastPointerLayout() {
@@ -153,7 +153,7 @@ int LayoutDescriptor::GetSlowModeBackingStoreLength(int length) {
 
 int LayoutDescriptor::CalculateCapacity(Map map, DescriptorArray descriptors,
                                         int num_descriptors) {
-  int inobject_properties = map.GetInObjectProperties();
+  int inobject_properties = map.TotalInObjectFieldSlots();
   if (inobject_properties == 0) return 0;
 
   DCHECK_LE(num_descriptors, descriptors.number_of_descriptors());
@@ -169,11 +169,12 @@ int LayoutDescriptor::CalculateCapacity(Map map, DescriptorArray descriptors,
   } else {
     layout_descriptor_length = 0;
 
-    for (InternalIndex i : InternalIndex::Range(num_descriptors)) {
+    for (int i = 0; i < num_descriptors; i++) {
       PropertyDetails details = descriptors.GetDetails(i);
       if (!InobjectUnboxedField(inobject_properties, details)) continue;
-      int field_index = details.field_index();
-      int field_width_in_words = details.field_width_in_words();
+      int field_index = details.field_slot_index();
+      int field_width_in_words =
+          details.field_width_in_words(inobject_properties);
       layout_descriptor_length =
           Max(layout_descriptor_length, field_index + field_width_in_words);
     }
@@ -186,18 +187,19 @@ LayoutDescriptor LayoutDescriptor::Initialize(
     LayoutDescriptor layout_descriptor, Map map, DescriptorArray descriptors,
     int num_descriptors) {
   DisallowHeapAllocation no_allocation;
-  int inobject_properties = map.GetInObjectProperties();
+  int inobject_properties = map.TotalInObjectFieldSlots();
 
-  for (InternalIndex i : InternalIndex::Range(num_descriptors)) {
+  for (int i = 0; i < num_descriptors; i++) {
     PropertyDetails details = descriptors.GetDetails(i);
     if (!InobjectUnboxedField(inobject_properties, details)) {
       DCHECK(details.location() != kField ||
-             layout_descriptor.IsTagged(details.field_index()));
+             layout_descriptor.IsTagged(details.field_slot_index()));
       continue;
     }
-    int field_index = details.field_index();
+    int field_index = details.field_slot_index();
     layout_descriptor = layout_descriptor.SetRawData(field_index);
-    if (details.field_width_in_words() > 1) {
+    if (details.field_width_in_words(inobject_properties) > 1) {
+      DCHECK_EQ(details.field_width_in_words(inobject_properties), 2);
       layout_descriptor = layout_descriptor.SetRawData(field_index + 1);
     }
   }
@@ -229,7 +231,7 @@ LayoutDescriptorHelper::LayoutDescriptorHelper(Map map)
     return;
   }
 
-  header_size_ = map.GetInObjectPropertiesStartInWords() * kTaggedSize;
+  header_size_ = map.GetInObjectFieldStorageStartInWords() * kTaggedSize;
   DCHECK_GE(header_size_, 0);
 
   all_fields_tagged_ = false;

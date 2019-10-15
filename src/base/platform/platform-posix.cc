@@ -48,7 +48,6 @@
 
 #if V8_OS_MACOSX
 #include <dlfcn.h>
-#include <mach/mach.h>
 #endif
 
 #if V8_OS_LINUX

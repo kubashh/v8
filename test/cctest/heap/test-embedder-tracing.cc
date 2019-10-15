@@ -17,6 +17,12 @@
 
 namespace v8 {
 
+// See test below: TracedGlobalNoDestructor.
+template <>
+struct TracedGlobalTrait<v8::TracedGlobal<v8::Value>> {
+  static constexpr bool kRequiresExplicitDestruction = false;
+};
+
 namespace internal {
 namespace heap {
 
@@ -287,14 +293,13 @@ void ConstructJSObject(v8::Isolate* isolate, v8::Local<v8::Context> context,
   CHECK(!global->IsEmpty());
 }
 
-template <typename T>
 void ConstructJSApiObject(v8::Isolate* isolate, v8::Local<v8::Context> context,
-                          T* global) {
+                          v8::TracedGlobal<v8::Object>* global) {
   v8::HandleScope scope(isolate);
   v8::Local<v8::Object> object(
       ConstructTraceableJSApiObject(context, nullptr, nullptr));
   CHECK(!object.IsEmpty());
-  *global = T(isolate, object);
+  *global = v8::TracedGlobal<v8::Object>(isolate, object);
   CHECK(!global->IsEmpty());
 }
 
@@ -355,6 +360,10 @@ TEST(TracedGlobalCopyWithDestructor) {
   v8::HandleScope scope(isolate);
   i::GlobalHandles* global_handles = CcTest::i_isolate()->global_handles();
 
+  static_assert(TracedGlobalTrait<
+                    v8::TracedGlobal<v8::Object>>::kRequiresExplicitDestruction,
+                "destructor expected");
+
   const size_t initial_count = global_handles->handles_count();
   v8::TracedGlobal<v8::Object> global1;
   {
@@ -392,14 +401,18 @@ TEST(TracedGlobalCopyNoDestructor) {
   v8::HandleScope scope(isolate);
   i::GlobalHandles* global_handles = CcTest::i_isolate()->global_handles();
 
+  static_assert(!TracedGlobalTrait<
+                    v8::TracedGlobal<v8::Value>>::kRequiresExplicitDestruction,
+                "no destructor expected");
+
   const size_t initial_count = global_handles->handles_count();
-  v8::TracedReference<v8::Value> global1;
+  v8::TracedGlobal<v8::Value> global1;
   {
     v8::HandleScope scope(isolate);
     global1.Reset(isolate, v8::Object::New(isolate));
   }
-  v8::TracedReference<v8::Value> global2(global1);
-  v8::TracedReference<v8::Value> global3;
+  v8::TracedGlobal<v8::Value> global2(global1);
+  v8::TracedGlobal<v8::Value> global3;
   global3 = global2;
   CHECK_EQ(initial_count + 3, global_handles->handles_count());
   CHECK(!global1.IsEmpty());
@@ -487,7 +500,7 @@ TEST(TracedGlobalToUnmodifiedJSApiObjectSurvivesScavengePerDefault) {
   heap::TemporaryEmbedderHeapTracerScope tracer_scope(isolate, &tracer);
   tracer.ConsiderTracedGlobalAsRoot(true);
   TracedGlobalTest(
-      CcTest::isolate(), ConstructJSApiObject<TracedGlobal<v8::Object>>,
+      CcTest::isolate(), ConstructJSApiObject,
       [](const TracedGlobal<v8::Object>& global) {}, InvokeScavenge,
       SurvivalMode::kSurvives);
 }
@@ -500,7 +513,7 @@ TEST(TracedGlobalToUnmodifiedJSApiObjectDiesOnScavengeWhenExcludedFromRoots) {
   heap::TemporaryEmbedderHeapTracerScope tracer_scope(isolate, &tracer);
   tracer.ConsiderTracedGlobalAsRoot(false);
   TracedGlobalTest(
-      CcTest::isolate(), ConstructJSApiObject<TracedGlobal<v8::Object>>,
+      CcTest::isolate(), ConstructJSApiObject,
       [](const TracedGlobal<v8::Object>& global) {}, InvokeScavenge,
       SurvivalMode::kDies);
 }
@@ -658,6 +671,9 @@ TEST(TracedGlobalWithDestructor) {
     CHECK(!traced->IsEmpty());
     CHECK_EQ(initial_count + 1, global_handles->handles_count());
   }
+  static_assert(TracedGlobalTrait<
+                    v8::TracedGlobal<v8::Object>>::kRequiresExplicitDestruction,
+                "destructor expected");
   delete traced;
   CHECK_EQ(initial_count, global_handles->handles_count());
   // GC should not need to clear the handle.
@@ -675,18 +691,21 @@ TEST(TracedGlobalNoDestructor) {
   i::GlobalHandles* global_handles = CcTest::i_isolate()->global_handles();
 
   const size_t initial_count = global_handles->handles_count();
-  char* memory = new char[sizeof(v8::TracedReference<v8::Value>)];
-  auto* traced = new (memory) v8::TracedReference<v8::Value>();
+  char* memory = new char[sizeof(v8::TracedGlobal<v8::Value>)];
+  auto* traced = new (memory) v8::TracedGlobal<v8::Value>();
   {
     v8::HandleScope scope(isolate);
     v8::Local<v8::Value> object(ConstructTraceableJSApiObject(
         isolate->GetCurrentContext(), nullptr, nullptr));
     CHECK(traced->IsEmpty());
-    *traced = v8::TracedReference<v8::Value>(isolate, object);
+    *traced = v8::TracedGlobal<v8::Value>(isolate, object);
     CHECK(!traced->IsEmpty());
     CHECK_EQ(initial_count + 1, global_handles->handles_count());
   }
-  traced->~TracedReference<v8::Value>();
+  static_assert(!TracedGlobalTrait<
+                    v8::TracedGlobal<v8::Value>>::kRequiresExplicitDestruction,
+                "no destructor expected");
+  traced->~TracedGlobal<v8::Value>();
   CHECK_EQ(initial_count + 1, global_handles->handles_count());
   // GC should clear the handle.
   heap::InvokeMarkSweep();
@@ -740,19 +759,18 @@ class EmbedderHeapTracerNoDestructorNonTracingClearing final
       uint16_t class_id_to_optimize)
       : class_id_to_optimize_(class_id_to_optimize) {}
 
-  bool IsRootForNonTracingGC(
-      const v8::TracedReference<v8::Value>& handle) final {
+  bool IsRootForNonTracingGC(const v8::TracedGlobal<v8::Value>& handle) final {
     return handle.WrapperClassId() != class_id_to_optimize_;
   }
 
   void ResetHandleInNonTracingGC(
-      const v8::TracedReference<v8::Value>& handle) final {
+      const v8::TracedGlobal<v8::Value>& handle) final {
     if (handle.WrapperClassId() != class_id_to_optimize_) return;
 
     // Convention (for test): Objects that are optimized have their first field
     // set as a back pointer.
-    TracedReferenceBase<v8::Value>* original_handle =
-        reinterpret_cast<TracedReferenceBase<v8::Value>*>(
+    TracedGlobal<v8::Value>* original_handle =
+        reinterpret_cast<TracedGlobal<v8::Value>*>(
             v8::Object::GetAlignedPointerFromInternalField(
                 handle.As<v8::Object>(), 0));
     original_handle->Reset();
@@ -763,23 +781,23 @@ class EmbedderHeapTracerNoDestructorNonTracingClearing final
 };
 
 template <typename T>
-void SetupOptimizedAndNonOptimizedHandle(v8::Isolate* isolate,
-                                         uint16_t optimized_class_id,
-                                         T* optimized_handle,
-                                         T* non_optimized_handle) {
+void SetupOptimizedAndNonOptimizedHandle(
+    v8::Isolate* isolate, uint16_t optimized_class_id,
+    v8::TracedGlobal<T>* optimized_handle,
+    v8::TracedGlobal<T>* non_optimized_handle) {
   v8::HandleScope scope(isolate);
 
   v8::Local<v8::Object> optimized_object(ConstructTraceableJSApiObject(
       isolate->GetCurrentContext(), optimized_handle, nullptr));
   CHECK(optimized_handle->IsEmpty());
-  *optimized_handle = T(isolate, optimized_object);
+  *optimized_handle = v8::TracedGlobal<T>(isolate, optimized_object);
   CHECK(!optimized_handle->IsEmpty());
   optimized_handle->SetWrapperClassId(optimized_class_id);
 
   v8::Local<v8::Object> non_optimized_object(ConstructTraceableJSApiObject(
       isolate->GetCurrentContext(), nullptr, nullptr));
   CHECK(non_optimized_handle->IsEmpty());
-  *non_optimized_handle = T(isolate, non_optimized_object);
+  *non_optimized_handle = v8::TracedGlobal<T>(isolate, non_optimized_object);
   CHECK(!non_optimized_handle->IsEmpty());
 }
 
@@ -795,6 +813,9 @@ TEST(TracedGlobalDestructorReclaimedOnScavenge) {
   heap::TemporaryEmbedderHeapTracerScope tracer_scope(isolate, &tracer);
   i::GlobalHandles* global_handles = CcTest::i_isolate()->global_handles();
 
+  static_assert(TracedGlobalTrait<
+                    v8::TracedGlobal<v8::Object>>::kRequiresExplicitDestruction,
+                "destructor expected");
   const size_t initial_count = global_handles->handles_count();
   auto* optimized_handle = new v8::TracedGlobal<v8::Object>();
   auto* non_optimized_handle = new v8::TracedGlobal<v8::Object>();
@@ -820,9 +841,12 @@ TEST(TracedGlobalNoDestructorReclaimedOnScavenge) {
   heap::TemporaryEmbedderHeapTracerScope tracer_scope(isolate, &tracer);
   i::GlobalHandles* global_handles = CcTest::i_isolate()->global_handles();
 
+  static_assert(!TracedGlobalTrait<
+                    v8::TracedGlobal<v8::Value>>::kRequiresExplicitDestruction,
+                "no destructor expected");
   const size_t initial_count = global_handles->handles_count();
-  auto* optimized_handle = new v8::TracedReference<v8::Value>();
-  auto* non_optimized_handle = new v8::TracedReference<v8::Value>();
+  auto* optimized_handle = new v8::TracedGlobal<v8::Value>();
+  auto* non_optimized_handle = new v8::TracedGlobal<v8::Value>();
   SetupOptimizedAndNonOptimizedHandle(isolate, kClassIdToOptimize,
                                       optimized_handle, non_optimized_handle);
   CHECK_EQ(initial_count + 2, global_handles->handles_count());

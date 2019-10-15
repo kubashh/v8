@@ -204,11 +204,11 @@ class AccessInfoFactory final {
   PropertyAccessInfo ComputeDataFieldAccessInfo(Handle<Map> receiver_map,
                                                 Handle<Map> map,
                                                 MaybeHandle<JSObject> holder,
-                                                InternalIndex descriptor,
+                                                int descriptor,
                                                 AccessMode access_mode) const;
   PropertyAccessInfo ComputeAccessorDescriptorAccessInfo(
       Handle<Map> receiver_map, Handle<Name> name, Handle<Map> map,
-      MaybeHandle<JSObject> holder, InternalIndex descriptor,
+      MaybeHandle<JSObject> holder, int descriptor,
       AccessMode access_mode) const;
 
   void MergePropertyAccessInfos(ZoneVector<PropertyAccessInfo> infos,

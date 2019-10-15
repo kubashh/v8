@@ -150,8 +150,9 @@ FieldStatsCollector::GetInobjectFieldStats(Map map) {
   JSObjectFieldStats stats;
   stats.embedded_fields_count_ = JSObject::GetEmbedderFieldCount(map);
   if (!map.is_dictionary_map()) {
+    int nof = map.NumberOfOwnDescriptors();
     DescriptorArray descriptors = map.instance_descriptors();
-    for (InternalIndex descriptor : map.IterateOwnDescriptors()) {
+    for (int descriptor = 0; descriptor < nof; descriptor++) {
       PropertyDetails details = descriptors.GetDetails(descriptor);
       if (details.location() == kField) {
         FieldIndex index = FieldIndex::ForDescriptor(map, descriptor);
@@ -603,7 +604,7 @@ void ObjectStatsCollectorImpl::RecordVirtualJSObjectDetails(JSObject object) {
   if (object.HasFastProperties()) {
     PropertyArray properties = object.property_array();
     if (properties != ReadOnlyRoots(heap_).empty_property_array()) {
-      size_t over_allocated = object.map().UnusedPropertyFields() * kTaggedSize;
+      size_t over_allocated = object.map().UnusedFieldSlots() * kTaggedSize;
       RecordVirtualObjectStats(object, properties,
                                object.map().is_prototype_map()
                                    ? ObjectStats::PROTOTYPE_PROPERTY_ARRAY_TYPE

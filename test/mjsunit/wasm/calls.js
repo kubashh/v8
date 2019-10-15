@@ -49,8 +49,8 @@ function assertFunction(module, func) {
   builder.addMemory(1, 1, true);
   builder.addFunction("sub", kSig_i_ii)
     .addBody([
-      kExprLocalGet, 0,             // --
-      kExprLocalGet, 1,             // --
+      kExprGetLocal, 0,             // --
+      kExprGetLocal, 1,             // --
       kExprI32Sub,                  // --
     ])
     .exportFunc()
@@ -91,8 +91,8 @@ function assertFunction(module, func) {
   builder.addMemory(kPages, kPages, true);
   builder.addFunction("flt", kSig_i_dd)
     .addBody([
-      kExprLocalGet, 0,     // --
-      kExprLocalGet, 1,     // --
+      kExprGetLocal, 0,     // --
+      kExprGetLocal, 1,     // --
       kExprF64Lt            // --
     ])                      // --
     .exportFunc();

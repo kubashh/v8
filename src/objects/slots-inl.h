@@ -119,11 +119,18 @@ inline void MemsetTagged(ObjectSlot start, Object value, size_t counter) {
 #ifdef V8_COMPRESS_POINTERS
   Tagged_t raw_value = CompressTagged(value.ptr());
   STATIC_ASSERT(kTaggedSize == kInt32Size);
-  MemsetInt32(reinterpret_cast<int32_t*>(start.location()), raw_value, counter);
+  MemsetInt32(start.location(), raw_value, counter);
 #else
   Address raw_value = value.ptr();
   MemsetPointer(start.location(), raw_value, counter);
 #endif
+}
+
+// Sets |counter| number of kTaggedSize-sized values starting at |start| slot to
+// the tagged value of Smi::kZero.
+inline void MemsetTaggedSmiZero(ObjectSlot start, size_t counter) {
+  DCHECK_EQ(CompressTagged(Smi::kZero.ptr()), static_cast<Tagged_t>(0));
+  memset(reinterpret_cast<void*>(start.location()), 0, counter * kTaggedSize);
 }
 
 // Sets |counter| number of kSystemPointerSize-sized values starting at |start|

@@ -1071,12 +1071,13 @@ Address StubFrame::GetCallerStackPointer() const {
   return fp() + ExitFrameConstants::kCallerSPOffset;
 }
 
-int StubFrame::LookupExceptionHandlerInTable() {
+int StubFrame::LookupExceptionHandlerInTable(int* stack_slots) {
   Code code = LookupCode();
   DCHECK(code.is_turbofanned());
   DCHECK_EQ(code.kind(), Code::BUILTIN);
   HandlerTable table(code);
   int pc_offset = static_cast<int>(pc() - code.InstructionStart());
+  *stack_slots = code.stack_slots();
   return table.LookupReturn(pc_offset);
 }
 
@@ -1619,7 +1620,7 @@ void OptimizedFrame::Summarize(std::vector<FrameSummary>* frames) const {
 }
 
 int OptimizedFrame::LookupExceptionHandlerInTable(
-    int* data, HandlerTable::CatchPrediction* prediction) {
+    int* stack_slots, HandlerTable::CatchPrediction* prediction) {
   // We cannot perform exception prediction on optimized code. Instead, we need
   // to use FrameSummary to find the corresponding code offset in unoptimized
   // code to perform prediction there.
@@ -1627,7 +1628,7 @@ int OptimizedFrame::LookupExceptionHandlerInTable(
   Code code = LookupCode();
   HandlerTable table(code);
   int pc_offset = static_cast<int>(pc() - code.InstructionStart());
-  DCHECK_NULL(data);  // Data is not used and will not return a value.
+  if (stack_slots) *stack_slots = code.stack_slots();
 
   // When the return pc has been replaced by a trampoline there won't be
   // a handler for this trampoline. Thus we need to use the return pc that
@@ -1942,13 +1943,15 @@ bool WasmCompiledFrame::at_to_number_conversion() const {
   return !!pos;
 }
 
-int WasmCompiledFrame::LookupExceptionHandlerInTable() {
+int WasmCompiledFrame::LookupExceptionHandlerInTable(int* stack_slots) {
+  DCHECK_NOT_NULL(stack_slots);
   wasm::WasmCode* code =
       isolate()->wasm_engine()->code_manager()->LookupCode(pc());
   if (!code->IsAnonymous() && code->handler_table_size() > 0) {
     HandlerTable table(code->handler_table(), code->handler_table_size(),
                        HandlerTable::kReturnAddressBasedEncoding);
     int pc_offset = static_cast<int>(pc() - code->instruction_start());
+    *stack_slots = static_cast<int>(code->stack_slots());
     return table.LookupReturn(pc_offset);
   }
   return -1;

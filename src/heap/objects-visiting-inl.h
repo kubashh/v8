@@ -38,7 +38,7 @@ ResultType HeapVisitor<ResultType, ConcreteVisitor>::Visit(Map map,
                                                            HeapObject object) {
   ConcreteVisitor* visitor = static_cast<ConcreteVisitor*>(this);
   switch (map.visitor_id()) {
-#define CASE(TypeName)               \
+#define CASE(TypeName, Type)         \
   case kVisit##TypeName:             \
     return visitor->Visit##TypeName( \
         map, ConcreteVisitor::template Cast<TypeName>(object));
@@ -77,10 +77,10 @@ void HeapVisitor<ResultType, ConcreteVisitor>::VisitMapPointer(
   static_cast<ConcreteVisitor*>(this)->VisitPointer(host, host.map_slot());
 }
 
-#define VISIT(TypeName)                                                        \
+#define VISIT(TypeName, Type)                                                  \
   template <typename ResultType, typename ConcreteVisitor>                     \
   ResultType HeapVisitor<ResultType, ConcreteVisitor>::Visit##TypeName(        \
-      Map map, TypeName object) {                                              \
+      Map map, Type object) {                                                  \
     ConcreteVisitor* visitor = static_cast<ConcreteVisitor*>(this);            \
     if (!visitor->ShouldVisit(object)) return ResultType();                    \
     if (!visitor->AllowDefaultJSObjectVisit()) {                               \

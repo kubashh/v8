@@ -157,18 +157,16 @@ class BaseConsumedPreparseData : public ConsumedPreparseData {
       int* function_length, int* num_inner_functions, bool* uses_super_property,
       LanguageMode* language_mode) final;
 
-  void RestoreScopeAllocationData(DeclarationScope* scope,
-                                  AstValueFactory* ast_value_factory) final;
+  void RestoreScopeAllocationData(DeclarationScope* scope) final;
 
 #ifdef DEBUG
   bool VerifyDataStart();
 #endif
 
  private:
-  void RestoreDataForScope(Scope* scope, AstValueFactory* ast_value_factory);
+  void RestoreDataForScope(Scope* scope);
   void RestoreDataForVariable(Variable* var);
-  void RestoreDataForInnerScopes(Scope* scope,
-                                 AstValueFactory* ast_value_factory);
+  void RestoreDataForInnerScopes(Scope* scope);
 
   std::unique_ptr<ByteData> scope_data_;
   // When consuming the data, these indexes point to the data we're going to

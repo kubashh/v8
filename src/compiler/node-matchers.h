@@ -187,11 +187,10 @@ using Float64Matcher = FloatMatcher<double, IrOpcode::kFloat64Constant>;
 using NumberMatcher = FloatMatcher<double, IrOpcode::kNumberConstant>;
 
 // A pattern matcher for heap object constants.
-template <IrOpcode::Value kHeapConstantOpcode>
-struct HeapObjectMatcherImpl final
-    : public ValueMatcher<Handle<HeapObject>, kHeapConstantOpcode> {
-  explicit HeapObjectMatcherImpl(Node* node)
-      : ValueMatcher<Handle<HeapObject>, kHeapConstantOpcode>(node) {}
+struct HeapObjectMatcher final
+    : public ValueMatcher<Handle<HeapObject>, IrOpcode::kHeapConstant> {
+  explicit HeapObjectMatcher(Node* node)
+      : ValueMatcher<Handle<HeapObject>, IrOpcode::kHeapConstant>(node) {}
 
   bool Is(Handle<HeapObject> const& value) const {
     return this->HasValue() && this->Value().address() == value.address();
@@ -202,9 +201,6 @@ struct HeapObjectMatcherImpl final
   }
 };
 
-using HeapObjectMatcher = HeapObjectMatcherImpl<IrOpcode::kHeapConstant>;
-using CompressedHeapObjectMatcher =
-    HeapObjectMatcherImpl<IrOpcode::kCompressedHeapConstant>;
 
 // A pattern matcher for external reference constants.
 struct ExternalReferenceMatcher final
@@ -299,8 +295,6 @@ using Float64BinopMatcher = BinopMatcher<Float64Matcher, Float64Matcher>;
 using NumberBinopMatcher = BinopMatcher<NumberMatcher, NumberMatcher>;
 using HeapObjectBinopMatcher =
     BinopMatcher<HeapObjectMatcher, HeapObjectMatcher>;
-using CompressedHeapObjectBinopMatcher =
-    BinopMatcher<CompressedHeapObjectMatcher, CompressedHeapObjectMatcher>;
 
 template <class BinopMatcher, IrOpcode::Value kMulOpcode,
           IrOpcode::Value kShiftOpcode>

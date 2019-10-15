@@ -8,7 +8,7 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
 
 let builder = new WasmModuleBuilder();
     builder.addFunction("main", kSig_i_i)
-      .addBody([kExprLocalGet, 0])
+      .addBody([kExprGetLocal, 0])
       .addLocals({s128_count: 1});
 
   assertFalse(WebAssembly.validate(builder.toBuffer()));

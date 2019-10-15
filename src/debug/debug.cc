@@ -622,7 +622,9 @@ bool Debug::SetBreakPointForScript(Handle<Script> script,
   Handle<BreakPoint> break_point =
       isolate_->factory()->NewBreakPoint(*id, condition);
   if (script->type() == Script::TYPE_WASM) {
-    return WasmModuleObject::SetBreakPoint(script, source_position,
+    Handle<WasmModuleObject> module_object(
+        WasmModuleObject::cast(script->wasm_module_object()), isolate_);
+    return WasmModuleObject::SetBreakPoint(module_object, source_position,
                                            break_point);
   }
 
@@ -1169,7 +1171,7 @@ void Debug::PrepareFunctionForDebugExecution(
   if (debug_info->flags() & DebugInfo::kPreparedForDebugExecution) return;
 
   // Make a copy of the bytecode array if available.
-  Handle<HeapObject> maybe_original_bytecode_array =
+  Handle<Object> maybe_original_bytecode_array =
       isolate_->factory()->undefined_value();
   if (shared->HasBytecodeArray()) {
     Handle<BytecodeArray> original_bytecode_array =
@@ -1248,7 +1250,7 @@ void Debug::InstallDebugBreakTrampoline() {
         JSObject object = JSObject::cast(obj);
         DescriptorArray descriptors = object.map().instance_descriptors();
 
-        for (InternalIndex i : object.map().IterateOwnDescriptors()) {
+        for (int i = 0; i < object.map().NumberOfOwnDescriptors(); ++i) {
           if (descriptors.GetDetails(i).kind() == PropertyKind::kAccessor) {
             Object value = descriptors.GetStrongValue(i);
             if (!value.IsAccessorPair()) continue;
@@ -1899,7 +1901,6 @@ bool Debug::CanBreakAtEntry(Handle<SharedFunctionInfo> shared) {
 bool Debug::SetScriptSource(Handle<Script> script, Handle<String> source,
                             bool preview, debug::LiveEditResult* result) {
   DebugScope debug_scope(this);
-  feature_tracker()->Track(DebugFeatureTracker::kLiveEdit);
   running_live_edit_ = true;
   LiveEdit::PatchScript(isolate_, script, source, preview, result);
   running_live_edit_ = false;

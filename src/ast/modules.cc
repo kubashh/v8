@@ -84,11 +84,11 @@ void SourceTextModuleDescriptor::AddStarExport(
 }
 
 namespace {
-Handle<PrimitiveHeapObject> ToStringOrUndefined(Isolate* isolate,
-                                                const AstRawString* s) {
-  return (s == nullptr) ? Handle<PrimitiveHeapObject>::cast(
-                              isolate->factory()->undefined_value())
-                        : Handle<PrimitiveHeapObject>::cast(s->string());
+Handle<HeapObject> ToStringOrUndefined(Isolate* isolate,
+                                       const AstRawString* s) {
+  return (s == nullptr)
+             ? Handle<HeapObject>::cast(isolate->factory()->undefined_value())
+             : Handle<HeapObject>::cast(s->string());
 }
 }  // namespace
 

@@ -43,19 +43,21 @@ Handle<LayoutDescriptor> LayoutDescriptor::ShareAppend(
   Handle<LayoutDescriptor> layout_descriptor(map->GetLayoutDescriptor(),
                                              isolate);
 
-  if (!InobjectUnboxedField(map->GetInObjectProperties(), details)) {
+  int in_object_field_slots = map->TotalInObjectFieldSlots();
+  if (!InobjectUnboxedField(in_object_field_slots, details)) {
     DCHECK(details.location() != kField ||
-           layout_descriptor->IsTagged(details.field_index()));
+           layout_descriptor->IsTagged(details.field_slot_index()));
     return layout_descriptor;
   }
-  int field_index = details.field_index();
+  int field_index = details.field_slot_index();
   layout_descriptor = LayoutDescriptor::EnsureCapacity(
-      isolate, layout_descriptor, field_index + details.field_width_in_words());
+      isolate, layout_descriptor,
+      field_index + details.field_width_in_words(in_object_field_slots));
 
   DisallowHeapAllocation no_allocation;
   LayoutDescriptor layout_desc = *layout_descriptor;
   layout_desc = layout_desc.SetRawData(field_index);
-  if (details.field_width_in_words() > 1) {
+  if (details.field_width_in_words(in_object_field_slots) > 1) {
     layout_desc = layout_desc.SetRawData(field_index + 1);
   }
   return handle(layout_desc, isolate);
@@ -69,13 +71,15 @@ Handle<LayoutDescriptor> LayoutDescriptor::AppendIfFastOrUseFull(
   if (layout_descriptor.IsSlowLayout()) {
     return full_layout_descriptor;
   }
-  if (!InobjectUnboxedField(map->GetInObjectProperties(), details)) {
+  int in_object_field_slots = map->TotalInObjectFieldSlots();
+  if (!InobjectUnboxedField(in_object_field_slots, details)) {
     DCHECK(details.location() != kField ||
-           layout_descriptor.IsTagged(details.field_index()));
+           layout_descriptor.IsTagged(details.field_slot_index()));
     return handle(layout_descriptor, isolate);
   }
-  int field_index = details.field_index();
-  int new_capacity = field_index + details.field_width_in_words();
+  int field_index = details.field_slot_index();
+  int new_capacity =
+      field_index + details.field_width_in_words(in_object_field_slots);
   if (new_capacity > layout_descriptor.capacity()) {
     // Current map's layout descriptor runs out of space, so use the full
     // layout descriptor.
@@ -83,7 +87,8 @@ Handle<LayoutDescriptor> LayoutDescriptor::AppendIfFastOrUseFull(
   }
 
   layout_descriptor = layout_descriptor.SetRawData(field_index);
-  if (details.field_width_in_words() > 1) {
+  if (details.field_width_in_words(in_object_field_slots) > 1) {
+    DCHECK_EQ(details.field_width_in_words(in_object_field_slots), 2);
     layout_descriptor = layout_descriptor.SetRawData(field_index + 1);
   }
   return handle(layout_descriptor, isolate);
@@ -257,22 +262,29 @@ LayoutDescriptor LayoutDescriptor::Trim(Heap* heap, Map map,
 
 bool LayoutDescriptor::IsConsistentWithMap(Map map, bool check_tail) {
   if (FLAG_unbox_double_fields) {
+    if (!map.IsJSObjectMap()) {
+      return LayoutDescriptor::IsFastPointerLayout(*this);
+    }
     DescriptorArray descriptors = map.instance_descriptors();
+    int nof_descriptors = map.NumberOfOwnDescriptors();
+    int in_object_field_slots = map.TotalInObjectFieldSlots();
     int last_field_index = 0;
-    for (InternalIndex i : map.IterateOwnDescriptors()) {
+    for (int i = 0; i < nof_descriptors; i++) {
       PropertyDetails details = descriptors.GetDetails(i);
       if (details.location() != kField) continue;
       FieldIndex field_index = FieldIndex::ForDescriptor(map, i);
       bool tagged_expected =
           !field_index.is_inobject() || !details.representation().IsDouble();
-      for (int bit = 0; bit < details.field_width_in_words(); bit++) {
-        bool tagged_actual = IsTagged(details.field_index() + bit);
+      int field_width_in_words =
+          details.field_width_in_words(in_object_field_slots);
+      for (int bit = 0; bit < field_width_in_words; bit++) {
+        bool tagged_actual = IsTagged(details.field_slot_index() + bit);
         DCHECK_EQ(tagged_expected, tagged_actual);
         if (tagged_actual != tagged_expected) return false;
       }
-      last_field_index =
-          Max(last_field_index,
-              details.field_index() + details.field_width_in_words());
+      DCHECK_LT(last_field_index,
+                details.field_slot_index() + field_width_in_words);
+      last_field_index = details.field_slot_index() + field_width_in_words;
     }
     if (check_tail) {
       int n = capacity();

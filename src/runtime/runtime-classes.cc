@@ -130,8 +130,7 @@ Handle<Name> KeyToName<NumberDictionary>(Isolate* isolate, Handle<Object> key) {
 inline void SetHomeObject(Isolate* isolate, JSFunction method,
                           JSObject home_object) {
   if (method.shared().needs_home_object()) {
-    const InternalIndex kPropertyIndex(
-        JSFunction::kMaybeHomeObjectDescriptorIndex);
+    const int kPropertyIndex = JSFunction::kMaybeHomeObjectDescriptorIndex;
     CHECK_EQ(method.map().instance_descriptors().GetKey(kPropertyIndex),
              ReadOnlyRoots(isolate).home_object_symbol());
 
@@ -304,7 +303,7 @@ bool AddDescriptorsByTemplate(
   // Count the number of properties that must be in the instance and
   // create the property array to hold the constants.
   int count = 0;
-  for (InternalIndex i : InternalIndex::Range(nof_descriptors)) {
+  for (int i = 0; i < nof_descriptors; i++) {
     PropertyDetails details = descriptors_template->GetDetails(i);
     if (details.location() == kDescriptor && details.kind() == kData) {
       count++;
@@ -316,7 +315,7 @@ bool AddDescriptorsByTemplate(
   // Read values from |descriptors_template| and store possibly post-processed
   // values into "instantiated" |descriptors| array.
   int field_index = 0;
-  for (InternalIndex i : InternalIndex::Range(nof_descriptors)) {
+  for (int i = 0; i < nof_descriptors; i++) {
     Object value = descriptors_template->GetStrongValue(i);
     if (value.IsAccessorPair()) {
       Handle<AccessorPair> pair = AccessorPair::Copy(
@@ -372,6 +371,7 @@ bool AddDescriptorsByTemplate(
 
   map->InitializeDescriptors(isolate, *descriptors,
                              LayoutDescriptor::FastPointerLayout());
+  map->SetOutOfObjectUnusedFieldSlots(0);
   if (elements_dictionary->NumberOfElements() > 0) {
     if (!SubstituteValues<NumberDictionary>(isolate, elements_dictionary,
                                             receiver, args)) {

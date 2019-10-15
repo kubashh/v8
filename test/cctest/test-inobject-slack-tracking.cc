@@ -74,9 +74,8 @@ static inline Handle<T> CompileRunI(const char* script) {
   return OpenHandle<T>(CompileRun(script));
 }
 
-static Object GetFieldValue(JSObject obj, int property_index) {
-  FieldIndex index = FieldIndex::ForPropertyIndex(obj.map(), property_index);
-  return obj.RawFastPropertyAt(index);
+static Object GetFieldValue(JSObject obj, FieldIndex field_index) {
+  return obj.RawFastPropertyAt(field_index);
 }
 
 static double GetDoubleFieldValue(JSObject obj, FieldIndex field_index) {
@@ -92,21 +91,18 @@ static double GetDoubleFieldValue(JSObject obj, FieldIndex field_index) {
   }
 }
 
-static double GetDoubleFieldValue(JSObject obj, int property_index) {
-  FieldIndex index = FieldIndex::ForPropertyIndex(obj.map(), property_index);
-  return GetDoubleFieldValue(obj, index);
-}
-
 bool IsObjectShrinkable(JSObject obj) {
   Handle<Map> filler_map =
       CcTest::i_isolate()->factory()->one_pointer_filler_map();
 
-  int inobject_properties = obj.map().GetInObjectProperties();
-  int unused = obj.map().UnusedPropertyFields();
+  int inobject_properties = obj.map().TotalInObjectFieldSlots();
+  int unused = obj.map().UnusedFieldSlots();
   if (unused == 0) return false;
 
   for (int i = inobject_properties - unused; i < inobject_properties; i++) {
-    if (*filler_map != GetFieldValue(obj, i)) {
+    FieldIndex index = FieldIndex::ForFieldSlot(obj.map(), i);
+    DCHECK(!index.is_double());
+    if (*filler_map != GetFieldValue(obj, index)) {
       return false;
     }
   }
@@ -144,10 +140,12 @@ TEST(JSObjectBasic) {
   CHECK(initial_map->IsInobjectSlackTrackingInProgress());
 
   // There must be at least some slack.
-  CHECK_LT(5, obj->map().GetInObjectProperties());
-  CHECK_EQ(Smi::FromInt(42), GetFieldValue(*obj, 0));
-  CHECK_EQ(4.2, GetDoubleFieldValue(*obj, 1));
-  CHECK_EQ(*obj, GetFieldValue(*obj, 2));
+  CHECK_LT(5, obj->map().TotalInObjectFieldSlots());
+  CHECK_EQ(Smi::FromInt(42),
+           GetFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 0)));
+  CHECK_EQ(4.2,
+           GetDoubleFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 1)));
+  CHECK_EQ(*obj, GetFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 2)));
   CHECK(IsObjectShrinkable(*obj));
 
   // Create several objects to complete the tracking.
@@ -161,9 +159,8 @@ TEST(JSObjectBasic) {
   CHECK(!IsObjectShrinkable(*obj));
 
   // No slack left.
-  CHECK_EQ(3, obj->map().GetInObjectProperties());
+  CHECK_EQ(3, obj->map().TotalInObjectFieldSlots());
 }
-
 
 TEST(JSObjectBasicNoInlineNew) {
   FLAG_inline_new = false;
@@ -205,10 +202,13 @@ TEST(JSObjectComplex) {
   CHECK(initial_map->IsInobjectSlackTrackingInProgress());
 
   // There must be at least some slack.
-  CHECK_LT(5, obj3->map().GetInObjectProperties());
-  CHECK_EQ(Smi::FromInt(42), GetFieldValue(*obj3, 0));
-  CHECK_EQ(4.2, GetDoubleFieldValue(*obj3, 1));
-  CHECK_EQ(*obj3, GetFieldValue(*obj3, 2));
+  CHECK_LT(5, obj3->map().TotalInObjectFieldSlots());
+  CHECK_EQ(Smi::FromInt(42),
+           GetFieldValue(*obj3, FieldIndex::ForDescriptor(obj3->map(), 0)));
+  CHECK_EQ(4.2, GetDoubleFieldValue(*obj3,
+                                    FieldIndex::ForDescriptor(obj3->map(), 1)));
+  CHECK_EQ(*obj3,
+           GetFieldValue(*obj3, FieldIndex::ForDescriptor(obj3->map(), 2)));
   CHECK(IsObjectShrinkable(*obj1));
   CHECK(IsObjectShrinkable(*obj3));
   CHECK(IsObjectShrinkable(*obj5));
@@ -225,14 +225,14 @@ TEST(JSObjectComplex) {
   CHECK(IsObjectShrinkable(*obj3));
   CHECK(!IsObjectShrinkable(*obj5));
 
-  CHECK_EQ(5, obj1->map().GetInObjectProperties());
-  CHECK_EQ(4, obj1->map().UnusedPropertyFields());
+  CHECK_EQ(5, obj1->map().TotalInObjectFieldSlots());
+  CHECK_EQ(4, obj1->map().UnusedFieldSlots());
 
-  CHECK_EQ(5, obj3->map().GetInObjectProperties());
-  CHECK_EQ(2, obj3->map().UnusedPropertyFields());
+  CHECK_EQ(5, obj3->map().TotalInObjectFieldSlots());
+  CHECK_EQ(2, obj3->map().UnusedFieldSlots());
 
-  CHECK_EQ(5, obj5->map().GetInObjectProperties());
-  CHECK_EQ(0, obj5->map().UnusedPropertyFields());
+  CHECK_EQ(5, obj5->map().TotalInObjectFieldSlots());
+  CHECK_EQ(0, obj5->map().UnusedFieldSlots());
 
   // Since slack tracking is complete, the new objects should not be shrinkable.
   obj1 = CompileRunI<JSObject>("new A(1);");
@@ -290,10 +290,12 @@ TEST(JSGeneratorObjectBasic) {
   CHECK(initial_map->IsInobjectSlackTrackingInProgress());
 
   // There must be at least some slack.
-  CHECK_LT(5, obj->map().GetInObjectProperties());
-  CHECK_EQ(Smi::FromInt(42), GetFieldValue(*obj, 0));
-  CHECK_EQ(4.2, GetDoubleFieldValue(*obj, 1));
-  CHECK_EQ(*obj, GetFieldValue(*obj, 2));
+  CHECK_LT(5, obj->map().TotalInObjectFieldSlots());
+  CHECK_EQ(Smi::FromInt(42),
+           GetFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 0)));
+  CHECK_EQ(4.2,
+           GetDoubleFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 1)));
+  CHECK_EQ(*obj, GetFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 2)));
   CHECK(IsObjectShrinkable(*obj));
 
   // Create several objects to complete the tracking.
@@ -307,9 +309,8 @@ TEST(JSGeneratorObjectBasic) {
   CHECK(!IsObjectShrinkable(*obj));
 
   // No slack left.
-  CHECK_EQ(3, obj->map().GetInObjectProperties());
+  CHECK_EQ(3, obj->map().TotalInObjectFieldSlots());
 }
-
 
 TEST(JSGeneratorObjectBasicNoInlineNew) {
   FLAG_inline_new = false;
@@ -374,13 +375,17 @@ TEST(SubclassBasicNoBaseClassInstances) {
   CHECK(b_initial_map->IsInobjectSlackTrackingInProgress());
 
   // There must be at least some slack.
-  CHECK_LT(10, obj->map().GetInObjectProperties());
-  CHECK_EQ(Smi::FromInt(42), GetFieldValue(*obj, 0));
-  CHECK_EQ(4.2, GetDoubleFieldValue(*obj, 1));
-  CHECK_EQ(*obj, GetFieldValue(*obj, 2));
-  CHECK_EQ(Smi::FromInt(142), GetFieldValue(*obj, 3));
-  CHECK_EQ(14.2, GetDoubleFieldValue(*obj, 4));
-  CHECK_EQ(*obj, GetFieldValue(*obj, 5));
+  CHECK_LT(10, obj->map().TotalInObjectFieldSlots());
+  CHECK_EQ(Smi::FromInt(42),
+           GetFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 0)));
+  CHECK_EQ(4.2,
+           GetDoubleFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 1)));
+  CHECK_EQ(*obj, GetFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 2)));
+  CHECK_EQ(Smi::FromInt(142),
+           GetFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 3)));
+  CHECK_EQ(14.2,
+           GetDoubleFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 4)));
+  CHECK_EQ(*obj, GetFieldValue(*obj, FieldIndex::ForDescriptor(obj->map(), 5)));
   CHECK(IsObjectShrinkable(*obj));
 
   // Create several subclass instances to complete the tracking.
@@ -399,9 +404,8 @@ TEST(SubclassBasicNoBaseClassInstances) {
   CHECK(a_initial_map->IsInobjectSlackTrackingInProgress());
 
   // No slack left.
-  CHECK_EQ(6, obj->map().GetInObjectProperties());
+  CHECK_EQ(6, obj->map().TotalInObjectFieldSlots());
 }
-
 
 TEST(SubclassBasicNoBaseClassInstancesNoInlineNew) {
   FLAG_inline_new = false;
@@ -479,16 +483,22 @@ TEST(SubclassBasic) {
   CHECK(!IsObjectShrinkable(*a_obj));
 
   // No slack left.
-  CHECK_EQ(3, a_obj->map().GetInObjectProperties());
+  CHECK_EQ(3, a_obj->map().TotalInObjectFieldSlots());
 
   // There must be at least some slack.
-  CHECK_LT(10, b_obj->map().GetInObjectProperties());
-  CHECK_EQ(Smi::FromInt(42), GetFieldValue(*b_obj, 0));
-  CHECK_EQ(4.2, GetDoubleFieldValue(*b_obj, 1));
-  CHECK_EQ(*b_obj, GetFieldValue(*b_obj, 2));
-  CHECK_EQ(Smi::FromInt(142), GetFieldValue(*b_obj, 3));
-  CHECK_EQ(14.2, GetDoubleFieldValue(*b_obj, 4));
-  CHECK_EQ(*b_obj, GetFieldValue(*b_obj, 5));
+  CHECK_LT(10, b_obj->map().TotalInObjectFieldSlots());
+  CHECK_EQ(Smi::FromInt(42),
+           GetFieldValue(*b_obj, FieldIndex::ForDescriptor(b_obj->map(), 0)));
+  CHECK_EQ(4.2, GetDoubleFieldValue(
+                    *b_obj, FieldIndex::ForDescriptor(b_obj->map(), 1)));
+  CHECK_EQ(*b_obj,
+           GetFieldValue(*b_obj, FieldIndex::ForDescriptor(b_obj->map(), 2)));
+  CHECK_EQ(Smi::FromInt(142),
+           GetFieldValue(*b_obj, FieldIndex::ForDescriptor(b_obj->map(), 3)));
+  CHECK_EQ(14.2, GetDoubleFieldValue(
+                     *b_obj, FieldIndex::ForDescriptor(b_obj->map(), 4)));
+  CHECK_EQ(*b_obj,
+           GetFieldValue(*b_obj, FieldIndex::ForDescriptor(b_obj->map(), 5)));
   CHECK(IsObjectShrinkable(*b_obj));
 
   // Create several subclass instances to complete the tracking.
@@ -502,9 +512,8 @@ TEST(SubclassBasic) {
   CHECK(!IsObjectShrinkable(*b_obj));
 
   // No slack left.
-  CHECK_EQ(6, b_obj->map().GetInObjectProperties());
+  CHECK_EQ(6, b_obj->map().TotalInObjectFieldSlots());
 }
-
 
 TEST(SubclassBasicNoInlineNew) {
   FLAG_inline_new = false;
@@ -582,7 +591,7 @@ static void TestClassHierarchy(const std::vector<int>& hierarchy_desc, int n) {
     if (obj->map().is_dictionary_map()) continue;
 
     // There must be at least some slack.
-    CHECK_LT(fields_count, obj->map().GetInObjectProperties());
+    CHECK_LT(fields_count, obj->map().TotalInObjectFieldSlots());
 
     // One instance was created.
     CHECK_EQ(Map::kSlackTrackingCounterStart - 1,
@@ -606,7 +615,7 @@ static void TestClassHierarchy(const std::vector<int>& hierarchy_desc, int n) {
     CHECK(!IsObjectShrinkable(*obj));
 
     // No slack left.
-    CHECK_EQ(fields_count, obj->map().GetInObjectProperties());
+    CHECK_EQ(fields_count, obj->map().TotalInObjectFieldSlots());
   }
 }
 
@@ -690,7 +699,7 @@ TEST(InobjectPropetiesCountOverflowInSubclass) {
 
     // There must be no slack left.
     CHECK_EQ(JSObject::kMaxInstanceSize, obj->map().instance_size());
-    CHECK_EQ(kMaxInobjectProperties, obj->map().GetInObjectProperties());
+    CHECK_EQ(kMaxInobjectProperties, obj->map().TotalInObjectFieldSlots());
 
     // One instance was created.
     CHECK_EQ(Map::kSlackTrackingCounterStart - 1,
@@ -707,7 +716,7 @@ TEST(InobjectPropetiesCountOverflowInSubclass) {
     CHECK(!IsObjectShrinkable(*obj));
 
     // No slack left.
-    CHECK_EQ(kMaxInobjectProperties, obj->map().GetInObjectProperties());
+    CHECK_EQ(kMaxInobjectProperties, obj->map().TotalInObjectFieldSlots());
   }
 
   // The other classes in the hierarchy are not affected.
@@ -717,7 +726,7 @@ TEST(InobjectPropetiesCountOverflowInSubclass) {
 static void CheckExpectedProperties(int expected, std::ostringstream& os) {
   Handle<HeapObject> obj = Handle<HeapObject>::cast(
       v8::Utils::OpenHandle(*CompileRun(os.str().c_str())));
-  CHECK_EQ(expected, obj->map().GetInObjectProperties());
+  CHECK_EQ(expected, obj->map().TotalInObjectFieldSlots());
 }
 
 TEST(ObjectLiteralPropertyBackingStoreSize) {
@@ -955,10 +964,16 @@ static void TestSubclassBuiltin(const char* subclass_name,
   CHECK(initial_map->IsInobjectSlackTrackingInProgress());
 
   // There must be at least some slack.
-  CHECK_LT(builtin_properties_count + 5, obj->map().GetInObjectProperties());
-  CHECK_EQ(Smi::FromInt(42), GetFieldValue(*obj, builtin_properties_count + 0));
-  CHECK_EQ(4.2, GetDoubleFieldValue(*obj, builtin_properties_count + 1));
-  CHECK_EQ(*obj, GetFieldValue(*obj, builtin_properties_count + 2));
+  CHECK_LT(builtin_properties_count + 5, obj->map().TotalInObjectFieldSlots());
+  CHECK_EQ(Smi::FromInt(42),
+           GetFieldValue(*obj, FieldIndex::ForDescriptor(
+                                   obj->map(), builtin_properties_count + 0)));
+  CHECK_EQ(4.2, GetDoubleFieldValue(
+                    *obj, FieldIndex::ForDescriptor(
+                              obj->map(), builtin_properties_count + 1)));
+  CHECK_EQ(*obj,
+           GetFieldValue(*obj, FieldIndex::ForDescriptor(
+                                   obj->map(), builtin_properties_count + 2)));
   CHECK(IsObjectShrinkable(*obj));
 
   // Create several subclass instances to complete the tracking.
@@ -972,7 +987,7 @@ static void TestSubclassBuiltin(const char* subclass_name,
   CHECK(!IsObjectShrinkable(*obj));
 
   // No slack left.
-  CHECK_EQ(builtin_properties_count + 3, obj->map().GetInObjectProperties());
+  CHECK_EQ(builtin_properties_count + 3, obj->map().TotalInObjectFieldSlots());
 
   CHECK_EQ(instance_type, obj->map().instance_type());
 }
@@ -1112,7 +1127,7 @@ TEST(SubclassRegExpBuiltin) {
   v8::HandleScope scope(CcTest::isolate());
 
   const int first_field = 1;
-  TestSubclassBuiltin("A1", JS_REG_EXP_TYPE, "RegExp", "'o(..)h', 'g'",
+  TestSubclassBuiltin("A1", JS_REGEXP_TYPE, "RegExp", "'o(..)h', 'g'",
                       first_field);
 }
 
@@ -1286,7 +1301,7 @@ TEST(SubclassTranspiledClassHierarchy) {
   CHECK(!IsObjectShrinkable(*obj));
 
   // No slack left.
-  CHECK_EQ(21, obj->map().GetInObjectProperties());
+  CHECK_EQ(21, obj->map().TotalInObjectFieldSlots());
   CHECK_EQ(JS_OBJECT_TYPE, obj->map().instance_type());
 }
 
@@ -1299,7 +1314,7 @@ TEST(Regress8853_ClassConstructor) {
   Handle<JSObject> obj = CompileRunI<JSObject>("new (class {});\n");
   CHECK(obj->map().IsInobjectSlackTrackingInProgress());
   CHECK(IsObjectShrinkable(*obj));
-  CHECK_EQ(10, obj->map().GetInObjectProperties());
+  CHECK_EQ(10, obj->map().TotalInObjectFieldSlots());
 
   // For classes with N explicit this.prop assignments in their
   // constructors we start out with N+8 inobject properties.
@@ -1313,7 +1328,7 @@ TEST(Regress8853_ClassConstructor) {
       "});\n");
   CHECK(obj->map().IsInobjectSlackTrackingInProgress());
   CHECK(IsObjectShrinkable(*obj));
-  CHECK_EQ(3 + 8, obj->map().GetInObjectProperties());
+  CHECK_EQ(3 + 8, obj->map().TotalInObjectFieldSlots());
 }
 
 TEST(Regress8853_ClassHierarchy) {
@@ -1329,7 +1344,7 @@ TEST(Regress8853_ClassHierarchy) {
     Handle<JSObject> obj = CompileRunI<JSObject>(script.c_str());
     CHECK(obj->map().IsInobjectSlackTrackingInProgress());
     CHECK(IsObjectShrinkable(*obj));
-    CHECK_EQ(8 + 2 * i, obj->map().GetInObjectProperties());
+    CHECK_EQ(8 + 2 * i, obj->map().TotalInObjectFieldSlots());
     base = "(class extends " + base + " {})";
   }
 }
@@ -1343,7 +1358,7 @@ TEST(Regress8853_FunctionConstructor) {
   Handle<JSObject> obj = CompileRunI<JSObject>("new (function() {});\n");
   CHECK(obj->map().IsInobjectSlackTrackingInProgress());
   CHECK(IsObjectShrinkable(*obj));
-  CHECK_EQ(10, obj->map().GetInObjectProperties());
+  CHECK_EQ(10, obj->map().TotalInObjectFieldSlots());
 
   // For constructor functions with N explicit this.prop assignments
   // in them we start out with N+8 inobject properties.
@@ -1358,7 +1373,7 @@ TEST(Regress8853_FunctionConstructor) {
       "});\n");
   CHECK(obj->map().IsInobjectSlackTrackingInProgress());
   CHECK(IsObjectShrinkable(*obj));
-  CHECK_EQ(6 + 8, obj->map().GetInObjectProperties());
+  CHECK_EQ(6 + 8, obj->map().TotalInObjectFieldSlots());
 }
 
 TEST(InstanceFieldsArePropertiesDefaultConstructorLazy) {
@@ -1379,7 +1394,7 @@ TEST(InstanceFieldsArePropertiesDefaultConstructorLazy) {
       "  x09 = null;\n"
       "  x10 = null;\n"
       "});\n");
-  CHECK_EQ(11 + 8, obj->map().GetInObjectProperties());
+  CHECK_EQ(11 + 8, obj->map().TotalInObjectFieldSlots());
 }
 
 TEST(InstanceFieldsArePropertiesFieldsAndConstructorLazy) {
@@ -1412,7 +1427,7 @@ TEST(InstanceFieldsArePropertiesFieldsAndConstructorLazy) {
       "    this.x20 = null;\n"
       "  }\n"
       "});\n");
-  CHECK_EQ(21 + 8, obj->map().GetInObjectProperties());
+  CHECK_EQ(21 + 8, obj->map().TotalInObjectFieldSlots());
 }
 
 TEST(InstanceFieldsArePropertiesDefaultConstructorEager) {
@@ -1434,7 +1449,7 @@ TEST(InstanceFieldsArePropertiesDefaultConstructorEager) {
       "  x09 = null;\n"
       "  x10 = null;\n"
       "});\n");
-  CHECK_EQ(11 + 8, obj->map().GetInObjectProperties());
+  CHECK_EQ(11 + 8, obj->map().TotalInObjectFieldSlots());
 }
 
 TEST(InstanceFieldsArePropertiesFieldsAndConstructorEager) {
@@ -1468,7 +1483,7 @@ TEST(InstanceFieldsArePropertiesFieldsAndConstructorEager) {
       "    this.x20 = null;\n"
       "  }\n"
       "});\n");
-  CHECK_EQ(21 + 8, obj->map().GetInObjectProperties());
+  CHECK_EQ(21 + 8, obj->map().TotalInObjectFieldSlots());
 }
 
 }  // namespace test_inobject_slack_tracking

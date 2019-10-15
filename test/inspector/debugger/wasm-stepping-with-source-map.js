@@ -17,12 +17,12 @@ builder.addFunction('wasm_B', kSig_v_i)
     .addBody([
       // clang-format off
       kExprLoop, kWasmStmt,               // while
-        kExprLocalGet, 0,                 // -
+        kExprGetLocal, 0,                 // -
         kExprIf, kWasmStmt,               // if <param0> != 0
-          kExprLocalGet, 0,               // -
+          kExprGetLocal, 0,               // -
           kExprI32Const, 1,               // -
           kExprI32Sub,                    // -
-          kExprLocalSet, 0,               // decrease <param0>
+          kExprSetLocal, 0,               // decrease <param0>
           kExprCallFunction, func_a_idx,  // -
           kExprBr, 1,                     // continue
           kExprEnd,                       // -

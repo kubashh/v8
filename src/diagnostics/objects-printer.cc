@@ -215,25 +215,25 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
     case JS_API_OBJECT_TYPE:
     case JS_SPECIAL_API_OBJECT_TYPE:
     case JS_CONTEXT_EXTENSION_OBJECT_TYPE:
-    case JS_ARGUMENTS_OBJECT_TYPE:
+    case JS_ARGUMENTS_TYPE:
     case JS_ERROR_TYPE:
     // TODO(titzer): debug printing for more wasm objects
-    case WASM_EXCEPTION_OBJECT_TYPE:
+    case WASM_EXCEPTION_TYPE:
       JSObject::cast(*this).JSObjectPrint(os);
       break;
-    case WASM_MODULE_OBJECT_TYPE:
+    case WASM_MODULE_TYPE:
       WasmModuleObject::cast(*this).WasmModuleObjectPrint(os);
       break;
-    case WASM_MEMORY_OBJECT_TYPE:
+    case WASM_MEMORY_TYPE:
       WasmMemoryObject::cast(*this).WasmMemoryObjectPrint(os);
       break;
-    case WASM_TABLE_OBJECT_TYPE:
+    case WASM_TABLE_TYPE:
       WasmTableObject::cast(*this).WasmTableObjectPrint(os);
       break;
-    case WASM_GLOBAL_OBJECT_TYPE:
+    case WASM_GLOBAL_TYPE:
       WasmGlobalObject::cast(*this).WasmGlobalObjectPrint(os);
       break;
-    case WASM_INSTANCE_OBJECT_TYPE:
+    case WASM_INSTANCE_TYPE:
       WasmInstanceObject::cast(*this).WasmInstanceObjectPrint(os);
       break;
     case JS_ASYNC_FUNCTION_OBJECT_TYPE:
@@ -247,10 +247,10 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
     case JS_ARRAY_TYPE:
       JSArray::cast(*this).JSArrayPrint(os);
       break;
-    case JS_REG_EXP_TYPE:
+    case JS_REGEXP_TYPE:
       JSRegExp::cast(*this).JSRegExpPrint(os);
       break;
-    case JS_REG_EXP_STRING_ITERATOR_TYPE:
+    case JS_REGEXP_STRING_ITERATOR_TYPE:
       JSRegExpStringIterator::cast(*this).JSRegExpStringIteratorPrint(os);
       break;
     case ODDBALL_TYPE:
@@ -362,34 +362,34 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
       JSDataView::cast(*this).JSDataViewPrint(os);
       break;
 #ifdef V8_INTL_SUPPORT
-    case JS_V8_BREAK_ITERATOR_TYPE:
+    case JS_INTL_V8_BREAK_ITERATOR_TYPE:
       JSV8BreakIterator::cast(*this).JSV8BreakIteratorPrint(os);
       break;
-    case JS_COLLATOR_TYPE:
+    case JS_INTL_COLLATOR_TYPE:
       JSCollator::cast(*this).JSCollatorPrint(os);
       break;
-    case JS_DATE_TIME_FORMAT_TYPE:
+    case JS_INTL_DATE_TIME_FORMAT_TYPE:
       JSDateTimeFormat::cast(*this).JSDateTimeFormatPrint(os);
       break;
-    case JS_LIST_FORMAT_TYPE:
+    case JS_INTL_LIST_FORMAT_TYPE:
       JSListFormat::cast(*this).JSListFormatPrint(os);
       break;
-    case JS_LOCALE_TYPE:
+    case JS_INTL_LOCALE_TYPE:
       JSLocale::cast(*this).JSLocalePrint(os);
       break;
-    case JS_NUMBER_FORMAT_TYPE:
+    case JS_INTL_NUMBER_FORMAT_TYPE:
       JSNumberFormat::cast(*this).JSNumberFormatPrint(os);
       break;
-    case JS_PLURAL_RULES_TYPE:
+    case JS_INTL_PLURAL_RULES_TYPE:
       JSPluralRules::cast(*this).JSPluralRulesPrint(os);
       break;
-    case JS_RELATIVE_TIME_FORMAT_TYPE:
+    case JS_INTL_RELATIVE_TIME_FORMAT_TYPE:
       JSRelativeTimeFormat::cast(*this).JSRelativeTimeFormatPrint(os);
       break;
-    case JS_SEGMENT_ITERATOR_TYPE:
+    case JS_INTL_SEGMENT_ITERATOR_TYPE:
       JSSegmentIterator::cast(*this).JSSegmentIteratorPrint(os);
       break;
-    case JS_SEGMENTER_TYPE:
+    case JS_INTL_SEGMENTER_TYPE:
       JSSegmenter::cast(*this).JSSegmenterPrint(os);
       break;
 #endif  // V8_INTL_SUPPORT
@@ -476,9 +476,9 @@ void FreeSpace::FreeSpacePrint(std::ostream& os) {  // NOLINT
 bool JSObject::PrintProperties(std::ostream& os) {  // NOLINT
   if (HasFastProperties()) {
     DescriptorArray descs = map().instance_descriptors();
-    int nof_inobject_properties = map().GetInObjectProperties();
-    for (InternalIndex i :
-         InternalIndex::Range(map().NumberOfOwnDescriptors())) {
+    int nof_inobject_properties = map().TotalInObjectFieldSlots();
+    int i = 0;
+    for (; i < map().NumberOfOwnDescriptors(); i++) {
       os << "\n    ";
       descs.GetKey(i).NamePrint(os);
       os << ": ";
@@ -500,13 +500,13 @@ bool JSObject::PrintProperties(std::ostream& os) {  // NOLINT
       os << " ";
       details.PrintAsFastTo(os, PropertyDetails::kForProperties);
       if (details.location() != kField) continue;
-      int field_index = details.field_index();
-      if (nof_inobject_properties <= field_index) {
-        field_index -= nof_inobject_properties;
-        os << " properties[" << field_index << "]";
+      int field_slot_index = details.field_slot_index();
+      if (nof_inobject_properties <= field_slot_index) {
+        field_slot_index -= nof_inobject_properties;
+        os << " properties[" << field_slot_index << "]";
       }
     }
-    return map().NumberOfOwnDescriptors() > 0;
+    return i > 0;
   } else if (IsJSGlobalObject()) {
     JSGlobalObject::cast(*this).global_dictionary().Print(os);
   } else {
@@ -1916,6 +1916,9 @@ void WasmModuleObject::WasmModuleObjectPrint(std::ostream& os) {  // NOLINT
   if (has_asm_js_offset_table()) {
     os << "\n - asm_js_offset_table: " << Brief(asm_js_offset_table());
   }
+  if (has_breakpoint_infos()) {
+    os << "\n - breakpoint_infos: " << Brief(breakpoint_infos());
+  }
   os << "\n";
 }
 
@@ -2148,9 +2151,6 @@ void Script::ScriptPrint(std::ostream& os) {  // NOLINT
     os << "\n - wrapped arguments: " << Brief(wrapped_arguments());
   }
   os << "\n - eval from position: " << eval_from_position();
-  if (has_wasm_breakpoint_infos()) {
-    os << "\n - wasm_breakpoint_infos: " << Brief(wasm_breakpoint_infos());
-  }
   os << "\n - shared function infos: " << Brief(shared_function_infos());
   os << "\n";
 }
@@ -2285,7 +2285,6 @@ void ScopeInfo::ScopeInfoPrint(std::ostream& os) {  // NOLINT
     os << "\n - receiver: " << ReceiverVariableField::decode(flags);
   }
   if (HasClassBrand()) os << "\n - has class brand";
-  if (HasSavedClassVariableIndex()) os << "\n - has saved class variable index";
   if (HasNewTarget()) os << "\n - needs new target";
   if (HasFunctionName()) {
     os << "\n - function name(" << FunctionVariableField::decode(flags)
@@ -2517,10 +2516,16 @@ void Map::MapPrint(std::ostream& os) {  // NOLINT
     os << instance_size();
   }
   if (IsJSObjectMap()) {
-    os << "\n - inobject properties: " << GetInObjectProperties();
+    os << "\n - inobject field slots: " << TotalInObjectFieldSlots();
+    if (HasOutOfObjectProperties()) {
+      os << "\n - out-of-object properties: "
+         << TotalUsedFieldSlots() - TotalInObjectFieldSlots();
+    } else {
+      os << "\n - no out-of-object properties";
+    }
   }
   os << "\n - elements kind: " << ElementsKindToString(elements_kind());
-  os << "\n - unused property fields: " << UnusedPropertyFields();
+  os << "\n - unused property fields: " << UnusedFieldSlots();
   os << "\n - enum length: ";
   if (EnumLength() == kInvalidEnumCacheSentinel) {
     os << "invalid";
@@ -2587,9 +2592,9 @@ void Map::MapPrint(std::ostream& os) {  // NOLINT
 }
 
 void DescriptorArray::PrintDescriptors(std::ostream& os) {
-  for (InternalIndex i : InternalIndex::Range(number_of_descriptors())) {
+  for (int i = 0; i < number_of_descriptors(); i++) {
     Name key = GetKey(i);
-    os << "\n  [" << i.as_int() << "]: ";
+    os << "\n  [" << i << "]: ";
 #ifdef OBJECT_PRINT
     key.NamePrint(os);
 #else
@@ -2601,8 +2606,7 @@ void DescriptorArray::PrintDescriptors(std::ostream& os) {
   os << "\n";
 }
 
-void DescriptorArray::PrintDescriptorDetails(std::ostream& os,
-                                             InternalIndex descriptor,
+void DescriptorArray::PrintDescriptorDetails(std::ostream& os, int descriptor,
                                              PropertyDetails::PrintMode mode) {
   PropertyDetails details = GetDetails(descriptor);
   details.PrintAsFastTo(os, mode);
@@ -2665,7 +2669,7 @@ void TransitionsAccessor::PrintOneTransition(std::ostream& os, Name key,
   } else {
     DCHECK(!IsSpecialTransition(roots, key));
     os << "(transition to ";
-    InternalIndex descriptor = target.LastAdded();
+    int descriptor = target.LastAdded();
     DescriptorArray descriptors = target.instance_descriptors();
     descriptors.PrintDescriptorDetails(os, descriptor,
                                        PropertyDetails::kForTransitions);
@@ -2743,7 +2747,7 @@ void TransitionsAccessor::PrintTransitionTree(std::ostream& os, int level,
       os << " ";
       DCHECK(!IsSpecialTransition(ReadOnlyRoots(isolate_), key));
       os << "to ";
-      InternalIndex descriptor = target.LastAdded();
+      int descriptor = target.LastAdded();
       DescriptorArray descriptors = target.instance_descriptors();
       descriptors.PrintDescriptorDetails(os, descriptor,
                                          PropertyDetails::kForTransitions);

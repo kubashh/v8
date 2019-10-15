@@ -14,7 +14,7 @@ load("test/mjsunit/wasm/user-properties-common.js");
     builder.addImport("m", "f", kSig_i_i);
     builder.addFunction("main", kSig_i_i)
       .addBody([
-        kExprLocalGet, 0,
+        kExprGetLocal, 0,
         kExprCallFunction, 0])
       .exportAs("main");
     builder.addMemory(1, 1, false)

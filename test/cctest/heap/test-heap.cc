@@ -2499,8 +2499,8 @@ TEST(OptimizedPretenuringMixedInObjectProperties) {
       v8::Utils::OpenHandle(*v8::Local<v8::Object>::Cast(res)));
 
   CHECK(CcTest::heap()->InOldSpace(*o));
-  FieldIndex idx1 = FieldIndex::ForPropertyIndex(o->map(), 0);
-  FieldIndex idx2 = FieldIndex::ForPropertyIndex(o->map(), 1);
+  FieldIndex idx1 = FieldIndex::ForDescriptor(o->map(), 0);
+  FieldIndex idx2 = FieldIndex::ForDescriptor(o->map(), 1);
   CHECK(CcTest::heap()->InOldSpace(o->RawFastPropertyAt(idx1)));
   if (!o->IsUnboxedDoubleField(idx2)) {
     CHECK(CcTest::heap()->InOldSpace(o->RawFastPropertyAt(idx2)));
@@ -2509,15 +2509,17 @@ TEST(OptimizedPretenuringMixedInObjectProperties) {
   }
 
   JSObject inner_object = JSObject::cast(o->RawFastPropertyAt(idx1));
+  FieldIndex inner_idx1 = FieldIndex::ForDescriptor(inner_object.map(), 0);
+  FieldIndex inner_idx2 = FieldIndex::ForDescriptor(inner_object.map(), 1);
   CHECK(CcTest::heap()->InOldSpace(inner_object));
-  if (!inner_object.IsUnboxedDoubleField(idx1)) {
-    CHECK(CcTest::heap()->InOldSpace(inner_object.RawFastPropertyAt(idx1)));
+  if (!inner_object.IsUnboxedDoubleField(inner_idx1)) {
+    CHECK(
+        CcTest::heap()->InOldSpace(inner_object.RawFastPropertyAt(inner_idx1)));
   } else {
-    CHECK_EQ(2.2, inner_object.RawFastDoublePropertyAt(idx1));
+    CHECK_EQ(2.2, inner_object.RawFastDoublePropertyAt(inner_idx1));
   }
-  CHECK(CcTest::heap()->InOldSpace(inner_object.RawFastPropertyAt(idx2)));
+  CHECK(CcTest::heap()->InOldSpace(inner_object.RawFastPropertyAt(inner_idx2)));
 }
-
 
 TEST(OptimizedPretenuringDoubleArrayProperties) {
   FLAG_allow_natives_syntax = true;
@@ -5337,11 +5339,6 @@ AllocationResult HeapTester::AllocateByteArrayForTest(
   return result;
 }
 
-bool HeapTester::CodeEnsureLinearAllocationArea(Heap* heap, int size_in_bytes) {
-  return heap->code_space()->EnsureLinearAllocationArea(
-      size_in_bytes, AllocationOrigin::kRuntime);
-}
-
 HEAP_TEST(Regress587004) {
   ManualGCScope manual_gc_scope;
 #ifdef VERIFY_HEAP
@@ -6021,173 +6018,6 @@ TEST(UncommitUnusedLargeObjectMemory) {
   CHECK_EQ(shrinked_size, chunk->CommittedPhysicalMemory());
 }
 
-template <RememberedSetType direction>
-static size_t GetRememberedSetSize(HeapObject obj) {
-  size_t count = 0;
-  auto chunk = MemoryChunk::FromHeapObject(obj);
-  RememberedSet<direction>::Iterate(
-      chunk,
-      [&count](MaybeObjectSlot slot) {
-        count++;
-        return KEEP_SLOT;
-      },
-      SlotSet::KEEP_EMPTY_BUCKETS);
-  return count;
-}
-
-TEST(RememberedSet_InsertOnWriteBarrier) {
-  CcTest::InitializeVM();
-  Isolate* isolate = CcTest::i_isolate();
-  Factory* factory = isolate->factory();
-  Heap* heap = isolate->heap();
-  heap::SealCurrentObjects(heap);
-  HandleScope scope(isolate);
-
-  // Allocate an object in old space.
-  Handle<FixedArray> arr = factory->NewFixedArray(3, AllocationType::kOld);
-
-  // Add into 'arr' references to young objects.
-  {
-    HandleScope scope_inner(isolate);
-    Handle<Object> number = factory->NewHeapNumber(42);
-    arr->set(0, *number);
-    arr->set(1, *number);
-    arr->set(2, *number);
-    Handle<Object> number_other = factory->NewHeapNumber(24);
-    arr->set(2, *number_other);
-  }
-  // Remembered sets track *slots* pages with cross-generational pointers, so
-  // must have recorded three of them each exactly once.
-  CHECK_EQ(3, GetRememberedSetSize<OLD_TO_NEW>(*arr));
-}
-
-TEST(RememberedSet_InsertInLargePage) {
-  CcTest::InitializeVM();
-  Isolate* isolate = CcTest::i_isolate();
-  Factory* factory = isolate->factory();
-  Heap* heap = isolate->heap();
-  heap::SealCurrentObjects(heap);
-  HandleScope scope(isolate);
-
-  // Allocate an object in Large space.
-  const int count = Max(FixedArray::kMaxRegularLength + 1, 128 * KB);
-  Handle<FixedArray> arr = factory->NewFixedArray(count, AllocationType::kOld);
-  CHECK(heap->lo_space()->Contains(*arr));
-  CHECK_EQ(0, GetRememberedSetSize<OLD_TO_NEW>(*arr));
-
-  // Create OLD_TO_NEW references from the large object so that the
-  // corresponding slots end up in different SlotSets.
-  {
-    HandleScope short_lived(isolate);
-    Handle<Object> number = factory->NewHeapNumber(42);
-    arr->set(0, *number);
-    arr->set(count - 1, *number);
-  }
-  CHECK_EQ(2, GetRememberedSetSize<OLD_TO_NEW>(*arr));
-}
-
-TEST(RememberedSet_InsertOnPromotingObjectToOld) {
-  CcTest::InitializeVM();
-  Isolate* isolate = CcTest::i_isolate();
-  Factory* factory = isolate->factory();
-  Heap* heap = isolate->heap();
-  heap::SealCurrentObjects(heap);
-  HandleScope scope(isolate);
-
-  // Create a young object and age it one generation inside the new space.
-  Handle<FixedArray> arr = factory->NewFixedArray(1);
-  CcTest::CollectGarbage(i::NEW_SPACE);
-  CHECK(Heap::InYoungGeneration(*arr));
-
-  // Add into 'arr' a reference to an object one generation younger.
-  {
-    HandleScope scope_inner(isolate);
-    Handle<Object> number = factory->NewHeapNumber(42);
-    arr->set(0, *number);
-  }
-
-  // Promote 'arr' into old, its element is still in new, the old to new
-  // refs are inserted into the remembered sets during GC.
-  CcTest::CollectGarbage(i::NEW_SPACE);
-
-  CHECK(heap->InOldSpace(*arr));
-  CHECK_EQ(1, GetRememberedSetSize<OLD_TO_NEW>(*arr));
-}
-
-TEST(RememberedSet_RemoveStaleOnScavenge) {
-  CcTest::InitializeVM();
-  Isolate* isolate = CcTest::i_isolate();
-  Factory* factory = isolate->factory();
-  Heap* heap = isolate->heap();
-  heap::SealCurrentObjects(heap);
-  HandleScope scope(isolate);
-
-  // Allocate an object in old space and add into it references to young.
-  Handle<FixedArray> arr = factory->NewFixedArray(3, AllocationType::kOld);
-  {
-    HandleScope scope_inner(isolate);
-    Handle<Object> number = factory->NewHeapNumber(42);
-    arr->set(0, *number);  // will be trimmed away
-    arr->set(1, *number);  // will be replaced with #undefined
-    arr->set(2, *number);  // will be promoted into old
-  }
-  CHECK_EQ(3, GetRememberedSetSize<OLD_TO_NEW>(*arr));
-
-  // Run scavenger once so the young object becomes ready for promotion on the
-  // next pass.
-  CcTest::CollectGarbage(i::NEW_SPACE);
-  arr->set(1, ReadOnlyRoots(CcTest::heap()).undefined_value());
-  Handle<FixedArrayBase> tail =
-      Handle<FixedArrayBase>(heap->LeftTrimFixedArray(*arr, 1), isolate);
-
-  // None of the actions above should have updated the remembered set.
-  CHECK_EQ(3, GetRememberedSetSize<OLD_TO_NEW>(*tail));
-
-  // Run GC to promote the remaining young object and fixup the stale entries in
-  // the remembered set.
-  CcTest::CollectGarbage(i::NEW_SPACE);
-  CHECK_EQ(0, GetRememberedSetSize<OLD_TO_NEW>(*tail));
-}
-
-// The OLD_TO_OLD remembered set is created temporary by GC and is cleared at
-// the end of the pass. There is no way to observe it so the test only checks
-// that compaction has happened and otherwise relies on code's self-validation.
-TEST(RememberedSet_OldToOld) {
-  if (FLAG_stress_incremental_marking) return;
-
-  CcTest::InitializeVM();
-  Isolate* isolate = CcTest::i_isolate();
-  Factory* factory = isolate->factory();
-  Heap* heap = isolate->heap();
-  heap::SealCurrentObjects(heap);
-  HandleScope scope(isolate);
-
-  Handle<FixedArray> arr = factory->NewFixedArray(10, AllocationType::kOld);
-  {
-    HandleScope short_lived(isolate);
-    factory->NewFixedArray(100, AllocationType::kOld);
-  }
-  Handle<Object> ref = factory->NewFixedArray(100, AllocationType::kOld);
-  arr->set(0, *ref);
-
-  // To force compaction of the old space, fill it with garbage and start a new
-  // page (so that the page with 'arr' becomes subject to compaction).
-  {
-    HandleScope short_lived(isolate);
-    heap::SimulateFullSpace(heap->old_space());
-    factory->NewFixedArray(100, AllocationType::kOld);
-  }
-
-  FLAG_manual_evacuation_candidates_selection = true;
-  heap::ForceEvacuationCandidate(Page::FromHeapObject(*arr));
-  const auto prev_location = *arr;
-
-  // This GC pass will evacuate the page with 'arr'/'ref' so it will have to
-  // create OLD_TO_OLD remembered set to track the reference.
-  CcTest::CollectAllGarbage();
-  CHECK_NE(prev_location, *arr);
-}
-
 TEST(RememberedSetRemoveRange) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
@@ -6782,19 +6612,6 @@ HEAP_TEST(MemoryReducerActivationForSmallHeaps) {
   CHECK_EQ(heap->memory_reducer()->state_.action, MemoryReducer::Action::kWait);
 }
 
-TEST(AllocateExternalBackingStore) {
-  ManualGCScope manual_gc_scope;
-  LocalContext env;
-  Isolate* isolate = CcTest::i_isolate();
-  Heap* heap = isolate->heap();
-  int initial_ms_count = heap->ms_count();
-  void* result =
-      heap->AllocateExternalBackingStore([](size_t) { return nullptr; }, 10);
-  CHECK_NULL(result);
-  // At least two GCs should happen.
-  CHECK_LE(2, heap->ms_count() - initial_ms_count);
-}
-
 TEST(CodeObjectRegistry) {
   // We turn off compaction to ensure that code is not moving.
   FLAG_never_compact = true;
@@ -6806,13 +6623,11 @@ TEST(CodeObjectRegistry) {
   HandleScope outer_scope(heap->isolate());
   Address code2_address;
   {
-    // Ensure that both code objects end up on the same page.
-    CHECK(HeapTester::CodeEnsureLinearAllocationArea(
-        heap, kMaxRegularHeapObjectSize));
     code1 = DummyOptimizedCode(isolate);
     Handle<Code> code2 = DummyOptimizedCode(isolate);
     code2_address = code2->address();
-
+    // If this check breaks, change the allocation to ensure that both code
+    // objects are on the same page.
     CHECK_EQ(MemoryChunk::FromHeapObject(*code1),
              MemoryChunk::FromHeapObject(*code2));
     CHECK(MemoryChunk::FromHeapObject(*code1)->Contains(code1->address()));

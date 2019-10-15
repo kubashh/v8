@@ -381,7 +381,7 @@ MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name) {
       // Ensure the IC state progresses.
       TRACE_HANDLER_STATS(isolate(), LoadIC_NonReceiver);
       update_receiver_map(object);
-      SetCache(name, LoadHandler::LoadSlow(isolate()));
+      PatchCache(name, slow_stub());
       TraceIC("LoadIC", name);
     }
 
@@ -484,7 +484,7 @@ MaybeHandle<Object> LoadGlobalIC::Load(Handle<Name> name) {
         } else {
           // Given combination of indices can't be encoded, so use slow stub.
           TRACE_HANDLER_STATS(isolate(), LoadGlobalIC_SlowStub);
-          SetCache(name, LoadHandler::LoadSlow(isolate()));
+          PatchCache(name, slow_stub());
         }
         TraceIC("LoadGlobalIC", name);
       }
@@ -607,11 +607,11 @@ bool IC::IsTransitionOfMonomorphicTarget(Map source_map, Map target_map) {
   return transitioned_map == target_map;
 }
 
-void IC::SetCache(Handle<Name> name, Handle<Object> handler) {
-  SetCache(name, MaybeObjectHandle(handler));
+void IC::PatchCache(Handle<Name> name, Handle<Object> handler) {
+  PatchCache(name, MaybeObjectHandle(handler));
 }
 
-void IC::SetCache(Handle<Name> name, const MaybeObjectHandle& handler) {
+void IC::PatchCache(Handle<Name> name, const MaybeObjectHandle& handler) {
   DCHECK(IsHandler(*handler));
   // Currently only load and store ICs support non-code handlers.
   DCHECK(IsAnyLoad() || IsAnyStore() || IsAnyHas());
@@ -652,7 +652,7 @@ __attribute__((__aligned__(32)))
 void LoadIC::UpdateCaches(LookupIterator* lookup) {
   Handle<Object> code;
   if (lookup->state() == LookupIterator::ACCESS_CHECK) {
-    code = LoadHandler::LoadSlow(isolate());
+    code = slow_stub();
   } else if (!lookup->IsFound()) {
     TRACE_HANDLER_STATS(isolate(), LoadIC_LoadNonexistentDH);
     Handle<Smi> smi_handler = LoadHandler::LoadNonExistent(isolate());
@@ -676,7 +676,7 @@ void LoadIC::UpdateCaches(LookupIterator* lookup) {
     code = ComputeHandler(lookup);
   }
 
-  SetCache(lookup->name(), code);
+  PatchCache(lookup->name(), code);
   TraceIC("LoadIC", lookup->name());
 }
 
@@ -791,7 +791,7 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
                               isolate());
         if (!getter->IsJSFunction() && !getter->IsFunctionTemplateInfo()) {
           TRACE_HANDLER_STATS(isolate(), LoadIC_SlowStub);
-          return LoadHandler::LoadSlow(isolate());
+          return slow_stub();
         }
 
         if ((getter->IsFunctionTemplateInfo() &&
@@ -800,7 +800,7 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
              JSFunction::cast(*getter).shared().BreakAtEntry())) {
           // Do not install an IC if the api function has a breakpoint.
           TRACE_HANDLER_STATS(isolate(), LoadIC_SlowStub);
-          return LoadHandler::LoadSlow(isolate());
+          return slow_stub();
         }
 
         Handle<Smi> smi_handler;
@@ -810,7 +810,7 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
           if (!call_optimization.IsCompatibleReceiverMap(map, holder) ||
               !holder->HasFastProperties()) {
             TRACE_HANDLER_STATS(isolate(), LoadIC_SlowStub);
-            return LoadHandler::LoadSlow(isolate());
+            return slow_stub();
           }
 
           CallOptimization::HolderLookup holder_lookup;
@@ -861,7 +861,7 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
           !holder->HasFastProperties() ||
           (info->is_sloppy() && !receiver->IsJSReceiver())) {
         TRACE_HANDLER_STATS(isolate(), LoadIC_SlowStub);
-        return LoadHandler::LoadSlow(isolate());
+        return slow_stub();
       }
 
       Handle<Smi> smi_handler = LoadHandler::LoadNativeDataProperty(
@@ -1395,7 +1395,7 @@ MaybeHandle<Object> StoreGlobalIC::Store(Handle<Name> name,
       } else {
         // Given combination of indices can't be encoded, so use slow stub.
         TRACE_HANDLER_STATS(isolate(), StoreGlobalIC_SlowStub);
-        SetCache(name, StoreHandler::StoreSlow(isolate()));
+        PatchCache(name, StoreHandler::StoreSlow(isolate()));
       }
       TraceIC("StoreGlobalIC", name);
     }
@@ -1428,7 +1428,7 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
       // Ensure the IC state progresses.
       TRACE_HANDLER_STATS(isolate(), StoreIC_NonReceiver);
       update_receiver_map(object);
-      SetCache(name, StoreHandler::StoreSlow(isolate()));
+      PatchCache(name, StoreHandler::StoreSlow(isolate()));
       TraceIC("StoreIC", name);
     }
     return TypeError(MessageTemplate::kNonObjectPropertyStore, object, name);
@@ -1477,7 +1477,7 @@ void StoreIC::UpdateCaches(LookupIterator* lookup, Handle<Object> value,
     handler = MaybeObjectHandle(StoreHandler::StoreSlow(isolate()));
   }
 
-  SetCache(lookup->name(), handler);
+  PatchCache(lookup->name(), handler);
   TraceIC("StoreIC", lookup->name());
 }
 
@@ -2522,7 +2522,7 @@ static bool CanFastCloneObject(Handle<Map> map) {
   }
 
   DescriptorArray descriptors = map->instance_descriptors();
-  for (InternalIndex i : map->IterateOwnDescriptors()) {
+  for (int i = 0; i < map->NumberOfOwnDescriptors(); i++) {
     PropertyDetails details = descriptors.GetDetails(i);
     Name key = descriptors.GetKey(i);
     if (details.kind() != kData || !details.IsEnumerable() ||
@@ -2543,12 +2543,13 @@ static Handle<Map> FastCloneObjectMap(Isolate* isolate, Handle<Map> source_map,
   Handle<Map> initial_map(constructor->initial_map(), isolate);
   Handle<Map> map = initial_map;
 
-  if (source_map->IsJSObjectMap() && source_map->GetInObjectProperties() !=
-                                         initial_map->GetInObjectProperties()) {
-    int inobject_properties = source_map->GetInObjectProperties();
+  if (source_map->IsJSObjectMap() &&
+      source_map->TotalInObjectFieldSlots() !=
+          initial_map->TotalInObjectFieldSlots()) {
+    int inobject_properties = source_map->TotalInObjectFieldSlots();
     int instance_size =
         JSObject::kHeaderSize + kTaggedSize * inobject_properties;
-    int unused = source_map->UnusedInObjectProperties();
+    int unused = source_map->UnusedInObjectFieldSlots();
     DCHECK(instance_size <= JSObject::kMaxInstanceSize);
     map = Map::CopyInitialMap(isolate, map, instance_size, inobject_properties,
                               unused);
@@ -2579,7 +2580,7 @@ static Handle<Map> FastCloneObjectMap(Isolate* isolate, Handle<Map> source_map,
   Handle<LayoutDescriptor> layout =
       LayoutDescriptor::New(isolate, map, descriptors, size);
   map->InitializeDescriptors(isolate, *descriptors, *layout);
-  map->CopyUnusedPropertyFieldsAdjustedForInstanceSize(*source_map);
+  map->CopyUnusedFieldSlotsAdjustedForInstanceSize(*source_map);
 
   // Update bitfields
   map->set_may_have_interesting_symbols(

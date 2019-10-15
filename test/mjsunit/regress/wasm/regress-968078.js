@@ -28,16 +28,16 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
   builder.addFunction("foo", kSig_v_iii)
     .addBody([].concat([
       kExprBlock, kWasmStmt,
-        kExprLocalGet, 0x2,
+        kExprGetLocal, 0x2,
         kExprI32Const, 0x01,
         kExprI32And,
         // Generate a test branch (which has 32k limited reach).
         kExprIf, kWasmStmt,
-          kExprLocalGet, 0x0,
+          kExprGetLocal, 0x0,
           kExprI32Const, 0x01,
           kExprI32And,
           kExprBrIf, 0x1,
-          kExprLocalGet, 0x0,
+          kExprGetLocal, 0x0,
           // Emit a br_table that is long enough to make the test branch go out of range.
           ], br_table(0x1, 9000, 0x00), [
         kExprEnd,

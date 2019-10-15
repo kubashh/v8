@@ -151,7 +151,7 @@ TEST(JSObjectInObjectAddingProperties) {
   // force in object properties by changing the expected_nof_properties
   // (we always reserve 8 inobject properties slack on top).
   function->shared().set_expected_nof_properties(nof_inobject_properties - 8);
-  Handle<Object> value(Smi::FromInt(42), isolate);
+  Handle<Object> value = factory->NewHeapNumber(4.2);
 
   Handle<JSObject> object = factory->NewJSObject(function);
   Handle<Map> previous_map(object->map(), isolate);

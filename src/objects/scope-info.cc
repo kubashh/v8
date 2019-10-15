@@ -138,10 +138,6 @@ Handle<ScopeInfo> ScopeInfo::Create(Isolate* isolate, Zone* zone, Scope* scope,
   const bool has_brand = scope->is_class_scope()
                              ? scope->AsClassScope()->brand() != nullptr
                              : false;
-  const bool should_save_class_variable_index =
-      scope->is_class_scope()
-          ? scope->AsClassScope()->should_save_class_variable_index()
-          : false;
   const bool has_function_name = function_name_info != NONE;
   const bool has_position_info = NeedsPositionInfo(scope->scope_type());
   const bool has_receiver = receiver_info == STACK || receiver_info == CONTEXT;
@@ -152,7 +148,6 @@ Handle<ScopeInfo> ScopeInfo::Create(Isolate* isolate, Zone* zone, Scope* scope,
   const bool has_outer_scope_info = !outer_scope.is_null();
 
   const int length = kVariablePartIndex + 2 * context_local_count +
-                     (should_save_class_variable_index ? 1 : 0) +
                      (has_receiver ? 1 : 0) +
                      (has_function_name ? kFunctionNameEntries : 0) +
                      (has_inferred_function_name ? 1 : 0) +
@@ -196,8 +191,6 @@ Handle<ScopeInfo> ScopeInfo::Create(Isolate* isolate, Zone* zone, Scope* scope,
         DeclarationScopeField::encode(scope->is_declaration_scope()) |
         ReceiverVariableField::encode(receiver_info) |
         HasClassBrandField::encode(has_brand) |
-        HasSavedClassVariableIndexField::encode(
-            should_save_class_variable_index) |
         HasNewTargetField::encode(has_new_target) |
         FunctionVariableField::encode(function_name_info) |
         HasInferredFunctionNameField::encode(has_inferred_function_name) |
@@ -300,16 +293,6 @@ Handle<ScopeInfo> ScopeInfo::Create(Isolate* isolate, Zone* zone, Scope* scope,
 
     index += 2 * context_local_count;
 
-    DCHECK_EQ(index, scope_info.SavedClassVariableInfoIndex());
-    // If the scope is a class scope and has used static private methods, save
-    // the context slot index of the class variable.
-    // Store the class variable index.
-    if (should_save_class_variable_index) {
-      Variable* class_variable = scope->AsClassScope()->class_variable();
-      DCHECK_EQ(class_variable->location(), VariableLocation::CONTEXT);
-      scope_info.set(index++, Smi::FromInt(class_variable->index()));
-    }
-
     // If the receiver is allocated, add its index.
     DCHECK_EQ(index, scope_info.ReceiverInfoIndex());
     if (has_receiver) {
@@ -389,7 +372,6 @@ Handle<ScopeInfo> ScopeInfo::CreateForWithScope(
       LanguageModeField::encode(LanguageMode::kSloppy) |
       DeclarationScopeField::encode(false) |
       ReceiverVariableField::encode(NONE) | HasClassBrandField::encode(false) |
-      HasSavedClassVariableIndexField::encode(false) |
       HasNewTargetField::encode(false) | FunctionVariableField::encode(NONE) |
       IsAsmModuleField::encode(false) | HasSimpleParametersField::encode(true) |
       FunctionKindField::encode(kNormalFunction) |
@@ -456,9 +438,7 @@ Handle<ScopeInfo> ScopeInfo::CreateForBootstrapping(Isolate* isolate,
       LanguageModeField::encode(LanguageMode::kSloppy) |
       DeclarationScopeField::encode(true) |
       ReceiverVariableField::encode(is_empty_function ? UNUSED : CONTEXT) |
-      HasClassBrandField::encode(false) |
-      HasSavedClassVariableIndexField::encode(false) |
-      HasNewTargetField::encode(false) |
+      HasClassBrandField::encode(false) | HasNewTargetField::encode(false) |
       FunctionVariableField::encode(is_empty_function ? UNUSED : NONE) |
       HasInferredFunctionNameField::encode(has_inferred_function_name) |
       IsAsmModuleField::encode(false) | HasSimpleParametersField::encode(true) |
@@ -584,10 +564,6 @@ bool ScopeInfo::HasAllocatedReceiver() const {
 
 bool ScopeInfo::HasClassBrand() const {
   return HasClassBrandField::decode(Flags());
-}
-
-bool ScopeInfo::HasSavedClassVariableIndex() const {
-  return HasSavedClassVariableIndexField::decode(Flags());
 }
 
 bool ScopeInfo::HasNewTarget() const {
@@ -831,14 +807,6 @@ int ScopeInfo::ContextSlotIndex(ScopeInfo scope_info, String name,
   return -1;
 }
 
-int ScopeInfo::SavedClassVariableContextLocalIndex() const {
-  if (length() > 0 && HasSavedClassVariableIndexField::decode(Flags())) {
-    int index = Smi::ToInt(get(SavedClassVariableInfoIndex()));
-    return index - Context::MIN_CONTEXT_SLOTS;
-  }
-  return -1;
-}
-
 int ScopeInfo::ReceiverContextSlotIndex() const {
   if (length() > 0 && ReceiverVariableField::decode(Flags()) == CONTEXT) {
     return Smi::ToInt(get(ReceiverInfoIndex()));
@@ -870,12 +838,8 @@ int ScopeInfo::ContextLocalInfosIndex() const {
   return ContextLocalNamesIndex() + ContextLocalCount();
 }
 
-int ScopeInfo::SavedClassVariableInfoIndex() const {
-  return ContextLocalInfosIndex() + ContextLocalCount();
-}
-
 int ScopeInfo::ReceiverInfoIndex() const {
-  return SavedClassVariableInfoIndex() + (HasSavedClassVariableIndex() ? 1 : 0);
+  return ContextLocalInfosIndex() + ContextLocalCount();
 }
 
 int ScopeInfo::FunctionNameInfoIndex() const {
@@ -952,10 +916,9 @@ std::ostream& operator<<(std::ostream& os,
 }
 
 Handle<SourceTextModuleInfoEntry> SourceTextModuleInfoEntry::New(
-    Isolate* isolate, Handle<PrimitiveHeapObject> export_name,
-    Handle<PrimitiveHeapObject> local_name,
-    Handle<PrimitiveHeapObject> import_name, int module_request, int cell_index,
-    int beg_pos, int end_pos) {
+    Isolate* isolate, Handle<HeapObject> export_name,
+    Handle<HeapObject> local_name, Handle<HeapObject> import_name,
+    int module_request, int cell_index, int beg_pos, int end_pos) {
   Handle<SourceTextModuleInfoEntry> result =
       Handle<SourceTextModuleInfoEntry>::cast(isolate->factory()->NewStruct(
           SOURCE_TEXT_MODULE_INFO_ENTRY_TYPE, AllocationType::kOld));

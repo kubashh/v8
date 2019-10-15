@@ -229,7 +229,6 @@
   # operations.
   'test-run-wasm-atomics/*': [SKIP],
   'test-run-wasm-atomics64/*': [SKIP],
-  'test-regexp/Peephole*': [SKIP],
 }],  # 'byteorder == big'
 
 ##############################################################################
