@@ -37,7 +37,8 @@ TEST(WeakReferencesBasic) {
   MaybeObject code_object = lh->data1();
   CHECK(code_object->IsSmi());
   CcTest::CollectAllGarbage();
-  CHECK(Heap::InYoungGeneration(*lh));
+  CHECK(FLAG_promote_young ? !Heap::InYoungGeneration(*lh)
+                           : Heap::InYoungGeneration(*lh));
   CHECK_EQ(code_object, lh->data1());
 
   {

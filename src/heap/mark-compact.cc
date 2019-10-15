@@ -1359,13 +1359,26 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
   inline bool Visit(HeapObject object, int size) override {
     if (TryEvacuateWithoutCopy(object)) return true;
     HeapObject target_object;
+
+    if (FLAG_promote_young) {
+      heap_->UpdateAllocationSite(object.map(), object,
+                                  local_pretenuring_feedback_);
+
+      AlwaysPromoteObject(object, size);
+      promoted_size_ += size;
+
+      return true;
+    }
+
     if (heap_->ShouldBePromoted(object.address()) &&
         TryEvacuateObject(OLD_SPACE, object, size, &target_object)) {
       promoted_size_ += size;
       return true;
     }
+
     heap_->UpdateAllocationSite(object.map(), object,
                                 local_pretenuring_feedback_);
+
     HeapObject target;
     AllocationSpace space = AllocateTargetObject(object, size, &target);
     MigrateObject(HeapObject::cast(target), object, size, space);
@@ -1392,6 +1405,12 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
     // TODO(mlippautz): Handle ConsString.
 
     return false;
+  }
+
+  inline void AlwaysPromoteObject(HeapObject object, int size) {
+    AllocationAlignment alignment = HeapObject::RequiredAlignment(object.map());
+    AllocationResult target = AllocateInOldSpace(size, alignment);
+    MigrateObject(target.ToObjectChecked(), object, size, OLD_SPACE);
   }
 
   inline AllocationSpace AllocateTargetObject(HeapObject old_object, int size,
