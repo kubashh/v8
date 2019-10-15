@@ -406,9 +406,9 @@ void LiftoffAssembler::FillStackSlotsWithZero(uint32_t index, uint32_t count) {
   RecordUsedSpillSlot(last_stack_slot);
 
   int max_stp_offset = -liftoff::GetStackSlotOffset(index + count - 1);
-  if (count <= 20 && IsImmLSPair(max_stp_offset, kXRegSizeLog2)) {
-    // Special straight-line code for up to 20 slots. Generates one
-    // instruction per two slots (<= 10 instructions total).
+  if (count <= 12 && IsImmLSPair(max_stp_offset, kXRegSizeLog2)) {
+    // Special straight-line code for up to 12 slots. Generates one
+    // instruction per two slots (<= 6 instructions total).
     for (; count > 1; count -= 2) {
       STATIC_ASSERT(kStackSlotSize == kSystemPointerSize);
       stp(xzr, xzr, liftoff::GetStackSlot(index + count - 1));
@@ -416,19 +416,38 @@ void LiftoffAssembler::FillStackSlotsWithZero(uint32_t index, uint32_t count) {
     DCHECK(count == 0 || count == 1);
     if (count) str(xzr, liftoff::GetStackSlot(index));
   } else {
-    // General case for bigger counts (7 instructions).
-    // Use x0 for start address (inclusive), x1 for end address (exclusive).
-    Push(x1, x0);
-    Sub(x0, fp, Operand(liftoff::GetStackSlotOffset(last_stack_slot)));
-    Sub(x1, fp, Operand(liftoff::GetStackSlotOffset(index) + kStackSlotSize));
+    // General case for bigger counts (5-13 instructions).
+    // Temp registers for start address (inclusive) and end address (exclusive).
+    UseScratchRegisterScope temps(this);
+    Register tmp0 = temps.AcquireX();
+    Register tmp1 = temps.AcquireX();
+    // There should always be two scratch registers available.
+    DCHECK(tmp0.IsValid());
+    DCHECK(tmp1.IsValid());
+
+    // Do the equivalent to {TurboAssembler::Sub}, but manually, since no more
+    // temp registers are available, and we know that {tmp0} and {tmp1} can be
+    // overwritten.
+    int offset_start = liftoff::GetStackSlotOffset(last_stack_slot);
+    if (IsImmAddSub(offset_start)) {
+      sub(tmp0, fp, Operand(offset_start));
+    } else {
+      Mov(tmp0, offset_start);  // <= 4 instructions
+      sub(tmp0, fp, tmp0);
+    }
+    int offset_end = liftoff::GetStackSlotOffset(index) + kStackSlotSize;
+    if (IsImmAddSub(offset_end)) {
+      sub(tmp1, fp, Operand(offset_end));
+    } else {
+      Mov(tmp1, offset_end);  // <= 4 instructions
+      sub(tmp1, fp, tmp1);
+    }
 
     Label loop;
     bind(&loop);
-    str(xzr, MemOperand(x0, /* offset */ kSystemPointerSize, PostIndex));
-    cmp(x0, x1);
+    str(xzr, MemOperand(tmp0, /* offset */ kSystemPointerSize, PostIndex));
+    cmp(tmp0, tmp1);
     b(&loop, ne);
-
-    Pop(x0, x1);
   }
 }
 
