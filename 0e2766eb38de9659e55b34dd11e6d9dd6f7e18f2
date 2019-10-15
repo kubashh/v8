@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25086fa3_5cebdc96",
+        "filename": "src/compiler/graph-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2019-10-15T10:28:41Z",
+      "side": 1,
+      "message": "Did you have something like this in mind? I used TaggedEqual as an example, but I\u0027m not sure if the nodes for changing to compressed are necessary - we use EmitIdentity for them in the selector anyway, I suspect they will also soon be gone?\n\nWhen looking for SmiSub, I spotted the code in CodeStubAssembler which I found a little confusing: https://chromium.googlesource.com/v8/v8.git/+/refs/heads/master/src/codegen/code-stub-assembler.h#614\n\nThe size of tagged signed type was recently changed to 32-bit: https://chromium-review.googlesource.com/c/v8/v8/+/1815134/10/src/codegen/machine-type.h#444\n\nbut the bitcast nodes BitcastTaggedToWordForTagAndSmiBits and BitcastWordToTaggedSigned still casts between tagged signed and word (which for 64-bit platforms are 64-bit AFAIK). Is this something else that will be updated soon?",
+      "revId": "0e2766eb38de9659e55b34dd11e6d9dd6f7e18f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
