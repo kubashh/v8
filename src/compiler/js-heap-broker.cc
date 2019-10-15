@@ -2130,6 +2130,8 @@ void JSObjectData::SerializeRecursiveAsBoilerplate(JSHeapBroker* broker,
         boilerplate->property_array().length() == 0);
   CHECK_EQ(inobject_fields_.size(), 0u);
 
+  int inobject_field_slots = boilerplate->map().UsedInObjectFieldSlots();
+
   // Check the in-object properties.
   Handle<DescriptorArray> descriptors(boilerplate->map().instance_descriptors(),
                                       isolate);
@@ -2171,9 +2173,13 @@ void JSObjectData::SerializeRecursiveAsBoilerplate(JSHeapBroker* broker,
         value_data->AsJSObject()->SerializeRecursiveAsBoilerplate(broker,
                                                                   depth - 1);
       }
-      inobject_fields_.push_back(JSObjectField{value_data});
+      for (int j = 0; j < details.field_width_in_words(inobject_field_slots);
+           ++j) {
+        inobject_fields_.push_back(JSObjectField{value_data});
+      }
     }
   }
+  CHECK_EQ(inobject_fields_.size(), inobject_field_slots);
   TRACE(broker, "Copied " << inobject_fields_.size() << " in-object fields");
 
   map()->SerializeOwnDescriptors(broker);

@@ -493,10 +493,9 @@ void ObjectLiteral::BuildBoilerplateDescription(Isolate* isolate) {
 
     MaterializedLiteral* m_literal = property->value()->AsMaterializedLiteral();
     if (kDoubleSize > kTaggedSize && FLAG_unbox_double_fields &&
-        (!m_literal ||
-         (m_literal->IsNumberLiteral() && !m_literal->IsSmiLiteral()))) {
-      // We have to allocate more space for double-valued fields. If the value
-      // is not a known literal, we pessimistically assume it is a double.
+        (!m_literal || m_literal->IsNumberLiteral())) {
+      // We have to allocate more space for number-valued fields. If the value
+      // is not a known literal, we pessimistically assume it is a number.
       boilerplate_backing_size += kDoubleSize / kTaggedSize;
     } else if (m_literal) {
       boilerplate_backing_size += 1;

@@ -1709,6 +1709,13 @@ Node* JSCreateLowering::AllocateFastLiteral(Node* effect, Node* control,
       written_slots += 1;
     }
     inobject_fields.push_back(std::make_pair(access, value));
+    if (FLAG_unbox_double_fields && property_details.representation().IsSmi()) {
+      FieldAccess access = AccessBuilder::ForJSObjectInObjectProperty(
+          boilerplate_map, index.slot_index() + 1);
+      inobject_fields.push_back(std::make_pair(
+          access,
+          jsgraph()->HeapConstant(factory()->one_pointer_filler_map())));
+    }
   }
 
   // Fill slack at the end of the boilerplate object with filler maps.

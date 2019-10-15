@@ -110,10 +110,12 @@ class Representation {
     // but double without any modification to the object, because the default
     // uninitialized value for representation None can be overwritten by both
     // smi and tagged values. Doubles, however, would require a box allocation.
-    if (IsNone()) return !other.IsDouble();
+    if (IsNone())
+      return FLAG_unbox_double_fields && kDoubleSize > kTaggedSize
+                 ? other.IsSmi()
+                 : !other.IsDouble();
     if (!FLAG_modify_field_representation_inplace) return false;
-    return (IsSmi() || (!FLAG_unbox_double_fields && IsDouble()) ||
-            IsHeapObject()) &&
+    return ((!FLAG_unbox_double_fields && IsDouble()) || IsHeapObject()) &&
            other.IsTagged();
   }
 
@@ -136,6 +138,9 @@ class Representation {
     // DCHECK(!IsNone());
     if (IsDouble()) return kDoubleSize;
     DCHECK(IsNone() || IsTagged() || IsSmi() || IsHeapObject());
+    if (FLAG_unbox_double_fields && kDoubleSize > kTaggedSize &&
+        (IsNone() || IsSmi()))
+      return kDoubleSize;
     return kTaggedSize;
   }
 
