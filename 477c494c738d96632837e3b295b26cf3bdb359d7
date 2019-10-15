@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa456d6_6a7d169c",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1334495
+      },
+      "writtenOn": "2019-10-15T15:44:59Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be simpler to, instead of using addresses, have a loop that executed `count` times. This would be similar to how x64 implements this function.\n\nSomething like:\n    Register tmp0 \u003d temps.AcquireX();\n    Sub(tmp0, fp, Operand(liftoff::GetStackSlotOffset(last_stack_slot)));\n    Register tmp1 \u003d temps.AcquireX();\n    Mov(tmp1, count);\n\n    Label loop;\n    Bind(\u0026loop);\n    Sub(tmp1, tmp1, Operand(1));\n    Str(xzr, MemOperand(tmp0, /* offset */ kSystemPointerSize, PostIndex));\n    Cbnz(tmp1, \u0026loop);\n\n\nThis way you can acquire a scratch register before the sub, and then acquire a second scratch register after the sub and you can remove the IsImmAddSub code and just call the macro assembler Sub method directly.\n\nLooks cleaner/more understandable, what do you think?",
+      "revId": "477c494c738d96632837e3b295b26cf3bdb359d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
