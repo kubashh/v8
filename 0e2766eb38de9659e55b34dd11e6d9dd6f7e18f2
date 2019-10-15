@@ -16,6 +16,24 @@
       "revId": "0e2766eb38de9659e55b34dd11e6d9dd6f7e18f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5479730d_58717985",
+        "filename": "src/compiler/graph-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-15T10:37:15Z",
+      "side": 1,
+      "message": "Regarding ChangeTaggedToCompressed, they are working as a bitcast right now. No code is being generated for them, but they do change the machine representation of the node.\nWe are currently testing a new implementation that may depreacate these Change nodes, but we are not removing them for the time being.\n\nThe size that you talked about is regarding ElementSizeLog2Of. It\u0027s a tricky case since we changed a couple of times what \u0027Tagged\u0027 means. We got lucky that no two pieces of code that thought that \u0027Tagged\u0027 meant two different things called ElementSizeLog2Of. See https://bugs.chromium.org/p/v8/issues/detail?id\u003d9206 for more info.\n\nLeaving it unresolved so Igor can answer the rest of the questions.",
+      "parentUuid": "25086fa3_5cebdc96",
+      "revId": "0e2766eb38de9659e55b34dd11e6d9dd6f7e18f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
