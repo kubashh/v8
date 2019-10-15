@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e062123f_e44bc8b8",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-10-15T17:37:32Z",
+      "side": 1,
+      "message": "If I comment this out, I see:\nsrc/builtins/promise-abstract-operations.tq:18:12: Torque Error: \ncannot find suitable callable with name: \n  \u003d\u003d(PromiseState, constexpr PromiseState)\n\nI would have also expected the \u003d\u003d of int32 to work, but maybe the constexpr part confuses things? Should I add a TODO to remove?",
+      "parentUuid": "4176de03_13869d15",
+      "range": {
+        "startLine": 2080,
+        "startChar": 0,
+        "endLine": 2084,
+        "endChar": 0
+      },
+      "revId": "4a5d8cfbfbadf9d92656cddd46a1bf26361bf89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa1f5f1b_b50390d9",
         "filename": "src/builtins/base.tq",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2019-10-15T09:10:48Z",
       "side": 1,
       "message": "The conditional potentially causes runtime overhead, and it\u0027s not necessary. The default implementation of UnsafeCast should do it, you just need to define a Cast operator for the union type, which is unfortunately not auto-generated yet. The Cast will then be used by Is\u003c\u003e, which is in turn used by the default UnsafeCast...\nSomething like this (also see Cast\u003cNumber | TheHole\u003e as an example).\n\nCast\u003cSmi | PromiseReaction\u003e(o: Object): Smi | PromiseReaction labels CastError {\n  typeswitch (o) {\n    case (o: Smi): {\n      return o;\n    }\n    case (o: PromiseReaction): {\n      return o;\n    }\n    case (Object): {\n      goto CastError;\n    }\n  }\n}",
+      "range": {
+        "startLine": 2929,
+        "startChar": 0,
+        "endLine": 2938,
+        "endChar": 0
+      },
+      "revId": "4a5d8cfbfbadf9d92656cddd46a1bf26361bf89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec6bad70_4f51c7ae",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 2938,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-10-15T17:37:32Z",
+      "side": 1,
+      "message": "Okay, I made this change, but then torque complained about the lack of a cast for PromiseReaction. I added that cast, and now it seems to work. Was that expected?",
+      "parentUuid": "aa1f5f1b_b50390d9",
       "range": {
         "startLine": 2929,
         "startChar": 0,
@@ -68,6 +116,30 @@
       "revId": "4a5d8cfbfbadf9d92656cddd46a1bf26361bf89c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0f0c1ba_e0f59b29",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-10-15T17:37:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79fb7a19_566e7ac7",
+      "range": {
+        "startLine": 21,
+        "startChar": 19,
+        "endLine": 21,
+        "endChar": 42
+      },
+      "revId": "4a5d8cfbfbadf9d92656cddd46a1bf26361bf89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
