@@ -66,6 +66,27 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
   assertEquals(instance.exports.main(1, 4), 5);
 })();
 
+(function MultiBlockUnreachableTest() {
+  print("MultiBlockUnreachableTest");
+  let builder = new WasmModuleBuilder();
+  let sig_il_v = builder.addType(makeSig([], [kWasmI32, kWasmI64]));
+
+  builder.addFunction("main", kSig_i_v)
+    .addBody([
+      kExprBlock, sig_il_v,
+      kExprI32Const, 1,
+      kExprI64Const, 1,
+      kExprBr, 0,
+      kExprI32Const, 1,
+      kExprI64Const, 1,
+      kExprEnd,
+      kExprDrop])
+    .exportAs("main");
+
+  let module = new WebAssembly.Module(builder.toBuffer());
+  let instance = new WebAssembly.Instance(module);
+  assertEquals(instance.exports.main(1, 2), 1);
+})();
 
 (function MultiLoopResultTest() {
   print("MultiLoopResultTest");
