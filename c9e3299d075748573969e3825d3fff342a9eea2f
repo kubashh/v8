@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c0fe5ce9_ba806a0c",
+        "filename": "src/codegen/ia32/assembler-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-15T08:15:45Z",
+      "side": 1,
+      "message": "Oh, nice! Will reuse this one of course then.",
+      "parentUuid": "8a593a0a_8d82bbed",
+      "range": {
+        "startLine": 691,
+        "startChar": 2,
+        "endLine": 692,
+        "endChar": 13
+      },
+      "revId": "c9e3299d075748573969e3825d3fff342a9eea2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8210ca40_3718b852",
         "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "bc361bae_667172c0",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-15T08:15:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8210ca40_3718b852",
+      "range": {
+        "startLine": 646,
+        "startChar": 5,
+        "endLine": 646,
+        "endChar": 9
+      },
+      "revId": "c9e3299d075748573969e3825d3fff342a9eea2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "486d8a7f_b7c831a5",
         "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
         "patchSetId": 6
@@ -62,6 +110,24 @@
       "revId": "c9e3299d075748573969e3825d3fff342a9eea2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c76b9e3e_7e6cc3e8",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-15T08:15:45Z",
+      "side": 1,
+      "message": "I actually think this is correct. We start at {last_stack_slot}, which has the lowest address, and clear everything up to (and including) the slot at {index}. Hence the end address is one stack slot size *above* {index}. We could also express this as \"the slot at {index - 1}\", but this is problematic if {index \u003d\u003d 0}, and the current code expresses better what is actually meant IMO.",
+      "parentUuid": "486d8a7f_b7c831a5",
+      "revId": "c9e3299d075748573969e3825d3fff342a9eea2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "2dca5fbb_e19ded59",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-15T08:15:45Z",
+      "side": 1,
+      "message": "Ack, fixed.",
+      "parentUuid": "5c6d3e20_ee0de275",
+      "revId": "c9e3299d075748573969e3825d3fff342a9eea2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68520110_f85dc475",
         "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
         "patchSetId": 6
@@ -96,6 +180,24 @@
       "revId": "c9e3299d075748573969e3825d3fff342a9eea2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34406cab_7e1b8168",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-15T08:15:45Z",
+      "side": 1,
+      "message": "Ack, fixed.",
+      "parentUuid": "68520110_f85dc475",
+      "revId": "c9e3299d075748573969e3825d3fff342a9eea2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
