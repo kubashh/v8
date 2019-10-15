@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "53d0fa71_ce037e3b",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 9872,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-15T12:54:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7aa9aaa5_424e213d",
+      "range": {
+        "startLine": 9872,
+        "startChar": 25,
+        "endLine": 9872,
+        "endChar": 64
+      },
+      "revId": "3bfba3dbc34ccde168145eb85ba2c84e39ccdf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aab0c793_25ce67ab",
         "filename": "src/objects/objects-inl.h",
         "patchSetId": 12
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "dce52f19_101c325a",
+        "filename": "src/objects/objects-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-15T12:54:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aab0c793_25ce67ab",
+      "revId": "3bfba3dbc34ccde168145eb85ba2c84e39ccdf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3cb10b2c_3a507c5d",
         "filename": "src/objects/objects.h",
         "patchSetId": 12
@@ -53,6 +95,24 @@
       "writtenOn": "2019-10-15T08:28:18Z",
       "side": 1,
       "message": "Please add some explanation here of the difference between ToInt32 and ToInt32Slow, and the failure signaling of ToInt32Slow.\n\nIt\u0027s a bit odd that the function, despite its name, never returns a negative number in the success case. Maybe it makes more sense to name it ToArrayIndex or something similar.",
+      "revId": "3bfba3dbc34ccde168145eb85ba2c84e39ccdf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3573c58_b93f959f",
+        "filename": "src/objects/objects.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-15T12:54:22Z",
+      "side": 1,
+      "message": "\u003e Please add some explanation here of the difference between ToInt32 and ToInt32Slow, and the failure signaling of ToInt32Slow.\n\nDone\n\n\u003e It\u0027s a bit odd that the function, despite its name, never returns a negative number in the success case. Maybe it makes more sense to name it ToArrayIndex or something similar.\n\nAgree that this is weird but couldn\u0027t come up with a better name. ArrayIndex isn\u0027t accurate either since this doesn\u0027t support the full ArrayIndex range. Happy to change it if you have a better suggestion",
+      "parentUuid": "3cb10b2c_3a507c5d",
       "revId": "3bfba3dbc34ccde168145eb85ba2c84e39ccdf3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
