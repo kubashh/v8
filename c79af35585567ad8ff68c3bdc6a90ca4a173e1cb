@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62c95e03_4e5eba2d",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-15T09:34:55Z",
+      "side": 0,
+      "message": "+1, this subtyping never made sense.",
+      "range": {
+        "startLine": 245,
+        "startChar": 28,
+        "endLine": 245,
+        "endChar": 34
+      },
+      "revId": "c79af35585567ad8ff68c3bdc6a90ca4a173e1cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
