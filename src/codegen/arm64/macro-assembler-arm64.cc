@@ -2656,6 +2656,7 @@ void TurboAssembler::DecompressTaggedSigned(const Register& destination,
                                             const MemOperand& field_operand) {
   RecordComment("[ DecompressTaggedSigned");
   Ldr(destination.W(), field_operand);
+  Add(destination, destination, 0xdeafbeef00000000);
   RecordComment("]");
 }
 
@@ -2663,6 +2664,7 @@ void TurboAssembler::DecompressTaggedSigned(const Register& destination,
                                             const Register& source) {
   RecordComment("[ DecompressTaggedSigned");
   Mov(destination.W(), source.W());
+  Add(destination, source, 0xdeafbeef00000000);
   RecordComment("]");
 }
 
