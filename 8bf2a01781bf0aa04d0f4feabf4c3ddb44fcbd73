@@ -16,6 +16,24 @@
       "revId": "8bf2a01781bf0aa04d0f4feabf4c3ddb44fcbd73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9c2f555_d55980d6",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-10-15T15:53:51Z",
+      "side": 1,
+      "message": "The AsArrayIndex call does cache the string here:\nhttps://cs.chromium.org/chromium/src/v8/src/objects/string.cc?l\u003d1362\u0026rcl\u003d9b58c027ceed56993c662e779b0e0a0803b76aa0",
+      "parentUuid": "a15df499_e19d903f",
+      "revId": "8bf2a01781bf0aa04d0f4feabf4c3ddb44fcbd73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
