@@ -72,6 +72,7 @@ TEST(Promotion) {
 }
 
 HEAP_TEST(NoPromotion) {
+  if (FLAG_promote_young) return;
   // Page promotion allows pages to be moved to old space even in the case of
   // OOM scenarios.
   FLAG_page_promotion = false;
