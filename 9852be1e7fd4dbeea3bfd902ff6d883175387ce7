@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af2428af_1e772caa",
+        "filename": "test/mjsunit/wasm/multi-value.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-10-15T13:29:12Z",
+      "side": 1,
+      "message": "Nit: you can just use print(arguments.callee.name); instead.",
+      "range": {
+        "startLine": 70,
+        "startChar": 2,
+        "endLine": 70,
+        "endChar": 37
+      },
+      "revId": "9852be1e7fd4dbeea3bfd902ff6d883175387ce7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68ee61fe_465b9aab",
+        "filename": "test/mjsunit/wasm/multi-value.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-10-15T13:29:12Z",
+      "side": 1,
+      "message": "Can you also add one negative test, where you push the two values in the wrong order, and then check that there is a validation error?",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 23
+      },
+      "revId": "9852be1e7fd4dbeea3bfd902ff6d883175387ce7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
