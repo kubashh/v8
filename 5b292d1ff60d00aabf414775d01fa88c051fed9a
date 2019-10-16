@@ -42,6 +42,48 @@
     },
     {
       "key": {
+        "uuid": "c6a0f880_1e697551",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acf24d09_ab796b97",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4139b1d5_edc307b6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "78765dc6_99b03ea9",
+      "range": {
+        "startLine": 7,
+        "startChar": 26,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfdc822a_40f3a786",
         "filename": "/COMMIT_MSG",
         "patchSetId": 7
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "68c338da_7b716c0b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfdc822a_40f3a786",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7361df9_937fc459",
         "filename": "src/compiler/decompression-avoider.cc",
         "patchSetId": 7
@@ -70,6 +130,24 @@
       "writtenOn": "2019-10-16T08:36:09Z",
       "side": 1,
       "message": "Why? It\u0027s unlikely that all nodes will be pushed in here, right? If so, reserving the maximal memory ahead of time seems wasteful.",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fccb37ef_752ed851",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Do we have an estimate on how many loads we have in a graph? If so, should we do a heuristic? Or maybe not reserve anything at all.",
+      "parentUuid": "e7361df9_937fc459",
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "dd927ea1_59c0612d",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46442c5d_2a14e8b5",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ba6b7d4_be61a384",
         "filename": "src/compiler/decompression-avoider.cc",
         "patchSetId": 7
@@ -107,6 +203,24 @@
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1a3a0b8_8fd93fe5",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ba6b7d4_be61a384",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -156,6 +270,30 @@
     },
     {
       "key": {
+        "uuid": "cdff889b_0c31dee4",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "We are looking at them below. In the\nfor (int i \u003d node-\u003eop()-\u003eValueInputCount(); i \u003c node-\u003eInputCount(); ++i)\nloop",
+      "parentUuid": "b76b6a77_0d8ecaf7",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 60,
+        "endChar": 7
+      },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa451f41_4f9ec670",
         "filename": "src/compiler/decompression-avoider.cc",
         "patchSetId": 7
@@ -170,6 +308,24 @@
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7fe31bd_ab436837",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa451f41_4f9ec670",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -190,6 +346,24 @@
     },
     {
       "key": {
+        "uuid": "dc78e365_f935f404",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "There was a suggestion in the doc to maintain the Compressed representation to mean \"do not add the root when loading\". Then, the Compressed representation would only be alive from this reducer forwards, and the previous phases would be oblivious to them.",
+      "parentUuid": "7f2ad35e_7a7a09e6",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69ac6871_a75fbd6a",
         "filename": "src/compiler/decompression-avoider.h",
         "patchSetId": 7
@@ -207,6 +381,24 @@
     },
     {
       "key": {
+        "uuid": "4ea69dac_3cdd1fbb",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69ac6871_a75fbd6a",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de6f3eb1_e06347df",
         "filename": "src/compiler/decompression-avoider.h",
         "patchSetId": 7
@@ -218,6 +410,24 @@
       "writtenOn": "2019-10-16T08:36:09Z",
       "side": 1,
       "message": "Why not DecompressionElimination? That seems to better match existing naming conventions for compiler phases.",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68b344b4_c3e86fab",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "DecompressionElimination suited better the previous method: we had explicit change nodes that we eliminated from the graph.\nHere, we are not creating the full decompression in the first place. So, instead of creating and deleting it, we are avoiding creating it in the first place.\n\nI\u0027m open to suggestions but I don\u0027t think DecompressionElimination is a good choice for its name.",
+      "parentUuid": "de6f3eb1_e06347df",
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -241,6 +451,24 @@
     },
     {
       "key": {
+        "uuid": "f5167342_13e690c2",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Sounds good! Done.",
+      "parentUuid": "22868bd6_25f7977d",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e54bbec_b90319a1",
         "filename": "src/compiler/decompression-avoider.h",
         "patchSetId": 7
@@ -255,6 +483,24 @@
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2ad5996_9fd7feec",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e54bbec_b90319a1",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -275,6 +521,24 @@
     },
     {
       "key": {
+        "uuid": "d7bc8fa7_7fe5898a",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9cf21816_987d2ba9",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e164745_beaf500b",
         "filename": "src/compiler/decompression-avoider.h",
         "patchSetId": 7
@@ -292,6 +556,24 @@
     },
     {
       "key": {
+        "uuid": "34cc5f3c_ab16e441",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e164745_beaf500b",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66593bc6_37273c7c",
         "filename": "src/compiler/decompression-avoider.h",
         "patchSetId": 7
@@ -306,6 +588,24 @@
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8a19d0b_8627ffa6",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66593bc6_37273c7c",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -349,6 +649,48 @@
     },
     {
       "key": {
+        "uuid": "ef406c35_44aedd4e",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0f91f45_0e6f0fa5",
+      "range": {
+        "startLine": 58,
+        "startChar": 24,
+        "endLine": 58,
+        "endChar": 28
+      },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0cf3d5ab_796f96e5",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "I was emulating GraphTrimmer https://cs.chromium.org/chromium/src/v8/src/compiler/graph-trimmer.h?l\u003d39\u0026rcl\u003d480cfc4a44f922c1e1eee1ec6c40e5e655b4edfd\n\nRemoved the inline.",
+      "parentUuid": "d5151dee_97e94cd3",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04e0ec38_5b76fd29",
         "filename": "src/compiler/decompression-avoider.h",
         "patchSetId": 7
@@ -363,6 +705,24 @@
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "128cbef8_a5376166",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Moved to anonymous namespace.",
+      "parentUuid": "04e0ec38_5b76fd29",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -383,6 +743,24 @@
     },
     {
       "key": {
+        "uuid": "6821678b_bd52addd",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "b0470ce5_a90e6b75",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40febd9a_7631d120",
         "filename": "src/compiler/decompression-avoider.h",
         "patchSetId": 7
@@ -400,6 +778,24 @@
     },
     {
       "key": {
+        "uuid": "db154f43_17541901",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40febd9a_7631d120",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1ecbff1_d7eebf12",
         "filename": "src/compiler/node.h",
         "patchSetId": 7
@@ -411,6 +807,24 @@
       "writtenOn": "2019-10-16T08:36:09Z",
       "side": 1,
       "message": "Note that ZoneDeque uses the recycling allocator, ZoneQueue does not. Consider using ZoneDeque. \n\nAlso, why not move the typedef into the single use-site?",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43f76c79_047c9f53",
+        "filename": "src/compiler/node.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-16T10:40:10Z",
+      "side": 1,
+      "message": "We don\u0027t need the extra methods that Deque has. Is it worth it to change it to have the recycling allocator?\n\nIt\u0027s not single use: https://cs.chromium.org/search/?q\u003d%22ZoneQueue%3CNode*%3E%22\u0026sq\u003dpackage:chromium\u0026type\u003dcs\nI was planning on updating the other ZoneQueue\u003cNode*\u003e in a future CL.",
+      "parentUuid": "c1ecbff1_d7eebf12",
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
