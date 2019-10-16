@@ -22,6 +22,29 @@
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b76b6a77_0d8ecaf7",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-16T08:13:26Z",
+      "side": 1,
+      "message": "We also have to visit effect and control edges, otherwise we won\u0027t visit the complete graph.",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 60,
+        "endChar": 7
+      },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
