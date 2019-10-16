@@ -343,7 +343,6 @@
   # Test that assumes specific execution time, flaky in debug mode.
   'js1_5/Array/regress-101964': [PASS, ['mode == debug', FAIL]],
 
-
   ##################### INCOMPATIBLE TESTS #####################
 
   # This section is for tests that fail in both V8 and JSC.  Thus they
@@ -1038,8 +1037,8 @@
   #BUG(3152): Avoid C stack overflow.
   'js1_5/extensions/regress-355497': [FAIL_OK, '--sim-stack-size=512'],
 
-  # Slow without pointer compression
-  'js1_5/Regress/regress-80981': [PASS, ['not pointer_compression', SLOW]],
+  # Flaky without pointer compression, BUG(v8:9863)
+  'js1_5/Regress/regress-80981': [PASS, ['not pointer_compression', SKIP]],
 }],  # 'arch == arm64 and simulator_run'
 
 ['system == android', {
