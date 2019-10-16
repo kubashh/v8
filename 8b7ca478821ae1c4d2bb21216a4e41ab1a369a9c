@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b8f28973_fa33920c",
+        "filename": "test/mjsunit/es6/array-concat.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2019-10-16T05:56:29Z",
+      "side": 1,
+      "message": "That sounds good to me. I\u0027m also open to invalidating the rest of the world, if that\u0027s even possible.",
+      "parentUuid": "067033df_99cfe055",
+      "revId": "8b7ca478821ae1c4d2bb21216a4e41ab1a369a9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f93a6fdd_f407509c",
         "filename": "test/mjsunit/mjsunit.status",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-10-16T05:13:37Z",
       "side": 1,
       "message": "This CL fixes the test and a follow-up the bug?",
+      "revId": "8b7ca478821ae1c4d2bb21216a4e41ab1a369a9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b79dbf9_34af20d9",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2019-10-16T05:56:29Z",
+      "side": 1,
+      "message": "The final patch in the series for the bug re-enables the test. Wanted each CL to be landable on its own, thus this disabling.",
+      "parentUuid": "f93a6fdd_f407509c",
       "revId": "8b7ca478821ae1c4d2bb21216a4e41ab1a369a9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
