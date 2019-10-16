@@ -116,6 +116,24 @@
       "revId": "3bfba3dbc34ccde168145eb85ba2c84e39ccdf3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc0467b4_fd3024b7",
+        "filename": "src/objects/objects.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-10-16T08:31:55Z",
+      "side": 1,
+      "message": "ToArrayIndex is much better, the limitation to kMaxInt is kind of obvious from the type but you can mention it in a sentence as well.",
+      "parentUuid": "c3573c58_b93f959f",
+      "revId": "3bfba3dbc34ccde168145eb85ba2c84e39ccdf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
