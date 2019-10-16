@@ -1348,24 +1348,39 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
   explicit EvacuateNewSpaceVisitor(
       Heap* heap, LocalAllocator* local_allocator,
       RecordMigratedSlotVisitor* record_visitor,
-      Heap::PretenuringFeedbackMap* local_pretenuring_feedback)
+      Heap::PretenuringFeedbackMap* local_pretenuring_feedback,
+      bool promote_young)
       : EvacuateVisitorBase(heap, local_allocator, record_visitor),
         buffer_(LocalAllocationBuffer::InvalidBuffer()),
         promoted_size_(0),
         semispace_copied_size_(0),
         local_pretenuring_feedback_(local_pretenuring_feedback),
-        is_incremental_marking_(heap->incremental_marking()->IsMarking()) {}
+        is_incremental_marking_(heap->incremental_marking()->IsMarking()),
+        promote_young_(promote_young) {}
 
   inline bool Visit(HeapObject object, int size) override {
     if (TryEvacuateWithoutCopy(object)) return true;
     HeapObject target_object;
+
+    if (promote_young_) {
+      heap_->UpdateAllocationSite(object.map(), object,
+                                  local_pretenuring_feedback_);
+
+      AlwaysPromoteObject(object, size);
+      promoted_size_ += size;
+
+      return true;
+    }
+
     if (heap_->ShouldBePromoted(object.address()) &&
         TryEvacuateObject(OLD_SPACE, object, size, &target_object)) {
       promoted_size_ += size;
       return true;
     }
+
     heap_->UpdateAllocationSite(object.map(), object,
                                 local_pretenuring_feedback_);
+
     HeapObject target;
     AllocationSpace space = AllocateTargetObject(object, size, &target);
     MigrateObject(HeapObject::cast(target), object, size, space);
@@ -1392,6 +1407,17 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
     // TODO(mlippautz): Handle ConsString.
 
     return false;
+  }
+
+  inline void AlwaysPromoteObject(HeapObject object, int size) {
+    AllocationAlignment alignment = HeapObject::RequiredAlignment(object.map());
+    AllocationResult allocation = local_allocator_->Allocate(
+        OLD_SPACE, size, AllocationOrigin::kGC, alignment);
+    if (allocation.IsRetry()) {
+      heap_->FatalProcessOutOfMemory(
+          "MarkCompactCollector: young object promotion failed");
+    }
+    MigrateObject(allocation.ToObjectChecked(), object, size, OLD_SPACE);
   }
 
   inline AllocationSpace AllocateTargetObject(HeapObject old_object, int size,
@@ -1427,6 +1453,7 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
   intptr_t semispace_copied_size_;
   Heap::PretenuringFeedbackMap* local_pretenuring_feedback_;
   bool is_incremental_marking_;
+  bool promote_young_;
 };
 
 template <PageEvacuationMode mode>
@@ -2663,6 +2690,8 @@ void MarkCompactCollector::EvacuatePrologue() {
   new_space->Flip();
   new_space->ResetLinearAllocationArea();
 
+  DCHECK_EQ(new_space->Size(), 0);
+
   heap()->new_lo_space()->Flip();
   heap()->new_lo_space()->ResetPendingObject();
 
@@ -2677,6 +2706,8 @@ void MarkCompactCollector::EvacuateEpilogue() {
   aborted_evacuation_candidates_.clear();
   // New space.
   heap()->new_space()->set_age_mark(heap()->new_space()->top());
+  DCHECK_IMPLIES(FLAG_always_promote_young_in_mc,
+                 heap()->new_space()->Size() == 0);
   // Deallocate unmarked large objects.
   heap()->lo_space()->FreeUnmarkedObjects();
   heap()->code_lo_space()->FreeUnmarkedObjects();
@@ -2724,12 +2755,13 @@ class Evacuator : public Malloced {
     return MemoryChunkLayout::AllocatableMemoryInDataPage() + kTaggedSize;
   }
 
-  Evacuator(Heap* heap, RecordMigratedSlotVisitor* record_visitor)
+  Evacuator(Heap* heap, RecordMigratedSlotVisitor* record_visitor,
+            bool always_promote_young)
       : heap_(heap),
         local_allocator_(heap_),
         local_pretenuring_feedback_(kInitialLocalPretenuringFeedbackCapacity),
         new_space_visitor_(heap_, &local_allocator_, record_visitor,
-                           &local_pretenuring_feedback_),
+                           &local_pretenuring_feedback_, always_promote_young),
         new_to_new_page_visitor_(heap_, record_visitor,
                                  &local_pretenuring_feedback_),
         new_to_old_page_visitor_(heap_, record_visitor,
@@ -2834,7 +2866,8 @@ void Evacuator::Finalize() {
 class FullEvacuator : public Evacuator {
  public:
   explicit FullEvacuator(MarkCompactCollector* collector)
-      : Evacuator(collector->heap(), &record_visitor_),
+      : Evacuator(collector->heap(), &record_visitor_,
+                  FLAG_always_promote_young_in_mc),
         record_visitor_(collector, &ephemeron_remembered_set_),
         collector_(collector) {}
 
@@ -3024,7 +3057,8 @@ void MarkCompactCollector::EvacuatePagesInParallel() {
     if (live_bytes_on_page == 0 && !page->contains_array_buffers()) continue;
     live_bytes += live_bytes_on_page;
     if (ShouldMovePage(page, live_bytes_on_page)) {
-      if (page->IsFlagSet(MemoryChunk::NEW_SPACE_BELOW_AGE_MARK)) {
+      if (page->IsFlagSet(MemoryChunk::NEW_SPACE_BELOW_AGE_MARK) ||
+          FLAG_always_promote_young_in_mc) {
         EvacuateNewSpacePageVisitor<NEW_TO_OLD>::Move(page);
         DCHECK_EQ(heap()->old_space(), page->owner());
         // The move added page->allocated_bytes to the old space, but we are
@@ -4849,7 +4883,7 @@ namespace {
 class YoungGenerationEvacuator : public Evacuator {
  public:
   explicit YoungGenerationEvacuator(MinorMarkCompactCollector* collector)
-      : Evacuator(collector->heap(), &record_visitor_),
+      : Evacuator(collector->heap(), &record_visitor_, false),
         record_visitor_(collector->heap()->mark_compact_collector()),
         collector_(collector) {}
 
