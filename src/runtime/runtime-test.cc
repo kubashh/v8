@@ -1424,5 +1424,23 @@ RUNTIME_FUNCTION(Runtime_EnableCodeLoggingForTesting) {
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
+RUNTIME_FUNCTION(Runtime_ResetAllProtectors) {
+  HandleScope scope(isolate);
+  Handle<NativeContext> native_context = isolate->native_context();
+#define CALL_RESET_PROTECTOR_ON_NATIVE_CONTEXT(name, unused_cell) \
+  Protectors::Reset##name##ForTesting(isolate, native_context);
+
+  DECLARED_PROTECTORS_ON_NATIVE_CONTEXT(CALL_RESET_PROTECTOR_ON_NATIVE_CONTEXT)
+#undef CALL_RESET_PROTECTOR_ON_NATIVE_CONTEXT
+
+#define CALL_RESET_PROTECTOR_ON_ISOLATE(name, unused_root_index, unused_cell) \
+  Protectors::Reset##name##ForTesting(isolate);
+
+  DECLARED_PROTECTORS_ON_ISOLATE(CALL_RESET_PROTECTOR_ON_ISOLATE)
+#undef CALL_RESET_PROTECTOR_ON_ISOLATE
+
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
 }  // namespace internal
 }  // namespace v8

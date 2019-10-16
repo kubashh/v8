@@ -506,6 +506,7 @@ namespace internal {
   F(PrepareFunctionForOptimization, -1, 1)    \
   F(PrintWithNameForAssert, 2, 1)             \
   F(RedirectToWasmInterpreter, 2, 1)          \
+  F(ResetAllProtectors, 0, 1)                 \
   F(RunningInSimulator, 0, 1)                 \
   F(SerializeWasmModule, 1, 1)                \
   F(SetAllocationTimeout, -1 /* 2 || 3 */, 1) \
