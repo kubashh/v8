@@ -372,6 +372,7 @@ bool AddDescriptorsByTemplate(
 
   map->InitializeDescriptors(isolate, *descriptors,
                              LayoutDescriptor::FastPointerLayout());
+  map->SetOutOfObjectUnusedFieldSlots(0);
   if (elements_dictionary->NumberOfElements() > 0) {
     if (!SubstituteValues<NumberDictionary>(isolate, elements_dictionary,
                                             receiver, args)) {

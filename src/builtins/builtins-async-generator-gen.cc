@@ -509,6 +509,15 @@ TF_BUILTIN(AsyncGeneratorResolve, AsyncGeneratorBuiltinsAssembler) {
                                    value);
     StoreObjectFieldNoWriteBarrier(iter_result, JSIteratorResult::kDoneOffset,
                                    done);
+    if (JSIteratorResult::kSize == 7 * kTaggedSize) {
+      StoreObjectFieldNoWriteBarrier(
+          iter_result, JSIteratorResult::kPaddingOffset, UndefinedConstant());
+      StoreObjectFieldNoWriteBarrier(
+          iter_result, JSIteratorResult::kPaddingOffset + kTaggedSize,
+          UndefinedConstant());
+    } else {
+      DCHECK_EQ(JSIteratorResult::kSize, 5 * kTaggedSize);
+    }
   }
 
   // We know that {iter_result} itself doesn't have any "then" property (a

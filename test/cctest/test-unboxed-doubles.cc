@@ -33,7 +33,6 @@ namespace test_unboxed_doubles {
 
 #if V8_DOUBLE_FIELDS_UNBOXING
 
-
 //
 // Helper functions.
 //
@@ -51,13 +50,11 @@ static Handle<String> MakeString(const char* str) {
   return factory->InternalizeUtf8String(str);
 }
 
-
 static Handle<String> MakeName(const char* str, int suffix) {
   EmbeddedVector<char, 128> buffer;
   SNPrintF(buffer, "%s%d", str, suffix);
   return MakeString(buffer.begin());
 }
-
 
 Handle<JSObject> GetObject(const char* name) {
   return Handle<JSObject>::cast(
@@ -87,6 +84,8 @@ void WriteToField(JSObject object, int index, Object value) {
 
 const int kNumberOfBits = 32;
 const int kBitsInSmiLayout = SmiValuesAre32Bits() ? 32 : kSmiValueSize - 1;
+const int kTaggedSlotWidth = 1;
+const int kDoubleSlotWidth = kDoubleSize / kTaggedSize;
 
 enum TestPropertyKind {
   PROP_ACCESSOR_INFO,
@@ -100,17 +99,16 @@ static Representation representations[PROP_KIND_NUMBER] = {
     Representation::None(), Representation::Smi(), Representation::Double(),
     Representation::Tagged()};
 
-
-static Handle<DescriptorArray> CreateDescriptorArray(Isolate* isolate,
-                                                     TestPropertyKind* props,
-                                                     int kPropsCount) {
+static Handle<DescriptorArray> CreateDescriptorArray(
+    Isolate* isolate, TestPropertyKind* props, int props_count,
+    int in_object_field_slots) {
   Factory* factory = isolate->factory();
 
   Handle<DescriptorArray> descriptors =
-      DescriptorArray::Allocate(isolate, 0, kPropsCount);
+      DescriptorArray::Allocate(isolate, 0, props_count);
 
   int next_field_offset = 0;
-  for (int i = 0; i < kPropsCount; i++) {
+  for (int i = 0; i < props_count; i++) {
     EmbeddedVector<char, 64> buffer;
     SNPrintF(buffer, "prop%d", i);
     Handle<String> name = factory->InternalizeUtf8String(buffer.begin());
@@ -124,18 +122,79 @@ static Handle<DescriptorArray> CreateDescriptorArray(Isolate* isolate,
       d = Descriptor::AccessorConstant(name, info, NONE);
 
     } else {
+      Representation representation = representations[kind];
+      // Make sure to overflow into the property array if we can't fit the next
+      // value in the object (because it's a double, doubles take up multiple
+      // slots, and we don't have enough slots left in the object).
+      if (kDoubleSlotWidth > kTaggedSlotWidth &&
+          next_field_offset < in_object_field_slots &&
+          representation.IsDouble() &&
+          next_field_offset + kDoubleSlotWidth > in_object_field_slots) {
+        next_field_offset = in_object_field_slots;
+      }
       d = Descriptor::DataField(isolate, name, next_field_offset, NONE,
-                                representations[kind]);
+                                representation);
     }
     descriptors->Append(&d);
     PropertyDetails details = d.GetDetails();
     if (details.location() == kField) {
-      next_field_offset += details.field_width_in_words();
+      next_field_offset += details.field_width_in_words(in_object_field_slots);
     }
   }
   return descriptors;
 }
 
+static int GetNumPropsThatFitInObjectForSmiLayout(TestPropertyKind* props,
+                                                  int props_count) {
+  int size_if_all_in_object = 0;
+  for (int i = 0; i < props_count; i++) {
+    switch (props[i]) {
+      case PROP_DOUBLE:
+        size_if_all_in_object += kDoubleSlotWidth;
+        if (size_if_all_in_object > kBitsInSmiLayout) {
+          return i;
+        }
+        break;
+      case PROP_TAGGED:
+      case PROP_KIND_NUMBER:
+      case PROP_SMI:
+        size_if_all_in_object += kTaggedSlotWidth;
+        if (size_if_all_in_object > kBitsInSmiLayout) {
+          return i;
+        }
+        break;
+      case PROP_ACCESSOR_INFO:
+        break;
+    }
+  }
+  return props_count;
+}
+
+static int GetSizeOfPropsThatFitInObjectForSmiLayout(TestPropertyKind* props,
+                                                     int props_count) {
+  int size_if_all_in_object = 0;
+  for (int i = 0; i < props_count; i++) {
+    switch (props[i]) {
+      case PROP_DOUBLE:
+        if (size_if_all_in_object + kDoubleSlotWidth > kBitsInSmiLayout) {
+          return size_if_all_in_object;
+        }
+        size_if_all_in_object += kDoubleSlotWidth;
+        break;
+      case PROP_TAGGED:
+      case PROP_KIND_NUMBER:
+      case PROP_SMI:
+        if (size_if_all_in_object + kTaggedSlotWidth > kBitsInSmiLayout) {
+          return i;
+        }
+        size_if_all_in_object += kTaggedSlotWidth;
+        break;
+      case PROP_ACCESSOR_INFO:
+        break;
+    }
+  }
+  return size_if_all_in_object;
+}
 
 TEST(LayoutDescriptorBasicFast) {
   CcTest::InitializeVM();
@@ -172,7 +231,6 @@ TEST(LayoutDescriptorBasicFast) {
   CHECK_EQ(7, sequence_length);
 }
 
-
 TEST(LayoutDescriptorBasicSlow) {
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -188,7 +246,7 @@ TEST(LayoutDescriptorBasicSlow) {
 
   {
     Handle<DescriptorArray> descriptors =
-        CreateDescriptorArray(isolate, props, kPropsCount);
+        CreateDescriptorArray(isolate, props, kPropsCount, kPropsCount);
 
     Handle<Map> map = Map::Create(isolate, kPropsCount);
 
@@ -203,12 +261,14 @@ TEST(LayoutDescriptorBasicSlow) {
   props[0] = PROP_DOUBLE;
   props[kPropsCount - 1] = PROP_DOUBLE;
 
-  Handle<DescriptorArray> descriptors =
-      CreateDescriptorArray(isolate, props, kPropsCount);
+  const int kNumTaggedProps = kPropsCount - 2;
 
   {
-    int inobject_properties = kPropsCount - 1;
-    Handle<Map> map = Map::Create(isolate, inobject_properties);
+    int inobject_field_slots =
+        kDoubleSlotWidth + kTaggedSlotWidth * kNumTaggedProps;
+    Handle<DescriptorArray> descriptors = CreateDescriptorArray(
+        isolate, props, kPropsCount, inobject_field_slots);
+    Handle<Map> map = Map::Create(isolate, inobject_field_slots);
 
     // Should be fast as the only double property is the first one.
     layout_descriptor =
@@ -217,17 +277,30 @@ TEST(LayoutDescriptorBasicSlow) {
     CHECK(!layout_descriptor->IsSlowLayout());
     CHECK(!layout_descriptor->IsFastPointerLayout());
 
-    CHECK(!layout_descriptor->IsTagged(0));
-    for (int i = 1; i < kPropsCount; i++) {
-      CHECK(layout_descriptor->IsTagged(i));
+    if (kDoubleSize == kTaggedSize) {
+      CHECK(!layout_descriptor->IsTagged(0));
+      for (int i = 1; i < kPropsCount; i++) {
+        CHECK(layout_descriptor->IsTagged(i));
+      }
+    } else {
+      // Double takes up two slots.
+      CHECK(!layout_descriptor->IsTagged(0));
+      CHECK(!layout_descriptor->IsTagged(1));
+      for (int i = 1; i < kPropsCount; i++) {
+        CHECK(layout_descriptor->IsTagged(i + 1));
+      }
     }
     InitializeVerifiedMapDescriptors(isolate, *map, *descriptors,
                                      *layout_descriptor);
   }
 
   {
-    int inobject_properties = kPropsCount;
-    Handle<Map> map = Map::Create(isolate, inobject_properties);
+    int inobject_field_slots = kDoubleSlotWidth +
+                               kTaggedSlotWidth * kNumTaggedProps +
+                               kDoubleSlotWidth;
+    Handle<DescriptorArray> descriptors = CreateDescriptorArray(
+        isolate, props, kPropsCount, inobject_field_slots);
+    Handle<Map> map = Map::Create(isolate, inobject_field_slots);
 
     layout_descriptor =
         LayoutDescriptor::New(isolate, map, descriptors, kPropsCount);
@@ -236,9 +309,23 @@ TEST(LayoutDescriptorBasicSlow) {
     CHECK(!layout_descriptor->IsFastPointerLayout());
     CHECK_GT(layout_descriptor->capacity(), kBitsInSmiLayout);
 
-    CHECK(!layout_descriptor->IsTagged(0));
-    CHECK(!layout_descriptor->IsTagged(kPropsCount - 1));
-    for (int i = 1; i < kPropsCount - 1; i++) {
+    // Calculate the range of slots containing tagged values, with doubles on
+    // either end. Needs explicit calculation because the double-valued slots
+    // can take two slots.
+    const int kStartOfTagged = kDoubleSlotWidth;
+    const int kEndOfTagged =
+        kDoubleSlotWidth + kTaggedSlotWidth * kNumTaggedProps - 1;
+
+    if (kDoubleSize == kTaggedSize) {
+      CHECK(!layout_descriptor->IsTagged(kStartOfTagged - 1));
+      CHECK(!layout_descriptor->IsTagged(kEndOfTagged + 1));
+    } else {
+      CHECK(!layout_descriptor->IsTagged(kStartOfTagged - 2));
+      CHECK(!layout_descriptor->IsTagged(kStartOfTagged - 1));
+      CHECK(!layout_descriptor->IsTagged(kEndOfTagged + 1));
+      CHECK(!layout_descriptor->IsTagged(kEndOfTagged + 2));
+    }
+    for (int i = kStartOfTagged; i <= kEndOfTagged; i++) {
       CHECK(layout_descriptor->IsTagged(i));
     }
 
@@ -252,7 +339,7 @@ TEST(LayoutDescriptorBasicSlow) {
 
     LayoutDescriptor layout_desc = *layout_descriptor;
     // Play with the bits but leave it in consistent state with map at the end.
-    for (int i = 1; i < kPropsCount - 1; i++) {
+    for (int i = kStartOfTagged; i <= kEndOfTagged; i++) {
       layout_desc = layout_desc.SetTaggedForTesting(i, false);
       CHECK(!layout_desc.IsTagged(i));
       layout_desc = layout_desc.SetTaggedForTesting(i, true);
@@ -263,7 +350,6 @@ TEST(LayoutDescriptorBasicSlow) {
     CHECK(layout_descriptor->IsConsistentWithMap(*map, true));
   }
 }
-
 
 static void TestLayoutDescriptorQueries(int layout_descriptor_length,
                                         int* bit_flip_positions,
@@ -327,7 +413,6 @@ static void TestLayoutDescriptorQueries(int layout_descriptor_length,
   }
 }
 
-
 static void TestLayoutDescriptorQueriesFast(int max_sequence_length) {
   {
     LayoutDescriptor layout_desc = LayoutDescriptor::FastPointerLayout();
@@ -375,14 +460,12 @@ static void TestLayoutDescriptorQueriesFast(int max_sequence_length) {
   }
 }
 
-
 TEST(LayoutDescriptorQueriesFastLimited7) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
 
   TestLayoutDescriptorQueriesFast(7);
 }
-
 
 TEST(LayoutDescriptorQueriesFastLimited13) {
   CcTest::InitializeVM();
@@ -391,14 +474,12 @@ TEST(LayoutDescriptorQueriesFastLimited13) {
   TestLayoutDescriptorQueriesFast(13);
 }
 
-
 TEST(LayoutDescriptorQueriesFastUnlimited) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
 
   TestLayoutDescriptorQueriesFast(std::numeric_limits<int>::max());
 }
-
 
 static void TestLayoutDescriptorQueriesSlow(int max_sequence_length) {
   {
@@ -464,14 +545,12 @@ static void TestLayoutDescriptorQueriesSlow(int max_sequence_length) {
   }
 }
 
-
 TEST(LayoutDescriptorQueriesSlowLimited7) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
 
   TestLayoutDescriptorQueriesSlow(7);
 }
-
 
 TEST(LayoutDescriptorQueriesSlowLimited13) {
   CcTest::InitializeVM();
@@ -480,7 +559,6 @@ TEST(LayoutDescriptorQueriesSlowLimited13) {
   TestLayoutDescriptorQueriesSlow(13);
 }
 
-
 TEST(LayoutDescriptorQueriesSlowLimited42) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
@@ -488,14 +566,12 @@ TEST(LayoutDescriptorQueriesSlowLimited42) {
   TestLayoutDescriptorQueriesSlow(42);
 }
 
-
 TEST(LayoutDescriptorQueriesSlowUnlimited) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
 
   TestLayoutDescriptorQueriesSlow(std::numeric_limits<int>::max());
 }
-
 
 TEST(LayoutDescriptorCreateNewFast) {
   CcTest::InitializeVM();
@@ -514,11 +590,11 @@ TEST(LayoutDescriptorCreateNewFast) {
   };
   const int kPropsCount = arraysize(props);
 
-  Handle<DescriptorArray> descriptors =
-      CreateDescriptorArray(isolate, props, kPropsCount);
-
   {
-    Handle<Map> map = Map::Create(isolate, 0);
+    const int in_object_field_slots = 0;
+    Handle<DescriptorArray> descriptors = CreateDescriptorArray(
+        isolate, props, kPropsCount, in_object_field_slots);
+    Handle<Map> map = Map::Create(isolate, in_object_field_slots);
     layout_descriptor =
         LayoutDescriptor::New(isolate, map, descriptors, kPropsCount);
     CHECK_EQ(LayoutDescriptor::FastPointerLayout(), *layout_descriptor);
@@ -527,7 +603,10 @@ TEST(LayoutDescriptorCreateNewFast) {
   }
 
   {
-    Handle<Map> map = Map::Create(isolate, 1);
+    const int in_object_field_slots = 1;
+    Handle<DescriptorArray> descriptors = CreateDescriptorArray(
+        isolate, props, kPropsCount, in_object_field_slots);
+    Handle<Map> map = Map::Create(isolate, in_object_field_slots);
     layout_descriptor =
         LayoutDescriptor::New(isolate, map, descriptors, kPropsCount);
     CHECK_EQ(LayoutDescriptor::FastPointerLayout(), *layout_descriptor);
@@ -536,20 +615,29 @@ TEST(LayoutDescriptorCreateNewFast) {
   }
 
   {
-    Handle<Map> map = Map::Create(isolate, 2);
+    const int in_object_field_slots = 1 + kDoubleSlotWidth;
+    Handle<DescriptorArray> descriptors = CreateDescriptorArray(
+        isolate, props, kPropsCount, in_object_field_slots);
+    Handle<Map> map = Map::Create(isolate, in_object_field_slots);
     layout_descriptor =
         LayoutDescriptor::New(isolate, map, descriptors, kPropsCount);
     CHECK_NE(LayoutDescriptor::FastPointerLayout(), *layout_descriptor);
     CHECK(!layout_descriptor->IsSlowLayout());
     CHECK(layout_descriptor->IsTagged(0));
-    CHECK(!layout_descriptor->IsTagged(1));
-    CHECK(layout_descriptor->IsTagged(2));
+    if (kDoubleSize == kTaggedSize) {
+      CHECK(!layout_descriptor->IsTagged(1));
+      CHECK(layout_descriptor->IsTagged(2));
+    } else {
+      // Double takes up two slots.
+      CHECK(!layout_descriptor->IsTagged(1));
+      CHECK(!layout_descriptor->IsTagged(2));
+      CHECK(layout_descriptor->IsTagged(3));
+    }
     CHECK(layout_descriptor->IsTagged(125));
     InitializeVerifiedMapDescriptors(isolate, *map, *descriptors,
                                      *layout_descriptor);
   }
 }
-
 
 TEST(LayoutDescriptorCreateNewSlow) {
   CcTest::InitializeVM();
@@ -563,11 +651,11 @@ TEST(LayoutDescriptorCreateNewSlow) {
     props[i] = static_cast<TestPropertyKind>(i % PROP_KIND_NUMBER);
   }
 
-  Handle<DescriptorArray> descriptors =
-      CreateDescriptorArray(isolate, props, kPropsCount);
-
   {
-    Handle<Map> map = Map::Create(isolate, 0);
+    const int in_object_field_slots = 0;
+    Handle<DescriptorArray> descriptors = CreateDescriptorArray(
+        isolate, props, kPropsCount, in_object_field_slots);
+    Handle<Map> map = Map::Create(isolate, in_object_field_slots);
     layout_descriptor =
         LayoutDescriptor::New(isolate, map, descriptors, kPropsCount);
     CHECK_EQ(LayoutDescriptor::FastPointerLayout(), *layout_descriptor);
@@ -576,7 +664,10 @@ TEST(LayoutDescriptorCreateNewSlow) {
   }
 
   {
-    Handle<Map> map = Map::Create(isolate, 1);
+    const int in_object_field_slots = 1;
+    Handle<DescriptorArray> descriptors = CreateDescriptorArray(
+        isolate, props, kPropsCount, in_object_field_slots);
+    Handle<Map> map = Map::Create(isolate, in_object_field_slots);
     layout_descriptor =
         LayoutDescriptor::New(isolate, map, descriptors, kPropsCount);
     CHECK_EQ(LayoutDescriptor::FastPointerLayout(), *layout_descriptor);
@@ -585,33 +676,48 @@ TEST(LayoutDescriptorCreateNewSlow) {
   }
 
   {
-    Handle<Map> map = Map::Create(isolate, 2);
+    const int in_object_field_slots = 1 + kDoubleSlotWidth;
+    Handle<DescriptorArray> descriptors = CreateDescriptorArray(
+        isolate, props, kPropsCount, in_object_field_slots);
+    Handle<Map> map = Map::Create(isolate, in_object_field_slots);
     layout_descriptor =
         LayoutDescriptor::New(isolate, map, descriptors, kPropsCount);
     CHECK_NE(LayoutDescriptor::FastPointerLayout(), *layout_descriptor);
     CHECK(!layout_descriptor->IsSlowLayout());
     CHECK(layout_descriptor->IsTagged(0));
-    CHECK(!layout_descriptor->IsTagged(1));
-    CHECK(layout_descriptor->IsTagged(2));
+    if (kDoubleSize == kTaggedSize) {
+      CHECK(!layout_descriptor->IsTagged(1));
+      CHECK(layout_descriptor->IsTagged(2));
+    } else {
+      // Double takes up two slots.
+      CHECK(!layout_descriptor->IsTagged(1));
+      CHECK(!layout_descriptor->IsTagged(2));
+      CHECK(layout_descriptor->IsTagged(3));
+    }
     CHECK(layout_descriptor->IsTagged(125));
     InitializeVerifiedMapDescriptors(isolate, *map, *descriptors,
                                      *layout_descriptor);
   }
 
   {
-    int inobject_properties = kPropsCount / 2;
-    Handle<Map> map = Map::Create(isolate, inobject_properties);
+    int inobject_field_slots = kPropsCount / 2;
+    Handle<DescriptorArray> descriptors = CreateDescriptorArray(
+        isolate, props, kPropsCount, inobject_field_slots);
+    Handle<Map> map = Map::Create(isolate, inobject_field_slots);
     layout_descriptor =
         LayoutDescriptor::New(isolate, map, descriptors, kPropsCount);
     CHECK_NE(LayoutDescriptor::FastPointerLayout(), *layout_descriptor);
     CHECK(layout_descriptor->IsSlowLayout());
-    for (int i = 0; i < inobject_properties; i++) {
+    for (int i = 0, offset = 0; offset < inobject_field_slots; i++) {
       // PROP_DOUBLE has index 1 among DATA properties.
       const bool tagged = (i % (PROP_KIND_NUMBER - 1)) != 1;
-      CHECK_EQ(tagged, layout_descriptor->IsTagged(i));
+      const int slot_width = tagged ? kTaggedSlotWidth : kDoubleSlotWidth;
+      for (int j = 0; j < slot_width; j++) {
+        CHECK_EQ(tagged, layout_descriptor->IsTagged(offset++));
+      }
     }
-    // Every property after inobject_properties must be tagged.
-    for (int i = inobject_properties; i < kPropsCount; i++) {
+    // Every property after inobject_field_slots must be tagged.
+    for (int i = inobject_field_slots; i < map->TotalUsedFieldSlots(); i++) {
       CHECK(layout_descriptor->IsTagged(i));
     }
     InitializeVerifiedMapDescriptors(isolate, *map, *descriptors,
@@ -639,16 +745,15 @@ TEST(LayoutDescriptorCreateNewSlow) {
   }
 }
 
-
 static Handle<LayoutDescriptor> TestLayoutDescriptorAppend(
-    Isolate* isolate, int inobject_properties, TestPropertyKind* props,
+    Isolate* isolate, int inobject_field_slots, TestPropertyKind* props,
     int kPropsCount) {
   Factory* factory = isolate->factory();
 
   Handle<DescriptorArray> descriptors =
       DescriptorArray::Allocate(isolate, 0, kPropsCount);
 
-  Handle<Map> map = Map::Create(isolate, inobject_properties);
+  Handle<Map> map = Map::Create(isolate, inobject_field_slots);
   map->InitializeDescriptors(isolate, *descriptors,
                              LayoutDescriptor::FastPointerLayout());
 
@@ -674,11 +779,12 @@ static Handle<LayoutDescriptor> TestLayoutDescriptorAppend(
     layout_descriptor = LayoutDescriptor::ShareAppend(isolate, map, details);
     descriptors->Append(&d);
     if (details.location() == kField) {
-      int field_width_in_words = details.field_width_in_words();
+      int field_width_in_words =
+          details.field_width_in_words(inobject_field_slots);
       next_field_offset += field_width_in_words;
 
-      int field_index = details.field_index();
-      bool is_inobject = field_index < map->GetInObjectProperties();
+      int field_index = details.field_slot_index();
+      bool is_inobject = field_index < map->TotalInObjectFieldSlots();
       for (int bit = 0; bit < field_width_in_words; bit++) {
         CHECK_EQ(is_inobject && (kind == PROP_DOUBLE),
                  !layout_descriptor->IsTagged(field_index + bit));
@@ -692,7 +798,6 @@ static Handle<LayoutDescriptor> TestLayoutDescriptorAppend(
   return layout_descriptor;
 }
 
-
 TEST(LayoutDescriptorAppend) {
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -705,6 +810,9 @@ TEST(LayoutDescriptorAppend) {
     props[i] = static_cast<TestPropertyKind>(i % PROP_KIND_NUMBER);
   }
 
+  int size_of_props_that_fit_in_object_for_smi_layout =
+      GetSizeOfPropsThatFitInObjectForSmiLayout(props, kPropsCount);
+
   layout_descriptor =
       TestLayoutDescriptorAppend(isolate, 0, props, kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
@@ -713,11 +821,12 @@ TEST(LayoutDescriptorAppend) {
       TestLayoutDescriptorAppend(isolate, 13, props, kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
 
-  layout_descriptor =
-      TestLayoutDescriptorAppend(isolate, kBitsInSmiLayout, props, kPropsCount);
+  layout_descriptor = TestLayoutDescriptorAppend(
+      isolate, size_of_props_that_fit_in_object_for_smi_layout, props,
+      kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
 
-  layout_descriptor = TestLayoutDescriptorAppend(isolate, kBitsInSmiLayout * 2,
+  layout_descriptor = TestLayoutDescriptorAppend(isolate, kBitsInSmiLayout + 1,
                                                  props, kPropsCount);
   CHECK(layout_descriptor->IsSlowLayout());
 
@@ -725,7 +834,6 @@ TEST(LayoutDescriptorAppend) {
       TestLayoutDescriptorAppend(isolate, kPropsCount, props, kPropsCount);
   CHECK(layout_descriptor->IsSlowLayout());
 }
-
 
 TEST(LayoutDescriptorAppendAllDoubles) {
   CcTest::InitializeVM();
@@ -739,6 +847,11 @@ TEST(LayoutDescriptorAppendAllDoubles) {
     props[i] = PROP_DOUBLE;
   }
 
+  int size_of_props_that_fit_in_object_for_smi_layout =
+      GetSizeOfPropsThatFitInObjectForSmiLayout(props, kPropsCount);
+  int num_props_that_fit_in_object_for_smi_layout =
+      GetNumPropsThatFitInObjectForSmiLayout(props, kPropsCount);
+
   layout_descriptor =
       TestLayoutDescriptorAppend(isolate, 0, props, kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
@@ -747,12 +860,14 @@ TEST(LayoutDescriptorAppendAllDoubles) {
       TestLayoutDescriptorAppend(isolate, 13, props, kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
 
-  layout_descriptor =
-      TestLayoutDescriptorAppend(isolate, kBitsInSmiLayout, props, kPropsCount);
+  layout_descriptor = TestLayoutDescriptorAppend(
+      isolate, size_of_props_that_fit_in_object_for_smi_layout, props,
+      kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
 
-  layout_descriptor = TestLayoutDescriptorAppend(isolate, kBitsInSmiLayout + 1,
-                                                 props, kPropsCount);
+  layout_descriptor = TestLayoutDescriptorAppend(
+      isolate, size_of_props_that_fit_in_object_for_smi_layout + 1, props,
+      kPropsCount);
   CHECK(layout_descriptor->IsSlowLayout());
 
   layout_descriptor = TestLayoutDescriptorAppend(isolate, kBitsInSmiLayout * 2,
@@ -765,21 +880,25 @@ TEST(LayoutDescriptorAppendAllDoubles) {
 
   {
     // Ensure layout descriptor switches into slow mode at the right moment.
-    layout_descriptor = TestLayoutDescriptorAppend(isolate, kPropsCount, props,
-                                                   kBitsInSmiLayout);
+    layout_descriptor = TestLayoutDescriptorAppend(
+        isolate, kPropsCount * kDoubleSlotWidth, props,
+        num_props_that_fit_in_object_for_smi_layout);
     CHECK(!layout_descriptor->IsSlowLayout());
 
-    layout_descriptor = TestLayoutDescriptorAppend(isolate, kPropsCount, props,
-                                                   kBitsInSmiLayout + 1);
+    layout_descriptor = TestLayoutDescriptorAppend(
+        isolate, kPropsCount * kDoubleSlotWidth, props,
+        num_props_that_fit_in_object_for_smi_layout + 1);
     CHECK(layout_descriptor->IsSlowLayout());
   }
 }
 
-
 static Handle<LayoutDescriptor> TestLayoutDescriptorAppendIfFastOrUseFull(
-    Isolate* isolate, int inobject_properties,
-    Handle<DescriptorArray> descriptors, int number_of_descriptors) {
-  Handle<Map> initial_map = Map::Create(isolate, inobject_properties);
+    Isolate* isolate, int inobject_field_slots, TestPropertyKind props[],
+    int number_of_descriptors) {
+  Handle<Map> initial_map = Map::Create(isolate, inobject_field_slots);
+
+  Handle<DescriptorArray> descriptors = CreateDescriptorArray(
+      isolate, props, number_of_descriptors, inobject_field_slots);
 
   Handle<LayoutDescriptor> full_layout_descriptor = LayoutDescriptor::New(
       isolate, initial_map, descriptors, descriptors->number_of_descriptors());
@@ -823,10 +942,11 @@ static Handle<LayoutDescriptor> TestLayoutDescriptorAppendIfFastOrUseFull(
       CHECK(!switched_to_slow_mode);
       if (details.location() == kField) {
         nof++;
-        int field_index = details.field_index();
-        int field_width_in_words = details.field_width_in_words();
+        int field_index = details.field_slot_index();
+        int field_width_in_words =
+            details.field_width_in_words(inobject_field_slots);
 
-        bool is_inobject = field_index < map->GetInObjectProperties();
+        bool is_inobject = field_index < map->TotalInObjectFieldSlots();
         for (int bit = 0; bit < field_width_in_words; bit++) {
           CHECK_EQ(is_inobject && details.representation().IsDouble(),
                    !layout_desc.IsTagged(field_index + bit));
@@ -843,7 +963,6 @@ static Handle<LayoutDescriptor> TestLayoutDescriptorAppendIfFastOrUseFull(
   return layout_descriptor;
 }
 
-
 TEST(LayoutDescriptorAppendIfFastOrUseFull) {
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -855,30 +974,29 @@ TEST(LayoutDescriptorAppendIfFastOrUseFull) {
   for (int i = 0; i < kPropsCount; i++) {
     props[i] = static_cast<TestPropertyKind>(i % PROP_KIND_NUMBER);
   }
-  Handle<DescriptorArray> descriptors =
-      CreateDescriptorArray(isolate, props, kPropsCount);
+  int props_that_fit_in_object_for_smi_layout =
+      GetNumPropsThatFitInObjectForSmiLayout(props, kPropsCount);
 
-  layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-      isolate, 0, descriptors, kPropsCount);
+  layout_descriptor =
+      TestLayoutDescriptorAppendIfFastOrUseFull(isolate, 0, props, kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
 
   layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-      isolate, 13, descriptors, kPropsCount);
+      isolate, 13, props, kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
 
   layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-      isolate, kBitsInSmiLayout, descriptors, kPropsCount);
+      isolate, props_that_fit_in_object_for_smi_layout, props, kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
 
   layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-      isolate, kBitsInSmiLayout * 2, descriptors, kPropsCount);
+      isolate, props_that_fit_in_object_for_smi_layout + 1, props, kPropsCount);
   CHECK(layout_descriptor->IsSlowLayout());
 
   layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-      isolate, kPropsCount, descriptors, kPropsCount);
+      isolate, kPropsCount, props, kPropsCount);
   CHECK(layout_descriptor->IsSlowLayout());
 }
-
 
 TEST(LayoutDescriptorAppendIfFastOrUseFullAllDoubles) {
   CcTest::InitializeVM();
@@ -891,45 +1009,46 @@ TEST(LayoutDescriptorAppendIfFastOrUseFullAllDoubles) {
   for (int i = 0; i < kPropsCount; i++) {
     props[i] = PROP_DOUBLE;
   }
-  Handle<DescriptorArray> descriptors =
-      CreateDescriptorArray(isolate, props, kPropsCount);
+  int props_that_fit_in_object_for_smi_layout =
+      GetNumPropsThatFitInObjectForSmiLayout(props, kPropsCount);
 
-  layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-      isolate, 0, descriptors, kPropsCount);
+  layout_descriptor =
+      TestLayoutDescriptorAppendIfFastOrUseFull(isolate, 0, props, kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
 
   layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-      isolate, 13, descriptors, kPropsCount);
+      isolate, 13, props, kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
 
   layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-      isolate, kBitsInSmiLayout, descriptors, kPropsCount);
+      isolate, kBitsInSmiLayout, props, kPropsCount);
   CHECK(!layout_descriptor->IsSlowLayout());
 
   layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-      isolate, kBitsInSmiLayout + 1, descriptors, kPropsCount);
+      isolate, kBitsInSmiLayout + kDoubleSlotWidth, props, kPropsCount);
   CHECK(layout_descriptor->IsSlowLayout());
 
   layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-      isolate, kBitsInSmiLayout * 2, descriptors, kPropsCount);
+      isolate, kBitsInSmiLayout * 2, props, kPropsCount);
   CHECK(layout_descriptor->IsSlowLayout());
 
   layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-      isolate, kPropsCount, descriptors, kPropsCount);
+      isolate, kPropsCount, props, kPropsCount);
   CHECK(layout_descriptor->IsSlowLayout());
 
   {
     // Ensure layout descriptor switches into slow mode at the right moment.
     layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-        isolate, kPropsCount, descriptors, kBitsInSmiLayout);
+        isolate, kPropsCount * kDoubleSlotWidth, props,
+        props_that_fit_in_object_for_smi_layout);
     CHECK(!layout_descriptor->IsSlowLayout());
 
     layout_descriptor = TestLayoutDescriptorAppendIfFastOrUseFull(
-        isolate, kPropsCount, descriptors, kBitsInSmiLayout + 1);
+        isolate, kPropsCount * kDoubleSlotWidth, props,
+        props_that_fit_in_object_for_smi_layout + 1);
     CHECK(layout_descriptor->IsSlowLayout());
   }
 }
-
 
 TEST(Regress436816) {
   ManualGCScope manual_gc_scope;
@@ -947,10 +1066,12 @@ TEST(Regress436816) {
   for (int i = 0; i < kPropsCount; i++) {
     props[i] = PROP_DOUBLE;
   }
-  Handle<DescriptorArray> descriptors =
-      CreateDescriptorArray(isolate, props, kPropsCount);
+  int in_object_field_slots = kPropsCount * kDoubleSlotWidth;
 
-  Handle<Map> map = Map::Create(isolate, kPropsCount);
+  Handle<DescriptorArray> descriptors =
+      CreateDescriptorArray(isolate, props, kPropsCount, in_object_field_slots);
+
+  Handle<Map> map = Map::Create(isolate, in_object_field_slots);
   Handle<LayoutDescriptor> layout_descriptor =
       LayoutDescriptor::New(isolate, map, descriptors, kPropsCount);
   map->InitializeDescriptors(isolate, *descriptors, *layout_descriptor);
@@ -962,7 +1083,14 @@ TEST(Regress436816) {
   HeapObject fake_object = HeapObject::FromAddress(fake_address);
   CHECK(fake_object.IsHeapObject());
 
+#if TAGGED_SIZE_8_BYTES
   uint64_t boom_value = bit_cast<uint64_t>(fake_object);
+#else
+  uint64_t boom_value = static_cast<uint64_t>(bit_cast<uint32_t>(fake_object))
+                            << 32 |
+                        bit_cast<uint32_t>(fake_object);
+#endif
+
   for (InternalIndex i : InternalIndex::Range(kPropsCount)) {
     FieldIndex index = FieldIndex::ForDescriptor(*map, i);
     CHECK(map->IsUnboxedDoubleField(index));
@@ -980,7 +1108,6 @@ TEST(Regress436816) {
   // Trigger GCs and heap verification.
   CcTest::CollectAllGarbage();
 }
-
 
 TEST(DescriptorArrayTrimming) {
   ManualGCScope manual_gc_scope;
@@ -1073,7 +1200,6 @@ TEST(DescriptorArrayTrimming) {
   CHECK(map->layout_descriptor().IsSlowLayout());
 }
 
-
 TEST(DoScavenge) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
@@ -1118,7 +1244,13 @@ TEST(DoScavenge) {
   // Construct a double value that looks like a pointer to the new space object
   // and store it into the obj.
   Address fake_object = temp->ptr() + kSystemPointerSize;
+#if TAGGED_SIZE_8_BYTES
   double boom_value = bit_cast<double>(fake_object);
+#else
+  double boom_value = bit_cast<double>(
+      static_cast<uint64_t>(bit_cast<uint32_t>(fake_object)) << 32 |
+      bit_cast<uint32_t>(fake_object));
+#endif
 
   FieldIndex field_index =
       FieldIndex::ForDescriptor(obj->map(), InternalIndex(0));
@@ -1133,7 +1265,6 @@ TEST(DoScavenge) {
 
   CHECK_EQ(boom_value, GetDoubleFieldValue(*obj, field_index));
 }
-
 
 TEST(DoScavengeWithIncrementalWriteBarrier) {
   if (FLAG_never_compact || !FLAG_incremental_marking) return;
@@ -1153,14 +1284,17 @@ TEST(DoScavengeWithIncrementalWriteBarrier) {
 
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<Map> map = Map::Create(isolate, 10);
+  map->instance_descriptors().Print();
   map = Map::CopyWithField(isolate, map, MakeName("prop", 0), any_type, NONE,
                            PropertyConstness::kMutable,
                            Representation::Double(), INSERT_TRANSITION)
             .ToHandleChecked();
+  map->instance_descriptors().Print();
   map = Map::CopyWithField(isolate, map, MakeName("prop", 1), any_type, NONE,
                            PropertyConstness::kMutable,
                            Representation::Tagged(), INSERT_TRANSITION)
             .ToHandleChecked();
+  map->instance_descriptors().Print();
 
   // Create |obj_value| in old space.
   Handle<HeapObject> obj_value;
@@ -1179,12 +1313,16 @@ TEST(DoScavengeWithIncrementalWriteBarrier) {
       factory->NewJSObjectFromMap(map, AllocationType::kYoung);
 
   Handle<HeapNumber> heap_number = factory->NewHeapNumber(42.5);
+  obj->Print();
   WriteToField(*obj, 0, *heap_number);
+  obj->Print();
   WriteToField(*obj, 1, *obj_value);
+  obj->Print();
 
   {
     // Ensure the object is properly set up.
     FieldIndex field_index = FieldIndex::ForDescriptor(*map, InternalIndex(0));
+    PrintF("read from %d\n", field_index.offset());
     CHECK(field_index.is_inobject() && field_index.is_double());
     CHECK_EQ(FLAG_unbox_double_fields, map->IsUnboxedDoubleField(field_index));
     CHECK_EQ(42.5, GetDoubleFieldValue(*obj, field_index));
@@ -1231,12 +1369,13 @@ TEST(DoScavengeWithIncrementalWriteBarrier) {
   CHECK_EQ(*obj_value, obj->RawFastPropertyAt(field_index));
 }
 
-
 static void TestLayoutDescriptorHelper(Isolate* isolate,
-                                       int inobject_properties,
-                                       Handle<DescriptorArray> descriptors,
+                                       int inobject_field_slots,
+                                       TestPropertyKind props[],
                                        int number_of_descriptors) {
-  Handle<Map> map = Map::Create(isolate, inobject_properties);
+  Handle<Map> map = Map::Create(isolate, inobject_field_slots);
+  Handle<DescriptorArray> descriptors = CreateDescriptorArray(
+      isolate, props, number_of_descriptors, inobject_field_slots);
 
   Handle<LayoutDescriptor> layout_descriptor = LayoutDescriptor::New(
       isolate, map, descriptors, descriptors->number_of_descriptors());
@@ -1295,7 +1434,6 @@ static void TestLayoutDescriptorHelper(Isolate* isolate,
   CHECK_EQ(all_fields_tagged, helper.all_fields_tagged());
 }
 
-
 TEST(LayoutDescriptorHelperMixed) {
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -1307,22 +1445,25 @@ TEST(LayoutDescriptorHelperMixed) {
   for (int i = 0; i < kPropsCount; i++) {
     props[i] = static_cast<TestPropertyKind>(i % PROP_KIND_NUMBER);
   }
-  Handle<DescriptorArray> descriptors =
-      CreateDescriptorArray(isolate, props, kPropsCount);
+  int size_of_props_that_fit_in_object_for_smi_layout =
+      GetSizeOfPropsThatFitInObjectForSmiLayout(props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, 0, descriptors, kPropsCount);
+  TestLayoutDescriptorHelper(isolate, 0, props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, 13, descriptors, kPropsCount);
+  TestLayoutDescriptorHelper(isolate, 13, props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, kBitsInSmiLayout, descriptors,
-                             kPropsCount);
+  TestLayoutDescriptorHelper(isolate,
+                             size_of_props_that_fit_in_object_for_smi_layout,
+                             props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, kBitsInSmiLayout * 2, descriptors,
-                             kPropsCount);
+  TestLayoutDescriptorHelper(
+      isolate, size_of_props_that_fit_in_object_for_smi_layout + 1, props,
+      kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, kPropsCount, descriptors, kPropsCount);
+  TestLayoutDescriptorHelper(isolate, kBitsInSmiLayout * 2, props, kPropsCount);
+
+  TestLayoutDescriptorHelper(isolate, kPropsCount, props, kPropsCount);
 }
-
 
 TEST(LayoutDescriptorHelperAllTagged) {
   CcTest::InitializeVM();
@@ -1335,22 +1476,27 @@ TEST(LayoutDescriptorHelperAllTagged) {
   for (int i = 0; i < kPropsCount; i++) {
     props[i] = PROP_TAGGED;
   }
-  Handle<DescriptorArray> descriptors =
-      CreateDescriptorArray(isolate, props, kPropsCount);
+  int size_of_props_that_fit_in_object_for_smi_layout =
+      GetSizeOfPropsThatFitInObjectForSmiLayout(props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, 0, descriptors, kPropsCount);
+  TestLayoutDescriptorHelper(isolate, 0, props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, 13, descriptors, kPropsCount);
+  TestLayoutDescriptorHelper(isolate, 13, props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, kBitsInSmiLayout, descriptors,
-                             kPropsCount);
+  TestLayoutDescriptorHelper(isolate,
+                             size_of_props_that_fit_in_object_for_smi_layout,
+                             props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, kBitsInSmiLayout * 2, descriptors,
-                             kPropsCount);
+  TestLayoutDescriptorHelper(
+      isolate, size_of_props_that_fit_in_object_for_smi_layout + 1, props,
+      kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, kPropsCount, descriptors, kPropsCount);
+  TestLayoutDescriptorHelper(isolate, kBitsInSmiLayout, props, kPropsCount);
+
+  TestLayoutDescriptorHelper(isolate, kBitsInSmiLayout * 2, props, kPropsCount);
+
+  TestLayoutDescriptorHelper(isolate, kPropsCount, props, kPropsCount);
 }
-
 
 TEST(LayoutDescriptorHelperAllDoubles) {
   CcTest::InitializeVM();
@@ -1363,22 +1509,27 @@ TEST(LayoutDescriptorHelperAllDoubles) {
   for (int i = 0; i < kPropsCount; i++) {
     props[i] = PROP_DOUBLE;
   }
-  Handle<DescriptorArray> descriptors =
-      CreateDescriptorArray(isolate, props, kPropsCount);
+  int size_of_props_that_fit_in_object_for_smi_layout =
+      GetSizeOfPropsThatFitInObjectForSmiLayout(props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, 0, descriptors, kPropsCount);
+  TestLayoutDescriptorHelper(isolate, 0, props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, 13, descriptors, kPropsCount);
+  TestLayoutDescriptorHelper(isolate, 13, props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, kBitsInSmiLayout, descriptors,
-                             kPropsCount);
+  TestLayoutDescriptorHelper(isolate,
+                             size_of_props_that_fit_in_object_for_smi_layout,
+                             props, kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, kBitsInSmiLayout * 2, descriptors,
-                             kPropsCount);
+  TestLayoutDescriptorHelper(
+      isolate, size_of_props_that_fit_in_object_for_smi_layout + 1, props,
+      kPropsCount);
 
-  TestLayoutDescriptorHelper(isolate, kPropsCount, descriptors, kPropsCount);
+  TestLayoutDescriptorHelper(isolate, kBitsInSmiLayout, props, kPropsCount);
+
+  TestLayoutDescriptorHelper(isolate, kBitsInSmiLayout * 2, props, kPropsCount);
+
+  TestLayoutDescriptorHelper(isolate, kPropsCount, props, kPropsCount);
 }
-
 
 TEST(LayoutDescriptorSharing) {
   CcTest::InitializeVM();
@@ -1475,7 +1626,13 @@ static void TestWriteBarrier(Handle<Map> map, Handle<Map> new_map,
   JSObject::MigrateToMap(isolate, obj, new_map);
 
   Address fake_object = obj_value->ptr() + kTaggedSize;
+#if TAGGED_SIZE_8_BYTES
   uint64_t boom_value = bit_cast<uint64_t>(fake_object);
+#else
+  uint64_t boom_value = static_cast<uint64_t>(bit_cast<uint32_t>(fake_object))
+                            << 32 |
+                        bit_cast<uint32_t>(fake_object);
+#endif
 
   FieldIndex double_field_index =
       FieldIndex::ForDescriptor(*new_map, double_descriptor);
@@ -1492,7 +1649,6 @@ static void TestWriteBarrier(Handle<Map> map, Handle<Map> new_map,
   }
   CHECK_EQ(boom_value, obj->RawFastDoublePropertyAsBitsAt(double_field_index));
 }
-
 static void TestIncrementalWriteBarrier(Handle<Map> map, Handle<Map> new_map,
                                         InternalIndex tagged_descriptor,
                                         InternalIndex double_descriptor,
@@ -1625,16 +1781,13 @@ TEST(WriteBarrierObjectShiftFieldsRight) {
   TestWriteBarrierObjectShiftFieldsRight(OLD_TO_NEW_WRITE_BARRIER);
 }
 
-
 TEST(IncrementalWriteBarrierObjectShiftFieldsRight) {
   TestWriteBarrierObjectShiftFieldsRight(OLD_TO_OLD_WRITE_BARRIER);
 }
 
-
 // TODO(ishell): add respective tests for property kind reconfiguring from
 // accessor field to double, once accessor fields are supported by
 // Map::ReconfigureProperty().
-
 
 // TODO(ishell): add respective tests for fast property removal case once
 // Map::ReconfigureProperty() supports that.

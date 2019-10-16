@@ -227,7 +227,7 @@ MapUpdater::State MapUpdater::TryReconfigureToDataFieldInplace() {
   if (FLAG_trace_generalization) {
     old_map_->PrintGeneralization(
         isolate_, stdout, "uninitialized field", modified_descriptor_, old_nof_,
-        old_nof_, false, old_representation, new_representation_,
+        old_nof_, false, false, old_representation, new_representation_,
         old_details.constness(), new_constness_,
         handle(old_descriptors_->GetFieldType(modified_descriptor_), isolate_),
         MaybeHandle<Object>(), new_field_type_, MaybeHandle<Object>());
@@ -500,6 +500,11 @@ Handle<DescriptorArray> MapUpdater::BuildDescriptorArray() {
   Handle<DescriptorArray> target_descriptors(
       target_map_->instance_descriptors(), isolate_);
 
+  DCHECK_EQ(old_map_->TotalInObjectFieldSlots(),
+            target_map_->TotalInObjectFieldSlots());
+  DCHECK_EQ(root_map_->TotalInObjectFieldSlots(),
+            target_map_->TotalInObjectFieldSlots());
+
   // Allocate a new descriptor array large enough to hold the required
   // descriptors, with minimally the exact same size as the old descriptor
   // array.
@@ -516,6 +521,7 @@ Handle<DescriptorArray> MapUpdater::BuildDescriptorArray() {
   DCHECK(new_descriptors->number_of_descriptors() == old_nof_);
 
   int root_nof = root_map_->NumberOfOwnDescriptors();
+  int in_object_field_slots = root_map_->TotalInObjectFieldSlots();
 
   // Given that we passed root modification check in FindRootMap() so
   // the root descriptors are either not modified at all or already more
@@ -525,7 +531,7 @@ Handle<DescriptorArray> MapUpdater::BuildDescriptorArray() {
   for (InternalIndex i : InternalIndex::Range(root_nof)) {
     PropertyDetails old_details = old_descriptors_->GetDetails(i);
     if (old_details.location() == kField) {
-      current_offset += old_details.field_width_in_words();
+      current_offset += old_details.field_width_in_words(in_object_field_slots);
     }
     Descriptor d(handle(GetKey(i), isolate_),
                  MaybeObjectHandle(old_descriptors_->GetValue(i), isolate_),
@@ -585,6 +591,12 @@ Handle<DescriptorArray> MapUpdater::BuildDescriptorArray() {
           Map::WrapFieldType(isolate_, next_field_type));
       Descriptor d;
       if (next_kind == kData) {
+        // Skip an in-object field slot if we can't fit a double in it.
+        if (kDoubleSize > kTaggedSize && FLAG_unbox_double_fields &&
+            next_representation.IsDouble() &&
+            current_offset == in_object_field_slots - 1) {
+          current_offset++;
+        }
         d = Descriptor::DataField(key, current_offset, next_attributes,
                                   next_constness, next_representation,
                                   wrapped_type);
@@ -592,7 +604,8 @@ Handle<DescriptorArray> MapUpdater::BuildDescriptorArray() {
         // TODO(ishell): mutable accessors are not implemented yet.
         UNIMPLEMENTED();
       }
-      current_offset += d.GetDetails().field_width_in_words();
+      current_offset +=
+          d.GetDetails().field_width_in_words(in_object_field_slots);
       new_descriptors->Set(i, &d);
     } else {
       DCHECK_EQ(kDescriptor, next_location);
@@ -633,6 +646,13 @@ Handle<DescriptorArray> MapUpdater::BuildDescriptorArray() {
           Map::WrapFieldType(isolate_, next_field_type));
       Descriptor d;
       if (next_kind == kData) {
+        // Skip an in-object field slot if we can't fit a double in it.
+        if (kDoubleSize > kTaggedSize && FLAG_unbox_double_fields &&
+            next_representation.size_in_words() > 1 &&
+            current_offset == in_object_field_slots - 1) {
+          DCHECK_EQ(next_representation.size_in_words(), 2);
+          current_offset++;
+        }
         d = Descriptor::DataField(key, current_offset, next_attributes,
                                   next_constness, next_representation,
                                   wrapped_type);
@@ -640,7 +660,8 @@ Handle<DescriptorArray> MapUpdater::BuildDescriptorArray() {
         // TODO(ishell): mutable accessors are not implemented yet.
         UNIMPLEMENTED();
       }
-      current_offset += d.GetDetails().field_width_in_words();
+      current_offset +=
+          d.GetDetails().field_width_in_words(in_object_field_slots);
       new_descriptors->Set(i, &d);
     } else {
       DCHECK_EQ(kDescriptor, next_location);
@@ -728,6 +749,12 @@ MapUpdater::State MapUpdater::ConstructNewMap() {
 
   old_map_->NotifyLeafMapLayoutChange(isolate_);
 
+  Handle<LayoutDescriptor> new_layout_descriptor =
+      LayoutDescriptor::New(isolate_, split_map, new_descriptors, old_nof_);
+
+  Handle<Map> new_map = Map::AddMissingTransitions(
+      isolate_, split_map, new_descriptors, new_layout_descriptor);
+
   if (FLAG_trace_generalization && modified_descriptor_.is_found()) {
     PropertyDetails old_details =
         old_descriptors_->GetDetails(modified_descriptor_);
@@ -755,16 +782,12 @@ MapUpdater::State MapUpdater::ConstructNewMap() {
     old_map_->PrintGeneralization(
         isolate_, stdout, "", modified_descriptor_, split_nof, old_nof_,
         old_details.location() == kDescriptor && new_location_ == kField,
+        !old_map_->HasOutOfObjectProperties() &&
+            new_map->HasOutOfObjectProperties(),
         old_details.representation(), new_details.representation(),
         old_details.constness(), new_details.constness(), old_field_type,
         old_value, new_field_type, new_value);
   }
-
-  Handle<LayoutDescriptor> new_layout_descriptor =
-      LayoutDescriptor::New(isolate_, split_map, new_descriptors, old_nof_);
-
-  Handle<Map> new_map = Map::AddMissingTransitions(
-      isolate_, split_map, new_descriptors, new_layout_descriptor);
 
   // Deprecated part of the transition tree is no longer reachable, so replace
   // current instance descriptors in the "survived" part of the tree with

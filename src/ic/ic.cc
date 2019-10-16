@@ -2543,12 +2543,13 @@ static Handle<Map> FastCloneObjectMap(Isolate* isolate, Handle<Map> source_map,
   Handle<Map> initial_map(constructor->initial_map(), isolate);
   Handle<Map> map = initial_map;
 
-  if (source_map->IsJSObjectMap() && source_map->GetInObjectProperties() !=
-                                         initial_map->GetInObjectProperties()) {
-    int inobject_properties = source_map->GetInObjectProperties();
+  if (source_map->IsJSObjectMap() &&
+      source_map->TotalInObjectFieldSlots() !=
+          initial_map->TotalInObjectFieldSlots()) {
+    int inobject_properties = source_map->TotalInObjectFieldSlots();
     int instance_size =
         JSObject::kHeaderSize + kTaggedSize * inobject_properties;
-    int unused = source_map->UnusedInObjectProperties();
+    int unused = source_map->UnusedInObjectFieldSlots();
     DCHECK(instance_size <= JSObject::kMaxInstanceSize);
     map = Map::CopyInitialMap(isolate, map, instance_size, inobject_properties,
                               unused);
@@ -2579,7 +2580,7 @@ static Handle<Map> FastCloneObjectMap(Isolate* isolate, Handle<Map> source_map,
   Handle<LayoutDescriptor> layout =
       LayoutDescriptor::New(isolate, map, descriptors, size);
   map->InitializeDescriptors(isolate, *descriptors, *layout);
-  map->CopyUnusedPropertyFieldsAdjustedForInstanceSize(*source_map);
+  map->CopyUnusedFieldSlotsAdjustedForInstanceSize(*source_map);
 
   // Update bitfields
   map->set_may_have_interesting_symbols(

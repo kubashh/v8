@@ -172,7 +172,7 @@ class V8_EXPORT_PRIVATE Factory {
   // Allocates a fixed array for name-value pairs of boilerplate properties and
   // calculates the number of properties we need to store in the backing store.
   Handle<ObjectBoilerplateDescription> NewObjectBoilerplateDescription(
-      int boilerplate, int all_properties, int index_keys, bool has_seen_proto);
+      int boilerplate, int all_properties, int backing_store_size);
 
   // Allocate a new uninitialized fixed double array.
   // The function returns a pre-allocated empty fixed array for length = 0,
@@ -871,7 +871,8 @@ class V8_EXPORT_PRIVATE Factory {
   // Return a map for given number of properties using the map cache in the
   // native context.
   Handle<Map> ObjectLiteralMapFromCache(Handle<NativeContext> native_context,
-                                        int number_of_properties);
+                                        int number_of_properties,
+                                        int preferred_backing_store_size);
 
   Handle<LoadHandler> NewLoadHandler(
       int data_count, AllocationType allocation = AllocationType::kOld);

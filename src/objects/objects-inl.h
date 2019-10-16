@@ -59,11 +59,12 @@ Smi PropertyDetails::AsSmi() const {
   return Smi::FromInt(value >> 1);
 }
 
-int PropertyDetails::field_width_in_words() const {
+int PropertyDetails::field_width_in_words(int in_object_field_slots) const {
   DCHECK_EQ(location(), kField);
   if (!FLAG_unbox_double_fields) return 1;
   if (kDoubleSize == kTaggedSize) return 1;
-  return representation().IsDouble() ? kDoubleSize / kTaggedSize : 1;
+  if (field_slot_index() >= in_object_field_slots) return 1;
+  return representation().size_in_words();
 }
 
 DEF_GETTER(HeapObject, IsSloppyArgumentsElements, bool) {
@@ -577,7 +578,9 @@ ElementsKind Object::OptimalElementsKind(Isolate* isolate) const {
 }
 
 bool Object::FitsRepresentation(Representation representation) {
-  if (FLAG_track_fields && representation.IsSmi()) {
+  if (IsUninitialized()) {
+    return !representation.IsNone();
+  } else if (FLAG_track_fields && representation.IsSmi()) {
     return IsSmi();
   } else if (FLAG_track_double_fields && representation.IsDouble()) {
     return IsNumber();

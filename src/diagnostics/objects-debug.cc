@@ -571,18 +571,18 @@ void JSObject::JSObjectVerify(Isolate* isolate) {
 
   CHECK_IMPLIES(HasSloppyArgumentsElements(), IsJSArgumentsObject());
   if (HasFastProperties()) {
-    int actual_unused_property_fields = map().GetInObjectProperties() +
-                                        property_array().length() -
-                                        map().NextFreePropertyIndex();
-    if (map().UnusedPropertyFields() != actual_unused_property_fields) {
+    int actual_unused_field_slots = map().TotalInObjectFieldSlots() +
+                                    property_array().length() -
+                                    map().TotalUsedFieldSlots();
+    if (map().UnusedFieldSlots() != actual_unused_field_slots) {
       // There are two reasons why this can happen:
       // - in the middle of StoreTransitionStub when the new extended backing
       //   store is already set into the object and the allocation of the
       //   HeapNumber triggers GC while the map isn't updated yet.
       // - deletion of the last property can leave additional backing store
       //   capacity behind.
-      CHECK_GT(actual_unused_property_fields, map().UnusedPropertyFields());
-      int delta = actual_unused_property_fields - map().UnusedPropertyFields();
+      CHECK_GT(actual_unused_field_slots, map().UnusedFieldSlots());
+      int delta = actual_unused_field_slots - map().UnusedFieldSlots();
       CHECK_EQ(0, delta % JSObject::kFieldsAdded);
     }
     DescriptorArray descriptors = map().instance_descriptors();
@@ -671,6 +671,22 @@ void Map::MapVerify(Isolate* isolate) {
       CHECK(!descriptors.GetKey(i).IsInterestingSymbol());
     }
   }
+  if (IsJSObjectMap() && !is_dictionary_map()) {
+    CHECK_EQ(TotalUsedFieldSlots() + UnusedFieldSlots(), TotalFieldSlots());
+    CHECK_EQ(UsedInObjectFieldSlots() + UnusedInObjectFieldSlots(),
+             TotalInObjectFieldSlots());
+    CHECK_EQ(UsedOutOfObjectFieldSlots() + UnusedOutOfObjectFieldSlots(),
+             TotalOutOfObjectFieldSlots());
+
+    CHECK_EQ(UsedInObjectFieldSlots() + UsedOutOfObjectFieldSlots(),
+             TotalUsedFieldSlots());
+    CHECK_EQ(UnusedInObjectFieldSlots() + UnusedOutOfObjectFieldSlots(),
+             UnusedFieldSlots());
+    CHECK_EQ(TotalInObjectFieldSlots() + TotalOutOfObjectFieldSlots(),
+             TotalFieldSlots());
+
+    // CHECK_EQ(TotalOutOfObjectFieldSlots() % JSObject::kFieldsAdded, 0);
+  }
   CHECK_IMPLIES(has_named_interceptor(), may_have_interesting_symbols());
   CHECK_IMPLIES(is_dictionary_map(), may_have_interesting_symbols());
   CHECK_IMPLIES(is_access_check_needed(), may_have_interesting_symbols());
@@ -691,7 +707,7 @@ void Map::DictionaryMapVerify(Isolate* isolate) {
   CHECK_EQ(kInvalidEnumCacheSentinel, EnumLength());
   CHECK_EQ(ReadOnlyRoots(isolate).empty_descriptor_array(),
            instance_descriptors());
-  CHECK_EQ(0, UnusedPropertyFields());
+  CHECK_EQ(0, UnusedFieldSlots());
   CHECK_EQ(Map::GetVisitorId(*this), visitor_id());
 }
 
@@ -801,7 +817,7 @@ void DescriptorArray::DescriptorArrayVerify(Isolate* isolate) {
 
     // Check that properties with private symbols names are non-enumerable, and
     // that fields are in order.
-    int expected_field_index = 0;
+    int previous_field_slot = -1;
     for (InternalIndex descriptor :
          InternalIndex::Range(number_of_descriptors())) {
       Object key = *(GetDescriptorSlot(descriptor.as_int()) + kEntryKeyIndex);
@@ -815,13 +831,13 @@ void DescriptorArray::DescriptorArrayVerify(Isolate* isolate) {
       MaybeObject value = GetValue(descriptor);
       HeapObject heap_object;
       if (details.location() == kField) {
-        CHECK_EQ(details.field_index(), expected_field_index);
+        CHECK_GT(details.field_slot_index(), previous_field_slot);
+        previous_field_slot = details.field_slot_index();
         CHECK(
             value == MaybeObject::FromObject(FieldType::None()) ||
             value == MaybeObject::FromObject(FieldType::Any()) ||
             value->IsCleared() ||
             (value->GetHeapObjectIfWeak(&heap_object) && heap_object.IsMap()));
-        expected_field_index += details.field_width_in_words();
       } else {
         CHECK(!value->IsWeakOrCleared());
         CHECK(!value->cast<Object>().IsMap());
@@ -1788,8 +1804,8 @@ void JSObject::IncrementSpillStatistics(Isolate* isolate,
   // Named properties
   if (HasFastProperties()) {
     info->number_of_objects_with_fast_properties_++;
-    info->number_of_fast_used_fields_ += map().NextFreePropertyIndex();
-    info->number_of_fast_unused_fields_ += map().UnusedPropertyFields();
+    info->number_of_fast_used_fields_ += map().TotalUsedFieldSlots();
+    info->number_of_fast_unused_fields_ += map().UnusedFieldSlots();
   } else if (IsJSGlobalObject()) {
     GlobalDictionary dict = JSGlobalObject::cast(*this).global_dictionary();
     info->number_of_slow_used_properties_ += dict.NumberOfElements();

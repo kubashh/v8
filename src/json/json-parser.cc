@@ -408,7 +408,7 @@ Handle<Object> JsonParser<Char>::BuildJsonObject(
   int named_length = length - cont.elements;
 
   Handle<Map> initial_map = factory()->ObjectLiteralMapFromCache(
-      isolate_->native_context(), named_length);
+      isolate_->native_context(), named_length, named_length);
 
   Handle<Map> map = initial_map;
 

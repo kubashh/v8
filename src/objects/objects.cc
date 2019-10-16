@@ -2380,6 +2380,7 @@ bool HeapObject::IsExternal(Isolate* isolate) const {
 
 void DescriptorArray::GeneralizeAllFields() {
   int length = number_of_descriptors();
+  int slot_index = 0;
   for (InternalIndex i : InternalIndex::Range(length)) {
     PropertyDetails details = GetDetails(i);
     details = details.CopyWithRepresentation(Representation::Tagged());
@@ -2387,6 +2388,9 @@ void DescriptorArray::GeneralizeAllFields() {
       DCHECK_EQ(kData, details.kind());
       details = details.CopyWithConstness(PropertyConstness::kMutable);
       SetValue(i, MaybeObject::FromObject(FieldType::Any()));
+      if (FLAG_unbox_double_fields && kDoubleSize > kTaggedSize) {
+        details = details.CopyWithSlotIndex(slot_index++);
+      }
     }
     SetDetails(i, details);
   }
@@ -3788,7 +3792,7 @@ Handle<DescriptorArray> DescriptorArray::CopyForFastObjectClone(
     // details did not contain DONT_ENUM.
     PropertyDetails new_details(kData, NONE, details.location(),
                                 details.constness(), new_representation,
-                                details.field_index());
+                                details.field_slot_index());
 
     descriptors->Set(i, key, type, new_details);
   }

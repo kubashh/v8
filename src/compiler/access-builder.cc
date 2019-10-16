@@ -111,7 +111,7 @@ FieldAccess AccessBuilder::ForJSObjectElements() {
 // static
 FieldAccess AccessBuilder::ForJSObjectInObjectProperty(const MapRef& map,
                                                        int index) {
-  int const offset = map.GetInObjectPropertyOffset(index);
+  int const offset = map.GetInObjectFieldSlotOffset(index);
   FieldAccess access = {
       kTaggedBase,         offset,
       MaybeHandle<Name>(), MaybeHandle<Map>(),
@@ -488,6 +488,26 @@ FieldAccess AccessBuilder::ForJSIteratorResultDone() {
 FieldAccess AccessBuilder::ForJSIteratorResultValue() {
   FieldAccess access = {
       kTaggedBase,         JSIteratorResult::kValueOffset,
+      MaybeHandle<Name>(), MaybeHandle<Map>(),
+      Type::NonInternal(), MachineType::TypeCompressedTagged(),
+      kFullWriteBarrier};
+  return access;
+}
+
+// static
+FieldAccess AccessBuilder::ForJSIteratorResultPadding1() {
+  FieldAccess access = {
+      kTaggedBase,         JSIteratorResult::kPaddingOffset,
+      MaybeHandle<Name>(), MaybeHandle<Map>(),
+      Type::NonInternal(), MachineType::TypeCompressedTagged(),
+      kFullWriteBarrier};
+  return access;
+}
+
+// static
+FieldAccess AccessBuilder::ForJSIteratorResultPadding2() {
+  FieldAccess access = {
+      kTaggedBase,         JSIteratorResult::kPaddingOffset + kTaggedSize,
       MaybeHandle<Name>(), MaybeHandle<Map>(),
       Type::NonInternal(), MachineType::TypeCompressedTagged(),
       kFullWriteBarrier};

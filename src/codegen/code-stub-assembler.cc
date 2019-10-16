@@ -1812,13 +1812,13 @@ TNode<IntPtrT> CodeStubAssembler::LoadMapInstanceSizeInWords(
       map, Map::kInstanceSizeInWordsOffset, MachineType::Uint8()));
 }
 
-TNode<IntPtrT> CodeStubAssembler::LoadMapInobjectPropertiesStartInWords(
+TNode<IntPtrT> CodeStubAssembler::LoadMapInobjectFieldStorageStartInWords(
     SloppyTNode<Map> map) {
   CSA_SLOW_ASSERT(this, IsMap(map));
-  // See Map::GetInObjectPropertiesStartInWords() for details.
+  // See Map::GetInObjectFieldStorageStartInWords() for details.
   CSA_ASSERT(this, IsJSObjectMap(map));
   return ChangeInt32ToIntPtr(LoadObjectField(
-      map, Map::kInObjectPropertiesStartOrConstructorFunctionIndexOffset,
+      map, Map::kInObjectFieldStorageStartOrConstructorFunctionIndexOffset,
       MachineType::Uint8()));
 }
 
@@ -1828,7 +1828,7 @@ TNode<IntPtrT> CodeStubAssembler::LoadMapConstructorFunctionIndex(
   // See Map::GetConstructorFunctionIndex() for details.
   CSA_ASSERT(this, IsPrimitiveInstanceType(LoadMapInstanceType(map)));
   return ChangeInt32ToIntPtr(LoadObjectField(
-      map, Map::kInObjectPropertiesStartOrConstructorFunctionIndexOffset,
+      map, Map::kInObjectFieldStorageStartOrConstructorFunctionIndexOffset,
       MachineType::Uint8()));
 }
 
@@ -8944,13 +8944,13 @@ void CodeStubAssembler::LoadPropertyFromFastObject(
          &if_in_descriptor);
   BIND(&if_in_field);
   {
-    TNode<IntPtrT> field_index =
-        Signed(DecodeWordFromWord32<PropertyDetails::FieldIndexField>(details));
+    TNode<IntPtrT> field_index = Signed(
+        DecodeWordFromWord32<PropertyDetails::FieldSlotIndexField>(details));
     TNode<Uint32T> representation =
         DecodeWord32<PropertyDetails::RepresentationField>(details);
 
     field_index =
-        IntPtrAdd(field_index, LoadMapInobjectPropertiesStartInWords(map));
+        IntPtrAdd(field_index, LoadMapInobjectFieldStorageStartInWords(map));
     TNode<IntPtrT> instance_size_in_words = LoadMapInstanceSizeInWords(map);
 
     Label if_inobject(this), if_backing_store(this);
@@ -12880,6 +12880,15 @@ TNode<JSObject> CodeStubAssembler::AllocateJSIteratorResult(
                        RootIndex::kEmptyFixedArray);
   StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kValueOffset, value);
   StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kDoneOffset, done);
+  if (JSIteratorResult::kSize == 7 * kTaggedSize) {
+    StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kPaddingOffset,
+                                   UndefinedConstant());
+    StoreObjectFieldNoWriteBarrier(
+        result, JSIteratorResult::kPaddingOffset + kTaggedSize,
+        UndefinedConstant());
+  } else {
+    DCHECK_EQ(JSIteratorResult::kSize, 5 * kTaggedSize);
+  }
   return CAST(result);
 }
 
@@ -12914,6 +12923,15 @@ TNode<JSObject> CodeStubAssembler::AllocateJSIteratorResultForEntry(
   StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kValueOffset, array);
   StoreObjectFieldRoot(result, JSIteratorResult::kDoneOffset,
                        RootIndex::kFalseValue);
+  if (JSIteratorResult::kSize == 7 * kTaggedSize) {
+    StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kPaddingOffset,
+                                   UndefinedConstant());
+    StoreObjectFieldNoWriteBarrier(
+        result, JSIteratorResult::kPaddingOffset + kTaggedSize,
+        UndefinedConstant());
+  } else {
+    DCHECK_EQ(JSIteratorResult::kSize, 5 * kTaggedSize);
+  }
   return CAST(result);
 }
 

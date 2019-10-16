@@ -476,7 +476,7 @@ void FreeSpace::FreeSpacePrint(std::ostream& os) {  // NOLINT
 bool JSObject::PrintProperties(std::ostream& os) {  // NOLINT
   if (HasFastProperties()) {
     DescriptorArray descs = map().instance_descriptors();
-    int nof_inobject_properties = map().GetInObjectProperties();
+    int nof_inobject_properties = map().TotalInObjectFieldSlots();
     for (InternalIndex i :
          InternalIndex::Range(map().NumberOfOwnDescriptors())) {
       os << "\n    ";
@@ -500,10 +500,10 @@ bool JSObject::PrintProperties(std::ostream& os) {  // NOLINT
       os << " ";
       details.PrintAsFastTo(os, PropertyDetails::kForProperties);
       if (details.location() != kField) continue;
-      int field_index = details.field_index();
-      if (nof_inobject_properties <= field_index) {
-        field_index -= nof_inobject_properties;
-        os << " properties[" << field_index << "]";
+      int field_slot_index = details.field_slot_index();
+      if (nof_inobject_properties <= field_slot_index) {
+        field_slot_index -= nof_inobject_properties;
+        os << " properties[" << field_slot_index << "]";
       }
     }
     return map().NumberOfOwnDescriptors() > 0;
@@ -2517,10 +2517,16 @@ void Map::MapPrint(std::ostream& os) {  // NOLINT
     os << instance_size();
   }
   if (IsJSObjectMap()) {
-    os << "\n - inobject properties: " << GetInObjectProperties();
+    os << "\n - inobject field slots: " << TotalInObjectFieldSlots();
+    if (HasOutOfObjectProperties()) {
+      os << "\n - out-of-object properties: "
+         << TotalUsedFieldSlots() - TotalInObjectFieldSlots();
+    } else {
+      os << "\n - no out-of-object properties";
+    }
   }
   os << "\n - elements kind: " << ElementsKindToString(elements_kind());
-  os << "\n - unused property fields: " << UnusedPropertyFields();
+  os << "\n - unused property fields: " << UnusedFieldSlots();
   os << "\n - enum length: ";
   if (EnumLength() == kInvalidEnumCacheSentinel) {
     os << "invalid";

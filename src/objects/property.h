@@ -45,10 +45,6 @@ class V8_EXPORT_PRIVATE Descriptor final {
   static Descriptor DataConstant(Handle<Name> key, Handle<Object> value,
                                  PropertyAttributes attributes);
 
-  static Descriptor DataConstant(Isolate* isolate, Handle<Name> key,
-                                 int field_index, Handle<Object> value,
-                                 PropertyAttributes attributes);
-
   static Descriptor AccessorConstant(Handle<Name> key, Handle<Object> foreign,
                                      PropertyAttributes attributes);
 

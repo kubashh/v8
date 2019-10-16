@@ -73,7 +73,7 @@ class DescriptorArray : public HeapObject {
   inline MaybeObject GetValue(Isolate* isolate,
                               InternalIndex descriptor_number);
   inline PropertyDetails GetDetails(InternalIndex descriptor_number);
-  inline int GetFieldIndex(InternalIndex descriptor_number);
+  inline int GetFieldSlotIndex(InternalIndex descriptor_number);
   inline FieldType GetFieldType(InternalIndex descriptor_number);
   inline FieldType GetFieldType(Isolate* isolate,
                                 InternalIndex descriptor_number);

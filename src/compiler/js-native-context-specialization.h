@@ -196,7 +196,8 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
 
   // Construct appropriate subgraph to extend properties backing store.
   Node* BuildExtendPropertiesBackingStore(const MapRef& map, Node* properties,
-                                          Node* effect, Node* control);
+                                          Node* effect, Node* control,
+                                          int length, int new_length);
 
   // Construct appropriate subgraph to check that the {value} matches
   // the previously recorded {name} feedback.

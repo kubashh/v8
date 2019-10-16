@@ -275,7 +275,7 @@ int JSObject::GetEmbedderFieldCount(Map map) {
   // kSystemPointerSize) anyway.
   return (((instance_size - GetEmbedderFieldsStartOffset(map)) >>
            kTaggedSizeLog2) -
-          map.GetInObjectProperties()) /
+          map.TotalInObjectFieldSlots()) /
          kEmbedderDataSlotSizeInTaggedSlots;
 }
 
@@ -324,7 +324,9 @@ Object JSObject::RawFastPropertyAt(Isolate* isolate, FieldIndex index) const {
   if (index.is_inobject()) {
     return TaggedField<Object>::load(isolate, *this, index.offset());
   } else {
-    return property_array(isolate).get(isolate, index.outobject_array_index());
+    DCHECK_EQ(property_array().OffsetOfElementAt(index.slot_index()),
+              index.offset());
+    return TaggedField<Object>::load(isolate, property_array(), index.offset());
   }
 }
 
@@ -352,18 +354,16 @@ void JSObject::RawFastPropertyAtPut(FieldIndex index, Object value,
     RawFastInobjectPropertyAtPut(index, value, mode);
   } else {
     DCHECK_EQ(UPDATE_WRITE_BARRIER, mode);
-    property_array().set(index.outobject_array_index(), value);
+    DCHECK_EQ(property_array().OffsetOfElementAt(index.slot_index()),
+              index.offset());
+    RELAXED_WRITE_FIELD(property_array(), index.offset(), value);
+    WRITE_BARRIER(property_array(), index.offset(), value);
   }
 }
 
 void JSObject::RawFastDoublePropertyAsBitsAtPut(FieldIndex index,
                                                 uint64_t bits) {
-  // Double unboxing is enabled only on 64-bit platforms without pointer
-  // compression.
-  DCHECK_EQ(kDoubleSize, kTaggedSize);
-  Address field_addr = FIELD_ADDR(*this, index.offset());
-  base::Relaxed_Store(reinterpret_cast<base::AtomicWord*>(field_addr),
-                      static_cast<base::AtomicWord>(bits));
+  WriteField<uint64_t>(index.offset(), bits);
 }
 
 void JSObject::FastPropertyAtPut(FieldIndex index, Object value) {
@@ -408,19 +408,19 @@ void JSObject::WriteToField(InternalIndex descriptor, PropertyDetails details,
   }
 }
 
-int JSObject::GetInObjectPropertyOffset(int index) {
-  return map().GetInObjectPropertyOffset(index);
+int JSObject::GetInObjectFieldSlotOffset(int index) {
+  return map().GetInObjectFieldSlotOffset(index);
 }
 
 Object JSObject::InObjectPropertyAt(int index) {
-  int offset = GetInObjectPropertyOffset(index);
+  int offset = GetInObjectFieldSlotOffset(index);
   return TaggedField<Object>::load(*this, offset);
 }
 
 Object JSObject::InObjectPropertyAtPut(int index, Object value,
                                        WriteBarrierMode mode) {
   // Adjust for the number of properties stored in the object.
-  int offset = GetInObjectPropertyOffset(index);
+  int offset = GetInObjectFieldSlotOffset(index);
   WRITE_FIELD(*this, offset, value);
   CONDITIONAL_WRITE_BARRIER(*this, offset, value, mode);
   return value;
@@ -436,7 +436,7 @@ void JSObject::InitializeBody(Map map, int start_offset,
   int offset = start_offset;
   if (filler_value != pre_allocated_value) {
     int end_of_pre_allocated_offset =
-        size - (map.UnusedPropertyFields() * kTaggedSize);
+        size - (map.UnusedFieldSlots() * kTaggedSize);
     DCHECK_LE(kHeaderSize, end_of_pre_allocated_offset);
     while (offset < end_of_pre_allocated_offset) {
       WRITE_FIELD(*this, offset, pre_allocated_value);

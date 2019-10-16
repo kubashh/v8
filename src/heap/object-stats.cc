@@ -603,7 +603,7 @@ void ObjectStatsCollectorImpl::RecordVirtualJSObjectDetails(JSObject object) {
   if (object.HasFastProperties()) {
     PropertyArray properties = object.property_array();
     if (properties != ReadOnlyRoots(heap_).empty_property_array()) {
-      size_t over_allocated = object.map().UnusedPropertyFields() * kTaggedSize;
+      size_t over_allocated = object.map().UnusedFieldSlots() * kTaggedSize;
       RecordVirtualObjectStats(object, properties,
                                object.map().is_prototype_map()
                                    ? ObjectStats::PROTOTYPE_PROPERTY_ARRAY_TYPE

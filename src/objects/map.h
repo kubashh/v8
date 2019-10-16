@@ -117,13 +117,17 @@ using MapHandles = std::vector<Handle<Map>>;
 //      | Byte     | If Map for a primitive type:                |
 //      |          |   native context index for constructor fn   |
 //      |          | If Map for an Object type:                  |
-//      |          |   inobject properties start offset in words |
+//      |          |   inobject field storage start offset in    |
+//      |          |   words                                     |
 //      +----------+---------------------------------------------+
 //      | Byte     | [used_or_unused_instance_size_in_words]     |
-//      |          | For JSObject in fast mode this byte encodes |
-//      |          | the size of the object that includes only   |
-//      |          | the used property fields or the slack size  |
-//      |          | in properties backing store.                |
+//      |          | Only used for JSObject in fast mode.        |
+//      |          | If all fields stored in-object:             |
+//      |          |   the instance size of the object, in words |
+//      |          |   excluding unused field slots.             |
+//      |          | If some fields stored out-of-object:        |
+//      |          |   the slack size (unused slots) in the      |
+//      |          |   properties backing store.                 |
 //      +----------+---------------------------------------------+
 //      | Byte     | [visitor_id]                                |
 // +----+----------+---------------------------------------------+
@@ -196,16 +200,16 @@ class Map : public HeapObject {
   // a fixed size.
   DECL_INT_ACCESSORS(instance_size_in_words)
 
-  // [inobject_properties_start_or_constructor_function_index]:
+  // [inobject_field_storage_start_or_constructor_function_index]:
   // Provides access to the inobject properties start offset in words in case of
   // JSObject maps, or the constructor function index in case of primitive maps.
-  DECL_INT_ACCESSORS(inobject_properties_start_or_constructor_function_index)
+  DECL_INT_ACCESSORS(inobject_field_storage_start_or_constructor_function_index)
 
-  // Get/set the in-object property area start offset in words in the object.
-  inline int GetInObjectPropertiesStartInWords() const;
-  inline void SetInObjectPropertiesStartInWords(int value);
-  // Count of properties allocated in the object (JSObject only).
-  inline int GetInObjectProperties() const;
+  // Get/set the in-object field storage area start offset in bytes in the
+  // object.
+  inline int GetInObjectFieldStorageStartInWords() const;
+  inline void SetInObjectFieldStorageStartInWords(int value);
+
   // Index of the constructor function in the native context (primitives only),
   // or the special sentinel value to indicate that there is no object wrapper
   // for the primitive (i.e. in case of null or undefined).
@@ -227,18 +231,33 @@ class Map : public HeapObject {
   // is equal to the instance size).
   inline int UsedInstanceSize() const;
 
-  // Tells how many unused property fields (in-object or out-of object) are
+  inline bool HasOutOfObjectProperties() const;
+
+  // Get the total number of in-object field slots, including both used and
+  // unused slots.
+  inline int TotalInObjectFieldSlots() const;
+  inline int TotalOutOfObjectFieldSlots() const;
+  inline int TotalFieldSlots() const;
+
+  // Get the total number of used field slots (in-object or out-of object).
+  inline int TotalUsedFieldSlots() const;
+
+  // Tells how many unused property field slots (in-object or out-of object) are
   // available in the instance (only used for JSObject in fast mode).
-  inline int UnusedPropertyFields() const;
-  // Tells how many unused in-object property words are present.
-  inline int UnusedInObjectProperties() const;
-  // Updates the counters tracking unused fields in the object.
-  inline void SetInObjectUnusedPropertyFields(int unused_property_fields);
-  // Updates the counters tracking unused fields in the property array.
-  inline void SetOutOfObjectUnusedPropertyFields(int unused_property_fields);
-  inline void CopyUnusedPropertyFields(Map map);
-  inline void CopyUnusedPropertyFieldsAdjustedForInstanceSize(Map map);
-  inline void AccountAddedPropertyField();
+  inline int UnusedFieldSlots() const;
+  // Tells how many unused in-object property field slots are present.
+  inline int UnusedInObjectFieldSlots() const;
+  inline int UsedInObjectFieldSlots() const;
+  // Tells how many unused out-of-object property field slots are present.
+  inline int UnusedOutOfObjectFieldSlots() const;
+  inline int UsedOutOfObjectFieldSlots() const;
+  // Updates the counters tracking unused field slots in the object.
+  inline void SetInObjectUnusedFieldSlots(int unused_slots);
+  // Updates the counters tracking unused field slots in the property array.
+  inline void SetOutOfObjectUnusedFieldSlots(int unused_slots);
+  inline void CopyUnusedFieldSlots(Map map);
+  inline void CopyUnusedFieldSlotsAdjustedForInstanceSize(Map map);
+  inline void AccountAddedPropertyField(PropertyDetails details);
   inline void AccountAddedOutOfObjectPropertyField(
       int unused_in_property_array);
 
@@ -329,7 +348,7 @@ class Map : public HeapObject {
   //   be resized quickly and safely.
   // - Once enough objects have been created  compute the 'slack'
   //   (traverse the map transition tree starting from the
-  //   initial_map and find the lowest value of unused_property_fields).
+  //   initial_map and find the lowest value of unused_field_slots).
   // - Traverse the transition tree again and decrease the instance size
   //   of every map. Existing objects will resize automatically (they are
   //   filled with one_pointer_filler_map). All further allocations will
@@ -474,7 +493,7 @@ class Map : public HeapObject {
   V8_EXPORT_PRIVATE Map FindFieldOwner(Isolate* isolate,
                                        InternalIndex descriptor) const;
 
-  inline int GetInObjectPropertyOffset(int index) const;
+  inline int GetInObjectFieldSlotOffset(int index) const;
 
   class FieldCounts {
    public:
@@ -493,8 +512,6 @@ class Map : public HeapObject {
 
   FieldCounts GetFieldCounts() const;
   int NumberOfFields() const;
-
-  bool HasOutOfObjectProperties() const;
 
   // Returns true if transition to the given map requires special
   // synchronization with the concurrent marker.
@@ -693,7 +710,7 @@ class Map : public HeapObject {
   static inline Handle<Map> CopyInitialMap(Isolate* isolate, Handle<Map> map);
   V8_EXPORT_PRIVATE static Handle<Map> CopyInitialMap(
       Isolate* isolate, Handle<Map> map, int instance_size,
-      int in_object_properties, int unused_property_fields);
+      int total_in_object_field_slots, int unused_field_slots);
   static Handle<Map> CopyInitialMapNormalized(
       Isolate* isolate, Handle<Map> map,
       PropertyNormalizationMode mode = CLEAR_INOBJECT_PROPERTIES);
@@ -769,8 +786,9 @@ class Map : public HeapObject {
   V8_EXPORT_PRIVATE static Handle<Map> Create(Isolate* isolate,
                                               int inobject_properties);
 
-  // Returns the next free property index (only valid for FAST MODE).
-  int NextFreePropertyIndex() const;
+  // Returns the next free field slot (only valid for FAST MODE). May not be
+  // big enough for an unboxed double in 32-bit.
+  int NextFreeFieldSlot() const;
 
   // Returns the number of enumerable properties.
   int NumberOfEnumerableProperties() const;
@@ -861,6 +879,8 @@ class Map : public HeapObject {
   // Returns true if given field is unboxed double.
   inline bool IsUnboxedDoubleField(FieldIndex index) const;
   inline bool IsUnboxedDoubleField(Isolate* isolate, FieldIndex index) const;
+  inline bool IsUnboxedDoubleField(int slot_index) const;
+  inline bool IsUnboxedDoubleField(Isolate* isolate, int slot_index) const;
 
   void PrintMapDetails(std::ostream& os);
 
@@ -921,7 +941,8 @@ class Map : public HeapObject {
                              int instance_size, int inobject_properties);
   static Handle<Map> ShareDescriptor(Isolate* isolate, Handle<Map> map,
                                      Handle<DescriptorArray> descriptors,
-                                     Descriptor* descriptor);
+                                     Descriptor* descriptor,
+                                     PropertyDetails* added_field);
   V8_EXPORT_PRIVATE static Handle<Map> AddMissingTransitions(
       Isolate* isolate, Handle<Map> map, Handle<DescriptorArray> descriptors,
       Handle<LayoutDescriptor> full_layout_descriptor);
@@ -931,12 +952,13 @@ class Map : public HeapObject {
       Handle<LayoutDescriptor> full_layout_descriptor);
   static Handle<Map> CopyAddDescriptor(Isolate* isolate, Handle<Map> map,
                                        Descriptor* descriptor,
-                                       TransitionFlag flag);
+                                       TransitionFlag flag,
+                                       PropertyDetails* added_field = nullptr);
   static Handle<Map> CopyReplaceDescriptors(
       Isolate* isolate, Handle<Map> map, Handle<DescriptorArray> descriptors,
       Handle<LayoutDescriptor> layout_descriptor, TransitionFlag flag,
       MaybeHandle<Name> maybe_name, const char* reason,
-      SimpleTransitionFlag simple_flag);
+      SimpleTransitionFlag simple_flag, PropertyDetails* added_field = nullptr);
 
   static Handle<Map> CopyReplaceDescriptor(Isolate* isolate, Handle<Map> map,
                                            Handle<DescriptorArray> descriptors,
@@ -967,11 +989,11 @@ class Map : public HeapObject {
   void PrintGeneralization(
       Isolate* isolate, FILE* file, const char* reason,
       InternalIndex modify_index, int split, int descriptors,
-      bool constant_to_field, Representation old_representation,
-      Representation new_representation, PropertyConstness old_constness,
-      PropertyConstness new_constness, MaybeHandle<FieldType> old_field_type,
-      MaybeHandle<Object> old_value, MaybeHandle<FieldType> new_field_type,
-      MaybeHandle<Object> new_value);
+      bool constant_to_field, bool pushed_out_of_object,
+      Representation old_representation, Representation new_representation,
+      PropertyConstness old_constness, PropertyConstness new_constness,
+      MaybeHandle<FieldType> old_field_type, MaybeHandle<Object> old_value,
+      MaybeHandle<FieldType> new_field_type, MaybeHandle<Object> new_value);
 
   // Use the high-level instance_descriptors/SetInstanceDescriptors instead.
   DECL_ACCESSORS(synchronized_instance_descriptors, DescriptorArray)

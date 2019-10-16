@@ -810,13 +810,13 @@ Handle<Map> CreateNonConstructorMap(Isolate* isolate, Handle<Map> source_map,
   if (!map->has_prototype_slot()) {
     // Re-set the unused property fields after changing the instance size.
     // TODO(ulan): Do not change instance size after map creation.
-    int unused_property_fields = map->UnusedPropertyFields();
+    int unused_field_slots = map->UnusedFieldSlots();
     map->set_instance_size(map->instance_size() + kTaggedSize);
     // The prototype slot shifts the in-object properties area by one slot.
-    map->SetInObjectPropertiesStartInWords(
-        map->GetInObjectPropertiesStartInWords() + 1);
+    map->SetInObjectFieldStorageStartInWords(
+        map->GetInObjectFieldStorageStartInWords() + 1);
     map->set_has_prototype_slot(true);
-    map->SetInObjectUnusedPropertyFields(unused_property_fields);
+    map->SetInObjectUnusedFieldSlots(unused_field_slots);
   }
   map->set_is_constructor(false);
   Map::SetPrototype(isolate, map, prototype);
@@ -2623,7 +2623,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     DCHECK(regexp_fun->has_initial_map());
     Handle<Map> initial_map(regexp_fun->initial_map(), isolate());
 
-    DCHECK_EQ(1, initial_map->GetInObjectProperties());
+    DCHECK_EQ(1, initial_map->TotalInObjectFieldSlots());
 
     Map::EnsureDescriptorSlack(isolate_, initial_map, 1);
 
@@ -3588,7 +3588,8 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     // of maps (i.e. less polymorphism) and also make it possible to hit the
     // fast-paths in various builtins (i.e. promises and collections) with
     // user defined iterators.
-    Handle<Map> map = factory->ObjectLiteralMapFromCache(native_context(), 2);
+    Handle<Map> map =
+        factory->ObjectLiteralMapFromCache(native_context(), 2, 2);
 
     // value
     map = Map::CopyWithField(isolate(), map, factory->value_string(),
@@ -3607,6 +3608,9 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
                              PropertyConstness::kConst,
                              Representation::Tagged(), INSERT_TRANSITION)
               .ToHandleChecked();
+
+    // Fix up the size to match JSIteratorResult.
+    DCHECK_EQ(JSIteratorResult::kSize, map->instance_size());
 
     native_context()->set_iterator_result_map(*map);
   }
@@ -3825,12 +3829,12 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     Handle<Map> map = isolate_->sloppy_arguments_map();
     map = Map::Copy(isolate_, map, "FastAliasedArguments");
     map->set_elements_kind(FAST_SLOPPY_ARGUMENTS_ELEMENTS);
-    DCHECK_EQ(2, map->GetInObjectProperties());
+    DCHECK_EQ(2, map->TotalInObjectFieldSlots());
     native_context()->set_fast_aliased_arguments_map(*map);
 
     map = Map::Copy(isolate_, map, "SlowAliasedArguments");
     map->set_elements_kind(SLOW_SLOPPY_ARGUMENTS_ELEMENTS);
-    DCHECK_EQ(2, map->GetInObjectProperties());
+    DCHECK_EQ(2, map->TotalInObjectFieldSlots());
     native_context()->set_slow_aliased_arguments_map(*map);
   }
 

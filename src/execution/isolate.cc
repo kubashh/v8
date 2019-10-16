@@ -3465,9 +3465,7 @@ bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
     set_event_logger(Logger::DefaultEventLoggerSentinel);
   }
 
-  if (FLAG_trace_turbo || FLAG_trace_turbo_graph || FLAG_turbo_profiling) {
-    PrintF("Concurrent recompilation has been disabled for tracing.\n");
-  } else if (OptimizingCompileDispatcher::Enabled()) {
+  if (OptimizingCompileDispatcher::Enabled()) {
     optimizing_compile_dispatcher_ = new OptimizingCompileDispatcher(this);
   }
 

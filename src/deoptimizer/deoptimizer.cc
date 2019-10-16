@@ -3656,7 +3656,7 @@ void TranslatedState::EnsurePropertiesAllocatedAndMarked(
     if (descriptors->GetDetails(i).representation().IsDouble() &&
         !index.is_inobject()) {
       CHECK(!map->IsUnboxedDoubleField(index));
-      int outobject_index = index.outobject_array_index();
+      int outobject_index = index.slot_index();
       int array_index = outobject_index * kTaggedSize;
       object_storage->set(array_index, kStoreMutableHeapNumber);
     }
@@ -3689,8 +3689,8 @@ void TranslatedState::EnsureJSObjectAllocated(TranslatedValue* slot,
     FieldIndex index = FieldIndex::ForDescriptor(*map, i);
     if (descriptors->GetDetails(i).representation().IsDouble() &&
         index.is_inobject()) {
-      CHECK_GE(index.index(), FixedArray::kHeaderSize / kTaggedSize);
-      int array_index = index.index() * kTaggedSize - FixedArray::kHeaderSize;
+      CHECK_GE(index.slot_index(), 0);
+      int array_index = index.slot_index() * kTaggedSize;
       uint8_t marker = map->IsUnboxedDoubleField(index)
                            ? kStoreUnboxedDouble
                            : kStoreMutableHeapNumber;

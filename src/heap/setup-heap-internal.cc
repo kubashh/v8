@@ -148,10 +148,10 @@ AllocationResult Heap::AllocatePartialMap(InstanceType instance_type,
   }
   // GetVisitorId requires a properly initialized LayoutDescriptor.
   map.set_visitor_id(Map::GetVisitorId(map));
-  map.set_inobject_properties_start_or_constructor_function_index(0);
+  map.set_inobject_field_storage_start_or_constructor_function_index(0);
   DCHECK(!map.IsJSObjectMap());
   map.set_prototype_validity_cell(Smi::FromInt(Map::kPrototypeChainValid));
-  map.SetInObjectUnusedPropertyFields(0);
+  map.SetInObjectUnusedFieldSlots(0);
   map.set_bit_field(0);
   map.set_bit_field2(0);
   int bit_field3 = Map::EnumLengthBits::encode(kInvalidEnumCacheSentinel) |

@@ -562,13 +562,14 @@ class V8_EXPORT_PRIVATE MapRef : public HeapObjectRef {
 
   int instance_size() const;
   InstanceType instance_type() const;
-  int GetInObjectProperties() const;
-  int GetInObjectPropertiesStartInWords() const;
+  int TotalInObjectFieldSlots() const;
+  int TotalOutOfObjectFieldSlots() const;
+  int GetInObjectFieldStorageStartInWords() const;
   int NumberOfOwnDescriptors() const;
-  int GetInObjectPropertyOffset(int index) const;
+  int GetInObjectFieldSlotOffset(int index) const;
   int constructor_function_index() const;
-  int NextFreePropertyIndex() const;
-  int UnusedPropertyFields() const;
+  int NextFreeFieldSlot() const;
+  int UnusedFieldSlots() const;
   ElementsKind elements_kind() const;
   bool is_stable() const;
   bool is_extensible() const;

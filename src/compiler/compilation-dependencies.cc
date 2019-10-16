@@ -604,7 +604,7 @@ SlackTrackingPrediction::SlackTrackingPrediction(MapRef initial_map,
     : instance_size_(instance_size),
       inobject_property_count_(
           (instance_size >> kTaggedSizeLog2) -
-          initial_map.GetInObjectPropertiesStartInWords()) {}
+          initial_map.GetInObjectFieldStorageStartInWords()) {}
 
 SlackTrackingPrediction
 CompilationDependencies::DependOnInitialMapInstanceSizePrediction(

@@ -361,11 +361,11 @@ VisitorId Map::GetVisitorId(Map map) {
 void Map::PrintGeneralization(
     Isolate* isolate, FILE* file, const char* reason,
     InternalIndex modify_index, int split, int descriptors,
-    bool descriptor_to_field, Representation old_representation,
-    Representation new_representation, PropertyConstness old_constness,
-    PropertyConstness new_constness, MaybeHandle<FieldType> old_field_type,
-    MaybeHandle<Object> old_value, MaybeHandle<FieldType> new_field_type,
-    MaybeHandle<Object> new_value) {
+    bool descriptor_to_field, bool pushed_out_of_object,
+    Representation old_representation, Representation new_representation,
+    PropertyConstness old_constness, PropertyConstness new_constness,
+    MaybeHandle<FieldType> old_field_type, MaybeHandle<Object> old_value,
+    MaybeHandle<FieldType> new_field_type, MaybeHandle<Object> new_value) {
   OFStream os(file);
   os << "[generalizing]";
   Name name = instance_descriptors().GetKey(modify_index);
@@ -397,6 +397,9 @@ void Map::PrintGeneralization(
     os << reason;
   } else {
     os << "+" << (descriptors - split) << " maps";
+  }
+  if (pushed_out_of_object) {
+    os << ", pushed out";
   }
   os << ") [";
   JavaScriptFrame::PrintTop(isolate, file, false, true);
@@ -439,7 +442,18 @@ MaybeHandle<Map> Map::CopyWithField(Isolate* isolate, Handle<Map> map,
   }
 
   // Compute the new index for new field.
-  int index = map->NextFreePropertyIndex();
+  int index = map->NextFreeFieldSlot();
+
+  if (kDoubleSize != kTaggedSize && FLAG_unbox_double_fields &&
+      representation.size_in_words() > 1 &&
+      index == map->TotalInObjectFieldSlots() - 1) {
+    // If we are double-unboxing, doubles take up two slots, and we happen to
+    // have exactly one free slot remaining in-object, then skip that slot and
+    // go straight to the property array.
+    DCHECK_EQ(map->UnusedInObjectFieldSlots(), 1);
+    DCHECK_EQ(representation.size_in_words(), 2);
+    index += 1;
+  }
 
   if (map->instance_type() == JS_CONTEXT_EXTENSION_OBJECT_TYPE) {
     constness = PropertyConstness::kMutable;
@@ -454,9 +468,8 @@ MaybeHandle<Map> Map::CopyWithField(Isolate* isolate, Handle<Map> map,
 
   Descriptor d = Descriptor::DataField(name, index, attributes, constness,
                                        representation, wrapped_type);
-  Handle<Map> new_map = Map::CopyAddDescriptor(isolate, map, &d, flag);
-  new_map->AccountAddedPropertyField();
-  return new_map;
+  PropertyDetails details = d.GetDetails();
+  return Map::CopyAddDescriptor(isolate, map, &d, flag, &details);
 }
 
 MaybeHandle<Map> Map::CopyWithConstant(Isolate* isolate, Handle<Map> map,
@@ -475,38 +488,36 @@ MaybeHandle<Map> Map::CopyWithConstant(Isolate* isolate, Handle<Map> map,
                        PropertyConstness::kConst, representation, flag);
 }
 
-bool Map::TransitionRemovesTaggedField(Map target) const {
-  int inobject = NumberOfFields();
-  int target_inobject = target.NumberOfFields();
-  for (int i = target_inobject; i < inobject; i++) {
-    FieldIndex index = FieldIndex::ForPropertyIndex(*this, i);
-    if (!IsUnboxedDoubleField(index)) return true;
-  }
-  return false;
-}
+bool Map::TransitionRequiresSynchronizationWithGC(Map target) const {
+  DCHECK_EQ(GetInObjectFieldSlotOffset(0),
+            target.GetInObjectFieldSlotOffset(0));
 
-bool Map::TransitionChangesTaggedFieldToUntaggedField(Map target) const {
-  int inobject = NumberOfFields();
-  int target_inobject = target.NumberOfFields();
-  int limit = Min(inobject, target_inobject);
-  for (int i = 0; i < limit; i++) {
-    FieldIndex index = FieldIndex::ForPropertyIndex(target, i);
-    if (!IsUnboxedDoubleField(index) && target.IsUnboxedDoubleField(index)) {
+  int current_end = UsedInObjectFieldSlots();
+  int target_end = UsedInObjectFieldSlots();
+
+  int shared_end = std::min(current_end, target_end);
+
+  int slot = 0;
+
+  // Tagged -> Untagged
+  for (; slot < shared_end; ++slot) {
+    if (!IsUnboxedDoubleField(slot) && target.IsUnboxedDoubleField(slot)) {
       return true;
     }
   }
-  return false;
-}
 
-bool Map::TransitionRequiresSynchronizationWithGC(Map target) const {
-  return TransitionRemovesTaggedField(target) ||
-         TransitionChangesTaggedFieldToUntaggedField(target);
+  // Tagged removed
+  for (; slot < current_end; ++slot) {
+    if (!IsUnboxedDoubleField(slot)) return true;
+  }
+
+  return false;
 }
 
 bool Map::InstancesNeedRewriting(Map target) const {
   int target_number_of_fields = target.NumberOfFields();
-  int target_inobject = target.GetInObjectProperties();
-  int target_unused = target.UnusedPropertyFields();
+  int target_inobject = target.TotalInObjectFieldSlots();
+  int target_unused = target.UnusedFieldSlots();
   int old_number_of_fields;
 
   return InstancesNeedRewriting(target, target_number_of_fields,
@@ -534,11 +545,11 @@ bool Map::InstancesNeedRewriting(Map target, int target_number_of_fields,
 
   // If no fields were added, and no inobject properties were removed, setting
   // the map is sufficient.
-  if (target_inobject == GetInObjectProperties()) return false;
+  if (target_inobject == TotalInObjectFieldSlots()) return false;
   // In-object slack tracking may have reduced the object size of the new map.
   // In that case, succeed if all existing fields were inobject, and they still
   // fit within the new inobject size.
-  DCHECK(target_inobject < GetInObjectProperties());
+  DCHECK(target_inobject < TotalInObjectFieldSlots());
   if (target_number_of_fields <= target_inobject) {
     DCHECK(target_number_of_fields + target_unused == target_inobject);
     return false;
@@ -574,10 +585,6 @@ Map::FieldCounts Map::GetFieldCounts() const {
     }
   }
   return FieldCounts(mutable_count, const_count);
-}
-
-bool Map::HasOutOfObjectProperties() const {
-  return GetInObjectProperties() < NumberOfFields();
 }
 
 void Map::DeprecateTransitionTree(Isolate* isolate) {
@@ -701,7 +708,7 @@ void Map::UpdateFieldType(Isolate* isolate, InternalIndex descriptor,
         !new_representation.Equals(details.representation()) ||
         descriptors.GetFieldType(descriptor) != *new_wrapped_type.object()) {
       Descriptor d = Descriptor::DataField(
-          name, descriptors.GetFieldIndex(descriptor), details.attributes(),
+          name, descriptors.GetFieldSlotIndex(descriptor), details.attributes(),
           new_constness, new_representation, new_wrapped_type);
       descriptors.Replace(descriptor, &d);
     }
@@ -782,7 +789,7 @@ void Map::GeneralizeField(Isolate* isolate, Handle<Map> map,
     map->PrintGeneralization(
         isolate, stdout, "field type generalization", modify_index,
         map->NumberOfOwnDescriptors(), map->NumberOfOwnDescriptors(), false,
-        details.representation(),
+        false, details.representation(),
         descriptors->GetDetails(modify_index).representation(), old_constness,
         new_constness, old_field_type, MaybeHandle<Object>(), new_field_type,
         MaybeHandle<Object>());
@@ -1366,14 +1373,16 @@ int Map::NumberOfEnumerableProperties() const {
   return result;
 }
 
-int Map::NextFreePropertyIndex() const {
+int Map::NextFreeFieldSlot() const {
   int number_of_own_descriptors = NumberOfOwnDescriptors();
+  int in_object_field_slots = IsJSObjectMap() ? TotalInObjectFieldSlots() : 0;
   DescriptorArray descs = instance_descriptors();
   // Search properties backwards to find the last field.
   for (int i = number_of_own_descriptors - 1; i >= 0; --i) {
     PropertyDetails details = descs.GetDetails(InternalIndex(i));
     if (details.location() == kField) {
-      return details.field_index() + details.field_width_in_words();
+      return details.field_slot_index() +
+             details.field_width_in_words(in_object_field_slots);
     }
   }
   return 0;
@@ -1518,15 +1527,15 @@ Handle<Map> Map::CopyNormalized(Isolate* isolate, Handle<Map> map,
                                 PropertyNormalizationMode mode) {
   int new_instance_size = map->instance_size();
   if (mode == CLEAR_INOBJECT_PROPERTIES) {
-    new_instance_size -= map->GetInObjectProperties() * kTaggedSize;
+    new_instance_size -= map->TotalInObjectFieldSlots() * kTaggedSize;
   }
 
   Handle<Map> result = RawCopy(
       isolate, map, new_instance_size,
-      mode == CLEAR_INOBJECT_PROPERTIES ? 0 : map->GetInObjectProperties());
-  // Clear the unused_property_fields explicitly as this field should not
+      mode == CLEAR_INOBJECT_PROPERTIES ? 0 : map->TotalInObjectFieldSlots());
+  // Clear the unused_field_slots explicitly as this field should not
   // be accessed for normalized maps.
-  result->SetInObjectUnusedPropertyFields(0);
+  result->SetInObjectUnusedFieldSlots(0);
   result->set_is_dictionary_map(true);
   result->set_is_migration_target(false);
   result->set_may_have_interesting_symbols(true);
@@ -1589,13 +1598,13 @@ Handle<Map> Map::CopyInitialMapNormalized(Isolate* isolate, Handle<Map> map,
 // static
 Handle<Map> Map::CopyInitialMap(Isolate* isolate, Handle<Map> map,
                                 int instance_size, int inobject_properties,
-                                int unused_property_fields) {
+                                int unused_field_slots) {
   EnsureInitialMap(isolate, map);
   Handle<Map> result =
       RawCopy(isolate, map, instance_size, inobject_properties);
 
   // Please note instance_type and instance_size are set when allocated.
-  result->SetInObjectUnusedPropertyFields(unused_property_fields);
+  result->SetInObjectUnusedFieldSlots(unused_field_slots);
 
   int number_of_own_descriptors = map->NumberOfOwnDescriptors();
   if (number_of_own_descriptors > 0) {
@@ -1605,7 +1614,7 @@ Handle<Map> Map::CopyInitialMap(Isolate* isolate, Handle<Map> map,
                               number_of_own_descriptors);
 
     DCHECK_EQ(result->NumberOfFields(),
-              result->GetInObjectProperties() - result->UnusedPropertyFields());
+              result->TotalInObjectFieldSlots() - result->UnusedFieldSlots());
   }
 
   return result;
@@ -1614,11 +1623,11 @@ Handle<Map> Map::CopyInitialMap(Isolate* isolate, Handle<Map> map,
 Handle<Map> Map::CopyDropDescriptors(Isolate* isolate, Handle<Map> map) {
   Handle<Map> result =
       RawCopy(isolate, map, map->instance_size(),
-              map->IsJSObjectMap() ? map->GetInObjectProperties() : 0);
+              map->IsJSObjectMap() ? map->TotalInObjectFieldSlots() : 0);
 
   // Please note instance_type and instance_size are set when allocated.
   if (map->IsJSObjectMap()) {
-    result->CopyUnusedPropertyFields(*map);
+    result->SetInObjectUnusedFieldSlots(map->TotalInObjectFieldSlots());
   }
   map->NotifyLeafMapLayoutChange(isolate);
   return result;
@@ -1626,12 +1635,16 @@ Handle<Map> Map::CopyDropDescriptors(Isolate* isolate, Handle<Map> map) {
 
 Handle<Map> Map::ShareDescriptor(Isolate* isolate, Handle<Map> map,
                                  Handle<DescriptorArray> descriptors,
-                                 Descriptor* descriptor) {
+                                 Descriptor* descriptor,
+                                 PropertyDetails* added_field = nullptr) {
   // Sanity check. This path is only to be taken if the map owns its descriptor
   // array, implying that its NumberOfOwnDescriptors equals the number of
   // descriptors in the descriptor array.
   DCHECK_EQ(map->NumberOfOwnDescriptors(),
             map->instance_descriptors().number_of_descriptors());
+  DCHECK_IMPLIES(added_field != nullptr,
+                 descriptor->GetDetails().field_slot_index() ==
+                     added_field->field_slot_index());
 
   Handle<Map> result = CopyDropDescriptors(isolate, map);
   Handle<Name> name = descriptor->GetKey();
@@ -1663,6 +1676,8 @@ Handle<Map> Map::ShareDescriptor(Isolate* isolate, Handle<Map> map,
     DisallowHeapAllocation no_gc;
     descriptors->Append(descriptor);
     result->InitializeDescriptors(isolate, *descriptors, *layout_descriptor);
+    result->CopyUnusedFieldSlots(*map);
+    if (added_field) result->AccountAddedPropertyField(*added_field);
   }
 
   DCHECK(result->NumberOfOwnDescriptors() == map->NumberOfOwnDescriptors() + 1);
@@ -1704,8 +1719,14 @@ Handle<Map> Map::CopyReplaceDescriptors(
     Isolate* isolate, Handle<Map> map, Handle<DescriptorArray> descriptors,
     Handle<LayoutDescriptor> layout_descriptor, TransitionFlag flag,
     MaybeHandle<Name> maybe_name, const char* reason,
-    SimpleTransitionFlag simple_flag) {
+    SimpleTransitionFlag simple_flag, PropertyDetails* added_field) {
   DCHECK(descriptors->IsSortedNoDuplicates());
+  DCHECK_IMPLIES(
+      added_field != nullptr,
+      descriptors
+              ->GetDetails(
+                  InternalIndex(descriptors->number_of_descriptors() - 1))
+              .field_slot_index() == added_field->field_slot_index());
 
   Handle<Map> result = CopyDropDescriptors(isolate, map);
 
@@ -1715,14 +1736,32 @@ Handle<Map> Map::CopyReplaceDescriptors(
     result->set_may_have_interesting_symbols(true);
   }
 
+  bool connected_transition = false;
   if (!map->is_prototype_map()) {
     if (flag == INSERT_TRANSITION &&
         TransitionsAccessor(isolate, map).CanHaveMoreTransitions()) {
       result->InitializeDescriptors(isolate, *descriptors, *layout_descriptor);
+      result->CopyUnusedFieldSlots(*map);
+      if (added_field) result->AccountAddedPropertyField(*added_field);
 
       DCHECK(!maybe_name.is_null());
       ConnectTransition(isolate, map, result, name, simple_flag);
+      connected_transition = true;
     } else {
+      if (map->IsJSObjectMap()) {
+        int new_size = map->NumberOfFields() + (added_field ? 1 : 0);
+        if (new_size <= result->TotalInObjectFieldSlots()) {
+          result->SetInObjectUnusedFieldSlots(
+              result->TotalInObjectFieldSlots() - new_size);
+        } else {
+          int used = new_size - result->TotalInObjectFieldSlots();
+          // Round up the used slots to a multiple of JSObject::kFieldsAdded.
+          int total =
+              ((used + JSObject::kFieldsAdded - 1) / JSObject::kFieldsAdded) *
+              JSObject::kFieldsAdded;
+          result->SetOutOfObjectUnusedFieldSlots(total - used);
+        }
+      }
       descriptors->GeneralizeAllFields();
       result->InitializeDescriptors(isolate, *descriptors,
                                     LayoutDescriptor::FastPointerLayout());
@@ -1735,12 +1774,13 @@ Handle<Map> Map::CopyReplaceDescriptors(
     }
   } else {
     result->InitializeDescriptors(isolate, *descriptors, *layout_descriptor);
+    result->CopyUnusedFieldSlots(*map);
+    if (added_field) result->AccountAddedPropertyField(*added_field);
   }
-  if (FLAG_trace_maps &&
-      // Mirror conditions above that did not call ConnectTransition().
-      (map->is_prototype_map() ||
-       !(flag == INSERT_TRANSITION &&
-         TransitionsAccessor(isolate, map).CanHaveMoreTransitions()))) {
+#ifdef VERIFY_HEAP
+  if (FLAG_verify_heap) result->MapVerify(isolate);
+#endif
+  if (FLAG_trace_maps && !connected_transition) {
     LOG(isolate, MapEvent("ReplaceDescriptors", *map, *result, reason,
                           maybe_name.is_null() ? Name() : *name));
   }
@@ -1772,7 +1812,7 @@ Handle<Map> Map::AddMissingTransitions(
   Handle<Map> last_map = CopyDropDescriptors(isolate, split_map);
   last_map->InitializeDescriptors(isolate, *descriptors,
                                   *full_layout_descriptor);
-  last_map->SetInObjectUnusedPropertyFields(0);
+  DCHECK_EQ(last_map->UsedInObjectFieldSlots(), 0);
   last_map->set_may_have_interesting_symbols(true);
 
   // During creation of intermediate maps we violate descriptors sharing
@@ -1805,10 +1845,10 @@ void Map::InstallDescriptors(Isolate* isolate, Handle<Map> parent,
 
   child->SetInstanceDescriptors(isolate, *descriptors,
                                 new_descriptor.as_int() + 1);
-  child->CopyUnusedPropertyFields(*parent);
+  child->CopyUnusedFieldSlots(*parent);
   PropertyDetails details = descriptors->GetDetails(new_descriptor);
   if (details.location() == kField) {
-    child->AccountAddedPropertyField();
+    child->AccountAddedPropertyField(details);
   }
 
   if (FLAG_unbox_double_fields) {
@@ -1904,10 +1944,9 @@ Handle<Map> Map::AsLanguageMode(Isolate* isolate, Handle<Map> initial_map,
 
   // Create new map taking descriptors from the |function_map| and all
   // the other details from the |initial_map|.
-  Handle<Map> map =
-      Map::CopyInitialMap(isolate, function_map, initial_map->instance_size(),
-                          initial_map->GetInObjectProperties(),
-                          initial_map->UnusedPropertyFields());
+  Handle<Map> map = Map::CopyInitialMap(
+      isolate, function_map, initial_map->instance_size(),
+      initial_map->TotalInObjectFieldSlots(), initial_map->UnusedFieldSlots());
   map->SetConstructor(initial_map->GetConstructor());
   map->set_prototype(initial_map->prototype());
   map->set_construction_counter(initial_map->construction_counter());
@@ -1922,6 +1961,7 @@ Handle<Map> Map::AsLanguageMode(Isolate* isolate, Handle<Map> initial_map,
 Handle<Map> Map::CopyForElementsTransition(Isolate* isolate, Handle<Map> map) {
   DCHECK(!map->is_prototype_map());
   Handle<Map> new_map = CopyDropDescriptors(isolate, map);
+  new_map->CopyUnusedFieldSlots(*map);
 
   if (map->owns_descriptors()) {
     // In case the map owned its own descriptors, share the descriptors and
@@ -1973,9 +2013,10 @@ Handle<Map> Map::Create(Isolate* isolate, int inobject_properties) {
 
   // Adjust the map with the extra inobject properties.
   copy->set_instance_size(new_instance_size);
-  copy->SetInObjectPropertiesStartInWords(JSObject::kHeaderSize / kTaggedSize);
-  DCHECK_EQ(copy->GetInObjectProperties(), inobject_properties);
-  copy->SetInObjectUnusedPropertyFields(inobject_properties);
+  copy->SetInObjectFieldStorageStartInWords(JSObject::kHeaderSize /
+                                            kTaggedSize);
+  DCHECK_EQ(copy->TotalInObjectFieldSlots(), inobject_properties);
+  copy->SetInObjectUnusedFieldSlots(inobject_properties);
   copy->set_visitor_id(Map::GetVisitorId(*copy));
   return copy;
 }
@@ -2338,15 +2379,21 @@ Handle<Map> Map::TransitionToAccessorProperty(Isolate* isolate, Handle<Map> map,
 }
 
 Handle<Map> Map::CopyAddDescriptor(Isolate* isolate, Handle<Map> map,
-                                   Descriptor* descriptor,
-                                   TransitionFlag flag) {
+                                   Descriptor* descriptor, TransitionFlag flag,
+                                   PropertyDetails* added_field) {
+  DCHECK_IMPLIES(added_field != nullptr,
+                 descriptor->GetDetails().field_slot_index() ==
+                     added_field->field_slot_index());
+  DCHECK_IMPLIES(added_field == nullptr,
+                 descriptor->GetDetails().location() == kDescriptor);
+
   Handle<DescriptorArray> descriptors(map->instance_descriptors(), isolate);
 
   // Share descriptors only if map owns descriptors and it not an initial map.
   if (flag == INSERT_TRANSITION && map->owns_descriptors() &&
       !map->GetBackPointer().IsUndefined(isolate) &&
       TransitionsAccessor(isolate, map).CanHaveMoreTransitions()) {
-    return ShareDescriptor(isolate, map, descriptors, descriptor);
+    return ShareDescriptor(isolate, map, descriptors, descriptor, added_field);
   }
 
   int nof = map->NumberOfOwnDescriptors();
@@ -2359,9 +2406,10 @@ Handle<Map> Map::CopyAddDescriptor(Isolate* isolate, Handle<Map> map,
           ? LayoutDescriptor::New(isolate, map, new_descriptors, nof + 1)
           : handle(LayoutDescriptor::FastPointerLayout(), isolate);
 
-  return CopyReplaceDescriptors(
-      isolate, map, new_descriptors, new_layout_descriptor, flag,
-      descriptor->GetKey(), "CopyAddDescriptor", SIMPLE_PROPERTY_TRANSITION);
+  return CopyReplaceDescriptors(isolate, map, new_descriptors,
+                                new_layout_descriptor, flag,
+                                descriptor->GetKey(), "CopyAddDescriptor",
+                                SIMPLE_PROPERTY_TRANSITION, added_field);
 }
 
 Handle<Map> Map::CopyInsertDescriptor(Isolate* isolate, Handle<Map> map,
@@ -2476,20 +2524,20 @@ bool Map::EquivalentToForNormalization(const Map other,
                                        ElementsKind elements_kind,
                                        PropertyNormalizationMode mode) const {
   int properties =
-      mode == CLEAR_INOBJECT_PROPERTIES ? 0 : other.GetInObjectProperties();
+      mode == CLEAR_INOBJECT_PROPERTIES ? 0 : other.TotalInObjectFieldSlots();
   // Make sure the elements_kind bits are in bit_field2.
   DCHECK_EQ(this->elements_kind(), Map::ElementsKindBits::decode(bit_field2()));
   int adjusted_other_bit_field2 =
       Map::ElementsKindBits::update(other.bit_field2(), elements_kind);
   return CheckEquivalent(*this, other) &&
          bit_field2() == adjusted_other_bit_field2 &&
-         GetInObjectProperties() == properties &&
+         TotalInObjectFieldSlots() == properties &&
          JSObject::GetEmbedderFieldCount(*this) ==
              JSObject::GetEmbedderFieldCount(other);
 }
 
 static void GetMinInobjectSlack(Map map, void* data) {
-  int slack = map.UnusedPropertyFields();
+  int slack = map.UnusedFieldSlots();
   if (*reinterpret_cast<int*>(data) > slack) {
     *reinterpret_cast<int*>(data) = slack;
   }
@@ -2500,7 +2548,7 @@ int Map::ComputeMinObjectSlack(Isolate* isolate) {
   // Has to be an initial map.
   DCHECK(GetBackPointer().IsUndefined(isolate));
 
-  int slack = UnusedPropertyFields();
+  int slack = UnusedFieldSlots();
   TransitionsAccessor transitions(isolate, *this, &no_gc);
   transitions.TraverseTransitionTree(&GetMinInobjectSlack, &slack);
   return slack;
@@ -2511,12 +2559,12 @@ static void ShrinkInstanceSize(Map map, void* data) {
   DCHECK_GE(slack, 0);
 #ifdef DEBUG
   int old_visitor_id = Map::GetVisitorId(map);
-  int new_unused = map.UnusedPropertyFields() - slack;
+  int new_unused = map.UnusedFieldSlots() - slack;
 #endif
   map.set_instance_size(map.InstanceSizeFromSlack(slack));
   map.set_construction_counter(Map::kNoSlackTracking);
   DCHECK_EQ(old_visitor_id, Map::GetVisitorId(map));
-  DCHECK_EQ(new_unused, map.UnusedPropertyFields());
+  DCHECK_EQ(new_unused, map.UnusedFieldSlots());
 }
 
 static void StopSlackTracking(Map map, void* data) {
@@ -2651,7 +2699,7 @@ void Map::SetPrototype(Isolate* isolate, Handle<Map> map,
 
 void Map::StartInobjectSlackTracking() {
   DCHECK(!IsInobjectSlackTrackingInProgress());
-  if (UnusedPropertyFields() == 0) return;
+  if (UnusedFieldSlots() == 0) return;
   set_construction_counter(Map::kSlackTrackingCounterStart);
 }
 

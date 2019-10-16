@@ -510,6 +510,9 @@ void LookupIterator::PrepareForDataProperty(Handle<Object> value) {
   // We should only get here if the new_map is different from the old map,
   // otherwise we would have falled through to the is_identical_to check above.
   DCHECK_NE(*old_map, *new_map);
+#ifdef VERIFY_HEAP
+  if (FLAG_verify_heap) new_map->MapVerify(isolate());
+#endif
 
   JSObject::MigrateToMap(isolate_, holder_obj, new_map);
   ReloadPropertyInformation<false>();

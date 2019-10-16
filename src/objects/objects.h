@@ -623,13 +623,7 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   template <class T, typename std::enable_if<std::is_arithmetic<T>::value,
                                              int>::type = 0>
   inline T ReadField(size_t offset) const {
-    // Pointer compression causes types larger than kTaggedSize to be unaligned.
-#ifdef V8_COMPRESS_POINTERS
-    constexpr bool v8_pointer_compression_unaligned = sizeof(T) > kTaggedSize;
-#else
-    constexpr bool v8_pointer_compression_unaligned = false;
-#endif
-    if (std::is_same<T, double>::value || v8_pointer_compression_unaligned) {
+    if (sizeof(T) != kTaggedSize) {
       // Bug(v8:8875) Double fields may be unaligned.
       return base::ReadUnalignedValue<T>(field_address(offset));
     } else {
@@ -640,13 +634,7 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   template <class T, typename std::enable_if<std::is_arithmetic<T>::value,
                                              int>::type = 0>
   inline void WriteField(size_t offset, T value) const {
-    // Pointer compression causes types larger than kTaggedSize to be unaligned.
-#ifdef V8_COMPRESS_POINTERS
-    constexpr bool v8_pointer_compression_unaligned = sizeof(T) > kTaggedSize;
-#else
-    constexpr bool v8_pointer_compression_unaligned = false;
-#endif
-    if (std::is_same<T, double>::value || v8_pointer_compression_unaligned) {
+    if (sizeof(T) != kTaggedSize) {
       // Bug(v8:8875) Double fields may be unaligned.
       base::WriteUnalignedValue<T>(field_address(offset), value);
     } else {

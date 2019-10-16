@@ -138,10 +138,9 @@ bool DeleteObjectPropertyFast(Isolate* isolate, Handle<JSReceiver> receiver,
     // recorded slot.
     isolate->heap()->NotifyObjectLayoutChange(*receiver, no_allocation,
                                               InvalidateRecordedSlots::kNo);
-    FieldIndex index =
-        FieldIndex::ForPropertyIndex(*receiver_map, details.field_index());
+    FieldIndex index = FieldIndex::ForDetails(*receiver_map, details);
     // Special case deleting the last out-of object property.
-    if (!index.is_inobject() && index.outobject_array_index() == 0) {
+    if (!index.is_inobject() && index.slot_index() == 0) {
       DCHECK(!parent_map->HasOutOfObjectProperties());
       // Clear out the properties backing store.
       receiver->SetProperties(ReadOnlyRoots(isolate).empty_fixed_array());

@@ -2771,7 +2771,7 @@ TEST(InternalFieldsSubclassing) {
     i::Handle<i::JSObject> i_obj =
         i::Handle<i::JSObject>::cast(v8::Utils::OpenHandle(*obj));
     CHECK_EQ(nof_embedder_fields, obj->InternalFieldCount());
-    CHECK_EQ(0, i_obj->map().GetInObjectProperties());
+    CHECK_EQ(0, i_obj->map().TotalInObjectFieldSlots());
     // Check writing and reading internal fields.
     for (int j = 0; j < nof_embedder_fields; j++) {
       CHECK(obj->GetInternalField(j)->IsUndefined());
@@ -2839,20 +2839,20 @@ TEST(InternalFieldsSubclassing) {
 #endif
       CHECK_EQ(nof_embedder_fields, value->InternalFieldCount());
       if (in_object_only) {
-        CHECK_LE(nof_properties, i_value->map().GetInObjectProperties());
+        CHECK_LE(nof_properties, i_value->map().TotalInObjectFieldSlots());
       } else {
-        CHECK_LE(i_value->map().GetInObjectProperties(), kMaxNofProperties);
+        CHECK_LE(i_value->map().TotalInObjectFieldSlots(), kMaxNofProperties);
       }
 
       // Make Sure we get the precise property count.
       i_value->map().FindRootMap(i_isolate).CompleteInobjectSlackTracking(
           i_isolate);
       // TODO(cbruni): fix accounting to make this condition true.
-      // CHECK_EQ(0, i_value->map()->UnusedPropertyFields());
+      // CHECK_EQ(0, i_value->map()->UnusedFieldSlots());
       if (in_object_only) {
-        CHECK_EQ(nof_properties, i_value->map().GetInObjectProperties());
+        CHECK_EQ(nof_properties, i_value->map().TotalInObjectFieldSlots());
       } else {
-        CHECK_LE(i_value->map().GetInObjectProperties(), kMaxNofProperties);
+        CHECK_LE(i_value->map().TotalInObjectFieldSlots(), kMaxNofProperties);
       }
     }
   }

@@ -402,20 +402,19 @@ ObjectData* JSObjectData::GetOwnDataProperty(JSHeapBroker* broker,
                                              Representation representation,
                                              FieldIndex field_index,
                                              SerializationPolicy policy) {
-  auto p = own_properties_.find(field_index.property_index());
+  auto p = own_properties_.find(field_index.offset());
   if (p != own_properties_.end()) return p->second;
 
   if (policy == SerializationPolicy::kAssumeSerialized) {
     TRACE_MISSING(broker, "knowledge about property with index "
-                              << field_index.property_index() << " on "
-                              << this);
+                              << field_index.slot_index() << " on " << this);
     return nullptr;
   }
 
   ObjectRef property = GetOwnDataPropertyFromHeap(
       broker, Handle<JSObject>::cast(object()), representation, field_index);
   ObjectData* result(property.data());
-  own_properties_.insert(std::make_pair(field_index.property_index(), result));
+  own_properties_.insert(std::make_pair(field_index.offset(), result));
   return result;
 }
 
@@ -950,17 +949,21 @@ class MapData : public HeapObjectData {
   uint32_t bit_field3() const { return bit_field3_; }
   bool can_be_deprecated() const { return can_be_deprecated_; }
   bool can_transition() const { return can_transition_; }
-  int in_object_properties_start_in_words() const {
+  int in_object_field_storage_start_in_words() const {
     CHECK(InstanceTypeChecker::IsJSObject(instance_type()));
-    return in_object_properties_start_in_words_;
+    return in_object_field_storage_start_in_words_;
   }
-  int in_object_properties() const {
+  int total_in_object_field_slots() const {
     CHECK(InstanceTypeChecker::IsJSObject(instance_type()));
-    return in_object_properties_;
+    return total_in_object_field_slots_;
+  }
+  int total_out_of_object_field_slots() const {
+    CHECK(InstanceTypeChecker::IsJSObject(instance_type()));
+    return total_out_of_object_field_slots_;
   }
   int constructor_function_index() const { return constructor_function_index_; }
-  int NextFreePropertyIndex() const { return next_free_property_index_; }
-  int UnusedPropertyFields() const { return unused_property_fields_; }
+  int NextFreeFieldSlot() const { return next_free_property_index_; }
+  int UnusedFieldSlots() const { return unused_field_slots_; }
   bool supports_fast_array_iteration() const {
     return supports_fast_array_iteration_;
   }
@@ -1023,11 +1026,12 @@ class MapData : public HeapObjectData {
   uint32_t const bit_field3_;
   bool const can_be_deprecated_;
   bool const can_transition_;
-  int const in_object_properties_start_in_words_;
-  int const in_object_properties_;
+  int const in_object_field_storage_start_in_words_;
+  int const total_in_object_field_slots_;
+  int const total_out_of_object_field_slots_;
   int const constructor_function_index_;
   int const next_free_property_index_;
-  int const unused_property_fields_;
+  int const unused_field_slots_;
   bool const supports_fast_array_iteration_;
   bool const supports_fast_array_resize_;
   bool const is_abandoned_prototype_map_;
@@ -1143,16 +1147,19 @@ MapData::MapData(JSHeapBroker* broker, ObjectData** storage, Handle<Map> object)
                              ? object->CanBeDeprecated()
                              : false),
       can_transition_(object->CanTransition()),
-      in_object_properties_start_in_words_(
-          object->IsJSObjectMap() ? object->GetInObjectPropertiesStartInWords()
-                                  : 0),
-      in_object_properties_(
-          object->IsJSObjectMap() ? object->GetInObjectProperties() : 0),
+      in_object_field_storage_start_in_words_(
+          object->IsJSObjectMap()
+              ? object->GetInObjectFieldStorageStartInWords()
+              : 0),
+      total_in_object_field_slots_(
+          object->IsJSObjectMap() ? object->TotalInObjectFieldSlots() : 0),
+      total_out_of_object_field_slots_(
+          object->IsJSObjectMap() ? object->TotalOutOfObjectFieldSlots() : 0),
       constructor_function_index_(object->IsPrimitiveMap()
                                       ? object->GetConstructorFunctionIndex()
                                       : Map::kNoConstructorFunctionIndex),
-      next_free_property_index_(object->NextFreePropertyIndex()),
-      unused_property_fields_(object->UnusedPropertyFields()),
+      next_free_property_index_(object->NextFreeFieldSlot()),
+      unused_field_slots_(object->UnusedFieldSlots()),
       supports_fast_array_iteration_(
           SupportsFastArrayIteration(broker->isolate(), object)),
       supports_fast_array_resize_(
@@ -2140,12 +2147,14 @@ void JSObjectData::SerializeRecursiveAsBoilerplate(JSHeapBroker* broker,
     FieldIndex field_index = FieldIndex::ForDescriptor(boilerplate->map(), i);
     // Make sure {field_index} agrees with {inobject_properties} on the index of
     // this field.
-    DCHECK_EQ(field_index.property_index(),
+    DCHECK_EQ(field_index.slot_index(),
               static_cast<int>(inobject_fields_.size()));
     if (boilerplate->IsUnboxedDoubleField(field_index)) {
       uint64_t value_bits =
           boilerplate->RawFastDoublePropertyAsBitsAt(field_index);
-      inobject_fields_.push_back(JSObjectField{value_bits});
+      for (int i = 0; i < kDoubleSize / kTaggedSize; ++i) {
+        inobject_fields_.push_back(JSObjectField{value_bits});
+      }
     } else {
       Handle<Object> value(boilerplate->RawFastPropertyAt(field_index),
                            isolate);
@@ -2876,7 +2885,7 @@ double JSObjectRef::RawFastDoublePropertyAt(FieldIndex index) const {
   }
   JSObjectData* object_data = data()->AsJSObject();
   CHECK(index.is_inobject());
-  return object_data->GetInobjectField(index.property_index()).AsDouble();
+  return object_data->GetInobjectField(index.slot_index()).AsDouble();
 }
 
 uint64_t JSObjectRef::RawFastDoublePropertyAsBitsAt(FieldIndex index) const {
@@ -2886,7 +2895,7 @@ uint64_t JSObjectRef::RawFastDoublePropertyAsBitsAt(FieldIndex index) const {
   }
   JSObjectData* object_data = data()->AsJSObject();
   CHECK(index.is_inobject());
-  return object_data->GetInobjectField(index.property_index()).AsBitsOfDouble();
+  return object_data->GetInobjectField(index.slot_index()).AsBitsOfDouble();
 }
 
 ObjectRef JSObjectRef::RawFastPropertyAt(FieldIndex index) const {
@@ -2899,8 +2908,7 @@ ObjectRef JSObjectRef::RawFastPropertyAt(FieldIndex index) const {
   JSObjectData* object_data = data()->AsJSObject();
   CHECK(index.is_inobject());
   return ObjectRef(
-      broker(),
-      object_data->GetInobjectField(index.property_index()).AsObject());
+      broker(), object_data->GetInobjectField(index.slot_index()).AsObject());
 }
 
 bool AllocationSiteRef::IsFastLiteral() const {
@@ -2954,12 +2962,12 @@ FieldIndex MapRef::GetFieldIndexFor(InternalIndex descriptor_index) const {
   return descriptors->contents().at(descriptor_index.as_int()).field_index;
 }
 
-int MapRef::GetInObjectPropertyOffset(int i) const {
+int MapRef::GetInObjectFieldSlotOffset(int i) const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleDereference allow_handle_dereference;
-    return object()->GetInObjectPropertyOffset(i);
+    return object()->GetInObjectFieldSlotOffset(i);
   }
-  return (GetInObjectPropertiesStartInWords() + i) * kTaggedSize;
+  return (GetInObjectFieldStorageStartInWords() + i) * kTaggedSize;
 }
 
 PropertyDetails MapRef::GetPropertyDetails(
@@ -3280,8 +3288,8 @@ BIMODAL_ACCESSOR_B(Map, bit_field, has_indexed_interceptor,
 BIMODAL_ACCESSOR_B(Map, bit_field, is_constructor, Map::IsConstructorBit)
 BIMODAL_ACCESSOR_B(Map, bit_field, is_undetectable, Map::IsUndetectableBit)
 BIMODAL_ACCESSOR_C(Map, int, instance_size)
-BIMODAL_ACCESSOR_C(Map, int, NextFreePropertyIndex)
-BIMODAL_ACCESSOR_C(Map, int, UnusedPropertyFields)
+BIMODAL_ACCESSOR_C(Map, int, NextFreeFieldSlot)
+BIMODAL_ACCESSOR_C(Map, int, UnusedFieldSlots)
 BIMODAL_ACCESSOR(Map, HeapObject, prototype)
 BIMODAL_ACCESSOR_C(Map, InstanceType, instance_type)
 BIMODAL_ACCESSOR(Map, Object, GetConstructor)
@@ -3480,14 +3488,19 @@ bool MapRef::CanTransition() const {
   return data()->AsMap()->can_transition();
 }
 
-int MapRef::GetInObjectPropertiesStartInWords() const {
-  IF_BROKER_DISABLED_ACCESS_HANDLE_C(Map, GetInObjectPropertiesStartInWords);
-  return data()->AsMap()->in_object_properties_start_in_words();
+int MapRef::GetInObjectFieldStorageStartInWords() const {
+  IF_BROKER_DISABLED_ACCESS_HANDLE_C(Map, GetInObjectFieldStorageStartInWords);
+  return data()->AsMap()->in_object_field_storage_start_in_words();
 }
 
-int MapRef::GetInObjectProperties() const {
-  IF_BROKER_DISABLED_ACCESS_HANDLE_C(Map, GetInObjectProperties);
-  return data()->AsMap()->in_object_properties();
+int MapRef::TotalInObjectFieldSlots() const {
+  IF_BROKER_DISABLED_ACCESS_HANDLE_C(Map, TotalInObjectFieldSlots);
+  return data()->AsMap()->total_in_object_field_slots();
+}
+
+int MapRef::TotalOutOfObjectFieldSlots() const {
+  IF_BROKER_DISABLED_ACCESS_HANDLE_C(Map, TotalOutOfObjectFieldSlots);
+  return data()->AsMap()->total_out_of_object_field_slots();
 }
 
 int ScopeInfoRef::ContextLength() const {

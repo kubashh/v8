@@ -957,7 +957,7 @@ Reduction JSCreateLowering::ReduceJSCreateClosure(Node* node) {
             jsgraph()->TheHoleConstant());
     STATIC_ASSERT(JSFunction::kSizeWithPrototype == 8 * kTaggedSize);
   }
-  for (int i = 0; i < function_map.GetInObjectProperties(); i++) {
+  for (int i = 0; i < function_map.TotalInObjectFieldSlots(); i++) {
     a.Store(AccessBuilder::ForJSObjectInObjectProperty(function_map, i),
             jsgraph()->UndefinedConstant());
   }
@@ -985,7 +985,15 @@ Reduction JSCreateLowering::ReduceJSCreateIterResultObject(Node* node) {
           jsgraph()->EmptyFixedArrayConstant());
   a.Store(AccessBuilder::ForJSIteratorResultValue(), value);
   a.Store(AccessBuilder::ForJSIteratorResultDone(), done);
-  STATIC_ASSERT(JSIteratorResult::kSize == 5 * kTaggedSize);
+  if (JSIteratorResult::kSize == 7 * kTaggedSize) {
+    DCHECK_EQ(JSIteratorResult::kSize, 7 * kTaggedSize);
+    a.Store(AccessBuilder::ForJSIteratorResultPadding1(),
+            jsgraph()->UndefinedConstant());
+    a.Store(AccessBuilder::ForJSIteratorResultPadding2(),
+            jsgraph()->UndefinedConstant());
+  } else {
+    DCHECK_EQ(JSIteratorResult::kSize, 5 * kTaggedSize);
+  }
   a.FinishAndChange(node);
   return Changed(node);
 }
@@ -1008,7 +1016,7 @@ Reduction JSCreateLowering::ReduceJSCreateStringIterator(Node* node) {
           jsgraph()->EmptyFixedArrayConstant());
   a.Store(AccessBuilder::ForJSStringIteratorString(), string);
   a.Store(AccessBuilder::ForJSStringIteratorIndex(), jsgraph()->SmiConstant(0));
-  STATIC_ASSERT(JSIteratorResult::kSize == 5 * kTaggedSize);
+  STATIC_ASSERT(JSStringIterator::kSize == 5 * kTaggedSize);
   a.FinishAndChange(node);
   return Changed(node);
 }
@@ -1143,7 +1151,7 @@ Reduction JSCreateLowering::ReduceJSCreateEmptyLiteralObject(Node* node) {
   a.Store(AccessBuilder::ForJSObjectPropertiesOrHashKnownPointer(),
           jsgraph()->EmptyFixedArrayConstant());
   a.Store(AccessBuilder::ForJSObjectElements(), elements);
-  for (int i = 0; i < map.GetInObjectProperties(); i++) {
+  for (int i = 0; i < map.TotalInObjectFieldSlots(); i++) {
     a.Store(AccessBuilder::ForJSObjectInObjectProperty(map, i),
             jsgraph()->UndefinedConstant());
   }
@@ -1630,8 +1638,9 @@ Node* JSCreateLowering::AllocateFastLiteral(Node* effect, Node* control,
   // Compute the in-object properties to store first (might have effects).
   MapRef boilerplate_map = boilerplate.map();
   ZoneVector<std::pair<FieldAccess, Node*>> inobject_fields(zone());
-  inobject_fields.reserve(boilerplate_map.GetInObjectProperties());
+  inobject_fields.reserve(boilerplate_map.TotalInObjectFieldSlots());
   int const boilerplate_nof = boilerplate_map.NumberOfOwnDescriptors();
+  int written_slots = 0;
   for (InternalIndex i : InternalIndex::Range(boilerplate_nof)) {
     PropertyDetails const property_details =
         boilerplate_map.GetPropertyDetails(i);
@@ -1640,6 +1649,7 @@ Node* JSCreateLowering::AllocateFastLiteral(Node* effect, Node* control,
     NameRef property_name = boilerplate_map.GetPropertyKey(i);
     FieldIndex index = boilerplate_map.GetFieldIndexFor(i);
     ConstFieldInfo const_field_info(boilerplate_map.object());
+    DCHECK(index.is_inobject());
     FieldAccess access = {kTaggedBase,
                           index.offset(),
                           property_name.object(),
@@ -1664,6 +1674,7 @@ Node* JSCreateLowering::AllocateFastLiteral(Node* effect, Node* control,
         access.const_field_info = ConstFieldInfo::None();
       }
       value = jsgraph()->Constant(bit_cast<double>(value_bits));
+      written_slots += FLAG_unbox_double_fields ? kDoubleSize / kTaggedSize : 1;
     } else {
       ObjectRef boilerplate_value = boilerplate.RawFastPropertyAt(index);
       bool is_uninitialized =
@@ -1695,14 +1706,14 @@ Node* JSCreateLowering::AllocateFastLiteral(Node* effect, Node* control,
       } else {
         value = jsgraph()->Constant(boilerplate_value);
       }
+      written_slots += 1;
     }
     inobject_fields.push_back(std::make_pair(access, value));
   }
 
   // Fill slack at the end of the boilerplate object with filler maps.
-  int const boilerplate_length = boilerplate_map.GetInObjectProperties();
-  for (int index = static_cast<int>(inobject_fields.size());
-       index < boilerplate_length; ++index) {
+  int const boilerplate_length = boilerplate_map.TotalInObjectFieldSlots();
+  for (int index = written_slots; index < boilerplate_length; ++index) {
     FieldAccess access =
         AccessBuilder::ForJSObjectInObjectProperty(boilerplate_map, index);
     Node* value = jsgraph()->HeapConstant(factory()->one_pointer_filler_map());
