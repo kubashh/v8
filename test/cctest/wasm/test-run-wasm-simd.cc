@@ -3391,6 +3391,33 @@ WASM_EXTRACT_I16x8_TEST(S, UINT16) WASM_EXTRACT_I16x8_TEST(I, INT16)
     WASM_EXTRACT_I8x16_TEST(S, UINT8) WASM_EXTRACT_I8x16_TEST(I, INT8)
 #undef WASM_EXTRACT_I8x16_TEST
 
+        WASM_SIMD_TEST_NO_LOWERING(ZHIN) {
+  int64_t x = 0x8000000000000401;
+  printf("int64_t x: %" PRIu64 "\n", x);
+  printf("static_cast<double>(static_cast<uint64_t>(x)): %a\n",
+         static_cast<double>(static_cast<uint64_t>(x)));
+  printf("static_cast<double>(static_cast<uint64_t>((x))): %a\n",
+         static_cast<double>(static_cast<uint64_t>((x))));
+  printf("static_cast<double>(static_cast<uint64_t>(0x8000000000000401)): %a\n",
+         static_cast<double>(static_cast<uint64_t>(0x8000000000000401)));
+  printf(
+      "static_cast<double>(static_cast<uint64_t>((0x8000000000000401))): %a\n",
+      static_cast<double>(static_cast<uint64_t>((0x8000000000000401))));
+
+  uint64_t y = 0x8000000000000401;
+  printf("uint64_t y: %" PRIu64 "\n", y);
+  printf("static_cast<double>(static_cast<uint64_t>(y)): %a\n",
+         static_cast<double>(static_cast<uint64_t>(y)));
+  printf("static_cast<double>(static_cast<uint64_t>((y))): %a\n",
+         static_cast<double>(static_cast<uint64_t>((y))));
+  printf("static_cast<double>(static_cast<uint64_t>(0x8000000000000401)): %a\n",
+         static_cast<double>(static_cast<uint64_t>(0x8000000000000401)));
+  printf(
+      "static_cast<double>(static_cast<uint64_t>((0x8000000000000401))): %a\n",
+      static_cast<double>(static_cast<uint64_t>((0x8000000000000401))));
+  CHECK_EQ(1, 0);
+}
+
 #undef WASM_SIMD_TEST
 #undef WASM_SIMD_CHECK_LANE_S
 #undef WASM_SIMD_CHECK_LANE_U
