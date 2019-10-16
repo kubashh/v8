@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "067033df_99cfe055",
+        "filename": "test/mjsunit/es6/array-concat.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T05:13:37Z",
+      "side": 1,
+      "message": "Even for testing, this function seems easy to misuse. It resets the protector state, but not the state of the world. So whatever assumption the protector is protecting might still be invalidated.\n\nMaybe we could discourage use further by calling it UnsafeResetAllProtectorsForTesting or so?",
+      "revId": "8b7ca478821ae1c4d2bb21216a4e41ab1a369a9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f93a6fdd_f407509c",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T05:13:37Z",
+      "side": 1,
+      "message": "This CL fixes the test and a follow-up the bug?",
+      "revId": "8b7ca478821ae1c4d2bb21216a4e41ab1a369a9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
