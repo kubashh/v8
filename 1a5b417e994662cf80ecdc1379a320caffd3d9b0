@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8dd7a7bd_524028e4",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-10-16T14:44:57Z",
+      "side": 1,
+      "message": "nit: if you name it \"address\" (or \"address_reg\" or \"tmp_address\"), you can drop the comment in line 420, and make line 432 easier to grok.\n\nSame for \"tmp1\" vs \"count_reg\"/\"tmp_count\" or somesuch.",
+      "range": {
+        "startLine": 422,
+        "startChar": 13,
+        "endLine": 422,
+        "endChar": 17
+      },
+      "revId": "1a5b417e994662cf80ecdc1379a320caffd3d9b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06bcb495_7fe778e2",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-10-16T14:44:57Z",
+      "side": 1,
+      "message": "nit: is\n\n(or s/s/f/g in the reft of the line for confiftenfy :-P )",
+      "range": {
+        "startLine": 423,
+        "startChar": 64,
+        "endLine": 423,
+        "endChar": 66
+      },
+      "revId": "1a5b417e994662cf80ecdc1379a320caffd3d9b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
