@@ -6,8 +6,28 @@
 
 namespace regexp {
 
-  extern transitioning macro RegExpBuiltinsAssembler::RegExpCreate(
-      implicit context: Context)(Context, Object, String): Object;
+  extern runtime RegExpInitializeAndCompile(Context, JSRegExp, String, String):
+      JSAny;
+
+  @export
+  transitioning macro RegExpCreate(implicit context: Context)(
+      nativeContext: NativeContext, regexpString: JSAny, flags: String): JSAny {
+    const regexpFun =
+        UnsafeCast<JSFunction>(nativeContext[REGEXP_FUNCTION_INDEX]);
+    const initialMap = UnsafeCast<Map>(regexpFun.prototype_or_initial_map);
+    return RegExpCreate(initialMap, regexpString, flags);
+  }
+
+  @export
+  transitioning macro RegExpCreate(implicit context: Context)(
+      initialMap: Map, regexpString: JSAny, flags: String): JSAny {
+    const pattern: String = regexpString == Undefined ?
+        kEmptyString :
+        ToString_Inline(context, regexpString);
+    const regexp: JSObject = AllocateFastOrSlowJSObjectFromMap(initialMap);
+    return RegExpInitializeAndCompile(
+        context, UnsafeCast<JSRegExp>(regexp), pattern, flags);
+  }
 
   extern transitioning macro
   RegExpMatchAllAssembler::CreateRegExpStringIterator(
