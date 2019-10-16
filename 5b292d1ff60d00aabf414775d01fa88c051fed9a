@@ -25,6 +25,91 @@
     },
     {
       "key": {
+        "uuid": "acf24d09_ab796b97",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Decompression here and elsewhere.",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfdc822a_40f3a786",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Please expand a bit more. When does the phase run? When can decompressions be eliminated? Any intricacies worth mentioning? Examples?",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7361df9_937fc459",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Why? It\u0027s unlikely that all nodes will be pushed in here, right? If so, reserving the maximal memory ahead of time seems wasteful.",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46442c5d_2a14e8b5",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Let\u0027s do this in the .h if possible.",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ba6b7d4_be61a384",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Perhaps briefly comment what these inputs represent, same below.",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67e0eb89_92c7b9ce",
         "filename": "src/compiler/decompression-avoider.cc",
         "patchSetId": 7
@@ -65,6 +150,267 @@
         "endLine": 60,
         "endChar": 7
       },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa451f41_4f9ec670",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "The name and description of this method don\u0027t mention maintaining the to_visit_ list. Perhaps rename to \u0027MaybeMarkAndQueueForRevisit\u0027 or so?",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f2ad35e_7a7a09e6",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Is the plan still to remove Compressed machine types?",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69ac6871_a75fbd6a",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Same comment here as in the CL message, more details would be helpful.",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de6f3eb1_e06347df",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Why not DecompressionElimination? That seems to better match existing naming conventions for compiler phases.",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22868bd6_25f7977d",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Why not move this to ChangeLoads (perhaps rename that to Reduce) and only do initialization in the ctor?",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e54bbec_b90319a1",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "couldn\u0027t",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cf21816_987d2ba9",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Please camelify: 32Bits, 64Bits",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e164745_beaf500b",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "appropriate",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66593bc6_37273c7c",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "same",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0f91f45_0e6f0fa5",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Bits",
+      "range": {
+        "startLine": 58,
+        "startChar": 24,
+        "endLine": 58,
+        "endChar": 28
+      },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5151dee_97e94cd3",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "We usually don\u0027t explicitly mark as V8_INLINE. Is there a reason to do so here?",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04e0ec38_5b76fd29",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Could be static (or even better in an anonymous namespace).",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0470ce5_a90e6b75",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "nit: this is just repeating the code in the next line ;)",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40febd9a_7631d120",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "\u0027will be contained\u0027?",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1ecbff1_d7eebf12",
+        "filename": "src/compiler/node.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-16T08:36:09Z",
+      "side": 1,
+      "message": "Note that ZoneDeque uses the recycling allocator, ZoneQueue does not. Consider using ZoneDeque. \n\nAlso, why not move the typedef into the single use-site?",
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
