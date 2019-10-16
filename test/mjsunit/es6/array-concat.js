@@ -1,6 +1,9 @@
 // Copyright 2014 the V8 project authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+
+// Flags: --allow-natives-syntax
+
 (function testArrayConcatArity() {
   "use strict";
   assertEquals(1, Array.prototype.concat.length);
@@ -20,7 +23,8 @@
 })();
 
 (function testNonConcatSpreadableArray() {
-  "use strict"
+  "use strict";
+  %ResetAllProtectors();
   var array = [1, 2, 3];
   assertEquals(array, [].concat(array));
   assertEquals(array, array.concat([]));
@@ -31,6 +35,7 @@
 
 (function testConcatArrayLike() {
   "use strict";
+  %ResetAllProtectors();
   var obj = {
     "length": 6,
     "1": "A",
@@ -48,6 +53,7 @@
 
 (function testConcatArrayLikeStringLength() {
   "use strict";
+  %ResetAllProtectors();
   var obj = {
     "length": "6",
     "1": "A",
@@ -65,6 +71,7 @@
 
 (function testConcatArrayLikeNegativeLength() {
   "use strict";
+  %ResetAllProtectors();
   var obj = {
     "length": -6,
     "1": "A",
@@ -82,6 +89,7 @@
 
 (function testConcatArrayLikeToLengthThrows() {
   "use strict";
+  %ResetAllProtectors();
   var obj = {
     "length": {valueOf: null, toString: null},
     "1": "A",
@@ -99,6 +107,7 @@
 
 (function testConcatArrayLikePrimitiveNonNumberLength() {
   "use strict";
+  %ResetAllProtectors();
   var obj = {
     "1": "A",
     "3": "B",
@@ -114,6 +123,7 @@
 
 (function testConcatArrayLikeLengthToStringThrows() {
   "use strict";
+  %ResetAllProtectors();
   function MyError() {}
   var obj = {
     "length": { toString: function() {
@@ -133,6 +143,7 @@
 
 (function testConcatArrayLikeLengthValueOfThrows() {
   "use strict";
+  %ResetAllProtectors();
   function MyError() {}
   var obj = {
     "length": { valueOf: function() {
@@ -142,16 +153,17 @@
   "1": "A",
   "3": "B",
   "5": "C"
-};
-obj[Symbol.isConcatSpreadable] = true;
-assertThrows(function() {
-  [].concat(obj);
-}, MyError);
+  };
+  obj[Symbol.isConcatSpreadable] = true;
+  assertThrows(function() {
+    [].concat(obj);
+  }, MyError);
 })();
 
 
 (function testConcatHoleyArray() {
   "use strict";
+  %ResetAllProtectors();
   var arr = [];
   arr[4] = "Item 4";
   arr[8] = "Item 8";
@@ -163,6 +175,7 @@ assertThrows(function() {
 
 (function testIsConcatSpreadableGetterThrows() {
   "use strict";
+  %ResetAllProtectors();
   function MyError() {}
   var obj = {};
   Object.defineProperty(obj, Symbol.isConcatSpreadable, {
@@ -181,6 +194,7 @@ assertThrows(function() {
 
 (function testConcatLengthThrows() {
   "use strict";
+  %ResetAllProtectors();
   function MyError() {}
   var obj = {};
   obj[Symbol.isConcatSpreadable] = true;
@@ -200,6 +214,7 @@ assertThrows(function() {
 
 (function testConcatArraySubclass() {
   "use strict";
+  %ResetAllProtectors();
   // If @@isConcatSpreadable is not used, the value of IsArray(O)
   // is used to determine the spreadable property.
   class A extends Array {}
@@ -220,6 +235,7 @@ assertThrows(function() {
 
 (function testConcatArraySubclassOptOut() {
   "use strict";
+  %ResetAllProtectors();
   class A extends Array {
     get [Symbol.isConcatSpreadable]() { return false; }
   }
@@ -233,6 +249,7 @@ assertThrows(function() {
 
 (function testConcatNonArray() {
   "use strict";
+  %ResetAllProtectors();
   class NonArray {
     constructor() { Array.apply(this, arguments); }
   };
@@ -247,6 +264,7 @@ assertThrows(function() {
 
 function testConcatTypedArray(type, elems, modulo) {
   "use strict";
+  %ResetAllProtectors();
   var items = new Array(elems);
   var ta_by_len = new type(elems);
   for (var i = 0; i < elems; ++i) {
@@ -273,6 +291,7 @@ function testConcatTypedArray(type, elems, modulo) {
 }
 
 (function testConcatSmallTypedArray() {
+  %ResetAllProtectors();
   var length = 1;
   testConcatTypedArray(Uint8Array, length, Math.pow(2, 8));
   testConcatTypedArray(Uint16Array, length, Math.pow(2, 16));
@@ -283,6 +302,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 
 (function testConcatLargeTypedArray() {
+  %ResetAllProtectors();
   var length = 4000;
   testConcatTypedArray(Uint8Array, length, Math.pow(2, 8));
   testConcatTypedArray(Uint16Array, length, Math.pow(2, 16));
@@ -293,6 +313,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 
 (function testConcatStrictArguments() {
+  %ResetAllProtectors();
   var args = (function(a, b, c) { "use strict"; return arguments; })(1,2,3);
   args[Symbol.isConcatSpreadable] = true;
   assertEquals([1, 2, 3, 1, 2, 3], [].concat(args, args));
@@ -303,6 +324,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 
 (function testConcatSloppyArguments() {
+  %ResetAllProtectors();
   var args = (function(a, b, c) { return arguments; })(1,2,3);
   args[Symbol.isConcatSpreadable] = true;
   assertEquals([1, 2, 3, 1, 2, 3], [].concat(args, args));
@@ -313,6 +335,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 
 (function testConcatSloppyArgumentsWithDupes() {
+  %ResetAllProtectors();
   var args = (function(a, a, a) { return arguments; })(1,2,3);
   args[Symbol.isConcatSpreadable] = true;
   assertEquals([1, 2, 3, 1, 2, 3], [].concat(args, args));
@@ -323,6 +346,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 
 (function testConcatSloppyArgumentsThrows() {
+  %ResetAllProtectors();
   function MyError() {}
   var args = (function(a) { return arguments; })(1,2,3);
   Object.defineProperty(args, 0, {
@@ -336,6 +360,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 
 (function testConcatHoleySloppyArguments() {
+  %ResetAllProtectors();
   var args = (function(a) { return arguments; })(1,2,3);
   delete args[1];
   args[Symbol.isConcatSpreadable] = true;
@@ -345,6 +370,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 (function testConcatSpreadableStringWrapper() {
   "use strict";
+  %ResetAllProtectors();
   var str1 = new String("yuck\uD83D\uDCA9")
   // String wrapper objects are not concat-spreadable by default
   assertEquals([str1], [].concat(str1));
@@ -367,6 +393,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 (function testConcatSpreadableBooleanWrapper() {
   "use strict";
+  %ResetAllProtectors();
   var bool = new Boolean(true)
   // Boolean wrapper objects are not concat-spreadable by default
   assertEquals([bool], [].concat(bool));
@@ -398,6 +425,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 (function testConcatSpreadableNumberWrapper() {
   "use strict";
+  %ResetAllProtectors();
   var num = new Number(true)
   // Number wrapper objects are not concat-spreadable by default
   assertEquals([num], [].concat(num));
@@ -429,6 +457,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 (function testConcatSpreadableFunction() {
   "use strict";
+  %ResetAllProtectors();
   var fn = function(a, b, c) {}
   // Functions are not concat-spreadable by default
   assertEquals([fn], [].concat(fn));
@@ -455,6 +484,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 (function testConcatSpreadableRegExp() {
   "use strict";
+  %ResetAllProtectors();
   var re = /abc/;
   // RegExps are not concat-spreadable by default
   assertEquals([re], [].concat(re));
@@ -484,6 +514,7 @@ function testConcatTypedArray(type, elems, modulo) {
 
 (function testArrayConcatSpreadableSparseObject() {
   "use strict";
+  %ResetAllProtectors();
   var obj = { length: 5 };
   obj[Symbol.isConcatSpreadable] = true;
   assertEquals([void 0, void 0, void 0, void 0, void 0], [].concat(obj));
@@ -496,6 +527,7 @@ function testConcatTypedArray(type, elems, modulo) {
 // ES5 tests
 (function testArrayConcatES5() {
   "use strict";
+  %ResetAllProtectors();
   var poses;
   var pos;
 
@@ -733,6 +765,7 @@ logger.get = function(t, trap, r) {
 
 
 (function testUnspreadableNonArrayLikeProxy() {
+  %ResetAllProtectors();
   var target = {0: "a", 1: "b"};
   var obj = new Proxy(target, handler);
 
@@ -751,6 +784,7 @@ logger.get = function(t, trap, r) {
 
 
 (function testSpreadableNonArrayLikeProxy() {
+  %ResetAllProtectors();
   var target = {0: "a", 1: "b", [Symbol.isConcatSpreadable]: "truish"};
   var obj = new Proxy(target, handler);
 
@@ -797,6 +831,7 @@ logger.get = function(t, trap, r) {
 
 
 (function testUnspreadableArrayLikeProxy() {
+  %ResetAllProtectors();
   var target = ["a", "b"];
   target[Symbol.isConcatSpreadable] = "";
   var obj = new Proxy(target, handler);
@@ -817,6 +852,7 @@ logger.get = function(t, trap, r) {
 
 
 (function testSpreadableArrayLikeProxy() {
+  %ResetAllProtectors();
   var target = ["a", "b"];
   target[Symbol.isConcatSpreadable] = undefined;
   var obj = new Proxy(target, handler);
@@ -847,6 +883,7 @@ logger.get = function(t, trap, r) {
 
 
 (function testSpreadableArrayLikeProxyWithNontrivialLength() {
+  %ResetAllProtectors();
   var getTrap = function(t, key) {
     if (key === "length") return {[Symbol.toPrimitive]() {return 3}};
     if (key === "2") return "baz";
@@ -861,6 +898,7 @@ logger.get = function(t, trap, r) {
 
 
 (function testSpreadableArrayLikeProxyWithBogusLength() {
+  %ResetAllProtectors();
   var getTrap = function(t, key) {
     if (key === "length") return Symbol();
     if (key === "2") return "baz";
@@ -875,6 +913,7 @@ logger.get = function(t, trap, r) {
 
 (function testConcatRevokedProxy() {
   "use strict";
+  %ResetAllProtectors();
   var target = [];
   var handler = {
     get(_, name) {

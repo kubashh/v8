@@ -86,6 +86,8 @@ class Protectors : public AllStatic {
   V8_EXPORT_PRIVATE static inline bool Is##name##Intact(       \
       Handle<NativeContext> native_context);                   \
   V8_EXPORT_PRIVATE static void Invalidate##name(              \
+      Isolate* isolate, Handle<NativeContext> native_context); \
+  V8_EXPORT_PRIVATE static void Reset##name##ForTesting(       \
       Isolate* isolate, Handle<NativeContext> native_context);
 
   DECLARED_PROTECTORS_ON_NATIVE_CONTEXT(DECLARE_PROTECTOR_ON_NATIVE_CONTEXT)
@@ -93,7 +95,8 @@ class Protectors : public AllStatic {
 
 #define DECLARE_PROTECTOR_ON_ISOLATE(name, unused_root_index, unused_cell) \
   V8_EXPORT_PRIVATE static inline bool Is##name##Intact(Isolate* isolate); \
-  V8_EXPORT_PRIVATE static void Invalidate##name(Isolate* isolate);
+  V8_EXPORT_PRIVATE static void Invalidate##name(Isolate* isolate);        \
+  V8_EXPORT_PRIVATE static void Reset##name##ForTesting(Isolate* isolate);
 
   DECLARED_PROTECTORS_ON_ISOLATE(DECLARE_PROTECTOR_ON_ISOLATE)
 #undef DECLARE_PROTECTOR_ON_ISOLATE

@@ -67,5 +67,31 @@ DECLARED_PROTECTORS_ON_NATIVE_CONTEXT(
 DECLARED_PROTECTORS_ON_ISOLATE(INVALIDATE_PROTECTOR_ON_ISOLATE_DEFINITION)
 #undef INVALIDATE_PROTECTOR_ON_ISOLATE_DEFINITION
 
+#define RESET_PROTECTOR_ON_NATIVE_CONTEXT_DEFINITION(name, cell)        \
+  void Protectors::Reset##name##ForTesting(                             \
+      Isolate* isolate, Handle<NativeContext> native_context) {         \
+    DCHECK_EQ(*native_context, isolate->raw_native_context());          \
+    DCHECK(native_context->cell().value().IsSmi());                     \
+    Handle<PropertyCell> species_cell(native_context->cell(), isolate); \
+    PropertyCell::SetValueWithInvalidation(                             \
+        isolate, #cell, species_cell,                                   \
+        handle(Smi::FromInt(kProtectorValid), isolate));                \
+    DCHECK(Is##name##Intact(native_context));                           \
+  }
+DECLARED_PROTECTORS_ON_NATIVE_CONTEXT(
+    RESET_PROTECTOR_ON_NATIVE_CONTEXT_DEFINITION)
+#undef RESET_PROTECTOR_ON_NATIVE_CONTEXT_DEFINITION
+
+#define RESET_PROTECTOR_ON_ISOLATE_DEFINITION(name, unused_index, cell) \
+  void Protectors::Reset##name##ForTesting(Isolate* isolate) {          \
+    DCHECK(isolate->factory()->cell()->value().IsSmi());                \
+    PropertyCell::SetValueWithInvalidation(                             \
+        isolate, #cell, isolate->factory()->cell(),                     \
+        handle(Smi::FromInt(kProtectorValid), isolate));                \
+    DCHECK(Is##name##Intact(isolate));                                  \
+  }
+DECLARED_PROTECTORS_ON_ISOLATE(RESET_PROTECTOR_ON_ISOLATE_DEFINITION)
+#undef RESET_PROTECTOR_ON_ISOLATE_DEFINITION
+
 }  // namespace internal
 }  // namespace v8
