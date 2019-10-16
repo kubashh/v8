@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "879fd5e8_baaf8981",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-16T09:04:01Z",
+      "side": 1,
+      "message": "Yes, I can see why it fails. The alternative would be to add an overload\n\nFromConstexpr\u003cint32, constexpr PromiseState\u003e(s: constexpr PromiseState):\n    int32 {\n  return %FromConstexpr\u003cPromiseState\u003e(s);\n}\n\nUnfortunate... I\u0027m not sure what is better.",
+      "parentUuid": "e062123f_e44bc8b8",
+      "range": {
+        "startLine": 2080,
+        "startChar": 0,
+        "endLine": 2084,
+        "endChar": 0
+      },
+      "revId": "4a5d8cfbfbadf9d92656cddd46a1bf26361bf89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa1f5f1b_b50390d9",
         "filename": "src/builtins/base.tq",
         "patchSetId": 8
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Okay, I made this change, but then torque complained about the lack of a cast for PromiseReaction. I added that cast, and now it seems to work. Was that expected?",
       "parentUuid": "aa1f5f1b_b50390d9",
+      "range": {
+        "startLine": 2929,
+        "startChar": 0,
+        "endLine": 2938,
+        "endChar": 0
+      },
+      "revId": "4a5d8cfbfbadf9d92656cddd46a1bf26361bf89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1a3dc49_55631853",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 2938,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-16T09:04:01Z",
+      "side": 1,
+      "message": "Yes, that\u0027s expected, I missed that :)",
+      "parentUuid": "ec6bad70_4f51c7ae",
       "range": {
         "startLine": 2929,
         "startChar": 0,
