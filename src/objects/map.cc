@@ -537,8 +537,18 @@ bool Map::InstancesNeedRewriting(Map target, int target_number_of_fields,
   DescriptorArray old_desc = instance_descriptors();
   DescriptorArray new_desc = target.instance_descriptors();
   for (InternalIndex i : IterateOwnDescriptors()) {
+    if (new_desc.GetDetails(i).location() !=
+        old_desc.GetDetails(i).location()) {
+      return true;
+    }
+    if (new_desc.GetDetails(i).location() != kField) continue;
+
     if (new_desc.GetDetails(i).representation().IsDouble() !=
         old_desc.GetDetails(i).representation().IsDouble()) {
+      return true;
+    }
+    if (new_desc.GetDetails(i).field_width_in_words(target_inobject) !=
+        old_desc.GetDetails(i).field_width_in_words(target_inobject)) {
       return true;
     }
   }

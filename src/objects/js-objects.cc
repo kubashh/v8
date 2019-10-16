@@ -2841,6 +2841,14 @@ void MigrateFastToFast(Isolate* isolate, Handle<JSObject> object,
       }
     } else {
       object->RawFastInobjectPropertyAtPut(index, value);
+      if (details.representation().size_in_words() > 1) {
+        DCHECK_EQ(details.representation().size_in_words(), 2);
+        object->RawFastInobjectPropertyAtPut(
+            FieldIndex::ForInObjectOffset(index.offset() + kTaggedSize,
+                                          FieldIndex::kTagged),
+            ReadOnlyRoots(isolate).one_pointer_filler_map(),
+            WriteBarrierMode::SKIP_WRITE_BARRIER);
+      }
     }
   }
 

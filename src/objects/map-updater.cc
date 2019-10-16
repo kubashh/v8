@@ -221,6 +221,14 @@ MapUpdater::State MapUpdater::TryReconfigureToDataFieldInplace() {
     return state_;  // Not done yet.
   }
 
+  if (old_details.field_slot_index() < old_map_->TotalInObjectFieldSlots() &&
+      old_representation.size_in_words() >
+          new_representation_.size_in_words()) {
+    DCHECK_EQ(old_representation.size_in_words(), 2);
+    DCHECK_EQ(new_representation_.size_in_words(), 1);
+    return state_;  // Not done yet.
+  }
+
   DCHECK_EQ(new_kind_, old_details.kind());
   DCHECK_EQ(new_attributes_, old_details.attributes());
   DCHECK_EQ(kField, old_details.location());
@@ -593,8 +601,9 @@ Handle<DescriptorArray> MapUpdater::BuildDescriptorArray() {
       if (next_kind == kData) {
         // Skip an in-object field slot if we can't fit a double in it.
         if (kDoubleSize > kTaggedSize && FLAG_unbox_double_fields &&
-            next_representation.IsDouble() &&
+            next_representation.size_in_words() > 1 &&
             current_offset == in_object_field_slots - 1) {
+          DCHECK_EQ(next_representation.size_in_words(), 2);
           current_offset++;
         }
         d = Descriptor::DataField(key, current_offset, next_attributes,
