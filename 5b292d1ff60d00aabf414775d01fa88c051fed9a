@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "78765dc6_99b03ea9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-10-16T08:23:25Z",
+      "side": 1,
+      "message": "Can I have one of those as well. :D",
+      "range": {
+        "startLine": 7,
+        "startChar": 26,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67e0eb89_92c7b9ce",
         "filename": "src/compiler/decompression-avoider.cc",
         "patchSetId": 7
