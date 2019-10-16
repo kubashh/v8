@@ -16,6 +16,24 @@
       "revId": "477c494c738d96632837e3b295b26cf3bdb359d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b812d23e_f09708fa",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-16T09:54:13Z",
+      "side": 1,
+      "message": "Ack, that looks clearer. It still requires knowledge about when exactly {Sub} might need a temp register, so it still looks a bit brittle to me. But it\u0027s overall much less code, so I like it. The number of instructions generated would be 5 in the best case, and 12 in the worst case, right? So that would also be better.\n\nI changed the code accordingly, plus a few comments. I use assembler methods directly if the extended logic of the MacroAssembler is not needed.",
+      "parentUuid": "5aa456d6_6a7d169c",
+      "revId": "477c494c738d96632837e3b295b26cf3bdb359d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
