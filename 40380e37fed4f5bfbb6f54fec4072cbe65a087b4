@@ -275,6 +275,24 @@
       "revId": "40380e37fed4f5bfbb6f54fec4072cbe65a087b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9378a5b_0af2b063",
+        "filename": "src/builtins/promise-abstract-operations.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-10-16T13:22:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "176ec77e_0bc2d224",
+      "revId": "40380e37fed4f5bfbb6f54fec4072cbe65a087b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
