@@ -1104,6 +1104,24 @@
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6612f349_81b0d6b2",
+        "filename": "src/compiler/node.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-17T12:41:35Z",
+      "side": 1,
+      "message": "Sounds like a good reason to me. I will add a comment that we use it as a Queue and the only reason we are using Deque is because of this reuse of freed memory.",
+      "parentUuid": "b235bc48_2fa1a0cc",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
