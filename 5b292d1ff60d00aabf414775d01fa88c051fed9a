@@ -289,6 +289,30 @@
     },
     {
       "key": {
+        "uuid": "5463ffc8_5cc97649",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-17T08:34:35Z",
+      "side": 1,
+      "message": "It ends up being lowered to an add with 64 bit registers, which certainly observes the upper bits, so it has to be State::kNeeds64bits.",
+      "parentUuid": "7e60d6ff_57589a19",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 53
+      },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b76b6a77_0d8ecaf7",
         "filename": "src/compiler/decompression-avoider.cc",
         "patchSetId": 7
@@ -324,6 +348,30 @@
       "side": 1,
       "message": "We are looking at them below. In the\nfor (int i \u003d node-\u003eop()-\u003eValueInputCount(); i \u003c node-\u003eInputCount(); ++i)\nloop",
       "parentUuid": "b76b6a77_0d8ecaf7",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 60,
+        "endChar": 7
+      },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "78669c1a_86c91788",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-17T08:34:35Z",
+      "side": 1,
+      "message": "Sorry, I\u0027m blind ...",
+      "parentUuid": "cdff889b_0c31dee4",
       "range": {
         "startLine": 58,
         "startChar": 6,
@@ -506,6 +554,24 @@
       "side": 1,
       "message": "Ack. I still think \u0027DecompressionAvoider\u0027 sounds a bit awkward but don\u0027t have a super-strong opinion. I\u0027d appreciate other\u0027s input (neis? tebbi?).",
       "parentUuid": "68b344b4_c3e86fab",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d414f94_f9eee863",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-17T08:34:35Z",
+      "side": 1,
+      "message": "I\u0027d suggest DecompressionOptimizer, since it doesn\u0027t actually remove decompressions, just replaces them with a faster version.",
+      "parentUuid": "dae97c07_b0e4f579",
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
