@@ -172,6 +172,24 @@
     },
     {
       "key": {
+        "uuid": "15ee6117_fe48b547",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-17T10:24:56Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "65d53fa0_2b0d7830",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46442c5d_2a14e8b5",
         "filename": "src/compiler/decompression-avoider.cc",
         "patchSetId": 7
@@ -310,6 +328,30 @@
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b28df6d_03156705",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-17T10:24:56Z",
+      "side": 1,
+      "message": "Ack. Updated here and in the Store case.\nAlso updated the doc regarding this.",
+      "parentUuid": "5463ffc8_5cc97649",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 53
+      },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -572,6 +614,24 @@
       "side": 1,
       "message": "I\u0027d suggest DecompressionOptimizer, since it doesn\u0027t actually remove decompressions, just replaces them with a faster version.",
       "parentUuid": "dae97c07_b0e4f579",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d55aa0c4_f639dd83",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-17T10:24:56Z",
+      "side": 1,
+      "message": "DecompressionOptimizer SGTM. Jakob?",
+      "parentUuid": "8d414f94_f9eee863",
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
