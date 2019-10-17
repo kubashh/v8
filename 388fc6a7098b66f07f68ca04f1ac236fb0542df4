@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "50f163e8_16bbfc90",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-17T15:23:14Z",
+      "side": 1,
+      "message": "Yeah, I don\u0027t like this magic number either. Updated\n\nWhen I first implemented this, I talked with Dan offline regarding possible changes to NodeMarke. We arrived at something using template arguments that worked fine for enums and bool (NodeMarker\u003cbool\u003e is the most common case of NodeMarker).\nHowever, it doesn\u0027t suit well to this NodeMarker\u003csize_t\u003e (https://cs.chromium.org/chromium/src/v8/src/compiler/loop-peeling.cc?q\u003dNodeMarker%3Csize\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d108). It passes the number of states here (https://cs.chromium.org/chromium/src/v8/src/compiler/loop-peeling.cc?q\u003dNodeMarker%3Csize\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d113) and it changes on runtime.",
+      "parentUuid": "7f135cf1_d00e0300",
+      "range": {
+        "startLine": 29,
+        "startChar": 21,
+        "endLine": 29,
+        "endChar": 22
+      },
+      "revId": "388fc6a7098b66f07f68ca04f1ac236fb0542df4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ce155b7_faa32c45",
         "filename": "src/compiler/decompression-optimizer.cc",
         "patchSetId": 16
@@ -45,6 +69,30 @@
       "revId": "388fc6a7098b66f07f68ca04f1ac236fb0542df4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c60a219b_79a9f462",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-17T15:23:14Z",
+      "side": 1,
+      "message": "It doesn\u0027t make a difference since it\u0027s only used in this phase and we make sure to only change Tagged loads. I can add it for correctness reasons.",
+      "parentUuid": "9ce155b7_faa32c45",
+      "range": {
+        "startLine": 53,
+        "startChar": 6,
+        "endLine": 54,
+        "endChar": 66
+      },
+      "revId": "388fc6a7098b66f07f68ca04f1ac236fb0542df4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "20b15427_a271897a",
+        "filename": "src/compiler/decompression-optimizer.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-17T15:23:14Z",
+      "side": 1,
+      "message": "Ack. Updated comment.",
+      "parentUuid": "8b4bd75f_c1b702c4",
+      "range": {
+        "startLine": 49,
+        "startChar": 50,
+        "endLine": 49,
+        "endChar": 77
+      },
+      "revId": "388fc6a7098b66f07f68ca04f1ac236fb0542df4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "367e4beb_4c9f5f7e",
         "filename": "src/compiler/decompression-optimizer.h",
         "patchSetId": 16
@@ -91,6 +163,30 @@
       "revId": "388fc6a7098b66f07f68ca04f1ac236fb0542df4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37a32bb2_ccac74dd",
+        "filename": "src/compiler/decompression-optimizer.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-17T15:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "367e4beb_4c9f5f7e",
+      "range": {
+        "startLine": 52,
+        "startChar": 30,
+        "endLine": 52,
+        "endChar": 70
+      },
+      "revId": "388fc6a7098b66f07f68ca04f1ac236fb0542df4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
