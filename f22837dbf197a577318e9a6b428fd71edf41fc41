@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0743a45_7f5d73a7",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 5
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-10-17T09:22:39Z",
+      "side": 0,
+      "message": "ha! nice!",
+      "range": {
+        "startLine": 508,
+        "startChar": 29,
+        "endLine": 508,
+        "endChar": 33
+      },
+      "revId": "f22837dbf197a577318e9a6b428fd71edf41fc41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
