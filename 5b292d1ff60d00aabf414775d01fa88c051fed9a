@@ -1086,6 +1086,24 @@
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b235bc48_2fa1a0cc",
+        "filename": "src/compiler/node.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-17T11:45:22Z",
+      "side": 1,
+      "message": "It attempts to reuse \u0027freed\u0027 zone memory instead of always allocating a new region.",
+      "parentUuid": "ede9ecff_9f1d0db2",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
