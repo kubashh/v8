@@ -16,6 +16,24 @@
       "revId": "ecf02c3c9d06d519c8a269a75afbf39d81b76faa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47be7dd0_81cbf93f",
+        "filename": "test/unittests/wasm/trap-handler-x64-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1359388
+      },
+      "writtenOn": "2019-10-17T15:02:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39410557_7e63fd21",
+      "revId": "ecf02c3c9d06d519c8a269a75afbf39d81b76faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
