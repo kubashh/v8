@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c91e39dc_69145468",
+        "filename": "src/builtins/regexp-match-all.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-17T05:16:51Z",
+      "side": 1,
+      "message": "Please put these in regexp.cc since they are used outside matchAll as well.",
+      "revId": "7f23a4c76dce82a2d8e298411402ce513e3adef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6286e2a1_16a90770",
+        "filename": "src/builtins/regexp-match-all.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-17T05:16:51Z",
+      "side": 1,
+      "message": "Here and below, please call this maybeString or maybePattern or so.",
+      "revId": "7f23a4c76dce82a2d8e298411402ce513e3adef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b40921b6_51b60b77",
+        "filename": "src/builtins/regexp-match-all.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-17T05:16:51Z",
+      "side": 1,
+      "message": "nit: please move this cast up to the AllocateFastOrSlow... call.",
+      "revId": "7f23a4c76dce82a2d8e298411402ce513e3adef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36537ab8_a96516ea",
+        "filename": "src/builtins/regexp.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-17T05:16:51Z",
+      "side": 1,
+      "message": "\u0027receiver \u003d\u003d initialPrototype\u0027 doesn\u0027t work?",
+      "revId": "7f23a4c76dce82a2d8e298411402ce513e3adef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
