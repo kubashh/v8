@@ -121,6 +121,24 @@
       "revId": "7f23a4c76dce82a2d8e298411402ce513e3adef1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7866816d_6ca30ea9",
+        "filename": "src/builtins/regexp.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-10-17T18:21:16Z",
+      "side": 1,
+      "message": "Sorry, I missed this one. I can fix it on my next CL.\n\nIt doesn\u0027t work since the args are (Object, HeapObject) while TaggedEqual \u003d only support (Object, TaggedWithIdentity) and TaggedWithIdentity does not include HeapObject.",
+      "parentUuid": "36537ab8_a96516ea",
+      "revId": "7f23a4c76dce82a2d8e298411402ce513e3adef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
