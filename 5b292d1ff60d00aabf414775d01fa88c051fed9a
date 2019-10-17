@@ -154,6 +154,24 @@
     },
     {
       "key": {
+        "uuid": "65d53fa0_2b0d7830",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-17T07:08:06Z",
+      "side": 1,
+      "message": "Personally I\u0027d rely on standard vector growth and not reserve at all.",
+      "parentUuid": "fccb37ef_752ed851",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46442c5d_2a14e8b5",
         "filename": "src/compiler/decompression-avoider.cc",
         "patchSetId": 7
@@ -235,6 +253,30 @@
       "writtenOn": "2019-10-14T17:17:19Z",
       "side": 1,
       "message": "For the index, machine graph verifier states that needs a PointerRepresentation (https://cs.chromium.org/chromium/src/v8/src/compiler/machine-graph-verifier.cc?l\u003d586\u0026rcl\u003d71bbf6321fea2c9e274f1886342ef2e4c1ae1752). That would mean this should be 64 bits.\nIs that PointerRepresentation correct? Do we need 64 bit index?\n\nIt\u0027s the same for the Store case below.",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 53
+      },
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e60d6ff_57589a19",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-17T07:08:06Z",
+      "side": 1,
+      "message": "I don\u0027t know.. Tobias? Otherwise, please ask bmeurer@/jarin@/mstarzinger@.",
+      "parentUuid": "67e0eb89_92c7b9ce",
       "range": {
         "startLine": 45,
         "startChar": 0,
@@ -364,6 +406,24 @@
     },
     {
       "key": {
+        "uuid": "2812e085_7965a38c",
+        "filename": "src/compiler/decompression-avoider.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-17T07:08:06Z",
+      "side": 1,
+      "message": "For posterity here\u0027s the comment: https://docs.google.com/document/d/1CeK8PBeU8_gU3TLXG8cRSv6vKzjaFG6PtKMa0u6QHH4/edit?disco\u003dAAAADd67ADs?",
+      "parentUuid": "dc78e365_f935f404",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69ac6871_a75fbd6a",
         "filename": "src/compiler/decompression-avoider.h",
         "patchSetId": 7
@@ -428,6 +488,24 @@
       "side": 1,
       "message": "DecompressionElimination suited better the previous method: we had explicit change nodes that we eliminated from the graph.\nHere, we are not creating the full decompression in the first place. So, instead of creating and deleting it, we are avoiding creating it in the first place.\n\nI\u0027m open to suggestions but I don\u0027t think DecompressionElimination is a good choice for its name.",
       "parentUuid": "de6f3eb1_e06347df",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dae97c07_b0e4f579",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-17T07:08:06Z",
+      "side": 1,
+      "message": "Ack. I still think \u0027DecompressionAvoider\u0027 sounds a bit awkward but don\u0027t have a super-strong opinion. I\u0027d appreciate other\u0027s input (neis? tebbi?).",
+      "parentUuid": "68b344b4_c3e86fab",
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

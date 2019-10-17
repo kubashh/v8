@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c52509d_edb625ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-17T07:08:06Z",
+      "side": 1,
+      "message": "\u0027when machine nodes\u0027?",
+      "revId": "e26c8883a8cc8f29f69aaf7028959ebe04870991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96b01cd8_f76969e2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-17T07:08:06Z",
+      "side": 1,
+      "message": "Load\u0027s",
+      "revId": "e26c8883a8cc8f29f69aaf7028959ebe04870991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
