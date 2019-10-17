@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a8b8d72_582dda79",
+        "filename": "tools/turbolizer/src/schedule-view.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-10-17T12:03:17Z",
+      "side": 1,
+      "message": "This does not need \u0027viewpane\u0027, flex is handling it, please remove it.",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 32
+      },
+      "revId": "96cc70090a314781bef8b7bbd15fe0709a4b857b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e59003d0_dbe2d54b",
+        "filename": "tools/turbolizer/src/sequence-view.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-10-17T12:03:17Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 16,
+        "startChar": 24,
+        "endLine": 16,
+        "endChar": 32
+      },
+      "revId": "96cc70090a314781bef8b7bbd15fe0709a4b857b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
