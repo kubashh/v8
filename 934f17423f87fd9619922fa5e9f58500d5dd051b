@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6df3c6d5_899aac0d",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1260,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-10-17T11:04:25Z",
+      "side": 1,
+      "message": "Not true yet, can you remove this until it\u0027s the case?",
+      "range": {
+        "startLine": 1260,
+        "startChar": 57,
+        "endLine": 1260,
+        "endChar": 85
+      },
+      "revId": "934f17423f87fd9619922fa5e9f58500d5dd051b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
