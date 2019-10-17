@@ -656,6 +656,24 @@
     },
     {
       "key": {
+        "uuid": "0943883e_441a64e1",
+        "filename": "src/compiler/decompression-avoider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-17T10:46:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e9821928_8bc90df5",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22868bd6_25f7977d",
         "filename": "src/compiler/decompression-avoider.h",
         "patchSetId": 7
@@ -1047,6 +1065,24 @@
       "side": 1,
       "message": "We don\u0027t need the extra methods that Deque has. Is it worth it to change it to have the recycling allocator?\n\nIt\u0027s not single use: https://cs.chromium.org/search/?q\u003d%22ZoneQueue%3CNode*%3E%22\u0026sq\u003dpackage:chromium\u0026type\u003dcs\nI was planning on updating the other ZoneQueue\u003cNode*\u003e in a future CL.",
       "parentUuid": "c1ecbff1_d7eebf12",
+      "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ede9ecff_9f1d0db2",
+        "filename": "src/compiler/node.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-17T10:46:43Z",
+      "side": 1,
+      "message": "I think this is the only comment unresolved. I am not seeing the importance of the recycling allocator. Am I missing something?",
+      "parentUuid": "43f76c79_047c9f53",
       "revId": "5b292d1ff60d00aabf414775d01fa88c051fed9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
