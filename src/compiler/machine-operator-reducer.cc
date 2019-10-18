@@ -668,6 +668,9 @@ Reduction MachineOperatorReducer::Reduce(Node* node) {
           DCHECK(machine()->Is64() && SmiValuesAre31Bits());
           return Replace(BitcastWord32ToCompressedSigned(n.node()->InputAt(0)));
         }
+      } else if (m.IsHeapConstant() && !FLAG_turbo_decompression_elimination) {
+        return Replace(graph()->NewNode(
+            common()->CompressedHeapConstant(HeapConstantOf(m.node()->op()))));
       }
       break;
     }
