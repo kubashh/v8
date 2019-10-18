@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f064c0ab_1788588d",
+        "filename": "src/compiler/linkage.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-10-18T14:19:46Z",
+      "side": 1,
+      "message": "Could you add a comment here clarifying their relationship, e.g. that the second only matters when the first is set. (And maybe change the code such that we only set the second one when we set the first one.)",
+      "revId": "b4888cca8b58120ecc967f0fa9945d0ca34e377f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
