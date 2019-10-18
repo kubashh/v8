@@ -3520,6 +3520,14 @@ void Shell::WaitForRunningWorkers() {
   allow_new_workers_ = true;
 }
 
+size_t D8NearHeapLimitCallback(void* data, size_t current_heap_limit,
+                               size_t initial_heap_limit) {
+  printf("NearHeapLimitCallback: %zuKB %zuKB\n", current_heap_limit / 1024,
+         initial_heap_limit / 1024);
+  reinterpret_cast<v8::Isolate*>(data)->TerminateExecution();
+  return initial_heap_limit * 4;
+}
+
 int Shell::Main(int argc, char* argv[]) {
   v8::base::EnsureConsoleOutput();
   if (!SetOptions(argc, argv)) return 1;
@@ -3641,6 +3649,8 @@ int Shell::Main(int argc, char* argv[]) {
       Shell::HostImportModuleDynamically);
   isolate->SetHostInitializeImportMetaObjectCallback(
       Shell::HostInitializeImportMetaObject);
+
+  isolate->AddNearHeapLimitCallback(D8NearHeapLimitCallback, isolate);
 
   D8Console console(isolate);
   {
