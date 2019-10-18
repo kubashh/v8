@@ -2787,8 +2787,10 @@ void InstructionSelector::VisitCall(Node* node, BasicBlock* handler) {
   auto call_descriptor = CallDescriptorOf(node->op());
 
   if (call_descriptor->NeedsCallerSavedRegisters()) {
-    Emit(kArchSaveCallerRegisters | MiscField::encode(static_cast<int>(
-                                        call_descriptor->get_save_fp_mode())),
+    SaveFPRegsMode mode = call_descriptor->NeedsCallerSavedFPRegisters()
+                              ? kSaveFPRegs
+                              : kDontSaveFPRegs;
+    Emit(kArchSaveCallerRegisters | MiscField::encode(static_cast<int>(mode)),
          g.NoOutput());
   }
 
@@ -2869,10 +2871,12 @@ void InstructionSelector::VisitCall(Node* node, BasicBlock* handler) {
   EmitPrepareResults(&(buffer.output_nodes), call_descriptor, node);
 
   if (call_descriptor->NeedsCallerSavedRegisters()) {
-    Emit(kArchRestoreCallerRegisters |
-             MiscField::encode(
-                 static_cast<int>(call_descriptor->get_save_fp_mode())),
-         g.NoOutput());
+    SaveFPRegsMode mode = call_descriptor->NeedsCallerSavedFPRegisters()
+                              ? kSaveFPRegs
+                              : kDontSaveFPRegs;
+    Emit(
+        kArchRestoreCallerRegisters | MiscField::encode(static_cast<int>(mode)),
+        g.NoOutput());
   }
 }
 
