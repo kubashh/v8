@@ -495,8 +495,9 @@ class V8_EXPORT_PRIVATE Factory {
                      int inobject_properties = 0);
   // Initializes the fields of a newly created Map. Exposed for tests and
   // heap setup; other code should just call NewMap which takes care of it.
-  Map InitializeMap(Map map, InstanceType type, int instance_size,
-                    ElementsKind elements_kind, int inobject_properties);
+  Map InitializeMap(Uninitialized<Map> map, InstanceType type,
+                    int instance_size, ElementsKind elements_kind,
+                    int inobject_properties);
 
   // Allocate a block of memory of the given AllocationType (filled with a
   // filler). Used as a fall-back for generated code when the space is full.
@@ -907,7 +908,8 @@ class V8_EXPORT_PRIVATE Factory {
 
   Handle<CallHandlerInfo> NewCallHandlerInfo(bool has_no_side_effect = false);
 
-  HeapObject NewForTest(Handle<Map> map, AllocationType allocation) {
+  Uninitialized<HeapObject> NewForTest(Handle<Map> map,
+                                       AllocationType allocation) {
     return New(map, allocation);
   }
 
@@ -1003,10 +1005,10 @@ class V8_EXPORT_PRIVATE Factory {
     return (Isolate*)this;  // NOLINT(readability/casting)
   }
 
-  HeapObject AllocateRawWithImmortalMap(
+  Uninitialized<HeapObject> AllocateRawWithImmortalMap(
       int size, AllocationType allocation, Map map,
       AllocationAlignment alignment = kWordAligned);
-  HeapObject AllocateRawWithAllocationSite(
+  Uninitialized<HeapObject> AllocateRawWithAllocationSite(
       Handle<Map> map, AllocationType allocation,
       Handle<AllocationSite> allocation_site);
 
@@ -1015,9 +1017,12 @@ class V8_EXPORT_PRIVATE Factory {
       Handle<JSArrayBuffer> buffer, size_t byte_offset, size_t byte_length);
 
   // Allocate memory for an uninitialized array (e.g., a FixedArray or similar).
-  HeapObject AllocateRawArray(int size, AllocationType allocation);
-  HeapObject AllocateRawFixedArray(int length, AllocationType allocation);
-  HeapObject AllocateRawWeakArrayList(int length, AllocationType allocation);
+  Uninitialized<HeapObject> AllocateRawArray(int size,
+                                             AllocationType allocation);
+  Uninitialized<HeapObject> AllocateRawFixedArray(int length,
+                                                  AllocationType allocation);
+  Uninitialized<HeapObject> AllocateRawWeakArrayList(int length,
+                                                     AllocationType allocation);
   Handle<FixedArray> NewFixedArrayWithFiller(RootIndex map_root_index,
                                              int length, Object filler,
                                              AllocationType allocation);
@@ -1035,7 +1040,7 @@ class V8_EXPORT_PRIVATE Factory {
 
   // Creates a heap object based on the map. The fields of the heap object are
   // not initialized, it's the responsibility of the caller to do that.
-  HeapObject New(Handle<Map> map, AllocationType allocation);
+  Uninitialized<HeapObject> New(Handle<Map> map, AllocationType allocation);
 
   template <typename T>
   Handle<T> CopyArrayWithMap(Handle<T> src, Handle<Map> map);

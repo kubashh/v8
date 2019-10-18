@@ -16,6 +16,7 @@
 #include "src/heap/array-buffer-collector.h"
 #include "src/heap/array-buffer-tracker-inl.h"
 #include "src/heap/gc-tracer.h"
+#include "src/heap/heap.h"
 #include "src/heap/incremental-marking-inl.h"
 #include "src/heap/invalidated-slots-inl.h"
 #include "src/heap/item-parallel-job.h"
@@ -1242,40 +1243,46 @@ class EvacuateVisitorBase : public HeapObjectVisitor {
  protected:
   enum MigrationMode { kFast, kObserved };
 
-  using MigrateFunction = void (*)(EvacuateVisitorBase* base, HeapObject dst,
+  using MigrateFunction = void (*)(EvacuateVisitorBase* base,
+                                   Uninitialized<HeapObject> dst,
                                    HeapObject src, int size,
                                    AllocationSpace dest);
 
   template <MigrationMode mode>
-  static void RawMigrateObject(EvacuateVisitorBase* base, HeapObject dst,
-                               HeapObject src, int size, AllocationSpace dest) {
+  static void RawMigrateObject(EvacuateVisitorBase* base,
+                               Uninitialized<HeapObject> dst, HeapObject src,
+                               int size, AllocationSpace dest) {
     Address dst_addr = dst.address();
     Address src_addr = src.address();
     DCHECK(base->heap_->AllowedToBeMigrated(src.map(), src, dest));
     DCHECK_NE(dest, LO_SPACE);
     DCHECK_NE(dest, CODE_LO_SPACE);
+    HeapObject dst_obj;
     if (dest == OLD_SPACE) {
       DCHECK_OBJECT_SIZE(size);
       DCHECK(IsAligned(size, kTaggedSize));
       base->heap_->CopyBlock(dst_addr, src_addr, size);
+      dst_obj = dst.publish();
       if (mode != MigrationMode::kFast)
-        base->ExecuteMigrationObservers(dest, src, dst, size);
-      dst.IterateBodyFast(dst.map(), size, base->record_visitor_);
+        base->ExecuteMigrationObservers(dest, src, dst_obj, size);
+      dst_obj.IterateBodyFast(dst_obj.map(), size, base->record_visitor_);
     } else if (dest == CODE_SPACE) {
       DCHECK_CODEOBJECT_SIZE(size, base->heap_->code_space());
       base->heap_->CopyBlock(dst_addr, src_addr, size);
-      Code::cast(dst).Relocate(dst_addr - src_addr);
+      dst_obj = dst.publish();
+      Code::cast(dst_obj).Relocate(dst_addr - src_addr);
       if (mode != MigrationMode::kFast)
-        base->ExecuteMigrationObservers(dest, src, dst, size);
-      dst.IterateBodyFast(dst.map(), size, base->record_visitor_);
+        base->ExecuteMigrationObservers(dest, src, dst_obj, size);
+      dst_obj.IterateBodyFast(dst_obj.map(), size, base->record_visitor_);
     } else {
       DCHECK_OBJECT_SIZE(size);
       DCHECK(dest == NEW_SPACE);
       base->heap_->CopyBlock(dst_addr, src_addr, size);
+      dst_obj = dst.publish();
       if (mode != MigrationMode::kFast)
-        base->ExecuteMigrationObservers(dest, src, dst, size);
+        base->ExecuteMigrationObservers(dest, src, dst_obj, size);
     }
-    src.set_map_word(MapWord::FromForwardingAddress(dst));
+    src.set_map_word(MapWord::FromForwardingAddress(dst_obj));
   }
 
   EvacuateVisitorBase(Heap* heap, LocalAllocator* local_allocator,
@@ -1287,7 +1294,8 @@ class EvacuateVisitorBase : public HeapObjectVisitor {
   }
 
   inline bool TryEvacuateObject(AllocationSpace target_space, HeapObject object,
-                                int size, HeapObject* target_object) {
+                                int size,
+                                Uninitialized<HeapObject>* target_object) {
 #ifdef VERIFY_HEAP
     if (AbortCompactionForTesting(object)) return false;
 #endif  // VERIFY_HEAP
@@ -1295,9 +1303,10 @@ class EvacuateVisitorBase : public HeapObjectVisitor {
     AllocationResult allocation = local_allocator_->Allocate(
         target_space, size, AllocationOrigin::kGC, alignment);
     if (allocation.To(target_object)) {
-      MigrateObject(*target_object, object, size, target_space);
+      MigrateObject(target_object->as<HeapObject>(), object, size,
+                    target_space);
       if (target_space == CODE_SPACE)
-        MemoryChunk::FromHeapObject(*target_object)
+        MemoryChunk::FromAddress(target_object->address())
             ->GetCodeObjectRegistry()
             ->RegisterNewlyAllocatedCodeObject((*target_object).address());
       return true;
@@ -1312,9 +1321,9 @@ class EvacuateVisitorBase : public HeapObjectVisitor {
     }
   }
 
-  inline void MigrateObject(HeapObject dst, HeapObject src, int size,
-                            AllocationSpace dest) {
-    migration_function_(this, dst, src, size, dest);
+  inline void MigrateObject(Uninitialized<HeapObject> dst, HeapObject src,
+                            int size, AllocationSpace dest) {
+    migration_function_(this, std::move(dst), src, size, dest);
   }
 
 #ifdef VERIFY_HEAP
@@ -1358,7 +1367,7 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
 
   inline bool Visit(HeapObject object, int size) override {
     if (TryEvacuateWithoutCopy(object)) return true;
-    HeapObject target_object;
+    Uninitialized<HeapObject> target_object;
     if (heap_->ShouldBePromoted(object.address()) &&
         TryEvacuateObject(OLD_SPACE, object, size, &target_object)) {
       promoted_size_ += size;
@@ -1366,9 +1375,9 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
     }
     heap_->UpdateAllocationSite(object.map(), object,
                                 local_pretenuring_feedback_);
-    HeapObject target;
+    Uninitialized<HeapObject> target;
     AllocationSpace space = AllocateTargetObject(object, size, &target);
-    MigrateObject(HeapObject::cast(target), object, size, space);
+    MigrateObject(target.as<HeapObject>(), object, size, space);
     semispace_copied_size_ += size;
     return true;
   }
@@ -1394,8 +1403,9 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
     return false;
   }
 
-  inline AllocationSpace AllocateTargetObject(HeapObject old_object, int size,
-                                              HeapObject* target_object) {
+  inline AllocationSpace AllocateTargetObject(
+      HeapObject old_object, int size,
+      Uninitialized<HeapObject>* target_object) {
     AllocationAlignment alignment =
         HeapObject::RequiredAlignment(old_object.map());
     AllocationSpace space_allocated_in = NEW_SPACE;
@@ -1483,7 +1493,7 @@ class EvacuateOldSpaceVisitor final : public EvacuateVisitorBase {
       : EvacuateVisitorBase(heap, local_allocator, record_visitor) {}
 
   inline bool Visit(HeapObject object, int size) override {
-    HeapObject target_object;
+    Uninitialized<HeapObject> target_object;
     if (TryEvacuateObject(Page::FromHeapObject(object)->owner_identity(),
                           object, size, &target_object)) {
       DCHECK(object.map_word().IsForwardingAddress());

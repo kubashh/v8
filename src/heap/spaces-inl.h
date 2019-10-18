@@ -5,6 +5,7 @@
 #ifndef V8_HEAP_SPACES_INL_H_
 #define V8_HEAP_SPACES_INL_H_
 
+#include "src/heap/heap.h"
 #include "src/heap/spaces.h"
 
 #include "src/base/atomic-utils.h"
@@ -479,14 +480,14 @@ AllocationResult PagedSpace::AllocateRaw(int size_in_bytes,
 #else
   AllocationResult result = AllocateRawUnaligned(size_in_bytes, origin);
 #endif
-  HeapObject heap_obj;
-  if (!result.IsRetry() && result.To(&heap_obj) && !is_local()) {
+  Uninitialized<HeapObject> allocation;
+  if (!result.IsRetry() && result.To(&allocation) && !is_local()) {
     AllocationStep(static_cast<int>(size_in_bytes + bytes_since_last),
-                   heap_obj.address(), size_in_bytes);
+                   allocation.address(), size_in_bytes);
     StartNextInlineAllocationStep();
     DCHECK_IMPLIES(
         heap()->incremental_marking()->black_allocation(),
-        heap()->incremental_marking()->marking_state()->IsBlack(heap_obj));
+        heap()->incremental_marking()->marking_state()->IsBlack(allocation));
   }
   return result;
 }
@@ -589,11 +590,11 @@ LocalAllocationBuffer LocalAllocationBuffer::FromResult(Heap* heap,
                                                         AllocationResult result,
                                                         intptr_t size) {
   if (result.IsRetry()) return InvalidBuffer();
-  HeapObject obj;
+  Uninitialized<HeapObject> obj;
   bool ok = result.To(&obj);
   USE(ok);
   DCHECK(ok);
-  Address top = HeapObject::cast(obj).address();
+  Address top = obj.address();
   return LocalAllocationBuffer(heap, LinearAllocationArea(top, top + size));
 }
 

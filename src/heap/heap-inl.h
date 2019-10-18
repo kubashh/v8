@@ -173,7 +173,6 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationType type,
 
   bool large_object = size_in_bytes > kMaxRegularHeapObjectSize;
 
-  HeapObject object;
   AllocationResult allocation;
 
   if (FLAG_single_generation && type == AllocationType::kYoung) {
@@ -219,28 +218,31 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationType type,
     UNREACHABLE();
   }
 
+  Uninitialized<HeapObject> object;
   if (allocation.To(&object)) {
     if (AllocationType::kCode == type) {
       // Unprotect the memory chunk of the object if it was not unprotected
       // already.
-      UnprotectAndRegisterMemoryChunk(object);
+      UnprotectAndRegisterMemoryChunk(
+          MemoryChunk::FromAddress(object.address()));
       ZapCodeObject(object.address(), size_in_bytes);
       if (!large_object) {
-        MemoryChunk::FromHeapObject(object)
+        MemoryChunk::FromAddress(object.address())
             ->GetCodeObjectRegistry()
             ->RegisterNewlyAllocatedCodeObject(object.address());
       }
     }
-    OnAllocationEvent(object, size_in_bytes);
+    OnAllocationEvent(object.address(), size_in_bytes);
   }
 
   return allocation;
 }
 
 template <Heap::AllocationRetryMode mode>
-HeapObject Heap::AllocateRawWith(int size, AllocationType allocation,
-                                 AllocationOrigin origin,
-                                 AllocationAlignment alignment) {
+Uninitialized<HeapObject> Heap::AllocateRawWith(int size,
+                                                AllocationType allocation,
+                                                AllocationOrigin origin,
+                                                AllocationAlignment alignment) {
   DCHECK(AllowHandleAllocation::IsAllowed());
   DCHECK(AllowHeapAllocation::IsAllowed());
   DCHECK_EQ(gc_state_, NOT_IN_GC);
@@ -254,7 +256,7 @@ HeapObject Heap::AllocateRawWith(int size, AllocationType allocation,
       V8_LIKELY(!FLAG_single_generation && FLAG_inline_new &&
                 FLAG_gc_interval == 0)) {
     DCHECK(IsAligned(size, kTaggedSize));
-    HeapObject obj = HeapObject::FromAddress(*top);
+    Uninitialized<HeapObject> obj(HeapObject::FromAddress(*top));
     *top += size;
     heap->CreateFillerObjectAt(obj.address(), size, ClearRecordedSlots::kNo);
     MSAN_ALLOCATED_UNINITIALIZED_MEMORY(obj.address(), size);
@@ -271,9 +273,9 @@ HeapObject Heap::AllocateRawWith(int size, AllocationType allocation,
   UNREACHABLE();
 }
 
-void Heap::OnAllocationEvent(HeapObject object, int size_in_bytes) {
+void Heap::OnAllocationEvent(Address address, int size_in_bytes) {
   for (auto& tracker : allocation_trackers_) {
-    tracker->AllocationEvent(object.address(), size_in_bytes);
+    tracker->AllocationEvent(address, size_in_bytes);
   }
 
   if (FLAG_verify_predictable) {
@@ -281,7 +283,7 @@ void Heap::OnAllocationEvent(HeapObject object, int size_in_bytes) {
     // Advance synthetic time by making a time request.
     MonotonicallyIncreasingTimeInMs();
 
-    UpdateAllocationsHash(object);
+    UpdateAllocationsHashWithAddress(address);
     UpdateAllocationsHash(size_in_bytes);
 
     if (allocations_count_ % FLAG_dump_allocations_digest_at_alloc == 0) {
@@ -301,8 +303,7 @@ bool Heap::CanAllocateInReadOnlySpace() {
   return read_only_space()->writable();
 }
 
-void Heap::UpdateAllocationsHash(HeapObject object) {
-  Address object_address = object.address();
+void Heap::UpdateAllocationsHashWithAddress(Address object_address) {
   MemoryChunk* memory_chunk = MemoryChunk::FromAddress(object_address);
   AllocationSpace allocation_space = memory_chunk->owner_identity();
 

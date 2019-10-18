@@ -155,6 +155,43 @@ enum class YoungGenerationHandling {
 
 enum class GCIdleTimeAction : uint8_t;
 
+template <typename T>
+class Uninitialized {
+ public:
+  Uninitialized() {
+#ifdef DEBUG
+    no_gc_.Release();
+#endif
+  }
+  explicit Uninitialized(HeapObject object) : object_(object) {}
+
+  template <typename U>
+  static Uninitialized<T> cast(const Uninitialized<U>& obj) {
+    return Uninitialized<T>(obj.object_);
+  }
+
+  bool is_null() const { return object_.is_null(); }
+
+  T* operator->() const { return object_; }
+
+  T publish() {
+#ifdef DEBUG
+    no_gc_.Release();
+#endif
+    return T::cast(object_);
+  }
+
+  Address address() const { return object_.address(); }
+
+ private:
+  T object_;
+
+#ifdef DEBUG
+  // Don't allow allocations until the uninitialized allocation is dead.
+  DisallowHeapAllocation no_gc_;
+#endif
+};
+
 class AllocationResult {
  public:
   static inline AllocationResult Retry(AllocationSpace space = NEW_SPACE) {
@@ -175,10 +212,9 @@ class AllocationResult {
   inline HeapObject ToObjectChecked();
   inline AllocationSpace RetrySpace();
 
-  template <typename T>
-  bool To(T* obj) {
+  bool To(Uninitialized<HeapObject>* obj) {
     if (IsRetry()) return false;
-    *obj = T::cast(object_);
+    *obj = Uninitialized<HeapObject>(HeapObject::cast(object_));
     return true;
   }
 
@@ -434,8 +470,10 @@ class Heap {
   bool CanMoveObjectStart(HeapObject object);
 
   bool IsImmovable(HeapObject object);
+  bool IsImmovable(Uninitialized<HeapObject> object);
 
   static bool IsLargeObject(HeapObject object);
+  static bool IsLargeObject(Uninitialized<HeapObject> object);
 
   // Trim the given array from the left. Note that this relocates the object
   // start and hence is only valid if there is only a single reference to it.
@@ -608,7 +646,7 @@ class Heap {
   // by runtime. Allocations of target space for object evacuation do not
   // trigger the event. In order to track ALL allocations one must turn off
   // FLAG_inline_new.
-  inline void OnAllocationEvent(HeapObject object, int size_in_bytes);
+  inline void OnAllocationEvent(Address object_address, int size_in_bytes);
 
   // This event is triggered after object is moved to a new place.
   void OnMoveEvent(HeapObject target, HeapObject source, int size_in_bytes);
@@ -1571,7 +1609,7 @@ class Heap {
                                 double deadline_in_ms);
 
   int NextAllocationTimeout(int current_timeout = 0);
-  inline void UpdateAllocationsHash(HeapObject object);
+  inline void UpdateAllocationsHashWithAddress(Address address);
   inline void UpdateAllocationsHash(uint32_t value);
   void PrintAllocationsHash();
 
@@ -1752,7 +1790,7 @@ class Heap {
   // otherwise it falls back to a slower path indicated by the mode.
   enum AllocationRetryMode { kLightRetry, kRetryOrFail };
   template <AllocationRetryMode mode>
-  V8_WARN_UNUSED_RESULT inline HeapObject AllocateRawWith(
+  V8_WARN_UNUSED_RESULT inline Uninitialized<HeapObject> AllocateRawWith(
       int size, AllocationType allocation,
       AllocationOrigin origin = AllocationOrigin::kRuntime,
       AllocationAlignment alignment = kWordAligned);
@@ -1762,7 +1800,8 @@ class Heap {
   // is triggered and the allocation is retried. This is performed multiple
   // times. If after that retry procedure the allocation still fails nullptr is
   // returned.
-  V8_WARN_UNUSED_RESULT HeapObject AllocateRawWithLightRetrySlowPath(
+  V8_WARN_UNUSED_RESULT Uninitialized<HeapObject>
+  AllocateRawWithLightRetrySlowPath(
       int size, AllocationType allocation, AllocationOrigin origin,
       AllocationAlignment alignment = kWordAligned);
 
@@ -1772,11 +1811,13 @@ class Heap {
   // times. If after that retry procedure the allocation still fails a "hammer"
   // garbage collection is triggered which tries to significantly reduce memory.
   // If the allocation still fails after that a fatal error is thrown.
-  V8_WARN_UNUSED_RESULT HeapObject AllocateRawWithRetryOrFailSlowPath(
+  V8_WARN_UNUSED_RESULT Uninitialized<HeapObject>
+  AllocateRawWithRetryOrFailSlowPath(
       int size, AllocationType allocation, AllocationOrigin origin,
       AllocationAlignment alignment = kWordAligned);
 
-  V8_WARN_UNUSED_RESULT HeapObject AllocateRawCodeInLargeObjectSpace(int size);
+  V8_WARN_UNUSED_RESULT Uninitialized<HeapObject>
+  AllocateRawCodeInLargeObjectSpace(int size);
 
   // Allocates a heap object based on the map.
   V8_WARN_UNUSED_RESULT AllocationResult Allocate(Map map,
@@ -1785,7 +1826,8 @@ class Heap {
   // Takes a code object and checks if it is on memory which is not subject to
   // compaction. This method will return a new code object on an immovable
   // memory location if the original code object was movable.
-  HeapObject EnsureImmovableCode(HeapObject heap_object, int object_size);
+  Uninitialized<HeapObject> EnsureImmovableCode(
+      Uninitialized<HeapObject> heap_object, int object_size);
 
   // Allocates a partial map for bootstrapping.
   V8_WARN_UNUSED_RESULT AllocationResult

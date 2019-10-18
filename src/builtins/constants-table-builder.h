@@ -6,15 +6,18 @@
 #define V8_BUILTINS_CONSTANTS_TABLE_BUILDER_H_
 
 #include "src/base/macros.h"
+#include "src/handles/handles.h"
+#include "src/heap/heap.h"
 #include "src/utils/allocation.h"
 #include "src/utils/identity-map.h"
-#include "src/handles/handles.h"
 
 namespace v8 {
 namespace internal {
 
 class Isolate;
 class Object;
+template <typename T>
+class Uninitialized;
 
 // Utility class to build the builtins constants table and store it on the root
 // list. The constants table contains constants used by builtins, and is there
@@ -32,7 +35,7 @@ class BuiltinsConstantsTableBuilder final {
   // with a temporary dummy object. Once the final Code object exists, such
   // entries in the constants map must be patched up.
   void PatchSelfReference(Handle<Object> self_reference,
-                          Handle<Code> code_object);
+                          const Uninitialized<Code>& code_object);
 
   // Should be called after all affected code (e.g. builtins and bytecode
   // handlers) has been generated.

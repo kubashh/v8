@@ -58,13 +58,8 @@ uint32_t BuiltinsConstantsTableBuilder::AddObject(Handle<Object> object) {
 }
 
 void BuiltinsConstantsTableBuilder::PatchSelfReference(
-    Handle<Object> self_reference, Handle<Code> code_object) {
+    Handle<Object> self_reference, const Uninitialized<Code>& code_object) {
 #ifdef DEBUG
-  // Roots must not be inserted into the constants table as they are already
-  // accessibly from the root list.
-  RootIndex root_list_index;
-  DCHECK(!isolate_->roots_table().IsRootHandle(code_object, &root_list_index));
-
   // Not yet finalized.
   DCHECK_EQ(ReadOnlyRoots(isolate_).empty_fixed_array(),
             isolate_->heap()->builtins_constants_table());
@@ -79,7 +74,7 @@ void BuiltinsConstantsTableBuilder::PatchSelfReference(
   uint32_t key;
   if (map_.Delete(self_reference, &key)) {
     DCHECK(code_object->IsCode());
-    map_.Set(code_object, key);
+    map_.Set(Object(code_object->ptr()), key);
   }
 }
 

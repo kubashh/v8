@@ -131,7 +131,7 @@ AllocationResult Heap::AllocateMap(InstanceType instance_type,
 
 AllocationResult Heap::AllocatePartialMap(InstanceType instance_type,
                                           int instance_size) {
-  Object result;
+  HeapObject result;
   AllocationResult allocation =
       AllocateRaw(Map::kSize, AllocationType::kReadOnly);
   if (!allocation.To(&result)) return allocation;

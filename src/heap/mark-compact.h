@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "src/heap/concurrent-marking.h"
+#include "src/heap/heap.h"
 #include "src/heap/marking.h"
 #include "src/heap/objects-visiting.h"
 #include "src/heap/spaces.h"
@@ -36,6 +37,10 @@ class MarkingStateBase {
     return MarkBitFrom(MemoryChunk::FromHeapObject(obj), obj.ptr());
   }
 
+  V8_INLINE MarkBit MarkBitFrom(const Uninitialized<HeapObject>& obj) {
+    return MarkBitFrom(MemoryChunk::FromAddress(obj.address()), obj.address());
+  }
+
   // {addr} may be tagged or aligned.
   V8_INLINE MarkBit MarkBitFrom(MemoryChunk* p, Address addr) {
     return static_cast<ConcreteState*>(this)->bitmap(p)->MarkBitFromIndex(
@@ -51,6 +56,10 @@ class MarkingStateBase {
   }
 
   V8_INLINE bool IsBlack(HeapObject obj) {
+    return Marking::IsBlack<access_mode>(MarkBitFrom(obj));
+  }
+
+  V8_INLINE bool IsBlack(const Uninitialized<HeapObject>& obj) {
     return Marking::IsBlack<access_mode>(MarkBitFrom(obj));
   }
 
