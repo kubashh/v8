@@ -484,6 +484,22 @@ TEST_F(MachineOperatorReducerTest, ChangeUint32ToUint64WithConstant) {
   }
 }
 
+// -----------------------------------------------------------------------------
+// ChangeTaggedToCompressed
+
+TEST_F(MachineOperatorReducerTest, ChangeTaggedToCompressedWithHeapConstant) {
+  // Skip if we are using DecompressionElimination
+  if (FLAG_turbo_decompression_elimination) return;
+
+  TRACED_FOREACH(int32_t, x, kInt32Values) {
+    Reduction reduction = Reduce(
+        graph()->NewNode(machine()->ChangeTaggedToCompressed(),
+                         HeapConstant(isolate()->factory()->NewHeapNumber(x))));
+    ASSERT_TRUE(reduction.Changed());
+    EXPECT_THAT(reduction.replacement()->opcode(),
+                IrOpcode::kCompressedHeapConstant);
+  }
+}
 
 // -----------------------------------------------------------------------------
 // TruncateFloat64ToFloat32
