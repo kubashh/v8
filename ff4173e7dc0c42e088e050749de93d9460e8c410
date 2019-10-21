@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d25fe51_fd7c2804",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-21T10:57:28Z",
+      "side": 1,
+      "message": "Drive-by cleanup",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 54
+      },
+      "revId": "ff4173e7dc0c42e088e050749de93d9460e8c410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
