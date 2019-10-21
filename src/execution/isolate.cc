@@ -2020,6 +2020,9 @@ void Isolate::CancelScheduledExceptionFromTryCatch(v8::TryCatch* handler) {
     DCHECK_EQ(scheduled_exception(),
               ReadOnlyRoots(heap()).termination_exception());
     // Clear termination once we returned from all V8 frames.
+    // std::cerr
+    //     << "CancelScheduledExceptionFromTryCatch (termination) call depth: "
+    //     << thread_local_top()->CallDepthIsZero() << std::endl;
     if (thread_local_top()->CallDepthIsZero()) {
       thread_local_top()->external_caught_exception_ = false;
       clear_scheduled_exception();

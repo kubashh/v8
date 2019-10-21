@@ -2709,6 +2709,11 @@ v8::TryCatch::TryCatch(v8::Isolate* isolate)
 }
 
 v8::TryCatch::~TryCatch() {
+  // std::cerr << "TryCatch::~TryCatch has caught: " << HasCaught()
+  //           << " rethrow: " << rethrow_
+  //           << " has scheduled exn: " << isolate_->has_scheduled_exception()
+  //           << " has pending exn: " << isolate_->has_pending_exception()
+  //           << std::endl;
   if (rethrow_) {
     v8::Isolate* isolate = reinterpret_cast<Isolate*>(isolate_);
     v8::HandleScope scope(isolate);
