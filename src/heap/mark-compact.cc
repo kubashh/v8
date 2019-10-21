@@ -1187,8 +1187,16 @@ class RecordMigratedSlotVisitor : public ObjectVisitor {
         DCHECK_IMPLIES(
             p->IsToPage(),
             p->IsFlagSet(Page::PAGE_NEW_NEW_PROMOTION) || p->IsLargePage());
-        RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(
-            MemoryChunk::FromHeapObject(host), slot);
+
+        MemoryChunk* chunk = MemoryChunk::FromHeapObject(host);
+        DCHECK(chunk->SweepingDone());
+        if (chunk->IsLargePage()) {
+          RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(chunk,
+                                                                    slot);
+        } else {
+          DCHECK_NULL((chunk->slot_set<OLD_TO_NEW, AccessMode::NON_ATOMIC>()));
+          RememberedSetSweeping::Insert<AccessMode::NON_ATOMIC>(chunk, slot);
+        }
       } else if (p->IsEvacuationCandidate()) {
         RememberedSet<OLD_TO_OLD>::Insert<AccessMode::NON_ATOMIC>(
             MemoryChunk::FromHeapObject(host), slot);
@@ -3363,18 +3371,16 @@ class ToSpaceUpdatingItem : public UpdatingItem {
   MarkingState* marking_state_;
 };
 
-template <typename MarkingState>
+template <typename MarkingState, GarbageCollector collector>
 class RememberedSetUpdatingItem : public UpdatingItem {
  public:
   explicit RememberedSetUpdatingItem(Heap* heap, MarkingState* marking_state,
                                      MemoryChunk* chunk,
-                                     RememberedSetUpdatingMode updating_mode,
-                                     bool always_promote_young)
+                                     RememberedSetUpdatingMode updating_mode)
       : heap_(heap),
         marking_state_(marking_state),
         chunk_(chunk),
-        updating_mode_(updating_mode),
-        always_promote_young_(always_promote_young) {}
+        updating_mode_(updating_mode) {}
   ~RememberedSetUpdatingItem() override = default;
 
   void Process() override {
@@ -3439,7 +3445,21 @@ class RememberedSetUpdatingItem : public UpdatingItem {
   }
 
   void UpdateUntypedPointers() {
+    // While the remembered sets for swept pages are merged at the
+    // end of the previous evacuation phase, some swept pages are still
+    // in swept_list_ and not part of a compaction space. Ensure that
+    // the remembered sets of those pages are merged as well.
+    if (chunk_->SweepingDone() && !chunk_->IsLargePage()) {
+      Page* page = static_cast<Page*>(chunk_);
+      page->MergeOldToNewRememberedSets();
+    }
+
     if (chunk_->slot_set<OLD_TO_NEW, AccessMode::NON_ATOMIC>() != nullptr) {
+      DCHECK_IMPLIES(
+          collector == MARK_COMPACTOR,
+          chunk_->SweepingDone() &&
+              chunk_->sweeping_slot_set<AccessMode::NON_ATOMIC>() == nullptr);
+
       InvalidatedSlotsFilter filter = InvalidatedSlotsFilter::OldToNew(chunk_);
       int slots = RememberedSet<OLD_TO_NEW>::Iterate(
           chunk_,
@@ -3449,7 +3469,9 @@ class RememberedSetUpdatingItem : public UpdatingItem {
           },
           SlotSet::FREE_EMPTY_BUCKETS);
 
-      DCHECK_IMPLIES(always_promote_young_, slots == 0);
+      DCHECK_IMPLIES(
+          collector == MARK_COMPACTOR && FLAG_always_promote_young_mc,
+          slots == 0);
 
       if (slots == 0) {
         chunk_->ReleaseSlotSet<OLD_TO_NEW>();
@@ -3457,6 +3479,13 @@ class RememberedSetUpdatingItem : public UpdatingItem {
     }
 
     if (chunk_->sweeping_slot_set<AccessMode::NON_ATOMIC>()) {
+      DCHECK_IMPLIES(
+          collector == MARK_COMPACTOR,
+          !chunk_->SweepingDone() &&
+              (chunk_->slot_set<OLD_TO_NEW, AccessMode::NON_ATOMIC>()) ==
+                  nullptr);
+      DCHECK(!chunk_->IsLargePage());
+
       InvalidatedSlotsFilter filter = InvalidatedSlotsFilter::OldToNew(chunk_);
       int slots = RememberedSetSweeping::Iterate(
           chunk_,
@@ -3466,7 +3495,9 @@ class RememberedSetUpdatingItem : public UpdatingItem {
           },
           SlotSet::FREE_EMPTY_BUCKETS);
 
-      DCHECK_IMPLIES(always_promote_young_, slots == 0);
+      DCHECK_IMPLIES(
+          collector == MARK_COMPACTOR && FLAG_always_promote_young_mc,
+          slots == 0);
 
       if (slots == 0) {
         chunk_->ReleaseSweepingSlotSet();
@@ -3532,7 +3563,6 @@ class RememberedSetUpdatingItem : public UpdatingItem {
   MarkingState* marking_state_;
   MemoryChunk* chunk_;
   RememberedSetUpdatingMode updating_mode_;
-  bool always_promote_young_;
 };
 
 UpdatingItem* MarkCompactCollector::CreateToSpaceUpdatingItem(
@@ -3543,9 +3573,8 @@ UpdatingItem* MarkCompactCollector::CreateToSpaceUpdatingItem(
 
 UpdatingItem* MarkCompactCollector::CreateRememberedSetUpdatingItem(
     MemoryChunk* chunk, RememberedSetUpdatingMode updating_mode) {
-  return new RememberedSetUpdatingItem<NonAtomicMarkingState>(
-      heap(), non_atomic_marking_state(), chunk, updating_mode,
-      FLAG_always_promote_young_mc);
+  return new RememberedSetUpdatingItem<NonAtomicMarkingState, MARK_COMPACTOR>(
+      heap(), non_atomic_marking_state(), chunk, updating_mode);
 }
 
 // Update array buffers on a page that has been evacuated by copying objects.
@@ -4270,8 +4299,9 @@ class YoungGenerationRecordMigratedSlotVisitor final
         DCHECK_IMPLIES(
             p->IsToPage(),
             p->IsFlagSet(Page::PAGE_NEW_NEW_PROMOTION) || p->IsLargePage());
-        RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(
-            MemoryChunk::FromHeapObject(host), slot);
+        MemoryChunk* chunk = MemoryChunk::FromHeapObject(host);
+        DCHECK(chunk->SweepingDone());
+        RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(chunk, slot);
       } else if (p->IsEvacuationCandidate() && IsLive(host)) {
         RememberedSet<OLD_TO_OLD>::Insert<AccessMode::NON_ATOMIC>(
             MemoryChunk::FromHeapObject(host), slot);
@@ -4586,8 +4616,9 @@ UpdatingItem* MinorMarkCompactCollector::CreateToSpaceUpdatingItem(
 
 UpdatingItem* MinorMarkCompactCollector::CreateRememberedSetUpdatingItem(
     MemoryChunk* chunk, RememberedSetUpdatingMode updating_mode) {
-  return new RememberedSetUpdatingItem<NonAtomicMarkingState>(
-      heap(), non_atomic_marking_state(), chunk, updating_mode, false);
+  return new RememberedSetUpdatingItem<NonAtomicMarkingState,
+                                       MINOR_MARK_COMPACTOR>(
+      heap(), non_atomic_marking_state(), chunk, updating_mode);
 }
 
 class MarkingItem;
