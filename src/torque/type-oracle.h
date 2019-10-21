@@ -22,10 +22,11 @@ class TypeOracle : public ContextualClass<TypeOracle> {
   static const AbstractType* GetAbstractType(
       const Type* parent, std::string name, bool transient,
       std::string generated, const AbstractType* non_constexpr_version) {
-    AbstractType* result =
+    std::unique_ptr<AbstractType> type(
         new AbstractType(parent, transient, std::move(name),
-                         std::move(generated), non_constexpr_version);
-    Get().nominal_types_.push_back(std::unique_ptr<AbstractType>(result));
+                         std::move(generated), non_constexpr_version));
+    AbstractType* result = type.get();
+    Get().nominal_types_.push_back(std::move(type));
     if (non_constexpr_version) {
       non_constexpr_version->SetConstexprVersion(result);
     }
@@ -35,10 +36,12 @@ class TypeOracle : public ContextualClass<TypeOracle> {
   static StructType* GetStructType(
       const StructDeclaration* decl,
       StructType::MaybeSpecializationKey specialized_from) {
-    Namespace* nspace = new Namespace(STRUCT_NAMESPACE_STRING);
-    StructType* result = new StructType(nspace, decl, specialized_from);
-    Get().aggregate_types_.push_back(std::unique_ptr<StructType>(result));
-    Get().struct_namespaces_.push_back(std::unique_ptr<Namespace>(nspace));
+    std::unique_ptr<Namespace> nspace(new Namespace(STRUCT_NAMESPACE_STRING));
+    std::unique_ptr<StructType> type(
+        new StructType(nspace.get(), decl, specialized_from));
+    StructType* result = type.get();
+    Get().aggregate_types_.push_back(std::move(type));
+    Get().struct_namespaces_.push_back(std::move(nspace));
     return result;
   }
 
@@ -46,9 +49,10 @@ class TypeOracle : public ContextualClass<TypeOracle> {
                                  ClassFlags flags, const std::string& generates,
                                  ClassDeclaration* decl,
                                  const TypeAlias* alias) {
-    ClassType* result = new ClassType(parent, CurrentNamespace(), name, flags,
-                                      generates, decl, alias);
-    Get().aggregate_types_.push_back(std::unique_ptr<ClassType>(result));
+    std::unique_ptr<ClassType> type(new ClassType(
+        parent, CurrentNamespace(), name, flags, generates, decl, alias));
+    ClassType* result = type.get();
+    Get().aggregate_types_.push_back(std::move(type));
     return result;
   }
 
@@ -110,8 +114,9 @@ class TypeOracle : public ContextualClass<TypeOracle> {
 
   static const TopType* GetTopType(std::string reason,
                                    const Type* source_type) {
-    TopType* result = new TopType(std::move(reason), source_type);
-    Get().top_types_.push_back(std::unique_ptr<TopType>(result));
+    std::unique_ptr<TopType> type(new TopType(std::move(reason), source_type));
+    TopType* result = type.get();
+    Get().top_types_.push_back(std::move(type));
     return result;
   }
 

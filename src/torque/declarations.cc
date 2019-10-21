@@ -144,7 +144,7 @@ base::Optional<GenericStructType*> Declarations::TryLookupGenericStructType(
 }
 
 Namespace* Declarations::DeclareNamespace(const std::string& name) {
-  return Declare(name, std::unique_ptr<Namespace>(new Namespace(name)));
+  return Declare(name, std::make_unique<Namespace>(name));
 }
 
 TypeAlias* Declarations::DeclareType(const Identifier* name, const Type* type) {
@@ -266,8 +266,8 @@ RuntimeFunction* Declarations::DeclareRuntimeFunction(
 void Declarations::DeclareExternConstant(Identifier* name, const Type* type,
                                          std::string value) {
   CheckAlreadyDeclared<Value>(name->value, "constant");
-  ExternConstant* result = new ExternConstant(name, type, value);
-  Declare(name->value, std::unique_ptr<Declarable>(result));
+  Declare(name->value, std::unique_ptr<ExternConstant>(
+                           new ExternConstant(name, type, value)));
 }
 
 NamespaceConstant* Declarations::DeclareNamespaceConstant(Identifier* name,
@@ -276,9 +276,10 @@ NamespaceConstant* Declarations::DeclareNamespaceConstant(Identifier* name,
   CheckAlreadyDeclared<Value>(name->value, "constant");
   std::string external_name =
       name->value + "_" + std::to_string(GlobalContext::FreshId());
-  NamespaceConstant* result =
-      new NamespaceConstant(name, std::move(external_name), type, body);
-  Declare(name->value, std::unique_ptr<Declarable>(result));
+  std::unique_ptr<NamespaceConstant> namespaceConstant(
+      new NamespaceConstant(name, std::move(external_name), type, body));
+  NamespaceConstant* result = namespaceConstant.get();
+  Declare(name->value, std::move(namespaceConstant));
   return result;
 }
 
