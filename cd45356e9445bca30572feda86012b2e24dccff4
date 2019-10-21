@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82b42d3f_5b7e5fa5",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-10-21T08:12:34Z",
+      "side": 1,
+      "message": "Alternatively we could make PagedSpace::RefillFreeList more precise in the case of is_local().\nI.e. merge the remembered sets even for local compaction spaces if they were created for Mark-Compact.",
+      "range": {
+        "startLine": 1192,
+        "startChar": 8,
+        "endLine": 1192,
+        "endChar": 38
+      },
+      "revId": "cd45356e9445bca30572feda86012b2e24dccff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
