@@ -55,6 +55,17 @@ void DecompressionOptimizer::MarkNodes() {
 void DecompressionOptimizer::MarkNodeInputs(Node* node) {
   // Mark the value inputs.
   switch (node->opcode()) {
+    // TaggedEqual and BuildTypedArrayDataPointer use ChangeTaggedToCompressed
+    // Example:
+    // Value_1 -> ChangeTaggedToCompressed \
+    // Value_2 -> ChangeTaggedToCompressed -> Word32Equal
+    // Then, there is no need for the Word32Equal to propagate the
+    // State::kOnly32BitsObserved
+    case IrOpcode::kChangeTaggedToCompressed:
+      DCHECK_EQ(node->op()->ValueInputCount(), 1);
+      MaybeMarkAndQueueForRevisit(node->InputAt(0),
+                                  State::kOnly32BitsObserved);  // value
+      break;
     case IrOpcode::kStore:           // Fall through.
     case IrOpcode::kProtectedStore:  // Fall through.
     case IrOpcode::kUnalignedStore:
@@ -63,15 +74,14 @@ void DecompressionOptimizer::MarkNodeInputs(Node* node) {
                                   State::kEverythingObserved);  // base pointer
       MaybeMarkAndQueueForRevisit(node->InputAt(1),
                                   State::kEverythingObserved);  // index
-      // TODO(v8:7703): When the implementation is done, check if this 'if' is
-      // too restrictive We only mark Tagged stores as 32 bits
-      if (IsAnyTagged(StoreRepresentationOf(node->op()).representation())) {
-        MaybeMarkAndQueueForRevisit(node->InputAt(2),
-                                    State::kOnly32BitsObserved);  // value
-      } else {
-        MaybeMarkAndQueueForRevisit(node->InputAt(2),
-                                    State::kEverythingObserved);  // value
-      }
+      // TODO(v8:7703): When the implementation is done, check if this ternary
+      // operator is too restrictive, since we only mark Tagged stores as 32
+      // bits.
+      MaybeMarkAndQueueForRevisit(
+          node->InputAt(2),
+          IsAnyTagged(StoreRepresentationOf(node->op()).representation())
+              ? State::kOnly32BitsObserved
+              : State::kEverythingObserved);  // value
       break;
     default:
       // To be conservative, we assume that all value inputs need to be 64 bits
