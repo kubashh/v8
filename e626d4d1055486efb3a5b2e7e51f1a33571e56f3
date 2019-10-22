@@ -46,6 +46,30 @@
       "revId": "e626d4d1055486efb3a5b2e7e51f1a33571e56f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "082a5ca5_46c2888b",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-10-22T11:18:43Z",
+      "side": 1,
+      "message": "Ah, naturally, because WasmFeaturesFromIsolate(isolate_).mv is not constexpr.\n\nI don\u0027t really like that we force debug code here into production code. Although I guess the compiler optimizes it away...",
+      "parentUuid": "f81d1997_95a57956",
+      "range": {
+        "startLine": 224,
+        "startChar": 4,
+        "endLine": 224,
+        "endChar": 7
+      },
+      "revId": "e626d4d1055486efb3a5b2e7e51f1a33571e56f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
