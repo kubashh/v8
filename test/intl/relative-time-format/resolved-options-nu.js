@@ -4,37 +4,37 @@
 
 // For locale default the numberingSystem to 'latn'
 assertEquals(
-    "latn",
+    undefined,
     new Intl.RelativeTimeFormat("ar").resolvedOptions().numberingSystem
 );
 assertEquals(
-    "latn",
+    undefined,
     new Intl.RelativeTimeFormat("en").resolvedOptions().numberingSystem
 );
 assertEquals(
-    "latn",
+    undefined,
     new Intl.RelativeTimeFormat("fr").resolvedOptions().numberingSystem
 );
 assertEquals(
-    "latn",
+    undefined,
     new Intl.RelativeTimeFormat("hi").resolvedOptions().numberingSystem
 );
 assertEquals(
-    "latn",
+    undefined,
     new Intl.RelativeTimeFormat("th").resolvedOptions().numberingSystem
 );
 assertEquals(
-    "latn",
+    undefined,
     new Intl.RelativeTimeFormat("zh-Hant").resolvedOptions().numberingSystem
 );
 
 // For locale default the numberingSystem to other than 'latn'
 assertEquals(
-    "arab",
+    undefined,
     new Intl.RelativeTimeFormat("ar-TD").resolvedOptions().numberingSystem
 );
 assertEquals(
-    "arabext",
+    undefined,
     new Intl.RelativeTimeFormat("fa").resolvedOptions().numberingSystem
 );
 
@@ -69,13 +69,13 @@ assertEquals(
 
 // For locale use -u-nu- with invalid value still back to default.
 assertEquals(
-    "latn",
+    undefined,
     new Intl.RelativeTimeFormat("en-u-nu-abcd").resolvedOptions()
         .numberingSystem
 );
 
 assertEquals(
-    "arabext",
+    undefined,
     new Intl.RelativeTimeFormat("fa-u-nu-abcd").resolvedOptions()
         .numberingSystem
 );

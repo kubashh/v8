@@ -54,8 +54,9 @@ let locales = [
 invalidNumberingSystem.forEach(function(numberingSystem) {
   locales.forEach(function(base) {
     var df;
+    let l = base + "-u-nu-" + numberingSystem;
     assertDoesNotThrow(
-        () => df = new Intl.RelativeTimeFormat([base], {numberingSystem}));
+        () => df = new Intl.RelativeTimeFormat(l));
     assertEquals(
         (new Intl.RelativeTimeFormat([base])).resolvedOptions().numberingSystem,
         df.resolvedOptions().numberingSystem);
@@ -73,7 +74,7 @@ validNumberingSystem.forEach(function(numberingSystem) {
   locales.forEach(function(base) {
     let l = base + "-u-nu-" + numberingSystem;
     let nf = new Intl.RelativeTimeFormat([base], {numberingSystem});
-    assertEquals(l, nf.resolvedOptions().locale);
+    assertEquals(base, nf.resolvedOptions().locale);
     assertEquals(numberingSystem, nf.resolvedOptions().numberingSystem);
 
     // Test the formatting result is the same as passing in via u-nu-

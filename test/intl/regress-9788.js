@@ -15,12 +15,11 @@ const intlClasses = [
 ];
 
 intlClasses.forEach(function(cls) {
-  var expected =  new cls("en").resolvedOptions().numberingSystem;
   var obj;
   for (var i = 3; i < 20; i++, len++, numberingSystem += "a") {
     assertDoesNotThrow(() => obj = new cls("en", {numberingSystem}),
         "Well-formed numberingSystem should not throw");
-    assertEquals(expected, obj.resolvedOptions().numberingSystem);
+    assertEquals(numberingSystem, obj.resolvedOptions().numberingSystem);
     if (len == 8) {
       numberingSystem += "-ab";
       len = 2;

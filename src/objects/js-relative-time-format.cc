@@ -111,14 +111,17 @@ MaybeHandle<JSRelativeTimeFormat> JSRelativeTimeFormat::New(
   // 13. Set relativeTimeFormat.[[Locale]] to locale.
   // 14. Let dataLocale be r.[[DataLocale]].
   icu::Locale icu_locale = r.icu_locale;
+  icu::Locale remove_ext_icu_locale = r.icu_locale;
   UErrorCode status = U_ZERO_ERROR;
   if (numbering_system_str != nullptr &&
       Intl::IsValidNumberingSystem(numbering_system_str.get())) {
     icu_locale.setUnicodeKeywordValue("nu", numbering_system_str.get(), status);
+    remove_ext_icu_locale.setUnicodeKeywordValue("nu", nullptr, status);
     CHECK(U_SUCCESS(status));
   }
 
-  Maybe<std::string> maybe_locale_str = Intl::ToLanguageTag(icu_locale);
+  Maybe<std::string> maybe_locale_str =
+      Intl::ToLanguageTag(remove_ext_icu_locale);
   MAYBE_RETURN(maybe_locale_str, MaybeHandle<JSRelativeTimeFormat>());
 
   Handle<String> locale_str = isolate->factory()->NewStringFromAsciiChecked(
@@ -177,7 +180,24 @@ MaybeHandle<JSRelativeTimeFormat> JSRelativeTimeFormat::New(
   DisallowHeapAllocation no_gc;
   relative_time_format_holder->set_flags(0);
 
+  // 13. Set relativeTimeFormat.[[Locale]] to locale.
   relative_time_format_holder->set_locale(*locale_str);
+
+  // 14. Set relativeTimeFormat.[[NumberingSystem]] to r[[nu]].
+  if (numbering_system_str != nullptr) {
+    Handle<String> numberingSystem =
+        isolate->factory()->NewStringFromAsciiChecked(
+            numbering_system_str.get());
+    relative_time_format_holder->set_numberingSystem(*numberingSystem);
+  } else {
+    auto nu_extension_it = r.extensions.find("nu");
+    if (nu_extension_it != r.extensions.end()) {
+      Handle<String> numberingSystem =
+          isolate->factory()->NewStringFromAsciiChecked(
+              nu_extension_it->second.c_str());
+      relative_time_format_holder->set_numberingSystem(*numberingSystem);
+    }
+  }
 
   // 16. Set relativeTimeFormat.[[Style]] to s.
   relative_time_format_holder->set_style(style_enum);
@@ -203,12 +223,9 @@ Handle<JSObject> JSRelativeTimeFormat::ResolvedOptions(
                         format_holder->StyleAsString(), NONE);
   JSObject::AddProperty(isolate, result, factory->numeric_string(),
                         format_holder->NumericAsString(), NONE);
-  std::string locale_str(format_holder->locale().ToCString().get());
-  icu::Locale icu_locale = Intl::CreateICULocale(locale_str);
-  std::string numbering_system = Intl::GetNumberingSystem(icu_locale);
-  JSObject::AddProperty(
-      isolate, result, factory->numberingSystem_string(),
-      factory->NewStringFromAsciiChecked(numbering_system.c_str()), NONE);
+  Handle<String> numberingSystem(format_holder->numberingSystem(), isolate);
+  JSObject::AddProperty(isolate, result, factory->numberingSystem_string(),
+                        numberingSystem, NONE);
   return result;
 }
 

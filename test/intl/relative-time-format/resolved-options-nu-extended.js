@@ -8,7 +8,7 @@
 
 // For locale default the numberingSystem to other than 'latn'
 assertEquals(
-    "beng",
+    undefined,
     new Intl.RelativeTimeFormat("bn").resolvedOptions().numberingSystem
 );
 
@@ -20,7 +20,7 @@ assertEquals(
 );
 // For locale use -u-nu- with invalid value still back to default.
 assertEquals(
-    "beng",
+    undefined,
     new Intl.RelativeTimeFormat("bn-u-nu-abcd").resolvedOptions()
         .numberingSystem
 );
