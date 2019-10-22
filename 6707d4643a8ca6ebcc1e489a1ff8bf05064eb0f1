@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fda7f238_e50095fc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-22T15:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14c0b3f8_9a4e3eb8",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64f3491e_4bb4a0fd",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a2ac222_060c674e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-22T15:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64f3491e_4bb4a0fd",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "2dcffc85_a272ff22",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-22T15:05:11Z",
+      "side": 1,
+      "message": "It means that the TaggedEqual (here already lowered to Word32Equal) node generates ChangeTaggedToCompressed nodes before the Word32Equal inputs. Then, there is no need to add an explicit Word32Equal case.",
+      "parentUuid": "04ae7366_f0e8892f",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11ae1933_8b5b345e",
         "filename": "src/compiler/decompression-optimizer.cc",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06937050_201f7a93",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-22T15:05:11Z",
+      "side": 1,
+      "message": "Reworded.",
+      "parentUuid": "11ae1933_8b5b345e",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "d425290d_aefeaf6d",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-22T15:05:11Z",
+      "side": 1,
+      "message": "Reworded.",
+      "parentUuid": "20cacccf_f81351a0",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7729b8a_84d1918e",
         "filename": "src/compiler/machine-graph-verifier.cc",
         "patchSetId": 4
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "e00065c6_6ac8fac8",
+        "filename": "src/compiler/machine-graph-verifier.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-22T15:05:11Z",
+      "side": 1,
+      "message": "Yes. Keep in mind that:\n1) Compressed here means Tagged without the root added\n2) ChangeTaggedToCompressed is a no-op already.",
+      "parentUuid": "b7729b8a_84d1918e",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a51b8ee5_17013306",
         "filename": "test/unittests/compiler/decompression-optimizer-unittest.cc",
         "patchSetId": 4
@@ -118,6 +226,24 @@
       "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fce2a179_1752d865",
+        "filename": "test/unittests/compiler/decompression-optimizer-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-22T15:05:11Z",
+      "side": 1,
+      "message": "Do you mean to add a SKIP on non-pointer compression builds on the unittests.status?\nIf so, done.",
+      "parentUuid": "a51b8ee5_17013306",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
