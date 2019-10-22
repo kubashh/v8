@@ -3270,11 +3270,16 @@ void InstructionSelector::VisitS128Zero(Node* node) {
 SIMD_TYPE_LIST(SIMD_VISIT_SPLAT)
 #undef SIMD_VISIT_SPLAT
 
-#define SIMD_VISIT_EXTRACT_LANE(Type)                              \
+#define SIMD_VISIT_EXTRACT_LANE(Type, Sign)                        \
   void InstructionSelector::Visit##Type##ExtractLane(Node* node) { \
-    VisitRRI(this, kArm64##Type##ExtractLane, node);               \
+    VisitRRI(this, kArm64##Type##ExtractLane##Sign, node);         \
   }
-SIMD_TYPE_LIST(SIMD_VISIT_EXTRACT_LANE)
+SIMD_VISIT_EXTRACT_LANE(F64x2, )
+SIMD_VISIT_EXTRACT_LANE(F32x4, )
+SIMD_VISIT_EXTRACT_LANE(I64x2, )
+SIMD_VISIT_EXTRACT_LANE(I32x4, )
+SIMD_VISIT_EXTRACT_LANE(I16x8, U)
+SIMD_VISIT_EXTRACT_LANE(I8x16, U)
 #undef SIMD_VISIT_EXTRACT_LANE
 
 #define SIMD_VISIT_REPLACE_LANE(Type)                              \
@@ -3485,10 +3490,26 @@ void InstructionSelector::VisitS8x16Shuffle(Node* node) {
 }
 
 void InstructionSelector::VisitSignExtendWord8ToInt32(Node* node) {
+  NodeMatcher m(node->InputAt(0));
+  if (m.IsI8x16ExtractLane() && CanCover(node, m.node())) {
+    Arm64OperandGenerator g(this);
+    int32_t imm = OpParameter<int32_t>(m.node()->op());
+    Emit(kArm64I8x16ExtractLaneS, g.DefineAsRegister(node),
+         g.UseRegister(m.node()->InputAt(0)), g.UseImmediate(imm));
+    return;
+  }
   VisitRR(this, kArm64Sxtb32, node);
 }
 
 void InstructionSelector::VisitSignExtendWord16ToInt32(Node* node) {
+  NodeMatcher m(node->InputAt(0));
+  if (m.IsI16x8ExtractLane() && CanCover(node, m.node())) {
+    Arm64OperandGenerator g(this);
+    int32_t imm = OpParameter<int32_t>(m.node()->op());
+    Emit(kArm64I16x8ExtractLaneS, g.DefineAsRegister(node),
+         g.UseRegister(m.node()->InputAt(0)), g.UseImmediate(imm));
+    return;
+  }
   VisitRR(this, kArm64Sxth32, node);
 }
 
