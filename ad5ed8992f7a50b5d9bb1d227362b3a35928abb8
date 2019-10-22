@@ -22,6 +22,30 @@
       "revId": "ad5ed8992f7a50b5d9bb1d227362b3a35928abb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d309859_17de50b2",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-10-22T11:08:11Z",
+      "side": 1,
+      "message": "Aren\u0027t non-static member functions already implicitly non-allocating? Would it be better to pass through a DisallowAllocationScope*?",
+      "parentUuid": "a38c2ef6_44ea8605",
+      "range": {
+        "startLine": 176,
+        "startChar": 2,
+        "endLine": 176,
+        "endChar": 48
+      },
+      "revId": "ad5ed8992f7a50b5d9bb1d227362b3a35928abb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
