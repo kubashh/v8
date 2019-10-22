@@ -46,6 +46,7 @@ extern class JSPluralRules extends JSObject {
 
 extern class JSRelativeTimeFormat extends JSObject {
   locale: String;
+  numbering_system: String;
   icu_formatter: Foreign;  // Managed<icu::RelativeDateTimeFormatter>
   flags: Smi;
 }
