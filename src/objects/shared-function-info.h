@@ -173,6 +173,8 @@ class SharedFunctionInfo : public HeapObject {
  public:
   NEVER_READ_ONLY_SPACE
 
+  void Init(ReadOnlyRoots roots, int unique_id);
+
   V8_EXPORT_PRIVATE static constexpr Object const kNoSharedNameSentinel =
       Smi::kZero;
 
