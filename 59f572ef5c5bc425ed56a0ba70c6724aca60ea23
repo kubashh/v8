@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0be5ea3_03dd7214",
+        "filename": "src/compiler/backend/arm/instruction-selector-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2733,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-10-22T22:36:16Z",
+      "side": 1,
+      "message": "I see why this was done this way, but this looks like the wrong level to check for the ExtractLane op as this affects all SignExtension operations and not just the WebAssembly/WebAssembly SIMD ops. Where possible, decoupling these would be best. I think a better place to fix this to either edit the ExtractLane node, or have separate signed/unsigned variants that map directly to the operations in wasm-compiler.cc.",
+      "revId": "59f572ef5c5bc425ed56a0ba70c6724aca60ea23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
