@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4f55e65_9f8546d5",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-10-22T07:50:35Z",
+      "side": 1,
+      "message": "Maybe do it in a different CL to isolate potential regressions.",
+      "range": {
+        "startLine": 439,
+        "startChar": 3,
+        "endLine": 439,
+        "endChar": 18
+      },
+      "revId": "69909d11718b971e55eef6555add74cd8879f371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
