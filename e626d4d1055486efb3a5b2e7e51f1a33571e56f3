@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06ea4aaf_b9e31af5",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-10-22T10:57:54Z",
+      "side": 1,
+      "message": "You can make this a constexpr. I wonder now if constexpr need the {USE} below ...",
+      "range": {
+        "startLine": 224,
+        "startChar": 4,
+        "endLine": 224,
+        "endChar": 7
+      },
+      "revId": "e626d4d1055486efb3a5b2e7e51f1a33571e56f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
