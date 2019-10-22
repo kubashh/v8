@@ -1962,7 +1962,7 @@ extern macro LoadBufferSmi(RawPtr, constexpr int32): Smi;
 
 extern runtime StringEqual(Context, String, String): Oddball;
 extern builtin StringLessThan(Context, String, String): Boolean;
-extern macro StringCharCodeAt(String, intptr): int32;
+extern macro StringCharCodeAt(String, uintptr): int32;
 extern runtime StringCompareSequence(Context, String, String, Number): Boolean;
 extern macro StringFromSingleCharCode(int32): String;
 
