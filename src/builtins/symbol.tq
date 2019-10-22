@@ -19,7 +19,7 @@ namespace symbol {
     const sym: Symbol =
         ThisSymbolValue(receiver, 'Symbol.prototype.description');
     // 3. Return sym.[[Description]].
-    return Cast<JSAny>(sym.name) otherwise unreachable;
+    return sym.description;
   }
 
   // ES6 #sec-symbol.prototype-@@toprimitive
