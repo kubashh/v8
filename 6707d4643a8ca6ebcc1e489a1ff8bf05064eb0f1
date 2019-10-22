@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14c0b3f8_9a4e3eb8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-22T14:03:49Z",
+      "side": 1,
+      "message": "nit: now also in the decompression optimizer.",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64f3491e_4bb4a0fd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-22T14:03:49Z",
+      "side": 1,
+      "message": "\u0027.\u0027",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04ae7366_f0e8892f",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-22T14:03:49Z",
+      "side": 1,
+      "message": "What does this part of the comment mean? That the input node is marked as kOnly32BitsObserved but Word32Equal is not?",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11ae1933_8b5b345e",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-22T14:03:49Z",
+      "side": 1,
+      "message": "You removed the \u0027if\u0027 :)",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20cacccf_f81351a0",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-22T14:03:49Z",
+      "side": 1,
+      "message": "nit: Is this one or two sentences?",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7729b8a_84d1918e",
+        "filename": "src/compiler/machine-graph-verifier.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-22T14:03:49Z",
+      "side": 1,
+      "message": "So ChangeTaggedToCompressed can take a Compressed input?",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a51b8ee5_17013306",
+        "filename": "test/unittests/compiler/decompression-optimizer-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-22T14:03:49Z",
+      "side": 1,
+      "message": "q: This first part (COMPRESS_POINTERS_BOOL) seems more appropriate to handle in .status files, wdyt?",
+      "revId": "6707d4643a8ca6ebcc1e489a1ff8bf05064eb0f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
