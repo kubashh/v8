@@ -83,11 +83,15 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
     // Call a method where the AVX version expects the dst argument to be
     // duplicated.
     template <void (Assembler::*avx)(Dst, Dst, Args...),
+              void (Assembler::*sse4_1)(Dst, Args...),
               void (Assembler::*no_avx)(Dst, Args...)>
     void emit(Dst dst, Args... args) {
       if (CpuFeatures::IsSupported(AVX)) {
         CpuFeatureScope scope(assm, AVX);
         (assm->*avx)(dst, dst, args...);
+      } else if (sse4_1 != nullptr && CpuFeatures::IsSupported(SSE4_1)) {
+        CpuFeatureScope scope(assm, SSE4_1);
+        (assm->*sse4_1)(dst, args...);
       } else {
         (assm->*no_avx)(dst, args...);
       }
@@ -95,24 +99,36 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
 
     // Call a method where the AVX version expects no duplicated dst argument.
     template <void (Assembler::*avx)(Dst, Args...),
+              void (Assembler::*sse4_1)(Dst, Args...),
               void (Assembler::*no_avx)(Dst, Args...)>
     void emit(Dst dst, Args... args) {
       if (CpuFeatures::IsSupported(AVX)) {
         CpuFeatureScope scope(assm, AVX);
         (assm->*avx)(dst, args...);
+      } else if (sse4_1 != nullptr && CpuFeatures::IsSupported(SSE4_1)) {
+        CpuFeatureScope scope(assm, SSE4_1);
+        (assm->*sse4_1)(dst, args...);
       } else {
         (assm->*no_avx)(dst, args...);
       }
     }
   };
 
-#define AVX_OP(macro_name, name)                                             \
-  template <typename Dst, typename... Args>                                  \
-  void macro_name(Dst dst, Args... args) {                                   \
-    AvxHelper<Dst, Args...>{this}                                            \
-        .template emit<&Assembler::v##name, &Assembler::name>(dst, args...); \
+#define AVX_OP(macro_name, name)                                        \
+  template <typename Dst, typename... Args>                             \
+  void macro_name(Dst dst, Args... args) {                              \
+    AvxHelper<Dst, Args...>{this}                                       \
+        .template emit<&Assembler::v##name, nullptr, &Assembler::name>( \
+            dst, args...);                                              \
   }
 
+#define AVX_OP_SSE4_1(macro_name, name)                                 \
+  template <typename Dst, typename... Args>                             \
+  void macro_name(Dst dst, Args... args) {                              \
+    AvxHelper<Dst, Args...>{this}                                       \
+        .template emit<&Assembler::v##name, &Assembler::name, nullptr>( \
+            dst, args...);                                              \
+  }
   AVX_OP(Subsd, subsd)
   AVX_OP(Divss, divss)
   AVX_OP(Divsd, divsd)
@@ -178,6 +194,9 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   AVX_OP(Mulpd, mulpd)
   AVX_OP(Divpd, divpd)
   AVX_OP(Shufps, shufps)
+  AVX_OP(Cvtdq2ps, cvtdq2ps)
+  AVX_OP_SSE4_1(Extractps, extractps)
+  AVX_OP_SSE4_1(Insertps, insertps)
 
 #undef AVX_OP
 
