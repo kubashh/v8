@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "82e0d3fd_10ec713c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-23T09:46:48Z",
+      "side": 1,
+      "message": "TaggedEqual is not added in the CL because it\u0027s not a Machine node (it\u0027s not an opcode either). It gets translated to ChangeTaggedToCompressed here (https://cs.chromium.org/chromium/src/v8/src/compiler/graph-assembler.cc?l\u003d102\u0026rcl\u003d704ce5c7f10c6e96877e23c19f65aad2b3faf5f9).\n\nThen, the description states why it\u0027s not necessary to add a Word32Equal case. We currently always have a ChangeTaggedToCompressed between the Word32Equal and the value. It\u0027s not talking about the future; it\u0027s talking about now.\n\nI think it\u0027s important to have the first line of the CL talk about TaggedEqual. The only reason we are adding ChangeTaggedToCompressed it\u0027s because of how TaggedEqual is generated.",
+      "parentUuid": "8b290283_aeba2e52",
+      "revId": "61e73691af89bd8166d0facb9cc55a0bdc93ac8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db520769_57ff3861",
         "filename": "src/compiler/decompression-optimizer.cc",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "61e73691af89bd8166d0facb9cc55a0bdc93ac8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26691de1_0a3de70a",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-23T09:46:48Z",
+      "side": 1,
+      "message": "Updated the comment in the code.\n\nAs far as I understood, the ChangeTaggedToCompressed will be eliminated, but there is no CL in flight just yet. Since we want to swap systems now, it\u0027s relevant to add this case.",
+      "parentUuid": "db520769_57ff3861",
+      "revId": "61e73691af89bd8166d0facb9cc55a0bdc93ac8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
