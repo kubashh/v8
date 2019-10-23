@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "15f6cefe_8edefe02",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2019-10-23T18:25:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c2e37b3_6008cd6f",
+      "revId": "f6cc7b6645bdf53f8dc76ee9176e859bba4244c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e39368b_03220475",
         "filename": "src/builtins/builtins-string-gen.cc",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "f6cc7b6645bdf53f8dc76ee9176e859bba4244c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cfdc756_a1dad7c6",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1580,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2019-10-23T18:25:59Z",
+      "side": 1,
+      "message": "I was hoping for a more general version of RequireObjectCoercible in the future, but it\u0027s easy enough to refactor later so I\u0027ll take your suggestion for this CL.",
+      "parentUuid": "0e39368b_03220475",
+      "revId": "f6cc7b6645bdf53f8dc76ee9176e859bba4244c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
