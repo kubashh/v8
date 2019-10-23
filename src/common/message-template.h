@@ -53,6 +53,7 @@ namespace internal {
     "CallSite expects wasm object as first or function as second argument, "   \
     "got <%, %>")                                                              \
   T(CallSiteMethod, "CallSite method % expects CallSite as receiver")          \
+  T(CannotBeNullOrUndefined, "% cannot be null or undefined")                  \
   T(CannotConvertToPrimitive, "Cannot convert object to primitive value")      \
   T(CannotPreventExt, "Cannot prevent extensions")                             \
   T(CannotFreeze, "Cannot freeze")                                             \
@@ -111,8 +112,6 @@ namespace internal {
   T(MapperFunctionNonCallable, "flatMap mapper function is not callable")      \
   T(MethodCalledOnWrongObject,                                                 \
     "Method % called on a non-object or on a wrong type of object.")           \
-  T(MethodInvokedOnNullOrUndefined,                                            \
-    "Method invoked on undefined or null value.")                              \
   T(MethodInvokedOnWrongType, "Method invoked on an object that is not %.")    \
   T(NoAccess, "no access")                                                     \
   T(NonCallableInInstanceOfCheck,                                              \
