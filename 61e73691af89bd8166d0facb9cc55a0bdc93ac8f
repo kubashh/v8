@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "6bbbcb4f_8f678272",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-23T10:14:02Z",
+      "side": 1,
+      "message": "As discussed offline, I think it\u0027d be a clearer mental model to just consider ChangeTaggedToCompressed and Word32Equal on their own. In both cases, it conceptually makes sense to mark their inputs as kOnly32BitsObserved. The connection to TaggedEqual is irrelevant.\n\nWdyt about marking Word32Equal inputs as kOnly32BitsObserved (in addition to ChangeTaggedToCompressed). And rephrasing descriptions to refer to \u0027Word32Equal and ChangeTaggedToCompressed\u0027 instead of TaggedEqual.",
+      "parentUuid": "82e0d3fd_10ec713c",
+      "revId": "61e73691af89bd8166d0facb9cc55a0bdc93ac8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db520769_57ff3861",
         "filename": "src/compiler/decompression-optimizer.cc",
         "patchSetId": 7
