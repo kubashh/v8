@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "764691b4_5a4fbe62",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-23T09:02:36Z",
+      "side": 1,
+      "message": "No idea. I\u0027m new to Torque so I just followed the existing code style ))",
+      "parentUuid": "da11de00_a1f0a87d",
+      "revId": "898b1df88dbff75a9523f2a2657bff9cd7643075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c877c45a_f6a766da",
         "filename": "src/builtins/string-startswith.tq",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "898b1df88dbff75a9523f2a2657bff9cd7643075",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9f04537_5a817a34",
+        "filename": "src/builtins/string-startswith.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-23T09:02:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c877c45a_f6a766da",
+      "revId": "898b1df88dbff75a9523f2a2657bff9cd7643075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "0e78fc48_019d4e28",
+        "filename": "src/builtins/string.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-23T09:02:36Z",
+      "side": 1,
+      "message": "Hm... true!",
+      "parentUuid": "21a8765a_39063f09",
+      "revId": "898b1df88dbff75a9523f2a2657bff9cd7643075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1582ed23_eee2fbe9",
         "filename": "src/builtins/string.tq",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "898b1df88dbff75a9523f2a2657bff9cd7643075",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b9da8f9_9223635d",
+        "filename": "src/builtins/string.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-23T09:02:36Z",
+      "side": 1,
+      "message": "Done here and in other two places.",
+      "parentUuid": "1582ed23_eee2fbe9",
+      "revId": "898b1df88dbff75a9523f2a2657bff9cd7643075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
