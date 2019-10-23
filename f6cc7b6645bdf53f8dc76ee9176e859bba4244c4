@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c2e37b3_6008cd6f",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-23T04:51:26Z",
+      "side": 1,
+      "message": "nit: empty line above please.",
+      "revId": "f6cc7b6645bdf53f8dc76ee9176e859bba4244c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e39368b_03220475",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1580,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-23T04:51:26Z",
+      "side": 1,
+      "message": "I\u0027d put all of this into a dedicated kStringMatchAllNullOrUndefinedFlags message template. It feels weird having so much of the actual message as a parameter. Did you have further future uses in mind?",
+      "revId": "f6cc7b6645bdf53f8dc76ee9176e859bba4244c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
