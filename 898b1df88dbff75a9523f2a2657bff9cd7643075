@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da11de00_a1f0a87d",
+        "filename": "src/builtins/string-endswith.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-23T05:05:05Z",
+      "side": 1,
+      "message": "Out of curiosity, here and in all similar spots I\u0027ve wondered why we use a negative comparison `!\u003d Undefined` instead of the easier-to-read `\u003d\u003d Undefined`.",
+      "revId": "898b1df88dbff75a9523f2a2657bff9cd7643075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c877c45a_f6a766da",
+        "filename": "src/builtins/string-startswith.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-23T05:05:05Z",
+      "side": 1,
+      "message": "\u0027rephrased\u0027",
+      "revId": "898b1df88dbff75a9523f2a2657bff9cd7643075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21a8765a_39063f09",
+        "filename": "src/builtins/string.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-23T05:05:05Z",
+      "side": 1,
+      "message": "Why not catch this with the single unsigned comparison below? :)",
+      "revId": "898b1df88dbff75a9523f2a2657bff9cd7643075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1582ed23_eee2fbe9",
+        "filename": "src/builtins/string.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-23T05:05:05Z",
+      "side": 1,
+      "message": "At this point we could check IsNumberNormalized (to ensure we\u0027re not looking at a heap number in smi range).",
+      "revId": "898b1df88dbff75a9523f2a2657bff9cd7643075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
