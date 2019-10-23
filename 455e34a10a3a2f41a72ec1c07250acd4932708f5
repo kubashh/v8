@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e334248_fe44c759",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1623,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-10-23T13:29:16Z",
+      "side": 1,
+      "message": "DCHECK(x || y) is not the same as DCHECK_IMPLIES(x, y)  which is actually DCHECK(~x || y).",
+      "range": {
+        "startLine": 1623,
+        "startChar": 9,
+        "endLine": 1623,
+        "endChar": 53
+      },
+      "revId": "455e34a10a3a2f41a72ec1c07250acd4932708f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "346e7ca5_ae5ebce4",
+        "filename": "src/debug/arm64/debug-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-10-23T13:29:16Z",
+      "side": 1,
+      "message": "Why did you change x2 to x3 here?",
+      "range": {
+        "startLine": 47,
+        "startChar": 2,
+        "endLine": 49,
+        "endChar": 60
+      },
+      "revId": "455e34a10a3a2f41a72ec1c07250acd4932708f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d1fddcd_6d7895b8",
+        "filename": "src/debug/ia32/debug-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-10-23T13:29:16Z",
+      "side": 1,
+      "message": "This wasn\u0027t using registers before but constants, so now you\u0027re generating extra code to compare two registers that are guaranteed to be the same?",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 62
+      },
+      "revId": "455e34a10a3a2f41a72ec1c07250acd4932708f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
