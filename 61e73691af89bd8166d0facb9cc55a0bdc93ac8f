@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b290283_aeba2e52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-23T05:17:13Z",
+      "side": 1,
+      "message": "I\u0027m sorry, the CL message is still cryptic to me. \n\n- The TaggedEqual opcode is in fact *not* added in this CL.\n- Then I think the description states why it will, in the future, not be necessary to add Word32Equal handling to the decompression optimizer? \n\nPlease describe what *this* CL does. Something like \u0027mark inputs of kChangeTaggedToCompressed nodes as kOnly32BitsObserved\u0027 and then briefly say why that is possible and what happens with the TaggedToCompressed node later.",
+      "revId": "61e73691af89bd8166d0facb9cc55a0bdc93ac8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db520769_57ff3861",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-23T05:17:13Z",
+      "side": 1,
+      "message": "Same comment here as for the CL message, it isn\u0027t clear why the part about Word32Equal exists.. Is it an explanation for why the switch case does not need to handle IrOpcode::kWord32Equal? If so, I think it\u0027d be clearer to rephrase \u0027There is no need for the Word32Equal to propagate kOnly32BitsObserved since its input are ChangeTaggedToCompressed nodes.\u0027\n\nA related question: will these ChangeTaggedToCompressed nodes remain in the future?",
+      "revId": "61e73691af89bd8166d0facb9cc55a0bdc93ac8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
