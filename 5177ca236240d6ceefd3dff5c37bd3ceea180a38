@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4018aaab_bd19f11d",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4400,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-10-23T23:01:11Z",
+      "side": 1,
+      "message": "Looks like these helper functions and the ones below for SSE2 are identical. Could you use a generic helper function so we don\u0027t need both?",
+      "revId": "5177ca236240d6ceefd3dff5c37bd3ceea180a38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
