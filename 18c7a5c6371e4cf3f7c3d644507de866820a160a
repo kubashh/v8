@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "25837b49_b81eaa1f",
+        "filename": "src/builtins/builtins-symbol.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2019-10-23T14:54:07Z",
+      "side": 1,
+      "message": "I was under the impression that cast had runtime overhead. Is cast just unchecked_cast with a DCHECK?",
+      "parentUuid": "7e466f33_c78f6ab3",
+      "range": {
+        "startLine": 31,
+        "startChar": 36,
+        "endLine": 31,
+        "endChar": 50
+      },
+      "revId": "18c7a5c6371e4cf3f7c3d644507de866820a160a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5009aef7_1656c2e1",
         "filename": "src/builtins/symbol.tq",
         "patchSetId": 2
