@@ -212,9 +212,10 @@ class V8_EXPORT_PRIVATE CallDescriptor final
     kFixedTargetRegister = 1u << 7,
     kAllowCallThroughSlot = 1u << 8,
     kCallerSavedRegisters = 1u << 9,
+    kCallerSavedFPRegisters = 1u << 10,
     // AIX has a function descriptor which we will set to true by default
     // for all CFunction calls (only used for Kind::kCallAddress).
-    kHasFunctionDescriptor = 1u << 10,
+    kHasFunctionDescriptor = 1u << 11,
   };
   using Flags = base::Flags<Flag>;
 
@@ -296,6 +297,9 @@ class V8_EXPORT_PRIVATE CallDescriptor final
   bool NeedsCallerSavedRegisters() const {
     return flags() & kCallerSavedRegisters;
   }
+  bool NeedsCallerSavedFPRegisters() const {
+    return flags() & kCallerSavedFPRegisters;
+  }
   bool HasFunctionDescriptor() const {
     return flags() & kHasFunctionDescriptor;
   }
@@ -354,13 +358,8 @@ class V8_EXPORT_PRIVATE CallDescriptor final
     return allocatable_registers_ != 0;
   }
 
-  void set_save_fp_mode(SaveFPRegsMode mode) { save_fp_mode_ = mode; }
-
-  SaveFPRegsMode get_save_fp_mode() const { return save_fp_mode_; }
-
  private:
   friend class Linkage;
-  SaveFPRegsMode save_fp_mode_ = kSaveFPRegs;
 
   const Kind kind_;
   const MachineType target_type_;
