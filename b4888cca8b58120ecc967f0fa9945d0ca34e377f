@@ -16,6 +16,24 @@
       "revId": "b4888cca8b58120ecc967f0fa9945d0ca34e377f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6438c371_ec3da566",
+        "filename": "src/compiler/linkage.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-10-23T13:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f064c0ab_1788588d",
+      "revId": "b4888cca8b58120ecc967f0fa9945d0ca34e377f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
