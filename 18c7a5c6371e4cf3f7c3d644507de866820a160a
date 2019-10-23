@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "66956429_6139c3ce",
+        "filename": "src/builtins/builtins-symbol.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-10-23T15:02:28Z",
+      "side": 1,
+      "message": "Yes, it\u0027s even a SLOW_DCHECK, so not even triggered in all debug builds.",
+      "parentUuid": "25837b49_b81eaa1f",
+      "range": {
+        "startLine": 31,
+        "startChar": 36,
+        "endLine": 31,
+        "endChar": 50
+      },
+      "revId": "18c7a5c6371e4cf3f7c3d644507de866820a160a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5009aef7_1656c2e1",
         "filename": "src/builtins/symbol.tq",
         "patchSetId": 2
