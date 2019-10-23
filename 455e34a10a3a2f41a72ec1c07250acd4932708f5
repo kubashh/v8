@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d46a99e7_3ba8c820",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1623,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-23T13:49:53Z",
+      "side": 1,
+      "message": "flag here could be one of two: CALL_FUNCTION or JUMP_FUNCTION. This is enforced by lines 1651 - 1654 below.\nThen, DCHECK was essentially \"If it\u0027s not a JUMP_FUNCTION, then it needs to have a frame\", which in this context means \"If it\u0027s a CALL_FUNCTION, then it needs a frame\". The DCHECK is now more consistent with the comment above it as well.",
+      "parentUuid": "5e334248_fe44c759",
+      "range": {
+        "startLine": 1623,
+        "startChar": 9,
+        "endLine": 1623,
+        "endChar": 53
+      },
+      "revId": "455e34a10a3a2f41a72ec1c07250acd4932708f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "346e7ca5_ae5ebce4",
         "filename": "src/debug/arm64/debug-arm64.cc",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "787d3bab_a4a0237c",
+        "filename": "src/debug/arm64/debug-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-23T13:49:53Z",
+      "side": 1,
+      "message": "DCHECK down the line here (https://cs.chromium.org/chromium/src/v8/src/codegen/arm64/macro-assembler-arm64.cc?l\u003d2250\u0026rcl\u003dc4aff1dccafa8c41d6b692b276ef6161edb6f747) needs it to be x3.",
+      "parentUuid": "346e7ca5_ae5ebce4",
+      "range": {
+        "startLine": 47,
+        "startChar": 2,
+        "endLine": 49,
+        "endChar": 60
+      },
+      "revId": "455e34a10a3a2f41a72ec1c07250acd4932708f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d1fddcd_6d7895b8",
         "filename": "src/debug/ia32/debug-ia32.cc",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2019-10-23T13:29:16Z",
       "side": 1,
       "message": "This wasn\u0027t using registers before but constants, so now you\u0027re generating extra code to compare two registers that are guaranteed to be the same?",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 62
+      },
+      "revId": "455e34a10a3a2f41a72ec1c07250acd4932708f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f431b06_04cc0817",
+        "filename": "src/debug/ia32/debug-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-23T13:49:53Z",
+      "side": 1,
+      "message": "I know. This is something that only happens in ia32 and in this spot. It needs ecx and eax to be passed on here to be correct according to the DCHECKs in InvokeFunctionCode.\nI think since it\u0027s only in this spot, for this particular arch, and it\u0027s debug only it should be fine. WDYT?",
+      "parentUuid": "1d1fddcd_6d7895b8",
       "range": {
         "startLine": 45,
         "startChar": 2,
