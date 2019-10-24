@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8ca1654_38722ca7",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 3644,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-24T14:05:40Z",
+      "side": 1,
+      "message": "This check only makes sense for code that needs to throw if we\u0027re out of bounds related to allocation or (typed array / string(?) indexed access) that need to throw if the length is too large. Since this check anyway needs to be distinguished from kMaxSafeInteger above for ToLength that\u0027s unrelated to memory limits, I\u0027d move this out to users that care. Possibly add a wrapper helper that checks the limit after calling this function (e.g., ToLengthWithMemoryLimit or so)",
+      "revId": "95ca34cbf8294a8ec445c1258c34cc983ee34194",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "144f9b5c_4304e839",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-24T14:05:40Z",
+      "side": 1,
+      "message": "You shouldn\u0027t throw a range error here; because ToLength is used for a lot of non-allocation-related conversions.",
+      "revId": "95ca34cbf8294a8ec445c1258c34cc983ee34194",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
