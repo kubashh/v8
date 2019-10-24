@@ -1647,11 +1647,6 @@ TNode<HeapObject> CodeStubAssembler::LoadSlowProperties(
       [=] { return CAST(properties); });
 }
 
-TNode<Number> CodeStubAssembler::LoadJSArrayLength(SloppyTNode<JSArray> array) {
-  CSA_ASSERT(this, IsJSArray(array));
-  return CAST(LoadObjectField(array, JSArray::kLengthOffset));
-}
-
 TNode<Object> CodeStubAssembler::LoadJSArgumentsObjectWithLength(
     SloppyTNode<JSArgumentsObjectWithLength> array) {
   return LoadObjectField(array, JSArgumentsObjectWithLength::kLengthOffset);
@@ -9137,7 +9132,8 @@ TNode<Object> CodeStubAssembler::CallGetterIfAccessor(
       GotoIfNot(IsLengthString(
                     LoadObjectField(accessor_info, AccessorInfo::kNameOffset)),
                 if_bailout);
-      var_value.Bind(LoadJSArrayLength(receiver));
+      TNode<JSArray> array = CAST(receiver);
+      var_value.Bind(LoadJSArrayLength(array));
       Goto(&done);
     }
 
