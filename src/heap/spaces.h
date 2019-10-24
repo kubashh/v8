@@ -3230,8 +3230,6 @@ class LargeObjectSpace : public Space {
  public:
   using iterator = LargePageIterator;
 
-  LargeObjectSpace(Heap* heap, AllocationSpace id);
-
   ~LargeObjectSpace() override { TearDown(); }
 
   // Releases internal resources, frees objects in this space.
@@ -3247,14 +3245,6 @@ class LargeObjectSpace : public Space {
   size_t CommittedPhysicalMemory() override;
 
   int PageCount() { return page_count_; }
-
-  // Clears the marking state of live objects.
-  void ClearMarkingStateOfLiveObjects();
-
-  // Frees unmarked objects.
-  void FreeUnmarkedObjects();
-
-  void PromoteNewLargeObject(LargePage* page);
 
   // Checks whether a heap object is in this space; O(1).
   V8_EXPORT_PRIVATE bool Contains(HeapObject obj);
@@ -3272,9 +3262,6 @@ class LargeObjectSpace : public Space {
     return reinterpret_cast<LargePage*>(Space::first_page());
   }
 
-  // Collect code statistics.
-  void CollectCodeStatistics();
-
   iterator begin() { return iterator(first_page()); }
   iterator end() { return iterator(nullptr); }
 
@@ -3289,6 +3276,8 @@ class LargeObjectSpace : public Space {
 #endif
 
  protected:
+  LargeObjectSpace(Heap* heap, AllocationSpace id);
+
   LargePage* AllocateLargePage(int object_size, Executability executable);
 
   size_t size_;          // allocated bytes
@@ -3299,12 +3288,26 @@ class LargeObjectSpace : public Space {
   friend class LargeObjectSpaceObjectIterator;
 };
 
-class OldLargeObjectSpace : public LargeObjectSpace {
+class MainThreadLargeObjectSpace : public LargeObjectSpace {
+ public:
+  // Frees unmarked objects.
+  void FreeUnmarkedObjects();
+
+ protected:
+  explicit MainThreadLargeObjectSpace(Heap* heap, AllocationSpace id);
+};
+
+class OldLargeObjectSpace : public MainThreadLargeObjectSpace {
  public:
   explicit OldLargeObjectSpace(Heap* heap);
 
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT AllocationResult
   AllocateRaw(int object_size);
+
+  // Clears the marking state of live objects.
+  void ClearMarkingStateOfLiveObjects();
+
+  void PromoteNewLargeObject(LargePage* page);
 
  protected:
   explicit OldLargeObjectSpace(Heap* heap, AllocationSpace id);
@@ -3312,7 +3315,7 @@ class OldLargeObjectSpace : public LargeObjectSpace {
                                                      Executability executable);
 };
 
-class NewLargeObjectSpace : public LargeObjectSpace {
+class NewLargeObjectSpace : public MainThreadLargeObjectSpace {
  public:
   NewLargeObjectSpace(Heap* heap, size_t capacity);
 
