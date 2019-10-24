@@ -32,7 +32,10 @@ void VPrintFToString(std::string* str, size_t str_offset, const char* format,
                                          static_cast<int>(len - str_offset)),
                             format, args_copy);
     va_end(args_copy);
-    if (written < 0) continue;  // not enough space.
+    if (written < 0 || written >= static_cast<int>(len - str_offset)) {
+      // not enough space.
+      continue;
+    }
     str->resize(str_offset + written);
     return;
   }

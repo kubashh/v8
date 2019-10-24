@@ -661,12 +661,9 @@ int OS::VSNPrintF(char* str, int length, const char* format, va_list args) {
   // Make sure to zero-terminate the string if the output was
   // truncated or if there was an error.
   if (n < 0 || n >= length) {
-    if (length > 0)
-      str[length - 1] = '\0';
-    return -1;
-  } else {
-    return n;
+    if (length > 0) str[length - 1] = '\0';
   }
+  return n;
 }
 
 

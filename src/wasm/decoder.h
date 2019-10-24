@@ -294,6 +294,7 @@ class Decoder {
     EmbeddedVector<char, kMaxErrorMsg> buffer;
     int len = VSNPrintF(buffer, format, args);
     CHECK_LT(0, len);
+    CHECK_GT(buffer.length(), len);
     error_ = {offset, {buffer.begin(), static_cast<size_t>(len)}};
     onFirstError();
   }

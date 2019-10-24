@@ -227,6 +227,7 @@ void RecordWasmHeapStubCompilation(Isolate* isolate, Handle<Code> code,
   va_start(arguments, format);
   int len = VSNPrintF(buffer, format, arguments);
   CHECK_LT(0, len);
+  CHECK_GT(buffer.length(), len);
   va_end(arguments);
   Handle<String> name_str =
       isolate->factory()->NewStringFromAsciiChecked(buffer.begin());
