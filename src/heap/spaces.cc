@@ -4087,7 +4087,7 @@ LargePage* CodeLargeObjectSpace::FindPage(Address a) {
   return nullptr;
 }
 
-void LargeObjectSpace::ClearMarkingStateOfLiveObjects() {
+void OldLargeObjectSpace::ClearMarkingStateOfLiveObjects() {
   IncrementalMarking::NonAtomicMarkingState* marking_state =
       heap()->incremental_marking()->non_atomic_marking_state();
   LargeObjectSpaceObjectIterator it(this);
@@ -4119,7 +4119,7 @@ void CodeLargeObjectSpace::RemoveChunkMapEntries(LargePage* page) {
   }
 }
 
-void LargeObjectSpace::PromoteNewLargeObject(LargePage* page) {
+void NewLargeObjectSpace::PromoteNewLargeObject(LargePage* page) {
   DCHECK_EQ(page->owner_identity(), NEW_LO_SPACE);
   DCHECK(page->IsLargePage());
   DCHECK(page->IsFlagSet(MemoryChunk::FROM_PAGE));
@@ -4148,7 +4148,7 @@ void LargeObjectSpace::RemovePage(LargePage* page, size_t object_size) {
   memory_chunk_list_.Remove(page);
 }
 
-void LargeObjectSpace::FreeUnmarkedObjects() {
+void MainThreadLargeObjectSpace::FreeUnmarkedObjects() {
   LargePage* current = first_page();
   IncrementalMarking::NonAtomicMarkingState* marking_state =
       heap()->incremental_marking()->non_atomic_marking_state();
@@ -4324,14 +4324,18 @@ void Page::Print() {
 
 #endif  // DEBUG
 
-OldLargeObjectSpace::OldLargeObjectSpace(Heap* heap)
-    : LargeObjectSpace(heap, LO_SPACE) {}
-
-OldLargeObjectSpace::OldLargeObjectSpace(Heap* heap, AllocationSpace id)
+MainThreadLargeObjectSpace::MainThreadLargeObjectSpace(Heap* heap,
+                                                       AllocationSpace id)
     : LargeObjectSpace(heap, id) {}
 
+OldLargeObjectSpace::OldLargeObjectSpace(Heap* heap)
+    : MainThreadLargeObjectSpace(heap, LO_SPACE) {}
+
+OldLargeObjectSpace::OldLargeObjectSpace(Heap* heap, AllocationSpace id)
+    : MainThreadLargeObjectSpace(heap, id) {}
+
 NewLargeObjectSpace::NewLargeObjectSpace(Heap* heap, size_t capacity)
-    : LargeObjectSpace(heap, NEW_LO_SPACE),
+    : MainThreadLargeObjectSpace(heap, NEW_LO_SPACE),
       pending_object_(0),
       capacity_(capacity) {}
 
