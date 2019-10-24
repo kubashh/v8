@@ -105,11 +105,6 @@ std::unique_ptr<{{type.id}}> {{type.id}}::clone() const
     return {{config.exported.to_string_out % "json"}};
 }
 
-void {{type.id}}::writeBinary(std::vector<uint8_t>* out) const
-{
-    toValue()->writeBinary(out);
-}
-
 // static
 std::unique_ptr<API::{{type.id}}> API::{{type.id}}::fromJSONString(const {{config.exported.string_in}}& json)
 {
