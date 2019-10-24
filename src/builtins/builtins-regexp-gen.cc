@@ -78,7 +78,7 @@ TNode<RawPtrT> RegExpBuiltinsAssembler::LoadCodeObjectEntry(TNode<Code> code) {
 
 TNode<JSRegExpResult> RegExpBuiltinsAssembler::AllocateRegExpResult(
     TNode<Context> context, TNode<Smi> length, TNode<Smi> index,
-    TNode<String> input, TNode<RegExpMatchInfo> match_info,
+    TNode<String> input, TNode<JSRegExp> regexp,
     TNode<FixedArray>* elements_out) {
   CSA_ASSERT(this, SmiLessThanOrEqual(
                        length, SmiConstant(JSArray::kMaxFastArrayLength)));
@@ -120,7 +120,7 @@ TNode<JSRegExpResult> RegExpBuiltinsAssembler::AllocateRegExpResult(
   // Stash match_info in order to build JSRegExpResultIndices lazily when the
   // 'indices' property is accessed.
   StoreObjectField(result, JSRegExpResult::kCachedIndicesOrMatchInfoOffset,
-                   match_info);
+                   regexp);
 
   // Finish elements initialization.
 
@@ -199,8 +199,9 @@ TNode<JSRegExpResult> RegExpBuiltinsAssembler::ConstructNewResultFromMatchInfo(
       CAST(CallBuiltin(Builtins::kSubString, context, string, start, end));
 
   TNode<FixedArray> result_elements;
-  TNode<JSRegExpResult> result = AllocateRegExpResult(
-      context, num_results, start, string, match_info, &result_elements);
+  TNode<JSRegExpResult> result =
+      AllocateRegExpResult(context, num_results, start, string,
+                           CAST(maybe_regexp), &result_elements);
 
   UnsafeStoreFixedArrayElement(result_elements, 0, first);
 

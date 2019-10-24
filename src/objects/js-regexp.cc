@@ -6,6 +6,7 @@
 
 #include "src/objects/js-array-inl.h"
 #include "src/objects/js-regexp-inl.h"
+#include "src/regexp/regexp.h"
 
 namespace v8 {
 namespace internal {
@@ -19,18 +20,40 @@ Handle<JSArray> JSRegExpResult::GetAndCacheIndices(
                   isolate->factory()
                       ->regexp_result_cached_indices_or_match_info_symbol())
           .ToHandleChecked());
-  if (indices_or_match_info->IsRegExpMatchInfo()) {
+  if (indices_or_match_info->IsJSRegExp()) {
     // Build and cache indices for next lookup.
-    // TODO(joshualitt): Instead of caching the indices, we could call
-    // ReconfigureToDataProperty on 'indices' setting its value to this
-    // newly created array. However, care would have to be taken to ensure
-    // a new map is not created each time.
-    Handle<RegExpMatchInfo> match_info(
-        RegExpMatchInfo::cast(*indices_or_match_info), isolate);
+    Handle<JSRegExp> regexp(JSRegExp::cast(*indices_or_match_info), isolate);
+    Handle<String> subject = Handle<String>::cast(
+        GetProperty(isolate, regexp_result, "input").ToHandleChecked());
     Handle<Object> maybe_names(
         GetProperty(isolate, regexp_result,
                     isolate->factory()->regexp_result_names_symbol())
             .ToHandleChecked());
+
+    // Note: This is a quick hack and a real implementation would need to do
+    // more.
+    // - Ensure the input string is unmodified by keeping an addtl internal copy
+    // of the input field.
+    // - Stash lastIndex instead of assuming 0.
+    // - Be robust against subclassing (can a JSRegExpResult be constructed from
+    // a non-JSRegExp? I don't think so..).
+    // - Handle the potential exception thrown by Exec.
+
+    int capture_count =
+        Smi::ToInt(FixedArray::cast(regexp->data())
+                       .get(JSRegExp::kIrregexpCaptureCountIndex));
+    int capture_register_count = (capture_count + 1) * 2;
+    Handle<RegExpMatchInfo> match_info =
+        isolate->factory()->NewRegExpMatchInfo();
+    match_info = RegExpMatchInfo::ReserveCaptures(isolate, match_info,
+                                                  capture_register_count);
+    match_info->SetNumberOfCaptureRegisters(capture_register_count);
+
+    Handle<Object> result =
+        RegExp::Exec(isolate, regexp, subject, 0, match_info).ToHandleChecked();
+
+    DCHECK_EQ(*result, *match_info);
+
     indices_or_match_info =
         JSRegExpResultIndices::BuildIndices(isolate, match_info, maybe_names);
 
