@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cf127c9_86623986",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-10-24T14:14:19Z",
+      "side": 1,
+      "message": "Looks like you forgot the \"- perf\" suffix on those builders. Sorry for not catching that.",
+      "range": {
+        "startLine": 141,
+        "startChar": 7,
+        "endLine": 141,
+        "endChar": 23
+      },
+      "revId": "3cf6f4729ef6235457380cd6622645625aef9f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
