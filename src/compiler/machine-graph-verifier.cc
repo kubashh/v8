@@ -580,7 +580,6 @@ class MachineRepresentationChecker {
           case IrOpcode::kAbortCSAAssert:
             CheckValueInputIsTagged(node, 0);
             break;
-          case IrOpcode::kLoad:
           case IrOpcode::kWord32AtomicLoad:
           case IrOpcode::kWord32AtomicPairLoad:
           case IrOpcode::kWord64AtomicLoad:
@@ -588,6 +587,35 @@ class MachineRepresentationChecker {
             CheckValueInputIsTaggedOrPointer(node, 0);
             CheckValueInputRepresentationIs(
                 node, 1, MachineType::PointerRepresentation());
+            break;
+          case IrOpcode::kStore:
+            switch (inferrer_->GetRepresentation(node)) {
+              case MachineRepresentation::kTagged:
+              case MachineRepresentation::kTaggedPointer:
+              case MachineRepresentation::kTaggedSigned:
+                if (COMPRESS_POINTERS_BOOL &&
+                    !FLAG_turbo_decompression_elimination &&
+                    node->opcode() == IrOpcode::kStore &&
+                    CanBeTaggedPointer(
+                        StoreRepresentationOf(node->op()).representation())) {
+                  CheckValueInputIsCompressedOrTagged(node, 2);
+                } else {
+                  CheckValueInputIsTagged(node, 2);
+                }
+                break;
+              case MachineRepresentation::kCompressed:
+              case MachineRepresentation::kCompressedPointer:
+              case MachineRepresentation::kCompressedSigned:
+                CheckValueInputIsCompressed(node, 2);
+                break;
+              default:
+                CheckValueInputRepresentationIs(
+                    node, 2, inferrer_->GetRepresentation(node));
+            }
+            V8_FALLTHROUGH;
+          case IrOpcode::kLoad:
+            CheckValueInputIsTaggedOrPointer(node, 0);
+            CheckValueInputIsTaggedOrPointer(node, 1);
             break;
           case IrOpcode::kWord32AtomicPairAdd:
           case IrOpcode::kWord32AtomicPairSub:
@@ -599,7 +627,6 @@ class MachineRepresentationChecker {
             CheckValueInputRepresentationIs(node, 3,
                                             MachineRepresentation::kWord32);
             V8_FALLTHROUGH;
-          case IrOpcode::kStore:
           case IrOpcode::kWord32AtomicStore:
           case IrOpcode::kWord32AtomicExchange:
           case IrOpcode::kWord32AtomicAdd:

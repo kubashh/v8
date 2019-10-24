@@ -532,7 +532,7 @@ DEFINE_BOOL(trace_turbo_alloc, false, "trace TurboFan's register allocator")
 DEFINE_BOOL(trace_all_uses, false, "trace all use positions")
 DEFINE_BOOL(trace_representation, false, "trace representation types")
 DEFINE_BOOL(turbo_verify, DEBUG_BOOL, "verify TurboFan graphs at each phase")
-DEFINE_STRING(turbo_verify_machine_graph, nullptr,
+DEFINE_STRING(turbo_verify_machine_graph, "*",
               "verify TurboFan machine graph before instruction selection")
 #ifdef ENABLE_VERIFY_CSA
 DEFINE_BOOL(verify_csa, DEBUG_BOOL,
