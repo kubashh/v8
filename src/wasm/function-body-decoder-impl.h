@@ -1721,7 +1721,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
       Vector<char> remaining_msg_space(buffer_ + len_, remaining_len);
       int len = VSNPrintF(remaining_msg_space, format, va_args);
       va_end(va_args);
-      len_ += len < 0 ? remaining_len : len;
+      len_ += len;
     }
 
    private:

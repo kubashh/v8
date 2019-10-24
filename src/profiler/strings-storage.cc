@@ -62,7 +62,7 @@ const char* StringsStorage::AddOrDisposeString(char* str, int len) {
 const char* StringsStorage::GetVFormatted(const char* format, va_list args) {
   Vector<char> str = Vector<char>::New(1024);
   int len = VSNPrintF(str, format, args);
-  if (len == -1) {
+  if (len == -1 || len >= str.length()) {
     DeleteArray(str.begin());
     return GetCopy(format);
   }

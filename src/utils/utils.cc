@@ -296,7 +296,8 @@ void StringBuilder::AddFormatted(const char* format, ...) {
 void StringBuilder::AddFormattedList(const char* format, va_list list) {
   DCHECK(!is_finalized() && position_ <= buffer_.length());
   int n = VSNPrintF(buffer_ + position_, format, list);
-  if (n < 0 || n >= (buffer_.length() - position_)) {
+  DCHECK_NE(n, -1);
+  if (n >= (buffer_.length() - position_)) {
     position_ = buffer_.length();
   } else {
     position_ += n;
