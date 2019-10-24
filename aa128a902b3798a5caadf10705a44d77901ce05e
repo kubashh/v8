@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01baba68_a322abd6",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3291,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-10-24T15:11:48Z",
+      "side": 1,
+      "message": "I don\u0027t really like the name. It is not consistent with other spaces we have.\n\nCan we keep FreeUnmarkedObjects in the base class and avoid this class?",
+      "range": {
+        "startLine": 3291,
+        "startChar": 6,
+        "endLine": 3291,
+        "endChar": 32
+      },
+      "revId": "aa128a902b3798a5caadf10705a44d77901ce05e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
