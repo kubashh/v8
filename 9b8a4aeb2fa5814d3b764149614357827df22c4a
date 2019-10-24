@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "527a48ad_be7279ad",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-24T12:27:40Z",
+      "side": 1,
+      "message": "nit: I guess int32_t makes more sense now.",
+      "range": {
+        "startLine": 914,
+        "startChar": 58,
+        "endLine": 914,
+        "endChar": 66
+      },
+      "revId": "9b8a4aeb2fa5814d3b764149614357827df22c4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
