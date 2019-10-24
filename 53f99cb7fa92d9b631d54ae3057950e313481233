@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0f6c11e_2ed461be",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 3
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-10-24T11:55:18Z",
+      "side": 1,
+      "message": "Still looks true now :)",
+      "range": {
+        "startLine": 726,
+        "startChar": 36,
+        "endLine": 726,
+        "endChar": 40
+      },
+      "revId": "53f99cb7fa92d9b631d54ae3057950e313481233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
