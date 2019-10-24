@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ceb248dd_00983ba8",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-24T11:04:37Z",
+      "side": 1,
+      "message": "Max JSArray length is not bigger than max JSTypedArray length, so we skip ToLength logic here.",
+      "range": {
+        "startLine": 181,
+        "startChar": 15,
+        "endLine": 181,
+        "endChar": 35
+      },
+      "revId": "d0e87fcbefcdf755fa1d7cfa5858bb3be75758e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
