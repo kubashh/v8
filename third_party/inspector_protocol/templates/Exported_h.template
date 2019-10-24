@@ -18,11 +18,15 @@ namespace {{namespace}} {
 
 #ifndef {{"_".join(config.protocol.namespace)}}_exported_api_h
 #define {{"_".join(config.protocol.namespace)}}_exported_api_h
-class {{config.exported.export_macro}} Exported {
+class {{config.exported.export_macro}} Exported : public Serializable {
 public:
     virtual {{config.exported.string_out}} toJSONString() const = 0;
-    virtual void writeBinary(std::vector<uint8_t>* out) const = 0;
-    virtual ~Exported() { }
+
+    // TODO(johannes): Compat only. Remove after V8->Chromium roll.
+    void writeBinary(std::vector<uint8_t>* out) const {
+        AppendToBinary(out);
+    }
+    virtual ~Exported() = default;
 };
 #endif // !defined({{"_".join(config.protocol.namespace)}}_exported_api_h)
 
