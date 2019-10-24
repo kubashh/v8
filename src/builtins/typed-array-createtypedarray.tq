@@ -139,16 +139,12 @@ namespace typed_array {
   // 22.2.4.4 TypedArray ( object )
   // ES #sec-typedarray-object
   transitioning macro ConstructByArrayLike(implicit context: Context)(
-      map: Map, arrayLike: HeapObject, initialLength: JSAny,
+      map: Map, arrayLike: HeapObject, length: uintptr,
       elementsInfo: typed_array::TypedArrayElementsInfo,
       bufferConstructor: JSReceiver): JSTypedArray {
-    // The caller has looked up length on arrayLike, which is observable.
-    const length: PositiveSmi = ToSmiLength(initialLength)
-        otherwise ThrowRangeError(kInvalidTypedArrayLength, initialLength);
     const initialize: constexpr bool = false;
     const typedArray = TypedArrayInitialize(
-        initialize, map, Convert<uintptr>(length), elementsInfo,
-        bufferConstructor);
+        initialize, map, length, elementsInfo, bufferConstructor);
 
     try {
       const src: JSTypedArray = Cast<JSTypedArray>(arrayLike) otherwise IfSlow;
@@ -167,7 +163,8 @@ namespace typed_array {
     }
     label IfSlow deferred {
       if (length > 0) {
-        TypedArrayCopyElements(context, typedArray, arrayLike, length);
+        TypedArrayCopyElements(
+            context, typedArray, arrayLike, Convert<Number>(length));
       }
     }
     return typedArray;
@@ -177,23 +174,23 @@ namespace typed_array {
   // ES #sec-typedarray-object
   transitioning macro ConstructByIterable(implicit context: Context)(
       iterable: JSReceiver, iteratorFn: Callable): never
-      labels IfConstructByArrayLike(JSArray, Number, JSReceiver) {
+      labels IfConstructByArrayLike(JSArray, uintptr, JSReceiver) {
     const array: JSArray =
         IterableToListMayPreserveHoles(context, iterable, iteratorFn);
-    goto IfConstructByArrayLike(array, array.length, GetArrayBufferFunction());
+    goto IfConstructByArrayLike(
+        array, array.length_uintptr, GetArrayBufferFunction());
   }
 
   // 22.2.4.3 TypedArray ( typedArray )
   // ES #sec-typedarray-typedarray
   transitioning macro ConstructByTypedArray(implicit context: Context)(
       srcTypedArray: JSTypedArray): never
-      labels IfConstructByArrayLike(JSTypedArray, Number, JSReceiver) {
+      labels IfConstructByArrayLike(JSTypedArray, uintptr, JSReceiver) {
     let bufferConstructor: JSReceiver = GetArrayBufferFunction();
     const srcBuffer: JSArrayBuffer = srcTypedArray.buffer;
     // TODO(petermarshall): Throw on detached typedArray.
-    // TODO(v8:4156): Update this to support huge TypedArrays.
-    let length =
-        IsDetachedBuffer(srcBuffer) ? 0 : Convert<Number>(srcTypedArray.length);
+    let length: uintptr =
+        IsDetachedBuffer(srcBuffer) ? 0 : srcTypedArray.length;
 
     // The spec requires that constructing a typed array using a SAB-backed
     // typed array use the ArrayBuffer constructor, not the species constructor.
@@ -284,7 +281,7 @@ namespace typed_array {
 
   transitioning macro ConstructByJSReceiver(implicit context:
                                                 Context)(obj: JSReceiver): never
-      labels IfConstructByArrayLike(JSReceiver, Number, JSReceiver) {
+      labels IfConstructByArrayLike(JSReceiver, uintptr, JSReceiver) {
     try {
       const iteratorMethod: Object =
           GetIteratorMethod(obj) otherwise IfIteratorUndefined;
@@ -295,7 +292,9 @@ namespace typed_array {
     }
     label IfIteratorUndefined {
       const lengthObj: JSAny = GetProperty(obj, kLengthString);
-      const length: Smi = ToSmiLength(lengthObj)
+      // Throw RangeError if the length value is bigger than
+      // min(kMaxUIntPtr, kMaxSafeInteger).
+      const length: uintptr = ToLength(lengthObj)
           otherwise goto IfInvalidLength(lengthObj);
       goto IfConstructByArrayLike(obj, length, GetArrayBufferFunction());
     }
@@ -344,7 +343,7 @@ namespace typed_array {
       return ConstructByLength(map, length, elementsInfo);
     }
     label IfConstructByArrayLike(
-        arrayLike: JSReceiver, length: Number, bufferConstructor: JSReceiver) {
+        arrayLike: JSReceiver, length: uintptr, bufferConstructor: JSReceiver) {
       return ConstructByArrayLike(
           map, arrayLike, length, elementsInfo, bufferConstructor);
     }
