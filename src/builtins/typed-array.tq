@@ -23,22 +23,22 @@ namespace typed_array {
   @export
   struct TypedArrayElementsInfo {
     // Calculates the number of bytes required for specified number of elements.
-    CalculateByteLength(length: uintptr): uintptr labels IfInvalid {
+    CalculateByteLength(length: uintptr): uintptr labels IfUnsupportedLength {
       // TODO(v8:4153): use kArrayBufferMaxByteLength instead of kSmiMaxValue
       // to allow creation of huge TypedArrays.
       const maxArrayLength = kSmiMaxValue >>> this.sizeLog2;
-      if (length > maxArrayLength) goto IfInvalid;
+      if (length > maxArrayLength) goto IfUnsupportedLength;
       const byteLength = length << this.sizeLog2;
       return byteLength;
     }
 
     // Calculates the maximum number of elements supported by a specified number
     // of bytes.
-    CalculateLength(byteLength: uintptr): uintptr labels IfInvalid {
+    CalculateLength(byteLength: uintptr): uintptr labels IfUnsupportedLength {
       const length = byteLength >>> this.sizeLog2;
       // TODO(v8:4153): use kArrayBufferMaxByteLength instead of kSmiMaxValue
       // to allow creation of huge TypedArrays.
-      if (length > kSmiMaxValue) goto IfInvalid;
+      if (length > kSmiMaxValue) goto IfUnsupportedLength;
       return length;
     }
 

@@ -1647,11 +1647,6 @@ TNode<HeapObject> CodeStubAssembler::LoadSlowProperties(
       [=] { return CAST(properties); });
 }
 
-TNode<Number> CodeStubAssembler::LoadJSArrayLength(SloppyTNode<JSArray> array) {
-  CSA_ASSERT(this, IsJSArray(array));
-  return CAST(LoadObjectField(array, JSArray::kLengthOffset));
-}
-
 TNode<Object> CodeStubAssembler::LoadJSArgumentsObjectWithLength(
     SloppyTNode<JSArgumentsObjectWithLength> array) {
   return LoadObjectField(array, JSArgumentsObjectWithLength::kLengthOffset);
@@ -9137,7 +9132,8 @@ TNode<Object> CodeStubAssembler::CallGetterIfAccessor(
       GotoIfNot(IsLengthString(
                     LoadObjectField(accessor_info, AccessorInfo::kNameOffset)),
                 if_bailout);
-      var_value.Bind(LoadJSArrayLength(receiver));
+      TNode<JSArray> array = CAST(receiver);
+      var_value.Bind(LoadJSArrayLength(array));
       Goto(&done);
     }
 
@@ -10387,7 +10383,7 @@ void CodeStubAssembler::EmitElementStore(Node* object, Node* key, Node* value,
          IsNonextensibleElementsKind(elements_kind));
 
   Node* length = SelectImpl(
-      IsJSArray(object), [=]() { return LoadJSArrayLength(object); },
+      IsJSArray(object), [=]() { return LoadJSArrayLength(CAST(object)); },
       [=]() { return LoadFixedArrayBaseLength(elements); },
       MachineRepresentation::kTagged);
   length = TaggedToParameter(length, parameter_mode);
@@ -13385,7 +13381,7 @@ void CodeStubAssembler::CheckPrototypeEnumCache(Node* receiver,
 
     // It might still be an empty JSArray.
     GotoIfNot(IsJSArrayMap(object_map), if_slow);
-    TNode<Number> object_length = LoadJSArrayLength(object);
+    TNode<Number> object_length = LoadJSArrayLength(CAST(object));
     Branch(TaggedEqual(object_length, SmiConstant(0)), &if_no_elements,
            if_slow);
 
