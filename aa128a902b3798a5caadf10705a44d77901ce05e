@@ -22,6 +22,30 @@
       "revId": "aa128a902b3798a5caadf10705a44d77901ce05e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50de78b7_c046d872",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3291,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-10-24T15:37:19Z",
+      "side": 1,
+      "message": "I wanted to not have this in OffThreadLargeObjectSpace, which is why it\u0027s here. I could instead mark it virtual and override it (with UNREACHABLE) in OffThreadLargeObjectSpace?",
+      "parentUuid": "01baba68_a322abd6",
+      "range": {
+        "startLine": 3291,
+        "startChar": 6,
+        "endLine": 3291,
+        "endChar": 32
+      },
+      "revId": "aa128a902b3798a5caadf10705a44d77901ce05e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
