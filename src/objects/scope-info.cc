@@ -422,21 +422,26 @@ Handle<ScopeInfo> ScopeInfo::CreateForWithScope(
 
 // static
 Handle<ScopeInfo> ScopeInfo::CreateGlobalThisBinding(Isolate* isolate) {
-  return CreateForBootstrapping(isolate, SCRIPT_SCOPE);
+  return CreateForBootstrapping(isolate, BootstrappingType::kScript);
 }
 
 // static
 Handle<ScopeInfo> ScopeInfo::CreateForEmptyFunction(Isolate* isolate) {
-  return CreateForBootstrapping(isolate, FUNCTION_SCOPE);
+  return CreateForBootstrapping(isolate, BootstrappingType::kFunction);
+}
+
+// static
+Handle<ScopeInfo> ScopeInfo::CreateForNativeContext(Isolate* isolate) {
+  return CreateForBootstrapping(isolate, BootstrappingType::kNative);
 }
 
 // static
 Handle<ScopeInfo> ScopeInfo::CreateForBootstrapping(Isolate* isolate,
-                                                    ScopeType type) {
-  DCHECK(type == SCRIPT_SCOPE || type == FUNCTION_SCOPE);
-
+                                                    BootstrappingType type) {
   const int parameter_count = 0;
-  const bool is_empty_function = type == FUNCTION_SCOPE;
+  const bool is_empty_function = type == BootstrappingType::kFunction ||
+                                 type == BootstrappingType::kNative;
+  const bool is_native_context = type == BootstrappingType::kNative;
   const int context_local_count = is_empty_function ? 0 : 1;
   const bool has_receiver = !is_empty_function;
   const bool has_inferred_function_name = is_empty_function;
@@ -453,7 +458,8 @@ Handle<ScopeInfo> ScopeInfo::CreateForBootstrapping(Isolate* isolate,
 
   // Encode the flags.
   int flags =
-      ScopeTypeField::encode(type) |
+      ScopeTypeField::encode(is_empty_function ? FUNCTION_SCOPE
+                                               : SCRIPT_SCOPE) |
       SloppyEvalCanExtendVarsField::encode(false) |
       LanguageModeField::encode(LanguageMode::kSloppy) |
       DeclarationScopeField::encode(true) |
@@ -470,7 +476,7 @@ Handle<ScopeInfo> ScopeInfo::CreateForBootstrapping(Isolate* isolate,
       ForceContextAllocationField::encode(false) |
       PrivateNameLookupSkipsOuterClassField::encode(false) |
       CanElideThisHoleChecksField::encode(false) |
-      HasContextExtensionField::encode(false);
+      HasContextExtensionField::encode(is_native_context);
   scope_info->SetFlags(flags);
   scope_info->SetParameterCount(parameter_count);
   scope_info->SetContextLocalCount(context_local_count);
@@ -516,7 +522,7 @@ Handle<ScopeInfo> ScopeInfo::CreateForBootstrapping(Isolate* isolate,
   DCHECK_EQ(index, scope_info->OuterScopeInfoIndex());
   DCHECK_EQ(index, scope_info->length());
   DCHECK_EQ(scope_info->ParameterCount(), parameter_count);
-  if (type == FUNCTION_SCOPE) {
+  if (is_empty_function) {
     DCHECK_EQ(scope_info->ContextLength(), 0);
   } else {
     DCHECK_EQ(scope_info->ContextLength(),
