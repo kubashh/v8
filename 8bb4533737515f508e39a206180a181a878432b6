@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ac7cbc3_3b0f3b91",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-10-24T11:29:35Z",
+      "side": 1,
+      "message": "We don\u0027t need gcmole. This is only used on some testers.",
+      "range": {
+        "startLine": 145,
+        "startChar": 41,
+        "endLine": 145,
+        "endChar": 48
+      },
+      "revId": "8bb4533737515f508e39a206180a181a878432b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ab13f25_4eee2e81",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-10-24T11:29:35Z",
+      "side": 1,
+      "message": "Please keep this empty or set to false for now with a TODO. According to the plan we want to switch this first after the builders are in use.",
+      "range": {
+        "startLine": 725,
+        "startChar": 18,
+        "endLine": 725,
+        "endChar": 40
+      },
+      "revId": "8bb4533737515f508e39a206180a181a878432b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
