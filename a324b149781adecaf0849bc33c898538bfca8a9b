@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "859cc56e_a9e8e6d3",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-24T11:44:02Z",
+      "side": 1,
+      "message": "I wouldn\u0027t make kNative be \"is_empty_function\"",
+      "revId": "a324b149781adecaf0849bc33c898538bfca8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecde7d31_284017be",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-24T11:44:02Z",
+      "side": 1,
+      "message": "There shouldn\u0027t be a context local for the native context I think?",
+      "revId": "a324b149781adecaf0849bc33c898538bfca8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f6a3bbd_fe044fdd",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-24T11:44:02Z",
+      "side": 1,
+      "message": "This should only be true for kScript.",
+      "revId": "a324b149781adecaf0849bc33c898538bfca8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b55d844c_1040ca7c",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-24T11:44:02Z",
+      "side": 1,
+      "message": "This should only be true for kFunction",
+      "revId": "a324b149781adecaf0849bc33c898538bfca8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab7c5f13_449197e0",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-24T11:44:02Z",
+      "side": 1,
+      "message": "The native context should also use SCRIPT_SCOPE I think?",
+      "revId": "a324b149781adecaf0849bc33c898538bfca8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02292494_15e22dbd",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-24T11:44:02Z",
+      "side": 1,
+      "message": "Do we still need to check for length() \u003d\u003d 0 now that we always have a full scope_info object? Perhaps Camillo\u0027s CL made this out-of-date?",
+      "revId": "a324b149781adecaf0849bc33c898538bfca8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
