@@ -364,7 +364,7 @@ class RecordWriteCodeStubAssembler : public CodeStubAssembler {
   TNode<IntPtrT> LoadBucket(TNode<IntPtrT> slot_set_array,
                             TNode<WordT> slot_offset, Label* slow_path) {
     // Assume here that SlotSet only contains of buckets
-    DCHECK_EQ(SlotSet::kSize, SlotSet::kBuckets * sizeof(SlotSet::Bucket));
+    DCHECK_EQ(SlotSet::kSize, SlotSet::kBuckets * sizeof(SlotBucket));
     TNode<WordT> bucket_index =
         WordShr(slot_offset, SlotSet::kBitsPerBucketLog2 + kTaggedSizeLog2);
     TNode<IntPtrT> bucket = UncheckedCast<IntPtrT>(

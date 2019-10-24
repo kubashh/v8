@@ -26,8 +26,7 @@ class RememberedSetOperations {
   static void Insert(SlotSet* slot_set, MemoryChunk* chunk, Address slot_addr) {
     DCHECK(chunk->Contains(slot_addr));
     uintptr_t offset = slot_addr - chunk->address();
-    slot_set[offset / Page::kPageSize].Insert<access_mode>(offset %
-                                                           Page::kPageSize);
+    slot_set->Insert<access_mode>(offset);
   }
 
   template <typename Callback>
@@ -35,11 +34,9 @@ class RememberedSetOperations {
                      SlotSet::EmptyBucketMode mode) {
     int number_slots = 0;
     if (slots != nullptr) {
-      size_t pages = (chunk->size() + Page::kPageSize - 1) / Page::kPageSize;
-      for (size_t page = 0; page < pages; page++) {
-        number_slots += slots[page].Iterate(
-            chunk->address() + page * Page::kPageSize, callback, mode);
-      }
+      number_slots += slots->Iterate(chunk->address(),
+                                     SlotSet::RealBucketsForSize(chunk->size()),
+                                     callback, mode);
     }
     return number_slots;
   }
@@ -47,7 +44,7 @@ class RememberedSetOperations {
   static void Remove(SlotSet* slot_set, MemoryChunk* chunk, Address slot_addr) {
     if (slot_set != nullptr) {
       uintptr_t offset = slot_addr - chunk->address();
-      slot_set[offset / Page::kPageSize].Remove(offset % Page::kPageSize);
+      slot_set->Remove(offset);
     }
   }
 
@@ -57,35 +54,9 @@ class RememberedSetOperations {
       uintptr_t start_offset = start - chunk->address();
       uintptr_t end_offset = end - chunk->address();
       DCHECK_LT(start_offset, end_offset);
-      if (end_offset < static_cast<uintptr_t>(Page::kPageSize)) {
-        slot_set->RemoveRange(static_cast<int>(start_offset),
-                              static_cast<int>(end_offset), mode);
-      } else {
-        // The large page has multiple slot sets.
-        // Compute slot set indicies for the range [start_offset, end_offset).
-        int start_chunk = static_cast<int>(start_offset / Page::kPageSize);
-        int end_chunk = static_cast<int>((end_offset - 1) / Page::kPageSize);
-        int offset_in_start_chunk =
-            static_cast<int>(start_offset % Page::kPageSize);
-        // Note that using end_offset % Page::kPageSize would be incorrect
-        // because end_offset is one beyond the last slot to clear.
-        int offset_in_end_chunk = static_cast<int>(
-            end_offset - static_cast<uintptr_t>(end_chunk) * Page::kPageSize);
-        if (start_chunk == end_chunk) {
-          slot_set[start_chunk].RemoveRange(offset_in_start_chunk,
-                                            offset_in_end_chunk, mode);
-        } else {
-          // Clear all slots from start_offset to the end of first chunk.
-          slot_set[start_chunk].RemoveRange(offset_in_start_chunk,
-                                            Page::kPageSize, mode);
-          // Clear all slots in intermediate chunks.
-          for (int i = start_chunk + 1; i < end_chunk; i++) {
-            slot_set[i].RemoveRange(0, Page::kPageSize, mode);
-          }
-          // Clear slots from the beginning of the last page to end_offset.
-          slot_set[end_chunk].RemoveRange(0, offset_in_end_chunk, mode);
-        }
-      }
+      slot_set->RemoveRange(static_cast<int>(start_offset),
+                            static_cast<int>(end_offset),
+                            SlotSet::RealBucketsForSize(chunk->size()), mode);
     }
   }
 };
@@ -115,8 +86,7 @@ class RememberedSet : public AllStatic {
       return false;
     }
     uintptr_t offset = slot_addr - chunk->address();
-    return slot_set[offset / Page::kPageSize].Contains(offset %
-                                                       Page::kPageSize);
+    return slot_set->Contains(offset);
   }
 
   // Given a page and a slot in that page, this function removes the slot from
@@ -184,10 +154,7 @@ class RememberedSet : public AllStatic {
     DCHECK(type == OLD_TO_NEW);
     SlotSet* slots = chunk->slot_set<type>();
     if (slots != nullptr) {
-      size_t pages = (chunk->size() + Page::kPageSize - 1) / Page::kPageSize;
-      for (size_t page = 0; page < pages; page++) {
-        slots[page].FreeEmptyBuckets();
-      }
+      slots->FreeEmptyBuckets(SlotSet::RealBucketsForSize(chunk->size()));
     }
   }
 

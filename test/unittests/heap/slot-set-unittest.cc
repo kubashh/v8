@@ -52,7 +52,7 @@ TEST(SlotSet, Iterate) {
   }
 
   set.Iterate(
-      kNullAddress,
+      kNullAddress, SlotSet::BucketsForSize(Page::kPageSize),
       [](MaybeObjectSlot slot) {
         if (slot.address() % 3 == 0) {
           return KEEP_SLOT;
@@ -103,7 +103,7 @@ void CheckRemoveRangeOn(uint32_t start, uint32_t end) {
     for (uint32_t i = first; i <= last; i += kTaggedSize) {
       set.Insert<AccessMode::ATOMIC>(i);
     }
-    set.RemoveRange(start, end, mode);
+    set.RemoveRange(start, end, SlotSet::BucketsForSize(Page::kPageSize), mode);
     if (first != start) {
       EXPECT_TRUE(set.Lookup(first));
     }
@@ -136,7 +136,8 @@ TEST(SlotSet, RemoveRange) {
   for (const auto mode :
        {SlotSet::FREE_EMPTY_BUCKETS, SlotSet::KEEP_EMPTY_BUCKETS}) {
     set.Insert<AccessMode::ATOMIC>(Page::kPageSize / 2);
-    set.RemoveRange(0, Page::kPageSize, mode);
+    set.RemoveRange(0, Page::kPageSize,
+                    SlotSet::BucketsForSize(Page::kPageSize), mode);
     for (uint32_t i = 0; i < Page::kPageSize; i += kTaggedSize) {
       EXPECT_FALSE(set.Lookup(i));
     }
