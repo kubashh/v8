@@ -1127,8 +1127,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Load the length of a JSArray instance.
   TNode<Object> LoadJSArgumentsObjectWithLength(
       SloppyTNode<JSArgumentsObjectWithLength> array);
-  // Load the length of a JSArray instance.
-  TNode<Number> LoadJSArrayLength(SloppyTNode<JSArray> array);
   // Load the length of a fast JSArray instance. Returns a positive Smi.
   TNode<Smi> LoadFastJSArrayLength(SloppyTNode<JSArray> array);
   // Load the length of a fixed array base instance.
