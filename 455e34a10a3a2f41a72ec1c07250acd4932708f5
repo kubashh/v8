@@ -49,6 +49,53 @@
     },
     {
       "key": {
+        "uuid": "c92b837d_fa4f7682",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1623,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-10-24T13:09:47Z",
+      "side": 1,
+      "message": "oh sorry I missed you changed JUMP_FUNCTION to CALL_FUNCTION.",
+      "parentUuid": "d46a99e7_3ba8c820",
+      "range": {
+        "startLine": 1623,
+        "startChar": 9,
+        "endLine": 1623,
+        "endChar": 53
+      },
+      "revId": "455e34a10a3a2f41a72ec1c07250acd4932708f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "04fb0704_26550a93",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2165,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-10-24T13:09:47Z",
+      "side": 1,
+      "message": "nit: arguments",
+      "range": {
+        "startLine": 2165,
+        "startChar": 9,
+        "endLine": 2165,
+        "endChar": 17
+      },
+      "revId": "455e34a10a3a2f41a72ec1c07250acd4932708f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "346e7ca5_ae5ebce4",
         "filename": "src/debug/arm64/debug-arm64.cc",
         "patchSetId": 3
@@ -140,6 +187,30 @@
       "revId": "455e34a10a3a2f41a72ec1c07250acd4932708f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c235f84d_ef2ba3f5",
+        "filename": "src/debug/ia32/debug-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-10-24T13:09:47Z",
+      "side": 1,
+      "message": "Fair enough",
+      "parentUuid": "2f431b06_04cc0817",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 62
+      },
+      "revId": "455e34a10a3a2f41a72ec1c07250acd4932708f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
