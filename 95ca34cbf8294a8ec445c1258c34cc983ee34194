@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "670ac640_5c656e1a",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 3635,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-25T10:20:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25da3eea_9c2c98e1",
+      "revId": "95ca34cbf8294a8ec445c1258c34cc983ee34194",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8ca1654_38722ca7",
         "filename": "src/builtins/base.tq",
         "patchSetId": 7
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "a966d2eb_1d7bfa45",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 3644,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-25T10:20:26Z",
+      "side": 1,
+      "message": "If I address all the comments this whole function happened to be doing TryNumberToUintPtr operation. So I removed the old implementation of TryNumberToUintPtr which didn\u0027t handle all the overflow cases.",
+      "parentUuid": "b8ca1654_38722ca7",
+      "revId": "95ca34cbf8294a8ec445c1258c34cc983ee34194",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "144f9b5c_4304e839",
         "filename": "src/builtins/base.tq",
         "patchSetId": 7
@@ -50,6 +86,24 @@
       "revId": "95ca34cbf8294a8ec445c1258c34cc983ee34194",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59c70821_97d4e11d",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-25T10:20:26Z",
+      "side": 1,
+      "message": "I realized that the uintptr version of ToLength is necessary only for one use case. So I just used generic ToLength_Inline() there.",
+      "parentUuid": "144f9b5c_4304e839",
+      "revId": "95ca34cbf8294a8ec445c1258c34cc983ee34194",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
