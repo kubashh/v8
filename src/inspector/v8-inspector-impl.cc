@@ -331,6 +331,32 @@ void V8InspectorImpl::allAsyncTasksCanceled() {
   m_debugger->allAsyncTasksCanceled();
 }
 
+std::shared_ptr<V8Inspector::CountersMap> V8InspectorImpl::enableCounters() {
+  if (!m_countersMap) {
+    m_countersMap = std::make_shared<CountersMap>();
+    m_isolate->SetCounterFunction([](const char* name) -> int* {
+      if (v8::Isolate* isolate = v8::Isolate::GetCurrent()) {
+        if (V8Inspector* inspector = v8::debug::GetInspector(isolate)) {
+          return inspector->getCounterPtr(name);
+        }
+      }
+      return nullptr;
+    });
+  }
+  return m_countersMap;
+}
+
+void V8InspectorImpl::disableCountersMaybe() {
+  if (m_countersMap.unique()) {
+    m_isolate->SetCounterFunction(nullptr);
+    m_countersMap.reset();
+  }
+}
+
+int* V8InspectorImpl::getCounterPtr(const char* name) {
+  return m_countersMap ? &((*m_countersMap)[name]) : nullptr;
+}
+
 v8::Local<v8::Context> V8InspectorImpl::regexContext() {
   if (m_regexContext.IsEmpty())
     m_regexContext.Reset(m_isolate, v8::Context::New(m_isolate));
