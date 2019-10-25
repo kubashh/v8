@@ -22,6 +22,30 @@
       "revId": "e3c6de5b6df5fb7714e4ab61e7917003c9b9d357",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4b599e6_590ccb0d",
+        "filename": "src/runtime/runtime-symbol.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2019-10-25T22:50:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ddc7911_648f2a51",
+      "range": {
+        "startLine": 24,
+        "startChar": 38,
+        "endLine": 24,
+        "endChar": 52
+      },
+      "revId": "e3c6de5b6df5fb7714e4ab61e7917003c9b9d357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
