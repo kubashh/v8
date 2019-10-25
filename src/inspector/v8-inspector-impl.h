@@ -107,6 +107,10 @@ class V8InspectorImpl : public V8Inspector {
   void externalAsyncTaskStarted(const V8StackTraceId& parent) override;
   void externalAsyncTaskFinished(const V8StackTraceId& parent) override;
 
+  std::shared_ptr<CountersMap> enableCounters() override;
+  void disableCountersMaybe() override;
+  int* getCounterPtr(const char* name) override;
+
   unsigned nextExceptionId() { return ++m_lastExceptionId; }
   void enableStackCapturingIfNeeded();
   void disableStackCapturingIfNeeded();
@@ -173,6 +177,8 @@ class V8InspectorImpl : public V8Inspector {
   std::unordered_map<int, int> m_contextIdToGroupIdMap;
 
   std::unique_ptr<V8Console> m_console;
+
+  std::shared_ptr<CountersMap> m_countersMap;
 
   DISALLOW_COPY_AND_ASSIGN(V8InspectorImpl);
 };

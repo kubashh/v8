@@ -9,6 +9,7 @@
 #include <cctype>
 
 #include <memory>
+#include <unordered_map>
 
 #include "v8.h"  // NOLINT(build/include)
 
@@ -299,6 +300,12 @@ class V8_EXPORT V8Inspector {
   virtual std::unique_ptr<V8StackTrace> createStackTrace(
       v8::Local<v8::StackTrace>) = 0;
   virtual std::unique_ptr<V8StackTrace> captureStackTrace(bool fullStack) = 0;
+
+  // Performance counters.
+  using CountersMap = std::unordered_map<std::string, int>;
+  virtual std::shared_ptr<CountersMap> enableCounters() = 0;
+  virtual void disableCountersMaybe() = 0;
+  virtual int* getCounterPtr(const char* name) = 0;
 };
 
 }  // namespace v8_inspector
