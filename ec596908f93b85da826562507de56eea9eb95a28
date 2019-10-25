@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6cdf79ec_344ba502",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1360234
+      },
+      "writtenOn": "2019-10-25T14:55:23Z",
+      "side": 1,
+      "message": "I\u0027m afraid `git cl format` complains if I do any of these.\n\nI\u0027m guessing the rule is to align only if the adjacent line has a comment.",
+      "parentUuid": "c075c83c_456febef",
+      "range": {
+        "startLine": 11,
+        "startChar": 20,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "ec596908f93b85da826562507de56eea9eb95a28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9c041d5_92fd91bd",
         "filename": "src/heap/factory.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "ec596908f93b85da826562507de56eea9eb95a28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2c3ead0_41a14c50",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1360234
+      },
+      "writtenOn": "2019-10-25T14:55:23Z",
+      "side": 1,
+      "message": "ditto, `git cl format` fixes it back",
+      "parentUuid": "c9c041d5_92fd91bd",
+      "range": {
+        "startLine": 10,
+        "startChar": 20,
+        "endLine": 10,
+        "endChar": 31
+      },
+      "revId": "ec596908f93b85da826562507de56eea9eb95a28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
