@@ -70,6 +70,30 @@
       "revId": "aa128a902b3798a5caadf10705a44d77901ce05e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bc8c958_d8ac0ae3",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3291,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-10-25T08:41:30Z",
+      "side": 1,
+      "message": "Cool, will do when I introduce the off-thread space",
+      "parentUuid": "73b29b7f_01fa3287",
+      "range": {
+        "startLine": 3291,
+        "startChar": 6,
+        "endLine": 3291,
+        "endChar": 32
+      },
+      "revId": "aa128a902b3798a5caadf10705a44d77901ce05e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
