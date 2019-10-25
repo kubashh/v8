@@ -175,6 +175,7 @@ V8ProfilerAgentImpl::V8ProfilerAgentImpl(
 
 V8ProfilerAgentImpl::~V8ProfilerAgentImpl() {
   if (m_profiler) m_profiler->Dispose();
+  disableRuntimeCallStatsInternal();
 }
 
 void V8ProfilerAgentImpl::consoleProfile(const String16& title) {
@@ -488,9 +489,71 @@ Response V8ProfilerAgentImpl::takeTypeProfile(
   return Response::OK();
 }
 
+Response V8ProfilerAgentImpl::enableRuntimeCallStats() {
+  if (m_countersMap)
+    return Response::Error("RuntimeCallStats already enabled.");
+
+  if (V8Inspector* inspector = v8::debug::GetInspector(m_isolate))
+    m_countersMap = inspector->enableCounters();
+  else
+    return Response::Error("No inspector found.");
+
+  m_isolate->SetCounterFunction([](const char* name) -> int* {
+    if (v8::Isolate* isolate = v8::Isolate::GetCurrent()) {
+      if (V8Inspector* inspector = v8::debug::GetInspector(isolate)) {
+        return inspector->getCounterPtr(name);
+      }
+    }
+    return nullptr;
+  });
+
+  return Response::OK();
+}
+
+Response V8ProfilerAgentImpl::disableRuntimeCallStats() {
+  disableRuntimeCallStatsInternal();
+  return Response::OK();
+}
+
+Response V8ProfilerAgentImpl::getRuntimeCallStats(
+    std::unique_ptr<protocol::Array<protocol::Profiler::CounterInfo>>*
+        out_result) {
+  if (!m_countersMap)
+    return Response::Error("RuntimeCallStats collection is not enabled.");
+
+  auto result =
+      std::make_unique<protocol::Array<protocol::Profiler::CounterInfo>>();
+
+  if (V8Inspector* inspector = v8::debug::GetInspector(m_isolate)) {
+    for (const auto& counter : *m_countersMap) {
+      result->emplace_back(
+          protocol::Profiler::CounterInfo::create()
+              .setName(String16(counter.first.c_str(), counter.first.length()))
+              .setValue(counter.second)
+              .build());
+    }
+  } else {
+    return Response::Error("No inspector found.");
+  }
+
+  *out_result = std::move(result);
+
+  return Response::OK();
+}
+
 String16 V8ProfilerAgentImpl::nextProfileId() {
   return String16::fromInteger(
       v8::base::Relaxed_AtomicIncrement(&s_lastProfileId, 1));
+}
+
+void V8ProfilerAgentImpl::disableRuntimeCallStatsInternal() {
+  if (m_countersMap) {
+    m_countersMap.reset();
+    m_isolate->SetCounterFunction(nullptr);
+    if (V8Inspector* inspector = v8::debug::GetInspector(m_isolate)) {
+      inspector->disableCountersMaybe();
+    }
+  }
 }
 
 void V8ProfilerAgentImpl::startProfiling(const String16& title) {
