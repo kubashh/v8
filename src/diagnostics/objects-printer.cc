@@ -875,8 +875,8 @@ void JSRegExpStringIterator::JSRegExpStringIteratorPrint(
 void Symbol::SymbolPrint(std::ostream& os) {  // NOLINT
   PrintHeader(os, "Symbol");
   os << "\n - hash: " << Hash();
-  os << "\n - name: " << Brief(name());
-  if (name().IsUndefined()) {
+  os << "\n - description: " << Brief(description());
+  if (description().IsUndefined()) {
     os << " (" << PrivateSymbolToName() << ")";
   }
   os << "\n - private: " << is_private();
@@ -2475,10 +2475,10 @@ void Name::NameShortPrint() {
   } else {
     DCHECK(this->IsSymbol());
     Symbol s = Symbol::cast(*this);
-    if (s.name().IsUndefined()) {
+    if (s.description().IsUndefined()) {
       PrintF("#<%s>", s.PrivateSymbolToName());
     } else {
-      PrintF("<%s>", String::cast(s.name()).ToCString().get());
+      PrintF("<%s>", String::cast(s.description()).ToCString().get());
     }
   }
 }
@@ -2490,10 +2490,11 @@ int Name::NameShortPrint(Vector<char> str) {
   } else {
     DCHECK(this->IsSymbol());
     Symbol s = Symbol::cast(*this);
-    if (s.name().IsUndefined()) {
+    if (s.description().IsUndefined()) {
       return SNPrintF(str, "#<%s>", s.PrivateSymbolToName());
     } else {
-      return SNPrintF(str, "<%s>", String::cast(s.name()).ToCString().get());
+      return SNPrintF(str, "<%s>",
+                      String::cast(s.description()).ToCString().get());
     }
   }
 }
