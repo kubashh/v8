@@ -22,6 +22,30 @@
       "revId": "411b3ac242f746fc6906edd4bda0244b1146bd7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "558e08ad_ae7e76c3",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 13
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-25T13:18:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8378effd_d69027f4",
+      "range": {
+        "startLine": 186,
+        "startChar": 25,
+        "endLine": 186,
+        "endChar": 26
+      },
+      "revId": "411b3ac242f746fc6906edd4bda0244b1146bd7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
