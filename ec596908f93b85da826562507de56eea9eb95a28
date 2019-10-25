@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c075c83c_456febef",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-10-25T14:46:55Z",
+      "side": 1,
+      "message": "Nit: align this with other comments (or don\u0027t align all of them).",
+      "range": {
+        "startLine": 11,
+        "startChar": 20,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "ec596908f93b85da826562507de56eea9eb95a28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9c041d5_92fd91bd",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-10-25T14:46:55Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 10,
+        "startChar": 20,
+        "endLine": 10,
+        "endChar": 31
+      },
+      "revId": "ec596908f93b85da826562507de56eea9eb95a28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
