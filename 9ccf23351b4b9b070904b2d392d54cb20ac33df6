@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbeec5ea_2806d064",
+        "filename": "test/mjsunit/regress/wasm/regress-1010272.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-10-28T18:51:31Z",
+      "side": 1,
+      "message": "Fly-by: How were these numbers chosen? Please make sure to use the minimum required to run into the check.",
+      "range": {
+        "startLine": 8,
+        "startChar": 21,
+        "endLine": 8,
+        "endChar": 23
+      },
+      "revId": "9ccf23351b4b9b070904b2d392d54cb20ac33df6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
