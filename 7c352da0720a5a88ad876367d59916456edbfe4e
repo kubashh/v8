@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "352e2376_d48629a6",
+        "filename": "test/mjsunit/compiler/regress-bound-functions.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-10-28T12:29:21Z",
+      "side": 1,
+      "message": "We can remove --concurrent-inlining, that way we get more coverage.\nAlso --no-lazy-feedback-allocation shouldn\u0027t be necessary since you call PrepareBlabla in your test.",
+      "revId": "7c352da0720a5a88ad876367d59916456edbfe4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
