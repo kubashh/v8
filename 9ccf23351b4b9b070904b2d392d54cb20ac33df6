@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "a7bf76f0_4d88e156",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-10-28T18:53:03Z",
+      "side": 1,
+      "message": "Why not land as part of this CL. That\u0027d be atomic and not break the builders in between.",
+      "range": {
+        "startLine": 11,
+        "startChar": 26,
+        "endLine": 12,
+        "endChar": 42
+      },
+      "revId": "9ccf23351b4b9b070904b2d392d54cb20ac33df6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fbeec5ea_2806d064",
         "filename": "test/mjsunit/regress/wasm/regress-1010272.js",
         "patchSetId": 1
