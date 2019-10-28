@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fe65a6fa_88341249",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-28T16:55:32Z",
+      "side": 1,
+      "message": "Updated the text.\n\nI haven\u0027t removed all ParameterCount uses, e.g https://cs.chromium.org/chromium/src/v8/src/codegen/arm/macro-assembler-arm.cc?l\u003d1497\u0026rcl\u003d99564c9b22ad426db6165f680cb1a897dee3fcb6",
+      "parentUuid": "d555e1d6_f3ffa89a",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4bed5d67_ac65fd9d",
         "filename": "src/codegen/arm/macro-assembler-arm.cc",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "22199b20_0dce7e4e",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-28T16:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bed5d67_ac65fd9d",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d16c511_0316d0e7",
         "filename": "src/codegen/arm/macro-assembler-arm.cc",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2019-10-28T13:21:01Z",
       "side": 1,
       "message": "Does it make sense to implement the `expected_parameter_count \u003d\u003d actual_parameter_count` case as well, or if not DCHECK that the two are not equal?",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60c505fa_d1ec1a2b",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-28T16:55:32Z",
+      "side": 1,
+      "message": "On this CL, I tried to keep the logic the same way it was before while keeping in mind the fact that only registers are used.\nI don\u0027t know why different architectures follow different patterns. I think unifying the logic should be left to a future CL. WDYT?",
+      "parentUuid": "8d16c511_0316d0e7",
       "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "12d6f05d_14ed9ebb",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-28T16:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9400d4e6_b55d20d8",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d3eae5ab_fd5bee68",
         "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
         "patchSetId": 4
@@ -81,6 +153,24 @@
       "writtenOn": "2019-10-28T13:21:01Z",
       "side": 1,
       "message": "These DCHECKs make the condition in 1113 impossible. Please refactor similar to x64 to support the test case.",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1e0986c_f212917e",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-28T16:55:32Z",
+      "side": 1,
+      "message": "Same as the other comment. I don\u0027t know the reasons behind the architectures having different logic paths, but I tried to keep it the same as it was for simplicity sake.\n\nSince the DCHECK and the if are inconsistent, I will remove the if and reassess on a future CL. WDYT?",
+      "parentUuid": "d3eae5ab_fd5bee68",
       "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "1c91df2e_da3b9226",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2445,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-28T16:55:32Z",
+      "side": 1,
+      "message": "Same as the other comments. I am keeping the logic as it was before. The DCHECK was happening only in the case that the registers were different.",
+      "parentUuid": "50dedc71_e8cbddb7",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "799b1194_18a37aad",
         "filename": "src/debug/ia32/debug-ia32.cc",
         "patchSetId": 4
@@ -115,6 +223,24 @@
       "writtenOn": "2019-10-28T13:21:01Z",
       "side": 1,
       "message": "You\u0027re overwriting eax here, which was just loaded with the kFormalParameterCountOffset in the previous instruction.\n\nWhat about solving this differently by just passing the same register (eax) as both actual and expected register? Together with logic that understands the case of expected_reg \u003d\u003d actual_reg.",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b7360b5_b4669ce1",
+        "filename": "src/debug/ia32/debug-ia32.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-28T16:55:32Z",
+      "side": 1,
+      "message": "Was eax being used in the previous code? As far as I see it was being ignored. That\u0027s why I though overwriting it should be fine.",
+      "parentUuid": "799b1194_18a37aad",
       "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
