@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ff08704f_c884c3db",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-10-28T17:45:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18ba9191_699b7996",
+      "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f61a9a8_c6493973",
         "filename": "src/objects/instance-type-inl.h",
         "patchSetId": 9
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "bedd4964_93449870",
+        "filename": "src/objects/instance-type-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-10-28T17:45:22Z",
+      "side": 1,
+      "message": "Great catch! The macro got renamed recently.",
+      "parentUuid": "3f61a9a8_c6493973",
+      "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6dffa844_ca458806",
         "filename": "src/objects/instance-type.h",
         "patchSetId": 9
@@ -47,6 +83,24 @@
       "writtenOn": "2019-10-28T09:24:33Z",
       "side": 1,
       "message": "TORQUE_INSTANCE_CHECKERS_SINGLE_FULLY_DEFINED + TORQUE_INSTANCE_CHECKERS_SINGLE_ONLY_DECLARED (and the RANGE versions below) are all types mentioned in torque?",
+      "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff8fae0b_f9155741",
+        "filename": "src/objects/instance-type.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-10-28T17:45:22Z",
+      "side": 1,
+      "message": "All of the types that have InstanceType values assigned, yes. Torque also knows about some other types that don\u0027t have their own InstanceType values, such as how the class Symbol (corresponding to SYMBOL_TYPE) can be further subdivided into PublicSymbol and PrivateSymbol (which don\u0027t have any corresponding InstanceType values).",
+      "parentUuid": "6dffa844_ca458806",
       "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -82,6 +136,24 @@
       "side": 1,
       "message": "Or part of TorqueGeneratedJSAsyncFunctionObject.",
       "parentUuid": "2e203a5d_422b927e",
+      "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6123370_1455bd0c",
+        "filename": "src/objects/js-generator.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-10-28T17:45:22Z",
+      "side": 1,
+      "message": "Great idea! I\u0027d prefer putting them in TQ_OBJECT_CONSTRUCTORS. Otherwise, if we declare them in the generated parent class, the spelling for the implementation gets a little unwieldy. Compare:\n\nvoid JSAsyncFunctionObject::JSAsyncFunctionObjectPrint(std::ostream\u0026 os) {\n  ...\n}\n\ntemplate \u003c\u003e\nvoid TorqueGeneratedTemplateObjectDescription\u003cTemplateObjectDescription, Struct\u003e::TemplateObjectDescriptionPrint(std::ostream\u0026 os) {\n  ...\n}",
+      "parentUuid": "8f74e864_92620020",
       "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
