@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26a374a7_3f653c06",
+        "filename": "src/codegen/x64/assembler-x64.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-10-28T22:13:54Z",
+      "side": 1,
+      "message": "Sorry I wasn\u0027t clear in my earlier comment - what I meant was that you could use one generic sse_instr in both these macros instead of declaring additional methods that are doing the sa,e things. As they are common to both SSE/SSE2 using a generic sse_instr makes sense to me.",
+      "revId": "1fc2fac07a8db58d9455150fb953ff534c08a8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
