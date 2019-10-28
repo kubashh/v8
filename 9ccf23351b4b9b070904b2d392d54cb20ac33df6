@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d7d3d241_073d66b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-10-28T19:14:05Z",
+      "side": 1,
+      "message": "No reason, except that the CLs were already out and reviewed and seemed easier to land. Caught this too late, and the CL has landed now so will just land the others too.",
+      "parentUuid": "a7bf76f0_4d88e156",
+      "range": {
+        "startLine": 11,
+        "startChar": 26,
+        "endLine": 12,
+        "endChar": 42
+      },
+      "revId": "9ccf23351b4b9b070904b2d392d54cb20ac33df6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fbeec5ea_2806d064",
         "filename": "test/mjsunit/regress/wasm/regress-1010272.js",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-10-28T18:51:31Z",
       "side": 1,
       "message": "Fly-by: How were these numbers chosen? Please make sure to use the minimum required to run into the check.",
+      "range": {
+        "startLine": 8,
+        "startChar": 21,
+        "endLine": 8,
+        "endChar": 23
+      },
+      "revId": "9ccf23351b4b9b070904b2d392d54cb20ac33df6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd3a0051_baddc7bc",
+        "filename": "test/mjsunit/regress/wasm/regress-1010272.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-10-28T19:14:05Z",
+      "side": 1,
+      "message": "These numbers are not very deterministic unfortunately. I originally had kNumWorkers \u003d 128, and kNumMessages \u003d 64, but brought them down to this number to fail deterministically on my machine on debug builds. The numbers could probably be slightly smaller i.e. kNumMessages to ~48, and kNumWorkers to ~94, but I ended up rounding up to see it fail in a deterministic way on the bots. Some of the GrowMemory tests consume more memory, and are potentially non-deterministic, regression tests may not be the right place to put them, but I\u0027m not sure where they should go.",
+      "parentUuid": "fbeec5ea_2806d064",
       "range": {
         "startLine": 8,
         "startChar": 21,
