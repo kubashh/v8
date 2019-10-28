@@ -46,6 +46,30 @@
       "revId": "901811179797907e6aa623692c8d355eaa7407f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ab2a308c_5263e234",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-10-28T18:36:42Z",
+      "side": 1,
+      "message": "Should have been self.to_string(relative\u003dTrue) - the way on the right fails on bots. I reverted for now.",
+      "parentUuid": "66abf5c3_4a7df47d",
+      "range": {
+        "startLine": 137,
+        "startChar": 19,
+        "endLine": 137,
+        "endChar": 49
+      },
+      "revId": "901811179797907e6aa623692c8d355eaa7407f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
