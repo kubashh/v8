@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d555e1d6_f3ffa89a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T13:21:01Z",
+      "side": 1,
+      "message": "Sorry, CL message nits again :) The fact that CallDebugOnFunctionCall is modified is a very minor point here, changing InvokeFunction and InvokeFunctionCode is way more interesting. \n\nIt seems like you\u0027ve removed all ParameterCount uses; why not remove the class entirely and change the subject to \u0027[masm] Remove ParameterCount\u0027 or so?\n\nLikewise for the CL text.\n\n(Awesome cleanup btw.)",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bed5d67_ac65fd9d",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T13:21:01Z",
+      "side": 1,
+      "message": "The last part \u0027if .. passed in registers\u0027 no longer seems to apply.",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d16c511_0316d0e7",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T13:21:01Z",
+      "side": 1,
+      "message": "Does it make sense to implement the `expected_parameter_count \u003d\u003d actual_parameter_count` case as well, or if not DCHECK that the two are not equal?",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9400d4e6_b55d20d8",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T13:21:01Z",
+      "side": 1,
+      "message": "nit: same here.",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3eae5ab_fd5bee68",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T13:21:01Z",
+      "side": 1,
+      "message": "These DCHECKs make the condition in 1113 impossible. Please refactor similar to x64 to support the test case.",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50dedc71_e8cbddb7",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2445,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T13:21:01Z",
+      "side": 1,
+      "message": "Could this also be just a \n\n    DCHECK_EQ(actual_parameter_count, rax);\n\n?",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "799b1194_18a37aad",
+        "filename": "src/debug/ia32/debug-ia32.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T13:21:01Z",
+      "side": 1,
+      "message": "You\u0027re overwriting eax here, which was just loaded with the kFormalParameterCountOffset in the previous instruction.\n\nWhat about solving this differently by just passing the same register (eax) as both actual and expected register? Together with logic that understands the case of expected_reg \u003d\u003d actual_reg.",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
