@@ -1415,12 +1415,6 @@ void MemoryChunk::ReleaseAllAllocatedMemory() {
   if (marking_bitmap_ != nullptr) ReleaseMarkingBitmap();
 }
 
-static SlotSet* AllocateAndInitializeSlotSet(size_t size, Address page_start) {
-  size_t pages = (size + Page::kPageSize - 1) / Page::kPageSize;
-  DCHECK_LT(0, pages);
-  return new SlotSet[pages];
-}
-
 template V8_EXPORT_PRIVATE SlotSet* MemoryChunk::AllocateSlotSet<OLD_TO_NEW>();
 template V8_EXPORT_PRIVATE SlotSet* MemoryChunk::AllocateSlotSet<OLD_TO_OLD>();
 
@@ -1434,11 +1428,11 @@ SlotSet* MemoryChunk::AllocateSweepingSlotSet() {
 }
 
 SlotSet* MemoryChunk::AllocateSlotSet(SlotSet** slot_set) {
-  SlotSet* new_slot_set = AllocateAndInitializeSlotSet(size(), address());
-  SlotSet* old_slot_set = base::AsAtomicPointer::Release_CompareAndSwap(
+  SlotSet* new_slot_set = SlotSet::Allocate(buckets());
+  SlotSet* old_slot_set = base::AsAtomicPointer::AcquireRelease_CompareAndSwap(
       slot_set, nullptr, new_slot_set);
   if (old_slot_set != nullptr) {
-    delete[] new_slot_set;
+    SlotSet::Delete(new_slot_set, buckets());
     new_slot_set = old_slot_set;
   }
   DCHECK(new_slot_set);
@@ -1459,7 +1453,7 @@ void MemoryChunk::ReleaseSweepingSlotSet() {
 
 void MemoryChunk::ReleaseSlotSet(SlotSet** slot_set) {
   if (*slot_set) {
-    delete[] * slot_set;
+    SlotSet::Delete(*slot_set, buckets());
     *slot_set = nullptr;
   }
 }
