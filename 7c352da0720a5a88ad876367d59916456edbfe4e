@@ -16,6 +16,24 @@
       "revId": "7c352da0720a5a88ad876367d59916456edbfe4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c5b7df2_9fe5f33e",
+        "filename": "test/mjsunit/compiler/regress-bound-functions.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-10-28T12:35:03Z",
+      "side": 1,
+      "message": "Good idea, thanks!",
+      "parentUuid": "352e2376_d48629a6",
+      "revId": "7c352da0720a5a88ad876367d59916456edbfe4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
