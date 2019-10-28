@@ -67,6 +67,24 @@
       "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f74e864_92620020",
+        "filename": "src/objects/js-generator.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T09:24:58Z",
+      "side": 1,
+      "message": "Or part of TorqueGeneratedJSAsyncFunctionObject.",
+      "parentUuid": "2e203a5d_422b927e",
+      "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
