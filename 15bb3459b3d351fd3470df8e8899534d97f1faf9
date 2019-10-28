@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18ba9191_699b7996",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T09:24:33Z",
+      "side": 1,
+      "message": "Please comment the necessary conditions for classes to be part of this list.",
+      "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f61a9a8_c6493973",
+        "filename": "src/objects/instance-type-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T09:24:33Z",
+      "side": 1,
+      "message": "So this just disables the DCHECK, or is there magic somewhere that I\u0027m missing?",
+      "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6dffa844_ca458806",
+        "filename": "src/objects/instance-type.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T09:24:33Z",
+      "side": 1,
+      "message": "TORQUE_INSTANCE_CHECKERS_SINGLE_FULLY_DEFINED + TORQUE_INSTANCE_CHECKERS_SINGLE_ONLY_DECLARED (and the RANGE versions below) are all types mentioned in torque?",
+      "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e203a5d_422b927e",
+        "filename": "src/objects/js-generator.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-28T09:24:33Z",
+      "side": 1,
+      "message": "Unrelated question, does it still make sense to separate DECL_VERIFIER/DECL_PRINTER? Could/should they be part of a (perhaps renamed) TQ_OBJECT_CONSTRUCTORS?",
+      "revId": "15bb3459b3d351fd3470df8e8899534d97f1faf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
