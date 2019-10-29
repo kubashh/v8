@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79826d4a_45deff45",
+        "filename": "src/execution/messages.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T13:39:35Z",
+      "side": 1,
+      "message": "Note line numbers seem to be 1-based (see line 82 above). Is the 0 used anywhere now or is it just meaningless and unused for wasm frames?",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be7b79cc_5477a805",
+        "filename": "src/inspector/wasm-translation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T13:39:35Z",
+      "side": 1,
+      "message": "Also here and other spots; would it make sense to define a kWasmNoLineNumber constant or so?",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
