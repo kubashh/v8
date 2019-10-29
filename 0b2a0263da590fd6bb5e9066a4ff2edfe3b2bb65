@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae742f2_4f45f4d5",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T12:16:12Z",
+      "side": 1,
+      "message": "nit: You could use Move(Register,Register) which handles the \u0027target !\u003d source\u0027 check. See also x64 which uses Move.",
+      "revId": "0b2a0263da590fd6bb5e9066a4ff2edfe3b2bb65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26c93181_b3fb73e5",
+        "filename": "src/debug/ia32/debug-ia32.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T12:16:12Z",
+      "side": 1,
+      "message": "The intention was to pass eax as both expected and actual counts, no?",
+      "revId": "0b2a0263da590fd6bb5e9066a4ff2edfe3b2bb65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

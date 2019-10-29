@@ -179,6 +179,24 @@
     },
     {
       "key": {
+        "uuid": "c6891897_e71ca46b",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T12:16:12Z",
+      "side": 1,
+      "message": "Ah of course :)",
+      "parentUuid": "0418e695_efa1f0ff",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9400d4e6_b55d20d8",
         "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
         "patchSetId": 4
@@ -249,6 +267,24 @@
     },
     {
       "key": {
+        "uuid": "ffcf49f5_d396bb97",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2165,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T12:16:12Z",
+      "side": 1,
+      "message": "I meant if the comment change from \u0027arguments mismatch\u0027 to \u0027argument mismatch\u0027 between recent patchsets was intentional. Super-nit. \u0027The argument counts mismatch\u0027 may be even better.",
+      "parentUuid": "08c56d79_4a3f6c62",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d3eae5ab_fd5bee68",
         "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
         "patchSetId": 4
@@ -314,6 +350,24 @@
       "side": 1,
       "message": "The logic is the same. We previously had\n    DCHECK_IMPLIES(expected.is_reg(), expected.reg() \u003d\u003d ecx);\nNow, expected.is_reg() is always true. Then,\n    DCHECK_EQ(expected_parameter_count, ecx);\nfollows the same logic.\n\nThe logic for `expected_parameter_count \u003d\u003d actual_parameter_count)` was dead code previously. If you had two registers, they had to be ecx and eax (due to DHCECKs above). Then, they will never be the same register.\n\nHaving said that, in order to solve the debug-ia32.cc thing, I will add the logic here for expected_reg \u003d\u003d actual_reg.",
       "parentUuid": "7b338da8_6775dc83",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "374303fc_9dfa235f",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T12:16:12Z",
+      "side": 1,
+      "message": "\u003e The logic for `expected_parameter_count \u003d\u003d actual_parameter_count)` was dead code previously. If you had two registers, they had to be ecx and eax (due to DHCECKs above). Then, they will never be the same register.\n\nThat\u0027s what I meant - the DCHECKs may have been wrong but the logic already existed. Anyways, thanks for adding it back.",
+      "parentUuid": "53b1d81e_a575ea70",
       "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
