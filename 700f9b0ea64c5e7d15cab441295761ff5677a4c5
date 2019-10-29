@@ -22,6 +22,30 @@
       "revId": "700f9b0ea64c5e7d15cab441295761ff5677a4c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e34c3c5_1c524e63",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2019-10-29T12:35:06Z",
+      "side": 0,
+      "message": "Strange. I did rebase when I saw the diff, but got nothing. Maybe the revert did not land ? It kept poping up as waiting for my review and I LGTMed it.",
+      "parentUuid": "7b6cfe76_e7cfab02",
+      "range": {
+        "startLine": 137,
+        "startChar": 24,
+        "endLine": 137,
+        "endChar": 39
+      },
+      "revId": "700f9b0ea64c5e7d15cab441295761ff5677a4c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
