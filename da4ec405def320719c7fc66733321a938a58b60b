@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bed11e6e_33f15509",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-29T14:01:00Z",
+      "side": 1,
+      "message": "Because we don\u0027t have it here and we would need to change the public API to add it.",
+      "parentUuid": "27c93764_4209f663",
+      "revId": "da4ec405def320719c7fc66733321a938a58b60b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42144d78_70be1d59",
         "filename": "src/heap/factory.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-10-29T13:38:26Z",
       "side": 1,
       "message": "What happened here and below?",
+      "revId": "da4ec405def320719c7fc66733321a938a58b60b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d7902dc_caf2a432",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-29T14:01:00Z",
+      "side": 1,
+      "message": "Looks like clang format thought this could be prettier.",
+      "parentUuid": "42144d78_70be1d59",
       "revId": "da4ec405def320719c7fc66733321a938a58b60b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

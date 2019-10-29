@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "42aaeb1f_88ee038f",
+        "filename": "src/execution/messages.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-29T14:01:00Z",
+      "side": 1,
+      "message": "It is meaningless and unused.",
+      "parentUuid": "79826d4a_45deff45",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be7b79cc_5477a805",
         "filename": "src/inspector/wasm-translation.cc",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-10-29T13:39:35Z",
       "side": 1,
       "message": "Also here and other spots; would it make sense to define a kWasmNoLineNumber constant or so?",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a65a514f_2c218358",
+        "filename": "src/inspector/wasm-translation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-29T14:01:00Z",
+      "side": 1,
+      "message": "What header file would it be in that everything that needs it includes? I don\u0027t think I could find all current instances of `0` that already mean this.",
+      "parentUuid": "be7b79cc_5477a805",
       "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
