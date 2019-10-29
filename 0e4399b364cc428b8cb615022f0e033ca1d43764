@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "2d51a558_4ab27ae0",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "Hm, this is a regression. It\u0027s kind-of-spec\u0027ed that we should show the function index here, see https://github.com/WebAssembly/design/blob/master/Web.md#developer-facing-display-conventions.\n\nShould we extend the Message API to provide an accessor for the wasm function index? The Message object wraps a JSMessageObject, which has the Script, which allows us to use {GetContainingWasmFunction}.\n\n(Also, the comment above is outdated with the current implementation.)",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a8c7042_9d9f7b06",
+        "filename": "src/execution/messages.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "What does it return for non-wasm frames?",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79826d4a_45deff45",
         "filename": "src/execution/messages.h",
         "patchSetId": 3
@@ -31,6 +65,23 @@
       "side": 1,
       "message": "It is meaningless and unused.",
       "parentUuid": "79826d4a_45deff45",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86bda4f1_79d76f7b",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "Please avoid reformatting unrelated parts. It just pollutes this CL with unrelated changes. \"git cl format\" automatically only reformats the parts you touched, and most IDE integrations provide the same functionality.",
       "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -84,6 +135,171 @@
       "side": 1,
       "message": "We have globals.h and perhaps something similar exists for wasm-specific globals. Anyways, leaving this up to you and reviewers.",
       "parentUuid": "a65a514f_2c218358",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1737b5af_8290aa76",
+        "filename": "src/inspector/wasm-translation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "Why not just a DCHECK_NE(fake_scripts_.end(), it)?",
+      "range": {
+        "startLine": 404,
+        "startChar": 0,
+        "endLine": 407,
+        "endChar": 3
+      },
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ddf0437_fe80cff4",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4689,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "Awesome, this macro saves exactly one character :)\n(obviously not a problem of this CL)",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad2f0cb_b3c161b0",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "This check might be too strict. Do we want this method to fail if {start \u003d\u003d end}?",
+      "range": {
+        "startLine": 925,
+        "startChar": 8,
+        "endLine": 925,
+        "endChar": 56
+      },
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f7bf6fe_67581f0c",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "Wondering why the compiler did not warn here. An {uint32_t} cannot be smaller than 0.\nThe best solution is probably to store {start_func_index} in an {int}.",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54b47a77_f6bb731a",
+        "filename": "test/cctest/wasm/test-wasm-stack.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "This comment is outdated.",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f98ce92_6a76a309",
+        "filename": "test/cctest/wasm/test-wasm-stack.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f87564fd_23c6c954",
+        "filename": "test/cctest/wasm/test-wasm-trap-position.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76224bf0_f031bee7",
+        "filename": "test/cctest/wasm/test-wasm-trap-position.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5606d70d_d66a40d9",
+        "filename": "test/mjsunit/wasm/stack.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-29T14:52:50Z",
+      "side": 1,
+      "message": "Stopping review here, because it\u0027s hard to see what actually changed. Can you undo all whitespace-only changes please?",
       "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
