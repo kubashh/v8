@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3b74337_0423052e",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-10-29T10:37:48Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right, given that there are several factory()-\u003eNew... calls below. I think allocation of {relative_time_format_holder} needs to go back to where it was.",
+      "range": {
+        "startLine": 113,
+        "startChar": 2,
+        "endLine": 113,
+        "endChar": 31
+      },
+      "revId": "b4c57bd452662916ef51b7ecb05016137610277c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
