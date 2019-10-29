@@ -5,6 +5,7 @@
 #ifndef V8_INSPECTOR_V8_PROFILER_AGENT_IMPL_H_
 #define V8_INSPECTOR_V8_PROFILER_AGENT_IMPL_H_
 
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -55,6 +56,12 @@ class V8ProfilerAgentImpl : public protocol::Profiler::Backend {
       std::unique_ptr<protocol::Array<protocol::Profiler::ScriptTypeProfile>>*
           out_result) override;
 
+  Response enableRuntimeCallStats() override;
+  Response disableRuntimeCallStats() override;
+  Response getRuntimeCallStats(
+      std::unique_ptr<protocol::Array<protocol::Profiler::CounterInfo>>*
+          out_result) override;
+
   void consoleProfile(const String16& title);
   void consoleProfileEnd(const String16& title);
 
@@ -76,6 +83,7 @@ class V8ProfilerAgentImpl : public protocol::Profiler::Backend {
   std::vector<ProfileDescriptor> m_startedProfiles;
   String16 m_frontendInitiatedProfileId;
   int m_startedProfilesCount = 0;
+  std::shared_ptr<V8Inspector::Counters> m_counters;
 
   DISALLOW_COPY_AND_ASSIGN(V8ProfilerAgentImpl);
 };

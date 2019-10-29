@@ -30,7 +30,7 @@
 
 #include "src/inspector/v8-inspector-impl.h"
 
-#include <vector>
+#include <iostream>
 
 #include "src/base/platform/mutex.h"
 #include "src/inspector/inspected-context.h"
@@ -329,6 +329,41 @@ void V8InspectorImpl::asyncTaskFinished(void* task) {
 
 void V8InspectorImpl::allAsyncTasksCanceled() {
   m_debugger->allAsyncTasksCanceled();
+}
+
+V8Inspector::Counters::Counters(v8::Isolate* isolate) : m_isolate(isolate) {
+  CHECK(m_isolate);
+}
+
+V8Inspector::Counters::~Counters() { m_isolate->SetCounterFunction(nullptr); }
+
+void V8Inspector::Counters::enableCounters() {
+  m_isolate->SetCounterFunction(V8InspectorImpl::getCounterPtr);
+}
+
+int* V8Inspector::Counters::getCounterPtr(const char* name) {
+  // This incurs std::string(name) allocation, however, number of calls to this
+  // function seems to be in low dozens even for heavy pages, so it's OK.
+  return &(m_countersMap[name]);
+}
+
+std::shared_ptr<V8Inspector::Counters> V8InspectorImpl::enableCounters() {
+  if (auto counters = m_counters.lock()) return counters;
+  auto counters = std::make_shared<Counters>(m_isolate);
+  m_counters = counters;
+  counters->enableCounters();
+  return counters;
+}
+
+int* V8InspectorImpl::getCounterPtr(const char* name) {
+  if (v8::Isolate* isolate = v8::Isolate::GetCurrent()) {
+    if (V8Inspector* inspector = v8::debug::GetInspector(isolate)) {
+      auto counters =
+          static_cast<V8InspectorImpl*>(inspector)->m_counters.lock();
+      return counters ? counters->getCounterPtr(name) : nullptr;
+    }
+  }
+  return nullptr;
 }
 
 v8::Local<v8::Context> V8InspectorImpl::regexContext() {
