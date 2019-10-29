@@ -320,6 +320,8 @@ Handle<Object> StackFrameBase::GetWasmModuleName() {
   return isolate_->factory()->undefined_value();
 }
 
+int StackFrameBase::GetWasmFunctionIndex() { return -1; }
+
 Handle<Object> StackFrameBase::GetWasmInstance() {
   return isolate_->factory()->undefined_value();
 }
