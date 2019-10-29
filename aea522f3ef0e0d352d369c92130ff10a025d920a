@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd4e4dc3_3e6cff78",
+        "filename": "src/compiler/graph-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T13:29:24Z",
+      "side": 1,
+      "message": "q: This works because it is only called in graph-assembler.cc, despite the missing inline definition?",
+      "revId": "aea522f3ef0e0d352d369c92130ff10a025d920a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
