@@ -52,6 +52,24 @@
       "revId": "aea522f3ef0e0d352d369c92130ff10a025d920a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b426d7a_7c4b5c9f",
+        "filename": "src/compiler/graph-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-10-29T14:06:23Z",
+      "side": 1,
+      "message": "We effectively do the same thing for all \u003cnane\u003e-inl.h files (where compilation units that don\u0027t include the inl.h file also don\u0027t see the definition of an inlined function). I can add an graph-assembler-inl.h  in a followup if you prefer?",
+      "parentUuid": "fa0bc245_96879155",
+      "revId": "aea522f3ef0e0d352d369c92130ff10a025d920a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
