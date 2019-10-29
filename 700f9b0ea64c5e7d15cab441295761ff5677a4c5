@@ -70,6 +70,30 @@
       "revId": "700f9b0ea64c5e7d15cab441295761ff5677a4c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41d7c595_36c94388",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2019-10-29T15:22:07Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "a965b828_5283303b",
+      "range": {
+        "startLine": 137,
+        "startChar": 24,
+        "endLine": 137,
+        "endChar": 39
+      },
+      "revId": "700f9b0ea64c5e7d15cab441295761ff5677a4c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
