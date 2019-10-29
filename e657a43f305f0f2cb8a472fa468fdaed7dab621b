@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "8876bede_a1b9a569",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-29T11:46:26Z",
+      "side": 1,
+      "message": "After offline talk, let\u0027s leave removing the rest of the ParameterCount to compartmentalize the changes.",
+      "parentUuid": "27b6f1be_7534eaec",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4bed5d67_ac65fd9d",
         "filename": "src/codegen/arm/macro-assembler-arm.cc",
         "patchSetId": 4
@@ -143,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "0418e695_efa1f0ff",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-29T11:46:26Z",
+      "side": 1,
+      "message": "We already have the DCHECKs above.\n  DCHECK_EQ(actual_parameter_count, r0);\n  DCHECK_EQ(expected_parameter_count, r2);\nIf those DCHECKs pass, it means that actual_parameter_count !\u003d expected_parameter_count.",
+      "parentUuid": "333c127d_6666b9bb",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9400d4e6_b55d20d8",
         "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
         "patchSetId": 4
@@ -192,6 +228,24 @@
       "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08c56d79_4a3f6c62",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2165,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-29T11:46:26Z",
+      "side": 1,
+      "message": "It\u0027s intentional. Since we are jumping over this in\n  B(eq, \u0026regular_invoke);\nwhen the arguments are the same, when we are in 2165 the arguments always mismatch.",
+      "parentUuid": "439e1d10_440664f1",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -245,6 +299,24 @@
       "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53b1d81e_a575ea70",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-29T11:46:26Z",
+      "side": 1,
+      "message": "The logic is the same. We previously had\n    DCHECK_IMPLIES(expected.is_reg(), expected.reg() \u003d\u003d ecx);\nNow, expected.is_reg() is always true. Then,\n    DCHECK_EQ(expected_parameter_count, ecx);\nfollows the same logic.\n\nThe logic for `expected_parameter_count \u003d\u003d actual_parameter_count)` was dead code previously. If you had two registers, they had to be ecx and eax (due to DHCECKs above). Then, they will never be the same register.\n\nHaving said that, in order to solve the debug-ia32.cc thing, I will add the logic here for expected_reg \u003d\u003d actual_reg.",
+      "parentUuid": "7b338da8_6775dc83",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -333,6 +405,24 @@
       "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f509b8a3_fc5ede4a",
+        "filename": "src/debug/ia32/debug-ia32.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-29T11:46:26Z",
+      "side": 1,
+      "message": "To solve this, I added the logic of expected_reg \u003d\u003d actual_reg to InvokePrologue in ia32.",
+      "parentUuid": "d7e90fba_2a4af00e",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
