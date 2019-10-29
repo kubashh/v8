@@ -69,6 +69,24 @@
       "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdbaff40_49c79ef2",
+        "filename": "src/inspector/wasm-translation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T14:10:11Z",
+      "side": 1,
+      "message": "We have globals.h and perhaps something similar exists for wasm-specific globals. Anyways, leaving this up to you and reviewers.",
+      "parentUuid": "a65a514f_2c218358",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
