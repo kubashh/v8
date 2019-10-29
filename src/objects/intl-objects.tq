@@ -15,6 +15,7 @@
 #include 'src/objects/js-segmenter.h'
 
 extern class JSDateTimeFormat extends JSObject {
+  locale: String;
   icu_locale: Foreign;                // Managed<icu::Locale>
   icu_simple_date_format: Foreign;    // Managed<icu::SimpleDateFormat>
   icu_date_interval_format: Foreign;  // Managed<icu::DateIntervalFormat>

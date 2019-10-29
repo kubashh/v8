@@ -2013,6 +2013,7 @@ void JSCollator::JSCollatorPrint(std::ostream& os) {  // NOLINT
 
 void JSDateTimeFormat::JSDateTimeFormatPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, *this, "JSDateTimeFormat");
+  os << "\n - locale: " << Brief(locale());
   os << "\n - icu locale: " << Brief(icu_locale());
   os << "\n - icu simple date format: " << Brief(icu_simple_date_format());
   os << "\n - icu date interval format: " << Brief(icu_date_interval_format());
