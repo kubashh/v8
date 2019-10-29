@@ -42,9 +42,9 @@ void DebugCodegen::GenerateFrameDropperTrampoline(MacroAssembler* masm) {
 
   // The expected and actual argument counts don't matter as long as they match
   // and we don't enter the ArgumentsAdaptorTrampoline.
-  ParameterCount dummy(0);
+  __ mov(ecx, eax);
   __ mov(esi, FieldOperand(edi, JSFunction::kContextOffset));
-  __ InvokeFunctionCode(edi, no_reg, dummy, dummy, JUMP_FUNCTION);
+  __ InvokeFunctionCode(edi, no_reg, ecx, eax, JUMP_FUNCTION);
 }
 
 const bool LiveEdit::kFrameDropperSupported = true;
