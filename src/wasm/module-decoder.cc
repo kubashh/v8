@@ -963,7 +963,13 @@ class ModuleDecoderImpl : public Decoder {
         // Function and local names will be decoded when needed.
         if (name_type == NameSectionKindCode::kModule) {
           WireBytesRef name = consume_string(&inner, false, "module name");
-          if (inner.ok() && validate_utf8(&inner, name)) module_->name = name;
+          if (inner.ok() && validate_utf8(&inner, name)) {
+            module_->name = name;
+            const byte* name_start =
+                inner.start() + inner.GetBufferRelativeOffset(name.offset());
+            module_->module_name.assign(
+                reinterpret_cast<const char*>(name_start), name.length());
+          }
         } else {
           inner.consume_bytes(name_payload_len, "name subsection payload");
         }

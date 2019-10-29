@@ -1509,8 +1509,8 @@ void AsyncCompileJob::PrepareRuntimeObjects() {
   // Create heap objects for script and module bytes to be stored in the
   // module object. Asm.js is not compiled asynchronously.
   const WasmModule* module = native_module_->module();
-  Handle<Script> script =
-      CreateWasmScript(isolate_, wire_bytes_, module->source_map_url);
+  Handle<Script> script = CreateWasmScript(
+      isolate_, wire_bytes_, module->source_map_url, module->module_name);
 
   Handle<WasmModuleObject> module_object =
       WasmModuleObject::New(isolate_, native_module_, script);
@@ -2666,7 +2666,8 @@ WasmCode* CompileImportWrapper(
 
 Handle<Script> CreateWasmScript(Isolate* isolate,
                                 const ModuleWireBytes& wire_bytes,
-                                const std::string& source_map_url) {
+                                const std::string& source_map_url,
+                                const std::string& module_name) {
   Handle<Script> script =
       isolate->factory()->NewScript(isolate->factory()->empty_string());
   script->set_context_data(isolate->native_context()->debug_context_id());
@@ -2682,7 +2683,10 @@ Handle<Script> CreateWasmScript(Isolate* isolate,
   Handle<String> url_prefix =
       isolate->factory()->InternalizeString(StaticCharVector("wasm://wasm/"));
 
-  int name_chars = SNPrintF(ArrayVector(buffer), "wasm-%08x", hash);
+  int name_chars = module_name.size() == 0
+                       ? SNPrintF(ArrayVector(buffer), "wasm-%08x", hash)
+                       : SNPrintF(ArrayVector(buffer), "wasm-%.17s-%08x",
+                                  module_name.c_str(), hash);
   DCHECK(name_chars >= 0 && name_chars < kBufferSize);
   Handle<String> name_str =
       isolate->factory()

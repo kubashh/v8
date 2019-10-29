@@ -2354,6 +2354,16 @@ TEST_F(WasmModuleVerifyTest, MultipleNameSections) {
   ModuleResult result = DecodeModule(data, data + sizeof(data));
   EXPECT_TRUE(result.ok());
   EXPECT_EQ(3u, result.value()->name.length());
+  EXPECT_EQ("abc", result.value()->module_name);
+}
+
+TEST_F(WasmModuleVerifyTest, BadNameSection) {
+  static const byte data[] = {SECTION_NAMES(
+      0, ADD_COUNT(ADD_COUNT('s', 'r', 'c', '/', 'x', 0xff, 'z', '.', 'c')))};
+  ModuleResult result = DecodeModule(data, data + sizeof(data));
+  EXPECT_TRUE(result.ok());
+  EXPECT_EQ(0u, result.value()->name.length());
+  EXPECT_EQ(0u, result.value()->module_name.size());
 }
 
 TEST_F(WasmModuleVerifyTest, PassiveDataSegment) {

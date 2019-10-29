@@ -222,6 +222,7 @@ struct V8_EXPORT_PRIVATE WasmModule {
   mutable std::unique_ptr<std::unordered_map<uint32_t, WireBytesRef>>
       function_names;
   std::string source_map_url;
+  std::string module_name;
 
   explicit WasmModule(std::unique_ptr<Zone> signature_zone = nullptr);
 
