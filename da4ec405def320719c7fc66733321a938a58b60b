@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27c93764_4209f663",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-29T13:38:26Z",
+      "side": 1,
+      "message": "Why don\u0027t we print the function index anymore?",
+      "revId": "da4ec405def320719c7fc66733321a938a58b60b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42144d78_70be1d59",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-29T13:38:26Z",
+      "side": 1,
+      "message": "What happened here and below?",
+      "revId": "da4ec405def320719c7fc66733321a938a58b60b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
