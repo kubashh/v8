@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d212f15_32dd32fd",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1104,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-10-29T15:43:03Z",
+      "side": 1,
+      "message": "IIUC, we return Nothing when there is an exception when executing the code. If not, I will also check for has_pending_exceptions here.",
+      "revId": "d33ae4c250a6ed6b7e58f9a80865024ba7866e2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
