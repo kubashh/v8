@@ -16,6 +16,24 @@
       "revId": "aea522f3ef0e0d352d369c92130ff10a025d920a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84225061_43a98c6f",
+        "filename": "src/compiler/graph-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-10-29T13:35:34Z",
+      "side": 1,
+      "message": "Yes, it\u0027s private so it can\u0027t be called from elsewhere.",
+      "parentUuid": "bd4e4dc3_3e6cff78",
+      "revId": "aea522f3ef0e0d352d369c92130ff10a025d920a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
