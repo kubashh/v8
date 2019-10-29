@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "126d727d_89bb596c",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2019-10-29T15:41:43Z",
+      "side": 1,
+      "message": "Good catch! I\u0027ve updated SlotSet to also store initial_buckets. In debug-mode we can check that those bucket-pointers are null.",
+      "parentUuid": "24dac87f_01281730",
+      "range": {
+        "startLine": 115,
+        "startChar": 9,
+        "endLine": 115,
+        "endChar": 68
+      },
+      "revId": "9e1c6e1159c481cb6dda535a6c217447f72adee9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5daac84_fff6927f",
         "filename": "src/heap/remembered-set.h",
         "patchSetId": 11
@@ -68,6 +92,30 @@
       "revId": "9e1c6e1159c481cb6dda535a6c217447f72adee9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c91e680_1d555c17",
+        "filename": "src/heap/slot-set.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2019-10-29T15:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "219d3e61_c09424c4",
+      "range": {
+        "startLine": 27,
+        "startChar": 43,
+        "endLine": 27,
+        "endChar": 51
+      },
+      "revId": "9e1c6e1159c481cb6dda535a6c217447f72adee9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
