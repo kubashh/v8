@@ -54,10 +54,10 @@ class WireBytesRef {
 
 // Static representation of a wasm function.
 struct WasmFunction {
-  FunctionSig* sig;      // signature of the function.
-  uint32_t func_index;   // index into the function table.
-  uint32_t sig_index;    // index into the signature table.
-  WireBytesRef code;     // code of this function.
+  FunctionSig* sig;     // signature of the function.
+  uint32_t func_index;  // index into the function table.
+  uint32_t sig_index;   // index into the signature table.
+  WireBytesRef code;    // code of this function.
   bool imported;
   bool exported;
 };
@@ -108,8 +108,8 @@ struct WasmTable {
   uint32_t initial_size = 0;      // initial table size.
   uint32_t maximum_size = 0;      // maximum table size.
   bool has_maximum_size = false;  // true if there is a maximum size.
-  bool imported = false;        // true if imported.
-  bool exported = false;        // true if exported.
+  bool imported = false;          // true if imported.
+  bool exported = false;          // true if exported.
 };
 
 // Static representation of wasm element segment (table initializer).
@@ -250,9 +250,12 @@ int GetExportWrapperIndex(const WasmModule* module, const FunctionSig* sig,
 int GetWasmFunctionOffset(const WasmModule* module, uint32_t func_index);
 
 // Returns the function containing the given byte offset.
-// Returns -1 if the byte offset is not contained in any function of this
-// module.
-int GetContainingWasmFunction(const WasmModule* module, uint32_t byte_offset);
+// Returns -1 if strict is true and the byte offset is not contained in any
+// function of this module.
+// Will return preceding function if strict is false and the byte offset is not
+// contained within a function.
+int GetContainingWasmFunction(const WasmModule* module, uint32_t byte_offset,
+                              bool strict = true);
 
 // Compute the disassembly of a wasm function.
 // Returns the disassembly string and a list of <byte_offset, line, column>
