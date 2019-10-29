@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "27b6f1be_7534eaec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T10:01:39Z",
+      "side": 1,
+      "message": "Why not remove those as well? It is always called with a Register arg AFAICT. Fine in a follow-up of course.",
+      "parentUuid": "fe65a6fa_88341249",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4bed5d67_ac65fd9d",
         "filename": "src/codegen/arm/macro-assembler-arm.cc",
         "patchSetId": 4
@@ -107,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "333c127d_6666b9bb",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T10:01:39Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t know why different architectures follow different patterns. I think unifying the logic should be left to a future CL. WDYT?\n\nNo reason I think, just natural divergence between platforms. I\u0027m okay with either here or a follow-up, or not at all. But please at least add the DCHECK here.",
+      "parentUuid": "60c505fa_d1ec1a2b",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9400d4e6_b55d20d8",
         "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
         "patchSetId": 4
@@ -142,6 +178,23 @@
     },
     {
       "key": {
+        "uuid": "439e1d10_440664f1",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2165,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T10:01:39Z",
+      "side": 1,
+      "message": "Unintentional? The original comment reads better to me.",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d3eae5ab_fd5bee68",
         "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
         "patchSetId": 4
@@ -171,6 +224,24 @@
       "side": 1,
       "message": "Same as the other comment. I don\u0027t know the reasons behind the architectures having different logic paths, but I tried to keep it the same as it was for simplicity sake.\n\nSince the DCHECK and the if are inconsistent, I will remove the if and reassess on a future CL. WDYT?",
       "parentUuid": "d3eae5ab_fd5bee68",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b338da8_6775dc83",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T10:01:39Z",
+      "side": 1,
+      "message": "Please keep the logic in this case since we already had it before, and fix the DCHECKs by moving them into the `if (expected_parameter_count !\u003d actual_parameter_count) {` block.\n\nKeeping logic for `expected_parameter_count \u003d\u003d actual_parameter_count)` will fix the issue in the test.",
+      "parentUuid": "c1e0986c_f212917e",
       "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -241,6 +312,24 @@
       "side": 1,
       "message": "Was eax being used in the previous code? As far as I see it was being ignored. That\u0027s why I though overwriting it should be fine.",
       "parentUuid": "799b1194_18a37aad",
+      "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7e90fba_2a4af00e",
+        "filename": "src/debug/ia32/debug-ia32.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-29T10:01:39Z",
+      "side": 1,
+      "message": "eax is the kJavaScriptCallArgCountRegister in the JS calling convention, see https://cs.chromium.org/chromium/src/v8/src/codegen/ia32/register-ia32.h?l\u003d138\u0026rcl\u003da0b89dfbeaf116d9132771611e20db8a302149fd.",
+      "parentUuid": "1b7360b5_b4669ce1",
       "revId": "e657a43f305f0f2cb8a472fa468fdaed7dab621b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
