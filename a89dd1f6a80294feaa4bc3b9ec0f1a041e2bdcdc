@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "874e27bd_722f8e38",
+        "filename": "include/v8-inspector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-10-29T18:36:54Z",
+      "side": 1,
+      "message": "Can we rather wrap CountersMap into a class that would disable counters in destructor when last reference is lost? This way you don\u0027t need to expose disableCountersMaybe()",
+      "revId": "a89dd1f6a80294feaa4bc3b9ec0f1a041e2bdcdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df99a304_dbd59c47",
+        "filename": "include/v8-inspector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-10-29T18:36:54Z",
+      "side": 1,
+      "message": "Can we avoid exposing that? A client that called enableCounters() has a reference to the map, so they can get it from there.",
+      "revId": "a89dd1f6a80294feaa4bc3b9ec0f1a041e2bdcdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33494ac8_7dc6f67e",
+        "filename": "src/inspector/v8-inspector-impl.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-10-29T18:36:54Z",
+      "side": 1,
+      "message": "Let\u0027s extract a named function.",
+      "revId": "a89dd1f6a80294feaa4bc3b9ec0f1a041e2bdcdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7776eacd_4b97d416",
+        "filename": "src/inspector/v8-inspector-impl.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-10-29T18:36:54Z",
+      "side": 1,
+      "message": "Is there a situation this may return nullptr? Add a DCHECK()?",
+      "revId": "a89dd1f6a80294feaa4bc3b9ec0f1a041e2bdcdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f01107c_111a40f7",
+        "filename": "src/inspector/v8-profiler-agent-impl.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-10-29T18:36:54Z",
+      "side": 1,
+      "message": "s/c_str/data/",
+      "revId": "a89dd1f6a80294feaa4bc3b9ec0f1a041e2bdcdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
