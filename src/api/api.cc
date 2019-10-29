@@ -9434,12 +9434,6 @@ bool debug::Script::GetPossibleBreakpoints(
 int debug::Script::GetSourceOffset(const debug::Location& location) const {
   i::Handle<i::Script> script = Utils::OpenHandle(this);
   if (script->type() == i::Script::TYPE_WASM) {
-    if (this->SourceMappingURL().IsEmpty()) {
-      i::wasm::NativeModule* native_module = script->wasm_native_module();
-      const i::wasm::WasmModule* module = native_module->module();
-      return i::wasm::GetWasmFunctionOffset(module, location.GetLineNumber()) +
-             location.GetColumnNumber();
-    }
     DCHECK_EQ(0, location.GetLineNumber());
     return location.GetColumnNumber();
   }
@@ -9562,6 +9556,17 @@ std::pair<int, int> debug::WasmScript::GetFunctionRange(
   DCHECK_GE(i::kMaxInt, func.code.end_offset());
   return std::make_pair(static_cast<int>(func.code.offset()),
                         static_cast<int>(func.code.end_offset()));
+}
+
+int debug::WasmScript::GetContainingFunction(int byte_offset) const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  i::wasm::NativeModule* native_module = script->wasm_native_module();
+  const i::wasm::WasmModule* module = native_module->module();
+  DCHECK_LE(0, byte_offset);
+
+  return i::wasm::GetContainingWasmFunction(module, byte_offset);
 }
 
 uint32_t debug::WasmScript::GetFunctionHash(int function_index) {
