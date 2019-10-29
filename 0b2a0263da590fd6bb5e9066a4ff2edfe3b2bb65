@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "402bfcd2_71de1a9c",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-29T12:30:00Z",
+      "side": 1,
+      "message": "Updated this one and x64s which was doing the extra check.",
+      "parentUuid": "dae742f2_4f45f4d5",
+      "revId": "0b2a0263da590fd6bb5e9066a4ff2edfe3b2bb65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26c93181_b3fb73e5",
         "filename": "src/debug/ia32/debug-ia32.cc",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "0b2a0263da590fd6bb5e9066a4ff2edfe3b2bb65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9d85af8_dcb90147",
+        "filename": "src/debug/ia32/debug-ia32.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-10-29T12:30:00Z",
+      "side": 1,
+      "message": "No, since InvokeFunctionCode requires them to be ecx and eax. I loaded the same value into them by overwriting ecx.",
+      "parentUuid": "26c93181_b3fb73e5",
+      "revId": "0b2a0263da590fd6bb5e9066a4ff2edfe3b2bb65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
