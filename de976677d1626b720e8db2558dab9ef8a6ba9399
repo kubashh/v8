@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "ad510bd4_b6ea1f61",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-30T14:00:10Z",
+      "side": 1,
+      "message": "I just tried it, and it seems to work as expected. Note that we also need to remove that \"wasm/\" part in wasm-translation.cc.",
+      "parentUuid": "1925b287_14446adb",
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a3df2807_fa65af41",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 5
