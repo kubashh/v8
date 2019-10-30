@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbe30caa_5e42e4df",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-10-30T22:30:16Z",
+      "side": 1,
+      "message": "I don\u0027t know if it makes sense to define this as a template specialization of SetTraceValue\u003cT\u003e?",
+      "range": {
+        "startLine": 485,
+        "startChar": 17,
+        "endLine": 485,
+        "endChar": 30
+      },
+      "revId": "e9b5383391f0e424b12a53e9f4110416343d78e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
