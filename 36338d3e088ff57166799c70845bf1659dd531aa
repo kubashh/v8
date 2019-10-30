@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "aad3b916_49513aa0",
+        "filename": "include/v8-inspector.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-10-30T00:40:49Z",
+      "side": 1,
+      "message": "blank line below that.",
+      "revId": "36338d3e088ff57166799c70845bf1659dd531aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "672d5d80_9296f7ac",
         "filename": "src/inspector/v8-inspector-impl.cc",
         "patchSetId": 11
@@ -19,6 +36,57 @@
         "endLine": 363,
         "endChar": 64
       },
+      "revId": "36338d3e088ff57166799c70845bf1659dd531aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64b76c8d_316bbc91",
+        "filename": "test/inspector/runtime-call-stats/collection.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-10-30T00:40:49Z",
+      "side": 1,
+      "message": "for (const counter of counters) (or const {name, value} of counters)",
+      "revId": "36338d3e088ff57166799c70845bf1659dd531aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32a9f574_d4f19db6",
+        "filename": "test/inspector/runtime-call-stats/collection.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-10-30T00:40:49Z",
+      "side": 1,
+      "message": "!\u003d\u003d",
+      "revId": "36338d3e088ff57166799c70845bf1659dd531aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "696e1dcf_a6c4db5f",
+        "filename": "test/inspector/runtime-call-stats/collection.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-10-30T00:40:49Z",
+      "side": 1,
+      "message": "\u003d\u003d\u003d",
       "revId": "36338d3e088ff57166799c70845bf1659dd531aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
