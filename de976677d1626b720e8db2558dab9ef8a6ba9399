@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fad30c90_bb212de3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-10-30T08:14:38Z",
+      "side": 1,
+      "message": "Can we use `wasm://\u003cmodule-name\u003e-\u003chexid\u003e` instead? What\u0027s the point of the redundant `wasm://wasm` prefix?",
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3624a807_4e06aff6",
         "filename": "test/inspector/debugger/wasm-scripts-with-name.js",
         "patchSetId": 5
