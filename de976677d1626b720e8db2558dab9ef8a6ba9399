@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9b3be31e_5fe0246d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-10-30T13:35:52Z",
+      "side": 1,
+      "message": "That\u0027s actually the reason I\u0027m asking, since it\u0027s kind of odd that .wasm files are artificially grouped into \"wasm\", which we don\u0027t do for .js or .css files.",
+      "parentUuid": "9794e4e6_ed71288d",
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a3df2807_fa65af41",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 5
