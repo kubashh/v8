@@ -19,6 +19,104 @@
     },
     {
       "key": {
+        "uuid": "9794e4e6_ed71288d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-30T10:05:19Z",
+      "side": 1,
+      "message": "This will make wasm script show up correctly in a \"wasm\" folder in the sources tab. Not sure what happens if we drop this. I remember vaguely that the frontend / UI was confused then.",
+      "parentUuid": "fad30c90_bb212de3",
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3df2807_fa65af41",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2687,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-30T10:05:19Z",
+      "side": 1,
+      "message": "nit: I have never seen this abbreviation. Can we write this out?",
+      "range": {
+        "startLine": 2687,
+        "startChar": 16,
+        "endLine": 2687,
+        "endChar": 21
+      },
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e867272_61a7e46a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2711,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-30T10:05:19Z",
+      "side": 1,
+      "message": "I am wondering if we should flatten this {name_str} to avoid having this tree of ConsStrings around forever. Or does that happen automatically by the garbage collector? I am not an expert here. Benedikt?",
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d30383d7_2144ce54",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-30T10:05:19Z",
+      "side": 1,
+      "message": "WireBytesRef is a small struct (similar to base::Vector) and should be passed by value.",
+      "range": {
+        "startLine": 62,
+        "startChar": 39,
+        "endLine": 62,
+        "endChar": 63
+      },
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88787acd_47111d68",
+        "filename": "test/inspector/debugger/wasm-scripts-with-name.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-30T10:05:19Z",
+      "side": 1,
+      "message": "This file copies a lot of logic that is unrelated to what should actually be tested here. Can we either integrate this into existing tests, or strip down this new test to only test the script names? It should include one module with a name and one without name then.",
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3624a807_4e06aff6",
         "filename": "test/inspector/debugger/wasm-scripts-with-name.js",
         "patchSetId": 5
