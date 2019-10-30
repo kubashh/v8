@@ -50,15 +50,6 @@ class TypedArrayBuiltinsAssembler : public CodeStubAssembler {
   TNode<JSFunction> GetDefaultConstructor(TNode<Context> context,
                                           TNode<JSTypedArray> exemplar);
 
-  TNode<JSTypedArray> TypedArrayCreateByLength(TNode<Context> context,
-                                               TNode<Object> constructor,
-                                               TNode<Smi> len,
-                                               const char* method_name);
-
-  void ThrowIfLengthLessThan(TNode<Context> context,
-                             TNode<JSTypedArray> typed_array,
-                             TNode<Smi> min_length);
-
   TNode<JSArrayBuffer> GetBuffer(TNode<Context> context,
                                  TNode<JSTypedArray> array);
 
@@ -112,11 +103,17 @@ class TypedArrayBuiltinsAssembler : public CodeStubAssembler {
   void SetJSTypedArrayOffHeapDataPtr(TNode<JSTypedArray> holder,
                                      TNode<RawPtrT> base,
                                      TNode<UintPtrT> offset);
+  void StoreJSTypedArrayElementFromNumeric(TNode<Context> context,
+                                           TNode<JSTypedArray> typed_array,
+                                           TNode<UintPtrT> index_node,
+                                           TNode<Numeric> value,
+                                           ElementsKind elements_kind);
   void StoreJSTypedArrayElementFromTagged(TNode<Context> context,
                                           TNode<JSTypedArray> typed_array,
                                           TNode<UintPtrT> index_node,
                                           TNode<Object> value,
-                                          ElementsKind elements_kind);
+                                          ElementsKind elements_kind,
+                                          Label* if_detached);
 };
 
 }  // namespace internal
