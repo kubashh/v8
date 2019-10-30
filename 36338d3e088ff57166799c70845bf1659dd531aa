@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "672d5d80_9296f7ac",
+        "filename": "src/inspector/v8-inspector-impl.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1280850
+      },
+      "writtenOn": "2019-10-30T00:22:18Z",
+      "side": 1,
+      "message": "Can counters be nullptr at this point, given it\u0027s single threaded and the destructor would unregister the function before we get here?\n\nMaybe a DCHECK instead and unconditional counters-\u003eGetCounterPtr?",
+      "range": {
+        "startLine": 363,
+        "startChar": 6,
+        "endLine": 363,
+        "endChar": 64
+      },
+      "revId": "36338d3e088ff57166799c70845bf1659dd531aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
