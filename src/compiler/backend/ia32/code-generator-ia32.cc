@@ -2727,9 +2727,15 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Pshufd(dst, dst, 0x0);
       break;
     }
-    case kIA32I16x8ExtractLane: {
+    case kIA32I16x8ExtractLaneU: {
       Register dst = i.OutputRegister();
       __ Pextrw(dst, i.InputSimd128Register(0), i.InputInt8(1));
+      break;
+    }
+    case kIA32I16x8ExtractLaneS: {
+      Register dst = i.OutputRegister();
+      __ Pextrw(dst, i.InputSimd128Register(0), i.InputInt8(1));
+      __ movsx_w(dst, dst);
       break;
     }
     case kSSEI16x8ReplaceLane: {
@@ -3105,9 +3111,15 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Pshufb(dst, kScratchDoubleReg);
       break;
     }
-    case kIA32I8x16ExtractLane: {
+    case kIA32I8x16ExtractLaneU: {
       Register dst = i.OutputRegister();
       __ Pextrb(dst, i.InputSimd128Register(0), i.InputInt8(1));
+      break;
+    }
+    case kIA32I8x16ExtractLaneS: {
+      Register dst = i.OutputRegister();
+      __ Pextrb(dst, i.InputSimd128Register(0), i.InputInt8(1));
+      __ movsx_b(dst, dst);
       break;
     }
     case kSSEI8x16ReplaceLane: {

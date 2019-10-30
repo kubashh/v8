@@ -167,7 +167,8 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArmI32x4GtU:
     case kArmI32x4GeU:
     case kArmI16x8Splat:
-    case kArmI16x8ExtractLane:
+    case kArmI16x8ExtractLaneU:
+    case kArmI16x8ExtractLaneS:
     case kArmI16x8ReplaceLane:
     case kArmI16x8SConvertI8x16Low:
     case kArmI16x8SConvertI8x16High:
@@ -198,7 +199,8 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArmI16x8GtU:
     case kArmI16x8GeU:
     case kArmI8x16Splat:
-    case kArmI8x16ExtractLane:
+    case kArmI8x16ExtractLaneU:
+    case kArmI8x16ExtractLaneS:
     case kArmI8x16ReplaceLane:
     case kArmI8x16Neg:
     case kArmI8x16Shl:
