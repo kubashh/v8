@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3624a807_4e06aff6",
+        "filename": "test/inspector/debugger/wasm-scripts-with-name.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-10-30T07:58:43Z",
+      "side": 1,
+      "message": "It\u0027s 2019 :)",
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
