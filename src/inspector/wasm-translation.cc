@@ -204,7 +204,7 @@ class WasmTranslation::TranslatorImpl {
     int numFunctions = script->NumFunctions();
     int numImported = script->NumImportedFunctions();
     String16Builder builder;
-    builder.appendAll("wasm://wasm/", script_name, '/');
+    builder.appendAll("wasm://", script_name, '/');
     if (numFunctions - numImported > 300) {
       size_t digits = String16::fromInteger(numFunctions - 1).length();
       String16 thisCategory = String16::fromInteger((func_index / 100) * 100);
