@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "11842bbf_a3e19fa0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-10-30T21:13:57Z",
+      "side": 1,
+      "message": "Yes, just tested the file will put in \"no domain\" group.",
+      "parentUuid": "ad510bd4_b6ea1f61",
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3df2807_fa65af41",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 5
@@ -149,6 +167,24 @@
       "writtenOn": "2019-10-30T10:05:19Z",
       "side": 1,
       "message": "I am wondering if we should flatten this {name_str} to avoid having this tree of ConsStrings around forever. Or does that happen automatically by the garbage collector? I am not an expert here. Benedikt?",
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "634c4ef6_2c0f9f48",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2711,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-10-30T21:13:57Z",
+      "side": 1,
+      "message": "Please let me know if you want to do anything here. With the new name format \u003cname\u003e-\u003chash\u003e, it is not too bad.",
+      "parentUuid": "7e867272_61a7e46a",
       "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
