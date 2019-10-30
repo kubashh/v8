@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6a189e2_bb0c3c43",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-10-30T11:06:07Z",
+      "side": 1,
+      "message": "Here and several times below (and in the other .cc files): Have you thought about CHECK vs DCHECK here? I don\u0027t have a strong opinion, just wanted to make sure that the decision was intentional. CHECK means we\u0027ll include the code in Release builds, and crash hard if it ever fails. The advantage is that we\u0027ll learn about the problem via crash reports; the disadvantage is that it slightly increases binary size and affected users will see an Aw, Snap. DCHECK means that only Debug builds will include the check.",
+      "range": {
+        "startLine": 1331,
+        "startChar": 6,
+        "endLine": 1331,
+        "endChar": 11
+      },
+      "revId": "a8bf01905acebe5ca56c911cba08fde08e25fe77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
