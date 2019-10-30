@@ -22,6 +22,30 @@
       "revId": "a8bf01905acebe5ca56c911cba08fde08e25fe77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34c920de_e2b4dd27",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-10-30T20:52:46Z",
+      "side": 1,
+      "message": "I think we should keep \"new code\" in CHECK so in case thing we are not expected happen, we have higher chance to catch those before they are out of door.\nSurely I probably should do a clean up cl to find some code we already put there for a while\n(say launched \u003e 3 months) and move them from CHECK to DCHECK.",
+      "parentUuid": "d6a189e2_bb0c3c43",
+      "range": {
+        "startLine": 1331,
+        "startChar": 6,
+        "endLine": 1331,
+        "endChar": 11
+      },
+      "revId": "a8bf01905acebe5ca56c911cba08fde08e25fe77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
