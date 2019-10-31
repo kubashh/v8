@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "22f9527d_56a95f68",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d51a558_4ab27ae0",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a8c7042_9d9f7b06",
         "filename": "src/execution/messages.h",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b506d835_cd230cdf",
+        "filename": "src/execution/messages.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a8c7042_9d9f7b06",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -85,6 +121,24 @@
       "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93f7d37f_dccb2932",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "Done.\n\nFor IDE integration I copied the recommended settings from https://chromium.googlesource.com/chromium/src/+/refs/heads/master/tools/vscode/settings.json5. It is reformatting JS quite aggressively, though. I\u0027ve turned off format on save for now.",
+      "parentUuid": "86bda4f1_79d76f7b",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -141,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "36b51330_dc3d2e9d",
+        "filename": "src/inspector/wasm-translation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cdbaff40_49c79ef2",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1737b5af_8290aa76",
         "filename": "src/inspector/wasm-translation.cc",
         "patchSetId": 3
@@ -161,6 +233,30 @@
       "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f2880c3_a50b9c9f",
+        "filename": "src/inspector/wasm-translation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "I wasn\u0027t certain when I wrote it that this would never happen and I wanted to define what the release build would do. Fixed.",
+      "parentUuid": "1737b5af_8290aa76",
+      "range": {
+        "startLine": 404,
+        "startChar": 0,
+        "endLine": 407,
+        "endChar": 3
+      },
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -204,6 +300,30 @@
     },
     {
       "key": {
+        "uuid": "0c9b4f79_1a6ef844",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad2f0cb_b3c161b0",
+      "range": {
+        "startLine": 925,
+        "startChar": 8,
+        "endLine": 925,
+        "endChar": 56
+      },
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f7bf6fe_67581f0c",
         "filename": "src/wasm/wasm-debug.cc",
         "patchSetId": 3
@@ -218,6 +338,24 @@
       "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4759814b_388770ef",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f7bf6fe_67581f0c",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -238,6 +376,24 @@
     },
     {
       "key": {
+        "uuid": "888e1733_e249d47d",
+        "filename": "test/cctest/wasm/test-wasm-stack.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54b47a77_f6bb731a",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f98ce92_6a76a309",
         "filename": "test/cctest/wasm/test-wasm-stack.cc",
         "patchSetId": 3
@@ -252,6 +408,24 @@
       "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "057cb9ca_c0a0d82b",
+        "filename": "test/cctest/wasm/test-wasm-stack.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f98ce92_6a76a309",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -272,6 +446,24 @@
     },
     {
       "key": {
+        "uuid": "33f9ba4f_339ed15f",
+        "filename": "test/cctest/wasm/test-wasm-trap-position.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f87564fd_23c6c954",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76224bf0_f031bee7",
         "filename": "test/cctest/wasm/test-wasm-trap-position.cc",
         "patchSetId": 3
@@ -289,6 +481,24 @@
     },
     {
       "key": {
+        "uuid": "8a479029_53c5c1b6",
+        "filename": "test/cctest/wasm/test-wasm-trap-position.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76224bf0_f031bee7",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5606d70d_d66a40d9",
         "filename": "test/mjsunit/wasm/stack.js",
         "patchSetId": 3
@@ -303,6 +513,24 @@
       "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee36bfcf_d46d4b28",
+        "filename": "test/mjsunit/wasm/stack.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-10-31T13:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5606d70d_d66a40d9",
+      "revId": "0e4399b364cc428b8cb615022f0e033ca1d43764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
