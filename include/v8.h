@@ -2014,6 +2014,12 @@ class V8_EXPORT Message {
   int GetEndPosition() const;
 
   /**
+   * Returns the Wasm function index where the error occurred. Returns -1 if
+   * message is not from a Wasm script.
+   */
+  int GetWasmFunctionIndex() const;
+
+  /**
    * Returns the error level of the message.
    */
   int ErrorLevel() const;
