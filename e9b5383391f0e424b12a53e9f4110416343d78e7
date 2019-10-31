@@ -22,6 +22,30 @@
       "revId": "e9b5383391f0e424b12a53e9f4110416343d78e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1227934d_3ff9a827",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-10-31T17:35:18Z",
+      "side": 1,
+      "message": "That would be another way of doing it. Instead of the enable_if above, we would define that function as the \"base implementation\" and provide specializations.\nThe way it\u0027s done in this CL, these are independent function definitions, and there is always as most 1 that can be used per type. If you uses any unsupported type, the compiler will list all function that could be used, which is nice.\nSo overall, I think there is no benefit in implementing this via template specialization.",
+      "parentUuid": "fbe30caa_5e42e4df",
+      "range": {
+        "startLine": 485,
+        "startChar": 17,
+        "endLine": 485,
+        "endChar": 30
+      },
+      "revId": "e9b5383391f0e424b12a53e9f4110416343d78e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
