@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "377cb8ce_6c04edd5",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-31T12:44:54Z",
+      "side": 1,
+      "message": "FYI: this is just to make it print uint8_t values as numbers instead of chars.",
+      "revId": "1e4e2956ca984d4df5acad0851fb2c25140c2c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
