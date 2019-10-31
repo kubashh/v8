@@ -22,6 +22,30 @@
       "revId": "5d5a659539bd8751f914b4a87077df1979c87f93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1966de17_558db3c0",
+        "filename": "src/runtime/runtime-regexp.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-10-31T06:52:02Z",
+      "side": 1,
+      "message": ":D well, yes good point. Especially since the compiler would change to right shift anyways.\n\nI\u0027m not too happy with how the capture map encoding is handled overall, the index and length/count transformations should really be by helper functions. But it didn\u0027t bother me enough to change at this point.",
+      "parentUuid": "b081a7c3_a6e01b8e",
+      "range": {
+        "startLine": 1058,
+        "startChar": 56,
+        "endLine": 1058,
+        "endChar": 61
+      },
+      "revId": "5d5a659539bd8751f914b4a87077df1979c87f93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
