@@ -10692,11 +10692,7 @@ TNode<TIndex> CodeStubAssembler::BuildFastLoop(const VariableList& vars,
   return var.value();
 }
 
-// Instantiate BuildFastLoop for Smi and IntPtrT.
-template TNode<Smi> CodeStubAssembler::BuildFastLoop<Smi>(
-    const VariableList& vars, TNode<Smi> start_index, TNode<Smi> end_index,
-    const FastLoopBody<Smi>& body, int increment,
-    IndexAdvanceMode advance_mode);
+// Instantiate BuildFastLoop for IntPtrT and UintPtrT.
 template TNode<IntPtrT> CodeStubAssembler::BuildFastLoop<IntPtrT>(
     const VariableList& vars, TNode<IntPtrT> start_index,
     TNode<IntPtrT> end_index, const FastLoopBody<IntPtrT>& body, int increment,
