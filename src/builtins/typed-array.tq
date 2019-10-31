@@ -79,39 +79,51 @@ namespace typed_array {
       RawPtr, uintptr, constexpr ElementsKind): Numeric;
   extern macro TypedArrayBuiltinsAssembler::StoreJSTypedArrayElementFromNumeric(
       Context, JSTypedArray, uintptr, Numeric, constexpr ElementsKind);
+  extern macro TypedArrayBuiltinsAssembler::StoreJSTypedArrayElementFromTagged(
+      Context, JSTypedArray, uintptr, JSAny,
+      constexpr ElementsKind) labels IfDetached;
 
   type LoadFn = builtin(Context, JSTypedArray, uintptr) => Numeric;
   type StoreNumericFn = builtin(Context, JSTypedArray, uintptr, Numeric) =>
       JSAny;
+  type StoreJSAnyFn = builtin(Context, JSTypedArray, uintptr, JSAny) => JSAny;
 
   struct LoadStoreFn {
     loadNumericFn: LoadFn;
     storeNumericFn: StoreNumericFn;
+    storeJSAnyFn: StoreJSAnyFn;
   }
 
   macro GetLoadStoreFnForElementsKind(elementsKind: ElementsKind): LoadStoreFn {
     let loadNumericFn: LoadFn;
     let storeNumericFn: StoreNumericFn;
+    let storeJSAnyFn: StoreJSAnyFn;
 
     if (IsElementsKindGreaterThan(elementsKind, UINT32_ELEMENTS)) {
       if (elementsKind == INT32_ELEMENTS) {
         loadNumericFn = LoadTypedElement<Int32Elements>;
         storeNumericFn = StoreTypedElementNumeric<Int32Elements>;
+        storeJSAnyFn = StoreTypedElementJSAny<Int32Elements>;
       } else if (elementsKind == FLOAT32_ELEMENTS) {
         loadNumericFn = LoadTypedElement<Float32Elements>;
         storeNumericFn = StoreTypedElementNumeric<Float32Elements>;
+        storeJSAnyFn = StoreTypedElementJSAny<Float32Elements>;
       } else if (elementsKind == FLOAT64_ELEMENTS) {
         loadNumericFn = LoadTypedElement<Float64Elements>;
         storeNumericFn = StoreTypedElementNumeric<Float64Elements>;
+        storeJSAnyFn = StoreTypedElementJSAny<Float64Elements>;
       } else if (elementsKind == UINT8_CLAMPED_ELEMENTS) {
         loadNumericFn = LoadTypedElement<Uint8ClampedElements>;
         storeNumericFn = StoreTypedElementNumeric<Uint8ClampedElements>;
+        storeJSAnyFn = StoreTypedElementJSAny<Uint8ClampedElements>;
       } else if (elementsKind == BIGUINT64_ELEMENTS) {
         loadNumericFn = LoadTypedElement<BigUint64Elements>;
         storeNumericFn = StoreTypedElementNumeric<BigUint64Elements>;
+        storeJSAnyFn = StoreTypedElementJSAny<BigUint64Elements>;
       } else if (elementsKind == BIGINT64_ELEMENTS) {
         loadNumericFn = LoadTypedElement<BigInt64Elements>;
         storeNumericFn = StoreTypedElementNumeric<BigInt64Elements>;
+        storeJSAnyFn = StoreTypedElementJSAny<BigInt64Elements>;
       } else {
         unreachable;
       }
@@ -119,23 +131,28 @@ namespace typed_array {
       if (elementsKind == UINT8_ELEMENTS) {
         loadNumericFn = LoadTypedElement<Uint8Elements>;
         storeNumericFn = StoreTypedElementNumeric<Uint8Elements>;
+        storeJSAnyFn = StoreTypedElementJSAny<Uint8Elements>;
       } else if (elementsKind == INT8_ELEMENTS) {
         loadNumericFn = LoadTypedElement<Int8Elements>;
         storeNumericFn = StoreTypedElementNumeric<Int8Elements>;
+        storeJSAnyFn = StoreTypedElementJSAny<Int8Elements>;
       } else if (elementsKind == UINT16_ELEMENTS) {
         loadNumericFn = LoadTypedElement<Uint16Elements>;
         storeNumericFn = StoreTypedElementNumeric<Uint16Elements>;
+        storeJSAnyFn = StoreTypedElementJSAny<Uint16Elements>;
       } else if (elementsKind == INT16_ELEMENTS) {
         loadNumericFn = LoadTypedElement<Int16Elements>;
         storeNumericFn = StoreTypedElementNumeric<Int16Elements>;
+        storeJSAnyFn = StoreTypedElementJSAny<Int16Elements>;
       } else if (elementsKind == UINT32_ELEMENTS) {
         loadNumericFn = LoadTypedElement<Uint32Elements>;
         storeNumericFn = StoreTypedElementNumeric<Uint32Elements>;
+        storeJSAnyFn = StoreTypedElementJSAny<Uint32Elements>;
       } else {
         unreachable;
       }
     }
-    return LoadStoreFn{loadNumericFn, storeNumericFn};
+    return LoadStoreFn{loadNumericFn, storeNumericFn, storeJSAnyFn};
   }
 
   extern macro TypedArrayBuiltinsAssembler::SetJSTypedArrayOnHeapDataPtr(
@@ -234,7 +251,17 @@ namespace typed_array {
       value: Numeric): JSAny {
     StoreJSTypedArrayElementFromNumeric(
         context, typedArray, index, value, KindForArrayType<T>());
-    return Undefined;
+    return True;
+  }
+
+  // Returns True on sucess or False if the typedArrays was detached.
+  builtin StoreTypedElementJSAny<T : type extends ElementsKind>(
+      context: Context, typedArray: JSTypedArray, index: uintptr,
+      value: JSAny): JSAny {
+    StoreJSTypedArrayElementFromTagged(
+        context, typedArray, index, value, KindForArrayType<T>()) otherwise
+    return False;
+    return True;
   }
 
   transitioning macro CallCompare(
@@ -369,5 +396,184 @@ namespace typed_array {
       storefn(context, array, i, UnsafeCast<Numeric>(work1.objects[i]));
 
     return array;
+  }
+
+  type BuiltinsName extends int31 constexpr 'Builtins::Name';
+  const kTypedArrayPrototypeValues: constexpr BuiltinsName
+  generates 'Builtins::kTypedArrayPrototypeValues';
+
+  extern builtin IterableToList(implicit context: Context)(JSAny, JSAny):
+      JSArray;
+
+  // %TypedArray%.from ( source [ , mapfn [ , thisArg ] ] )
+  // https://tc39.github.io/ecma262/#sec-%typedarray%.from
+  transitioning javascript builtin
+  TypedArrayFrom(js-implicit context: Context, receiver: JSAny)(...arguments):
+      JSTypedArray {
+    const methodName: constexpr string = '%TypedArray%.from';
+    try {
+      const source: JSAny = arguments[0];
+
+      // 1. Let C be the this value.
+      // 2. If IsConstructor(C) is false, throw a TypeError exception.
+      const constructor = Cast<Constructor>(receiver) otherwise NotConstructor;
+
+      // 3. If mapfn is present and mapfn is not undefined, then
+      //   a. If IsCallable(mapfn) is false, throw a TypeError exception.
+      //   b. Let mapping be true.
+      // 4. Else, let mapping be false.
+      const mapping: bool = arguments.length > 1;
+      const mapfnObj: JSAny = mapping ? arguments[1] : Undefined;
+      if (mapping && !TaggedIsCallable(mapfnObj)) deferred {
+          ThrowTypeError(kCalledNonCallable, mapfnObj);
+        }
+
+      // 5. If thisArg is present, let T be thisArg; else let T be undefined.
+      const thisArg = arguments.length > 2 ? arguments[2] : Undefined;
+
+      // We split up this builtin differently to the way it is written in the
+      // spec. We already have great code in the elements accessor for copying
+      // from a JSArray into a TypedArray, so we use that when possible. We only
+      // avoid calling into the elements accessor when we have a mapping
+      // function, because we can't handle that. Here, presence of a mapping
+      // function is the slow path. We also combine the two different loops in
+      // the specification (starting at 7.e and 13) because they are essentially
+      // identical. We also save on code-size this way.
+
+      let finalLength: uintptr;
+      let finalSource: JSAny;
+
+      try {
+        // 6. Let usingIterator be ? GetMethod(source, @@iterator).
+        // TODO(v8:8996): Use iterator::GetIteratorMethod() once it supports
+        // labels.
+        const usingIterator = GetMethod(source, IteratorSymbolConstant())
+            otherwise IteratorIsUndefined, IteratorNotCallable;
+
+        try {
+          // TypedArrays have iterators, so normally we would go through the
+          // IterableToList case below, which would convert the TypedArray to a
+          // JSArray (boxing the values if they won't fit in a Smi).
+          //
+          // However, if we can guarantee that the source object has the
+          // built-in iterator and that the %ArrayIteratorPrototype%.next method
+          // has not been overridden, then we know the behavior of the iterator:
+          // returning the values in the TypedArray sequentially from index 0 to
+          // length-1.
+          //
+          // In this case, we can avoid creating the intermediate array and the
+          // associated HeapNumbers, and use the fast path in
+          // TypedArrayCopyElements which uses the same ordering as the default
+          // iterator.
+          //
+          // Drop through to the default check_iterator behavior if any of these
+          // checks fail.
+          const sourceTypedArray =
+              Cast<JSTypedArray>(source) otherwise UseIterator;
+          const sourceBuffer = sourceTypedArray.buffer;
+          if (IsDetachedBuffer(sourceBuffer)) goto UseIterator;
+
+          // Check that the iterator function is exactly
+          // Builtins::kTypedArrayPrototypeValues.
+          const iteratorFn =
+              Cast<JSFunction>(usingIterator) otherwise UseIterator;
+          if (TaggedEqual(
+                  iteratorFn.shared_function_info.function_data,
+                  SmiConstant(kTypedArrayPrototypeValues)))
+            goto UseIterator;
+
+          // Check that the ArrayIterator prototype's "next" method hasn't been
+          // overridden.
+          if (IsArrayIteratorProtectorCellInvalid()) goto UseIterator;
+
+          // Source is a TypedArray with unmodified iterator behavior. Use the
+          // source object directly, taking advantage of the special-case code
+          // in TypedArrayCopyElements
+          finalLength = sourceTypedArray.length;
+          finalSource = source;
+        }
+        label UseIterator {
+          // 7. If usingIterator is not undefined, then
+          //  a. Let values be ? IterableToList(source, usingIterator).
+          //  b. Let len be the number of elements in values.
+          const values: JSArray = IterableToList(source, usingIterator);
+
+          finalLength = Convert<uintptr>(values.length);
+          finalSource = values;
+        }
+      }
+      label IteratorIsUndefined {
+        // 8. NOTE: source is not an Iterable so assume it is already an
+        // array-like object.
+
+        // 9. Let arrayLike be ! ToObject(source).
+        const arrayLike: JSReceiver = ToObject_Inline(context, source);
+
+        // 10. Let len be ? ToLength(? Get(arrayLike, "length")).
+        finalLength = Convert<uintptr>(GetLengthProperty(arrayLike));
+        finalSource = arrayLike;
+      }
+      label IteratorNotCallable(_value: JSAny) deferred {
+        ThrowTypeError(kIteratorSymbolNonCallable);
+      }
+
+      const finalLengthNum = Convert<Number>(finalLength);
+
+      // 7c/11. Let targetObj be ? TypedArrayCreate(C, «len»).
+      const targetObj =
+          TypedArrayCreateByLength(constructor, finalLengthNum, methodName);
+
+      if (!mapping) {
+        // Fast path.
+        if (finalLength != 0) {
+          // Call runtime.
+          TypedArrayCopyElements(
+              context, targetObj, finalSource, finalLengthNum);
+        }
+        return targetObj;
+      }
+      // Slow path.
+
+      const mapfn: Callable = Cast<Callable>(mapfnObj) otherwise unreachable;
+      const accessors: LoadStoreFn =
+          GetLoadStoreFnForElementsKind(targetObj.elements_kind);
+      const storefn = accessors.storeJSAnyFn;
+
+      // 7d-7e and 12-13.
+      // 12. Let k be 0.
+      // 13. Repeat, while k < len
+      for (let k: uintptr = 0; k < finalLength; k++) {
+        // 13a. Let Pk be ! ToString(k).
+        const kNum = Convert<Number>(k);
+
+        // 13b. Let kValue be ? Get(arrayLike, Pk).
+        const kValue: JSAny = GetProperty(finalSource, kNum);
+
+        let mappedValue: JSAny;
+        // 13c. If mapping is true, then
+        if (mapping) {
+          // i. Let mappedValue be ? Call(mapfn, T, « kValue, k »).
+          mappedValue = Call(context, mapfn, thisArg, kValue, kNum);
+        } else {
+          // 13d. Else, let mappedValue be kValue.
+          mappedValue = kValue;
+        }
+
+        // 13e. Perform ? Set(targetObj, Pk, mappedValue, true).
+        // SetProperty(targetObj, k, mappedValue);
+        if (storefn(context, targetObj, k, mappedValue) != True) {
+          // Buffer was detached during executing ToNumber/ToBigInt.
+          goto OnDetached;
+        }
+        // 13f. Set k to k + 1. (done by the loop).
+      }
+      return targetObj;
+    }
+    label NotConstructor deferred {
+      ThrowTypeError(kNotConstructor, receiver);
+    }
+    label OnDetached deferred {
+      ThrowTypeError(kDetachedOperation, methodName);
+    }
   }
 }
