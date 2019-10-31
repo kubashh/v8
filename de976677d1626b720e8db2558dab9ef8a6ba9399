@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "0c960d58_1ed86e95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-10-31T07:37:20Z",
+      "side": 1,
+      "message": "I see, that\u0027s a bummer. We somehow need to thread through the URL of the file to make it useful for developers.\n\nMeanwhile, let\u0027s keep the wasm://wasm/... indirection then.",
+      "parentUuid": "ad510bd4_b6ea1f61",
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a3df2807_fa65af41",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 5
@@ -185,6 +203,24 @@
       "side": 1,
       "message": "Please let me know if you want to do anything here. With the new name format \u003cname\u003e-\u003chash\u003e, it is not too bad.",
       "parentUuid": "7e867272_61a7e46a",
+      "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95a4ab48_faf363e5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2711,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-10-31T07:37:20Z",
+      "side": 1,
+      "message": "You could forcibly flatten it, but I don\u0027t think that\u0027s all too important TBH.",
+      "parentUuid": "634c4ef6_2c0f9f48",
       "revId": "de976677d1626b720e8db2558dab9ef8a6ba9399",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
