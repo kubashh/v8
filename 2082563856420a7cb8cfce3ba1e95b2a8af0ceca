@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bce9aae7_30dfdd0c",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 3760,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-31T18:48:02Z",
+      "side": 1,
+      "message": "I created v8:9933 and mentioned this idea there.",
+      "parentUuid": "36d2e2e7_a63228b0",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a727479_4ef68b76",
         "filename": "src/builtins/builtins-typed-array-gen.cc",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbe3c5c2_660c3cd2",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-31T18:48:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a727479_4ef68b76",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "facc0fb7_a8b5a5cf",
+        "filename": "src/builtins/typed-array.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-31T18:48:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0602457_ff21a9e1",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bae95a04_b50a0846",
         "filename": "src/builtins/typed-array.tq",
         "patchSetId": 7
@@ -67,6 +121,42 @@
       "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7117d43_4b49ea31",
+        "filename": "src/builtins/typed-array.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-31T18:48:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bae95a04_b50a0846",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "51cc9e34_6b6affa8",
+        "filename": "src/builtins/typed-array.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-31T18:48:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bae95a04_b50a0846",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "1884e4f4_35714c67",
+        "filename": "src/builtins/typed-array.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-31T18:48:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4605140_3f2325f1",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dffb8d18_68ac08a6",
         "filename": "src/builtins/typed-array.tq",
         "patchSetId": 7
@@ -101,6 +209,24 @@
       "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "541edd2f_b21a59ec",
+        "filename": "src/builtins/typed-array.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-31T18:48:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dffb8d18_68ac08a6",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

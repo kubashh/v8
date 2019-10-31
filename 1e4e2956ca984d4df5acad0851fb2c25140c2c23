@@ -16,6 +16,24 @@
       "revId": "1e4e2956ca984d4df5acad0851fb2c25140c2c23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0748bb28_a4761918",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-10-31T18:48:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "377cb8ce_6c04edd5",
+      "revId": "1e4e2956ca984d4df5acad0851fb2c25140c2c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
