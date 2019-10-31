@@ -22,6 +22,30 @@
       "revId": "bd47bbe82be39cda884e1c9cf1cdb10793d2e584",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9d05ef8_4bf18811",
+        "filename": "src/asmjs/asm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1364447
+      },
+      "writtenOn": "2019-10-31T17:05:33Z",
+      "side": 1,
+      "message": "According to vsnprintf manual, \"a return value of size or more means that the output was truncated\".\n\nSo if lenght \u003d\u003d text.length(), it means there has been an error.",
+      "parentUuid": "53cc5aa6_f70b81e1",
+      "range": {
+        "startLine": 143,
+        "startChar": 2,
+        "endLine": 143,
+        "endChar": 10
+      },
+      "revId": "bd47bbe82be39cda884e1c9cf1cdb10793d2e584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
