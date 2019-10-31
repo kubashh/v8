@@ -639,6 +639,10 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   // Predicates.
   bool MustAllocate(Variable* var);
   bool MustAllocateInContext(Variable* var);
+  bool ShouldMarkAllVariablesAsUsed();
+
+  // Marks all local variables as used for script and catch scopes.
+  void MarkVariablesAsUsedRecursively();
 
   // Variable allocation.
   void AllocateStackSlot(Variable* var);
