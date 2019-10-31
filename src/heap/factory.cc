@@ -3683,6 +3683,7 @@ Handle<StackFrameInfo> Factory::NewStackFrameInfo(
 
   int line = frame->GetLineNumber();
   int column = frame->GetColumnNumber();
+  int wasm_function_index = frame->GetWasmFunctionIndex();
 
   const int script_id = frame->GetScriptId();
 
@@ -3734,6 +3735,7 @@ Handle<StackFrameInfo> Factory::NewStackFrameInfo(
   info->set_is_user_java_script(is_user_java_script);
   info->set_line_number(line);
   info->set_column_number(column);
+  info->set_wasm_function_index(wasm_function_index);
   info->set_script_id(script_id);
 
   info->set_script_name(*script_name);
