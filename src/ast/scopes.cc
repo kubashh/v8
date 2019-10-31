@@ -585,6 +585,7 @@ bool DeclarationScope::Analyze(ParseInfo* info) {
         scope, info->ast_value_factory());
   }
 
+  scope->MarkVariablesAsUsedRecursively();
   if (!scope->AllocateVariables(info)) return false;
 
 #ifdef DEBUG
@@ -2122,10 +2123,9 @@ bool Scope::MustAllocate(Variable* var) {
   // Give var a read/write use if there is a chance it might be accessed
   // via an eval() call.  This is only possible if the variable has a
   // visible name.
-  if (!var->raw_name()->IsEmpty() &&
-      (inner_scope_calls_eval_ || is_catch_scope() || is_script_scope())) {
+  if (!var->raw_name()->IsEmpty() && inner_scope_calls_eval_) {
     var->set_is_used();
-    if (inner_scope_calls_eval_ && !var->is_this()) var->SetMaybeAssigned();
+    if (!var->is_this()) var->SetMaybeAssigned();
   }
   DCHECK(!var->has_forced_context_allocation() || var->is_used());
   // Global variables do not need to be allocated.
@@ -2152,6 +2152,22 @@ bool Scope::MustAllocateInContext(Variable* var) {
   return var->has_forced_context_allocation() || inner_scope_calls_eval_;
 }
 
+bool Scope::ShouldMarkAllVariablesAsUsed() {
+  return is_script_scope() || is_catch_scope();
+}
+
+void Scope::MarkVariablesAsUsedRecursively() {
+  this->ForEach([](Scope* scope) -> Iteration {
+    if (!scope->ShouldMarkAllVariablesAsUsed()) return kDescend;
+
+    for (Variable* var : scope->locals_) {
+      if (!var->raw_name()->IsEmpty()) {
+        var->set_is_used();
+      }
+    }
+    return kDescend;
+  });
+}
 
 void Scope::AllocateStackSlot(Variable* var) {
   if (is_block_scope()) {
