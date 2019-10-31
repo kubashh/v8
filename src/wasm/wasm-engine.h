@@ -26,6 +26,10 @@ class JSArrayBuffer;
 
 namespace wasm {
 
+namespace gdb_server {
+class GdbServer;
+}
+
 class AsyncCompileJob;
 class ErrorThrower;
 struct ModuleWireBytes;
@@ -121,6 +125,8 @@ class V8_EXPORT_PRIVATE WasmEngine {
   WasmCodeManager* code_manager() { return &code_manager_; }
 
   AccountingAllocator* allocator() { return &allocator_; }
+
+  gdb_server::GdbServer* gdb_server() { return gdb_server_.get(); }
 
   // Compilation statistics for TurboFan compilations.
   CompilationStatistics* GetOrCreateTurboStatistics();
@@ -219,6 +225,10 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // engines this might be a pointer to a new instance or to a shared one.
   static std::shared_ptr<WasmEngine> GetWasmEngine();
 
+  // GDB debugging API
+  void Suspend();
+  void Resume();
+
  private:
   struct CurrentGCInfo;
   struct IsolateInfo;
@@ -277,6 +287,8 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // If an engine-wide GC is currently running, this pointer stores information
   // about that.
   std::unique_ptr<CurrentGCInfo> current_gc_info_;
+
+  std::unique_ptr<gdb_server::GdbServer> gdb_server_;
 
   // End of fields protected by {mutex_}.
   //////////////////////////////////////////////////////////////////////////////
