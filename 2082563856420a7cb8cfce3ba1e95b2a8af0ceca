@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36d2e2e7_a63228b0",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 3760,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-31T16:26:07Z",
+      "side": 1,
+      "message": "We should check for Callable first since it\u0027s a bit on the heap object map and that\u0027s the common case. Only check what kind of non-callable it is afterwards (undefinedornull or regular)",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a727479_4ef68b76",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-31T16:26:07Z",
+      "side": 1,
+      "message": "It doesn\u0027t seem like we need this switch?",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0602457_ff21a9e1",
+        "filename": "src/builtins/typed-array.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-31T16:26:07Z",
+      "side": 1,
+      "message": "If you do something like the following:\n\nreturn LoadStoreFunction\u003cInt32Elements\u003e();\n\nCan\u0027t you avoid copying 3 lines per entry?",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bae95a04_b50a0846",
+        "filename": "src/builtins/typed-array.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-31T16:26:07Z",
+      "side": 1,
+      "message": "Fix formatting.",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4605140_3f2325f1",
+        "filename": "src/builtins/typed-array.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-31T16:26:07Z",
+      "side": 1,
+      "message": "UseIterator -\u003e UseUserProvidedIterator?",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dffb8d18_68ac08a6",
+        "filename": "src/builtins/typed-array.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-10-31T16:26:07Z",
+      "side": 1,
+      "message": "It would be good if storefn would guarantee that OnDetached is checked; perhaps by using a wrapper around the builtin call that checks the result and uses the exception?",
+      "revId": "2082563856420a7cb8cfce3ba1e95b2a8af0ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
