@@ -46,6 +46,30 @@
       "revId": "da2d5b50ac5835b6779640832a5455a3ef26fcfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8501dd1d_06f23be7",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-11-01T21:24:55Z",
+      "side": 1,
+      "message": "Renamed to use CheckHasMemoryForAtomics. Didn\u0027t introduce a new function because only atomic operations currently check for shared memory, so the check for shared memory should also include the check for the new flag.",
+      "parentUuid": "553d48a1_74a7448b",
+      "range": {
+        "startLine": 1698,
+        "startChar": 7,
+        "endLine": 1698,
+        "endChar": 34
+      },
+      "revId": "da2d5b50ac5835b6779640832a5455a3ef26fcfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
