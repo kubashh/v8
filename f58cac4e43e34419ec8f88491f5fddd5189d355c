@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a816b24c_a9b108fb",
+        "filename": "test/mjsunit/wasm/atomics-non-shared.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-11-01T21:23:30Z",
+      "side": 1,
+      "message": "Any reason not to make this test comprehensive, including a test showing that for now Wait/Notify fail to validate?",
+      "revId": "f58cac4e43e34419ec8f88491f5fddd5189d355c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
