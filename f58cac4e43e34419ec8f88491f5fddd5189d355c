@@ -34,6 +34,24 @@
       "revId": "f58cac4e43e34419ec8f88491f5fddd5189d355c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23194888_b22bbb69",
+        "filename": "test/mjsunit/wasm/atomics-non-shared.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-11-01T21:59:14Z",
+      "side": 1,
+      "message": "As discussed offline adding a TODO to do more comprehensive testing if we want to launch this is good for now.",
+      "parentUuid": "8857da8a_933dee32",
+      "revId": "f58cac4e43e34419ec8f88491f5fddd5189d355c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
