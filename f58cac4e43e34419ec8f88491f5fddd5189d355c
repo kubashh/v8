@@ -52,6 +52,24 @@
       "revId": "f58cac4e43e34419ec8f88491f5fddd5189d355c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4508418e_89ce17d0",
+        "filename": "test/mjsunit/wasm/atomics-non-shared.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-11-01T22:04:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23194888_b22bbb69",
+      "revId": "f58cac4e43e34419ec8f88491f5fddd5189d355c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
