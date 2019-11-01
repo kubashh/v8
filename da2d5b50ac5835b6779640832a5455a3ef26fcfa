@@ -22,6 +22,30 @@
       "revId": "da2d5b50ac5835b6779640832a5455a3ef26fcfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "553d48a1_74a7448b",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-11-01T20:09:38Z",
+      "side": 1,
+      "message": "I guess the second option would require rewriting the error message for CheckHasSharedMemory.",
+      "parentUuid": "c9f48f5a_9988c5d4",
+      "range": {
+        "startLine": 1698,
+        "startChar": 7,
+        "endLine": 1698,
+        "endChar": 34
+      },
+      "revId": "da2d5b50ac5835b6779640832a5455a3ef26fcfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
