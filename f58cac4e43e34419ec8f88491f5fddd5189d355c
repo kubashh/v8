@@ -16,6 +16,24 @@
       "revId": "f58cac4e43e34419ec8f88491f5fddd5189d355c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8857da8a_933dee32",
+        "filename": "test/mjsunit/wasm/atomics-non-shared.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-11-01T21:51:59Z",
+      "side": 1,
+      "message": "My commit message wasn\u0027t clear, I\u0027ve updated it - the check introduced here is common to all atomic operations, so wait/notify will not fail to validate. The DCHECKS that check for SABs are in callbacks, so depending on the usage this may hit DCHECKS when run - I\u0027m working on a follow up to refactor the Wasm/JS parts to be separate so JS can still retain the DCHECKS and Wasm does not. Added tests here for Wait/Notify here that will pass on validation.",
+      "parentUuid": "a816b24c_a9b108fb",
+      "revId": "f58cac4e43e34419ec8f88491f5fddd5189d355c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
