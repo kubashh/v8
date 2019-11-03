@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8c6ed35_d90c776f",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2019-11-03T03:48:57Z",
+      "side": 1,
+      "message": "Hi Clemens, switching \"booleans\" to use casting instead of a Union or memcpy has caused an endianness problem. I have made this CL with more details on the issue:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1896835",
+      "revId": "7f4a2ec4d99fa3f53ec5884fdef6f2eb0d376bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
