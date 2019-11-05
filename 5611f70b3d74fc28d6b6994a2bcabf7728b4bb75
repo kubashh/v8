@@ -70,6 +70,24 @@
       "revId": "5611f70b3d74fc28d6b6994a2bcabf7728b4bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec3153d6_b590b0f7",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2019-11-05T09:36:03Z",
+      "side": 1,
+      "message": "CL coming your way: https://chromium-review.googlesource.com/c/v8/v8/+/1899547/",
+      "parentUuid": "41bcb106_bafbf5f0",
+      "revId": "5611f70b3d74fc28d6b6994a2bcabf7728b4bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
