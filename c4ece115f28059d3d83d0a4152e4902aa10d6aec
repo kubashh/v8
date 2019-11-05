@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4df360a6_8898e5bd",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-11-05T12:10:51Z",
+      "side": 1,
+      "message": "I wouldn\u0027t do this in a pass like this. We create catch scopes only when we parse catch(...) {}, so we can directly mark them there.\n\nScript scope variables you can simply mark if the DeclarationScope we parse from is a script scope. That\u0027s also a pretty fast / obvious check.",
+      "revId": "c4ece115f28059d3d83d0a4152e4902aa10d6aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
