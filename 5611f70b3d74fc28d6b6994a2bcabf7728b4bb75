@@ -34,6 +34,24 @@
       "revId": "5611f70b3d74fc28d6b6994a2bcabf7728b4bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "387b57ed_3d5a83fe",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2019-11-05T09:11:44Z",
+      "side": 1,
+      "message": "Yes, though 32-bit builds still compile this section of code, and a 32-bit MSVC bot warns about the issue at compile time because it can\u0027t figure out the code is not reachable at runtime. e.g. here: https://pdfium-review.googlesource.com/c/pdfium/+/61931\n\nV8 only seems to have a 64-bit MSVC bot, which is why CLs containing code like this passes.\n\nMind if I send a V8 CL to make 32-bit MSVC work?",
+      "parentUuid": "9b7224d2_769fe235",
+      "revId": "5611f70b3d74fc28d6b6994a2bcabf7728b4bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
