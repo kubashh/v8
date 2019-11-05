@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d659b65_00dd1b50",
+        "filename": "src/api/api.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2935,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-11-05T12:21:49Z",
+      "side": 1,
+      "message": "nit: Magic number. Depending on how stable our error signaling is, we could introduce a constant in the API to make this check easier for embedders.",
+      "range": {
+        "startLine": 2935,
+        "startChar": 11,
+        "endLine": 2935,
+        "endChar": 13
+      },
+      "revId": "b614a0132d2ec27447af210db998a2ed12463564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6891de5_a6cd1943",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-11-05T12:21:49Z",
+      "side": 1,
+      "message": "nit: StackFrameBase::kNone",
+      "range": {
+        "startLine": 323,
+        "startChar": 52,
+        "endLine": 323,
+        "endChar": 54
+      },
+      "revId": "b614a0132d2ec27447af210db998a2ed12463564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ddf3172_a1773f4a",
+        "filename": "src/inspector/v8-debugger-script.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-11-05T12:21:49Z",
+      "side": 1,
+      "message": "nit: As discussed offline, please update the comment that this points to the end of the script now.",
+      "range": {
+        "startLine": 397,
+        "startChar": 6,
+        "endLine": 397,
+        "endChar": 52
+      },
+      "revId": "b614a0132d2ec27447af210db998a2ed12463564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40ab520a_2c86badc",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-11-05T12:21:49Z",
+      "side": 1,
+      "message": "nit: An enum class for this parameter would make call sites more readable. Alternatively you could use a constant for \u0027strict\u0027 at use sites:\n\n const bool strict \u003d false;\n ... \u003d GetContainingWasmFunction(module, offset, strict);",
+      "range": {
+        "startLine": 258,
+        "startChar": 30,
+        "endLine": 258,
+        "endChar": 48
+      },
+      "revId": "b614a0132d2ec27447af210db998a2ed12463564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "039c79fa_eddc8a65",
+        "filename": "test/mjsunit/wasm/stack.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-11-05T12:21:49Z",
+      "side": 1,
+      "message": "left over indent?",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 2
+      },
+      "revId": "b614a0132d2ec27447af210db998a2ed12463564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
