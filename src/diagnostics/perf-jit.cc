@@ -127,7 +127,8 @@ void PerfJitLogger::OpenJitDumpFile() {
   ScopedVector<char> perf_dump_name(bufferSize);
   int size = SNPrintF(perf_dump_name, kFilenameFormatString,
                       base::OS::GetCurrentProcessId());
-  CHECK_NE(size, -1);
+  CHECK_NE(-1, size);
+  CHECK_GT(perf_dump_name.length(), size);
 
   int fd = open(perf_dump_name.begin(), O_CREAT | O_TRUNC | O_RDWR, 0666);
   if (fd == -1) return;

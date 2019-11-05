@@ -673,10 +673,8 @@ int OS::VSNPrintF(char* str,
     // If the length is zero, the assignment fails.
     if (length > 0)
       str[length - 1] = '\0';
-    return -1;
-  } else {
-    return n;
   }
+  return n;
 }
 
 

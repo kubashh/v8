@@ -163,6 +163,7 @@ void String16Builder::appendNumber(int number) {
   char buffer[kBufferSize];
   int chars = v8::base::OS::SNPrintF(buffer, kBufferSize, "%d", number);
   DCHECK_LE(0, chars);
+  DCHECK_GT(kBufferSize, chars);
   m_buffer.insert(m_buffer.end(), buffer, buffer + chars);
 }
 
@@ -175,6 +176,7 @@ void String16Builder::appendNumber(size_t number) {
   int chars = v8::base::OS::SNPrintF(buffer, kBufferSize, "%Iu", number);
 #endif
   DCHECK_LE(0, chars);
+  DCHECK_GT(kBufferSize, chars);
   m_buffer.insert(m_buffer.end(), buffer, buffer + chars);
 }
 
@@ -184,6 +186,7 @@ void String16Builder::appendUnsignedAsHex(uint64_t number) {
   int chars =
       v8::base::OS::SNPrintF(buffer, kBufferSize, "%016" PRIx64, number);
   DCHECK_LE(0, chars);
+  DCHECK_GT(kBufferSize, chars);
   m_buffer.insert(m_buffer.end(), buffer, buffer + chars);
 }
 
@@ -192,6 +195,7 @@ void String16Builder::appendUnsignedAsHex(uint32_t number) {
   char buffer[kBufferSize];
   int chars = v8::base::OS::SNPrintF(buffer, kBufferSize, "%08" PRIx32, number);
   DCHECK_LE(0, chars);
+  DCHECK_GT(kBufferSize, chars);
   m_buffer.insert(m_buffer.end(), buffer, buffer + chars);
 }
 

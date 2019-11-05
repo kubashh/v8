@@ -129,8 +129,7 @@ TEST(SNPrintF) {
     Vector<char> buffer = Vector<char>::New(i + 1);
     buffer[i] = kMarker;
     int n = SNPrintF(Vector<char>(buffer.begin(), i), "%s", s);
-    CHECK(n <= i);
-    CHECK(n == length || n == -1);
+    CHECK(n >= length);
     CHECK_EQ(0, strncmp(buffer.begin(), s, i - 1));
     CHECK_EQ(kMarker, buffer[i]);
     if (i <= length) {
@@ -138,6 +137,14 @@ TEST(SNPrintF) {
     } else {
       CHECK_EQ(length, strlen(buffer.begin()));
     }
+    buffer.Dispose();
+  }
+
+  // Make sure that encoding errors result in negative return values
+  {
+    Vector<char> buffer = Vector<char>::New(10);
+    int n = SNPrintF(buffer, "%lc", 3079);
+    CHECK_EQ(-1, n);
     buffer.Dispose();
   }
 }

@@ -140,6 +140,7 @@ void ReportCompilationSuccess(Handle<Script> script, int position,
       text, "success, asm->wasm: %0.3f ms, compile: %0.3f ms, %zu bytes",
       translate_time, compile_time, module_size);
   CHECK_NE(-1, length);
+  CHECK_GT(text.length(), length);
   text.Truncate(length);
   Report(script, position, text, MessageTemplate::kAsmJsCompiled,
          v8::Isolate::kMessageInfo);
@@ -160,6 +161,7 @@ void ReportInstantiationSuccess(Handle<Script> script, int position,
   EmbeddedVector<char, 50> text;
   int length = SNPrintF(text, "success, %0.3f ms", instantiate_time);
   CHECK_NE(-1, length);
+  CHECK_GT(text.length(), length);
   text.Truncate(length);
   Report(script, position, text, MessageTemplate::kAsmJsInstantiated,
          v8::Isolate::kMessageInfo);

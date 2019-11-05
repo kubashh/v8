@@ -620,7 +620,12 @@ void AstPrinter::Print(const char* format, ...) {
                       arguments);
     va_end(arguments);
 
-    if (n >= 0) {
+    if (n < 0) {
+      // there was an encoding error
+      Print("<?>");
+      return;
+    }
+    if (n < (size_ - pos_)) {
       // there was enough space - we are done
       pos_ += n;
       return;
@@ -690,11 +695,16 @@ void AstPrinter::PrintLiteral(Literal* literal, bool quote) {
 void AstPrinter::PrintLiteral(const AstRawString* value, bool quote) {
   if (quote) Print("\"");
   if (value != nullptr) {
-    const char* format = value->is_one_byte() ? "%c" : "%lc";
-    const int increment = value->is_one_byte() ? 1 : 2;
-    const unsigned char* raw_bytes = value->raw_data();
-    for (int i = 0; i < value->length(); i += increment) {
-      Print(format, raw_bytes[i]);
+    if (value->is_one_byte()) {
+      const auto* raw_bytes = value->raw_data();
+      for (int i = 0; i < value->length(); i++) {
+        Print("%c", raw_bytes[i]);
+      }
+    } else {
+      const auto* raw_bytes = reinterpret_cast<const uc16*>(value->raw_data());
+      for (int i = 0; i < value->length(); i++) {
+        Print("%lc", raw_bytes[i]);
+      }
     }
   }
   if (quote) Print("\"");

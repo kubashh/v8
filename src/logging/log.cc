@@ -292,6 +292,7 @@ PerfBasicLogger::PerfBasicLogger(Isolate* isolate)
   int size = SNPrintF(perf_dump_name, kFilenameFormatString,
                       base::OS::GetCurrentProcessId());
   CHECK_NE(size, -1);
+  CHECK_GT(perf_dump_name.length(), size);
   perf_output_handle_ =
       base::OS::FOpen(perf_dump_name.begin(), base::OS::LogFileOpenMode);
   CHECK_NOT_NULL(perf_output_handle_);

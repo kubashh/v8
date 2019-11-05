@@ -2148,6 +2148,7 @@ class OutputStreamWriter {
       int result = SNPrintF(
           chunk_.SubVector(chunk_pos_, chunk_size_), format, n);
       DCHECK_NE(result, -1);
+      DCHECK_GT(chunk_size_ - chunk_pos_, result);
       chunk_pos_ += result;
       MaybeWriteChunk();
     } else {
@@ -2155,6 +2156,7 @@ class OutputStreamWriter {
       int result = SNPrintF(buffer, format, n);
       USE(result);
       DCHECK_NE(result, -1);
+      DCHECK_GT(buffer.length(), result);
       AddString(buffer.begin());
     }
   }

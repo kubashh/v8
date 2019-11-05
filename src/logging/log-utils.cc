@@ -186,10 +186,10 @@ int Log::MessageBuilder::FormatStringIntoBuffer(const char* format,
                                                 va_list args) {
   Vector<char> buf(log_->format_buffer_.get(), Log::kMessageBufferSize);
   int length = v8::internal::VSNPrintF(buf, format, args);
-  // |length| is -1 if output was truncated.
-  if (length == -1) length = Log::kMessageBufferSize;
-  DCHECK_LE(length, Log::kMessageBufferSize);
   DCHECK_GE(length, 0);
+  // |length| is >= buf.length() if output was truncated.
+  if (length >= buf.length()) length = Log::kMessageBufferSize;
+  DCHECK_LE(length, Log::kMessageBufferSize);
   return length;
 }
 
