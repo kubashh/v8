@@ -52,6 +52,24 @@
       "revId": "5611f70b3d74fc28d6b6994a2bcabf7728b4bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41bcb106_bafbf5f0",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-11-05T09:32:47Z",
+      "side": 1,
+      "message": "I see, thanks for the explanation. A fix would be very welcome!",
+      "parentUuid": "387b57ed_3d5a83fe",
+      "revId": "5611f70b3d74fc28d6b6994a2bcabf7728b4bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
