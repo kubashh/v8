@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2989402_fecda31c",
+        "filename": "src/snapshot/embedded/embedded-file-writer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-05T09:06:01Z",
+      "side": 1,
+      "message": "This may include trailing padding bytes, does that mess with tooling, e.g. by inserting a tracepoint outside real function boundaries?",
+      "revId": "427d27b4a0245d577c86fc70cff458e01817a82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "468e67a2_db0a9444",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-aix.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-05T09:06:01Z",
+      "side": 1,
+      "message": "Please leave a TODO here to investigate emitting size annotations. Same on other architecture where size is unused.",
+      "revId": "427d27b4a0245d577c86fc70cff458e01817a82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
