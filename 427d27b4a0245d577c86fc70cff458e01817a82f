@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "18c1d6ef_32c36def",
+        "filename": "src/snapshot/embedded/embedded-file-writer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1344620
+      },
+      "writtenOn": "2019-11-05T18:06:48Z",
+      "side": 1,
+      "message": "Disassembling with lldb loooks much better using InstructionSizeOfBuiltin :)",
+      "parentUuid": "4c0e843f_9fc379e0",
+      "revId": "427d27b4a0245d577c86fc70cff458e01817a82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "468e67a2_db0a9444",
         "filename": "src/snapshot/embedded/platform-embedded-file-writer-aix.cc",
         "patchSetId": 1
@@ -69,6 +87,24 @@
       "revId": "427d27b4a0245d577c86fc70cff458e01817a82f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a937ff3a_6fa4b181",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-aix.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1344620
+      },
+      "writtenOn": "2019-11-05T18:06:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "feed2ddf_3d903b9c",
+      "revId": "427d27b4a0245d577c86fc70cff458e01817a82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
