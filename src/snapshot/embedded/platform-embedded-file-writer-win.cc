@@ -418,7 +418,8 @@ void PlatformEmbeddedFileWriterWin::SourceInfo(int fileid, const char* filename,
   // Its syntax is #line <line> "<filename>"
 }
 
-void PlatformEmbeddedFileWriterWin::DeclareFunctionBegin(const char* name) {
+void PlatformEmbeddedFileWriterWin::DeclareFunctionBegin(const char* name,
+                                                         uint32_t size) {
   fprintf(fp_, "%s%s PROC\n", SYMBOL_PREFIX, name);
 }
 
@@ -522,7 +523,8 @@ void PlatformEmbeddedFileWriterWin::SourceInfo(int fileid, const char* filename,
   // Its syntax is #line <line> "<filename>"
 }
 
-void PlatformEmbeddedFileWriterWin::DeclareFunctionBegin(const char* name) {
+void PlatformEmbeddedFileWriterWin::DeclareFunctionBegin(const char* name,
+                                                         uint32_t size) {
   fprintf(fp_, "%s%s FUNCTION\n", SYMBOL_PREFIX, name);
 }
 
@@ -637,7 +639,8 @@ void PlatformEmbeddedFileWriterWin::SourceInfo(int fileid, const char* filename,
   fprintf(fp_, ".loc %d %d\n", fileid, line);
 }
 
-void PlatformEmbeddedFileWriterWin::DeclareFunctionBegin(const char* name) {
+void PlatformEmbeddedFileWriterWin::DeclareFunctionBegin(const char* name,
+                                                         uint32_t size) {
   DeclareLabel(name);
 
   if (target_arch_ == EmbeddedTargetArch::kArm64) {

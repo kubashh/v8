@@ -78,7 +78,8 @@ void PlatformEmbeddedFileWriterMac::SourceInfo(int fileid, const char* filename,
   fprintf(fp_, ".loc %d %d\n", fileid, line);
 }
 
-void PlatformEmbeddedFileWriterMac::DeclareFunctionBegin(const char* name) {
+void PlatformEmbeddedFileWriterMac::DeclareFunctionBegin(const char* name,
+                                                         uint32_t size) {
   DeclareLabel(name);
 
   // TODO(mvstanton): Investigate the proper incantations to mark the label as
