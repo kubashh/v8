@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e97f76c8_cd0a3529",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2472,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-11-05T11:59:44Z",
+      "side": 1,
+      "message": "The HasProperty trap can mutate the world, causing a subsequent Set(receiver,...) to hit a different state entirely. Directly calling JSProxy::SetProperty afterwards doesn\u0027t seem correct to me.",
+      "revId": "3adb3cae5cb55c54dd5811d99581593ac68356da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
