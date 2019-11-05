@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "ede38ae8_eea0ac15",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1370170
+      },
+      "writtenOn": "2019-11-05T12:33:18Z",
+      "side": 1,
+      "message": "Given that strict checks are fairly independent from the rest of the function, maybe it\u0027s even easier to split function into two instead?",
+      "parentUuid": "40ab520a_2c86badc",
+      "range": {
+        "startLine": 258,
+        "startChar": 30,
+        "endLine": 258,
+        "endChar": 48
+      },
+      "revId": "b614a0132d2ec27447af210db998a2ed12463564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "039c79fa_eddc8a65",
         "filename": "test/mjsunit/wasm/stack.js",
         "patchSetId": 6
