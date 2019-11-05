@@ -52,6 +52,24 @@
       "revId": "3adb3cae5cb55c54dd5811d99581593ac68356da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4171497_3256e97c",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2472,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-11-05T16:05:35Z",
+      "side": 1,
+      "message": "Exactly: If HasProperty removes the proxy from the prototype (or masks that particular property) a subsequent SetMutableBinding on the global object will not end up in JSProxy::SetProperty.",
+      "parentUuid": "4180d950_9f524090",
+      "revId": "3adb3cae5cb55c54dd5811d99581593ac68356da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
