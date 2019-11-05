@@ -753,8 +753,8 @@ inline void EmitShiftOperation(LiftoffAssembler* assm, Register dst,
 }
 }  // namespace liftoff
 
-void LiftoffAssembler::emit_i32_shl(Register dst, Register src, Register amount,
-                                    LiftoffRegList pinned) {
+void LiftoffAssembler::emit_i32_shl(Register dst, Register src,
+                                    Register amount) {
   liftoff::EmitShiftOperation(this, dst, src, amount, &Assembler::shl_cl,
                               pinned);
 }
@@ -765,8 +765,8 @@ void LiftoffAssembler::emit_i32_shl(Register dst, Register src,
   shl(dst, amount & 31);
 }
 
-void LiftoffAssembler::emit_i32_sar(Register dst, Register src, Register amount,
-                                    LiftoffRegList pinned) {
+void LiftoffAssembler::emit_i32_sar(Register dst, Register src,
+                                    Register amount) {
   liftoff::EmitShiftOperation(this, dst, src, amount, &Assembler::sar_cl,
                               pinned);
 }
@@ -777,8 +777,8 @@ void LiftoffAssembler::emit_i32_sar(Register dst, Register src,
   sar(dst, amount & 31);
 }
 
-void LiftoffAssembler::emit_i32_shr(Register dst, Register src, Register amount,
-                                    LiftoffRegList pinned) {
+void LiftoffAssembler::emit_i32_shr(Register dst, Register src,
+                                    Register amount) {
   liftoff::EmitShiftOperation(this, dst, src, amount, &Assembler::shr_cl,
                               pinned);
 }
