@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ab3d7902_327238f6",
+        "filename": "src/api/api.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2935,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-05T13:16:00Z",
+      "side": 1,
+      "message": "Done. Also changed return value above since 0 is a valid function index.",
+      "parentUuid": "8d659b65_00dd1b50",
+      "range": {
+        "startLine": 2935,
+        "startChar": 11,
+        "endLine": 2935,
+        "endChar": 13
+      },
+      "revId": "b614a0132d2ec27447af210db998a2ed12463564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6891de5_a6cd1943",
         "filename": "src/execution/messages.cc",
         "patchSetId": 6
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "a9ddd4ba_c403f5df",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-05T13:16:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6891de5_a6cd1943",
+      "range": {
+        "startLine": 323,
+        "startChar": 52,
+        "endLine": 323,
+        "endChar": 54
+      },
+      "revId": "b614a0132d2ec27447af210db998a2ed12463564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ddf3172_a1773f4a",
         "filename": "src/inspector/v8-debugger-script.cc",
         "patchSetId": 6
@@ -92,6 +140,30 @@
       "revId": "b614a0132d2ec27447af210db998a2ed12463564",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42650327_a8c6b901",
+        "filename": "src/inspector/v8-debugger-script.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-05T13:16:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ddf3172_a1773f4a",
+      "range": {
+        "startLine": 397,
+        "startChar": 6,
+        "endLine": 397,
+        "endChar": 52
+      },
+      "revId": "b614a0132d2ec27447af210db998a2ed12463564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -142,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "f24ea19e_c6097d8c",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-05T13:16:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ede38ae8_eea0ac15",
+      "range": {
+        "startLine": 258,
+        "startChar": 30,
+        "endLine": 258,
+        "endChar": 48
+      },
+      "revId": "b614a0132d2ec27447af210db998a2ed12463564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "039c79fa_eddc8a65",
         "filename": "test/mjsunit/wasm/stack.js",
         "patchSetId": 6
@@ -162,6 +258,30 @@
       "revId": "b614a0132d2ec27447af210db998a2ed12463564",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91bf2d6b_adf54338",
+        "filename": "test/mjsunit/wasm/stack.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-05T13:16:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "039c79fa_eddc8a65",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 2
+      },
+      "revId": "b614a0132d2ec27447af210db998a2ed12463564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
