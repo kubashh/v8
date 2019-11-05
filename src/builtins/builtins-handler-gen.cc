@@ -215,8 +215,8 @@ void Builtins::Generate_StoreIC_NoFeedback(
   StoreICNoFeedbackGenerator::Generate(state);
 }
 
-// TODO(mythria): Check if we can remove feedback vector and slot parameters in
-// descriptor.
+// TODO(mythria): Create a Descriptor without feedback vector and slot
+// parameters.
 void HandlerBuiltinsAssembler::Generate_KeyedStoreIC_Slow() {
   using Descriptor = StoreWithVectorDescriptor;
   Node* receiver = Parameter(Descriptor::kReceiver);
