@@ -4791,7 +4791,7 @@ void ParserBase<Impl>::ParseDerivedConstructorBody(StatementListT* body,
       DeclarationScope* receiver_scope = GetReceiverScope();
       if (!receiver_scope->receiver()->is_used() &&
           !receiver_scope->inner_scope_calls_eval()) {
-        receiver_scope->set_can_elide_this_hole_checks();
+        receiver_scope->set_can_elide_this_hole_checks(true);
       }
       stat = factory()->NewExpressionStatement(expr, pos);
     } else {

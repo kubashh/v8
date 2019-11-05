@@ -625,8 +625,11 @@ void BaseConsumedPreparseData<Data>::RestoreDataForScope(
   if (NeedsPrivateNameContextChainRecalcField::decode(scope_data_flags)) {
     scope->AsDeclarationScope()->RecordNeedsPrivateNameContextChainRecalc();
   }
-  if (CanElideThisHoleChecks::decode(scope_data_flags)) {
-    scope->AsDeclarationScope()->set_can_elide_this_hole_checks();
+
+  // Always apply the can_elide_this_hole_checks result from preparsing.
+  if (scope->is_declaration_scope()) {
+    scope->AsDeclarationScope()->set_can_elide_this_hole_checks(
+        CanElideThisHoleChecks::decode(scope_data_flags));
   }
   if (ShouldSaveClassVariableIndexField::decode(scope_data_flags)) {
     Variable* var;

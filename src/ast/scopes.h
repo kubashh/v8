@@ -1114,7 +1114,9 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
     return can_elide_this_hole_checks_;
   }
 
-  void set_can_elide_this_hole_checks() { can_elide_this_hole_checks_ = true; }
+  void set_can_elide_this_hole_checks(bool can_elide) {
+    can_elide_this_hole_checks_ = can_elide;
+  }
 
   bool needs_private_name_context_chain_recalc() const {
     return needs_private_name_context_chain_recalc_;
