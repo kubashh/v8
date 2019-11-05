@@ -34,6 +34,24 @@
       "revId": "3adb3cae5cb55c54dd5811d99581593ac68356da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4180d950_9f524090",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2472,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-11-05T14:52:29Z",
+      "side": 1,
+      "message": "I am sorry, I didn\u0027t read it fully last time. Shouldn\u0027t we be calling JSProxy::SetProperty even if the has returns true? According to the spec, we should just SetMutableBinding on the environment record, so I thought calling JSProxy::SetProperty should be fine when has property returns true. When hasProperty returns true, should we lookup the prototype chain again? What happens if has trap has changed the global prototype to not have proxy anymore? Shouldn\u0027t we be calling set trap then?",
+      "parentUuid": "b33eb1a9_4a3448bb",
+      "revId": "3adb3cae5cb55c54dd5811d99581593ac68356da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
