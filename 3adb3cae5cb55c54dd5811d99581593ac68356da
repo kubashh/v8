@@ -16,6 +16,24 @@
       "revId": "3adb3cae5cb55c54dd5811d99581593ac68356da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b33eb1a9_4a3448bb",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2472,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-11-05T13:19:16Z",
+      "side": 1,
+      "message": "Ya, I just created a base cl so it is easy for review. I haven\u0027t fixed it yet. I am fixing the SetProperty that calls SetPropertyInternal to call SetProperty if the state was JSPROXY.",
+      "parentUuid": "e97f76c8_cd0a3529",
+      "revId": "3adb3cae5cb55c54dd5811d99581593ac68356da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
