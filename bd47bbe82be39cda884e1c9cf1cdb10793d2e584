@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5263f2ae_fd5e5add",
+        "filename": "src/asmjs/asm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-11-07T11:11:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d9d05ef8_4bf18811",
+      "range": {
+        "startLine": 143,
+        "startChar": 2,
+        "endLine": 143,
+        "endChar": 10
+      },
+      "revId": "bd47bbe82be39cda884e1c9cf1cdb10793d2e584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9c2df2b_7a1c0290",
         "filename": "src/ast/prettyprinter.cc",
         "patchSetId": 2
@@ -78,6 +102,24 @@
       "side": 1,
       "message": "Where so? I don\u0027t find it in the logs. I can\u0027t reproduce that problem either.",
       "parentUuid": "e9c2df2b_7a1c0290",
+      "revId": "bd47bbe82be39cda884e1c9cf1cdb10793d2e584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4a3fa61_b37c46f9",
+        "filename": "src/ast/prettyprinter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-11-07T11:11:16Z",
+      "side": 1,
+      "message": "According to https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/vsnprintf-s-vsnprintf-s-vsnprintf-s-l-vsnwprintf-s-vsnwprintf-s-l?view\u003dvs-2019#error-conditions, the return value on Windows is always \u0027-1\u0027, also when the buffer is too small. So when you call {Print} again here, the buffer is still to small, also for \"\u003c?\u003e\", and therefore causes the recursion.\n\nI cannot spend much time on debugging this issue, so I hope that this information is enough.",
+      "parentUuid": "f4f8a8c6_edb08385",
       "revId": "bd47bbe82be39cda884e1c9cf1cdb10793d2e584",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
