@@ -5128,17 +5128,6 @@ int Heap::NextStressMarkingLimit() {
 }
 
 void Heap::NotifyDeserializationComplete() {
-  PagedSpaceIterator spaces(this);
-  for (PagedSpace* s = spaces.Next(); s != nullptr; s = spaces.Next()) {
-    if (isolate()->snapshot_available()) s->ShrinkImmortalImmovablePages();
-#ifdef DEBUG
-    // All pages right after bootstrapping must be marked as never-evacuate.
-    for (Page* p : *s) {
-      DCHECK(p->NeverEvacuate());
-    }
-#endif  // DEBUG
-  }
-
   deserialization_complete_ = true;
 }
 

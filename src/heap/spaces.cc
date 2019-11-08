@@ -1821,17 +1821,6 @@ void PagedSpace::ResetFreeList() {
   DCHECK(free_list_->IsEmpty());
 }
 
-void PagedSpace::ShrinkImmortalImmovablePages() {
-  DCHECK(!heap()->deserialization_complete());
-  MemoryChunk::UpdateHighWaterMark(allocation_info_.top());
-  FreeLinearAllocationArea();
-  ResetFreeList();
-  for (Page* page : *this) {
-    DCHECK(page->IsFlagSet(Page::NEVER_EVACUATE));
-    ShrinkPageToHighWaterMark(page);
-  }
-}
-
 bool PagedSpace::Expand() {
   // Always lock against the main space as we can only adjust capacity and
   // pages concurrently for the main paged space.
@@ -3920,6 +3909,17 @@ void ReadOnlySpace::RepairFreeListsAfterDeserialization() {
     }
     CHECK_EQ(size, static_cast<int>(end - start));
     heap()->CreateFillerObjectAt(start, size, ClearRecordedSlots::kNo);
+  }
+}
+
+void ReadOnlySpace::ShrinkImmortalImmovablePages() {
+  DCHECK(!heap()->deserialization_complete());
+  MemoryChunk::UpdateHighWaterMark(allocation_info_.top());
+  FreeLinearAllocationArea();
+  ResetFreeList();
+  for (Page* page : *this) {
+    DCHECK(page->IsFlagSet(Page::NEVER_EVACUATE));
+    ShrinkPageToHighWaterMark(page);
   }
 }
 

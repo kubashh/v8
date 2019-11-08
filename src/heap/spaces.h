@@ -2484,10 +2484,6 @@ class V8_EXPORT_PRIVATE PagedSpace
   iterator begin() { return iterator(first_page()); }
   iterator end() { return iterator(nullptr); }
 
-  // Shrink immortal immovable pages of the space to be exactly the size needed
-  // using the high water mark.
-  void ShrinkImmortalImmovablePages();
-
   size_t ShrinkPageToHighWaterMark(Page* page);
 
   std::unique_ptr<ObjectIterator> GetObjectIterator(Heap* heap) override;
@@ -3200,6 +3196,10 @@ class ReadOnlySpace : public PagedSpace {
   void RepairFreeListsAfterDeserialization();
 
   size_t Available() override { return 0; }
+
+  // Shrink immortal immovable pages of the space to be exactly the size needed
+  // using the high water mark.
+  void ShrinkImmortalImmovablePages();
 
  private:
   // Unseal the space after is has been sealed, by making it writable.
