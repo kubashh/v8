@@ -7,7 +7,6 @@
 #include <array>
 #include <tuple>
 
-#include "src/builtins/builtins-arguments-gen.h"
 #include "src/builtins/builtins-constructor-gen.h"
 #include "src/builtins/builtins-iterator-gen.h"
 #include "src/codegen/code-factory.h"
@@ -25,6 +24,7 @@
 #include "src/objects/oddball.h"
 #include "src/objects/source-text-module.h"
 #include "src/utils/ostreams.h"
+#include "torque-generated/exported-macros-assembler-tq.h"
 
 namespace v8 {
 namespace internal {
@@ -32,6 +32,7 @@ namespace interpreter {
 
 namespace {
 
+using compiler::CodeAssemblerState;
 using compiler::Node;
 using Label = CodeStubAssembler::Label;
 using Variable = CodeStubAssembler::Variable;
@@ -2801,9 +2802,9 @@ IGNITION_HANDLER(CreateMappedArguments, InterpreterAssembler) {
 
   BIND(&if_not_duplicate_parameters);
   {
-    ArgumentsBuiltinsAssembler constructor_assembler(state());
-    Node* result =
-        constructor_assembler.EmitFastNewSloppyArguments(context, closure);
+    TorqueGeneratedExportedMacrosAssembler constructor_assembler(state());
+    Node* result = constructor_assembler.EmitFastNewSloppyArguments(
+        CAST(context), closure);
     SetAccumulator(result);
     Dispatch();
   }
@@ -2822,8 +2823,8 @@ IGNITION_HANDLER(CreateMappedArguments, InterpreterAssembler) {
 // Creates a new unmapped arguments object.
 IGNITION_HANDLER(CreateUnmappedArguments, InterpreterAssembler) {
   TNode<Context> context = GetContext();
-  Node* closure = LoadRegister(Register::function_closure());
-  ArgumentsBuiltinsAssembler builtins_assembler(state());
+  TNode<JSFunction> closure = CAST(LoadRegister(Register::function_closure()));
+  TorqueGeneratedExportedMacrosAssembler builtins_assembler(state());
   Node* result =
       builtins_assembler.EmitFastNewStrictArguments(context, closure);
   SetAccumulator(result);
@@ -2836,8 +2837,9 @@ IGNITION_HANDLER(CreateUnmappedArguments, InterpreterAssembler) {
 IGNITION_HANDLER(CreateRestParameter, InterpreterAssembler) {
   Node* closure = LoadRegister(Register::function_closure());
   TNode<Context> context = GetContext();
-  ArgumentsBuiltinsAssembler builtins_assembler(state());
-  Node* result = builtins_assembler.EmitFastNewRestParameter(context, closure);
+  TorqueGeneratedExportedMacrosAssembler builtins_assembler(state());
+  Node* result =
+      builtins_assembler.EmitFastNewRestArguments(context, CAST(closure));
   SetAccumulator(result);
   Dispatch();
 }

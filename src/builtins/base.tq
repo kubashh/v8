@@ -457,10 +457,47 @@ extern class JSSloppyArgumentsObject extends JSArgumentsObjectWithLength {
   callee: JSAny;
 }
 
+macro NewJSSloppyArgumentsObject(implicit context: Context)(
+    elements: FixedArray, callee: JSFunction): JSSloppyArgumentsObject {
+  const map = GetSloppyArgumentsMap();
+  return new JSSloppyArgumentsObject{
+    map,
+    properties_or_hash: kEmptyFixedArray,
+    elements,
+    length: elements.length,
+    callee
+  };
+}
+
+macro NewJSFastAliasedArgumentsObject(implicit context: Context)(
+    elements: FixedArray, length: Smi,
+    callee: JSFunction): JSSloppyArgumentsObject {
+  // TODO(danno): FastAliasedArguments should really by a type for itself
+  const map = GetFastAliasedArgumentsMap();
+  return new JSSloppyArgumentsObject{
+    map,
+    properties_or_hash: kEmptyFixedArray,
+    elements,
+    length,
+    callee
+  };
+}
+
 // Just a starting shape for JSObject; properties can move after initialization.
 @hasSameInstanceTypeAsParent
 @noVerifier
 extern class JSStrictArgumentsObject extends JSArgumentsObjectWithLength {
+}
+
+macro NewJSStrictArgumentsObject(implicit context: Context)(
+    elements: FixedArray): JSStrictArgumentsObject {
+  const map = GetStrictArgumentsMap();
+  return new JSStrictArgumentsObject{
+    map,
+    properties_or_hash: kEmptyFixedArray,
+    elements,
+    length: elements.length
+  };
 }
 
 extern class JSArrayIterator extends JSObject {
@@ -706,6 +743,12 @@ const ARRAY_BUFFER_MAP_INDEX: constexpr NativeContextSlot
     generates 'Context::ARRAY_BUFFER_MAP_INDEX';
 const ARRAY_JOIN_STACK_INDEX: constexpr NativeContextSlot
     generates 'Context::ARRAY_JOIN_STACK_INDEX';
+const STRICT_ARGUMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::STRICT_ARGUMENTS_MAP_INDEX';
+const FAST_ALIASED_ARGUMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::FAST_ALIASED_ARGUMENTS_MAP_INDEX';
+const SLOPPY_ARGUMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::SLOPPY_ARGUMENTS_MAP_INDEX';
 const OBJECT_FUNCTION_INDEX: constexpr NativeContextSlot
     generates 'Context::OBJECT_FUNCTION_INDEX';
 const ITERATOR_RESULT_MAP_INDEX: constexpr NativeContextSlot
@@ -1067,6 +1110,9 @@ const BIGUINT64_ELEMENTS:
 const BIGINT64_ELEMENTS:
     constexpr ElementsKind generates 'BIGINT64_ELEMENTS';
 
+const MIN_CONTEXT_SLOTS: constexpr int31
+    generates 'Context::MIN_CONTEXT_SLOTS';
+
 const kNone:
     constexpr AllocationFlags generates 'CodeStubAssembler::kNone';
 const kDoubleAlignment: constexpr AllocationFlags
@@ -1098,6 +1144,8 @@ const kEmptyFixedArrayRootIndex:
     constexpr RootIndex generates 'RootIndex::kEmptyFixedArray';
 const kTheHoleValueRootIndex:
     constexpr RootIndex generates 'RootIndex::kTheHoleValue';
+const kSloppyArgumentsElementsMapIndex: constexpr RootIndex
+    generates 'RootIndex::kSloppyArgumentsElementsMap';
 
 const kInvalidArrayBufferLength: constexpr MessageTemplate
     generates 'MessageTemplate::kInvalidArrayBufferLength';
@@ -2630,9 +2678,17 @@ extern macro IntPtrToBInt(intptr): bint;
 Convert<bint, intptr>(v: intptr): bint {
   return IntPtrToBInt(v);
 }
+extern macro BIntToIntPtr(bint): intptr;
+Convert<intptr, bint>(v: bint): intptr {
+  return BIntToIntPtr(v);
+}
 extern macro SmiToBInt(Smi): bint;
 Convert<bint, Smi>(v: Smi): bint {
   return SmiToBInt(v);
+}
+extern macro BIntToSmi(bint): Smi;
+Convert<Smi, bint>(v: bint): Smi {
+  return BIntToSmi(v);
 }
 
 macro Is<A: type, B: type>(implicit context: Context)(o: B): bool {
@@ -2649,11 +2705,13 @@ extern macro FixedArrayMapConstant(): Map;
 extern macro FixedCOWArrayMapConstant(): Map;
 extern macro EmptyByteArrayConstant(): ByteArray;
 extern macro EmptyFixedArrayConstant(): FixedArray;
+extern macro SloppyArgumentsElementsMapConstant(): Map;
 
 const kFixedArrayMap: Map = FixedArrayMapConstant();
 const kCOWMap: Map = FixedCOWArrayMapConstant();
 const kEmptyByteArray: ByteArray = EmptyByteArrayConstant();
 const kEmptyFixedArray: FixedArray = EmptyFixedArrayConstant();
+const kSloppyArgumentsElementsMap: Map = SloppyArgumentsElementsMapConstant();
 
 extern macro IsPrototypeInitialArrayPrototype(implicit context: Context)(Map):
     bool;
@@ -2845,6 +2903,18 @@ macro GetReflectApply(implicit context: Context)(): Callable {
 macro GetRegExpLastMatchInfo(implicit context: Context)(): RegExpMatchInfo {
   return %RawDownCast<RegExpMatchInfo>(
       LoadNativeContext(context)[REGEXP_LAST_MATCH_INFO_INDEX]);
+}
+macro GetStrictArgumentsMap(implicit context: Context)(): Map {
+  return UnsafeCast<Map>(
+      LoadNativeContext(context)[STRICT_ARGUMENTS_MAP_INDEX]);
+}
+macro GetSloppyArgumentsMap(implicit context: Context)(): Map {
+  return UnsafeCast<Map>(
+      LoadNativeContext(context)[SLOPPY_ARGUMENTS_MAP_INDEX]);
+}
+macro GetFastAliasedArgumentsMap(implicit context: Context)(): Map {
+  return UnsafeCast<Map>(
+      LoadNativeContext(context)[FAST_ALIASED_ARGUMENTS_MAP_INDEX]);
 }
 
 extern transitioning macro Call(Context, Callable, JSAny): JSAny;
