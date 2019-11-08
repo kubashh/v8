@@ -2712,6 +2712,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<UintPtrT> DecodeWord(SloppyTNode<WordT> word, uint32_t shift,
                              uint32_t mask);
 
+  TNode<IntPtrT> DecodeScopeInfoHasContextExtension(TNode<IntPtrT> flags);
+
   // Returns a node that contains the updated values of a |BitField|.
   template <typename BitField>
   TNode<WordT> UpdateWord(TNode<WordT> word, TNode<WordT> value) {
