@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fa03385_9e551387",
+        "filename": "src/codegen/tnode.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-11-08T17:25:36Z",
+      "side": 0,
+      "message": "I think it\u0027s intentional that WordT doesn\u0027t have a Machine type, since I don\u0027t think it is necessarily a pointer. I think you need to change your code to use RawPtrT instead.",
+      "revId": "08c0abb565717ad2fa0d460c9456f81b3aec0ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
