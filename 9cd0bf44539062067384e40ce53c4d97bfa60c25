@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7816e484_7b203889",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-08T15:07:24Z",
+      "side": 1,
+      "message": "This is the cause of the sloppy-ness in StringAdd",
+      "range": {
+        "startLine": 547,
+        "startChar": 2,
+        "endLine": 547,
+        "endChar": 6
+      },
+      "revId": "9cd0bf44539062067384e40ce53c4d97bfa60c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de3bf12a_8229c79b",
+        "filename": "src/builtins/builtins-string-gen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-08T15:07:24Z",
+      "side": 1,
+      "message": "This and AllocateCopyStringCharacters use a String most of the times...except using a RawPtrT in one case. That\u0027s why we need to template them.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 32
+      },
+      "revId": "9cd0bf44539062067384e40ce53c4d97bfa60c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "93e3e654_1336939c",
+        "filename": "src/builtins/builtins-string-gen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-08T15:07:24Z",
+      "side": 1,
+      "message": "Sloppy on purpose. Context is coming as 0 sometimes.\nLooking into it for a separate CL.",
+      "range": {
+        "startLine": 115,
+        "startChar": 26,
+        "endLine": 115,
+        "endChar": 54
+      },
+      "revId": "9cd0bf44539062067384e40ce53c4d97bfa60c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

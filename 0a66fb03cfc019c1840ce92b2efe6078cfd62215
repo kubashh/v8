@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c70ad21c_c4485754",
+        "filename": "src/codegen/tnode.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-08T15:07:24Z",
+      "side": 1,
+      "message": "de-duplicating code",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 29,
+        "endChar": 43
+      },
+      "revId": "0a66fb03cfc019c1840ce92b2efe6078cfd62215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e015fc53_b41ff69c",
+        "filename": "src/codegen/tnode.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-08T15:07:24Z",
+      "side": 1,
+      "message": "The actual needed change.",
+      "range": {
+        "startLine": 30,
+        "startChar": 2,
+        "endLine": 30,
+        "endChar": 67
+      },
+      "revId": "0a66fb03cfc019c1840ce92b2efe6078cfd62215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
