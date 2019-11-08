@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe3bead2_b45d5306",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5140,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-11-08T15:07:18Z",
+      "side": 0,
+      "message": "Note: This is going to regress tiny almost static web pages that do not allocate in old generation.",
+      "range": {
+        "startLine": 5131,
+        "startChar": 2,
+        "endLine": 5140,
+        "endChar": 3
+      },
+      "revId": "40c68c36dcb6bb15a5eb33b469e67da14f0b591e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
