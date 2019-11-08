@@ -131,6 +131,11 @@ template <>
 struct MachineTypeOf<Smi> {
   static constexpr MachineType value = MachineType::TaggedSigned();
 };
+
+template <>
+struct MachineTypeOf<WordT> {
+  static constexpr MachineType value = MachineType::Pointer();
+};
 template <class HeapObjectSubtype>
 struct MachineTypeOf<HeapObjectSubtype,
                      typename std::enable_if<std::is_base_of<
