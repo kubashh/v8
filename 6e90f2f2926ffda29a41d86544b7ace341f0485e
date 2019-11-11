@@ -16,6 +16,24 @@
       "revId": "6e90f2f2926ffda29a41d86544b7ace341f0485e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5291441c_706ba842",
+        "filename": "test/cctest/test-accessor-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-11-11T19:34:36Z",
+      "side": 0,
+      "message": "It\u0027s ok. 0 map does not make sense.",
+      "parentUuid": "2589c960_e09f55a2",
+      "revId": "6e90f2f2926ffda29a41d86544b7ace341f0485e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
