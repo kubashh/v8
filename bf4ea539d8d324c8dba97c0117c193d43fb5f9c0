@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa4a6730_50130f69",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1570,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-11-11T18:33:41Z",
+      "side": 1,
+      "message": "Is there any reasonable guidance we could include in this comment about how to determine updated values in the future? As in, is there a script or command to run, or flags that give relevant output, or specific objects to inspect in a debugger, or ... ?",
+      "range": {
+        "startLine": 1570,
+        "startChar": 25,
+        "endLine": 1570,
+        "endChar": 45
+      },
+      "revId": "bf4ea539d8d324c8dba97c0117c193d43fb5f9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
