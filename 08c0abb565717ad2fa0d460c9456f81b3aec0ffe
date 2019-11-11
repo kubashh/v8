@@ -16,6 +16,24 @@
       "revId": "08c0abb565717ad2fa0d460c9456f81b3aec0ffe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b23bb627_38b4a991",
+        "filename": "src/codegen/tnode.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-11-11T10:29:22Z",
+      "side": 0,
+      "message": "+1 I added a comment in a couple of places to change it from WordT to a pointer type. With those fixes you may not need this change.",
+      "parentUuid": "7fa03385_9e551387",
+      "revId": "08c0abb565717ad2fa0d460c9456f81b3aec0ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

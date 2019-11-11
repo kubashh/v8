@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "33b692fe_56cfb51c",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-11-11T10:29:22Z",
+      "side": 1,
+      "message": "I think ExternalString::kResourceDataOffset is a pointer field. I think this should be IntPtrT or a RawPtrT.",
+      "revId": "0a66fb03cfc019c1840ce92b2efe6078cfd62215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a68988f_7aa37964",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-11-11T10:29:22Z",
+      "side": 1,
+      "message": "I think these should be pointer fields too. They seem to be an offset added to pointer fields.",
+      "revId": "0a66fb03cfc019c1840ce92b2efe6078cfd62215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c70ad21c_c4485754",
         "filename": "src/codegen/tnode.h",
         "patchSetId": 2
