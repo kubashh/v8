@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4daeca2d_4f7806d1",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-11T16:05:27Z",
+      "side": 1,
+      "message": "var_encoded_hash could be TNodified to Word32T.\nvar_length I don\u0027t think we can at the moment due to ParameterRepresentation being there. I am wondering if it\u0027s worth it to have a \"ParameterType\" which is the MachineType of ParameterRepresentation.",
+      "range": {
+        "startLine": 1915,
+        "startChar": 2,
+        "endLine": 1917,
+        "endChar": 0
+      },
+      "revId": "456bce63e3451d59a57db6736b8aa8249b0b1813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a73a6d2c_de3e5cac",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2348,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-11T16:05:27Z",
+      "side": 1,
+      "message": "Please TNodify VARIABLES if possible (OK to do it in a follow-up CL).\nFor example, TVARIABLE(Word32T, var_details)",
+      "range": {
+        "startLine": 2347,
+        "startChar": 2,
+        "endLine": 2348,
+        "endChar": 54
+      },
+      "revId": "456bce63e3451d59a57db6736b8aa8249b0b1813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
