@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fe3c880_b32eba5a",
+        "filename": "src/builtins/frame-arguments.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-11T13:55:20Z",
+      "side": 1,
+      "message": "builtins-arguments.tq?",
+      "revId": "670c989d96023913b0811d91d9617a7602ccd87d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68eb4dc5_867439bc",
+        "filename": "src/builtins/string-builtins.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-11T13:55:20Z",
+      "side": 1,
+      "message": "Why not builtins-string.tq here and possibly for other builtins/*.tq files to match existing naming?",
+      "revId": "670c989d96023913b0811d91d9617a7602ccd87d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
