@@ -286,7 +286,8 @@ Signature DeclarationVisitor::MakeSpecializedSignature(
 }
 
 Callable* DeclarationVisitor::SpecializeImplicit(
-    const SpecializationKey<GenericCallable>& key) {
+    const SpecializationKey<GenericCallable>& key, const Expression* caller,
+    const Callable* caller_container) {
   base::Optional<Statement*> body = key.generic->CallableBody();
   if (!body && IntrinsicDeclaration::DynamicCast(key.generic->declaration()) ==
                    nullptr) {
@@ -298,6 +299,7 @@ Callable* DeclarationVisitor::SpecializeImplicit(
   Callable* result = Specialize(key, key.generic->declaration(), base::nullopt,
                                 body, CurrentSourcePosition::Get());
   result->SetIsUserDefined(false);
+  result->SetSpecializationRequestedBy(caller, caller_container);
   CurrentScope::Scope callable_scope(result);
   DeclareSpecializedTypes(key);
   return result;

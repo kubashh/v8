@@ -556,6 +556,7 @@ class ImplementationVisitor {
                            const TypeVector& types,
                            const std::vector<Binding<LocalLabel>*>& labels,
                            const TypeVector& specialization_types,
+                           const Expression* caller,
                            bool silence_errors = false);
   bool TestLookupCallable(const QualifiedName& name,
                           const TypeVector& parameter_types);
@@ -564,12 +565,14 @@ class ImplementationVisitor {
   Callable* LookupCallable(const QualifiedName& name,
                            const Container& declaration_container,
                            const Arguments& arguments,
-                           const TypeVector& specialization_types);
+                           const TypeVector& specialization_types,
+                           const Expression* caller);
 
   Method* LookupMethod(const std::string& name,
                        const AggregateType* receiver_type,
                        const Arguments& arguments,
-                       const TypeVector& specialization_types);
+                       const TypeVector& specialization_types,
+                       const Expression* caller);
 
   const Type* GetCommonType(const Type* left, const Type* right);
 
@@ -590,14 +593,16 @@ class ImplementationVisitor {
                            const TypeVector& specialization_types = {},
                            bool tail_call = false);
   VisitResult GenerateCall(const QualifiedName& callable_name,
-                           Arguments parameters,
+                           Arguments parameters, const Expression* caller,
                            const TypeVector& specialization_types = {},
                            bool tail_call = false);
   VisitResult GenerateCall(std::string callable_name, Arguments parameters,
+                           const Expression* caller,
                            const TypeVector& specialization_types = {},
                            bool tail_call = false) {
     return GenerateCall(QualifiedName(std::move(callable_name)),
-                        std::move(parameters), specialization_types, tail_call);
+                        std::move(parameters), caller, specialization_types,
+                        tail_call);
   }
   VisitResult GeneratePointerCall(Expression* callee,
                                   const Arguments& parameters, bool tail_call);

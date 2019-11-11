@@ -97,7 +97,8 @@ class DeclarationVisitor {
   static Signature MakeSpecializedSignature(
       const SpecializationKey<GenericCallable>& key);
   static Callable* SpecializeImplicit(
-      const SpecializationKey<GenericCallable>& key);
+      const SpecializationKey<GenericCallable>& key, const Expression* caller,
+      const Callable* caller_container);
   static Callable* Specialize(
       const SpecializationKey<GenericCallable>& key,
       CallableDeclaration* declaration,

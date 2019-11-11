@@ -101,6 +101,16 @@ class Declarable {
     is_user_defined_ = is_user_defined;
   }
 
+  const std::pair<const Expression*, const Declarable*>
+  GetSpecializationRequestedBy() const {
+    return {caller_, caller_container_};
+  }
+  void SetSpecializationRequestedBy(const Expression* caller,
+                                    const Declarable* caller_container) {
+    caller_ = caller;
+    caller_container_ = caller_container;
+  }
+
  protected:
   explicit Declarable(Kind kind) : kind_(kind) {}
 
@@ -110,6 +120,13 @@ class Declarable {
   SourcePosition position_ = CurrentSourcePosition::Get();
   SourcePosition identifier_position_ = SourcePosition::Invalid();
   bool is_user_defined_ = true;
+
+  // For declarables that weren't user-defined, such as generics that were
+  // instantiated because of code calling them, these pointers refer to the
+  // place that caused the generic instantiation so we can construct useful
+  // error messages.
+  const Expression* caller_ = nullptr;
+  const Declarable* caller_container_ = nullptr;
 };
 
 #define DECLARE_DECLARABLE_BOILERPLATE(x, y)                  \

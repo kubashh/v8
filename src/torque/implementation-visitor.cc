@@ -736,7 +736,8 @@ VisitResult ImplementationVisitor::Visit(IncrementDecrementExpression* expr) {
   Arguments args;
   args.parameters = {current_value, one};
   VisitResult assignment_value = GenerateCall(
-      expr->op == IncrementDecrementOperator::kIncrement ? "+" : "-", args);
+      expr->op == IncrementDecrementOperator::kIncrement ? "+" : "-", args,
+      expr);
   GenerateAssignToLocation(location_ref, assignment_value);
   return scope.Yield(expr->postfix ? current_value : assignment_value);
 }
@@ -750,7 +751,7 @@ VisitResult ImplementationVisitor::Visit(AssignmentExpression* expr) {
     assignment_value = Visit(expr->value);
     Arguments args;
     args.parameters = {location_value, assignment_value};
-    assignment_value = GenerateCall(*expr->op, args);
+    assignment_value = GenerateCall(*expr->op, args, expr);
     GenerateAssignToLocation(location_ref, assignment_value);
   } else {
     assignment_value = Visit(expr->value);
@@ -1261,7 +1262,7 @@ void ImplementationVisitor::InitializeFieldFromSpread(
   assign_arguments.parameters.push_back(object);
   assign_arguments.parameters.push_back(length);
   assign_arguments.parameters.push_back(iterator);
-  GenerateCall("%InitializeFieldsFromIterator", assign_arguments,
+  GenerateCall("%InitializeFieldsFromIterator", assign_arguments, nullptr,
                {field.aggregate, index.type, iterator.type()});
 }
 
@@ -1286,8 +1287,9 @@ VisitResult ImplementationVisitor::AddVariableObjectSize(
         args.parameters.push_back(object_size);
         args.parameters.push_back(initializer_value);
         args.parameters.push_back(index_field_size);
-        object_size = GenerateCall("%AddIndexedFieldSizeToObjectSize", args,
-                                   {current_field->index->type}, false);
+        object_size =
+            GenerateCall("%AddIndexedFieldSizeToObjectSize", args, nullptr,
+                         {current_field->index->type}, false);
       }
       ++current_field;
     }
@@ -1338,8 +1340,8 @@ VisitResult ImplementationVisitor::Visit(NewExpression* expr) {
     get_struct_map_arguments.parameters.push_back(
         VisitResult(TypeOracle::GetConstexprInstanceTypeType(),
                     CapifyStringWithUnderscores(class_type->name()) + "_TYPE"));
-    object_map =
-        GenerateCall("%GetStructMap", get_struct_map_arguments, {}, false);
+    object_map = GenerateCall("%GetStructMap", get_struct_map_arguments, expr,
+                              {}, false);
     CurrentSourcePosition::Scope current_pos(expr->pos);
     initializer_results.names.insert(initializer_results.names.begin(),
                                      MakeNode<Identifier>("map"));
@@ -1353,8 +1355,8 @@ VisitResult ImplementationVisitor::Visit(NewExpression* expr) {
 
   Arguments size_arguments;
   size_arguments.parameters.push_back(object_map);
-  VisitResult object_size = GenerateCall("%GetAllocationBaseSize",
-                                         size_arguments, {class_type}, false);
+  VisitResult object_size = GenerateCall(
+      "%GetAllocationBaseSize", size_arguments, expr, {class_type}, false);
 
   object_size =
       AddVariableObjectSize(object_size, class_type, initializer_results);
@@ -1362,7 +1364,7 @@ VisitResult ImplementationVisitor::Visit(NewExpression* expr) {
   Arguments allocate_arguments;
   allocate_arguments.parameters.push_back(object_size);
   VisitResult allocate_result =
-      GenerateCall("%Allocate", allocate_arguments, {class_type}, false);
+      GenerateCall("%Allocate", allocate_arguments, expr, {class_type}, false);
   DCHECK(allocate_result.IsOnStack());
 
   InitializeClass(class_type, allocate_result, initializer_results);
@@ -1566,12 +1568,13 @@ void FailCallableLookup(
 }
 
 Callable* GetOrCreateSpecialization(
-    const SpecializationKey<GenericCallable>& key) {
+    const SpecializationKey<GenericCallable>& key, const Expression* caller,
+    const Callable* caller_container) {
   if (base::Optional<Callable*> specialization =
           key.generic->GetSpecialization(key.specialized_types)) {
     return *specialization;
   }
-  return DeclarationVisitor::SpecializeImplicit(key);
+  return DeclarationVisitor::SpecializeImplicit(key, caller, caller_container);
 }
 
 }  // namespace
@@ -1609,7 +1612,7 @@ Block* ImplementationVisitor::LookupSimpleLabel(const std::string& name) {
 bool ImplementationVisitor::TestLookupCallable(
     const QualifiedName& name, const TypeVector& parameter_types) {
   return LookupCallable(name, Declarations::TryLookup(name), parameter_types,
-                        {}, {}, true) != nullptr;
+                        {}, {}, nullptr, true) != nullptr;
 }
 
 template <class Container>
@@ -1617,7 +1620,8 @@ Callable* ImplementationVisitor::LookupCallable(
     const QualifiedName& name, const Container& declaration_container,
     const TypeVector& parameter_types,
     const std::vector<Binding<LocalLabel>*>& labels,
-    const TypeVector& specialization_types, bool silence_errors) {
+    const TypeVector& specialization_types, const Expression* caller,
+    bool silence_errors) {
   Callable* result = nullptr;
 
   std::vector<Declarable*> overloads;
@@ -1690,7 +1694,8 @@ Callable* ImplementationVisitor::LookupCallable(
     TypeArgumentInference inference = generic->InferSpecializationTypes(
         specialization_types, parameter_types);
     result = GetOrCreateSpecialization(
-        SpecializationKey<GenericCallable>{generic, inference.GetResult()});
+        SpecializationKey<GenericCallable>{generic, inference.GetResult()},
+        caller, CurrentCallable::Get());
   } else {
     result = Callable::cast(overloads[best]);
   }
@@ -1713,20 +1718,22 @@ Callable* ImplementationVisitor::LookupCallable(
 template <class Container>
 Callable* ImplementationVisitor::LookupCallable(
     const QualifiedName& name, const Container& declaration_container,
-    const Arguments& arguments, const TypeVector& specialization_types) {
+    const Arguments& arguments, const TypeVector& specialization_types,
+    const Expression* caller) {
   return LookupCallable(name, declaration_container,
                         arguments.parameters.ComputeTypeVector(),
-                        arguments.labels, specialization_types);
+                        arguments.labels, specialization_types, caller);
 }
 
 Method* ImplementationVisitor::LookupMethod(
     const std::string& name, const AggregateType* receiver_type,
-    const Arguments& arguments, const TypeVector& specialization_types) {
+    const Arguments& arguments, const TypeVector& specialization_types,
+    const Expression* caller) {
   TypeVector types(arguments.parameters.ComputeTypeVector());
   types.insert(types.begin(), receiver_type);
   return Method::cast(LookupCallable({{}, name}, receiver_type->Methods(name),
                                      types, arguments.labels,
-                                     specialization_types));
+                                     specialization_types, caller));
 }
 
 const Type* ImplementationVisitor::GetCommonType(const Type* left,
@@ -1865,7 +1872,7 @@ LocationReference ImplementationVisitor::GetLocationReference(
           VisitResult length = GenerateFetchFromLocation(
               LocationReference::HeapReference(length_reference));
           VisitResult converted_length =
-              GenerateCall("Convert", {{length}, {}},
+              GenerateCall("Convert", {{length}, {}}, expr,
                            {TypeOracle::GetIntPtrType(), length.type()}, false);
           DCHECK_EQ(converted_length.stack_range().Size(), 1);
           length_scope.Yield(converted_length);
@@ -1895,7 +1902,7 @@ LocationReference ImplementationVisitor::GetLocationReference(
     Arguments arguments{{index}, {}};
     const AggregateType* slice_type =
         AggregateType::cast(reference.heap_slice().type());
-    Method* method = LookupMethod("AtIndex", slice_type, arguments, {});
+    Method* method = LookupMethod("AtIndex", slice_type, arguments, {}, expr);
     return LocationReference::HeapReference(
         GenerateCall(method, reference, arguments, {}, false));
   } else {
@@ -1940,9 +1947,10 @@ LocationReference ImplementationVisitor::GetLocationReference(
   }
   if (expr->generic_arguments.size() != 0) {
     GenericCallable* generic = Declarations::LookupUniqueGeneric(name);
-    Callable* specialization =
-        GetOrCreateSpecialization(SpecializationKey<GenericCallable>{
-            generic, TypeVisitor::ComputeTypeVector(expr->generic_arguments)});
+    Callable* specialization = GetOrCreateSpecialization(
+        SpecializationKey<GenericCallable>{
+            generic, TypeVisitor::ComputeTypeVector(expr->generic_arguments)},
+        expr, CurrentCallable::Get());
     if (Builtin* builtin = Builtin::DynamicCast(specialization)) {
       DCHECK(!builtin->IsExternal());
       return LocationReference::Temporary(GetBuiltinCode(builtin),
@@ -2003,7 +2011,7 @@ VisitResult ImplementationVisitor::GenerateFetchFromLocation(
     }
     DCHECK(reference.IsCallAccess());
     return GenerateCall(reference.eval_function(),
-                        Arguments{reference.call_arguments(), {}});
+                        Arguments{reference.call_arguments(), {}}, nullptr);
   }
 }
 
@@ -2012,7 +2020,7 @@ void ImplementationVisitor::GenerateAssignToLocation(
   if (reference.IsCallAccess()) {
     Arguments arguments{reference.call_arguments(), {}};
     arguments.parameters.push_back(assignment_value);
-    GenerateCall(reference.assign_function(), arguments);
+    GenerateCall(reference.assign_function(), arguments, nullptr);
   } else if (reference.IsVariableAccess()) {
     VisitResult variable = reference.variable();
     VisitResult converted_value =
@@ -2034,7 +2042,7 @@ void ImplementationVisitor::GenerateAssignToLocation(
         GenerateImplicitConvert(referenced_type, assignment_value);
     if (referenced_type == TypeOracle::GetFloat64Type()) {
       VisitResult silenced_float_value =
-          GenerateCall("Float64SilenceNaN", {{assignment_value}, {}});
+          GenerateCall("Float64SilenceNaN", {{assignment_value}, {}}, nullptr);
       assembler().Poke(converted_assignment_value.stack_range(),
                        silenced_float_value.stack_range(), referenced_type);
     }
@@ -2359,10 +2367,11 @@ VisitResult ImplementationVisitor::GenerateCall(
 
 VisitResult ImplementationVisitor::GenerateCall(
     const QualifiedName& callable_name, Arguments arguments,
-    const TypeVector& specialization_types, bool is_tailcall) {
+    const Expression* caller, const TypeVector& specialization_types,
+    bool is_tailcall) {
   Callable* callable =
       LookupCallable(callable_name, Declarations::Lookup(callable_name),
-                     arguments, specialization_types);
+                     arguments, specialization_types, caller);
   return GenerateCall(callable, base::nullopt, arguments, specialization_types,
                       is_tailcall);
 }
@@ -2395,13 +2404,14 @@ VisitResult ImplementationVisitor::Visit(CallExpression* expr,
         GeneratePointerCall(expr->callee, arguments, is_tailcall));
   } else {
     if (GlobalContext::collect_language_server_data()) {
-      Callable* callable = LookupCallable(name, Declarations::Lookup(name),
-                                          arguments, specialization_types);
+      Callable* callable =
+          LookupCallable(name, Declarations::Lookup(name), arguments,
+                         specialization_types, expr);
       LanguageServerData::AddDefinition(expr->callee->name->pos,
                                         callable->IdentifierPosition());
     }
     return scope.Yield(
-        GenerateCall(name, arguments, specialization_types, is_tailcall));
+        GenerateCall(name, arguments, expr, specialization_types, is_tailcall));
   }
 }
 
@@ -2429,7 +2439,7 @@ VisitResult ImplementationVisitor::Visit(CallMethodExpression* expr) {
   DCHECK_EQ(expr->method->namespace_qualification.size(), 0);
   QualifiedName qualified_name = QualifiedName(method_name);
   Callable* callable = nullptr;
-  callable = LookupMethod(method_name, target_type, arguments, {});
+  callable = LookupMethod(method_name, target_type, arguments, {}, expr);
   if (GlobalContext::collect_language_server_data()) {
     LanguageServerData::AddDefinition(expr->method->name->pos,
                                       callable->IdentifierPosition());
@@ -2444,8 +2454,8 @@ VisitResult ImplementationVisitor::Visit(IntrinsicCallExpression* expr) {
       TypeVisitor::ComputeTypeVector(expr->generic_arguments);
   for (Expression* arg : expr->arguments)
     arguments.parameters.push_back(Visit(arg));
-  return scope.Yield(
-      GenerateCall(expr->name->value, arguments, specialization_types, false));
+  return scope.Yield(GenerateCall(expr->name->value, arguments, expr,
+                                  specialization_types, false));
 }
 
 void ImplementationVisitor::GenerateBranch(const VisitResult& condition,
@@ -2486,7 +2496,8 @@ VisitResult ImplementationVisitor::GenerateImplicitConvert(
   if (TypeOracle::IsImplicitlyConvertableFrom(destination_type,
                                               source.type())) {
     return scope.Yield(GenerateCall(kFromConstexprMacroName, {{source}, {}},
-                                    {destination_type, source.type()}, false));
+                                    nullptr, {destination_type, source.type()},
+                                    false));
   } else if (IsAssignableFrom(destination_type, source.type())) {
     source.SetType(destination_type);
     return scope.Yield(GenerateCopy(source));
@@ -2627,6 +2638,15 @@ void ImplementationVisitor::VisitAllDeclarables() {
       Visit(all_declarables[i].get());
     } catch (TorqueAbortCompilation&) {
       // Recover from compile errors here. The error is recorded already.
+      const Declarable* declarable = all_declarables[i].get();
+      while (declarable) {
+        const Expression* caller = nullptr;
+        std::tie(caller, declarable) =
+            declarable->GetSpecializationRequestedBy();
+        if (caller != nullptr) {
+          Error("Note: specialization requested here").Position(caller->pos);
+        }
+      }
     }
   }
 }
