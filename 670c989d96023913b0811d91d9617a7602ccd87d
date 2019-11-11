@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f3144de2_89014661",
+        "filename": "src/builtins/frame-arguments.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-11-11T14:10:27Z",
+      "side": 1,
+      "message": "It doesn\u0027t actually contain any builtins, but rather code to get access to the arguments in stack frames, as opposed to src/objects/arguments.tq that is about JS arguments objects.",
+      "parentUuid": "7fe3c880_b32eba5a",
+      "revId": "670c989d96023913b0811d91d9617a7602ccd87d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "68eb4dc5_867439bc",
         "filename": "src/builtins/string-builtins.tq",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "670c989d96023913b0811d91d9617a7602ccd87d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfe2e06c_07223b39",
+        "filename": "src/builtins/string-builtins.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-11-11T14:10:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "68eb4dc5_867439bc",
+      "revId": "670c989d96023913b0811d91d9617a7602ccd87d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
