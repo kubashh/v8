@@ -3055,7 +3055,7 @@ TEST(AllocateStruct) {
   CodeStubAssembler m(asm_tester.state());
 
   {
-    Node* map = m.Parameter(0);
+    TNode<Map> map = m.CAST(m.Parameter(0));
     Node* result = m.AllocateStruct(map);
 
     m.Return(result);
