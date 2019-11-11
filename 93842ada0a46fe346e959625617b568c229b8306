@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18842f65_22971f3b",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-11T16:38:32Z",
+      "side": 1,
+      "message": "This one can stop being sloppy if we TNodify value in TryStoreArrayElement (or make a CAST there)",
+      "range": {
+        "startLine": 786,
+        "startChar": 23,
+        "endLine": 786,
+        "endChar": 34
+      },
+      "revId": "93842ada0a46fe346e959625617b568c229b8306",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7227067e_dfa1f06a",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-11T16:38:32Z",
+      "side": 1,
+      "message": "I don\u0027t think this one needs to be sloppy.",
+      "range": {
+        "startLine": 787,
+        "startChar": 20,
+        "endLine": 787,
+        "endChar": 31
+      },
+      "revId": "93842ada0a46fe346e959625617b568c229b8306",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
