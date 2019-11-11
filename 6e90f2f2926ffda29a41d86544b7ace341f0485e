@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2589c960_e09f55a2",
+        "filename": "test/cctest/test-accessor-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-11-11T15:12:35Z",
+      "side": 0,
+      "message": "Igor, I removed this because a null object is actually just a 0 value so is treated as an SMI and the test fails in debug mode because we expect a map. Is it important to test this case? If yes, I need to change the function to expect a TNode\u003cObject\u003e instead of TNode\u003cMap\u003e I think.",
+      "revId": "6e90f2f2926ffda29a41d86544b7ace341f0485e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
