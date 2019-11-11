@@ -34,6 +34,24 @@
       "revId": "08c0abb565717ad2fa0d460c9456f81b3aec0ffe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fbdf7b4_cc9ae00a",
+        "filename": "src/codegen/tnode.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-11T13:05:19Z",
+      "side": 0,
+      "message": "Yep. Removing the machine type change.\nKeeping the machine representation as a drive-by cleanup though.",
+      "parentUuid": "b23bb627_38b4a991",
+      "revId": "08c0abb565717ad2fa0d460c9456f81b3aec0ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

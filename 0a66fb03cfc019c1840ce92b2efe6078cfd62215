@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a641e7f0_9312f714",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-11T13:05:19Z",
+      "side": 1,
+      "message": "IntPtrT makes sense due to the IntPtrAdd above. Updated.",
+      "parentUuid": "33b692fe_56cfb51c",
+      "revId": "0a66fb03cfc019c1840ce92b2efe6078cfd62215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a68988f_7aa37964",
         "filename": "src/builtins/builtins-string-gen.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "0a66fb03cfc019c1840ce92b2efe6078cfd62215",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daaa6397_bfd6804d",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-11T13:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a68988f_7aa37964",
+      "revId": "0a66fb03cfc019c1840ce92b2efe6078cfd62215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
