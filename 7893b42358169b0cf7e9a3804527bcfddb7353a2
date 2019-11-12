@@ -34,6 +34,24 @@
       "revId": "7893b42358169b0cf7e9a3804527bcfddb7353a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "378d83ad_9f77e56b",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-12T11:02:07Z",
+      "side": 1,
+      "message": "Yes, that\u0027s obsolete. Will upload a CL to remove it.\nI think adding --no-wasm-code-gc is not worth it. This will only execute less code, and keep more memory alive, but I don\u0027t see how that could catch bugs.",
+      "parentUuid": "0138bf5c_383378af",
+      "revId": "7893b42358169b0cf7e9a3804527bcfddb7353a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
