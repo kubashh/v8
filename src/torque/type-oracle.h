@@ -68,8 +68,9 @@ class TypeOracle : public ContextualClass<TypeOracle> {
     return result;
   }
 
-  static const Type* GetGenericTypeInstance(GenericType* generic_type,
-                                            TypeVector arg_types);
+  static const Type* GetGenericTypeInstance(
+      GenericType* generic_type, TypeVector arg_types,
+      const SpecializationRequester& requester);
 
   static GenericType* GetReferenceGeneric() {
     return Declarations::LookupUniqueGenericType(QualifiedName(
@@ -81,12 +82,16 @@ class TypeOracle : public ContextualClass<TypeOracle> {
         QualifiedName({TORQUE_INTERNAL_NAMESPACE_STRING}, SLICE_TYPE_STRING));
   }
 
-  static const Type* GetReferenceType(const Type* referenced_type) {
-    return GetGenericTypeInstance(GetReferenceGeneric(), {referenced_type});
+  static const Type* GetReferenceType(
+      const Type* referenced_type, const SpecializationRequester& requester) {
+    return GetGenericTypeInstance(GetReferenceGeneric(), {referenced_type},
+                                  requester);
   }
 
-  static const Type* GetSliceType(const Type* referenced_type) {
-    return GetGenericTypeInstance(GetSliceGeneric(), {referenced_type});
+  static const Type* GetSliceType(const Type* referenced_type,
+                                  const SpecializationRequester& requester) {
+    return GetGenericTypeInstance(GetSliceGeneric(), {referenced_type},
+                                  requester);
   }
 
   static const std::vector<const BuiltinPointerType*>&

@@ -564,7 +564,7 @@ const Type* ImplementationVisitor::Visit(
 
   base::Optional<const Type*> type;
   if (stmt->type) {
-    type = TypeVisitor::ComputeType(*stmt->type);
+    type = TypeVisitor::ComputeType(*stmt->type, GetRequester());
   }
   base::Optional<VisitResult> init_result;
   if (stmt->initializer) {
@@ -777,7 +777,8 @@ VisitResult ImplementationVisitor::Visit(NumberLiteralExpression* expr) {
 VisitResult ImplementationVisitor::Visit(AssumeTypeImpossibleExpression* expr) {
   VisitResult result = Visit(expr->expression);
   const Type* result_type = SubtractType(
-      result.type(), TypeVisitor::ComputeType(expr->excluded_type));
+      result.type(),
+      TypeVisitor::ComputeType(expr->excluded_type, GetRequester()));
   if (result_type->IsNever()) {
     ReportError("unreachable code");
   }
@@ -1111,8 +1112,8 @@ VisitResult ImplementationVisitor::Visit(TryLabelExpression* expr) {
     Stack<const Type*> label_input_stack = assembler().CurrentStack();
     TypeVector parameter_types;
     for (size_t i = 0; i < parameter_count; ++i) {
-      const Type* type =
-          TypeVisitor::ComputeType(expr->label_block->parameters.types[i]);
+      const Type* type = TypeVisitor::ComputeType(
+          expr->label_block->parameters.types[i], GetRequester());
       parameter_types.push_back(type);
       if (type->IsConstexpr()) {
         ReportError("no constexpr type allowed for label arguments");
@@ -1241,7 +1242,7 @@ void ImplementationVisitor::InitializeClass(
       assembler().Emit(CreateFieldReferenceInstruction{
           ClassType::cast(class_type), f.name_and_type.name});
       VisitResult heap_reference(
-          TypeOracle::GetReferenceType(f.name_and_type.type),
+          TypeOracle::GetReferenceType(f.name_and_type.type, GetRequester()),
           assembler().TopRange(2));
       GenerateAssignToLocation(LocationReference::HeapReference(heap_reference),
                                current_value);
@@ -1298,7 +1299,7 @@ VisitResult ImplementationVisitor::AddVariableObjectSize(
 
 VisitResult ImplementationVisitor::Visit(NewExpression* expr) {
   StackScope stack_scope(this);
-  const Type* type = TypeVisitor::ComputeType(expr->type);
+  const Type* type = TypeVisitor::ComputeType(expr->type, GetRequester());
   const ClassType* class_type = ClassType::DynamicCast(type);
   if (class_type == nullptr) {
     ReportError("type for new expression must be a class, \"", *type,
@@ -1635,8 +1636,8 @@ Callable* ImplementationVisitor::LookupCallable(
       overloads.push_back(generic);
       overload_signatures.push_back(
           DeclarationVisitor::MakeSpecializedSignature(
-              SpecializationKey<GenericCallable>{generic,
-                                                 inference.GetResult()}));
+              SpecializationKey<GenericCallable>{generic, inference.GetResult(),
+                                                 GetRequester()}));
     } else if (Callable* callable = Callable::DynamicCast(declarable)) {
       overloads.push_back(callable);
       overload_signatures.push_back(callable->signature());
@@ -1689,8 +1690,8 @@ Callable* ImplementationVisitor::LookupCallable(
           GenericCallable::DynamicCast(overloads[best])) {
     TypeArgumentInference inference = generic->InferSpecializationTypes(
         specialization_types, parameter_types);
-    result = GetOrCreateSpecialization(
-        SpecializationKey<GenericCallable>{generic, inference.GetResult()});
+    result = GetOrCreateSpecialization(SpecializationKey<GenericCallable>{
+        generic, inference.GetResult(), GetRequester()});
   } else {
     result = Callable::cast(overloads[best]);
   }
@@ -1769,7 +1770,7 @@ VisitResult ImplementationVisitor::Visit(StructExpression* expr) {
 
   // Compute and check struct type from given struct name and argument types
   const StructType* struct_type = TypeVisitor::ComputeTypeForStructExpression(
-      expr->type, term_argument_types);
+      expr->type, term_argument_types, GetRequester());
   CheckInitializersWellformed(struct_type->name(), struct_type->fields(),
                               initializers);
 
@@ -1858,7 +1859,7 @@ LocationReference ImplementationVisitor::GetLocationReference(
           assembler().Emit(CreateFieldReferenceInstruction{object_result.type(),
                                                            index_field.name});
           VisitResult length_reference(
-              TypeOracle::GetReferenceType(index_field.type),
+              TypeOracle::GetReferenceType(index_field.type, GetRequester()),
               assembler().TopRange(2));
 
           // Load the length from the reference and convert it to intptr
@@ -1871,14 +1872,14 @@ LocationReference ImplementationVisitor::GetLocationReference(
           length_scope.Yield(converted_length);
         }
         const Type* slice_type =
-            TypeOracle::GetSliceType(field.name_and_type.type);
+            TypeOracle::GetSliceType(field.name_and_type.type, GetRequester());
         return LocationReference::HeapSlice(
             VisitResult(slice_type, assembler().TopRange(3)));
       } else {
         assembler().Emit(
             CreateFieldReferenceInstruction{*class_type, fieldname});
-        const Type* reference_type =
-            TypeOracle::GetReferenceType(field.name_and_type.type);
+        const Type* reference_type = TypeOracle::GetReferenceType(
+            field.name_and_type.type, GetRequester());
         return LocationReference::HeapReference(
             VisitResult(reference_type, assembler().TopRange(2)));
       }
@@ -1942,7 +1943,10 @@ LocationReference ImplementationVisitor::GetLocationReference(
     GenericCallable* generic = Declarations::LookupUniqueGeneric(name);
     Callable* specialization =
         GetOrCreateSpecialization(SpecializationKey<GenericCallable>{
-            generic, TypeVisitor::ComputeTypeVector(expr->generic_arguments)});
+            generic,
+            TypeVisitor::ComputeTypeVector(expr->generic_arguments,
+                                           GetRequester()),
+            GetRequester()});
     if (Builtin* builtin = Builtin::DynamicCast(specialization)) {
       DCHECK(!builtin->IsExternal());
       return LocationReference::Temporary(GetBuiltinCode(builtin),
@@ -2383,8 +2387,8 @@ VisitResult ImplementationVisitor::Visit(CallExpression* expr,
   Arguments arguments;
   QualifiedName name = QualifiedName(expr->callee->namespace_qualification,
                                      expr->callee->name->value);
-  TypeVector specialization_types =
-      TypeVisitor::ComputeTypeVector(expr->callee->generic_arguments);
+  TypeVector specialization_types = TypeVisitor::ComputeTypeVector(
+      expr->callee->generic_arguments, GetRequester());
   bool has_template_arguments = !specialization_types.empty();
   for (Expression* arg : expr->arguments)
     arguments.parameters.push_back(Visit(arg));
@@ -2409,8 +2413,8 @@ VisitResult ImplementationVisitor::Visit(CallMethodExpression* expr) {
   StackScope scope(this);
   Arguments arguments;
   std::string method_name = expr->method->name->value;
-  TypeVector specialization_types =
-      TypeVisitor::ComputeTypeVector(expr->method->generic_arguments);
+  TypeVector specialization_types = TypeVisitor::ComputeTypeVector(
+      expr->method->generic_arguments, GetRequester());
   LocationReference target = GetLocationReference(expr->target);
   if (!target.IsVariableAccess()) {
     VisitResult result = GenerateFetchFromLocation(target);
@@ -2441,7 +2445,7 @@ VisitResult ImplementationVisitor::Visit(IntrinsicCallExpression* expr) {
   StackScope scope(this);
   Arguments arguments;
   TypeVector specialization_types =
-      TypeVisitor::ComputeTypeVector(expr->generic_arguments);
+      TypeVisitor::ComputeTypeVector(expr->generic_arguments, GetRequester());
   for (Expression* arg : expr->arguments)
     arguments.parameters.push_back(Visit(arg));
   return scope.Yield(
@@ -2627,6 +2631,26 @@ void ImplementationVisitor::VisitAllDeclarables() {
       Visit(all_declarables[i].get());
     } catch (TorqueAbortCompilation&) {
       // Recover from compile errors here. The error is recorded already.
+      const Declarable* declarable = all_declarables[i].get();
+      int limit = 10;
+      while (declarable && limit > 0) {
+        --limit;
+        SpecializationRequester requester =
+            declarable->GetSpecializationRequester();
+        if (requester.position != SourcePosition::Invalid()) {
+          std::string readable_name;
+          if (const Callable* callable = Callable::DynamicCast(declarable)) {
+            readable_name = callable->ReadableName();
+            if (const Method* method = Method::DynamicCast(callable)) {
+              readable_name =
+                  method->aggregate_type()->ToString() + "." + readable_name;
+            }
+          }
+          Error("Note: specialization ", readable_name, " requested here")
+              .Position(requester.position);
+        }
+        declarable = requester.container;
+      }
     }
   }
 }

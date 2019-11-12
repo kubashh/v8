@@ -16,23 +16,28 @@ namespace torque {
 
 class TypeVisitor {
  public:
-  static TypeVector ComputeTypeVector(const std::vector<TypeExpression*>& v) {
+  static TypeVector ComputeTypeVector(
+      const std::vector<TypeExpression*>& v,
+      const SpecializationRequester& requester) {
     TypeVector result;
     for (TypeExpression* t : v) {
-      result.push_back(ComputeType(t));
+      result.push_back(ComputeType(t, requester));
     }
     return result;
   }
 
-  static const Type* ComputeType(TypeExpression* type_expression);
+  static const Type* ComputeType(TypeExpression* type_expression,
+                                 const SpecializationRequester& requester);
   static void VisitClassFieldsAndMethods(
       ClassType* class_type, const ClassDeclaration* class_declaration);
   static void VisitStructMethods(StructType* struct_type,
                                  const StructDeclaration* struct_declaration);
-  static Signature MakeSignature(const CallableDeclaration* declaration);
+  static Signature MakeSignature(const CallableDeclaration* declaration,
+                                 const SpecializationRequester& requester);
   static const StructType* ComputeTypeForStructExpression(
       TypeExpression* type_expression,
-      const std::vector<const Type*>& term_argument_types);
+      const std::vector<const Type*>& term_argument_types,
+      const SpecializationRequester& requester);
 
  private:
   friend class TypeAlias;

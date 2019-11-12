@@ -45,9 +45,16 @@ const Type* TypeVisitor::ComputeType(TypeDeclaration* decl,
   }
 }
 
+namespace {
+SpecializationRequester GetRequester(MaybeSpecializationKey specialized_from) {
+  return specialized_from.has_value() ? specialized_from->requester
+                                      : SpecializationRequester::None();
+}
+}  // namespace
+
 const Type* TypeVisitor::ComputeType(TypeAliasDeclaration* decl,
                                      MaybeSpecializationKey specialized_from) {
-  const Type* type = ComputeType(decl->type);
+  const Type* type = ComputeType(decl->type, GetRequester(specialized_from));
   type->AddAlias(decl->name->value);
   return type;
 }
@@ -113,7 +120,8 @@ void DeclareMethods(AggregateType* container_type,
     CurrentSourcePosition::Scope pos_scope(declaration->pos);
     TorqueMacroDeclaration* method =
         TorqueMacroDeclaration::DynamicCast(declaration);
-    Signature signature = TypeVisitor::MakeSignature(method);
+    Signature signature = TypeVisitor::MakeSignature(
+        method, container_type->GetSpecializationRequester());
     signature.parameter_names.insert(
         signature.parameter_names.begin() + signature.implicit_count,
         MakeNode<Identifier>(kThisParameterName));
@@ -136,7 +144,8 @@ const StructType* TypeVisitor::ComputeType(
   for (auto& field : decl->fields) {
     CurrentSourcePosition::Scope position_activator(
         field.name_and_type.type->pos);
-    const Type* field_type = TypeVisitor::ComputeType(field.name_and_type.type);
+    const Type* field_type = TypeVisitor::ComputeType(
+        field.name_and_type.type, GetRequester(specialized_from));
     if (field_type->IsConstexpr()) {
       ReportError("struct field \"", field.name_and_type.name->value,
                   "\" carries constexpr type \"", *field_type, "\"");
@@ -166,7 +175,8 @@ const ClassType* TypeVisitor::ComputeType(
     if (!decl->super) {
       ReportError("Extern class must extend another type.");
     }
-    const Type* super_type = TypeVisitor::ComputeType(*decl->super);
+    const Type* super_type =
+        TypeVisitor::ComputeType(*decl->super, GetRequester(specialized_from));
     if (super_type != TypeOracle::GetStrongTaggedType()) {
       const ClassType* super_class = ClassType::DynamicCast(super_type);
       if (!super_class) {
@@ -195,7 +205,8 @@ const ClassType* TypeVisitor::ComputeType(
       ReportError("Intern class ", decl->name->value,
                   " must extend class Struct.");
     }
-    const Type* super_type = TypeVisitor::ComputeType(*decl->super);
+    const Type* super_type =
+        TypeVisitor::ComputeType(*decl->super, GetRequester(specialized_from));
     const ClassType* super_class = ClassType::DynamicCast(super_type);
     const Type* struct_type = Declarations::LookupGlobalType("Struct");
     if (!super_class || super_class != struct_type) {
@@ -213,7 +224,8 @@ const ClassType* TypeVisitor::ComputeType(
   return new_class;
 }
 
-const Type* TypeVisitor::ComputeType(TypeExpression* type_expression) {
+const Type* TypeVisitor::ComputeType(TypeExpression* type_expression,
+                                     const SpecializationRequester& requester) {
   if (auto* basic = BasicTypeExpression::DynamicCast(type_expression)) {
     QualifiedName qualified_name{basic->namespace_qualification, basic->name};
     auto& args = basic->generic_arguments;
@@ -227,8 +239,8 @@ const Type* TypeVisitor::ComputeType(TypeExpression* type_expression) {
     } else {
       auto* generic_type =
           Declarations::LookupUniqueGenericType(qualified_name);
-      type = TypeOracle::GetGenericTypeInstance(generic_type,
-                                                ComputeTypeVector(args));
+      type = TypeOracle::GetGenericTypeInstance(
+          generic_type, ComputeTypeVector(args, requester), requester);
       pos = generic_type->declaration()->name->pos;
     }
 
@@ -239,23 +251,25 @@ const Type* TypeVisitor::ComputeType(TypeExpression* type_expression) {
 
   } else if (auto* union_type =
                  UnionTypeExpression::DynamicCast(type_expression)) {
-    return TypeOracle::GetUnionType(ComputeType(union_type->a),
-                                    ComputeType(union_type->b));
+    return TypeOracle::GetUnionType(ComputeType(union_type->a, requester),
+                                    ComputeType(union_type->b, requester));
   } else {
     auto* function_type_exp = FunctionTypeExpression::cast(type_expression);
     TypeVector argument_types;
     for (TypeExpression* type_exp : function_type_exp->parameters) {
-      argument_types.push_back(ComputeType(type_exp));
+      argument_types.push_back(ComputeType(type_exp, requester));
     }
     return TypeOracle::GetBuiltinPointerType(
-        argument_types, ComputeType(function_type_exp->return_type));
+        argument_types, ComputeType(function_type_exp->return_type, requester));
   }
 }
 
-Signature TypeVisitor::MakeSignature(const CallableDeclaration* declaration) {
+Signature TypeVisitor::MakeSignature(const CallableDeclaration* declaration,
+                                     const SpecializationRequester& requester) {
   LabelDeclarationVector definition_vector;
   for (const auto& label : declaration->labels) {
-    LabelDeclaration def = {label.name, ComputeTypeVector(label.types)};
+    LabelDeclaration def = {label.name,
+                            ComputeTypeVector(label.types, requester)};
     definition_vector.push_back(def);
   }
   base::Optional<std::string> arguments_variable;
@@ -263,10 +277,10 @@ Signature TypeVisitor::MakeSignature(const CallableDeclaration* declaration) {
     arguments_variable = declaration->parameters.arguments_variable;
   Signature result{declaration->parameters.names,
                    arguments_variable,
-                   {ComputeTypeVector(declaration->parameters.types),
+                   {ComputeTypeVector(declaration->parameters.types, requester),
                     declaration->parameters.has_varargs},
                    declaration->parameters.implicit_count,
-                   ComputeType(declaration->return_type),
+                   ComputeType(declaration->return_type, requester),
                    definition_vector,
                    declaration->transitioning};
   return result;
@@ -281,7 +295,9 @@ void TypeVisitor::VisitClassFieldsAndMethods(
        class_declaration->fields) {
     CurrentSourcePosition::Scope position_activator(
         field_expression.name_and_type.type->pos);
-    const Type* field_type = ComputeType(field_expression.name_and_type.type);
+    const Type* field_type =
+        ComputeType(field_expression.name_and_type.type,
+                    class_type->GetSpecializationRequester());
     if (!(class_declaration->flags & ClassFlag::kExtern)) {
       if (!field_type->IsSubtypeOf(TypeOracle::GetObjectType())) {
         ReportError(
@@ -355,7 +371,8 @@ void TypeVisitor::VisitStructMethods(
 
 const StructType* TypeVisitor::ComputeTypeForStructExpression(
     TypeExpression* type_expression,
-    const std::vector<const Type*>& term_argument_types) {
+    const std::vector<const Type*>& term_argument_types,
+    const SpecializationRequester& requester) {
   auto* basic = BasicTypeExpression::DynamicCast(type_expression);
   if (!basic) {
     ReportError("expected basic type expression referring to struct");
@@ -372,7 +389,7 @@ const StructType* TypeVisitor::ComputeTypeForStructExpression(
 
   // Compute types of non-generic structs as usual
   if (!(maybe_generic_type && decl)) {
-    const Type* type = ComputeType(type_expression);
+    const Type* type = ComputeType(type_expression, requester);
     const StructType* struct_type = StructType::DynamicCast(type);
     if (!struct_type) {
       ReportError(*type, " is not a struct, but used like one");
@@ -381,7 +398,8 @@ const StructType* TypeVisitor::ComputeTypeForStructExpression(
   }
 
   auto generic_type = *maybe_generic_type;
-  auto explicit_type_arguments = ComputeTypeVector(basic->generic_arguments);
+  auto explicit_type_arguments =
+      ComputeTypeVector(basic->generic_arguments, requester);
 
   std::vector<TypeExpression*> term_parameters;
   auto& fields = decl->fields;
@@ -403,8 +421,8 @@ const StructType* TypeVisitor::ComputeTypeForStructExpression(
     LanguageServerData::AddDefinition(type_expression->pos,
                                       generic_type->declaration()->name->pos);
   }
-  return StructType::cast(
-      TypeOracle::GetGenericTypeInstance(generic_type, inference.GetResult()));
+  return StructType::cast(TypeOracle::GetGenericTypeInstance(
+      generic_type, inference.GetResult(), requester));
 }
 
 }  // namespace torque

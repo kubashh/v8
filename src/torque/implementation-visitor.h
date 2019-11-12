@@ -638,6 +638,12 @@ class ImplementationVisitor {
                                          size_t i);
   std::string ExternalParameterName(const std::string& name);
 
+  // Get information about the current position so that we can later report it
+  // if specializations caused by this position have errors.
+  SpecializationRequester GetRequester() {
+    return {CurrentSourcePosition::Get(), CurrentCallable::Get()};
+  }
+
   std::ostream& source_out() {
     if (auto* streams = CurrentFileStreams::Get()) {
       return streams->csa_ccfile;
