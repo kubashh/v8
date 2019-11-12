@@ -31,3 +31,40 @@ type SloppyArgumentsElements extends FixedArray;
 extern class AliasedArgumentsEntry extends Struct {
   aliased_context_slot: Smi;
 }
+
+macro NewJSStrictArgumentsObject(implicit context: Context)(
+    elements: FixedArray): JSStrictArgumentsObject {
+  const map = GetStrictArgumentsMap();
+  return new JSStrictArgumentsObject{
+    map,
+    properties_or_hash: kEmptyFixedArray,
+    elements,
+    length: elements.length
+  };
+}
+
+macro NewJSSloppyArgumentsObject(implicit context: Context)(
+    elements: FixedArray, callee: JSFunction): JSSloppyArgumentsObject {
+  const map = GetSloppyArgumentsMap();
+  return new JSSloppyArgumentsObject{
+    map,
+    properties_or_hash: kEmptyFixedArray,
+    elements,
+    length: elements.length,
+    callee
+  };
+}
+
+macro NewJSFastAliasedArgumentsObject(implicit context: Context)(
+    elements: FixedArray, length: Smi,
+    callee: JSFunction): JSSloppyArgumentsObject {
+  // TODO(danno): FastAliasedArguments should really by a type for itself
+  const map = GetFastAliasedArgumentsMap();
+  return new JSSloppyArgumentsObject{
+    map,
+    properties_or_hash: kEmptyFixedArray,
+    elements,
+    length,
+    callee
+  };
+}

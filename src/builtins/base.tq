@@ -232,6 +232,9 @@ const BIGUINT64_ELEMENTS:
 const BIGINT64_ELEMENTS:
     constexpr ElementsKind generates 'BIGINT64_ELEMENTS';
 
+const MIN_CONTEXT_SLOTS: constexpr int31
+    generates 'Context::MIN_CONTEXT_SLOTS';
+
 const kNone:
     constexpr AllocationFlags generates 'CodeStubAssembler::kNone';
 const kDoubleAlignment: constexpr AllocationFlags
@@ -267,6 +270,8 @@ const kPromiseFulfillReactionJobTaskMapRootIndex: constexpr RootIndex
     generates 'RootIndex::kPromiseFulfillReactionJobTaskMap';
 const kPromiseRejectReactionJobTaskMapRootIndex: constexpr RootIndex
     generates 'RootIndex::kPromiseRejectReactionJobTaskMap';
+const kSloppyArgumentsElementsMapIndex: constexpr RootIndex
+    generates 'RootIndex::kSloppyArgumentsElementsMap';
 
 const kInvalidArrayBufferLength: constexpr MessageTemplate
     generates 'MessageTemplate::kInvalidArrayBufferLength';
@@ -384,6 +389,9 @@ const kNumber: constexpr PrimitiveType
 
 const kNameDictionaryInitialCapacity:
     constexpr int32 generates 'NameDictionary::kInitialCapacity';
+
+const kScopeInfoFlagsOffset:
+    constexpr int32 generates 'ScopeInfo::kFlagsOffset';
 
 type TheHole extends Oddball;
 type Null extends Oddball;
@@ -916,12 +924,14 @@ extern macro FixedCOWArrayMapConstant(): Map;
 extern macro EmptyByteArrayConstant(): ByteArray;
 extern macro EmptyFixedArrayConstant(): EmptyFixedArray;
 extern macro PromiseCapabilityMapConstant(): Map;
+extern macro SloppyArgumentsElementsMapConstant(): Map;
 
 const kFixedArrayMap: Map = FixedArrayMapConstant();
 const kCOWMap: Map = FixedCOWArrayMapConstant();
 const kEmptyByteArray: ByteArray = EmptyByteArrayConstant();
 const kEmptyFixedArray: EmptyFixedArray = EmptyFixedArrayConstant();
 const kPromiseCapabilityMap: Map = PromiseCapabilityMapConstant();
+const kSloppyArgumentsElementsMap: Map = SloppyArgumentsElementsMapConstant();
 
 extern macro IsPrototypeInitialArrayPrototype(implicit context: Context)(Map):
     bool;
@@ -1029,6 +1039,18 @@ macro GetReflectApply(implicit context: Context)(): Callable {
 macro GetRegExpLastMatchInfo(implicit context: Context)(): RegExpMatchInfo {
   return %RawDownCast<RegExpMatchInfo>(
       LoadNativeContext(context)[REGEXP_LAST_MATCH_INFO_INDEX]);
+}
+macro GetStrictArgumentsMap(implicit context: Context)(): Map {
+  return UnsafeCast<Map>(
+      LoadNativeContext(context)[STRICT_ARGUMENTS_MAP_INDEX]);
+}
+macro GetSloppyArgumentsMap(implicit context: Context)(): Map {
+  return UnsafeCast<Map>(
+      LoadNativeContext(context)[SLOPPY_ARGUMENTS_MAP_INDEX]);
+}
+macro GetFastAliasedArgumentsMap(implicit context: Context)(): Map {
+  return UnsafeCast<Map>(
+      LoadNativeContext(context)[FAST_ALIASED_ARGUMENTS_MAP_INDEX]);
 }
 
 extern transitioning macro Call(Context, Callable, JSAny): JSAny;
@@ -1551,3 +1573,7 @@ macro ReplaceTheHoleWithUndefined(o: JSAny|TheHole): JSAny {
     }
   }
 }
+
+extern macro DecodeScopeInfoHasContextExtension(intptr): intptr;
+
+extern macro LoadAndUntagObjectField(HeapObject, constexpr int32): intptr;
