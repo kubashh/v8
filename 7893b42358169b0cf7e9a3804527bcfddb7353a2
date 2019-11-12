@@ -16,6 +16,24 @@
       "revId": "7893b42358169b0cf7e9a3804527bcfddb7353a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0138bf5c_383378af",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-12T10:36:36Z",
+      "side": 1,
+      "message": "Is then this maybe obsolete? https://cs.chromium.org/chromium/src/v8/tools/testrunner/local/variants.py?q\u003dvariants.py\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d28\n\nShould we maybe add --no-wasm-code-gc ?",
+      "parentUuid": "0117d602_af826496",
+      "revId": "7893b42358169b0cf7e9a3804527bcfddb7353a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
