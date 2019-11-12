@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0117d602_af826496",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-12T10:10:26Z",
+      "side": 1,
+      "message": "--wasm-code-gc is on by default, thus we can skip it here.",
+      "revId": "7893b42358169b0cf7e9a3804527bcfddb7353a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
