@@ -1849,9 +1849,9 @@ TEST(AllocateJSObjectFromMap) {
   CodeStubAssembler m(asm_tester.state());
 
   {
-    Node* map = m.Parameter(0);
-    Node* properties = m.Parameter(1);
-    Node* elements = m.Parameter(2);
+    TNode<Map> map = m.CAST(m.Parameter(0));
+    TNode<HeapObject> properties = m.CAST(m.Parameter(1));
+    TNode<FixedArray> elements = m.CAST(m.Parameter(2));
 
     TNode<JSObject> result =
         m.AllocateJSObjectFromMap(map, properties, elements);
@@ -3055,7 +3055,7 @@ TEST(AllocateStruct) {
   CodeStubAssembler m(asm_tester.state());
 
   {
-    Node* map = m.Parameter(0);
+    TNode<Map> map = m.CAST(m.Parameter(0));
     Node* result = m.AllocateStruct(map);
 
     m.Return(result);
