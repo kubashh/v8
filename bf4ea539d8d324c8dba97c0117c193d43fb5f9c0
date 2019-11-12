@@ -22,6 +22,30 @@
       "revId": "bf4ea539d8d324c8dba97c0117c193d43fb5f9c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f65453aa_b8619ebe",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1570,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-12T11:58:41Z",
+      "side": 1,
+      "message": "As discussed offline, I uploaded the patch I used to compute these numbers(https://crrev.com/c/1910945), and linked it here.",
+      "parentUuid": "aa4a6730_50130f69",
+      "range": {
+        "startLine": 1570,
+        "startChar": 25,
+        "endLine": 1570,
+        "endChar": 45
+      },
+      "revId": "bf4ea539d8d324c8dba97c0117c193d43fb5f9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
