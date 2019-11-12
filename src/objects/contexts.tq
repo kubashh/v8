@@ -20,6 +20,9 @@ extern class NativeContext extends Context;
 extern class ScriptContext extends Context generates 'TNode<Context>';
 extern class WithContext extends Context generates 'TNode<Context>';
 
+const MIN_CONTEXT_SLOTS: constexpr int31
+    generates 'Context::MIN_CONTEXT_SLOTS';
+
 type NativeContextSlot generates 'TNode<IntPtrT>' constexpr 'int32_t';
 const ARRAY_BUFFER_FUN_INDEX: constexpr NativeContextSlot
     generates 'Context::ARRAY_BUFFER_FUN_INDEX';
@@ -47,6 +50,13 @@ const REGEXP_LAST_MATCH_INFO_INDEX: constexpr NativeContextSlot
     generates 'Context::REGEXP_LAST_MATCH_INFO_INDEX';
 const INITIAL_STRING_ITERATOR_MAP_INDEX: constexpr NativeContextSlot
     generates 'Context::INITIAL_STRING_ITERATOR_MAP_INDEX';
+const STRICT_ARGUMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::STRICT_ARGUMENTS_MAP_INDEX';
+const FAST_ALIASED_ARGUMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::FAST_ALIASED_ARGUMENTS_MAP_INDEX';
+const SLOPPY_ARGUMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::SLOPPY_ARGUMENTS_MAP_INDEX';
+
 const SLOW_OBJECT_WITH_NULL_PROTOTYPE_MAP: constexpr NativeContextSlot
     generates 'Context::SLOW_OBJECT_WITH_NULL_PROTOTYPE_MAP';
 extern operator '[]' macro LoadContextElement(
