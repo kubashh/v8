@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d678086_8f1b592a",
+        "filename": "src/base/bits.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-11-12T13:04:54Z",
+      "side": 1,
+      "message": "\"sizeof(T) \u003e 1\" is guaranteed per the \"if\" in line 44, so you can fold this into a plain \"8\". Again in the two branches below.",
+      "range": {
+        "startLine": 45,
+        "startChar": 23,
+        "endLine": 45,
+        "endChar": 46
+      },
+      "revId": "40082df1f57594dd8589b1666d827ea51042d545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
