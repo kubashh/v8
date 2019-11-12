@@ -22,6 +22,30 @@
       "revId": "40082df1f57594dd8589b1666d827ea51042d545",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c4fd6c4_fb826edb",
+        "filename": "src/base/bits.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-12T14:54:01Z",
+      "side": 1,
+      "message": "As discussed offline, this is needed to avoid a compiler warning for smaller types. This code will be dead then, but the compiler would still compile the shift by an amount larger than the bit size of the type.",
+      "parentUuid": "9d678086_8f1b592a",
+      "range": {
+        "startLine": 45,
+        "startChar": 23,
+        "endLine": 45,
+        "endChar": 46
+      },
+      "revId": "40082df1f57594dd8589b1666d827ea51042d545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
