@@ -101,6 +101,16 @@ class Declarable {
     is_user_defined_ = is_user_defined;
   }
 
+  const std::pair<const SourcePosition&, const Declarable*>
+  GetSpecializationRequestedBy() const {
+    return {caller_position_, caller_};
+  }
+  void SetSpecializationRequestedBy(const SourcePosition& caller_position,
+                                    const Declarable* caller) {
+    caller_position_ = caller_position;
+    caller_ = caller;
+  }
+
  protected:
   explicit Declarable(Kind kind) : kind_(kind) {}
 
@@ -110,6 +120,12 @@ class Declarable {
   SourcePosition position_ = CurrentSourcePosition::Get();
   SourcePosition identifier_position_ = SourcePosition::Invalid();
   bool is_user_defined_ = true;
+
+  // For generics that were instantiated because of code calling them, these
+  // pointers refer to the place that caused the generic instantiation so we can
+  // construct useful error messages.
+  SourcePosition caller_position_ = SourcePosition::Invalid();
+  const Declarable* caller_ = nullptr;
 };
 
 #define DECLARE_DECLARABLE_BOILERPLATE(x, y)                  \

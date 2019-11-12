@@ -1566,12 +1566,12 @@ void FailCallableLookup(
 }
 
 Callable* GetOrCreateSpecialization(
-    const SpecializationKey<GenericCallable>& key) {
+    const SpecializationKey<GenericCallable>& key, const Callable* caller) {
   if (base::Optional<Callable*> specialization =
           key.generic->GetSpecialization(key.specialized_types)) {
     return *specialization;
   }
-  return DeclarationVisitor::SpecializeImplicit(key);
+  return DeclarationVisitor::SpecializeImplicit(key, caller);
 }
 
 }  // namespace
@@ -1690,7 +1690,8 @@ Callable* ImplementationVisitor::LookupCallable(
     TypeArgumentInference inference = generic->InferSpecializationTypes(
         specialization_types, parameter_types);
     result = GetOrCreateSpecialization(
-        SpecializationKey<GenericCallable>{generic, inference.GetResult()});
+        SpecializationKey<GenericCallable>{generic, inference.GetResult()},
+        CurrentCallable::Get());
   } else {
     result = Callable::cast(overloads[best]);
   }
@@ -1940,9 +1941,10 @@ LocationReference ImplementationVisitor::GetLocationReference(
   }
   if (expr->generic_arguments.size() != 0) {
     GenericCallable* generic = Declarations::LookupUniqueGeneric(name);
-    Callable* specialization =
-        GetOrCreateSpecialization(SpecializationKey<GenericCallable>{
-            generic, TypeVisitor::ComputeTypeVector(expr->generic_arguments)});
+    Callable* specialization = GetOrCreateSpecialization(
+        SpecializationKey<GenericCallable>{
+            generic, TypeVisitor::ComputeTypeVector(expr->generic_arguments)},
+        CurrentCallable::Get());
     if (Builtin* builtin = Builtin::DynamicCast(specialization)) {
       DCHECK(!builtin->IsExternal());
       return LocationReference::Temporary(GetBuiltinCode(builtin),
@@ -2627,6 +2629,18 @@ void ImplementationVisitor::VisitAllDeclarables() {
       Visit(all_declarables[i].get());
     } catch (TorqueAbortCompilation&) {
       // Recover from compile errors here. The error is recorded already.
+      const Declarable* declarable = all_declarables[i].get();
+      int limit = 10;
+      while (declarable && limit > 0) {
+        --limit;
+        SourcePosition caller_position = SourcePosition::Invalid();
+        std::tie(caller_position, declarable) =
+            declarable->GetSpecializationRequestedBy();
+        if (caller_position != SourcePosition::Invalid()) {
+          Error("Note: specialization requested here")
+              .Position(caller_position);
+        }
+      }
     }
   }
 }
