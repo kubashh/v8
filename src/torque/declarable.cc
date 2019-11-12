@@ -92,8 +92,9 @@ std::vector<TypeConstraint> ComputeConstraints(
   std::vector<TypeConstraint> result;
   for (const GenericParameter& parameter : parameters) {
     if (parameter.constraint) {
-      result.push_back(TypeConstraint::SubtypeConstraint(
-          TypeVisitor::ComputeType(*parameter.constraint)));
+      result.push_back(
+          TypeConstraint::SubtypeConstraint(TypeVisitor::ComputeType(
+              *parameter.constraint, SpecializationRequester::None())));
     } else {
       result.push_back(TypeConstraint::Unconstrained());
     }

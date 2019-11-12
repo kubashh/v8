@@ -83,10 +83,28 @@ class TypeBase {
 
 using TypeVector = std::vector<const Type*>;
 
+class Callable;
+
+// Information about what code caused a specialization to exist. This is used
+// for error reporting.
+struct SpecializationRequester {
+  // The position of the expression that caused this specialization.
+  SourcePosition position;
+  // The Callable which contains the expression that caused this specialization.
+  // It may in turn also be a specialization, which allows us to print the stack
+  // of requesters when an error occurs.
+  Callable* container;
+
+  static SpecializationRequester None() {
+    return {SourcePosition::Invalid(), nullptr};
+  }
+};
+
 template <typename T>
 struct SpecializationKey {
   T* generic;
   TypeVector specialized_types;
+  SpecializationRequester requester;
 };
 
 using MaybeSpecializationKey = base::Optional<SpecializationKey<GenericType>>;
@@ -125,6 +143,10 @@ class V8_EXPORT_PRIVATE Type : public TypeBase {
   size_t id() const { return id_; }
   const MaybeSpecializationKey& GetSpecializedFrom() const {
     return specialized_from_;
+  }
+  SpecializationRequester GetSpecializationRequester() const {
+    return specialized_from_.has_value() ? specialized_from_->requester
+                                         : SpecializationRequester::None();
   }
 
  protected:

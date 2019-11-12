@@ -218,6 +218,12 @@ Method* Declarations::CreateMethod(AggregateType* container_type,
       "Method_" + container_type->SimpleName() + "_" + name);
   Method* result = RegisterDeclarable(std::unique_ptr<Method>(new Method(
       container_type, generated_name, name, std::move(signature), body)));
+  SpecializationRequester requester =
+      container_type->GetSpecializationRequester();
+  if (requester.position != SourcePosition::Invalid()) {
+    result->SetIsUserDefined(false);
+    result->SetSpecializationRequester(requester);
+  }
   container_type->RegisterMethod(result);
   return result;
 }

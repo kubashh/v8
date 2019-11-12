@@ -101,6 +101,13 @@ class Declarable {
     is_user_defined_ = is_user_defined;
   }
 
+  const SpecializationRequester& GetSpecializationRequester() const {
+    return requester_;
+  }
+  void SetSpecializationRequester(const SpecializationRequester& requester) {
+    requester_ = requester;
+  }
+
  protected:
   explicit Declarable(Kind kind) : kind_(kind) {}
 
@@ -110,6 +117,11 @@ class Declarable {
   SourcePosition position_ = CurrentSourcePosition::Get();
   SourcePosition identifier_position_ = SourcePosition::Invalid();
   bool is_user_defined_ = true;
+
+  // For specializations of generics that were instantiated due to being used in
+  // an expression somewhere, |requester_| refers to the place that caused the
+  // specialization so we can construct useful error messages.
+  SpecializationRequester requester_ = SpecializationRequester::None();
 };
 
 #define DECLARE_DECLARABLE_BOILERPLATE(x, y)                  \

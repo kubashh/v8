@@ -25,8 +25,9 @@ void TypeOracle::FinalizeAggregateTypes() {
 }
 
 // static
-const Type* TypeOracle::GetGenericTypeInstance(GenericType* generic_type,
-                                               TypeVector arg_types) {
+const Type* TypeOracle::GetGenericTypeInstance(
+    GenericType* generic_type, TypeVector arg_types,
+    const SpecializationRequester& requester) {
   auto& params = generic_type->generic_parameters();
 
   if (params.size() != arg_types.size()) {
@@ -38,8 +39,8 @@ const Type* TypeOracle::GetGenericTypeInstance(GenericType* generic_type,
     return *specialization;
   } else {
     CurrentScope::Scope generic_scope(generic_type->ParentScope());
-    auto type = TypeVisitor::ComputeType(generic_type->declaration(),
-                                         {{generic_type, arg_types}});
+    auto type = TypeVisitor::ComputeType(
+        generic_type->declaration(), {{generic_type, arg_types, requester}});
     generic_type->AddSpecialization(arg_types, type);
     return type;
   }

@@ -111,12 +111,15 @@ Builtin* DeclarationVisitor::CreateBuiltin(BuiltinDeclaration* decl,
 void DeclarationVisitor::Visit(ExternalBuiltinDeclaration* decl) {
   Declarations::Declare(
       decl->name->value,
-      CreateBuiltin(decl, decl->name->value, decl->name->value,
-                    TypeVisitor::MakeSignature(decl), base::nullopt));
+      CreateBuiltin(
+          decl, decl->name->value, decl->name->value,
+          TypeVisitor::MakeSignature(decl, SpecializationRequester::None()),
+          base::nullopt));
 }
 
 void DeclarationVisitor::Visit(ExternalRuntimeDeclaration* decl) {
-  Signature signature = TypeVisitor::MakeSignature(decl);
+  Signature signature =
+      TypeVisitor::MakeSignature(decl, SpecializationRequester::None());
   if (signature.parameter_types.types.size() == 0 ||
       !(signature.parameter_types.types[0] == TypeOracle::GetContextType())) {
     ReportError(
@@ -146,33 +149,40 @@ void DeclarationVisitor::Visit(ExternalRuntimeDeclaration* decl) {
 void DeclarationVisitor::Visit(ExternalMacroDeclaration* decl) {
   Declarations::DeclareMacro(
       decl->name->value, true, decl->external_assembler_name,
-      TypeVisitor::MakeSignature(decl), base::nullopt, decl->op);
+      TypeVisitor::MakeSignature(decl, SpecializationRequester::None()),
+      base::nullopt, decl->op);
 }
 
 void DeclarationVisitor::Visit(TorqueBuiltinDeclaration* decl) {
   Declarations::Declare(
       decl->name->value,
-      CreateBuiltin(decl, decl->name->value, decl->name->value,
-                    TypeVisitor::MakeSignature(decl), decl->body));
+      CreateBuiltin(
+          decl, decl->name->value, decl->name->value,
+          TypeVisitor::MakeSignature(decl, SpecializationRequester::None()),
+          decl->body));
 }
 
 void DeclarationVisitor::Visit(TorqueMacroDeclaration* decl) {
   Macro* macro = Declarations::DeclareMacro(
       decl->name->value, decl->export_to_csa, base::nullopt,
-      TypeVisitor::MakeSignature(decl), decl->body, decl->op);
+      TypeVisitor::MakeSignature(decl, SpecializationRequester::None()),
+      decl->body, decl->op);
   // TODO(szuend): Set identifier_position to decl->name->pos once all callable
   // names are changed from std::string to Identifier*.
   macro->SetPosition(decl->pos);
 }
 
 void DeclarationVisitor::Visit(IntrinsicDeclaration* decl) {
-  Declarations::DeclareIntrinsic(decl->name->value,
-                                 TypeVisitor::MakeSignature(decl));
+  Declarations::DeclareIntrinsic(
+      decl->name->value,
+      TypeVisitor::MakeSignature(decl, SpecializationRequester::None()));
 }
 
 void DeclarationVisitor::Visit(ConstDeclaration* decl) {
   Declarations::DeclareNamespaceConstant(
-      decl->name, TypeVisitor::ComputeType(decl->type), decl->expression);
+      decl->name,
+      TypeVisitor::ComputeType(decl->type, SpecializationRequester::None()),
+      decl->expression);
 }
 
 void DeclarationVisitor::Visit(SpecializationDeclaration* decl) {
@@ -181,17 +191,22 @@ void DeclarationVisitor::Visit(SpecializationDeclaration* decl) {
   // Find the matching generic specialization based on the concrete parameter
   // list.
   GenericCallable* matching_generic = nullptr;
-  Signature signature_with_types = TypeVisitor::MakeSignature(decl);
+  Signature signature_with_types =
+      TypeVisitor::MakeSignature(decl, SpecializationRequester::None());
   for (GenericCallable* generic : generic_list) {
     // This argument inference is just to trigger constraint checking on the
     // generic arguments.
     TypeArgumentInference inference = generic->InferSpecializationTypes(
-        TypeVisitor::ComputeTypeVector(decl->generic_parameters),
+        TypeVisitor::ComputeTypeVector(decl->generic_parameters,
+                                       SpecializationRequester::None()),
         signature_with_types.GetExplicitTypes());
     if (inference.HasFailed()) continue;
     Signature generic_signature_with_types =
         MakeSpecializedSignature(SpecializationKey<GenericCallable>{
-            generic, TypeVisitor::ComputeTypeVector(decl->generic_parameters)});
+            generic,
+            TypeVisitor::ComputeTypeVector(decl->generic_parameters,
+                                           SpecializationRequester::None()),
+            SpecializationRequester::None()});
     if (signature_with_types.HasSameTypesAs(generic_signature_with_types,
                                             ParameterMode::kIgnoreImplicit)) {
       if (matching_generic != nullptr) {
@@ -220,7 +235,10 @@ void DeclarationVisitor::Visit(SpecializationDeclaration* decl) {
       stream << "\n  "
              << MakeSpecializedSignature(SpecializationKey<GenericCallable>{
                     generic,
-                    TypeVisitor::ComputeTypeVector(decl->generic_parameters)});
+                    TypeVisitor::ComputeTypeVector(
+                        decl->generic_parameters,
+                        SpecializationRequester::None()),
+                    SpecializationRequester::None()});
     }
     ReportError(stream.str());
   }
@@ -232,14 +250,18 @@ void DeclarationVisitor::Visit(SpecializationDeclaration* decl) {
 
   CallableDeclaration* generic_declaration = matching_generic->declaration();
 
-  Specialize(SpecializationKey<GenericCallable>{matching_generic,
-                                                TypeVisitor::ComputeTypeVector(
-                                                    decl->generic_parameters)},
-             generic_declaration, decl, decl->body, decl->pos);
+  Specialize(
+      SpecializationKey<GenericCallable>{
+          matching_generic,
+          TypeVisitor::ComputeTypeVector(decl->generic_parameters,
+                                         SpecializationRequester::None()),
+          SpecializationRequester::None()},
+      generic_declaration, decl, decl->body, decl->pos);
 }
 
 void DeclarationVisitor::Visit(ExternConstDeclaration* decl) {
-  const Type* type = TypeVisitor::ComputeType(decl->type);
+  const Type* type =
+      TypeVisitor::ComputeType(decl->type, SpecializationRequester::None());
   if (!type->IsConstexpr()) {
     std::stringstream stream;
     stream << "extern constants must have constexpr type, but found: \""
@@ -282,7 +304,7 @@ Signature DeclarationVisitor::MakeSpecializedSignature(
   Namespace tmp_namespace("_tmp");
   CurrentScope::Scope tmp_namespace_scope(&tmp_namespace);
   DeclareSpecializedTypes(key);
-  return TypeVisitor::MakeSignature(key.generic->declaration());
+  return TypeVisitor::MakeSignature(key.generic->declaration(), key.requester);
 }
 
 Callable* DeclarationVisitor::SpecializeImplicit(
@@ -298,6 +320,7 @@ Callable* DeclarationVisitor::SpecializeImplicit(
   Callable* result = Specialize(key, key.generic->declaration(), base::nullopt,
                                 body, CurrentSourcePosition::Get());
   result->SetIsUserDefined(false);
+  result->SetSpecializationRequester(key.requester);
   CurrentScope::Scope callable_scope(result);
   DeclareSpecializedTypes(key);
   return result;
@@ -326,7 +349,7 @@ Callable* DeclarationVisitor::Specialize(
 
   Signature type_signature =
       explicit_specialization
-          ? TypeVisitor::MakeSignature(*explicit_specialization)
+          ? TypeVisitor::MakeSignature(*explicit_specialization, key.requester)
           : MakeSpecializedSignature(key);
 
   std::string generated_name = Declarations::GetGeneratedCallableName(

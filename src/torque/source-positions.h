@@ -66,6 +66,8 @@ struct SourcePosition {
   bool operator==(const SourcePosition& pos) const {
     return source == pos.source && start == pos.start && end == pos.end;
   }
+
+  bool operator!=(const SourcePosition& pos) const { return !(*this == pos); }
 };
 
 DECLARE_CONTEXTUAL_VARIABLE(CurrentSourceFile, SourceId);
