@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9c79a90_e4fa3e40",
+        "filename": "test/mjsunit/object-is.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-11-13T14:38:21Z",
+      "side": 0,
+      "message": "The proposal ended up never adding an operator for Object.is as initially envisioned, so the TODO has long been obsoleted.",
+      "range": {
+        "startLine": 31,
+        "startChar": 41,
+        "endLine": 31,
+        "endChar": 54
+      },
+      "revId": "837556be7fcd2d7bc581cb3a792187f3fd8f3fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96be696a_c0302f7b",
+        "filename": "test/mjsunit/object-is.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-11-13T14:38:21Z",
+      "side": 0,
+      "message": "Since {i} and {j} both iterate over the full range we\u0027ll hit the (i,j) and the (j,i) pair independently anyways. No need to explicitly call both combinations here I think.",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 48
+      },
+      "revId": "837556be7fcd2d7bc581cb3a792187f3fd8f3fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
