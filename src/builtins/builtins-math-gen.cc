@@ -15,7 +15,7 @@ namespace internal {
 
 // -----------------------------------------------------------------------------
 // ES6 section 20.2.2 Function Properties of the Math Object
-
+/*
 // ES6 #sec-math.abs
 TF_BUILTIN(MathAbs, CodeStubAssembler) {
   Node* context = Parameter(Descriptor::kContext);
@@ -95,7 +95,7 @@ TF_BUILTIN(MathAbs, CodeStubAssembler) {
     }
   }
 }
-
+*/
 void MathBuiltinsAssembler::MathRoundingOperation(
     Node* context, Node* x,
     TNode<Float64T> (CodeStubAssembler::*float64op)(SloppyTNode<Float64T>)) {
@@ -172,18 +172,6 @@ TF_BUILTIN(MathFloor, MathBuiltinsAssembler) {
   Node* context = Parameter(Descriptor::kContext);
   Node* x = Parameter(Descriptor::kX);
   MathRoundingOperation(context, x, &CodeStubAssembler::Float64Floor);
-}
-
-// ES6 #sec-math.imul
-TF_BUILTIN(MathImul, CodeStubAssembler) {
-  Node* context = Parameter(Descriptor::kContext);
-  Node* x = Parameter(Descriptor::kX);
-  Node* y = Parameter(Descriptor::kY);
-  TNode<Word32T> x_value = TruncateTaggedToWord32(context, x);
-  TNode<Word32T> y_value = TruncateTaggedToWord32(context, y);
-  TNode<Int32T> value = Signed(Int32Mul(x_value, y_value));
-  TNode<Number> result = ChangeInt32ToTagged(value);
-  Return(result);
 }
 
 CodeStubAssembler::Node* MathBuiltinsAssembler::MathPow(Node* context,
