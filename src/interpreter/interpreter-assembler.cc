@@ -158,7 +158,7 @@ TNode<Object> InterpreterAssembler::GetAccumulator() {
 }
 
 // TODO(v8:6949): Remove sloppy-ness from SetAccumulator's value argument.
-void InterpreterAssembler::SetAccumulator(SloppyTNode<Object> value) {
+void InterpreterAssembler::SetAccumulator(TNode<Object> value) {
   DCHECK(Bytecodes::WritesAccumulator(bytecode_));
   accumulator_use_ = accumulator_use_ | AccumulatorUse::kWrite;
   accumulator_ = value;
