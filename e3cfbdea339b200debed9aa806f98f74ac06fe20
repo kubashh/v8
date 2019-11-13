@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e43a1aab_337e2cad",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1152444
+      },
+      "writtenOn": "2019-11-13T14:08:32Z",
+      "side": 1,
+      "message": "The \"special straight-line code\" below proved pretty efficient to reduce code size in smaller functions. Can we keep it for cases where {size} is a multiple of 4 or 8, and small enough?",
+      "revId": "e3cfbdea339b200debed9aa806f98f74ac06fe20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
