@@ -22,6 +22,30 @@
       "revId": "47508c857f0277c32896610e8d0a8f2a0380905f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73a57461_3920f2e5",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-13T07:37:01Z",
+      "side": 1,
+      "message": "We use 16.04 across the fleet atm.",
+      "parentUuid": "4e9241e9_62ff7319",
+      "range": {
+        "startLine": 53,
+        "startChar": 20,
+        "endLine": 53,
+        "endChar": 25
+      },
+      "revId": "47508c857f0277c32896610e8d0a8f2a0380905f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
