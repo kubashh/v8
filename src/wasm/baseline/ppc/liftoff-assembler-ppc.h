@@ -120,7 +120,8 @@ void LiftoffAssembler::LoadCallerFrameSlot(LiftoffRegister dst,
 }
 
 void LiftoffAssembler::MoveStackValue(uint32_t dst_index, uint32_t src_index,
-                                      ValueType type) {
+                                      ValueType type uint32_t dst_offset,
+                                      uint32_t src_offset) {
   bailout(kUnsupportedArchitecture, "MoveStackValue");
 }
 
@@ -134,16 +135,16 @@ void LiftoffAssembler::Move(DoubleRegister dst, DoubleRegister src,
 }
 
 void LiftoffAssembler::Spill(uint32_t index, LiftoffRegister reg,
-                             ValueType type) {
+                             ValueType type, uint32_t offset) {
   bailout(kUnsupportedArchitecture, "Spill register");
 }
 
-void LiftoffAssembler::Spill(uint32_t index, WasmValue value) {
+void LiftoffAssembler::Spill(uint32_t index, WasmValue value, uint32_t offset) {
   bailout(kUnsupportedArchitecture, "Spill value");
 }
 
-void LiftoffAssembler::Fill(LiftoffRegister reg, uint32_t index,
-                            ValueType type) {
+void LiftoffAssembler::Fill(LiftoffRegister reg, uint32_t index, ValueType type,
+                            uint32_t offset) {
   bailout(kUnsupportedArchitecture, "Fill");
 }
 

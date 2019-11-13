@@ -438,7 +438,8 @@ void LiftoffAssembler::LoadCallerFrameSlot(LiftoffRegister dst,
 }
 
 void LiftoffAssembler::MoveStackValue(uint32_t dst_index, uint32_t src_index,
-                                      ValueType type) {
+                                      ValueType type, uint32_t dst_offset,
+                                      uint32_t src_offset) {
   DCHECK_NE(dst_index, src_index);
   LiftoffRegister reg = GetUnusedRegister(reg_class_for(type));
   Fill(reg, src_index, type);
@@ -458,7 +459,7 @@ void LiftoffAssembler::Move(DoubleRegister dst, DoubleRegister src,
 }
 
 void LiftoffAssembler::Spill(uint32_t index, LiftoffRegister reg,
-                             ValueType type) {
+                             ValueType type, uint32_t offset) {
   RecordUsedSpillSlot(index);
   MemOperand dst = liftoff::GetStackSlot(index);
   switch (type) {
@@ -479,7 +480,7 @@ void LiftoffAssembler::Spill(uint32_t index, LiftoffRegister reg,
   }
 }
 
-void LiftoffAssembler::Spill(uint32_t index, WasmValue value) {
+void LiftoffAssembler::Spill(uint32_t index, WasmValue value, uint32_t offset) {
   RecordUsedSpillSlot(index);
   MemOperand dst = liftoff::GetStackSlot(index);
   switch (value.type()) {
@@ -502,8 +503,8 @@ void LiftoffAssembler::Spill(uint32_t index, WasmValue value) {
   }
 }
 
-void LiftoffAssembler::Fill(LiftoffRegister reg, uint32_t index,
-                            ValueType type) {
+void LiftoffAssembler::Fill(LiftoffRegister reg, uint32_t index, ValueType type,
+                            uint32_t offset) {
   MemOperand src = liftoff::GetStackSlot(index);
   switch (type) {
     case kWasmI32:

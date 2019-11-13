@@ -103,6 +103,18 @@ class LiftoffAssembler : public TurboAssembler {
 
     void MakeStack() { loc_ = kStack; }
 
+    // Copy src to this, except for offset, since src and this could have been
+    // from different stack states.
+    void Copy(VarState src) {
+      loc_ = src.loc();
+      type_ = src.type();
+      if (loc_ == kRegister) {
+        reg_ = src.reg();
+      } else if (loc_ == kIntConst) {
+        i32_const_ = src.i32_const();
+      }
+    }
+
    private:
     Location loc_;
     // TODO(wasm): This is redundant, the decoder already knows the type of each
@@ -401,14 +413,16 @@ class LiftoffAssembler : public TurboAssembler {
                     bool is_store_mem = false);
   inline void LoadCallerFrameSlot(LiftoffRegister, uint32_t caller_slot_idx,
                                   ValueType);
-  inline void MoveStackValue(uint32_t dst_index, uint32_t src_index, ValueType);
+  inline void MoveStackValue(uint32_t dst_index, uint32_t src_index, ValueType,
+                             uint32_t dst_offset, uint32_t src_offset);
 
   inline void Move(Register dst, Register src, ValueType);
   inline void Move(DoubleRegister dst, DoubleRegister src, ValueType);
 
-  inline void Spill(uint32_t index, LiftoffRegister, ValueType);
-  inline void Spill(uint32_t index, WasmValue);
-  inline void Fill(LiftoffRegister, uint32_t index, ValueType);
+  inline void Spill(uint32_t index, LiftoffRegister, ValueType,
+                    uint32_t offset);
+  inline void Spill(uint32_t index, WasmValue, uint32_t offset);
+  inline void Fill(LiftoffRegister, uint32_t index, ValueType, uint32_t offset);
   // Only used on 32-bit systems: Fill a register from a "half stack slot", i.e.
   // 4 bytes on the stack holding half of a 64-bit value.
   inline void FillI64Half(Register, uint32_t index, RegPairHalf);

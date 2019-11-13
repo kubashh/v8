@@ -328,7 +328,8 @@ void LiftoffAssembler::LoadCallerFrameSlot(LiftoffRegister dst,
 }
 
 void LiftoffAssembler::MoveStackValue(uint32_t dst_index, uint32_t src_index,
-                                      ValueType type) {
+                                      ValueType type, uint32_t dst_offset,
+                                      uint32_t src_offset) {
   UseScratchRegisterScope temps(this);
   CPURegister scratch = liftoff::AcquireByType(&temps, type);
   Ldr(scratch, liftoff::GetStackSlot(src_index));
@@ -355,13 +356,13 @@ void LiftoffAssembler::Move(DoubleRegister dst, DoubleRegister src,
 }
 
 void LiftoffAssembler::Spill(uint32_t index, LiftoffRegister reg,
-                             ValueType type) {
+                             ValueType type, uint32_t offset) {
   RecordUsedSpillSlot(index);
   MemOperand dst = liftoff::GetStackSlot(index);
   Str(liftoff::GetRegFromType(reg, type), dst);
 }
 
-void LiftoffAssembler::Spill(uint32_t index, WasmValue value) {
+void LiftoffAssembler::Spill(uint32_t index, WasmValue value, uint32_t offset) {
   RecordUsedSpillSlot(index);
   MemOperand dst = liftoff::GetStackSlot(index);
   UseScratchRegisterScope temps(this);
@@ -390,8 +391,8 @@ void LiftoffAssembler::Spill(uint32_t index, WasmValue value) {
   Str(src, dst);
 }
 
-void LiftoffAssembler::Fill(LiftoffRegister reg, uint32_t index,
-                            ValueType type) {
+void LiftoffAssembler::Fill(LiftoffRegister reg, uint32_t index, ValueType type,
+                            uint32_t offset) {
   MemOperand src = liftoff::GetStackSlot(index);
   Ldr(liftoff::GetRegFromType(reg, type), src);
 }
