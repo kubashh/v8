@@ -406,6 +406,7 @@ void InitMergeRegion(LiftoffAssembler::CacheState* state,
     if (!reg && state->has_unused_register(rc, used_regs)) {
       reg = state->unused_register(rc, used_regs);
     }
+    // TODO(zhin): when discarded is not 0, can we still use source->offset()?
     if (!reg) {
       // No free register; make this a stack slot.
       *target = VarState(source->type(), source->offset());

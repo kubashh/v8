@@ -52,6 +52,10 @@ inline Operand GetStackSlotByOffset(uint32_t offset, ValueType type) {
   return Operand(rbp, -kConstantStackSpace - offset - size_type);
 }
 
+inline Operand GetStackSlotByOffset(uint32_t offset) {
+  return Operand(rbp, -kConstantStackSpace - offset);
+}
+
 // TODO(clemensb): Make this a constexpr variable once Operand is constexpr.
 inline Operand GetInstanceOperand() { return Operand(rbp, -16); }
 
@@ -147,10 +151,13 @@ int LiftoffAssembler::PrepareStackFrame() {
   return offset;
 }
 
-void LiftoffAssembler::PatchPrepareStackFrame(int offset,
-                                              uint32_t stack_slots) {
-  uint32_t bytes = liftoff::kConstantStackSpace + kStackSlotSize * stack_slots;
+void LiftoffAssembler::PatchPrepareStackFrame(int offset, uint32_t stack_slots,
+                                              uint32_t size) {
+  uint32_t bytes = liftoff::kConstantStackSpace + size;
   DCHECK_LE(bytes, kMaxInt);
+  DCHECK_GE(size, stack_slots * 4);
+  // Need to align to system pointer size;
+  bytes += bytes & 7;
   // We can't run out of space, just pass anything big enough to not cause the
   // assembler to try to grow the buffer.
   constexpr int kAvailableSpace = 64;
@@ -387,6 +394,7 @@ void LiftoffAssembler::Move(DoubleRegister dst, DoubleRegister src,
 void LiftoffAssembler::Spill(uint32_t index, LiftoffRegister reg,
                              ValueType type, uint32_t offset) {
   RecordUsedSpillSlot(index);
+  RecordUsedSpillOffset(offset, type);
   Operand dst = liftoff::GetStackSlotByOffset(offset, type);
   switch (type) {
     case kWasmI32:
@@ -408,6 +416,7 @@ void LiftoffAssembler::Spill(uint32_t index, LiftoffRegister reg,
 
 void LiftoffAssembler::Spill(uint32_t index, WasmValue value, uint32_t offset) {
   RecordUsedSpillSlot(index);
+  RecordUsedSpillOffset(offset, value.type());
   Operand dst = liftoff::GetStackSlotByOffset(offset, value.type());
   switch (value.type()) {
     case kWasmI32:
@@ -458,10 +467,34 @@ void LiftoffAssembler::FillI64Half(Register, uint32_t index, RegPairHalf) {
   UNREACHABLE();
 }
 
+void LiftoffAssembler::FillStackSlotsWithZero(uint32_t index, uint32_t count,
+                                              uint32_t size,
+                                              uint32_t param_size) {
+  DCHECK_LT(0, size);
+
+  pushq(rax);
+  pushq(rcx);
+  pushq(rdi);
+  leaq(rdi, liftoff::GetStackSlotByOffset(param_size + size));
+  xorl(rax, rax);
+  // no longer quadwords, so bytes
+  movl(rcx, Immediate(size));
+  repstosb();
+  popq(rdi);
+  popq(rcx);
+  popq(rax);
+
+  DCHECK_LT(0, count);
+  uint32_t last_stack_slot = index + count - 1;
+  RecordUsedSpillSlot(last_stack_slot);
+  RecordUsedSpillOffset(size);
+}
+
 void LiftoffAssembler::FillStackSlotsWithZero(uint32_t index, uint32_t count) {
   DCHECK_LT(0, count);
   uint32_t last_stack_slot = index + count - 1;
   RecordUsedSpillSlot(last_stack_slot);
+  RecordUsedSpillOffset((last_stack_slot + 1) * 8);
 
   if (count <= 3) {
     // Special straight-line code for up to three slots

@@ -427,14 +427,24 @@ class LiftoffCompiler {
     __ SpillInstance(instance_reg);
     // Input 0 is the code target, 1 is the instance. First parameter at 2.
     uint32_t input_idx = kInstanceParameterIndex + 1;
+    uint32_t param_size = 0;
     for (uint32_t param_idx = 0; param_idx < num_params; ++param_idx) {
       input_idx += ProcessParameter(__ local_type(param_idx), input_idx);
+      param_size += ValueTypes::ElementSizeInBytes(__ local_type(param_idx));
     }
     DCHECK_EQ(input_idx, descriptor_->InputCount());
 
+    uint32_t size = 0;
+    for (uint32_t param_idx = 0; param_idx < __ num_locals(); ++param_idx) {
+      size += ValueTypes::ElementSizeInBytes(decoder->GetLocalType(param_idx));
+    }
+    __ initial_offset_size = param_size + size;
+
     // Initialize locals beyond parameters.
     if (SpillLocalsInitially(decoder, num_params)) {
-      __ FillStackSlotsWithZero(num_params, __ num_locals() - num_params);
+      __ FillStackSlotsWithZero(num_params, __ num_locals() - num_params, size,
+                                param_size);
+
       for (uint32_t param_idx = num_params; param_idx < __ num_locals();
            ++param_idx) {
         ValueType type = decoder->GetLocalType(param_idx);
@@ -500,8 +510,10 @@ class LiftoffCompiler {
     for (OutOfLineCode& ool : out_of_line_code_) {
       GenerateOutOfLineCode(&ool);
     }
+
     __ PatchPrepareStackFrame(pc_offset_stack_frame_construction_,
-                              __ GetTotalFrameSlotCount());
+                              __ GetTotalFrameSlotCount(),
+                              __ GetTotalSlotOffset());
     __ FinishCode();
     safepoint_table_builder_.Emit(&asm_, __ GetTotalFrameSlotCount());
     __ MaybeEmitOutOfLineConstantPool();

@@ -59,6 +59,7 @@ class LiftoffAssembler : public TurboAssembler {
     bool operator==(const VarState& other) const {
       if (loc_ != other.loc_) return false;
       if (type_ != other.type_) return false;
+      if (spill_offset_ != other.spill_offset_) return false;
       switch (loc_) {
         case kStack:
           return true;
@@ -349,6 +350,19 @@ class LiftoffAssembler : public TurboAssembler {
     if (index >= num_used_spill_slots_) num_used_spill_slots_ = index + 1;
   }
 
+  void RecordUsedSpillOffset(uint32_t size) {
+    if (size > num_used_offset_) {
+      num_used_offset_ = size;
+    }
+  }
+
+  void RecordUsedSpillOffset(uint32_t offset, ValueType type) {
+    uint32_t sum = ValueTypes::ElementSizeInBytes(type) + offset;
+    if (sum > num_used_offset_) {
+      num_used_offset_ = sum;
+    }
+  }
+
   // Load parameters into the right registers / stack slots for the call.
   // Move {*target} into another register if needed and update {*target} to that
   // register, or {no_reg} if target was spilled to the stack.
@@ -390,7 +404,8 @@ class LiftoffAssembler : public TurboAssembler {
   // which can later be patched (via {PatchPrepareStackFrame)} when the size of
   // the frame is known.
   inline int PrepareStackFrame();
-  inline void PatchPrepareStackFrame(int offset, uint32_t stack_slots);
+  inline void PatchPrepareStackFrame(int offset, uint32_t stack_slots,
+                                     uint32_t size);
   inline void FinishCode();
   inline void AbortCompilation();
 
@@ -427,6 +442,8 @@ class LiftoffAssembler : public TurboAssembler {
   // 4 bytes on the stack holding half of a 64-bit value.
   inline void FillI64Half(Register, uint32_t index, RegPairHalf);
   inline void FillStackSlotsWithZero(uint32_t index, uint32_t count);
+  inline void FillStackSlotsWithZero(uint32_t index, uint32_t count,
+                                     uint32_t size, uint32_t param_size);
 
   // i32 binops.
   inline void emit_i32_add(Register dst, Register lhs, Register rhs);
@@ -668,6 +685,10 @@ class LiftoffAssembler : public TurboAssembler {
     return num_locals_ + num_used_spill_slots_;
   }
 
+  uint32_t GetTotalSlotOffset() const {
+    return initial_offset_size + num_used_offset_;
+  }
+
   ValueType local_type(uint32_t index) {
     DCHECK_GT(num_locals_, index);
     ValueType* locals =
@@ -695,6 +716,7 @@ class LiftoffAssembler : public TurboAssembler {
     bailout_reason_ = reason;
     bailout_detail_ = detail;
   }
+  uint32_t initial_offset_size = 0;
 
  private:
   uint32_t num_locals_ = 0;
@@ -707,6 +729,7 @@ class LiftoffAssembler : public TurboAssembler {
                 "Reconsider this inlining if ValueType gets bigger");
   CacheState cache_state_;
   uint32_t num_used_spill_slots_ = 0;
+  uint32_t num_used_offset_ = 0;
   LiftoffBailoutReason bailout_reason_ = kSuccess;
   const char* bailout_detail_ = nullptr;
 
