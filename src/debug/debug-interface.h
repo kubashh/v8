@@ -162,6 +162,18 @@ class WasmScript : public Script {
 
   debug::WasmDisassembly DisassembleFunction(int function_index) const;
   uint32_t GetFunctionHash(int function_index);
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  bool GetWasmGlobal(uint32_t index, uint64_t* value) const;
+  bool GetWasmLocal(uint32_t frame_index, uint32_t index,
+                    uint64_t* value) const;
+  bool GetWasmOperandStackValue(uint32_t index, uint64_t* value) const;
+  uint32_t GetWasmMemory(uint32_t offset, uint8_t* buffer, uint32_t size) const;
+  uint32_t GetWasmModuleBytes(uint32_t offset, uint8_t* buffer,
+                              uint32_t size) const;
+  bool AddWasmBreakpoint(uint32_t offset, debug::BreakpointId* id);
+  bool RemoveWasmBreakpoint(uint32_t offset, debug::BreakpointId id);
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 };
 
 V8_EXPORT_PRIVATE void GetLoadedScripts(

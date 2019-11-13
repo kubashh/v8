@@ -164,12 +164,18 @@ class WasmModuleObject : public JSObject {
   V8_EXPORT_PRIVATE static bool SetBreakPoint(Handle<WasmModuleObject>,
                                               int* position,
                                               Handle<BreakPoint> break_point);
+  V8_EXPORT_PRIVATE static bool ClearBreakPoint(Handle<WasmModuleObject>,
+                                                int position,
+                                                Handle<BreakPoint> break_point);
 
   // Check whether this module was generated from asm.js source.
   inline bool is_asm_js();
 
   static void AddBreakpoint(Handle<WasmModuleObject>, int position,
                             Handle<BreakPoint> break_point);
+
+  static bool RemoveBreakpoint(Handle<WasmModuleObject>, int position,
+                               Handle<BreakPoint> break_point);
 
   static void SetBreakpointsOnNewInstance(Handle<WasmModuleObject>,
                                           Handle<WasmInstanceObject>);
@@ -244,6 +250,16 @@ class WasmModuleObject : public JSObject {
   static MaybeHandle<FixedArray> CheckBreakPoints(Isolate*,
                                                   Handle<WasmModuleObject>,
                                                   int position);
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  bool GetWasmGlobal(uint32_t index, uint64_t* value) const;
+  bool GetWasmLocal(uint32_t frame_index, uint32_t index,
+                    uint64_t* value) const;
+  bool GetWasmOperandStackValue(uint32_t index, uint64_t* value) const;
+  uint32_t GetWasmMemory(uint32_t offset, uint8_t* buffer, uint32_t size) const;
+  uint32_t GetWasmModuleBytes(uint32_t offset, uint8_t* buffer,
+                              uint32_t size) const;
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
   OBJECT_CONSTRUCTORS(WasmModuleObject, JSObject);
 };
@@ -870,6 +886,9 @@ class WasmDebugInfo : public Struct {
   V8_EXPORT_PRIVATE static void SetBreakpoint(Handle<WasmDebugInfo>,
                                               int func_index, int offset);
 
+  V8_EXPORT_PRIVATE static void ClearBreakpoint(
+      Handle<WasmDebugInfo> debug_info, int func_index, int offset);
+
   // Make a set of functions always execute in the interpreter without setting
   // breakpoints.
   V8_EXPORT_PRIVATE static void RedirectToInterpreter(Handle<WasmDebugInfo>,
@@ -916,6 +935,16 @@ class WasmDebugInfo : public Struct {
 
   V8_EXPORT_PRIVATE static Handle<Code> GetCWasmEntry(Handle<WasmDebugInfo>,
                                                       wasm::FunctionSig*);
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  static bool GetWasmGlobal(Handle<WasmDebugInfo> debug_info, uint32_t index,
+                            uint64_t* value);
+  static bool GetWasmLocal(Handle<WasmDebugInfo> debug_info,
+                           uint32_t frame_index, uint32_t index,
+                           uint64_t* value);
+  static bool GetWasmOperandStackValue(Handle<WasmDebugInfo> debug_info,
+                                       uint32_t index, uint64_t* value);
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
   OBJECT_CONSTRUCTORS(WasmDebugInfo, Struct);
 };
