@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76c36a7f_36270757",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-11-13T15:32:04Z",
+      "side": 1,
+      "message": "int32 -\u003e float64?\nHow about kOverfolowValue -\u003e kSmiMaxValuePlus1?",
+      "range": {
+        "startLine": 16,
+        "startChar": 34,
+        "endLine": 16,
+        "endChar": 39
+      },
+      "revId": "40b8f68e7b201fe4b5376e8c5955449535e60f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba74ccec_f725e30a",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-11-13T15:32:04Z",
+      "side": 1,
+      "message": "How about:\nreturn MathAbsImpl(x1) otherwise Retry;",
+      "range": {
+        "startLine": 54,
+        "startChar": 8,
+        "endLine": 55,
+        "endChar": 22
+      },
+      "revId": "40b8f68e7b201fe4b5376e8c5955449535e60f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8770fab_392fc11a",
+        "filename": "src/builtins/math.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-11-13T15:32:04Z",
+      "side": 1,
+      "message": "How about putting this into a Convert\u003c\u003e overload that transforms a Number to int32? Then it can also be re-used below, turning the whole builtin into (ToNumber_Inline could should take the context implicitly.)\n\nconst x \u003d Convert\u003cint32\u003e(ToNumber_Inline(x));\nconst y \u003d Convert\u003cint32\u003e(ToNumber_Inline(y))\nreturn Convert\u003cNumber\u003e(x * y);",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 5
+      },
+      "revId": "40b8f68e7b201fe4b5376e8c5955449535e60f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
