@@ -9380,6 +9380,76 @@ debug::WasmDisassembly debug::WasmScript::DisassembleFunction(
   return module_object.DisassembleFunction(function_index);
 }
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
+bool debug::WasmScript::GetWasmGlobal(uint32_t index, uint64_t* value) const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  i::WasmModuleObject module_object =
+      i::WasmModuleObject::cast(script->wasm_module_object());
+  return module_object.GetWasmGlobal(index, value);
+}
+
+bool debug::WasmScript::GetWasmLocal(uint32_t frame_index, uint32_t index,
+                                     uint64_t* value) const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  i::WasmModuleObject module_object =
+      i::WasmModuleObject::cast(script->wasm_module_object());
+  return module_object.GetWasmLocal(frame_index, index, value);
+}
+
+bool debug::WasmScript::GetWasmOperandStackValue(uint32_t index,
+                                                 uint64_t* value) const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  i::WasmModuleObject module_object =
+      i::WasmModuleObject::cast(script->wasm_module_object());
+  return module_object.GetWasmOperandStackValue(index, value);
+}
+
+uint32_t debug::WasmScript::GetWasmMemory(uint32_t offset, uint8_t* buffer,
+                                          uint32_t size) const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  i::WasmModuleObject module_object =
+      i::WasmModuleObject::cast(script->wasm_module_object());
+  return module_object.GetWasmMemory(offset, buffer, size);
+}
+
+uint32_t debug::WasmScript::GetWasmModuleBytes(uint32_t offset, uint8_t* buffer,
+                                               uint32_t size) const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  i::WasmModuleObject module_object =
+      i::WasmModuleObject::cast(script->wasm_module_object());
+  return module_object.GetWasmModuleBytes(offset, buffer, size);
+}
+
+bool debug::WasmScript::AddWasmBreakpoint(uint32_t offset,
+                                          debug::BreakpointId* id) {
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  i::Isolate* isolate = script->GetIsolate();
+  i::Handle<i::String> condition = isolate->factory()->empty_string();
+  int address = offset;
+  return isolate->debug()->SetBreakPointForScript(script, condition, &address,
+                                                  id);
+}
+
+bool debug::WasmScript::RemoveWasmBreakpoint(uint32_t offset,
+                                             debug::BreakpointId id) {
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  i::Isolate* isolate = script->GetIsolate();
+  return isolate->debug()->RemoveWasmBreakpoint(script, offset, id);
+}
+
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
 debug::Location::Location(int line_number, int column_number)
     : line_number_(line_number),
       column_number_(column_number),

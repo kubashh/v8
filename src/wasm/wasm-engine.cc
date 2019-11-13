@@ -19,7 +19,12 @@
 #include "src/wasm/module-decoder.h"
 #include "src/wasm/module-instantiate.h"
 #include "src/wasm/streaming-decoder.h"
+#include "src/wasm/wasm-interpreter.h"
 #include "src/wasm/wasm-objects-inl.h"
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+#include "src/wasm/gdb-server/gdb-server.h"
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
 namespace v8 {
 namespace internal {
@@ -214,6 +219,10 @@ struct WasmEngine::NativeModuleInfo {
 WasmEngine::WasmEngine() : code_manager_(FLAG_wasm_max_code_space * MB) {}
 
 WasmEngine::~WasmEngine() {
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  gdb_server_ = nullptr;
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
   // Synchronize on all background compile tasks.
   background_compile_task_manager_.CancelAndWait();
   // All AsyncCompileJobs have been canceled.
@@ -595,6 +604,12 @@ void WasmEngine::AddIsolate(Isolate* isolate) {
 }
 
 void WasmEngine::RemoveIsolate(Isolate* isolate) {
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  if (gdb_server_) {
+    gdb_server_->RemoveIsolate(isolate);
+  }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
   base::MutexGuard guard(&mutex_);
   auto it = isolates_.find(isolate);
   DCHECK_NE(isolates_.end(), it);
@@ -672,6 +687,12 @@ void WasmEngine::LogOutstandingCodesForIsolate(Isolate* isolate) {
 std::shared_ptr<NativeModule> WasmEngine::NewNativeModule(
     Isolate* isolate, const WasmFeatures& enabled,
     std::shared_ptr<const WasmModule> module) {
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  if (!gdb_server_) {
+    gdb_server_ = std::make_unique<gdb_server::GdbServer>(isolate, this);
+  }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
   size_t code_size_estimate =
       wasm::WasmCodeManager::EstimateNativeModuleCodeSize(module.get());
   return NewNativeModule(isolate, enabled, code_size_estimate,
@@ -973,6 +994,11 @@ std::shared_ptr<WasmEngine> WasmEngine::GetWasmEngine() {
   if (FLAG_wasm_shared_engine) return *GetSharedWasmEngine();
   return std::make_shared<WasmEngine>();
 }
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+void WasmEngine::Suspend() { WasmInterpreter::Suspend(); }
+void WasmEngine::Resume() { WasmInterpreter::Resume(); }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
 // {max_mem_pages} is declared in wasm-limits.h.
 uint32_t max_mem_pages() {

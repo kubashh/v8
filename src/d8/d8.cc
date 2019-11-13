@@ -1718,6 +1718,10 @@ Local<ObjectTemplate> Shell::CreateGlobalTemplate(Isolate* isolate) {
           .ToLocalChecked(),
       FunctionTemplate::New(isolate, ReadBuffer));
   global_template->Set(
+      String::NewFromUtf8(isolate, "writebuffer", NewStringType::kNormal)
+          .ToLocalChecked(),
+      FunctionTemplate::New(isolate, WriteBuffer));
+  global_template->Set(
       String::NewFromUtf8(isolate, "readline", NewStringType::kNormal)
           .ToLocalChecked(),
       FunctionTemplate::New(isolate, ReadLine));
@@ -2185,6 +2189,16 @@ static char* ReadChars(const char* name, int* size_out) {
   return chars;
 }
 
+static size_t WriteChars(const char* name, uint8_t* buffer, size_t size) {
+  FILE* file = FOpen(name, "wb");
+  if (file == nullptr) return 0;
+
+  size_t written = fwrite(buffer, sizeof(char), size, file);
+  fclose(file);
+
+  return written;
+}
+
 struct DataAndPersistent {
   uint8_t* data;
   int byte_length;
@@ -2228,6 +2242,34 @@ void Shell::ReadBuffer(const v8::FunctionCallbackInfo<v8::Value>& args) {
   isolate->AdjustAmountOfExternalAllocatedMemory(length);
 
   args.GetReturnValue().Set(buffer);
+}
+
+void Shell::WriteBuffer(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  static_assert(sizeof(char) == sizeof(uint8_t),
+                "char and uint8_t should both have 1 byte");
+  Isolate* isolate = args.GetIsolate();
+  if (args.Length() < 2 || !args[0]->IsString() || !args[1]->IsUint8Array()) {
+    Throw(isolate, "Invalid argument");
+    return;
+  }
+
+  String::Utf8Value filename(isolate, args[0]);
+  if (*filename == nullptr) {
+    Throw(isolate, "Error writing file");
+    return;
+  }
+
+  v8::Local<v8::Uint8Array> array = v8::Local<v8::Uint8Array>::Cast(args[1]);
+  v8::Local<ArrayBuffer> buffer = array->Buffer();
+
+  size_t len = array->Length();
+  if (len != WriteChars(*filename,
+                        static_cast<uint8_t*>(buffer->GetContents().Data()) +
+                            array->ByteOffset(),
+                        len)) {
+    Throw(isolate, "Error writing file");
+    return;
+  }
 }
 
 // Reads a file into a v8 string.
