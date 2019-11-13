@@ -392,10 +392,19 @@ Node* GraphAssembler::LoadFramePointer() {
   return AddNode(graph()->NewNode(machine()->LoadFramePointer()));
 }
 
-#define SINGLETON_CONST_DEF(Name) \
-  Node* GraphAssembler::Name() { return AddClonedNode(jsgraph()->Name()); }
+#define SINGLETON_CONST_DEF(Name)                      \
+  Node* GraphAssembler::Name##Constant() {             \
+    return AddClonedNode(jsgraph()->Name##Constant()); \
+  }
 JSGRAPH_SINGLETON_CONSTANT_LIST(SINGLETON_CONST_DEF)
 #undef SINGLETON_CONST_DEF
+
+#define SINGLETON_CONST_TEST_DEF(Name)              \
+  Node* GraphAssembler::Is##Name(Node* value) {     \
+    return ReferenceEqual(value, Name##Constant()); \
+  }
+JSGRAPH_SINGLETON_CONSTANT_LIST(SINGLETON_CONST_TEST_DEF)
+#undef SINGLETON_CONST_TEST_DEF
 
 #define PURE_UNOP_DEF(Name)                                     \
   Node* GraphAssembler::Name(Node* input) {                     \
@@ -495,6 +504,46 @@ Node* GraphAssembler::StoreElement(ElementAccess const& access, Node* object,
   return AddNode(graph()->NewNode(simplified()->StoreElement(access), object,
                                   index, value, current_effect_,
                                   current_control_));
+}
+
+Node* GraphAssembler::NewNode(const Operator* op, Node* input0) {
+  return graph()->NewNode(op, input0, current_effect_, current_control_);
+}
+
+Node* GraphAssembler::SpeculativeToNumber(Node* value,
+                                          FeedbackSource const& feedback,
+                                          NumberOperationHint hint) {
+  return AddNode(
+      NewNode(simplified()->SpeculativeToNumber(hint, feedback), value));
+}
+
+Node* GraphAssembler::CheckSmi(Node* value, FeedbackSource const& feedback) {
+  return AddNode(NewNode(simplified()->CheckSmi(feedback), value));
+}
+
+Node* GraphAssembler::CheckString(Node* value, FeedbackSource const& feedback) {
+  return AddNode(NewNode(simplified()->CheckString(feedback), value));
+}
+
+Node* GraphAssembler::StringLength(Node* string) {
+  return AddNode(graph()->NewNode(simplified()->StringLength(), string));
+}
+
+Node* GraphAssembler::ReferenceEqual(Node* lhs, Node* rhs) {
+  return AddNode(graph()->NewNode(simplified()->ReferenceEqual(), lhs, rhs));
+}
+
+Node* GraphAssembler::NumberMin(Node* lhs, Node* rhs) {
+  return AddNode(graph()->NewNode(simplified()->NumberMin(), lhs, rhs));
+}
+
+Node* GraphAssembler::NumberMax(Node* lhs, Node* rhs) {
+  return AddNode(graph()->NewNode(simplified()->NumberMax(), lhs, rhs));
+}
+
+Node* GraphAssembler::StringSubstring(Node* string, Node* from, Node* to) {
+  return AddNode(graph()->NewNode(simplified()->StringSubstring(), string, from,
+                                  to, current_effect(), current_control()));
 }
 
 Node* GraphAssembler::DebugBreak() {
@@ -636,6 +685,16 @@ void GraphAssembler::Branch(Node* condition, GraphAssemblerLabel<0u>* if_true,
   current_effect_ = nullptr;
 }
 
+Node* GraphAssembler::Select(Node* condition, NodeGenerator true_body,
+                             NodeGenerator false_body,
+                             MachineRepresentation phi_representation) {
+  auto merge = MakeLabel(phi_representation);
+  GotoIf(condition, &merge, true_body());
+  Goto(&merge, false_body());
+  Bind(&merge);
+  return merge.PhiAt(0);
+}
+
 void GraphAssembler::BindBasicBlock(BasicBlock* block) {
   if (block_updater_) {
     block_updater_->AddBind(block);
@@ -735,6 +794,11 @@ void GraphAssembler::Reset(BasicBlock* block) {
 void GraphAssembler::InitializeEffectControl(Node* effect, Node* control) {
   current_effect_ = effect;
   current_control_ = control;
+}
+
+void GraphAssembler::InitializeEffectControl(Node* node) {
+  InitializeEffectControl(NodeProperties::GetEffectInput(node),
+                          NodeProperties::GetControlInput(node));
 }
 
 Operator const* GraphAssembler::ToNumberOperator() {

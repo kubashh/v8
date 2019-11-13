@@ -15,6 +15,7 @@
 #include "src/compiler/allocation-builder.h"
 #include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/feedback-source.h"
+#include "src/compiler/graph-assembler.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/map-inference.h"
@@ -36,6 +37,8 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+#define __ gasm()->
+
 Reduction JSCallReducer::ReduceMathUnary(Node* node, const Operator* op) {
   CallParameters const& p = CallParametersOf(node->op());
   if (p.speculation_mode() == SpeculationMode::kDisallowSpeculation) {
@@ -47,16 +50,13 @@ Reduction JSCallReducer::ReduceMathUnary(Node* node, const Operator* op) {
     return Replace(value);
   }
 
-  Node* effect = NodeProperties::GetEffectInput(node);
-  Node* control = NodeProperties::GetControlInput(node);
-  Node* input = NodeProperties::GetValueInput(node, 2);
+  __ InitializeEffectControl(node);
 
-  input = effect =
-      graph()->NewNode(simplified()->SpeculativeToNumber(
-                           NumberOperationHint::kNumberOrOddball, p.feedback()),
-                       input, effect, control);
-  Node* value = graph()->NewNode(op, input);
-  ReplaceWithValue(node, value, effect);
+  Node* const input = NodeProperties::GetValueInput(node, 2);
+  Node* const input_as_number = __ SpeculativeToNumber(input, p.feedback());
+  Node* const value = graph()->NewNode(op, input_as_number);
+
+  ReplaceWithValue(node, value, __ effect());
   return Replace(value);
 }
 
@@ -70,23 +70,18 @@ Reduction JSCallReducer::ReduceMathBinary(Node* node, const Operator* op) {
     ReplaceWithValue(node, value);
     return Replace(value);
   }
-  Node* effect = NodeProperties::GetEffectInput(node);
-  Node* control = NodeProperties::GetControlInput(node);
 
-  Node* left = NodeProperties::GetValueInput(node, 2);
-  Node* right = node->op()->ValueInputCount() > 3
-                    ? NodeProperties::GetValueInput(node, 3)
-                    : jsgraph()->NaNConstant();
-  left = effect =
-      graph()->NewNode(simplified()->SpeculativeToNumber(
-                           NumberOperationHint::kNumberOrOddball, p.feedback()),
-                       left, effect, control);
-  right = effect =
-      graph()->NewNode(simplified()->SpeculativeToNumber(
-                           NumberOperationHint::kNumberOrOddball, p.feedback()),
-                       right, effect, control);
-  Node* value = graph()->NewNode(op, left, right);
-  ReplaceWithValue(node, value, effect);
+  __ InitializeEffectControl(node);
+
+  Node* const left = NodeProperties::GetValueInput(node, 2);
+  Node* const right = node->op()->ValueInputCount() > 3
+                          ? NodeProperties::GetValueInput(node, 3)
+                          : gasm()->NaNConstant();
+  Node* const left_as_number = __ SpeculativeToNumber(left, p.feedback());
+  Node* const right_as_number = __ SpeculativeToNumber(right, p.feedback());
+  Node* const value = graph()->NewNode(op, left_as_number, right_as_number);
+
+  ReplaceWithValue(node, value, __ effect());
   return Replace(value);
 }
 
@@ -4058,63 +4053,40 @@ Reduction JSCallReducer::ReduceStringPrototypeIndexOf(Node* node) {
 // ES #sec-string.prototype.substring
 Reduction JSCallReducer::ReduceStringPrototypeSubstring(Node* node) {
   if (node->op()->ValueInputCount() < 3) return NoChange();
+
   CallParameters const& p = CallParametersOf(node->op());
   if (p.speculation_mode() == SpeculationMode::kDisallowSpeculation) {
     return NoChange();
   }
 
-  Node* effect = NodeProperties::GetEffectInput(node);
-  Node* control = NodeProperties::GetControlInput(node);
-  Node* receiver = NodeProperties::GetValueInput(node, 1);
-  Node* start = NodeProperties::GetValueInput(node, 2);
-  Node* end = node->op()->ValueInputCount() > 3
-                  ? NodeProperties::GetValueInput(node, 3)
-                  : jsgraph()->UndefinedConstant();
+  __ InitializeEffectControl(node);
 
-  receiver = effect = graph()->NewNode(simplified()->CheckString(p.feedback()),
-                                       receiver, effect, control);
+  Node* const receiver = NodeProperties::GetValueInput(node, 1);
+  Node* const start = NodeProperties::GetValueInput(node, 2);
+  Node* const end = node->op()->ValueInputCount() > 3
+                        ? NodeProperties::GetValueInput(node, 3)
+                        : gasm()->UndefinedConstant();
 
-  start = effect = graph()->NewNode(simplified()->CheckSmi(p.feedback()), start,
-                                    effect, control);
+  Node* const receiver_as_string = __ CheckString(receiver, p.feedback());
+  Node* const start_as_smi = __ CheckSmi(start, p.feedback());
 
-  Node* length = graph()->NewNode(simplified()->StringLength(), receiver);
+  Node* const length = __ StringLength(receiver_as_string);
 
-  Node* check = graph()->NewNode(simplified()->ReferenceEqual(), end,
-                                 jsgraph()->UndefinedConstant());
-  Node* branch =
-      graph()->NewNode(common()->Branch(BranchHint::kFalse), check, control);
+  Node* const end_as_smi = __ Select(
+      __ IsUndefined(end), [&]() { return length; },
+      [&]() { return __ CheckSmi(end, p.feedback()); },
+      MachineRepresentation::kTagged);
 
-  Node* if_true = graph()->NewNode(common()->IfTrue(), branch);
-  Node* etrue = effect;
-  Node* vtrue = length;
+  Node* const finalStart =
+      __ NumberMin(__ NumberMax(start_as_smi, __ ZeroConstant()), length);
+  Node* const finalEnd =
+      __ NumberMin(__ NumberMax(end_as_smi, __ ZeroConstant()), length);
+  Node* const from = __ NumberMin(finalStart, finalEnd);
+  Node* const to = __ NumberMax(finalStart, finalEnd);
 
-  Node* if_false = graph()->NewNode(common()->IfFalse(), branch);
-  Node* efalse = effect;
-  Node* vfalse = efalse = graph()->NewNode(simplified()->CheckSmi(p.feedback()),
-                                           end, efalse, if_false);
+  Node* const value = __ StringSubstring(receiver_as_string, from, to);
 
-  control = graph()->NewNode(common()->Merge(2), if_true, if_false);
-  effect = graph()->NewNode(common()->EffectPhi(2), etrue, efalse, control);
-  end = graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
-                         vtrue, vfalse, control);
-  Node* finalStart =
-      graph()->NewNode(simplified()->NumberMin(),
-                       graph()->NewNode(simplified()->NumberMax(), start,
-                                        jsgraph()->ZeroConstant()),
-                       length);
-  Node* finalEnd =
-      graph()->NewNode(simplified()->NumberMin(),
-                       graph()->NewNode(simplified()->NumberMax(), end,
-                                        jsgraph()->ZeroConstant()),
-                       length);
-
-  Node* from =
-      graph()->NewNode(simplified()->NumberMin(), finalStart, finalEnd);
-  Node* to = graph()->NewNode(simplified()->NumberMax(), finalStart, finalEnd);
-
-  Node* value = effect = graph()->NewNode(simplified()->StringSubstring(),
-                                          receiver, from, to, effect, control);
-  ReplaceWithValue(node, value, effect, control);
+  ReplaceWithValue(node, value, __ effect(), __ control());
   return Replace(value);
 }
 
@@ -7237,6 +7209,8 @@ JSOperatorBuilder* JSCallReducer::javascript() const {
 SimplifiedOperatorBuilder* JSCallReducer::simplified() const {
   return jsgraph()->simplified();
 }
+
+#undef __
 
 }  // namespace compiler
 }  // namespace internal
