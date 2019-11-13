@@ -47,6 +47,11 @@ inline Operand GetStackSlot(uint32_t index) {
   return Operand(rbp, -kFirstStackSlotOffset - offset);
 }
 
+inline Operand GetStackSlotByOffset(uint32_t offset, ValueType type) {
+  uint32_t size_type = ValueTypes::ElementSizeInBytes(type);
+  return Operand(rbp, -kConstantStackSpace - offset - size_type);
+}
+
 // TODO(clemensb): Make this a constexpr variable once Operand is constexpr.
 inline Operand GetInstanceOperand() { return Operand(rbp, -16); }
 
@@ -345,9 +350,9 @@ void LiftoffAssembler::LoadCallerFrameSlot(LiftoffRegister dst,
 void LiftoffAssembler::MoveStackValue(uint32_t dst_index, uint32_t src_index,
                                       ValueType type, uint32_t dst_offset,
                                       uint32_t src_offset) {
-  DCHECK_NE(dst_index, src_index);
-  Operand src = liftoff::GetStackSlot(src_index);
-  Operand dst = liftoff::GetStackSlot(dst_index);
+  DCHECK_NE(dst_offset, src_offset);
+  Operand dst = liftoff::GetStackSlotByOffset(dst_offset, type);
+  Operand src = liftoff::GetStackSlotByOffset(src_offset, type);
   if (ValueTypes::ElementSizeLog2Of(type) == 2) {
     movl(kScratchRegister, src);
     movl(dst, kScratchRegister);
@@ -382,7 +387,7 @@ void LiftoffAssembler::Move(DoubleRegister dst, DoubleRegister src,
 void LiftoffAssembler::Spill(uint32_t index, LiftoffRegister reg,
                              ValueType type, uint32_t offset) {
   RecordUsedSpillSlot(index);
-  Operand dst = liftoff::GetStackSlot(index);
+  Operand dst = liftoff::GetStackSlotByOffset(offset, type);
   switch (type) {
     case kWasmI32:
       movl(dst, reg.gp());
@@ -403,7 +408,7 @@ void LiftoffAssembler::Spill(uint32_t index, LiftoffRegister reg,
 
 void LiftoffAssembler::Spill(uint32_t index, WasmValue value, uint32_t offset) {
   RecordUsedSpillSlot(index);
-  Operand dst = liftoff::GetStackSlot(index);
+  Operand dst = liftoff::GetStackSlotByOffset(offset, value.type());
   switch (value.type()) {
     case kWasmI32:
       movl(dst, Immediate(value.to_i32()));
@@ -430,7 +435,7 @@ void LiftoffAssembler::Spill(uint32_t index, WasmValue value, uint32_t offset) {
 
 void LiftoffAssembler::Fill(LiftoffRegister reg, uint32_t index, ValueType type,
                             uint32_t offset) {
-  Operand src = liftoff::GetStackSlot(index);
+  Operand src = liftoff::GetStackSlotByOffset(offset, type);
   switch (type) {
     case kWasmI32:
       movl(reg.gp(), src);
@@ -1679,14 +1684,15 @@ void LiftoffStackSlots::Construct() {
         if (src.type() == kWasmI32) {
           // Load i32 values to a register first to ensure they are zero
           // extended.
-          asm_->movl(kScratchRegister, liftoff::GetStackSlot(slot.src_index_));
+          asm_->movl(kScratchRegister,
+                     liftoff::GetStackSlotByOffset(src.offset(), src.type()));
           asm_->pushq(kScratchRegister);
         } else {
           // For all other types, just push the whole (8-byte) stack slot.
           // This is also ok for f32 values (even though we copy 4 uninitialized
           // bytes), because f32 and f64 values are clearly distinguished in
           // Turbofan, so the uninitialized bytes are never accessed.
-          asm_->pushq(liftoff::GetStackSlot(slot.src_index_));
+          asm_->pushq(liftoff::GetStackSlotByOffset(src.offset(), src.type()));
         }
         break;
       case LiftoffAssembler::VarState::kRegister:
