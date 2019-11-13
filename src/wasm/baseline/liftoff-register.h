@@ -293,19 +293,15 @@ class LiftoffRegList {
   inline Iterator begin() const;
   inline Iterator end() const;
 
-  static LiftoffRegList FromBits(storage_t bits) {
+  static constexpr LiftoffRegList FromBits(storage_t bits) {
+#if V8_HAS_CXX14_CONSTEXPR
     DCHECK_EQ(bits, bits & (kGpMask | kFpMask));
-    return LiftoffRegList(bits);
-  }
-
-  template <storage_t bits>
-  static constexpr LiftoffRegList FromBits() {
-    static_assert(bits == (bits & (kGpMask | kFpMask)), "illegal reg list");
+#endif
     return LiftoffRegList(bits);
   }
 
   template <typename... Regs>
-  static LiftoffRegList ForRegs(Regs... regs) {
+  static constexpr LiftoffRegList ForRegs(Regs... regs) {
     LiftoffRegList list;
     for (LiftoffRegister reg : {LiftoffRegister(regs)...}) list.set(reg);
     return list;
@@ -320,9 +316,9 @@ class LiftoffRegList {
 ASSERT_TRIVIALLY_COPYABLE(LiftoffRegList);
 
 static constexpr LiftoffRegList kGpCacheRegList =
-    LiftoffRegList::FromBits<LiftoffRegList::kGpMask>();
+    LiftoffRegList::FromBits(LiftoffRegList::kGpMask);
 static constexpr LiftoffRegList kFpCacheRegList =
-    LiftoffRegList::FromBits<LiftoffRegList::kFpMask>();
+    LiftoffRegList::FromBits(LiftoffRegList::kFpMask);
 
 class LiftoffRegList::Iterator {
  public:
