@@ -27,6 +27,7 @@ class CommonOperatorBuilder;
 class CompilationDependencies;
 struct FeedbackSource;
 struct FieldAccess;
+class GraphAssembler;
 class JSGraph;
 class JSHeapBroker;
 class JSOperatorBuilder;
@@ -43,10 +44,12 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
   using Flags = base::Flags<Flag>;
 
   JSCallReducer(Editor* editor, JSGraph* jsgraph, JSHeapBroker* broker,
-                Flags flags, CompilationDependencies* dependencies)
+                GraphAssembler* gasm, Flags flags,
+                CompilationDependencies* dependencies)
       : AdvancedReducer(editor),
         jsgraph_(jsgraph),
         broker_(broker),
+        gasm_(gasm),
         flags_(flags),
         dependencies_(dependencies) {}
 
@@ -250,6 +253,7 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
   Graph* graph() const;
   JSGraph* jsgraph() const { return jsgraph_; }
   JSHeapBroker* broker() const { return broker_; }
+  GraphAssembler* gasm() const { return gasm_; }
   Isolate* isolate() const;
   Factory* factory() const;
   NativeContextRef native_context() const;
@@ -261,6 +265,7 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
 
   JSGraph* const jsgraph_;
   JSHeapBroker* const broker_;
+  GraphAssembler* const gasm_;
   Flags const flags_;
   CompilationDependencies* const dependencies_;
   std::set<Node*> waitlist_;

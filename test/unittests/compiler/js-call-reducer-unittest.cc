@@ -7,6 +7,7 @@
 #include "src/codegen/tick-counter.h"
 #include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/feedback-source.h"
+#include "src/compiler/graph-assembler.h"
 #include "src/compiler/js-call-reducer.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/simplified-operator.h"
@@ -37,7 +38,8 @@ class JSCallReducerTest : public TypedGraphTest {
     // TODO(titzer): mock the GraphReducer here for better unit testing.
     GraphReducer graph_reducer(zone(), graph(), tick_counter());
 
-    JSCallReducer reducer(&graph_reducer, &jsgraph, broker(),
+    GraphAssembler graph_assembler(&jsgraph, zone());
+    JSCallReducer reducer(&graph_reducer, &jsgraph, broker(), &graph_assembler,
                           JSCallReducer::kNoFlags, &deps_);
     return reducer.Reduce(node);
   }
