@@ -13,7 +13,6 @@ namespace proxy {
       proxy: JSProxy, name: PropertyKey, languageMode: LanguageMode): JSAny {
     const kTrapName: constexpr string = 'deleteProperty';
     // Handle deeply nested proxy.
-    PerformStackCheck();
     // 1. Assert: IsPropertyKey(P) is true.
     assert(TaggedIsNotSmi(name));
     assert(IsName(name));

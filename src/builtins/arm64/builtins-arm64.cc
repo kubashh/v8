@@ -65,6 +65,17 @@ static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
 
 namespace {
 
+void LoadStackLimit(MacroAssembler* masm, Register destination) {
+  DCHECK(masm->root_array_available());
+  Isolate* isolate = masm->isolate();
+  ExternalReference limit = ExternalReference::address_of_jslimit(isolate);
+  DCHECK(TurboAssembler::IsAddressableThroughRootRegister(isolate, limit));
+
+  intptr_t offset =
+      TurboAssembler::RootRegisterOffsetForExternalReference(isolate, limit);
+  __ Ldr(destination, MemOperand(kRootRegister, offset));
+}
+
 void LoadRealStackLimit(MacroAssembler* masm, Register destination) {
   DCHECK(masm->root_array_available());
   Isolate* isolate = masm->isolate();
@@ -1247,6 +1258,13 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ Str(x3, MemOperand(fp, x10, LSL, kSystemPointerSizeLog2));
   __ Bind(&no_incoming_new_target_or_generator_register);
 
+  // Perform interrupt stack check
+  Label stack_check_interrupt;
+  {
+    LoadStackLimit(masm, x10);
+    __ CompareAndBranch(sp, x10, lo, &stack_check_interrupt);
+  }
+
   // The accumulator is already loaded with undefined.
 
   // Load the dispatch table into a register and dispatch to the bytecode
@@ -1304,10 +1322,12 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
 
   __ bind(&compile_lazy);
   GenerateTailCallToReturnedCode(masm, Runtime::kCompileLazy);
-  __ Unreachable();  // Should not return.
 
   __ bind(&stack_overflow);
   __ CallRuntime(Runtime::kThrowStackOverflow);
+
+  __ bind(&stack_check_interrupt);
+  __ CallRuntime(Runtime::kStackGuard);
   __ Unreachable();  // Should not return.
 }
 

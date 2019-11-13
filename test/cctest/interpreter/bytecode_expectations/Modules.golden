@@ -13,9 +13,8 @@ snippet: "
 "
 frame size: 5
 parameter count: 2
-bytecode array length: 62
+bytecode array length: 61
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(LdaConstant), U8(1),
                 B(Star), R(3),
@@ -54,9 +53,8 @@ snippet: "
 "
 frame size: 5
 parameter count: 2
-bytecode array length: 62
+bytecode array length: 61
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(LdaConstant), U8(1),
                 B(Star), R(3),
@@ -97,9 +95,8 @@ snippet: "
 "
 frame size: 6
 parameter count: 2
-bytecode array length: 92
+bytecode array length: 91
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(LdaConstant), U8(1),
                 B(Star), R(4),
@@ -154,9 +151,8 @@ snippet: "
 "
 frame size: 6
 parameter count: 2
-bytecode array length: 90
+bytecode array length: 89
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(LdaConstant), U8(1),
                 B(Star), R(4),
@@ -209,9 +205,8 @@ snippet: "
 "
 frame size: 6
 parameter count: 2
-bytecode array length: 96
+bytecode array length: 95
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(LdaConstant), U8(1),
                 B(Star), R(4),
@@ -267,9 +262,8 @@ snippet: "
 "
 frame size: 6
 parameter count: 2
-bytecode array length: 100
+bytecode array length: 99
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(LdaConstant), U8(1),
                 B(Star), R(4),
@@ -323,9 +317,8 @@ snippet: "
 "
 frame size: 5
 parameter count: 2
-bytecode array length: 75
+bytecode array length: 74
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(LdaConstant), U8(1),
                 B(Star), R(3),
@@ -370,9 +363,8 @@ snippet: "
 "
 frame size: 7
 parameter count: 2
-bytecode array length: 96
+bytecode array length: 95
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(LdaConstant), U8(1),
                 B(Star), R(3),
@@ -427,9 +419,8 @@ snippet: "
 "
 frame size: 5
 parameter count: 2
-bytecode array length: 62
+bytecode array length: 61
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(LdaConstant), U8(1),
                 B(Star), R(3),
@@ -468,9 +459,8 @@ snippet: "
 "
 frame size: 5
 parameter count: 2
-bytecode array length: 62
+bytecode array length: 61
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(LdaConstant), U8(1),
                 B(Star), R(3),
@@ -510,9 +500,8 @@ snippet: "
 "
 frame size: 8
 parameter count: 2
-bytecode array length: 89
+bytecode array length: 88
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(LdaConstant), U8(1),
                 B(Star), R(4),

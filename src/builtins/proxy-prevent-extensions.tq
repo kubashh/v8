@@ -11,7 +11,6 @@ namespace proxy {
   transitioning builtin
   ProxyPreventExtensions(implicit context:
                              Context)(proxy: JSProxy, doThrow: Boolean): JSAny {
-    PerformStackCheck();
     const kTrapName: constexpr string = 'preventExtensions';
     try {
       // 1. Let handler be O.[[ProxyHandler]].

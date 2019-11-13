@@ -1033,6 +1033,14 @@ void BytecodeGraphBuilder::CreateGraph() {
                   graph()->start());
   set_environment(&env);
 
+  // set_visited_first_stack_check();
+  // if (!skip_first_stack_check()) {
+  //   PrepareEagerCheckpoint();
+  //   Node* node =
+  //   NewNode(javascript()->StackCheck(StackCheckKind::kJSFunctionEntry));
+  //   environment()->RecordAfterState(node, Environment::kAttachFrameState);
+  // }
+
   VisitBytecodes();
 
   // Finish the basic structure of the graph.
@@ -1303,6 +1311,18 @@ void BytecodeGraphBuilder::VisitBytecodes() {
     // bytecode iteration below.
     AdvanceToOsrEntryAndPeelLoops();
   }
+
+  // TODO(solanes): StackCheck has to happen after OSR
+  // TODO(solanes): no crash here but we seem to be adding an extra StackCheck.
+  // We are doing it way before it's needed
+  VisitStackCheck();
+
+  // if (!skip_first_stack_check()) {
+  //   PrepareEagerCheckpoint();
+  //   Node* node =
+  //   NewNode(javascript()->StackCheck(StackCheckKind::kJSFunctionEntry));
+  //   environment()->RecordAfterState(node, Environment::kAttachFrameState);
+  // }
 
   bool has_one_shot_bytecode = false;
   for (; !bytecode_iterator().done(); bytecode_iterator().Advance()) {

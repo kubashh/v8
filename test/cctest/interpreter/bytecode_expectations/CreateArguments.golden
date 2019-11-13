@@ -13,9 +13,8 @@ snippet: "
 "
 frame size: 1
 parameter count: 1
-bytecode array length: 5
+bytecode array length: 4
 bytecodes: [
-  /*   10 E> */ B(StackCheck),
                 B(CreateMappedArguments),
                 B(Star), R(0),
   /*   32 S> */ B(Return),
@@ -32,9 +31,8 @@ snippet: "
 "
 frame size: 1
 parameter count: 1
-bytecode array length: 9
+bytecode array length: 8
 bytecodes: [
-  /*   10 E> */ B(StackCheck),
                 B(CreateMappedArguments),
                 B(Star), R(0),
   /*   15 S> */ B(LdaZero),
@@ -53,9 +51,8 @@ snippet: "
 "
 frame size: 1
 parameter count: 1
-bytecode array length: 5
+bytecode array length: 4
 bytecodes: [
-  /*   10 E> */ B(StackCheck),
                 B(CreateUnmappedArguments),
                 B(Star), R(0),
   /*   46 S> */ B(Return),
@@ -72,9 +69,8 @@ snippet: "
 "
 frame size: 2
 parameter count: 2
-bytecode array length: 18
+bytecode array length: 17
 bytecodes: [
-  /*   10 E> */ B(StackCheck),
                 B(CreateFunctionContext), U8(0), U8(1),
                 B(PushContext), R(1),
                 B(Ldar), R(arg0),
@@ -98,9 +94,8 @@ snippet: "
 "
 frame size: 2
 parameter count: 4
-bytecode array length: 22
+bytecode array length: 21
 bytecodes: [
-  /*   10 E> */ B(StackCheck),
                 B(CreateFunctionContext), U8(0), U8(3),
                 B(PushContext), R(1),
                 B(Ldar), R(arg0),
@@ -126,9 +121,8 @@ snippet: "
 "
 frame size: 1
 parameter count: 4
-bytecode array length: 5
+bytecode array length: 4
 bytecodes: [
-  /*   10 E> */ B(StackCheck),
                 B(CreateUnmappedArguments),
                 B(Star), R(0),
   /*   53 S> */ B(Return),

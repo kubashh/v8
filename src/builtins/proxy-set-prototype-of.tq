@@ -11,7 +11,6 @@ namespace proxy {
   transitioning builtin
   ProxySetPrototypeOf(implicit context: Context)(
       proxy: JSProxy, proto: Null|JSReceiver, doThrow: Boolean): JSAny {
-    PerformStackCheck();
     const kTrapName: constexpr string = 'setPrototypeOf';
     try {
       // 1. Assert: Either Type(V) is Object or Type(V) is Null.

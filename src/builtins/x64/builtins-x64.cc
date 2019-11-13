@@ -65,6 +65,18 @@ static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
 
 namespace {
 
+Operand StackLimitAsOperand(MacroAssembler* masm) {
+  DCHECK(masm->root_array_available());
+  Isolate* isolate = masm->isolate();
+  ExternalReference limit = ExternalReference::address_of_jslimit(isolate);
+  DCHECK(TurboAssembler::IsAddressableThroughRootRegister(isolate, limit));
+
+  intptr_t offset =
+      TurboAssembler::RootRegisterOffsetForExternalReference(isolate, limit);
+  CHECK(is_int32(offset));
+  return Operand(kRootRegister, static_cast<int32_t>(offset));
+}
+
 Operand RealStackLimitAsOperand(MacroAssembler* masm) {
   DCHECK(masm->root_array_available());
   Isolate* isolate = masm->isolate();
@@ -1147,6 +1159,11 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
     __ j(greater_equal, &loop_header, Label::kNear);
   }
 
+  // Perform interrupt stack check
+  Label stack_check_interrupt;
+  __ cmpq(rsp, StackLimitAsOperand(masm));
+  __ j(below, &stack_check_interrupt);
+
   // If the bytecode array has a valid incoming new target or generator object
   // register, initialize it with incoming value which was passed in rdx.
   Label no_incoming_new_target_or_generator_register;
@@ -1220,6 +1237,9 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
 
   __ bind(&stack_overflow);
   __ CallRuntime(Runtime::kThrowStackOverflow);
+
+  __ bind(&stack_check_interrupt);
+  __ CallRuntime(Runtime::kStackGuard);
   __ int3();  // Should not return.
 }
 

@@ -15,7 +15,6 @@ namespace proxy {
   ProxyGetProperty(implicit context: Context)(
       proxy: JSProxy, name: PropertyKey, receiverValue: JSAny,
       onNonExistent: Smi): JSAny {
-    PerformStackCheck();
     // 1. Assert: IsPropertyKey(P) is true.
     assert(TaggedIsNotSmi(name));
     assert(IsName(name));

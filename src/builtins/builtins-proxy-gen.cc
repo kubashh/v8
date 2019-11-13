@@ -146,7 +146,7 @@ TF_BUILTIN(CallProxy, ProxiesCodeStubAssembler) {
 
   CSA_ASSERT(this, IsCallable(proxy));
 
-  PerformStackCheck(context);
+  // PerformStackCheck(context);
 
   Label throw_proxy_handler_revoked(this, Label::kDeferred),
       trap_undefined(this);
