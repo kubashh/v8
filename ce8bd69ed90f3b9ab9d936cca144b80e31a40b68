@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6badf8bb_376f4ca4",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-13T12:49:13Z",
+      "side": 1,
+      "message": "Can we use \"target-\u003eMakeStack()\" here?",
+      "revId": "ce8bd69ed90f3b9ab9d936cca144b80e31a40b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34dba9ac_54e526fd",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-13T12:49:13Z",
+      "side": 1,
+      "message": "Similarly, we could introduce a \"MakeReg\" method. Would make it a bit more obvious what is happening here.",
+      "revId": "ce8bd69ed90f3b9ab9d936cca144b80e31a40b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03f4a529_e067ab63",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-13T12:49:13Z",
+      "side": 1,
+      "message": "This could also use \"MakeReg\" if we add this method.",
+      "revId": "ce8bd69ed90f3b9ab9d936cca144b80e31a40b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
