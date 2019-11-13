@@ -3,6 +3,66 @@
 // LICENSE file.
 
 namespace math {
+
+  extern transitioning builtin
+  NonNumberToNumber(implicit context: Context)(HeapObject): Number;
+
+  transitioning macro ReduceToSmiOrFloat64(implicit context: Context)(x: JSAny):
+      never
+      labels SmiResult(Smi), Float64Result(float64) {
+    let x1: JSAny = x;
+    while (true) {
+      typeswitch (x1) {
+        case (s: Smi): {
+          goto SmiResult(s);
+        }
+        case (h: HeapNumber): {
+          goto Float64Result(Convert<float64>(h));
+        }
+        case (a: JSAnyNotNumber): {
+          x1 = NonNumberToNumber(a);
+        }
+      }
+    }
+    VerifiedUnreachable();
+  }
+
+  // ES6 #sec-math.abs
+  extern macro IsIntPtrAbsWithOverflowSupported(): constexpr bool;
+  extern macro TrySmiSub(Smi, Smi): Smi labels Overflow;
+  extern macro Float64Abs(float64): float64;
+  extern macro EasyIntPtrAbsWithOverflow(intptr): intptr labels Overflow;
+  const kOverflowValue: constexpr int32 generates '0.0 - kSmiMinValue';
+
+  transitioning javascript builtin
+  MathAbs(js-implicit context: Context)(x: JSAny): Number {
+    try {
+      ReduceToSmiOrFloat64(x) otherwise SmiResult, Float64Result;
+    }
+    label SmiResult(s: Smi) {
+      try {
+        if constexpr (IsIntPtrAbsWithOverflowSupported()) {
+          const result: intptr = EasyIntPtrAbsWithOverflow(Convert<intptr>(s))
+              otherwise SmiOverflow;
+          return Convert<Smi>(result);
+        } else {
+          if (0 <= s) {
+            return s;
+          } else {
+            const result: Smi = TrySmiSub(0, s) otherwise SmiOverflow;
+            return result;
+          }
+        }
+      }
+      label SmiOverflow {
+        return NumberConstant(kOverflowValue);
+      }
+    }
+    label Float64Result(f: float64) {
+      return Convert<Number>(Float64Abs(Convert<float64>(f)));
+    }
+  }
+
   // ES6 #sec-math.acos
   extern macro Float64Acos(float64): float64;
 
@@ -140,6 +200,35 @@ namespace math {
     return Convert<Number>(x64);
   }
 
+  // ES6 #sec-math.imul
+  transitioning javascript builtin
+  MathImul(js-implicit context: Context)(x: JSAny, y: JSAny): Number {
+    const xNum = ToNumber_Inline(context, x);
+
+    let xValue: int32;
+    typeswitch (xNum) {
+      case (s: Smi): {
+        xValue = Convert<int32>(s);
+      }
+      case (h: HeapNumber): {
+        xValue = TruncateHeapNumberValueToWord32(h);
+      }
+    }
+
+    const yNum = ToNumber_Inline(context, y);
+
+    let yValue: int32;
+    typeswitch (yNum) {
+      case (s: Smi): {
+        yValue = Convert<int32>(s);
+      }
+      case (h: HeapNumber): {
+        yValue = TruncateHeapNumberValueToWord32(h);
+      }
+    }
+    return Convert<Number>(xValue * yValue);
+  }
+
   // ES6 #sec-math.log
   extern macro Float64Log(float64): float64;
 
@@ -235,8 +324,6 @@ namespace math {
     const value = Convert<float64>(ToNumber_Inline(context, x));
     return Convert<Number>(Float64Tanh(value));
   }
-
-  extern macro Float64Abs(float64): float64;
 
   // ES6 #sec-math.hypot
   transitioning javascript builtin
