@@ -155,7 +155,7 @@ class CPURegister : public RegisterBase<CPURegister, kRegAfterLast> {
     return Aliases(other) && (reg_size_ == other.reg_size_);
   }
   constexpr bool Aliases(const CPURegister& other) const {
-    return (reg_code_ == other.reg_code_) && (reg_type_ == other.reg_type_);
+    return (code() == other.code()) && (reg_type_ == other.reg_type_);
   }
 
   constexpr bool operator==(const CPURegister& other) const {
