@@ -1357,6 +1357,12 @@ void InstructionSelector::VisitChangeUint32ToUint64(Node* node) {
        g.TempImmediate(0), g.TempImmediate(32));
 }
 
+void InstructionSelector::VisitChangeTaggedToCompressed(Node* node) {
+  // The top 32 bits in the 64-bit register will be undefined, and
+  // must not be used by a dependent node.
+  EmitIdentity(node);
+}
+
 void InstructionSelector::VisitTruncateInt64ToInt32(Node* node) {
   Mips64OperandGenerator g(this);
   Node* value = node->InputAt(0);
