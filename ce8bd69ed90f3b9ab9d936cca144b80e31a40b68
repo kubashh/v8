@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "66f8630f_3d905a8b",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2019-11-13T18:42:27Z",
+      "side": 1,
+      "message": "Just to clarify, the `VarState(source-\u003etype(), source-\u003eoffset())` constructor sets the loc_ to stack, is your suggestion to add a call to \"target-\u003eMakeStack()\" after this line to make the intent here more obvious?",
+      "parentUuid": "6badf8bb_376f4ca4",
+      "revId": "ce8bd69ed90f3b9ab9d936cca144b80e31a40b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34dba9ac_54e526fd",
         "filename": "src/wasm/baseline/liftoff-assembler.cc",
         "patchSetId": 1
