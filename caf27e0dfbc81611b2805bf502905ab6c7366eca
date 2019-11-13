@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bb6c64b_3d66917c",
+        "filename": "src/compiler/checkpoint-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-11-13T15:05:46Z",
+      "side": 1,
+      "message": "This work around has quite a few subleties, as other places in TurboFan might also care about the precise frame state.\n\nI wonder if it would be better to instead have the Deoptimizer also deoptimize any existing optimized version of an inlined function for eager deopts? That way we ensure that we learn something.\n\nActually I\u0027m surprised that the optimized version for the inlined function doesn\u0027t deopt. That also sounds fishy.",
+      "revId": "caf27e0dfbc81611b2805bf502905ab6c7366eca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
