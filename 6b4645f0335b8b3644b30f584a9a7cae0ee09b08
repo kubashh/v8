@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "644f4433_a126461a",
+        "filename": "test/mjsunit/wasm/exceptions-simd.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-14T09:57:26Z",
+      "side": 1,
+      "message": "This is just temporary, until https://crbug.com/v8/9973 is fixed, right? Can we mention this here, and maybe also link that bug in the CL description?",
+      "revId": "6b4645f0335b8b3644b30f584a9a7cae0ee09b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
