@@ -24,6 +24,8 @@
 #include "src/wasm/wasm-objects-inl.h"
 #include "src/zone/accounting-allocator.h"
 
+#include "src/wasm/gdb-server/gdb-server.h"
+
 namespace v8 {
 namespace internal {
 namespace wasm {
@@ -184,12 +186,20 @@ class InterpreterHandle {
     thread->InitFrame(&module()->functions[func_index],
                       argument_values.begin());
     bool finished = false;
+#if V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+    gdb_server::GdbServer* gdb_server = isolate_->wasm_engine()->gdb_server();
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
     while (!finished) {
       // TODO(clemensb): Add occasional StackChecks.
       WasmInterpreter::State state = ContinueExecution(thread);
       switch (state) {
         case WasmInterpreter::State::PAUSED:
           NotifyDebugEventListeners(thread);
+#if V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+          if (gdb_server) {
+            gdb_server->onPaused(thread->GetCallStack());
+          }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
           break;
         case WasmInterpreter::State::FINISHED:
           // Perfect, just break the switch and exit the loop.
@@ -420,6 +430,27 @@ class InterpreterHandle {
     return local_scope_object;
   }
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
+  bool GetWasmLocal(uint32_t frame_index, uint32_t index,
+                    WasmValue* wasm_value) {
+    WasmInterpreter::Thread* thread = interpreter()->GetThread(0);
+    int frames_count = thread->GetFrameCount();
+    if (static_cast<int>(frame_index) >= frames_count) {
+      return false;
+    }
+    WasmInterpreter::FramePtr frame =
+        thread->GetFrame(frames_count - 1 - frame_index);
+    uint32_t num_locals = frame->GetLocalCount();
+    if (num_locals > index) {
+      *wasm_value = frame->GetLocalValue(index);
+      return true;
+    }
+    return false;
+  }
+
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
  private:
   DISALLOW_COPY_AND_ASSIGN(InterpreterHandle);
 };
@@ -552,7 +583,6 @@ void WasmDebugInfo::ClearBreakpoint(Handle<WasmDebugInfo> debug_info,
   handle->interpreter()->SetBreakpoint(func, offset, false);
 }
 
-// static
 void WasmDebugInfo::RedirectToInterpreter(Handle<WasmDebugInfo> debug_info,
                                           Vector<int> func_indexes) {
   Isolate* isolate = debug_info->GetIsolate();
@@ -658,6 +688,16 @@ Handle<Code> WasmDebugInfo::GetCWasmEntry(Handle<WasmDebugInfo> debug_info,
   }
   return handle(Code::cast(entries->get(index)), isolate);
 }
+
+#if V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+// static
+bool WasmDebugInfo::GetWasmLocal(Handle<WasmDebugInfo> debug_info,
+                                 uint32_t frame_index, uint32_t index,
+                                 wasm::WasmValue* wasm_value) {
+  wasm::InterpreterHandle* interpreter = GetInterpreterHandle(*debug_info);
+  return interpreter->GetWasmLocal(frame_index, index, wasm_value);
+}
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
 namespace {
 
@@ -916,45 +956,52 @@ bool WasmScript::GetPossibleBreakpoints(
     std::vector<v8::debug::BreakLocation>* locations) {
   DisallowHeapAllocation no_gc;
 
-  const wasm::WasmModule* module = native_module->module();
-  const std::vector<wasm::WasmFunction>& functions = module->functions;
-
-  if (start.GetLineNumber() != 0 || start.GetColumnNumber() < 0 ||
+  const std::vector<wasm::WasmFunction>& functions =
+      native_module->module()->functions;
+  if (start.GetLineNumber() < 0 || start.GetColumnNumber() < 0 ||
       (!end.IsEmpty() &&
-       (end.GetLineNumber() != 0 || end.GetColumnNumber() < 0 ||
-        end.GetColumnNumber() < start.GetColumnNumber())))
+       (end.GetLineNumber() < 0 || end.GetColumnNumber() < 0)))
     return false;
 
   // start_func_index, start_offset and end_func_index is inclusive.
   // end_offset is exclusive.
   // start_offset and end_offset are module-relative byte offsets.
-  // We set strict to false because offsets may be between functions.
-  int start_func_index =
-      GetNearestWasmFunction(module, start.GetColumnNumber());
-  if (start_func_index < 0) return false;
-  uint32_t start_offset = start.GetColumnNumber();
-  int end_func_index;
+  uint32_t start_func_index = start.GetLineNumber();
+  if (start_func_index >= functions.size()) return false;
+  int start_func_len = functions[start_func_index].code.length();
+  if (start.GetColumnNumber() > start_func_len) return false;
+  uint32_t start_offset =
+      functions[start_func_index].code.offset() + start.GetColumnNumber();
+  uint32_t end_func_index;
   uint32_t end_offset;
-
   if (end.IsEmpty()) {
     // Default: everything till the end of the Script.
     end_func_index = static_cast<uint32_t>(functions.size() - 1);
     end_offset = functions[end_func_index].code.end_offset();
   } else {
     // If end is specified: Use it and check for valid input.
-    end_offset = end.GetColumnNumber();
-    end_func_index = GetNearestWasmFunction(module, end_offset);
-    DCHECK_GE(end_func_index, start_func_index);
+    end_func_index = static_cast<uint32_t>(end.GetLineNumber());
+
+    // Special case: Stop before the start of the next function. Change to: Stop
+    // at the end of the function before, such that we don't disassemble the
+    // next function also.
+    if (end.GetColumnNumber() == 0 && end_func_index > 0) {
+      --end_func_index;
+      end_offset = functions[end_func_index].code.end_offset();
+    } else {
+      if (end_func_index >= functions.size()) return false;
+      end_offset =
+          functions[end_func_index].code.offset() + end.GetColumnNumber();
+      if (end_offset > functions[end_func_index].code.end_offset())
+        return false;
+    }
   }
 
-  if (start_func_index == end_func_index &&
-      start_offset > functions[end_func_index].code.end_offset())
-    return false;
   AccountingAllocator alloc;
   Zone tmp(&alloc, ZONE_NAME);
   const byte* module_start = native_module->wire_bytes().begin();
 
-  for (int func_idx = start_func_index; func_idx <= end_func_index;
+  for (uint32_t func_idx = start_func_index; func_idx <= end_func_index;
        ++func_idx) {
     const wasm::WasmFunction& func = functions[func_idx];
     if (func.code.length() == 0) continue;
@@ -971,7 +1018,7 @@ bool WasmScript::GetPossibleBreakpoints(
         break;
       }
       if (total_offset < start_offset) continue;
-      locations->emplace_back(0, total_offset, debug::kCommonBreakLocation);
+      locations->emplace_back(func_idx, offset, debug::kCommonBreakLocation);
     }
   }
   return true;

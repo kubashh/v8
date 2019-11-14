@@ -133,6 +133,7 @@ class V8_EXPORT_PRIVATE WasmInterpreter {
 
     // Stack inspection and modification.
     pc_t GetBreakpointPc();
+    std::vector<uint64_t> GetCallStack();
     int GetFrameCount();
     // The InterpretedFrame is only valid as long as the Thread is paused.
     FramePtr GetFrame(int index);
@@ -184,6 +185,9 @@ class V8_EXPORT_PRIVATE WasmInterpreter {
   // previous state of the breakpoint at {pc}.
   bool SetBreakpoint(const WasmFunction* function, pc_t pc, bool enabled);
 
+  // Remove a breakpoint at {pc} in {function}.
+  void ClearBreakpoint(const WasmFunction* function, pc_t pc);
+
   // Gets the current state of the breakpoint at {function}.
   bool GetBreakpoint(const WasmFunction* function, pc_t pc);
 
@@ -210,6 +214,11 @@ class V8_EXPORT_PRIVATE WasmInterpreter {
   // the interpreter, but exposed for testing.
   static ControlTransferMap ComputeControlTransfersForTesting(
       Zone* zone, const WasmModule* module, const byte* start, const byte* end);
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  static void Suspend();
+  static void Resume();
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
  private:
   Zone zone_;

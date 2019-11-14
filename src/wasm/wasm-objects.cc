@@ -231,8 +231,6 @@ Handle<WasmModuleObject> WasmModuleObject::New(
   return module_object;
 }
 
-
-
 namespace {
 
 enum AsmJsOffsetTableEntryLayout {
