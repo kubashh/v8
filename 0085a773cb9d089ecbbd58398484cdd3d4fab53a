@@ -22,6 +22,30 @@
       "revId": "0085a773cb9d089ecbbd58398484cdd3d4fab53a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3146d862_57d40be1",
+        "filename": "src/torque/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-11-14T17:40:59Z",
+      "side": 1,
+      "message": "Got it, thanks!",
+      "parentUuid": "3cca3fb0_44f41770",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 14
+      },
+      "revId": "0085a773cb9d089ecbbd58398484cdd3d4fab53a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
