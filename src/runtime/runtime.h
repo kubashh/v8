@@ -13,6 +13,7 @@
 #include "src/objects/elements-kind.h"
 #include "src/strings/unicode.h"
 #include "src/utils/allocation.h"
+#include "src/utils/bit-field.h"
 #include "src/zone/zone.h"
 
 namespace v8 {

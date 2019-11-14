@@ -6,6 +6,8 @@
 #define V8_STRINGS_CHAR_PREDICATES_INL_H_
 
 #include "src/strings/char-predicates.h"
+#include "src/utils/bounds.h"
+#include "src/utils/utils.h"
 
 namespace v8 {
 namespace internal {

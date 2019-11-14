@@ -34,6 +34,7 @@
 #include "src/api/api-inl.h"
 #include "src/base/platform/platform.h"
 #include "src/numbers/conversions.h"
+#include "src/utils/bit-field.h"
 #include "test/cctest/cctest.h"
 #include "test/cctest/collector.h"
 

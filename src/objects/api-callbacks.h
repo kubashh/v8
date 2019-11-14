@@ -6,6 +6,7 @@
 #define V8_OBJECTS_API_CALLBACKS_H_
 
 #include "src/objects/struct.h"
+#include "src/utils/bit-field.h"
 #include "torque-generated/class-definitions-tq.h"
 
 // Has to be the last include (doesn't have include guards):

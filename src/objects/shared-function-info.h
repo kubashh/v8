@@ -16,6 +16,7 @@
 #include "src/objects/slots.h"
 #include "src/objects/smi.h"
 #include "src/objects/struct.h"
+#include "src/utils/bit-field.h"
 #include "testing/gtest/include/gtest/gtest_prod.h"
 #include "torque-generated/field-offsets-tq.h"
 
