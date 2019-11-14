@@ -13,9 +13,8 @@ snippet: "
 "
 frame size: 1
 parameter count: 2
-bytecode array length: 15
+bytecode array length: 14
 bytecodes: [
-  /*   10 E> */ B(StackCheck),
                 B(CreateFunctionContext), U8(0), U8(1),
                 B(PushContext), R(0),
                 B(Ldar), R(arg0),
@@ -37,9 +36,8 @@ snippet: "
 "
 frame size: 2
 parameter count: 2
-bytecode array length: 19
+bytecode array length: 18
 bytecodes: [
-  /*   10 E> */ B(StackCheck),
                 B(CreateFunctionContext), U8(0), U8(1),
                 B(PushContext), R(1),
                 B(Ldar), R(arg0),
@@ -63,9 +61,8 @@ snippet: "
 "
 frame size: 1
 parameter count: 5
-bytecode array length: 19
+bytecode array length: 18
 bytecodes: [
-  /*   10 E> */ B(StackCheck),
                 B(CreateFunctionContext), U8(0), U8(2),
                 B(PushContext), R(0),
                 B(Ldar), R(arg0),
@@ -89,9 +86,8 @@ snippet: "
 "
 frame size: 1
 parameter count: 1
-bytecode array length: 15
+bytecode array length: 14
 bytecodes: [
-  /*   10 E> */ B(StackCheck),
                 B(CreateFunctionContext), U8(0), U8(1),
                 B(PushContext), R(0),
   /*   26 S> */ B(Ldar), R(this),

@@ -19,9 +19,8 @@ snippet: "
 "
 frame size: 3
 parameter count: 1
-bytecode array length: 28
+bytecode array length: 27
 bytecodes: [
-  /*   44 E> */ B(StackCheck),
                 B(LdaCurrentContextSlot), U8(3),
                 B(Star), R(1),
                 B(Mov), R(this), R(0),
@@ -50,9 +49,8 @@ snippet: "
 "
 frame size: 4
 parameter count: 1
-bytecode array length: 29
+bytecode array length: 28
 bytecodes: [
-  /*   44 E> */ B(StackCheck),
                 B(LdaCurrentContextSlot), U8(3),
                 B(Star), R(1),
                 B(Mov), R(this), R(0),
@@ -82,9 +80,8 @@ snippet: "
 "
 frame size: 4
 parameter count: 1
-bytecode array length: 29
+bytecode array length: 28
 bytecodes: [
-  /*   44 E> */ B(StackCheck),
                 B(LdaCurrentContextSlot), U8(3),
                 B(Star), R(1),
                 B(Mov), R(this), R(0),
