@@ -443,7 +443,10 @@ bool Builtins::CodeObjectIsExecutable(int builtin_index) {
   // that they are builtins at generation time. E.g.
   //   f = Array.of;
   //   f(1, 2, 3);
-  if (Builtins::KindOf(builtin_index) == Builtins::TFJ) return true;
+  if (Builtins::KindOf(builtin_index) == Builtins::TFJ ||
+      Builtins::KindOf(builtin_index) == Builtins::CPP) {
+    return true;
+  }
 
   // There are some other non-TF builtins that also have JS linkage like
   // InterpreterEntryTrampoline which are explicitly allow-listed below.
