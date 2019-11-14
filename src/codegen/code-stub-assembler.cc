@@ -13521,5 +13521,10 @@ void PrototypeCheckAssembler::CheckAndBranch(TNode<HeapObject> prototype,
   }
 }
 
+TNode<IntPtrT> CodeStubAssembler::DecodeScopeInfoHasContextExtension(
+    TNode<IntPtrT> flags) {
+  return Signed(DecodeWord<ScopeInfo::HasContextExtensionSlotField>(flags));
+}
+
 }  // namespace internal
 }  // namespace v8

@@ -1387,7 +1387,9 @@ action("v8_dump_build_config") {
 v8_source_set("v8_snapshot") {
   visibility = [ ":*" ]  # Targets in this file can depend on this.
 
-  deps = [ ":v8_maybe_icu" ]
+  deps = [
+    ":v8_maybe_icu",
+  ]
   public_deps = [
     # This should be public so downstream targets can declare the snapshot
     # output file as their inputs.
@@ -1397,7 +1399,9 @@ v8_source_set("v8_snapshot") {
   # Do not publicize any header to remove build dependency.
   public = []
 
-  sources = [ "src/init/setup-isolate-deserialize.cc" ]
+  sources = [
+    "src/init/setup-isolate-deserialize.cc",
+  ]
   if (emit_builtins_as_inline_asm) {
     deps += [ ":asm_to_inline_asm_default" ]
     sources += [ "$target_gen_dir/embedded.cc" ]
@@ -1436,8 +1440,6 @@ v8_source_set("v8_initializers") {
 
   sources = [
     ### gcmole(all) ###
-    "src/builtins/builtins-arguments-gen.cc",
-    "src/builtins/builtins-arguments-gen.h",
     "src/builtins/builtins-array-gen.cc",
     "src/builtins/builtins-array-gen.h",
     "src/builtins/builtins-async-function-gen.cc",
