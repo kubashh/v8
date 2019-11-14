@@ -19,9 +19,8 @@ snippet: "
 "
 frame size: 5
 parameter count: 1
-bytecode array length: 19
+bytecode array length: 18
 bytecodes: [
-  /*   93 E> */ B(StackCheck),
                 B(CreateRestParameter),
                 B(Star), R(2),
                 B(Mov), R(closure), R(1),
@@ -51,9 +50,8 @@ snippet: "
 "
 frame size: 9
 parameter count: 1
-bytecode array length: 40
+bytecode array length: 39
 bytecodes: [
-  /*  128 E> */ B(StackCheck),
                 B(CreateRestParameter),
                 B(Star), R(3),
                 B(Mov), R(closure), R(1),
@@ -93,9 +91,8 @@ snippet: "
 "
 frame size: 11
 parameter count: 1
-bytecode array length: 112
+bytecode array length: 111
 bytecodes: [
-  /*  128 E> */ B(StackCheck),
                 B(CreateRestParameter),
                 B(Star), R(3),
                 B(Mov), R(closure), R(1),

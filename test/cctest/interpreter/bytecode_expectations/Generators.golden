@@ -13,9 +13,8 @@ snippet: "
 "
 frame size: 3
 parameter count: 1
-bytecode array length: 44
+bytecode array length: 43
 bytecodes: [
-  /*   11 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(Mov), R(closure), R(1),
                 B(Mov), R(this), R(2),
@@ -48,9 +47,8 @@ snippet: "
 "
 frame size: 3
 parameter count: 1
-bytecode array length: 80
+bytecode array length: 79
 bytecodes: [
-  /*   11 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(1),
                 B(Mov), R(this), R(2),
@@ -100,9 +98,8 @@ snippet: "
 "
 frame size: 15
 parameter count: 1
-bytecode array length: 246
+bytecode array length: 245
 bytecodes: [
-  /*   11 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(4),
                 B(Mov), R(this), R(5),
@@ -222,8 +219,8 @@ constant pool: [
   Smi [9],
 ]
 handlers: [
-  [66, 150, 158],
-  [182, 215, 217],
+  [65, 149, 157],
+  [181, 214, 216],
 ]
 
 ---
@@ -234,9 +231,8 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 198
+bytecode array length: 197
 bytecodes: [
-  /*   38 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(1),
                 B(Mov), R(this), R(2),

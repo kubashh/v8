@@ -1304,6 +1304,10 @@ void BytecodeGraphBuilder::VisitBytecodes() {
     AdvanceToOsrEntryAndPeelLoops();
   }
 
+  // TODO(solanes): StackCheck has to happen after OSR
+  // TODO(solanes): copy the code from VisitStackCheck here and simplify it.
+  VisitStackCheck();
+
   bool has_one_shot_bytecode = false;
   for (; !bytecode_iterator().done(); bytecode_iterator().Advance()) {
     if (interpreter::Bytecodes::IsOneShotBytecode(
