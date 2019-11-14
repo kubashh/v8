@@ -268,7 +268,8 @@ void CSAGenerator::EmitInstruction(const CallIntrinsicInstruction& instruction,
 
   out_ << "(";
   PrintCommaSeparatedList(out_, args);
-  if (instruction.intrinsic->ExternalName() == "%Allocate") out_ << ")";
+  if (instruction.intrinsic->ExternalName() == "%Allocate")
+    out_ << ", CodeStubAssembler::kAllowLargeObjectAllocation)";
   if (instruction.intrinsic->ExternalName() == "%GetAllocationBaseSize")
     out_ << "))";
   if (return_type->IsStructType()) {
