@@ -1198,6 +1198,13 @@ class ThreadImpl {
     // If state_ is STOPPED, the current activation must be fully unwound.
     DCHECK_IMPLIES(state_ == WasmInterpreter::STOPPED,
                    current_activation().fp == frames_.size());
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+    if (wait_to_suspend_ && state_ != WasmInterpreter::RUNNING) {
+      wait_to_suspend_ = false;
+    }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
     return state_;
   }
 
@@ -1210,6 +1217,27 @@ class ThreadImpl {
     state_ = WasmInterpreter::STOPPED;
     trap_reason_ = kTrapCount;
     possible_nondeterminism_ = false;
+  }
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  static void Suspend() {
+    // This might be called on any thread
+    wait_to_suspend_ = true;
+  }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
+  std::vector<uint64_t> GetCallStack() {
+    DCHECK(state_ != WasmInterpreter::RUNNING);
+    v8::internal::Script script = instance_object_->module_object().script();
+    uint64_t module_id = script.id();
+
+    std::vector<uint64_t> result;
+    for (int i = static_cast<int>(frames_.size() - 1); i >= 0; i--) {
+      const auto& frame = frames_[i];
+      result.push_back((module_id << 32) |
+                       (frame.pc + frame.code->function->code.offset()));
+    }
+    return result;
   }
 
   int GetFrameCount() {
@@ -1414,6 +1442,10 @@ class ThreadImpl {
   // Store the stack height of each activation (for unwind and frame
   // inspection).
   ZoneVector<Activation> activations_;
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  static bool wait_to_suspend_;
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
   CodeMap* codemap() const { return codemap_; }
   const WasmModule* module() const { return codemap_->module(); }
@@ -2881,6 +2913,13 @@ class ThreadImpl {
     max = 0;                                                          \
   }
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+      if (wait_to_suspend_) {
+        hit_break = true;
+        max = 0;
+      }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
       DCHECK_GT(limit, pc);
       DCHECK_NOT_NULL(code->start);
 
@@ -3959,6 +3998,11 @@ class InterpretedFrameImpl {
   }
 };
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+// static
+bool ThreadImpl::wait_to_suspend_ = false;
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
 namespace {
 
 // Converters between WasmInterpreter::Thread and WasmInterpreter::ThreadImpl.
@@ -4019,6 +4063,9 @@ WasmInterpreter::Thread::RaiseException(Isolate* isolate,
 }
 pc_t WasmInterpreter::Thread::GetBreakpointPc() {
   return ToImpl(this)->GetBreakpointPc();
+}
+std::vector<uint64_t> WasmInterpreter::Thread::GetCallStack() {
+  return ToImpl(this)->GetCallStack();
 }
 int WasmInterpreter::Thread::GetFrameCount() {
   return ToImpl(this)->GetFrameCount();
@@ -4122,6 +4169,11 @@ WasmInterpreter::~WasmInterpreter() {}
 void WasmInterpreter::Run() { internals_->threads_[0].Run(); }
 
 void WasmInterpreter::Pause() { internals_->threads_[0].Pause(); }
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+// static
+void WasmInterpreter::Suspend() { ThreadImpl::Suspend(); }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
 bool WasmInterpreter::SetBreakpoint(const WasmFunction* function, pc_t pc,
                                     bool enabled) {

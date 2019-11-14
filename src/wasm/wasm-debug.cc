@@ -24,6 +24,8 @@
 #include "src/wasm/wasm-objects-inl.h"
 #include "src/zone/accounting-allocator.h"
 
+#include "src/wasm/gdb-server/gdb-server.h"
+
 namespace v8 {
 namespace internal {
 namespace wasm {
@@ -184,12 +186,20 @@ class InterpreterHandle {
     thread->InitFrame(&module()->functions[func_index],
                       argument_values.begin());
     bool finished = false;
+#if V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+    gdb_server::GdbServer* gdb_server = isolate_->wasm_engine()->gdb_server();
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
     while (!finished) {
       // TODO(clemensb): Add occasional StackChecks.
       WasmInterpreter::State state = ContinueExecution(thread);
       switch (state) {
         case WasmInterpreter::State::PAUSED:
           NotifyDebugEventListeners(thread);
+#if V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+          if (gdb_server) {
+            gdb_server->onPaused(thread->GetCallStack());
+          }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
           break;
         case WasmInterpreter::State::FINISHED:
           // Perfect, just break the switch and exit the loop.
@@ -419,6 +429,25 @@ class InterpreterHandle {
     }
     return local_scope_object;
   }
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  bool GetWasmLocal(uint32_t frame_index, uint32_t index,
+                    WasmValue* wasm_value) {
+    WasmInterpreter::Thread* thread = interpreter()->GetThread(0);
+    int frames_count = thread->GetFrameCount();
+    if (static_cast<int>(frame_index) >= frames_count) {
+      return false;
+    }
+    WasmInterpreter::FramePtr frame =
+        thread->GetFrame(frames_count - 1 - frame_index);
+    uint32_t num_locals = frame->GetLocalCount();
+    if (num_locals > index) {
+      *wasm_value = frame->GetLocalValue(index);
+      return true;
+    }
+    return false;
+  }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
  private:
   DISALLOW_COPY_AND_ASSIGN(InterpreterHandle);
@@ -658,6 +687,16 @@ Handle<Code> WasmDebugInfo::GetCWasmEntry(Handle<WasmDebugInfo> debug_info,
   }
   return handle(Code::cast(entries->get(index)), isolate);
 }
+
+#if V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+// static
+bool WasmDebugInfo::GetWasmLocal(Handle<WasmDebugInfo> debug_info,
+                                 uint32_t frame_index, uint32_t index,
+                                 wasm::WasmValue* wasm_value) {
+  wasm::InterpreterHandle* interpreter = GetInterpreterHandle(*debug_info);
+  return interpreter->GetWasmLocal(frame_index, index, wasm_value);
+}
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
 namespace {
 

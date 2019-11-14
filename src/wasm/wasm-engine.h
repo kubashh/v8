@@ -26,6 +26,12 @@ class JSArrayBuffer;
 
 namespace wasm {
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+namespace gdb_server {
+class GdbServer;
+}
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
 class AsyncCompileJob;
 class ErrorThrower;
 struct ModuleWireBytes;
@@ -122,6 +128,10 @@ class V8_EXPORT_PRIVATE WasmEngine {
 
   AccountingAllocator* allocator() { return &allocator_; }
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  gdb_server::GdbServer* gdb_server() { return gdb_server_.get(); }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
   // Compilation statistics for TurboFan compilations.
   CompilationStatistics* GetOrCreateTurboStatistics();
 
@@ -216,6 +226,11 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // engine lifetime decisions during Isolate bootstrapping.
   static std::shared_ptr<WasmEngine> GetWasmEngine();
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  // GDB debugging API
+  void Suspend();
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
  private:
   struct CurrentGCInfo;
   struct IsolateInfo;
@@ -274,6 +289,10 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // If an engine-wide GC is currently running, this pointer stores information
   // about that.
   std::unique_ptr<CurrentGCInfo> current_gc_info_;
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  std::unique_ptr<gdb_server::GdbServer> gdb_server_;
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
   // End of fields protected by {mutex_}.
   //////////////////////////////////////////////////////////////////////////////
