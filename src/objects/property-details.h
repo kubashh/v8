@@ -9,7 +9,7 @@
 #include "src/utils/allocation.h"
 // TODO(bmeurer): Remove once FLAG_modify_field_representation_inplace is gone.
 #include "src/flags/flags.h"
-#include "src/utils/utils.h"
+#include "src/utils/bit-field.h"
 
 namespace v8 {
 namespace internal {

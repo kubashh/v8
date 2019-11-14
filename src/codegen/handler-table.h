@@ -7,7 +7,7 @@
 
 #include "src/common/assert-scope.h"
 #include "src/common/globals.h"
-#include "src/utils/utils.h"
+#include "src/utils/bit-field.h"
 
 namespace v8 {
 namespace internal {
