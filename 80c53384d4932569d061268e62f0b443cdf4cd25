@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8190c597_26c36e8a",
+        "filename": "src/utils/utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-11-14T16:42:09Z",
+      "side": 1,
+      "message": "These should be in bit-fields should they?",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 214,
+        "endChar": 0
+      },
+      "revId": "80c53384d4932569d061268e62f0b443cdf4cd25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
