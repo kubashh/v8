@@ -1392,6 +1392,12 @@ RUNTIME_FUNCTION(Runtime_IsLiftoffFunction) {
   return isolate->heap()->ToBoolean(code && code->is_liftoff());
 }
 
+RUNTIME_FUNCTION(Runtime_WasmSupportsSimd128) {
+  SealHandleScope shs(isolate);
+  DCHECK_EQ(0, args.length());
+  return isolate->heap()->ToBoolean(CpuFeatures::SupportsWasmSimd128());
+}
+
 RUNTIME_FUNCTION(Runtime_CompleteInobjectSlackTracking) {
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
