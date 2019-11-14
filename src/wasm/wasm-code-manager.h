@@ -488,6 +488,7 @@ class V8_EXPORT_PRIVATE NativeModule final {
   UseTrapHandler use_trap_handler() const { return use_trap_handler_; }
   void set_lazy_compile_frozen(bool frozen) { lazy_compile_frozen_ = frozen; }
   bool lazy_compile_frozen() const { return lazy_compile_frozen_; }
+  bool has_wire_bytes() const { return wire_bytes_.use_count() > 0; }
   Vector<const uint8_t> wire_bytes() const { return wire_bytes_->as_vector(); }
   const WasmModule* module() const { return module_.get(); }
   std::shared_ptr<const WasmModule> shared_module() const { return module_; }

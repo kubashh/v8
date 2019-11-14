@@ -90,7 +90,7 @@ function checkStack(stack, expected_lines) {
   assertEquals(initial_interpreted + 9, %WasmNumInterpretedCalls(instance));
 })();
 
-function createTwoInstancesCallingEachOther(inner_throws = false) {
+function createTwoInstancesCallingEachOther(name, inner_throws = false) {
   let builder1 = new WasmModuleBuilder();
 
   let id_imp = builder1.addImport('q', 'id', kSig_i_i);
@@ -102,10 +102,18 @@ function createTwoInstancesCallingEachOther(inner_throws = false) {
                        kExprCallFunction, id_imp
                      ])
                      .exportFunc();
+
   function imp(i) {
     if (inner_throws) throw new Error('i=' + i);
     return i;
   }
+  // Some tests assume that the modules do not initially redirect any function
+  // to the interpreter.
+  // This assumption is broken when we get a cached native module with
+  // already interpreted functions. To force a cache miss, we ensure that the
+  // bytes are different by setting a module name.
+  builder1.setName(name);
+
   let instance1 = builder1.instantiate({q: {id: imp}});
 
   let builder2 = new WasmModuleBuilder();
@@ -120,6 +128,8 @@ function createTwoInstancesCallingEachOther(inner_throws = false) {
                        kExprI32Add
                      ])
                      .exportFunc();
+
+  builder2.setName(name);
 
   let instance2 =
       builder2.instantiate({q: {plus_one: instance1.exports.plus_one}});
@@ -144,7 +154,7 @@ function redirectToInterpreter(
   // Three runs: Break in instance 1, break in instance 2, or both.
   for (let run = 0; run < 3; ++run) {
     print(" - run " + run);
-    let [instance1, instance2] = createTwoInstancesCallingEachOther();
+    let [instance1, instance2] = createTwoInstancesCallingEachOther("m" + run);
 
     let interpreted_before_1 = %WasmNumInterpretedCalls(instance1);
     let interpreted_before_2 = %WasmNumInterpretedCalls(instance2);
@@ -173,7 +183,7 @@ function redirectToInterpreter(
   print("testStackTraceThroughCWasmEntry");
   for (let run = 0; run < 3; ++run) {
     print(" - run " + run);
-    let [instance1, instance2] = createTwoInstancesCallingEachOther(true);
+    let [instance1, instance2] = createTwoInstancesCallingEachOther("m" + run, true);
     redirectToInterpreter(instance1, instance2, run != 1, run != 0);
 
     try {
@@ -184,8 +194,8 @@ function redirectToInterpreter(
       checkStack(stripPath(e.stack), [
         'Error: i=8',                                                // -
         /^    at imp \(file:\d+:29\)$/,                              // -
-        '    at plus_one (wasm-function[1]:0x3b)',                   // -
-        '    at plus_two (wasm-function[1]:0x3e)',                   // -
+        '    at m' + run + '.plus_one (wasm-function[1]:0x3b)',      // -
+        '    at m' + run + '.plus_two (wasm-function[1]:0x3e)',      // -
         /^    at testStackTraceThroughCWasmEntry \(file:\d+:25\)$/,  // -
         /^    at file:\d+:3$/
       ]);

@@ -619,13 +619,30 @@ MaybeHandle<WasmModuleObject> DeserializeNativeModule(
   Handle<Script> script = CreateWasmScript(
       isolate, wire_bytes, module->source_map_url, module->name);
 
-  const bool kIncludeLiftoff = false;
-  size_t code_size_estimate =
-      wasm::WasmCodeManager::EstimateNativeModuleCodeSize(module.get(),
-                                                          kIncludeLiftoff);
-  auto shared_native_module = isolate->wasm_engine()->NewNativeModule(
-      isolate, enabled_features, std::move(module), code_size_estimate);
-  shared_native_module->SetWireBytes(OwnedVector<uint8_t>::Of(wire_bytes_vec));
+  auto shared_native_module =
+      isolate->wasm_engine()->MaybeGetNativeModule(wire_bytes_vec);
+  if (shared_native_module == nullptr) {
+    WasmEngine* wasm_engine = isolate->wasm_engine();
+    const bool kIncludeLiftoff = false;
+    size_t code_size_estimate =
+        wasm::WasmCodeManager::EstimateNativeModuleCodeSize(module.get(),
+                                                            kIncludeLiftoff);
+    shared_native_module = wasm_engine->NewNativeModule(
+        isolate, enabled_features, std::move(module), code_size_estimate);
+    shared_native_module->SetWireBytes(
+        OwnedVector<uint8_t>::Of(wire_bytes_vec));
+    shared_native_module =
+        wasm_engine->MaybeCacheNativeModule(shared_native_module);
+
+    NativeModuleDeserializer deserializer(shared_native_module.get());
+    WasmCodeRefScope wasm_code_ref_scope;
+
+    Reader reader(data + kVersionSize);
+    if (!deserializer.Read(&reader)) return {};
+
+    // Log the code within the generated module for profiling.
+    shared_native_module->LogWasmCodes(isolate);
+  }
 
   Handle<FixedArray> export_wrappers;
   CompileJsToWasmWrappers(isolate, shared_native_module->module(),
@@ -633,16 +650,6 @@ MaybeHandle<WasmModuleObject> DeserializeNativeModule(
 
   Handle<WasmModuleObject> module_object = WasmModuleObject::New(
       isolate, std::move(shared_native_module), script, export_wrappers);
-  NativeModule* native_module = module_object->native_module();
-
-  NativeModuleDeserializer deserializer(native_module);
-  WasmCodeRefScope wasm_code_ref_scope;
-
-  Reader reader(data + kVersionSize);
-  if (!deserializer.Read(&reader)) return {};
-
-  // Log the code within the generated module for profiling.
-  native_module->LogWasmCodes(isolate);
 
   // Finish the Wasm script now and make it public to the debugger.
   isolate->debug()->OnAfterCompile(script);

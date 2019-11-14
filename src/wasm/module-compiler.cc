@@ -1352,6 +1352,7 @@ std::shared_ptr<NativeModule> CompileToNativeModule(
     std::shared_ptr<const WasmModule> module, const ModuleWireBytes& wire_bytes,
     Handle<FixedArray>* export_wrappers_out) {
   const WasmModule* wasm_module = module.get();
+
   TimedHistogramScope wasm_compile_module_time_scope(SELECT_WASM_COUNTER(
       isolate->counters(), wasm_module->origin, wasm_compile, module_time));
 
@@ -1568,6 +1569,35 @@ void AsyncCompileJob::FinishCompile() {
   }
   // We can only update the feature counts once the entire compile is done.
   compilation_state->PublishDetectedFeatures(isolate_);
+
+  ModuleOrigin origin = native_module_->module()->origin;
+  std::shared_ptr<NativeModule> cached_native_module = nullptr;
+  if (origin == kWasmOrigin) {
+    cached_native_module = isolate_->wasm_engine()->MaybeGetNativeModule(
+        native_module_->wire_bytes());
+    if (cached_native_module != nullptr) {
+      // TODO(thibaudm): We compiled the native module for nothing, the cache
+      // already contains an entry for these bytes. Ideally we would delay
+      // streaming compilation as long as the current wire bytes match the
+      // prefix of a cache entry.
+      native_module_ = cached_native_module;
+      const WasmModule* module = native_module_->module();
+      const bool uses_liftoff = FLAG_liftoff;
+      size_t size_estimate =
+          wasm::WasmCodeManager::EstimateNativeModuleCodeSize(module,
+                                                              uses_liftoff);
+      size_estimate +=
+          wasm::WasmCodeManager::EstimateNativeModuleMetaDataSize(module);
+      Handle<Managed<wasm::NativeModule>> managed_native_module =
+          Managed<wasm::NativeModule>::FromSharedPtr(isolate_, size_estimate,
+                                                     native_module_);
+      module_object_->set_managed_native_module(*managed_native_module);
+    }
+  }
+  if (cached_native_module == nullptr) {
+    native_module_ =
+        isolate_->wasm_engine()->MaybeCacheNativeModule(native_module_);
+  }
 
   FinishModule();
 }
@@ -2214,9 +2244,7 @@ bool AsyncStreamingProcessor::Deserialize(Vector<const uint8_t> module_bytes,
   job_->module_object_ =
       job_->isolate_->global_handles()->Create(*result.ToHandleChecked());
   job_->native_module_ = job_->module_object_->shared_native_module();
-  auto owned_wire_bytes = OwnedVector<uint8_t>::Of(wire_bytes);
-  job_->wire_bytes_ = ModuleWireBytes(owned_wire_bytes.as_vector());
-  job_->native_module_->SetWireBytes(std::move(owned_wire_bytes));
+  job_->wire_bytes_ = ModuleWireBytes(job_->native_module_->wire_bytes());
   job_->FinishCompile();
   return true;
 }
