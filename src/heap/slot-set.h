@@ -15,6 +15,7 @@
 #include "src/objects/compressed-slots.h"
 #include "src/objects/slots.h"
 #include "src/utils/allocation.h"
+#include "src/utils/bit-field.h"
 #include "src/utils/utils.h"
 
 namespace v8 {
