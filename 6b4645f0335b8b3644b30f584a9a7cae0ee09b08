@@ -16,6 +16,24 @@
       "revId": "6b4645f0335b8b3644b30f584a9a7cae0ee09b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f5d15f6_c5a9c054",
+        "filename": "test/mjsunit/wasm/exceptions-simd.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-11-14T10:13:15Z",
+      "side": 1,
+      "message": "Done. But I added the TODO to the runtime function in the runtime-test.cc file instead.",
+      "parentUuid": "644f4433_a126461a",
+      "revId": "6b4645f0335b8b3644b30f584a9a7cae0ee09b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
