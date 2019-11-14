@@ -6,7 +6,7 @@
 #define V8_INTERPRETER_BYTECODE_OPERANDS_H_
 
 #include "src/common/globals.h"
-#include "src/utils/utils.h"
+#include "src/utils/bounds.h"
 
 namespace v8 {
 namespace internal {

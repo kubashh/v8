@@ -9,6 +9,7 @@
 #include "src/common/globals.h"
 #include "src/objects/property-details.h"
 #include "src/utils/allocation.h"
+#include "src/utils/bit-field.h"
 
 namespace v8 {
 namespace internal {

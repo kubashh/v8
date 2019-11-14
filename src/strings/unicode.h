@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include "src/common/globals.h"
 #include "src/third_party/utf8-decoder/utf8-decoder.h"
-#include "src/utils/utils.h"
+#include "src/utils/bit-field.h"
 /**
  * \file
  * Definitions and convenience functions for working with unicode.
