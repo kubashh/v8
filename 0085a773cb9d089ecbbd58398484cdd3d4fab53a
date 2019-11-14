@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3cca3fb0_44f41770",
+        "filename": "src/torque/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-11-14T14:52:50Z",
+      "side": 1,
+      "message": "nit: we usually write {type} instead of |type| (even though I personally consider |type| less ugly ;) )",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 14
+      },
+      "revId": "0085a773cb9d089ecbbd58398484cdd3d4fab53a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
