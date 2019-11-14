@@ -10,6 +10,7 @@
 #include "src/objects/internal-index.h"
 #include "src/objects/objects.h"
 #include "src/objects/struct.h"
+#include "src/utils/bit-field.h"
 #include "src/utils/utils.h"
 
 // Has to be the last include (doesn't have include guards):

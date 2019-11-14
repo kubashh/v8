@@ -14,6 +14,7 @@
 #include "src/objects/map.h"
 #include "src/objects/name.h"
 #include "src/objects/type-hints.h"
+#include "src/utils/bit-field.h"
 #include "src/zone/zone-containers.h"
 
 // Has to be the last include (doesn't have include guards):

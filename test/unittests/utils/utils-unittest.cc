@@ -4,6 +4,7 @@
 
 #include <limits>
 
+#include "src/utils/bounds.h"
 #include "src/utils/utils.h"
 #include "testing/gtest-support.h"
 

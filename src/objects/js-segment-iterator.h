@@ -14,6 +14,7 @@
 #include "src/objects/js-segmenter.h"
 #include "src/objects/managed.h"
 #include "src/objects/objects.h"
+#include "src/utils/bit-field.h"
 #include "unicode/uversion.h"
 
 // Has to be the last include (doesn't have include guards):

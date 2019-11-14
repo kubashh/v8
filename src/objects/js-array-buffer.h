@@ -7,6 +7,7 @@
 
 #include "src/objects/backing-store.h"
 #include "src/objects/js-objects.h"
+#include "src/utils/bit-field.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"

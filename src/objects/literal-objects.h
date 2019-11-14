@@ -7,6 +7,7 @@
 
 #include "src/objects/fixed-array.h"
 #include "src/objects/struct.h"
+#include "src/utils/bit-field.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"

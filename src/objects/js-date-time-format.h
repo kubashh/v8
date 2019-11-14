@@ -15,6 +15,7 @@
 #include "src/execution/isolate.h"
 #include "src/objects/intl-objects.h"
 #include "src/objects/managed.h"
+#include "src/utils/bit-field.h"
 #include "torque-generated/field-offsets-tq.h"
 #include "unicode/uversion.h"
 

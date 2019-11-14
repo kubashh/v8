@@ -12,6 +12,7 @@
 #include "src/debug/debug.h"
 #include "src/heap/heap.h"
 #include "src/objects/objects.h"
+#include "src/utils/bit-field.h"
 #include "src/wasm/value-type.h"
 
 // Has to be the last include (doesn't have include guards)
