@@ -8,7 +8,7 @@
 #include "src/base/macros.h"
 #include "src/common/checks.h"
 #include "src/flags/flags.h"
-#include "src/utils/utils.h"
+#include "src/utils/bounds.h"
 
 namespace v8 {
 namespace internal {

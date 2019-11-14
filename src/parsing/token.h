@@ -7,7 +7,8 @@
 
 #include "src/base/logging.h"
 #include "src/common/globals.h"
-#include "src/utils/utils.h"
+#include "src/utils/bit-field.h"
+#include "src/utils/bounds.h"
 
 namespace v8 {
 namespace internal {
