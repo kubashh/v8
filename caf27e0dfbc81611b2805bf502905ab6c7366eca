@@ -16,6 +16,24 @@
       "revId": "caf27e0dfbc81611b2805bf502905ab6c7366eca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00f12ba5_70f5b148",
+        "filename": "src/compiler/checkpoint-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-15T10:41:41Z",
+      "side": 1,
+      "message": "I don\u0027t understand the first sentence about precise frame state, could you clarify?\n\nYes, deoptimizing any code objects for the inlined function (and surrounding inlinees) is an alternative solution and I will think more about it. It\u0027s definitely not a simple change.\n\nWhy are you surprised that (without my changes) the optimized version of the inlinee doesn\u0027t deopt? That\u0027s a direct consequence of eliminating the inlinee\u0027s checkpoint.",
+      "parentUuid": "2bb6c64b_3d66917c",
+      "revId": "caf27e0dfbc81611b2805bf502905ab6c7366eca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
