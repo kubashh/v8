@@ -34,6 +34,24 @@
       "revId": "caf27e0dfbc81611b2805bf502905ab6c7366eca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37e11901_2ed35674",
+        "filename": "src/compiler/checkpoint-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-11-15T12:10:26Z",
+      "side": 1,
+      "message": "s/precise/exact/ in my previous statement.\n\nI\u0027m surprise because why deopt to the caller, which then still calls into the optimized code of what was the inlinee, and that code should also bake in the same assumptions as we did for the bigger code object, and therefore deoptimize individually. So somehow there\u0027s a mismatch between what\u0027s relevant in the context of inlining a function vs. optimizing it standalone.",
+      "parentUuid": "00f12ba5_70f5b148",
+      "revId": "caf27e0dfbc81611b2805bf502905ab6c7366eca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
