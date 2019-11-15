@@ -6,6 +6,7 @@
 #define V8_WASM_WASM_ENGINE_H_
 
 #include <memory>
+#include <unordered_map>
 #include <unordered_set>
 
 #include "src/tasks/cancelable-task.h"
@@ -181,6 +182,15 @@ class V8_EXPORT_PRIVATE WasmEngine {
   std::shared_ptr<NativeModule> NewNativeModule(
       Isolate* isolate, const WasmFeatures& enabled_features,
       std::shared_ptr<const WasmModule> module, size_t code_size_estimate);
+  std::shared_ptr<NativeModule> NewNativeModule(
+      Isolate* isolate, const WasmFeatures& enabled_features,
+      size_t code_size_estimate, bool can_request_more,
+      std::shared_ptr<const WasmModule> module);
+  std::shared_ptr<NativeModule> MaybeGetNativeModule(
+      Vector<const uint8_t> wire_bytes);
+  // Returns the existing cache entry if it exists, and the new entry otherwise.
+  std::shared_ptr<NativeModule> MaybeCacheNativeModule(
+      std::shared_ptr<NativeModule> native_module) V8_WARN_UNUSED_RESULT;
 
   void FreeNativeModule(NativeModule*);
 
@@ -274,6 +284,15 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // If an engine-wide GC is currently running, this pointer stores information
   // about that.
   std::unique_ptr<CurrentGCInfo> current_gc_info_;
+
+  struct WireBytesHasher {
+    size_t operator()(const Vector<const uint8_t>& bytes) const;
+  };
+
+  // Native modules cached by their wire bytes.
+  std::unordered_map<Vector<const uint8_t>, std::weak_ptr<NativeModule>,
+                     WireBytesHasher>
+      native_module_cache_;
 
   // End of fields protected by {mutex_}.
   //////////////////////////////////////////////////////////////////////////////

@@ -2214,9 +2214,7 @@ bool AsyncStreamingProcessor::Deserialize(Vector<const uint8_t> module_bytes,
   job_->module_object_ =
       job_->isolate_->global_handles()->Create(*result.ToHandleChecked());
   job_->native_module_ = job_->module_object_->shared_native_module();
-  auto owned_wire_bytes = OwnedVector<uint8_t>::Of(wire_bytes);
-  job_->wire_bytes_ = ModuleWireBytes(owned_wire_bytes.as_vector());
-  job_->native_module_->SetWireBytes(std::move(owned_wire_bytes));
+  job_->wire_bytes_ = ModuleWireBytes(job_->native_module_->wire_bytes());
   job_->FinishCompile();
   return true;
 }
