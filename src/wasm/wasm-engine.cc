@@ -13,6 +13,7 @@
 #include "src/objects/heap-number.h"
 #include "src/objects/js-promise.h"
 #include "src/objects/objects-inl.h"
+#include "src/strings/string-hasher-inl.h"
 #include "src/utils/ostreams.h"
 #include "src/wasm/function-compiler.h"
 #include "src/wasm/module-compiler.h"
@@ -298,8 +299,15 @@ MaybeHandle<WasmModuleObject> WasmEngine::SyncCompile(
   // in {CompileToModuleObject}.
   Handle<FixedArray> export_wrappers;
   std::shared_ptr<NativeModule> native_module =
-      CompileToNativeModule(isolate, enabled, thrower,
-                            std::move(result).value(), bytes, &export_wrappers);
+      MaybeGetNativeModule(bytes.module_bytes());
+  if (native_module != nullptr) {
+    CompileJsToWasmWrappers(isolate, result.value().get(), &export_wrappers);
+  } else {
+    native_module = CompileToNativeModule(isolate, enabled, thrower,
+                                          std::move(result).value(), bytes,
+                                          &export_wrappers);
+    native_module = MaybeCacheNativeModule(native_module);
+  }
   if (!native_module) return {};
 
   Handle<Script> script =
@@ -690,6 +698,34 @@ std::shared_ptr<NativeModule> WasmEngine::NewNativeModule(
   return native_module;
 }
 
+std::shared_ptr<NativeModule> WasmEngine::MaybeGetNativeModule(
+    Vector<const uint8_t> wire_bytes) {
+  base::MutexGuard lock(&mutex_);
+  auto it = native_module_cache_.find(wire_bytes);
+  if (it == native_module_cache_.end()) {
+    return nullptr;
+  }
+  // Guaranteed by {FreeNativeModule}.
+  DCHECK(!it->second.expired());
+  return it->second.lock();
+}
+
+std::shared_ptr<NativeModule> WasmEngine::MaybeCacheNativeModule(
+    std::shared_ptr<NativeModule> native_module) {
+  if (!native_module) return nullptr;
+  base::MutexGuard lock(&mutex_);
+  DCHECK(native_module->has_wire_bytes());
+  auto it = native_module_cache_.find(native_module->wire_bytes());
+  if (it == native_module_cache_.end()) {
+    it =
+        native_module_cache_.emplace(native_module->wire_bytes(), native_module)
+            .first;
+  }
+  // Guaranteed by {FreeNativeModule}.
+  DCHECK(!it->second.expired());
+  return it->second.lock();
+}
+
 void WasmEngine::FreeNativeModule(NativeModule* native_module) {
   base::MutexGuard guard(&mutex_);
   auto it = native_modules_.find(native_module);
@@ -729,6 +765,12 @@ void WasmEngine::FreeNativeModule(NativeModule* native_module) {
     }
     TRACE_CODE_GC("Native module %p died, reducing dead code objects to %zu.\n",
                   native_module, current_gc_info_->dead_code.size());
+  }
+  if (native_module->has_wire_bytes()) {
+    auto it = native_module_cache_.find(native_module->wire_bytes());
+    if (it != native_module_cache_.end() && it->second.expired()) {
+      native_module_cache_.erase(it);
+    }
   }
   native_modules_.erase(it);
 }
@@ -965,6 +1007,13 @@ void WasmEngine::GlobalTearDown() {
 // static
 std::shared_ptr<WasmEngine> WasmEngine::GetWasmEngine() {
   return *GetSharedWasmEngine();
+}
+
+size_t WasmEngine::WireBytesHasher::operator()(
+    const Vector<const uint8_t>& bytes) const {
+  return StringHasher::HashSequentialString(
+      reinterpret_cast<const char*>(bytes.begin()),
+      static_cast<int>(bytes.size()), kZeroHashSeed);
 }
 
 // {max_mem_pages} is declared in wasm-limits.h.
