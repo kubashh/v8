@@ -85,14 +85,19 @@ class LiftoffRegister {
                 "chosen type is small enough");
 
  public:
-  explicit LiftoffRegister(Register reg) : LiftoffRegister(reg.code()) {
+  explicit constexpr LiftoffRegister(Register reg)
+      : LiftoffRegister(reg.code()) {
+#if V8_HAS_CXX14_CONSTEXPR
     DCHECK_NE(0, kLiftoffAssemblerGpCacheRegs & reg.bit());
     DCHECK_EQ(reg, gp());
+#endif
   }
-  explicit LiftoffRegister(DoubleRegister reg)
+  explicit constexpr LiftoffRegister(DoubleRegister reg)
       : LiftoffRegister(kAfterMaxLiftoffGpRegCode + reg.code()) {
+#if V8_HAS_CXX14_CONSTEXPR
     DCHECK_NE(0, kLiftoffAssemblerFpCacheRegs & reg.bit());
     DCHECK_EQ(reg, fp());
+#endif
   }
 
   static LiftoffRegister from_liftoff_code(uint32_t code) {
@@ -146,18 +151,24 @@ class LiftoffRegister {
     return Register::from_code((code_ >> kBitsPerGpRegCode) & kCodeMask);
   }
 
-  Register gp() const {
+  constexpr Register gp() const {
+#if V8_HAS_CXX14_CONSTEXPR
     DCHECK(is_gp());
+#endif
     return Register::from_code(code_);
   }
 
-  DoubleRegister fp() const {
+  constexpr DoubleRegister fp() const {
+#if V8_HAS_CXX14_CONSTEXPR
     DCHECK(is_fp());
+#endif
     return DoubleRegister::from_code(code_ - kAfterMaxLiftoffGpRegCode);
   }
 
-  int liftoff_code() const {
+  constexpr int liftoff_code() const {
+#if V8_HAS_CXX14_CONSTEXPR
     DCHECK(is_gp() || is_fp());
+#endif
     return code_;
   }
 
@@ -218,22 +229,12 @@ class LiftoffRegList {
   }
 
   LiftoffRegister set(LiftoffRegister reg) {
-    if (reg.is_pair()) {
-      regs_ |= storage_t{1} << reg.low().liftoff_code();
-      regs_ |= storage_t{1} << reg.high().liftoff_code();
-    } else {
-      regs_ |= storage_t{1} << reg.liftoff_code();
-    }
+    regs_ |= ForReg(reg).regs_;
     return reg;
   }
 
   LiftoffRegister clear(LiftoffRegister reg) {
-    if (reg.is_pair()) {
-      regs_ &= ~(storage_t{1} << reg.low().liftoff_code());
-      regs_ &= ~(storage_t{1} << reg.high().liftoff_code());
-    } else {
-      regs_ &= ~(storage_t{1} << reg.liftoff_code());
-    }
+    regs_ &= ~ForReg(reg).regs_;
     return reg;
   }
 
@@ -293,22 +294,29 @@ class LiftoffRegList {
   inline Iterator begin() const;
   inline Iterator end() const;
 
-  static LiftoffRegList FromBits(storage_t bits) {
+  static constexpr LiftoffRegList FromBits(storage_t bits) {
+#if V8_HAS_CXX14_CONSTEXPR
     DCHECK_EQ(bits, bits & (kGpMask | kFpMask));
-    return LiftoffRegList(bits);
-  }
-
-  template <storage_t bits>
-  static constexpr LiftoffRegList FromBits() {
-    static_assert(bits == (bits & (kGpMask | kFpMask)), "illegal reg list");
+#endif
     return LiftoffRegList(bits);
   }
 
   template <typename... Regs>
-  static LiftoffRegList ForRegs(Regs... regs) {
+  static constexpr LiftoffRegList ForRegs(Regs... regs) {
     LiftoffRegList list;
-    for (LiftoffRegister reg : {LiftoffRegister(regs)...}) list.set(reg);
+    for (LiftoffRegister reg : {LiftoffRegister(regs)...}) {
+      list = list | ForReg(reg);
+    }
     return list;
+  }
+
+  static constexpr LiftoffRegList ForReg(LiftoffRegister reg) {
+    if (reg.is_pair()) {
+      return LiftoffRegList((storage_t{1} << reg.low().liftoff_code()) |
+                            (storage_t{1} << reg.high().liftoff_code()));
+    } else {
+      return LiftoffRegList(storage_t{1} << reg.liftoff_code());
+    }
   }
 
  private:
@@ -320,9 +328,9 @@ class LiftoffRegList {
 ASSERT_TRIVIALLY_COPYABLE(LiftoffRegList);
 
 static constexpr LiftoffRegList kGpCacheRegList =
-    LiftoffRegList::FromBits<LiftoffRegList::kGpMask>();
+    LiftoffRegList::FromBits(LiftoffRegList::kGpMask);
 static constexpr LiftoffRegList kFpCacheRegList =
-    LiftoffRegList::FromBits<LiftoffRegList::kFpMask>();
+    LiftoffRegList::FromBits(LiftoffRegList::kFpMask);
 
 class LiftoffRegList::Iterator {
  public:
