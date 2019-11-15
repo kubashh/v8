@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac30f523_8cd4b3d5",
+        "filename": "src/utils/bit-field.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-15T09:29:08Z",
+      "side": 1,
+      "message": "Can you move this fie to src/base? It does not depend on anything v8-specific AFAICS.",
+      "revId": "9fe22f75a689e9488f1ccd444e5badc174f48fc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc706a8f_6c2c0990",
+        "filename": "src/utils/bounds.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-15T09:29:08Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "9fe22f75a689e9488f1ccd444e5badc174f48fc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
