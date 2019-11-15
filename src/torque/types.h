@@ -127,6 +127,9 @@ class V8_EXPORT_PRIVATE Type : public TypeBase {
     return specialized_from_;
   }
 
+  static std::string ComputeName(const std::string& basename,
+                                 MaybeSpecializationKey specialized_from);
+
  protected:
   Type(TypeBase::Kind kind, const Type* parent,
        MaybeSpecializationKey specialized_from = base::nullopt);
@@ -139,9 +142,6 @@ class V8_EXPORT_PRIVATE Type : public TypeBase {
   virtual std::string GetGeneratedTypeNameImpl() const = 0;
   virtual std::string GetGeneratedTNodeTypeNameImpl() const = 0;
   virtual std::string SimpleNameImpl() const = 0;
-
-  static std::string ComputeName(const std::string& basename,
-                                 MaybeSpecializationKey specialized_from);
 
  private:
   bool IsAbstractName(const std::string& name) const;
