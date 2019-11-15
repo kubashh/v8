@@ -9,6 +9,8 @@
 
 #include "src/base/logging.h"
 #include "src/torque/ast.h"
+#include "src/torque/declarable.h"
+#include "src/torque/type-oracle.h"
 #include "src/torque/utils.h"
 
 namespace v8 {
@@ -130,10 +132,46 @@ MessageBuilder::MessageBuilder(const std::string& message,
     position = CurrentSourcePosition::Get();
   }
   message_ = TorqueMessage{message, position, kind};
+  if (CurrentScope::HasScope()) {
+    // Traverse the parent scopes to find one that was created to represent a
+    // specialization of something generic. If we find one, then log it and
+    // continue walking the scope tree of the code that requested that
+    // specialization. This allows us to collect the stack of locations that
+    // caused a specialization.
+    Scope* scope = CurrentScope::Get();
+    while (scope) {
+      SpecializationRequester requester = scope->GetSpecializationRequester();
+      if (requester.position != SourcePosition::Invalid()) {
+        std::string name;
+        if (const Callable* callable = Callable::DynamicCast(scope)) {
+          name = callable->ReadableName();
+        } else if (const Namespace* ns = Namespace::DynamicCast(scope)) {
+          // The scope is a namespace that exists to hold the generic type
+          // parameters for a struct or class. Dig through the global list of
+          // types to find one that is in this namespace.
+          for (const auto& type : *TypeOracle::GetAggregateTypes()) {
+            if (type->nspace() == ns) {
+              name = type->ToString();
+              break;
+            }
+          }
+        }
+        extra_messages_.push_back(
+            {"Note: specialization " + name + " requested here",
+             requester.position, kind});
+        scope = requester.scope;
+      } else {
+        scope = scope->ParentScope();
+      }
+    }
+  }
 }
 
 void MessageBuilder::Report() const {
   TorqueMessages::Get().push_back(message_);
+  for (const auto& message : extra_messages_) {
+    TorqueMessages::Get().push_back(message);
+  }
 }
 
 [[noreturn]] void MessageBuilder::Throw() const {
