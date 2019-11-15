@@ -454,7 +454,7 @@ class Instruction {
   }
 
   // Read a bit field <hi:lo>, leaving its position unchanged in the result.
-  inline int BitField(int hi, int lo) const {
+  inline int base::BitField(int hi, int lo) const {
     return InstructionBits() & (((2 << (hi - lo)) - 1) << lo);
   }
 
