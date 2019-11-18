@@ -1198,6 +1198,13 @@ class ThreadImpl {
     // If state_ is STOPPED, the current activation must be fully unwound.
     DCHECK_IMPLIES(state_ == WasmInterpreter::STOPPED,
                    current_activation().fp == frames_.size());
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+    if (wait_to_suspend_ && state_ != WasmInterpreter::RUNNING) {
+      wait_to_suspend_ = false;
+    }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
     return state_;
   }
 
@@ -1211,6 +1218,13 @@ class ThreadImpl {
     trap_reason_ = kTrapCount;
     possible_nondeterminism_ = false;
   }
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  static void Suspend() {
+    // This might be called on any thread
+    wait_to_suspend_ = true;
+  }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
   int GetFrameCount() {
     DCHECK_GE(kMaxInt, frames_.size());
@@ -1414,6 +1428,10 @@ class ThreadImpl {
   // Store the stack height of each activation (for unwind and frame
   // inspection).
   ZoneVector<Activation> activations_;
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  static bool wait_to_suspend_;
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
   CodeMap* codemap() const { return codemap_; }
   const WasmModule* module() const { return codemap_->module(); }
@@ -2881,6 +2899,17 @@ class ThreadImpl {
     max = 0;                                                          \
   }
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+      if (wait_to_suspend_) {
+        HandleScope handle_scope(isolate_);  // Avoid leaking handles.
+        Handle<WasmDebugInfo> debug_info(instance_object_->debug_info(),
+                                         isolate_);
+        debug_info->PrepareStep(StepIn);
+        hit_break = true;
+        max = 0;
+      }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
       DCHECK_GT(limit, pc);
       DCHECK_NOT_NULL(code->start);
 
@@ -3959,6 +3988,11 @@ class InterpretedFrameImpl {
   }
 };
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+// static
+bool ThreadImpl::wait_to_suspend_ = false;
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
 namespace {
 
 // Converters between WasmInterpreter::Thread and WasmInterpreter::ThreadImpl.
@@ -4122,6 +4156,11 @@ WasmInterpreter::~WasmInterpreter() {}
 void WasmInterpreter::Run() { internals_->threads_[0].Run(); }
 
 void WasmInterpreter::Pause() { internals_->threads_[0].Pause(); }
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+// static
+void WasmInterpreter::Suspend() { ThreadImpl::Suspend(); }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
 bool WasmInterpreter::SetBreakpoint(const WasmFunction* function, pc_t pc,
                                     bool enabled) {
