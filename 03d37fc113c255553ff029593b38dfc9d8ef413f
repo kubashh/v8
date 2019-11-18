@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "deaa2d1b_cfab4e81",
+        "filename": "tools/mb/mb.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-18T07:34:56Z",
+      "side": 0,
+      "message": "This condition is gone in the newest MB version in Chromium. Since merging the scripts isn\u0027t feasible short-term, lets just remove it in our version.",
+      "revId": "03d37fc113c255553ff029593b38dfc9d8ef413f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
