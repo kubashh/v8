@@ -880,6 +880,12 @@ class WasmDebugInfo : public Struct {
   V8_EXPORT_PRIVATE static Handle<Code> GetCWasmEntry(Handle<WasmDebugInfo>,
                                                       wasm::FunctionSig*);
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  static bool GetWasmLocal(Handle<WasmDebugInfo> debug_info,
+                           uint32_t frame_index, uint32_t index,
+                           wasm::WasmValue* wasm_value);
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
   OBJECT_CONSTRUCTORS(WasmDebugInfo, Struct);
 };
 

@@ -420,6 +420,25 @@ class InterpreterHandle {
     return local_scope_object;
   }
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  bool GetWasmLocal(uint32_t frame_index, uint32_t index,
+                    WasmValue* wasm_value) {
+    WasmInterpreter::Thread* thread = interpreter()->GetThread(0);
+    int frames_count = thread->GetFrameCount();
+    if (static_cast<int>(frame_index) >= frames_count) {
+      return false;
+    }
+    WasmInterpreter::FramePtr frame =
+        thread->GetFrame(frames_count - 1 - frame_index);
+    uint32_t num_locals = frame->GetLocalCount();
+    if (num_locals > index) {
+      *wasm_value = frame->GetLocalValue(index);
+      return true;
+    }
+    return false;
+  }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
  private:
   DISALLOW_COPY_AND_ASSIGN(InterpreterHandle);
 };
@@ -658,6 +677,21 @@ Handle<Code> WasmDebugInfo::GetCWasmEntry(Handle<WasmDebugInfo> debug_info,
   }
   return handle(Code::cast(entries->get(index)), isolate);
 }
+
+#if V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+// static
+bool WasmDebugInfo::GetWasmLocal(Handle<WasmDebugInfo> debug_info,
+                                 uint32_t frame_index, uint32_t index,
+                                 wasm::WasmValue* wasm_value) {
+  wasm::InterpreterHandle* interpreter =
+      GetInterpreterHandleOrNull(*debug_info);
+  if (interpreter) {
+    return interpreter->GetWasmLocal(frame_index, index, wasm_value);
+  } else {
+    return false;
+  }
+}
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
 namespace {
 
