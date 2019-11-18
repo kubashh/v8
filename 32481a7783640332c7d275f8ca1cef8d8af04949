@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7901c84f_94a063a3",
+        "filename": "src/compiler/backend/arm/instruction-codes-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-11-18T16:49:57Z",
+      "side": 1,
+      "message": "Nit: The ordering here is to group the unsigned operations separate from the signed ones, could this be moved down to above the converts below? Same for the I8x16 operations as well.",
+      "revId": "32481a7783640332c7d275f8ca1cef8d8af04949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5199ea2_abd4504c",
+        "filename": "src/compiler/backend/arm/instruction-scheduler-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-11-18T16:49:57Z",
+      "side": 1,
+      "message": "Ordering nit here as well.",
+      "revId": "32481a7783640332c7d275f8ca1cef8d8af04949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
