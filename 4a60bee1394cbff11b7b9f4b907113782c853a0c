@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd6603ad_10a89469",
+        "filename": "test/mjsunit/regress/regress-crbug-1022695.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-11-18T10:16:38Z",
+      "side": 1,
+      "message": "nit: I know this test case is fuzzer generated, but lets rename s/PI/foreign/ here, otherwise this is super hard to read.",
+      "range": {
+        "startLine": 6,
+        "startChar": 18,
+        "endLine": 6,
+        "endChar": 20
+      },
+      "revId": "4a60bee1394cbff11b7b9f4b907113782c853a0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
