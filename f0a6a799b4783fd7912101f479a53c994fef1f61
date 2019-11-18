@@ -1,0 +1,186 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "610a9c09_bb144577",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-18T15:19:58Z",
+      "side": 1,
+      "message": "Below, we are using \"if (!native_module)\". Can we be consistent and use the same check here?",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf40aa3f_276270a2",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-18T15:19:58Z",
+      "side": 1,
+      "message": "This line should move before the \"MaybeCacheNativeModule\" above, right?",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1800c90_5e765088",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-18T15:19:58Z",
+      "side": 1,
+      "message": "These two calls to not execute atomically, i.e. it can happen that {expired()} returns {false}, but {lock()} still returns a nullptr afterwards. You could call {lock()}, and then DCHECK that the returned {shared_ptr} is not null before returning it.",
+      "range": {
+        "startLine": 725,
+        "startChar": 0,
+        "endLine": 726,
+        "endChar": 27
+      },
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5203be3_eb3fb5ac",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-18T15:19:58Z",
+      "side": 1,
+      "message": "Please add a line describing in which situation(s) the module might not have wire bytes.",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5616d49c_cf272032",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-18T15:19:58Z",
+      "side": 1,
+      "message": "{FreeNativeModule} is called from the destructor of {NativeModule}. Is the {expired()} check needed here?\nOr should we rather check (or DCHECK?) that the entry in fact contained the module we are just freeing?",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4c88c1a_42388602",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-18T15:19:58Z",
+      "side": 1,
+      "message": "Are you adding another constructor here? I don\u0027t see a definition for it. Is this a merge error?",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 48
+      },
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcaf9e21_6e1af1c0",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-18T15:19:58Z",
+      "side": 1,
+      "message": "Please add a newline before this method, and some documentation.",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04db4447_a2383ba9",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-18T15:19:58Z",
+      "side": 1,
+      "message": "Why is this a \"Maybe\"? If we want modules to be shared correctly, then every new module should be cached, right? Otherwise (if a cache entry already exists), we should have used that cached module.",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b974bde2_9d57ad64",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-18T15:19:58Z",
+      "side": 1,
+      "message": "Who is owning the Vector here? Is it owned by the NativeModule itself? That would be problematic since the pointer is weak. Would it be enough to just store a size_t-sized hash here? If that matches, we could then do a check against the actual wire bytes in the native module.",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b3fffb5_8d31468b",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-18T15:19:58Z",
+      "side": 1,
+      "message": "If you move this line to the beginning of this method, you can reuse it two more times.",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
