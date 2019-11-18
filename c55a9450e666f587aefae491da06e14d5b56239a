@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84752774_b599da07",
+        "filename": "src/wasm/gdb-server/gdb-server.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-18T13:16:44Z",
+      "side": 1,
+      "message": "Not sure how robust we need this prototype to be, but the assumption that there is one instance per module is not correct. My preferred solution would be to determine the instance from the call stack frame rather than from the module.",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 4
+      },
+      "revId": "c55a9450e666f587aefae491da06e14d5b56239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64488815_e0f751ab",
+        "filename": "src/wasm/gdb-server/gdb-server.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-18T13:16:44Z",
+      "side": 1,
+      "message": "I\u0027m finding the logic of this quite hard to follow, and at a minimum would like to see unit tests verifying that this does what you think it does.",
+      "range": {
+        "startLine": 336,
+        "startChar": 0,
+        "endLine": 336,
+        "endChar": 8
+      },
+      "revId": "c55a9450e666f587aefae491da06e14d5b56239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e72e3d50_b576b393",
+        "filename": "src/wasm/gdb-server/gdb-server.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-18T13:16:44Z",
+      "side": 1,
+      "message": "Take a stack frame index as well just in case it ever is used?",
+      "range": {
+        "startLine": 360,
+        "startChar": 5,
+        "endLine": 360,
+        "endChar": 14
+      },
+      "revId": "c55a9450e666f587aefae491da06e14d5b56239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d50a6173_9793e500",
+        "filename": "src/wasm/gdb-server/gdb-server.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-18T13:16:44Z",
+      "side": 1,
+      "message": "To be clear, this is what you\u0027re currently doing?\n\nSkipping non-Wasm is fine for now, though I think it would be better to show intermediate frames with no symbols so that wasm calling javascript calling wasm looks different from wasm calling wasm.\n\nFor formatting I\u0027d prefer the comment be on its own line and the if condition on one line.",
+      "range": {
+        "startLine": 507,
+        "startChar": 27,
+        "endLine": 507,
+        "endChar": 74
+      },
+      "revId": "c55a9450e666f587aefae491da06e14d5b56239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b24683b_b2eceaab",
+        "filename": "src/wasm/gdb-server/util.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-18T13:16:44Z",
+      "side": 1,
+      "message": "Any reason not to use ssprintf and strtol to convert to/from hex?",
+      "range": {
+        "startLine": 17,
+        "startChar": 5,
+        "endLine": 17,
+        "endChar": 16
+      },
+      "revId": "c55a9450e666f587aefae491da06e14d5b56239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc7214a0_9c02ec33",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-18T13:16:44Z",
+      "side": 1,
+      "message": "I don\u0027t think it is necessary to add this. You can get locals and stack values by way of the stack walking API, and it would be more future-proof, as you would get querying of Liftoff-compiled frames for free when that work is done.\n\nThere are two ways you might go about this. You can follow the example of https://cs.chromium.org/chromium/src/v8/test/cctest/wasm/test-wasm-breakpoints.cc?rcl\u003d295649fd927eeaaaf8ec10d68b45602e89e94223\u0026l\u003d244 using StackTraceFrameIterator. Or you can go a level higher and follow the example of the inspector https://cs.chromium.org/chromium/src/v8/src/inspector/v8-debugger-agent-impl.cc?rcl\u003d295649fd927eeaaaf8ec10d68b45602e89e94223\u0026l\u003d1292 using v8::debug::StackTraceIterator, then iterating through the scopes to find the local variables (or stack or globals). Of course you need to make sure that how you report stack frames matches how you iterate through them to find a frame for getting locals.",
+      "range": {
+        "startLine": 424,
+        "startChar": 1,
+        "endLine": 424,
+        "endChar": 20
+      },
+      "revId": "c55a9450e666f587aefae491da06e14d5b56239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "832bf903_8cc28e67",
+        "filename": "test/gdb-server/debug_stub_test.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-18T13:16:44Z",
+      "side": 1,
+      "message": "Missing comment on source location.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 15
+      },
+      "revId": "c55a9450e666f587aefae491da06e14d5b56239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1ee56eb_ffcf8f17",
+        "filename": "test/gdb-server/debug_stub_test.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-18T13:16:44Z",
+      "side": 1,
+      "message": "nit: prefer \"if not match\"",
+      "range": {
+        "startLine": 162,
+        "startChar": 2,
+        "endLine": 162,
+        "endChar": 18
+      },
+      "revId": "c55a9450e666f587aefae491da06e14d5b56239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc147b79_060836a2",
+        "filename": "test/gdb-server/debug_stub_test.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-18T13:16:44Z",
+      "side": 1,
+      "message": "len(modules)?",
+      "range": {
+        "startLine": 195,
+        "startChar": 11,
+        "endLine": 195,
+        "endChar": 26
+      },
+      "revId": "c55a9450e666f587aefae491da06e14d5b56239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7877d1db_d674ca48",
+        "filename": "test/gdb-server/debug_stub_test.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-18T13:16:44Z",
+      "side": 1,
+      "message": "There are a lot of magic numbers here. Any way we can get the module id we want rather than hard code it? Also, MEMORY_ADDRESS_0 (with comment on what it points to) would be an improvement.\n\nIt might also be nice to have comments giving lldb commands that created the sequence of queries these test cases are replaying.",
+      "range": {
+        "startLine": 263,
+        "startChar": 59,
+        "endLine": 263,
+        "endChar": 72
+      },
+      "revId": "c55a9450e666f587aefae491da06e14d5b56239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "757eec08_4a24c430",
+        "filename": "test/gdb-server/testcfg.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-18T13:16:44Z",
+      "side": 1,
+      "message": "Use os.path.join, here and below. Also, is it possible to make this work without changing the working directory?",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 44
+      },
+      "revId": "c55a9450e666f587aefae491da06e14d5b56239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
