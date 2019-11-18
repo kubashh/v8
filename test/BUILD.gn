@@ -11,6 +11,7 @@ group("gn_all") {
     "benchmarks:v8_benchmarks",
     "intl:v8_intl",
     "fuzzer:v8_fuzzer",
+    "gdb-server:v8_gdb_server",
     "message:v8_message",
     "mjsunit:v8_mjsunit",
     "mozilla:v8_mozilla",
@@ -69,6 +70,7 @@ group("v8_bot_default") {
     "cctest:cctest",
     "debugger:v8_debugger",
     "fuzzer:v8_fuzzer",
+    "gdb-server:v8_gdb_server",
     "inspector:inspector-test",
     "intl:v8_intl",
     "message:v8_message",
@@ -89,6 +91,7 @@ group("v8_default") {
   data_deps = [
     "cctest:cctest",
     "debugger:v8_debugger",
+    "gdb-server:v8_gdb_server",
     "fuzzer:v8_fuzzer",
     "inspector:inspector-test",
     "intl:v8_intl",
