@@ -10,11 +10,13 @@
 #include "src/builtins/builtins-promise.h"
 #include "src/builtins/builtins-utils.h"
 #include "src/codegen/code-factory.h"
+#include "src/codegen/tnode.h"
 #include "src/compiler/access-builder.h"
 #include "src/compiler/access-info.h"
 #include "src/compiler/allocation-builder.h"
 #include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/feedback-source.h"
+#include "src/compiler/graph-assembler.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/map-inference.h"
@@ -36,6 +38,189 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+namespace {
+
+// Shorter lambda declarations.
+#define λ [&]()  // NOLINT(whitespace/braces)
+
+// TODO(jgruber): Switch to TNode once fewer explicit casts are necessary, i.e.
+// once more underlying operations return typed nodes.
+template <class T>
+using STNode = SloppyTNode<T>;
+
+class JSCallReducerAssembler : public GraphAssembler {
+ public:
+  JSCallReducerAssembler(JSGraph* jsgraph, Zone* zone, STNode<Object> node)
+      : GraphAssembler(jsgraph, zone), node_(node) {
+#ifdef DEBUG
+    CallParameters const& p = CallParametersOf(node_ptr()->op());
+    DCHECK_NE(p.speculation_mode(), SpeculationMode::kDisallowSpeculation);
+#endif
+    InitializeEffectControlFromNode(node);
+  }
+  virtual ~JSCallReducerAssembler() {}
+
+  STNode<Object> ReduceMathUnary(const Operator* op);
+  STNode<Object> ReduceMathBinary(const Operator* op);
+  STNode<String> ReduceStringPrototypeSubstring();
+  STNode<String> ReduceStringPrototypeSlice();
+
+  using NodeGenerator = std::function<Node*()>;
+  class SelectBuilder {
+   public:
+    SelectBuilder(GraphAssembler* gasm, STNode<Object> cond)
+        : gasm_(gasm), cond_(cond) {}
+
+    SelectBuilder& Then(NodeGenerator body) {
+      then_body_ = body;
+      return *this;
+    }
+    SelectBuilder& Else(NodeGenerator body) {
+      else_body_ = body;
+      return *this;
+    }
+
+    STNode<Object> Value() {
+      DCHECK(then_body_);
+      DCHECK(else_body_);
+      auto merge = gasm_->MakeLabel(kPhiRepresentation);
+      gasm_->GotoIf(cond_, &merge, then_body_());
+      gasm_->Goto(&merge, else_body_());
+      gasm_->Bind(&merge);
+      return merge.PhiAt(0);
+    }
+
+   private:
+    static constexpr MachineRepresentation kPhiRepresentation =
+        MachineRepresentation::kTagged;
+
+    GraphAssembler* const gasm_;
+    STNode<Object> cond_;
+    NodeGenerator then_body_;
+    NodeGenerator else_body_;
+  };
+
+  SelectBuilder SelectIf(STNode<Object> cond) { return {this, cond}; }
+
+ private:
+  const FeedbackSource& feedback() const {
+    CallParameters const& p = CallParametersOf(node_ptr()->op());
+    return p.feedback();
+  }
+
+  STNode<Number> Zero() { return ZeroConstant(); }
+
+  void InitializeEffectControlFromNode(STNode<Object> node) {
+    InitializeEffectControl(NodeProperties::GetEffectInput(node),
+                            NodeProperties::GetControlInput(node));
+  }
+
+  STNode<Object> ValueInput(int index) {
+    return NodeProperties::GetValueInput(node_, index);
+  }
+
+  STNode<Object> ValueInputOrNaN(int index) {
+    return node_ptr()->op()->ValueInputCount() > index
+               ? NodeProperties::GetValueInput(node_, index)
+               : NaNConstant();
+  }
+
+  STNode<Object> ValueInputOrUndefined(int index) {
+    return node_ptr()->op()->ValueInputCount() > index
+               ? NodeProperties::GetValueInput(node_, index)
+               : UndefinedConstant();
+  }
+
+ private:
+  Node* node_ptr() const { return static_cast<Node*>(node_); }
+
+  const STNode<Object> node_;
+};
+
+STNode<Object> JSCallReducerAssembler::ReduceMathUnary(const Operator* op) {
+  STNode<Object> input = ValueInput(2);
+  STNode<Number> input_as_number = SpeculativeToNumber(input, feedback());
+  return graph()->NewNode(op, static_cast<Node*>(input_as_number));
+}
+
+STNode<Object> JSCallReducerAssembler::ReduceMathBinary(const Operator* op) {
+  STNode<Object> left = ValueInput(2);
+  STNode<Object> right = ValueInputOrNaN(3);
+  STNode<Number> left_number = SpeculativeToNumber(left, feedback());
+  STNode<Number> right_number = SpeculativeToNumber(right, feedback());
+  return graph()->NewNode(op, static_cast<Node*>(left_number),
+                          static_cast<Node*>(right_number));
+}
+
+STNode<String> JSCallReducerAssembler::ReduceStringPrototypeSubstring() {
+  STNode<Object> receiver = ValueInput(1);
+  STNode<Object> start = ValueInput(2);
+  STNode<Object> end = ValueInputOrUndefined(3);
+
+  STNode<String> receiver_string = CheckString(receiver, feedback());
+  STNode<Smi> start_smi = CheckSmi(start, feedback());
+
+  STNode<Smi> length = StringLength(receiver_string);
+
+  STNode<Smi> end_smi = STNode<Smi>::UncheckedCast(
+      SelectIf(IsUndefined(end))
+          .Then(λ { return length; })
+          .Else(λ { return CheckSmi(end, feedback()); })
+          .Value());
+
+  STNode<Number> finalStart = NumberMin(NumberMax(start_smi, Zero()), length);
+  STNode<Number> finalEnd = NumberMin(NumberMax(end_smi, Zero()), length);
+  STNode<Number> from = NumberMin(finalStart, finalEnd);
+  STNode<Number> to = NumberMax(finalStart, finalEnd);
+
+  return StringSubstring(receiver_string, from, to);
+}
+
+STNode<String> JSCallReducerAssembler::ReduceStringPrototypeSlice() {
+  STNode<Object> receiver = ValueInput(1);
+  STNode<Object> start = ValueInput(2);
+  STNode<Object> end = ValueInputOrUndefined(3);
+
+  STNode<String> receiver_string = CheckString(receiver, feedback());
+  STNode<Smi> start_smi = CheckSmi(start, feedback());
+
+  STNode<Smi> length = StringLength(receiver_string);
+
+  STNode<Smi> end_smi = STNode<Smi>::UncheckedCast(
+      SelectIf(IsUndefined(end))
+          .Then(λ { return length; })
+          .Else(λ { return CheckSmi(end, feedback()); })
+          .Value());
+
+  STNode<Object> from_untyped =
+      SelectIf(NumberLessThan(start_smi, Zero()))
+          .Then(λ { return NumberMax(NumberAdd(length, start_smi), Zero()); })
+          .Else(λ { return NumberMin(start_smi, length); })
+          .Value();
+  // {from} is always in non-negative Smi range, but our typer cannot
+  // figure that out yet.
+  STNode<Number> from = TypeGuard(Type::UnsignedSmall(), from_untyped);
+
+  STNode<Number> to_untyped = STNode<Number>::UncheckedCast(
+      SelectIf(NumberLessThan(end_smi, Zero()))
+          .Then(λ { return NumberMax(NumberAdd(length, end_smi), Zero()); })
+          .Else(λ { return NumberMin(end_smi, length); })
+          .Value());
+  // {to} is always in non-negative Smi range, but our typer cannot
+  // figure that out yet.
+  STNode<Number> to = TypeGuard(Type::UnsignedSmall(), to_untyped);
+
+  return STNode<String>::UncheckedCast(
+      SelectIf(NumberLessThan(from, to))
+          .Then(λ { return StringSubstring(receiver_string, from, to); })
+          .Else(λ { return EmptyStringConstant(); })
+          .Value());
+}
+
+#undef λ
+
+}  // namespace
+
 Reduction JSCallReducer::ReduceMathUnary(Node* node, const Operator* op) {
   CallParameters const& p = CallParametersOf(node->op());
   if (p.speculation_mode() == SpeculationMode::kDisallowSpeculation) {
@@ -47,16 +232,10 @@ Reduction JSCallReducer::ReduceMathUnary(Node* node, const Operator* op) {
     return Replace(value);
   }
 
-  Node* effect = NodeProperties::GetEffectInput(node);
-  Node* control = NodeProperties::GetControlInput(node);
-  Node* input = NodeProperties::GetValueInput(node, 2);
+  JSCallReducerAssembler a(jsgraph(), temp_zone(), node);
+  Node* value = a.ReduceMathUnary(op);
 
-  input = effect =
-      graph()->NewNode(simplified()->SpeculativeToNumber(
-                           NumberOperationHint::kNumberOrOddball, p.feedback()),
-                       input, effect, control);
-  Node* value = graph()->NewNode(op, input);
-  ReplaceWithValue(node, value, effect);
+  ReplaceWithValue(node, value, a.effect());
   return Replace(value);
 }
 
@@ -70,23 +249,11 @@ Reduction JSCallReducer::ReduceMathBinary(Node* node, const Operator* op) {
     ReplaceWithValue(node, value);
     return Replace(value);
   }
-  Node* effect = NodeProperties::GetEffectInput(node);
-  Node* control = NodeProperties::GetControlInput(node);
 
-  Node* left = NodeProperties::GetValueInput(node, 2);
-  Node* right = node->op()->ValueInputCount() > 3
-                    ? NodeProperties::GetValueInput(node, 3)
-                    : jsgraph()->NaNConstant();
-  left = effect =
-      graph()->NewNode(simplified()->SpeculativeToNumber(
-                           NumberOperationHint::kNumberOrOddball, p.feedback()),
-                       left, effect, control);
-  right = effect =
-      graph()->NewNode(simplified()->SpeculativeToNumber(
-                           NumberOperationHint::kNumberOrOddball, p.feedback()),
-                       right, effect, control);
-  Node* value = graph()->NewNode(op, left, right);
-  ReplaceWithValue(node, value, effect);
+  JSCallReducerAssembler a(jsgraph(), temp_zone(), node);
+  Node* value = a.ReduceMathBinary(op);
+
+  ReplaceWithValue(node, value, a.effect());
   return Replace(value);
 }
 
@@ -4063,58 +4230,10 @@ Reduction JSCallReducer::ReduceStringPrototypeSubstring(Node* node) {
     return NoChange();
   }
 
-  Node* effect = NodeProperties::GetEffectInput(node);
-  Node* control = NodeProperties::GetControlInput(node);
-  Node* receiver = NodeProperties::GetValueInput(node, 1);
-  Node* start = NodeProperties::GetValueInput(node, 2);
-  Node* end = node->op()->ValueInputCount() > 3
-                  ? NodeProperties::GetValueInput(node, 3)
-                  : jsgraph()->UndefinedConstant();
+  JSCallReducerAssembler a(jsgraph(), temp_zone(), node);
+  Node* value = a.ReduceStringPrototypeSubstring();
 
-  receiver = effect = graph()->NewNode(simplified()->CheckString(p.feedback()),
-                                       receiver, effect, control);
-
-  start = effect = graph()->NewNode(simplified()->CheckSmi(p.feedback()), start,
-                                    effect, control);
-
-  Node* length = graph()->NewNode(simplified()->StringLength(), receiver);
-
-  Node* check = graph()->NewNode(simplified()->ReferenceEqual(), end,
-                                 jsgraph()->UndefinedConstant());
-  Node* branch =
-      graph()->NewNode(common()->Branch(BranchHint::kFalse), check, control);
-
-  Node* if_true = graph()->NewNode(common()->IfTrue(), branch);
-  Node* etrue = effect;
-  Node* vtrue = length;
-
-  Node* if_false = graph()->NewNode(common()->IfFalse(), branch);
-  Node* efalse = effect;
-  Node* vfalse = efalse = graph()->NewNode(simplified()->CheckSmi(p.feedback()),
-                                           end, efalse, if_false);
-
-  control = graph()->NewNode(common()->Merge(2), if_true, if_false);
-  effect = graph()->NewNode(common()->EffectPhi(2), etrue, efalse, control);
-  end = graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
-                         vtrue, vfalse, control);
-  Node* finalStart =
-      graph()->NewNode(simplified()->NumberMin(),
-                       graph()->NewNode(simplified()->NumberMax(), start,
-                                        jsgraph()->ZeroConstant()),
-                       length);
-  Node* finalEnd =
-      graph()->NewNode(simplified()->NumberMin(),
-                       graph()->NewNode(simplified()->NumberMax(), end,
-                                        jsgraph()->ZeroConstant()),
-                       length);
-
-  Node* from =
-      graph()->NewNode(simplified()->NumberMin(), finalStart, finalEnd);
-  Node* to = graph()->NewNode(simplified()->NumberMax(), finalStart, finalEnd);
-
-  Node* value = effect = graph()->NewNode(simplified()->StringSubstring(),
-                                          receiver, from, to, effect, control);
-  ReplaceWithValue(node, value, effect, control);
+  ReplaceWithValue(node, value, a.effect(), a.control());
   return Replace(value);
 }
 
@@ -4126,98 +4245,11 @@ Reduction JSCallReducer::ReduceStringPrototypeSlice(Node* node) {
     return NoChange();
   }
 
-  Node* effect = NodeProperties::GetEffectInput(node);
-  Node* control = NodeProperties::GetControlInput(node);
-  Node* receiver = NodeProperties::GetValueInput(node, 1);
-  Node* start = NodeProperties::GetValueInput(node, 2);
-  Node* end = node->op()->ValueInputCount() > 3
-                  ? NodeProperties::GetValueInput(node, 3)
-                  : jsgraph()->UndefinedConstant();
+  JSCallReducerAssembler a(jsgraph(), temp_zone(), node);
+  Node* value = a.ReduceStringPrototypeSlice();
 
-  receiver = effect = graph()->NewNode(simplified()->CheckString(p.feedback()),
-                                       receiver, effect, control);
-
-  start = effect = graph()->NewNode(simplified()->CheckSmi(p.feedback()), start,
-                                    effect, control);
-
-  Node* length = graph()->NewNode(simplified()->StringLength(), receiver);
-
-  // Replace {end} argument with {length} if it is undefined.
-  {
-    Node* check = graph()->NewNode(simplified()->ReferenceEqual(), end,
-                                   jsgraph()->UndefinedConstant());
-
-    Node* branch =
-        graph()->NewNode(common()->Branch(BranchHint::kFalse), check, control);
-
-    Node* if_true = graph()->NewNode(common()->IfTrue(), branch);
-    Node* etrue = effect;
-    Node* vtrue = length;
-
-    Node* if_false = graph()->NewNode(common()->IfFalse(), branch);
-    Node* efalse = effect;
-    Node* vfalse = efalse = graph()->NewNode(
-        simplified()->CheckSmi(p.feedback()), end, efalse, if_false);
-
-    control = graph()->NewNode(common()->Merge(2), if_true, if_false);
-    effect = graph()->NewNode(common()->EffectPhi(2), etrue, efalse, control);
-    end = graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
-                           vtrue, vfalse, control);
-  }
-
-  Node* from = graph()->NewNode(
-      common()->Select(MachineRepresentation::kTagged, BranchHint::kFalse),
-      graph()->NewNode(simplified()->NumberLessThan(), start,
-                       jsgraph()->ZeroConstant()),
-      graph()->NewNode(
-          simplified()->NumberMax(),
-          graph()->NewNode(simplified()->NumberAdd(), length, start),
-          jsgraph()->ZeroConstant()),
-      graph()->NewNode(simplified()->NumberMin(), start, length));
-  // {from} is always in non-negative Smi range, but our typer cannot
-  // figure that out yet.
-  from = effect = graph()->NewNode(common()->TypeGuard(Type::UnsignedSmall()),
-                                   from, effect, control);
-
-  Node* to = graph()->NewNode(
-      common()->Select(MachineRepresentation::kTagged, BranchHint::kFalse),
-      graph()->NewNode(simplified()->NumberLessThan(), end,
-                       jsgraph()->ZeroConstant()),
-      graph()->NewNode(simplified()->NumberMax(),
-                       graph()->NewNode(simplified()->NumberAdd(), length, end),
-                       jsgraph()->ZeroConstant()),
-      graph()->NewNode(simplified()->NumberMin(), end, length));
-  // {to} is always in non-negative Smi range, but our typer cannot
-  // figure that out yet.
-  to = effect = graph()->NewNode(common()->TypeGuard(Type::UnsignedSmall()), to,
-                                 effect, control);
-
-  Node* result_string = nullptr;
-  // Return empty string if {from} is smaller than {to}.
-  {
-    Node* check = graph()->NewNode(simplified()->NumberLessThan(), from, to);
-
-    Node* branch =
-        graph()->NewNode(common()->Branch(BranchHint::kTrue), check, control);
-
-    Node* if_true = graph()->NewNode(common()->IfTrue(), branch);
-    Node* etrue = effect;
-    Node* vtrue = etrue = graph()->NewNode(simplified()->StringSubstring(),
-                                           receiver, from, to, etrue, if_true);
-
-    Node* if_false = graph()->NewNode(common()->IfFalse(), branch);
-    Node* efalse = effect;
-    Node* vfalse = jsgraph()->EmptyStringConstant();
-
-    control = graph()->NewNode(common()->Merge(2), if_true, if_false);
-    effect = graph()->NewNode(common()->EffectPhi(2), etrue, efalse, control);
-    result_string =
-        graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
-                         vtrue, vfalse, control);
-  }
-
-  ReplaceWithValue(node, result_string, effect, control);
-  return Replace(result_string);
+  ReplaceWithValue(node, value, a.effect(), a.control());
+  return Replace(value);
 }
 
 // ES #sec-string.prototype.substr
