@@ -211,6 +211,10 @@ class V8_EXPORT_PRIVATE WasmInterpreter {
   static ControlTransferMap ComputeControlTransfersForTesting(
       Zone* zone, const WasmModule* module, const byte* start, const byte* end);
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  static void Suspend();
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
  private:
   Zone zone_;
   std::unique_ptr<WasmInterpreterInternals> internals_;
