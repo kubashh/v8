@@ -372,3 +372,10 @@ class D8TestCase(TestCase):
     """Returns True if the test case is not suitable for predictable testing."""
     return (statusfile.FAIL in self.expected_outcomes or
             self.output_proc.negative)
+
+class PythonTestCase(TestCase):
+  def get_shell(self):
+    return "python"
+
+  def _get_suffix(self):
+    return '.py'
