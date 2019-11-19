@@ -1,0 +1,446 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abcc5f0_92e4f41d",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "I don\u0027t believe these need to be guarded, since they\u0027re just flags. Generally  I\u0027d like to avoid ifdefs like this in headers unless strictly necessary, they tend to invite confusion between symbols in object files.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33db7663_e9abb676",
+        "filename": "src/wasm/gdb-server/gdb-server-thread.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "This isn\u0027t nacl anymore.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac3a1807_5063a677",
+        "filename": "src/wasm/gdb-server/gdb-server-thread.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "Nacl again.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "414ae950_3662ecc5",
+        "filename": "src/wasm/gdb-server/gdb-server-thread.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "The flag doesn\u0027t have any effect though, because Suspend is not implemented.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d11dc7ff_a1c3d00e",
+        "filename": "src/wasm/gdb-server/gdb-server-thread.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "Please add documentation.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9abdf631_07caba1f",
+        "filename": "src/wasm/gdb-server/gdb-server.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "Superfluous.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e133cae6_e7013283",
+        "filename": "src/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "This is not necessary. Just don\u0027t compile the implementation if the build flag is unset. That also applies to all gdb-server source files.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63e780c4_b3542880",
+        "filename": "src/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "What about this? Also please add documentation on the method. What\u0027s supposed to happen here?",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab4161fe_2bc46177",
+        "filename": "src/wasm/gdb-server/session.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "The whole cass needs documentation.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42a37c2b_7cc8dac4",
+        "filename": "src/wasm/gdb-server/session.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "Why is this here? Are there any classes derived off Session?",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f71100a8_6e11d9ce",
+        "filename": "src/wasm/gdb-server/target.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "The class needs more documentation.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea38a73e_bbed233d",
+        "filename": "src/wasm/gdb-server/target.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "Why not enum class?",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ef2237e_b762c482",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "How is this different than a unique_ptr?",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02ef2219_87aec977",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "Addr needs to be documented better. What am I supposed  to pass here?",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee084889_680f4ce0",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "This method shouldn\u0027t be on the interface. You can make it a static in the implementation instead, since it has only one call site anyways.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78762729_f0aee7b6",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "This and the write method below deserve more documentation. Why are the ptr types different? What preconditions do they assume on the pointers? what are the postconditions?",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a82cccf8_fa388a1a",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "The implementation should not be in the header.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9330bf70_f6a17c38",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "These two methods need documentation.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9875e047_9ddcfa34",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "What\u0027s the difference between close and disconnect? Documentation is needed here. The implementation should also be in the source file.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b709049_3e34b66c",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "This doesn\u0027t compile. closesocket is undefined.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3d92f01_1d269bd0",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "The implementation should be in the source file.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65044c77_a4951c54",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "The documentation should be in the source file.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8316bc94_630ae29e",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "Is there any way to avoid having the distinction on the API?",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33db4555_2bf1cffb",
+        "filename": "src/wasm/gdb-server/util.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "The file is superfluous.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d97b8e7_5b5bec84",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "This is pointless. gdb_server_ is a uniqut ptr.",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0f1ab93_7c29439d",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:08:49Z",
+      "side": 1,
+      "message": "The arguments above also apply here, there\u0027s an ABI break between object files compiled with different settings.\n\nIs there a way to avoid it? We could forward declare GdbServer in the header and define it as an empty class in the implementation. That would fix the ABI, but might look weird. Thoughts on that?",
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
