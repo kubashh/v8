@@ -33,6 +33,52 @@
       "revId": "32481a7783640332c7d275f8ca1cef8d8af04949",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a38a50a_2e0b51f9",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4531,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-11-19T09:14:12Z",
+      "side": 1,
+      "message": "nit: Indentation looks off.",
+      "range": {
+        "startLine": 4531,
+        "startChar": 27,
+        "endLine": 4531,
+        "endChar": 36
+      },
+      "revId": "32481a7783640332c7d275f8ca1cef8d8af04949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9984624d_e90d2943",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4540,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-11-19T09:14:12Z",
+      "side": 1,
+      "message": "nit: Indentation looks off.",
+      "range": {
+        "startLine": 4540,
+        "startChar": 27,
+        "endLine": 4540,
+        "endChar": 36
+      },
+      "revId": "32481a7783640332c7d275f8ca1cef8d8af04949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
