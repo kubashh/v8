@@ -450,6 +450,30 @@
     },
     {
       "key": {
+        "uuid": "02c5d5d1_a11374b4",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-19T10:23:31Z",
+      "side": 1,
+      "message": "+1. What is the debugging story going to be for multiple isolates per engine? Is that going to be supported/relevant?",
+      "parentUuid": "e2857bc4_913f6df0",
+      "range": {
+        "startLine": 688,
+        "startChar": 58,
+        "endLine": 688,
+        "endChar": 65
+      },
+      "revId": "b74766db03e70e58cd58eb192b7cd79ab71405f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f0f1ab93_7c29439d",
         "filename": "src/wasm/wasm-engine.h",
         "patchSetId": 2
