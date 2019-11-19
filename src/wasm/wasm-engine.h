@@ -6,6 +6,7 @@
 #define V8_WASM_WASM_ENGINE_H_
 
 #include <memory>
+#include <unordered_map>
 #include <unordered_set>
 
 #include "src/tasks/cancelable-task.h"
@@ -182,6 +183,13 @@ class V8_EXPORT_PRIVATE WasmEngine {
       Isolate* isolate, const WasmFeatures& enabled_features,
       std::shared_ptr<const WasmModule> module, size_t code_size_estimate);
 
+  // Get a cached native module for these wire bytes if there is one, or nullptr
+  // otherwise
+  std::shared_ptr<NativeModule> MaybeGetNativeModule(
+      Vector<const uint8_t> wire_bytes);
+
+  void CacheNativeModule(std::shared_ptr<NativeModule> native_module);
+
   void FreeNativeModule(NativeModule*);
 
   // Sample the code size of the given {NativeModule} in all isolates that have
@@ -274,6 +282,21 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // If an engine-wide GC is currently running, this pointer stores information
   // about that.
   std::unique_ptr<CurrentGCInfo> current_gc_info_;
+
+  struct WireBytesHasher {
+    size_t operator()(const Vector<const uint8_t>& bytes) const;
+  };
+
+  // Native modules cached by their wire bytes.
+  // Each key points to the corresponding native module's wire bytes, so they
+  // should always be valid as long as the native module is alive.  When
+  // the native module dies, {FreeNativeModule} deletes the entry from the
+  // map, so that we do not leave any dangling key pointing to an expired
+  // weak_ptr. This also serves as a way to regularly clean up the map, which
+  // would otherwise accumulate expired entries.
+  std::unordered_map<Vector<const uint8_t>, std::weak_ptr<NativeModule>,
+                     WireBytesHasher>
+      native_module_cache_;
 
   // End of fields protected by {mutex_}.
   //////////////////////////////////////////////////////////////////////////////
