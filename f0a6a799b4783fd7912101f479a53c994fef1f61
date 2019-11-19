@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa201b41_1bbfede2",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-11-19T17:10:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "610a9c09_bb144577",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf40aa3f_276270a2",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e822121b_421b8aae",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-11-19T17:10:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf40aa3f_276270a2",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "d9fc814f_2dd433de",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-11-19T17:10:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1800c90_5e765088",
+      "range": {
+        "startLine": 725,
+        "startChar": 0,
+        "endLine": 726,
+        "endChar": 27
+      },
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5203be3_eb3fb5ac",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 3
@@ -70,6 +130,24 @@
       "writtenOn": "2019-11-18T15:19:58Z",
       "side": 1,
       "message": "Please add a line describing in which situation(s) the module might not have wire bytes.",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a339ed2_81d3024c",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-11-19T17:10:08Z",
+      "side": 1,
+      "message": "This only happens in some tests explicitly creating the native module. On second thought I think it is cleaner to just set some empty bytes in the test to avoid this check.",
+      "parentUuid": "f5203be3_eb3fb5ac",
       "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -90,6 +168,24 @@
       "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc83ecfc_cac02732",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-11-19T17:10:08Z",
+      "side": 1,
+      "message": "Modules compiled from asm-js are not cached. Although this is unlikely, we might be freeing an asm-js module with the same bytes as a non-expired cached wasm module.\nThe reason for not caching asm-js modules is that the {ModuleOrigin} now contains strictness information, and is stored in the {WasmModule} object inside the {NativeModule}. So sharing them would be observable (see regress-985154.js).",
+      "parentUuid": "5616d49c_cf272032",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "7d729e06_92c7bb96",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-11-19T17:10:08Z",
+      "side": 1,
+      "message": "Ah yes, this is a merge error. Removed.",
+      "parentUuid": "b4c88c1a_42388602",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 48
+      },
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fcaf9e21_6e1af1c0",
         "filename": "src/wasm/wasm-engine.h",
         "patchSetId": 3
@@ -130,6 +250,24 @@
       "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3d876be_b8a8b20c",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-11-19T17:10:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcaf9e21_6e1af1c0",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -150,6 +288,24 @@
     },
     {
       "key": {
+        "uuid": "90cf7605_e7f30838",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-11-19T17:10:08Z",
+      "side": 1,
+      "message": "Discussed offline. This was done with streaming compilation in mind, but it looks like we are going for a solution that would not require it either anyway. Done.",
+      "parentUuid": "04db4447_a2383ba9",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b974bde2_9d57ad64",
         "filename": "src/wasm/wasm-engine.h",
         "patchSetId": 3
@@ -161,6 +317,24 @@
       "writtenOn": "2019-11-18T15:19:58Z",
       "side": 1,
       "message": "Who is owning the Vector here? Is it owned by the NativeModule itself? That would be problematic since the pointer is weak. Would it be enough to just store a size_t-sized hash here? If that matches, we could then do a check against the actual wire bytes in the native module.",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab60118e_94714b91",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-11-19T17:10:08Z",
+      "side": 1,
+      "message": "Also discussed offline, this all works but needs some more documentation.",
+      "parentUuid": "b974bde2_9d57ad64",
       "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -181,6 +355,24 @@
       "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72e4f467_437133fe",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-11-19T17:10:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b3fffb5_8d31468b",
+      "revId": "f0a6a799b4783fd7912101f479a53c994fef1f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
