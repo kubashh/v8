@@ -13,6 +13,7 @@
 #include "src/objects/heap-number.h"
 #include "src/objects/js-promise.h"
 #include "src/objects/objects-inl.h"
+#include "src/strings/string-hasher-inl.h"
 #include "src/utils/ostreams.h"
 #include "src/wasm/function-compiler.h"
 #include "src/wasm/module-compiler.h"
@@ -298,9 +299,16 @@ MaybeHandle<WasmModuleObject> WasmEngine::SyncCompile(
   // in {CompileToModuleObject}.
   Handle<FixedArray> export_wrappers;
   std::shared_ptr<NativeModule> native_module =
-      CompileToNativeModule(isolate, enabled, thrower,
-                            std::move(result).value(), bytes, &export_wrappers);
-  if (!native_module) return {};
+      MaybeGetNativeModule(bytes.module_bytes());
+  if (native_module) {
+    CompileJsToWasmWrappers(isolate, result.value().get(), &export_wrappers);
+  } else {
+    native_module = CompileToNativeModule(isolate, enabled, thrower,
+                                          std::move(result).value(), bytes,
+                                          &export_wrappers);
+    if (!native_module) return {};
+    CacheNativeModule(native_module);
+  }
 
   Handle<Script> script =
       CreateWasmScript(isolate, bytes, native_module->module()->source_map_url,
@@ -690,6 +698,33 @@ std::shared_ptr<NativeModule> WasmEngine::NewNativeModule(
   return native_module;
 }
 
+std::shared_ptr<NativeModule> WasmEngine::MaybeGetNativeModule(
+    Vector<const uint8_t> wire_bytes) {
+  base::MutexGuard lock(&mutex_);
+  auto it = native_module_cache_.find(wire_bytes);
+  if (it == native_module_cache_.end()) {
+    return nullptr;
+  }
+  auto shared_native_module = it->second.lock();
+  // Guaranteed by {FreeNativeModule}.
+  DCHECK_NOT_NULL(shared_native_module);
+  return shared_native_module;
+}
+
+void WasmEngine::CacheNativeModule(
+    std::shared_ptr<NativeModule> native_module) {
+  DCHECK_NOT_NULL(native_module);
+  base::MutexGuard lock(&mutex_);
+  DCHECK(native_module->has_wire_bytes());
+  auto it = native_module_cache_.find(native_module->wire_bytes());
+  DCHECK_EQ(it, native_module_cache_.end());
+  it = native_module_cache_.emplace(native_module->wire_bytes(), native_module)
+           .first;
+  auto shared_native_module = it->second.lock();
+  // Guaranteed by {FreeNativeModule}.
+  DCHECK_NOT_NULL(shared_native_module);
+}
+
 void WasmEngine::FreeNativeModule(NativeModule* native_module) {
   base::MutexGuard guard(&mutex_);
   auto it = native_modules_.find(native_module);
@@ -729,6 +764,13 @@ void WasmEngine::FreeNativeModule(NativeModule* native_module) {
     }
     TRACE_CODE_GC("Native module %p died, reducing dead code objects to %zu.\n",
                   native_module, current_gc_info_->dead_code.size());
+  }
+  auto cache_it = native_module_cache_.find(native_module->wire_bytes());
+  // Not all native modules are stored in the cache currently. In particular
+  // asynchronous compilation and asmjs compilation do not. So make sure that
+  // we are deleting an existing entry, and check that the entry is expired.
+  if (cache_it != native_module_cache_.end() && cache_it->second.expired()) {
+    native_module_cache_.erase(cache_it);
   }
   native_modules_.erase(it);
 }
@@ -965,6 +1007,13 @@ void WasmEngine::GlobalTearDown() {
 // static
 std::shared_ptr<WasmEngine> WasmEngine::GetWasmEngine() {
   return *GetSharedWasmEngine();
+}
+
+size_t WasmEngine::WireBytesHasher::operator()(
+    const Vector<const uint8_t>& bytes) const {
+  return StringHasher::HashSequentialString(
+      reinterpret_cast<const char*>(bytes.begin()),
+      static_cast<int>(bytes.size()), kZeroHashSeed);
 }
 
 // {max_mem_pages} is declared in wasm-limits.h.
