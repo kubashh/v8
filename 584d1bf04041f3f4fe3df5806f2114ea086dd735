@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da63f6e1_77156932",
+        "filename": "src/compiler/graph-assembler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-19T14:09:55Z",
+      "side": 1,
+      "message": "For the call reducer we can probably get away with CheckSmi and CheckString that always use the call node\u0027s feedback. Have you considered adding such methods to the CallReducerAssembler, perhaps even instead of these more general ones.",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d698813_3820636b",
+        "filename": "src/compiler/graph-assembler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-19T14:09:55Z",
+      "side": 1,
+      "message": "Please use the existing methods and then have a separate renaming CL.",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d93a7bc6_972751c5",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-19T14:09:55Z",
+      "side": 1,
+      "message": "Hmm not sure if this restriction makes sense.",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72cba5b3_b81ff6aa",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-19T14:09:55Z",
+      "side": 1,
+      "message": "Please add some way of telling the builder which branch should be deferred. At the moment that information got lost in your translation.",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5578560_5c977c7d",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-19T14:09:55Z",
+      "side": 1,
+      "message": "I think this can be const too.",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a63d44d_773c76d3",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-19T14:09:55Z",
+      "side": 1,
+      "message": "Let\u0027s stick with ZeroConstant.",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ca2cd26_48e108b0",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-19T14:09:55Z",
+      "side": 1,
+      "message": "Unless this will be used frequently I think it\u0027s not worth defining it. Right now it\u0027s used only once.",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68165cb9_bdcda60a",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-19T14:09:55Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
