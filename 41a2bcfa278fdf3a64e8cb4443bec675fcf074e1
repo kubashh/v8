@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "17fb5cb7_c1573d7c",
+        "filename": "src/wasm/gdb-server/gdb-server-thread.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-20T23:17:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71f61970_462c42c5",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2edaad05_62408336",
         "filename": "src/wasm/gdb-server/gdb-server-thread.h",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1462c3f_8e6afd3f",
+        "filename": "src/wasm/gdb-server/gdb-server-thread.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-20T23:17:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2edaad05_62408336",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f64e03a8_d29cd6f6",
+        "filename": "src/wasm/gdb-server/gdb-server.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-20T23:17:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "384a08e0_3a7c95dc",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d567251_947f7bc9",
         "filename": "src/wasm/gdb-server/gdb-server.h",
         "patchSetId": 8
@@ -67,6 +121,24 @@
       "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ed31a71_05c55005",
+        "filename": "src/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-20T23:17:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d567251_947f7bc9",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "d3e9b27e_ae4cdf45",
+        "filename": "src/wasm/gdb-server/transport.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-20T23:17:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecfed2a5_fd39049d",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae98f501_88f6262d",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 8
@@ -98,6 +188,24 @@
       "writtenOn": "2019-11-20T09:25:02Z",
       "side": 1,
       "message": "This is not quite correct, GdbServer shouldn\u0027t be a singleton. There might be multiple seperate engines, each with their own set of concurrent isolates. A single gdb session should probably only talk to a single engine. WDYT?",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "599c9406_9b2e081e",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-20T23:17:28Z",
+      "side": 1,
+      "message": "I thought that there was an unique WasmEngine, so there should also be a single GdbServer in charge of the full set of isolates managed by the WasmEngine. Is this not the case?\n\nI don\u0027t think we should have multiple ports for the debugger or more than one GDB-remote thread to handle the protocol, so GdbServer should really be a singleton in my opinion even if there were multiple engines.",
+      "parentUuid": "ae98f501_88f6262d",
       "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
