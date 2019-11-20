@@ -7,6 +7,7 @@
 #include "src/api/api.h"
 #include "src/ast/ast-traversal-visitor.h"
 #include "src/ast/prettyprinter.h"
+#include "src/base/platform/time.h"
 #include "src/builtins/builtins.h"
 #include "src/common/message-template.h"
 #include "src/debug/debug.h"
@@ -87,9 +88,40 @@ RUNTIME_FUNCTION(Runtime_ReportDetachedWindowAccess) {
   DCHECK_EQ(0, args.length());
   Handle<NativeContext> native_context(isolate->context().native_context(),
                                        isolate);
-  // TODO(bartekn,chromium:1018156): Report this to Blink, for it to emit it
-  // via UKM. Use native_context->detached_window_reason().value()
-  // This will be addressed as the first step after this CL lands.
+  v8::Isolate::UseCounterFeature counterMain;
+  v8::Isolate::UseCounterFeature counter10s;
+  v8::Isolate::UseCounterFeature counter1min;
+  switch (native_context->GetDetachedWindowReason()) {
+    case v8::Context::kWindowNotDetached:
+      counterMain = v8::Isolate::kUseCounterFeatureCount;  // sentinel value
+      break;
+    case v8::Context::kDetachedWindowByNavigation:
+      counterMain = v8::Isolate::kCallInDetachedWindowByNavigation;
+      counter10s = v8::Isolate::kCallInDetachedWindowByNavigationAfter10s;
+      counter1min = v8::Isolate::kCallInDetachedWindowByNavigationAfter1min;
+      break;
+    case v8::Context::kDetachedWindowByClosing:
+      counterMain = v8::Isolate::kCallInDetachedWindowByClosing;
+      counter10s = v8::Isolate::kCallInDetachedWindowByClosingAfter10s;
+      counter1min = v8::Isolate::kCallInDetachedWindowByClosingAfter1min;
+      break;
+    case v8::Context::kDetachedWindowByOtherReason:
+      counterMain = v8::Isolate::kCallInDetachedWindowByOtherReason;
+      counter10s = v8::Isolate::kCallInDetachedWindowByOtherReasonAfter10s;
+      counter1min = v8::Isolate::kCallInDetachedWindowByOtherReasonAfter1min;
+      break;
+  }
+  if (counterMain != v8::Isolate::kUseCounterFeatureCount) {
+    isolate->CountUsage(counterMain);
+    // This can be off by up to 1s in each direction, but that's ok.
+    int secsPassed = native_context->SecsSinceDetachedWindow();
+    if (secsPassed >= 10) {
+      isolate->CountUsage(counter10s);
+    }
+    if (secsPassed >= 60) {
+      isolate->CountUsage(counter1min);
+    }
+  }
 
   // The return value isn't needed, but RUNTIME_FUNCTION sets it up.
   return ReadOnlyRoots(isolate).undefined_value();
