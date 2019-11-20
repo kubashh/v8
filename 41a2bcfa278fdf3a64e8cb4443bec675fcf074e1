@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71f61970_462c42c5",
+        "filename": "src/wasm/gdb-server/gdb-server-thread.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-20T09:25:02Z",
+      "side": 1,
+      "message": "After this, socket_binding will be destroyed. Is that intended? In that case, Bind should return socket_binding by value instead of unique_ptr.",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2edaad05_62408336",
+        "filename": "src/wasm/gdb-server/gdb-server-thread.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-20T09:25:02Z",
+      "side": 1,
+      "message": "Could you add class comments saying what the purpose of this class is?",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "384a08e0_3a7c95dc",
+        "filename": "src/wasm/gdb-server/gdb-server.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-20T09:25:02Z",
+      "side": 1,
+      "message": "The impact is probably negligible, since this happens once per loaded module, right?",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d567251_947f7bc9",
+        "filename": "src/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-20T09:25:02Z",
+      "side": 1,
+      "message": "Some comments here would be great",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae98f501_88f6262d",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-20T09:25:02Z",
+      "side": 1,
+      "message": "This is not quite correct, GdbServer shouldn\u0027t be a singleton. There might be multiple seperate engines, each with their own set of concurrent isolates. A single gdb session should probably only talk to a single engine. WDYT?",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
