@@ -691,6 +691,7 @@ macro Float64IsNaN(n: float64): bool {
 // The type of all tagged values that can safely be compared with TaggedEqual.
 type TaggedWithIdentity = JSReceiver|FixedArrayBase|Oddball|Map|EmptyString;
 
+extern operator '==' macro TaggedEqual(Object, Object): bool;
 extern operator '==' macro TaggedEqual(TaggedWithIdentity, Object): bool;
 extern operator '==' macro TaggedEqual(Object, TaggedWithIdentity): bool;
 extern operator '==' macro TaggedEqual(

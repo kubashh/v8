@@ -729,8 +729,6 @@ namespace internal {
   TFJ(PromiseGetCapabilitiesExecutor, 2, kReceiver, kResolve, kReject)         \
   TFJ(PromiseConstructorLazyDeoptContinuation, 4, kReceiver, kPromise,         \
       kReject, kException, kResult)                                            \
-  /* ES6 #sec-promise-executor */                                              \
-  TFJ(PromiseConstructor, 1, kReceiver, kExecutor)                             \
   CPP(IsPromise)                                                               \
   /* ES #sec-promise.prototype.then */                                         \
   TFJ(PromisePrototypeThen, 2, kReceiver, kOnFulfilled, kOnRejected)           \
