@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7eb4d9a2_cf150f2d",
+        "filename": "src/compiler/graph-assembler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-20T13:09:35Z",
+      "side": 1,
+      "message": "Good suggestion, that does improve readability. I moved these into the subclass assembler for now, if needed we can add a generic version here later.",
+      "parentUuid": "da63f6e1_77156932",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d698813_3820636b",
         "filename": "src/compiler/graph-assembler.h",
         "patchSetId": 12
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "54a60fb2_25fda0b4",
+        "filename": "src/compiler/graph-assembler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-20T13:09:35Z",
+      "side": 1,
+      "message": "Renamed in https://crrev.com/c/1926028 which I will land prior to this CL.",
+      "parentUuid": "1d698813_3820636b",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d93a7bc6_972751c5",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 12
@@ -47,6 +83,24 @@
       "writtenOn": "2019-11-19T14:09:55Z",
       "side": 1,
       "message": "Hmm not sure if this restriction makes sense.",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca37a76f_fa0ea1c5",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-20T13:09:35Z",
+      "side": 1,
+      "message": "All reductions I touched so far checked this; do you have an example where it would not apply? I was planning to at least keep this in until I run into such a case.",
+      "parentUuid": "d93a7bc6_972751c5",
       "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "87454b1b_f354c910",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-20T13:09:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72cba5b3_b81ff6aa",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5578560_5c977c7d",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 12
@@ -84,6 +156,24 @@
       "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6b18e0f_e4032b50",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-20T13:09:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5578560_5c977c7d",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "22e63f14_cfd83d4e",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-20T13:09:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a63d44d_773c76d3",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ca2cd26_48e108b0",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 12
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "e81fa97e_552ab6b7",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-20T13:09:35Z",
+      "side": 1,
+      "message": "Done. (This grew historically, initially it had multiple callsites that I later merged into one.)",
+      "parentUuid": "0ca2cd26_48e108b0",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68165cb9_bdcda60a",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 12
@@ -135,6 +261,24 @@
       "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df115145_8360eef3",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-20T13:09:35Z",
+      "side": 1,
+      "message": "😎",
+      "parentUuid": "68165cb9_bdcda60a",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
