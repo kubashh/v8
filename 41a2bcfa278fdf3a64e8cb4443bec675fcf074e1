@@ -70,6 +70,23 @@
     },
     {
       "key": {
+        "uuid": "ecfed2a5_fd39049d",
+        "filename": "src/wasm/gdb-server/transport.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-11-20T18:10:55Z",
+      "side": 1,
+      "message": "nit: we\u0027re already in a `#if _WIN32` block, started on line 199",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae98f501_88f6262d",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 8
