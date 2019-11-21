@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8bfddb6d_b563eb21",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-21T11:11:10Z",
+      "side": 1,
+      "message": "I like it, changed to ExpectTrue/False.",
+      "parentUuid": "cca1ca7f_27bfdbce",
+      "range": {
+        "startLine": 86,
+        "startChar": 19,
+        "endLine": 86,
+        "endChar": 29
+      },
+      "revId": "7a8ef91cf2519878e0986fb32cba2dbc6c0d9689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b41e92b5_e9f5c50a",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 13
@@ -39,6 +63,24 @@
       "revId": "7a8ef91cf2519878e0986fb32cba2dbc6c0d9689",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "497041bb_8360b844",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-21T11:11:10Z",
+      "side": 1,
+      "message": "Discussed offline. The reasoning behind the current convention to put ExpectTrue/False just before .Value() is that I branch hints are secondary information. Interspersing into the actual if-then-else code would make the important bits (the condition, then-body and else-body) harder to read.",
+      "parentUuid": "b41e92b5_e9f5c50a",
+      "revId": "7a8ef91cf2519878e0986fb32cba2dbc6c0d9689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
