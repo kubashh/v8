@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_CRDTP_PARSER_HANDLER_H_
-#define V8_CRDTP_PARSER_HANDLER_H_
+#ifndef CRDTP_PARSER_HANDLER_H_
+#define CRDTP_PARSER_HANDLER_H_
 
 #include <cstdint>
 #include "span.h"
 #include "status.h"
 
-namespace v8_crdtp {
+namespace crdtp {
 // Handler interface for parser events emitted by a streaming parser.
 // See cbor::NewCBOREncoder, cbor::ParseCBOR, json::NewJSONEncoder,
 // json::ParseJSON.
@@ -34,6 +34,6 @@ class ParserHandler {
   // |error| must be an eror, as in, |error.is_ok()| can't be true.
   virtual void HandleError(Status error) = 0;
 };
-}  // namespace v8_crdtp
+}  // namespace crdtp
 
-#endif  // V8_CRDTP_PARSER_HANDLER_H_
+#endif  // CRDTP_PARSER_HANDLER_H_
