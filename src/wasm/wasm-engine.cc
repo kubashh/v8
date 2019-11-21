@@ -21,6 +21,10 @@
 #include "src/wasm/streaming-decoder.h"
 #include "src/wasm/wasm-objects-inl.h"
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+#include "src/wasm/gdb-server/gdb-server.h"
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
 namespace v8 {
 namespace internal {
 namespace wasm {
@@ -125,6 +129,15 @@ class WasmGCForegroundTask : public CancelableTask {
 
 }  // namespace
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+static gdb_server::GdbServer* GetGdbServer() {
+  DCHECK(FLAG_wasm_gdb_remote);
+  static base::LazyInstance<gdb_server::GdbServer>::type item =
+      LAZY_INSTANCE_INITIALIZER;
+  return item.Pointer();
+}
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
 struct WasmEngine::CurrentGCInfo {
   explicit CurrentGCInfo(int8_t gc_sequence_index)
       : gc_sequence_index(gc_sequence_index) {
@@ -214,6 +227,12 @@ struct WasmEngine::NativeModuleInfo {
 WasmEngine::WasmEngine() : code_manager_(FLAG_wasm_max_code_space * MB) {}
 
 WasmEngine::~WasmEngine() {
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  if (FLAG_wasm_gdb_remote) {
+    GetGdbServer()->Terminate();
+  }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
   // Synchronize on all background compile tasks.
   background_compile_task_manager_.CancelAndWait();
   // All AsyncCompileJobs have been canceled.
@@ -671,10 +690,22 @@ void WasmEngine::LogOutstandingCodesForIsolate(Isolate* isolate) {
   WasmCode::DecrementRefCount(VectorOf(code_to_log));
 }
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+V8_DECLARE_ONCE(init_gdb_server_once);
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
 std::shared_ptr<NativeModule> WasmEngine::NewNativeModule(
     Isolate* isolate, const WasmFeatures& enabled,
     std::shared_ptr<const WasmModule> module, size_t code_size_estimate) {
   // TODO(clemensb): Remove --wasm-far-jump-table and {can_request_more}.
+
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+  if (FLAG_wasm_gdb_remote) {
+    base::CallOnce(&init_gdb_server_once,
+                   []() { GetGdbServer()->Initialize(); });
+  }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
   bool can_request_more =
       !wasm::NativeModule::kNeedsFarJumpsBetweenCodeSpaces ||
       FLAG_wasm_far_jump_table;
