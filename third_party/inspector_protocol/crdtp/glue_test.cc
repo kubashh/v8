@@ -9,7 +9,7 @@
 
 #include "test_platform.h"
 
-namespace v8_crdtp {
+namespace crdtp {
 namespace glue {
 // =============================================================================
 // glue::detail::PtrMaybe, glue::detail::ValueMaybe, templates for optional
@@ -41,4 +41,4 @@ TEST(PtrValueTest, SmokeTest) {
   EXPECT_EQ(out, 42);
 }
 }  // namespace glue
-}  // namespace v8_crdtp
+}  // namespace crdtp

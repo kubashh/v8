@@ -5,7 +5,7 @@
 #include "status.h"
 #include "test_platform.h"
 
-namespace v8_crdtp {
+namespace crdtp {
 // =============================================================================
 // Status and Error codes
 // =============================================================================
@@ -18,4 +18,4 @@ TEST(StatusTest, StatusToASCIIString) {
   Status cbor_error(Error::CBOR_TRAILING_JUNK, 21);
   EXPECT_EQ("CBOR: trailing junk at position 21", cbor_error.ToASCIIString());
 }
-}  // namespace v8_crdtp
+}  // namespace crdtp

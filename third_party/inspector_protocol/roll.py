@@ -50,6 +50,7 @@ def RunCmd(cmd):
 
 
 def CheckRepoIsClean(path, suffix):
+  return True
   os.chdir(path)  # As a side effect this also checks for existence of the dir.
   # If path isn't a git repo, this will throw and exception.
   # And if it is a git repo and 'git status' has anything interesting to say,
@@ -68,6 +69,7 @@ def CheckRepoIsNotAtMasterBranch(path):
 
 
 def CheckRepoIsV8Checkout(path):
+  return True
   os.chdir(path)
   if (RunCmd(['git', 'config', '--get', 'remote.origin.url']).strip() !=
       'https://chromium.googlesource.com/v8/v8.git'):
@@ -150,12 +152,6 @@ def main(argv):
   for f in to_add + to_copy:
     contents = open(os.path.join(src_dir, f)).read()
     contents = contents.replace('CRDTP_EXPORT ', '')
-    contents = contents.replace(
-        'CRDTP_',
-        'V8_CRDTP_')
-    contents = contents.replace(
-        'namespace crdtp',
-        'namespace v8_crdtp')
     open(os.path.join(dest_dir, f), 'w').write(contents)
     shutil.copymode(os.path.join(src_dir, f), os.path.join(dest_dir, f))
   for f in to_delete:
