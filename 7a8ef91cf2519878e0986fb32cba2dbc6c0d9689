@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cca1ca7f_27bfdbce",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-21T08:32:07Z",
+      "side": 1,
+      "message": "\"Assume\" is a little strong, in particular from a logical point of view. How about \"Hint\" or \"Predict\" or \"Expect\"?",
+      "range": {
+        "startLine": 86,
+        "startChar": 19,
+        "endLine": 86,
+        "endChar": 29
+      },
+      "revId": "7a8ef91cf2519878e0986fb32cba2dbc6c0d9689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b41e92b5_e9f5c50a",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-21T08:32:07Z",
+      "side": 1,
+      "message": "I\u0027d prefer this to be closer to the condition, so either as the first thing after the SelectIf or even as a second argument to SelectIf.",
+      "revId": "7a8ef91cf2519878e0986fb32cba2dbc6c0d9689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

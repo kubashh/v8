@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "6778dcda_b1aba755",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-11-21T08:32:07Z",
+      "side": 1,
+      "message": "There are many Reduce* functions that do work regardless of the speculation mode (randome example: ReduceFunctionPrototypeCall). This DCHECK would prevent using the assembler for these.",
+      "parentUuid": "ca37a76f_fa0ea1c5",
+      "revId": "584d1bf04041f3f4fe3df5806f2114ea086dd735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72cba5b3_b81ff6aa",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 12
