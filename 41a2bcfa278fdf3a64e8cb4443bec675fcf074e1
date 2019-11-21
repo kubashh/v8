@@ -227,6 +227,24 @@
       "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d5cb15b_d7e3fcb7",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-21T23:31:25Z",
+      "side": 1,
+      "message": "There is something I am missing here because from GetSharedWasmEngine() in src\\wasm\\wasm-engine.cc I had the impression there could only be one WasmEngine, at least for now. But it makes sense to tie the lifespan of GdbServer to its \u0027owner\u0027 WasmEngine so I have modified the code as you suggested, introducing an empty class GdbServer {}; for the case where V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING is not set, in order not to break the class ABI.\nThis can evolve when there will be actual interaction between GdbServer and WasmEngine in future CLs.",
+      "parentUuid": "3a2941e3_7918136c",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
