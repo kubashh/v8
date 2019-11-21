@@ -209,6 +209,24 @@
       "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a2941e3_7918136c",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-21T09:03:34Z",
+      "side": 1,
+      "message": "In general, there can be multiple engines. In that case, I don\u0027t think there should be a single gdb connection spanning all isolates, because it might give you strange results. Think of it as if you were looking at two seperate processes in a single debugger at the same time.",
+      "parentUuid": "599c9406_9b2e081e",
+      "revId": "41a2bcfa278fdf3a64e8cb4443bec675fcf074e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
