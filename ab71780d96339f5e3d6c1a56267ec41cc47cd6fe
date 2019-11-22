@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cde7bec6_effcebc1",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-11-22T21:08:55Z",
+      "side": 1,
+      "message": "I don\u0027t understand this comment. You needed to add this check and return if !\u003d kSlow for a reason, so I\u0027m guessing other handlers do use this path under certain conditions? Maybe the comment just isn\u0027t as clear as it could be.",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 68
+      },
+      "revId": "ab71780d96339f5e3d6c1a56267ec41cc47cd6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f45433de_536b3de8",
+        "filename": "test/mjsunit/regress/regress-crbug-1027025.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-11-22T21:08:55Z",
+      "side": 1,
+      "message": "Looks like this was directly copied from the fuzzer repro. I see some of the other regression tests add a comment as to what the issue was the test uncovered. That seems like good practice to me (especially as the bug number on this one isn\u0027t publicly visible).",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "ab71780d96339f5e3d6c1a56267ec41cc47cd6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
