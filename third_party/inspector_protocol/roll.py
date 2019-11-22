@@ -150,12 +150,6 @@ def main(argv):
   for f in to_add + to_copy:
     contents = open(os.path.join(src_dir, f)).read()
     contents = contents.replace('CRDTP_EXPORT ', '')
-    contents = contents.replace(
-        'CRDTP_',
-        'V8_CRDTP_')
-    contents = contents.replace(
-        'namespace crdtp',
-        'namespace v8_crdtp')
     open(os.path.join(dest_dir, f), 'w').write(contents)
     shutil.copymode(os.path.join(src_dir, f), os.path.join(dest_dir, f))
   for f in to_delete:

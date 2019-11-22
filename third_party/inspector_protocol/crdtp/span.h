@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_CRDTP_SPAN_H_
-#define V8_CRDTP_SPAN_H_
+#ifndef CRDTP_SPAN_H_
+#define CRDTP_SPAN_H_
 
 #include <algorithm>
 #include <cstdint>
@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace v8_crdtp {
+namespace crdtp {
 // =============================================================================
 // span - sequence of bytes
 // =============================================================================
@@ -84,6 +84,6 @@ inline bool SpanEquals(span<uint8_t> x, span<uint8_t> y) noexcept {
   return x.data() == y.data() || len == 0 ||
          std::memcmp(x.data(), y.data(), len) == 0;
 }
-}  // namespace v8_crdtp
+}  // namespace crdtp
 
-#endif  // V8_CRDTP_SPAN_H_
+#endif  // CRDTP_SPAN_H_

@@ -11,7 +11,7 @@
 #include <limits>
 #include <stack>
 
-namespace v8_crdtp {
+namespace crdtp {
 namespace cbor {
 namespace {
 // Indicates the number of bits the "initial byte" needs to be shifted to the
@@ -1150,4 +1150,4 @@ Status AppendString8EntryToCBORMap(span<uint8_t> string8_key,
   return AppendString8EntryToCBORMapTmpl(string8_key, string8_value, cbor);
 }
 }  // namespace cbor
-}  // namespace v8_crdtp
+}  // namespace crdtp
