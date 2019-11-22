@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "c425caf8_27b4793a",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1428,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-22T23:23:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "652e08ef_a707464f",
+      "range": {
+        "startLine": 1428,
+        "startChar": 0,
+        "endLine": 1428,
+        "endChar": 11
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11ccf2e6_a7a29843",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 14
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "If we need an #ifdef (or #ifndef) anyway, wouldn\u0027t it be simpler/nicer then to put the {gdb_server_} field in an #ifdef, and skip this code here?",
       "parentUuid": "19233bea_85cd2a06",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 15
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d579f432_bc637c8a",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-22T23:23:31Z",
+      "side": 1,
+      "message": "That was in the original patchset, but one comment was that:\n\u003e there\u0027s an ABI break between object files compiled with different settings.\n\nWould having an additional data member in a V8_EXPORT_PRIVATE class when a compilation flag is set be a problem?",
+      "parentUuid": "97a4637c_5a95268c",
       "range": {
         "startLine": 42,
         "startChar": 6,
@@ -252,6 +300,24 @@
       "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcc13724_36f2c578",
+        "filename": "test/wasm-remote-debugging/test_files/sort_test.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-22T23:23:31Z",
+      "side": 1,
+      "message": "This file was generated compiling a ~100 lines C++ program with Clang and stripping away the DWARF debug data. For the moment we are only that the GDB-stub correctly initializes when a module is loaded and accepts TCP connections, so we can certainly use wasm-module-builder.js instead of a binary. \nIn the future we\u0027ll need to test more complex scenarios and it could be better to have some clang-compiled module, IMHO, but we can try to keep using wasm-module-builder.js.",
+      "parentUuid": "5ed77bf6_bc00b871",
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
