@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ed77bf6_bc00b871",
+        "filename": "test/wasm-remote-debugging/test_files/sort_test.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-22T13:22:27Z",
+      "side": 1,
+      "message": "How was that sort.wasm file generated? Does it need to be this big?\nWe generally try to avoid binary files in the repository. Could we generate it via wasm-module-builder.js instead (in a smaller version)?",
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
