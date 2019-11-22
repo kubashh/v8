@@ -72,7 +72,11 @@
     "type": "script",
   },
   "unittests": {
-    "label": "//test/unittests:unittests",
+    "label": "//:v8_unittests_fuchsia",
+    "type": "script",
+  },
+  "fuchsia-unittests": {
+    "label": "//test/unittests:v8_unittests_fuchsia",
     "type": "script",
   },
   "webkit": {
