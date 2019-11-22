@@ -5,6 +5,7 @@
 #include "src/objects/contexts.h"
 
 #include "src/ast/modules.h"
+#include "src/base/platform/time.h"
 #include "src/debug/debug.h"
 #include "src/execution/isolate-inl.h"
 #include "src/init/bootstrapper.h"
@@ -499,12 +500,21 @@ STATIC_ASSERT(NativeContext::kSize ==
 void NativeContext::SetDetachedWindowReason(
     v8::Context::DetachedWindowReason reason) {
   set_detached_window_reason(Smi::FromEnum(reason));
+
+  struct timespec now = base::Time::Now().ToTimespec();
+  // Divide by 2 to fit under the Smi limit.
+  set_detached_window_time(Smi::FromInt(static_cast<int>(now.tv_sec / 2)));
 }
 
 v8::Context::DetachedWindowReason NativeContext::GetDetachedWindowReason()
     const {
   return static_cast<v8::Context::DetachedWindowReason>(
       detached_window_reason().value());
+}
+
+int NativeContext::SecsSinceDetachedWindow() const {
+  struct timespec now = base::Time::Now().ToTimespec();
+  return static_cast<int>(now.tv_sec) - detached_window_time().value() * 2;
 }
 
 }  // namespace internal
