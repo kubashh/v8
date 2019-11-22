@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecdbdce6_e19bb962",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-22T06:54:54Z",
+      "side": 1,
+      "message": "Is it possible to add this file conditionally to if(v8_enable_wasm_gdb_remote_debugging), defined in the main BUILD.gn?",
+      "range": {
+        "startLine": 227,
+        "startChar": 4,
+        "endLine": 227,
+        "endChar": 38
+      },
+      "revId": "9e504e5ee39a958fe1f5822c4f1edeec35928e2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
