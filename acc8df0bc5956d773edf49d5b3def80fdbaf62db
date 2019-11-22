@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "261a05fa_1e5feb62",
+        "filename": "tools/release/create_release.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-22T12:07:53Z",
+      "side": 1,
+      "message": "Here is a small visible change. Previously we prepared the commit message from the changelog entry. Now we just use a much simpler version, saying e.g.\n\"Version 1.2.3\n\nTBR\u003d...\"\n\nPreviously it looked like this:\nhttps://chromium.googlesource.com/v8/v8/+/refs/tags/8.0.342\n\nThe scary-looking logic below was for extracting and formatting the lines of the changelog, but this was not used for more than 5 cycles.",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 140,
+        "endChar": 74
+      },
+      "revId": "acc8df0bc5956d773edf49d5b3def80fdbaf62db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
