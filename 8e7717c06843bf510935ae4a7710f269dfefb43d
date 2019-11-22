@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5ff30b4_f5f9a0b3",
+        "filename": "tools/release/test_scripts.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-22T12:12:44Z",
+      "side": 1,
+      "message": "At some point we forked CreateRelease from PushToCandidates. CreateRelease was cleaned-up and is used in prod, while PushToCandidates was forgotten. Some of the test changes in this file stem from the implementations of the steps in CreateRelease differing slightly from the ones in PushToCandidates.",
+      "range": {
+        "startLine": 243,
+        "startChar": 27,
+        "endLine": 243,
+        "endChar": 40
+      },
+      "revId": "8e7717c06843bf510935ae4a7710f269dfefb43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
