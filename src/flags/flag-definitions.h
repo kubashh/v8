@@ -204,7 +204,6 @@ DEFINE_IMPLICATION(harmony_import_meta, harmony_dynamic_import)
 
 // Features that are still work in progress (behind individual flags).
 #define HARMONY_INPROGRESS_BASE(V)                                    \
-  V(harmony_string_replaceall, "harmony String.prototype.replaceAll") \
   V(harmony_regexp_sequence, "RegExp Unicode sequence properties")    \
   V(harmony_weak_refs, "harmony weak references")                     \
   V(harmony_regexp_match_indices, "harmony regexp match indices")     \
@@ -235,14 +234,15 @@ DEFINE_IMPLICATION(harmony_import_meta, harmony_dynamic_import)
 #endif
 
 // Features that are shipping (turned on by default, but internal flag remains).
-#define HARMONY_SHIPPING_BASE(V)                               \
-  V(harmony_namespace_exports,                                 \
-    "harmony namespace exports (export * as foo from 'bar')")  \
-  V(harmony_sharedarraybuffer, "harmony sharedarraybuffer")    \
-  V(harmony_import_meta, "harmony import.meta property")       \
-  V(harmony_dynamic_import, "harmony dynamic import")          \
-  V(harmony_promise_all_settled, "harmony Promise.allSettled") \
-  V(harmony_nullish, "harmony nullish operator")               \
+#define HARMONY_SHIPPING_BASE(V)                                      \
+  V(harmony_string_replaceall, "harmony String.prototype.replaceAll") \
+  V(harmony_namespace_exports,                                        \
+    "harmony namespace exports (export * as foo from 'bar')")         \
+  V(harmony_sharedarraybuffer, "harmony sharedarraybuffer")           \
+  V(harmony_import_meta, "harmony import.meta property")              \
+  V(harmony_dynamic_import, "harmony dynamic import")                 \
+  V(harmony_promise_all_settled, "harmony Promise.allSettled")        \
+  V(harmony_nullish, "harmony nullish operator")                      \
   V(harmony_optional_chaining, "harmony optional chaining syntax")
 
 #ifdef V8_INTL_SUPPORT
