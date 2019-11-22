@@ -8,7 +8,7 @@
 #include <sstream>
 #include <vector>
 #include "src/base/macros.h"
-#include "src/wasm/gdb-server/util.h"
+#include "src/wasm/gdb-server/gdb-remote-util.h"
 
 #if _WIN32
 #include <windows.h>

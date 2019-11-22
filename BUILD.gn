@@ -194,7 +194,7 @@ declare_args() {
   v8_enable_regexp_interpreter_threaded_dispatch = true
 
   # Enable WebAssembly debugging via GDB-remote protocol.
-  v8_enable_wasm_gdb_remote_debugging = false
+  v8_enable_wasm_gdb_remote_debugging = true
 }
 
 # Derived defaults.
@@ -2941,17 +2941,20 @@ v8_source_set("v8_base_without_compiler") {
 
   if (v8_enable_wasm_gdb_remote_debugging) {
     sources += [
+      "src/wasm/gdb-server/gdb-remote-util.cc",
+      "src/wasm/gdb-server/gdb-remote-util.h",
       "src/wasm/gdb-server/gdb-server-thread.cc",
       "src/wasm/gdb-server/gdb-server-thread.h",
       "src/wasm/gdb-server/gdb-server.cc",
       "src/wasm/gdb-server/gdb-server.h",
+      "src/wasm/gdb-server/packet.cc",
+      "src/wasm/gdb-server/packet.h",
       "src/wasm/gdb-server/session.cc",
       "src/wasm/gdb-server/session.h",
       "src/wasm/gdb-server/target.cc",
       "src/wasm/gdb-server/target.h",
       "src/wasm/gdb-server/transport.cc",
       "src/wasm/gdb-server/transport.h",
-      "src/wasm/gdb-server/util.h",
     ]
   }
 

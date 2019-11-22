@@ -187,11 +187,10 @@ void TransportBase::Close() {
 }
 
 void TransportBase::Disconnect() {
-  // Shutdown the connection in both directions.  This should
-  // always succeed, and nothing we can do if this fails.
-  ::shutdown(handle_accept_, SD_BOTH);
-
   if (handle_accept_ != InvalidSocket) {
+    // Shutdown the connection in both directions.  This should
+    // always succeed, and nothing we can do if this fails.
+    ::shutdown(handle_accept_, SD_BOTH);
     CloseSocket(handle_accept_);
     handle_accept_ = InvalidSocket;
   }
@@ -325,6 +324,7 @@ void Transport::Disconnect() {
     TRACE_GDB_REMOTE("Transport::~Transport: Failed to close socket event\n");
   }
   socket_event_ = WSA_INVALID_EVENT;
+  SignalThreadEvent();
 }
 
 #else  // _WIN32

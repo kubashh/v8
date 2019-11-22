@@ -12,7 +12,7 @@ function go() {
                 maximum: 2,
                 element: 'anyfunc',
             }),
-            consoleLog: function (s) { }
+            consoleLog: function (s) { print(s); }
         }
     };
 
