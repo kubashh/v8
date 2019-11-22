@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f5a362f_3cfbb06b",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-11-22T10:51:10Z",
+      "side": 1,
+      "message": "Please move this out of the anonymous namespace.",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 30
+      },
+      "revId": "97623078b8977eb1c0d8a8a4e6aab019806d6033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
