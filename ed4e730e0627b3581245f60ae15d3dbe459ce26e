@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05f163ed_08504991",
+        "filename": "test/mjsunit/regress/wasm/regress-1026680.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-22T19:52:05Z",
+      "side": 1,
+      "message": "We have a test variant that specifies these arguments (see https://cs.chromium.org/chromium/src/v8/tools/testrunner/local/variants.py?q\u003dvariants\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d23).\nHard-coding them here means that all other variants also use these flags, which ultimately means less coverage. I would advice to drop them.",
+      "revId": "ed4e730e0627b3581245f60ae15d3dbe459ce26e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
