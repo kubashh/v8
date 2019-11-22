@@ -182,6 +182,14 @@ KeyedAccessStoreMode StoreHandler::GetKeyedAccessStoreMode(
   DisallowHeapAllocation no_gc;
   if (handler->IsSmi()) {
     int const raw_handler = handler.ToSmi().value();
+    Kind const kind = KindBits::decode(raw_handler);
+    // Verify that it is Slow Handler.
+    // As of now, only the slow handler uses this path to return the
+    // KeyedAccessStoreMode. This Check ensures that if any other handler gets
+    // here, we just return STANDARD_STORE
+    if (kind != kSlow) {
+      return STANDARD_STORE;
+    }
     KeyedAccessStoreMode store_mode =
         KeyedAccessStoreModeBits::decode(raw_handler);
     return store_mode;
