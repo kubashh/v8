@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d398ead2_aefe7321",
+        "filename": "src/wasm/gdb-server/gdb-remote-util.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-22T14:47:39Z",
+      "side": 1,
+      "message": "Could we use ssprintf and strol instead of writing a hex conversion utility?",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 27
+      },
+      "revId": "9e504e5ee39a958fe1f5822c4f1edeec35928e2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ecdbdce6_e19bb962",
         "filename": "test/unittests/BUILD.gn",
         "patchSetId": 1
@@ -22,6 +45,53 @@
       "revId": "9e504e5ee39a958fe1f5822c4f1edeec35928e2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "520aa4e7_2df39230",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-22T14:47:39Z",
+      "side": 1,
+      "message": "Not sure. If not I expect it would be possible to #if guard the contents of the file?",
+      "parentUuid": "ecdbdce6_e19bb962",
+      "range": {
+        "startLine": 227,
+        "startChar": 4,
+        "endLine": 227,
+        "endChar": 38
+      },
+      "revId": "9e504e5ee39a958fe1f5822c4f1edeec35928e2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e16c9b3c_383e3caf",
+        "filename": "test/unittests/wasm/wasm-gdbserver-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-22T14:47:39Z",
+      "side": 1,
+      "message": "Optional: I think this would be clearer if you just gave the full expected string as one.",
+      "range": {
+        "startLine": 79,
+        "startChar": 12,
+        "endLine": 79,
+        "endChar": 56
+      },
+      "revId": "9e504e5ee39a958fe1f5822c4f1edeec35928e2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
