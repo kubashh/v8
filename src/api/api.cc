@@ -7820,6 +7820,16 @@ size_t v8::SharedArrayBuffer::ByteLength() const {
   return obj->byte_length();
 }
 
+Local<v8::Value> SharedArrayBuffer::Wake(Isolate* isolate, size_t address,
+                                         uint32_t num_waiters_to_wake) {
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  i::Handle<i::JSArrayBuffer> obj = Utils::OpenHandle(this);
+  i::Handle<i::Object> result(
+      internal::FutexEmulation::Wake(obj, address, num_waiters_to_wake),
+      i_isolate);
+  return Utils::ToLocal(result);
+}
+
 Local<SharedArrayBuffer> v8::SharedArrayBuffer::New(Isolate* isolate,
                                                     size_t byte_length) {
   CHECK(i::FLAG_harmony_sharedarraybuffer);

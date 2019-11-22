@@ -5510,6 +5510,11 @@ class V8_EXPORT SharedArrayBuffer : public Object {
   size_t ByteLength() const;
 
   /**
+   * Call wake on the SharedArrayBuffer
+   */
+  Local<Value> Wake(Isolate* isolate, size_t address,
+                    uint32_t num_waiters_to_wake);
+  /**
    * Create a new SharedArrayBuffer. Allocate |byte_length| bytes.
    * Allocated memory will be owned by a created SharedArrayBuffer and
    * will be deallocated when it is garbage-collected,
