@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "652e08ef_a707464f",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1428,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-22T19:37:04Z",
+      "side": 1,
+      "message": "+1, we should only have these flags if the gdb server is actually available.",
+      "parentUuid": "0295676f_d8fbf9cc",
+      "range": {
+        "startLine": 1428,
+        "startChar": 0,
+        "endLine": 1428,
+        "endChar": 11
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11ccf2e6_a7a29843",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 14
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "std::unique_ptr\u003cGdbServer\u003e doesn\u0027t compile with incomplete types; see https://stackoverflow.com/questions/9954518/stdunique-ptr-with-an-incomplete-type-wont-compile for details. It would work with raw pointers though.",
       "parentUuid": "11ccf2e6_a7a29843",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 15
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97a4637c_5a95268c",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-22T19:37:04Z",
+      "side": 1,
+      "message": "If we need an #ifdef (or #ifndef) anyway, wouldn\u0027t it be simpler/nicer then to put the {gdb_server_} field in an #ifdef, and skip this code here?",
+      "parentUuid": "19233bea_85cd2a06",
       "range": {
         "startLine": 42,
         "startChar": 6,
