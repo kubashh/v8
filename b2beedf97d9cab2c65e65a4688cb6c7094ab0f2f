@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "d21b4471_e8fbf16b",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1428,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-22T14:39:53Z",
+      "side": 1,
+      "message": "Should we only expose these flags if the compiler flag is on? I believe this will expose documentation for these flags, which could be confusing if they don\u0027t do anything.",
+      "range": {
+        "startLine": 1428,
+        "startChar": 0,
+        "endLine": 1428,
+        "endChar": 11
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11ccf2e6_a7a29843",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-22T14:39:53Z",
+      "side": 1,
+      "message": "What happens if this isn\u0027t here?",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 15
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4aebc23_c1fda5c2",
+        "filename": "test/wasm-remote-debugging/connect.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-22T14:39:53Z",
+      "side": 1,
+      "message": "What does this stand for?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6210e9e9_a662c200",
+        "filename": "test/wasm-remote-debugging/connect.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-22T14:39:53Z",
+      "side": 1,
+      "message": "unittest.main can take argv as a named argument.",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 36,
+        "endChar": 29
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5ed77bf6_bc00b871",
         "filename": "test/wasm-remote-debugging/test_files/sort_test.js",
         "patchSetId": 14
@@ -13,6 +105,29 @@
       "writtenOn": "2019-11-22T13:22:27Z",
       "side": 1,
       "message": "How was that sort.wasm file generated? Does it need to be this big?\nWe generally try to avoid binary files in the repository. Could we generate it via wasm-module-builder.js instead (in a smaller version)?",
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b5348e3_58fd500a",
+        "filename": "test/wasm-remote-debugging/testcfg.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-22T14:39:53Z",
+      "side": 1,
+      "message": "os.path.join",
+      "range": {
+        "startLine": 26,
+        "startChar": 75,
+        "endLine": 26,
+        "endChar": 81
+      },
       "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
