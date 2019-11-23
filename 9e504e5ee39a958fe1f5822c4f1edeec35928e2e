@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fc334ab4_947144af",
+        "filename": "src/wasm/gdb-server/gdb-remote-util.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-23T02:20:10Z",
+      "side": 1,
+      "message": "strtol(const char* str, char** endptr, int base) is not ideal in this case because we need more control on the parsing. For example:\n strtol(\"00\", nullptr, 16)\n strtol(\"P2\", nullptr, 16)\n strtol(\" 0\", nullptr, 16)\n strtol(\"0P\", nullptr, 16)\nall return the same value (0), but only the first one is in the correct protocol format. It is possible to detect the errors by passing a not-null endptr and checking that on return it does not point to str + 2, but this is convoluted and still does not work on the \" 0\" case, which strtol considers correct since it discard the leading whitespaces. Also, some packets may contain numbers (as hex digits) separated by a \u0027;\u0027 or \u0027:\u0027, and for this case it is useful to have a function that checks whether a char is a valid nibble or not.\n\nIn the other direction, we could use sprintf but it adds a \u0027\\0\u0027 at the end that complicates things, and the code becomes more prone to possible buffer overruns. Also, some packets send numbers formatted as big-endian hex strings.",
+      "parentUuid": "d398ead2_aefe7321",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 27
+      },
+      "revId": "9e504e5ee39a958fe1f5822c4f1edeec35928e2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ecdbdce6_e19bb962",
         "filename": "test/unittests/BUILD.gn",
         "patchSetId": 1
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "4fbf66d5_06e92cc4",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-23T02:20:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "520aa4e7_2df39230",
+      "range": {
+        "startLine": 227,
+        "startChar": 4,
+        "endLine": 227,
+        "endChar": 38
+      },
+      "revId": "9e504e5ee39a958fe1f5822c4f1edeec35928e2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e16c9b3c_383e3caf",
         "filename": "test/unittests/wasm/wasm-gdbserver-unittest.cc",
         "patchSetId": 1
@@ -83,6 +131,30 @@
       "writtenOn": "2019-11-22T14:47:39Z",
       "side": 1,
       "message": "Optional: I think this would be clearer if you just gave the full expected string as one.",
+      "range": {
+        "startLine": 79,
+        "startChar": 12,
+        "endLine": 79,
+        "endChar": 56
+      },
+      "revId": "9e504e5ee39a958fe1f5822c4f1edeec35928e2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "18254b6b_8bd9ddc0",
+        "filename": "test/unittests/wasm/wasm-gdbserver-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-23T02:20:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e16c9b3c_383e3caf",
       "range": {
         "startLine": 79,
         "startChar": 12,
