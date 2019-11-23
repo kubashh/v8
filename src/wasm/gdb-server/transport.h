@@ -8,7 +8,7 @@
 #include <sstream>
 #include <vector>
 #include "src/base/macros.h"
-#include "src/wasm/gdb-server/util.h"
+#include "src/wasm/gdb-server/gdb-remote-util.h"
 
 #if _WIN32
 #include <windows.h>
@@ -95,7 +95,7 @@ class TransportBase {
   // shuts down, when the program terminates.
   void Close();
 
-  // If a socket connection with a debugger is present, gracefully closes it.
+  // If we are connected to a debugger, gracefully closes the connection.
   // This should be called when a debugging session gets closed.
   virtual void Disconnect();
 

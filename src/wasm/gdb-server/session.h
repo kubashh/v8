@@ -12,6 +12,7 @@ namespace internal {
 namespace wasm {
 namespace gdb_server {
 
+class Packet;
 class Transport;
 
 // Represents a gdb-remote debugging session.
@@ -19,15 +20,16 @@ class Session {
  public:
   explicit Session(Transport* transport);
 
+  // Attempt to send a packet and optionally wait for an ACK from the receiver.
+  bool SendPacket(Packet* packet);
+
   // Attempt to receive a packet.
-  // For the moment this method is only used to check whether the TCP connection
-  // is still active; all bytes read are discarded.
-  bool GetPacket();
+  bool GetPacket(Packet* packet);
 
   // Return true if there is data to read.
   bool IsDataAvailable() const;
 
-  // Return true if the connection still valid.
+  // Return true if the connection is still valid.
   bool IsConnected() const;
 
   // Shutdown the connection.
@@ -42,11 +44,18 @@ class Session {
   // Signal that the debuggee execution stopped because of a trap or breakpoint.
   bool SignalThreadEvent();
 
+  void EnableAck(bool ack_enabled) { ack_enabled_ = ack_enabled; }
+
  private:
+  // Send a packet without waiting for an ACK from the receiver.
+  bool SendPacketOnly(Packet* packet);
+
+  // Read a single character from the transport.
   bool GetChar(char* ch);
 
-  Transport* io_;   // Transport object not owned by the Session.
-  bool connected_;  // Is the connection still valid.
+  Transport* io_;     // Transport object not owned by the Session.
+  bool connected_;    // Is the connection still valid.
+  bool ack_enabled_;  // If true, emit or wait for '+' from RSP stream.
 
   DISALLOW_COPY_AND_ASSIGN(Session);
 };

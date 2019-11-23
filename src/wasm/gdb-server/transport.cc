@@ -191,7 +191,6 @@ void TransportBase::Disconnect() {
     // Shutdown the connection in both directions.  This should
     // always succeed, and nothing we can do if this fails.
     ::shutdown(handle_accept_, SD_BOTH);
-
     CloseSocket(handle_accept_);
     handle_accept_ = InvalidSocket;
   }
