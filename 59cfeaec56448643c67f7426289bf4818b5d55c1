@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9e2e76a8_b2f7b7e0",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9770,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-11-25T16:18:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c854dd32_3cffa747",
+      "revId": "59cfeaec56448643c67f7426289bf4818b5d55c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4537f385_25ac8129",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "59cfeaec56448643c67f7426289bf4818b5d55c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43ae331f_0d3f5164",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2446,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-11-25T16:18:32Z",
+      "side": 1,
+      "message": "This seems to be the way things are done in the EffectControlLinearizer. This function is an adapted copy of the one above. I don\u0027t have strong feelings either way on introducing additional helpers/abstractions, but that seems like a separate project.",
+      "parentUuid": "4537f385_25ac8129",
+      "revId": "59cfeaec56448643c67f7426289bf4818b5d55c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
