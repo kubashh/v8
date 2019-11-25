@@ -381,6 +381,24 @@
     },
     {
       "key": {
+        "uuid": "78778175_a74dc8d5",
+        "filename": "test/wasm-remote-debugging/test_files/sort_test.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-25T11:18:25Z",
+      "side": 1,
+      "message": "As noted initially, we try to avoid checking in binaries if possible. What we sometimes do (especially with tests) is putting the binaries somewhere else (e.g. in a gcloud pocket) and download it from there. We do this with the wasm-spec-tests for example.\nIf these tests are only run locally anyway (when debugging / changing the gdb server), would there be any problem then with expecting the developer to have the latest emscripten version installed? That\u0027s the version we always want to support, right?",
+      "parentUuid": "00423b31_170eccd8",
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3b5348e3_58fd500a",
         "filename": "test/wasm-remote-debugging/testcfg.py",
         "patchSetId": 14
