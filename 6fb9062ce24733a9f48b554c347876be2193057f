@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc1a56f6_49a49f2e",
+        "filename": "src/wasm/gdb-server/gdb-server-thread.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-25T10:52:55Z",
+      "side": 1,
+      "message": "Why not use the base class here?",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c8e1bc5_8d29c664",
+        "filename": "src/wasm/gdb-server/gdb-server.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-25T10:52:55Z",
+      "side": 1,
+      "message": "Can  the server be reinitialized after a shutdown? In that case, the thread_ should be reset here as well.",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9925909a_5120ef8b",
+        "filename": "src/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-25T10:52:55Z",
+      "side": 1,
+      "message": "What is the reason this changed? With this change there is a strong implied contract between the methods, namely that each is called only once and in strict order. Before, that was explicit.",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b832b931_534c1c93",
+        "filename": "src/wasm/gdb-server/session.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-25T10:52:55Z",
+      "side": 1,
+      "message": "I\u0027d prefer a greater separation of concerns between Packet and Session. Currently both Session and Packet format data for the protocol. I feel only one (i.e., Packet) should do the formatting, while the other manages control flow.",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8299585a_dd96f251",
+        "filename": "src/wasm/gdb-server/session.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-25T10:52:55Z",
+      "side": 1,
+      "message": "The code below can be decomposed into multiple functions so that you don\u0027t have to do this.",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8f505ed_ae09097e",
+        "filename": "src/wasm/gdb-server/transport.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-25T10:52:55Z",
+      "side": 1,
+      "message": "I see why you went for this type hierarchie. But wouldn\u0027t it be cleaner to have a win32/posix socket abstraction, and a general SocketTransport handler using that?",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
