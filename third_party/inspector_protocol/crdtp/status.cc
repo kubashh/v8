@@ -4,7 +4,7 @@
 
 #include "status.h"
 
-namespace v8_crdtp {
+namespace crdtp {
 // =============================================================================
 // Status and Error codes
 // =============================================================================
@@ -105,4 +105,4 @@ std::string Status::ToASCIIString() const {
 std::string Status::ToASCIIString(const char* msg) const {
   return std::string(msg) + " at position " + std::to_string(pos);
 }
-}  // namespace v8_crdtp
+}  // namespace crdtp

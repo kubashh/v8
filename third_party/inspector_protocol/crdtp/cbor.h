@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_CRDTP_CBOR_H_
-#define V8_CRDTP_CBOR_H_
+#ifndef CRDTP_CBOR_H_
+#define CRDTP_CBOR_H_
 
 #include <cstddef>
 #include <cstdint>
@@ -15,7 +15,7 @@
 #include "parser_handler.h"
 #include "span.h"
 
-namespace v8_crdtp {
+namespace crdtp {
 namespace cbor {
 // The binary encoding for the inspector protocol follows the CBOR specification
 // (RFC 7049). Additional constraints:
@@ -83,12 +83,14 @@ void EncodeString8(span<uint8_t> in, std::string* out);
 // Encodes the given |latin1| string as STRING8.
 // If any non-ASCII character is present, it will be represented
 // as a 2 byte UTF8 sequence.
-void EncodeFromLatin1(span<uint8_t> latin1, std::vector<uint8_t>* out);
+void EncodeFromLatin1(span<uint8_t> latin1,
+                                   std::vector<uint8_t>* out);
 void EncodeFromLatin1(span<uint8_t> latin1, std::string* out);
 
 // Encodes the given |utf16| string as STRING8 if it's entirely US-ASCII.
 // Otherwise, encodes as STRING16.
-void EncodeFromUTF16(span<uint16_t> utf16, std::vector<uint8_t>* out);
+void EncodeFromUTF16(span<uint16_t> utf16,
+                                  std::vector<uint8_t>* out);
 void EncodeFromUTF16(span<uint16_t> utf16, std::string* out);
 
 // Encodes arbitrary binary data in |in| as a BYTE_STRING (major type 2) with
@@ -137,9 +139,11 @@ class EnvelopeEncoder {
 // that drives it. The handler will encode into |out|, and iff an error occurs
 // it will set |status| to an error and clear |out|. Otherwise, |status.ok()|
 // will be |true|.
-std::unique_ptr<ParserHandler> NewCBOREncoder(std::vector<uint8_t>* out,
-                                              Status* status);
-std::unique_ptr<ParserHandler> NewCBOREncoder(std::string* out, Status* status);
+std::unique_ptr<ParserHandler> NewCBOREncoder(
+    std::vector<uint8_t>* out,
+    Status* status);
+std::unique_ptr<ParserHandler> NewCBOREncoder(std::string* out,
+                                                           Status* status);
 
 // =============================================================================
 // cbor::CBORTokenizer - for parsing individual CBOR items
@@ -288,25 +292,25 @@ void ParseCBOR(span<uint8_t> bytes, ParserHandler* out);
 // of the map. Patches up the envelope size; Status.ok() iff successful.
 // If not successful, |cbor| may be corrupted after this call.
 Status AppendString8EntryToCBORMap(span<uint8_t> string8_key,
-                                   span<uint8_t> string8_value,
-                                   std::vector<uint8_t>* cbor);
+                                                span<uint8_t> string8_value,
+                                                std::vector<uint8_t>* cbor);
 Status AppendString8EntryToCBORMap(span<uint8_t> string8_key,
-                                   span<uint8_t> string8_value,
-                                   std::string* cbor);
+                                                span<uint8_t> string8_value,
+                                                std::string* cbor);
 
 namespace internals {  // Exposed only for writing tests.
 size_t ReadTokenStart(span<uint8_t> bytes,
-                      cbor::MajorType* type,
-                      uint64_t* value);
+                                   cbor::MajorType* type,
+                                   uint64_t* value);
 
 void WriteTokenStart(cbor::MajorType type,
-                     uint64_t value,
-                     std::vector<uint8_t>* encoded);
+                                  uint64_t value,
+                                  std::vector<uint8_t>* encoded);
 void WriteTokenStart(cbor::MajorType type,
-                     uint64_t value,
-                     std::string* encoded);
+                                  uint64_t value,
+                                  std::string* encoded);
 }  // namespace internals
 }  // namespace cbor
-}  // namespace v8_crdtp
+}  // namespace crdtp
 
-#endif  // V8_CRDTP_CBOR_H_
+#endif  // CRDTP_CBOR_H_

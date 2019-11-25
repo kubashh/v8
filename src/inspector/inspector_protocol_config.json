@@ -47,6 +47,6 @@
     },
 
     "crdtp": {
-        "namespace": "v8_crdtp"
+        "namespace": "crdtp"
     }
 }

@@ -8,7 +8,7 @@
 #include "span.h"
 #include "test_platform.h"
 
-namespace v8_crdtp {
+namespace crdtp {
 // =============================================================================
 // span - sequence of bytes
 // =============================================================================
@@ -97,4 +97,4 @@ TEST(SpanComparisons, ByteWiseLexicographicalOrder) {
   EXPECT_FALSE(SpanLessThan(SpanFrom(msg), SpanFrom(lesser_msg)));
   EXPECT_FALSE(SpanEquals(SpanFrom(msg), SpanFrom(lesser_msg)));
 }
-}  // namespace v8_crdtp
+}  // namespace crdtp

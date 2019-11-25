@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_CRDTP_STATUS_H_
-#define V8_CRDTP_STATUS_H_
+#ifndef CRDTP_STATUS_H_
+#define CRDTP_STATUS_H_
 
 #include <cstddef>
 #include <limits>
@@ -11,7 +11,7 @@
 
 #include "export.h"
 
-namespace v8_crdtp {
+namespace crdtp {
 // =============================================================================
 // Status and Error codes
 // =============================================================================
@@ -83,6 +83,6 @@ struct Status {
  private:
   std::string ToASCIIString(const char* msg) const;
 };
-}  // namespace v8_crdtp
+}  // namespace crdtp
 
-#endif  // V8_CRDTP_STATUS_H_
+#endif  // CRDTP_STATUS_H_
