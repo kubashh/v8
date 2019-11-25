@@ -841,7 +841,15 @@ void getPrivatePropertiesForPreview(
   std::vector<String16> whitelist;
   for (auto& mirror : mirrors) {
     std::unique_ptr<PropertyPreview> propertyPreview;
-    mirror.value->buildPropertyPreview(context, mirror.name, &propertyPreview);
+    if (mirror.value) {
+      mirror.value->buildPropertyPreview(context, mirror.name,
+                                         &propertyPreview);
+    } else {
+      propertyPreview = PropertyPreview::create()
+                            .setName(mirror.name)
+                            .setType(PropertyPreview::TypeEnum::Accessor)
+                            .build();
+    }
     if (!propertyPreview) continue;
     if (!*nameLimit) {
       *overflow = true;
@@ -1191,6 +1199,25 @@ void addTypedArrayViews(v8::Local<v8::Context> context,
   addTypedArrayView<v8::Int32Array>(context, buffer, length, "[[Int32Array]]",
                                     accumulator);
 }
+
+std::unique_ptr<ValueMirror> DescriptorPropertyToMirror(
+    v8::Local<v8::Context> context, v8::Local<v8::Object> desc_obj,
+    v8::Local<v8::String> key) {
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::TryCatch tryCatch(isolate);
+
+  v8::Maybe<bool> has = desc_obj->HasRealNamedProperty(context, key);
+  if (has.IsNothing() || !has.FromJust()) {
+    return nullptr;
+  }
+
+  v8::Local<v8::Value> result;
+  if (!desc_obj->GetRealNamedProperty(context, key).ToLocal(&result) ||
+      result->IsUndefined()) {
+    return nullptr;
+  }
+  return ValueMirror::create(context, result);
+}
 }  // anonymous namespace
 
 ValueMirror::~ValueMirror() = default;
@@ -1415,40 +1442,40 @@ std::vector<PrivatePropertyMirror> ValueMirror::getPrivateProperties(
   v8::TryCatch tryCatch(isolate);
   v8::Local<v8::Array> privateProperties;
 
-  if (!v8::debug::GetPrivateFields(context, object).ToLocal(&privateProperties))
+  if (!v8::debug::GetPrivateMemberDescriptors(context, object)
+           .ToLocal(&privateProperties))
     return mirrors;
 
-  for (uint32_t i = 0; i < privateProperties->Length(); i += 2) {
+  v8::Local<v8::String> name_string = toV8String(isolate, "name");
+
+  uint32_t len = privateProperties->Length();
+  for (uint32_t i = 0; i < len; i++) {
+    v8::Local<v8::Value> desc;
+    if (!privateProperties->Get(context, i).ToLocal(&desc)) {
+      tryCatch.Reset();
+      continue;
+    }
+    DCHECK(desc->IsObject());
+    v8::Local<v8::Object> desc_obj = desc.As<v8::Object>();
+
     v8::Local<v8::Value> name;
-    if (!privateProperties->Get(context, i).ToLocal(&name)) {
+    if (!desc_obj->GetRealNamedProperty(context, name_string).ToLocal(&name)) {
       tryCatch.Reset();
       continue;
     }
 
-    // Weirdly, v8::Private is set to be a subclass of v8::Data and
-    // not v8::Value, meaning, we first need to upcast to v8::Data
-    // and then downcast to v8::Private. Changing the hierarchy is a
-    // breaking change now. Not sure if that's possible.
-    //
-    // TODO(gsathya): Add an IsPrivate method to the v8::Private and
-    // assert here.
-    v8::Local<v8::Private> private_field = v8::Local<v8::Private>::Cast(name);
-    v8::Local<v8::Value> private_name = private_field->Name();
-    DCHECK(!private_name->IsUndefined());
+    std::unique_ptr<ValueMirror> valueMirror = DescriptorPropertyToMirror(
+        context, desc_obj, toV8String(isolate, "value"));
+    std::unique_ptr<ValueMirror> getterMirror = DescriptorPropertyToMirror(
+        context, desc_obj, toV8String(isolate, "get"));
+    std::unique_ptr<ValueMirror> setterMirror = DescriptorPropertyToMirror(
+        context, desc_obj, toV8String(isolate, "set"));
 
-    v8::Local<v8::Value> value;
-    if (!privateProperties->Get(context, i + 1).ToLocal(&value)) {
-      tryCatch.Reset();
-      continue;
-    }
-    auto wrapper = ValueMirror::create(context, value);
-    if (wrapper) {
-      mirrors.emplace_back(PrivatePropertyMirror{
-          toProtocolStringWithTypeCheck(context->GetIsolate(), private_name),
-          std::move(wrapper)});
-    }
+    mirrors.emplace_back(PrivatePropertyMirror{
+        toProtocolStringWithTypeCheck(context->GetIsolate(), name),
+        std::move(valueMirror), std::move(getterMirror),
+        std::move(setterMirror)});
   }
-
   return mirrors;
 }
 
