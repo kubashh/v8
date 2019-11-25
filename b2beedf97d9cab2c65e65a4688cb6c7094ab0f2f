@@ -417,6 +417,24 @@
     },
     {
       "key": {
+        "uuid": "2b910a58_8978b561",
+        "filename": "test/wasm-remote-debugging/test_files/sort_test.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-25T11:56:56Z",
+      "side": 1,
+      "message": "This is a principle in V8 generally.\nI think the important question is whether we want to run these tests automatically on the bots and on every developer\u0027s machine, or whether we only run them occasionally (like the gcmole tests).\nI was under the impression that it\u0027s the latter. After all, this requires a build with v8_enable_wasm_gdb_remote_debugging enabled.\nIf we want to run these tests everywhere, then sure, it would be a problem to assume emscription installed.",
+      "parentUuid": "2099722c_0d718197",
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3b5348e3_58fd500a",
         "filename": "test/wasm-remote-debugging/testcfg.py",
         "patchSetId": 14
