@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f523d645_226d7fca",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1322339
+      },
+      "writtenOn": "2019-11-25T19:00:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cde7bec6_effcebc1",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 68
+      },
+      "revId": "ab71780d96339f5e3d6c1a56267ec41cc47cd6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f45433de_536b3de8",
         "filename": "test/mjsunit/regress/regress-crbug-1027025.js",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "ab71780d96339f5e3d6c1a56267ec41cc47cd6fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59c19cfc_25b584ee",
+        "filename": "test/mjsunit/regress/regress-crbug-1027025.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1322339
+      },
+      "writtenOn": "2019-11-25T19:00:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f45433de_536b3de8",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "ab71780d96339f5e3d6c1a56267ec41cc47cd6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
