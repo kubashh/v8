@@ -12,20 +12,21 @@ namespace internal {
 namespace wasm {
 namespace gdb_server {
 
-GdbServer::GdbServer() {
-  DCHECK(!thread_);
+bool GdbServer::Initialize() {
   DCHECK(FLAG_wasm_gdb_remote);
+  DCHECK(!thread_);
 
   thread_ = std::make_unique<GdbServerThread>(this);
-  // TODO(paolosev): does StartSynchronously hurt performances?
   if (!thread_->StartAndInitialize()) {
     TRACE_GDB_REMOTE(
         "Cannot initialize thread, GDB-remote debugging will be disabled.\n");
     thread_ = nullptr;
+    return false;
   }
+  return true;
 }
 
-GdbServer::~GdbServer() {
+void GdbServer::Shutdown() {
   if (thread_) {
     thread_->Stop();
     thread_->Join();
