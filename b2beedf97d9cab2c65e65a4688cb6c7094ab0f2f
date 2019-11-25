@@ -216,6 +216,30 @@
     },
     {
       "key": {
+        "uuid": "608b1467_21116746",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-25T11:59:32Z",
+      "side": 1,
+      "message": "For example, when v8 is built with remote deubgging enabled, and an external client links against it. The client needs to be aware of the remote debugging setting, or it will assume a different object layout then what has been generated.\n\nI\u0027m aware that the counter argument is that the client is not supposed to do that, since it\u0027s internal API after all, yet I\u0027m still convinced this will break someone in the future, maybe even us.",
+      "parentUuid": "07b87f14_fbbdbe06",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 15
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4aebc23_c1fda5c2",
         "filename": "test/wasm-remote-debugging/connect.py",
         "patchSetId": 14
