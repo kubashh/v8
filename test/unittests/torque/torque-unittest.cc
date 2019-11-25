@@ -124,6 +124,7 @@ void ExpectFailingCompilation(
       source, MatcherVector<T>{{message_pattern, LineAndColumn::Invalid()}});
 }
 
+#if !defined(V8_TARGET_OS_FUCHSIA)
 int CountPreludeLines() {
   static int result = -1;
   if (result == -1) {
@@ -132,17 +133,20 @@ int CountPreludeLines() {
   }
   return result;
 }
+#endif
 
 using SubstrWithPosition =
     std::pair<::testing::PolymorphicMatcher<
                   ::testing::internal::HasSubstrMatcher<std::string>>,
               LineAndColumn>;
 
+#if !defined(V8_TARGET_OS_FUCHSIA)
 SubstrWithPosition SubstrTester(const std::string& message, int line, int col) {
   // Change line and column from 1-based to 0-based.
   return {::testing::HasSubstr(message),
           LineAndColumn{line + CountPreludeLines() - 1, col - 1}};
 }
+#endif
 
 using SubstrVector = std::vector<SubstrWithPosition>;
 
@@ -234,6 +238,7 @@ TEST(Torque, TypeDeclarationOrder) {
   )");
 }
 
+#if !defined(V8_TARGET_OS_FUCHSIA)
 TEST(Torque, ConditionalFields) {
   // This class should throw alignment errors if @if decorators aren't
   // working.
@@ -278,6 +283,7 @@ TEST(Torque, DoubleUnderScorePrefixIllegalForIdentifiers) {
   )",
                            HasSubstr("Lexer Error"));
 }
+#endif
 
 TEST(Torque, UnusedLetBindingLintError) {
   ExpectFailingCompilation(R"(
@@ -296,6 +302,7 @@ TEST(Torque, UnderscorePrefixSilencesUnusedWarning) {
   )");
 }
 
+#if !defined(V8_TARGET_OS_FUCHSIA)
 TEST(Torque, UsingUnderscorePrefixedIdentifierError) {
   ExpectFailingCompilation(R"(
     @export macro Foo(y: Smi) {
@@ -305,6 +312,7 @@ TEST(Torque, UsingUnderscorePrefixedIdentifierError) {
   )",
                            HasSubstr("Trying to reference '_x'"));
 }
+#endif
 
 TEST(Torque, UnusedArgumentLintError) {
   ExpectFailingCompilation(R"(
@@ -346,10 +354,12 @@ TEST(Torque, NoUnusedWarningForVariablesOnlyUsedInAsserts) {
   )");
 }
 
+#if !defined(V8_TARGET_OS_FUCHSIA)
 TEST(Torque, ImportNonExistentFile) {
   ExpectFailingCompilation(R"(import "foo/bar.tq")",
                            HasSubstr("File 'foo/bar.tq' not found."));
 }
+#endif
 
 TEST(Torque, LetShouldBeConstLintError) {
   ExpectFailingCompilation(R"(
@@ -370,6 +380,7 @@ TEST(Torque, LetShouldBeConstIsSkippedForStructs) {
   )");
 }
 
+#if !defined(V8_TARGET_OS_FUCHSIA)
 TEST(Torque, GenericAbstractType) {
   ExpectSuccessfulCompilation(R"(
     type Foo<T: type> extends HeapObject;
@@ -483,6 +494,7 @@ TEST(Torque, SpecializationRequesters) {
           SubstrTester("Note: in specialization C<Smi> requested here", 11,
                        5)});
 }
+#endif
 
 }  // namespace torque
 }  // namespace internal

@@ -110,6 +110,7 @@ sigjmp_buf MemoryAllocationPermissionsTest::continuation_;
 
 }  // namespace
 
+#if !defined(V8_TARGET_OS_FUCHSIA)
 TEST_F(MemoryAllocationPermissionsTest, DoTest) {
   TestPermissions(PageAllocator::Permission::kNoAccess, false, false);
   TestPermissions(PageAllocator::Permission::kRead, true, false);
@@ -117,6 +118,8 @@ TEST_F(MemoryAllocationPermissionsTest, DoTest) {
   TestPermissions(PageAllocator::Permission::kReadWriteExecute, true, true);
   TestPermissions(PageAllocator::Permission::kReadExecute, true, false);
 }
+#endif
+
 #endif  // V8_OS_POSIX
 
 // Basic tests of allocation.
