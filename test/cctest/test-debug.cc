@@ -4710,16 +4710,22 @@ TEST(Regress517592) {
   v8::debug::SetDebugDelegate(env->GetIsolate(), nullptr);
 }
 
+namespace {
+std::string FromString(v8::Isolate* isolate, v8::Local<v8::String> str) {
+  v8::String::Utf8Value utf8(isolate, str);
+  return std::string(*utf8);
+}
+}  // namespace
+
 TEST(GetPrivateFields) {
   LocalContext env;
   v8::Isolate* v8_isolate = CcTest::isolate();
-  v8::internal::Isolate* isolate = CcTest::i_isolate();
   v8::HandleScope scope(v8_isolate);
   v8::Local<v8::Context> context = env.local();
   v8::Local<v8::String> source = v8_str(
       "var X = class {\n"
-      "  #foo = 1;\n"
-      "  #bar = function() {};\n"
+      "  #field_number = 1;\n"
+      "  #field_function = function() {};\n"
       "}\n"
       "var x = new X()");
   CompileRun(source);
@@ -4727,29 +4733,36 @@ TEST(GetPrivateFields) {
       env->Global()
           ->Get(context, v8_str(env->GetIsolate(), "x"))
           .ToLocalChecked());
-  v8::Local<v8::Array> private_names =
-      v8::debug::GetPrivateFields(context, object).ToLocalChecked();
+  v8::Local<v8::Array> descriptors =
+      v8::debug::GetPrivateMemberDescriptors(context, object).ToLocalChecked();
 
-  for (int i = 0; i < 4; i = i + 2) {
-    Handle<v8::internal::JSReceiver> private_name =
-        v8::Utils::OpenHandle(*private_names->Get(context, i)
-                                   .ToLocalChecked()
-                                   ->ToObject(context)
-                                   .ToLocalChecked());
-    Handle<v8::internal::JSPrimitiveWrapper> private_value =
-        Handle<v8::internal::JSPrimitiveWrapper>::cast(private_name);
-    Handle<v8::internal::Symbol> priv_symbol(
-        v8::internal::Symbol::cast(private_value->value()), isolate);
-    CHECK(priv_symbol->is_private_name());
+  CHECK_EQ(descriptors->Length(), 2);
+  for (int i = 0; i < 2; i++) {
+    v8::Local<v8::Object> desc = descriptors->Get(context, i)
+                                     .ToLocalChecked()
+                                     ->ToObject(context)
+                                     .ToLocalChecked();
+    v8::Local<v8::Value> name =
+        desc->Get(context, v8_str("name")).ToLocalChecked();
+    v8::Local<v8::Value> value =
+        desc->Get(context, v8_str("value")).ToLocalChecked();
+    CHECK(name->IsString());
+    std::string name_str = FromString(v8_isolate, name.As<v8::String>());
+    if (name_str == "#field_number") {
+      CHECK(value->Equals(context, v8_num(1)).FromJust());
+    } else {
+      CHECK_EQ(name_str, "#field_function");
+      CHECK(value->IsFunction());
+    }
   }
 
   source = v8_str(
       "var Y = class {\n"
-      "  #baz = 2;\n"
+      "  #base_field_number = 2;\n"
       "}\n"
       "var X = class extends Y{\n"
-      "  #foo = 1;\n"
-      "  #bar = function() {};\n"
+      "  #field_number = 1;\n"
+      "  #field_function = function() {};\n"
       "}\n"
       "var x = new X()");
   CompileRun(source);
@@ -4757,19 +4770,29 @@ TEST(GetPrivateFields) {
       env->Global()
           ->Get(context, v8_str(env->GetIsolate(), "x"))
           .ToLocalChecked());
-  private_names = v8::debug::GetPrivateFields(context, object).ToLocalChecked();
+  descriptors =
+      v8::debug::GetPrivateMemberDescriptors(context, object).ToLocalChecked();
 
-  for (int i = 0; i < 6; i = i + 2) {
-    Handle<v8::internal::JSReceiver> private_name =
-        v8::Utils::OpenHandle(*private_names->Get(context, i)
-                                   .ToLocalChecked()
-                                   ->ToObject(context)
-                                   .ToLocalChecked());
-    Handle<v8::internal::JSPrimitiveWrapper> private_value =
-        Handle<v8::internal::JSPrimitiveWrapper>::cast(private_name);
-    Handle<v8::internal::Symbol> priv_symbol(
-        v8::internal::Symbol::cast(private_value->value()), isolate);
-    CHECK(priv_symbol->is_private_name());
+  CHECK_EQ(descriptors->Length(), 3);
+  for (int i = 0; i < 3; i++) {
+    v8::Local<v8::Object> desc = descriptors->Get(context, i)
+                                     .ToLocalChecked()
+                                     ->ToObject(context)
+                                     .ToLocalChecked();
+    v8::Local<v8::Value> name =
+        desc->Get(context, v8_str("name")).ToLocalChecked();
+    v8::Local<v8::Value> value =
+        desc->Get(context, v8_str("value")).ToLocalChecked();
+    CHECK(name->IsString());
+    std::string name_str = FromString(v8_isolate, name.As<v8::String>());
+    if (name_str == "#base_field_number") {
+      CHECK(value->Equals(context, v8_num(2)).FromJust());
+    } else if (name_str == "#field_number") {
+      CHECK(value->Equals(context, v8_num(1)).FromJust());
+    } else {
+      CHECK_EQ(name_str, "#field_function");
+      CHECK(value->IsFunction());
+    }
   }
 
   source = v8_str(
@@ -4779,8 +4802,8 @@ TEST(GetPrivateFields) {
       "  }"
       "}\n"
       "var X = class extends Y{\n"
-      "  #foo = 1;\n"
-      "  #bar = function() {};\n"
+      "  #field_number = 1;\n"
+      "  #field_function = function() {};\n"
       "}\n"
       "var x = new X()");
   CompileRun(source);
@@ -4788,18 +4811,157 @@ TEST(GetPrivateFields) {
       env->Global()
           ->Get(context, v8_str(env->GetIsolate(), "x"))
           .ToLocalChecked());
-  private_names = v8::debug::GetPrivateFields(context, object).ToLocalChecked();
+  descriptors =
+      v8::debug::GetPrivateMemberDescriptors(context, object).ToLocalChecked();
 
-  for (int i = 0; i < 4; i = i + 2) {
-    Handle<v8::internal::JSReceiver> private_name =
-        v8::Utils::OpenHandle(*private_names->Get(context, i)
-                                   .ToLocalChecked()
-                                   ->ToObject(context)
-                                   .ToLocalChecked());
-    Handle<v8::internal::JSPrimitiveWrapper> private_value =
-        Handle<v8::internal::JSPrimitiveWrapper>::cast(private_name);
-    Handle<v8::internal::Symbol> priv_symbol(
-        v8::internal::Symbol::cast(private_value->value()), isolate);
-    CHECK(priv_symbol->is_private_name());
+  CHECK_EQ(descriptors->Length(), 2);
+  for (int i = 0; i < 2; i++) {
+    v8::Local<v8::Object> desc = descriptors->Get(context, i)
+                                     .ToLocalChecked()
+                                     ->ToObject(context)
+                                     .ToLocalChecked();
+    v8::Local<v8::Value> name =
+        desc->Get(context, v8_str("name")).ToLocalChecked();
+    v8::Local<v8::Value> value =
+        desc->Get(context, v8_str("value")).ToLocalChecked();
+    CHECK(name->IsString());
+    std::string name_str = FromString(v8_isolate, name.As<v8::String>());
+    if (name_str == "#field_number") {
+      CHECK(value->Equals(context, v8_num(1)).FromJust());
+    } else {
+      CHECK_EQ(name_str, "#field_function");
+      CHECK(value->IsFunction());
+    }
+  }
+}
+
+TEST(GetPrivateMethodsAndAccessors) {
+  i::FLAG_harmony_private_methods = true;
+  LocalContext env;
+  v8::Isolate* v8_isolate = CcTest::isolate();
+  v8::HandleScope scope(v8_isolate);
+  v8::Local<v8::Context> context = env.local();
+
+  v8::Local<v8::String> source = v8_str(
+      "var X = class {\n"
+      "  #method() { }\n"
+      "  get #accessor() { }\n"
+      "  set #accessor(val) { }\n"
+      "  get #readOnly() { }\n"
+      "  set #writeOnly(val) { }\n"
+      "}\n"
+      "var x = new X()");
+  CompileRun(source);
+  v8::Local<v8::Object> object = v8::Local<v8::Object>::Cast(
+      env->Global()
+          ->Get(context, v8_str(env->GetIsolate(), "x"))
+          .ToLocalChecked());
+  v8::Local<v8::Array> descriptors =
+      v8::debug::GetPrivateMemberDescriptors(context, object).ToLocalChecked();
+
+  CHECK_EQ(descriptors->Length(), 4);
+  for (int i = 0; i < 4; i++) {
+    v8::Local<v8::Object> desc = descriptors->Get(context, i)
+                                     .ToLocalChecked()
+                                     ->ToObject(context)
+                                     .ToLocalChecked();
+    v8::Local<v8::Value> name =
+        desc->Get(context, v8_str("name")).ToLocalChecked();
+    CHECK(name->IsString());
+    std::string name_str = FromString(v8_isolate, name.As<v8::String>());
+    if (name_str == "#method") {
+      CHECK(desc->Get(context, v8_str("value")).ToLocalChecked()->IsFunction());
+    } else if (name_str == "#accessor") {
+      CHECK(desc->Get(context, v8_str("get")).ToLocalChecked()->IsFunction());
+      CHECK(desc->Get(context, v8_str("set")).ToLocalChecked()->IsFunction());
+    } else if (name_str == "#readOnly") {
+      CHECK(desc->Get(context, v8_str("get")).ToLocalChecked()->IsFunction());
+    } else {
+      CHECK_EQ(name_str, "#writeOnly");
+      CHECK(desc->Get(context, v8_str("set")).ToLocalChecked()->IsFunction());
+    }
+  }
+
+  source = v8_str(
+      "var Y = class {\n"
+      "  #method() {}\n"
+      "  get #accessor() {}\n"
+      "  set #accessor(val) {};\n"
+      "}\n"
+      "var X = class extends Y{\n"
+      "  get #readOnly() {}\n"
+      "  set #writeOnly(val) {};\n"
+      "}\n"
+      "var x = new X()");
+  CompileRun(source);
+  object = v8::Local<v8::Object>::Cast(
+      env->Global()
+          ->Get(context, v8_str(env->GetIsolate(), "x"))
+          .ToLocalChecked());
+  descriptors =
+      v8::debug::GetPrivateMemberDescriptors(context, object).ToLocalChecked();
+
+  CHECK_EQ(descriptors->Length(), 4);
+  for (int i = 0; i < 3; i++) {
+    v8::Local<v8::Object> desc = descriptors->Get(context, i)
+                                     .ToLocalChecked()
+                                     ->ToObject(context)
+                                     .ToLocalChecked();
+    v8::Local<v8::Value> name =
+        desc->Get(context, v8_str("name")).ToLocalChecked();
+    CHECK(name->IsString());
+    std::string name_str = FromString(v8_isolate, name.As<v8::String>());
+    if (name_str == "#method") {
+      CHECK(desc->Get(context, v8_str("value")).ToLocalChecked()->IsFunction());
+    } else if (name_str == "#accessor") {
+      CHECK(desc->Get(context, v8_str("get")).ToLocalChecked()->IsFunction());
+      CHECK(desc->Get(context, v8_str("set")).ToLocalChecked()->IsFunction());
+    } else if (name_str == "#readOnly") {
+      CHECK(desc->Get(context, v8_str("get")).ToLocalChecked()->IsFunction());
+    } else {
+      CHECK_EQ(name_str, "#writeOnly");
+      CHECK(desc->Get(context, v8_str("set")).ToLocalChecked()->IsFunction());
+    }
+  }
+
+  source = v8_str(
+      "var Y = class {\n"
+      "  constructor() {"
+      "    return new Proxy({}, {});"
+      "  }"
+      "}\n"
+      "var X = class extends Y{\n"
+      "  #method() {}\n"
+      "  get #accessor() {}\n"
+      "  set #accessor(val) {};\n"
+      "}\n"
+      "var x = new X()");
+  CompileRun(source);
+  object = v8::Local<v8::Object>::Cast(
+      env->Global()
+          ->Get(context, v8_str(env->GetIsolate(), "x"))
+          .ToLocalChecked());
+  descriptors =
+      v8::debug::GetPrivateMemberDescriptors(context, object).ToLocalChecked();
+
+  CHECK_EQ(descriptors->Length(), 2);
+  for (int i = 0; i < 2; i++) {
+    v8::Local<v8::Object> desc = descriptors->Get(context, i)
+                                     .ToLocalChecked()
+                                     ->ToObject(context)
+                                     .ToLocalChecked();
+    v8::Local<v8::Value> name =
+        desc->Get(context, v8_str("name")).ToLocalChecked();
+    CHECK(name->IsString());
+    std::string name_str = FromString(v8_isolate, name.As<v8::String>());
+    if (name_str == "#method") {
+      v8::Local<v8::Value> value =
+          desc->Get(context, v8_str("value")).ToLocalChecked();
+      CHECK(value->IsFunction());
+    } else {
+      CHECK_EQ(name_str, "#accessor");
+      CHECK(desc->Get(context, v8_str("get")).ToLocalChecked()->IsFunction());
+      CHECK(desc->Get(context, v8_str("set")).ToLocalChecked()->IsFunction());
+    }
   }
 }
