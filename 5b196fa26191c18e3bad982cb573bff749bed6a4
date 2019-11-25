@@ -68,6 +68,40 @@
       "revId": "5b196fa26191c18e3bad982cb573bff749bed6a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f5d416e_65778a01",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-25T07:08:18Z",
+      "side": 1,
+      "message": "nit: here and below, lower_underscore local variable names please.",
+      "revId": "5b196fa26191c18e3bad982cb573bff749bed6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67fba7d6_f9f7e79a",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-25T07:08:18Z",
+      "side": 1,
+      "message": "Why not \n\n if (kWindowNotDetached) return undefined;\n\n?",
+      "revId": "5b196fa26191c18e3bad982cb573bff749bed6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
