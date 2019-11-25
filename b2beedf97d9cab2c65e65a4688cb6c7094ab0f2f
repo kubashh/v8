@@ -264,6 +264,30 @@
     },
     {
       "key": {
+        "uuid": "9c2a952a_41157d1a",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-11-25T12:33:08Z",
+      "side": 1,
+      "message": "We care about ABI of publicly exported objects. There are no guarantees for ABI stability of internal objects. V8 embedders should not include/depend on internal objects. If they do, they are on their own and have to ensure that the build configurations match.",
+      "parentUuid": "b0ef9ac8_1d7e58c4",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 15
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4aebc23_c1fda5c2",
         "filename": "test/wasm-remote-debugging/connect.py",
         "patchSetId": 14
