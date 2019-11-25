@@ -240,6 +240,30 @@
     },
     {
       "key": {
+        "uuid": "b0ef9ac8_1d7e58c4",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-25T12:01:30Z",
+      "side": 1,
+      "message": "I am not an expert here. Adding Ulan. Do we need to care about ABI stability of internal objects?",
+      "parentUuid": "608b1467_21116746",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 15
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4aebc23_c1fda5c2",
         "filename": "test/wasm-remote-debugging/connect.py",
         "patchSetId": 14
