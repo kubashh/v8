@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e5ec3aa_43d5a470",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-25T17:09:18Z",
+      "side": 1,
+      "message": "Could this code move to test/unittests/BUILD.gn for modularity?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 1
+      },
+      "revId": "071dfe26c89c152795a557b4d46719d0aeb3b195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b23cc3a8_c168c2d4",
+        "filename": "infra/mb/gn_isolate_map.pyl",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-25T17:09:18Z",
+      "side": 1,
+      "message": "This should point to //test:unittests: once moved.",
+      "range": {
+        "startLine": 79,
+        "startChar": 17,
+        "endLine": 79,
+        "endChar": 37
+      },
+      "revId": "071dfe26c89c152795a557b4d46719d0aeb3b195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
