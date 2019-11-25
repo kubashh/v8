@@ -4475,6 +4475,13 @@ Node* EffectControlLinearizer::ChangeSmiToInt64(Node* value) {
 }
 
 Node* EffectControlLinearizer::ObjectIsSmi(Node* value) {
+#if defined(V8_TARGET_ARCH_64_BIT) && !defined(V8_COMPRESS_POINTERS)
+  // TODO(Loongson): Pointer compression has not been implemented on mips64
+  // platform, and the following statement shouldn't be removed before it's
+  // implementation.
+  value = __ TruncateInt64ToInt32(value);
+#endif  // defined(V8_TARGET_ARCH_64_BIT) && !defined(V8_COMPRESS_POINTERS)
+
   return __ Word32Equal(__ Word32And(value, __ Int32Constant(kSmiTagMask)),
                         __ Int32Constant(kSmiTag));
 }
