@@ -399,6 +399,24 @@
     },
     {
       "key": {
+        "uuid": "2099722c_0d718197",
+        "filename": "test/wasm-remote-debugging/test_files/sort_test.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-25T11:48:45Z",
+      "side": 1,
+      "message": "\u003e As noted initially, we try to avoid checking in binaries if possible\n\nIs this a matter of principle or a matter of size? I can see that adding a 5KB file is an issue, but that binary is unnecessarily large. A good testcase should still be possible with a few hundred bytes.\n\nI think making the correctness of a test depend on the toolchain installed at the developer\u0027s end mostly just adds to the flakiness of the test. And what if they don\u0027t have emcc available at all? Will that be required to build and  test v8 now?\n\nSo my preference would be to keep binaries (after all, it\u0027s not the testcase itself, it\u0027s just input data for testcases), but find a way to keep the binaries small, concise and reproducible.",
+      "parentUuid": "78778175_a74dc8d5",
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3b5348e3_58fd500a",
         "filename": "test/wasm-remote-debugging/testcfg.py",
         "patchSetId": 14
