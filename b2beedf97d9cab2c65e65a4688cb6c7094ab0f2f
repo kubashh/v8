@@ -363,6 +363,24 @@
     },
     {
       "key": {
+        "uuid": "00423b31_170eccd8",
+        "filename": "test/wasm-remote-debugging/test_files/sort_test.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-25T10:58:26Z",
+      "side": 1,
+      "message": "That way we would check against the emscripten version available to whoever runs the ttest. If emscripten changes its output somehow, we\u0027re forced to support multiple versions in the tests. Does it make sense instead to check in the binary alongside the source and build-instructions? Then the binary can be rebuilt, but we don\u0027t dilute the tests.",
+      "parentUuid": "7d90d450_8b516cba",
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3b5348e3_58fd500a",
         "filename": "test/wasm-remote-debugging/testcfg.py",
         "patchSetId": 14
