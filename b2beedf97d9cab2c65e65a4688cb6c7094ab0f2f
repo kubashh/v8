@@ -358,6 +358,52 @@
     },
     {
       "key": {
+        "uuid": "7e33ee73_45ea32c3",
+        "filename": "test/wasm-remote-debugging/gdb_rsp.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-25T12:08:40Z",
+      "side": 1,
+      "message": "Also rename this.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 23
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "170cabb3_a4017b77",
+        "filename": "test/wasm-remote-debugging/gdb_rsp.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-25T12:08:40Z",
+      "side": 1,
+      "message": "And this.",
+      "range": {
+        "startLine": 52,
+        "startChar": 42,
+        "endLine": 52,
+        "endChar": 49
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5ed77bf6_bc00b871",
         "filename": "test/wasm-remote-debugging/test_files/sort_test.js",
         "patchSetId": 14
@@ -476,6 +522,24 @@
       "writtenOn": "2019-11-25T11:56:56Z",
       "side": 1,
       "message": "This is a principle in V8 generally.\nI think the important question is whether we want to run these tests automatically on the bots and on every developer\u0027s machine, or whether we only run them occasionally (like the gcmole tests).\nI was under the impression that it\u0027s the latter. After all, this requires a build with v8_enable_wasm_gdb_remote_debugging enabled.\nIf we want to run these tests everywhere, then sure, it would be a problem to assume emscription installed.",
+      "parentUuid": "2099722c_0d718197",
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "659f36d3_de129c0a",
+        "filename": "test/wasm-remote-debugging/test_files/sort_test.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2019-11-25T12:08:40Z",
+      "side": 1,
+      "message": "We should at a minimum include the source and build instructions. However having seen the rest of this prototype it looks like the intent is to create a test framework that basically replays the GDB remote rpcs of a debugging session, which includes things like hard-coded memory addresses, which I wouldn\u0027t assume to be stable across compiler versions. Perhaps we shouldn\u0027t test at that layer and instead only integration test from lldb (which would currently need to be a custom build...).\n\n\u003e If these tests are only run locally anyway (when debugging / changing the gdb server), would there be any problem then with expecting the developer to have the latest emscripten version installed? That\u0027s the version we always want to support, right?\n\nPaolo, is this correct? More to the point, does this depend on any patches to dwarf symbol generation that have yet to be upstreamed to emscripten?",
       "parentUuid": "2099722c_0d718197",
       "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
