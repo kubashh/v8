@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "607dea35_74a775c0",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8056,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-11-26T13:42:23Z",
+      "side": 1,
+      "message": "Why don\u0027t you use the macro ASSIGN_RETURN_ON_EXCEPTION_VALUE?",
+      "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "755c295b_3df315f3",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8081,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-11-26T13:42:23Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e52063a_702f408c",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8097,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-11-26T13:42:23Z",
+      "side": 1,
+      "message": "Why do you go through the trouble of creating descriptor objects, rather than simply putting the value in the array as you previously did? We can identify accessors as values that are AccessorPairs on the outside.\n\nIf we want something like this, we should have property CreateDataDescriptor and CreateAccessorDescriptor functions that create object literals of the proper size. I\u0027d prefer not to create these unnecessary intermediate objects though.",
+      "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
