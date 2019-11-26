@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "593aa922_a5727ead",
+        "filename": "src/wasm/gdb-server/gdb-server-thread.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-26T04:50:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc1a56f6_49a49f2e",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c8e1bc5_8d29c664",
         "filename": "src/wasm/gdb-server/gdb-server.cc",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "6c485dd2_26d52f10",
+        "filename": "src/wasm/gdb-server/gdb-server.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-26T04:50:40Z",
+      "side": 1,
+      "message": "It cannot be reinitialized, but it\u0027s much cleaner if we reset thread_ as you suggest.",
+      "parentUuid": "9c8e1bc5_8d29c664",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9925909a_5120ef8b",
         "filename": "src/wasm/gdb-server/gdb-server.h",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2019-11-25T10:52:55Z",
       "side": 1,
       "message": "What is the reason this changed? With this change there is a strong implied contract between the methods, namely that each is called only once and in strict order. Before, that was explicit.",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1590f8dd_1c8e084a",
+        "filename": "src/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-26T04:50:40Z",
+      "side": 1,
+      "message": "I was reading the Google C++ Style Guide https://google.github.io/styleguide/cppguide.html#Doing_Work_in_Constructors that says: \"Avoid initialization that can fail if you can\u0027t signal an error\".\nI was a bit on the fence here, but I thought that it was better not to do too much work in the constructor and not to block on a thread Join in the destructor. I can revert if you prefer.",
+      "parentUuid": "9925909a_5120ef8b",
       "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "dedaca3d_74eaea55",
+        "filename": "src/wasm/gdb-server/session.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-26T04:50:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b832b931_534c1c93",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8299585a_dd96f251",
         "filename": "src/wasm/gdb-server/session.cc",
         "patchSetId": 3
@@ -84,6 +156,24 @@
       "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69a9210b_c771fcad",
+        "filename": "src/wasm/gdb-server/session.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-26T04:50:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8299585a_dd96f251",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
