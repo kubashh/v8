@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "857fc4dc_a80b2fad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2019-11-26T15:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e561f7b6_d46b8662",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "590a57bf7319254c6ce9be5aaa6aa97ac383f7f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0b6a10d_a78c14da",
         "filename": "cr-buildbucket.cfg",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "590a57bf7319254c6ce9be5aaa6aa97ac383f7f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc4964f5_8b3a9b78",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2019-11-26T15:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0b6a10d_a78c14da",
+      "range": {
+        "startLine": 792,
+        "startChar": 14,
+        "endLine": 792,
+        "endChar": 37
+      },
+      "revId": "590a57bf7319254c6ce9be5aaa6aa97ac383f7f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
