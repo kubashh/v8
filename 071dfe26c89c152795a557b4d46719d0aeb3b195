@@ -62,6 +62,24 @@
       "revId": "071dfe26c89c152795a557b4d46719d0aeb3b195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8faaa11f_b95af2ef",
+        "filename": "test/unittests/torque/torque-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1368997
+      },
+      "writtenOn": "2019-11-26T11:42:07Z",
+      "side": 1,
+      "message": "because these tests caused exceptions on Fuchsia that prevented the run from completing",
+      "parentUuid": "ef794f06_479fdbca",
+      "revId": "071dfe26c89c152795a557b4d46719d0aeb3b195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
