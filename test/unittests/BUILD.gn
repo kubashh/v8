@@ -224,6 +224,7 @@ v8_source_set("unittests_sources") {
     "wasm/streaming-decoder-unittest.cc",
     "wasm/wasm-code-manager-unittest.cc",
     "wasm/wasm-compiler-unittest.cc",
+    "wasm/wasm-gdbserver-unittest.cc",
     "wasm/wasm-macro-gen-unittest.cc",
     "wasm/wasm-module-builder-unittest.cc",
     "wasm/wasm-module-sourcemap-unittest.cc",
