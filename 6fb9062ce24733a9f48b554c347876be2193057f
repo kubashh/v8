@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "cdd59ceb_54136d93",
+        "filename": "src/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-26T17:53:28Z",
+      "side": 1,
+      "message": "With the next CLs the GdbServer will the interaction between the debugging Target, which executes the GDB-remote commands, and the Wasm engine. It will be act as a \"Manager\" for the GDB remote stub. \nNot sure what should the factory do in this case; I think the code is cleaner if WasmEngine calls gdb_server_-\u003eInitialize() directly, even though it is not clear what it should do when the \nGdbServer cannot be initialized for example because it fails binding to a TCP port.\nAnd it is probably cleaner if WasmEngine explicitly calls gdb_server_-\u003eShutdown(), because it is a blocking call that a waits for the termination of a thread.",
+      "parentUuid": "8c49c41f_b9b41e20",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b832b931_534c1c93",
         "filename": "src/wasm/gdb-server/session.cc",
         "patchSetId": 3
