@@ -20,14 +20,16 @@ namespace gdb_server {
 // the Wasm engine.
 class GdbServer {
  public:
+  GdbServer() {}
+
   // Spawns a "GDB-remote" thread that will be used to communicate with the
   // debugger. This should be called once, the first time a Wasm module is
   // loaded in the Wasm engine.
-  GdbServer();
+  bool Initialize();
 
   // Stops the "GDB-remote" thread and waits for it to complete. This should be
   // called once, when the Wasm engine shuts down.
-  ~GdbServer();
+  void Shutdown();
 
  private:
   std::unique_ptr<GdbServerThread> thread_;
