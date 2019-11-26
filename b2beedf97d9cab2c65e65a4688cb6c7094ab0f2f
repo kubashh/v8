@@ -288,6 +288,30 @@
     },
     {
       "key": {
+        "uuid": "c73b32da_42eac787",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-26T01:14:14Z",
+      "side": 1,
+      "message": "Thank you, then we can keep \u0027gdb_server_\u0027 as a data member.",
+      "parentUuid": "9c2a952a_41157d1a",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 15
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4aebc23_c1fda5c2",
         "filename": "test/wasm-remote-debugging/connect.py",
         "patchSetId": 14
@@ -405,6 +429,30 @@
     },
     {
       "key": {
+        "uuid": "4200e47e_52202c01",
+        "filename": "test/wasm-remote-debugging/gdb_rsp.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-26T01:14:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e33ee73_45ea32c3",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 23
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "170cabb3_a4017b77",
         "filename": "test/wasm-remote-debugging/gdb_rsp.py",
         "patchSetId": 14
@@ -425,6 +473,30 @@
       "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b6b7615_5f62e676",
+        "filename": "test/wasm-remote-debugging/gdb_rsp.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-26T01:14:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "170cabb3_a4017b77",
+      "range": {
+        "startLine": 52,
+        "startChar": 42,
+        "endLine": 52,
+        "endChar": 49
+      },
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -568,6 +640,24 @@
       "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6563e85_7eb21644",
+        "filename": "test/wasm-remote-debugging/test_files/sort_test.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-26T01:14:14Z",
+      "side": 1,
+      "message": "I replaced the module with code directly generated with wasm-module-builder.js, as suggested.\n\nThe idea here is to test that V8 can retrieve correctly the Wasm engine state queried through the GDB-stub; for this we don\u0027t really need the Clang patches for DWARF symbols generation because only the debugger needs to load symbols.\nIt is true that there at some point be hard-coded code addresses (for example to test setting a breakpoint) but these are addresses in the Wasm module, so for a given module they should be stable across V8 versions. They could vary, however, if the module is generated dynamically or  recompiled with different versions of clang or emcc. For this reason the ideal solution would be to check in the binary, but I understand that this is against the rules.\n\nI would like these tests to run automatically on the bots, but I obviously this is not possible given that we are building behind the v8_enable_wasm_gdb_remote_debugging flag. However, I found that even running these tests manually is very useful when refactoring code and much faster than testing with LLDB.",
+      "parentUuid": "659f36d3_de129c0a",
+      "revId": "b2beedf97d9cab2c65e65a4688cb6c7094ab0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
