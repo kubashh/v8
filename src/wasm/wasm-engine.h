@@ -31,9 +31,11 @@ class ErrorThrower;
 struct ModuleWireBytes;
 struct WasmFeatures;
 
+#ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 namespace gdb_server {
 class GdbServer;
 }
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
 class V8_EXPORT_PRIVATE CompilationResultResolver {
  public:

@@ -20,8 +20,7 @@ Packet::Packet() {
 
 void Packet::Clear() {
   data_.clear();
-  data_.resize(kGrowSize);
-  data_[0] = '\0';
+  data_.resize(kGrowSize);  // Zeroes the memory
 
   read_index_ = 0;
   write_index_ = 0;
@@ -40,7 +39,7 @@ void Packet::AddRawChar(char ch) {
 
   // Add character and always null terminate.
   data_[write_index_++] = ch;
-  data_[write_index_] = 0;
+  data_[write_index_] = '\0';
 }
 
 void Packet::AddWord8(uint8_t byte) {
@@ -224,7 +223,7 @@ bool Packet::GetRawChar(char* ch) {
 
     // Now we update the write_index_, and reterminate the string.
     write_index_ = data_.size() - 1;
-    data_[write_index_] = 0;
+    data_[write_index_] = '\0';
   }
   return true;
 }
