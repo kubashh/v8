@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e561f7b6_d46b8662",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-26T15:04:13Z",
+      "side": 1,
+      "message": "nit: all linux?",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "590a57bf7319254c6ce9be5aaa6aa97ac383f7f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0b6a10d_a78c14da",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-26T15:04:13Z",
+      "side": 1,
+      "message": "Lets do the two gcc bots separately. I expect some problems with those.",
+      "range": {
+        "startLine": 792,
+        "startChar": 14,
+        "endLine": 792,
+        "endChar": 37
+      },
+      "revId": "590a57bf7319254c6ce9be5aaa6aa97ac383f7f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
