@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "8c49c41f_b9b41e20",
+        "filename": "src/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-26T09:04:05Z",
+      "side": 1,
+      "message": "Sure, that makes sense. You can use a factory to init gdbserver instead, and still tie the thread lifetime to the object lifetime. That being said, what is the reason to have this extra layer around the thread, that doesn\u0027t do anything else but own it?",
+      "parentUuid": "1590f8dd_1c8e084a",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b832b931_534c1c93",
         "filename": "src/wasm/gdb-server/session.cc",
         "patchSetId": 3
