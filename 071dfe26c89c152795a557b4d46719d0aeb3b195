@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "a3a9f12a_b340b807",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-27T10:41:27Z",
+      "side": 1,
+      "message": "nit: It\u0027s more than a name change. How about:\nUse fuchsia test runner for unittests\n\nAlso, please reference the bug.",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 32
+      },
+      "revId": "071dfe26c89c152795a557b4d46719d0aeb3b195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e5ec3aa_43d5a470",
         "filename": "BUILD.gn",
         "patchSetId": 6
