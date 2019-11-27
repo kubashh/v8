@@ -68,6 +68,24 @@
       "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41d334a8_1111831f",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8097,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-11-27T13:28:23Z",
+      "side": 1,
+      "message": "The inspector used to be outside of V8. It might be a good idea to keep it that way. We could possibly use v8::PropertyDescriptor? I\u0027ll let the DevTools folks chime in on how this should best be done since I don\u0027t know too much about how the inspect is supposed to work.",
+      "parentUuid": "032bcf0d_ef8e30e5",
+      "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
