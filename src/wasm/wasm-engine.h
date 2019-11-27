@@ -6,8 +6,10 @@
 #define V8_WASM_WASM_ENGINE_H_
 
 #include <memory>
+#include <unordered_map>
 #include <unordered_set>
 
+#include "src/base/platform/condition-variable.h"
 #include "src/tasks/cancelable-task.h"
 #include "src/wasm/wasm-code-manager.h"
 #include "src/wasm/wasm-tier.h"
@@ -182,6 +184,18 @@ class V8_EXPORT_PRIVATE WasmEngine {
       Isolate* isolate, const WasmFeatures& enabled_features,
       std::shared_ptr<const WasmModule> module, size_t code_size_estimate);
 
+  // Try getting a cached {NativeModule}. The {wire_bytes}' underlying array
+  // should be valid at least until the next call to {UpdateNativeModuleCache}.
+  // Return nullptr if no {NativeModule} exists for these bytes.
+  std::shared_ptr<NativeModule> MaybeGetNativeModule(
+      ModuleOrigin origin, Vector<const uint8_t> wire_bytes);
+
+  // Delete the temporary cache entry inserted by {MaybeGetNativeModule}.
+  // Then if {compile_error} is false, add a new entry for the compiled
+  // {NativeModule}. Wake up the threads waiting for this {NativeModule}.
+  void UpdateNativeModuleCache(std::shared_ptr<NativeModule> native_module,
+                               bool compile_error = true);
+
   void FreeNativeModule(NativeModule*);
 
   // Sample the code size of the given {NativeModule} in all isolates that have
@@ -274,6 +288,23 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // If an engine-wide GC is currently running, this pointer stores information
   // about that.
   std::unique_ptr<CurrentGCInfo> current_gc_info_;
+
+  struct WireBytesHasher {
+    size_t operator()(const Vector<const uint8_t>& bytes) const;
+  };
+
+  // Native modules cached by their wire bytes.
+  // Each key points to the corresponding native module's wire bytes, so they
+  // should always be valid as long as the native module is alive.  When
+  // the native module dies, {FreeNativeModule} deletes the entry from the
+  // map, so that we do not leave any dangling key pointing to an expired
+  // weak_ptr. This also serves as a way to regularly clean up the map, which
+  // would otherwise accumulate expired entries.
+  std::unordered_map<Vector<const uint8_t>, std::weak_ptr<NativeModule>,
+                     WireBytesHasher>
+      native_module_cache_;
+
+  base::ConditionVariable cache_cv_;
 
   // End of fields protected by {mutex_}.
   //////////////////////////////////////////////////////////////////////////////
