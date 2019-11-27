@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1da0899_429bfc48",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3276,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-27T12:05:03Z",
+      "side": 1,
+      "message": "Why the change to index 1/0 from index 2?",
+      "revId": "cb4df32a0ae53bd88e563a31fb11083d4e850a5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
