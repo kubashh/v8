@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b143613c_27caf2a4",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-27T09:52:51Z",
+      "side": 1,
+      "message": "promise-then? Or just put it in a generic promise.tq.",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f5e0fdc_d30f792e",
+        "filename": "src/builtins/promise-prototype.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-27T09:52:51Z",
+      "side": 1,
+      "message": "nit: inline below or in IsPromiseSpeciesLookupChainIntact",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd3da6f4_67b58b61",
+        "filename": "src/builtins/promise-prototype.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-27T09:52:51Z",
+      "side": 1,
+      "message": "nit: please combine this with the same code above in L42.",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e861ebda_ab0417ae",
+        "filename": "src/builtins/promise-prototype.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-27T09:52:51Z",
+      "side": 1,
+      "message": "nit: the \u0027Var\u0027 suffix doesn\u0027t make much sense in a torque context. Maybe  just inline the conditional in the PerformPromiseThenImpl call below? Or an \u0027Arg\u0027 suffix?",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e93d909c_0f515543",
+        "filename": "src/builtins/promise-prototype.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-11-27T09:52:51Z",
+      "side": 1,
+      "message": "Just wondering, could this be phrased as\n\n onFulfilled \u003d Cast\u003cCallable\u003e(onFulfilled) otherwise Undefined;\n\n? If not, I\u0027d still prefer\n\n onFulfilled \u003d IsCallable ? A : B\n\nover if/else.",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
