@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "d419c32d_741d2a2e",
+        "filename": "src/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-27T11:44:14Z",
+      "side": 1,
+      "message": "The factory should create a GdbServer object and initialize it. Similarly, the destructor should do the Shutdown. That way there is never an uninitialized GdbServer object. Shutdown() is currently called by the wasm engine destructor, so I don\u0027t quite understand the blocking call argument. In any case, since GdbServer objects live in a unique_ptr you can still shut a server down explicitly by just calling reset.",
+      "parentUuid": "cdd59ceb_54136d93",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b832b931_534c1c93",
         "filename": "src/wasm/gdb-server/session.cc",
         "patchSetId": 3
