@@ -16,6 +16,24 @@
       "revId": "cb4df32a0ae53bd88e563a31fb11083d4e850a5f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65504412_0661159a",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3276,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-11-27T13:06:43Z",
+      "side": 1,
+      "message": "This tests something else. Fixed comment.",
+      "parentUuid": "f1da0899_429bfc48",
+      "revId": "cb4df32a0ae53bd88e563a31fb11083d4e850a5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
