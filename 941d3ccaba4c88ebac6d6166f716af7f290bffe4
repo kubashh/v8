@@ -86,6 +86,24 @@
       "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e88b1a3_7ea3a220",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8097,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-11-27T14:40:46Z",
+      "side": 1,
+      "message": "Since\n\n- v8::PropertyDescriptor does not have a name field\n- v8::PropertyDescriptor is not a v8::Value\n\nWhat would the signature of debug::GetPrivateMemberDescriptors() look like if we use v8::PropertyDescriptor? Maybe this?\n\nMaybeLocal\u003cArray\u003e debug::GetPrivateMemberDescriptors(\n    Local\u003cContext\u003e context, Local\u003cObject\u003e value,\n    std::vector\u003cv8::PropertyDescriptor\u003e* descriptors);\n\n(Where the returned Local\u003cArray\u003e contain the names of the descriptors in the corresponding index. The handles allocated shall all live in the closest HandleScope created by the caller.)",
+      "parentUuid": "41d334a8_1111831f",
+      "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
