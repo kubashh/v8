@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea955fc9_31304f02",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 6
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1000329
+      },
+      "writtenOn": "2019-11-27T02:01:22Z",
+      "side": 1,
+      "message": "Is ATS required for these Linux builders? I would prefer that you added ATS in a separate CL, ideally after you have migrated Windows.\n\nThe approach I have been following in Chromium builder migration is:\n1. Migrate Linux/Android/Mac without ATS\n2. Migrate Windows with ATS\n3. Switch Linux/Android to ATS\n\niOS is not yet supported by Goma RBE. We expect it to be supported in 2020Q1.",
+      "range": {
+        "startLine": 400,
+        "startChar": 7,
+        "endLine": 400,
+        "endChar": 17
+      },
+      "revId": "8a66d13028c2f91b9779e8cf5c866718f5d9af2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
