@@ -220,7 +220,7 @@ WasmEngine::WasmEngine() : code_manager_(FLAG_wasm_max_code_space * MB) {}
 WasmEngine::~WasmEngine() {
 #ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
   // Synchronize on the GDB-remote thread, if running.
-  gdb_server_ = nullptr;
+  gdb_server_.reset();
 #endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
   // Synchronize on all background compile tasks.
