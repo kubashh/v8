@@ -161,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "e60bd5fc_de1273d9",
+        "filename": "src/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2019-11-27T18:57:41Z",
+      "side": 1,
+      "message": "Then it\u0027s probably better to have the initialization in the GdbServer constructor and the shutdown in the destructor, after all the factory would have the same identical logic.",
+      "parentUuid": "d419c32d_741d2a2e",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b832b931_534c1c93",
         "filename": "src/wasm/gdb-server/session.cc",
         "patchSetId": 3
