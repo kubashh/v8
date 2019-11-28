@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b951f0ba_087752bd",
+        "filename": "test/cctest/test-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-11-28T18:35:18Z",
+      "side": 1,
+      "message": "unfinished comment?",
+      "revId": "5964f17f50a304bdd81df90450d9f61e4add5408",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4acfdd33_cdf52e64",
+        "filename": "test/cctest/test-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-11-28T18:35:18Z",
+      "side": 1,
+      "message": "Any reason you are ensuring source positions here? Maybe just check there are source positions?",
+      "revId": "5964f17f50a304bdd81df90450d9f61e4add5408",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
