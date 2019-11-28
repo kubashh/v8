@@ -104,6 +104,24 @@
       "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6025b966_aaafdecd",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8097,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-11-28T12:39:51Z",
+      "side": 1,
+      "message": "I\u0027d be open to introducing a v8::debug::AccessorPair in debug-interface.h. We have done this for v8::internal::Script -\u003e v8::debug::Script as well. That way, we can expose accessors directly to the inspector.",
+      "parentUuid": "0e88b1a3_7ea3a220",
+      "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
