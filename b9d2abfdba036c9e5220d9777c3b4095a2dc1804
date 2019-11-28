@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4c2a55c_37639763",
+        "filename": "src/compiler/decompression-optimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-11-28T15:36:04Z",
+      "side": 1,
+      "message": "Then this should probably be called OperatorCanBeReducedTo32Bit",
+      "range": {
+        "startLine": 67,
+        "startChar": 5,
+        "endLine": 67,
+        "endChar": 33
+      },
+      "revId": "b9d2abfdba036c9e5220d9777c3b4095a2dc1804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
