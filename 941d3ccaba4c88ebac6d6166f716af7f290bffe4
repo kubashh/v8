@@ -212,6 +212,24 @@
       "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c795fe38_4bae7f65",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8097,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-11-28T17:18:12Z",
+      "side": 1,
+      "message": "I think we still need debug::AccessorPair to inherit from v8::Value one way or another, if we are going to put the values and accessors into one vector/array.",
+      "parentUuid": "64ac31bd_4ae24627",
+      "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
