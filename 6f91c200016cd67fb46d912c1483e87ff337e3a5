@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1782791a_5003fb73",
+        "filename": "include/v8-version.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-11-28T09:07:10Z",
+      "side": 1,
+      "message": "Changes in this file also need to be reverted",
+      "range": {
+        "startLine": 13,
+        "startChar": 24,
+        "endLine": 13,
+        "endChar": 27
+      },
+      "revId": "6f91c200016cd67fb46d912c1483e87ff337e3a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
