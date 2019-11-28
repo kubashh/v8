@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8119433_e435aec6",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4478,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-28T13:50:16Z",
+      "side": 1,
+      "message": "Why is the truncation needed for MIPS? The trunctation that was removed had nothing to do with pointer compression. It was not needed.\n\nIf we want to keep this, the if guard can be replaced with\nif (machine()-\u003eIs64() \u0026\u0026 !COMPRESS_POINTERS_BOOL)",
+      "range": {
+        "startLine": 4478,
+        "startChar": 0,
+        "endLine": 4478,
+        "endChar": 68
+      },
+      "revId": "55faa0e35cd964d8b3b579ce91e48bad417ef28b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
