@@ -240,6 +240,80 @@ class Heap {
     const char* event_name_;
   };
 
+  enum class ConcurrentSweepingState;
+
+  class OutOfLineMemoryChunkHeaderMap {
+   public:
+    struct Entry {
+      MemoryChunk* chunk = {};
+      std::atomic<ConcurrentSweepingState> state = {};
+    };
+
+    explicit OutOfLineMemoryChunkHeaderMap(size_t size)
+        : size_(size), next_(0), end_(0) {
+      page_header_data_ = new Entry[size];
+    }
+
+    ~OutOfLineMemoryChunkHeaderMap() { delete[] page_header_data_; }
+
+    bool RegisterNewMemoryChunk(MemoryChunk* chunk) {
+      if (IsFull()) return false;
+      page_header_data_[GetNextFree()].chunk = chunk;
+      return true;
+    }
+
+    bool IsFull() { return next_ == size_; }
+
+    // Free does not perform any checks. A double free on the same slot may
+    // break the free list.
+    void Free(uintptr_t index) {
+      DCHECK(index < size_);
+      DCHECK(index < end_);
+      page_header_data_[index].chunk = reinterpret_cast<MemoryChunk*>(next_);
+      next_ = index;
+    }
+
+    void Free(Entry* entry) {
+      DCHECK(entry >= page_header_data_ && entry < page_header_data_ + size_);
+      uintptr_t index =
+          ((uintptr_t)entry - (uintptr_t)page_header_data_) / sizeof(Entry);
+      Free(index);
+    }
+
+    Entry* page_header_data_;
+
+   private:
+    uintptr_t GetNextFree() {
+      uintptr_t free = next_;
+
+      // We should never hit this check since there should be always enough
+      // memory. Otherwise we will run out-of-memory earlier. IsFull() should
+      // be called earlier.
+      DCHECK_LT(free, size_);
+
+      // If next_ == end_ we don't have any free list items. Since end_ is
+      // smaller than size_ we know that there are never used slots left which
+      // can be used.
+      if (next_ == end_) {
+        next_++;
+        end_ = next_;
+      } else {
+        next_ = reinterpret_cast<uintptr_t>(page_header_data_[free].chunk);
+      }
+      return free;
+    }
+
+    // The number of slolts available in page_header_data_.
+    const size_t size_;
+
+    // next_ points to the next available slot in the free list.
+    // When next_ == size_ all slots are used up.
+    uintptr_t next_;
+
+    // end_ points to the so far last used slot in page_header_data_
+    uintptr_t end_;
+  };
+
   using PretenuringFeedbackMap =
       std::unordered_map<AllocationSite, size_t, Object::Hasher>;
 
