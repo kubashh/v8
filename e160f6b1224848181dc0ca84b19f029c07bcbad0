@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd58c4f2_22618f93",
+        "filename": "src/execution/execution.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-11-28T15:05:31Z",
+      "side": 1,
+      "message": "I guess you don\u0027t need this since maybe_result will already be MaybeHandle\u003cObject\u003e()?",
+      "revId": "e160f6b1224848181dc0ca84b19f029c07bcbad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
