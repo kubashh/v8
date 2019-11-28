@@ -250,6 +250,7 @@ void GenerateFieldValueAccessor(const Field& field,
 //     std::move(descriptors_struct_field_list),      // Struct fields
 //     GetArrayKind(indexed_field_count.validity)));  // Field kind
 void GenerateGetPropsChunkForField(const Field& field,
+                                   base::Optional<NameAndType> array_length,
                                    std::ostream& get_props_impl) {
   DebugFieldType debug_field_type(field);
 
@@ -280,8 +281,8 @@ void GenerateGetPropsChunkForField(const Field& field,
 
   // If the field is indexed, emit a fetch of the array length, and change
   // count_value and property_kind to be the correct values for an array.
-  if (field.index) {
-    const Type* index_type = field.index->type;
+  if (array_length) {
+    const Type* index_type = array_length->type;
     std::string index_type_name;
     if (index_type == TypeOracle::GetSmiType()) {
       index_type_name = "uintptr_t";
@@ -302,7 +303,8 @@ void GenerateGetPropsChunkForField(const Field& field,
     }
     get_props_impl << "  Value<" << index_type_name
                    << "> indexed_field_count = Get"
-                   << CamelifyString(field.index->name) << "Value(accessor);\n";
+                   << CamelifyString(array_length->name)
+                   << "Value(accessor);\n";
     property_kind = "GetArrayKind(indexed_field_count.validity)";
   }
 
@@ -410,7 +412,15 @@ void GenerateClassDebugReader(const ClassType& type, std::ostream& h_contents,
     if (field.name_and_type.type == TypeOracle::GetVoidType()) continue;
     GenerateFieldAddressAccessor(field, name, h_contents, cc_contents);
     GenerateFieldValueAccessor(field, name, h_contents, cc_contents);
-    GenerateGetPropsChunkForField(field, get_props_impl);
+    base::Optional<NameAndType> array_length;
+    if (field.index) {
+      array_length = ExtractSimpleFieldArraySize(type, *field.index);
+      if (!array_length) {
+        // Unsupported complex array length, skipping this field.
+        continue;
+      }
+    }
+    GenerateGetPropsChunkForField(field, array_length, get_props_impl);
   }
 
   h_contents << "};\n";
