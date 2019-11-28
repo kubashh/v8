@@ -122,6 +122,24 @@
       "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "571e2ca9_b68ec637",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8097,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-11-28T14:12:28Z",
+      "side": 1,
+      "message": "I think the issue is we don\u0027t have a v8:: or v8::debug type that can describe both data properties and accessor properties, while inhering from the same class as v8::String. We then have to\n\n1. return them in v8::Arrays in two different calls (iterating each object twice), with [name, value, name, value] or [name, accessor, name, accessor] format\n2. or return the names and the descriptors separately in one call, with at least one of them being out parameters (or maybe we can use std::vector\u003cstd::pair\u003cv8::String, v8::Descriptor\u003e\u003e?)\n3. or use some flexible dictionary type that somewhat does the job\n\nThis CL is currently using v8::Object for 3 in the format of [{name, value}, {name, get}, ...] because v8::Object is flexible enough to represent optional data or accessor properties while including the names, and it\u0027s v8::Value.\n\nWith v8:: PropertyDescriptor we can get to 2. If we add a name field to it, we can also just return one std::vector of it (is it safe to return them in std::vector though?)\n\nWith v8::debug::AccessorPair we can get to 1. But I think 1 is a bit unnecessarily expensive, and we still need v8::debug::AccessorPair to be v8::Value if we want to put them into the same array as the names, or use something like std::vector\u003cstd::pair\u003cv8::String, v8::debug::AccessorPair\u003e\u003e otherwise.",
+      "parentUuid": "6025b966_aaafdecd",
+      "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
