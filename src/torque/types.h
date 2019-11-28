@@ -185,7 +185,7 @@ struct Field {
 
   SourcePosition pos;
   const AggregateType* aggregate;
-  base::Optional<NameAndType> index;
+  base::Optional<Expression*> index;
   NameAndType name_and_type;
 
   // The byte offset of this field from the beginning of the containing class or
@@ -736,6 +736,9 @@ TypeVector LowerParameterTypes(const ParameterTypes& parameter_types,
                                size_t vararg_count = 0);
 
 base::Optional<std::tuple<size_t, std::string>> SizeOf(const Type* type);
+
+base::Optional<NameAndType> ExtractSimpleFieldArraySize(
+    const ClassType& class_type, Expression* array_size);
 
 }  // namespace torque
 }  // namespace internal

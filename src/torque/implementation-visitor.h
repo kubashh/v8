@@ -372,6 +372,7 @@ class ImplementationVisitor {
   LocationReference GenerateFieldReference(VisitResult object,
                                            const NameAndType& field,
                                            const ClassType* class_type);
+  VisitResult GenerateArrayLength(Expression* array_length);
   VisitResult GenerateArrayLength(VisitResult object, const Field& field);
   VisitResult GenerateArrayLength(const ClassType* class_type,
                                   const InitializerResults& initializer_results,
