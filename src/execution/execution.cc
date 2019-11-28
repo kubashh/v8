@@ -306,6 +306,7 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(Isolate* isolate,
 
 MaybeHandle<Object> InvokeWithTryCatch(Isolate* isolate,
                                        const InvokeParams& params) {
+  std::cerr << "InvokeWithTryCatch" << std::endl;
   bool is_termination = false;
   MaybeHandle<Object> maybe_result;
   if (params.exception_out != nullptr) {
@@ -343,8 +344,12 @@ MaybeHandle<Object> InvokeWithTryCatch(Isolate* isolate,
     }
   }
 
-  // Re-request terminate execution interrupt to trigger later.
-  if (is_termination) isolate->stack_guard()->RequestTerminateExecution();
+  if (is_termination) {
+    // Reschedule terminate execution exception.
+    isolate->TerminateExecution();
+    isolate->OptionalRescheduleException(false);
+    return MaybeHandle<Object>();
+  }
 
   return maybe_result;
 }
