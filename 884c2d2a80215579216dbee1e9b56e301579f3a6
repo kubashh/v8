@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd82dd1f_d1639271",
+        "filename": "src/torque/class-debug-reader-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-11-28T16:54:24Z",
+      "side": 1,
+      "message": "@Seth: Is this the right way to handle this?",
+      "range": {
+        "startLine": 416,
+        "startChar": 0,
+        "endLine": 422,
+        "endChar": 5
+      },
+      "revId": "884c2d2a80215579216dbee1e9b56e301579f3a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
