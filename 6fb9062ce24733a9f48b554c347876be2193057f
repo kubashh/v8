@@ -179,6 +179,24 @@
     },
     {
       "key": {
+        "uuid": "322483f1_ef65e889",
+        "filename": "src/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2019-11-28T08:53:04Z",
+      "side": 1,
+      "message": "The factory allows to signal failures. In that case, return null, or even better, some error.",
+      "parentUuid": "e60bd5fc_de1273d9",
+      "revId": "6fb9062ce24733a9f48b554c347876be2193057f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b832b931_534c1c93",
         "filename": "src/wasm/gdb-server/session.cc",
         "patchSetId": 3
