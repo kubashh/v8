@@ -16,6 +16,24 @@
       "revId": "63b75cb248f8ee5b72398e3595ead118a4a48211",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ef42928_90156d18",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-11-28T09:54:26Z",
+      "side": 1,
+      "message": "I don\u0027t think this should be fixed for asm-js modules. The {ModuleOrigin} now encodes strictness information and is stored in the {NativeModule}, so sharing a {NativeModule} for two identical asm-js modules with different strictness would break e.g. mjsunit/regress/wasm/regress-985154.js.\nOr do you think we should eventually include the origin in the cache key type?",
+      "parentUuid": "b17e6179_72731576",
+      "revId": "63b75cb248f8ee5b72398e3595ead118a4a48211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
