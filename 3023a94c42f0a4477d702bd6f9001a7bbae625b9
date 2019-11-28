@@ -22,6 +22,30 @@
       "revId": "3023a94c42f0a4477d702bd6f9001a7bbae625b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10055678_643fb752",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2019-11-28T16:40:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36cd614f_4bc563b8",
+      "range": {
+        "startLine": 593,
+        "startChar": 13,
+        "endLine": 593,
+        "endChar": 36
+      },
+      "revId": "3023a94c42f0a4477d702bd6f9001a7bbae625b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
