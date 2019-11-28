@@ -1,0 +1,237 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e83cb76_6e74df68",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "I think we should also try to share the export wrappers. It\u0027s only a FixedArray of code object, and should not be user-visible. Can you leave a TODO here to look at this again?",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f801613_3ad6c696",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "Can you remove this TODO please? It\u0027s being addressed by this CL, and is not very accurate anyway (we want different WasmModuleObjects in fact, they should just share the underlying NativeModule).",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6721cd23_6dcf2cc0",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "The code below looks overly complex. WDYT about something structured like this:\n\nwhile (true) {\n  auto it \u003d ...find(wire_bytes);\n  if (it \u003d\u003d ...end()) {\n     ...emplace(...);\n     return nullptr;\n  }\n  if (auto shared_native_module \u003d it-\u003esecond.lock()) return shared_native_module;\n  cache_cv_.Wait(\u0026mutex);\n}",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f2587a1_bd85f0d2",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "let\u0027s say \"is currently being created on another thread\" to be more precise.",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33a488aa_83d142f8",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "In which situation can it happen that we don\u0027t find an entry here? If {MaybeGetNativeModule} and {UpdateNativeModuleCache} are used according to the contract we need to document in the header, this should not happen, right?\nLet\u0027s be protective here and fail in that case then, instead of silently accepting this situation.",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cd47d85_ff971bf2",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "We already did the lookup above. If we assert that we always get a valid iterator, we can just do:\nif (compile_error) {\n  native_module_cache_.erase(it);\n} else {\n  it-\u003esecond \u003d std::move(native_module);\n}\n\n(note the std::move, which saves an unneeded atomic up-ref and down-ref of the std::shared_ptr.)",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05a91d7b_c0639f24",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "nit: If you use \"bytes.length()\", you get a DCHECK for free, and avoid the static cast here.",
+      "range": {
+        "startLine": 1024,
+        "startChar": 6,
+        "endLine": 1024,
+        "endChar": 36
+      },
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ec579d5_1c0af399",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "\"mutex.h\" is also missing (was already missing before). Can you add it please?",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efd64e57_c86961de",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "This contract needs more documentation. Can you also extend the comment on {MaybeGetNativeModule} to say that if it returns nullptr, a \"pending\" cache entry will be added, and the caller must ensure to later call {UpdateNativeModuleCache}?",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a2b358d_c37989ce",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "Please add a little bit of documentation about the use of this ConditionVariable.",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa412cdb_90c6ccb9",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "nit: Why did you split this? {owned_bytes} cannot be used after the std::move anyway, so I think the previous version was a bit safer and easier to read.",
+      "range": {
+        "startLine": 631,
+        "startChar": 4,
+        "endLine": 633,
+        "endChar": 63
+      },
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7042a07a_e45248f9",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we do this only *after* reading the code? Otherwise other threads might already use the NativeModule before the code is present.",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1905298f_a0c4b980",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-11-28T16:29:14Z",
+      "side": 1,
+      "message": "I think this should be done in any case, because the native module might be new to this isolate.\nThis is all pretty untested, so we probably don\u0027t have test coverage for this. Let\u0027s go best effort here and just move it out of this if.",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
