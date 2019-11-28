@@ -559,7 +559,7 @@ class SharedFunctionInfo : public HeapObject {
   void SetFunctionTokenPosition(int function_token_position,
                                 int start_position);
 
-  static void EnsureSourcePositionsAvailable(
+  V8_EXPORT_PRIVATE static void EnsureSourcePositionsAvailable(
       Isolate* isolate, Handle<SharedFunctionInfo> shared_info);
 
   bool AreSourcePositionsAvailable() const;
