@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36cd614f_4bc563b8",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-11-28T16:07:23Z",
+      "side": 1,
+      "message": "\"enum class ConcurrentSweepingState : intptr_t {\" to fix the size because this is used in the memory chunk header where we hard-code offsets of the fields.",
+      "range": {
+        "startLine": 593,
+        "startChar": 13,
+        "endLine": 593,
+        "endChar": 36
+      },
+      "revId": "3023a94c42f0a4477d702bd6f9001a7bbae625b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
