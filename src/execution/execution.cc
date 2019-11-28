@@ -343,8 +343,12 @@ MaybeHandle<Object> InvokeWithTryCatch(Isolate* isolate,
     }
   }
 
-  // Re-request terminate execution interrupt to trigger later.
-  if (is_termination) isolate->stack_guard()->RequestTerminateExecution();
+  if (is_termination) {
+    // Reschedule terminate execution exception.
+    isolate->TerminateExecution();
+    isolate->OptionalRescheduleException(false);
+    return MaybeHandle<Object>();
+  }
 
   return maybe_result;
 }
