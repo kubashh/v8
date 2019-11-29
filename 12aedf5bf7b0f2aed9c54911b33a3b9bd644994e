@@ -33,6 +33,24 @@
       "revId": "12aedf5bf7b0f2aed9c54911b33a3b9bd644994e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8707ff2a_97833fec",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 8060,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-11-29T14:18:54Z",
+      "side": 0,
+      "message": "Do you mean returning it in the [name, value|accessor, name, value|accessor] format? This was in reply to Yang\u0027s comment:\n\n\u003e one problem I see with this is that the thing we return is no longer a real JS Array. If that ever escapes into JS, we would be in trouble. So it might be better to return a vector of Local handles. If we do that, it no longer matters whether debug::AccessorPair inherits from v8::Value. And while we are at this, we could also return two vectors instead, one for names, one for value/accessors.",
+      "parentUuid": "23009d71_f275ba45",
+      "revId": "12aedf5bf7b0f2aed9c54911b33a3b9bd644994e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -16,6 +16,24 @@
       "revId": "8028c3e0b45c895cdac3aae398f77bf637a17d32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7aec012_3b29e053",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2376,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-11-29T14:18:54Z",
+      "side": 1,
+      "message": "I changed it because in this case the execution_context() in the constructor is not the class context, but a function context that doesn\u0027t get popped:\n\nclass C {\n  #c() { return 1; }\n  constructor() { (() \u003d\u003e this)().#c(); }\n}\nnew C;\n\nSomehow this is not reflected in the expectation file, but this is what the bytecode of C currently looks like\n\n         0x2c061d45f136 @    0 : a7                StackCheck\n         0x2c061d45f137 @    1 : 84 00 01          CreateFunctionContext [0], [1]\n         0x2c061d45f13a @    4 : 16 fb             PushContext r0\n         0x2c061d45f13c @    6 : 25 02             Ldar \u003cthis\u003e\n         0x2c061d45f13e @    8 : 1d 02             StaCurrentContextSlot [2]\n         0x2c061d45f140 @   10 : 18 fb 03 00       LdaContextSlot r0, [3], [0]\n         0x2c061d45f144 @   14 : 26 f9             Star r2\n         0x2c061d45f146 @   16 : 27 02 fa          Mov \u003cthis\u003e, r1\n         0x2c061d45f149 @   19 : 27 fb f8          Mov r0, r3\n         0x2c061d45f14c @   22 : 61 d6 00 fa 03    CallRuntime [AddPrivateBrand], r1-r3\n         0x2c061d45f151 @   27 : 81 01 00 02       CreateClosure [1], [0], #2\n         0x2c061d45f155 @   31 : 26 f6             Star r5\n         0x2c061d45f157 @   33 : 5c f6 00          CallUndefinedReceiver0 r5, [0]\n         0x2c061d45f15a @   36 : 26 f6             Star r5\n         0x2c061d45f15c @   38 : 18 fb 03 00       LdaContextSlot r0, [3], [0]\n         0x2c061d45f160 @   42 : 2a f6 02          LdaKeyedProperty r5, [2]\n         0x2c061d45f163 @   45 : 18 fb 02 00       LdaContextSlot r0, [2], [0]\n         0x2c061d45f167 @   49 : 26 f7             Star r4\n         0x2c061d45f169 @   51 : 56 f7 f6 01 04    CallAnyReceiver r4, r5-r5, [4]\n         0x2c061d45f16e @   56 : 0d                LdaUndefined\n         0x2c061d45f16f @   57 : ab                Return",
+      "parentUuid": "24d2f3aa_68cd5939",
+      "revId": "8028c3e0b45c895cdac3aae398f77bf637a17d32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
