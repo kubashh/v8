@@ -46,6 +46,30 @@
       "revId": "55faa0e35cd964d8b3b579ce91e48bad417ef28b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfe34243_55f0a519",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4478,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-11-29T10:17:49Z",
+      "side": 1,
+      "message": "In the previous patch the truncation was remove since it wasn\u0027t needed. The 32 bits operations below don\u0027t operate on the full 64 bits.\n\nHave you tested and it\u0027s only needed for non pointer compression? The if before was only considering whether the arch was 64 bits. There was no indication that pointer compression would behave differently than non pointer compression\n\nThe truncate feeds into Word32And. Is Word32And only looking at the bottom 32 bits? or the whole 64 bits?\nSame for Word32Equal.",
+      "parentUuid": "d17c7e2e_84b90113",
+      "range": {
+        "startLine": 4478,
+        "startChar": 0,
+        "endLine": 4478,
+        "endChar": 68
+      },
+      "revId": "55faa0e35cd964d8b3b579ce91e48bad417ef28b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
