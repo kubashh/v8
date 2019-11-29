@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0e46d8_91864169",
+        "filename": "infra/mb/gn_isolate_map.pyl",
+        "patchSetId": 13
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-29T08:47:39Z",
+      "side": 1,
+      "message": "See above. This needs to be a path to the BUILD.gn file, then after : a target in that file. The // indicate project root in GN.",
+      "range": {
+        "startLine": 79,
+        "startChar": 16,
+        "endLine": 79,
+        "endChar": 31
+      },
+      "revId": "24d5ea0d9907c70b02f52ff28027d8996b2cce53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb4f8ce1_6f20f5c7",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-29T08:47:39Z",
+      "side": 1,
+      "message": "This can now be just unittests, since it\u0027s in the same file now.",
+      "range": {
+        "startLine": 12,
+        "startChar": 14,
+        "endLine": 12,
+        "endChar": 40
+      },
+      "revId": "24d5ea0d9907c70b02f52ff28027d8996b2cce53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86972053_ac0fe300",
+        "filename": "test/unittests/torque/ls-json-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-11-29T08:47:39Z",
+      "side": 1,
+      "message": "It\u0027s even more helpful to add the shortened link to crbug. Then people can click on it directly in code search.",
+      "range": {
+        "startLine": 103,
+        "startChar": 62,
+        "endLine": 103,
+        "endChar": 80
+      },
+      "revId": "24d5ea0d9907c70b02f52ff28027d8996b2cce53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
