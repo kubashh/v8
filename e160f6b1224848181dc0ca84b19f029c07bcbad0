@@ -16,6 +16,24 @@
       "revId": "e160f6b1224848181dc0ca84b19f029c07bcbad0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b13db9f1_e5a1fd2e",
+        "filename": "src/execution/execution.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-11-29T08:10:18Z",
+      "side": 1,
+      "message": "I initially thought this was clearer, but accepted your suggestion.",
+      "parentUuid": "dd58c4f2_22618f93",
+      "revId": "e160f6b1224848181dc0ca84b19f029c07bcbad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
