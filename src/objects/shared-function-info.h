@@ -679,7 +679,7 @@ class SharedFunctionInfo : public HeapObject {
 
   friend class Factory;
   friend class V8HeapExplorer;
-  FRIEND_TEST(PreParserTest, LazyFunctionLength);
+  FRIEND_TEST(PreParserDeathTest, LazyFunctionLength);
 
   OBJECT_CONSTRUCTORS(SharedFunctionInfo, HeapObject);
 };

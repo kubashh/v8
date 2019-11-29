@@ -60,15 +60,16 @@ class WithFinalizationGroupMixin : public TMixin {
 template <typename TMixin>
 SaveFlags* WithFinalizationGroupMixin<TMixin>::save_flags_ = nullptr;
 
-using TestWithNativeContextAndFinalizationGroup =  //
-    WithInternalIsolateMixin<                      //
-        WithContextMixin<                          //
-            WithFinalizationGroupMixin<            //
-                WithIsolateScopeMixin<             //
-                    WithSharedIsolateMixin<        //
+using TestWithNativeContextDeathTestAndFinalizationGroup =  //
+    WithInternalIsolateMixin<                               //
+        WithContextMixin<                                   //
+            WithFinalizationGroupMixin<                     //
+                WithIsolateScopeMixin<                      //
+                    WithSharedIsolateMixin<                 //
                         ::testing::Test>>>>>;
 
-class MicrotaskQueueTest : public TestWithNativeContextAndFinalizationGroup {
+class MicrotaskQueueTest
+    : public TestWithNativeContextDeathTestAndFinalizationGroup {
  public:
   template <typename F>
   Handle<Microtask> NewMicrotask(F&& f) {

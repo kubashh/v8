@@ -22,15 +22,15 @@ namespace v8 {
 namespace internal {
 namespace interpreter {
 
-class BytecodeArrayBuilderTest : public TestWithIsolateAndZone {
+class BytecodeArrayBuilderDeathTest : public TestWithIsolateAndZone {
  public:
-  BytecodeArrayBuilderTest() = default;
-  ~BytecodeArrayBuilderTest() override = default;
+  BytecodeArrayBuilderDeathTest() = default;
+  ~BytecodeArrayBuilderDeathTest() override = default;
 };
 
 using ToBooleanMode = BytecodeArrayBuilder::ToBooleanMode;
 
-TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
+TEST_F(BytecodeArrayBuilderDeathTest, AllBytecodesGenerated) {
   FeedbackVectorSpec feedback_spec(zone());
   BytecodeArrayBuilder builder(zone(), 1, 131, &feedback_spec);
   Factory* factory = isolate()->factory();
@@ -493,8 +493,7 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
 #undef CHECK_BYTECODE_PRESENT
 }
 
-
-TEST_F(BytecodeArrayBuilderTest, FrameSizesLookGood) {
+TEST_F(BytecodeArrayBuilderDeathTest, FrameSizesLookGood) {
   for (int locals = 0; locals < 5; locals++) {
     for (int temps = 0; temps < 3; temps++) {
       BytecodeArrayBuilder builder(zone(), 1, locals);
@@ -520,8 +519,7 @@ TEST_F(BytecodeArrayBuilderTest, FrameSizesLookGood) {
   }
 }
 
-
-TEST_F(BytecodeArrayBuilderTest, RegisterValues) {
+TEST_F(BytecodeArrayBuilderDeathTest, RegisterValues) {
   int index = 1;
 
   Register the_register(index);
@@ -532,8 +530,7 @@ TEST_F(BytecodeArrayBuilderTest, RegisterValues) {
   CHECK_EQ(actual_index, index);
 }
 
-
-TEST_F(BytecodeArrayBuilderTest, Parameters) {
+TEST_F(BytecodeArrayBuilderDeathTest, Parameters) {
   BytecodeArrayBuilder builder(zone(), 10, 0);
 
   Register receiver(builder.Receiver());
@@ -541,8 +538,7 @@ TEST_F(BytecodeArrayBuilderTest, Parameters) {
   CHECK_EQ(param8.index() - receiver.index(), 9);
 }
 
-
-TEST_F(BytecodeArrayBuilderTest, Constants) {
+TEST_F(BytecodeArrayBuilderDeathTest, Constants) {
   BytecodeArrayBuilder builder(zone(), 1, 0);
   AstValueFactory ast_factory(zone(), isolate()->ast_string_constants(),
                               HashSeed(isolate()));
@@ -570,7 +566,7 @@ TEST_F(BytecodeArrayBuilderTest, Constants) {
   EXPECT_EQ(4, array->constant_pool().length());
 }
 
-TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
+TEST_F(BytecodeArrayBuilderDeathTest, ForwardJumps) {
   static const int kFarJumpDistance = 256 + 20;
 
   BytecodeArrayBuilder builder(zone(), 1, 1);
@@ -695,8 +691,7 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
   iterator.Advance();
 }
 
-
-TEST_F(BytecodeArrayBuilderTest, BackwardJumps) {
+TEST_F(BytecodeArrayBuilderDeathTest, BackwardJumps) {
   BytecodeArrayBuilder builder(zone(), 1, 1);
 
   Register reg(0);
@@ -762,7 +757,7 @@ TEST_F(BytecodeArrayBuilderTest, BackwardJumps) {
   CHECK(iterator.done());
 }
 
-TEST_F(BytecodeArrayBuilderTest, SmallSwitch) {
+TEST_F(BytecodeArrayBuilderDeathTest, SmallSwitch) {
   BytecodeArrayBuilder builder(zone(), 1, 1);
 
   // Small jump table that fits into the single-size constant pool
@@ -810,7 +805,7 @@ TEST_F(BytecodeArrayBuilderTest, SmallSwitch) {
   CHECK(iterator.done());
 }
 
-TEST_F(BytecodeArrayBuilderTest, WideSwitch) {
+TEST_F(BytecodeArrayBuilderDeathTest, WideSwitch) {
   BytecodeArrayBuilder builder(zone(), 1, 1);
 
   // Large jump table that requires a wide Switch bytecode.

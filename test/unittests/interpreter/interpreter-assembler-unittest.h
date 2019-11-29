@@ -18,23 +18,23 @@ namespace interpreter_assembler_unittest {
 
 using ::testing::Matcher;
 
-class InterpreterAssemblerTest;
+class InterpreterAssemblerDeathTest;
 
-class InterpreterAssemblerTestState : public compiler::CodeAssemblerState {
+class InterpreterAssemblerDeathTestState : public compiler::CodeAssemblerState {
  public:
-  InterpreterAssemblerTestState(InterpreterAssemblerTest* test,
-                                Bytecode bytecode);
+  InterpreterAssemblerDeathTestState(InterpreterAssemblerDeathTest* test,
+                                     Bytecode bytecode);
 };
 
-class InterpreterAssemblerTest : public TestWithIsolateAndZone {
+class InterpreterAssemblerDeathTest : public TestWithIsolateAndZone {
  public:
-  InterpreterAssemblerTest() = default;
-  ~InterpreterAssemblerTest() override = default;
+  InterpreterAssemblerDeathTest() = default;
+  ~InterpreterAssemblerDeathTest() override = default;
 
   class InterpreterAssemblerForTest final : public InterpreterAssembler {
    public:
     InterpreterAssemblerForTest(
-        InterpreterAssemblerTestState* state, Bytecode bytecode,
+        InterpreterAssemblerDeathTestState* state, Bytecode bytecode,
         OperandScale operand_scale = OperandScale::kSingle)
         : InterpreterAssembler(state, bytecode, operand_scale) {}
     ~InterpreterAssemblerForTest();

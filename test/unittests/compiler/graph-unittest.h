@@ -26,7 +26,7 @@ namespace compiler {
 
 using ::testing::Matcher;
 
-class GraphTest : public TestWithNativeContextAndZone {
+class GraphTest : public TestWithNativeContextDeathTestAndZone {
  public:
   explicit GraphTest(int num_parameters = 1);
   ~GraphTest() override;
@@ -75,7 +75,6 @@ class GraphTest : public TestWithNativeContextAndZone {
   NodeOriginTable node_origins_;
   TickCounter tick_counter_;
 };
-
 
 class TypedGraphTest : public GraphTest {
  public:

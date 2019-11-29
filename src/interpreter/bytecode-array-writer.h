@@ -56,6 +56,10 @@ class V8_EXPORT_PRIVATE BytecodeArrayWriter final {
                                         Handle<ByteArray> handler_table);
 
   Handle<ByteArray> ToSourcePositionTable(Isolate* isolate);
+  ZoneVector<uint8_t>* bytecodes() { return &bytecodes_; }
+  SourcePositionTableBuilder* source_position_table_builder() {
+    return &source_position_table_builder_;
+  }
 
 #ifdef DEBUG
   // Returns -1 if they match or the offset of the first mismatching byte.
@@ -99,10 +103,6 @@ class V8_EXPORT_PRIVATE BytecodeArrayWriter final {
 
   void StartBasicBlock();
 
-  ZoneVector<uint8_t>* bytecodes() { return &bytecodes_; }
-  SourcePositionTableBuilder* source_position_table_builder() {
-    return &source_position_table_builder_;
-  }
   ConstantArrayBuilder* constant_array_builder() {
     return constant_array_builder_;
   }

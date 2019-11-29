@@ -11,9 +11,9 @@
 namespace v8 {
 namespace internal {
 
-class BackingStoreTest : public TestWithIsolate {};
+class BackingStoreDeathTest : public TestWithIsolate {};
 
-TEST_F(BackingStoreTest, GrowWasmMemoryInPlace) {
+TEST_F(BackingStoreDeathTest, GrowWasmMemoryInPlace) {
   auto backing_store =
       BackingStore::AllocateWasmMemory(isolate(), 1, 2, SharedFlag::kNotShared);
   CHECK(backing_store);
@@ -26,7 +26,7 @@ TEST_F(BackingStoreTest, GrowWasmMemoryInPlace) {
   EXPECT_EQ(2 * wasm::kWasmPageSize, backing_store->byte_length());
 }
 
-TEST_F(BackingStoreTest, GrowWasmMemoryInPlace_neg) {
+TEST_F(BackingStoreDeathTest, GrowWasmMemoryInPlace_neg) {
   auto backing_store =
       BackingStore::AllocateWasmMemory(isolate(), 1, 2, SharedFlag::kNotShared);
   CHECK(backing_store);
@@ -39,7 +39,7 @@ TEST_F(BackingStoreTest, GrowWasmMemoryInPlace_neg) {
   EXPECT_EQ(1 * wasm::kWasmPageSize, backing_store->byte_length());
 }
 
-TEST_F(BackingStoreTest, GrowSharedWasmMemoryInPlace) {
+TEST_F(BackingStoreDeathTest, GrowSharedWasmMemoryInPlace) {
   auto backing_store =
       BackingStore::AllocateWasmMemory(isolate(), 2, 3, SharedFlag::kShared);
   CHECK(backing_store);
@@ -52,7 +52,7 @@ TEST_F(BackingStoreTest, GrowSharedWasmMemoryInPlace) {
   EXPECT_EQ(3 * wasm::kWasmPageSize, backing_store->byte_length());
 }
 
-TEST_F(BackingStoreTest, CopyWasmMemory) {
+TEST_F(BackingStoreDeathTest, CopyWasmMemory) {
   auto bs1 =
       BackingStore::AllocateWasmMemory(isolate(), 1, 2, SharedFlag::kNotShared);
   CHECK(bs1);
@@ -99,7 +99,7 @@ class GrowerThread : public base::Thread {
   std::shared_ptr<BackingStore> backing_store_;
 };
 
-TEST_F(BackingStoreTest, RacyGrowWasmMemoryInPlace) {
+TEST_F(BackingStoreDeathTest, RacyGrowWasmMemoryInPlace) {
   constexpr int kNumThreads = 10;
   constexpr int kMaxPages = 1024;
   GrowerThread* threads[kNumThreads];
