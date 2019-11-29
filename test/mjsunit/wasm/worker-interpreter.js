@@ -35,17 +35,15 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
   `;
   let worker = new Worker(workerScript, {type: 'string'});
 
-  // Call method without using the interpreter.
-  var initial_interpreted = %WasmNumInterpretedCalls(instance);
   assertEquals(23, exp.add(20, 3));
-  assertEquals(initial_interpreted + 0, %WasmNumInterpretedCalls(instance));
 
-  // Send module to the worker, still not interpreting.
+  // Send module to the worker
   worker.postMessage({ command:'module', module:module });
   assertEquals('OK', worker.getMessage());
   worker.postMessage({ command:'call' });
   assertEquals(42, worker.getMessage());
-  assertEquals(initial_interpreted + 0, %WasmNumInterpretedCalls(instance));
+
+  var initial_interpreted = %WasmNumInterpretedCalls(instance);
 
   // Switch to the interpreter and call method.
   %RedirectToWasmInterpreter(instance, add.index);
