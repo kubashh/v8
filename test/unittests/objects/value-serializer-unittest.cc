@@ -24,9 +24,9 @@ using ::testing::_;
 using ::testing::Invoke;
 using ::testing::Return;
 
-class ValueSerializerTest : public TestWithIsolate {
+class ValueSerializerDeathTest : public TestWithIsolate {
  protected:
-  ValueSerializerTest()
+  ValueSerializerDeathTest()
       : serialization_context_(Context::New(isolate())),
         deserialization_context_(Context::New(isolate())) {
     // Create a host object type that can be tested through
@@ -59,7 +59,7 @@ class ValueSerializerTest : public TestWithIsolate {
     isolate_ = reinterpret_cast<i::Isolate*>(isolate());
   }
 
-  ~ValueSerializerTest() override {
+  ~ValueSerializerDeathTest() override {
     // In some cases unhandled scheduled exceptions from current test produce
     // that Context::New(isolate()) from next test's constructor returns NULL.
     // In order to prevent that, we added destructor which will clear scheduled
@@ -274,10 +274,10 @@ class ValueSerializerTest : public TestWithIsolate {
   i::Isolate* isolate_;
   bool expect_inline_wasm_ = false;
 
-  DISALLOW_COPY_AND_ASSIGN(ValueSerializerTest);
+  DISALLOW_COPY_AND_ASSIGN(ValueSerializerDeathTest);
 };
 
-TEST_F(ValueSerializerTest, DecodeInvalid) {
+TEST_F(ValueSerializerDeathTest, DecodeInvalid) {
   // Version tag but no content.
   InvalidDecodeTest({0xFF});
   // Version too large.
@@ -286,7 +286,7 @@ TEST_F(ValueSerializerTest, DecodeInvalid) {
   InvalidDecodeTest({0xFF, 0x09, 0xDD});
 }
 
-TEST_F(ValueSerializerTest, RoundTripOddball) {
+TEST_F(ValueSerializerDeathTest, RoundTripOddball) {
   Local<Value> value = RoundTripTest(Undefined(isolate()));
   EXPECT_TRUE(value->IsUndefined());
   value = RoundTripTest(True(isolate()));
@@ -297,7 +297,7 @@ TEST_F(ValueSerializerTest, RoundTripOddball) {
   EXPECT_TRUE(value->IsNull());
 }
 
-TEST_F(ValueSerializerTest, DecodeOddball) {
+TEST_F(ValueSerializerDeathTest, DecodeOddball) {
   // What this code is expected to generate.
   Local<Value> value = DecodeTest({0xFF, 0x09, 0x5F});
   EXPECT_TRUE(value->IsUndefined());
@@ -329,15 +329,15 @@ TEST_F(ValueSerializerTest, DecodeOddball) {
   EXPECT_TRUE(value->IsNull());
 }
 
-TEST_F(ValueSerializerTest, EncodeArrayStackOverflow) {
+TEST_F(ValueSerializerDeathTest, EncodeArrayStackOverflow) {
   InvalidEncodeTest("var a = []; for (var i = 0; i < 1E5; i++) a = [a]; a");
 }
 
-TEST_F(ValueSerializerTest, EncodeObjectStackOverflow) {
+TEST_F(ValueSerializerDeathTest, EncodeObjectStackOverflow) {
   InvalidEncodeTest("var a = {}; for (var i = 0; i < 1E5; i++) a = {a}; a");
 }
 
-TEST_F(ValueSerializerTest, DecodeArrayStackOverflow) {
+TEST_F(ValueSerializerDeathTest, DecodeArrayStackOverflow) {
   static const int nesting_level = 1E5;
   std::vector<uint8_t> payload;
   // Header.
@@ -367,7 +367,7 @@ TEST_F(ValueSerializerTest, DecodeArrayStackOverflow) {
   InvalidDecodeTest(payload);
 }
 
-TEST_F(ValueSerializerTest, DecodeObjectStackOverflow) {
+TEST_F(ValueSerializerDeathTest, DecodeObjectStackOverflow) {
   static const int nesting_level = 1E5;
   std::vector<uint8_t> payload;
   // Header.
@@ -396,7 +396,7 @@ TEST_F(ValueSerializerTest, DecodeObjectStackOverflow) {
   InvalidDecodeTest(payload);
 }
 
-TEST_F(ValueSerializerTest, DecodeVerifyObjectCount) {
+TEST_F(ValueSerializerDeathTest, DecodeVerifyObjectCount) {
   static const int nesting_level = 1E5;
   std::vector<uint8_t> payload;
   // Header.
@@ -412,7 +412,7 @@ TEST_F(ValueSerializerTest, DecodeVerifyObjectCount) {
   InvalidDecodeTest(payload);
 }
 
-TEST_F(ValueSerializerTest, RoundTripNumber) {
+TEST_F(ValueSerializerDeathTest, RoundTripNumber) {
   Local<Value> value = RoundTripTest(Integer::New(isolate(), 42));
   ASSERT_TRUE(value->IsInt32());
   EXPECT_EQ(42, Int32::Cast(*value)->Value());
@@ -436,7 +436,7 @@ TEST_F(ValueSerializerTest, RoundTripNumber) {
   EXPECT_TRUE(std::isnan(Number::Cast(*value)->Value()));
 }
 
-TEST_F(ValueSerializerTest, DecodeNumber) {
+TEST_F(ValueSerializerDeathTest, DecodeNumber) {
   // 42 zig-zag encoded (signed)
   Local<Value> value = DecodeTest({0xFF, 0x09, 0x49, 0x54});
   ASSERT_TRUE(value->IsInt32());
@@ -479,7 +479,7 @@ TEST_F(ValueSerializerTest, DecodeNumber) {
   // TODO(jbroman): Equivalent test for big-endian machines.
 }
 
-TEST_F(ValueSerializerTest, RoundTripBigInt) {
+TEST_F(ValueSerializerDeathTest, RoundTripBigInt) {
   Local<Value> value = RoundTripTest(BigInt::New(isolate(), -42));
   ASSERT_TRUE(value->IsBigInt());
   ExpectScriptTrue("result === -42n");
@@ -502,7 +502,7 @@ TEST_F(ValueSerializerTest, RoundTripBigInt) {
   ExpectScriptTrue("result == 23n");
 }
 
-TEST_F(ValueSerializerTest, DecodeBigInt) {
+TEST_F(ValueSerializerDeathTest, DecodeBigInt) {
   Local<Value> value = DecodeTest({
       0xFF, 0x0D,              // Version 13
       0x5A,                    // BigInt
@@ -550,7 +550,7 @@ static const char kHelloString[] = "Hello";
 static const char kQuebecString[] = "\x51\x75\xC3\xA9\x62\x65\x63";
 static const char kEmojiString[] = "\xF0\x9F\x91\x8A";
 
-TEST_F(ValueSerializerTest, RoundTripString) {
+TEST_F(ValueSerializerDeathTest, RoundTripString) {
   Local<Value> value = RoundTripTest(String::Empty(isolate()));
   ASSERT_TRUE(value->IsString());
   EXPECT_EQ(0, String::Cast(*value)->Length());
@@ -574,7 +574,7 @@ TEST_F(ValueSerializerTest, RoundTripString) {
   EXPECT_EQ(kEmojiString, Utf8Value(value));
 }
 
-TEST_F(ValueSerializerTest, DecodeString) {
+TEST_F(ValueSerializerDeathTest, DecodeString) {
   // Decoding the strings above from UTF-8.
   Local<Value> value = DecodeTest({0xFF, 0x09, 0x53, 0x00});
   ASSERT_TRUE(value->IsString());
@@ -637,7 +637,7 @@ TEST_F(ValueSerializerTest, DecodeString) {
   // TODO(jbroman): The same for big-endian systems.
 }
 
-TEST_F(ValueSerializerTest, DecodeInvalidString) {
+TEST_F(ValueSerializerDeathTest, DecodeInvalidString) {
   // UTF-8 string with too few bytes available.
   InvalidDecodeTest({0xFF, 0x09, 0x53, 0x10, 'v', '8'});
   // One-byte string with too few bytes available.
@@ -651,7 +651,7 @@ TEST_F(ValueSerializerTest, DecodeInvalidString) {
   // TODO(jbroman): The same for big-endian systems.
 }
 
-TEST_F(ValueSerializerTest, EncodeTwoByteStringUsesPadding) {
+TEST_F(ValueSerializerDeathTest, EncodeTwoByteStringUsesPadding) {
   // As long as the output has a version that Blink expects to be able to read,
   // we must respect its alignment requirements. It requires that two-byte
   // characters be aligned.
@@ -674,7 +674,7 @@ TEST_F(ValueSerializerTest, EncodeTwoByteStringUsesPadding) {
                          data.begin() + 2));
 }
 
-TEST_F(ValueSerializerTest, RoundTripDictionaryObject) {
+TEST_F(ValueSerializerDeathTest, RoundTripDictionaryObject) {
   // Empty object.
   Local<Value> value = RoundTripTest("({})");
   ASSERT_TRUE(value->IsObject());
@@ -719,7 +719,7 @@ TEST_F(ValueSerializerTest, RoundTripDictionaryObject) {
   ExpectScriptTrue("result === result.self");
 }
 
-TEST_F(ValueSerializerTest, DecodeDictionaryObject) {
+TEST_F(ValueSerializerDeathTest, DecodeDictionaryObject) {
   // Empty object.
   Local<Value> value =
       DecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x6F, 0x7B, 0x00, 0x00});
@@ -775,7 +775,7 @@ TEST_F(ValueSerializerTest, DecodeDictionaryObject) {
   ExpectScriptTrue("result === result.self");
 }
 
-TEST_F(ValueSerializerTest, InvalidDecodeObjectWithInvalidKeyType) {
+TEST_F(ValueSerializerDeathTest, InvalidDecodeObjectWithInvalidKeyType) {
   // Objects which would need conversion to string shouldn't be present as
   // object keys. The serializer would have obtained them from the own property
   // keys list, which should only contain names and indices.
@@ -783,7 +783,7 @@ TEST_F(ValueSerializerTest, InvalidDecodeObjectWithInvalidKeyType) {
       {0xFF, 0x09, 0x6F, 0x61, 0x00, 0x40, 0x00, 0x00, 0x7B, 0x01});
 }
 
-TEST_F(ValueSerializerTest, RoundTripOnlyOwnEnumerableStringKeys) {
+TEST_F(ValueSerializerDeathTest, RoundTripOnlyOwnEnumerableStringKeys) {
   // Only "own" properties should be serialized, not ones on the prototype.
   Local<Value> value = RoundTripTest("var x = {}; x.__proto__ = {a: 4}; x;");
   ExpectScriptTrue("!('a' in result)");
@@ -800,7 +800,7 @@ TEST_F(ValueSerializerTest, RoundTripOnlyOwnEnumerableStringKeys) {
   ExpectScriptTrue("Object.getOwnPropertySymbols(result).length === 0");
 }
 
-TEST_F(ValueSerializerTest, RoundTripTrickyGetters) {
+TEST_F(ValueSerializerDeathTest, RoundTripTrickyGetters) {
   // Keys are enumerated before any setters are called, but if there is no own
   // property when the value is to be read, then it should not be serialized.
   Local<Value> value =
@@ -853,7 +853,7 @@ TEST_F(ValueSerializerTest, RoundTripTrickyGetters) {
   EXPECT_NE(std::string::npos, Utf8Value(message->Get()).find("sentinel"));
 }
 
-TEST_F(ValueSerializerTest, RoundTripDictionaryObjectForTransitions) {
+TEST_F(ValueSerializerDeathTest, RoundTripDictionaryObjectForTransitions) {
   // A case which should run on the fast path, and should reach all of the
   // different cases:
   // 1. no known transition (first time creating this kind of object)
@@ -878,7 +878,7 @@ TEST_F(ValueSerializerTest, RoundTripDictionaryObjectForTransitions) {
       ",{\"\xF0\x9F\x91\x8A\":5,\"\xF0\x9F\x91\x9B\":6}]");
 }
 
-TEST_F(ValueSerializerTest, DecodeDictionaryObjectVersion0) {
+TEST_F(ValueSerializerDeathTest, DecodeDictionaryObjectVersion0) {
   // Empty object.
   Local<Value> value = DecodeTestForVersion0({0x7B, 0x00});
   ASSERT_TRUE(value->IsObject());
@@ -916,7 +916,7 @@ TEST_F(ValueSerializerTest, DecodeDictionaryObjectVersion0) {
   ExpectScriptTrue("result.a === 42");
 }
 
-TEST_F(ValueSerializerTest, RoundTripArray) {
+TEST_F(ValueSerializerDeathTest, RoundTripArray) {
   // A simple array of integers.
   Local<Value> value = RoundTripTest("[1, 2, 3, 4, 5]");
   ASSERT_TRUE(value->IsArray());
@@ -979,7 +979,7 @@ TEST_F(ValueSerializerTest, RoundTripArray) {
   ExpectScriptTrue("result.hasOwnProperty(1)");
 }
 
-TEST_F(ValueSerializerTest, DecodeArray) {
+TEST_F(ValueSerializerDeathTest, DecodeArray) {
   // A simple array of integers.
   Local<Value> value =
       DecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x41, 0x05, 0x3F, 0x01, 0x49, 0x02,
@@ -1062,7 +1062,7 @@ TEST_F(ValueSerializerTest, DecodeArray) {
   ExpectScriptTrue("result.hasOwnProperty(1)");
 }
 
-TEST_F(ValueSerializerTest, DecodeInvalidOverLargeArray) {
+TEST_F(ValueSerializerDeathTest, DecodeInvalidOverLargeArray) {
   // So large it couldn't exist in the V8 heap, and its size couldn't fit in a
   // SMI on 32-bit systems (2^30).
   InvalidDecodeTest({0xFF, 0x09, 0x41, 0x80, 0x80, 0x80, 0x80, 0x04});
@@ -1070,7 +1070,7 @@ TEST_F(ValueSerializerTest, DecodeInvalidOverLargeArray) {
   InvalidDecodeTest({0xFF, 0x09, 0x41, 0x01});
 }
 
-TEST_F(ValueSerializerTest, RoundTripArrayWithNonEnumerableElement) {
+TEST_F(ValueSerializerDeathTest, RoundTripArrayWithNonEnumerableElement) {
   // Even though this array looks like [1,5,3], the 5 should be missing from the
   // perspective of structured clone, which only clones properties that were
   // enumerable.
@@ -1083,7 +1083,7 @@ TEST_F(ValueSerializerTest, RoundTripArrayWithNonEnumerableElement) {
   ExpectScriptTrue("!result.hasOwnProperty('1')");
 }
 
-TEST_F(ValueSerializerTest, RoundTripArrayWithTrickyGetters) {
+TEST_F(ValueSerializerDeathTest, RoundTripArrayWithTrickyGetters) {
   // If an element is deleted before it is serialized, then it's deleted.
   Local<Value> value =
       RoundTripTest("var x = [{ get a() { delete x[1]; }}, 42]; x;");
@@ -1198,7 +1198,7 @@ TEST_F(ValueSerializerTest, RoundTripArrayWithTrickyGetters) {
   ExpectScriptTrue("!(1 in result)");
 }
 
-TEST_F(ValueSerializerTest, DecodeSparseArrayVersion0) {
+TEST_F(ValueSerializerDeathTest, DecodeSparseArrayVersion0) {
   // Empty (sparse) array.
   Local<Value> value = DecodeTestForVersion0({0x40, 0x00, 0x00, 0x00});
   ASSERT_TRUE(value->IsArray());
@@ -1227,7 +1227,7 @@ TEST_F(ValueSerializerTest, DecodeSparseArrayVersion0) {
   ExpectScriptTrue("result[1][1] === true");
 }
 
-TEST_F(ValueSerializerTest, RoundTripDenseArrayContainingUndefined) {
+TEST_F(ValueSerializerDeathTest, RoundTripDenseArrayContainingUndefined) {
   // In previous serialization versions, this would be interpreted as an absent
   // property.
   Local<Value> value = RoundTripTest("[undefined]");
@@ -1237,7 +1237,7 @@ TEST_F(ValueSerializerTest, RoundTripDenseArrayContainingUndefined) {
   ExpectScriptTrue("result[0] === undefined");
 }
 
-TEST_F(ValueSerializerTest, DecodeDenseArrayContainingUndefined) {
+TEST_F(ValueSerializerDeathTest, DecodeDenseArrayContainingUndefined) {
   // In previous versions, "undefined" in a dense array signified absence of the
   // element (for compatibility). In new versions, it has a separate encoding.
   Local<Value> value =
@@ -1252,7 +1252,7 @@ TEST_F(ValueSerializerTest, DecodeDenseArrayContainingUndefined) {
   ExpectScriptTrue("!(0 in result)");
 }
 
-TEST_F(ValueSerializerTest, RoundTripDate) {
+TEST_F(ValueSerializerDeathTest, RoundTripDate) {
   Local<Value> value = RoundTripTest("new Date(1e6)");
   ASSERT_TRUE(value->IsDate());
   EXPECT_EQ(1e6, Date::Cast(*value)->ValueOf());
@@ -1271,7 +1271,7 @@ TEST_F(ValueSerializerTest, RoundTripDate) {
   ExpectScriptTrue("result.a === result.b");
 }
 
-TEST_F(ValueSerializerTest, DecodeDate) {
+TEST_F(ValueSerializerDeathTest, DecodeDate) {
   Local<Value> value;
 #if defined(V8_TARGET_LITTLE_ENDIAN)
   value = DecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x44, 0x00, 0x00, 0x00, 0x00,
@@ -1314,7 +1314,7 @@ TEST_F(ValueSerializerTest, DecodeDate) {
   ExpectScriptTrue("result.a === result.b");
 }
 
-TEST_F(ValueSerializerTest, RoundTripValueObjects) {
+TEST_F(ValueSerializerDeathTest, RoundTripValueObjects) {
   Local<Value> value = RoundTripTest("new Boolean(true)");
   ExpectScriptTrue("Object.getPrototypeOf(result) === Boolean.prototype");
   ExpectScriptTrue("result.valueOf() === true");
@@ -1355,12 +1355,12 @@ TEST_F(ValueSerializerTest, RoundTripValueObjects) {
   ExpectScriptTrue("result.a === result.b");
 }
 
-TEST_F(ValueSerializerTest, RejectsOtherValueObjects) {
+TEST_F(ValueSerializerDeathTest, RejectsOtherValueObjects) {
   // This is a roundabout way of getting an instance of Symbol.
   InvalidEncodeTest("Object.valueOf.apply(Symbol())");
 }
 
-TEST_F(ValueSerializerTest, DecodeValueObjects) {
+TEST_F(ValueSerializerDeathTest, DecodeValueObjects) {
   Local<Value> value = DecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x79, 0x00});
   ExpectScriptTrue("Object.getPrototypeOf(result) === Boolean.prototype");
   ExpectScriptTrue("result.valueOf() === true");
@@ -1429,7 +1429,7 @@ TEST_F(ValueSerializerTest, DecodeValueObjects) {
   ExpectScriptTrue("result.length === 6");
 }
 
-TEST_F(ValueSerializerTest, RoundTripRegExp) {
+TEST_F(ValueSerializerDeathTest, RoundTripRegExp) {
   Local<Value> value = RoundTripTest("/foo/g");
   ASSERT_TRUE(value->IsRegExp());
   ExpectScriptTrue("Object.getPrototypeOf(result) === RegExp.prototype");
@@ -1448,7 +1448,7 @@ TEST_F(ValueSerializerTest, RoundTripRegExp) {
   ExpectScriptTrue("result.a === result.b");
 }
 
-TEST_F(ValueSerializerTest, DecodeRegExp) {
+TEST_F(ValueSerializerDeathTest, DecodeRegExp) {
   Local<Value> value =
       DecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x52, 0x03, 0x66, 0x6F, 0x6F, 0x01});
   ASSERT_TRUE(value->IsRegExp());
@@ -1480,7 +1480,7 @@ TEST_F(ValueSerializerTest, DecodeRegExp) {
 }
 
 // Tests that invalid flags are not accepted by the deserializer.
-TEST_F(ValueSerializerTest, DecodeRegExpDotAll) {
+TEST_F(ValueSerializerDeathTest, DecodeRegExpDotAll) {
   Local<Value> value =
       DecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x52, 0x03, 0x66, 0x6F, 0x6F, 0x1F});
   ASSERT_TRUE(value->IsRegExp());
@@ -1497,7 +1497,7 @@ TEST_F(ValueSerializerTest, DecodeRegExpDotAll) {
       {0xFF, 0x09, 0x3F, 0x00, 0x52, 0x03, 0x66, 0x6F, 0x6F, 0x7F});
 }
 
-TEST_F(ValueSerializerTest, RoundTripMap) {
+TEST_F(ValueSerializerDeathTest, RoundTripMap) {
   Local<Value> value = RoundTripTest("var m = new Map(); m.set(42, 'foo'); m;");
   ASSERT_TRUE(value->IsMap());
   ExpectScriptTrue("Object.getPrototypeOf(result) === Map.prototype");
@@ -1518,7 +1518,7 @@ TEST_F(ValueSerializerTest, RoundTripMap) {
   ExpectScriptTrue("Array.from(result.keys()).toString() === '1,a,3,2'");
 }
 
-TEST_F(ValueSerializerTest, DecodeMap) {
+TEST_F(ValueSerializerDeathTest, DecodeMap) {
   Local<Value> value =
       DecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x3B, 0x3F, 0x01, 0x49, 0x54, 0x3F,
                   0x01, 0x53, 0x03, 0x66, 0x6F, 0x6F, 0x3A, 0x02});
@@ -1543,7 +1543,7 @@ TEST_F(ValueSerializerTest, DecodeMap) {
   ExpectScriptTrue("Array.from(result.keys()).toString() === '1,a,3,2'");
 }
 
-TEST_F(ValueSerializerTest, RoundTripMapWithTrickyGetters) {
+TEST_F(ValueSerializerDeathTest, RoundTripMapWithTrickyGetters) {
   // Even if an entry is removed or reassigned, the original key/value pair is
   // used.
   Local<Value> value = RoundTripTest(
@@ -1571,7 +1571,7 @@ TEST_F(ValueSerializerTest, RoundTripMapWithTrickyGetters) {
   ExpectScriptTrue("Array.from(result.values())[0].foo === 'bar'");
 }
 
-TEST_F(ValueSerializerTest, RoundTripSet) {
+TEST_F(ValueSerializerDeathTest, RoundTripSet) {
   Local<Value> value =
       RoundTripTest("var s = new Set(); s.add(42); s.add('foo'); s;");
   ASSERT_TRUE(value->IsSet());
@@ -1594,7 +1594,7 @@ TEST_F(ValueSerializerTest, RoundTripSet) {
   ExpectScriptTrue("Array.from(result.keys()).toString() === '1,a,3,2'");
 }
 
-TEST_F(ValueSerializerTest, DecodeSet) {
+TEST_F(ValueSerializerDeathTest, DecodeSet) {
   Local<Value> value =
       DecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x27, 0x3F, 0x01, 0x49, 0x54, 0x3F,
                   0x01, 0x53, 0x03, 0x66, 0x6F, 0x6F, 0x2C, 0x02});
@@ -1618,7 +1618,7 @@ TEST_F(ValueSerializerTest, DecodeSet) {
   ExpectScriptTrue("Array.from(result.keys()).toString() === '1,a,3,2'");
 }
 
-TEST_F(ValueSerializerTest, RoundTripSetWithTrickyGetters) {
+TEST_F(ValueSerializerDeathTest, RoundTripSetWithTrickyGetters) {
   // Even if an element is added or removed during serialization, the original
   // set of elements is used.
   Local<Value> value = RoundTripTest(
@@ -1643,7 +1643,7 @@ TEST_F(ValueSerializerTest, RoundTripSetWithTrickyGetters) {
   ExpectScriptTrue("Array.from(result.keys())[1].foo === 'bar'");
 }
 
-TEST_F(ValueSerializerTest, RoundTripArrayBuffer) {
+TEST_F(ValueSerializerDeathTest, RoundTripArrayBuffer) {
   Local<Value> value = RoundTripTest("new ArrayBuffer()");
   ASSERT_TRUE(value->IsArrayBuffer());
   EXPECT_EQ(0u, ArrayBuffer::Cast(*value)->ByteLength());
@@ -1660,7 +1660,7 @@ TEST_F(ValueSerializerTest, RoundTripArrayBuffer) {
   ExpectScriptTrue("result.a === result.b");
 }
 
-TEST_F(ValueSerializerTest, DecodeArrayBuffer) {
+TEST_F(ValueSerializerDeathTest, DecodeArrayBuffer) {
   Local<Value> value = DecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x42, 0x00});
   ASSERT_TRUE(value->IsArrayBuffer());
   EXPECT_EQ(0u, ArrayBuffer::Cast(*value)->ByteLength());
@@ -1679,7 +1679,7 @@ TEST_F(ValueSerializerTest, DecodeArrayBuffer) {
   ExpectScriptTrue("result.a === result.b");
 }
 
-TEST_F(ValueSerializerTest, DecodeInvalidArrayBuffer) {
+TEST_F(ValueSerializerDeathTest, DecodeInvalidArrayBuffer) {
   InvalidDecodeTest({0xFF, 0x09, 0x42, 0xFF, 0xFF, 0x00});
 }
 
@@ -1691,7 +1691,7 @@ class OOMArrayBufferAllocator : public ArrayBuffer::Allocator {
   void Free(void*, size_t) override {}
 };
 
-TEST_F(ValueSerializerTest, DecodeArrayBufferOOM) {
+TEST_F(ValueSerializerDeathTest, DecodeArrayBufferOOM) {
   // This test uses less of the harness, because it has to customize the
   // isolate.
   OOMArrayBufferAllocator allocator;
@@ -1720,11 +1720,12 @@ TEST_F(ValueSerializerTest, DecodeArrayBufferOOM) {
 
 // Includes an ArrayBuffer wrapper marked for transfer from the serialization
 // context to the deserialization context.
-class ValueSerializerTestWithArrayBufferTransfer : public ValueSerializerTest {
+class ValueSerializerWithArrayBufferTransferDeathTest
+    : public ValueSerializerDeathTest {
  protected:
   static const size_t kTestByteLength = 4;
 
-  ValueSerializerTestWithArrayBufferTransfer() {
+  ValueSerializerWithArrayBufferTransferDeathTest() {
     {
       Context::Scope scope(serialization_context());
       input_buffer_ = ArrayBuffer::New(isolate(), 0);
@@ -1753,7 +1754,7 @@ class ValueSerializerTestWithArrayBufferTransfer : public ValueSerializerTest {
   Local<ArrayBuffer> output_buffer_;
 };
 
-TEST_F(ValueSerializerTestWithArrayBufferTransfer,
+TEST_F(ValueSerializerWithArrayBufferTransferDeathTest,
        RoundTripArrayBufferTransfer) {
   Local<Value> value = RoundTripTest(input_buffer());
   ASSERT_TRUE(value->IsArrayBuffer());
@@ -1779,7 +1780,7 @@ TEST_F(ValueSerializerTestWithArrayBufferTransfer,
   ExpectScriptTrue("new Uint8Array(result.a).toString() === '0,1,128,255'");
 }
 
-TEST_F(ValueSerializerTest, RoundTripTypedArray) {
+TEST_F(ValueSerializerDeathTest, RoundTripTypedArray) {
   // Check that the right type comes out the other side for every kind of typed
   // array.
   Local<Value> value;
@@ -1822,7 +1823,7 @@ TEST_F(ValueSerializerTest, RoundTripTypedArray) {
   ExpectScriptTrue("result.f32.length === 5");
 }
 
-TEST_F(ValueSerializerTest, DecodeTypedArray) {
+TEST_F(ValueSerializerDeathTest, DecodeTypedArray) {
   // Check that the right type comes out the other side for every kind of typed
   // array.
   Local<Value> value = DecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x3F, 0x00, 0x42,
@@ -1926,7 +1927,7 @@ TEST_F(ValueSerializerTest, DecodeTypedArray) {
   ExpectScriptTrue("result.f32.length === 5");
 }
 
-TEST_F(ValueSerializerTest, DecodeInvalidTypedArray) {
+TEST_F(ValueSerializerDeathTest, DecodeInvalidTypedArray) {
   // Byte offset out of range.
   InvalidDecodeTest(
       {0xFF, 0x09, 0x42, 0x02, 0x00, 0x00, 0x56, 0x42, 0x03, 0x01});
@@ -1944,7 +1945,7 @@ TEST_F(ValueSerializerTest, DecodeInvalidTypedArray) {
       {0xFF, 0x09, 0x42, 0x02, 0x00, 0x00, 0x56, 0xFF, 0x01, 0x01});
 }
 
-TEST_F(ValueSerializerTest, RoundTripDataView) {
+TEST_F(ValueSerializerDeathTest, RoundTripDataView) {
   Local<Value> value = RoundTripTest("new DataView(new ArrayBuffer(4), 1, 2)");
   ASSERT_TRUE(value->IsDataView());
   EXPECT_EQ(1u, DataView::Cast(*value)->ByteOffset());
@@ -1953,7 +1954,7 @@ TEST_F(ValueSerializerTest, RoundTripDataView) {
   ExpectScriptTrue("Object.getPrototypeOf(result) === DataView.prototype");
 }
 
-TEST_F(ValueSerializerTest, DecodeDataView) {
+TEST_F(ValueSerializerDeathTest, DecodeDataView) {
   Local<Value> value =
       DecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x3F, 0x00, 0x42, 0x04, 0x00, 0x00,
                   0x00, 0x00, 0x56, 0x3F, 0x01, 0x02});
@@ -1964,19 +1965,19 @@ TEST_F(ValueSerializerTest, DecodeDataView) {
   ExpectScriptTrue("Object.getPrototypeOf(result) === DataView.prototype");
 }
 
-TEST_F(ValueSerializerTest, DecodeArrayWithLengthProperty1) {
+TEST_F(ValueSerializerDeathTest, DecodeArrayWithLengthProperty1) {
   InvalidDecodeTest({0xff, 0x0d, 0x41, 0x03, 0x49, 0x02, 0x49, 0x04,
                      0x49, 0x06, 0x22, 0x06, 0x6c, 0x65, 0x6e, 0x67,
                      0x74, 0x68, 0x49, 0x02, 0x24, 0x01, 0x03});
 }
 
-TEST_F(ValueSerializerTest, DecodeArrayWithLengthProperty2) {
+TEST_F(ValueSerializerDeathTest, DecodeArrayWithLengthProperty2) {
   InvalidDecodeTest({0xff, 0x0d, 0x41, 0x03, 0x49, 0x02, 0x49, 0x04,
                      0x49, 0x06, 0x22, 0x06, 0x6c, 0x65, 0x6e, 0x67,
                      0x74, 0x68, 0x6f, 0x7b, 0x00, 0x24, 0x01, 0x03});
 }
 
-TEST_F(ValueSerializerTest, DecodeInvalidDataView) {
+TEST_F(ValueSerializerDeathTest, DecodeInvalidDataView) {
   // Byte offset out of range.
   InvalidDecodeTest(
       {0xFF, 0x09, 0x42, 0x02, 0x00, 0x00, 0x56, 0x3F, 0x03, 0x01});
@@ -1985,10 +1986,10 @@ TEST_F(ValueSerializerTest, DecodeInvalidDataView) {
       {0xFF, 0x09, 0x42, 0x02, 0x00, 0x00, 0x56, 0x3F, 0x01, 0x03});
 }
 
-class ValueSerializerTestWithSharedArrayBufferClone
-    : public ValueSerializerTest {
+class ValueSerializerWithSharedArrayBufferCloneDeathTest
+    : public ValueSerializerDeathTest {
  protected:
-  ValueSerializerTestWithSharedArrayBufferClone()
+  ValueSerializerWithSharedArrayBufferCloneDeathTest()
       : serializer_delegate_(this), deserializer_delegate_(this) {}
 
   void InitializeData(const std::vector<uint8_t>& data, bool is_wasm_memory) {
@@ -2040,11 +2041,11 @@ class ValueSerializerTestWithSharedArrayBufferClone
   static void SetUpTestCase() {
     flag_was_enabled_ = i::FLAG_harmony_sharedarraybuffer;
     i::FLAG_harmony_sharedarraybuffer = true;
-    ValueSerializerTest::SetUpTestCase();
+    ValueSerializerDeathTest::SetUpTestCase();
   }
 
   static void TearDownTestCase() {
-    ValueSerializerTest::TearDownTestCase();
+    ValueSerializerDeathTest::TearDownTestCase();
     i::FLAG_harmony_sharedarraybuffer = flag_was_enabled_;
     flag_was_enabled_ = false;
   }
@@ -2059,7 +2060,7 @@ class ValueSerializerTestWithSharedArrayBufferClone
   class SerializerDelegate : public ValueSerializer::Delegate {
    public:
     explicit SerializerDelegate(
-        ValueSerializerTestWithSharedArrayBufferClone* test)
+        ValueSerializerWithSharedArrayBufferCloneDeathTest* test)
         : test_(test) {}
     MOCK_METHOD2(GetSharedArrayBufferId,
                  Maybe<uint32_t>(Isolate* isolate,
@@ -2071,13 +2072,13 @@ class ValueSerializerTestWithSharedArrayBufferClone
     }
 
    private:
-    ValueSerializerTestWithSharedArrayBufferClone* test_;
+    ValueSerializerWithSharedArrayBufferCloneDeathTest* test_;
   };
 
   class DeserializerDelegate : public ValueDeserializer::Delegate {
    public:
     explicit DeserializerDelegate(
-        ValueSerializerTestWithSharedArrayBufferClone* test) {}
+        ValueSerializerWithSharedArrayBufferCloneDeathTest* test) {}
     MOCK_METHOD2(GetSharedArrayBufferFromId,
                  MaybeLocal<SharedArrayBuffer>(Isolate* isolate, uint32_t id));
   };
@@ -2104,9 +2105,10 @@ class ValueSerializerTestWithSharedArrayBufferClone
   Local<SharedArrayBuffer> output_buffer_;
 };
 
-bool ValueSerializerTestWithSharedArrayBufferClone::flag_was_enabled_ = false;
+bool ValueSerializerWithSharedArrayBufferCloneDeathTest::flag_was_enabled_ =
+    false;
 
-TEST_F(ValueSerializerTestWithSharedArrayBufferClone,
+TEST_F(ValueSerializerWithSharedArrayBufferCloneDeathTest,
        RoundTripSharedArrayBufferClone) {
   InitializeData({0x00, 0x01, 0x80, 0xFF}, false);
 
@@ -2140,7 +2142,7 @@ TEST_F(ValueSerializerTestWithSharedArrayBufferClone,
   ExpectScriptTrue("new Uint8Array(result.a).toString() === '0,1,128,255'");
 }
 
-TEST_F(ValueSerializerTestWithSharedArrayBufferClone,
+TEST_F(ValueSerializerWithSharedArrayBufferCloneDeathTest,
        RoundTripWebAssemblyMemory) {
   bool flag_was_enabled = i::FLAG_experimental_wasm_threads;
   i::FLAG_experimental_wasm_threads = true;
@@ -2173,14 +2175,14 @@ TEST_F(ValueSerializerTestWithSharedArrayBufferClone,
   i::FLAG_experimental_wasm_threads = flag_was_enabled;
 }
 
-TEST_F(ValueSerializerTest, UnsupportedHostObject) {
+TEST_F(ValueSerializerDeathTest, UnsupportedHostObject) {
   InvalidEncodeTest("new ExampleHostObject()");
   InvalidEncodeTest("({ a: new ExampleHostObject() })");
 }
 
-class ValueSerializerTestWithHostObject : public ValueSerializerTest {
+class ValueSerializerWithHostObjectDeathTest : public ValueSerializerDeathTest {
  protected:
-  ValueSerializerTestWithHostObject() : serializer_delegate_(this) {}
+  ValueSerializerWithHostObjectDeathTest() : serializer_delegate_(this) {}
 
   static const uint8_t kExampleHostObjectTag;
 
@@ -2202,7 +2204,7 @@ class ValueSerializerTestWithHostObject : public ValueSerializerTest {
 
   class SerializerDelegate : public ValueSerializer::Delegate {
    public:
-    explicit SerializerDelegate(ValueSerializerTestWithHostObject* test)
+    explicit SerializerDelegate(ValueSerializerWithHostObjectDeathTest* test)
         : test_(test) {}
     MOCK_METHOD2(WriteHostObject,
                  Maybe<bool>(Isolate* isolate, Local<Object> object));
@@ -2211,7 +2213,7 @@ class ValueSerializerTestWithHostObject : public ValueSerializerTest {
     }
 
    private:
-    ValueSerializerTestWithHostObject* test_;
+    ValueSerializerWithHostObjectDeathTest* test_;
   };
 
   class DeserializerDelegate : public ValueDeserializer::Delegate {
@@ -2247,9 +2249,10 @@ class ValueSerializerTestWithHostObject : public ValueSerializerTest {
 
 // This is a tag that is used in V8. Using this ensures that we have separate
 // tag namespaces.
-const uint8_t ValueSerializerTestWithHostObject::kExampleHostObjectTag = 'T';
+const uint8_t ValueSerializerWithHostObjectDeathTest::kExampleHostObjectTag =
+    'T';
 
-TEST_F(ValueSerializerTestWithHostObject, RoundTripUint32) {
+TEST_F(ValueSerializerWithHostObjectDeathTest, RoundTripUint32) {
   // The host can serialize data as uint32_t.
   EXPECT_CALL(serializer_delegate_, WriteHostObject(isolate(), _))
       .WillRepeatedly(Invoke([this](Isolate*, Local<Object> object) {
@@ -2280,7 +2283,7 @@ TEST_F(ValueSerializerTestWithHostObject, RoundTripUint32) {
   ExpectScriptTrue("result.value === 0xCAFECAFE");
 }
 
-TEST_F(ValueSerializerTestWithHostObject, RoundTripUint64) {
+TEST_F(ValueSerializerWithHostObjectDeathTest, RoundTripUint64) {
   // The host can serialize data as uint64_t.
   EXPECT_CALL(serializer_delegate_, WriteHostObject(isolate(), _))
       .WillRepeatedly(Invoke([this](Isolate*, Local<Object> object) {
@@ -2320,7 +2323,7 @@ TEST_F(ValueSerializerTestWithHostObject, RoundTripUint64) {
   ExpectScriptTrue("result.value2 === 0x12345678");
 }
 
-TEST_F(ValueSerializerTestWithHostObject, RoundTripDouble) {
+TEST_F(ValueSerializerWithHostObjectDeathTest, RoundTripDouble) {
   // The host can serialize data as double.
   EXPECT_CALL(serializer_delegate_, WriteHostObject(isolate(), _))
       .WillRepeatedly(Invoke([this](Isolate*, Local<Object> object) {
@@ -2357,7 +2360,7 @@ TEST_F(ValueSerializerTestWithHostObject, RoundTripDouble) {
   ExpectScriptTrue("1/result.value === -Infinity");
 }
 
-TEST_F(ValueSerializerTestWithHostObject, RoundTripRawBytes) {
+TEST_F(ValueSerializerWithHostObjectDeathTest, RoundTripRawBytes) {
   // The host can serialize arbitrary raw bytes.
   const struct {
     uint64_t u64;
@@ -2389,7 +2392,7 @@ TEST_F(ValueSerializerTestWithHostObject, RoundTripRawBytes) {
       "Object.getPrototypeOf(result) === ExampleHostObject.prototype");
 }
 
-TEST_F(ValueSerializerTestWithHostObject, RoundTripSameObject) {
+TEST_F(ValueSerializerWithHostObjectDeathTest, RoundTripSameObject) {
   // If the same object exists in two places, the delegate should be invoked
   // only once, and the objects should be the same (by reference equality) on
   // the other side.
@@ -2408,7 +2411,7 @@ TEST_F(ValueSerializerTestWithHostObject, RoundTripSameObject) {
   ExpectScriptTrue("result.a === result.b");
 }
 
-TEST_F(ValueSerializerTestWithHostObject, DecodeSimpleHostObject) {
+TEST_F(ValueSerializerWithHostObjectDeathTest, DecodeSimpleHostObject) {
   EXPECT_CALL(deserializer_delegate_, ReadHostObject(isolate()))
       .WillRepeatedly(Invoke([this](Isolate*) {
         EXPECT_TRUE(ReadExampleHostObjectTag());
@@ -2419,16 +2422,17 @@ TEST_F(ValueSerializerTestWithHostObject, DecodeSimpleHostObject) {
       "Object.getPrototypeOf(result) === ExampleHostObject.prototype");
 }
 
-class ValueSerializerTestWithHostArrayBufferView
-    : public ValueSerializerTestWithHostObject {
+class ValueSerializerWithHostArrayBufferViewDeathTest
+    : public ValueSerializerWithHostObjectDeathTest {
  protected:
   void BeforeEncode(ValueSerializer* serializer) override {
-    ValueSerializerTestWithHostObject::BeforeEncode(serializer);
+    ValueSerializerWithHostObjectDeathTest::BeforeEncode(serializer);
     serializer_->SetTreatArrayBufferViewsAsHostObjects(true);
   }
 };
 
-TEST_F(ValueSerializerTestWithHostArrayBufferView, RoundTripUint8ArrayInput) {
+TEST_F(ValueSerializerWithHostArrayBufferViewDeathTest,
+       RoundTripUint8ArrayInput) {
   EXPECT_CALL(serializer_delegate_, WriteHostObject(isolate(), _))
       .WillOnce(Invoke([this](Isolate*, Local<Object> object) {
         EXPECT_TRUE(object->IsUint8Array());
@@ -2459,11 +2463,11 @@ const unsigned char kIncrementerWasm[] = {
     116, 0,  0,   10,  9, 1,  7, 0, 32,  0,   65, 1,   106, 11,
 };
 
-class ValueSerializerTestWithWasm : public ValueSerializerTest {
+class ValueSerializerWithWasmDeathTest : public ValueSerializerDeathTest {
  public:
   static const char* kUnsupportedSerialization;
 
-  ValueSerializerTestWithWasm()
+  ValueSerializerWithWasmDeathTest()
       : serialize_delegate_(&transfer_modules_),
         deserialize_delegate_(&transfer_modules_) {}
 
@@ -2493,11 +2497,11 @@ class ValueSerializerTestWithWasm : public ValueSerializerTest {
   static void SetUpTestCase() {
     g_saved_flag = i::FLAG_expose_wasm;
     i::FLAG_expose_wasm = true;
-    ValueSerializerTest::SetUpTestCase();
+    ValueSerializerDeathTest::SetUpTestCase();
   }
 
   static void TearDownTestCase() {
-    ValueSerializerTest::TearDownTestCase();
+    ValueSerializerDeathTest::TearDownTestCase();
     i::FLAG_expose_wasm = g_saved_flag;
     g_saved_flag = false;
   }
@@ -2634,14 +2638,14 @@ class ValueSerializerTestWithWasm : public ValueSerializerTest {
   ValueDeserializer::Delegate default_deserializer_;
 };
 
-bool ValueSerializerTestWithWasm::g_saved_flag = false;
-const char* ValueSerializerTestWithWasm::kUnsupportedSerialization =
+bool ValueSerializerWithWasmDeathTest::g_saved_flag = false;
+const char* ValueSerializerWithWasmDeathTest::kUnsupportedSerialization =
     "Wasm Serialization Not Supported";
 
 // The default implementation of the serialization
 // delegate throws when trying to serialize wasm. The
 // embedder must decide serialization policy.
-TEST_F(ValueSerializerTestWithWasm, DefaultSerializationDelegate) {
+TEST_F(ValueSerializerWithWasmDeathTest, DefaultSerializationDelegate) {
   EnableThrowingSerializer();
   Local<Message> message = InvalidEncodeTest(MakeWasm());
   size_t msg_len = static_cast<size_t>(message->Get()->Length());
@@ -2656,7 +2660,7 @@ TEST_F(ValueSerializerTestWithWasm, DefaultSerializationDelegate) {
 }
 
 // The default deserializer throws if wasm transfer is attempted
-TEST_F(ValueSerializerTestWithWasm, DefaultDeserializationDelegate) {
+TEST_F(ValueSerializerWithWasmDeathTest, DefaultDeserializationDelegate) {
   EnableTransferSerialization();
   EnableDefaultDeserializer();
   ExpectFail();
@@ -2670,28 +2674,29 @@ TEST_F(ValueSerializerTestWithWasm, DefaultDeserializationDelegate) {
 // inlined data because we don't trust that data on the
 // receiving end anyway).
 
-TEST_F(ValueSerializerTestWithWasm, RoundtripWasmTransfer) {
+TEST_F(ValueSerializerWithWasmDeathTest, RoundtripWasmTransfer) {
   EnableTransferSerialization();
   EnableTransferDeserialization();
   ExpectPass();
 }
 
-TEST_F(ValueSerializerTestWithWasm, RountripWasmInline) {
+TEST_F(ValueSerializerWithWasmDeathTest, RountripWasmInline) {
   SetExpectInlineWasm(true);
   ExpectPass();
 }
 
-TEST_F(ValueSerializerTestWithWasm, CannotDeserializeWasmInlineData) {
+TEST_F(ValueSerializerWithWasmDeathTest, CannotDeserializeWasmInlineData) {
   ExpectFail();
 }
 
-TEST_F(ValueSerializerTestWithWasm, CannotTransferWasmWhenExpectingInline) {
+TEST_F(ValueSerializerWithWasmDeathTest,
+       CannotTransferWasmWhenExpectingInline) {
   EnableTransferSerialization();
   SetExpectInlineWasm(true);
   ExpectFail();
 }
 
-TEST_F(ValueSerializerTestWithWasm, ComplexObjectDuplicateTransfer) {
+TEST_F(ValueSerializerWithWasmDeathTest, ComplexObjectDuplicateTransfer) {
   EnableTransferSerialization();
   EnableTransferDeserialization();
   Local<Value> value = RoundTripTest(GetComplexObjectWithDuplicate());
@@ -2699,14 +2704,14 @@ TEST_F(ValueSerializerTestWithWasm, ComplexObjectDuplicateTransfer) {
   ExpectScriptTrue("result.mod1 === result.mod2");
 }
 
-TEST_F(ValueSerializerTestWithWasm, ComplexObjectDuplicateInline) {
+TEST_F(ValueSerializerWithWasmDeathTest, ComplexObjectDuplicateInline) {
   SetExpectInlineWasm(true);
   Local<Value> value = RoundTripTest(GetComplexObjectWithDuplicate());
   VerifyComplexObject(value);
   ExpectScriptTrue("result.mod1 === result.mod2");
 }
 
-TEST_F(ValueSerializerTestWithWasm, ComplexObjectWithManyTransfer) {
+TEST_F(ValueSerializerWithWasmDeathTest, ComplexObjectWithManyTransfer) {
   EnableTransferSerialization();
   EnableTransferDeserialization();
   Local<Value> value = RoundTripTest(GetComplexObjectWithMany());
@@ -2714,7 +2719,7 @@ TEST_F(ValueSerializerTestWithWasm, ComplexObjectWithManyTransfer) {
   ExpectScriptTrue("result.mod1 != result.mod2");
 }
 
-TEST_F(ValueSerializerTestWithWasm, ComplexObjectWithManyInline) {
+TEST_F(ValueSerializerWithWasmDeathTest, ComplexObjectWithManyInline) {
   SetExpectInlineWasm(true);
   Local<Value> value = RoundTripTest(GetComplexObjectWithMany());
   VerifyComplexObject(value);
@@ -2782,7 +2787,7 @@ const unsigned char kSerializedIncrementerWasm[] = {
     0x00, 0x00, 0x00, 0x00, 0x84, 0xE0, 0x84, 0x84, 0x18, 0x2F, 0x2F, 0x2F,
     0x2F, 0x2F};
 
-TEST_F(ValueSerializerTestWithWasm, DecodeWasmModule) {
+TEST_F(ValueSerializerWithWasmDeathTest, DecodeWasmModule) {
   if ((true)) return;  // TODO(mtrofin): fix this test
   std::vector<uint8_t> raw(
       kSerializedIncrementerWasm,
@@ -2802,7 +2807,8 @@ const unsigned char kSerializedIncrementerWasmWithInvalidCompiledData[] = {
     0x63, 0x72, 0x65, 0x6D, 0x65, 0x6E, 0x74, 0x00, 0x00, 0x0A, 0x08,
     0x01, 0x06, 0x00, 0x20, 0x00, 0x41, 0x01, 0x6A, 0x00};
 
-TEST_F(ValueSerializerTestWithWasm, DecodeWasmModuleWithInvalidCompiledData) {
+TEST_F(ValueSerializerWithWasmDeathTest,
+       DecodeWasmModuleWithInvalidCompiledData) {
   if ((true)) return;  // TODO(titzer): regenerate this test
   std::vector<uint8_t> raw(
       kSerializedIncrementerWasmWithInvalidCompiledData,
@@ -2818,7 +2824,7 @@ TEST_F(ValueSerializerTestWithWasm, DecodeWasmModuleWithInvalidCompiledData) {
 const unsigned char kSerializedIncrementerWasmInvalid[] = {
     0xFF, 0x09, 0x3F, 0x00, 0x57, 0x79, 0x00, 0x00};
 
-TEST_F(ValueSerializerTestWithWasm,
+TEST_F(ValueSerializerWithWasmDeathTest,
        DecodeWasmModuleWithInvalidCompiledAndWireData) {
   std::vector<uint8_t> raw(kSerializedIncrementerWasmInvalid,
                            kSerializedIncrementerWasmInvalid +
@@ -2826,12 +2832,14 @@ TEST_F(ValueSerializerTestWithWasm,
   InvalidDecodeTest(raw);
 }
 
-TEST_F(ValueSerializerTestWithWasm, DecodeWasmModuleWithInvalidDataLength) {
+TEST_F(ValueSerializerWithWasmDeathTest,
+       DecodeWasmModuleWithInvalidDataLength) {
   InvalidDecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x57, 0x79, 0x7F, 0x00});
   InvalidDecodeTest({0xFF, 0x09, 0x3F, 0x00, 0x57, 0x79, 0x00, 0x7F});
 }
 
-class ValueSerializerTestWithLimitedMemory : public ValueSerializerTest {
+class ValueSerializerWithLimitedMemoryDeathTest
+    : public ValueSerializerDeathTest {
  protected:
 // GMock doesn't use the "override" keyword.
 #if __clang__
@@ -2841,7 +2849,7 @@ class ValueSerializerTestWithLimitedMemory : public ValueSerializerTest {
 
   class SerializerDelegate : public ValueSerializer::Delegate {
    public:
-    explicit SerializerDelegate(ValueSerializerTestWithLimitedMemory* test)
+    explicit SerializerDelegate(ValueSerializerWithLimitedMemoryDeathTest* test)
         : test_(test) {}
 
     ~SerializerDelegate() { EXPECT_EQ(nullptr, last_buffer_); }
@@ -2871,7 +2879,7 @@ class ValueSerializerTestWithLimitedMemory : public ValueSerializerTest {
                  Maybe<bool>(Isolate* isolate, Local<Object> object));
 
    private:
-    ValueSerializerTestWithLimitedMemory* test_;
+    ValueSerializerWithLimitedMemoryDeathTest* test_;
     void* last_buffer_ = nullptr;
     size_t memory_limit_ = 0;
   };
@@ -2892,7 +2900,8 @@ class ValueSerializerTestWithLimitedMemory : public ValueSerializerTest {
   ValueSerializer* serializer_ = nullptr;
 };
 
-TEST_F(ValueSerializerTestWithLimitedMemory, FailIfNoMemoryInWriteHostObject) {
+TEST_F(ValueSerializerWithLimitedMemoryDeathTest,
+       FailIfNoMemoryInWriteHostObject) {
   EXPECT_CALL(serializer_delegate_, WriteHostObject(isolate(), _))
       .WillRepeatedly(Invoke([this](Isolate*, Local<Object>) {
         static const char kDummyData[1024] = {};
@@ -2917,7 +2926,7 @@ TEST_F(ValueSerializerTestWithLimitedMemory, FailIfNoMemoryInWriteHostObject) {
 
 // We only have basic tests and tests for .stack here, because we have more
 // comprehensive tests as web platform tests.
-TEST_F(ValueSerializerTest, RoundTripError) {
+TEST_F(ValueSerializerDeathTest, RoundTripError) {
   Local<Value> value = RoundTripTest("Error('hello')");
   ASSERT_TRUE(value->IsObject());
   Local<Object> error = value.As<Object>();
@@ -2942,7 +2951,7 @@ TEST_F(ValueSerializerTest, RoundTripError) {
   EXPECT_EQ(Utf8Value(message), "hello");
 }
 
-TEST_F(ValueSerializerTest, DefaultErrorStack) {
+TEST_F(ValueSerializerDeathTest, DefaultErrorStack) {
   Local<Value> value =
       RoundTripTest("function hkalkcow() { return Error(); } hkalkcow();");
   ASSERT_TRUE(value->IsObject());
@@ -2955,7 +2964,7 @@ TEST_F(ValueSerializerTest, DefaultErrorStack) {
   EXPECT_NE(Utf8Value(stack).find("hkalkcow"), std::string::npos);
 }
 
-TEST_F(ValueSerializerTest, ModifiedErrorStack) {
+TEST_F(ValueSerializerDeathTest, ModifiedErrorStack) {
   Local<Value> value = RoundTripTest("let e = Error(); e.stack = 'hello'; e");
   ASSERT_TRUE(value->IsObject());
   Local<Object> error = value.As<Object>();
@@ -2967,7 +2976,7 @@ TEST_F(ValueSerializerTest, ModifiedErrorStack) {
   EXPECT_EQ(Utf8Value(stack), "hello");
 }
 
-TEST_F(ValueSerializerTest, NonStringErrorStack) {
+TEST_F(ValueSerializerDeathTest, NonStringErrorStack) {
   Local<Value> value = RoundTripTest("let e = Error(); e.stack = 17; e");
   ASSERT_TRUE(value->IsObject());
   Local<Object> error = value.As<Object>();

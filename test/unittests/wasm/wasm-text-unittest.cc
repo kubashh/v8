@@ -17,7 +17,7 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
-class WasmTextTest : public TestWithIsolateAndZone {
+class WasmTextDeathTest : public TestWithIsolateAndZone {
  public:
   TestSignatures sigs;
   WasmFeatures enabled_features_;
@@ -44,7 +44,7 @@ class WasmTextTest : public TestWithIsolateAndZone {
   }
 };
 
-TEST_F(WasmTextTest, EveryOpcodeCanBeDecoded) {
+TEST_F(WasmTextDeathTest, EveryOpcodeCanBeDecoded) {
   static const struct {
     WasmOpcode opcode;
     const char* debug_name;

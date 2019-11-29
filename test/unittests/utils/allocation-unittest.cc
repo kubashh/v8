@@ -110,6 +110,10 @@ sigjmp_buf MemoryAllocationPermissionsTest::continuation_;
 
 }  // namespace
 
+// TODO(almuthanna): This test was skipped because it causes a crash when it is
+// ran on Fuchsia. This issue should be solved later on
+// Ticket: https://crbug.com/1028617
+#if !defined(V8_TARGET_OS_FUCHSIA)
 TEST_F(MemoryAllocationPermissionsTest, DoTest) {
   TestPermissions(PageAllocator::Permission::kNoAccess, false, false);
   TestPermissions(PageAllocator::Permission::kRead, true, false);
@@ -117,13 +121,15 @@ TEST_F(MemoryAllocationPermissionsTest, DoTest) {
   TestPermissions(PageAllocator::Permission::kReadWriteExecute, true, true);
   TestPermissions(PageAllocator::Permission::kReadExecute, true, false);
 }
+#endif
+
 #endif  // V8_OS_POSIX
 
 // Basic tests of allocation.
 
-class AllocationTest : public ::testing::Test {};
+class AllocationDeathTest : public ::testing::Test {};
 
-TEST(AllocationTest, AllocateAndFree) {
+TEST(AllocationDeathTest, AllocateAndFree) {
   size_t page_size = v8::internal::AllocatePageSize();
   CHECK_NE(0, page_size);
 
@@ -149,7 +155,7 @@ TEST(AllocationTest, AllocateAndFree) {
                                 kAllocationSize));
 }
 
-TEST(AllocationTest, ReserveMemory) {
+TEST(AllocationDeathTest, ReserveMemory) {
   v8::PageAllocator* page_allocator = v8::internal::GetPlatformPageAllocator();
   size_t page_size = v8::internal::AllocatePageSize();
   const size_t kAllocationSize = 1 * v8::internal::MB;

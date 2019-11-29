@@ -966,10 +966,10 @@ const MemoryAccessImm2 kMemoryAccessesImmUnaligned[] = {
 
 }  // namespace
 
-using InstructionSelectorMemoryAccessTest =
+using InstructionSelectorMemoryAccessDeathTest =
     InstructionSelectorTestWithParam<MemoryAccess>;
 
-TEST_P(InstructionSelectorMemoryAccessTest, LoadWithParameters) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, LoadWithParameters) {
   const MemoryAccess memacc = GetParam();
   StreamBuilder m(this, memacc.type, MachineType::Pointer(),
                   MachineType::Int32());
@@ -980,8 +980,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, LoadWithParameters) {
   EXPECT_EQ(kMode_MRI, s[0]->addressing_mode());
 }
 
-
-TEST_P(InstructionSelectorMemoryAccessTest, StoreWithParameters) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, StoreWithParameters) {
   const MemoryAccess memacc = GetParam();
   StreamBuilder m(this, MachineType::Int32(), MachineType::Pointer(),
                   MachineType::Int32(), memacc.type);
@@ -995,7 +994,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, StoreWithParameters) {
 }
 
 INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
-                         InstructionSelectorMemoryAccessTest,
+                         InstructionSelectorMemoryAccessDeathTest,
                          ::testing::ValuesIn(kMemoryAccesses));
 
 // ----------------------------------------------------------------------------

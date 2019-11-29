@@ -18,7 +18,7 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
-class InstructionSelectorTest : public TestWithNativeContextAndZone {
+class InstructionSelectorTest : public TestWithNativeContextDeathTestAndZone {
  public:
   InstructionSelectorTest();
   ~InstructionSelectorTest() override;
