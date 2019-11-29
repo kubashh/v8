@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24d2f3aa_68cd5939",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2376,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-11-29T13:34:54Z",
+      "side": 1,
+      "message": "Can this ever be anything other than the current context (all the expectation files seem to have it as such)? I think it would be for the BuildPrivateBrandInitialization in GenerateBytecodeBody, but I\u0027m not so sure about the one in VisitCallSuper. If this is the case, could we avoid adding this argument and just use isolate-\u003econtext() in Runtime::AddPrivateBrand?",
+      "revId": "8028c3e0b45c895cdac3aae398f77bf637a17d32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
