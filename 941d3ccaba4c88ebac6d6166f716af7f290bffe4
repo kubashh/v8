@@ -230,6 +230,24 @@
       "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5b44f00_d632b4be",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8097,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-11-29T09:07:16Z",
+      "side": 1,
+      "message": "They could all inherit from v8::Data :)",
+      "parentUuid": "c795fe38_4bae7f65",
+      "revId": "941d3ccaba4c88ebac6d6166f716af7f290bffe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
