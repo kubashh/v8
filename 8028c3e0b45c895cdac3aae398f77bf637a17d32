@@ -34,6 +34,24 @@
       "revId": "8028c3e0b45c895cdac3aae398f77bf637a17d32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a71a9995_c04bd0f7",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2376,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-11-29T16:34:39Z",
+      "side": 1,
+      "message": "Right, thanks for the explanation.  Why is this not being reflected in the expectations files though? This should be failing the tests if we aren\u0027t generating the same code as in the golden files.",
+      "parentUuid": "f7aec012_3b29e053",
+      "revId": "8028c3e0b45c895cdac3aae398f77bf637a17d32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
