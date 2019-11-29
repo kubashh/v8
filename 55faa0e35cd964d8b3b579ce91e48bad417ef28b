@@ -22,6 +22,30 @@
       "revId": "55faa0e35cd964d8b3b579ce91e48bad417ef28b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d17c7e2e_84b90113",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4478,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2019-11-29T09:33:44Z",
+      "side": 1,
+      "message": "Thanks for your reply!\nAccording to my test on mips64el, the truncation is indeed needed, some tests in mjsunit will fail without the truncation.\nI thought it\u0027s related with pointer compression because I misunderstood the ported patch, and \nthought the truncation was removed because the the new added kWord32And in MarkNodeInputs.\nCurrently I have no idea why mips64 behaves differently from other platforms.",
+      "parentUuid": "a8119433_e435aec6",
+      "range": {
+        "startLine": 4478,
+        "startChar": 0,
+        "endLine": 4478,
+        "endChar": 68
+      },
+      "revId": "55faa0e35cd964d8b3b579ce91e48bad417ef28b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
