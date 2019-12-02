@@ -144,28 +144,18 @@ function redirectToInterpreter(
   // Three runs: Break in instance 1, break in instance 2, or both.
   for (let run = 0; run < 3; ++run) {
     print(" - run " + run);
+
     let [instance1, instance2] = createTwoInstancesCallingEachOther();
 
-    let interpreted_before_1 = %WasmNumInterpretedCalls(instance1);
-    let interpreted_before_2 = %WasmNumInterpretedCalls(instance2);
-    // Call plus_two, which calls plus_one.
-    assertEquals(9, instance2.exports.plus_two(7));
-
-    // Nothing interpreted:
-    assertEquals(interpreted_before_1, %WasmNumInterpretedCalls(instance1));
-    assertEquals(interpreted_before_2, %WasmNumInterpretedCalls(instance2));
-
-    // Now redirect functions to the interpreter.
+    // Redirect functions to the interpreter.
     redirectToInterpreter(instance1, instance2, run != 1, run != 0);
 
     // Call plus_two, which calls plus_one.
     assertEquals(9, instance2.exports.plus_two(7));
 
     // TODO(6668): Fix patching of instances which imported others' code.
-    //assertEquals(interpreted_before_1 + (run == 1 ? 0 : 1),
-    //             %WasmNumInterpretedCalls(instance1));
-    assertEquals(interpreted_before_2 + (run == 0 ? 0 : 1),
-                 %WasmNumInterpretedCalls(instance2));
+    //assertTrue(run == 1 || %WasmNumInterpretedCalls(instance1) == 1);
+    assertTrue(run == 0 || %WasmNumInterpretedCalls(instance2) == 1);
   }
 })();
 
@@ -201,10 +191,7 @@ function redirectToInterpreter(
   var instance = builder.instantiate();
   var exp = instance.exports;
 
-  // Initially the interpreter is not being called.
   var initial_interpreted = %WasmNumInterpretedCalls(instance);
-  assertEquals(23, exp.fun());
-  assertEquals(initial_interpreted + 0, %WasmNumInterpretedCalls(instance));
 
   // Redirection will cause the interpreter to be called.
   %RedirectToWasmInterpreter(instance, fun.index);
