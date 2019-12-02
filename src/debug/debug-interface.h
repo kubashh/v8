@@ -52,12 +52,16 @@ V8_EXPORT_PRIVATE void ClearBreakOnNextFunctionCall(Isolate* isolate);
 MaybeLocal<Array> GetInternalProperties(Isolate* isolate, Local<Value> value);
 
 /**
- * Returns array of private fields specific to the value type. Result has
- * the following format: [<name>, <value>,...,<name>, <value>]. Result array
- * will be allocated in the current context.
+ * Returns an array of names in v8::String for private members, including
+ * fields, methods, accessors specific to the value type. The values are
+ * returned through the out parameter values_out, private fields and methods
+ * are returned directly while accessors are returned as
+ * v8::debug::AccessorPair. Missing components in the accessor pairs are null.
+ * Results will be allocated in the current context and handle scope.
  */
-V8_EXPORT_PRIVATE MaybeLocal<Array> GetPrivateFields(Local<Context> context,
-                                                     Local<Object> value);
+V8_EXPORT_PRIVATE MaybeLocal<Array> GetPrivateMembers(
+    Local<Context> context, Local<Object> value,
+    std::vector<Local<Value>>* values_out);
 
 /**
  * Forwards to v8::Object::CreationContext, but with special handling for
@@ -511,6 +515,29 @@ class WeakMap : public v8::Object {
 
  private:
   WeakMap();
+};
+
+/**
+ * Pairs of accessors.
+ *
+ * In the case of private accessors, getters and setters are either null or
+ * Functions.
+ */
+class AccessorPair : public v8::Value {
+ public:
+  V8_EXPORT_PRIVATE v8::Local<v8::Value> getter();
+  V8_EXPORT_PRIVATE v8::Local<v8::Value> setter();
+
+  V8_EXPORT_PRIVATE static bool IsAccessorPair(v8::Local<v8::Value> obj);
+  V8_EXPORT_PRIVATE static Local<AccessorPair> New(v8::Isolate* isolate,
+                                                   v8::Local<v8::Value> getter,
+                                                   v8::Local<v8::Value> setter);
+
+  static AccessorPair* Cast(v8::Value* obj);
+
+ private:
+  AccessorPair();
+  static void CheckCast(v8::Value* obj);
 };
 
 struct PropertyDescriptor {
