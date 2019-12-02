@@ -22,6 +22,30 @@
       "revId": "884c2d2a80215579216dbee1e9b56e301579f3a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adc54399_496dfc4d",
+        "filename": "src/torque/class-debug-reader-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-02T01:23:23Z",
+      "side": 1,
+      "message": "Sure, that seems reasonable for now. I imagine that eventually we\u0027d like to implement support for a small subset of the expression grammar here just like we would need to do for GenerateClassFieldVerifier. As you mentioned in the change description, an entire extra backend would be a lot of work when all we are likely to need are a couple of simple special cases.",
+      "parentUuid": "bd82dd1f_d1639271",
+      "range": {
+        "startLine": 416,
+        "startChar": 0,
+        "endLine": 422,
+        "endChar": 5
+      },
+      "revId": "884c2d2a80215579216dbee1e9b56e301579f3a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
