@@ -220,7 +220,7 @@ WasmEngine::WasmEngine() : code_manager_(FLAG_wasm_max_code_space * MB) {}
 WasmEngine::~WasmEngine() {
 #ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
   // Synchronize on the GDB-remote thread, if running.
-  gdb_server_ = nullptr;
+  gdb_server_.reset();
 #endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
   // Synchronize on all background compile tasks.
@@ -687,7 +687,7 @@ std::shared_ptr<NativeModule> WasmEngine::NewNativeModule(
 
 #ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
   if (!gdb_server_) {
-    gdb_server_ = std::make_unique<gdb_server::GdbServer>();
+    gdb_server_ = gdb_server::GdbServer::Create();
   }
 #endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
