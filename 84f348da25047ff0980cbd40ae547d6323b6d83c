@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7edf6005_bf78c2eb",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e83cb76_6e74df68",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f801613_3ad6c696",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1f5017c_1ec6895d",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f801613_3ad6c696",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "17987267_c08a79d1",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6721cd23_6dcf2cc0",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f2587a1_bd85f0d2",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 8
@@ -67,6 +121,24 @@
       "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "629f61ba_bb1767a9",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f2587a1_bd85f0d2",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "523bfc2e_c1098817",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "There is one edge case when this happens, when compilation fails in one thread and the native module dies later, erasing the empty entry created by another thread. But you\u0027re right that this should not happen since this breaks the assumptions.\nI think this is avoided if we leave an empty entry here instead of deleting it. This way other threads will keep waiting until the module is actually freed, which will automatically remove the entry anyway and notify waiting threads again.",
+      "parentUuid": "33a488aa_83d142f8",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0cd47d85_ff971bf2",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 8
@@ -98,6 +188,24 @@
       "writtenOn": "2019-11-28T16:29:14Z",
       "side": 1,
       "message": "We already did the lookup above. If we assert that we always get a valid iterator, we can just do:\nif (compile_error) {\n  native_module_cache_.erase(it);\n} else {\n  it-\u003esecond \u003d std::move(native_module);\n}\n\n(note the std::move, which saves an unneeded atomic up-ref and down-ref of the std::shared_ptr.)",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1415ee5d_574afadd",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "The key\u0027s underlying bytes are not an owned copy here, so they might be freed prematurely. I erase the entry on purpose to create a new key based on the native module\u0027s owned copy of the bytes. I added some comments here and in the header to clarify.",
+      "parentUuid": "0cd47d85_ff971bf2",
       "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -127,6 +235,30 @@
     },
     {
       "key": {
+        "uuid": "06d3b138_733e487f",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05a91d7b_c0639f24",
+      "range": {
+        "startLine": 1024,
+        "startChar": 6,
+        "endLine": 1024,
+        "endChar": 36
+      },
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ec579d5_1c0af399",
         "filename": "src/wasm/wasm-engine.h",
         "patchSetId": 8
@@ -141,6 +273,24 @@
       "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f31a481f_a5461b76",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ec579d5_1c0af399",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -161,6 +311,24 @@
     },
     {
       "key": {
+        "uuid": "01e1d35b_0aa2124d",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efd64e57_c86961de",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a2b358d_c37989ce",
         "filename": "src/wasm/wasm-engine.h",
         "patchSetId": 8
@@ -175,6 +343,24 @@
       "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bfe00df_0c1ddc64",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a2b358d_c37989ce",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -201,6 +387,30 @@
     },
     {
       "key": {
+        "uuid": "f91c4204_b4b2d37e",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa412cdb_90c6ccb9",
+      "range": {
+        "startLine": 631,
+        "startChar": 4,
+        "endLine": 633,
+        "endChar": 63
+      },
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7042a07a_e45248f9",
         "filename": "src/wasm/wasm-serialization.cc",
         "patchSetId": 8
@@ -218,6 +428,24 @@
     },
     {
       "key": {
+        "uuid": "fc1b4bfa_d8d0cef7",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "Ah of course, thanks. I should also make sure I don\u0027t add the native module if there was a deserialization error.",
+      "parentUuid": "7042a07a_e45248f9",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1905298f_a0c4b980",
         "filename": "src/wasm/wasm-serialization.cc",
         "patchSetId": 8
@@ -232,6 +460,24 @@
       "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b501695_cabd861e",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2019-12-02T10:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1905298f_a0c4b980",
+      "revId": "84f348da25047ff0980cbd40ae547d6323b6d83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
