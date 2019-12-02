@@ -52,6 +52,24 @@
       "revId": "8028c3e0b45c895cdac3aae398f77bf637a17d32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea06ca2c_b20bc6c4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2376,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-12-02T02:11:48Z",
+      "side": 1,
+      "message": "So the expectation was incorrect because previously in the test case I declared the class C twice, which should result in a SyntaxError, then the bytecode printed was actually the bytecode of the previous test case. I changed the class name and it is now showing in the expectation. Thanks for catching this!",
+      "parentUuid": "a71a9995_c04bd0f7",
+      "revId": "8028c3e0b45c895cdac3aae398f77bf637a17d32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
