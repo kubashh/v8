@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac2401a1_dad9dc6e",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2019-12-02T09:32:15Z",
+      "side": 1,
+      "message": "This code looks repetitive. Should we move this to a function to avoid duplication?",
+      "range": {
+        "startLine": 1278,
+        "startChar": 0,
+        "endLine": 1321,
+        "endChar": 1
+      },
+      "revId": "e855290b228b4e6fca8ca07d5f3cc06920b248e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
