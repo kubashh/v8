@@ -70,6 +70,24 @@
       "revId": "8028c3e0b45c895cdac3aae398f77bf637a17d32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adc85177_cf5f5cfa",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2376,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-12-02T10:32:26Z",
+      "side": 1,
+      "message": "Great, thanks.",
+      "parentUuid": "ea06ca2c_b20bc6c4",
+      "revId": "8028c3e0b45c895cdac3aae398f77bf637a17d32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
