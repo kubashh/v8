@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a24fb4e_161382fe",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-12-02T13:58:42Z",
+      "side": 1,
+      "message": "I think braces help a bit reading this: \"{nullptr} if {error} is true\"?",
+      "range": {
+        "startLine": 199,
+        "startChar": 59,
+        "endLine": 200,
+        "endChar": 9
+      },
+      "revId": "32d590b4b5290c8d72eb2387d6753b4fa9f5f54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
