@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c51376a_8d3af82b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-12-02T07:20:15Z",
+      "side": 1,
+      "message": "nit: if the v isn\u0027t small it seems to not be interpreted as link.\n\nBut in this case it\u0027s a chromium bug and requires chromium prefix:\nBug: chromium:934932",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 6
+      },
+      "revId": "fdb45b928bebe576e5522c2420ab5f539446d0f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
