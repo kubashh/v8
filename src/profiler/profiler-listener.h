@@ -66,6 +66,9 @@ class V8_EXPORT_PRIVATE ProfilerListener : public CodeEventListener {
   const char* GetName(const char* name) {
     return function_and_resource_names_.GetCopy(name);
   }
+  const char* GetName(Vector<const char> name) {
+    return function_and_resource_names_.GetCopy(name);
+  }
   const char* GetConsName(const char* prefix, Name name) {
     return function_and_resource_names_.GetConsName(prefix, name);
   }

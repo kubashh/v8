@@ -27,11 +27,15 @@ StringsStorage::~StringsStorage() {
 }
 
 const char* StringsStorage::GetCopy(const char* src) {
-  int len = static_cast<int>(strlen(src));
-  base::HashMap::Entry* entry = GetEntry(src, len);
+  return GetCopy(CStrVector(src));
+}
+
+const char* StringsStorage::GetCopy(Vector<const char> src) {
+  int len = src.length();
+  base::HashMap::Entry* entry = GetEntry(src.begin(), len);
   if (entry->value == nullptr) {
     Vector<char> dst = Vector<char>::New(len + 1);
-    StrNCpy(dst, src, len);
+    StrNCpy(dst, src.begin(), len);
     dst[len] = '\0';
     entry->key = dst.begin();
     entry->value = entry->key;
