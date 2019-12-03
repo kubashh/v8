@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "991d7687_6a1c3be3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-12-03T14:54:57Z",
+      "side": 1,
+      "message": "Please add a [turbofan] prefix to indicate that this fix affects mainly (in fact, only) TF.",
+      "revId": "6a441f16d01b0968bb807884f93eb3bb4bdb7fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
