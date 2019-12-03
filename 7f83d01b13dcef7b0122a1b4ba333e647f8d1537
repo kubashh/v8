@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "6eedf984_543fd073",
+        "filename": "src/api/api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 9270,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-12-03T13:55:59Z",
+      "side": 1,
+      "message": "Do you mean we could just create a std::vector\u003cLocal\u003cValue\u003e\u003e from the beginning and do not create intermediate FixedArray at all?\n\nI think technically we don\u0027t need JSReceiver::GetPrivateEntries any more and can just implement the iteration and all in Debug::GetPrivateMembers, and simply forward the result of that here. Is that what you meant?",
+      "parentUuid": "f14fe7e9_c41d1709",
+      "range": {
+        "startLine": 9270,
+        "startChar": 4,
+        "endLine": 9270,
+        "endChar": 25
+      },
+      "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d79f9ae6_dc7e5acf",
         "filename": "src/api/api.cc",
         "patchSetId": 7
