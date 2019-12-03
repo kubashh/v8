@@ -863,11 +863,10 @@ uint32_t EstimateElementCount(Isolate* isolate, Handle<JSArray> array) {
       break;
     }
 #define TYPED_ARRAY_CASE(Type, type, TYPE, ctype) case TYPE##_ELEMENTS:
-
       TYPED_ARRAYS(TYPED_ARRAY_CASE)
 #undef TYPED_ARRAY_CASE
-      // External arrays are always dense.
-      return length;
+      // JSArrays never have typed elements.
+      UNREACHABLE();
     case NO_ELEMENTS:
       return 0;
     case FAST_SLOPPY_ARGUMENTS_ELEMENTS:
@@ -944,14 +943,18 @@ void CollectElementIndices(Isolate* isolate, Handle<JSObject> object,
       TYPED_ARRAYS(TYPED_ARRAY_CASE)
 #undef TYPED_ARRAY_CASE
       {
-        // TODO(bmeurer, v8:4153): Change this to size_t later.
-        uint32_t length =
-            static_cast<uint32_t>(Handle<JSTypedArray>::cast(object)->length());
-        if (range <= length) {
+        size_t raw_length = Handle<JSTypedArray>::cast(object)->length();
+        // We are only interested in the first {range} elements, so any
+        // additional elements in the typed array can be safely ignored.
+        uint32_t length;
+        if (raw_length >= range) {
           length = range;
           // We will add all indices, so we might as well clear it first
           // and avoid duplicates.
           indices->clear();
+        } else {
+          DCHECK_LE(raw_length, std::numeric_limits<uint32_t>::max());
+          length = static_cast<uint32_t>(raw_length);
         }
         for (uint32_t i = 0; i < length; i++) {
           indices->push_back(i);
@@ -1232,6 +1235,12 @@ Object Slow_ArrayConcat(BuiltinArguments* args, Handle<Object> species,
         kind = GetMoreGeneralElementsKind(kind, array_kind);
       }
       element_estimate = EstimateElementCount(isolate, array);
+    } else if (obj->IsJSTypedArray()) {
+      size_t raw_length = Handle<JSTypedArray>::cast(obj)->length();
+      length_estimate = static_cast<uint32_t>(
+          std::min(raw_length,
+                   static_cast<size_t>(std::numeric_limits<uint32_t>::max())));
+      element_estimate = length_estimate;
     } else {
       if (obj->IsHeapObject()) {
         kind = GetMoreGeneralElementsKind(
