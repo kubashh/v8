@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2953c9ba_1ae5751b",
+        "filename": "src/api/api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 9261,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-12-03T15:30:49Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "2f2c1d48_4cb5e078",
+      "range": {
+        "startLine": 9261,
+        "startChar": 7,
+        "endLine": 9261,
+        "endChar": 8
+      },
+      "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f14fe7e9_c41d1709",
         "filename": "src/api/api.cc",
         "patchSetId": 7
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "319ea3ad_d54e905a",
+        "filename": "src/api/api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 9270,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-12-03T15:30:49Z",
+      "side": 1,
+      "message": "I realized that in debug.cc the handles are all i::Handles instead of v8::Locals, so I implemented it in api.cc directly instead.",
+      "parentUuid": "07ef7248_a5086db3",
+      "range": {
+        "startLine": 9270,
+        "startChar": 4,
+        "endLine": 9270,
+        "endChar": 25
+      },
+      "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d79f9ae6_dc7e5acf",
         "filename": "src/api/api.cc",
         "patchSetId": 7
@@ -116,6 +164,30 @@
       "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2786d252_facf37f5",
+        "filename": "src/api/api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10166,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-12-03T15:30:49Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "d79f9ae6_dc7e5acf",
+      "range": {
+        "startLine": 10166,
+        "startChar": 48,
+        "endLine": 10166,
+        "endChar": 51
+      },
+      "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -187,6 +259,30 @@
       "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb11e455_428e6a44",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-12-03T15:30:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddeb15dc_758e1e18",
+      "range": {
+        "startLine": 1388,
+        "startChar": 0,
+        "endLine": 1389,
+        "endChar": 77
+      },
+      "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
