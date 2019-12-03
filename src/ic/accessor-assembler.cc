@@ -1928,10 +1928,6 @@ TNode<PropertyArray> AccessorAssembler::ExtendPropertiesBackingStore(
     TNode<HeapObject> object, TNode<IntPtrT> index) {
   Comment("[ Extend storage");
 
-  ParameterMode mode = OptimalParameterMode();
-
-  // TODO(gsathya): Clean up the type conversions by creating smarter
-  // helpers that do the correct op based on the mode.
   TVARIABLE(HeapObject, var_properties);
   TVARIABLE(Int32T, var_encoded_hash);
   TVARIABLE(BInt, var_length);
@@ -1974,28 +1970,24 @@ TNode<PropertyArray> AccessorAssembler::ExtendPropertiesBackingStore(
     // Previous property deletion could have left behind unused backing store
     // capacity even for a map that think it doesn't have any unused fields.
     // Perform a bounds check to see if we actually have to grow the array.
-    GotoIf(UintPtrLessThan(index, ParameterToIntPtr(var_length.value(), mode)),
-           &done);
+    GotoIf(UintPtrLessThan(index, BIntToIntPtr(var_length.value())), &done);
 
     TNode<BInt> delta = BIntConstant(JSObject::kFieldsAdded);
-    Node* new_capacity = IntPtrOrSmiAdd(var_length.value(), delta, mode);
+    TNode<BInt> new_capacity = BIntAdd(var_length.value(), delta);
 
     // Grow properties array.
     DCHECK(kMaxNumberOfDescriptors + JSObject::kFieldsAdded <
            FixedArrayBase::GetMaxLengthForNewSpaceAllocation(PACKED_ELEMENTS));
     // The size of a new properties backing store is guaranteed to be small
     // enough that the new backing store will be allocated in new space.
-    CSA_ASSERT(this,
-               UintPtrOrSmiLessThan(
-                   new_capacity,
-                   IntPtrOrSmiConstant(
-                       kMaxNumberOfDescriptors + JSObject::kFieldsAdded, mode),
-                   mode));
+    CSA_ASSERT(this, BIntBelowOrEqual(new_capacity,
+                                      BIntConstant(kMaxNumberOfDescriptors +
+                                                   JSObject::kFieldsAdded)));
 
-    TNode<PropertyArray> new_properties =
-        CAST(AllocatePropertyArray(new_capacity, mode));
+    TNode<PropertyArray> new_properties = AllocatePropertyArray(new_capacity);
     var_new_properties = new_properties;
 
+    ParameterMode mode = OptimalParameterMode();
     FillPropertyArrayWithUndefined(new_properties, var_length.value(),
                                    new_capacity, mode);
 
@@ -4038,7 +4030,7 @@ void AccessorAssembler::GenerateCloneObjectIC() {
       GotoIf(IntPtrEqual(length, IntPtrConstant(0)), &allocate_object);
 
       auto mode = INTPTR_PARAMETERS;
-      var_properties = CAST(AllocatePropertyArray(length, mode));
+      var_properties = AllocatePropertyArray(length);
       FillPropertyArrayWithUndefined(var_properties.value(), IntPtrConstant(0),
                                      length, mode);
       CopyPropertyArrayValues(source_properties, var_properties.value(), length,

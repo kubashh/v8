@@ -9,6 +9,7 @@
 
 #include "src/base/macros.h"
 #include "src/codegen/bailout-reason.h"
+#include "src/codegen/tnode.h"
 #include "src/common/globals.h"
 #include "src/common/message-template.h"
 #include "src/compiler/code-assembler.h"
@@ -465,7 +466,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   Node* MatchesParameterMode(Node* value, ParameterMode mode);
 
-#define PARAMETER_BINOP(OpName, IntPtrOpName, SmiOpName)                    \
+#ifdef BINT_IS_SMI
+#define CHOOSE_BINOP(SmiOpName, IntPtrOpName) SmiOpName
+#else
+#define CHOOSE_BINOP(SmiOpName, IntPtrOpName) IntPtrOpName
+#endif
+
+#define PARAMETER_BINOP(OpName, IntPtrOpName, SmiOpName, BIntOpName)        \
   /* TODO(v8:9708): remove once all uses are ported. */                     \
   Node* OpName(Node* a, Node* b, ParameterMode mode) {                      \
     if (mode == SMI_PARAMETERS) {                                           \
@@ -486,11 +493,15 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<RawPtrT> OpName(TNode<RawPtrT> a, TNode<RawPtrT> b) {               \
     return ReinterpretCast<RawPtrT>(IntPtrOpName(                           \
         ReinterpretCast<IntPtrT>(a), ReinterpretCast<IntPtrT>(b)));         \
+  }                                                                         \
+  TNode<BInt> BIntOpName(TNode<BInt> a, TNode<BInt> b) {                    \
+    return CHOOSE_BINOP(SmiOpName, IntPtrOpName)(a, b);                     \
   }
-  // TODO(v8:9708): Define BInt operations once all uses are ported.
-  PARAMETER_BINOP(IntPtrOrSmiMin, IntPtrMin, SmiMin)
-  PARAMETER_BINOP(IntPtrOrSmiAdd, IntPtrAdd, SmiAdd)
-  PARAMETER_BINOP(IntPtrOrSmiSub, IntPtrSub, SmiSub)
+
+  PARAMETER_BINOP(IntPtrOrSmiMin, IntPtrMin, SmiMin, BIntMin)
+  PARAMETER_BINOP(IntPtrOrSmiAdd, IntPtrAdd, SmiAdd, BIntAdd)
+  PARAMETER_BINOP(IntPtrOrSmiSub, IntPtrSub, SmiSub, BIntSub)
+#undef CHOOSE_BINOP
 #undef PARAMETER_BINOP
 
 #define PARAMETER_BINOP(OpName, IntPtrOpName, SmiOpName)                      \
@@ -777,6 +788,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   BINT_COMPARISON_OP(BIntAboveOrEqual, SmiAboveOrEqual,
                      UintPtrGreaterThanOrEqual)
   BINT_COMPARISON_OP(BIntBelow, SmiBelow, UintPtrLessThan)
+  BINT_COMPARISON_OP(BIntBelowOrEqual, SmiBelowOrEqual, UintPtrLessThanOrEqual)
   BINT_COMPARISON_OP(BIntLessThan, SmiLessThan, IntPtrLessThan)
   BINT_COMPARISON_OP(BIntLessThanOrEqual, SmiLessThanOrEqual,
                      IntPtrLessThanOrEqual)
@@ -1207,7 +1219,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // This is only used on a newly allocated PropertyArray which
   // doesn't have an existing hash.
   void InitializePropertyArrayLength(TNode<PropertyArray> property_array,
-                                     Node* length, ParameterMode mode);
+                                     TNode<BInt> length);
 
   // Check if the map is set for slow properties.
   TNode<BoolT> IsDictionaryMap(SloppyTNode<Map> map);
@@ -1944,9 +1956,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return result;
   }
 
-  Node* AllocatePropertyArray(Node* capacity,
-                              ParameterMode mode = INTPTR_PARAMETERS,
-                              AllocationFlags flags = kNone);
+  TNode<PropertyArray> AllocatePropertyArray(TNode<BInt> capacity,
+                                             AllocationFlags flags = kNone);
 
   // Perform CreateArrayIterator (ES #sec-createarrayiterator).
   TNode<JSArrayIterator> CreateArrayIterator(TNode<Context> context,

@@ -22,6 +22,7 @@
 #include "src/objects/js-generator.h"
 #include "src/objects/oddball.h"
 #include "src/objects/ordered-hash-table-inl.h"
+#include "src/objects/property-array.h"
 #include "src/objects/property-cell.h"
 #include "src/wasm/wasm-objects.h"
 
@@ -4586,25 +4587,19 @@ TNode<FixedArrayBase> CodeStubAssembler::ExtractFixedArray(
 }
 
 void CodeStubAssembler::InitializePropertyArrayLength(
-    TNode<PropertyArray> property_array, Node* length, ParameterMode mode) {
-  CSA_ASSERT(
-      this, IntPtrOrSmiGreaterThan(length, IntPtrOrSmiConstant(0, mode), mode));
-  CSA_ASSERT(
-      this,
-      IntPtrOrSmiLessThanOrEqual(
-          length, IntPtrOrSmiConstant(PropertyArray::LengthField::kMax, mode),
-          mode));
+    TNode<PropertyArray> property_array, TNode<BInt> length) {
+  CSA_ASSERT(this, BIntGreaterThan(length, BIntConstant(0)));
+  CSA_ASSERT(this, BIntLessThanOrEqual(
+                       length, BIntConstant(PropertyArray::LengthField::kMax)));
   StoreObjectFieldNoWriteBarrier(
-      property_array, PropertyArray::kLengthAndHashOffset,
-      ParameterToTagged(length, mode), MachineRepresentation::kTaggedSigned);
+      property_array, PropertyArray::kLengthAndHashOffset, BIntToSmi(length),
+      MachineRepresentation::kTaggedSigned);
 }
 
-Node* CodeStubAssembler::AllocatePropertyArray(Node* capacity_node,
-                                               ParameterMode mode,
-                                               AllocationFlags flags) {
-  CSA_SLOW_ASSERT(this, MatchesParameterMode(capacity_node, mode));
-  CSA_ASSERT(this, IntPtrOrSmiGreaterThan(capacity_node,
-                                          IntPtrOrSmiConstant(0, mode), mode));
+TNode<PropertyArray> CodeStubAssembler::AllocatePropertyArray(
+    TNode<BInt> capacity_node, AllocationFlags flags) {
+  CSA_ASSERT(this, BIntGreaterThan(capacity_node, BIntConstant(0)));
+  ParameterMode mode = OptimalParameterMode();
   TNode<IntPtrT> total_size =
       GetPropertyArrayAllocationSize(capacity_node, mode);
 
@@ -4612,8 +4607,8 @@ Node* CodeStubAssembler::AllocatePropertyArray(Node* capacity_node,
   RootIndex map_index = RootIndex::kPropertyArrayMap;
   DCHECK(RootsTable::IsImmortalImmovable(map_index));
   StoreMapNoWriteBarrier(array, map_index);
-  InitializePropertyArrayLength(CAST(array), capacity_node, mode);
-  return array;
+  InitializePropertyArrayLength(CAST(array), capacity_node);
+  return CAST(array);
 }
 
 void CodeStubAssembler::FillPropertyArrayWithUndefined(Node* array,
