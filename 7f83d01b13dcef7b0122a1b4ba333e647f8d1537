@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f2c1d48_4cb5e078",
+        "filename": "src/api/api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 9261,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-12-03T11:32:58Z",
+      "side": 1,
+      "message": "Do we really need this parens?",
+      "range": {
+        "startLine": 9261,
+        "startChar": 7,
+        "endLine": 9261,
+        "endChar": 8
+      },
+      "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f14fe7e9_c41d1709",
+        "filename": "src/api/api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 9270,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-12-03T11:32:58Z",
+      "side": 1,
+      "message": "If we are going to convert a FixedArray into a std::vector, why can\u0027t we do this in debug::GetPrivateMembers directly?",
+      "range": {
+        "startLine": 9270,
+        "startChar": 4,
+        "endLine": 9270,
+        "endChar": 25
+      },
+      "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d79f9ae6_dc7e5acf",
+        "filename": "src/api/api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10166,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-12-03T11:32:58Z",
+      "side": 1,
+      "message": "Why do we need this? I\u0027d be perfectly fine if we can only read accessor pairs from the other side of the API, and not be able to create them.",
+      "range": {
+        "startLine": 10166,
+        "startChar": 48,
+        "endLine": 10166,
+        "endChar": 51
+      },
+      "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caaa67b9_14a53aad",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-12-03T11:32:58Z",
+      "side": 1,
+      "message": "The signature of this function is super weird. We get a JSArray of names as return value, a FixedArray of values as out parameter, which we then turn into a std::vector at the use site. debug::GetPrivateMembers is equally weird.\n\nCan we clear this up? Let\u0027s just use std::vector everywhere?",
+      "range": {
+        "startLine": 1388,
+        "startChar": 0,
+        "endLine": 1389,
+        "endChar": 77
+      },
+      "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
