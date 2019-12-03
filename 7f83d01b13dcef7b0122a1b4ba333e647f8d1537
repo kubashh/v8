@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "07ef7248_a5086db3",
+        "filename": "src/api/api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 9270,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-12-03T13:57:54Z",
+      "side": 1,
+      "message": "Yes. Let\u0027s not go through a FixedArray at all.",
+      "parentUuid": "6eedf984_543fd073",
+      "range": {
+        "startLine": 9270,
+        "startChar": 4,
+        "endLine": 9270,
+        "endChar": 25
+      },
+      "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d79f9ae6_dc7e5acf",
         "filename": "src/api/api.cc",
         "patchSetId": 7
@@ -130,6 +154,30 @@
       "side": 1,
       "message": "Yeah I agree. Should we use two std::vectors? Or one in the [name, value|accessor, name, value|accessor] format?",
       "parentUuid": "caaa67b9_14a53aad",
+      "range": {
+        "startLine": 1388,
+        "startChar": 0,
+        "endLine": 1389,
+        "endChar": 77
+      },
+      "revId": "7f83d01b13dcef7b0122a1b4ba333e647f8d1537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddeb15dc_758e1e18",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-12-03T13:57:54Z",
+      "side": 1,
+      "message": "Two std::vector, both as out parameters, sounds good. We can still return a bool to report failure.",
+      "parentUuid": "a3e08493_b02661bc",
       "range": {
         "startLine": 1388,
         "startChar": 0,
