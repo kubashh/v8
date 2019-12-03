@@ -15,6 +15,8 @@ namespace v8 {
 namespace internal {
 
 class Name;
+template <typename T>
+class Vector;
 
 // Provides a storage of strings allocated in C++ heap, to hold them
 // forever, even if they disappear from JS heap or external storage.
@@ -26,6 +28,7 @@ class V8_EXPORT_PRIVATE StringsStorage {
   // Copies the given c-string and stores it, returning the stored copy, or just
   // returns the existing string in storage if it already exists.
   const char* GetCopy(const char* src);
+  const char* GetCopy(Vector<const char> src);
   // Returns a formatted string, de-duplicated via the storage.
   PRINTF_FORMAT(2, 3) const char* GetFormatted(const char* format, ...);
   // Returns a stored string resulting from name, or "<symbol>" for a symbol.
