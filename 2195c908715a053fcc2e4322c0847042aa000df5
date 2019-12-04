@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c761cf2_d970af48",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 9291,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-12-04T14:52:00Z",
+      "side": 1,
+      "message": "Let\u0027s instead DCHECK that they are empty?",
+      "range": {
+        "startLine": 9291,
+        "startChar": 2,
+        "endLine": 9291,
+        "endChar": 11
+      },
+      "revId": "2195c908715a053fcc2e4322c0847042aa000df5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08a985f7_6d628204",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-12-04T14:52:00Z",
+      "side": 1,
+      "message": "Can we DCHECK((privateProperty.getter \u0026\u0026 privateProperty.setter) ^ privateProperty.value)?",
+      "range": {
+        "startLine": 407,
+        "startChar": 24,
+        "endLine": 407,
+        "endChar": 29
+      },
+      "revId": "2195c908715a053fcc2e4322c0847042aa000df5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
