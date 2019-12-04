@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d9da38e2_7c0cbd13",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-12-04T17:01:15Z",
+      "side": 1,
+      "message": "Clearing prepares the state for the next allocation.",
+      "parentUuid": "afe375ae_92aefcdf",
+      "range": {
+        "startLine": 689,
+        "startChar": 7,
+        "endLine": 689,
+        "endChar": 12
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04ae6ce2_b8783188",
         "filename": "src/handles/global-handles.cc",
         "patchSetId": 4
@@ -142,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "5b8ada6a_54d83ba4",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-12-04T17:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00b9f31c_a1894394",
+      "range": {
+        "startLine": 890,
+        "startChar": 11,
+        "endLine": 890,
+        "endChar": 12
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a5e0018_7813425c",
         "filename": "src/handles/global-handles.cc",
         "patchSetId": 4
@@ -236,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "d27b121f_28821978",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-12-04T17:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "314663a1_f2d7b641",
+      "range": {
+        "startLine": 901,
+        "startChar": 10,
+        "endLine": 901,
+        "endChar": 42
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d56fd02a_5ba443a4",
         "filename": "src/handles/global-handles.cc",
         "patchSetId": 4
@@ -303,6 +375,30 @@
       "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4ac7c96_96e88a56",
+        "filename": "src/handles/global-handles.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-12-04T17:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fc13eb4_53002b7e",
+      "range": {
+        "startLine": 90,
+        "startChar": 34,
+        "endLine": 90,
+        "endChar": 43
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
