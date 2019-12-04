@@ -768,6 +768,7 @@ TEST(DisasmX64) {
       __ vpshuflw(xmm1, Operand(rbx, rcx, times_4, 10000), 85);
       __ vshufps(xmm3, xmm2, xmm3, 3);
 
+      __ vmovddup(xmm1, xmm2);
       __ vmovddup(xmm1, Operand(rbx, rcx, times_4, 10000));
       __ vbroadcastss(xmm1, Operand(rbx, rcx, times_4, 10000));
     }

@@ -2265,9 +2265,9 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       CpuFeatureScope sse_scope(tasm(), SSE3);
       XMMRegister dst = i.OutputSimd128Register();
       if (instr->InputAt(0)->IsFPRegister()) {
-        __ movddup(dst, i.InputDoubleRegister(0));
+        __ Movddup(dst, i.InputDoubleRegister(0));
       } else {
-        __ movddup(dst, i.InputOperand(0));
+        __ Movddup(dst, i.InputOperand(0));
       }
       break;
     }
@@ -2628,11 +2628,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       CpuFeatureScope sse_scope(tasm(), SSE3);
       XMMRegister dst = i.OutputSimd128Register();
       if (HasRegisterInput(instr, 0)) {
-        __ movq(dst, i.InputRegister(0));
+        __ Movq(dst, i.InputRegister(0));
       } else {
-        __ movq(dst, i.InputOperand(0));
+        __ Movq(dst, i.InputOperand(0));
       }
-      __ movddup(dst, dst);
+      __ Movddup(dst, dst);
       break;
     }
     case kX64I64x2ExtractLane: {
