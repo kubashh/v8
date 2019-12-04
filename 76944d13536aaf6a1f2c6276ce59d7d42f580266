@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2bce3084_10a5cd27",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-12-04T16:53:57Z",
+      "side": 1,
+      "message": "All other functions pass Addresses. So I am doing this for consistency. Besides, the are two call sites of RegisterExternalReference with two different types.",
+      "parentUuid": "04ae6ce2_b8783188",
+      "range": {
+        "startLine": 804,
+        "startChar": 31,
+        "endLine": 804,
+        "endChar": 38
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5659266a_07c33533",
         "filename": "src/handles/global-handles.cc",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-04T16:24:25Z",
       "side": 1,
       "message": "I\u0027m surprised this check doesn\u0027t fail. Didn\u0027t the \"old\" implementation relied on the v8 object dying before the correlating oilpan object? In such cases, this check should fail.",
+      "range": {
+        "startLine": 807,
+        "startChar": 2,
+        "endLine": 807,
+        "endChar": 26
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24f9afe8_aba9f397",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-12-04T16:53:57Z",
+      "side": 1,
+      "message": "Not sure I understood the comment. The check is about this handle (that the handle is in use).",
+      "parentUuid": "5659266a_07c33533",
       "range": {
         "startLine": 807,
         "startChar": 2,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "69ce7071_110d6ce8",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-12-04T16:53:57Z",
+      "side": 1,
+      "message": "Because the destructor will try to reset the handle (It is the contract of TracedNode).\nAdded a comment in the code.",
+      "parentUuid": "3a5e0018_7813425c",
+      "range": {
+        "startLine": 896,
+        "startChar": 17,
+        "endLine": 896,
+        "endChar": 31
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8faa7d03_3f9c08c2",
         "filename": "src/handles/global-handles.cc",
         "patchSetId": 4
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "314663a1_f2d7b641",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-12-04T16:53:57Z",
+      "side": 1,
+      "message": "Good catch! We need to check again that the node is in use.",
+      "parentUuid": "8faa7d03_3f9c08c2",
+      "range": {
+        "startLine": 901,
+        "startChar": 10,
+        "endLine": 901,
+        "endChar": 42
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d56fd02a_5ba443a4",
         "filename": "src/handles/global-handles.cc",
         "patchSetId": 4
@@ -105,6 +201,30 @@
       "writtenOn": "2019-12-04T16:24:25Z",
       "side": 1,
       "message": "This makes the mark bit sticky for nodes that have a destructor or nodes for which IsPhantomResetHandle is false. Is that intended? Is always clearing the bit more expensive than always checking the bit and clearing only for most?",
+      "range": {
+        "startLine": 902,
+        "startChar": 13,
+        "endLine": 902,
+        "endChar": 15
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8bacd0a_5c9b15b6",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-12-04T16:53:57Z",
+      "side": 1,
+      "message": "It is equivalent to always clearing the bit. If it is set, then we clear it (independent from IsPhantomResetHandle and destructor).",
+      "parentUuid": "d56fd02a_5ba443a4",
       "range": {
         "startLine": 902,
         "startChar": 13,
