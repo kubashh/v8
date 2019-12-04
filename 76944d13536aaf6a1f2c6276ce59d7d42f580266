@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "afe375ae_92aefcdf",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2019-12-04T16:56:15Z",
+      "side": 1,
+      "message": "It is a bit strange that we also do this for freeing but ok.",
+      "range": {
+        "startLine": 689,
+        "startChar": 7,
+        "endLine": 689,
+        "endChar": 12
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04ae6ce2_b8783188",
         "filename": "src/handles/global-handles.cc",
         "patchSetId": 4
@@ -89,6 +112,29 @@
         "startChar": 2,
         "endLine": 807,
         "endChar": 26
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00b9f31c_a1894394",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2019-12-04T16:56:15Z",
+      "side": 1,
+      "message": "This block needs more comments. I have a hard time figuring out the states.",
+      "range": {
+        "startLine": 890,
+        "startChar": 11,
+        "endLine": 890,
+        "endChar": 12
       },
       "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -230,6 +276,29 @@
         "startChar": 13,
         "endLine": 902,
         "endChar": 15
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fc13eb4_53002b7e",
+        "filename": "src/handles/global-handles.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2019-12-04T16:56:15Z",
+      "side": 1,
+      "message": "location?",
+      "range": {
+        "startLine": 90,
+        "startChar": 34,
+        "endLine": 90,
+        "endChar": 43
       },
       "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
