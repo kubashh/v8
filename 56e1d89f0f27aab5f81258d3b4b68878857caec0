@@ -22,6 +22,30 @@
       "revId": "56e1d89f0f27aab5f81258d3b4b68878857caec0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d71831a2_6640c6ca",
+        "filename": "src/debug/debug-scope-iterator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-12-04T08:48:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e3b90a1_50922448",
+      "range": {
+        "startLine": 54,
+        "startChar": 64,
+        "endLine": 54,
+        "endChar": 72
+      },
+      "revId": "56e1d89f0f27aab5f81258d3b4b68878857caec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
