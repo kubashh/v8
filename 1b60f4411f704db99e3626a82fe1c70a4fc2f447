@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbfd2c19_763470fc",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-12-04T12:07:15Z",
+      "side": 1,
+      "message": "This may surprise somebody later. What if we define estimate_result_length as size_t instead or cap it to JSObject::kMaxElementCount? The latter may help us to find places that require updating if we decide to change the limits.",
+      "revId": "1b60f4411f704db99e3626a82fe1c70a4fc2f447",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
