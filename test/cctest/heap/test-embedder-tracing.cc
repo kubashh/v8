@@ -520,6 +520,22 @@ TEST(TracedGlobalWrapperClassId) {
   CHECK_EQ(17, traced.WrapperClassId());
 }
 
+TEST(TracedReferenceLeak) {
+  ManualGCScope manual_gc;
+  CcTest::InitializeVM();
+  v8::Isolate* isolate = CcTest::isolate();
+  v8::HandleScope scope(isolate);
+  i::GlobalHandles* global_handles = CcTest::i_isolate()->global_handles();
+  const size_t initial_count = global_handles->handles_count();
+  for (int i = 0; i < 1000; i++) {
+    v8::TracedReference<v8::Value> global1;
+    global1.Reset(isolate, v8::Undefined(isolate));
+  }
+  InvokeMarkSweep();
+  const size_t final_count = global_handles->handles_count();
+  CHECK_EQ(initial_count, final_count);
+}
+
 namespace {
 
 class TracedGlobalVisitor final
