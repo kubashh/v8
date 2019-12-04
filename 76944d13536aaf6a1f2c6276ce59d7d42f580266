@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04ae6ce2_b8783188",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-12-04T16:24:25Z",
+      "side": 1,
+      "message": "You mentioned offline that you could just pass the TracedNode from the Oilpan side (instead of getting an Address from it and passing that). Why did you decide not to do that?",
+      "range": {
+        "startLine": 804,
+        "startChar": 31,
+        "endLine": 804,
+        "endChar": 38
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5659266a_07c33533",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-12-04T16:24:25Z",
+      "side": 1,
+      "message": "I\u0027m surprised this check doesn\u0027t fail. Didn\u0027t the \"old\" implementation relied on the v8 object dying before the correlating oilpan object? In such cases, this check should fail.",
+      "range": {
+        "startLine": 807,
+        "startChar": 2,
+        "endLine": 807,
+        "endChar": 26
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a5e0018_7813425c",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-12-04T16:24:25Z",
+      "side": 1,
+      "message": "why can\u0027t you use release the phantom handle if the node it\u0027s pointing to has a destructor?",
+      "range": {
+        "startLine": 896,
+        "startChar": 17,
+        "endLine": 896,
+        "endChar": 31
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8faa7d03_3f9c08c2",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-12-04T16:24:25Z",
+      "side": 1,
+      "message": "I think in some cases you could release the same handle twice. Is that safe?\nIt will definitely mess your count.",
+      "range": {
+        "startLine": 901,
+        "startChar": 10,
+        "endLine": 901,
+        "endChar": 42
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d56fd02a_5ba443a4",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-12-04T16:24:25Z",
+      "side": 1,
+      "message": "This makes the mark bit sticky for nodes that have a destructor or nodes for which IsPhantomResetHandle is false. Is that intended? Is always clearing the bit more expensive than always checking the bit and clearing only for most?",
+      "range": {
+        "startLine": 902,
+        "startChar": 13,
+        "endLine": 902,
+        "endChar": 15
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4e64754_12fb0b4d",
+        "filename": "test/cctest/heap/test-embedder-tracing.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2019-12-04T16:24:25Z",
+      "side": 1,
+      "message": "nit: can you rewrite this as \"CHECK_EQ(initial_count - 1, final_count);\"?\nThe \" + 1\" confused me and made me think that a handle is added (which obviously didn\u0027t make sense).",
+      "range": {
+        "startLine": 560,
+        "startChar": 40,
+        "endLine": 560,
+        "endChar": 43
+      },
+      "revId": "76944d13536aaf6a1f2c6276ce59d7d42f580266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
