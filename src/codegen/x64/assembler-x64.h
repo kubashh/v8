@@ -1118,6 +1118,7 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void movlhps(XMMRegister dst, XMMRegister src);
 
   // AVX instruction
+  void vmovddup(XMMRegister dst, XMMRegister src);
   void vmovddup(XMMRegister dst, Operand src);
   void vbroadcastss(XMMRegister dst, Operand src);
   void vfmadd132sd(XMMRegister dst, XMMRegister src1, XMMRegister src2) {
