@@ -103,9 +103,9 @@ TEST(Object, StructListOrder) {
 #undef TEST_STRUCT
 }
 
-using ObjectWithIsolate = TestWithIsolate;
+using ObjectWithIsolateDeathTest = TestWithIsolate;
 
-TEST_F(ObjectWithIsolate, DictionaryGrowth) {
+TEST_F(ObjectWithIsolateDeathTest, DictionaryGrowth) {
   Handle<NumberDictionary> dict = NumberDictionary::New(isolate(), 1);
   Handle<Object> value = isolate()->factory()->null_value();
   PropertyDetails details = PropertyDetails::Empty();
@@ -161,7 +161,7 @@ TEST_F(ObjectWithIsolate, DictionaryGrowth) {
   CHECK_EQ(64, dict->Capacity());
 }
 
-TEST_F(TestWithNativeContext, EmptyFunctionScopeInfo) {
+TEST_F(TestWithNativeContextDeathTest, EmptyFunctionScopeInfo) {
   // Check that the empty_function has a properly set up ScopeInfo.
   Handle<JSFunction> function = RunJS<JSFunction>("(function(){})");
 

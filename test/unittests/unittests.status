@@ -19,8 +19,8 @@
 ##############################################################################
 ['lite_mode or variant == jitless', {
   # TODO(v8:7777): Re-enable once wasm is supported in jitless mode.
-  'ValueSerializerTestWithSharedArrayBufferClone.RoundTripWebAssemblyMemory': [SKIP],
-  'ValueSerializerTestWithWasm.*': [SKIP],
+  'ValueSerializerWithSharedArrayBufferCloneDeathTest.RoundTripWebAssemblyMemory': [SKIP],
+  'ValueSerializerWithWasmDeathTest.*': [SKIP],
 }], # lite_mode or variant == jitless
 
 ##############################################################################
@@ -38,7 +38,7 @@
 ['tsan == True', {
   # https://crbug.com/v8/9380
   # The test is broken and needs to be fixed to use separate isolates.
-  'BackingStoreTest.RacyGrowWasmMemoryInPlace': [SKIP],
+  'BackingStoreDeathTest.RacyGrowWasmMemoryInPlace': [SKIP],
 }],  # tsan == True
 
 ##############################################################################
