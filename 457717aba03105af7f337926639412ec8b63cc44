@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63812ce4_314e7c20",
+        "filename": "test/unittests/utils/allocation-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-12-05T13:05:37Z",
+      "side": 1,
+      "message": "Please move this into the other CL. Also below.",
+      "range": {
+        "startLine": 130,
+        "startChar": 16,
+        "endLine": 130,
+        "endChar": 21
+      },
+      "revId": "457717aba03105af7f337926639412ec8b63cc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
