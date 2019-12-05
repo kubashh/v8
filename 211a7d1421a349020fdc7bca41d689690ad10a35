@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96f72865_3efe81fe",
+        "filename": "test/mjsunit/compiler/serializer-dead-after-jump.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-12-05T11:05:29Z",
+      "side": 1,
+      "message": "true or false",
+      "range": {
+        "startLine": 35,
+        "startChar": 5,
+        "endLine": 35,
+        "endChar": 27
+      },
+      "revId": "211a7d1421a349020fdc7bca41d689690ad10a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c20ee87d_722bcecf",
+        "filename": "test/mjsunit/compiler/serializer-dead-after-return.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-12-05T11:05:29Z",
+      "side": 1,
+      "message": "Since you added the tests to all those status file blocks, you can as well make use of %IsBeingInterpreted here to ensure that f actually got inlined.",
+      "revId": "211a7d1421a349020fdc7bca41d689690ad10a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d5143b8_1421ddef",
+        "filename": "test/mjsunit/compiler/serializer-dead-after-return.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-12-05T11:05:29Z",
+      "side": 1,
+      "message": "dito",
+      "range": {
+        "startLine": 34,
+        "startChar": 5,
+        "endLine": 34,
+        "endChar": 27
+      },
+      "revId": "211a7d1421a349020fdc7bca41d689690ad10a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
