@@ -49,13 +49,13 @@ class AggregatedMemoryHistogramTest : public ::testing::Test {
 static base::TimeTicks runtime_call_stats_test_time_ = base::TimeTicks();
 // Time source used for the RuntimeCallTimer during tests. We cannot rely on
 // the native timer since it's too unpredictable on the build bots.
-static base::TimeTicks RuntimeCallStatsTestNow() {
+static base::TimeTicks RuntimeCallStatsNow() {
   return runtime_call_stats_test_time_;
 }
 
-class RuntimeCallStatsTest : public TestWithNativeContext {
+class RuntimeCallStatsDeathTest : public TestWithNativeContextDeathTest {
  public:
-  RuntimeCallStatsTest() {
+  RuntimeCallStatsDeathTest() {
     TracingFlags::runtime_stats.store(
         v8::tracing::TracingCategoryObserver::ENABLED_BY_NATIVE,
         std::memory_order_relaxed);
@@ -65,7 +65,7 @@ class RuntimeCallStatsTest : public TestWithNativeContext {
     stats()->Reset();
   }
 
-  ~RuntimeCallStatsTest() override {
+  ~RuntimeCallStatsDeathTest() override {
     // Disable RuntimeCallStats before tearing down the isolate to prevent
     // printing the tests table. Comment the following line for debugging
     // purposes.
@@ -75,7 +75,7 @@ class RuntimeCallStatsTest : public TestWithNativeContext {
   static void SetUpTestCase() {
     TestWithIsolate::SetUpTestCase();
     // Use a custom time source to precisly emulate system time.
-    RuntimeCallTimer::Now = &RuntimeCallStatsTestNow;
+    RuntimeCallTimer::Now = &RuntimeCallStatsNow;
   }
 
   static void TearDownTestCase() {
@@ -121,32 +121,33 @@ class RuntimeCallStatsTest : public TestWithNativeContext {
 // Temporarily use the native time to modify the test time.
 class ElapsedTimeScope {
  public:
-  explicit ElapsedTimeScope(RuntimeCallStatsTest* test) : test_(test) {
+  explicit ElapsedTimeScope(RuntimeCallStatsDeathTest* test) : test_(test) {
     timer_.Start();
   }
   ~ElapsedTimeScope() { test_->Sleep(timer_.Elapsed().InMicroseconds()); }
 
  private:
   base::ElapsedTimer timer_;
-  RuntimeCallStatsTest* test_;
+  RuntimeCallStatsDeathTest* test_;
 };
 
 // Temporarily use the default time source.
 class NativeTimeScope {
  public:
   NativeTimeScope() {
-    CHECK_EQ(RuntimeCallTimer::Now, &RuntimeCallStatsTestNow);
+    CHECK_EQ(RuntimeCallTimer::Now, &RuntimeCallStatsNow);
     RuntimeCallTimer::Now = &base::TimeTicks::HighResolutionNow;
   }
   ~NativeTimeScope() {
     CHECK_EQ(RuntimeCallTimer::Now, &base::TimeTicks::HighResolutionNow);
-    RuntimeCallTimer::Now = &RuntimeCallStatsTestNow;
+    RuntimeCallTimer::Now = &RuntimeCallStatsNow;
   }
 };
 
-class SnapshotNativeCounterTest : public TestWithNativeContextAndCounters {
+class SnapshotNativeCounterDeathTest
+    : public TestWithNativeContextAndCounters {
  public:
-  SnapshotNativeCounterTest() {}
+  SnapshotNativeCounterDeathTest() {}
 
   bool SupportsNativeCounters() const {
 #ifdef V8_SNAPSHOT_NATIVE_CODE_COUNTERS
@@ -310,7 +311,7 @@ TEST_F(AggregatedMemoryHistogramTest, ManySamples2) {
   }
 }
 
-TEST_F(RuntimeCallStatsTest, RuntimeCallTimer) {
+TEST_F(RuntimeCallStatsDeathTest, RuntimeCallTimer) {
   RuntimeCallTimer timer;
 
   Sleep(50);
@@ -329,7 +330,7 @@ TEST_F(RuntimeCallStatsTest, RuntimeCallTimer) {
   EXPECT_EQ(100, counter()->time().InMicroseconds());
 }
 
-TEST_F(RuntimeCallStatsTest, RuntimeCallTimerSubTimer) {
+TEST_F(RuntimeCallStatsDeathTest, RuntimeCallTimerSubTimer) {
   RuntimeCallTimer timer;
   RuntimeCallTimer timer2;
 
@@ -374,7 +375,7 @@ TEST_F(RuntimeCallStatsTest, RuntimeCallTimerSubTimer) {
   EXPECT_EQ(nullptr, stats()->current_timer());
 }
 
-TEST_F(RuntimeCallStatsTest, RuntimeCallTimerRecursive) {
+TEST_F(RuntimeCallStatsDeathTest, RuntimeCallTimerRecursive) {
   RuntimeCallTimer timer;
   RuntimeCallTimer timer2;
 
@@ -408,7 +409,7 @@ TEST_F(RuntimeCallStatsTest, RuntimeCallTimerRecursive) {
   EXPECT_EQ(150, counter()->time().InMicroseconds());
 }
 
-TEST_F(RuntimeCallStatsTest, RuntimeCallTimerScope) {
+TEST_F(RuntimeCallStatsDeathTest, RuntimeCallTimerScope) {
   {
     RuntimeCallTimerScope scope(stats(), counter_id());
     Sleep(50);
@@ -424,7 +425,7 @@ TEST_F(RuntimeCallStatsTest, RuntimeCallTimerScope) {
   EXPECT_EQ(100, counter()->time().InMicroseconds());
 }
 
-TEST_F(RuntimeCallStatsTest, RuntimeCallTimerScopeRecursive) {
+TEST_F(RuntimeCallStatsDeathTest, RuntimeCallTimerScopeRecursive) {
   {
     RuntimeCallTimerScope scope(stats(), counter_id());
     Sleep(50);
@@ -441,7 +442,7 @@ TEST_F(RuntimeCallStatsTest, RuntimeCallTimerScopeRecursive) {
   EXPECT_EQ(100, counter()->time().InMicroseconds());
 }
 
-TEST_F(RuntimeCallStatsTest, RenameTimer) {
+TEST_F(RuntimeCallStatsDeathTest, RenameTimer) {
   {
     RuntimeCallTimerScope scope(stats(), counter_id());
     Sleep(50);
@@ -466,7 +467,7 @@ TEST_F(RuntimeCallStatsTest, RenameTimer) {
   EXPECT_EQ(50, counter2()->time().InMicroseconds());
 }
 
-TEST_F(RuntimeCallStatsTest, BasicPrintAndSnapshot) {
+TEST_F(RuntimeCallStatsDeathTest, BasicPrintAndSnapshot) {
   std::ostringstream out;
   stats()->Print(out);
   EXPECT_EQ(0, counter()->count());
@@ -490,7 +491,7 @@ TEST_F(RuntimeCallStatsTest, BasicPrintAndSnapshot) {
   EXPECT_EQ(0, counter3()->time().InMicroseconds());
 }
 
-TEST_F(RuntimeCallStatsTest, PrintAndSnapshot) {
+TEST_F(RuntimeCallStatsDeathTest, PrintAndSnapshot) {
   {
     RuntimeCallTimerScope scope(stats(), counter_id());
     Sleep(100);
@@ -539,7 +540,7 @@ TEST_F(RuntimeCallStatsTest, PrintAndSnapshot) {
   EXPECT_EQ(150, counter2()->time().InMicroseconds());
 }
 
-TEST_F(RuntimeCallStatsTest, NestedScopes) {
+TEST_F(RuntimeCallStatsDeathTest, NestedScopes) {
   {
     RuntimeCallTimerScope scope(stats(), counter_id());
     Sleep(100);
@@ -572,7 +573,7 @@ TEST_F(RuntimeCallStatsTest, NestedScopes) {
   EXPECT_EQ(100, counter3()->time().InMicroseconds());
 }
 
-TEST_F(RuntimeCallStatsTest, BasicJavaScript) {
+TEST_F(RuntimeCallStatsDeathTest, BasicJavaScript) {
   RuntimeCallCounter* counter =
       stats()->GetCounter(RuntimeCallCounterId::kJS_Execution);
   EXPECT_EQ(0, counter->count());
@@ -594,7 +595,7 @@ TEST_F(RuntimeCallStatsTest, BasicJavaScript) {
   EXPECT_LE(time, counter->time().InMicroseconds());
 }
 
-TEST_F(RuntimeCallStatsTest, FunctionLengthGetter) {
+TEST_F(RuntimeCallStatsDeathTest, FunctionLengthGetter) {
   RuntimeCallCounter* getter_counter =
       stats()->GetCounter(RuntimeCallCounterId::kFunctionLengthGetter);
   EXPECT_EQ(0, getter_counter->count());
@@ -637,7 +638,7 @@ TEST_F(RuntimeCallStatsTest, FunctionLengthGetter) {
 }
 
 namespace {
-static RuntimeCallStatsTest* current_test;
+static RuntimeCallStatsDeathTest* current_test;
 static const int kCustomCallbackTime = 1234;
 static void CustomCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
   RuntimeCallTimerScope scope(current_test->stats(),
@@ -646,7 +647,7 @@ static void CustomCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
 }
 }  // namespace
 
-TEST_F(RuntimeCallStatsTest, CallbackFunction) {
+TEST_F(RuntimeCallStatsDeathTest, CallbackFunction) {
   FLAG_allow_natives_syntax = true;
 
   RuntimeCallCounter* callback_counter =
@@ -724,7 +725,7 @@ TEST_F(RuntimeCallStatsTest, CallbackFunction) {
   EXPECT_EQ(kCustomCallbackTime * 4013, counter2()->time().InMicroseconds());
 }
 
-TEST_F(RuntimeCallStatsTest, ApiGetter) {
+TEST_F(RuntimeCallStatsDeathTest, ApiGetter) {
   FLAG_allow_natives_syntax = true;
 
   RuntimeCallCounter* callback_counter =
@@ -811,7 +812,7 @@ TEST_F(RuntimeCallStatsTest, ApiGetter) {
   EXPECT_EQ(kCustomCallbackTime * 4013, counter2()->time().InMicroseconds());
 }
 
-TEST_F(SnapshotNativeCounterTest, StringAddNative) {
+TEST_F(SnapshotNativeCounterDeathTest, StringAddNative) {
   RunJS("let s = 'hello, ' + 'world!'");
 
   if (SupportsNativeCounters()) {
@@ -823,7 +824,7 @@ TEST_F(SnapshotNativeCounterTest, StringAddNative) {
   PrintAll();
 }
 
-TEST_F(SnapshotNativeCounterTest, SubStringNative) {
+TEST_F(SnapshotNativeCounterDeathTest, SubStringNative) {
   RunJS("'hello, world!'.substring(6);");
 
   if (SupportsNativeCounters()) {
@@ -835,7 +836,7 @@ TEST_F(SnapshotNativeCounterTest, SubStringNative) {
   PrintAll();
 }
 
-TEST_F(SnapshotNativeCounterTest, WriteBarrier) {
+TEST_F(SnapshotNativeCounterDeathTest, WriteBarrier) {
   RunJS("let o = {a: 42};");
 
   if (SupportsNativeCounters()) {

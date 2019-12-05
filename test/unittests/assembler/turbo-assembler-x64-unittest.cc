@@ -16,7 +16,7 @@ namespace internal {
 // a buffer and executing them.  These tests do not initialize the
 // V8 library, create a context, or use any V8 objects.
 
-TEST(TurboAssemblerTest, TestHardAbort) {
+TEST(TurboAssemblerDeathTest, TestHardAbort) {
   auto buffer = AllocateAssemblerBuffer();
   TurboAssembler tasm(nullptr, AssemblerOptions{}, CodeObjectRequired::kNo,
                       buffer->CreateView());
@@ -32,7 +32,7 @@ TEST(TurboAssemblerTest, TestHardAbort) {
   ASSERT_DEATH_IF_SUPPORTED({ f.Call(); }, "abort: no reason");
 }
 
-TEST(TurboAssemblerTest, TestCheck) {
+TEST(TurboAssemblerDeathTest, TestCheck) {
   auto buffer = AllocateAssemblerBuffer();
   TurboAssembler tasm(nullptr, AssemblerOptions{}, CodeObjectRequired::kNo,
                       buffer->CreateView());

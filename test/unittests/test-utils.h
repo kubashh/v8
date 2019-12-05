@@ -228,8 +228,8 @@ using TestWithIsolate =          //
         WithSharedIsolateMixin<  //
             ::testing::Test>>;
 
-// Use v8::internal::TestWithNativeContext if you are testing internals,
-// aka. directly work with Handles.
+// Use v8::internal::TestWithNativeContextDeathTest if you are testing
+// internals, aka. directly work with Handles.
 using TestWithContext =              //
     WithContextMixin<                //
         WithIsolateScopeMixin<       //
@@ -321,7 +321,7 @@ using TestWithIsolateAndZone =       //
                 WithZoneMixin<       //
                     ::testing::Test>>>>;
 
-using TestWithNativeContext =            //
+using TestWithNativeContextDeathTest =   //
     WithInternalIsolateMixin<            //
         WithContextMixin<                //
             WithIsolateScopeMixin<       //
@@ -329,19 +329,19 @@ using TestWithNativeContext =            //
                     ::testing::Test>>>>;
 
 using TestWithNativeContextAndCounters =  //
-    WithInternalIsolateMixin<             //
-        WithContextMixin<                 //
-            WithIsolateScopeMixin<        //
-                WithSharedIsolateMixin<   //
-                    ::testing::Test,      //
+    WithInternalIsolateMixin<                      //
+        WithContextMixin<                          //
+            WithIsolateScopeMixin<                 //
+                WithSharedIsolateMixin<            //
+                    ::testing::Test,               //
                     SharedIsolateAndCountersHolder>>>>;
 
-using TestWithNativeContextAndZone =         //
-    WithZoneMixin<                           //
-        WithInternalIsolateMixin<            //
-            WithContextMixin<                //
-                WithIsolateScopeMixin<       //
-                    WithSharedIsolateMixin<  //
+using TestWithNativeContextAndZone =  //
+    WithZoneMixin<                             //
+        WithInternalIsolateMixin<              //
+            WithContextMixin<                  //
+                WithIsolateScopeMixin<         //
+                    WithSharedIsolateMixin<    //
                         ::testing::Test>>>>>;
 
 class SaveFlags {
