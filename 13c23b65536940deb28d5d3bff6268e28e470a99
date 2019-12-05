@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3e8c367_11586c96",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-12-05T15:20:47Z",
+      "side": 1,
+      "message": "nit: No need for comment as the mixin name is self-explanatory.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 39
+      },
+      "revId": "13c23b65536940deb28d5d3bff6268e28e470a99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
