@@ -22,6 +22,30 @@
       "revId": "70803a8fef8d93e2a73ab75f34fcead1090d81c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "366458a0_f0382132",
+        "filename": "src/compiler/node-properties.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-12-05T10:05:57Z",
+      "side": 0,
+      "message": "InputAt checks that already.",
+      "parentUuid": "d1a4b134_833bce34",
+      "range": {
+        "startLine": 85,
+        "startChar": 9,
+        "endLine": 85,
+        "endChar": 19
+      },
+      "revId": "70803a8fef8d93e2a73ab75f34fcead1090d81c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
