@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "74a9a2a0_02353686",
+        "filename": "src/builtins/promise-prototype.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-12-06T07:11:10Z",
+      "side": 1,
+      "message": "Would a \n\n try {\n  ...\n } label AllocAndInit {\n  AllocateAndInitJSPromise\n  ...\n }\n\nstructure work? Both paths (L42 and L48) could goto the label.",
+      "parentUuid": "b58a1adc_4422a308",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e861ebda_ab0417ae",
         "filename": "src/builtins/promise-prototype.tq",
         "patchSetId": 4
@@ -153,6 +171,24 @@
       "side": 1,
       "message": "unfortunately otherwise seems to expect a label, but the ternary operator works.",
       "parentUuid": "e93d909c_0f515543",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "436fac1d_f3449587",
+        "filename": "src/builtins/promise-prototype.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-12-06T07:11:10Z",
+      "side": 1,
+      "message": "`otherwise` can also take a statement, search for \u0027otherwise return\u0027. Anyways, the ternary op is good too :)",
+      "parentUuid": "12df594e_40331525",
       "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
