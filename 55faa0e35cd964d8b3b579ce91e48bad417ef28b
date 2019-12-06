@@ -70,6 +70,30 @@
       "revId": "55faa0e35cd964d8b3b579ce91e48bad417ef28b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6dec4bb0_0c786491",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4478,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2019-12-06T09:29:06Z",
+      "side": 1,
+      "message": "Sorry for the late reply, these days I spent some time on this bug, and it seems that it has nothing to do with pointer compression, sorry for my former reckless conclusion.\nThe real reason is Word32And(actully and some other 32-bit operations) will overwrite it\u0027s input register, but some later operation need it\u0027s previous value, so program crashed. And I find a way to avoid this conflict, by adjust 32-bit operations to keep the input register\u0027value unchanged, and I have updated the patch and the commit message, please take a look.",
+      "parentUuid": "bfe34243_55f0a519",
+      "range": {
+        "startLine": 4478,
+        "startChar": 0,
+        "endLine": 4478,
+        "endChar": 68
+      },
+      "revId": "55faa0e35cd964d8b3b579ce91e48bad417ef28b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
