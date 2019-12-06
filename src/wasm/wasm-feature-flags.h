@@ -82,13 +82,7 @@
   /* https://github.com/WebAssembly/nontrapping-float-to-int-conversions */    \
   /* V8 side owner: binji */                                                   \
   /* Shipped in v7.5. */                                                       \
-  V(sat_f2i_conversions, "saturating float conversion opcodes", true)          \
-                                                                               \
-  /* Sign-extension opcodes. */                                                \
-  /* https://github.com/WebAssembly/sign-extension-ops */                      \
-  /* V8 side owner: gdeepti */                                                 \
-  /* Shipped in v6.9. */                                                       \
-  V(se, "sign extension opcodes", true)
+  V(sat_f2i_conversions, "saturating float conversion opcodes", true)
 
 // Combination of all available wasm feature flags.
 #define FOREACH_WASM_FEATURE_FLAG(V)        \
