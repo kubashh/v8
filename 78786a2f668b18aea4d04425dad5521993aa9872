@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afead043_cf22bfdf",
+        "filename": "src/objects/contexts.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-12-06T09:06:56Z",
+      "side": 1,
+      "message": "Simon found that this is causing non-determinism during snapshot construction.\n\nChanging this (reason \u003d\u003d v8::Context::kWindowNotDetached) ? 0 : isolate-\u003etime_millis_since_init() / 1000) should fix the issue",
+      "range": {
+        "startLine": 509,
+        "startChar": 36,
+        "endLine": 509,
+        "endChar": 76
+      },
+      "revId": "78786a2f668b18aea4d04425dad5521993aa9872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
