@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "5f6a3a53_375d42ee",
+        "filename": "src/builtins/promise-prototype.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-12-06T00:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f5e0fdc_d30f792e",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd3da6f4_67b58b61",
         "filename": "src/builtins/promise-prototype.tq",
         "patchSetId": 4
@@ -47,6 +65,24 @@
       "writtenOn": "2019-11-27T09:52:51Z",
       "side": 1,
       "message": "nit: please combine this with the same code above in L42.",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b58a1adc_4422a308",
+        "filename": "src/builtins/promise-prototype.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-12-06T00:55:08Z",
+      "side": 1,
+      "message": "Okay, so I wanted to do this, but I can\u0027t think of a good way to.\n\nSpecifically, I think I want to avoid calling SpeciesConstructor on the fast path, so then the only way I think I can share this is to wrap the SpeciesConstructor and TaggedEqual in a function. But if I do that, I can\u0027t use the loaded constructor in the slow path, so I will have to call SpeciesConstructor 2x on the slow path.\n\nCan you think of a better way to do this?",
+      "parentUuid": "dd3da6f4_67b58b61",
       "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "7845a7e3_dab4e6af",
+        "filename": "src/builtins/promise-prototype.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-12-06T00:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e861ebda_ab0417ae",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e93d909c_0f515543",
         "filename": "src/builtins/promise-prototype.tq",
         "patchSetId": 4
@@ -84,6 +138,24 @@
       "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12df594e_40331525",
+        "filename": "src/builtins/promise-prototype.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-12-06T00:55:08Z",
+      "side": 1,
+      "message": "unfortunately otherwise seems to expect a label, but the ternary operator works.",
+      "parentUuid": "e93d909c_0f515543",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
