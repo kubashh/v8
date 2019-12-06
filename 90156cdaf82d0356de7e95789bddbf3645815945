@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "3e2a19bd_d016bc63",
+        "filename": "src/builtins/promise-prototype.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-12-06T15:15:24Z",
+      "side": 1,
+      "message": "lol, did not dawn on me to try a goto. I guess that works though.",
+      "parentUuid": "74a9a2a0_02353686",
+      "revId": "90156cdaf82d0356de7e95789bddbf3645815945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e861ebda_ab0417ae",
         "filename": "src/builtins/promise-prototype.tq",
         "patchSetId": 4
