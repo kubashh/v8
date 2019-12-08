@@ -49,7 +49,6 @@ class Tuple3 : public TorqueGeneratedTuple3<Tuple3, Struct> {
 //   * null: an accessor which has not been set
 class AccessorPair : public TorqueGeneratedAccessorPair<AccessorPair, Struct> {
  public:
-  NEVER_READ_ONLY_SPACE
   static Handle<AccessorPair> Copy(Isolate* isolate, Handle<AccessorPair> pair);
 
   inline Object get(AccessorComponent component);
