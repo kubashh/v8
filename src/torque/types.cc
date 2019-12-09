@@ -4,12 +4,14 @@
 
 #include <iostream>
 
+#include "src/torque/types.h"
+
+#include "src/base/bits.h"
 #include "src/torque/ast.h"
 #include "src/torque/declarable.h"
 #include "src/torque/global-context.h"
 #include "src/torque/type-oracle.h"
 #include "src/torque/type-visitor.h"
-#include "src/torque/types.h"
 
 namespace v8 {
 namespace internal {
@@ -353,11 +355,11 @@ size_t StructType::PackedSize() const {
   size_t result = 0;
   if (!fields_.empty()) {
     const Field& last = fields_.back();
-    if (last.offset == Field::kInvalidOffset) {
+    if (last.offset.has_value()) {
       // This struct can't be packed. Find the first invalid field and use its
       // name and position for the error.
       for (const Field& field : fields_) {
-        if (field.offset == Field::kInvalidOffset) {
+        if (!field.offset.has_value()) {
           Error("Cannot compute packed size of ", ToString(), " due to field ",
                 field.name_and_type.name, " of unknown size")
               .Position(field.pos);
@@ -367,7 +369,7 @@ size_t StructType::PackedSize() const {
     }
     size_t field_size = 0;
     std::tie(field_size, std::ignore) = last.GetFieldSizeInformation();
-    result = last.offset + field_size;
+    result = *last.offset + field_size;
   }
   return result;
 }
@@ -434,6 +436,7 @@ ClassType::ClassType(const Type* parent, Namespace* nspace,
                      const std::string& generates, const ClassDeclaration* decl,
                      const TypeAlias* alias)
     : AggregateType(Kind::kClassType, parent, nspace, name),
+      size_(ResidueClass::Unknown()),
       flags_(flags & ~(kInternalFlags)),
       generates_(generates),
       decl_(decl),
@@ -728,6 +731,65 @@ std::tuple<size_t, std::string> Field::GetFieldSizeInformation() const {
   Error("fields of type ", *name_and_type.type, " are not (yet) supported")
       .Position(pos);
   return std::make_tuple(0, "#no size");
+}
+
+size_t AlignmentLog2(const Type* type) {
+  size_t alignment;
+  if (type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
+    alignment = TargetArchitecture::TaggedSize();
+  } else if (type->IsSubtypeOf(TypeOracle::GetRawPtrType())) {
+    alignment = TargetArchitecture::RawPtrSize();
+  } else if (type->IsSubtypeOf(TypeOracle::GetVoidType())) {
+    alignment = 1;
+  } else if (type->IsSubtypeOf(TypeOracle::GetInt8Type())) {
+    alignment = kUInt8Size;
+  } else if (type->IsSubtypeOf(TypeOracle::GetUint8Type())) {
+    alignment = kUInt8Size;
+  } else if (type->IsSubtypeOf(TypeOracle::GetInt16Type())) {
+    alignment = kUInt16Size;
+  } else if (type->IsSubtypeOf(TypeOracle::GetUint16Type())) {
+    alignment = kUInt16Size;
+  } else if (type->IsSubtypeOf(TypeOracle::GetInt32Type())) {
+    alignment = kInt32Size;
+  } else if (type->IsSubtypeOf(TypeOracle::GetUint32Type())) {
+    alignment = kInt32Size;
+  } else if (type->IsSubtypeOf(TypeOracle::GetFloat64Type())) {
+    alignment = kDoubleSize;
+  } else if (type->IsSubtypeOf(TypeOracle::GetIntPtrType())) {
+    alignment = TargetArchitecture::RawPtrSize();
+  } else if (type->IsSubtypeOf(TypeOracle::GetUIntPtrType())) {
+    alignment = TargetArchitecture::RawPtrSize();
+  } else if (const StructType* struct_type = StructType::DynamicCast(type)) {
+    size_t alignment_log_2 = 0;
+    for (const Field& field : struct_type->fields()) {
+      alignment_log_2 =
+          std::max(alignment_log_2, AlignmentLog2(field.name_and_type.type));
+    }
+    return alignment_log_2;
+  } else {
+    // tagged size is the maximal alignment supported on the heap.
+    alignment = TargetArchitecture::TaggedSize();
+  }
+  alignment = std::min(alignment, TargetArchitecture::TaggedSize());
+  return base::bits::WhichPowerOfTwo(alignment);
+}
+
+void Field::ValidateAlignment(ResidueClass at_offset) const {
+  const Type* type = name_and_type.type;
+  if (const StructType* struct_type = StructType::DynamicCast(type)) {
+    for (const Field& field : struct_type->fields()) {
+      field.ValidateAlignment(at_offset);
+      size_t field_size = std::get<0>(field.GetFieldSizeInformation());
+      at_offset += field_size;
+    }
+  } else {
+    size_t alignment_log_2 = AlignmentLog2(name_and_type.type);
+    if (at_offset.AlignmentLog2() < alignment_log_2) {
+      Error("field ", name_and_type.name, " at offset ", at_offset, " is not ",
+            1 << alignment_log_2, "-byte aligned.")
+          .Position(pos);
+    }
+  }
 }
 
 base::Optional<std::tuple<size_t, std::string>> SizeOf(const Type* type) {
