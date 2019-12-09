@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "16110e5f_b3498c58",
+        "filename": "src/objects/ordered-hash-table.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-09T22:45:48Z",
+      "side": 1,
+      "message": "I went for the version without the comparison to 256, for the sake of readability.",
+      "parentUuid": "5b573925_b86377ef",
+      "range": {
+        "startLine": 35,
+        "startChar": 23,
+        "endLine": 35,
+        "endChar": 28
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70c775cc_c364b4a5",
         "filename": "src/objects/ordered-hash-table.tq",
         "patchSetId": 6
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "a4f08786_e4240256",
+        "filename": "src/objects/ordered-hash-table.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-09T22:45:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25e300ec_48e16220",
+      "range": {
+        "startLine": 43,
+        "startChar": 43,
+        "endLine": 43,
+        "endChar": 46
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9660fb1e_839fa51c",
         "filename": "src/torque/type-visitor.cc",
         "patchSetId": 6
@@ -85,6 +133,30 @@
       "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91fef9cf_25d72153",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-09T22:45:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9660fb1e_839fa51c",
+      "range": {
+        "startLine": 235,
+        "startChar": 27,
+        "endLine": 235,
+        "endChar": 63
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +206,30 @@
     },
     {
       "key": {
+        "uuid": "bb2e25a0_07b5748d",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-09T22:45:48Z",
+      "side": 1,
+      "message": "Oops...\nYes, I think it makes sense to simplify this function, I don\u0027t think it\u0027s called so often to matter for performance. And if it does, I think it\u0027d be cleaner to just cache the size explicitly.",
+      "parentUuid": "dfe33ff5_7fbb6d8f",
+      "range": {
+        "startLine": 358,
+        "startChar": 8,
+        "endLine": 358,
+        "endChar": 31
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3620fa03_e7b2a666",
         "filename": "src/torque/types.cc",
         "patchSetId": 6
@@ -148,6 +244,24 @@
       "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "030db1b4_d02dcbe8",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-09T22:45:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3620fa03_e7b2a666",
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +288,30 @@
     },
     {
       "key": {
+        "uuid": "d8c57b98_9cc988f0",
+        "filename": "src/torque/types.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-09T22:45:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fea83c89_915b828e",
+      "range": {
+        "startLine": 203,
+        "startChar": 52,
+        "endLine": 203,
+        "endChar": 58
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "53f83a47_a243e523",
         "filename": "src/torque/utils.h",
         "patchSetId": 6
@@ -194,6 +332,30 @@
       "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "739fca5c_2c2372ae",
+        "filename": "src/torque/utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-09T22:45:48Z",
+      "side": 1,
+      "message": "Thanks :)",
+      "parentUuid": "53f83a47_a243e523",
+      "range": {
+        "startLine": 440,
+        "startChar": 27,
+        "endLine": 440,
+        "endChar": 29
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -220,6 +382,30 @@
     },
     {
       "key": {
+        "uuid": "77e98623_4c9fd48c",
+        "filename": "src/torque/utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-09T22:45:48Z",
+      "side": 1,
+      "message": "Good point, thanks!",
+      "parentUuid": "b359bc39_bb418d60",
+      "range": {
+        "startLine": 441,
+        "startChar": 51,
+        "endLine": 441,
+        "endChar": 72
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9d4aa44_a5b4618f",
         "filename": "test/cctest/test-code-stub-assembler.cc",
         "patchSetId": 6
@@ -234,6 +420,24 @@
       "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee3315a2_27050b31",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3528,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-09T22:45:48Z",
+      "side": 1,
+      "message": "Oops, thank you :)",
+      "parentUuid": "b9d4aa44_a5b4618f",
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
