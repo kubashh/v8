@@ -46,6 +46,30 @@
       "revId": "78786a2f668b18aea4d04425dad5521993aa9872",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11ccb955_7477a1af",
+        "filename": "src/objects/contexts.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1360234
+      },
+      "writtenOn": "2019-12-09T13:16:04Z",
+      "side": 1,
+      "message": "Setting to 0 in the kWindowNotDetached case should be always correct, no need for gating on serializer_enabled.\n\nI just sent out a new CL for review: https://chromium-review.googlesource.com/c/v8/v8/+/1958344",
+      "parentUuid": "4bd8973e_999fd17a",
+      "range": {
+        "startLine": 509,
+        "startChar": 36,
+        "endLine": 509,
+        "endChar": 76
+      },
+      "revId": "78786a2f668b18aea4d04425dad5521993aa9872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
