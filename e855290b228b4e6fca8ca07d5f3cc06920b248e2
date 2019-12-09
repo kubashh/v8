@@ -22,6 +22,30 @@
       "revId": "e855290b228b4e6fca8ca07d5f3cc06920b248e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "176004bb_2daf7829",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-09T12:07:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac2401a1_dad9dc6e",
+      "range": {
+        "startLine": 1278,
+        "startChar": 0,
+        "endLine": 1321,
+        "endChar": 1
+      },
+      "revId": "e855290b228b4e6fca8ca07d5f3cc06920b248e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
