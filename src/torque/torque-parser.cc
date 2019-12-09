@@ -1442,7 +1442,9 @@ base::Optional<ParseResult> MakeAssignmentExpression(
 base::Optional<ParseResult> MakeNumberLiteralExpression(
     ParseResultIterator* child_results) {
   auto number = child_results->NextAs<std::string>();
-  Expression* result = MakeNode<NumberLiteralExpression>(std::move(number));
+  // TODO(tebbi): Support 64bit literals.
+  // Meanwhile, we type it as constexpr float64 when out of int32 range.
+  Expression* result = MakeNode<NumberLiteralExpression>(std::stod(number));
   return ParseResult{result};
 }
 
