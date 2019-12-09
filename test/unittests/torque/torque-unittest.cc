@@ -71,7 +71,11 @@ type BuiltinPtr extends Smi generates 'TNode<BuiltinPtr>';
 type Context extends HeapObject generates 'TNode<Context>';
 type NativeContext extends Context;
 
+extern macro IntPtrConstant(constexpr int31): intptr;
 macro FromConstexpr<To: type, From: type>(o: From): To;
+FromConstexpr<intptr, constexpr int31>(i: constexpr int31): intptr {
+  return IntPtrConstant(i);
+}
 )";
 
 TorqueCompilerResult TestCompileTorque(std::string source) {

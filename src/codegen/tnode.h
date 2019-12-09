@@ -152,6 +152,11 @@ struct MachineRepresentationOf {
 };
 template <class T>
 struct MachineRepresentationOf<
+    T, typename std::enable_if<(T::kMachineType, true)>::type> {
+  static const MachineRepresentation value = T::kMachineType.representation();
+};
+template <class T>
+struct MachineRepresentationOf<
     T, typename std::enable_if<std::is_base_of<Object, T>::value>::type> {
   static const MachineRepresentation value =
       MachineTypeOf<T>::value.representation();

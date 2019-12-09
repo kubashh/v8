@@ -137,7 +137,7 @@ const StructType* TypeVisitor::ComputeType(
   CurrentScope::Scope struct_namespace_scope(struct_type->nspace());
   CurrentSourcePosition::Scope position_activator(decl->pos);
 
-  size_t offset = 0;
+  ResidueClass offset = 0;
   bool packable = true;
   for (auto& field : decl->fields) {
     CurrentSourcePosition::Scope position_activator(
@@ -151,7 +151,7 @@ const StructType* TypeVisitor::ComputeType(
             struct_type,
             base::nullopt,
             {field.name_and_type.name->value, field_type},
-            offset,
+            offset.KnownValue(),
             false,
             field.const_qualified,
             false};
@@ -161,9 +161,6 @@ const StructType* TypeVisitor::ComputeType(
     // marked as invalid.
     if (!optional_size.has_value()) {
       packable = false;
-    }
-    if (!packable) {
-      f.offset = Field::kInvalidOffset;
     }
     struct_type->RegisterField(f);
     // Offsets are assigned based on an assumption of no space between members.
@@ -176,6 +173,8 @@ const StructType* TypeVisitor::ComputeType(
       size_t field_size = 0;
       std::tie(field_size, std::ignore) = *optional_size;
       offset += field_size;
+    } else {
+      offset = ResidueClass::Unknown();
     }
   }
   return struct_type;
@@ -322,11 +321,13 @@ Signature TypeVisitor::MakeSignature(const CallableDeclaration* declaration) {
 void TypeVisitor::VisitClassFieldsAndMethods(
     ClassType* class_type, const ClassDeclaration* class_declaration) {
   const ClassType* super_class = class_type->GetSuperClass();
-  size_t class_offset = super_class ? super_class->header_size() : 0;
-  size_t header_size = class_offset;
-  DCHECK_IMPLIES(super_class && !super_class->size(),
-                 class_declaration->fields.empty());
-  bool seen_indexed_field = false;
+  ResidueClass class_offset = 0;
+  size_t header_size = 0;
+  if (super_class) {
+    class_offset = super_class->size();
+    header_size = super_class->header_size();
+  }
+
   for (const ClassFieldExpression& field_expression :
        class_declaration->fields) {
     CurrentSourcePosition::Scope position_activator(
@@ -369,55 +370,42 @@ void TypeVisitor::VisitClassFieldsAndMethods(
         }
       }
     }
-    base::Optional<Expression*> array_length;
-    if (field_expression.index) {
-      if (seen_indexed_field ||
-          (super_class && super_class->HasIndexedField())) {
-        ReportError(
-            "only one indexable field is currently supported per class");
-      }
-      seen_indexed_field = true;
-      array_length = *field_expression.index;
-    } else {
-      if (seen_indexed_field) {
-        ReportError("cannot declare non-indexable field \"",
-                    field_expression.name_and_type.name,
-                    "\" after an indexable field "
-                    "declaration");
-      }
-    }
+    base::Optional<Expression*> array_length = field_expression.index;
     const Field& field = class_type->RegisterField(
         {field_expression.name_and_type.name->pos,
          class_type,
          array_length,
          {field_expression.name_and_type.name->value, field_type},
-         class_offset,
+         class_offset.KnownValue(),
          field_expression.weak,
          field_expression.const_qualified,
          field_expression.generate_verify});
-    size_t field_size;
-    std::tie(field_size, std::ignore) = field.GetFieldSizeInformation();
-    // Our allocations don't support alignments beyond kTaggedSize.
-    size_t alignment = std::min(
-        static_cast<size_t>(TargetArchitecture::TaggedSize()), field_size);
-    if (alignment > 0 && class_offset % alignment != 0) {
-      ReportError("field ", field_expression.name_and_type.name, " at offset ",
-                  class_offset, " is not ", alignment, "-byte aligned.");
-    }
-    if (!field_expression.index) {
-      class_offset += field_size;
-      // In-object properties are not considered part of the header.
-      if (!class_type->IsShape()) {
-        header_size = class_offset;
+    ResidueClass field_size = std::get<0>(field.GetFieldSizeInformation());
+    if (field.index) {
+      if (auto literal = NumberLiteralExpression::DynamicCast(*field.index)) {
+        size_t value = static_cast<size_t>(literal->number);
+        if (value != literal->number) {
+          Error("non-integral array length").Position(field.pos);
+        }
+        field_size *= value;
+      } else {
+        field_size *= ResidueClass::Unknown();
       }
+    }
+    field.ValidateAlignment(class_offset);
+    class_offset += field_size;
+    // In-object properties are not considered part of the header.
+    if (class_offset.KnownValue() && !class_type->IsShape()) {
+      header_size = *class_offset.KnownValue();
+    }
+    if (!field.index && !class_offset.KnownValue()) {
+      Error("Indexed fields have to be at the end of the object")
+          .Position(field.pos);
     }
   }
   DCHECK_GT(header_size, 0);
   class_type->header_size_ = header_size;
-  if ((!super_class || super_class->size()) && !seen_indexed_field) {
-    DCHECK_GE(class_offset, header_size);
-    class_type->size_ = class_offset;
-  }
+  class_type->size_ = class_offset;
   class_type->GenerateAccessors();
   DeclareMethods(class_type, class_declaration->methods);
 }
