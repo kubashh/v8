@@ -1,0 +1,239 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b573925_b86377ef",
+        "filename": "src/objects/ordered-hash-table.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-09T18:15:15Z",
+      "side": 1,
+      "message": "The maximum size is 254, not 255. Maybe we could check `\u003c\u003d SmallOrderedHashTableMaxCapacity` and defining that constant to generate \u0027SmallOrderedHashTable::kMaxCapacity\u0027. (By the way, I don\u0027t see why we wouldn\u0027t allow size 255, since I only see one defined sentinel value.)\n\nOn second thought, using 256 here makes it more obvious that the conversion to uint8 is safe. I guess the clearest option would be `0 \u003c\u003d hashTableSize \u0026\u0026 hashTableSize \u003c\u003d SmallOrderedHashTableMaxCapacity \u0026\u0026 SmallOrderedHashTableMaxCapacity \u003c 256`, but I don\u0027t know at what point the assertion becomes so long that it harms readability rather than helping it.",
+      "range": {
+        "startLine": 35,
+        "startChar": 23,
+        "endLine": 35,
+        "endChar": 28
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70c775cc_c364b4a5",
+        "filename": "src/objects/ordered-hash-table.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-09T18:15:15Z",
+      "side": 1,
+      "message": "Nice! Initializing by ConstantIterator is very elegant.",
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25e300ec_48e16220",
+        "filename": "src/objects/ordered-hash-table.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-09T18:15:15Z",
+      "side": 1,
+      "message": "Could we use a defined constant for 255? I believe this should generate as \u0027SmallOrderedHashTable::kNotFound\u0027.",
+      "range": {
+        "startLine": 43,
+        "startChar": 43,
+        "endLine": 43,
+        "endChar": 46
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9660fb1e_839fa51c",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-09T18:15:15Z",
+      "side": 1,
+      "message": "Just \"any subsequent fields\". \"this field\" already has a valid offset. (Which is a more sensible behavior than what I implemented previously, thanks.)",
+      "range": {
+        "startLine": 235,
+        "startChar": 27,
+        "endLine": 235,
+        "endChar": 63
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f17fa661_9651520e",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-09T18:15:15Z",
+      "side": 1,
+      "message": "Very cool.",
+      "range": {
+        "startLine": 452,
+        "startChar": 19,
+        "endLine": 452,
+        "endChar": 45
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfe33ff5_7fbb6d8f",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-09T18:15:15Z",
+      "side": 1,
+      "message": "I think this condition should be `!last.offset.has_value() || !SizeOf(last.name_and_type.type).has_value()`. Or just omit the `if` and iterate the fields every time, since we don\u0027t have structs with hundreds of fields.",
+      "range": {
+        "startLine": 358,
+        "startChar": 8,
+        "endLine": 358,
+        "endChar": 31
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3620fa03_e7b2a666",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-09T18:15:15Z",
+      "side": 1,
+      "message": "This condition should check for `!SizeOf(field.name_and_type.type).has_value()` due to your updates in type-visitor.cc: fields starting after the problematic one have no offset, but the problematic one has a valid offset and no size.",
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fea83c89_915b828e",
+        "filename": "src/torque/types.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-09T18:15:15Z",
+      "side": 1,
+      "message": "nit: after",
+      "range": {
+        "startLine": 203,
+        "startChar": 52,
+        "endLine": 203,
+        "endChar": 58
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53f83a47_a243e523",
+        "filename": "src/torque/utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-09T18:15:15Z",
+      "side": 1,
+      "message": "Is this meant to say xy?",
+      "range": {
+        "startLine": 440,
+        "startChar": 27,
+        "endLine": 440,
+        "endChar": 29
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b359bc39_bb418d60",
+        "filename": "src/torque/utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-09T18:15:15Z",
+      "side": 1,
+      "message": "Not sure I follow. If a and b are both 0, and x and y are both 2, then 2 is a common divisor of x2^b and y2^a but not of 2^(a+b). Is there another constraint I\u0027m missing?\n\nEdit: yes there is, x \u003c 2^a and y \u003c 2^b as mentioned in other comments elsewhere. Could you perhaps mention that here too?",
+      "range": {
+        "startLine": 441,
+        "startChar": 51,
+        "endLine": 441,
+        "endChar": 72
+      },
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9d4aa44_a5b4618f",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3528,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-12-09T18:15:15Z",
+      "side": 1,
+      "message": "Do you intend to keep this line?",
+      "revId": "082eaea1e5723a7445469a8f90df81c43089fc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
