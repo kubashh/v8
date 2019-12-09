@@ -1562,3 +1562,17 @@ macro ReplaceTheHoleWithUndefined(o: JSAny|TheHole): JSAny {
     }
   }
 }
+
+struct ConstantIterator<T: type> {
+  Empty(): bool {
+    return false;
+  }
+  Next(): T labels _NoMore {
+    return this.value;
+  }
+
+  value: T;
+}
+macro ConstantIterator<T: type>(value: T): ConstantIterator<T> {
+  return ConstantIterator{value};
+}

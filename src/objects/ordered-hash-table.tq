@@ -2,9 +2,104 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include 'src/objects/ordered-hash-table.h'
+
+@noVerifier
 @abstract
 extern class SmallOrderedHashTable extends HeapObject
-    generates 'TNode<HeapObject>';
-extern class SmallOrderedHashMap extends SmallOrderedHashTable;
-extern class SmallOrderedHashSet extends SmallOrderedHashTable;
-extern class SmallOrderedNameDictionary extends SmallOrderedHashTable;
+    generates 'TNode<HeapObject>' {
+}
+
+const kSmallOrderedHashSetLoadFactor:
+    constexpr int31 generates 'SmallOrderedHashSet::kLoadFactor';
+extern macro SmallOrderedHashSetMapConstant(): Map;
+const kSmallOrderedHashSetMap: Map = SmallOrderedHashSetMapConstant();
+
+@noVerifier
+extern class SmallOrderedHashSet extends SmallOrderedHashTable {
+  number_of_elements: uint8;
+  number_of_deleted_elements: uint8;
+  number_of_buckets: uint8;
+  @if(TAGGED_SIZE_8_BYTES) padding[5]: uint8;
+  @ifnot(TAGGED_SIZE_8_BYTES) padding[1]: uint8;
+  data_table[Convert<intptr>(number_of_buckets) * kSmallOrderedHashSetLoadFactor]:
+      JSAny|TheHole;
+  hash_table[number_of_buckets]: uint8;
+  chain_table[Convert<intptr>(number_of_buckets) * kSmallOrderedHashSetLoadFactor]:
+      uint8;
+}
+
+@export
+macro AllocateSmallOrderedHashSet(capacity: intptr): SmallOrderedHashSet {
+  const hashTableSize = capacity / kSmallOrderedHashSetLoadFactor;
+  assert(hashTableSize < 256);
+  return new SmallOrderedHashSet{
+    map: kSmallOrderedHashSetMap,
+    number_of_elements: 0,
+    number_of_deleted_elements: 0,
+    number_of_buckets: (Convert<uint8>(hashTableSize)),
+    padding: ...ConstantIterator<uint8>(0),
+    data_table: ...ConstantIterator(TheHole),
+    hash_table: ...ConstantIterator<uint8>(255),
+    chain_table: ...ConstantIterator<uint8>(255)
+  };
+}
+
+struct HashMapEntry {
+  key: JSAny|TheHole;
+  value: JSAny|TheHole;
+}
+
+const kSmallOrderedHashMapLoadFactor:
+    constexpr int31 generates 'SmallOrderedHashMap::kLoadFactor';
+extern macro SmallOrderedHashMapMapConstant(): Map;
+const kSmallOrderedHashMapMap: Map = SmallOrderedHashMapMapConstant();
+
+@noVerifier
+extern class SmallOrderedHashMap extends SmallOrderedHashTable {
+  number_of_elements: uint8;
+  number_of_deleted_elements: uint8;
+  number_of_buckets: uint8;
+  @if(TAGGED_SIZE_8_BYTES) padding[5]: uint8;
+  @ifnot(TAGGED_SIZE_8_BYTES) padding[1]: uint8;
+  data_table[Convert<intptr>(number_of_buckets) * kSmallOrderedHashMapLoadFactor]:
+      HashMapEntry;
+  hash_table[number_of_buckets]: uint8;
+  chain_table[Convert<intptr>(number_of_buckets) * kSmallOrderedHashMapLoadFactor]:
+      uint8;
+}
+
+@export
+macro AllocateSmallOrderedHashMap(capacity: intptr): SmallOrderedHashMap {
+  const hashTableSize = capacity / kSmallOrderedHashMapLoadFactor;
+  assert(hashTableSize < 256);
+  return new SmallOrderedHashMap{
+    map: kSmallOrderedHashMapMap,
+    number_of_elements: 0,
+    number_of_deleted_elements: 0,
+    number_of_buckets: (Convert<uint8>(hashTableSize)),
+    padding: ...ConstantIterator<uint8>(0),
+    data_table: ...ConstantIterator(HashMapEntry{key: TheHole, value: TheHole}),
+    hash_table: ...ConstantIterator<uint8>(255),
+    chain_table: ...ConstantIterator<uint8>(255)
+  };
+}
+
+struct NameDictionaryEntry {
+  key: JSAny|TheHole;
+  value: JSAny|TheHole;
+  property_details: Smi|TheHole;
+}
+
+@noVerifier
+extern class SmallOrderedNameDictionary extends SmallOrderedHashTable {
+  hash: int32;
+  number_of_elements: uint8;
+  number_of_deleted_elements: uint8;
+  number_of_buckets: uint8;
+  padding: uint8;
+  data_table[Convert<intptr>(number_of_buckets) * kSmallOrderedHashSetLoadFactor]:
+      NameDictionaryEntry;
+  hash_table[number_of_buckets]: uint8;
+  chain_table[number_of_buckets]: uint8;
+}
