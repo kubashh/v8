@@ -3507,8 +3507,7 @@ TEST(SmallOrderedHashMapAllocate) {
   {
     CodeStubAssembler m(asm_tester.state());
     TNode<Smi> capacity = m.CAST(m.Parameter(0));
-    m.Return(m.AllocateSmallOrderedHashTable<SmallOrderedHashMap>(
-        m.SmiToIntPtr(capacity)));
+    m.Return(m.AllocateSmallOrderedHashMap(m.SmiToIntPtr(capacity)));
   }
   FunctionTester ft(asm_tester.GenerateCode(), kNumParams);
 
@@ -3526,6 +3525,7 @@ TEST(SmallOrderedHashMapAllocate) {
     CHECK_EQ(0, actual->NumberOfDeletedElements());
     CHECK_EQ(capacity / SmallOrderedHashMap::kLoadFactor,
              actual->NumberOfBuckets());
+    PrintF("size: %i\n", SmallOrderedHashMap::SizeFor(capacity));
     CHECK_EQ(0, memcmp(reinterpret_cast<void*>(expected->address()),
                        reinterpret_cast<void*>(actual->address()),
                        SmallOrderedHashMap::SizeFor(capacity)));
@@ -3546,8 +3546,7 @@ TEST(SmallOrderedHashSetAllocate) {
   {
     CodeStubAssembler m(asm_tester.state());
     TNode<Smi> capacity = m.CAST(m.Parameter(0));
-    m.Return(m.AllocateSmallOrderedHashTable<SmallOrderedHashSet>(
-        m.SmiToIntPtr(capacity)));
+    m.Return(m.AllocateSmallOrderedHashSet(m.SmiToIntPtr(capacity)));
   }
   FunctionTester ft(asm_tester.GenerateCode(), kNumParams);
 
