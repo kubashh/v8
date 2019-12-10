@@ -9666,11 +9666,15 @@ TNode<IntPtrT> CodeStubAssembler::TryToIntptr(
     GotoIfNot(Float64Equal(value, RoundIntPtrToFloat64(int_value)),
               if_not_intptr);
     if (Is64()) {
+#if V8_TARGET_ARCH_64_BIT
       // TODO(jkummerow): Investigate whether we can drop support for
       // negative indices.
       GotoIfNot(IsInRange(int_value, static_cast<intptr_t>(-kMaxSafeInteger),
                           static_cast<intptr_t>(kMaxSafeIntegerUint64)),
                 if_not_intptr);
+#else
+      DCHECK(false);
+#endif
     }
     var_intptr_key = int_value;
     Goto(&done);
