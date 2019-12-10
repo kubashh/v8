@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f83af9ac_e83e9789",
+        "filename": "src/interpreter/bytecode-array-writer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-12-10T11:33:47Z",
+      "side": 1,
+      "message": "Instead of making the accessors public, could we just adapt the friendship declaration here?",
+      "range": {
+        "startLine": 122,
+        "startChar": 2,
+        "endLine": 122,
+        "endChar": 74
+      },
+      "revId": "9a235b4b1cc2c877528f2aed91c7e1d870dbefc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
