@@ -127,9 +127,9 @@ TEST_F(MemoryAllocationPermissionsTest, DoTest) {
 
 // Basic tests of allocation.
 
-class AllocationTest : public ::testing::Test {};
+class AllocationDeathTest : public ::testing::Test {};
 
-TEST(AllocationTest, AllocateAndFree) {
+TEST(AllocationDeathTest, AllocateAndFree) {
   size_t page_size = v8::internal::AllocatePageSize();
   CHECK_NE(0, page_size);
 
@@ -155,7 +155,7 @@ TEST(AllocationTest, AllocateAndFree) {
                                 kAllocationSize));
 }
 
-TEST(AllocationTest, ReserveMemory) {
+TEST(AllocationDeathTest, ReserveMemory) {
   v8::PageAllocator* page_allocator = v8::internal::GetPlatformPageAllocator();
   size_t page_size = v8::internal::AllocatePageSize();
   const size_t kAllocationSize = 1 * v8::internal::MB;
