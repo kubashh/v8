@@ -247,10 +247,10 @@ TARGET_TEST_F(InstructionSelectorTest, FinishRegion) {
 // -----------------------------------------------------------------------------
 // Phi.
 
-using InstructionSelectorPhiTest =
+using InstructionSelectorPhiDeathTest =
     InstructionSelectorTestWithParam<MachineType>;
 
-TARGET_TEST_P(InstructionSelectorPhiTest, Doubleness) {
+TARGET_TEST_P(InstructionSelectorPhiDeathTest, Doubleness) {
   const MachineType type = GetParam();
   StreamBuilder m(this, type, type, type);
   Node* param0 = m.Parameter(0);
@@ -269,7 +269,7 @@ TARGET_TEST_P(InstructionSelectorPhiTest, Doubleness) {
   EXPECT_EQ(s.IsDouble(phi), s.IsDouble(param1));
 }
 
-TARGET_TEST_P(InstructionSelectorPhiTest, Referenceness) {
+TARGET_TEST_P(InstructionSelectorPhiDeathTest, Referenceness) {
   const MachineType type = GetParam();
   StreamBuilder m(this, type, type, type);
   Node* param0 = m.Parameter(0);
@@ -289,7 +289,7 @@ TARGET_TEST_P(InstructionSelectorPhiTest, Referenceness) {
 }
 
 INSTANTIATE_TEST_SUITE_P(
-    InstructionSelectorTest, InstructionSelectorPhiTest,
+    InstructionSelectorTest, InstructionSelectorPhiDeathTest,
     ::testing::Values(MachineType::Float64(), MachineType::Int8(),
                       MachineType::Uint8(), MachineType::Int16(),
                       MachineType::Uint16(), MachineType::Int32(),
