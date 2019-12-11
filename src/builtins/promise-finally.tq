@@ -1,0 +1,87 @@
+// Copyright 2019 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include 'src/builtins/builtins-promise.h'
+#include 'src/builtins/builtins-promise-gen.h'
+
+namespace runtime {
+  extern transitioning runtime
+  Throw(implicit context: Context)(JSAny): JSAny;
+}
+
+namespace promise {
+
+  const kPromiseBuiltinsValueSlot: constexpr ContextSlot
+  generates 'PromiseBuiltins::kValueSlot';
+  const kPromiseBuiltinsOnFinallySlot: constexpr ContextSlot
+  generates 'PromiseBuiltins::kOnFinallySlot';
+  const kPromiseBuiltinsConstructorSlot: constexpr ContextSlot
+  generates 'PromiseBuiltins::kConstructorSlot';
+  const kPromiseBuiltinsPromiseValueThunkOrReasonContextLength: constexpr int31
+  generates 'PromiseBuiltins::kPromiseValueThunkOrReasonContextLength';
+  const PROMISE_THROWER_FINALLY_SHARED_FUN: constexpr NativeContextSlot
+  generates 'Context::PROMISE_THROWER_FINALLY_SHARED_FUN';
+
+  transitioning javascript builtin
+  PromiseValueThunkFinally(
+      js-implicit context: NativeContext, receiver: JSAny)(): JSAny {
+    return UnsafeCast<JSAny>(context[kPromiseBuiltinsValueSlot]);
+  }
+
+  transitioning javascript builtin
+  PromiseThrowerFinally(js-implicit context: NativeContext, receiver: JSAny)():
+      JSAny {
+    const reason = UnsafeCast<JSAny>(context[kPromiseBuiltinsValueSlot]);
+    runtime::Throw(reason);
+    unreachable;
+  }
+
+  macro CreateThrowerFunction(implicit context: Context)(
+      nativeContext: NativeContext, reason: JSAny): JSFunction {
+    const throwerContext = AllocateSyntheticFunctionContext(
+        nativeContext, kPromiseBuiltinsPromiseValueThunkOrReasonContextLength);
+    throwerContext[kPromiseBuiltinsValueSlot] = reason;
+    const map = UnsafeCast<Map>(
+        nativeContext[STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX]);
+    const throwerInfo = UnsafeCast<SharedFunctionInfo>(
+        nativeContext[PROMISE_THROWER_FINALLY_SHARED_FUN]);
+    return AllocateFunctionWithMapAndContext(map, throwerInfo, throwerContext);
+  }
+
+  extern transitioning macro PromiseBuiltinsAssembler::InvokeThen(
+      NativeContext, Object, Object): Object;
+  extern transitioning macro PromiseBuiltinsAssembler::InvokeThen(
+      NativeContext, Object, Object, Object): Object;
+
+  transitioning javascript builtin
+  PromiseCatchFinally(js-implicit context: NativeContext, receiver: JSAny)(
+      reason: JSAny): JSAny {
+    // 1. Let onFinally be F.[[OnFinally]].
+    // 2. Assert: IsCallable(onFinally) is true.
+    const onFinally =
+        UnsafeCast<Callable>(context[kPromiseBuiltinsOnFinallySlot]);
+
+    // 3. Let result be ? Call(onFinally).
+    const result = Call(context, onFinally, Undefined);
+
+    // 4. Let C be F.[[Constructor]].
+    const constructor =
+        UnsafeCast<JSFunction>(context[kPromiseBuiltinsConstructorSlot]);
+
+    // 5. Assert: IsConstructor(C) is true.
+    assert(IsConstructor(constructor));
+
+    // 6. Let promise be ? PromiseResolve(C, result).
+    const promise = PromiseResolve(constructor, result);
+
+    // 7. Let thrower be equivalent to a function that throws reason.
+    // TODO(tebbi): Why do I have to load the native context again?
+    const nativeContext = LoadNativeContext(context);
+    const thrower = CreateThrowerFunction(nativeContext, reason);
+
+    // 8. Return ? Invoke(promise, "then", « thrower »).
+    return UnsafeCast<JSAny>(InvokeThen(nativeContext, promise, thrower));
+  }
+
+}
