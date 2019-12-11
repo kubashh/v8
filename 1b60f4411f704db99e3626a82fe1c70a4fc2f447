@@ -16,6 +16,24 @@
       "revId": "1b60f4411f704db99e3626a82fe1c70a4fc2f447",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f009e14_ed022853",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-12-11T15:22:35Z",
+      "side": 1,
+      "message": "Good idea, done.",
+      "parentUuid": "cbfd2c19_763470fc",
+      "revId": "1b60f4411f704db99e3626a82fe1c70a4fc2f447",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
