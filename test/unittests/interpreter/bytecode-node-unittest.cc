@@ -11,16 +11,16 @@ namespace v8 {
 namespace internal {
 namespace interpreter {
 
-using BytecodeNodeTest = TestWithIsolateAndZone;
+using BytecodeNodeDeathTest = TestWithIsolateAndZone;
 
-TEST_F(BytecodeNodeTest, Constructor1) {
+TEST_F(BytecodeNodeDeathTest, Constructor1) {
   BytecodeNode node(Bytecode::kLdaZero);
   CHECK_EQ(node.bytecode(), Bytecode::kLdaZero);
   CHECK_EQ(node.operand_count(), 0);
   CHECK(!node.source_info().is_valid());
 }
 
-TEST_F(BytecodeNodeTest, Constructor2) {
+TEST_F(BytecodeNodeDeathTest, Constructor2) {
   uint32_t operands[] = {0x11};
   BytecodeNode node(Bytecode::kJumpIfTrue, operands[0]);
   CHECK_EQ(node.bytecode(), Bytecode::kJumpIfTrue);
@@ -29,7 +29,7 @@ TEST_F(BytecodeNodeTest, Constructor2) {
   CHECK(!node.source_info().is_valid());
 }
 
-TEST_F(BytecodeNodeTest, Constructor3) {
+TEST_F(BytecodeNodeDeathTest, Constructor3) {
   uint32_t operands[] = {0x11, 0x22};
   BytecodeNode node(Bytecode::kLdaGlobal, operands[0], operands[1]);
   CHECK_EQ(node.bytecode(), Bytecode::kLdaGlobal);
@@ -39,7 +39,7 @@ TEST_F(BytecodeNodeTest, Constructor3) {
   CHECK(!node.source_info().is_valid());
 }
 
-TEST_F(BytecodeNodeTest, Constructor4) {
+TEST_F(BytecodeNodeDeathTest, Constructor4) {
   uint32_t operands[] = {0x11, 0x22, 0x33};
   BytecodeNode node(Bytecode::kLdaNamedProperty, operands[0], operands[1],
                     operands[2]);
@@ -51,7 +51,7 @@ TEST_F(BytecodeNodeTest, Constructor4) {
   CHECK(!node.source_info().is_valid());
 }
 
-TEST_F(BytecodeNodeTest, Constructor5) {
+TEST_F(BytecodeNodeDeathTest, Constructor5) {
   uint32_t operands[] = {0x71, 0xA5, 0x5A, 0xFC};
   BytecodeNode node(Bytecode::kForInNext, operands[0], operands[1], operands[2],
                     operands[3]);
@@ -64,7 +64,7 @@ TEST_F(BytecodeNodeTest, Constructor5) {
   CHECK(!node.source_info().is_valid());
 }
 
-TEST_F(BytecodeNodeTest, Equality) {
+TEST_F(BytecodeNodeDeathTest, Equality) {
   uint32_t operands[] = {0x71, 0xA5, 0x5A, 0xFC};
   BytecodeNode node(Bytecode::kForInNext, operands[0], operands[1], operands[2],
                     operands[3]);
@@ -74,7 +74,7 @@ TEST_F(BytecodeNodeTest, Equality) {
   CHECK_EQ(node, other);
 }
 
-TEST_F(BytecodeNodeTest, EqualityWithSourceInfo) {
+TEST_F(BytecodeNodeDeathTest, EqualityWithSourceInfo) {
   uint32_t operands[] = {0x71, 0xA5, 0x5A, 0xFC};
   BytecodeSourceInfo first_source_info(3, true);
   BytecodeNode node(Bytecode::kForInNext, operands[0], operands[1], operands[2],
@@ -86,7 +86,7 @@ TEST_F(BytecodeNodeTest, EqualityWithSourceInfo) {
   CHECK_EQ(node, other);
 }
 
-TEST_F(BytecodeNodeTest, NoEqualityWithDifferentSourceInfo) {
+TEST_F(BytecodeNodeDeathTest, NoEqualityWithDifferentSourceInfo) {
   uint32_t operands[] = {0x71, 0xA5, 0x5A, 0xFC};
   BytecodeSourceInfo source_info(77, true);
   BytecodeNode node(Bytecode::kForInNext, operands[0], operands[1], operands[2],
