@@ -20,7 +20,7 @@
 namespace v8 {
 namespace internal {
 
-using OptimizingCompileDispatcherTest = TestWithNativeContext;
+using OptimizingCompileDispatcherTest = TestWithNativeContextDeathTest;
 
 namespace {
 
