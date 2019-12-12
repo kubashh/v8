@@ -3724,6 +3724,65 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ mov(esp, tmp);
       break;
     }
+    case kIA32S8x16LoadSplat: {
+      __ Pinsrb(i.OutputSimd128Register(), i.MemoryOperand(), 0);
+      __ Pxor(kScratchDoubleReg, kScratchDoubleReg);
+      __ Pshufb(i.OutputSimd128Register(), kScratchDoubleReg);
+      break;
+    }
+    case kIA32S16x8LoadSplat: {
+      __ Pinsrw(i.OutputSimd128Register(), i.MemoryOperand(), 0);
+      __ Pshuflw(i.OutputSimd128Register(), i.OutputSimd128Register(),
+                 static_cast<uint8_t>(0));
+      __ Punpcklqdq(i.OutputSimd128Register(), i.OutputSimd128Register());
+      break;
+    }
+    case kIA32S32x4LoadSplat: {
+      if (CpuFeatures::IsSupported(AVX)) {
+        CpuFeatureScope avx_scope(tasm(), AVX);
+        __ vbroadcastss(i.OutputSimd128Register(), i.MemoryOperand());
+      } else {
+        __ Movss(i.OutputSimd128Register(), i.MemoryOperand());
+        __ Shufps(i.OutputSimd128Register(), i.OutputSimd128Register(),
+                  static_cast<byte>(0));
+      }
+      break;
+    }
+    case kIA32S64x2LoadSplat: {
+      CpuFeatureScope sse_scope(tasm(), SSE3);
+      __ Movddup(i.OutputSimd128Register(), i.MemoryOperand());
+      break;
+    }
+    case kIA32I16x8Load8x8S: {
+      CpuFeatureScope sse_scope(tasm(), SSE4_1);
+      __ pmovsxbw(i.OutputSimd128Register(), i.MemoryOperand());
+      break;
+    }
+    case kIA32I16x8Load8x8U: {
+      CpuFeatureScope sse_scope(tasm(), SSE4_1);
+      __ pmovzxbw(i.OutputSimd128Register(), i.MemoryOperand());
+      break;
+    }
+    case kIA32I32x4Load16x4S: {
+      CpuFeatureScope sse_scope(tasm(), SSE4_1);
+      __ pmovsxwd(i.OutputSimd128Register(), i.MemoryOperand());
+      break;
+    }
+    case kIA32I32x4Load16x4U: {
+      CpuFeatureScope sse_scope(tasm(), SSE4_1);
+      __ pmovzxwd(i.OutputSimd128Register(), i.MemoryOperand());
+      break;
+    }
+    case kIA32I64x2Load32x2S: {
+      CpuFeatureScope sse_scope(tasm(), SSE4_1);
+      __ pmovsxdq(i.OutputSimd128Register(), i.MemoryOperand());
+      break;
+    }
+    case kIA32I64x2Load32x2U: {
+      CpuFeatureScope sse_scope(tasm(), SSE4_1);
+      __ pmovzxdq(i.OutputSimd128Register(), i.MemoryOperand());
+      break;
+    }
     case kIA32S32x4Swizzle: {
       DCHECK_EQ(2, instr->InputCount());
       __ Pshufd(i.OutputSimd128Register(), i.InputOperand(0), i.InputInt8(1));

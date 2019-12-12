@@ -1402,6 +1402,16 @@ void TurboAssembler::Psrlq(XMMRegister dst, uint8_t shift) {
   }
 }
 
+void TurboAssembler::Shufps(XMMRegister dst, XMMRegister src, uint8_t imm8) {
+  if (CpuFeatures::IsSupported(AVX)) {
+    CpuFeatureScope scope(this, AVX);
+    vshufps(dst, dst, src, imm8);
+  } else {
+    shufps(dst, src, imm8);
+  }
+  return;
+}
+
 void TurboAssembler::Psignb(XMMRegister dst, Operand src) {
   if (CpuFeatures::IsSupported(AVX)) {
     CpuFeatureScope scope(this, AVX);
@@ -1567,6 +1577,56 @@ void TurboAssembler::Pinsrd(XMMRegister dst, Operand src, uint8_t imm8) {
   // Load back the full value into {dst}.
   movsd(dst, Operand(esp, 0));
   add(esp, Immediate(kDoubleSize));
+}
+
+void TurboAssembler::Pinsrw(XMMRegister dst, Register src, int8_t imm8) {
+  if (CpuFeatures::IsSupported(AVX)) {
+    CpuFeatureScope scope(this, AVX);
+    vpinsrw(dst, dst, src, imm8);
+    return;
+  } else {
+    DCHECK(CpuFeatures::IsSupported(SSE4_1));
+    CpuFeatureScope sse_scope(this, SSE4_1);
+    pinsrw(dst, src, imm8);
+    return;
+  }
+}
+
+void TurboAssembler::Pinsrw(XMMRegister dst, Operand src, int8_t imm8) {
+  if (CpuFeatures::IsSupported(AVX)) {
+    CpuFeatureScope scope(this, AVX);
+    vpinsrw(dst, dst, src, imm8);
+    return;
+  } else {
+    CpuFeatureScope sse_scope(this, SSE4_1);
+    pinsrw(dst, src, imm8);
+    return;
+  }
+}
+
+void TurboAssembler::Pinsrb(XMMRegister dst, Register src, int8_t imm8) {
+  if (CpuFeatures::IsSupported(AVX)) {
+    CpuFeatureScope scope(this, AVX);
+    vpinsrb(dst, dst, src, imm8);
+    return;
+  } else {
+    DCHECK(CpuFeatures::IsSupported(SSE4_1));
+    CpuFeatureScope sse_scope(this, SSE4_1);
+    pinsrb(dst, src, imm8);
+    return;
+  }
+}
+
+void TurboAssembler::Pinsrb(XMMRegister dst, Operand src, int8_t imm8) {
+  if (CpuFeatures::IsSupported(AVX)) {
+    CpuFeatureScope scope(this, AVX);
+    vpinsrb(dst, dst, src, imm8);
+    return;
+  } else {
+    CpuFeatureScope sse_scope(this, SSE4_1);
+    pinsrb(dst, src, imm8);
+    return;
+  }
 }
 
 void TurboAssembler::Lzcnt(Register dst, Operand src) {

@@ -2632,7 +2632,9 @@ void InstructionSelector::VisitF64x2UConvertI64x2(Node* node) {
 }
 #if !V8_TARGET_ARCH_ARM64
 #if !V8_TARGET_ARCH_ARM
+#if !V8_TARGET_ARCH_IA32
 void InstructionSelector::VisitLoadTransform(Node* node) { UNIMPLEMENTED(); }
+#endif  // !V8_TARGET_ARCH_IA32
 #endif  // !V8_TARGET_ARCH_ARM
 #if !V8_TARGET_ARCH_IA32
 void InstructionSelector::VisitI64x2Mul(Node* node) { UNIMPLEMENTED(); }

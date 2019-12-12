@@ -263,6 +263,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   AVX_OP2_WITH_TYPE(Movaps, movaps, XMMRegister, XMMRegister)
   AVX_OP2_WITH_TYPE(Movapd, movapd, XMMRegister, XMMRegister)
   AVX_OP2_WITH_TYPE(Movapd, movapd, XMMRegister, const Operand&)
+  AVX_OP2_WITH_TYPE(Movss, movss, XMMRegister, Operand)
 
 #undef AVX_OP2_WITH_TYPE
 
@@ -293,6 +294,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   AVX_OP3_XO(Psubq, psubq)
   AVX_OP3_XO(Punpcklbw, punpcklbw)
   AVX_OP3_XO(Punpckhbw, punpckhbw)
+  AVX_OP3_XO(Punpcklqdq, punpcklqdq)
   AVX_OP3_XO(Pxor, pxor)
   AVX_OP3_XO(Andps, andps)
   AVX_OP3_XO(Andnps, andnps)
@@ -343,6 +345,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   AVX_PACKED_OP3_WITH_TYPE(Psllq, psllq, XMMRegister, uint8_t)
 #undef AVX_PACKED_OP3_WITH_TYPE
 
+  void Shufps(XMMRegister dst, XMMRegister src, uint8_t imm8);
+
 // Non-SSE2 instructions.
 #define AVX_OP2_WITH_TYPE_SCOPE(macro_name, name, dst_type, src_type, \
                                 sse_scope)                            \
@@ -359,6 +363,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
     }                                                                 \
     UNREACHABLE();                                                    \
   }
+  AVX_OP2_WITH_TYPE_SCOPE(Movddup, movddup, XMMRegister, Operand, SSE3)
 #define AVX_OP2_XO_SSE4(macro_name, name)                                     \
   AVX_OP2_WITH_TYPE_SCOPE(macro_name, name, XMMRegister, XMMRegister, SSE4_1) \
   AVX_OP2_WITH_TYPE_SCOPE(macro_name, name, XMMRegister, Operand, SSE4_1)
@@ -398,6 +403,10 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
     Pinsrd(dst, Operand(src), imm8);
   }
   void Pinsrd(XMMRegister dst, Operand src, uint8_t imm8);
+  void Pinsrw(XMMRegister dst, Register src, int8_t imm8);
+  void Pinsrw(XMMRegister dst, Operand src, int8_t imm8);
+  void Pinsrb(XMMRegister dst, Register src, int8_t imm8);
+  void Pinsrb(XMMRegister dst, Operand src, int8_t imm8);
 
   // Expression support
   // cvtsi2sd instruction only writes to the low 64-bit of dst register, which

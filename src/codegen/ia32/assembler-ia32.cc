@@ -2421,6 +2421,15 @@ void Assembler::movd(Operand dst, XMMRegister src) {
   emit_sse_operand(src, dst);
 }
 
+void Assembler::movddup(XMMRegister dst, Operand src) {
+  DCHECK(IsEnabled(SSE3));
+  EnsureSpace ensure_space(this);
+  EMIT(0xF2);
+  EMIT(0x0F);
+  EMIT(0x12);
+  emit_sse_operand(dst, src);
+}
+
 void Assembler::extractps(Register dst, XMMRegister src, byte imm8) {
   DCHECK(IsEnabled(SSE4_1));
   DCHECK(is_uint8(imm8));
@@ -2711,6 +2720,22 @@ void Assembler::pd(byte opcode, XMMRegister dst, Operand src) {
 }
 
 // AVX instructions
+void Assembler::vmovddup(XMMRegister dst, Operand src) {
+  DCHECK(IsEnabled(AVX));
+  EnsureSpace ensure_space(this);
+  emit_vex_prefix(xmm0, kL128, kF2, k0F, kWIG);
+  EMIT(0x12);
+  emit_sse_operand(dst, src);
+}
+
+void Assembler::vbroadcastss(XMMRegister dst, Operand src) {
+  DCHECK(IsEnabled(AVX));
+  EnsureSpace ensure_space(this);
+  emit_vex_prefix(xmm0, kL128, k66, k0F38, kW0);
+  EMIT(0x18);
+  emit_sse_operand(dst, src);
+}
+
 void Assembler::vfmasd(byte op, XMMRegister dst, XMMRegister src1,
                        Operand src2) {
   DCHECK(IsEnabled(FMA3));
