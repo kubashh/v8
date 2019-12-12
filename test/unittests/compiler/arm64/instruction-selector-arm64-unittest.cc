@@ -2510,10 +2510,10 @@ INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
                          InstructionSelectorConversionTest,
                          ::testing::ValuesIn(kConversionInstructions));
 
-using InstructionSelectorElidedChangeUint32ToUint64Test =
+using InstructionSelectorElidedChangeUint32ToUint64DeathTest =
     InstructionSelectorTestWithParam<MachInst2>;
 
-TEST_P(InstructionSelectorElidedChangeUint32ToUint64Test, Parameter) {
+TEST_P(InstructionSelectorElidedChangeUint32ToUint64DeathTest, Parameter) {
   const MachInst2 binop = GetParam();
   StreamBuilder m(this, MachineType::Uint64(), binop.machine_type,
                   binop.machine_type);
@@ -2528,7 +2528,7 @@ TEST_P(InstructionSelectorElidedChangeUint32ToUint64Test, Parameter) {
 }
 
 INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
-                         InstructionSelectorElidedChangeUint32ToUint64Test,
+                         InstructionSelectorElidedChangeUint32ToUint64DeathTest,
                          ::testing::ValuesIn(kCanElideChangeUint32ToUint64));
 
 TEST_F(InstructionSelectorTest, ChangeUint32ToUint64AfterLoad) {
@@ -2748,10 +2748,10 @@ static const MemoryAccess kMemoryAccesses[] = {
      {-256, -255, -3, -2, -1, 0, 1, 2, 3, 255, 256, 264, 4096, 4104, 8192, 8200,
       16384, 16392, 32752, 32760}}};
 
-using InstructionSelectorMemoryAccessTest =
+using InstructionSelectorMemoryAccessDeathTest =
     InstructionSelectorTestWithParam<MemoryAccess>;
 
-TEST_P(InstructionSelectorMemoryAccessTest, LoadWithParameters) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, LoadWithParameters) {
   const MemoryAccess memacc = GetParam();
   StreamBuilder m(this, memacc.type, MachineType::Pointer(),
                   MachineType::Int32());
@@ -2764,8 +2764,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, LoadWithParameters) {
   EXPECT_EQ(1U, s[0]->OutputCount());
 }
 
-
-TEST_P(InstructionSelectorMemoryAccessTest, LoadWithImmediateIndex) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, LoadWithImmediateIndex) {
   const MemoryAccess memacc = GetParam();
   TRACED_FOREACH(int32_t, index, memacc.immediates) {
     StreamBuilder m(this, memacc.type, MachineType::Pointer());
@@ -2781,8 +2780,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, LoadWithImmediateIndex) {
   }
 }
 
-
-TEST_P(InstructionSelectorMemoryAccessTest, StoreWithParameters) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, StoreWithParameters) {
   const MemoryAccess memacc = GetParam();
   StreamBuilder m(this, MachineType::Int32(), MachineType::Pointer(),
                   MachineType::Int32(), memacc.type);
@@ -2797,8 +2795,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, StoreWithParameters) {
   EXPECT_EQ(0U, s[0]->OutputCount());
 }
 
-
-TEST_P(InstructionSelectorMemoryAccessTest, StoreWithImmediateIndex) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, StoreWithImmediateIndex) {
   const MemoryAccess memacc = GetParam();
   TRACED_FOREACH(int32_t, index, memacc.immediates) {
     StreamBuilder m(this, MachineType::Int32(), MachineType::Pointer(),
@@ -2817,7 +2814,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, StoreWithImmediateIndex) {
   }
 }
 
-TEST_P(InstructionSelectorMemoryAccessTest, StoreZero) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, StoreZero) {
   const MemoryAccess memacc = GetParam();
   TRACED_FOREACH(int32_t, index, memacc.immediates) {
     StreamBuilder m(this, MachineType::Int32(), MachineType::Pointer());
@@ -2837,7 +2834,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, StoreZero) {
   }
 }
 
-TEST_P(InstructionSelectorMemoryAccessTest, LoadWithShiftedIndex) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, LoadWithShiftedIndex) {
   const MemoryAccess memacc = GetParam();
   TRACED_FORRANGE(int, immediate_shift, 0, 4) {
     // 32 bit shift
@@ -2885,7 +2882,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, LoadWithShiftedIndex) {
   }
 }
 
-TEST_P(InstructionSelectorMemoryAccessTest, StoreWithShiftedIndex) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, StoreWithShiftedIndex) {
   const MemoryAccess memacc = GetParam();
   TRACED_FORRANGE(int, immediate_shift, 0, 4) {
     // 32 bit shift
@@ -2938,7 +2935,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, StoreWithShiftedIndex) {
 }
 
 INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
-                         InstructionSelectorMemoryAccessTest,
+                         InstructionSelectorMemoryAccessDeathTest,
                          ::testing::ValuesIn(kMemoryAccesses));
 
 static const WriteBarrierKind kWriteBarrierKinds[] = {

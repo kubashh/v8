@@ -25,21 +25,21 @@
 namespace v8 {
 namespace internal {
 
-class BackgroundCompileTaskTest : public TestWithNativeContext {
+class BackgroundCompileTaskDeathTest : public TestWithNativeContextDeathTest {
  public:
-  BackgroundCompileTaskTest() : allocator_(isolate()->allocator()) {}
-  ~BackgroundCompileTaskTest() override = default;
+  BackgroundCompileTaskDeathTest() : allocator_(isolate()->allocator()) {}
+  ~BackgroundCompileTaskDeathTest() override = default;
 
   AccountingAllocator* allocator() { return allocator_; }
 
   static void SetUpTestCase() {
     CHECK_NULL(save_flags_);
     save_flags_ = new SaveFlags();
-    TestWithNativeContext::SetUpTestCase();
+    TestWithNativeContextDeathTest::SetUpTestCase();
   }
 
   static void TearDownTestCase() {
-    TestWithNativeContext::TearDownTestCase();
+    TestWithNativeContextDeathTest::TearDownTestCase();
     CHECK_NOT_NULL(save_flags_);
     delete save_flags_;
     save_flags_ = nullptr;
@@ -84,12 +84,12 @@ class BackgroundCompileTaskTest : public TestWithNativeContext {
   AccountingAllocator* allocator_;
   static SaveFlags* save_flags_;
 
-  DISALLOW_COPY_AND_ASSIGN(BackgroundCompileTaskTest);
+  DISALLOW_COPY_AND_ASSIGN(BackgroundCompileTaskDeathTest);
 };
 
-SaveFlags* BackgroundCompileTaskTest::save_flags_ = nullptr;
+SaveFlags* BackgroundCompileTaskDeathTest::save_flags_ = nullptr;
 
-TEST_F(BackgroundCompileTaskTest, Construct) {
+TEST_F(BackgroundCompileTaskDeathTest, Construct) {
   Handle<SharedFunctionInfo> shared =
       test::CreateSharedFunctionInfo(isolate(), nullptr);
   ASSERT_FALSE(shared->is_compiled());
@@ -97,7 +97,7 @@ TEST_F(BackgroundCompileTaskTest, Construct) {
       NewBackgroundCompileTask(isolate(), shared));
 }
 
-TEST_F(BackgroundCompileTaskTest, SyntaxError) {
+TEST_F(BackgroundCompileTaskDeathTest, SyntaxError) {
   test::ScriptResource* script = new test::ScriptResource("^^^", strlen("^^^"));
   Handle<SharedFunctionInfo> shared =
       test::CreateSharedFunctionInfo(isolate(), script);
@@ -112,7 +112,7 @@ TEST_F(BackgroundCompileTaskTest, SyntaxError) {
   isolate()->clear_pending_exception();
 }
 
-TEST_F(BackgroundCompileTaskTest, CompileAndRun) {
+TEST_F(BackgroundCompileTaskDeathTest, CompileAndRun) {
   const char raw_script[] =
       "function g() {\n"
       "  f = function(a) {\n"
@@ -139,7 +139,7 @@ TEST_F(BackgroundCompileTaskTest, CompileAndRun) {
   ASSERT_TRUE(value == Smi::FromInt(160));
 }
 
-TEST_F(BackgroundCompileTaskTest, CompileFailure) {
+TEST_F(BackgroundCompileTaskDeathTest, CompileFailure) {
   std::string raw_script("() { var a = ");
   for (int i = 0; i < 10000; i++) {
     // TODO(leszeks): Figure out a more "unit-test-y" way of forcing an analysis
@@ -181,7 +181,7 @@ class CompileTask : public Task {
   DISALLOW_COPY_AND_ASSIGN(CompileTask);
 };
 
-TEST_F(BackgroundCompileTaskTest, CompileOnBackgroundThread) {
+TEST_F(BackgroundCompileTaskDeathTest, CompileOnBackgroundThread) {
   const char* raw_script =
       "(a, b) {\n"
       "  var c = a + b;\n"
@@ -206,7 +206,7 @@ TEST_F(BackgroundCompileTaskTest, CompileOnBackgroundThread) {
   ASSERT_TRUE(shared->is_compiled());
 }
 
-TEST_F(BackgroundCompileTaskTest, EagerInnerFunctions) {
+TEST_F(BackgroundCompileTaskDeathTest, EagerInnerFunctions) {
   const char raw_script[] =
       "function g() {\n"
       "  f = function() {\n"
@@ -235,7 +235,7 @@ TEST_F(BackgroundCompileTaskTest, EagerInnerFunctions) {
   ASSERT_TRUE(e->shared().is_compiled());
 }
 
-TEST_F(BackgroundCompileTaskTest, LazyInnerFunctions) {
+TEST_F(BackgroundCompileTaskDeathTest, LazyInnerFunctions) {
   const char raw_script[] =
       "function g() {\n"
       "  f = function() {\n"

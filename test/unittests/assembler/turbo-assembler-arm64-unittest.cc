@@ -28,9 +28,9 @@ namespace internal {
 // a buffer and executing them.  These tests do not initialize the
 // V8 library, create a context, or use any V8 objects.
 
-class TurboAssemblerTest : public TestWithIsolate {};
+class TurboAssemblerDeathTest : public TestWithIsolate {};
 
-TEST_F(TurboAssemblerTest, TestHardAbort) {
+TEST_F(TurboAssemblerDeathTest, TestHardAbort) {
   auto buffer = AllocateAssemblerBuffer();
   TurboAssembler tasm(nullptr, AssemblerOptions{}, CodeObjectRequired::kNo,
                       buffer->CreateView());
@@ -47,7 +47,7 @@ TEST_F(TurboAssemblerTest, TestHardAbort) {
   ASSERT_DEATH_IF_SUPPORTED({ f.Call(); }, ERROR_MESSAGE("abort: no reason"));
 }
 
-TEST_F(TurboAssemblerTest, TestCheck) {
+TEST_F(TurboAssemblerDeathTest, TestCheck) {
   auto buffer = AllocateAssemblerBuffer();
   TurboAssembler tasm(nullptr, AssemblerOptions{}, CodeObjectRequired::kNo,
                       buffer->CreateView());
@@ -100,13 +100,13 @@ const MoveObjectAndSlotTestCase kMoveObjectAndSlotTestCases[] = {
 const int kOffsets[] = {0, 42, kMaxRegularHeapObjectSize, 0x101001};
 
 template <typename T>
-class TurboAssemblerTestWithParam : public TurboAssemblerTest,
-                                    public ::testing::WithParamInterface<T> {};
+class TurboAssemblerWithParam : public TurboAssemblerDeathTest,
+                                public ::testing::WithParamInterface<T> {};
 
-using TurboAssemblerTestMoveObjectAndSlot =
-    TurboAssemblerTestWithParam<MoveObjectAndSlotTestCase>;
+using TurboAssemblerMoveObjectAndSlot =
+    TurboAssemblerWithParam<MoveObjectAndSlotTestCase>;
 
-TEST_P(TurboAssemblerTestMoveObjectAndSlot, MoveObjectAndSlot) {
+TEST_P(TurboAssemblerMoveObjectAndSlot, MoveObjectAndSlot) {
   const MoveObjectAndSlotTestCase test_case = GetParam();
   TRACED_FOREACH(int32_t, offset, kOffsets) {
     auto buffer = AllocateAssemblerBuffer();
@@ -178,8 +178,8 @@ TEST_P(TurboAssemblerTestMoveObjectAndSlot, MoveObjectAndSlot) {
   }
 }
 
-INSTANTIATE_TEST_SUITE_P(TurboAssemblerTest,
-                         TurboAssemblerTestMoveObjectAndSlot,
+INSTANTIATE_TEST_SUITE_P(TurboAssemblerDeathTest,
+                         TurboAssemblerMoveObjectAndSlot,
                          ::testing::ValuesIn(kMoveObjectAndSlotTestCases));
 
 #undef __

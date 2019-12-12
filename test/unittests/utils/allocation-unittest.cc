@@ -29,7 +29,7 @@ namespace {
 // We don't test the execution permission because to do so we'd have to
 // dynamically generate code and test if we can execute it.
 
-class MemoryAllocationPermissionsTest : public ::testing::Test {
+class MemoryAllocationPermissionsDeathTest : public ::testing::Test {
   static void SignalHandler(int signal, siginfo_t* info, void*) {
     siglongjmp(continuation_, 1);
   }
@@ -106,7 +106,7 @@ class MemoryAllocationPermissionsTest : public ::testing::Test {
   }
 };
 
-sigjmp_buf MemoryAllocationPermissionsTest::continuation_;
+sigjmp_buf MemoryAllocationPermissionsDeathTest::continuation_;
 
 }  // namespace
 
@@ -114,7 +114,7 @@ sigjmp_buf MemoryAllocationPermissionsTest::continuation_;
 // ran on Fuchsia. This issue should be solved later on
 // Ticket: https://crbug.com/1028617
 #if !defined(V8_TARGET_OS_FUCHSIA)
-TEST_F(MemoryAllocationPermissionsTest, DoTest) {
+TEST_F(MemoryAllocationPermissionsDeathTest, DoTest) {
   TestPermissions(PageAllocator::Permission::kNoAccess, false, false);
   TestPermissions(PageAllocator::Permission::kRead, true, false);
   TestPermissions(PageAllocator::Permission::kReadWrite, true, true);
@@ -127,9 +127,9 @@ TEST_F(MemoryAllocationPermissionsTest, DoTest) {
 
 // Basic tests of allocation.
 
-class AllocationTest : public ::testing::Test {};
+class AllocationDeathTest : public ::testing::Test {};
 
-TEST(AllocationTest, AllocateAndFree) {
+TEST(AllocationDeathTest, AllocateAndFree) {
   size_t page_size = v8::internal::AllocatePageSize();
   CHECK_NE(0, page_size);
 
@@ -155,7 +155,7 @@ TEST(AllocationTest, AllocateAndFree) {
                                 kAllocationSize));
 }
 
-TEST(AllocationTest, ReserveMemory) {
+TEST(AllocationDeathTest, ReserveMemory) {
   v8::PageAllocator* page_allocator = v8::internal::GetPlatformPageAllocator();
   size_t page_size = v8::internal::AllocatePageSize();
   const size_t kAllocationSize = 1 * v8::internal::MB;
