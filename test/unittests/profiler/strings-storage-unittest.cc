@@ -12,13 +12,13 @@
 namespace v8 {
 namespace internal {
 
-using StringsStorageWithIsolate = TestWithIsolate;
+using StringsStorageWithIsolateDeathTest = TestWithIsolate;
 
 bool StringEq(const char* left, const char* right) {
   return strcmp(left, right) == 0;
 }
 
-TEST_F(StringsStorageWithIsolate, GetNameFromString) {
+TEST_F(StringsStorageWithIsolateDeathTest, GetNameFromString) {
   StringsStorage storage;
 
   // One char strings are canonical on the v8 heap so use a 2 char string here.
@@ -39,7 +39,7 @@ TEST_F(StringsStorageWithIsolate, GetNameFromString) {
   CHECK_EQ(stored_str_twice, stored_str_thrice);
 }
 
-TEST_F(StringsStorageWithIsolate, GetNameFromSymbol) {
+TEST_F(StringsStorageWithIsolateDeathTest, GetNameFromSymbol) {
   StringsStorage storage;
 
   Handle<Symbol> symbol = isolate()->factory()->NewSymbol();
@@ -52,7 +52,7 @@ TEST_F(StringsStorageWithIsolate, GetNameFromSymbol) {
   CHECK_EQ(stored_symbol, stored_symbol2);
 }
 
-TEST_F(StringsStorageWithIsolate, GetConsName) {
+TEST_F(StringsStorageWithIsolateDeathTest, GetConsName) {
   StringsStorage storage;
 
   Handle<String> str = isolate()->factory()->NewStringFromAsciiChecked("xy");
@@ -64,7 +64,7 @@ TEST_F(StringsStorageWithIsolate, GetConsName) {
   CHECK(StringEq("get xy", get_str));
 }
 
-TEST_F(StringsStorageWithIsolate, GetNameFromInt) {
+TEST_F(StringsStorageWithIsolateDeathTest, GetNameFromInt) {
   StringsStorage storage;
 
   const char* stored_str = storage.GetName(0);
@@ -80,7 +80,7 @@ TEST_F(StringsStorageWithIsolate, GetNameFromInt) {
   CHECK(StringEq(str_negative_int, stored_str));
 }
 
-TEST_F(StringsStorageWithIsolate, Format) {
+TEST_F(StringsStorageWithIsolateDeathTest, Format) {
   StringsStorage storage;
 
   const char* xy = "xy";
@@ -98,7 +98,7 @@ TEST_F(StringsStorageWithIsolate, Format) {
   CHECK_EQ(formatted_str, formatted_str2);
 }
 
-TEST_F(StringsStorageWithIsolate, FormatAndGetShareStorage) {
+TEST_F(StringsStorageWithIsolateDeathTest, FormatAndGetShareStorage) {
   StringsStorage storage;
 
   Handle<String> str = isolate()->factory()->NewStringFromAsciiChecked("xy");

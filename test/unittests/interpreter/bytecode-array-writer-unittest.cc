@@ -27,14 +27,14 @@ namespace bytecode_array_writer_unittest {
 #define B(Name) static_cast<uint8_t>(Bytecode::k##Name)
 #define R(i) static_cast<uint32_t>(Register(i).ToOperand())
 
-class BytecodeArrayWriterUnittest : public TestWithIsolateAndZone {
+class BytecodeArrayWriterUnittestDeathTest : public TestWithIsolateAndZone {
  public:
-  BytecodeArrayWriterUnittest()
+  BytecodeArrayWriterUnittestDeathTest()
       : constant_array_builder_(zone()),
         bytecode_array_writer_(
             zone(), &constant_array_builder_,
             SourcePositionTableBuilder::RECORD_SOURCE_POSITIONS) {}
-  ~BytecodeArrayWriterUnittest() override = default;
+  ~BytecodeArrayWriterUnittestDeathTest() override = default;
 
   void Write(Bytecode bytecode, BytecodeSourceInfo info = BytecodeSourceInfo());
   void Write(Bytecode bytecode, uint32_t operand0,
@@ -63,56 +63,58 @@ class BytecodeArrayWriterUnittest : public TestWithIsolateAndZone {
   BytecodeArrayWriter bytecode_array_writer_;
 };
 
-void BytecodeArrayWriterUnittest::Write(Bytecode bytecode,
-                                        BytecodeSourceInfo info) {
+void BytecodeArrayWriterUnittestDeathTest::Write(Bytecode bytecode,
+                                                 BytecodeSourceInfo info) {
   BytecodeNode node(bytecode, info);
   writer()->Write(&node);
 }
 
-void BytecodeArrayWriterUnittest::Write(Bytecode bytecode, uint32_t operand0,
-                                        BytecodeSourceInfo info) {
+void BytecodeArrayWriterUnittestDeathTest::Write(Bytecode bytecode,
+                                                 uint32_t operand0,
+                                                 BytecodeSourceInfo info) {
   BytecodeNode node(bytecode, operand0, info);
   writer()->Write(&node);
 }
 
-void BytecodeArrayWriterUnittest::Write(Bytecode bytecode, uint32_t operand0,
-                                        uint32_t operand1,
-                                        BytecodeSourceInfo info) {
+void BytecodeArrayWriterUnittestDeathTest::Write(Bytecode bytecode,
+                                                 uint32_t operand0,
+                                                 uint32_t operand1,
+                                                 BytecodeSourceInfo info) {
   BytecodeNode node(bytecode, operand0, operand1, info);
   writer()->Write(&node);
 }
 
-void BytecodeArrayWriterUnittest::Write(Bytecode bytecode, uint32_t operand0,
-                                        uint32_t operand1, uint32_t operand2,
-                                        BytecodeSourceInfo info) {
+void BytecodeArrayWriterUnittestDeathTest::Write(Bytecode bytecode,
+                                                 uint32_t operand0,
+                                                 uint32_t operand1,
+                                                 uint32_t operand2,
+                                                 BytecodeSourceInfo info) {
   BytecodeNode node(bytecode, operand0, operand1, operand2, info);
   writer()->Write(&node);
 }
 
-void BytecodeArrayWriterUnittest::Write(Bytecode bytecode, uint32_t operand0,
-                                        uint32_t operand1, uint32_t operand2,
-                                        uint32_t operand3,
-                                        BytecodeSourceInfo info) {
+void BytecodeArrayWriterUnittestDeathTest::Write(
+    Bytecode bytecode, uint32_t operand0, uint32_t operand1, uint32_t operand2,
+    uint32_t operand3, BytecodeSourceInfo info) {
   BytecodeNode node(bytecode, operand0, operand1, operand2, operand3, info);
   writer()->Write(&node);
 }
 
-void BytecodeArrayWriterUnittest::WriteJump(Bytecode bytecode,
-                                            BytecodeLabel* label,
-                                            BytecodeSourceInfo info) {
+void BytecodeArrayWriterUnittestDeathTest::WriteJump(Bytecode bytecode,
+                                                     BytecodeLabel* label,
+                                                     BytecodeSourceInfo info) {
   BytecodeNode node(bytecode, 0, info);
   writer()->WriteJump(&node, label);
 }
 
-void BytecodeArrayWriterUnittest::WriteJumpLoop(Bytecode bytecode,
-                                                BytecodeLoopHeader* loop_header,
-                                                int depth,
-                                                BytecodeSourceInfo info) {
+void BytecodeArrayWriterUnittestDeathTest::WriteJumpLoop(
+    Bytecode bytecode, BytecodeLoopHeader* loop_header, int depth,
+    BytecodeSourceInfo info) {
   BytecodeNode node(bytecode, 0, depth, info);
   writer()->WriteJumpLoop(&node, loop_header);
 }
 
-TEST_F(BytecodeArrayWriterUnittest, SimpleExample) {
+TEST_F(BytecodeArrayWriterUnittestDeathTest, SimpleExample) {
   CHECK_EQ(bytecodes()->size(), 0u);
 
   Write(Bytecode::kStackCheck, {10, false});
@@ -165,7 +167,7 @@ TEST_F(BytecodeArrayWriterUnittest, SimpleExample) {
   CHECK(source_iterator.done());
 }
 
-TEST_F(BytecodeArrayWriterUnittest, ComplexExample) {
+TEST_F(BytecodeArrayWriterUnittestDeathTest, ComplexExample) {
   static const uint8_t expected_bytes[] = {
       // clang-format off
       /*  0 30 E> */ B(StackCheck),
@@ -253,7 +255,7 @@ TEST_F(BytecodeArrayWriterUnittest, ComplexExample) {
   CHECK(source_iterator.done());
 }
 
-TEST_F(BytecodeArrayWriterUnittest, ElideNoneffectfulBytecodes) {
+TEST_F(BytecodeArrayWriterUnittestDeathTest, ElideNoneffectfulBytecodes) {
   if (!i::FLAG_ignition_elide_noneffectful_bytecodes) return;
 
   static const uint8_t expected_bytes[] = {
@@ -307,7 +309,7 @@ TEST_F(BytecodeArrayWriterUnittest, ElideNoneffectfulBytecodes) {
   CHECK(source_iterator.done());
 }
 
-TEST_F(BytecodeArrayWriterUnittest, DeadcodeElimination) {
+TEST_F(BytecodeArrayWriterUnittestDeathTest, DeadcodeElimination) {
   static const uint8_t expected_bytes[] = {
       // clang-format off
       /*  0  10 E> */ B(StackCheck),

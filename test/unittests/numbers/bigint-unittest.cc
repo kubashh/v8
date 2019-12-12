@@ -16,7 +16,7 @@
 namespace v8 {
 namespace internal {
 
-using BigIntWithIsolate = TestWithIsolate;
+using BigIntWithIsolateDeathTest = TestWithIsolate;
 
 void Compare(Handle<BigInt> x, double value, ComparisonResult expected) {
   CHECK_EQ(expected, BigInt::CompareToDouble(x, value));
@@ -27,7 +27,7 @@ Handle<BigInt> NewFromInt(Isolate* isolate, int value) {
   return BigInt::FromNumber(isolate, smi_value).ToHandleChecked();
 }
 
-TEST_F(BigIntWithIsolate, CompareToDouble) {
+TEST_F(BigIntWithIsolateDeathTest, CompareToDouble) {
   Handle<BigInt> zero = NewFromInt(isolate(), 0);
   Handle<BigInt> one = NewFromInt(isolate(), 1);
   Handle<BigInt> minus_one = NewFromInt(isolate(), -1);
