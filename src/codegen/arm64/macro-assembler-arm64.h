@@ -632,6 +632,24 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
 
   inline void Bind(Label* label, BranchTargetIdentifier id = EmitBTI_none);
 
+  // Control-flow integrity: This is required for compatibility with
+  // architecture-independent code.
+  // Define a function entrypoint.
+  inline void CFIEntryPoint();
+
+  // Control-flow integrity: This is required for compatibility with
+  // architecture-independent code.
+  // Define an exception handler. Optionally binds a label.
+  inline void CFIExceptionHandler(Label* label = nullptr);
+
+  // Define a jump (BR) target, optionally binding a label. Used for CFI.
+  inline void CFIJumpTarget(Label* label = nullptr);
+  // Define a call (BLR) target, optionally binding a label. The target also
+  // allows tail calls (via BR) when the target is x16 or x17. Used for CFI.
+  inline void CFICallTarget(Label* label = nullptr);
+  // Define a jump/call target, optionally binding a label. Used for CFI.
+  inline void CFIJumpOrCallTarget(Label* label = nullptr);
+
   static unsigned CountClearHalfWords(uint64_t imm, unsigned reg_size);
 
   CPURegList* TmpList() { return &tmp_list_; }
@@ -962,7 +980,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // The return address on the stack is used by frame iteration.
   void StoreReturnAddressAndCall(Register target);
 
-  void CallForDeoptimization(Address target, int deopt_id);
+  void CallForDeoptimization(Address target, int deopt_id, Label* exit,
+                             DeoptimizeKind kind);
 
   // Calls a C function.
   // The called function is not allowed to trigger a

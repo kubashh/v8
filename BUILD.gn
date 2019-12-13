@@ -537,7 +537,7 @@ config("toolchain") {
 
       # TODO(v8:10026): Enable this in src/build.
       if (current_cpu == "arm64") {
-        cflags += [ "-mbranch-protection=pac-ret" ]
+        cflags += [ "-mbranch-protection=standard" ]
       }
     }
   }

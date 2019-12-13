@@ -317,6 +317,10 @@ Simulator::Simulator(Decoder<DispatchingDecoderVisitor>* decoder,
         new Instrument(FLAG_log_instruction_file, FLAG_log_instruction_period);
     decoder_->AppendVisitor(instrument_);
   }
+
+#ifdef ENABLE_CONTROL_FLOW_INTEGRITY
+  guard_pages_ = true;
+#endif
 }
 
 Simulator::Simulator()
@@ -327,6 +331,10 @@ Simulator::Simulator()
       isolate_(nullptr) {
   Init(stdout);
   CHECK(!FLAG_trace_sim && !FLAG_log_instruction_stats);
+
+#ifdef ENABLE_CONTROL_FLOW_INTEGRITY
+  guard_pages_ = true;
+#endif
 }
 
 void Simulator::Init(FILE* stream) {
@@ -3663,6 +3671,7 @@ void Simulator::VisitException(Instruction* instr) {
         if (parameters & BREAK) Debug();
 
       } else if (instr->ImmException() == kImmExceptionIsRedirectedCall) {
+        ResetBType();  // The runtime call might call back into JavaScript.
         DoRuntimeCall(instr);
       } else if (instr->ImmException() == kImmExceptionIsPrintf) {
         DoPrintf(instr);
