@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5032700a_df8ea889",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-12-13T08:41:27Z",
+      "side": 1,
+      "message": "Is this change a rebase artifact?",
+      "range": {
+        "startLine": 222,
+        "startChar": 2,
+        "endLine": 222,
+        "endChar": 71
+      },
+      "revId": "a2725f0743a9fcbb0ed5b863ca16f202a3a5ba43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
