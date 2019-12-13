@@ -630,7 +630,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // Returns false, otherwise.
   bool TryOneInstrMoveImmediate(const Register& dst, int64_t imm);
 
-  inline void Bind(Label* label);
+  inline void Bind(Label* label, BranchTargetIdentifier id = EmitBTI_none);
 
   static unsigned CountClearHalfWords(uint64_t imm, unsigned reg_size);
 
@@ -2091,7 +2091,7 @@ class UseScratchRegisterScope {
     CPURegList copy(list);
     while (!copy.IsEmpty()) {
       const CPURegister& reg = copy.PopHighestIndex();
-      DCHECK(available_->IncludesAliasOf(reg));
+      DCHECK_IMPLIES(reg != NoReg, available_->IncludesAliasOf(reg));
     }
 #endif
     available_->Remove(list);
@@ -2100,7 +2100,7 @@ class UseScratchRegisterScope {
     CPURegList list(reg1, reg2);
     Include(list);
   }
-  void Exclude(const Register& reg1, const Register& reg2) {
+  void Exclude(const Register& reg1, const Register& reg2 = NoReg) {
     CPURegList list(reg1, reg2);
     Exclude(list);
   }

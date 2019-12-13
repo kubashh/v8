@@ -389,7 +389,40 @@ enum SystemHint {
   WFI = 3,
   SEV = 4,
   SEVL = 5,
-  CSDB = 20
+  CSDB = 20,
+  BTI = 32,
+  BTI_c = 34,
+  BTI_j = 36,
+  BTI_jc = 38
+};
+
+enum BranchTargetIdentifier {
+  EmitBTI_none = NOP,
+  EmitBTI = BTI,
+  EmitBTI_c = BTI_c,
+  EmitBTI_j = BTI_j,
+  EmitBTI_jc = BTI_jc,
+
+  // This corresponds to the value of the CRm:op2 fields in the equivalent HINT
+  // instruction.
+  EmitPACIASP = 25
+};
+
+enum BType {
+  // Set when executing any instruction on a guarded page, except those cases
+  // listed below.
+  DefaultBType = 0,
+
+  // Set when an indirect branch is taken from an unguarded page to a guarded
+  // page, or from a guarded page to ip0 or ip1 (x16 or x17), eg "br ip0".
+  BranchFromUnguardedOrToIP = 1,
+
+  // Set when an indirect branch and link (call) is taken, eg. "blr x0".
+  BranchAndLink = 2,
+
+  // Set when an indirect branch is taken from a guarded page to a register
+  // that is not ip0 or ip1 (x16 or x17), eg, "br x0".
+  BranchFromGuardedNotToIP = 3
 };
 
 enum BarrierDomain {

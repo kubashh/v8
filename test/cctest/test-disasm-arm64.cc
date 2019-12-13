@@ -1874,11 +1874,45 @@ TEST_(system_msr) {
 
 
 TEST_(system_nop) {
-  SET_UP_ASM();
+  {
+    SET_UP_ASM();
+    COMPARE(nop(), "nop");
+    CLEANUP();
+  }
+  {
+    SET_UP_MASM();
+    COMPARE(Nop(), "nop");
+    CLEANUP();
+  }
+}
 
-  COMPARE(nop(), "nop");
+TEST_(bti) {
+  {
+    SET_UP_ASM();
 
-  CLEANUP();
+    COMPARE(bti(EmitBTI), "bti");
+    COMPARE(bti(EmitBTI_c), "bti c");
+    COMPARE(bti(EmitBTI_j), "bti j");
+    COMPARE(bti(EmitBTI_jc), "bti jc");
+    COMPARE(hint(BTI), "bti");
+    COMPARE(hint(BTI_c), "bti c");
+    COMPARE(hint(BTI_j), "bti j");
+    COMPARE(hint(BTI_jc), "bti jc");
+
+    CLEANUP();
+  }
+
+  {
+    SET_UP_MASM();
+
+    Label dummy1, dummy2, dummy3, dummy4;
+    COMPARE(Bind(&dummy1, EmitBTI), "bti");
+    COMPARE(Bind(&dummy2, EmitBTI_c), "bti c");
+    COMPARE(Bind(&dummy3, EmitBTI_j), "bti j");
+    COMPARE(Bind(&dummy4, EmitBTI_jc), "bti jc");
+
+    CLEANUP();
+  }
 }
 
 TEST(system_pauth) {

@@ -1184,6 +1184,12 @@ void Assembler::autia1716() { Emit(AUTIA1716); }
 void Assembler::paciasp() { Emit(PACIASP); }
 void Assembler::autiasp() { Emit(AUTIASP); }
 
+void Assembler::bti(BranchTargetIdentifier id) {
+  DCHECK(id != EmitPACIASP);   // Not modes of Bti.
+  DCHECK(id != EmitBTI_none);  // Always generate an instruction.
+  hint(static_cast<SystemHint>(id));
+}
+
 void Assembler::ldp(const CPURegister& rt, const CPURegister& rt2,
                     const MemOperand& src) {
   LoadStorePair(rt, rt2, src, LoadPairOpFor(rt, rt2));

@@ -953,8 +953,11 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   // Conditional speculation barrier.
   void csdb();
 
-  // Alias for system instructions.
+  // No-op.
   void nop() { hint(NOP); }
+
+  // Branch target identification.
+  void bti(BranchTargetIdentifier id);
 
   // Different nop operations are used by the code generator to detect certain
   // states of the generated code.
