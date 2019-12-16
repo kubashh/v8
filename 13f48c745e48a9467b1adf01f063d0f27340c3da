@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1028e6b0_043b535a",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2019-12-16T15:55:45Z",
+      "side": 1,
+      "message": "Isn\u0027t this supposed to be f.offset?",
+      "range": {
+        "startLine": 1251,
+        "startChar": 39,
+        "endLine": 1251,
+        "endChar": 51
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad2bad6b_14fb86d0",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1996,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2019-12-16T15:55:45Z",
+      "side": 1,
+      "message": "Is it impossible that field.offset is nullopt at this point?",
+      "range": {
+        "startLine": 1996,
+        "startChar": 10,
+        "endLine": 1996,
+        "endChar": 23
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2823990_94e507ab",
+        "filename": "src/torque/torque-parser.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1447,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2019-12-16T15:55:45Z",
+      "side": 1,
+      "message": "How do we do this here? If std::stod throws (e.g. std::out_of_range) do we catch this somewhere? I guess we can omit some of the checks you usually need to do with std::stod because we detect them in MatchDecimalLiteral already, but it looks like range errors are not handled at all yet.",
+      "range": {
+        "startLine": 1446,
+        "startChar": 2,
+        "endLine": 1447,
+        "endChar": 76
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23f9f868_bb0fa155",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2019-12-16T15:55:45Z",
+      "side": 1,
+      "message": "result +\u003d std::get\u003c0\u003e(field.GetFieldSizeInformation());",
+      "range": {
+        "startLine": 357,
+        "startChar": 4,
+        "endLine": 359,
+        "endChar": 25
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "822e0a60_be009bec",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2019-12-16T15:55:45Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it make sense to make alignment a property of Type?",
+      "range": {
+        "startLine": 724,
+        "startChar": 2,
+        "endLine": 759,
+        "endChar": 3
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "017b3daf_d510f43e",
+        "filename": "src/torque/utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2019-12-16T15:55:45Z",
+      "side": 1,
+      "message": "How about Single[ton]Value()?",
+      "range": {
+        "startLine": 427,
+        "startChar": 25,
+        "endLine": 427,
+        "endChar": 35
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
