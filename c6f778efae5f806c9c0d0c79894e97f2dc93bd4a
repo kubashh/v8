@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1f9f94_e804bfad",
+        "filename": "src/codegen/ia32/sse-instr.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2019-12-16T08:28:43Z",
+      "side": 1,
+      "message": "1. Should be at SSE4_RM_INSTRUCTION_LIST.\n    1.1 We can fix x64.\n2. Notice ordering there.\n3. Have we checked the disasm test?\n\nSimiliar for pmovzxdq",
+      "revId": "c6f778efae5f806c9c0d0c79894e97f2dc93bd4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb405649_5382aa76",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3727,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2019-12-16T08:28:43Z",
+      "side": 1,
+      "message": "Shall we use VPBROADCASTB in later patch? Any reason to exclude AVX2 instructions?\nMore general, shall we scan all the simd opcodes for such opportunities?\n\nSimiliar for IA32S16x8LoadSplat\nReference: https://github.com/WebAssembly/simd/pull/82",
+      "revId": "c6f778efae5f806c9c0d0c79894e97f2dc93bd4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aab808db_9de5453e",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3746,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2019-12-16T08:28:43Z",
+      "side": 1,
+      "message": "We don\u0027t need Movss and Shufps macros here. We can use movss and shufps directly.\nWe may also refine x64 part.",
+      "revId": "c6f778efae5f806c9c0d0c79894e97f2dc93bd4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4f6b85d_d1e59455",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3752,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2019-12-16T08:28:43Z",
+      "side": 1,
+      "message": "Redundant scope, as you have noticed.",
+      "revId": "c6f778efae5f806c9c0d0c79894e97f2dc93bd4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b53b5f4e_2342c9a7",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3758,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2019-12-16T08:28:43Z",
+      "side": 1,
+      "message": "We can use macro here to enable AVX version.\nWe may also refine x64 later.\n\nSimiliar for all following cases",
+      "revId": "c6f778efae5f806c9c0d0c79894e97f2dc93bd4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dcec025_f350db35",
+        "filename": "src/compiler/backend/ia32/instruction-codes-ia32.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2019-12-16T08:28:43Z",
+      "side": 1,
+      "message": "Is there ordering here?",
+      "revId": "c6f778efae5f806c9c0d0c79894e97f2dc93bd4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46d07cba_8705499a",
+        "filename": "src/compiler/backend/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2019-12-16T08:28:43Z",
+      "side": 1,
+      "message": "If we have no unimplemented opcodes, shall we use UNREACHABLE?",
+      "revId": "c6f778efae5f806c9c0d0c79894e97f2dc93bd4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23ae0802_e2778b24",
+        "filename": "src/compiler/backend/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2019-12-16T08:28:43Z",
+      "side": 1,
+      "message": "DCHECK_NE(params.kind, LoadKind::kUnaligned);\nDCHECK_NE(params.kind, LoadKind::kProtected);",
+      "revId": "c6f778efae5f806c9c0d0c79894e97f2dc93bd4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19092504_3270da89",
+        "filename": "src/compiler/backend/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2019-12-16T08:28:43Z",
+      "side": 1,
+      "message": "No need to check kPoisonedLoad",
+      "revId": "c6f778efae5f806c9c0d0c79894e97f2dc93bd4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
