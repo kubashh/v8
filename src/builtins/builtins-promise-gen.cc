@@ -754,7 +754,7 @@ TF_BUILTIN(PromiseAllSettled, PromiseBuiltinsAssembler) {
             Context::PROMISE_ALL_SETTLED_REJECT_ELEMENT_SHARED_FUN);
       });
 }
-
+/*
 void PromiseBuiltinsAssembler::Generate_PromiseAllResolveElementClosure(
     TNode<Context> context, TNode<Object> value, TNode<JSFunction> function,
     const CreatePromiseAllResolveElementFunctionValue& callback) {
@@ -942,6 +942,6 @@ TF_BUILTIN(PromiseAllSettledRejectElementClosure, PromiseBuiltinsAssembler) {
         return obj;
       });
 }
-
+*/
 }  // namespace internal
 }  // namespace v8
