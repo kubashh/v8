@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4315a28d_f59edd67",
+        "filename": "src/diagnostics/unwinder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-12-18T17:35:09Z",
+      "side": 1,
+      "message": "We can simplify the comparison function to a single comparison if we use upper_bound. Something like:\n\nauto it \u003d std::upper_bound(code_pages, code_pages + code_pages_length, fake_range,\n    [](const MemoryRange\u0026 a, const MemoryRange\u0026 b) { return a.start \u003c b.start; });\nDCHECK_IMPLIES(it !\u003d code_pages + code_pages_length, pc \u003c it-\u003estart);\nif (it \u003d\u003d code_pages) return false;\n--it;\nreturn it-\u003estart \u003c\u003d pc \u0026\u0026 pc \u003c it-\u003estart + it-\u003elength_in_bytes;\n\nDisclaimer: I didn\u0027t test the code :)",
+      "range": {
+        "startLine": 29,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 9
+      },
+      "revId": "672ae3389ce4b8a19fc27fd4ef1ad6a3f5e55042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60013e5c_986e7790",
         "filename": "test/cctest/test-unwinder-code-pages.cc",
         "patchSetId": 6
