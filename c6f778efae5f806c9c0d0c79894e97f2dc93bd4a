@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fcf7bab1_4f1700d6",
+        "filename": "src/codegen/ia32/assembler-ia32.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2019-12-18T03:28:20Z",
+      "side": 1,
+      "message": "Not reviewed all assembler and macro assembler yet, since you have to change them when you change turbofan codegen.\nSome general comments:\n1. Need to add disassembler support and disassembler tests for all new instructions.\n2. Better to support both movddup(XMMRegister, Operand) and movddup(XMMRegister, XMMRegister)\n3. Please double check the Intel developer manual for instruction encoding.",
+      "revId": "c6f778efae5f806c9c0d0c79894e97f2dc93bd4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9a1f9f94_e804bfad",
         "filename": "src/codegen/ia32/sse-instr.h",
         "patchSetId": 1
