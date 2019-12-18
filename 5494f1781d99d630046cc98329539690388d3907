@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f6c2f8f_8e1866dd",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-18T21:37:21Z",
+      "side": 1,
+      "message": "How about porting the bitfields to Torque instead? The example we currently have is SharedFunctionInfoFlags in shared-function-info.tq.",
+      "range": {
+        "startLine": 1582,
+        "startChar": 0,
+        "endLine": 1583,
+        "endChar": 64
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4258b325_80910fdf",
+        "filename": "src/builtins/builtins-proxy-gen.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-18T21:37:21Z",
+      "side": 1,
+      "message": "This should be unnecessary, CodeStubAssembler inherits from TorqueGeneratedExportedMacrosAssembler.",
+      "range": {
+        "startLine": 124,
+        "startChar": 6,
+        "endLine": 124,
+        "endChar": 54
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d190e120_6dbd5064",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-18T21:37:21Z",
+      "side": 1,
+      "message": "As above, this should now be available without qualification since CodeStubAssembler inherits from TorqueGeneratedExportedMacrosAssembler.",
+      "range": {
+        "startLine": 2824,
+        "startChar": 30,
+        "endLine": 2824,
+        "endChar": 56
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0516af8c_1986cd68",
+        "filename": "src/objects/arguments.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-18T21:37:21Z",
+      "side": 1,
+      "message": "What would be the semantics of this? Only accessible from within this file?",
+      "range": {
+        "startLine": 36,
+        "startChar": 33,
+        "endLine": 36,
+        "endChar": 45
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cad8999e_012af021",
+        "filename": "src/objects/arguments.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-18T21:37:21Z",
+      "side": 1,
+      "message": "I think it would be better to access it as a FixedArray, to avoid exposing LoadAndUntagObjectField to Torque:\n\n  Convert\u003cintptr\u003e(UnsafeCast\u003cSmi\u003e(context.scope_info[kScopeInfoFlags]))",
+      "range": {
+        "startLine": 101,
+        "startChar": 8,
+        "endLine": 101,
+        "endChar": 74
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11183078_8c348485",
+        "filename": "src/objects/arguments.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-18T21:37:21Z",
+      "side": 1,
+      "message": "I don\u0027t think this makes a difference at the moment, all write barriers should be eliminated anyway since we allocate and initialize together, and allocation folding still doesn\u0027t work for variable-sized allocations.",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 72
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00899f85_b8f78d43",
+        "filename": "src/objects/arguments.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-18T21:37:21Z",
+      "side": 1,
+      "message": "Allocating FixedArrays like this is actually dangerous since we might forget to canonicalize kEmptyFixedArray. It would be better to use a NewFixedArray helper that returns kEmptyFixedArray for length\u003d\u003d0. Thanks to template argument inference, this will also work for the iterator argument.",
+      "range": {
+        "startLine": 158,
+        "startChar": 21,
+        "endLine": 158,
+        "endChar": 79
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5321fc6_656980a4",
+        "filename": "src/objects/arguments.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-18T21:37:21Z",
+      "side": 1,
+      "message": "nit: i sounds like an index, how about \"it\"? Also below.",
+      "range": {
+        "startLine": 207,
+        "startChar": 12,
+        "endLine": 207,
+        "endChar": 13
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
