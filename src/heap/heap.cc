@@ -218,6 +218,8 @@ size_t Heap::YoungGenerationSizeFromOldGenerationSize(size_t old_generation) {
                      ? kOldGenerationToSemiSpaceRatioLowMemory
                      : kOldGenerationToSemiSpaceRatio;
   size_t semi_space = old_generation / ratio;
+  semi_space = static_cast<size_t>(
+      base::bits::RoundUpToPowerOfTwo64(static_cast<uint64_t>(semi_space)));
   semi_space = Min<size_t>(semi_space, kMaxSemiSpaceSize);
   semi_space = Max<size_t>(semi_space, kMinSemiSpaceSize);
   semi_space = RoundUp(semi_space, Page::kPageSize);
