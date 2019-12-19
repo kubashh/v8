@@ -249,6 +249,7 @@ class Symbol;
   V(TemplateList, message_listeners, MessageListeners)                     \
   /* Support for async stack traces */                                     \
   V(HeapObject, current_microtask, CurrentMicrotask)                       \
+  V(Object, incubment_context, IncumbentScriptContext)                     \
   /* JSFinalizationGroup objects which need cleanup */                     \
   V(Object, dirty_js_finalization_groups, DirtyJSFinalizationGroups)       \
   /* KeepDuringJob set for JS WeakRefs */                                  \

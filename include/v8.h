@@ -8976,6 +8976,9 @@ class V8_EXPORT Isolate {
   void RemoveMicrotasksCompletedCallback(
       MicrotasksCompletedCallbackWithData callback, void* data = nullptr);
 
+  Local<Value> GetIncumbentScriptContext() const;
+  void SetIncumbentScriptContext(Local<Value> context);
+
   /**
    * Sets a callback for counting the number of times a feature of V8 is used.
    */

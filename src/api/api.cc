@@ -8760,6 +8760,20 @@ void Isolate::RemoveMicrotasksCompletedCallback(
       callback, data);
 }
 
+Local<Value> Isolate::GetIncumbentScriptContext() const {
+  i::Isolate* isolate =
+      reinterpret_cast<i::Isolate*>(const_cast<Isolate*>(this));
+  i::Handle<i::Object> context(isolate->GetIncumbentScriptContext(), isolate);
+  return ToApiHandle<Object>(context);
+}
+
+void Isolate::SetIncumbentScriptContext(Local<Value> context) {
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
+  if (context.IsEmpty())
+    context = v8::Undefined(reinterpret_cast<v8::Isolate*>(isolate));
+  isolate->SetIncumbentScriptContext(*Utils::OpenHandle(*context));
+}
+
 void Isolate::SetUseCounterCallback(UseCounterCallback callback) {
   reinterpret_cast<i::Isolate*>(this)->SetUseCounterCallback(callback);
 }

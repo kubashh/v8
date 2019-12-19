@@ -1492,6 +1492,14 @@ class Isolate final : private HiddenFactory {
   void RemoveCodeMemoryChunk(MemoryChunk* chunk);
   V8_EXPORT_PRIVATE void AddCodeRange(Address begin, size_t length_in_bytes);
 
+  Object GetIncumbentScriptContext() {
+    return root(internal::RootIndex::kIncumbentScriptContext);
+  }
+
+  void SetIncumbentScriptContext(Object context) {
+    roots_table()[internal::RootIndex::kIncumbentScriptContext] = context.ptr();
+  }
+
  private:
   explicit Isolate(std::unique_ptr<IsolateAllocator> isolate_allocator);
   ~Isolate();

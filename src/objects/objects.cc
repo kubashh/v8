@@ -6012,6 +6012,10 @@ Handle<Object> JSPromise::TriggerPromiseReactions(Isolate* isolate,
           static_cast<int>(PromiseReaction::kPromiseOrCapabilityOffset) ==
           static_cast<int>(
               PromiseFulfillReactionJobTask::kPromiseOrCapabilityOffset));
+      STATIC_ASSERT(
+          static_cast<int>(PromiseReaction::kIncumbentContextOffset) ==
+          static_cast<int>(
+              PromiseFulfillReactionJobTask::kIncumbentContextOffset));
     } else {
       DisallowHeapAllocation no_gc;
       task->synchronized_set_map(
@@ -6025,6 +6029,10 @@ Handle<Object> JSPromise::TriggerPromiseReactions(Isolate* isolate,
           static_cast<int>(PromiseReaction::kPromiseOrCapabilityOffset) ==
           static_cast<int>(
               PromiseRejectReactionJobTask::kPromiseOrCapabilityOffset));
+      STATIC_ASSERT(
+          static_cast<int>(PromiseReaction::kIncumbentContextOffset) ==
+          static_cast<int>(
+              PromiseFulfillReactionJobTask::kIncumbentContextOffset));
     }
 
     MicrotaskQueue* microtask_queue = handler_context->microtask_queue();

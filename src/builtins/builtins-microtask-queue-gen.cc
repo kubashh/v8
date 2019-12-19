@@ -219,6 +219,10 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     const TNode<HeapObject> promise_or_capability = CAST(LoadObjectField(
         microtask, PromiseReactionJobTask::kPromiseOrCapabilityOffset));
 
+    TNode<Object> incumbent_context = LoadObjectField(
+        microtask, PromiseReactionJobTask::kIncumbentContextOffset);
+    StoreRoot(RootIndex::kIncumbentScriptContext, incumbent_context);
+
     // Run the promise before/debug hook if enabled.
     RunPromiseHook(Runtime::kPromiseHookBefore, microtask_context,
                    promise_or_capability);
@@ -251,6 +255,10 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
         LoadObjectField(microtask, PromiseReactionJobTask::kHandlerOffset);
     const TNode<HeapObject> promise_or_capability = CAST(LoadObjectField(
         microtask, PromiseReactionJobTask::kPromiseOrCapabilityOffset));
+
+    TNode<Object> incumbent_context = LoadObjectField(
+        microtask, PromiseReactionJobTask::kIncumbentContextOffset);
+    StoreRoot(RootIndex::kIncumbentScriptContext, incumbent_context);
 
     // Run the promise before/debug hook if enabled.
     RunPromiseHook(Runtime::kPromiseHookBefore, microtask_context,
@@ -526,6 +534,7 @@ TF_BUILTIN(RunMicrotasks, MicrotaskQueueBuiltinsAssembler) {
   {
     // Reset the "current microtask" on the isolate.
     StoreRoot(RootIndex::kCurrentMicrotask, UndefinedConstant());
+    StoreRoot(RootIndex::kIncumbentScriptContext, UndefinedConstant());
     Return(UndefinedConstant());
   }
 }

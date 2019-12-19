@@ -176,6 +176,9 @@ TNode<PromiseReaction> PromiseBuiltinsAssembler::AllocatePromiseReaction(
                                  PromiseReaction::kPromiseOrCapabilityOffset,
                                  promise_or_capability);
   StoreObjectFieldNoWriteBarrier(
+      reaction, PromiseReaction::kIncumbentContextOffset,
+      CodeAssembler::LoadRoot(RootIndex::kIncumbentScriptContext));
+  StoreObjectFieldNoWriteBarrier(
       reaction, PromiseReaction::kFulfillHandlerOffset, fulfill_handler);
   StoreObjectFieldNoWriteBarrier(
       reaction, PromiseReaction::kRejectHandlerOffset, reject_handler);
@@ -198,6 +201,9 @@ PromiseBuiltinsAssembler::AllocatePromiseReactionJobTask(
   StoreObjectFieldNoWriteBarrier(
       microtask, PromiseReactionJobTask::kPromiseOrCapabilityOffset,
       promise_or_capability);
+  StoreObjectFieldNoWriteBarrier(
+      microtask, PromiseReactionJobTask::kIncumbentContextOffset,
+      CodeAssembler::LoadRoot(RootIndex::kIncumbentScriptContext));
   return CAST(microtask);
 }
 
