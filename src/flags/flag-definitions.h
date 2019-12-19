@@ -1442,7 +1442,7 @@ DEFINE_BOOL(regexp_possessive_quantifier, false,
             "enable possessive quantifier syntax for testing")
 
 // Debugger
-DEFINE_BOOL(print_break_location, false, "print source location on debug break")
+DEFINE_BOOL(print_break_location, true, "print source location on debug break")
 
 // wasm instance management
 DEFINE_DEBUG_BOOL(trace_wasm_instances, false,
