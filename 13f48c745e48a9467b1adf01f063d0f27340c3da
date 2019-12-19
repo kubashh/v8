@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7edf6227_5394d246",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-19T21:24:35Z",
+      "side": 1,
+      "message": "No, it\u0027s a base::Optional and we just checked it\u0027s not nullopt.",
+      "parentUuid": "1028e6b0_043b535a",
+      "range": {
+        "startLine": 1251,
+        "startChar": 39,
+        "endLine": 1251,
+        "endChar": 51
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad2bad6b_14fb86d0",
         "filename": "src/torque/implementation-visitor.cc",
         "patchSetId": 10
@@ -45,6 +69,30 @@
       "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c7dd4a2_012b92e5",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1996,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-19T21:24:35Z",
+      "side": 1,
+      "message": "Yes, it makes sense to check this.",
+      "parentUuid": "ad2bad6b_14fb86d0",
+      "range": {
+        "startLine": 1996,
+        "startChar": 10,
+        "endLine": 1996,
+        "endChar": 23
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "704b5865_f59751c2",
+        "filename": "src/torque/torque-parser.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1447,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-19T21:24:35Z",
+      "side": 1,
+      "message": "Right, even for doubles there are range errors...",
+      "parentUuid": "c2823990_94e507ab",
+      "range": {
+        "startLine": 1446,
+        "startChar": 2,
+        "endLine": 1447,
+        "endChar": 76
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23f9f868_bb0fa155",
         "filename": "src/torque/types.cc",
         "patchSetId": 10
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "84c4869d_4e2f9405",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-19T21:24:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23f9f868_bb0fa155",
+      "range": {
+        "startLine": 357,
+        "startChar": 4,
+        "endLine": 359,
+        "endChar": 25
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "822e0a60_be009bec",
         "filename": "src/torque/types.cc",
         "patchSetId": 10
@@ -105,6 +201,30 @@
       "writtenOn": "2019-12-16T15:55:45Z",
       "side": 1,
       "message": "Wouldn\u0027t it make sense to make alignment a property of Type?",
+      "range": {
+        "startLine": 724,
+        "startChar": 2,
+        "endLine": 759,
+        "endChar": 3
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4934507_2b9ab47f",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-19T21:24:35Z",
+      "side": 1,
+      "message": "Sure we could. But I don\u0027t like classes getting too many methods when it\u0027s not really necessary, it makes the class body unreadable. Also, methods have access to all the private and virtual stuff, which is unnecessary in this case.",
+      "parentUuid": "822e0a60_be009bec",
       "range": {
         "startLine": 724,
         "startChar": 2,
@@ -137,6 +257,30 @@
       "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8248f34_fabac1e9",
+        "filename": "src/torque/utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-19T21:24:35Z",
+      "side": 1,
+      "message": "I like SingleValue(), thanks!",
+      "parentUuid": "017b3daf_d510f43e",
+      "range": {
+        "startLine": 427,
+        "startChar": 25,
+        "endLine": 427,
+        "endChar": 35
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
