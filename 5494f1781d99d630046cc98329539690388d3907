@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3b0a7c51_2846d479",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-12-19T08:52:31Z",
+      "side": 1,
+      "message": "Will do. Would you mind if I do this in a second CL? It turns out that LanguageMode is a Smi, which isn\u0027t supported in the bit field. LanguageMode shouldn\u0027t be a Smi anyway, so there is a bit of cleanup to do to make this work correctly.",
+      "parentUuid": "4f6c2f8f_8e1866dd",
+      "range": {
+        "startLine": 1582,
+        "startChar": 0,
+        "endLine": 1583,
+        "endChar": 64
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4258b325_80910fdf",
         "filename": "src/builtins/builtins-proxy-gen.cc",
         "patchSetId": 44
@@ -45,6 +69,30 @@
       "revId": "5494f1781d99d630046cc98329539690388d3907",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88b1765a_e8a4b015",
+        "filename": "src/builtins/builtins-proxy-gen.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-12-19T08:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4258b325_80910fdf",
+      "range": {
+        "startLine": 124,
+        "startChar": 6,
+        "endLine": 124,
+        "endChar": 54
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "8ef4e0e6_bf45f071",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-12-19T08:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d190e120_6dbd5064",
+      "range": {
+        "startLine": 2824,
+        "startChar": 30,
+        "endLine": 2824,
+        "endChar": 56
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0516af8c_1986cd68",
         "filename": "src/objects/arguments.tq",
         "patchSetId": 44
@@ -82,6 +154,30 @@
       "writtenOn": "2019-12-18T21:37:21Z",
       "side": 1,
       "message": "What would be the semantics of this? Only accessible from within this file?",
+      "range": {
+        "startLine": 36,
+        "startChar": 33,
+        "endLine": 36,
+        "endChar": 45
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c0a08df_e2f2ef83",
+        "filename": "src/objects/arguments.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-12-19T08:52:31Z",
+      "side": 1,
+      "message": "Yes, this was my idea. It would have been a nice abstraction in this case.",
+      "parentUuid": "0516af8c_1986cd68",
       "range": {
         "startLine": 36,
         "startChar": 33,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "46f6c474_aa13f3df",
+        "filename": "src/objects/arguments.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-12-19T08:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cad8999e_012af021",
+      "range": {
+        "startLine": 101,
+        "startChar": 8,
+        "endLine": 101,
+        "endChar": 74
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11183078_8c348485",
         "filename": "src/objects/arguments.tq",
         "patchSetId": 44
@@ -137,6 +257,30 @@
       "revId": "5494f1781d99d630046cc98329539690388d3907",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef5eeade_fb1ef25b",
+        "filename": "src/objects/arguments.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-12-19T08:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11183078_8c348485",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 72
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "fa9dea65_b94ed0f2",
+        "filename": "src/objects/arguments.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-12-19T08:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00899f85_b8f78d43",
+      "range": {
+        "startLine": 158,
+        "startChar": 21,
+        "endLine": 158,
+        "endChar": 79
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5321fc6_656980a4",
         "filename": "src/objects/arguments.tq",
         "patchSetId": 44
@@ -183,6 +351,30 @@
       "revId": "5494f1781d99d630046cc98329539690388d3907",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b77ff52_5576baf7",
+        "filename": "src/objects/arguments.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-12-19T08:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5321fc6_656980a4",
+      "range": {
+        "startLine": 207,
+        "startChar": 12,
+        "endLine": 207,
+        "endChar": 13
+      },
+      "revId": "5494f1781d99d630046cc98329539690388d3907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
