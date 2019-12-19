@@ -17,9 +17,8 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 65
+bytecode array length: 64
 bytecodes: [
-  /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
                 B(PushContext), R(1),
                 B(LdaConstant), U8(2),
@@ -67,9 +66,8 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 62
+bytecode array length: 61
 bytecodes: [
-  /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
                 B(PushContext), R(1),
                 B(LdaConstant), U8(2),
@@ -116,9 +114,8 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 62
+bytecode array length: 61
 bytecodes: [
-  /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
                 B(PushContext), R(1),
                 B(LdaConstant), U8(2),
@@ -171,9 +168,8 @@ snippet: "
 "
 frame size: 8
 parameter count: 1
-bytecode array length: 127
+bytecode array length: 126
 bytecodes: [
-  /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
                 B(PushContext), R(2),
                 B(LdaConstant), U8(2),
@@ -251,9 +247,8 @@ snippet: "
 "
 frame size: 8
 parameter count: 1
-bytecode array length: 113
+bytecode array length: 112
 bytecodes: [
-  /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
                 B(PushContext), R(2),
                 B(LdaTheHole),
@@ -325,9 +320,8 @@ snippet: "
 "
 frame size: 8
 parameter count: 1
-bytecode array length: 113
+bytecode array length: 112
 bytecodes: [
-  /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
                 B(PushContext), R(2),
                 B(LdaTheHole),
