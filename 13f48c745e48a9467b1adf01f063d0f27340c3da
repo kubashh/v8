@@ -261,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "79360837_c9f80dea",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-12-20T10:50:05Z",
+      "side": 1,
+      "message": "+1. Methods are nicer than free-floating functions.",
+      "parentUuid": "b5f58b33_89fad7d7",
+      "range": {
+        "startLine": 724,
+        "startChar": 2,
+        "endLine": 759,
+        "endChar": 3
+      },
+      "revId": "13f48c745e48a9467b1adf01f063d0f27340c3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "017b3daf_d510f43e",
         "filename": "src/torque/utils.h",
         "patchSetId": 10
