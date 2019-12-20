@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cb86cd3_82084a45",
+        "filename": "src/base/template-utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-12-20T08:58:37Z",
+      "side": 1,
+      "message": "Can we name this make_void, like proposed here: https://en.cppreference.com/w/cpp/types/void_t\n\nThe name \"ContainsVoid\" sound like it would check whether any of the template parameter types is void.",
+      "revId": "1a9926220e9656e7e465f5f4d5300a050d12f8cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
