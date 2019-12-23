@@ -2165,6 +2165,8 @@ void InstructionSelector::VisitNode(Node* node) {
       return MarkAsSimd128(node), VisitS128Not(node);
     case IrOpcode::kS128Select:
       return MarkAsSimd128(node), VisitS128Select(node);
+    case IrOpcode::kS128AndNot:
+      return MarkAsSimd128(node), VisitS128AndNot(node);
     case IrOpcode::kS8x16Swizzle:
       return MarkAsSimd128(node), VisitS8x16Swizzle(node);
     case IrOpcode::kS8x16Shuffle:
@@ -2634,6 +2636,7 @@ void InstructionSelector::VisitF64x2SConvertI64x2(Node* node) {
 void InstructionSelector::VisitF64x2UConvertI64x2(Node* node) {
   UNIMPLEMENTED();
 }
+void InstructionSelector::VisitS128AndNot(Node* node) { UNIMPLEMENTED(); }
 #if !V8_TARGET_ARCH_ARM64
 void InstructionSelector::VisitI16x8RoundingAverageU(Node* node) {
   UNIMPLEMENTED();
