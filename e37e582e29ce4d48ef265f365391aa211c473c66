@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8020e82_db84eba0",
+        "filename": "src/builtins/promise-race.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-23T10:35:12Z",
+      "side": 1,
+      "message": "There is no need to give the shadowing binding a new name if it is the same value. You can just write:\n\n const receiver \u003d Cast\u003cJSReceiver\u003e(receiver) otherwise ...;",
+      "range": {
+        "startLine": 31,
+        "startChar": 10,
+        "endLine": 31,
+        "endChar": 20
+      },
+      "revId": "e37e582e29ce4d48ef265f365391aa211c473c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "535f4e2a_debb45af",
+        "filename": "src/builtins/promise-race.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-23T10:35:12Z",
+      "side": 1,
+      "message": "Can we type the resolve and reject fields of PromisCapability as (a subtype of?) JSAny to avoid these unsafe casts?",
+      "range": {
+        "startLine": 110,
+        "startChar": 14,
+        "endLine": 110,
+        "endChar": 67
+      },
+      "revId": "e37e582e29ce4d48ef265f365391aa211c473c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9962dd86_3a3187c3",
+        "filename": "src/builtins/promise-race.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-23T10:35:12Z",
+      "side": 1,
+      "message": "Is\u003cJSPromise\u003e(promise)",
+      "range": {
+        "startLine": 114,
+        "startChar": 33,
+        "endLine": 114,
+        "endChar": 78
+      },
+      "revId": "e37e582e29ce4d48ef265f365391aa211c473c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b015fb1f_be1733b6",
+        "filename": "src/builtins/promise-race.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-23T10:35:12Z",
+      "side": 1,
+      "message": "It should be possible to type exception up to here as JSAny to avoid this UnsafeCast, or is there any blocker?",
+      "range": {
+        "startLine": 128,
+        "startChar": 10,
+        "endLine": 128,
+        "endChar": 27
+      },
+      "revId": "e37e582e29ce4d48ef265f365391aa211c473c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
