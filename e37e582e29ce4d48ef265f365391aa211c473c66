@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "557a7d47_f537ac10",
+        "filename": "src/builtins/promise-race.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-12-26T19:35:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8020e82_db84eba0",
+      "range": {
+        "startLine": 31,
+        "startChar": 10,
+        "endLine": 31,
+        "endChar": 20
+      },
+      "revId": "e37e582e29ce4d48ef265f365391aa211c473c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "535f4e2a_debb45af",
         "filename": "src/builtins/promise-race.tq",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "e37e582e29ce4d48ef265f365391aa211c473c66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee0f17fb_2706afb3",
+        "filename": "src/builtins/promise-race.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-12-26T19:35:11Z",
+      "side": 1,
+      "message": "I think it might be possible, but I am reluctant to change this without talking to an expert on promises. I have added a TODO to promise.tq to investigate.",
+      "parentUuid": "535f4e2a_debb45af",
+      "range": {
+        "startLine": 110,
+        "startChar": 14,
+        "endLine": 110,
+        "endChar": 67
+      },
+      "revId": "e37e582e29ce4d48ef265f365391aa211c473c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "44a3392c_95959ff5",
+        "filename": "src/builtins/promise-race.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-12-26T19:35:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9962dd86_3a3187c3",
+      "range": {
+        "startLine": 114,
+        "startChar": 33,
+        "endLine": 114,
+        "endChar": 78
+      },
+      "revId": "e37e582e29ce4d48ef265f365391aa211c473c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b015fb1f_be1733b6",
         "filename": "src/builtins/promise-race.tq",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2019-12-23T10:35:12Z",
       "side": 1,
       "message": "It should be possible to type exception up to here as JSAny to avoid this UnsafeCast, or is there any blocker?",
+      "range": {
+        "startLine": 128,
+        "startChar": 10,
+        "endLine": 128,
+        "endChar": 27
+      },
+      "revId": "e37e582e29ce4d48ef265f365391aa211c473c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba1b9b00_fea475d0",
+        "filename": "src/builtins/promise-race.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2019-12-26T19:35:11Z",
+      "side": 1,
+      "message": "I\u0027m actually a bit concerned about this. There are places where we store a \u0027hole\u0027 as an exception and use it to influence control flow. For example, the promise deopt continuation.\n\nActually, perhaps this unsafe cast is actually unsafe and we need a variation of \u0027call\u0027 that takes \u0027Object\u0027?",
+      "parentUuid": "b015fb1f_be1733b6",
       "range": {
         "startLine": 128,
         "startChar": 10,
