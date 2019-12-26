@@ -187,6 +187,30 @@
       "revId": "e37e582e29ce4d48ef265f365391aa211c473c66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ac3101c_4f072c0c",
+        "filename": "src/builtins/promise-race.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-12-26T19:54:58Z",
+      "side": 1,
+      "message": "Well, whatever the truth, we should find the types to reflect that, so either JSAny or JSAny|TheHole. But it would be nice if we could avoid passing internal values as arguments to JavaScript functions, this seems a bit scary towards actually leaking these values to JS.\nIt might be easier to figure out the types once we moved all the relevant code to Torque to rely more on the static type checking, so I\u0027m also fine with landing as-is.",
+      "parentUuid": "ba1b9b00_fea475d0",
+      "range": {
+        "startLine": 128,
+        "startChar": 10,
+        "endLine": 128,
+        "endChar": 27
+      },
+      "revId": "e37e582e29ce4d48ef265f365391aa211c473c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
