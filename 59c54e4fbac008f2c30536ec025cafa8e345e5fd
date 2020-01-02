@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5ae8c75_3fcf8017",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-01-02T14:33:07Z",
+      "side": 1,
+      "message": "Ulan: Can you remind me why we don\u0027t move all the platform-dependent logic into ResourceConstraints and always use some default as input?",
+      "range": {
+        "startLine": 153,
+        "startChar": 9,
+        "endLine": 153,
+        "endChar": 27
+      },
+      "revId": "59c54e4fbac008f2c30536ec025cafa8e345e5fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
