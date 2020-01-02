@@ -68,6 +68,30 @@
       "revId": "45c9c1a28a2b675c69594b8eca92cbf6bb045677",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d5dbc1c_3701adb8",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-01-02T14:30:05Z",
+      "side": 1,
+      "message": "Thanks, removing it here as it\u0027s unused now: https://chromium-review.googlesource.com/c/v8/v8/+/1981508/",
+      "parentUuid": "b22d261b_9a4b12fd",
+      "range": {
+        "startLine": 528,
+        "startChar": 8,
+        "endLine": 528,
+        "endChar": 25
+      },
+      "revId": "45c9c1a28a2b675c69594b8eca92cbf6bb045677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
