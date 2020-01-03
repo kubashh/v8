@@ -34,7 +34,7 @@ class FeedbackCell : public TorqueGeneratedFeedbackCell<FeedbackCell, Struct> {
   static const int kAlignedSize = RoundUp<kObjectAlignment>(int{kSize});
 
   inline void clear_padding();
-  inline void reset();
+  inline void reset_feedback_vector();
 
   using BodyDescriptor =
       FixedBodyDescriptor<kValueOffset, kInterruptBudgetOffset, kAlignedSize>;

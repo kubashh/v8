@@ -9,6 +9,7 @@
 #include "src/heap/objects-visiting-inl.h"
 #include "src/heap/objects-visiting.h"
 #include "src/heap/spaces.h"
+#include "src/objects/object-macros.h"
 
 namespace v8 {
 namespace internal {
@@ -132,6 +133,24 @@ int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitJSFunction(
   if (bytecode_flush_mode_ != BytecodeFlushMode::kDoNotFlushBytecode &&
       object.NeedsResetDueToFlushedBytecode()) {
     weak_objects_->flushed_js_functions.Push(task_id_, object);
+    // Also update the remembered set to include ClosureFeedbackCellArray.
+    Object maybe_feedback_cell =
+        ACQUIRE_READ_FIELD(object, JSFunction::kFeedbackCellOffset);
+    if (maybe_feedback_cell.IsFeedbackCell()) {
+      Object maybe_feedback_vector = ACQUIRE_READ_FIELD(
+          HeapObject::cast(maybe_feedback_cell), FeedbackCell::kValueOffset);
+      if (maybe_feedback_vector.IsFeedbackVector()) {
+        Object maybe_feedback_cell_array =
+            ACQUIRE_READ_FIELD(HeapObject::cast(maybe_feedback_vector),
+                               FeedbackVector::kClosureFeedbackCellArrayOffset);
+        CHECK(maybe_feedback_cell_array.IsClosureFeedbackCellArray());
+        concrete_visitor()->RecordSlot(
+            HeapObject::cast(maybe_feedback_cell),
+            HeapObject::cast(maybe_feedback_cell)
+                .RawField(FeedbackCell::kValueOffset),
+            HeapObject::cast(maybe_feedback_cell_array));
+      }
+    }
   }
   return size;
 }
