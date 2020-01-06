@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85249b07_34df4c78",
+        "filename": "src/codegen/x64/sse-instr.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-01-06T18:44:53Z",
+      "side": 1,
+      "message": "Nit: Could this be renamed to SSE4_MOV_INSTRUCTION_LIST, or something more specific to this class of instructions? UNOP is generic, and it is possible that not all UNOP instructions follow the same pattern.",
+      "revId": "b8f7db45bf4aafd34e20ee5b3c639de6c2d34a43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
