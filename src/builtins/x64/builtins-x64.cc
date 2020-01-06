@@ -65,6 +65,18 @@ static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
 
 namespace {
 
+Operand StackLimitAsOperand(MacroAssembler* masm) {
+  DCHECK(masm->root_array_available());
+  Isolate* isolate = masm->isolate();
+  ExternalReference limit = ExternalReference::address_of_jslimit(isolate);
+  DCHECK(TurboAssembler::IsAddressableThroughRootRegister(isolate, limit));
+
+  intptr_t offset =
+      TurboAssembler::RootRegisterOffsetForExternalReference(isolate, limit);
+  CHECK(is_int32(offset));
+  return Operand(kRootRegister, static_cast<int32_t>(offset));
+}
+
 Operand RealStackLimitAsOperand(MacroAssembler* masm) {
   DCHECK(masm->root_array_available());
   Isolate* isolate = masm->isolate();
@@ -1155,6 +1167,32 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ j(zero, &no_incoming_new_target_or_generator_register, Label::kNear);
   __ movq(Operand(rbp, rcx, times_system_pointer_size, 0), rdx);
   __ bind(&no_incoming_new_target_or_generator_register);
+
+  // Perform interrupt stack check
+  // TODO(solanes): defer the stack_check_interrupt
+  Label ok;
+  __ cmpq(rsp, StackLimitAsOperand(masm));
+  __ j(above, &ok);
+  // Modify the bytecode offset in the stack to be -1 for the call to the
+  // StackGuard.
+  __ movq(
+      Operand(rbp, InterpreterFrameConstants::kBytecodeOffsetFromFp),
+      Immediate(Smi::FromInt(BytecodeArray::kHeaderSize - kHeapObjectTag - 1)));
+  __ CallRuntime(Runtime::kStackGuard);
+  // After the call, insert the previous value (0) again.
+  __ movq(Operand(rbp, InterpreterFrameConstants::kBytecodeOffsetFromFp),
+          Immediate(Smi::FromInt(BytecodeArray::kHeaderSize - kHeapObjectTag)));
+
+  // Get bytecode array and bytecode offset from the stack frame.
+  __ movq(kInterpreterBytecodeArrayRegister,
+          Operand(rbp, InterpreterFrameConstants::kBytecodeArrayFromFp));
+  __ SmiUntag(kInterpreterBytecodeOffsetRegister,
+              Operand(rbp, InterpreterFrameConstants::kBytecodeOffsetFromFp));
+
+  // Load accumulator with undefined.
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+
+  __ bind(&ok);
 
   // The accumulator is already loaded with undefined.
 
