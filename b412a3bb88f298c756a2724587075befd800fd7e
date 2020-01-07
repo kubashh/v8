@@ -70,6 +70,30 @@
       "revId": "b412a3bb88f298c756a2724587075befd800fd7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "978fb07c_a1e9cc6a",
+        "filename": "test/mjsunit/regress/regress-1038573.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-01-07T16:43:17Z",
+      "side": 1,
+      "message": "If this is a widely accepted pattern in our codebase, I\u0027m fine. Changed it. Thanks.",
+      "parentUuid": "8a357834_4e65c775",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 1
+      },
+      "revId": "b412a3bb88f298c756a2724587075befd800fd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
