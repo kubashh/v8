@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "eb1287ac_6c23e4c1",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-07T15:57:37Z",
+      "side": 1,
+      "message": "How about giving this a name that\u0027s a bit more intuitive, something like \nWrapResultAsFulfilledFunctor?",
+      "range": {
+        "startLine": 17,
+        "startChar": 9,
+        "endLine": 17,
+        "endChar": 54
+      },
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "021143ca_de2f5a75",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5
@@ -30,6 +53,52 @@
       "writtenOn": "2020-01-07T13:26:49Z",
       "side": 1,
       "message": "Nico recently added nicer syntax for defining enums in torque, see e.g. contexts.tq.",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52faca43_9f66f274",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-07T15:57:37Z",
+      "side": 1,
+      "message": "Instead of calling it functor, I think a name that indicates the meaning of this argument would be better. Something like wrapResultFunctor.",
+      "range": {
+        "startLine": 88,
+        "startChar": 55,
+        "endLine": 88,
+        "endChar": 62
+      },
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e708ca6f_5503b16b",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-07T15:57:37Z",
+      "side": 1,
+      "message": "This should be a FastJSArray, no?",
+      "range": {
+        "startLine": 114,
+        "startChar": 35,
+        "endLine": 114,
+        "endChar": 42
+      },
       "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -81,6 +150,24 @@
       "writtenOn": "2020-01-07T13:26:49Z",
       "side": 1,
       "message": "Could you replace this by ExtractFixedArray? We usually try to avoid exposing unsafe functionality like AllocateFixedArray (which returns an uninitialized fixed array) in torque. ExtractFixedArray will give you an initialized array + copy over a range from the source array.\n\nIf so, please remove the added declaration in fixed-array.tq.",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee9b99b2_5fd44a37",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-07T15:57:37Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "76e7e093_28fafb9a",
       "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
