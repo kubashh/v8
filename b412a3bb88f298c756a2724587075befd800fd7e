@@ -22,6 +22,30 @@
       "revId": "b412a3bb88f298c756a2724587075befd800fd7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5059a5e_b32d3890",
+        "filename": "test/mjsunit/regress/regress-1038573.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-01-07T15:57:27Z",
+      "side": 1,
+      "message": "Yes, but they group/separate the different tests, which makes the file more readable imho. Georg didn\u0027t like it when I used IIFEs to group things. I\u0027d leave it as is if you don\u0027t mind.",
+      "parentUuid": "d858c368_f4f8ec00",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 1
+      },
+      "revId": "b412a3bb88f298c756a2724587075befd800fd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
