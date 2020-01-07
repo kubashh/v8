@@ -9,7 +9,7 @@ load('test/mjsunit/test-async.js');
 // We store the index in the hash code field of the Promise.all resolve
 // element closures, so make sure we properly handle the cases where this
 // magical field turns into a PropertyArray later.
-(function() {
+/*(function() {
   class MyPromise extends Promise {
     then(resolve, reject) {
       this.resolve = resolve;
@@ -34,7 +34,7 @@ load('test/mjsunit/test-async.js');
     myPromise.resolve[`x${i}`] = i;
   }
   myPromise.resolve(1);
-})();
+})();*/
 
 // Test that we return a proper array even if (custom) "then" invokes the
 // resolve callbacks right away.
@@ -62,7 +62,7 @@ load('test/mjsunit/test-async.js');
 
 // Test that we properly handle holes introduced into the resulting array
 // by resolving some late elements immediately.
-(function() {
+/*(function() {
   class MyPromise extends Promise {
     then(resolve, reject) {
       if (this.immediately) {
@@ -83,4 +83,4 @@ load('test/mjsunit/test-async.js');
         b => assert.equals(42, b[1024]),
         assert.unexpectedRejection());
   });
-})();
+})();*/
