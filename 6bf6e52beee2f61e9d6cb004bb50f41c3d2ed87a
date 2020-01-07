@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "51fdbd1a_3e351913",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-07T19:30:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21fb8dc4_042773c4",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb1287ac_6c23e4c1",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "657fe80b_ac687a8e",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-07T19:30:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb1287ac_6c23e4c1",
+      "range": {
+        "startLine": 17,
+        "startChar": 9,
+        "endLine": 17,
+        "endChar": 54
+      },
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "021143ca_de2f5a75",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5
@@ -53,6 +95,24 @@
       "writtenOn": "2020-01-07T13:26:49Z",
       "side": 1,
       "message": "Nico recently added nicer syntax for defining enums in torque, see e.g. contexts.tq.",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "477eeb57_111b80ec",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-07T19:30:17Z",
+      "side": 1,
+      "message": "These ContextSlots are really strange as they only apply to PromiseContexts. Tobias and I have talked about it, and it seems better to either create a subclass of Context, or find some other way to pass the required information around. However, I think it is probably dangerous to add these to the ContextSlot enum.\n\nAre you okay with just a TODO and explainer for now? Other thoughts?",
+      "parentUuid": "021143ca_de2f5a75",
       "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "10279b9a_ca4a7bad",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-07T19:30:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52faca43_9f66f274",
+      "range": {
+        "startLine": 88,
+        "startChar": 55,
+        "endLine": 88,
+        "endChar": 62
+      },
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e708ca6f_5503b16b",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "6dc07084_032fe236",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-07T19:30:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e708ca6f_5503b16b",
+      "range": {
+        "startLine": 114,
+        "startChar": 35,
+        "endLine": 114,
+        "endChar": 42
+      },
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d24428bc_310951fa",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5
@@ -122,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "45f88f8c_7b783c8c",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-07T19:30:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d24428bc_310951fa",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "19bae639_223826ea",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5
@@ -136,6 +262,24 @@
       "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0e994d4_bf22fecd",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-07T19:30:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19bae639_223826ea",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +318,24 @@
     },
     {
       "key": {
+        "uuid": "9f7149cc_d58dc400",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-07T19:30:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee9b99b2_5fd44a37",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4befc80_6684d94a",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5
@@ -188,6 +350,24 @@
       "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "071ef9fc_1e69dd62",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-07T19:30:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4befc80_6684d94a",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
