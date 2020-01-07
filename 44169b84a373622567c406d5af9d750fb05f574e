@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4369c2b9_d6ca3376",
+        "filename": "test/mjsunit/regress/regress-crbug-1038178.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1362924
+      },
+      "writtenOn": "2020-01-07T16:23:01Z",
+      "side": 1,
+      "message": "Indeed, it\u0027s weird that this code was part of the test case. I did try to remove this block, and then line by line, to see if the case would still repro. It does not. I don\u0027t know enough about the opt/deopt stuff so I didn\u0027t investigate why this was the case.",
+      "parentUuid": "b9834fc0_016b6f98",
+      "range": {
+        "startLine": 10,
+        "startChar": 12,
+        "endLine": 13,
+        "endChar": 19
+      },
+      "revId": "44169b84a373622567c406d5af9d750fb05f574e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "15248b84_21b86a75",
         "filename": "test/mjsunit/regress/regress-crbug-1038178.js",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "44169b84a373622567c406d5af9d750fb05f574e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a0fe32a_6f697369",
+        "filename": "test/mjsunit/regress/regress-crbug-1038178.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1362924
+      },
+      "writtenOn": "2020-01-07T16:23:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "15248b84_21b86a75",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 17
+      },
+      "revId": "44169b84a373622567c406d5af9d750fb05f574e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
