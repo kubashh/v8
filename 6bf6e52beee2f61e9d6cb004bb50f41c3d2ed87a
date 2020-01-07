@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21fb8dc4_042773c4",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-07T13:26:49Z",
+      "side": 1,
+      "message": "q: why promise-promise-...?",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "021143ca_de2f5a75",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-07T13:26:49Z",
+      "side": 1,
+      "message": "Nico recently added nicer syntax for defining enums in torque, see e.g. contexts.tq.",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d24428bc_310951fa",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-07T13:26:49Z",
+      "side": 1,
+      "message": "Does Convert\u003cintptr\u003e work?",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19bae639_223826ea",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-07T13:26:49Z",
+      "side": 1,
+      "message": "Same q here and below, Convert\u003cNumber\u003e?",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76e7e093_28fafb9a",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-07T13:26:49Z",
+      "side": 1,
+      "message": "Could you replace this by ExtractFixedArray? We usually try to avoid exposing unsafe functionality like AllocateFixedArray (which returns an uninitialized fixed array) in torque. ExtractFixedArray will give you an initialized array + copy over a range from the source array.\n\nIf so, please remove the added declaration in fixed-array.tq.",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4befc80_6684d94a",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-07T13:26:49Z",
+      "side": 1,
+      "message": "Note the Callable cast wont be necessary here once https://crrev.com/c/1988542/3/src/builtins/promise-race.tq#107 has been addressed.",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
