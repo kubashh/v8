@@ -29,10 +29,10 @@
 
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
+#include "clang/AST/Expr.h"
 #include "clang/AST/Mangle.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/AST/StmtVisitor.h"
-#include "clang/Frontend/FrontendPluginRegistry.h"
 #include "clang/Frontend/CompilerInstance.h"
 #include "llvm/Support/raw_ostream.h"
 
@@ -93,6 +93,25 @@ static bool InV8Namespace(const clang::NamedDecl* decl) {
   return decl->getQualifiedNameAsString().compare(0, 4, "v8::") == 0;
 }
 
+static bool IsDerivedFrom(const clang::CXXRecordDecl* record,
+                          const clang::CXXRecordDecl* base) {
+  return (record == base) || record->isDerivedFrom(base);
+}
+
+static const clang::CXXRecordDecl* GetDefinitionOrNull(
+    const clang::CXXRecordDecl* record) {
+  if (record == NULL) {
+    return NULL;
+  }
+
+  if (!InV8Namespace(record)) return NULL;
+
+  if (!record->hasDefinition()) {
+    return NULL;
+  }
+
+  return record->getDefinition();
+}
 
 static std::string EXTERNAL("EXTERNAL");
 static std::string STATE_TAG("enum v8::internal::StateTag");
@@ -213,10 +232,14 @@ struct Resolver {
 
 class CalleesPrinter : public clang::RecursiveASTVisitor<CalleesPrinter> {
  public:
-  explicit CalleesPrinter(clang::MangleContext* ctx) : ctx_(ctx) {
-  }
+  explicit CalleesPrinter(clang::MangleContext* ctx,
+                          clang::CXXRecordDecl* no_gc_decl)
+      : ctx_(ctx), no_gc_decl_(no_gc_decl) {}
 
   virtual bool VisitCallExpr(clang::CallExpr* expr) {
+    // Ignore calls that are guarded by a disallow allocation scope.
+    if (HasActiveGuard()) return true;
+
     const clang::FunctionDecl* callee = expr->getDirectCallee();
     if (callee != NULL) AnalyzeFunction(callee);
     return true;
@@ -230,6 +253,13 @@ class CalleesPrinter : public clang::RecursiveASTVisitor<CalleesPrinter> {
     return true;
   }
 
+  bool VisitVarDecl(clang::VarDecl* var) {
+    if (IsGCGuard(var->getType())) {
+      scopes_.top().block_scopes.back().has_guard = true;
+    }
+    return true;
+  }
+
   void AnalyzeFunction(const clang::FunctionDecl* f) {
     MangledName name;
     if (InV8Namespace(f) && GetMangledName(ctx_, f, &name)) {
@@ -238,11 +268,19 @@ class CalleesPrinter : public clang::RecursiveASTVisitor<CalleesPrinter> {
 
       const clang::FunctionDecl* body = NULL;
       if (f->hasBody(body) && !Analyzed(name)) {
-        EnterScope(name);
+        EnterFunctionScope(name);
         TraverseStmt(body->getBody());
-        LeaveScope();
+        LeaveFunctionScope();
       }
     }
+  }
+
+  bool TraverseBlockExpr(clang::BlockExpr* expr) {
+    // TODO(leszeks): Investigate inheriting parent scope's guard state.
+    scopes_.top().block_scopes.push_back({false});
+    bool ret = RecursiveASTVisitor::TraverseBlockExpr(expr);
+    scopes_.top().block_scopes.pop_back();
+    return ret;
   }
 
   typedef std::map<MangledName, CalleesSet* > Callgraph;
@@ -251,22 +289,20 @@ class CalleesPrinter : public clang::RecursiveASTVisitor<CalleesPrinter> {
     return callgraph_[name] != NULL;
   }
 
-  void EnterScope(const MangledName& name) {
+  void EnterFunctionScope(const MangledName& name) {
     CalleesSet* callees = callgraph_[name];
 
     if (callees == NULL) {
       callgraph_[name] = callees = new CalleesSet();
     }
 
-    scopes_.push(callees);
+    scopes_.push({callees, {{false}}});
   }
 
-  void LeaveScope() {
-    scopes_.pop();
-  }
+  void LeaveFunctionScope() { scopes_.pop(); }
 
   void AddCallee(const MangledName& name, const MangledName& function) {
-    if (!scopes_.empty()) scopes_.top()->insert(name);
+    if (!scopes_.empty()) scopes_.top().callee_set->insert(name);
     mangled_to_function_[name] = function;
   }
 
@@ -274,6 +310,9 @@ class CalleesPrinter : public clang::RecursiveASTVisitor<CalleesPrinter> {
     for (Callgraph::const_iterator i = callgraph_.begin(), e = callgraph_.end();
          i != e;
          ++i) {
+      // Skip printing functions with no callees.
+      if (i->second->size() == 0) continue;
+
       std::cout << i->first << "," << mangled_to_function_[i->first] << "\n";
 
       CalleesSet* callees = i->second;
@@ -286,9 +325,43 @@ class CalleesPrinter : public clang::RecursiveASTVisitor<CalleesPrinter> {
   }
 
  private:
-  clang::MangleContext* ctx_;
+  // TODO(leszeks): Reduce code duplication of guard checks with ProblemsFinder.
+  bool IsGCGuard(clang::QualType qtype) {
+    if (qtype.isNull()) {
+      return false;
+    }
+    if (qtype->isNullPtrType()) {
+      return false;
+    }
 
-  std::stack<CalleesSet* > scopes_;
+    const clang::CXXRecordDecl* record = qtype->getAsCXXRecordDecl();
+    const clang::CXXRecordDecl* definition = GetDefinitionOrNull(record);
+
+    if (!definition) {
+      return false;
+    }
+
+    return (no_gc_decl_ && IsDerivedFrom(definition, no_gc_decl_));
+  }
+
+  bool HasActiveGuard() {
+    for (auto s : scopes_.top().block_scopes) {
+      if (s.has_guard) return true;
+    }
+    return false;
+  }
+
+  clang::MangleContext* ctx_;
+  clang::CXXRecordDecl* no_gc_decl_;
+
+  struct BlockScope {
+    bool has_guard;
+  };
+  struct FunctionScope {
+    CalleesSet* callee_set;
+    std::vector<BlockScope> block_scopes;
+  };
+  std::stack<FunctionScope> scopes_;
   Callgraph callgraph_;
   CalleesMap mangled_to_function_;
 };
@@ -304,8 +377,18 @@ class FunctionDeclarationFinder
       : d_(d), sm_(sm) {}
 
   virtual void HandleTranslationUnit(clang::ASTContext &ctx) {
+    Resolver r(ctx);
+
+    // It is a valid situation that no_gc_decl == NULL when the
+    // DisallowHeapAllocation is not included and can't be resolved.
+    // This is gracefully handled in the FunctionAnalyzer later.
+    clang::CXXRecordDecl* no_gc_decl =
+        r.ResolveNamespace("v8")
+            .ResolveNamespace("internal")
+            .ResolveTemplate("DisallowHeapAllocation");
+
     mangle_context_ = clang::ItaniumMangleContext::create(ctx, d_);
-    callees_printer_ = new CalleesPrinter(mangle_context_);
+    callees_printer_ = new CalleesPrinter(mangle_context_, no_gc_decl);
 
     TraverseDecl(ctx.getTranslationUnitDecl());
 
@@ -1314,26 +1397,6 @@ class FunctionAnalyzer {
     } else {
       return NULL;
     }
-  }
-
-  bool IsDerivedFrom(const clang::CXXRecordDecl* record,
-                     const clang::CXXRecordDecl* base) {
-    return (record == base) || record->isDerivedFrom(base);
-  }
-
-  const clang::CXXRecordDecl* GetDefinitionOrNull(
-      const clang::CXXRecordDecl* record) {
-    if (record == NULL) {
-      return NULL;
-    }
-
-    if (!InV8Namespace(record)) return NULL;
-
-    if (!record->hasDefinition()) {
-      return NULL;
-    }
-
-    return record->getDefinition();
   }
 
   bool IsDerivedFromInternalPointer(const clang::CXXRecordDecl* record) {
