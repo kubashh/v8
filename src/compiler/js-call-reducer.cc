@@ -42,16 +42,18 @@ namespace compiler {
 #define _ [&]()  // NOLINT(whitespace/braces)
 
 class JSCallReducerAssembler : public JSGraphAssembler {
+ protected:
+  class CatchScope;
+
  public:
   JSCallReducerAssembler(JSGraph* jsgraph, Zone* zone, Node* node)
-      : JSGraphAssembler(jsgraph, zone),
-        node_(node),
-        if_exception_nodes_(zone) {
+      : JSGraphAssembler(jsgraph, zone), node_(node), zone_(zone) {
     InitializeEffectControl(NodeProperties::GetEffectInput(node),
                             NodeProperties::GetControlInput(node));
 
-    has_external_exception_handler_ =
+    bool has_external_exception_handler =
         NodeProperties::IsExceptionalCall(node, &external_exception_handler_);
+    catch_scope_ = new (zone) CatchScope(zone, has_external_exception_handler);
   }
   virtual ~JSCallReducerAssembler() {}
 
@@ -60,11 +62,29 @@ class JSCallReducerAssembler : public JSGraphAssembler {
   TNode<String> ReduceStringPrototypeSubstring();
   TNode<String> ReduceStringPrototypeSlice();
 
+  void PushCatchScope() {
+    DCHECK_NOT_NULL(catch_scope_);
+    auto scope = new (zone_) CatchScope(zone, catch_scope_);
+    catch_scope_ = scope;
+  }
+  CatchScope* PopCatchScope() {
+    auto scope = catch_scope_;
+    catch_scope_ = scope->parent();
+    DCHECK_NOT_NULL(catch_scope_);
+    return scope;
+  }
+
+  CatchScope* catch_scope() const {
+    DCHECK_NOT_NULL(catch_scope_);
+    return catch_scope_;
+  }
   bool has_external_exception_handler() const {
-    return has_external_exception_handler_;
+    DCHECK(catch_scope()->is_outermost());
+    return catch_scope()->has_catch_handler();
   }
   bool SubgraphContainsExceptionalControlFlow() const {
-    return !if_exception_nodes_.empty();
+    DCHECK(catch_scope()->is_outermost());
+    return !catch_scope()->if_exception_nodes_.empty();
   }
   Node* external_exception_handler() const {
     DCHECK(has_external_exception_handler());
@@ -264,27 +284,80 @@ class JSCallReducerAssembler : public JSGraphAssembler {
 
   // TODO(jgruber): Currently, it's the responsibility of the developer to
   // note which operations may throw and appropriately wrap these in a call to
-  // MayThrow (see e.g. JS Call and CallRuntime). A more methodical approach
-  // would be good. Note also that this only handles the very basic case (not
-  // involving custom handlers) so far and will probably have to be extended in
-  // the future.
+  // MayThrow (see e.g. JSCall3 and CallRuntime2). A more methodical approach
+  // would be good.
   TNode<Object> MayThrow(const NodeGenerator0& body) {
     TNode<Object> result = body();
 
-    if (has_external_exception_handler()) {
+    if (catch_scope()->has_catch_handler()) {
       Effect e = effect();
       Control c = control();
 
       // The IfException node is later merged into the outer graph.
       Node* if_exception =
           AddNode(graph()->NewNode(common()->IfException(), e, c));
-      if_exception_nodes_.push_back(if_exception);
+      catch_scope()->RegisterIfExceptionNode(if_exception);
 
       InitializeEffectControl(e, c);
       AddNode(graph()->NewNode(common()->IfSuccess(), c));
     }
 
     return result;
+  }
+
+  // A catch scope represents a single catch handler. The handler can be custom
+  // catch logic within the reduction itself; or a catch handler in the outside
+  // graph into which the reduction will be integrated.
+  class CatchScope : public ZoneObject {
+   public:
+    CatchScope(Zone* zone, bool has_external_exception_handler)
+        : if_exception_nodes_(zone),
+          has_catch_handler_(has_external_exception_handler) {}
+    CatchScope(Zone* zone, CatchScope* parent)
+        : if_exception_nodes_(zone), parent_(parent) {}
+
+    bool has_catch_handler() const { return has_catch_handler_; }
+    bool is_outermost() const { return parent_ == nullptr; }
+    CatchScope* parent() const { return parent_; }
+
+    void RegisterIfExceptionNode(Node* if_exception) {
+      DCHECK(has_catch_handler());
+      if_exception_nodes_.push_back(if_exception);
+    }
+
+    // TODO: Should be private.
+    NodeVector if_exception_nodes_;
+
+   private:
+    CatchScope* const parent_ = nullptr;
+    const bool has_catch_handler_ = true;
+  };
+
+  class TryCatchBuilder0 {
+   public:
+    using TryFunction = VoidGenerator0;
+    using CatchFunction = std::function<void(TNode<Object>)>;
+
+    TryCatchBuilder0(JSGraphAssembler* gasm, const TryFunction& try_body)
+        : gasm_(gasm), try_body_(try_body) {}
+
+    void Catch(const CatchFunction& catch_body) {
+      PushCatchScope();
+      try_body_();
+
+      auto* scope = PopCatchScope();
+      // TODO: Continue here.
+      // Consider using a stack-allocd catch scope. It currently seems like it
+      // would cover all use cases. IfException edges may need to be merged, and
+      // the resulting value is the exception.
+    }
+
+   private:
+    const VoidGenerator0 try_body_;
+  };
+
+  TryCatchBuilder0 Try(const VoidGenerator0& try_body) {
+    return {this, try_body};
   }
 
   using ConditionFunction1 = std::function<TNode<Boolean>(TNode<Number>)>;
@@ -425,6 +498,21 @@ class JSCallReducerAssembler : public JSGraphAssembler {
     return {this, initial_value, cond, step, initial_arg0};
   }
 
+  void ThrowIfNotCallable(TNode<Object> maybe_callable,
+                          FrameState frame_state) {
+    IfNot(ObjectIsCallable(maybe_callable))
+        .Then(_ {
+          JSCallRuntime2(Runtime::kThrowTypeError,
+                         NumberConstant(static_cast<double>(
+                             MessageTemplate::kCalledNonCallable)),
+                         maybe_callable, frame_state);
+
+          Unreachable();  // The runtime call throws unconditionally.
+        })
+        .ExpectTrue()
+        .Build();
+  }
+
   const FeedbackSource& feedback() const {
     CallParameters const& p = CallParametersOf(node_ptr()->op());
     return p.feedback();
@@ -473,10 +561,10 @@ class JSCallReducerAssembler : public JSGraphAssembler {
 
  private:
   Node* const node_;
+  Zone* const zone_;
 
-  bool has_external_exception_handler_;
   Node* external_exception_handler_;
-  NodeVector if_exception_nodes_;
+  CatchScope* catch_scope_;
 };
 
 enum class ArrayReduceDirection { kLeft, kRight };
@@ -523,21 +611,7 @@ class IteratingArrayBuiltinReducerAssembler : public JSCallReducerAssembler {
   TNode<Object> ReduceArrayPrototypeIndexOfIncludes(
       ElementsKind kind, ArrayIndexOfIncludesVariant variant);
 
-  void ThrowIfNotCallable(TNode<Object> maybe_callable,
-                          FrameState frame_state) {
-    IfNot(ObjectIsCallable(maybe_callable))
-        .Then(_ {
-          JSCallRuntime2(Runtime::kThrowTypeError,
-                         NumberConstant(static_cast<double>(
-                             MessageTemplate::kCalledNonCallable)),
-                         maybe_callable, frame_state);
-
-          Unreachable();  // The runtime call throws unconditionally.
-        })
-        .ExpectTrue()
-        .Build();
-  }
-
+ private:
   // Returns {index,value}. Assumes that the map has not changed, but possibly
   // the length and backing store.
   std::pair<TNode<Number>, TNode<Object>> SafeLoadElement(ElementsKind kind,
@@ -623,6 +697,89 @@ class IteratingArrayBuiltinReducerAssembler : public JSCallReducerAssembler {
     }
 
     return ConvertTaggedHoleToUndefined(value);
+  }
+};
+
+class PromiseBuiltinReducerAssembler : public JSCallReducerAssembler {
+ public:
+  PromiseBuiltinReducerAssembler(JSGraph* jsgraph, Zone* zone, Node* node)
+      : JSCallReducerAssembler(jsgraph, zone, node) {
+    DCHECK(FLAG_turbo_inline_array_builtins);
+  }
+
+  TNode<Object> ReducePromiseConstructor(
+      const NativeContextRef& native_context);
+
+ private:
+  TNode<JSPromise> CreatePromise(TNode<Context> context) {
+    return AddNode<JSPromise>(
+        graph()->NewNode(javascript()->CreatePromise(), context, effect()));
+  }
+
+  TNode<Context> CreateFunctionContext(const NativeContextRef& native_context,
+                                       TNode<Context> outer_context,
+                                       int slot_count) {
+    return AddNode<Context>(graph()->NewNode(
+        javascript()->CreateFunctionContext(
+            native_context.scope_info().object(),
+            slot_count - Context::MIN_CONTEXT_SLOTS, FUNCTION_SCOPE),
+        outer_context, effect(), control()));
+  }
+
+  void StoreContextSlot(TNode<Context> context, size_t slot_index,
+                        TNode<Object> value) {
+    StoreField(AccessBuilder::ForContextSlot(slot_index), context, value);
+  }
+
+  TNode<JSFunction> CreateClosureFromBuiltinSharedFunctionInfo(
+      SharedFunctionInfoRef shared, TNode<Context> context) {
+    DCHECK(shared.HasBuiltinId());
+    Callable const callable = Builtins::CallableFor(
+        isolate(), static_cast<Builtins::Name>(shared.builtin_id()));
+    return AddNode<JSFunction>(graph()->NewNode(
+        javascript()->CreateClosure(shared.object(),
+                                    isolate()->factory()->many_closures_cell(),
+                                    callable.code()),
+        context, effect(), control()));
+  }
+
+  void CallPromiseExecutor(TNode<Object> executor, TNode<JSFunction> resolve,
+                           TNode<JSFunction> reject, FrameState frame_state) {
+    const ConstructParameters& p = ConstructParametersOf(node_ptr()->op());
+    FeedbackSource no_feedback_source{};
+    MayThrow(_ {
+      return AddNode<Object>(graph()->NewNode(
+          javascript()->Call(4, p.frequency(), no_feedback_source,
+                             ConvertReceiverMode::kNullOrUndefined),
+          executor, UndefinedConstant(), resolve, reject, ContextInput(),
+          frame_state, effect(), control()));
+    });
+  }
+
+  void CallPromiseReject(TNode<Object> executor, TNode<JSFunction> reject,
+                         TNode<Object> exception, FrameState frame_state) {
+    const ConstructParameters& p = ConstructParametersOf(node_ptr()->op());
+    FeedbackSource no_feedback_source{};
+    MayThrow(_ {
+      return AddNode<Object>(graph()->NewNode(
+          javascript()->Call(3, p.frequency(), no_feedback_source,
+                             ConvertReceiverMode::kNullOrUndefined),
+          reject, UndefinedConstant(), exception, ContextInput(), frame_state,
+          effect(), control()));
+    });
+  }
+
+  int ConstructArity() const {
+    DCHECK_EQ(IrOpcode::kJSConstruct, node_ptr()->opcode());
+    ConstructParameters const& p = ConstructParametersOf(node_ptr()->op());
+    // TODO(jgruber): Named helpers to clarify the '- 2' and '- 1'.
+    DCHECK_GE(p.arity(), 2);
+    return static_cast<int>(p.arity() - 2);
+  }
+
+  TNode<Object> NewTargetInput() const {
+    return TNode<Object>::UncheckedCast(
+        NodeProperties::GetValueInput(node_ptr(), ConstructArity() + 1));
   }
 };
 
@@ -753,28 +910,31 @@ JSCallReducerAssembler::MergeExceptionalPaths() {
   DCHECK(has_external_exception_handler());
   DCHECK(SubgraphContainsExceptionalControlFlow());
 
-  const int size = static_cast<int>(if_exception_nodes_.size());
+  // TODO: Porting crutch.
+  NodeVector* if_exception_nodes_ = &catch_scope()->if_exception_nodes_;
+  const int size = static_cast<int>(if_exception_nodes_->size());
 
   if (size == 1) {
     // No merge needed.
-    Node* e = if_exception_nodes_[0];
+    Node* e = if_exception_nodes_->at(0);
     return std::make_tuple(e, e, e);
   }
 
   Node* merge = graph()->NewNode(common()->Merge(size),
-                                 static_cast<int>(if_exception_nodes_.size()),
-                                 if_exception_nodes_.data());
+                                 static_cast<int>(if_exception_nodes_->size()),
+                                 if_exception_nodes_->data());
 
   // These phis additionally take {merge} as an input. Temporarily add it to the
   // list.
-  if_exception_nodes_.push_back(merge);
+  if_exception_nodes_->push_back(merge);
   Node* ephi = graph()->NewNode(common()->EffectPhi(size),
-                                static_cast<int>(if_exception_nodes_.size()),
-                                if_exception_nodes_.data());
-  Node* phi = graph()->NewNode(
-      common()->Phi(MachineRepresentation::kTagged, size),
-      static_cast<int>(if_exception_nodes_.size()), if_exception_nodes_.data());
-  if_exception_nodes_.pop_back();
+                                static_cast<int>(if_exception_nodes_->size()),
+                                if_exception_nodes_->data());
+  Node* phi =
+      graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, size),
+                       static_cast<int>(if_exception_nodes_->size()),
+                       if_exception_nodes_->data());
+  if_exception_nodes_->pop_back();
 
   return std::make_tuple(phi, ephi, merge);
 }
@@ -1670,6 +1830,171 @@ IteratingArrayBuiltinReducerAssembler::ReduceArrayPrototypeIndexOfIncludes(
 
   return Call4(GetCallableForArrayIndexOfIncludes(variant, kind, isolate()),
                context, elements, search_element, length, from_index);
+}
+
+namespace {
+
+struct PromiseCtorFrameStateParams {
+  JSGraph* jsgraph;
+  SharedFunctionInfoRef shared;
+  Node* node_ptr;
+  TNode<Context> context;
+  TNode<Object> target;
+  FrameState outer_frame_state;
+};
+
+// Remnant of old-style JSCallReducer code. Could be ported to graph assembler,
+// but probably not worth the effort.
+Node* CreateArtificialFrameState(Node* node, Node* outer_frame_state,
+                                 int parameter_count, BailoutId bailout_id,
+                                 FrameStateType frame_state_type,
+                                 const SharedFunctionInfoRef& shared,
+                                 Node* context, CommonOperatorBuilder* common,
+                                 Graph* graph) {
+  const FrameStateFunctionInfo* state_info =
+      common->CreateFrameStateFunctionInfo(
+          frame_state_type, parameter_count + 1, 0, shared.object());
+
+  const Operator* op = common->FrameState(
+      bailout_id, OutputFrameStateCombine::Ignore(), state_info);
+  const Operator* op0 = common->StateValues(0, SparseInputMask::Dense());
+  Node* node0 = graph->NewNode(op0);
+
+  static constexpr int kTargetInputIndex = 0;
+  static constexpr int kReceiverInputIndex = 1;
+  const int parameter_count_with_receiver = parameter_count + 1;
+  std::vector<Node*> params;
+  params.reserve(parameter_count_with_receiver);
+  for (int i = 0; i < parameter_count_with_receiver; i++) {
+    params.push_back(node->InputAt(kReceiverInputIndex + i));
+  }
+  const Operator* op_param = common->StateValues(
+      static_cast<int>(params.size()), SparseInputMask::Dense());
+  Node* params_node = graph->NewNode(op_param, static_cast<int>(params.size()),
+                                     &params.front());
+  DCHECK(context);
+  return graph->NewNode(op, params_node, node0, node0, context,
+                        node->InputAt(kTargetInputIndex), outer_frame_state);
+}
+
+FrameState PromiseConstructorFrameState(
+    const PromiseCtorFrameStateParams& params, CommonOperatorBuilder* common,
+    Graph* graph) {
+  DCHECK_EQ(1, params.shared.internal_formal_parameter_count());
+  return FrameState(CreateArtificialFrameState(
+      params.node_ptr, params.outer_frame_state, 1,
+      BailoutId::ConstructStubInvoke(), FrameStateType::kConstructStub,
+      params.shared, params.context, common, graph));
+}
+
+FrameState PromiseConstructorLazyFrameState(
+    const PromiseCtorFrameStateParams& params,
+    FrameState constructor_frame_state) {
+  // The deopt continuation of this frame state is never called; the frame state
+  // is only necessary to obtain the right stack trace.
+  JSGraph* jsgraph = params.jsgraph;
+  Node* checkpoint_params[] = {
+      jsgraph->UndefinedConstant(), /* receiver */
+      jsgraph->UndefinedConstant(), /* promise */
+      jsgraph->UndefinedConstant(), /* reject function */
+      jsgraph->TheHoleConstant()    /* exception */
+  };
+  return FrameState(CreateJavaScriptBuiltinContinuationFrameState(
+      jsgraph, params.shared,
+      Builtins::kPromiseConstructorLazyDeoptContinuation, params.target,
+      params.context, checkpoint_params, arraysize(checkpoint_params),
+      constructor_frame_state, ContinuationFrameStateMode::LAZY));
+}
+
+FrameState PromiseConstructorLazyWithCatchFrameState(
+    const PromiseCtorFrameStateParams& params,
+    FrameState constructor_frame_state, TNode<JSPromise> promise,
+    TNode<JSFunction> reject) {
+  // This continuation just returns the created promise and takes care of
+  // exceptions thrown by the executor.
+  Node* checkpoint_params[] = {
+      params.jsgraph->UndefinedConstant(), /* receiver */
+      promise, reject};
+  return FrameState(CreateJavaScriptBuiltinContinuationFrameState(
+      params.jsgraph, params.shared,
+      Builtins::kPromiseConstructorLazyDeoptContinuation, params.target,
+      params.context, checkpoint_params, arraysize(checkpoint_params),
+      constructor_frame_state, ContinuationFrameStateMode::LAZY_WITH_CATCH));
+}
+
+}  // namespace
+
+TNode<Object> PromiseBuiltinReducerAssembler::ReducePromiseConstructor(
+    const NativeContextRef& native_context) {
+  DCHECK_GE(ConstructArity(), 1);
+
+  FrameState outer_frame_state = FrameStateInput();
+  TNode<Context> context = ContextInput();
+  TNode<Object> target = ValueInput(0);
+  TNode<Object> executor = ValueInput(1);
+  TNode<Object> new_target = NewTargetInput();
+  DCHECK_EQ(target, new_target);
+
+  SharedFunctionInfoRef promise_shared =
+      native_context.promise_function().shared();
+
+  PromiseCtorFrameStateParams frame_state_params{jsgraph(),  promise_shared,
+                                                 node_ptr(), context,
+                                                 target,     outer_frame_state};
+
+  // Insert a construct stub frame into the chain of frame states. This will
+  // reconstruct the proper frame when deoptimizing within the constructor.
+  // For the frame state, we only provide the executor parameter, even if more
+  // arguments were passed. This is not observable from JS.
+  FrameState constructor_frame_state =
+      PromiseConstructorFrameState(frame_state_params, common(), graph());
+
+  ThrowIfNotCallable(executor,
+                     PromiseConstructorLazyFrameState(frame_state_params,
+                                                      constructor_frame_state));
+
+  TNode<JSPromise> promise = CreatePromise(context);
+
+  // 8. CreatePromiseResolvingFunctions
+  // Allocate a promise context for the closures below.
+  TNode<Context> promise_context = CreateFunctionContext(
+      native_context, context, PromiseBuiltins::kPromiseContextLength);
+  StoreContextSlot(promise_context, PromiseBuiltins::kPromiseSlot, promise);
+  StoreContextSlot(promise_context, PromiseBuiltins::kAlreadyResolvedSlot,
+                   FalseConstant());
+  StoreContextSlot(promise_context, PromiseBuiltins::kDebugEventSlot,
+                   TrueConstant());
+
+  // Allocate closures for the resolve and reject cases.
+  TNode<JSFunction> resolve = CreateClosureFromBuiltinSharedFunctionInfo(
+      native_context.promise_capability_default_resolve_shared_fun(),
+      promise_context);
+  TNode<JSFunction> reject = CreateClosureFromBuiltinSharedFunctionInfo(
+      native_context.promise_capability_default_reject_shared_fun(),
+      promise_context);
+
+  // 9. Call executor with both resolving functions
+  // 10a. Call reject if the call to executor threw.
+  FrameState lazy_with_catch_frame_state =
+      PromiseConstructorLazyWithCatchFrameState(
+          frame_state_params, constructor_frame_state, promise, reject);
+
+  // Structure should be:
+  // try {
+  //   executor();
+  // } catch {
+  //   reject();
+  // }
+  //
+  // The try block rewires exception edges differently than the catch block.
+  // Probably solved with catch scopes.
+
+  CallPromiseExecutor(executor, resolve, reject, lazy_with_catch_frame_state);
+
+  TNode<Object> exception;
+  CallPromiseReject(executor, reject, exception, lazy_with_catch_frame_state);
+
+  return promise;
 }
 
 #undef _
@@ -5674,6 +5999,7 @@ Reduction JSCallReducer::ReduceStringPrototypeConcat(Node* node) {
   return Replace(value);
 }
 
+// TODO(jgruber): Remove once all uses are ported to graph assembler.
 Node* JSCallReducer::CreateArtificialFrameState(
     Node* node, Node* outer_frame_state, int parameter_count,
     BailoutId bailout_id, FrameStateType frame_state_type,
@@ -5709,6 +6035,8 @@ Node* JSCallReducer::CreateArtificialFrameState(
 Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
   DisallowHeapAccessIf no_heap_access(FLAG_concurrent_inlining);
 
+  // TODO: This one next, then remove Wire helpers.
+
   DCHECK_EQ(IrOpcode::kJSConstruct, node->opcode());
   ConstructParameters const& p = ConstructParametersOf(node->op());
   int arity = static_cast<int>(p.arity() - 2);
@@ -5733,7 +6061,7 @@ Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
   // Insert a construct stub frame into the chain of frame states. This will
   // reconstruct the proper frame when deoptimizing within the constructor.
   // For the frame state, we only provide the executor parameter, even if more
-  // arugments were passed. This is not observable from JS.
+  // arguments were passed. This is not observable from JS.
   DCHECK_EQ(1, promise_shared.internal_formal_parameter_count());
   Node* constructor_frame_state = CreateArtificialFrameState(
       node, outer_frame_state, 1, BailoutId::ConstructStubInvoke(),
