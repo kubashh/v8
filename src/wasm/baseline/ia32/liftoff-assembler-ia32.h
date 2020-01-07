@@ -38,7 +38,12 @@ inline MemOperand GetHalfStackSlot(uint32_t offset, RegPairHalf half) {
 inline Operand GetInstanceOperand() { return Operand(ebp, -8); }
 
 static constexpr LiftoffRegList kByteRegs =
-    LiftoffRegList::FromBits<Register::ListOf(eax, ecx, edx)>();
+#if V8_HAS_CXX14_CONSTEXPR
+    LiftoffRegList::ForRegs(eax, ecx, edx);
+#else
+    // Prevent GCC 5 bug (for loops not implemented in constexpr functions).
+    LiftoffRegList::FromBits(Register::ListOf(eax, ecx, edx));
+#endif
 
 inline void Load(LiftoffAssembler* assm, LiftoffRegister dst, Register base,
                  int32_t offset, ValueType type) {
