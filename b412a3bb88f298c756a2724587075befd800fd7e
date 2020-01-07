@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d858c368_f4f8ec00",
+        "filename": "test/mjsunit/regress/regress-1038573.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-01-07T15:47:05Z",
+      "side": 1,
+      "message": "I don\u0027t think these do anything in JavaScript ;-)\n\nYou can use IIFEs instead:\n\n(function() {\n  function f(x) ...\n  ...\n})();",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 1
+      },
+      "revId": "b412a3bb88f298c756a2724587075befd800fd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
