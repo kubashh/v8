@@ -119,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "71a93f9f_24b4945b",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-07T20:17:49Z",
+      "side": 1,
+      "message": "Yes, I also think these shouldn\u0027t be added to the ContextSlot enum.",
+      "parentUuid": "477eeb57_111b80ec",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52faca43_9f66f274",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5
@@ -225,6 +243,30 @@
       "side": 1,
       "message": "whoops, meant to respond that UnsafeCast\u003cFastJSArray\u003e failed here. Unless the reason jumps out at you, maybe we can revisit why this is just a regular JSArray after completing the port?",
       "parentUuid": "6dc07084_032fe236",
+      "range": {
+        "startLine": 114,
+        "startChar": 35,
+        "endLine": 114,
+        "endChar": 42
+      },
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "489d5ef9_5f59150b",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-07T20:17:49Z",
+      "side": 1,
+      "message": "This is weird, we certainly do access it as if it was a FastJSArray...\nYes, let\u0027s investigate this after porting. In any case, I\u0027m not a huge fan of creating a non-exposed JSArray here and mutating it under the assumption it didn\u0027t leak yet. Turning this into an internal data structure like a FixedArray sounds like the safer approach...",
+      "parentUuid": "0863f63d_d9eff68d",
       "range": {
         "startLine": 114,
         "startChar": 35,
