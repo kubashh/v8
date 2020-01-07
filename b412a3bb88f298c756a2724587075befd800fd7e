@@ -46,6 +46,30 @@
       "revId": "b412a3bb88f298c756a2724587075befd800fd7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a357834_4e65c775",
+        "filename": "test/mjsunit/regress/regress-1038573.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-01-07T16:34:38Z",
+      "side": 1,
+      "message": "OK. Note that using IIFEs is a widespread pattern in our tests, and for good reason, because it provides actual encapsulation (at least as long as no engine internals like per-isolate protectors and caches are concerned...).\n\nAt the very least, please use non-clashing function names next time, because JavaScript function/variable hoisting is weirder than you\u0027d expect:\n\nf();  // TypeError\n{\n  f();  // f1\n  function f() { console.log(\"f1\"); }\n  f();  // f1\n}\nf();  // f1\n{\n  f();  // f2\n  function f() { console.log(\"f2\"); }\n  f();  // f2\n}\nf();  // f2\n\nI\u0027m fine with landing this as-is.",
+      "parentUuid": "c5059a5e_b32d3890",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 1
+      },
+      "revId": "b412a3bb88f298c756a2724587075befd800fd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
