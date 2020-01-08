@@ -137,6 +137,24 @@
     },
     {
       "key": {
+        "uuid": "9bcfb9dc_b3d3b9fd",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-08T06:46:45Z",
+      "side": 1,
+      "message": "I didn\u0027t mean you should add them to ContextSlotEnum (I only used contexts.tq as an example of the new enum syntax). But you could create a new PromiseAllResolveElementContextSlots enum here, right?",
+      "parentUuid": "71a93f9f_24b4945b",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52faca43_9f66f274",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5

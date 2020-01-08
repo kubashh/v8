@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1849af5_70ddf548",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-08T06:46:45Z",
+      "side": 1,
+      "message": "super-nit: now alpha-sort :)",
+      "revId": "5e6684874c1540bb14034be26a060775f14e1e10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55585dcc_65f82327",
+        "filename": "test/mjsunit/es6/promise-all.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-08T06:46:45Z",
+      "side": 1,
+      "message": "What\u0027s up with these commented tests?",
+      "revId": "5e6684874c1540bb14034be26a060775f14e1e10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
