@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0d8e85ca_6c06746b",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-08T18:58:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1849af5_70ddf548",
+      "revId": "5e6684874c1540bb14034be26a060775f14e1e10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55585dcc_65f82327",
         "filename": "test/mjsunit/es6/promise-all.js",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "5e6684874c1540bb14034be26a060775f14e1e10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18f981ef_95cfdf34",
+        "filename": "test/mjsunit/es6/promise-all.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-08T18:58:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55585dcc_65f82327",
+      "revId": "5e6684874c1540bb14034be26a060775f14e1e10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -155,6 +155,24 @@
     },
     {
       "key": {
+        "uuid": "32d06bdc_136c4e0b",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-08T18:58:58Z",
+      "side": 1,
+      "message": "Okay, enum added. Unfortunately I had to add some operator overloads. The other issue is that I had to pull the enum\u0027s header into code-stub-assembler.h. Suggestions?",
+      "parentUuid": "9bcfb9dc_b3d3b9fd",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52faca43_9f66f274",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5
