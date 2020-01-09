@@ -173,6 +173,24 @@
     },
     {
       "key": {
+        "uuid": "4ffd98fb_de2d1f23",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-09T17:22:11Z",
+      "side": 1,
+      "message": "You could add it to the list in src/torque/implementation-visitor.cc:81, which will add it to all Torque-generated CSA headers. It\u0027s not much better than code-stub-assembler.h regarding include load, but it would document it better as a future-work cleanup opportunity.",
+      "parentUuid": "32d06bdc_136c4e0b",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52faca43_9f66f274",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5
