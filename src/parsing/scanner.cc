@@ -316,6 +316,8 @@ Token::Value Scanner::SkipMultiLineComment() {
 
 void Scanner::SkipHashBang() {
   if (c0_ == '#' && Peek() == '!' && source_pos() == 0) {
+    // Reset scanner error, we're at the beginnng.
+    scanner_error_ = MessageTemplate::kNone;
     SkipSingleLineComment();
     Scan();
   }
