@@ -191,6 +191,24 @@
     },
     {
       "key": {
+        "uuid": "f04262d9_6990bfa6",
+        "filename": "src/builtins/promise-promise-all-element-closure.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1358537
+      },
+      "writtenOn": "2020-01-10T14:34:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ffd98fb_de2d1f23",
+      "revId": "6bf6e52beee2f61e9d6cb004bb50f41c3d2ed87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52faca43_9f66f274",
         "filename": "src/builtins/promise-promise-all-element-closure.tq",
         "patchSetId": 5
