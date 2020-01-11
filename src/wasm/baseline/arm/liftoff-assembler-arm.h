@@ -190,6 +190,10 @@ inline FloatRegister GetFloatRegister(DoubleRegister reg) {
   return LowDwVfpRegister::from_code(reg.code()).low();
 }
 
+inline Simd128Register GetSimd128Register(DoubleRegister reg) {
+  return QwNeonRegister::from_code(reg.code() / 2);
+}
+
 enum class MinOrMax : uint8_t { kMin, kMax };
 template <typename RegisterType>
 inline void EmitFloatMinOrMax(LiftoffAssembler* assm, RegisterType dst,
@@ -1468,6 +1472,11 @@ void LiftoffAssembler::emit_f64_set_cond(Condition cond, Register dst,
     // If V flag set, at least one of the arguments was a Nan -> false.
     mov(dst, Operand(0), LeaveCC, vs);
   }
+}
+
+void LiftoffAssembler::emit_f32x4_splat(LiftoffRegister dst,
+                                        LiftoffRegister src) {
+  vdup(Neon32, liftoff::GetSimd128Register(dst.low_fp()), src.fp(), 0);
 }
 
 void LiftoffAssembler::StackCheck(Label* ool_code, Register limit_address) {
