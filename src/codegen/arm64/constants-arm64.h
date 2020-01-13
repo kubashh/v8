@@ -389,7 +389,66 @@ enum SystemHint {
   WFI = 3,
   SEV = 4,
   SEVL = 5,
-  CSDB = 20
+  CSDB = 20,
+  BTI = 32,
+  BTI_c = 34,
+  BTI_j = 36,
+  BTI_jc = 38
+};
+
+// Branch Target Identification (BTI)
+//
+// Executing an instruction updates PSTATE.BTYPE, as described on the table
+// below. Execution of an instruction on a guarded page is allowed if either:
+// * PSTATE.BTYPE is 00, or
+// * it is a BTI or PACI[AB]SP instruction that accepts the current value of
+//   PSTATE.BTYPE (as described in the table below), or
+// * it is BRK or HLT instruction that causes some higher-priority exception.
+//
+//  --------------------------------------------------------------------------
+//  | Last-executed instruction    | Sets     | Accepted by                  |
+//  |                              | BTYPE to | BTI | BTI j | BTI c | BTI jc |
+//  --------------------------------------------------------------------------
+//  | - BR from an unguarded page. |          |     |       |       |        |
+//  | - BR from guarded page,      |          |     |       |       |        |
+//  |   to x16 or x17.             |    01    |     |   X   |   X   |   X    |
+//  --------------------------------------------------------------------------
+//  | BR from guarded page,        |          |     |       |       |        |
+//  | not to x16 or x17.           |    11    |     |   X   |       |   X    |
+//  --------------------------------------------------------------------------
+//  | BLR                          |    10    |     |       |   X   |   X    |
+//  --------------------------------------------------------------------------
+//  | Any other instruction        |          |     |       |       |        |
+//  |(including RET).              |    00    |  X  |   X   |   X   |   X    |
+//  --------------------------------------------------------------------------
+//
+// PACI[AB]SP is treated either like "BTI c" or "BTI jc", according to the value
+// of SCTLR_EL1.BT0. Details available in ARM DDI 0487E.a, D5-2580.
+
+enum BType {
+  // Set when executing any instruction on a guarded page, except those cases
+  // listed below.
+  DefaultBType = 0,
+
+  // Set when an indirect branch is taken from an unguarded page to a guarded
+  // page, or from a guarded page to ip0 or ip1 (x16 or x17), eg "br ip0".
+  BranchFromUnguardedOrToIP = 1,
+
+  // Set when an indirect branch and link (call) is taken, eg. "blr x0".
+  BranchAndLink = 2,
+
+  // Set when an indirect branch is taken from a guarded page to a register
+  // that is not ip0 or ip1 (x16 or x17), eg, "br x0".
+  BranchFromGuardedNotToIP = 3
+};
+
+enum class BranchTargetIdentifier {
+  kNone,
+  kBti,
+  kBtiCall,
+  kBtiJump,
+  kBtiJumpCall,
+  kPaciasp
 };
 
 enum BarrierDomain {

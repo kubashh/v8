@@ -771,12 +771,38 @@ class Simulator : public DecoderVisitor, public SimulatorBase {
 
   virtual void Decode(Instruction* instr) { decoder_->Decode(instr); }
 
+  BType ReadBType() const { return btype_; }
+  void WriteNextBType(BType btype) { next_btype_ = btype; }
+  void UpdateBType() {
+    btype_ = next_btype_;
+    next_btype_ = DefaultBType;
+  }
+
+  // Helper function to determine BType for branches.
+  BType GetBTypeFromInstruction(const Instruction* instr) const;
+
+  bool PcIsInGuardedPage() const { return guard_pages_; }
+  void SetGuardedPages(bool guard_pages) { guard_pages_ = guard_pages; }
+
   void ExecuteInstruction() {
     DCHECK(IsAligned(reinterpret_cast<uintptr_t>(pc_), kInstrSize));
+    // On guarded pages, if BType is not zero, take an exception on any
+    // instruction other than BTI, PACI[AB]SP, HLT or BRK.
+    if (PcIsInGuardedPage() && (ReadBType() != DefaultBType)) {
+      if (pc_->IsPAuth()) {
+        Instr i = pc_->Mask(SystemPAuthMask);
+        if (i != PACIASP) {
+          FATAL("Executing non-BTI instruction with wrong BType.");
+        }
+      } else if (!pc_->IsBti() && !pc_->IsException()) {
+        FATAL("Executing non-BTI instruction with wrong BType.");
+      }
+    }
     CheckBreakNext();
     Decode(pc_);
     increment_pc();
     LogAllWrittenRegisters();
+    UpdateBType();
     CheckBreakpoints();
   }
 
@@ -2195,6 +2221,17 @@ class Simulator : public DecoderVisitor, public SimulatorBase {
   // automatically incremented.
   bool pc_modified_;
   Instruction* pc_;
+
+  // Branch type register, used for branch target identification.
+  BType btype_;
+
+  // Next value of branch type register after the current instruction has been
+  // decoded.
+  BType next_btype_;
+
+  // Global flag for enabling guarded pages.
+  // TODO(arm64): implement guarding at page granularity, rather than globally.
+  bool guard_pages_;
 
   static const char* xreg_names[];
   static const char* wreg_names[];

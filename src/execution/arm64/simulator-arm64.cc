@@ -298,6 +298,7 @@ void Simulator::SetRedirectInstruction(Instruction* instruction) {
 Simulator::Simulator(Decoder<DispatchingDecoderVisitor>* decoder,
                      Isolate* isolate, FILE* stream)
     : decoder_(decoder),
+      guard_pages_(false),
       last_debugger_input_(nullptr),
       log_parameters_(NO_PARAM),
       isolate_(isolate) {
@@ -320,6 +321,7 @@ Simulator::Simulator(Decoder<DispatchingDecoderVisitor>* decoder,
 
 Simulator::Simulator()
     : decoder_(nullptr),
+      guard_pages_(false),
       last_debugger_input_(nullptr),
       log_parameters_(NO_PARAM),
       isolate_(nullptr) {
@@ -367,6 +369,9 @@ void Simulator::ResetState() {
   // Reset debug helpers.
   breakpoints_.clear();
   break_on_next_ = false;
+
+  btype_ = DefaultBType;
+  next_btype_ = DefaultBType;
 }
 
 Simulator::~Simulator() {
@@ -1503,6 +1508,19 @@ void Simulator::VisitConditionalBranch(Instruction* instr) {
   }
 }
 
+BType Simulator::GetBTypeFromInstruction(const Instruction* instr) const {
+  switch (instr->Mask(UnconditionalBranchToRegisterMask)) {
+    case BLR:
+      return BranchAndLink;
+    case BR:
+      if ((instr->Rn() == 16) || (instr->Rn() == 17) || !PcIsInGuardedPage()) {
+        return BranchFromUnguardedOrToIP;
+      }
+      return BranchFromGuardedNotToIP;
+  }
+  return DefaultBType;
+}
+
 void Simulator::VisitUnconditionalBranchToRegister(Instruction* instr) {
   Instruction* target = reg<Instruction*>(instr->Rn());
   switch (instr->Mask(UnconditionalBranchToRegisterMask)) {
@@ -1522,6 +1540,7 @@ void Simulator::VisitUnconditionalBranchToRegister(Instruction* instr) {
     default:
       UNIMPLEMENTED();
   }
+  WriteNextBType(GetBTypeFromInstruction(instr));
 }
 
 void Simulator::VisitTestBranch(Instruction* instr) {
@@ -3105,6 +3124,25 @@ void Simulator::VisitSystem(Instruction* instr) {
   // range of immediates instead of indicating a different instruction. This
   // makes the decoding tricky.
   if (instr->Mask(SystemPAuthFMask) == SystemPAuthFixed) {
+    // Check BType allows PACI[AB]SP instructions.
+    if (PcIsInGuardedPage()) {
+      Instr i = instr->Mask(SystemPAuthMask);
+      if (i == PACIASP) {
+        switch (ReadBType()) {
+          case BranchFromGuardedNotToIP:
+            // This case depends on the value of SCTLR_EL1.BT0, which we assume
+            // here to be set. This makes PACI[AB]SP behave like "BTI c",
+            // disallowing its execution when BTYPE is BranchFromGuardedNotToIP
+            // (0b11).
+            FATAL("Executing PACIASP with wrong BType.");
+          case DefaultBType:
+          case BranchFromUnguardedOrToIP:
+          case BranchAndLink:
+            break;
+        }
+      }
+    }
+
     switch (instr->Mask(SystemPAuthMask)) {
 #define DEFINE_PAUTH_FUNCS(SUFFIX, DST, MOD, KEY)                     \
   case PACI##SUFFIX:                                                  \
@@ -3154,6 +3192,22 @@ void Simulator::VisitSystem(Instruction* instr) {
     switch (instr->ImmHint()) {
       case NOP:
       case CSDB:
+      case BTI_jc:
+        break;
+      case BTI:
+        if (PcIsInGuardedPage() && (ReadBType() != DefaultBType)) {
+          FATAL("Executing BTI with wrong BType.");
+        }
+        break;
+      case BTI_c:
+        if (PcIsInGuardedPage() && (ReadBType() == BranchFromGuardedNotToIP)) {
+          FATAL("Executing BTI c with wrong BType.");
+        }
+        break;
+      case BTI_j:
+        if (PcIsInGuardedPage() && (ReadBType() == BranchAndLink)) {
+          FATAL("Executing BTI j with wrong BType.");
+        }
         break;
       default:
         UNIMPLEMENTED();
