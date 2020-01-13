@@ -448,7 +448,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
 
   void RetpolineJump(Register reg);
 
-  void CallForDeoptimization(Address target, int deopt_id);
+  void CallForDeoptimization(Address target, int deopt_id, Label* exit,
+                             DeoptimizeKind kind);
 
   void Trap() override;
 
@@ -573,6 +574,19 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void ComputeCodeStartAddress(Register dst);
 
   void ResetSpeculationPoisonRegister();
+
+  // Control-flow integrity: This is required for compatibility with
+  // architecture-independent code.
+  // Define a function entrypoint. This doesn't emit any code for this
+  // architecture, as control-flow integrity is not supported for it.
+  void CFIEntryPoint() {}
+
+  // Control-flow integrity: This is required for compatibility with
+  // architecture-independent code.
+  //  Define an exception handler. Optionally binds a label.
+  void CFIExceptionHandler(Label* label = nullptr) {
+    if (label != nullptr) bind(label);
+  }
 
   // ---------------------------------------------------------------------------
   // Pointer compression support

@@ -773,6 +773,7 @@ class Simulator : public DecoderVisitor, public SimulatorBase {
 
   BType ReadBType() const { return btype_; }
   void WriteNextBType(BType btype) { next_btype_ = btype; }
+  void ResetBType() { btype_ = DefaultBType; }
   void UpdateBType() {
     btype_ = next_btype_;
     next_btype_ = DefaultBType;

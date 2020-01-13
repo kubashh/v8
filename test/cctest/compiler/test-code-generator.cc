@@ -5,6 +5,7 @@
 #include "src/base/utils/random-number-generator.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/code-stub-assembler.h"
+#include "src/codegen/macro-assembler-inl.h"
 #include "src/codegen/optimized-compilation-info.h"
 #include "src/compiler/backend/code-generator.h"
 #include "src/compiler/backend/instruction.h"
@@ -999,6 +1000,10 @@ class CodeGeneratorTester {
         PoisoningMitigationLevel::kDontPoison,
         AssemblerOptions::Default(environment->main_isolate()),
         Builtins::kNoBuiltinId, kMaxUnoptimizedFrameHeight);
+
+#if V8_TARGET_ARCH_ARM64
+    generator_->tasm()->CFICallTarget();
+#endif
 
     // Force a frame to be created.
     generator_->frame_access_state()->MarkHasFrame(true);

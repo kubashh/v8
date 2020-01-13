@@ -327,6 +327,56 @@ void TurboAssembler::Bind(Label* label, BranchTargetIdentifier id) {
   }
 }
 
+void TurboAssembler::CFIEntryPoint() {
+  // Since `kJavaScriptCallCodeStartRegister` is the target register for tail
+  // calls, we have to allow for jumps too.
+  CFIJumpOrCallTarget();
+}
+
+void TurboAssembler::CFIExceptionHandler(Label* label) { CFIJumpTarget(label); }
+
+void TurboAssembler::CFIJumpTarget(Label* label) {
+#ifdef ENABLE_CONTROL_FLOW_INTEGRITY
+  if (label != nullptr) {
+    Bind(label, BranchTargetIdentifier::kBtiJump);
+  } else {
+    bti(BranchTargetIdentifier::kBtiJump);
+  }
+#else
+  if (label != nullptr) {
+    Bind(label);
+  }
+#endif
+}
+
+void TurboAssembler::CFICallTarget(Label* label) {
+#ifdef ENABLE_CONTROL_FLOW_INTEGRITY
+  if (label != nullptr) {
+    Bind(label, BranchTargetIdentifier::kBtiCall);
+  } else {
+    bti(BranchTargetIdentifier::kBtiCall);
+  }
+#else
+  if (label != nullptr) {
+    Bind(label);
+  }
+#endif
+}
+
+void TurboAssembler::CFIJumpOrCallTarget(Label* label) {
+#ifdef ENABLE_CONTROL_FLOW_INTEGRITY
+  if (label != nullptr) {
+    Bind(label, BranchTargetIdentifier::kBtiJumpCall);
+  } else {
+    bti(BranchTargetIdentifier::kBtiJumpCall);
+  }
+#else
+  if (label != nullptr) {
+    Bind(label);
+  }
+#endif
+}
+
 void TurboAssembler::Bl(Label* label) {
   DCHECK(allow_macro_instructions());
   bl(label);
