@@ -207,6 +207,10 @@ declare_args() {
   # Use token threaded dispatch for the regular expression interpreter.
   # Use switch-based dispatch if this is false
   v8_enable_regexp_interpreter_threaded_dispatch = true
+
+  # Enable control-flow integrity features, such as pointer authentication for
+  # ARM64.
+  v8_control_flow_integrity = false
 }
 
 # Derived defaults.
@@ -265,6 +269,9 @@ assert(!v8_disable_write_barriers || v8_enable_single_generation,
 
 assert(v8_current_cpu != "x86" || !v8_untrusted_code_mitigations,
        "Untrusted code mitigations are unsupported on ia32")
+
+assert(v8_current_cpu == "arm64" || !v8_control_flow_integrity,
+       "Control-flow integrity is only supported on arm64")
 
 assert(
     !v8_enable_pointer_compression || !v8_enable_shared_ro_heap,
@@ -539,6 +546,14 @@ config("toolchain") {
   }
   if (v8_current_cpu == "arm64") {
     defines += [ "V8_TARGET_ARCH_ARM64" ]
+    if (v8_control_flow_integrity) {
+      defines += [ "ENABLE_CONTROL_FLOW_INTEGRITY" ]
+
+      # TODO(v8:10026): Enable this in src/build.
+      if (current_cpu == "arm64") {
+        cflags += [ "-mbranch-protection=pac-ret" ]
+      }
+    }
   }
 
   # Mips64el/mipsel simulators.
@@ -3129,6 +3144,7 @@ v8_source_set("v8_base_without_compiler") {
       "src/execution/arm64/frame-constants-arm64.cc",
       "src/execution/arm64/frame-constants-arm64.h",
       "src/execution/arm64/pointer-auth-arm64.cc",
+      "src/execution/arm64/pointer-auth-utils-arm64.h",
       "src/execution/arm64/simulator-arm64.cc",
       "src/execution/arm64/simulator-arm64.h",
       "src/execution/arm64/simulator-logic-arm64.cc",

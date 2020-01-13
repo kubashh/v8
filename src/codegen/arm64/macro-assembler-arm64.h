@@ -781,20 +781,33 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // The stack pointer must be aligned to 16 bytes on entry and the total size
   // of the specified registers must also be a multiple of 16 bytes.
   //
-  // Other than the registers passed into Pop, the stack pointer and (possibly)
-  // the system stack pointer, these methods do not modify any other registers.
+  // Other than the registers passed into Pop, the stack pointer, (possibly)
+  // the system stack pointer and (possibly) the link register, these methods
+  // do not modify any other registers.
+  //
+  // Some of the methods take an optional LoadLRMode or StoreLRMode template
+  // argument, which specifies whether we need to sign the link register at the
+  // start of the operation, or authenticate it at the end of the operation,
+  // when control flow integrity measures are enabled.
+  // When the mode is kDontLoadLR or kDontStoreLR, LR must not be passed as an
+  // argument to the operation.
+  enum LoadLRMode { kAuthLR, kDontAuthLR, kDontLoadLR };
+  enum StoreLRMode { kSignLR, kDontSignLR, kDontStoreLR };
+  template <StoreLRMode lr_mode = kDontStoreLR>
   void Push(const CPURegister& src0, const CPURegister& src1 = NoReg,
             const CPURegister& src2 = NoReg, const CPURegister& src3 = NoReg);
   void Push(const CPURegister& src0, const CPURegister& src1,
             const CPURegister& src2, const CPURegister& src3,
             const CPURegister& src4, const CPURegister& src5 = NoReg,
             const CPURegister& src6 = NoReg, const CPURegister& src7 = NoReg);
+  template <LoadLRMode lr_mode = kDontLoadLR>
   void Pop(const CPURegister& dst0, const CPURegister& dst1 = NoReg,
            const CPURegister& dst2 = NoReg, const CPURegister& dst3 = NoReg);
   void Pop(const CPURegister& dst0, const CPURegister& dst1,
            const CPURegister& dst2, const CPURegister& dst3,
            const CPURegister& dst4, const CPURegister& dst5 = NoReg,
            const CPURegister& dst6 = NoReg, const CPURegister& dst7 = NoReg);
+  template <StoreLRMode lr_mode = kDontStoreLR>
   void Push(const Register& src0, const VRegister& src1);
 
   // This is a convenience method for pushing a single Handle<Object>.
@@ -836,7 +849,15 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // kSRegSizeInBits are supported.
   //
   // Otherwise, (Push|Pop)(CPU|X|W|D|S)RegList is preferred.
+  //
+  // The methods take an optional LoadLRMode or StoreLRMode template argument.
+  // When control flow integrity measures are enabled and the link register is
+  // included in 'registers', passing kSignLR to PushCPURegList will sign the
+  // link register before pushing the list, and passing kAuthLR to
+  // PopCPURegList will authenticate it after popping the list.
+  template <StoreLRMode lr_mode = kDontStoreLR>
   void PushCPURegList(CPURegList registers);
+  template <LoadLRMode lr_mode = kDontLoadLR>
   void PopCPURegList(CPURegList registers);
 
   // Calculate how much stack space (in bytes) are required to store caller
@@ -1040,10 +1061,18 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
 
   // Poke 'src' onto the stack. The offset is in bytes. The stack pointer must
   // be 16 byte aligned.
+  // When the optional template argument is kSignLR and control flow integrity
+  // measures are enabled, we sign the link register before poking it onto the
+  // stack. 'src' must be lr in this case.
+  template <StoreLRMode lr_mode = kDontStoreLR>
   void Poke(const CPURegister& src, const Operand& offset);
 
   // Peek at a value on the stack, and put it in 'dst'. The offset is in bytes.
   // The stack pointer must be aligned to 16 bytes.
+  // When the optional template argument is kAuthLR and control flow integrity
+  // measures are enabled, we authenticate the link register after peeking the
+  // value. 'dst' must be lr in this case.
+  template <LoadLRMode lr_mode = kDontLoadLR>
   void Peek(const CPURegister& dst, const Operand& offset);
 
   // Poke 'src1' and 'src2' onto the stack. The values written will be adjacent
@@ -1294,6 +1323,10 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
                                const Register& source);
   void DecompressAnyTagged(const Register& destination,
                            const MemOperand& field_operand);
+
+  // Restore FP and LR from the values stored in the current frame. This will
+  // authenticate the LR when pointer authentication is enabled.
+  void RestoreFPAndLR();
 
  protected:
   // The actual Push and Pop implementations. These don't generate any code
@@ -1623,21 +1656,27 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
     tbx(vd, vn, vn2, vn3, vn4, vm);
   }
 
+  // For the 'lr_mode' template argument of the following methods, see
+  // PushCPURegList/PopCPURegList.
+  template <StoreLRMode lr_mode = kDontStoreLR>
   inline void PushSizeRegList(
       RegList registers, unsigned reg_size,
       CPURegister::RegisterType type = CPURegister::kRegister) {
-    PushCPURegList(CPURegList(type, reg_size, registers));
+    PushCPURegList<lr_mode>(CPURegList(type, reg_size, registers));
   }
+  template <LoadLRMode lr_mode = kDontLoadLR>
   inline void PopSizeRegList(
       RegList registers, unsigned reg_size,
       CPURegister::RegisterType type = CPURegister::kRegister) {
-    PopCPURegList(CPURegList(type, reg_size, registers));
+    PopCPURegList<lr_mode>(CPURegList(type, reg_size, registers));
   }
+  template <StoreLRMode lr_mode = kDontStoreLR>
   inline void PushXRegList(RegList regs) {
-    PushSizeRegList(regs, kXRegSizeInBits);
+    PushSizeRegList<lr_mode>(regs, kXRegSizeInBits);
   }
+  template <LoadLRMode lr_mode = kDontLoadLR>
   inline void PopXRegList(RegList regs) {
-    PopSizeRegList(regs, kXRegSizeInBits);
+    PopSizeRegList<lr_mode>(regs, kXRegSizeInBits);
   }
   inline void PushWRegList(RegList regs) {
     PushSizeRegList(regs, kWRegSizeInBits);
@@ -1691,6 +1730,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
   // Floating-point registers are pushed before general-purpose registers, and
   // thus get higher addresses.
   //
+  // When control flow integrity measures are enabled, this method signs the
+  // link register before pushing it.
+  //
   // Note that registers are not checked for invalid values. Use this method
   // only if you know that the GC won't try to examine the values on the stack.
   void PushCalleeSavedRegisters();
@@ -1701,6 +1743,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
   // thus come from higher addresses.
   // Floating-point registers are popped after general-purpose registers, and
   // thus come from higher addresses.
+  //
+  // When control flow integrity measures are enabled, this method
+  // authenticates the link register after popping it.
   void PopCalleeSavedRegisters();
 
   // Helpers ------------------------------------------------------------------
@@ -1921,7 +1966,7 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
   // The offset is the offset from the start of the object, not the offset from
   // the tagged HeapObject pointer.  For use with FieldMemOperand(reg, off).
   void RecordWriteField(
-      Register object, int offset, Register value, LinkRegisterStatus lr_status,
+      Register object, int offset, Register value, LinkRegisterStatus lr_mode,
       SaveFPRegsMode save_fp,
       RememberedSetAction remembered_set_action = EMIT_REMEMBERED_SET,
       SmiCheck smi_check = INLINE_SMI_CHECK);
@@ -1930,7 +1975,7 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
   // has been written. |value| is the object being stored.
   void RecordWrite(
       Register object, Operand offset, Register value,
-      LinkRegisterStatus lr_status, SaveFPRegsMode save_fp,
+      LinkRegisterStatus lr_mode, SaveFPRegsMode save_fp,
       RememberedSetAction remembered_set_action = EMIT_REMEMBERED_SET,
       SmiCheck smi_check = INLINE_SMI_CHECK);
 
