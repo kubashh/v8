@@ -159,6 +159,10 @@ int AbstractCode::SourcePosition(int offset) {
   if (maybe_table.IsException()) return kNoSourcePosition;
 
   ByteArray source_position_table = ByteArray::cast(maybe_table);
+  if (offset == -1) {
+    // -1 signals that we are doing a stack guard interrupt.
+    // TODO(solanes): How to retrieve that value? The table here is a ByteArray.
+  }
   int position = 0;
   // Subtract one because the current PC is one instruction after the call site.
   if (IsCode()) offset--;
@@ -834,8 +838,7 @@ void BytecodeArray::MakeOlder() {
   // BytecodeArray is aged in concurrent marker.
   // The word must be completely within the byte code array.
   Address age_addr = address() + kBytecodeAgeOffset;
-  DCHECK_LE(RoundDown(age_addr, kSystemPointerSize) + kSystemPointerSize,
-            address() + Size());
+  DCHECK_LE(RoundDown(age_addr, kTaggedSize) + kTaggedSize, address() + Size());
   Age age = bytecode_age();
   if (age < kLastBytecodeAge) {
     base::AsAtomic8::Release_CompareAndSwap(reinterpret_cast<byte*>(age_addr),
