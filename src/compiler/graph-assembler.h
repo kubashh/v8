@@ -136,7 +136,7 @@ class NodeWrapper {
   Node* operator->() const { return node_; }
 
  private:
-  Node* const node_;
+  Node* node_;
 };
 
 class Effect : public NodeWrapper {
