@@ -136,7 +136,7 @@ class NodeWrapper {
   Node* operator->() const { return node_; }
 
  private:
-  Node* const node_;
+  Node* node_;
 };
 
 class Effect : public NodeWrapper {
@@ -453,9 +453,9 @@ class V8_EXPORT_PRIVATE GraphAssembler {
     }
 
     ~LoopScope() {
-      gasm_->loop_headers_.pop_back();
       DCHECK_EQ(static_cast<int>(gasm_->loop_headers_.size()),
                 gasm_->loop_nesting_level_);
+      gasm_->loop_headers_.pop_back();
     }
 
     GraphAssemblerLabel<sizeof...(Reps)>* loop_header_label() {
