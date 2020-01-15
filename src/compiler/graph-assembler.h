@@ -181,27 +181,13 @@ class GraphAssemblerLabel {
     return TNode<T>::UncheckedCast(PhiAt(index));
   }
 
-  template <typename... Reps>
-  explicit GraphAssemblerLabel(GraphAssemblerLabelType type,
-                               BasicBlock* basic_block, Reps... reps)
-      : type_(type), basic_block_(basic_block) {
-    STATIC_ASSERT(VarCount == sizeof...(reps));
-    MachineRepresentation reps_array[] = {MachineRepresentation::kNone,
-                                          reps...};
-    for (size_t i = 0; i < VarCount; i++) {
-      representations_[i] = reps_array[i + 1];
-    }
-  }
-
-  // Multiple merge variables with the same representation.
-  explicit GraphAssemblerLabel(GraphAssemblerLabelType type,
-                               BasicBlock* basic_block,
-                               MachineRepresentation rep)
-      : type_(type), basic_block_(basic_block) {
-    for (size_t i = 0; i < VarCount; i++) {
-      representations_[i] = rep;
-    }
-  }
+  GraphAssemblerLabel(GraphAssemblerLabelType type, BasicBlock* basic_block,
+                      int loop_nesting_level,
+                      const std::array<MachineRepresentation, VarCount>& reps)
+      : type_(type),
+        basic_block_(basic_block),
+        loop_nesting_level_(loop_nesting_level),
+        representations_(reps) {}
 
   ~GraphAssemblerLabel() { DCHECK(IsBound() || merged_count_ == 0); }
 
@@ -220,13 +206,14 @@ class GraphAssemblerLabel {
   BasicBlock* basic_block() { return basic_block_; }
 
   bool is_bound_ = false;
-  GraphAssemblerLabelType const type_;
-  BasicBlock* basic_block_;
+  const GraphAssemblerLabelType type_;
+  BasicBlock* const basic_block_;
+  const int loop_nesting_level_;
   size_t merged_count_ = 0;
   Node* effect_;
   Node* control_;
   std::array<Node*, VarCount> bindings_;
-  std::array<MachineRepresentation, VarCount> representations_;
+  const std::array<MachineRepresentation, VarCount> representations_;
 };
 
 class V8_EXPORT_PRIVATE GraphAssembler {
@@ -244,9 +231,18 @@ class V8_EXPORT_PRIVATE GraphAssembler {
   template <typename... Reps>
   GraphAssemblerLabel<sizeof...(Reps)> MakeLabelFor(
       GraphAssemblerLabelType type, Reps... reps) {
-    return GraphAssemblerLabel<sizeof...(Reps)>(
+    std::array<MachineRepresentation, sizeof...(Reps)> reps_array = {reps...};
+    return MakeLabel<sizeof...(Reps)>(reps_array, type);
+  }
+
+  // As above, but with an std::array of machine representations.
+  template <int VarCount>
+  GraphAssemblerLabel<VarCount> MakeLabel(
+      std::array<MachineRepresentation, VarCount> reps_array,
+      GraphAssemblerLabelType type) {
+    return GraphAssemblerLabel<VarCount>(
         type, NewBasicBlock(type == GraphAssemblerLabelType::kDeferred),
-        reps...);
+        loop_nesting_level_, reps_array);
   }
 
   // Convenience wrapper for creating non-deferred labels.
@@ -418,6 +414,77 @@ class V8_EXPORT_PRIVATE GraphAssembler {
   CommonOperatorBuilder* common() const { return mcgraph()->common(); }
   MachineOperatorBuilder* machine() const { return mcgraph()->machine(); }
 
+  // Updates machinery for creating {LoopExit,LoopExitEffect,LoopExitValue}
+  // nodes on loop exits (which are necessary for loop peeling).
+  //
+  // All labels created while a LoopScope is live are considered to be inside
+  // the loop.
+  template <MachineRepresentation... Reps>
+  class LoopScope final {
+   private:
+    // The internal scope is only here to increment the graph assembler's
+    // nesting level prior to `loop_header_label` creation below.
+    class LoopScopeInternal {
+     public:
+      explicit LoopScopeInternal(GraphAssembler* gasm)
+          : previous_loop_nesting_level_(gasm->loop_nesting_level_),
+            gasm_(gasm) {
+        gasm->loop_nesting_level_++;
+      }
+
+      ~LoopScopeInternal() {
+        gasm_->loop_nesting_level_--;
+        DCHECK_EQ(gasm_->loop_nesting_level_, previous_loop_nesting_level_);
+      }
+
+     private:
+      const int previous_loop_nesting_level_;
+      GraphAssembler* const gasm_;
+    };
+
+   public:
+    explicit LoopScope(GraphAssembler* gasm)
+        : internal_scope_(gasm),
+          gasm_(gasm),
+          loop_header_label_(gasm->MakeLoopLabel(Reps...)) {
+      gasm->loop_headers_.push_back(&loop_header_label_.control_);
+      DCHECK_EQ(static_cast<int>(gasm_->loop_headers_.size()),
+                gasm_->loop_nesting_level_);
+    }
+
+    ~LoopScope() {
+      DCHECK_EQ(static_cast<int>(gasm_->loop_headers_.size()),
+                gasm_->loop_nesting_level_);
+      gasm_->loop_headers_.pop_back();
+    }
+
+    GraphAssemblerLabel<sizeof...(Reps)>* loop_header_label() {
+      return &loop_header_label_;
+    }
+
+   private:
+    const LoopScopeInternal internal_scope_;
+    GraphAssembler* const gasm_;
+    GraphAssemblerLabel<sizeof...(Reps)> loop_header_label_;
+  };
+
+  // Upon destruction, restores effect and control to the state at construction.
+  class RestoreEffectControlScope {
+   public:
+    explicit RestoreEffectControlScope(GraphAssembler* gasm)
+        : gasm_(gasm), effect_(gasm->effect()), control_(gasm->control()) {}
+
+    ~RestoreEffectControlScope() {
+      gasm_->effect_ = effect_;
+      gasm_->control_ = control_;
+    }
+
+   private:
+    GraphAssembler* const gasm_;
+    const Effect effect_;
+    const Control control_;
+  };
+
  private:
   template <typename... Vars>
   void BranchImpl(Node* condition,
@@ -434,6 +501,12 @@ class V8_EXPORT_PRIVATE GraphAssembler {
   Node* effect_;
   Node* control_;
   std::unique_ptr<BasicBlockUpdater> block_updater_;
+
+  // Track loop information in order to properly mark loop exits with
+  // {LoopExit,LoopExitEffect,LoopExitValue} nodes. The outermost level has
+  // a nesting level of 0. See also GraphAssembler::LoopScope.
+  int loop_nesting_level_ = 0;
+  ZoneVector<Node**> loop_headers_;
 };
 
 template <size_t VarCount>
@@ -446,9 +519,29 @@ Node* GraphAssemblerLabel<VarCount>::PhiAt(size_t index) {
 template <typename... Vars>
 void GraphAssembler::MergeState(GraphAssemblerLabel<sizeof...(Vars)>* label,
                                 Vars... vars) {
-  int merged_count = static_cast<int>(label->merged_count_);
+  RestoreEffectControlScope restore_effect_control_scope(this);
+
+  const int merged_count = static_cast<int>(label->merged_count_);
   static constexpr int kVarCount = sizeof...(vars);
   std::array<Node*, kVarCount> var_array = {vars...};
+
+  const bool is_loop_exit = label->loop_nesting_level_ != loop_nesting_level_;
+  if (is_loop_exit) {
+    // Jumping from loops to loops not supported.
+    DCHECK(!label->IsLoop());
+    // Currently only the simple case of jumping one level is supported.
+    DCHECK_EQ(label->loop_nesting_level_, loop_nesting_level_ - 1);
+    DCHECK(!loop_headers_.empty());
+    DCHECK_NOT_NULL(*loop_headers_.back());
+
+    // Mark this exit as a candidate for loop peeling.
+    LoopExit(Control{*loop_headers_.back()});
+    LoopExitEffect();
+    for (size_t i = 0; i < kVarCount; i++) {
+      var_array[i] = LoopExitValue(var_array[i]);
+    }
+  }
+
   if (label->IsLoop()) {
     if (merged_count == 0) {
       DCHECK(!label->IsBound());
@@ -474,10 +567,10 @@ void GraphAssembler::MergeState(GraphAssemblerLabel<sizeof...(Vars)>* label,
       }
     }
   } else {
+    DCHECK(!label->IsLoop());
     DCHECK(!label->IsBound());
     if (merged_count == 0) {
       // Just set the control, effect and variables directly.
-      DCHECK(!label->IsBound());
       label->control_ = control();
       label->effect_ = effect();
       for (size_t i = 0; i < kVarCount; i++) {
