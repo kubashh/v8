@@ -6893,6 +6893,13 @@ TEST(Regress9701) {
   CHECK_EQ(mark_sweep_count_before, mark_sweep_count_after);
 }
 
+TEST(NoCodeRangeInJitlessMode) {
+  if (!FLAG_jitless) return;
+  CcTest::InitializeVM();
+  CHECK(
+      CcTest::i_isolate()->heap()->memory_allocator()->code_range().is_empty());
+}
+
 }  // namespace heap
 }  // namespace internal
 }  // namespace v8
