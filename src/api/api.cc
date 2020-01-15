@@ -985,7 +985,7 @@ void ResourceConstraints::ConfigureDefaultsFromHeapSize(
     set_initial_young_generation_size_in_bytes(young_generation);
     set_initial_old_generation_size_in_bytes(old_generation);
   }
-  if (i::kRequiresCodeRange) {
+  if (i::Heap::RequiresCodeRange()) {
     set_code_range_size_in_bytes(
         i::Min(i::kMaximalCodeRangeSize, maximum_heap_size_in_bytes));
   }
@@ -1000,7 +1000,7 @@ void ResourceConstraints::ConfigureDefaults(uint64_t physical_memory,
   set_max_young_generation_size_in_bytes(young_generation);
   set_max_old_generation_size_in_bytes(old_generation);
 
-  if (virtual_memory_limit > 0 && i::kRequiresCodeRange) {
+  if (virtual_memory_limit > 0 && i::Heap::RequiresCodeRange()) {
     set_code_range_size_in_bytes(
         i::Min(i::kMaximalCodeRangeSize,
                static_cast<size_t>(virtual_memory_limit / 8)));
