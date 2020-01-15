@@ -343,9 +343,10 @@ GraphAssembler::GraphAssembler(MachineGraph* mcgraph, Zone* zone,
       control_(nullptr),
       block_updater_(schedule != nullptr ? new BasicBlockUpdater(
                                                schedule, mcgraph->graph(), zone)
-                                         : nullptr) {}
+                                         : nullptr),
+      loop_headers_(zone) {}
 
-GraphAssembler::~GraphAssembler() = default;
+GraphAssembler::~GraphAssembler() { DCHECK_EQ(loop_nesting_level_, 0); }
 
 Node* GraphAssembler::IntPtrConstant(intptr_t value) {
   return AddClonedNode(mcgraph()->IntPtrConstant(value));
