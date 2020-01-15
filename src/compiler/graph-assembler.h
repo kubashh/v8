@@ -136,7 +136,7 @@ class NodeWrapper {
   Node* operator->() const { return node_; }
 
  private:
-  Node* const node_;
+  Node* node_;
 };
 
 class Effect : public NodeWrapper {
@@ -144,7 +144,7 @@ class Effect : public NodeWrapper {
   explicit constexpr Effect(Node* node) : NodeWrapper(node) {
     // TODO(jgruber): Remove the End/Dead special case.
     SLOW_DCHECK(node == nullptr || node->op()->opcode() == IrOpcode::kEnd ||
-                node->op()->opcode() == IrOpcode::kDead ||
+                node->opcode() == IrOpcode::kDead ||
                 node->op()->EffectOutputCount() > 0);
   }
 };
@@ -153,8 +153,8 @@ class Control : public NodeWrapper {
  public:
   explicit constexpr Control(Node* node) : NodeWrapper(node) {
     // TODO(jgruber): Remove the End/Dead special case.
-    SLOW_DCHECK(node == nullptr || node->op()->opcode() == IrOpcode::kEnd ||
-                node->op()->opcode() == IrOpcode::kDead ||
+    SLOW_DCHECK(node == nullptr || node->opcode() == IrOpcode::kEnd ||
+                node->opcode() == IrOpcode::kDead ||
                 node->op()->ControlOutputCount() > 0);
   }
 };
@@ -162,7 +162,10 @@ class Control : public NodeWrapper {
 class FrameState : public NodeWrapper {
  public:
   explicit constexpr FrameState(Node* node) : NodeWrapper(node) {
-    SLOW_DCHECK(node->op()->opcode() == IrOpcode::kFrameState);
+    // TODO(jgruber): Disallow kStart (needed for PromiseConstructorBasic unit
+    // test, among others).
+    SLOW_DCHECK(node->opcode() == IrOpcode::kFrameState ||
+                node->opcode() == IrOpcode::kStart);
   }
 };
 
