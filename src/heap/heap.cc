@@ -393,6 +393,10 @@ bool Heap::HasBeenSetUp() {
   return new_space_ != nullptr;
 }
 
+// static
+bool Heap::RequiresCodeRange() {
+  return kPlatformRequiresCodeRange && !FLAG_jitless;
+}
 
 GarbageCollector Heap::SelectGarbageCollector(AllocationSpace space,
                                               const char** reason) {

@@ -6893,6 +6893,18 @@ TEST(Regress9701) {
   CHECK_EQ(mark_sweep_count_before, mark_sweep_count_after);
 }
 
+UNINITIALIZED_TEST(NoCodeRangeInJitlessMode) {
+  bool jitless_saved = FLAG_jitless;
+  FLAG_jitless = true;
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
+  v8::Isolate* isolate = v8::Isolate::New(create_params);
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  CHECK(i_isolate->heap()->memory_allocator()->code_range().is_empty());
+  isolate->Dispose();
+  FLAG_jitless = jitless_saved;
+}
+
 }  // namespace heap
 }  // namespace internal
 }  // namespace v8
