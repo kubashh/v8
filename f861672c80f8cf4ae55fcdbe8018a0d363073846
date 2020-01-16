@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db50eb56_b3f4dc58",
+        "filename": "src/compiler/graph-assembler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-16T18:11:23Z",
+      "side": 1,
+      "message": "Drive-by comment: I think Dead is fine as a control node, we use it sometimes to let dead code elimination remove code starting at some control. Dead does have a control output, so it can indeed be removed from this DCHECK without changing it. \nThe kEnd special case is strange though, indeed.",
+      "range": {
+        "startLine": 155,
+        "startChar": 33,
+        "endLine": 155,
+        "endChar": 41
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c109ec55_ad59b5e5",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-16T18:11:23Z",
+      "side": 1,
+      "message": "Why does IfException() take effect and control while IfSuccess() doesn\u0027t?",
+      "range": {
+        "startLine": 272,
+        "startChar": 27,
+        "endLine": 272,
+        "endChar": 59
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e247086d_3e33faf1",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-16T18:11:23Z",
+      "side": 1,
+      "message": "Doesn\u0027t this constructor leave has_handler_ uninitialized?",
+      "range": {
+        "startLine": 288,
+        "startChar": 13,
+        "endLine": 288,
+        "endChar": 23
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5989ffc0_f938eee2",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-16T18:11:23Z",
+      "side": 1,
+      "message": "How about a DCHECK(is_outermost()) instead of this comment?",
+      "range": {
+        "startLine": 308,
+        "startChar": 4,
+        "endLine": 308,
+        "endChar": 61
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0cbcdd7_34643fc2",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-16T18:11:23Z",
+      "side": 1,
+      "message": "Can we add MayThrow to AddNode (perhaps in a forwarding version of AddNode defined in JSCallReducerAssembler)? Then it should be automatic. There is an operator property to figure out which nodes may throw.",
+      "range": {
+        "startLine": 831,
+        "startChar": 4,
+        "endLine": 831,
+        "endChar": 12
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fb33559_92e018a2",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1895,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-16T18:11:23Z",
+      "side": 1,
+      "message": "I don\u0027t understand why you copy this and not just keep using JSCallReducer::CreateArtificialFrameState.",
+      "range": {
+        "startLine": 1895,
+        "startChar": 6,
+        "endLine": 1895,
+        "endChar": 32
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
