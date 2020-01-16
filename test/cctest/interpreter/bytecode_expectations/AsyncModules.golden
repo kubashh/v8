@@ -14,9 +14,8 @@ snippet: "
 "
 frame size: 8
 parameter count: 2
-bytecode array length: 142
+bytecode array length: 141
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(LdaConstant), U8(2),
                 B(Star), R(3),
@@ -84,7 +83,7 @@ constant pool: [
   SCOPE_INFO_TYPE,
 ]
 handlers: [
-  [64, 114, 114],
+  [63, 113, 113],
 ]
 
 ---
@@ -93,9 +92,8 @@ snippet: "
 "
 frame size: 8
 parameter count: 2
-bytecode array length: 152
+bytecode array length: 151
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(LdaConstant), U8(2),
                 B(Star), R(3),
@@ -167,7 +165,7 @@ constant pool: [
   SCOPE_INFO_TYPE,
 ]
 handlers: [
-  [64, 124, 124],
+  [63, 123, 123],
 ]
 
 ---
@@ -180,9 +178,8 @@ snippet: "
 "
 frame size: 9
 parameter count: 2
-bytecode array length: 153
+bytecode array length: 152
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(LdaConstant), U8(2),
                 B(Star), R(4),
@@ -255,7 +252,7 @@ constant pool: [
   SCOPE_INFO_TYPE,
 ]
 handlers: [
-  [72, 125, 125],
+  [71, 124, 124],
 ]
 
 ---
@@ -265,9 +262,8 @@ snippet: "
 "
 frame size: 9
 parameter count: 2
-bytecode array length: 164
+bytecode array length: 163
 bytecodes: [
-  /*    0 E> */ B(StackCheck),
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(LdaConstant), U8(2),
                 B(Star), R(4),
@@ -344,6 +340,6 @@ constant pool: [
   SCOPE_INFO_TYPE,
 ]
 handlers: [
-  [76, 136, 136],
+  [75, 135, 135],
 ]
 
