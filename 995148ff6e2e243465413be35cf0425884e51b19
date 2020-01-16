@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19f3e621_0ec57bb2",
+        "filename": "src/wasm/wasm-serialization.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-16T17:44:43Z",
+      "side": 1,
+      "message": "I would propose to not set a default argument, to force us to think about the source URL whenever we deserialize a module. Otherwise it\u0027s really easy to accidentally not pass a URL.",
+      "revId": "995148ff6e2e243465413be35cf0425884e51b19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
