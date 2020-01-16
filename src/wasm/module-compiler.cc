@@ -1671,6 +1671,10 @@ class AsyncCompileJob::CompilationStateCallback {
       case CompilationEvent::kFinishedBaselineCompilation:
         DCHECK(!last_event_.has_value());
         if (job_->DecrementAndCheckFinisherCount()) {
+          if (job_->stream_ == nullptr) {
+            job_->isolate_->wasm_engine()->UpdateNativeModuleCache(
+                job_->native_module_, false);
+          }
           job_->DoSync<CompileFinished>();
         }
         break;
@@ -1682,6 +1686,10 @@ class AsyncCompileJob::CompilationStateCallback {
       case CompilationEvent::kFailedCompilation:
         DCHECK(!last_event_.has_value());
         if (job_->DecrementAndCheckFinisherCount()) {
+          if (job_->stream_ == nullptr) {
+            job_->isolate_->wasm_engine()->UpdateNativeModuleCache(
+                job_->native_module_, true);
+          }
           job_->DoSync<CompileFailed>();
         }
         break;
@@ -1934,6 +1942,23 @@ class AsyncCompileJob::PrepareAndStartCompile : public CompileStep {
 
   void RunInForeground(AsyncCompileJob* job) override {
     TRACE_COMPILE("(2) Prepare and start compile...\n");
+
+    // TODO(v8:6847): Also share streaming compilation result.
+    if (job->stream_ == nullptr) {
+      auto cached_native_module =
+          job->isolate_->wasm_engine()->MaybeGetNativeModule(
+              module_->origin, job->wire_bytes_.module_bytes());
+      if (cached_native_module != nullptr) {
+        job->native_module_ = std::move(cached_native_module);
+        job->PrepareRuntimeObjects();
+        Handle<FixedArray> export_wrappers;
+        CompileJsToWasmWrappers(job->isolate_, job->native_module_->module(),
+                                &export_wrappers);
+        job->module_object_->set_export_wrappers(*export_wrappers);
+        job->FinishCompile();
+        return;
+      }
+    }
 
     // Make sure all compilation tasks stopped running. Decoding (async step)
     // is done.
