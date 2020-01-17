@@ -22,6 +22,30 @@
       "revId": "3c1c57d67f4aba9f270c519662f5e03ff0fe4183",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27069135_f1608598",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-01-17T17:50:06Z",
+      "side": 1,
+      "message": "Ah yes, good catch, makes for a nicer alignment of code too!",
+      "parentUuid": "838e9b18_b85b30f3",
+      "range": {
+        "startLine": 712,
+        "startChar": 15,
+        "endLine": 712,
+        "endChar": 27
+      },
+      "revId": "3c1c57d67f4aba9f270c519662f5e03ff0fe4183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
