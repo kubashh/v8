@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d171762_7b7e0bed",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-17T11:47:48Z",
+      "side": 1,
+      "message": "I would propose to shorten this to \"emit_u32_to_intptr\".",
+      "range": {
+        "startLine": 543,
+        "startChar": 14,
+        "endLine": 543,
+        "endChar": 41
+      },
+      "revId": "4268dc86fabc34b86283b68d49da1e64b39f59df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
