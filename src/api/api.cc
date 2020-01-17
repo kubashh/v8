@@ -8575,11 +8575,7 @@ bool Isolate::GetHeapCodeAndMetadataStatistics(
 
 v8::MaybeLocal<v8::Promise> Isolate::MeasureMemory(
     v8::Local<v8::Context> context, MeasureMemoryMode mode) {
-  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
-  i::Handle<i::NativeContext> native_context =
-      handle(Utils::OpenHandle(*context)->native_context(), isolate);
-  return v8::Utils::PromiseToLocal(
-      isolate->heap()->MeasureMemory(native_context, mode));
+  return v8::MaybeLocal<v8::Promise>();
 }
 
 void Isolate::GetStackSample(const RegisterState& state, void** frames,

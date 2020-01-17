@@ -8597,6 +8597,7 @@ class V8_EXPORT Isolate {
    *   memory usage or just the total memory usage.
    * \returns a promise that will be resolved with memory usage estimate.
    */
+  V8_DEPRECATE_SOON("Use the version with a delegate")
   v8::MaybeLocal<v8::Promise> MeasureMemory(v8::Local<v8::Context> context,
                                             MeasureMemoryMode mode);
 
