@@ -16,6 +16,24 @@
       "revId": "995148ff6e2e243465413be35cf0425884e51b19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "032f5c0c_92860ee1",
+        "filename": "src/wasm/wasm-serialization.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-01-17T09:58:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19f3e621_0ec57bb2",
+      "revId": "995148ff6e2e243465413be35cf0425884e51b19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
