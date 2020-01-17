@@ -26,9 +26,12 @@ void FeedbackCell::clear_padding() {
          FeedbackCell::kAlignedSize - FeedbackCell::kUnalignedSize);
 }
 
-void FeedbackCell::reset() {
-  set_value(GetReadOnlyRoots().undefined_value());
+void FeedbackCell::reset_feedback_vector() {
   set_interrupt_budget(FeedbackCell::GetInitialInterruptBudget());
+  if (value().IsUndefined() || value().IsClosureFeedbackCellArray()) return;
+  CHECK(value().IsFeedbackVector());
+  FeedbackVector feedback_vector = FeedbackVector::cast(value());
+  set_value(feedback_vector.closure_feedback_cell_array());
 }
 
 }  // namespace internal

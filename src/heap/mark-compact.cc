@@ -2252,7 +2252,16 @@ void MarkCompactCollector::ClearFlushedJsFunctions() {
   JSFunction flushed_js_function;
   while (weak_objects_.flushed_js_functions.Pop(kMainThreadTask,
                                                 &flushed_js_function)) {
+    bool feedback_cell_needs_reset =
+        flushed_js_function.NeedsResetDueToFlushedBytecode() &&
+        flushed_js_function.has_feedback_vector();
     flushed_js_function.ResetIfBytecodeFlushed();
+
+    if (feedback_cell_needs_reset) {
+      FeedbackCell feedback_cell = flushed_js_function.raw_feedback_cell();
+      ObjectSlot slot = feedback_cell.RawField(FeedbackCell::kValueOffset);
+      RecordSlot(feedback_cell, slot, HeapObject::cast(*slot));
+    }
   }
 }
 
