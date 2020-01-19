@@ -13,6 +13,7 @@
 #include "src/heap/factory.h"
 #include "src/heap/incremental-marking.h"
 #include "src/heap/marking-worklist.h"
+#include "src/heap/memory-measurement-inl.h"
 #include "src/objects/js-promise-inl.h"
 #include "src/objects/js-promise.h"
 #include "src/tasks/task-utils.h"
@@ -311,6 +312,15 @@ std::unique_ptr<v8::MeasureMemoryDelegate> MemoryMeasurement::DefaultDelegate(
     v8::MeasureMemoryMode mode) {
   return std::make_unique<MeasureMemoryDelegate>(isolate, context, promise,
                                                  mode);
+}
+
+void NativeContextInferrer::InferAndSetContext(
+    Isolate* isolate, Map map, HeapObject object,
+    MarkingWorklists* marking_worklists) {
+  Address context = marking_worklists->Context();
+  if (Infer(isolate, map, object, &context)) {
+    marking_worklists->SwitchToContext(context);
+  }
 }
 
 bool NativeContextInferrer::InferForJSFunction(JSFunction function,
