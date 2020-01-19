@@ -97,7 +97,7 @@ bool NativeContextInferrer::InferForJSObject(Isolate* isolate, Map map,
       return true;
     }
   }
-  if (*native_context == MarkingWorklists::kSharedContext) {
+  /*if (*native_context == MarkingWorklists::kSharedContext) {
     // This lookup is expensive, so perform it only if the object is currently
     // attributed to the shared context.
     // The maximum number of steps to perform when looking for the context.
@@ -107,9 +107,34 @@ bool NativeContextInferrer::InferForJSObject(Isolate* isolate, Map map,
       return InferForJSFunction(JSFunction::cast(maybe_constructor),
                                 native_context);
     }
-  }
+  }*/
   return false;
 }
+  
+bool NativeContextInferrer::Infer(Isolate* isolate, Map map, HeapObject object,
+                                  Address* native_context) {
+  switch (map.visitor_id()) {
+    case kVisitContext:
+      *native_context = Context::cast(object).native_context().ptr();
+      return true;
+    case kVisitNativeContext:
+      *native_context = object.ptr();
+      return true;
+    case kVisitJSFunction:
+      return InferForJSFunction(JSFunction::cast(object), native_context);
+    case kVisitJSApiObject:
+    case kVisitJSArrayBuffer:
+    case kVisitJSObject:
+    case kVisitJSObjectFast:
+    case kVisitJSTypedArray:
+    case kVisitJSWeakCollection:
+      return InferForJSObject(isolate, map, JSObject::cast(object),
+                              native_context);
+    default:
+      return false;
+  }
+}
+
 
 void NativeContextStats::Clear() { size_by_context_.clear(); }
 

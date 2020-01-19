@@ -442,7 +442,7 @@ void ConcurrentMarking::Run(int task_id, TaskState* task_state) {
         } else {
           Map map = object.synchronized_map(isolate);
           if (is_per_context_mode) {
-            Address context;
+            Address context = 1;
             if (native_context_inferrer.Infer(isolate, map, object, &context)) {
               marking_worklists.SwitchToContext(context);
             }

@@ -33,7 +33,7 @@ class V8_EXPORT_PRIVATE NativeContextInferrer {
   // It should be initialized to the context that will be used for the object
   // if the inference is not successful. The function performs more work if the
   // context is the shared context.
-  V8_INLINE bool Infer(Isolate* isolate, Map map, HeapObject object,
+  bool Infer(Isolate* isolate, Map map, HeapObject object,
                        Address* native_context);
 
  private:
