@@ -1869,10 +1869,7 @@ size_t MarkCompactCollector::ProcessMarkingWorklist(size_t bytes_to_process) {
     }
     Map map = object.map(isolate);
     if (is_per_context_mode) {
-      Address context;
-      if (native_context_inferrer_.Infer(isolate, map, object, &context)) {
-        marking_worklists()->SwitchToContext(context);
-      }
+      native_context_inferrer_.InferAndSwitchContext(isolate, map, object, marking_worklists());
     }
     size_t visited_size = marking_visitor_->Visit(map, object);
     if (is_per_context_mode) {
