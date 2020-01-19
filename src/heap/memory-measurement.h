@@ -18,6 +18,7 @@ namespace internal {
 
 class Heap;
 class NativeContextStats;
+class MarkingWorklists;
 
 class V8_EXPORT_PRIVATE MemoryMeasurement {
  public:
@@ -64,10 +65,12 @@ class V8_EXPORT_PRIVATE NativeContextInferrer {
   // It should be initialized to the context that will be used for the object
   // if the inference is not successful. The function performs more work if the
   // context is the shared context.
-  V8_INLINE bool Infer(Isolate* isolate, Map map, HeapObject object,
-                       Address* native_context);
+  void InferAndSetContext(Isolate* isolate, Map map, HeapObject object,
+                          MarkingWorklists* marking_worklists);
 
  private:
+  V8_INLINE bool Infer(Isolate* isolate, Map map, HeapObject object,
+                       Address* native_context);
   bool InferForJSFunction(JSFunction function, Address* native_context);
   bool InferForJSObject(Isolate* isolate, Map map, JSObject object,
                         Address* native_context);
