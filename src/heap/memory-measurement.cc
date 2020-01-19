@@ -97,7 +97,7 @@ bool NativeContextInferrer::InferForJSObject(Isolate* isolate, Map map,
       return true;
     }
   }
-  if (*native_context == MarkingWorklists::kSharedContext) {
+  /*if (*native_context == MarkingWorklists::kSharedContext) {
     // This lookup is expensive, so perform it only if the object is currently
     // attributed to the shared context.
     // The maximum number of steps to perform when looking for the context.
@@ -107,7 +107,7 @@ bool NativeContextInferrer::InferForJSObject(Isolate* isolate, Map map,
       return InferForJSFunction(JSFunction::cast(maybe_constructor),
                                 native_context);
     }
-  }
+  }*/
   return false;
 }
 
