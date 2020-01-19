@@ -313,6 +313,15 @@ std::unique_ptr<v8::MeasureMemoryDelegate> MemoryMeasurement::DefaultDelegate(
                                                  mode);
 }
 
+void NativeContextInferrer::InferAndSetContext(
+    Isolate* isolate, Map map, HeapObject object,
+    MarkingWorklists* marking_worklists) {
+  Address context = marking_worklists->Context();
+  if (Infer(isolate, map, object, &context)) {
+    marking_worklists->SwitchToContext(context);
+  }
+}
+
 bool NativeContextInferrer::InferForJSFunction(JSFunction function,
                                                Address* native_context) {
   if (function.has_context()) {
