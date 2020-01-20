@@ -28,10 +28,13 @@ function listener(event, exec_state, event_data, data) {
       assertThrows(() => exec_state.frame(0).evaluate(source, true),
                    EvalError);
     }
+    function succeed(source) {
+      exec_state.frame(0).evaluate(source, true);
+    }
     fail("new Promise()");
     fail("generator()");
     fail("g.next()");
-    fail("async()");
+    succeed("async()");
     fail("Promise.resolve()");
     fail("Promise.reject()");
     fail("p.then(() => {})");
@@ -39,7 +42,7 @@ function listener(event, exec_state, event_data, data) {
     fail("p.finally(() => {})");
     fail("Promise.all([p, p])");
     fail("Promise.race([p, p])");
-    fail("(async function() {})()");
+    succeed("(async function() {})()");
     fail("(async function() { await 1; })()");
   } catch (e) {
     exception = e;
