@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43d321fc_9539b7cf",
+        "filename": "src/compiler/node.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-20T16:30:19Z",
+      "side": 1,
+      "message": "How about:\n\n  for (Use* use \u003d first_use_; use; use \u003d use-\u003enext) {\n    if (use-\u003efrom() !\u003d owner) {\n      return false;\n    }\n  }\n  return true;",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 19
+      },
+      "revId": "58b751dde5e752f28a4e174b710f1321f000bd67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
