@@ -22,6 +22,30 @@
       "revId": "58b751dde5e752f28a4e174b710f1321f000bd67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b41bff1a_bc29a555",
+        "filename": "src/compiler/node.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-01-20T16:34:05Z",
+      "side": 1,
+      "message": "The problem with that shorter code is that we need to check for first_use_ to not be null as well, i.e have at least one use.",
+      "parentUuid": "43d321fc_9539b7cf",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 19
+      },
+      "revId": "58b751dde5e752f28a4e174b710f1321f000bd67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
