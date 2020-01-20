@@ -759,6 +759,10 @@ Reduction MachineOperatorReducer::Reduce(Node* node) {
     case IrOpcode::kChangeInt32ToInt64: {
       Int32Matcher m(node->InputAt(0));
       if (m.HasValue()) return ReplaceInt64(m.Value());
+      if (m.IsTruncateInt64ToInt32()) {
+        node->ReplaceInput(0, m.InputAt(0));
+        return Changed(node);
+      }
       break;
     }
     case IrOpcode::kChangeInt64ToFloat64: {
