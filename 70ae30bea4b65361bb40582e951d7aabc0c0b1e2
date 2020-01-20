@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51400de7_b5f9dc6a",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-20T18:11:28Z",
+      "side": 1,
+      "message": "drive-by comment: I might have asked that before, but why doesn\u0027t IfBuilder trigger Build() automatically in the destructor? We could have a DCHECK to make sure that current effect and control are unchanged from the constructor until the descructor to avoid pathological cases where the IfBuilder is kept alive.",
+      "range": {
+        "startLine": 580,
+        "startChar": 8,
+        "endLine": 580,
+        "endChar": 16
+      },
+      "revId": "70ae30bea4b65361bb40582e951d7aabc0c0b1e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
