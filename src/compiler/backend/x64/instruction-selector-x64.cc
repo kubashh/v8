@@ -941,15 +941,18 @@ void InstructionSelector::VisitSimd128ReverseBytes(Node* node) {
 
 void InstructionSelector::VisitInt32Add(Node* node) {
   X64OperandGenerator g(this);
-
   // No need to truncate the values before Int32Add.
   DCHECK_EQ(node->InputCount(), 2);
   Node* left = node->InputAt(0);
   Node* right = node->InputAt(1);
-  if (left->opcode() == IrOpcode::kTruncateInt64ToInt32) {
+  if (left->opcode() == IrOpcode::kTruncateInt64ToInt32 &&
+      this->CanCover(node, left) &&
+      left->InputAt(0)->opcode() != IrOpcode::kParameter) {
     node->ReplaceInput(0, left->InputAt(0));
   }
-  if (right->opcode() == IrOpcode::kTruncateInt64ToInt32) {
+  if (right->opcode() == IrOpcode::kTruncateInt64ToInt32 &&
+      this->CanCover(node, right) &&
+      right->InputAt(0)->opcode() != IrOpcode::kParameter) {
     node->ReplaceInput(1, right->InputAt(0));
   }
 
