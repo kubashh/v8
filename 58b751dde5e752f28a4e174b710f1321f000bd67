@@ -70,6 +70,30 @@
       "revId": "58b751dde5e752f28a4e174b710f1321f000bd67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "76d30ad5_5899fa97",
+        "filename": "src/compiler/node.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-01-20T17:15:18Z",
+      "side": 1,
+      "message": "That\u0027s the code I originally had until a took a look at the other OwnedBy. I thought it would be confusing to have different implementations of similar methods.",
+      "parentUuid": "6c28b091_ee4cb726",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 19
+      },
+      "revId": "58b751dde5e752f28a4e174b710f1321f000bd67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
