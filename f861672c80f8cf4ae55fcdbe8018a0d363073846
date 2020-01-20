@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "56a82a21_4dc29183",
+        "filename": "src/compiler/graph-assembler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-20T11:18:00Z",
+      "side": 1,
+      "message": "Interesting.. I removed kDead in the latest PS. I assume kEnd comes from cctests, similar to kStart below.",
+      "parentUuid": "db50eb56_b3f4dc58",
+      "range": {
+        "startLine": 155,
+        "startChar": 33,
+        "endLine": 155,
+        "endChar": 41
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c109ec55_ad59b5e5",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-16T18:11:23Z",
       "side": 1,
       "message": "Why does IfException() take effect and control while IfSuccess() doesn\u0027t?",
+      "range": {
+        "startLine": 272,
+        "startChar": 27,
+        "endLine": 272,
+        "endChar": 59
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2859fc6b_b3b4b050",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-20T11:18:00Z",
+      "side": 1,
+      "message": "IfSuccess, like almost all other gasm functions, updates the effect/control chain and uses the current effect()/control() nodes as input. \n\nIfException does not update the e/c chain, and the e/c inputs were a way of noting \u0027this call is special\u0027. I agree the logic here is funky, but then again it should never be used directly (only through CatchScope).\n\nSince this is the only use-site, I think I\u0027ll just inline the IfSuccess/IfException node creation here.",
+      "parentUuid": "c109ec55_ad59b5e5",
       "range": {
         "startLine": 272,
         "startChar": 27,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0fdcc840_7ec16413",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-20T11:18:00Z",
+      "side": 1,
+      "message": "Done (it was never used prior to set_has_handler, but you\u0027re right it\u0027s safer to explicitly initialize here).",
+      "parentUuid": "e247086d_3e33faf1",
+      "range": {
+        "startLine": 288,
+        "startChar": 13,
+        "endLine": 288,
+        "endChar": 23
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5989ffc0_f938eee2",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 8
@@ -91,6 +163,30 @@
       "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ca2e198_cb558379",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-20T11:18:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5989ffc0_f938eee2",
+      "range": {
+        "startLine": 308,
+        "startChar": 4,
+        "endLine": 308,
+        "endChar": 61
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "7af253c2_70ec7acf",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-20T11:18:00Z",
+      "side": 1,
+      "message": "In current reductions, not all operators that may throw an exception are marked with MayThrow. See e.g. https://cs.chromium.org/chromium/src/v8/src/compiler/js-call-reducer.cc?l\u003d245\u0026rcl\u003dabd1a0fc04476bbb27ef2dfda2e444cc1467f5f6 and https://cs.chromium.org/chromium/src/v8/src/compiler/js-call-reducer.cc?l\u003d1182\u0026rcl\u003dabd1a0fc04476bbb27ef2dfda2e444cc1467f5f6.\n\nIt\u0027s not yet clear whether this is a common pattern, or indeed if there\u0027s a real benefit to the manual IfException omissions. If not, then doing this in AddNode would indeed be preferable. Opened https://crbug.com/v8/10141.",
+      "parentUuid": "c0cbcdd7_34643fc2",
+      "range": {
+        "startLine": 831,
+        "startChar": 4,
+        "endLine": 831,
+        "endChar": 12
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8fb33559_92e018a2",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 8
@@ -137,6 +257,30 @@
       "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4f031d3_3b102240",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1895,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-20T11:18:00Z",
+      "side": 1,
+      "message": "1. I don\u0027t have access to the JSCallReducer here (needed for common() and graph()), and 2. I wanted to remove the JSCallReducer version of CreateArtificialFrameState. Now that you mention it, that can already be done now.",
+      "parentUuid": "8fb33559_92e018a2",
+      "range": {
+        "startLine": 1895,
+        "startChar": 6,
+        "endLine": 1895,
+        "endChar": 32
+      },
+      "revId": "f861672c80f8cf4ae55fcdbe8018a0d363073846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
