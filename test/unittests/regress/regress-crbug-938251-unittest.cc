@@ -9,9 +9,9 @@
 namespace v8 {
 namespace internal {
 
-using NewFixedDoubleArrayTest = TestWithIsolateAndZone;
+using NewFixedDoubleArrayDeathTest = TestWithIsolateAndZone;
 
-TEST_F(NewFixedDoubleArrayTest, ThrowOnNegativeLength) {
+TEST_F(NewFixedDoubleArrayDeathTest, ThrowOnNegativeLength) {
   ASSERT_DEATH_IF_SUPPORTED({ factory()->NewFixedDoubleArray(-1); },
                             "Fatal javascript OOM in invalid array length");
 }

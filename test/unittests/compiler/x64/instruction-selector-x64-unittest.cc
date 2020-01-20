@@ -91,10 +91,11 @@ static const LoadWithToInt64Extension kLoadWithToInt64Extensions[] = {
 
 }  // namespace
 
-using InstructionSelectorChangeInt32ToInt64Test =
+using InstructionSelectorChangeInt32ToInt64DeathTest =
     InstructionSelectorTestWithParam<LoadWithToInt64Extension>;
 
-TEST_P(InstructionSelectorChangeInt32ToInt64Test, ChangeInt32ToInt64WithLoad) {
+TEST_P(InstructionSelectorChangeInt32ToInt64DeathTest,
+       ChangeInt32ToInt64WithLoad) {
   const LoadWithToInt64Extension extension = GetParam();
   StreamBuilder m(this, MachineType::Int64(), MachineType::Pointer());
   m.Return(m.ChangeInt32ToInt64(m.Load(extension.type, m.Parameter(0))));
@@ -104,7 +105,7 @@ TEST_P(InstructionSelectorChangeInt32ToInt64Test, ChangeInt32ToInt64WithLoad) {
 }
 
 INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
-                         InstructionSelectorChangeInt32ToInt64Test,
+                         InstructionSelectorChangeInt32ToInt64DeathTest,
                          ::testing::ValuesIn(kLoadWithToInt64Extensions));
 
 // -----------------------------------------------------------------------------
@@ -139,10 +140,10 @@ static const MemoryAccess kMemoryAccesses[] = {
 
 }  // namespace
 
-using InstructionSelectorMemoryAccessTest =
+using InstructionSelectorMemoryAccessDeathTest =
     InstructionSelectorTestWithParam<MemoryAccess>;
 
-TEST_P(InstructionSelectorMemoryAccessTest, LoadWithParameters) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, LoadWithParameters) {
   const MemoryAccess memacc = GetParam();
   StreamBuilder m(this, memacc.type, MachineType::Pointer(),
                   MachineType::Int32());
@@ -154,8 +155,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, LoadWithParameters) {
   EXPECT_EQ(1U, s[0]->OutputCount());
 }
 
-
-TEST_P(InstructionSelectorMemoryAccessTest, StoreWithParameters) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, StoreWithParameters) {
   const MemoryAccess memacc = GetParam();
   StreamBuilder m(this, MachineType::Int32(), MachineType::Pointer(),
                   MachineType::Int32(), memacc.type);
@@ -170,7 +170,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, StoreWithParameters) {
 }
 
 INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
-                         InstructionSelectorMemoryAccessTest,
+                         InstructionSelectorMemoryAccessDeathTest,
                          ::testing::ValuesIn(kMemoryAccesses));
 
 // -----------------------------------------------------------------------------
@@ -216,10 +216,10 @@ const BinaryOperation kWord32BinaryOperations[] = {
 
 }  // namespace
 
-using InstructionSelectorChangeUint32ToUint64Test =
+using InstructionSelectorChangeUint32ToUint64DeathTest =
     InstructionSelectorTestWithParam<BinaryOperation>;
 
-TEST_P(InstructionSelectorChangeUint32ToUint64Test, ChangeUint32ToUint64) {
+TEST_P(InstructionSelectorChangeUint32ToUint64DeathTest, ChangeUint32ToUint64) {
   const BinaryOperation& bop = GetParam();
   StreamBuilder m(this, MachineType::Uint64(), MachineType::Int32(),
                   MachineType::Int32());
@@ -231,7 +231,7 @@ TEST_P(InstructionSelectorChangeUint32ToUint64Test, ChangeUint32ToUint64) {
 }
 
 INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
-                         InstructionSelectorChangeUint32ToUint64Test,
+                         InstructionSelectorChangeUint32ToUint64DeathTest,
                          ::testing::ValuesIn(kWord32BinaryOperations));
 
 // -----------------------------------------------------------------------------
@@ -295,10 +295,10 @@ const MachInst2 kCanElideChangeUint32ToUint64[] = {
 
 }  // namespace
 
-using InstructionSelectorElidedChangeUint32ToUint64Test =
+using InstructionSelectorElidedChangeUint32ToUint64DeathTest =
     InstructionSelectorTestWithParam<MachInst2>;
 
-TEST_P(InstructionSelectorElidedChangeUint32ToUint64Test, Parameter) {
+TEST_P(InstructionSelectorElidedChangeUint32ToUint64DeathTest, Parameter) {
   const MachInst2 binop = GetParam();
   StreamBuilder m(this, MachineType::Uint64(), binop.machine_type,
                   binop.machine_type);
@@ -313,7 +313,7 @@ TEST_P(InstructionSelectorElidedChangeUint32ToUint64Test, Parameter) {
 }
 
 INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
-                         InstructionSelectorElidedChangeUint32ToUint64Test,
+                         InstructionSelectorElidedChangeUint32ToUint64DeathTest,
                          ::testing::ValuesIn(kCanElideChangeUint32ToUint64));
 
 // ChangeUint32ToUint64AfterLoad

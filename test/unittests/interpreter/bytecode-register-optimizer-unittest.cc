@@ -13,7 +13,7 @@ namespace v8 {
 namespace internal {
 namespace interpreter {
 
-class BytecodeRegisterOptimizerTest
+class BytecodeRegisterOptimizerDeathTest
     : public BytecodeRegisterOptimizer::BytecodeWriter,
       public TestWithIsolateAndZone {
  public:
@@ -23,8 +23,8 @@ class BytecodeRegisterOptimizerTest
     Register output;
   };
 
-  BytecodeRegisterOptimizerTest() = default;
-  ~BytecodeRegisterOptimizerTest() override { delete register_allocator_; }
+  BytecodeRegisterOptimizerDeathTest() = default;
+  ~BytecodeRegisterOptimizerDeathTest() override { delete register_allocator_; }
 
   void Initialize(int number_of_parameters, int number_of_locals) {
     register_allocator_ = new BytecodeRegisterAllocator(number_of_locals);
@@ -65,7 +65,7 @@ class BytecodeRegisterOptimizerTest
 
 // Sanity tests.
 
-TEST_F(BytecodeRegisterOptimizerTest, TemporaryMaterializedForFlush) {
+TEST_F(BytecodeRegisterOptimizerDeathTest, TemporaryMaterializedForFlush) {
   Initialize(1, 1);
   Register temp = NewTemporary();
   optimizer()->DoStar(temp);
@@ -76,7 +76,7 @@ TEST_F(BytecodeRegisterOptimizerTest, TemporaryMaterializedForFlush) {
   CHECK_EQ(output()->at(0).output.index(), temp.index());
 }
 
-TEST_F(BytecodeRegisterOptimizerTest, TemporaryMaterializedForJump) {
+TEST_F(BytecodeRegisterOptimizerDeathTest, TemporaryMaterializedForJump) {
   Initialize(1, 1);
   Register temp = NewTemporary();
   optimizer()->DoStar(temp);
@@ -89,7 +89,7 @@ TEST_F(BytecodeRegisterOptimizerTest, TemporaryMaterializedForJump) {
 
 // Basic Register Optimizations
 
-TEST_F(BytecodeRegisterOptimizerTest, TemporaryNotEmitted) {
+TEST_F(BytecodeRegisterOptimizerDeathTest, TemporaryNotEmitted) {
   Initialize(3, 1);
   Register parameter = Register::FromParameterIndex(1, 3);
   optimizer()->DoLdar(parameter);
@@ -103,7 +103,7 @@ TEST_F(BytecodeRegisterOptimizerTest, TemporaryNotEmitted) {
   CHECK_EQ(output()->at(0).input.index(), parameter.index());
 }
 
-TEST_F(BytecodeRegisterOptimizerTest, ReleasedRegisterUsed) {
+TEST_F(BytecodeRegisterOptimizerDeathTest, ReleasedRegisterUsed) {
   Initialize(3, 1);
   optimizer()->PrepareForBytecode<Bytecode::kLdaSmi, AccumulatorUse::kWrite>();
   Register temp0 = NewTemporary();
@@ -126,7 +126,7 @@ TEST_F(BytecodeRegisterOptimizerTest, ReleasedRegisterUsed) {
   CHECK_EQ(output()->at(1).input.index(), temp1.index());
 }
 
-TEST_F(BytecodeRegisterOptimizerTest, ReleasedRegisterNotFlushed) {
+TEST_F(BytecodeRegisterOptimizerDeathTest, ReleasedRegisterNotFlushed) {
   Initialize(3, 1);
   optimizer()->PrepareForBytecode<Bytecode::kLdaSmi, AccumulatorUse::kWrite>();
   Register temp0 = NewTemporary();
@@ -142,7 +142,7 @@ TEST_F(BytecodeRegisterOptimizerTest, ReleasedRegisterNotFlushed) {
   CHECK_EQ(output()->at(0).output.index(), temp0.index());
 }
 
-TEST_F(BytecodeRegisterOptimizerTest, StoresToLocalsImmediate) {
+TEST_F(BytecodeRegisterOptimizerDeathTest, StoresToLocalsImmediate) {
   Initialize(3, 1);
   Register parameter = Register::FromParameterIndex(1, 3);
   optimizer()->DoLdar(parameter);
@@ -160,7 +160,8 @@ TEST_F(BytecodeRegisterOptimizerTest, StoresToLocalsImmediate) {
   CHECK_EQ(output()->at(1).input.index(), local.index());
 }
 
-TEST_F(BytecodeRegisterOptimizerTest, SingleTemporaryNotMaterializedForInput) {
+TEST_F(BytecodeRegisterOptimizerDeathTest,
+       SingleTemporaryNotMaterializedForInput) {
   Initialize(3, 1);
   Register parameter = Register::FromParameterIndex(1, 3);
   Register temp0 = NewTemporary();
@@ -178,7 +179,8 @@ TEST_F(BytecodeRegisterOptimizerTest, SingleTemporaryNotMaterializedForInput) {
   CHECK_EQ(1, reg_list.register_count());
 }
 
-TEST_F(BytecodeRegisterOptimizerTest, RangeOfTemporariesMaterializedForInput) {
+TEST_F(BytecodeRegisterOptimizerDeathTest,
+       RangeOfTemporariesMaterializedForInput) {
   Initialize(3, 1);
   Register parameter = Register::FromParameterIndex(1, 3);
   Register temp0 = NewTemporary();

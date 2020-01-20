@@ -76,7 +76,6 @@ class GraphTest : public TestWithNativeContextAndZone {
   TickCounter tick_counter_;
 };
 
-
 class TypedGraphTest : public GraphTest {
  public:
   explicit TypedGraphTest(int num_parameters = 1);

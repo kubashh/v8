@@ -16,13 +16,13 @@ namespace v8 {
 namespace internal {
 namespace interpreter {
 
-class BytecodeArrayIteratorTest : public TestWithIsolateAndZone {
+class BytecodeArrayIteratorDeathTest : public TestWithIsolateAndZone {
  public:
-  BytecodeArrayIteratorTest() = default;
-  ~BytecodeArrayIteratorTest() override = default;
+  BytecodeArrayIteratorDeathTest() = default;
+  ~BytecodeArrayIteratorDeathTest() override = default;
 };
 
-TEST_F(BytecodeArrayIteratorTest, IteratesBytecodeArray) {
+TEST_F(BytecodeArrayIteratorDeathTest, IteratesBytecodeArray) {
   // Use a builder to create an array with containing multiple bytecodes
   // with 0, 1 and 2 operands.
   FeedbackVectorSpec feedback_spec(zone());

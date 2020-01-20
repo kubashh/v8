@@ -51,18 +51,18 @@ class CompilerDispatcherTestFlags {
 
 SaveFlags* CompilerDispatcherTestFlags::save_flags_ = nullptr;
 
-class CompilerDispatcherTest : public TestWithNativeContext {
+class CompilerDispatcherTest : public TestWithNativeContextDeathTest {
  public:
   CompilerDispatcherTest() = default;
   ~CompilerDispatcherTest() override = default;
 
   static void SetUpTestCase() {
     CompilerDispatcherTestFlags::SetFlagsForTest();
-    TestWithNativeContext::SetUpTestCase();
+    TestWithNativeContextDeathTest::SetUpTestCase();
   }
 
   static void TearDownTestCase() {
-    TestWithNativeContext::TearDownTestCase();
+    TestWithNativeContextDeathTest::TearDownTestCase();
     CompilerDispatcherTestFlags::RestoreFlags();
   }
 

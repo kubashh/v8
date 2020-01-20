@@ -13,10 +13,10 @@ namespace v8 {
 namespace internal {
 namespace interpreter {
 
-class BytecodeRegisterAllocatorTest : public TestWithIsolateAndZone {
+class BytecodeRegisterAllocatorDeathTest : public TestWithIsolateAndZone {
  public:
-  BytecodeRegisterAllocatorTest() : allocator_(0) {}
-  ~BytecodeRegisterAllocatorTest() override = default;
+  BytecodeRegisterAllocatorDeathTest() : allocator_(0) {}
+  ~BytecodeRegisterAllocatorDeathTest() override = default;
 
   BytecodeRegisterAllocator* allocator() { return &allocator_; }
 
@@ -24,7 +24,7 @@ class BytecodeRegisterAllocatorTest : public TestWithIsolateAndZone {
   BytecodeRegisterAllocator allocator_;
 };
 
-TEST_F(BytecodeRegisterAllocatorTest, SimpleAllocations) {
+TEST_F(BytecodeRegisterAllocatorDeathTest, SimpleAllocations) {
   CHECK_EQ(allocator()->maximum_register_count(), 0);
   Register reg0 = allocator()->NewRegister();
   CHECK_EQ(reg0.index(), 0);
@@ -53,7 +53,7 @@ TEST_F(BytecodeRegisterAllocatorTest, SimpleAllocations) {
   CHECK_EQ(allocator()->next_register_index(), 1);
 }
 
-TEST_F(BytecodeRegisterAllocatorTest, RegisterListAllocations) {
+TEST_F(BytecodeRegisterAllocatorDeathTest, RegisterListAllocations) {
   CHECK_EQ(allocator()->maximum_register_count(), 0);
   RegisterList reg_list = allocator()->NewRegisterList(3);
   CHECK_EQ(reg_list.first_register().index(), 0);
@@ -92,7 +92,7 @@ TEST_F(BytecodeRegisterAllocatorTest, RegisterListAllocations) {
   CHECK_EQ(allocator()->next_register_index(), 3);
 }
 
-TEST_F(BytecodeRegisterAllocatorTest, GrowableRegisterListAllocations) {
+TEST_F(BytecodeRegisterAllocatorDeathTest, GrowableRegisterListAllocations) {
   CHECK_EQ(allocator()->maximum_register_count(), 0);
   Register reg = allocator()->NewRegister();
   CHECK_EQ(reg.index(), 0);

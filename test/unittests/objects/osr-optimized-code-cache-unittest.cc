@@ -39,7 +39,7 @@ const int kMaxEntries = kMaxLength / OSROptimizedCodeCache::kEntryLength;
 
 }  // namespace
 
-TEST_F(TestWithNativeContext, AddCodeToEmptyCache) {
+TEST_F(TestWithNativeContextDeathTest, AddCodeToEmptyCache) {
   if (!i::FLAG_opt) return;
 
   i::FLAG_allow_natives_syntax = true;
@@ -72,7 +72,7 @@ TEST_F(TestWithNativeContext, AddCodeToEmptyCache) {
   EXPECT_EQ(osr_offset_entry.value(), bailout_id.ToInt());
 }
 
-TEST_F(TestWithNativeContext, GrowCodeCache) {
+TEST_F(TestWithNativeContextDeathTest, GrowCodeCache) {
   if (!i::FLAG_opt) return;
 
   i::FLAG_allow_natives_syntax = true;
@@ -115,7 +115,7 @@ TEST_F(TestWithNativeContext, GrowCodeCache) {
   EXPECT_EQ(osr_offset_entry.value(), bailout_id);
 }
 
-TEST_F(TestWithNativeContext, FindCachedEntry) {
+TEST_F(TestWithNativeContextDeathTest, FindCachedEntry) {
   if (!i::FLAG_opt) return;
 
   i::FLAG_allow_natives_syntax = true;
@@ -160,7 +160,7 @@ TEST_F(TestWithNativeContext, FindCachedEntry) {
       osr_cache->GetOptimizedCode(shared, BailoutId(0), isolate).is_null());
 }
 
-TEST_F(TestWithNativeContext, MaxCapacityCache) {
+TEST_F(TestWithNativeContextDeathTest, MaxCapacityCache) {
   if (!i::FLAG_opt) return;
 
   i::FLAG_allow_natives_syntax = true;
@@ -231,7 +231,7 @@ TEST_F(TestWithNativeContext, MaxCapacityCache) {
   EXPECT_EQ(smi.value(), bailout_id);
 }
 
-TEST_F(TestWithNativeContext, ReuseClearedEntry) {
+TEST_F(TestWithNativeContextDeathTest, ReuseClearedEntry) {
   if (!i::FLAG_opt) return;
 
   i::FLAG_allow_natives_syntax = true;
@@ -308,7 +308,7 @@ TEST_F(TestWithNativeContext, ReuseClearedEntry) {
   EXPECT_EQ(smi.value(), bailout_id);
 }
 
-TEST_F(TestWithNativeContext, EvictDeoptedEntriesNoCompact) {
+TEST_F(TestWithNativeContextDeathTest, EvictDeoptedEntriesNoCompact) {
   if (!i::FLAG_opt) return;
 
   i::FLAG_allow_natives_syntax = true;
@@ -367,7 +367,7 @@ TEST_F(TestWithNativeContext, EvictDeoptedEntriesNoCompact) {
       osr_cache->Get(index + OSROptimizedCodeCache::kOsrIdOffset)->IsCleared());
 }
 
-TEST_F(TestWithNativeContext, EvictDeoptedEntriesCompact) {
+TEST_F(TestWithNativeContextDeathTest, EvictDeoptedEntriesCompact) {
   if (!i::FLAG_opt) return;
 
   i::FLAG_allow_natives_syntax = true;

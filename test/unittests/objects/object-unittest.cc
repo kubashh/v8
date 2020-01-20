@@ -103,9 +103,9 @@ TEST(Object, StructListOrder) {
 #undef TEST_STRUCT
 }
 
-using ObjectWithIsolate = TestWithIsolate;
+using ObjectWithIsolateDeathTest = TestWithIsolate;
 
-TEST_F(ObjectWithIsolate, DictionaryGrowth) {
+TEST_F(ObjectWithIsolateDeathTest, DictionaryGrowth) {
   Handle<NumberDictionary> dict = NumberDictionary::New(isolate(), 1);
   Handle<Object> value = isolate()->factory()->null_value();
   PropertyDetails details = PropertyDetails::Empty();
@@ -161,7 +161,7 @@ TEST_F(ObjectWithIsolate, DictionaryGrowth) {
   CHECK_EQ(64, dict->Capacity());
 }
 
-TEST_F(TestWithNativeContext, EmptyFunctionScopeInfo) {
+TEST_F(TestWithNativeContextDeathTest, EmptyFunctionScopeInfo) {
   // Check that the empty_function has a properly set up ScopeInfo.
   Handle<JSFunction> function = RunJS<JSFunction>("(function(){})");
 
@@ -179,7 +179,8 @@ TEST_F(TestWithNativeContext, EmptyFunctionScopeInfo) {
             empty_function_scope_info->ContextLocalCount());
 }
 
-TEST_F(TestWithNativeContext, RecreateScopeInfoWithLocalsBlacklistWorks) {
+TEST_F(TestWithNativeContextDeathTest,
+       RecreateScopeInfoWithLocalsBlacklistWorks) {
   // Create a JSFunction to get a {ScopeInfo} we can use for the test.
   Handle<JSFunction> function = RunJS<JSFunction>("(function foo() {})");
   Handle<ScopeInfo> original_scope_info(function->shared().scope_info(),

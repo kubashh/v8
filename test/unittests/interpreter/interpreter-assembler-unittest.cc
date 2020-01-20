@@ -24,8 +24,8 @@ namespace internal {
 namespace interpreter {
 namespace interpreter_assembler_unittest {
 
-InterpreterAssemblerTestState::InterpreterAssemblerTestState(
-    InterpreterAssemblerTest* test, Bytecode bytecode)
+InterpreterAssemblerState::InterpreterAssemblerState(
+    InterpreterAssemblerDeathTest* test, Bytecode bytecode)
     : compiler::CodeAssemblerState(
           test->isolate(), test->zone(), InterpreterDispatchDescriptor{},
           Code::BYTECODE_HANDLER, Bytecodes::ToString(bytecode),
@@ -37,8 +37,7 @@ const interpreter::Bytecode kBytecodes[] = {
 #undef DEFINE_BYTECODE
 };
 
-
-InterpreterAssemblerTest::InterpreterAssemblerForTest::
+InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::
     ~InterpreterAssemblerForTest() {
   // Tests don't necessarily read and write accumulator but
   // InterpreterAssembler checks accumulator uses.
@@ -50,7 +49,8 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::
   }
 }
 
-Matcher<Node*> InterpreterAssemblerTest::InterpreterAssemblerForTest::IsLoad(
+Matcher<Node*>
+InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::IsLoad(
     const Matcher<c::LoadRepresentation>& rep_matcher,
     const Matcher<Node*>& base_matcher, const Matcher<Node*>& index_matcher,
     LoadSensitivity needs_poisoning) {
@@ -65,7 +65,7 @@ Matcher<Node*> InterpreterAssemblerTest::InterpreterAssemblerForTest::IsLoad(
 }
 
 Matcher<Node*>
-InterpreterAssemblerTest::InterpreterAssemblerForTest::IsLoadFromObject(
+InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::IsLoadFromObject(
     const Matcher<c::LoadRepresentation>& rep_matcher,
     const Matcher<Node*>& base_matcher, const Matcher<Node*>& index_matcher) {
   CHECK_NE(PoisoningMitigationLevel::kPoisonAll, poisoning_level());
@@ -73,7 +73,8 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsLoadFromObject(
                                          index_matcher, _, _);
 }
 
-Matcher<Node*> InterpreterAssemblerTest::InterpreterAssemblerForTest::IsStore(
+Matcher<Node*>
+InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::IsStore(
     const Matcher<c::StoreRepresentation>& rep_matcher,
     const Matcher<Node*>& base_matcher, const Matcher<Node*>& index_matcher,
     const Matcher<Node*>& value_matcher) {
@@ -81,16 +82,16 @@ Matcher<Node*> InterpreterAssemblerTest::InterpreterAssemblerForTest::IsStore(
                                 value_matcher, _, _);
 }
 
-Matcher<Node*> InterpreterAssemblerTest::InterpreterAssemblerForTest::IsWordNot(
+Matcher<Node*>
+InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::IsWordNot(
     const Matcher<Node*>& value_matcher) {
   return kSystemPointerSize == 8
              ? IsWord64Xor(value_matcher, c::IsInt64Constant(-1))
              : IsWord32Xor(value_matcher, c::IsInt32Constant(-1));
 }
 
-Matcher<Node*>
-InterpreterAssemblerTest::InterpreterAssemblerForTest::IsUnsignedByteOperand(
-    int offset, LoadSensitivity needs_poisoning) {
+Matcher<Node*> InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::
+    IsUnsignedByteOperand(int offset, LoadSensitivity needs_poisoning) {
   return IsLoad(
       MachineType::Uint8(),
       c::IsParameter(InterpreterDispatchDescriptor::kBytecodeArray),
@@ -101,7 +102,7 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsUnsignedByteOperand(
 }
 
 Matcher<Node*>
-InterpreterAssemblerTest::InterpreterAssemblerForTest::IsSignedByteOperand(
+InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::IsSignedByteOperand(
     int offset, LoadSensitivity needs_poisoning) {
   return IsLoad(
       MachineType::Int8(),
@@ -112,9 +113,8 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsSignedByteOperand(
       needs_poisoning);
 }
 
-Matcher<Node*>
-InterpreterAssemblerTest::InterpreterAssemblerForTest::IsUnsignedShortOperand(
-    int offset, LoadSensitivity needs_poisoning) {
+Matcher<Node*> InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::
+    IsUnsignedShortOperand(int offset, LoadSensitivity needs_poisoning) {
   if (TargetSupportsUnalignedAccess()) {
     return IsLoad(
         MachineType::Uint16(),
@@ -148,9 +148,8 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsUnsignedShortOperand(
   }
 }
 
-Matcher<Node*>
-InterpreterAssemblerTest::InterpreterAssemblerForTest::IsSignedShortOperand(
-    int offset, LoadSensitivity needs_poisoning) {
+Matcher<Node*> InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::
+    IsSignedShortOperand(int offset, LoadSensitivity needs_poisoning) {
   if (TargetSupportsUnalignedAccess()) {
     return IsLoad(
         MachineType::Int16(),
@@ -184,9 +183,8 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsSignedShortOperand(
   }
 }
 
-Matcher<Node*>
-InterpreterAssemblerTest::InterpreterAssemblerForTest::IsUnsignedQuadOperand(
-    int offset, LoadSensitivity needs_poisoning) {
+Matcher<Node*> InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::
+    IsUnsignedQuadOperand(int offset, LoadSensitivity needs_poisoning) {
   if (TargetSupportsUnalignedAccess()) {
     return IsLoad(
         MachineType::Uint32(),
@@ -226,7 +224,7 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsUnsignedQuadOperand(
 }
 
 Matcher<Node*>
-InterpreterAssemblerTest::InterpreterAssemblerForTest::IsSignedQuadOperand(
+InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::IsSignedQuadOperand(
     int offset, LoadSensitivity needs_poisoning) {
   if (TargetSupportsUnalignedAccess()) {
     return IsLoad(
@@ -267,7 +265,7 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsSignedQuadOperand(
 }
 
 Matcher<Node*>
-InterpreterAssemblerTest::InterpreterAssemblerForTest::IsSignedOperand(
+InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::IsSignedOperand(
     int offset, OperandSize operand_size, LoadSensitivity needs_poisoning) {
   switch (operand_size) {
     case OperandSize::kByte:
@@ -283,7 +281,7 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsSignedOperand(
 }
 
 Matcher<Node*>
-InterpreterAssemblerTest::InterpreterAssemblerForTest::IsUnsignedOperand(
+InterpreterAssemblerDeathTest::InterpreterAssemblerForTest::IsUnsignedOperand(
     int offset, OperandSize operand_size, LoadSensitivity needs_poisoning) {
   switch (operand_size) {
     case OperandSize::kByte:
@@ -298,9 +296,9 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsUnsignedOperand(
   return nullptr;
 }
 
-Matcher<compiler::Node*>
-InterpreterAssemblerTest::InterpreterAssemblerForTest::IsLoadRegisterOperand(
-    int offset, OperandSize operand_size) {
+Matcher<compiler::Node*> InterpreterAssemblerDeathTest::
+    InterpreterAssemblerForTest::IsLoadRegisterOperand(
+        int offset, OperandSize operand_size) {
   Matcher<compiler::Node*> reg_operand = IsChangeInt32ToIntPtr(
       IsSignedOperand(offset, operand_size, LoadSensitivity::kSafe));
   return IsBitcastWordToTagged(IsLoad(
@@ -309,12 +307,12 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsLoadRegisterOperand(
       LoadSensitivity::kCritical));
 }
 
-TARGET_TEST_F(InterpreterAssemblerTest, BytecodeOperand) {
+TARGET_TEST_F(InterpreterAssemblerDeathTest, BytecodeOperand) {
   static const OperandScale kOperandScales[] = {
       OperandScale::kSingle, OperandScale::kDouble, OperandScale::kQuadruple};
   TRACED_FOREACH(interpreter::Bytecode, bytecode, kBytecodes) {
     TRACED_FOREACH(interpreter::OperandScale, operand_scale, kOperandScales) {
-      InterpreterAssemblerTestState state(this, bytecode);
+      InterpreterAssemblerState state(this, bytecode);
       InterpreterAssemblerForTest m(&state, bytecode, operand_scale);
       int number_of_operands =
           interpreter::Bytecodes::NumberOfOperands(bytecode);
@@ -386,9 +384,9 @@ TARGET_TEST_F(InterpreterAssemblerTest, BytecodeOperand) {
   }
 }
 
-TARGET_TEST_F(InterpreterAssemblerTest, GetContext) {
+TARGET_TEST_F(InterpreterAssemblerDeathTest, GetContext) {
   TRACED_FOREACH(interpreter::Bytecode, bytecode, kBytecodes) {
-    InterpreterAssemblerTestState state(this, bytecode);
+    InterpreterAssemblerState state(this, bytecode);
     InterpreterAssemblerForTest m(&state, bytecode);
     EXPECT_THAT(
         m.GetContext(),
@@ -399,9 +397,9 @@ TARGET_TEST_F(InterpreterAssemblerTest, GetContext) {
   }
 }
 
-TARGET_TEST_F(InterpreterAssemblerTest, LoadConstantPoolEntry) {
+TARGET_TEST_F(InterpreterAssemblerDeathTest, LoadConstantPoolEntry) {
   TRACED_FOREACH(interpreter::Bytecode, bytecode, kBytecodes) {
-    InterpreterAssemblerTestState state(this, bytecode);
+    InterpreterAssemblerState state(this, bytecode);
     InterpreterAssemblerForTest m(&state, bytecode);
     {
       TNode<IntPtrT> index = m.IntPtrConstant(2);
@@ -440,9 +438,9 @@ TARGET_TEST_F(InterpreterAssemblerTest, LoadConstantPoolEntry) {
   }
 }
 
-TARGET_TEST_F(InterpreterAssemblerTest, LoadObjectField) {
+TARGET_TEST_F(InterpreterAssemblerDeathTest, LoadObjectField) {
   TRACED_FOREACH(interpreter::Bytecode, bytecode, kBytecodes) {
-    InterpreterAssemblerTestState state(this, bytecode);
+    InterpreterAssemblerState state(this, bytecode);
     InterpreterAssemblerForTest m(&state, bytecode);
     TNode<HeapObject> object =
         m.ReinterpretCast<HeapObject>(m.IntPtrConstant(0xDEADBEEF));
@@ -455,9 +453,9 @@ TARGET_TEST_F(InterpreterAssemblerTest, LoadObjectField) {
   }
 }
 
-TARGET_TEST_F(InterpreterAssemblerTest, CallRuntime2) {
+TARGET_TEST_F(InterpreterAssemblerDeathTest, CallRuntime2) {
   TRACED_FOREACH(interpreter::Bytecode, bytecode, kBytecodes) {
-    InterpreterAssemblerTestState state(this, bytecode);
+    InterpreterAssemblerState state(this, bytecode);
     InterpreterAssemblerForTest m(&state, bytecode);
     TNode<Object> arg1 = m.ReinterpretCast<Object>(m.Int32Constant(2));
     TNode<Object> arg2 = m.ReinterpretCast<Object>(m.Int32Constant(3));
@@ -470,12 +468,12 @@ TARGET_TEST_F(InterpreterAssemblerTest, CallRuntime2) {
   }
 }
 
-TARGET_TEST_F(InterpreterAssemblerTest, CallRuntime) {
+TARGET_TEST_F(InterpreterAssemblerDeathTest, CallRuntime) {
   const int kResultSizes[] = {1, 2};
   TRACED_FOREACH(interpreter::Bytecode, bytecode, kBytecodes) {
     TRACED_FOREACH(int, result_size, kResultSizes) {
       if (Bytecodes::IsCallRuntime(bytecode)) {
-        InterpreterAssemblerTestState state(this, bytecode);
+        InterpreterAssemblerState state(this, bytecode);
         InterpreterAssemblerForTest m(&state, bytecode);
         Callable builtin =
             CodeFactory::InterpreterCEntry(isolate(), result_size);
@@ -509,9 +507,9 @@ TARGET_TEST_F(InterpreterAssemblerTest, CallRuntime) {
   }
 }
 
-TARGET_TEST_F(InterpreterAssemblerTest, LoadFeedbackVector) {
+TARGET_TEST_F(InterpreterAssemblerDeathTest, LoadFeedbackVector) {
   TRACED_FOREACH(interpreter::Bytecode, bytecode, kBytecodes) {
-    InterpreterAssemblerTestState state(this, bytecode);
+    InterpreterAssemblerState state(this, bytecode);
     InterpreterAssemblerForTest m(&state, bytecode);
     TNode<HeapObject> feedback_vector = m.LoadFeedbackVector();
 

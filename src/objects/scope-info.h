@@ -350,7 +350,8 @@ class ScopeInfo : public FixedArray, public TorqueGeneratedScopeFlagsFields {
   friend std::ostream& operator<<(std::ostream& os, VariableAllocationInfo var);
 
   OBJECT_CONSTRUCTORS(ScopeInfo, FixedArray);
-  FRIEND_TEST(TestWithNativeContext, RecreateScopeInfoWithLocalsBlacklistWorks);
+  FRIEND_TEST(TestWithNativeContextDeathTest,
+              RecreateScopeInfoWithLocalsBlacklistWorks);
 };
 
 std::ostream& operator<<(std::ostream& os, VariableAllocationInfo var);

@@ -14,9 +14,9 @@
 namespace v8 {
 namespace internal {
 
-class AstValueTest : public TestWithIsolateAndZone {
+class AstValueDeathTest : public TestWithIsolateAndZone {
  protected:
-  AstValueTest()
+  AstValueDeathTest()
       : ast_value_factory_(zone(), i_isolate()->ast_string_constants(),
                            HashSeed(i_isolate())),
         ast_node_factory_(&ast_value_factory_, zone()) {}
@@ -30,7 +30,7 @@ class AstValueTest : public TestWithIsolateAndZone {
   AstNodeFactory ast_node_factory_;
 };
 
-TEST_F(AstValueTest, BigIntToBooleanIsTrue) {
+TEST_F(AstValueDeathTest, BigIntToBooleanIsTrue) {
   EXPECT_FALSE(NewBigInt("0")->ToBooleanIsTrue());
   EXPECT_FALSE(NewBigInt("0b0")->ToBooleanIsTrue());
   EXPECT_FALSE(NewBigInt("0o0")->ToBooleanIsTrue());

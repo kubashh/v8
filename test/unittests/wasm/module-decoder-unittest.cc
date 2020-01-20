@@ -172,7 +172,7 @@ struct ValueTypePair {
     {kLocalNullRef, kWasmNullRef}   // --
 };
 
-class WasmModuleVerifyTest : public TestWithIsolateAndZone {
+class WasmModuleVerifyDeathTest : public TestWithIsolateAndZone {
  public:
   WasmFeatures enabled_features_ = WasmFeatures::None();
 
@@ -200,7 +200,7 @@ class WasmModuleVerifyTest : public TestWithIsolateAndZone {
   }
 };
 
-TEST_F(WasmModuleVerifyTest, WrongMagic) {
+TEST_F(WasmModuleVerifyDeathTest, WrongMagic) {
   for (uint32_t x = 1; x; x <<= 1) {
     const byte data[] = {U32_LE(kWasmMagic ^ x), U32_LE(kWasmVersion)};
     ModuleResult result = DecodeModuleNoHeader(data, data + sizeof(data));
@@ -208,7 +208,7 @@ TEST_F(WasmModuleVerifyTest, WrongMagic) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, WrongVersion) {
+TEST_F(WasmModuleVerifyDeathTest, WrongVersion) {
   for (uint32_t x = 1; x; x <<= 1) {
     const byte data[] = {U32_LE(kWasmMagic), U32_LE(kWasmVersion ^ x)};
     ModuleResult result = DecodeModuleNoHeader(data, data + sizeof(data));
@@ -216,12 +216,12 @@ TEST_F(WasmModuleVerifyTest, WrongVersion) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, DecodeEmpty) {
+TEST_F(WasmModuleVerifyDeathTest, DecodeEmpty) {
   ModuleResult result = DecodeModule(nullptr, nullptr);
   EXPECT_TRUE(result.ok());
 }
 
-TEST_F(WasmModuleVerifyTest, OneGlobal) {
+TEST_F(WasmModuleVerifyDeathTest, OneGlobal) {
   static const byte data[] = {
       SECTION(Global,                     // --
               ENTRY_COUNT(1),             // --
@@ -250,7 +250,7 @@ TEST_F(WasmModuleVerifyTest, OneGlobal) {
   EXPECT_OFF_END_FAILURE(data, 1);
 }
 
-TEST_F(WasmModuleVerifyTest, AnyRefGlobal) {
+TEST_F(WasmModuleVerifyDeathTest, AnyRefGlobal) {
   WASM_FEATURE_SCOPE(anyref);
   static const byte data[] = {
       // sig#0 ---------------------------------------------------------------
@@ -288,7 +288,7 @@ TEST_F(WasmModuleVerifyTest, AnyRefGlobal) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, FuncRefGlobal) {
+TEST_F(WasmModuleVerifyDeathTest, FuncRefGlobal) {
   WASM_FEATURE_SCOPE(anyref);
   static const byte data[] = {
       // sig#0 ---------------------------------------------------------------
@@ -353,7 +353,7 @@ TEST_F(WasmModuleVerifyTest, NullRefGlobal) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, InvalidFuncRefGlobal) {
+TEST_F(WasmModuleVerifyDeathTest, InvalidFuncRefGlobal) {
   WASM_FEATURE_SCOPE(anyref);
   static const byte data[] = {
       // sig#0 ---------------------------------------------------------------
@@ -390,7 +390,7 @@ TEST_F(WasmModuleVerifyTest, InvalidNullRefGlobal) {
       "type error in global initialization, expected nullref, got funcref");
 }
 
-TEST_F(WasmModuleVerifyTest, AnyRefGlobalWithGlobalInit) {
+TEST_F(WasmModuleVerifyDeathTest, AnyRefGlobalWithGlobalInit) {
   WASM_FEATURE_SCOPE(anyref);
   static const byte data[] = {
       SECTION(Import,           // --
@@ -457,7 +457,7 @@ TEST_F(WasmModuleVerifyTest, NullRefGlobalWithGlobalInit) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, Global_invalid_type) {
+TEST_F(WasmModuleVerifyDeathTest, Global_invalid_type) {
   static const byte data[] = {
       SECTION(Global,                      // --
               ENTRY_COUNT(1),              // --
@@ -469,7 +469,7 @@ TEST_F(WasmModuleVerifyTest, Global_invalid_type) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, Global_invalid_type2) {
+TEST_F(WasmModuleVerifyDeathTest, Global_invalid_type2) {
   static const byte data[] = {
       SECTION(Global,                      // --
               ENTRY_COUNT(1),              // --
@@ -481,13 +481,13 @@ TEST_F(WasmModuleVerifyTest, Global_invalid_type2) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ZeroGlobals) {
+TEST_F(WasmModuleVerifyDeathTest, ZeroGlobals) {
   static const byte data[] = {SECTION(Global, ENTRY_COUNT(0))};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
   EXPECT_OK(result);
 }
 
-TEST_F(WasmModuleVerifyTest, ExportMutableGlobal) {
+TEST_F(WasmModuleVerifyDeathTest, ExportMutableGlobal) {
   {
     static const byte data[] = {
         SECTION(Global,                         // --
@@ -534,7 +534,7 @@ static void AppendUint32v(std::vector<byte>* buffer, uint32_t val) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, NGlobals) {
+TEST_F(WasmModuleVerifyDeathTest, NGlobals) {
   static const byte data[] = {
       kLocalF32,                // memory type
       0,                        // immutable
@@ -558,7 +558,7 @@ TEST_F(WasmModuleVerifyTest, NGlobals) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, GlobalWithInvalidMemoryType) {
+TEST_F(WasmModuleVerifyDeathTest, GlobalWithInvalidMemoryType) {
   static const byte data[] = {SECTION(Global,          // --
                                       ENTRY_COUNT(1),  // --
                                       33,              // memory type
@@ -568,7 +568,7 @@ TEST_F(WasmModuleVerifyTest, GlobalWithInvalidMemoryType) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, TwoGlobals) {
+TEST_F(WasmModuleVerifyDeathTest, TwoGlobals) {
   static const byte data[] = {SECTION(Global,                      // --
                                       ENTRY_COUNT(2),              // --
                                       kLocalF32,                   // type
@@ -604,7 +604,7 @@ TEST_F(WasmModuleVerifyTest, TwoGlobals) {
   EXPECT_OFF_END_FAILURE(data, 1);
 }
 
-TEST_F(WasmModuleVerifyTest, ZeroExceptions) {
+TEST_F(WasmModuleVerifyDeathTest, ZeroExceptions) {
   static const byte data[] = {SECTION(Exception, ENTRY_COUNT(0))};
   FAIL_IF_NO_EXPERIMENTAL_EH(data);
 
@@ -614,7 +614,7 @@ TEST_F(WasmModuleVerifyTest, ZeroExceptions) {
   EXPECT_EQ(0u, result.value()->exceptions.size());
 }
 
-TEST_F(WasmModuleVerifyTest, OneI32Exception) {
+TEST_F(WasmModuleVerifyDeathTest, OneI32Exception) {
   static const byte data[] = {
       SECTION(Type, ENTRY_COUNT(1), SIG_ENTRY_v_x(kLocalI32)),  // sig#0 (i32)
       SECTION(Exception, ENTRY_COUNT(1),
@@ -631,7 +631,7 @@ TEST_F(WasmModuleVerifyTest, OneI32Exception) {
   EXPECT_EQ(kWasmI32, e0.sig->GetParam(0));
 }
 
-TEST_F(WasmModuleVerifyTest, TwoExceptions) {
+TEST_F(WasmModuleVerifyDeathTest, TwoExceptions) {
   static const byte data[] = {
       SECTION(Type, ENTRY_COUNT(2),
               SIG_ENTRY_v_x(kLocalI32),               // sig#0 (i32)
@@ -653,7 +653,7 @@ TEST_F(WasmModuleVerifyTest, TwoExceptions) {
   EXPECT_EQ(kWasmI32, e1.sig->GetParam(0));
 }
 
-TEST_F(WasmModuleVerifyTest, Exception_invalid_sig_index) {
+TEST_F(WasmModuleVerifyDeathTest, Exception_invalid_sig_index) {
   static const byte data[] = {
       SIGNATURES_SECTION_VOID_VOID,
       SECTION(Exception, ENTRY_COUNT(1),
@@ -667,7 +667,7 @@ TEST_F(WasmModuleVerifyTest, Exception_invalid_sig_index) {
   EXPECT_NOT_OK(result, "signature index 23 out of bounds");
 }
 
-TEST_F(WasmModuleVerifyTest, Exception_invalid_sig_return) {
+TEST_F(WasmModuleVerifyDeathTest, Exception_invalid_sig_return) {
   static const byte data[] = {
       SECTION(Type, ENTRY_COUNT(1), SIG_ENTRY_i_i),
       SECTION(Exception, ENTRY_COUNT(1),
@@ -681,7 +681,7 @@ TEST_F(WasmModuleVerifyTest, Exception_invalid_sig_return) {
   EXPECT_NOT_OK(result, "exception signature 0 has non-void return");
 }
 
-TEST_F(WasmModuleVerifyTest, Exception_invalid_attribute) {
+TEST_F(WasmModuleVerifyDeathTest, Exception_invalid_attribute) {
   static const byte data[] = {
       SECTION(Type, ENTRY_COUNT(1), SIG_ENTRY_i_i),
       SECTION(Exception, ENTRY_COUNT(1), 23,
@@ -694,7 +694,7 @@ TEST_F(WasmModuleVerifyTest, Exception_invalid_attribute) {
   EXPECT_NOT_OK(result, "exception attribute 23 not supported");
 }
 
-TEST_F(WasmModuleVerifyTest, ExceptionSectionCorrectPlacement) {
+TEST_F(WasmModuleVerifyDeathTest, ExceptionSectionCorrectPlacement) {
   static const byte data[] = {SECTION(Import, ENTRY_COUNT(0)),
                               SECTION(Exception, ENTRY_COUNT(0)),
                               SECTION(Export, ENTRY_COUNT(0))};
@@ -705,7 +705,7 @@ TEST_F(WasmModuleVerifyTest, ExceptionSectionCorrectPlacement) {
   EXPECT_OK(result);
 }
 
-TEST_F(WasmModuleVerifyTest, ExceptionSectionAfterExport) {
+TEST_F(WasmModuleVerifyDeathTest, ExceptionSectionAfterExport) {
   static const byte data[] = {SECTION(Export, ENTRY_COUNT(0)),
                               SECTION(Exception, ENTRY_COUNT(0))};
   FAIL_IF_NO_EXPERIMENTAL_EH(data);
@@ -716,7 +716,7 @@ TEST_F(WasmModuleVerifyTest, ExceptionSectionAfterExport) {
                 "The Exception section must appear before the Export section");
 }
 
-TEST_F(WasmModuleVerifyTest, ExceptionSectionBeforeGlobal) {
+TEST_F(WasmModuleVerifyDeathTest, ExceptionSectionBeforeGlobal) {
   static const byte data[] = {SECTION(Exception, ENTRY_COUNT(0)),
                               SECTION(Global, ENTRY_COUNT(0))};
   FAIL_IF_NO_EXPERIMENTAL_EH(data);
@@ -726,7 +726,7 @@ TEST_F(WasmModuleVerifyTest, ExceptionSectionBeforeGlobal) {
   EXPECT_NOT_OK(result, "unexpected section <Global>");
 }
 
-TEST_F(WasmModuleVerifyTest, ExceptionSectionAfterMemoryBeforeGlobal) {
+TEST_F(WasmModuleVerifyDeathTest, ExceptionSectionAfterMemoryBeforeGlobal) {
   STATIC_ASSERT(kMemorySectionCode + 1 == kGlobalSectionCode);
   static const byte data[] = {SECTION(Memory, ENTRY_COUNT(0)),
                               SECTION(Exception, ENTRY_COUNT(0)),
@@ -738,7 +738,7 @@ TEST_F(WasmModuleVerifyTest, ExceptionSectionAfterMemoryBeforeGlobal) {
   EXPECT_NOT_OK(result, "unexpected section <Global>");
 }
 
-TEST_F(WasmModuleVerifyTest, ExceptionImport) {
+TEST_F(WasmModuleVerifyDeathTest, ExceptionImport) {
   static const byte data[] = {
       SIGNATURES_SECTION_VOID_VOID,
       SECTION(Import,                           // section header
@@ -756,7 +756,7 @@ TEST_F(WasmModuleVerifyTest, ExceptionImport) {
   EXPECT_EQ(1u, result.value()->import_table.size());
 }
 
-TEST_F(WasmModuleVerifyTest, ExceptionExport) {
+TEST_F(WasmModuleVerifyDeathTest, ExceptionExport) {
   static const byte data[] = {
       SIGNATURES_SECTION_VOID_VOID,
       SECTION(Exception, ENTRY_COUNT(1),
@@ -774,7 +774,7 @@ TEST_F(WasmModuleVerifyTest, ExceptionExport) {
   EXPECT_EQ(1u, result.value()->export_table.size());
 }
 
-TEST_F(WasmModuleVerifyTest, OneSignature) {
+TEST_F(WasmModuleVerifyDeathTest, OneSignature) {
   {
     static const byte data[] = {SIGNATURES_SECTION_VOID_VOID};
     EXPECT_VERIFIES(data);
@@ -786,7 +786,7 @@ TEST_F(WasmModuleVerifyTest, OneSignature) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, MultipleSignatures) {
+TEST_F(WasmModuleVerifyDeathTest, MultipleSignatures) {
   static const byte data[] = {
       SECTION(
           Type,                                              // --
@@ -812,7 +812,7 @@ TEST_F(WasmModuleVerifyTest, MultipleSignatures) {
   EXPECT_OFF_END_FAILURE(data, 1);
 }
 
-TEST_F(WasmModuleVerifyTest, DataSegmentWithImmutableImportedGlobal) {
+TEST_F(WasmModuleVerifyDeathTest, DataSegmentWithImmutableImportedGlobal) {
   // Import 2 globals so that we can initialize data with a global index != 0.
   const byte data[] = {
       SECTION(Import,           // section header
@@ -840,7 +840,7 @@ TEST_F(WasmModuleVerifyTest, DataSegmentWithImmutableImportedGlobal) {
   EXPECT_EQ(1u, expr.val.global_index);
 }
 
-TEST_F(WasmModuleVerifyTest, DataSegmentWithMutableImportedGlobal) {
+TEST_F(WasmModuleVerifyDeathTest, DataSegmentWithMutableImportedGlobal) {
   // Only an immutable imported global can be used as an init_expr.
   const byte data[] = {
       SECTION(Import,           // section header
@@ -858,7 +858,7 @@ TEST_F(WasmModuleVerifyTest, DataSegmentWithMutableImportedGlobal) {
   };
   EXPECT_FAILURE(data);
 }
-TEST_F(WasmModuleVerifyTest, DataSegmentWithImmutableGlobal) {
+TEST_F(WasmModuleVerifyDeathTest, DataSegmentWithImmutableGlobal) {
   // Only an immutable imported global can be used as an init_expr.
   const byte data[] = {
       SECTION(Memory, ENTRY_COUNT(1), kHasMaximumFlag, 28, 28),
@@ -874,7 +874,7 @@ TEST_F(WasmModuleVerifyTest, DataSegmentWithImmutableGlobal) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, OneDataSegment) {
+TEST_F(WasmModuleVerifyDeathTest, OneDataSegment) {
   const byte kDataSegmentSourceOffset = 24;
   const byte data[] = {
       SECTION(Memory, ENTRY_COUNT(1), kHasMaximumFlag, 28, 28),
@@ -903,7 +903,7 @@ TEST_F(WasmModuleVerifyTest, OneDataSegment) {
   EXPECT_OFF_END_FAILURE(data, 14);
 }
 
-TEST_F(WasmModuleVerifyTest, TwoDataSegments) {
+TEST_F(WasmModuleVerifyDeathTest, TwoDataSegments) {
   const byte kDataSegment0SourceOffset = 24;
   const byte kDataSegment1SourceOffset = kDataSegment0SourceOffset + 11;
 
@@ -945,7 +945,7 @@ TEST_F(WasmModuleVerifyTest, TwoDataSegments) {
   EXPECT_OFF_END_FAILURE(data, 14);
 }
 
-TEST_F(WasmModuleVerifyTest, DataWithoutMemory) {
+TEST_F(WasmModuleVerifyDeathTest, DataWithoutMemory) {
   const byte data[] = {
       SECTION(Data, ENTRY_COUNT(1), LINEAR_MEMORY_INDEX_0,
               WASM_INIT_EXPR_I32V_3(0x9BBAA),  // dest addr
@@ -955,7 +955,7 @@ TEST_F(WasmModuleVerifyTest, DataWithoutMemory) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, MaxMaximumMemorySize) {
+TEST_F(WasmModuleVerifyDeathTest, MaxMaximumMemorySize) {
   {
     const byte data[] = {
         SECTION(Memory, ENTRY_COUNT(1), kHasMaximumFlag, 0, U32V_3(65536))};
@@ -968,7 +968,7 @@ TEST_F(WasmModuleVerifyTest, MaxMaximumMemorySize) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, DataSegment_wrong_init_type) {
+TEST_F(WasmModuleVerifyDeathTest, DataSegment_wrong_init_type) {
   const byte data[] = {
       SECTION(Memory, ENTRY_COUNT(1), kHasMaximumFlag, 28, 28),
       SECTION(Data, ENTRY_COUNT(1), LINEAR_MEMORY_INDEX_0,
@@ -980,7 +980,7 @@ TEST_F(WasmModuleVerifyTest, DataSegment_wrong_init_type) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, DataSegmentEndOverflow) {
+TEST_F(WasmModuleVerifyDeathTest, DataSegmentEndOverflow) {
   const byte data[] = {
       SECTION(Memory,  // memory section
               ENTRY_COUNT(1), kHasMaximumFlag, 28, 28),
@@ -994,7 +994,7 @@ TEST_F(WasmModuleVerifyTest, DataSegmentEndOverflow) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, OneIndirectFunction) {
+TEST_F(WasmModuleVerifyDeathTest, OneIndirectFunction) {
   static const byte data[] = {
       // sig#0 ---------------------------------------------------------------
       SIGNATURES_SECTION_VOID_VOID,
@@ -1015,7 +1015,7 @@ TEST_F(WasmModuleVerifyTest, OneIndirectFunction) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, ElementSectionWithInternalTable) {
+TEST_F(WasmModuleVerifyDeathTest, ElementSectionWithInternalTable) {
   static const byte data[] = {
       // table ---------------------------------------------------------------
       SECTION(Table, ENTRY_COUNT(1), kLocalFuncRef, 0, 1),
@@ -1025,7 +1025,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionWithInternalTable) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ElementSectionWithImportedTable) {
+TEST_F(WasmModuleVerifyDeathTest, ElementSectionWithImportedTable) {
   static const byte data[] = {
       // imports -------------------------------------------------------------
       SECTION(Import, ENTRY_COUNT(1),
@@ -1041,7 +1041,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionWithImportedTable) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ElementSectionWithoutTable) {
+TEST_F(WasmModuleVerifyDeathTest, ElementSectionWithoutTable) {
   // Test that an element section without a table causes a validation error.
   static const byte data[] = {
       // elements ------------------------------------------------------------
@@ -1055,7 +1055,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionWithoutTable) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, Regression_735887) {
+TEST_F(WasmModuleVerifyDeathTest, Regression_735887) {
   // Test with an invalid function index in the element section.
   static const byte data[] = {
       // sig#0 ---------------------------------------------------------------
@@ -1075,7 +1075,7 @@ TEST_F(WasmModuleVerifyTest, Regression_735887) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, OneIndirectFunction_one_entry) {
+TEST_F(WasmModuleVerifyDeathTest, OneIndirectFunction_one_entry) {
   static const byte data[] = {
       // sig#0 ---------------------------------------------------------------
       SIGNATURES_SECTION_VOID_VOID,
@@ -1100,7 +1100,7 @@ TEST_F(WasmModuleVerifyTest, OneIndirectFunction_one_entry) {
   EXPECT_EQ(1u, result.value()->tables[0].initial_size);
 }
 
-TEST_F(WasmModuleVerifyTest, MultipleIndirectFunctions) {
+TEST_F(WasmModuleVerifyDeathTest, MultipleIndirectFunctions) {
   static const byte data[] = {
       // sig#0 -------------------------------------------------------
       SECTION(Type,
@@ -1128,7 +1128,7 @@ TEST_F(WasmModuleVerifyTest, MultipleIndirectFunctions) {
   EXPECT_EQ(8u, result.value()->tables[0].initial_size);
 }
 
-TEST_F(WasmModuleVerifyTest, ElementSectionMultipleTables) {
+TEST_F(WasmModuleVerifyDeathTest, ElementSectionMultipleTables) {
   // Test that if we have multiple tables, in the element section we can target
   // and initialize all tables.
   WASM_FEATURE_SCOPE(anyref);
@@ -1161,7 +1161,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionMultipleTables) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ElementSectionMixedTables) {
+TEST_F(WasmModuleVerifyDeathTest, ElementSectionMixedTables) {
   // Test that if we have multiple tables, both imported and module-defined, in
   // the element section we can target and initialize all tables.
   WASM_FEATURE_SCOPE(anyref);
@@ -1219,7 +1219,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionMixedTables) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ElementSectionMultipleTablesArbitraryOrder) {
+TEST_F(WasmModuleVerifyDeathTest, ElementSectionMultipleTablesArbitraryOrder) {
   // Test that the order in which tables are targeted in the element secion
   // can be arbitrary.
   WASM_FEATURE_SCOPE(anyref);
@@ -1256,7 +1256,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionMultipleTablesArbitraryOrder) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ElementSectionMixedTablesArbitraryOrder) {
+TEST_F(WasmModuleVerifyDeathTest, ElementSectionMixedTablesArbitraryOrder) {
   // Test that the order in which tables are targeted in the element secion can
   // be arbitrary. In this test, tables can be both imported and module-defined.
   WASM_FEATURE_SCOPE(anyref);
@@ -1314,7 +1314,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionMixedTablesArbitraryOrder) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ElementSectionInitAnyRefTableWithFuncRef) {
+TEST_F(WasmModuleVerifyDeathTest, ElementSectionInitAnyRefTableWithFuncRef) {
   WASM_FEATURE_SCOPE(anyref);
   WASM_FEATURE_SCOPE(bulk_memory);
   static const byte data[] = {
@@ -1346,7 +1346,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionInitAnyRefTableWithFuncRef) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ElementSectionDontInitAnyRefImportedTable) {
+TEST_F(WasmModuleVerifyDeathTest, ElementSectionDontInitAnyRefImportedTable) {
   // Test that imported tables of type AnyRef cannot be initialized in the
   // elements section.
   WASM_FEATURE_SCOPE(anyref);
@@ -1392,7 +1392,7 @@ TEST_F(WasmModuleVerifyTest, ElementSectionDontInitAnyRefImportedTable) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, IndirectFunctionNoFunctions) {
+TEST_F(WasmModuleVerifyDeathTest, IndirectFunctionNoFunctions) {
   static const byte data[] = {
       // sig#0 -------------------------------------------------------
       SIGNATURES_SECTION_VOID_VOID,
@@ -1402,7 +1402,7 @@ TEST_F(WasmModuleVerifyTest, IndirectFunctionNoFunctions) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, IndirectFunctionInvalidIndex) {
+TEST_F(WasmModuleVerifyDeathTest, IndirectFunctionInvalidIndex) {
   static const byte data[] = {
       // sig#0 -------------------------------------------------------
       SIGNATURES_SECTION_VOID_VOID,
@@ -1414,7 +1414,7 @@ TEST_F(WasmModuleVerifyTest, IndirectFunctionInvalidIndex) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, MultipleTablesWithoutFlag) {
+TEST_F(WasmModuleVerifyDeathTest, MultipleTablesWithoutFlag) {
   static const byte data[] = {
       SECTION(Table,           // table section
               ENTRY_COUNT(2),  // 2 tables
@@ -1428,7 +1428,7 @@ TEST_F(WasmModuleVerifyTest, MultipleTablesWithoutFlag) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, MultipleTablesWithFlag) {
+TEST_F(WasmModuleVerifyDeathTest, MultipleTablesWithFlag) {
   WASM_FEATURE_SCOPE(anyref);
   static const byte data[] = {
       SECTION(Table,           // table section
@@ -1453,7 +1453,7 @@ TEST_F(WasmModuleVerifyTest, MultipleTablesWithFlag) {
   EXPECT_EQ(kWasmAnyRef, result.value()->tables[1].type);
 }
 
-TEST_F(WasmModuleVerifyTest, TieringCompilationHints) {
+TEST_F(WasmModuleVerifyDeathTest, TieringCompilationHints) {
   WASM_FEATURE_SCOPE(compilation_hints);
   static const byte data[] = {
       SIGNATURES_SECTION(1, SIG_ENTRY_v_v),
@@ -1676,7 +1676,7 @@ TEST_F(WasmSignatureDecodeTest, Fail_invalid_param_type2) {
   EXPECT_EQ(nullptr, sig);
 }
 
-class WasmFunctionVerifyTest : public TestWithIsolateAndZone {
+class WasmFunctionVerifyDeathTest : public TestWithIsolateAndZone {
  public:
   FunctionResult DecodeWasmFunction(const ModuleWireBytes& wire_bytes,
                                     const WasmModule* module,
@@ -1689,7 +1689,7 @@ class WasmFunctionVerifyTest : public TestWithIsolateAndZone {
   }
 };
 
-TEST_F(WasmFunctionVerifyTest, Ok_v_v_empty) {
+TEST_F(WasmFunctionVerifyDeathTest, Ok_v_v_empty) {
   static const byte data[] = {
       SIG_ENTRY_v_v,  // signature entry
       4,              // locals
@@ -1719,12 +1719,12 @@ TEST_F(WasmFunctionVerifyTest, Ok_v_v_empty) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, SectionWithoutNameLength) {
+TEST_F(WasmModuleVerifyDeathTest, SectionWithoutNameLength) {
   const byte data[] = {1};
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, TheLoneliestOfValidModulesTheTrulyEmptyOne) {
+TEST_F(WasmModuleVerifyDeathTest, TheLoneliestOfValidModulesTheTrulyEmptyOne) {
   const byte data[] = {
       0,  // unknown section code.
       0,  // Empty section name.
@@ -1734,14 +1734,14 @@ TEST_F(WasmModuleVerifyTest, TheLoneliestOfValidModulesTheTrulyEmptyOne) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, OnlyUnknownSectionEmpty) {
+TEST_F(WasmModuleVerifyDeathTest, OnlyUnknownSectionEmpty) {
   const byte data[] = {
       UNKNOWN_SECTION(0),
   };
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, OnlyUnknownSectionNonEmpty) {
+TEST_F(WasmModuleVerifyDeathTest, OnlyUnknownSectionNonEmpty) {
   const byte data[] = {
       UNKNOWN_SECTION(5),
       0xFF,
@@ -1753,7 +1753,7 @@ TEST_F(WasmModuleVerifyTest, OnlyUnknownSectionNonEmpty) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, SignatureFollowedByEmptyUnknownSection) {
+TEST_F(WasmModuleVerifyDeathTest, SignatureFollowedByEmptyUnknownSection) {
   const byte data[] = {
       // signatures
       SIGNATURES_SECTION_VOID_VOID,
@@ -1762,7 +1762,7 @@ TEST_F(WasmModuleVerifyTest, SignatureFollowedByEmptyUnknownSection) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, SignatureFollowedByUnknownSection) {
+TEST_F(WasmModuleVerifyDeathTest, SignatureFollowedByUnknownSection) {
   const byte data[] = {
       // signatures
       SIGNATURES_SECTION_VOID_VOID,
@@ -1772,7 +1772,7 @@ TEST_F(WasmModuleVerifyTest, SignatureFollowedByUnknownSection) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, UnknownSectionOverflow) {
+TEST_F(WasmModuleVerifyDeathTest, UnknownSectionOverflow) {
   static const byte data[] = {
       UNKNOWN_SECTION(9),
       1,
@@ -1789,7 +1789,7 @@ TEST_F(WasmModuleVerifyTest, UnknownSectionOverflow) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, UnknownSectionUnderflow) {
+TEST_F(WasmModuleVerifyDeathTest, UnknownSectionUnderflow) {
   static const byte data[] = {
       UNKNOWN_SECTION(333),
       1,
@@ -1800,7 +1800,7 @@ TEST_F(WasmModuleVerifyTest, UnknownSectionUnderflow) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, UnknownSectionSkipped) {
+TEST_F(WasmModuleVerifyDeathTest, UnknownSectionSkipped) {
   static const byte data[] = {
       UNKNOWN_SECTION(1),
       0,  // one byte section
@@ -1822,18 +1822,18 @@ TEST_F(WasmModuleVerifyTest, UnknownSectionSkipped) {
   EXPECT_EQ(0u, global->offset);
 }
 
-TEST_F(WasmModuleVerifyTest, ImportTable_empty) {
+TEST_F(WasmModuleVerifyDeathTest, ImportTable_empty) {
   static const byte data[] = {SECTION(Type, ENTRY_COUNT(0)),
                               SECTION(Import, ENTRY_COUNT(0))};
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ImportTable_nosigs1) {
+TEST_F(WasmModuleVerifyDeathTest, ImportTable_nosigs1) {
   static const byte data[] = {SECTION(Import, ENTRY_COUNT(0))};
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ImportTable_mutable_global) {
+TEST_F(WasmModuleVerifyDeathTest, ImportTable_mutable_global) {
   {
     static const byte data[] = {
         SECTION(Import,           // section header
@@ -1860,7 +1860,7 @@ TEST_F(WasmModuleVerifyTest, ImportTable_mutable_global) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, ImportTable_mutability_malformed) {
+TEST_F(WasmModuleVerifyDeathTest, ImportTable_mutability_malformed) {
   static const byte data[] = {
       SECTION(Import,
               ENTRY_COUNT(1),   // --
@@ -1873,7 +1873,7 @@ TEST_F(WasmModuleVerifyTest, ImportTable_mutability_malformed) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ImportTable_nosigs2) {
+TEST_F(WasmModuleVerifyDeathTest, ImportTable_nosigs2) {
   static const byte data[] = {
       SECTION(Import, ENTRY_COUNT(1),  // sig table
               ADD_COUNT('m'),          // module name
@@ -1884,7 +1884,7 @@ TEST_F(WasmModuleVerifyTest, ImportTable_nosigs2) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ImportTable_invalid_sig) {
+TEST_F(WasmModuleVerifyDeathTest, ImportTable_invalid_sig) {
   static const byte data[] = {
       SECTION(Type, ENTRY_COUNT(0)),   // --
       SECTION(Import, ENTRY_COUNT(1),  // --
@@ -1896,7 +1896,7 @@ TEST_F(WasmModuleVerifyTest, ImportTable_invalid_sig) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ImportTable_one_sig) {
+TEST_F(WasmModuleVerifyDeathTest, ImportTable_one_sig) {
   static const byte data[] = {
       // signatures
       SIGNATURES_SECTION_VOID_VOID,
@@ -1910,7 +1910,7 @@ TEST_F(WasmModuleVerifyTest, ImportTable_one_sig) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ImportTable_invalid_module) {
+TEST_F(WasmModuleVerifyDeathTest, ImportTable_invalid_module) {
   static const byte data[] = {
       // signatures
       SIGNATURES_SECTION_VOID_VOID,  // --
@@ -1925,7 +1925,7 @@ TEST_F(WasmModuleVerifyTest, ImportTable_invalid_module) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ImportTable_off_end) {
+TEST_F(WasmModuleVerifyDeathTest, ImportTable_off_end) {
   static const byte data[] = {
       // signatures
       SIGNATURES_SECTION_VOID_VOID,
@@ -1939,7 +1939,7 @@ TEST_F(WasmModuleVerifyTest, ImportTable_off_end) {
   EXPECT_OFF_END_FAILURE(data, arraysize(data) - 3);
 }
 
-TEST_F(WasmModuleVerifyTest, ExportTable_empty1) {
+TEST_F(WasmModuleVerifyDeathTest, ExportTable_empty1) {
   static const byte data[] = {                               // signatures
                               SIGNATURES_SECTION_VOID_VOID,  // --
                               ONE_EMPTY_FUNCTION(SIG_INDEX(0)),
@@ -1953,18 +1953,18 @@ TEST_F(WasmModuleVerifyTest, ExportTable_empty1) {
   EXPECT_EQ(0u, result.value()->export_table.size());
 }
 
-TEST_F(WasmModuleVerifyTest, ExportTable_empty2) {
+TEST_F(WasmModuleVerifyDeathTest, ExportTable_empty2) {
   static const byte data[] = {SECTION(Type, ENTRY_COUNT(0)),
                               SECTION(Export, ENTRY_COUNT(0))};
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ExportTable_NoFunctions2) {
+TEST_F(WasmModuleVerifyDeathTest, ExportTable_NoFunctions2) {
   static const byte data[] = {SECTION(Export, ENTRY_COUNT(0))};
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ExportTableOne) {
+TEST_F(WasmModuleVerifyDeathTest, ExportTableOne) {
   static const byte data[] = {
       // signatures
       SIGNATURES_SECTION_VOID_VOID, ONE_EMPTY_FUNCTION(SIG_INDEX(0)),
@@ -1981,7 +1981,7 @@ TEST_F(WasmModuleVerifyTest, ExportTableOne) {
   EXPECT_EQ(1u, result.value()->export_table.size());
 }
 
-TEST_F(WasmModuleVerifyTest, ExportNameWithInvalidStringLength) {
+TEST_F(WasmModuleVerifyDeathTest, ExportNameWithInvalidStringLength) {
   static const byte data[] = {
       // signatures
       SIGNATURES_SECTION_VOID_VOID, ONE_EMPTY_FUNCTION(SIG_INDEX(0)),
@@ -1997,7 +1997,7 @@ TEST_F(WasmModuleVerifyTest, ExportNameWithInvalidStringLength) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, ExportTableTwo) {
+TEST_F(WasmModuleVerifyDeathTest, ExportTableTwo) {
   static const byte data[] = {
       // signatures
       SIGNATURES_SECTION_VOID_VOID, ONE_EMPTY_FUNCTION(SIG_INDEX(0)),
@@ -2018,7 +2018,7 @@ TEST_F(WasmModuleVerifyTest, ExportTableTwo) {
   EXPECT_EQ(2u, result.value()->export_table.size());
 }
 
-TEST_F(WasmModuleVerifyTest, ExportTableThree) {
+TEST_F(WasmModuleVerifyDeathTest, ExportTableThree) {
   static const byte data[] = {
       // signatures
       SIGNATURES_SECTION_VOID_VOID, THREE_EMPTY_FUNCTIONS(SIG_INDEX(0)),
@@ -2041,7 +2041,7 @@ TEST_F(WasmModuleVerifyTest, ExportTableThree) {
   EXPECT_EQ(3u, result.value()->export_table.size());
 }
 
-TEST_F(WasmModuleVerifyTest, ExportTableThreeOne) {
+TEST_F(WasmModuleVerifyDeathTest, ExportTableThreeOne) {
   for (int i = 0; i < 6; i++) {
     const byte data[] = {
         // signatures
@@ -2061,7 +2061,7 @@ TEST_F(WasmModuleVerifyTest, ExportTableThreeOne) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, ExportTableOne_off_end) {
+TEST_F(WasmModuleVerifyDeathTest, ExportTableOne_off_end) {
   static const byte data[] = {
       // signatures
       SIGNATURES_SECTION_VOID_VOID, ONE_EMPTY_FUNCTION(SIG_INDEX(0)),
@@ -2076,7 +2076,7 @@ TEST_F(WasmModuleVerifyTest, ExportTableOne_off_end) {
   EXPECT_OFF_END_FAILURE(data, arraysize(data) - 3);
 }
 
-TEST_F(WasmModuleVerifyTest, Regression_648070) {
+TEST_F(WasmModuleVerifyDeathTest, Regression_648070) {
   static const byte data[] = {
       SECTION(Type, ENTRY_COUNT(0)),         // --
       SECTION(Function, U32V_5(3500228624))  // function count = 3500228624
@@ -2084,7 +2084,7 @@ TEST_F(WasmModuleVerifyTest, Regression_648070) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, Regression_738097) {
+TEST_F(WasmModuleVerifyDeathTest, Regression_738097) {
   // The function body size caused an integer overflow in the module decoder.
   static const byte data[] = {
       SIGNATURES_SECTION(1, SIG_ENTRY_v_v),  // --
@@ -2097,7 +2097,7 @@ TEST_F(WasmModuleVerifyTest, Regression_738097) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, FunctionBodySizeLimit) {
+TEST_F(WasmModuleVerifyDeathTest, FunctionBodySizeLimit) {
   const uint32_t delta = 3;
   for (uint32_t body_size = kV8MaxWasmFunctionSize - delta;
        body_size < kV8MaxWasmFunctionSize + delta; body_size++) {
@@ -2122,7 +2122,7 @@ TEST_F(WasmModuleVerifyTest, FunctionBodySizeLimit) {
   }
 }
 
-TEST_F(WasmModuleVerifyTest, FunctionBodies_empty) {
+TEST_F(WasmModuleVerifyDeathTest, FunctionBodies_empty) {
   static const byte data[] = {
       EMPTY_SIGNATURES_SECTION,           // --
       EMPTY_FUNCTION_SIGNATURES_SECTION,  // --
@@ -2131,7 +2131,7 @@ TEST_F(WasmModuleVerifyTest, FunctionBodies_empty) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, FunctionBodies_one_empty) {
+TEST_F(WasmModuleVerifyDeathTest, FunctionBodies_one_empty) {
   static const byte data[] = {
       SIGNATURES_SECTION(1, SIG_ENTRY_v_v),  // --
       FUNCTION_SIGNATURES_SECTION(1, 0),     // --
@@ -2140,7 +2140,7 @@ TEST_F(WasmModuleVerifyTest, FunctionBodies_one_empty) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, FunctionBodies_one_nop) {
+TEST_F(WasmModuleVerifyDeathTest, FunctionBodies_one_nop) {
   static const byte data[] = {
       SIGNATURES_SECTION(1, SIG_ENTRY_v_v),    // --
       FUNCTION_SIGNATURES_SECTION(1, 0),       // --
@@ -2149,7 +2149,7 @@ TEST_F(WasmModuleVerifyTest, FunctionBodies_one_nop) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, FunctionBodies_count_mismatch1) {
+TEST_F(WasmModuleVerifyDeathTest, FunctionBodies_count_mismatch1) {
   static const byte data[] = {
       SIGNATURES_SECTION(1, SIG_ENTRY_v_v),  // --
       FUNCTION_SIGNATURES_SECTION(2, 0, 0),  // --
@@ -2158,7 +2158,7 @@ TEST_F(WasmModuleVerifyTest, FunctionBodies_count_mismatch1) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, FunctionBodies_count_mismatch2) {
+TEST_F(WasmModuleVerifyDeathTest, FunctionBodies_count_mismatch2) {
   static const byte data[] = {
       SIGNATURES_SECTION(1, SIG_ENTRY_v_v),              // --
       FUNCTION_SIGNATURES_SECTION(1, 0),                 // --
@@ -2167,14 +2167,14 @@ TEST_F(WasmModuleVerifyTest, FunctionBodies_count_mismatch2) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, Names_empty) {
+TEST_F(WasmModuleVerifyDeathTest, Names_empty) {
   static const byte data[] = {
       EMPTY_SIGNATURES_SECTION, EMPTY_FUNCTION_SIGNATURES_SECTION,
       EMPTY_FUNCTION_BODIES_SECTION, EMPTY_NAMES_SECTION};
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, Names_one_empty) {
+TEST_F(WasmModuleVerifyDeathTest, Names_one_empty) {
   // TODO(wasm): This test does not test anything (corrupt name section does not
   // fail validation).
   static const byte data[] = {
@@ -2186,7 +2186,7 @@ TEST_F(WasmModuleVerifyTest, Names_one_empty) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, Names_two_empty) {
+TEST_F(WasmModuleVerifyDeathTest, Names_two_empty) {
   // TODO(wasm): This test does not test anything (corrupt name section does not
   // fail validation).
   static const byte data[] = {
@@ -2200,7 +2200,7 @@ TEST_F(WasmModuleVerifyTest, Names_two_empty) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, Regression684855) {
+TEST_F(WasmModuleVerifyDeathTest, Regression684855) {
   static const byte data[] = {
       SECTION_NAMES(0xFB,  // functions count
                     0x27,  // |
@@ -2218,7 +2218,7 @@ TEST_F(WasmModuleVerifyTest, Regression684855) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, FunctionSectionWithoutCodeSection) {
+TEST_F(WasmModuleVerifyDeathTest, FunctionSectionWithoutCodeSection) {
   static const byte data[] = {
       SIGNATURES_SECTION(1, SIG_ENTRY_v_v),  // Type section.
       FUNCTION_SIGNATURES_SECTION(1, 0),     // Function section.
@@ -2227,18 +2227,18 @@ TEST_F(WasmModuleVerifyTest, FunctionSectionWithoutCodeSection) {
   EXPECT_NOT_OK(result, "function count is 1, but code section is absent");
 }
 
-TEST_F(WasmModuleVerifyTest, CodeSectionWithoutFunctionSection) {
+TEST_F(WasmModuleVerifyDeathTest, CodeSectionWithoutFunctionSection) {
   static const byte data[] = {ONE_EMPTY_BODY};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
   EXPECT_NOT_OK(result, "function body count 1 mismatch (0 expected)");
 }
 
-TEST_F(WasmModuleVerifyTest, EmptyFunctionSectionWithoutCodeSection) {
+TEST_F(WasmModuleVerifyDeathTest, EmptyFunctionSectionWithoutCodeSection) {
   static const byte data[] = {SECTION(Function, ENTRY_COUNT(0))};
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, EmptyCodeSectionWithoutFunctionSection) {
+TEST_F(WasmModuleVerifyDeathTest, EmptyCodeSectionWithoutFunctionSection) {
   static const byte data[] = {SECTION(Code, ENTRY_COUNT(0))};
   EXPECT_VERIFIES(data);
 }
@@ -2312,7 +2312,7 @@ TEST_F(WasmInitExprDecodeTest, InitExpr_illegal) {
   EXPECT_INIT_EXPR_FAIL(WASM_IF_ELSE(WASM_ZERO, WASM_ZERO, WASM_ZERO));
 }
 
-TEST_F(WasmModuleVerifyTest, Multiple_Named_Sections) {
+TEST_F(WasmModuleVerifyDeathTest, Multiple_Named_Sections) {
   static const byte data[] = {
       SECTION(Unknown, ADD_COUNT('X'), 17, 18),                    // --
       SECTION(Unknown, ADD_COUNT('f', 'o', 'o'), 5, 6, 7, 8, 9),   // --
@@ -2321,12 +2321,12 @@ TEST_F(WasmModuleVerifyTest, Multiple_Named_Sections) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, Section_Name_No_UTF8) {
+TEST_F(WasmModuleVerifyDeathTest, Section_Name_No_UTF8) {
   static const byte data[] = {SECTION(Unknown, 1, 0xFF, 17, 18)};
   EXPECT_FAILURE(data);
 }
 
-class WasmModuleCustomSectionTest : public TestWithIsolateAndZone {
+class WasmModuleCustomSectionDeathTest : public TestWithIsolateAndZone {
  public:
   void CheckSections(const byte* module_start, const byte* module_end,
                      const CustomSectionOffset* expected, size_t num_expected) {
@@ -2350,7 +2350,7 @@ class WasmModuleCustomSectionTest : public TestWithIsolateAndZone {
   }
 };
 
-TEST_F(WasmModuleCustomSectionTest, ThreeUnknownSections) {
+TEST_F(WasmModuleCustomSectionDeathTest, ThreeUnknownSections) {
   static constexpr byte data[] = {
       U32_LE(kWasmMagic),                                  // --
       U32_LE(kWasmVersion),                                // --
@@ -2369,7 +2369,7 @@ TEST_F(WasmModuleCustomSectionTest, ThreeUnknownSections) {
   CheckSections(data, data + sizeof(data), expected, arraysize(expected));
 }
 
-TEST_F(WasmModuleCustomSectionTest, TwoKnownTwoUnknownSections) {
+TEST_F(WasmModuleCustomSectionDeathTest, TwoKnownTwoUnknownSections) {
   static const byte data[] = {
       U32_LE(kWasmMagic),                                          // --
       U32_LE(kWasmVersion),                                        // --
@@ -2388,7 +2388,7 @@ TEST_F(WasmModuleCustomSectionTest, TwoKnownTwoUnknownSections) {
   CheckSections(data, data + sizeof(data), expected, arraysize(expected));
 }
 
-TEST_F(WasmModuleVerifyTest, SourceMappingURLSection) {
+TEST_F(WasmModuleVerifyDeathTest, SourceMappingURLSection) {
   static const byte data[] = {
       SECTION_SRC_MAP('s', 'r', 'c', '/', 'x', 'y', 'z', '.', 'c')};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
@@ -2396,7 +2396,7 @@ TEST_F(WasmModuleVerifyTest, SourceMappingURLSection) {
   EXPECT_EQ("src/xyz.c", result.value()->source_map_url);
 }
 
-TEST_F(WasmModuleVerifyTest, BadSourceMappingURLSection) {
+TEST_F(WasmModuleVerifyDeathTest, BadSourceMappingURLSection) {
   static const byte data[] = {
       SECTION_SRC_MAP('s', 'r', 'c', '/', 'x', 0xff, 'z', '.', 'c')};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
@@ -2404,7 +2404,7 @@ TEST_F(WasmModuleVerifyTest, BadSourceMappingURLSection) {
   EXPECT_EQ(0u, result.value()->source_map_url.size());
 }
 
-TEST_F(WasmModuleVerifyTest, MultipleSourceMappingURLSections) {
+TEST_F(WasmModuleVerifyDeathTest, MultipleSourceMappingURLSections) {
   static const byte data[] = {SECTION_SRC_MAP('a', 'b', 'c'),
                               SECTION_SRC_MAP('p', 'q', 'r')};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
@@ -2412,7 +2412,7 @@ TEST_F(WasmModuleVerifyTest, MultipleSourceMappingURLSections) {
   EXPECT_EQ("abc", result.value()->source_map_url);
 }
 
-TEST_F(WasmModuleVerifyTest, MultipleNameSections) {
+TEST_F(WasmModuleVerifyDeathTest, MultipleNameSections) {
   static const byte data[] = {
       SECTION_NAMES(0, ADD_COUNT(ADD_COUNT('a', 'b', 'c'))),
       SECTION_NAMES(0, ADD_COUNT(ADD_COUNT('p', 'q', 'r', 's')))};
@@ -2421,7 +2421,7 @@ TEST_F(WasmModuleVerifyTest, MultipleNameSections) {
   EXPECT_EQ(3u, result.value()->name.length());
 }
 
-TEST_F(WasmModuleVerifyTest, BadNameSection) {
+TEST_F(WasmModuleVerifyDeathTest, BadNameSection) {
   static const byte data[] = {SECTION_NAMES(
       0, ADD_COUNT(ADD_COUNT('s', 'r', 'c', '/', 'x', 0xff, 'z', '.', 'c')))};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
@@ -2429,7 +2429,7 @@ TEST_F(WasmModuleVerifyTest, BadNameSection) {
   EXPECT_EQ(0u, result.value()->name.length());
 }
 
-TEST_F(WasmModuleVerifyTest, PassiveDataSegment) {
+TEST_F(WasmModuleVerifyDeathTest, PassiveDataSegment) {
   static const byte data[] = {
       // memory declaration ----------------------------------------------------
       SECTION(Memory, ENTRY_COUNT(1), 0, 1),
@@ -2442,7 +2442,7 @@ TEST_F(WasmModuleVerifyTest, PassiveDataSegment) {
   EXPECT_OFF_END_FAILURE(data, arraysize(data) - 5);
 }
 
-TEST_F(WasmModuleVerifyTest, ActiveElementSegmentWithElements) {
+TEST_F(WasmModuleVerifyDeathTest, ActiveElementSegmentWithElements) {
   static const byte data[] = {
       // sig#0 -----------------------------------------------------------------
       SIGNATURES_SECTION_VOID_VOID,
@@ -2462,7 +2462,7 @@ TEST_F(WasmModuleVerifyTest, ActiveElementSegmentWithElements) {
   EXPECT_OFF_END_FAILURE(data, arraysize(data) - 5);
 }
 
-TEST_F(WasmModuleVerifyTest, PassiveElementSegment) {
+TEST_F(WasmModuleVerifyDeathTest, PassiveElementSegment) {
   static const byte data[] = {
       // sig#0 -----------------------------------------------------------------
       SIGNATURES_SECTION_VOID_VOID,
@@ -2482,7 +2482,7 @@ TEST_F(WasmModuleVerifyTest, PassiveElementSegment) {
   EXPECT_OFF_END_FAILURE(data, arraysize(data) - 5);
 }
 
-TEST_F(WasmModuleVerifyTest, PassiveElementSegmentAnyRef) {
+TEST_F(WasmModuleVerifyDeathTest, PassiveElementSegmentAnyRef) {
   static const byte data[] = {
       // sig#0 -----------------------------------------------------------------
       SIGNATURES_SECTION_VOID_VOID,
@@ -2499,7 +2499,7 @@ TEST_F(WasmModuleVerifyTest, PassiveElementSegmentAnyRef) {
   EXPECT_FAILURE(data);
 }
 
-TEST_F(WasmModuleVerifyTest, PassiveElementSegmentWithIndices) {
+TEST_F(WasmModuleVerifyDeathTest, PassiveElementSegmentWithIndices) {
   static const byte data[] = {
       // sig#0 -----------------------------------------------------------------
       SIGNATURES_SECTION_VOID_VOID,
@@ -2518,7 +2518,7 @@ TEST_F(WasmModuleVerifyTest, PassiveElementSegmentWithIndices) {
   EXPECT_OFF_END_FAILURE(data, arraysize(data) - 5);
 }
 
-TEST_F(WasmModuleVerifyTest, DataCountSectionCorrectPlacement) {
+TEST_F(WasmModuleVerifyDeathTest, DataCountSectionCorrectPlacement) {
   static const byte data[] = {SECTION(Element, ENTRY_COUNT(0)),
                               SECTION(DataCount, ENTRY_COUNT(0)),
                               SECTION(Code, ENTRY_COUNT(0))};
@@ -2527,7 +2527,7 @@ TEST_F(WasmModuleVerifyTest, DataCountSectionCorrectPlacement) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, DataCountSectionAfterCode) {
+TEST_F(WasmModuleVerifyDeathTest, DataCountSectionAfterCode) {
   static const byte data[] = {SECTION(Code, ENTRY_COUNT(0)),
                               SECTION(DataCount, ENTRY_COUNT(0))};
   WASM_FEATURE_SCOPE(bulk_memory);
@@ -2536,7 +2536,7 @@ TEST_F(WasmModuleVerifyTest, DataCountSectionAfterCode) {
                 "The DataCount section must appear before the Code section");
 }
 
-TEST_F(WasmModuleVerifyTest, DataCountSectionBeforeElement) {
+TEST_F(WasmModuleVerifyDeathTest, DataCountSectionBeforeElement) {
   static const byte data[] = {SECTION(DataCount, ENTRY_COUNT(0)),
                               SECTION(Element, ENTRY_COUNT(0))};
   WASM_FEATURE_SCOPE(bulk_memory);
@@ -2544,7 +2544,7 @@ TEST_F(WasmModuleVerifyTest, DataCountSectionBeforeElement) {
   EXPECT_NOT_OK(result, "unexpected section <Element>");
 }
 
-TEST_F(WasmModuleVerifyTest, DataCountSectionAfterStartBeforeElement) {
+TEST_F(WasmModuleVerifyDeathTest, DataCountSectionAfterStartBeforeElement) {
   STATIC_ASSERT(kStartSectionCode + 1 == kElementSectionCode);
   static const byte data[] = {
       // We need the start section for this test, but the start section must
@@ -2562,7 +2562,7 @@ TEST_F(WasmModuleVerifyTest, DataCountSectionAfterStartBeforeElement) {
   EXPECT_NOT_OK(result, "unexpected section <Element>");
 }
 
-TEST_F(WasmModuleVerifyTest, MultipleDataCountSections) {
+TEST_F(WasmModuleVerifyDeathTest, MultipleDataCountSections) {
   static const byte data[] = {SECTION(DataCount, ENTRY_COUNT(0)),
                               SECTION(DataCount, ENTRY_COUNT(0))};
   WASM_FEATURE_SCOPE(bulk_memory);
@@ -2570,7 +2570,7 @@ TEST_F(WasmModuleVerifyTest, MultipleDataCountSections) {
   EXPECT_NOT_OK(result, "Multiple DataCount sections not allowed");
 }
 
-TEST_F(WasmModuleVerifyTest, DataCountSegmentCountMatch) {
+TEST_F(WasmModuleVerifyDeathTest, DataCountSegmentCountMatch) {
   static const byte data[] = {
       SECTION(Memory, ENTRY_COUNT(1), 0, 1),  // Memory section.
       SECTION(DataCount, ENTRY_COUNT(1)),     // DataCount section.
@@ -2582,7 +2582,7 @@ TEST_F(WasmModuleVerifyTest, DataCountSegmentCountMatch) {
   EXPECT_VERIFIES(data);
 }
 
-TEST_F(WasmModuleVerifyTest, DataCountSegmentCount_greater) {
+TEST_F(WasmModuleVerifyDeathTest, DataCountSegmentCount_greater) {
   static const byte data[] = {
       SECTION(Memory, ENTRY_COUNT(1), 0, 1),  // Memory section.
       SECTION(DataCount, ENTRY_COUNT(3)),     // DataCount section.
@@ -2592,7 +2592,7 @@ TEST_F(WasmModuleVerifyTest, DataCountSegmentCount_greater) {
   EXPECT_NOT_OK(result, "data segments count 0 mismatch (3 expected)");
 }
 
-TEST_F(WasmModuleVerifyTest, DataCountSegmentCount_less) {
+TEST_F(WasmModuleVerifyDeathTest, DataCountSegmentCount_less) {
   static const byte data[] = {
       SECTION(Memory, ENTRY_COUNT(1), 0, 1),  // Memory section.
       SECTION(DataCount, ENTRY_COUNT(0)),     // DataCount section.
@@ -2603,7 +2603,7 @@ TEST_F(WasmModuleVerifyTest, DataCountSegmentCount_less) {
   EXPECT_NOT_OK(result, "data segments count 1 mismatch (0 expected)");
 }
 
-TEST_F(WasmModuleVerifyTest, DataCountSegmentCount_omitted) {
+TEST_F(WasmModuleVerifyDeathTest, DataCountSegmentCount_omitted) {
   static const byte data[] = {SECTION(Memory, ENTRY_COUNT(1), 0, 1),
                               SECTION(DataCount, ENTRY_COUNT(1))};
   WASM_FEATURE_SCOPE(bulk_memory);
