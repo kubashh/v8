@@ -128,7 +128,7 @@ declare_args() {
   v8_enable_concurrent_marking = true
 
   # Sets -dV8_ARRAY_BUFFER_EXTENSION
-  v8_enable_array_buffer_extension = false
+  v8_enable_array_buffer_extension = true
 
   # Enables various testing features.
   v8_enable_test_features = ""
@@ -2257,6 +2257,8 @@ v8_source_set("v8_base_without_compiler") {
     "src/handles/maybe-handles.h",
     "src/heap/array-buffer-collector.cc",
     "src/heap/array-buffer-collector.h",
+    "src/heap/array-buffer-sweeper.cc",
+    "src/heap/array-buffer-sweeper.h",
     "src/heap/array-buffer-tracker-inl.h",
     "src/heap/array-buffer-tracker.cc",
     "src/heap/array-buffer-tracker.h",

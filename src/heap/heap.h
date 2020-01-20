@@ -60,6 +60,7 @@ using v8::MemoryPressureLevel;
 
 class AllocationObserver;
 class ArrayBufferCollector;
+class ArrayBufferSweeper;
 class CodeLargeObjectSpace;
 class ConcurrentMarking;
 class GCIdleTimeHandler;
@@ -584,26 +585,8 @@ class Heap {
   V8_EXPORT_PRIVATE void AutomaticallyRestoreInitialHeapLimit(
       double threshold_percent);
 
-  ArrayBufferExtension* old_array_buffer_extensions() {
-    return old_array_buffer_extensions_;
-  }
-
-  ArrayBufferExtension* young_array_buffer_extensions() {
-    return young_array_buffer_extensions_;
-  }
-
-  void set_old_array_buffer_extensions(ArrayBufferExtension* head) {
-    old_array_buffer_extensions_ = head;
-  }
-
-  void set_young_array_buffer_extensions(ArrayBufferExtension* head) {
-    young_array_buffer_extensions_ = head;
-  }
-
   void AppendArrayBufferExtension(JSArrayBuffer object,
                                   ArrayBufferExtension* extension);
-
-  void ReleaseAllArrayBufferExtensions();
 
   V8_EXPORT_PRIVATE double MonotonicallyIncreasingTimeInMs();
 
@@ -754,6 +737,10 @@ class Heap {
 
   ArrayBufferCollector* array_buffer_collector() {
     return array_buffer_collector_.get();
+  }
+
+  ArrayBufferSweeper* array_buffer_sweeper() {
+    return array_buffer_sweeper_.get();
   }
 
   // ===========================================================================
@@ -1415,8 +1402,6 @@ class Heap {
   static Isolate* GetIsolateFromWritableObject(HeapObject object);
 
  private:
-  void ReleaseAllArrayBufferExtensions(ArrayBufferExtension** head);
-
   using ExternalStringTableUpdaterCallback = String (*)(Heap* heap,
                                                         FullObjectSlot pointer);
 
@@ -2039,6 +2024,8 @@ class Heap {
   MinorMarkCompactCollector* minor_mark_compact_collector_ = nullptr;
   std::unique_ptr<ScavengerCollector> scavenger_collector_;
   std::unique_ptr<ArrayBufferCollector> array_buffer_collector_;
+  std::unique_ptr<ArrayBufferSweeper> array_buffer_sweeper_;
+
   std::unique_ptr<MemoryAllocator> memory_allocator_;
   std::unique_ptr<IncrementalMarking> incremental_marking_;
   std::unique_ptr<ConcurrentMarking> concurrent_marking_;
@@ -2140,6 +2127,7 @@ class Heap {
   // Classes in "heap" can be friends.
   friend class AlwaysAllocateScope;
   friend class ArrayBufferCollector;
+  friend class ArrayBufferSweeper;
   friend class ConcurrentMarking;
   friend class GCCallbacksScope;
   friend class GCTracer;
