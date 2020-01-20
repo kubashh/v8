@@ -1314,10 +1314,10 @@ const MemoryAccess kMemoryAccesses[] = {
 
 }  // namespace
 
-using InstructionSelectorMemoryAccessTest =
+using InstructionSelectorMemoryAccessDeathTest =
     InstructionSelectorTestWithParam<MemoryAccess>;
 
-TEST_P(InstructionSelectorMemoryAccessTest, LoadWithParameters) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, LoadWithParameters) {
   const MemoryAccess memacc = GetParam();
   StreamBuilder m(this, memacc.type, MachineType::Pointer(),
                   MachineType::Int32());
@@ -1331,8 +1331,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, LoadWithParameters) {
   EXPECT_TRUE((s.*memacc.val_predicate)(s[0]->Output()));
 }
 
-
-TEST_P(InstructionSelectorMemoryAccessTest, LoadWithImmediateIndex) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, LoadWithImmediateIndex) {
   const MemoryAccess memacc = GetParam();
   TRACED_FOREACH(int32_t, index, memacc.immediates) {
     StreamBuilder m(this, memacc.type, MachineType::Pointer());
@@ -1349,8 +1348,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, LoadWithImmediateIndex) {
   }
 }
 
-
-TEST_P(InstructionSelectorMemoryAccessTest, StoreWithParameters) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, StoreWithParameters) {
   const MemoryAccess memacc = GetParam();
   StreamBuilder m(this, MachineType::Int32(), MachineType::Pointer(),
                   MachineType::Int32(), memacc.type);
@@ -1365,8 +1363,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, StoreWithParameters) {
   EXPECT_EQ(0U, s[0]->OutputCount());
 }
 
-
-TEST_P(InstructionSelectorMemoryAccessTest, StoreWithImmediateIndex) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, StoreWithImmediateIndex) {
   const MemoryAccess memacc = GetParam();
   TRACED_FOREACH(int32_t, index, memacc.immediates) {
     StreamBuilder m(this, MachineType::Int32(), MachineType::Pointer(),
@@ -1386,10 +1383,10 @@ TEST_P(InstructionSelectorMemoryAccessTest, StoreWithImmediateIndex) {
 }
 
 INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
-                         InstructionSelectorMemoryAccessTest,
+                         InstructionSelectorMemoryAccessDeathTest,
                          ::testing::ValuesIn(kMemoryAccesses));
 
-TEST_F(InstructionSelectorMemoryAccessTest, LoadWithShiftedIndex) {
+TEST_F(InstructionSelectorMemoryAccessDeathTest, LoadWithShiftedIndex) {
   TRACED_FORRANGE(int, immediate_shift, 1, 31) {
     StreamBuilder m(this, MachineType::Int32(), MachineType::Pointer(),
                     MachineType::Int32());
@@ -1405,7 +1402,7 @@ TEST_F(InstructionSelectorMemoryAccessTest, LoadWithShiftedIndex) {
   }
 }
 
-TEST_F(InstructionSelectorMemoryAccessTest, StoreWithShiftedIndex) {
+TEST_F(InstructionSelectorMemoryAccessDeathTest, StoreWithShiftedIndex) {
   TRACED_FORRANGE(int, immediate_shift, 1, 31) {
     StreamBuilder m(this, MachineType::Int32(), MachineType::Pointer(),
                     MachineType::Int32(), MachineType::Int32());

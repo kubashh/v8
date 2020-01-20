@@ -1148,10 +1148,10 @@ TEST_F(InstructionSelectorTest, ChangeInt32ToInt64AfterLoad) {
   }
 }
 
-using InstructionSelectorElidedChangeUint32ToUint64Test =
+using InstructionSelectorElidedChangeUint32ToUint64DeathTest =
     InstructionSelectorTestWithParam<MachInst2>;
 
-TEST_P(InstructionSelectorElidedChangeUint32ToUint64Test, Parameter) {
+TEST_P(InstructionSelectorElidedChangeUint32ToUint64DeathTest, Parameter) {
   const MachInst2 binop = GetParam();
   StreamBuilder m(this, MachineType::Uint64(), binop.machine_type,
                   binop.machine_type);
@@ -1166,7 +1166,7 @@ TEST_P(InstructionSelectorElidedChangeUint32ToUint64Test, Parameter) {
 }
 
 INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
-                         InstructionSelectorElidedChangeUint32ToUint64Test,
+                         InstructionSelectorElidedChangeUint32ToUint64DeathTest,
                          ::testing::ValuesIn(kCanElideChangeUint32ToUint64));
 
 TEST_F(InstructionSelectorTest, ChangeUint32ToUint64AfterLoad) {
@@ -1441,10 +1441,10 @@ const MemoryAccessImm2 kMemoryAccessesImmUnaligned[] = {
 
 }  // namespace
 
-using InstructionSelectorMemoryAccessTest =
+using InstructionSelectorMemoryAccessDeathTest =
     InstructionSelectorTestWithParam<MemoryAccess>;
 
-TEST_P(InstructionSelectorMemoryAccessTest, LoadWithParameters) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, LoadWithParameters) {
   const MemoryAccess memacc = GetParam();
   StreamBuilder m(this, memacc.type, MachineType::Pointer(),
                   MachineType::Int32());
@@ -1455,8 +1455,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, LoadWithParameters) {
   EXPECT_EQ(kMode_MRI, s[0]->addressing_mode());
 }
 
-
-TEST_P(InstructionSelectorMemoryAccessTest, StoreWithParameters) {
+TEST_P(InstructionSelectorMemoryAccessDeathTest, StoreWithParameters) {
   const MemoryAccess memacc = GetParam();
   StreamBuilder m(this, MachineType::Int32(), MachineType::Pointer(),
                   MachineType::Int32(), memacc.type);
@@ -1470,7 +1469,7 @@ TEST_P(InstructionSelectorMemoryAccessTest, StoreWithParameters) {
 }
 
 INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
-                         InstructionSelectorMemoryAccessTest,
+                         InstructionSelectorMemoryAccessDeathTest,
                          ::testing::ValuesIn(kMemoryAccesses));
 
 // ----------------------------------------------------------------------------

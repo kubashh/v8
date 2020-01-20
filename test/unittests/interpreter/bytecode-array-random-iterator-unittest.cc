@@ -16,13 +16,13 @@ namespace v8 {
 namespace internal {
 namespace interpreter {
 
-class BytecodeArrayRandomIteratorTest : public TestWithIsolateAndZone {
+class BytecodeArrayRandomIteratorDeathTest : public TestWithIsolateAndZone {
  public:
-  BytecodeArrayRandomIteratorTest() = default;
-  ~BytecodeArrayRandomIteratorTest() override = default;
+  BytecodeArrayRandomIteratorDeathTest() = default;
+  ~BytecodeArrayRandomIteratorDeathTest() override = default;
 };
 
-TEST_F(BytecodeArrayRandomIteratorTest, InvalidBeforeStart) {
+TEST_F(BytecodeArrayRandomIteratorDeathTest, InvalidBeforeStart) {
   // Use a builder to create an array with containing multiple bytecodes
   // with 0, 1 and 2 operands.
   FeedbackVectorSpec feedback_spec(zone());
@@ -76,7 +76,7 @@ TEST_F(BytecodeArrayRandomIteratorTest, InvalidBeforeStart) {
   ASSERT_FALSE(iterator.IsValid());
 }
 
-TEST_F(BytecodeArrayRandomIteratorTest, InvalidAfterEnd) {
+TEST_F(BytecodeArrayRandomIteratorDeathTest, InvalidAfterEnd) {
   // Use a builder to create an array with containing multiple bytecodes
   // with 0, 1 and 2 operands.
   FeedbackVectorSpec feedback_spec(zone());
@@ -130,7 +130,7 @@ TEST_F(BytecodeArrayRandomIteratorTest, InvalidAfterEnd) {
   ASSERT_FALSE(iterator.IsValid());
 }
 
-TEST_F(BytecodeArrayRandomIteratorTest, AccessesFirst) {
+TEST_F(BytecodeArrayRandomIteratorDeathTest, AccessesFirst) {
   // Use a builder to create an array with containing multiple bytecodes
   // with 0, 1 and 2 operands.
   FeedbackVectorSpec feedback_spec(zone());
@@ -189,7 +189,7 @@ TEST_F(BytecodeArrayRandomIteratorTest, AccessesFirst) {
   ASSERT_TRUE(iterator.IsValid());
 }
 
-TEST_F(BytecodeArrayRandomIteratorTest, AccessesLast) {
+TEST_F(BytecodeArrayRandomIteratorDeathTest, AccessesLast) {
   // Use a builder to create an array with containing multiple bytecodes
   // with 0, 1 and 2 operands.
   FeedbackVectorSpec feedback_spec(zone());
@@ -248,7 +248,7 @@ TEST_F(BytecodeArrayRandomIteratorTest, AccessesLast) {
   ASSERT_TRUE(iterator.IsValid());
 }
 
-TEST_F(BytecodeArrayRandomIteratorTest, RandomAccessValid) {
+TEST_F(BytecodeArrayRandomIteratorDeathTest, RandomAccessValid) {
   // Use a builder to create an array with containing multiple bytecodes
   // with 0, 1 and 2 operands.
   FeedbackVectorSpec feedback_spec(zone());
@@ -434,7 +434,7 @@ TEST_F(BytecodeArrayRandomIteratorTest, RandomAccessValid) {
   EXPECT_FALSE(iterator.IsValid());
 }
 
-TEST_F(BytecodeArrayRandomIteratorTest, IteratesBytecodeArray) {
+TEST_F(BytecodeArrayRandomIteratorDeathTest, IteratesBytecodeArray) {
   // Use a builder to create an array with containing multiple bytecodes
   // with 0, 1 and 2 operands.
   FeedbackVectorSpec feedback_spec(zone());
@@ -715,7 +715,7 @@ TEST_F(BytecodeArrayRandomIteratorTest, IteratesBytecodeArray) {
   ASSERT_TRUE(!iterator.IsValid());
 }
 
-TEST_F(BytecodeArrayRandomIteratorTest, IteratesBytecodeArrayBackwards) {
+TEST_F(BytecodeArrayRandomIteratorDeathTest, IteratesBytecodeArrayBackwards) {
   // Use a builder to create an array with containing multiple bytecodes
   // with 0, 1 and 2 operands.
   FeedbackVectorSpec feedback_spec(zone());

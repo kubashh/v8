@@ -76,8 +76,9 @@ std::string PrintTrapHandlerTestParam(
   UNREACHABLE();
 }
 
-class TrapHandlerTest : public TestWithIsolate,
-                        public ::testing::WithParamInterface<TrapHandlerStyle> {
+class TrapHandlerDeathTest
+    : public TestWithIsolate,
+      public ::testing::WithParamInterface<TrapHandlerStyle> {
  protected:
   void SetUp() override {
     backing_store_ = BackingStore::AllocateWasmMemory(i_isolate(), 1, 1,
@@ -264,7 +265,7 @@ class TrapHandlerTest : public TestWithIsolate,
 // they are ran on Fuchsia. This issue should be solved later on
 // Ticket: https://crbug.com/1028617
 #if !defined(V8_TARGET_OS_FUCHSIA)
-TEST_P(TrapHandlerTest, TestTrapHandlerRecovery) {
+TEST_P(TrapHandlerDeathTest, TestTrapHandlerRecovery) {
   // Test that the wasm trap handler can recover a memory access violation in
   // wasm code (we fake the wasm code and the access violation).
   MacroAssembler masm(nullptr, AssemblerOptions{}, CodeObjectRequired::kNo,
@@ -290,7 +291,7 @@ TEST_P(TrapHandlerTest, TestTrapHandlerRecovery) {
   ExecuteBuffer();
 }
 
-TEST_P(TrapHandlerTest, TestReleaseHandlerData) {
+TEST_P(TrapHandlerDeathTest, TestReleaseHandlerData) {
   // Test that after we release handler data in the trap handler, it cannot
   // recover from the specific memory access violation anymore.
   MacroAssembler masm(nullptr, AssemblerOptions{}, CodeObjectRequired::kNo,
@@ -324,7 +325,7 @@ TEST_P(TrapHandlerTest, TestReleaseHandlerData) {
   ExecuteExpectCrash(buffer_.get());
 }
 
-TEST_P(TrapHandlerTest, TestNoThreadInWasmFlag) {
+TEST_P(TrapHandlerDeathTest, TestNoThreadInWasmFlag) {
   // That that if the thread_in_wasm flag is not set, the trap handler does not
   // get active.
   MacroAssembler masm(nullptr, AssemblerOptions{}, CodeObjectRequired::kNo,
@@ -349,7 +350,7 @@ TEST_P(TrapHandlerTest, TestNoThreadInWasmFlag) {
   ExecuteExpectCrash(buffer_.get());
 }
 
-TEST_P(TrapHandlerTest, TestCrashInWasmNoProtectedInstruction) {
+TEST_P(TrapHandlerDeathTest, TestCrashInWasmNoProtectedInstruction) {
   // Test that if the crash in wasm happened at an instruction which is not
   // protected, then the trap handler does not handle it.
   MacroAssembler masm(nullptr, AssemblerOptions{}, CodeObjectRequired::kNo,
@@ -377,7 +378,7 @@ TEST_P(TrapHandlerTest, TestCrashInWasmNoProtectedInstruction) {
   ExecuteExpectCrash(buffer_.get());
 }
 
-TEST_P(TrapHandlerTest, TestCrashInWasmWrongCrashType) {
+TEST_P(TrapHandlerDeathTest, TestCrashInWasmWrongCrashType) {
   // Test that if the crash reason is not a memory access violation, then the
   // wasm trap handler does not handle it.
   MacroAssembler masm(nullptr, AssemblerOptions{}, CodeObjectRequired::kNo,
@@ -425,13 +426,13 @@ TEST_P(TrapHandlerTest, TestCrashInWasmWrongCrashType) {
 
 class CodeRunner : public v8::base::Thread {
  public:
-  CodeRunner(TrapHandlerTest* test, TestingAssemblerBuffer* buffer)
+  CodeRunner(TrapHandlerDeathTest* test, TestingAssemblerBuffer* buffer)
       : Thread(Options("CodeRunner")), test_(test), buffer_(buffer) {}
 
   void Run() override { test_->ExecuteExpectCrash(buffer_); }
 
  private:
-  TrapHandlerTest* test_;
+  TrapHandlerDeathTest* test_;
   TestingAssemblerBuffer* buffer_;
 };
 
@@ -439,7 +440,7 @@ class CodeRunner : public v8::base::Thread {
 // ran on Fuchsia. This issue should be solved later on
 // Ticket: https://crbug.com/1028617
 #if !defined(V8_TARGET_OS_FUCHSIA)
-TEST_P(TrapHandlerTest, TestCrashInOtherThread) {
+TEST_P(TrapHandlerDeathTest, TestCrashInOtherThread) {
   // Test setup:
   // The current thread enters wasm land (sets the thread_in_wasm flag)
   // A second thread crashes at a protected instruction without having the flag
@@ -475,7 +476,7 @@ TEST_P(TrapHandlerTest, TestCrashInOtherThread) {
 }
 #endif
 
-INSTANTIATE_TEST_SUITE_P(Traps, TrapHandlerTest,
+INSTANTIATE_TEST_SUITE_P(Traps, TrapHandlerDeathTest,
                          ::testing::Values(kDefault, kCallback),
                          PrintTrapHandlerTestParam);
 

@@ -33,7 +33,7 @@ TEST_F(InterceptorTest, FreezeApiObjectWithInterceptor) {
 namespace internal {
 namespace {
 
-class InterceptorLoggingTest : public TestWithNativeContext {
+class InterceptorLoggingTest : public TestWithNativeContextDeathTest {
  public:
   InterceptorLoggingTest() = default;
 
