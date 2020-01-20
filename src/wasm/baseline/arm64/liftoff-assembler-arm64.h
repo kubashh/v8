@@ -354,6 +354,12 @@ void LiftoffAssembler::AtomicStore(Register dst_addr, Register offset_reg,
   bailout(kAtomics, "AtomicStore");
 }
 
+void LiftoffAssembler::AtomicAdd(Register dst_addr, Register offset_reg,
+                                 uint32_t offset_imm, LiftoffRegister src,
+                                 LiftoffRegister result, StoreType type) {
+  bailout(kAtomics, "AtomicAdd");
+}
+
 void LiftoffAssembler::LoadCallerFrameSlot(LiftoffRegister dst,
                                            uint32_t caller_slot_idx,
                                            ValueType type) {
