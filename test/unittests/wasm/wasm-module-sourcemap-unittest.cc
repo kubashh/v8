@@ -16,9 +16,9 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
-class WasmModuleSourceMapTest : public TestWithIsolateAndZone {};
+class WasmModuleSourceMapDeathTest : public TestWithIsolateAndZone {};
 
-TEST_F(WasmModuleSourceMapTest, InvalidSourceMap) {
+TEST_F(WasmModuleSourceMapDeathTest, InvalidSourceMap) {
   auto i_isolate = isolate();
   v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(i_isolate);
 
@@ -94,7 +94,7 @@ TEST_F(WasmModuleSourceMapTest, InvalidSourceMap) {
   EXPECT_FALSE(wrong_mappings_ptr->IsValid());
 }
 
-TEST_F(WasmModuleSourceMapTest, HasSource) {
+TEST_F(WasmModuleSourceMapDeathTest, HasSource) {
   char src_map[] =
       "{\"version\":3,\"sources\":[\"./"
       "test.h\",\"main.cpp\"],\"names\":[],\"mappings\":\"6/"
@@ -141,7 +141,7 @@ TEST_F(WasmModuleSourceMapTest, HasSource) {
   EXPECT_FALSE(src_map_ptr->HasSource(0x60B4, 0x60BD));
 }
 
-TEST_F(WasmModuleSourceMapTest, HasValidEntry) {
+TEST_F(WasmModuleSourceMapDeathTest, HasValidEntry) {
   char src_map[] =
       "{\"version\":3,\"sources\":[\"./"
       "test.h\",\"main.cpp\"],\"names\":[],\"mappings\":\"6/"
@@ -170,7 +170,7 @@ TEST_F(WasmModuleSourceMapTest, HasValidEntry) {
   EXPECT_TRUE(src_map_ptr->HasValidEntry(0x4DE, 0x597));
 }
 
-TEST_F(WasmModuleSourceMapTest, GetFilename) {
+TEST_F(WasmModuleSourceMapDeathTest, GetFilename) {
   char src_map[] =
       "{\"version\":3,\"sources\":[\"./"
       "test.h\",\"main.cpp\"],\"names\":[],\"mappings\":\"6/"
@@ -195,7 +195,7 @@ TEST_F(WasmModuleSourceMapTest, GetFilename) {
   EXPECT_STREQ("main.cpp", src_map_ptr->GetFilename(0x5B7).c_str());
 }
 
-TEST_F(WasmModuleSourceMapTest, SourceLine) {
+TEST_F(WasmModuleSourceMapDeathTest, SourceLine) {
   char src_map[] =
       "{\"version\":3,\"sources\":[\"./"
       "test.h\",\"main.cpp\"],\"names\":[],\"mappings\":\"6/"

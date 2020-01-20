@@ -757,9 +757,9 @@ const ParameterType kParameterTypes[] = {
     ParameterType::kFixedSlot, ParameterType::kSlot, ParameterType::kRegister,
     ParameterType::kFixedRegister};
 
-class SlotConstraintTest : public RegisterAllocatorTest,
-                           public ::testing::WithParamInterface<
-                               ::testing::tuple<ParameterType, int>> {
+class SlotConstraintDeathTest : public RegisterAllocatorTest,
+                                public ::testing::WithParamInterface<
+                                    ::testing::tuple<ParameterType, int>> {
  public:
   static const int kMaxVariant = 5;
 
@@ -775,7 +775,7 @@ class SlotConstraintTest : public RegisterAllocatorTest,
 
 }  // namespace
 
-TEST_P(SlotConstraintTest, SlotConstraint) {
+TEST_P(SlotConstraintDeathTest, SlotConstraint) {
   StartBlock();
   VReg p_0;
   switch (parameter_type()) {
@@ -819,9 +819,10 @@ TEST_P(SlotConstraintTest, SlotConstraint) {
 }
 
 INSTANTIATE_TEST_SUITE_P(
-    RegisterAllocatorTest, SlotConstraintTest,
+    RegisterAllocatorTest, SlotConstraintDeathTest,
     ::testing::Combine(::testing::ValuesIn(kParameterTypes),
-                       ::testing::Range(0, SlotConstraintTest::kMaxVariant)));
+                       ::testing::Range(0,
+                                        SlotConstraintDeathTest::kMaxVariant)));
 
 }  // namespace
 }  // namespace compiler

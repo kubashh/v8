@@ -11,15 +11,15 @@
 namespace v8 {
 namespace internal {
 
-class PreParserTest : public TestWithNativeContext {
+class PreParserDeathTest : public TestWithNativeContextDeathTest {
  public:
-  PreParserTest() = default;
+  PreParserDeathTest() = default;
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(PreParserTest);
+  DISALLOW_COPY_AND_ASSIGN(PreParserDeathTest);
 };
 
-TEST_F(PreParserTest, LazyFunctionLength) {
+TEST_F(PreParserDeathTest, LazyFunctionLength) {
   const char* script_source = "function lazy(a, b, c) { } lazy";
 
   Handle<JSFunction> lazy_function = RunJS<JSFunction>(script_source);

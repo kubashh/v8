@@ -26,7 +26,7 @@ class ConstantArrayBuilder;
 class HandlerTableBuilder;
 
 namespace bytecode_array_writer_unittest {
-class BytecodeArrayWriterUnittest;
+class BytecodeArrayWriterUnittestDeathTest;
 }  // namespace bytecode_array_writer_unittest
 
 // Class for emitting bytecode as the final stage of the bytecode
@@ -119,7 +119,8 @@ class V8_EXPORT_PRIVATE BytecodeArrayWriter final {
 
   bool exit_seen_in_block_;
 
-  friend class bytecode_array_writer_unittest::BytecodeArrayWriterUnittest;
+  friend class bytecode_array_writer_unittest::
+      BytecodeArrayWriterUnittestDeathTest;
   DISALLOW_COPY_AND_ASSIGN(BytecodeArrayWriter);
 };
 

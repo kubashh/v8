@@ -8,9 +8,9 @@
 namespace v8 {
 namespace internal {
 
-using WeakArrayListTest = TestWithIsolate;
+using WeakArrayListDeathTest = TestWithIsolate;
 
-TEST_F(WeakArrayListTest, Compact) {
+TEST_F(WeakArrayListDeathTest, Compact) {
   Handle<WeakArrayList> list = isolate()->factory()->NewWeakArrayList(10);
   EXPECT_EQ(list->length(), 0);
   EXPECT_EQ(list->capacity(), 10);
@@ -31,7 +31,7 @@ TEST_F(WeakArrayListTest, Compact) {
   EXPECT_EQ(list->capacity(), 10);
 }
 
-TEST_F(WeakArrayListTest, OutOfPlaceCompact) {
+TEST_F(WeakArrayListDeathTest, OutOfPlaceCompact) {
   Handle<WeakArrayList> list = isolate()->factory()->NewWeakArrayList(20);
   EXPECT_EQ(list->length(), 0);
   EXPECT_EQ(list->capacity(), 20);
