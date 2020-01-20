@@ -94,6 +94,30 @@
       "revId": "58b751dde5e752f28a4e174b710f1321f000bd67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c2a8eca4_53c8a233",
+        "filename": "src/compiler/node.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-20T17:17:44Z",
+      "side": 1,
+      "message": "I guess it\u0027s a matter of taste, simple code vs uniform code. Anyhow, I\u0027m fine with leaving it as is.",
+      "parentUuid": "76d30ad5_5899fa97",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 19
+      },
+      "revId": "58b751dde5e752f28a4e174b710f1321f000bd67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
