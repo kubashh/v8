@@ -159,6 +159,10 @@ int AbstractCode::SourcePosition(int offset) {
   if (maybe_table.IsException()) return kNoSourcePosition;
 
   ByteArray source_position_table = ByteArray::cast(maybe_table);
+  if (offset == -1) {
+    // -1 signals that we are doing a function entry stack guard interrupt.
+    return -1;
+  }
   int position = 0;
   // Subtract one because the current PC is one instruction after the call site.
   if (IsCode()) offset--;
