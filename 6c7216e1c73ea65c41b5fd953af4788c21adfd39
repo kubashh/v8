@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d19d2aa4_c97f0d3a",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-01-21T11:08:28Z",
+      "side": 1,
+      "message": "As mentioned in the other CL, I don\u0027t think CanCover() is necessary or helpful.",
+      "range": {
+        "startLine": 1248,
+        "startChar": 57,
+        "endLine": 1249,
+        "endChar": 27
+      },
+      "revId": "6c7216e1c73ea65c41b5fd953af4788c21adfd39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
