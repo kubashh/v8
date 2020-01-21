@@ -537,6 +537,7 @@ THREADED_TEST(SkipArrayBufferDuringScavenge) {
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   v8::HandleScope handle_scope(isolate);
+  i::FLAG_concurrent_array_buffer_sweeping = false;
 
   // Make sure the pointer looks like a heap object
   Local<v8::Object> tmp = v8::Object::New(isolate);
