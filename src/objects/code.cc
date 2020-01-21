@@ -155,6 +155,10 @@ Address Code::OffHeapInstructionEnd() const {
 }
 
 int AbstractCode::SourcePosition(int offset) {
+  if (offset == -1) {
+    // -1 signals that we are doing a function entry stack guard interrupt.
+    return -1;
+  }
   Object maybe_table = source_position_table();
   if (maybe_table.IsException()) return kNoSourcePosition;
 
