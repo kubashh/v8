@@ -2994,7 +2994,7 @@ class DoubleRegisters {
 
 static constexpr int kR0DwarfCode = 0;
 static constexpr int kFpDwarfCode = 31;  // frame-pointer
-static constexpr int kLrDwarfCode = 65;  // return-address(lr)
+static constexpr int kLrDwarfCode = 108;  // return-address(lr)
 static constexpr int kSpDwarfCode = 1;   // stack-pointer (sp)
 
 #endif  // V8_CODEGEN_PPC_CONSTANTS_PPC_H_
