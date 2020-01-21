@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d7378f0_6c2166b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-01-21T11:25:29Z",
+      "side": 1,
+      "message": "FYI, you can also add \u0027Fixes: v8:10132\u0027 to automatically close the CL next time.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 13
+      },
+      "revId": "8201914f33e2eb84048d78612467c1d52e228d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
