@@ -22,6 +22,30 @@
       "revId": "70ae30bea4b65361bb40582e951d7aabc0c0b1e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97de1c4f_15d5d23b",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-21T06:05:16Z",
+      "side": 1,
+      "message": "Yes that\u0027s possible, and (even though somewhat magic) a better user experience. I\u0027ll change in a follow-up. 👍",
+      "parentUuid": "51400de7_b5f9dc6a",
+      "range": {
+        "startLine": 580,
+        "startChar": 8,
+        "endLine": 580,
+        "endChar": 16
+      },
+      "revId": "70ae30bea4b65361bb40582e951d7aabc0c0b1e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
