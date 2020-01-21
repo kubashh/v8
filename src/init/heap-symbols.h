@@ -493,6 +493,7 @@
 
 #define TRACER_BACKGROUND_SCOPES(F)               \
   F(BACKGROUND_ARRAY_BUFFER_FREE)                 \
+  F(BACKGROUND_ARRAY_BUFFER_SWEEP)                \
   F(BACKGROUND_STORE_BUFFER)                      \
   F(BACKGROUND_UNMAPPER)                          \
   F(MC_BACKGROUND_EVACUATE_COPY)                  \
