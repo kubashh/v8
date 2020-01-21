@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "382ec767_54b95289",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-01-21T14:54:54Z",
+      "side": 1,
+      "message": "nit: For",
+      "range": {
+        "startLine": 600,
+        "startChar": 7,
+        "endLine": 600,
+        "endChar": 10
+      },
+      "revId": "7e16b88dcc3fcacaf44a701e3a94398728970860",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a168f8d_a6fd0c61",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-01-21T14:54:54Z",
+      "side": 1,
+      "message": "includes?",
+      "range": {
+        "startLine": 606,
+        "startChar": 27,
+        "endLine": 606,
+        "endChar": 35
+      },
+      "revId": "7e16b88dcc3fcacaf44a701e3a94398728970860",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
