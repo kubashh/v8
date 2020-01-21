@@ -946,10 +946,12 @@ void InstructionSelector::VisitInt32Add(Node* node) {
   DCHECK_EQ(node->InputCount(), 2);
   Node* left = node->InputAt(0);
   Node* right = node->InputAt(1);
-  if (left->opcode() == IrOpcode::kTruncateInt64ToInt32) {
+  if (left->opcode() == IrOpcode::kTruncateInt64ToInt32 &&
+      this->CanCover(node, left)) {
     node->ReplaceInput(0, left->InputAt(0));
   }
-  if (right->opcode() == IrOpcode::kTruncateInt64ToInt32) {
+  if (right->opcode() == IrOpcode::kTruncateInt64ToInt32 &&
+      this->CanCover(node, right)) {
     node->ReplaceInput(1, right->InputAt(0));
   }
 
