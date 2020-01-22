@@ -102,6 +102,7 @@ TEST(LanguageServerJson, TestJsonObjects) {
 // TODO(almuthanna): These tests were skipped because they cause a crash when
 // they are ran on Fuchsia. This issue should be solved later on
 // Ticket: https://crbug.com/1028617
+
 #if !defined(V8_OS_WIN) && !defined(V8_TARGET_OS_FUCHSIA)
 using ::testing::HasSubstr;
 TEST(LanguageServerJson, ParserError) {

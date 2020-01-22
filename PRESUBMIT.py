@@ -391,7 +391,6 @@ def _CommonChecks(input_api, output_api):
     _CheckHeadersHaveIncludeGuards,
     _CheckNoInlineHeaderIncludesInNormalHeaders,
     _CheckJSONFiles,
-    _CheckMacroUndefs,
     _CheckNoexceptAnnotations,
     _RunTestsWithVPythonSpec,
   ]
@@ -454,13 +453,6 @@ def _CheckJSONFiles(input_api, output_api):
   return [output_api.PresubmitError(r) for r in results]
 
 
-def _CheckMacroUndefs(input_api, output_api):
-  """
-  Checks that each #define in a .cc file is eventually followed by an #undef.
-
-  TODO(clemensb): This check should eventually be enabled for all cc files via
-  tools/presubmit.py (https://crbug.com/v8/6811).
-  """
   def FilterFile(affected_file):
     # Skip header files, as they often define type lists which are used in
     # other files.
