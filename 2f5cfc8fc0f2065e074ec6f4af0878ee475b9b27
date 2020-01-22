@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23aaa24a_dbe6422a",
+        "filename": "test/cctest/test-debug-helper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-01-22T18:49:30Z",
+      "side": 1,
+      "message": "Is there value in using a unique_ptr here just to call release in the next statement? (i.e. just new it up inline).",
+      "range": {
+        "startLine": 306,
+        "startChar": 30,
+        "endLine": 306,
+        "endChar": 57
+      },
+      "revId": "2f5cfc8fc0f2065e074ec6f4af0878ee475b9b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2aacab00_53cb6e5e",
+        "filename": "test/cctest/test-debug-helper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-01-22T18:49:30Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 315,
+        "startChar": 46,
+        "endLine": 315,
+        "endChar": 71
+      },
+      "revId": "2f5cfc8fc0f2065e074ec6f4af0878ee475b9b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56be02bb_306c68ab",
+        "filename": "tools/debug_helper/get-object-properties.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-01-22T18:49:30Z",
+      "side": 1,
+      "message": "Safe assuming TChar is always char or char16_t, but maybe assert sizeof(TChar) \u003c\u003d sizeof(char16_t) just to ensure that invariant holds?",
+      "range": {
+        "startLine": 236,
+        "startChar": 19,
+        "endLine": 236,
+        "endChar": 40
+      },
+      "revId": "2f5cfc8fc0f2065e074ec6f4af0878ee475b9b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5524da6c_a28a73da",
+        "filename": "tools/debug_helper/get-object-properties.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-01-22T18:49:30Z",
+      "side": 1,
+      "message": "For the function name I\u0027d have expected this returns an instance type. It actually returns an iterable collection of types then (per below)?",
+      "range": {
+        "startLine": 296,
+        "startChar": 26,
+        "endLine": 296,
+        "endChar": 50
+      },
+      "revId": "2f5cfc8fc0f2065e074ec6f4af0878ee475b9b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
