@@ -1204,7 +1204,7 @@ void Assembler::lock() {
 
 void Assembler::xaddb(Operand dst, Register src) {
   EnsureSpace ensure_space(this);
-  emit_optional_rex_32(src, dst);
+  emit_rex_32(src, dst);
   emit(0x0F);
   emit(0xC0);
   emit_operand(src, dst);
