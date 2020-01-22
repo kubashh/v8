@@ -99,6 +99,24 @@
       "revId": "710d099d059fa1f791c29aa698238dd58a2e0aa9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6ab5237_2843dd31",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3800,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-01-22T13:45:33Z",
+      "side": 1,
+      "message": "I\u0027ve changed it to String::Empty(), I\u0027d prefer avoiding the internal API. Even though we use it below to do the printing...",
+      "parentUuid": "8b19fa5e_5b29b336",
+      "revId": "710d099d059fa1f791c29aa698238dd58a2e0aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
