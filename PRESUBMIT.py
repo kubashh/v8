@@ -391,7 +391,6 @@ def _CommonChecks(input_api, output_api):
     _CheckHeadersHaveIncludeGuards,
     _CheckNoInlineHeaderIncludesInNormalHeaders,
     _CheckJSONFiles,
-    _CheckMacroUndefs,
     _CheckNoexceptAnnotations,
     _RunTestsWithVPythonSpec,
   ]
