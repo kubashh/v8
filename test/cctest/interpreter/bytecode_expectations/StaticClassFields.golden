@@ -27,9 +27,8 @@ snippet: "
 "
 frame size: 9
 parameter count: 1
-bytecode array length: 185
+bytecode array length: 184
 bytecodes: [
-  /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
                 B(PushContext), R(2),
                 B(LdaTheHole),
@@ -162,9 +161,8 @@ snippet: "
 "
 frame size: 12
 parameter count: 1
-bytecode array length: 334
+bytecode array length: 333
 bytecodes: [
-  /*   30 E> */ B(StackCheck),
                 B(CreateBlockContext), U8(0),
                 B(PushContext), R(3),
                 B(LdaTheHole),

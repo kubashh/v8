@@ -2052,6 +2052,10 @@ void Debug::PrintBreakLocation() {
   StandardFrame* frame = iterator.frame();
   FrameSummary summary = FrameSummary::GetTop(frame);
   int source_position = summary.SourcePosition();
+  if (frame->is_java_script() && source_position == -1) {
+    JavaScriptFrame* js_frame = static_cast<JavaScriptFrame*>(frame);
+    source_position = js_frame->function().shared().StartPosition();
+  }
   Handle<Object> script_obj = summary.script();
   PrintF("[debug] break in function '");
   summary.FunctionName()->PrintOn(stdout);
