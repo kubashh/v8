@@ -118,7 +118,7 @@ void StartupSerializer::SerializeObject(HeapObject obj) {
   CheckRehashability(obj);
 
   // Object has not yet been serialized.  Serialize it here.
-  DCHECK(!ReadOnlyHeap::Contains(obj));
+  DCHECK(!in_read_only_space(obj));
   ObjectSerializer object_serializer(this, obj, &sink_);
   object_serializer.Serialize();
 }
