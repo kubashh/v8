@@ -1372,7 +1372,13 @@ bool FrameSummary::JavaScriptFrameSummary::is_subject_to_debugging() const {
 }
 
 int FrameSummary::JavaScriptFrameSummary::SourcePosition() const {
-  return abstract_code()->SourcePosition(code_offset());
+  int offset = code_offset();
+  if (offset != -1) {
+    return abstract_code()->SourcePosition(offset);
+  } else {
+    // -1 signals that we are doing a function entry stack guard interrupt.
+    return -1;
+  }
 }
 
 int FrameSummary::JavaScriptFrameSummary::SourceStatementPosition() const {
