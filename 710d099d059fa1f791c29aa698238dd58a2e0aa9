@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c831b8b5_82e04b60",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3147,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-01-22T13:15:12Z",
+      "side": 1,
+      "message": "Cool, good idea",
+      "parentUuid": "d87118c3_92c9c2be",
+      "range": {
+        "startLine": 3147,
+        "startChar": 14,
+        "endLine": 3147,
+        "endChar": 32
+      },
+      "revId": "710d099d059fa1f791c29aa698238dd58a2e0aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "345958c7_a329ab19",
         "filename": "src/d8/d8.cc",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2020-01-22T12:57:41Z",
       "side": 1,
       "message": "This is somewhat not nice that we now need a {HandleScope} unconditionally here. This is actually the first time we hold a handle in the Main function.\nI see that the {CPUProfiler} has another constructor that takes a {const char*} (also for {StopProfiling}). Can we switch to that, and avoid the HandleScope and the String allocation here?",
+      "revId": "710d099d059fa1f791c29aa698238dd58a2e0aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "912f7982_22bb4ed8",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3800,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-01-22T13:15:12Z",
+      "side": 1,
+      "message": "StartProfiling() with a char* is on the internal CpuProfiler API only, not the external one in v8-profiler.h. We would need to use the internal API directly to use that - totally possible, just depends how you want to balance the \u0027not nice\u0027 aspects.\n\nThe title doesn\u0027t actually matter as we don\u0027t use it in this case, we could just use String::Empty() or something like that? I guess we still need a handle scope to hold the local though...",
+      "parentUuid": "345958c7_a329ab19",
       "revId": "710d099d059fa1f791c29aa698238dd58a2e0aa9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
