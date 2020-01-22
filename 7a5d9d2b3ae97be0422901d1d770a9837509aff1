@@ -16,6 +16,24 @@
       "revId": "7a5d9d2b3ae97be0422901d1d770a9837509aff1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a435689f_0bedca81",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-22T15:05:52Z",
+      "side": 1,
+      "message": "Ack, done.",
+      "parentUuid": "63eb9681_99ce1fcd",
+      "revId": "7a5d9d2b3ae97be0422901d1d770a9837509aff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
