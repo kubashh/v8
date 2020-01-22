@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79edccdf_3bd0a64c",
+        "filename": "src/execution/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-01-22T16:15:39Z",
+      "side": 1,
+      "message": "By calling this here, we create the script context before the function runs. The side-effect check happens from Runtime_DebugOnFunctionCall which only runs once the function is called.\n\nThis means if you do debug-eval(\"const y \u003d 1\") with throwOnSideEffect: true, it throws with a side-effect which is correct, but the next time you do debug-eval(\"const y \u003d 1\") with throwOnSideEffect: false, you get \"SyntaxError: Identifier \u0027y\u0027 has already been declared\". You get the same thing even with throwOnSideEffect: true as well, even though it should be throwing because of a side-effect, not a name clash",
+      "range": {
+        "startLine": 291,
+        "startChar": 11,
+        "endLine": 291,
+        "endChar": 27
+      },
+      "revId": "36190b91d4e1dc302a84fecc24fc4af537a0bdd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
