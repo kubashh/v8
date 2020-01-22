@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d87118c3_92c9c2be",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3147,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-01-22T12:35:04Z",
+      "side": 1,
+      "message": "should this set cpu_profiler \u003d true as well? I find it surprising that passing --cpu-profiler-print doesn\u0027t activate profiling.",
+      "range": {
+        "startLine": 3147,
+        "startChar": 14,
+        "endLine": 3147,
+        "endChar": 32
+      },
+      "revId": "710d099d059fa1f791c29aa698238dd58a2e0aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
