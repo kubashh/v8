@@ -59,7 +59,7 @@ TEST(ReadOnlyHeapObjectIterator) {
 
   for (HeapObject obj = iterator.Next(); !obj.is_null();
        obj = iterator.Next()) {
-    CHECK(ReadOnlyHeap::Contains(obj));
+    CHECK(in_read_only_space(obj));
     CHECK(!CcTest::heap()->Contains(obj));
     CHECK_NE(sample_object, obj);
   }
@@ -74,7 +74,7 @@ TEST(HeapObjectIterator) {
 
   for (HeapObject obj = iterator.Next(); !obj.is_null();
        obj = iterator.Next()) {
-    CHECK(!ReadOnlyHeap::Contains(obj));
+    CHECK(!in_read_only_space(obj));
     CHECK(CcTest::heap()->Contains(obj));
     if (sample_object == obj) seen_sample_object = true;
   }

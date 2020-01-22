@@ -96,7 +96,7 @@ ScriptData* CodeSerializer::SerializeSharedFunctionInfo(
 }
 
 bool CodeSerializer::SerializeReadOnlyObject(HeapObject obj) {
-  if (!ReadOnlyHeap::Contains(obj)) return false;
+  if (!in_read_only_space(obj)) return false;
 
   // For objects on the read-only heap, never serialize the object, but instead
   // create a back reference that encodes the page number as the chunk_index and

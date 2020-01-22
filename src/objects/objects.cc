@@ -2371,7 +2371,7 @@ void HeapObject::RehashBasedOnMap(ReadOnlyRoots roots) {
     case ONE_BYTE_INTERNALIZED_STRING_TYPE:
     case INTERNALIZED_STRING_TYPE:
       // Rare case, rehash read-only space strings before they are sealed.
-      DCHECK(ReadOnlyHeap::Contains(*this));
+      DCHECK(in_read_only_space(*this));
       String::cast(*this).Hash();
       break;
     default:

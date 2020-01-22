@@ -38,7 +38,7 @@ class StringSlotCollectingVisitor : public ObjectVisitor {
     for (ObjectSlot slot = start; slot != end; ++slot) {
       Object obj = *slot;
       if (obj.IsInternalizedString() &&
-          !ReadOnlyHeap::Contains(HeapObject::cast(obj))) {
+          !in_read_only_space(HeapObject::cast(obj))) {
         string_slots.emplace_back(host.ptr(), slot.address() - host.ptr());
       }
     }
@@ -49,7 +49,7 @@ class StringSlotCollectingVisitor : public ObjectVisitor {
       MaybeObject maybe_obj = *slot;
       HeapObject obj;
       if (maybe_obj.GetHeapObjectIfStrong(&obj)) {
-        if (obj.IsInternalizedString() && !ReadOnlyHeap::Contains(obj)) {
+        if (obj.IsInternalizedString() && !in_read_only_space(obj)) {
           string_slots.emplace_back(host.ptr(), slot.address() - host.ptr());
         }
       }

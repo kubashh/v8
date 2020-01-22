@@ -3950,7 +3950,7 @@ const char* Heap::GarbageCollectionReasonToString(
 
 bool Heap::Contains(HeapObject value) {
   if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
-    return true;
+    return !in_read_only_space(value);
   }
   if (ReadOnlyHeap::Contains(value)) {
     return false;
@@ -3987,7 +3987,7 @@ bool Heap::InSpace(HeapObject value, AllocationSpace space) {
     case NEW_LO_SPACE:
       return new_lo_space_->Contains(value);
     case RO_SPACE:
-      return ReadOnlyHeap::Contains(value);
+      return in_read_only_space(value);
   }
   UNREACHABLE();
 }
@@ -5524,7 +5524,9 @@ void Heap::CompactWeakArrayLists(AllocationType allocation) {
 
   // Find known WeakArrayLists and compact them.
   Handle<WeakArrayList> scripts(script_list(), isolate());
-  DCHECK_IMPLIES(allocation == AllocationType::kOld, InOldSpace(*scripts));
+  DCHECK_IMPLIES(
+      !V8_ENABLE_THIRD_PARTY_HEAP_BOOL && allocation == AllocationType::kOld,
+      InOldSpace(*scripts));
   scripts = CompactWeakArrayList(this, scripts, allocation);
   set_script_list(*scripts);
 }
@@ -6291,7 +6293,7 @@ Code Heap::GcSafeFindCodeForInnerPointer(Address inner_pointer) {
   // was called on an address within a RO_SPACE builtin. It cannot reach here
   // during stack iteration as RO_SPACE memory is not executable so cannot
   // appear on the stack as an instruction address.
-  DCHECK(ReadOnlyHeap::Contains(
+  DCHECK(in_read_only_space(
       HeapObject::FromAddress(inner_pointer & ~kHeapObjectTagMask)));
 
   // TODO(delphick): Possibly optimize this as it iterates over all pages in
