@@ -81,6 +81,24 @@
       "revId": "710d099d059fa1f791c29aa698238dd58a2e0aa9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b19fa5e_5b29b336",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3800,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-22T13:22:44Z",
+      "side": 1,
+      "message": "Oh, I see. Looked at the wrong \"CpuProfiler\" then :)\n\nI think both solutions would work for me. It seems that the CpuProfiler API wrapper just calls through to the internal CpuProfiler, so switching should be straightforward?\n\nUsing String::Empty() would also work. We could remove the HandleScope then, since that Local lives in the read-only space (does not allocate in the HandleScope).\n\nYour choice :)",
+      "parentUuid": "912f7982_22bb4ed8",
+      "revId": "710d099d059fa1f791c29aa698238dd58a2e0aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
