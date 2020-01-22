@@ -110,7 +110,8 @@ class V8_EXPORT_PRIVATE LoopBuilder final : public BreakableControlFlowBuilder {
 
   void LoopHeader();
   void LoopBody();
-  void JumpToHeader(int loop_depth);
+  // TODO(solanes): Change this -1 to be kInvalidSourcePosition or similar
+  void JumpToHeader(int loop_depth, int source_position = -1);
   void BindContinueTarget();
 
   // This method is called when visiting continue statements in the AST.

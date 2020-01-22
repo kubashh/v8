@@ -64,7 +64,12 @@ void LoopBuilder::LoopBody() {
   }
 }
 
-void LoopBuilder::JumpToHeader(int loop_depth) {
+void LoopBuilder::JumpToHeader(int loop_depth, int source_position) {
+  // TODO(solanes): Change this -1 to be kInvalidSourcePosition or similar
+  if (source_position != -1) {
+    builder()->StackCheck(source_position);
+  }
+
   // Pass the proper loop nesting level to the backwards branch, to trigger
   // on-stack replacement when armed for the given loop nesting depth.
   int level = Min(loop_depth, AbstractCode::kMaxLoopNestingMarker - 1);

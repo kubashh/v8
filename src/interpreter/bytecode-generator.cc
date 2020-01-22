@@ -1717,19 +1717,20 @@ void BytecodeGenerator::VisitIterationBody(IterationStatement* stmt,
                                            LoopBuilder* loop_builder) {
   loop_builder->LoopBody();
   ControlScopeForIteration execution_control(this, stmt, loop_builder);
-  builder()->StackCheck(stmt->position());
+  // builder()->StackCheck(stmt->position());
   Visit(stmt->body());
   loop_builder->BindContinueTarget();
 }
 
 void BytecodeGenerator::VisitDoWhileStatement(DoWhileStatement* stmt) {
   LoopBuilder loop_builder(builder(), block_coverage_builder_, stmt);
+  int source_position = stmt->position();
   if (stmt->cond()->ToBooleanIsFalse()) {
     VisitIterationBody(stmt, &loop_builder);
   } else if (stmt->cond()->ToBooleanIsTrue()) {
     loop_builder.LoopHeader();
     VisitIterationBody(stmt, &loop_builder);
-    loop_builder.JumpToHeader(loop_depth_);
+    loop_builder.JumpToHeader(loop_depth_, source_position);
   } else {
     loop_builder.LoopHeader();
     VisitIterationBody(stmt, &loop_builder);
@@ -1738,7 +1739,7 @@ void BytecodeGenerator::VisitDoWhileStatement(DoWhileStatement* stmt) {
     VisitForTest(stmt->cond(), &loop_backbranch, loop_builder.break_labels(),
                  TestFallthrough::kThen);
     loop_backbranch.Bind(builder());
-    loop_builder.JumpToHeader(loop_depth_);
+    loop_builder.JumpToHeader(loop_depth_, source_position);
   }
 }
 
@@ -1758,8 +1759,9 @@ void BytecodeGenerator::VisitWhileStatement(WhileStatement* stmt) {
                  TestFallthrough::kThen);
     loop_body.Bind(builder());
   }
+  int source_position = stmt->position();
   VisitIterationBody(stmt, &loop_builder);
-  loop_builder.JumpToHeader(loop_depth_);
+  loop_builder.JumpToHeader(loop_depth_, source_position);
 }
 
 void BytecodeGenerator::VisitForStatement(ForStatement* stmt) {
@@ -1782,12 +1784,13 @@ void BytecodeGenerator::VisitForStatement(ForStatement* stmt) {
                  TestFallthrough::kThen);
     loop_body.Bind(builder());
   }
+  int source_position = stmt->position();
   VisitIterationBody(stmt, &loop_builder);
   if (stmt->next() != nullptr) {
     builder()->SetStatementPosition(stmt->next());
     Visit(stmt->next());
   }
-  loop_builder.JumpToHeader(loop_depth_);
+  loop_builder.JumpToHeader(loop_depth_, source_position);
 }
 
 void BytecodeGenerator::VisitForInStatement(ForInStatement* stmt) {
@@ -1839,11 +1842,11 @@ void BytecodeGenerator::VisitForInStatement(ForInStatement* stmt) {
       builder()->SetExpressionPosition(stmt->each());
       BuildAssignment(lhs_data, Token::ASSIGN, LookupHoistingMode::kNormal);
     }
-
+    int source_position = stmt->position();
     VisitIterationBody(stmt, &loop_builder);
     builder()->ForInStep(index);
     builder()->StoreAccumulatorInRegister(index);
-    loop_builder.JumpToHeader(loop_depth_);
+    loop_builder.JumpToHeader(loop_depth_, source_position);
   }
   builder()->Bind(&subject_undefined_label);
 }
@@ -1926,9 +1929,10 @@ void BytecodeGenerator::VisitForOfStatement(ForOfStatement* stmt) {
         builder()->LoadAccumulatorWithRegister(next_result);
         BuildAssignment(lhs_data, Token::ASSIGN, LookupHoistingMode::kNormal);
 
+        int source_position = stmt->position();
         VisitIterationBody(stmt, &loop_builder);
 
-        loop_builder.JumpToHeader(loop_depth_);
+        loop_builder.JumpToHeader(loop_depth_, source_position);
       },
       // Finally block.
       [&](Register iteration_continuation_token) {
@@ -2770,6 +2774,7 @@ void BytecodeGenerator::BuildFillArrayWithIterator(
       .UnaryOperation(Token::INC, feedback_index(index_slot))
       .StoreAccumulatorInRegister(index);
   loop_builder.BindContinueTarget();
+  // TODO(solanes): No VisitIterationBody here...
   loop_builder.JumpToHeader(loop_depth_);
 }
 
@@ -4361,6 +4366,7 @@ void BytecodeGenerator::VisitYieldStar(YieldStar* expr) {
           .StoreAccumulatorInRegister(resume_mode);
 
       loop.BindContinueTarget();
+      // TODO(solanes): No VisitIterationBody here...
       loop.JumpToHeader(loop_depth_);
     }
   }
