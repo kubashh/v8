@@ -8,6 +8,7 @@
 #include "src/diagnostics/code-tracer.h"
 #include "src/execution/v8threads.h"
 #include "src/handles/global-handles.h"
+#include "src/heap/heap-inl.h"
 #include "src/heap/read-only-heap.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/slots.h"
@@ -26,7 +27,7 @@ ReadOnlySerializer::~ReadOnlySerializer() {
 }
 
 void ReadOnlySerializer::SerializeObject(HeapObject obj) {
-  CHECK(ReadOnlyHeap::Contains(obj));
+  CHECK(in_read_only_space(obj));
   CHECK_IMPLIES(obj.IsString(), obj.IsInternalizedString());
 
   if (SerializeHotObject(obj)) return;
@@ -67,10 +68,12 @@ void ReadOnlySerializer::FinalizeSerialization() {
 #ifdef DEBUG
   // Check that every object on read-only heap is reachable (and was
   // serialized).
-  ReadOnlyHeapObjectIterator iterator(isolate()->read_only_heap());
-  for (HeapObject object = iterator.Next(); !object.is_null();
-       object = iterator.Next()) {
-    CHECK(serialized_objects_.count(object));
+  if (!V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
+    ReadOnlyHeapObjectIterator iterator(isolate()->read_only_heap());
+    for (HeapObject object = iterator.Next(); !object.is_null();
+         object = iterator.Next()) {
+      CHECK(serialized_objects_.count(object));
+    }
   }
 #endif
 }
