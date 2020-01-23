@@ -464,7 +464,7 @@ def _CheckMacroUndefs(input_api, output_api):
   def FilterFile(affected_file):
     # Skip header files, as they often define type lists which are used in
     # other files.
-    white_list = (r'.+\.cc',r'.+\.cpp',r'.+\.c')
+    white_list = (r'.+\.cpp$',r'.+\.c$')
     return input_api.FilterSourceFile(affected_file, white_list=white_list)
 
   def Touches(line):
