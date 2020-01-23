@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d9a8dea9_4ed81976",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-23T13:31:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "331b1994_acaa743b",
+      "revId": "6aeae9f5533207f40bbbfcd3ade4844fb5c8653f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed8a7330_3cd917c5",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 7

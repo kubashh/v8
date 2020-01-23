@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6421abcb_fb8426ea",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-23T13:31:52Z",
+      "side": 1,
+      "message": "Last nit: I think camel-case would be more expected here, and this function should go inside an anonymous namespace.",
+      "revId": "a38c5f19d455110250591c91413235053cf7d31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
