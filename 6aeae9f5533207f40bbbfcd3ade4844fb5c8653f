@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b4a2834_ca80a054",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-23T13:11:32Z",
+      "side": 1,
+      "message": "Saw this fly by, please add a comment explaining this branch. Why can we not do this check with TPH?",
+      "revId": "6aeae9f5533207f40bbbfcd3ade4844fb5c8653f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed8a7330_3cd917c5",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-01-23T13:11:32Z",
+      "side": 1,
+      "message": "nit: add {} please here and below.",
+      "revId": "6aeae9f5533207f40bbbfcd3ade4844fb5c8653f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
