@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4daba631_91a47406",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-01-23T13:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7b46439_142ae2d3",
+      "range": {
+        "startLine": 43,
+        "startChar": 22,
+        "endLine": 43,
+        "endChar": 26
+      },
+      "revId": "4187b8a5fe445eb3a47b8bce4a47bec62fe436cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27ffd7cd_7509e7cd",
         "filename": "src/heap/array-buffer-sweeper.cc",
         "patchSetId": 24
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "eb324e54_49966c0e",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-01-23T13:58:19Z",
+      "side": 1,
+      "message": "This was an optimization but I thought it might make sense from correctness perspective (SweepingState::Preserved should only be observed during teardow). But I agree, I will remove the in_teardown argument again and just sweep in this case.",
+      "parentUuid": "27ffd7cd_7509e7cd",
+      "range": {
+        "startLine": 73,
+        "startChar": 9,
+        "endLine": 76,
+        "endChar": 26
+      },
+      "revId": "4187b8a5fe445eb3a47b8bce4a47bec62fe436cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52b6ea23_b17c9ac5",
         "filename": "src/heap/array-buffer-sweeper.cc",
         "patchSetId": 24
@@ -59,6 +107,30 @@
       "writtenOn": "2020-01-23T13:26:53Z",
       "side": 1,
       "message": "No background task should be running at this point. Is this mutex needed?",
+      "range": {
+        "startLine": 115,
+        "startChar": 6,
+        "endLine": 115,
+        "endChar": 47
+      },
+      "revId": "4187b8a5fe445eb3a47b8bce4a47bec62fe436cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcf5c272_65314a23",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-01-23T13:58:19Z",
+      "side": 1,
+      "message": "IIRC this was to make TSAN happy. Without the mutex, we would write to the variable in the main thread and then later read in the background thread without synchronization. I will try to remove it and see whether TSAN reports this as a failure.",
+      "parentUuid": "52b6ea23_b17c9ac5",
       "range": {
         "startLine": 115,
         "startChar": 6,
