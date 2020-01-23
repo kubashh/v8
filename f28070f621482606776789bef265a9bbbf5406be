@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "552b62f0_5abc52b2",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2020-01-23T15:43:09Z",
+      "side": 1,
+      "message": "Oh, I see; so this rule is specifically only for .cc/.cpp/.c files, and not headers because obviously they need to leave things defined - I was completely wrong. :P\n\nI\u0027d suggest that you reach out to clemensb@ to find out why V8 wants to enforce #undef of macros in .cc/.cpp/.c files, since it seems rather pointless.",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 467,
+        "endChar": 40
+      },
+      "revId": "f28070f621482606776789bef265a9bbbf5406be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
