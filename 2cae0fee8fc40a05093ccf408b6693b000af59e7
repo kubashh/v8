@@ -16,6 +16,24 @@
       "revId": "2cae0fee8fc40a05093ccf408b6693b000af59e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "455f449a_18554694",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-01-23T00:36:26Z",
+      "side": 1,
+      "message": "Yes it is weird to read :) Done!",
+      "parentUuid": "914bd33a_3fa1aeac",
+      "revId": "2cae0fee8fc40a05093ccf408b6693b000af59e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
