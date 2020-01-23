@@ -543,6 +543,8 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
   uint32_t GetInputRegisterListOperand(RegisterList reg_list);
   uint32_t GetOutputRegisterListOperand(RegisterList reg_list);
 
+  void ForceExpressionPosition(int position);
+
   // Outputs raw register transfer bytecodes without going through the register
   // optimizer.
   void OutputLdarRaw(Register reg);

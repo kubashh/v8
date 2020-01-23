@@ -1717,7 +1717,7 @@ void BytecodeGenerator::VisitIterationBody(IterationStatement* stmt,
                                            LoopBuilder* loop_builder) {
   loop_builder->LoopBody();
   ControlScopeForIteration execution_control(this, stmt, loop_builder);
-  builder()->StackCheck(stmt->position());
+  builder()->ForceExpressionPosition(stmt->position());
   Visit(stmt->body());
   loop_builder->BindContinueTarget();
 }
@@ -1729,7 +1729,7 @@ void BytecodeGenerator::VisitDoWhileStatement(DoWhileStatement* stmt) {
   } else if (stmt->cond()->ToBooleanIsTrue()) {
     loop_builder.LoopHeader();
     VisitIterationBody(stmt, &loop_builder);
-    loop_builder.JumpToHeader(loop_depth_);
+    loop_builder.JumpToHeader(loop_depth_, true);
   } else {
     loop_builder.LoopHeader();
     VisitIterationBody(stmt, &loop_builder);
@@ -1738,7 +1738,7 @@ void BytecodeGenerator::VisitDoWhileStatement(DoWhileStatement* stmt) {
     VisitForTest(stmt->cond(), &loop_backbranch, loop_builder.break_labels(),
                  TestFallthrough::kThen);
     loop_backbranch.Bind(builder());
-    loop_builder.JumpToHeader(loop_depth_);
+    loop_builder.JumpToHeader(loop_depth_, true);
   }
 }
 
@@ -1759,7 +1759,7 @@ void BytecodeGenerator::VisitWhileStatement(WhileStatement* stmt) {
     loop_body.Bind(builder());
   }
   VisitIterationBody(stmt, &loop_builder);
-  loop_builder.JumpToHeader(loop_depth_);
+  loop_builder.JumpToHeader(loop_depth_, true);
 }
 
 void BytecodeGenerator::VisitForStatement(ForStatement* stmt) {
@@ -1787,7 +1787,7 @@ void BytecodeGenerator::VisitForStatement(ForStatement* stmt) {
     builder()->SetStatementPosition(stmt->next());
     Visit(stmt->next());
   }
-  loop_builder.JumpToHeader(loop_depth_);
+  loop_builder.JumpToHeader(loop_depth_, true);
 }
 
 void BytecodeGenerator::VisitForInStatement(ForInStatement* stmt) {
@@ -1839,11 +1839,10 @@ void BytecodeGenerator::VisitForInStatement(ForInStatement* stmt) {
       builder()->SetExpressionPosition(stmt->each());
       BuildAssignment(lhs_data, Token::ASSIGN, LookupHoistingMode::kNormal);
     }
-
     VisitIterationBody(stmt, &loop_builder);
     builder()->ForInStep(index);
     builder()->StoreAccumulatorInRegister(index);
-    loop_builder.JumpToHeader(loop_depth_);
+    loop_builder.JumpToHeader(loop_depth_, true);
   }
   builder()->Bind(&subject_undefined_label);
 }
@@ -1928,7 +1927,7 @@ void BytecodeGenerator::VisitForOfStatement(ForOfStatement* stmt) {
 
         VisitIterationBody(stmt, &loop_builder);
 
-        loop_builder.JumpToHeader(loop_depth_);
+        loop_builder.JumpToHeader(loop_depth_, true);
       },
       // Finally block.
       [&](Register iteration_continuation_token) {
@@ -2770,6 +2769,7 @@ void BytecodeGenerator::BuildFillArrayWithIterator(
       .UnaryOperation(Token::INC, feedback_index(index_slot))
       .StoreAccumulatorInRegister(index);
   loop_builder.BindContinueTarget();
+  // TODO(solanes): No VisitIterationBody here...
   loop_builder.JumpToHeader(loop_depth_);
 }
 
@@ -4361,6 +4361,7 @@ void BytecodeGenerator::VisitYieldStar(YieldStar* expr) {
           .StoreAccumulatorInRegister(resume_mode);
 
       loop.BindContinueTarget();
+      // TODO(solanes): No VisitIterationBody here...
       loop.JumpToHeader(loop_depth_);
     }
   }

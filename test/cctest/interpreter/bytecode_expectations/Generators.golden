@@ -141,7 +141,6 @@ bytecodes: [
                 B(LdaFalse),
                 B(Star), R(6),
                 B(Mov), R(10), R(1),
-  /*   16 E> */ B(StackCheck),
   /*   25 S> */ B(Mov), R(1), R(3),
   /*   36 S> */ B(LdaFalse),
                 B(Star), R(12),
@@ -157,7 +156,8 @@ bytecodes: [
                 B(LdaSmi), I8(1),
                 B(Star), R(7),
                 B(Mov), R(11), R(8),
-                B(Jump), U8(20),
+                B(Jump), U8(21),
+                B(StackCheck),
                 B(Ldar), R(11),
                 B(JumpLoop), U8(81), I8(0),
                 B(LdaSmi), I8(-1),
@@ -209,7 +209,7 @@ bytecodes: [
 ]
 constant pool: [
   Smi [21],
-  Smi [125],
+  Smi [124],
   Smi [10],
   Smi [7],
   ARRAY_BOILERPLATE_DESCRIPTION_TYPE,
