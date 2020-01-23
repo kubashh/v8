@@ -22,6 +22,30 @@
       "revId": "f28070f621482606776789bef265a9bbbf5406be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0750b07_9d02d909",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-23T16:55:47Z",
+      "side": 1,
+      "message": "Yeah, this was there mostly (or completely?) for jumbo support. It hurts a bit seeing this effort wasted, but I agree that there is no real value any more in enforcing this.\n\nI would propose to just remove the whole _CheckMacroUndefs then.\n\n(see https://crrev.com/c/657104 for the motivation why this was added)",
+      "parentUuid": "552b62f0_5abc52b2",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 467,
+        "endChar": 40
+      },
+      "revId": "f28070f621482606776789bef265a9bbbf5406be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
