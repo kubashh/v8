@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7b46439_142ae2d3",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-01-23T13:26:53Z",
+      "side": 1,
+      "message": "Nit: \"Contains\" would be more precise",
+      "range": {
+        "startLine": 43,
+        "startChar": 22,
+        "endLine": 43,
+        "endChar": 26
+      },
+      "revId": "4187b8a5fe445eb3a47b8bce4a47bec62fe436cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27ffd7cd_7509e7cd",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-01-23T13:26:53Z",
+      "side": 1,
+      "message": "Is this an optimization or needed for correctness?\nIn the former case, I would prefer always sweeping and removing in_teardown to avoid coupling this with the teardown sequence.",
+      "range": {
+        "startLine": 73,
+        "startChar": 9,
+        "endLine": 76,
+        "endChar": 26
+      },
+      "revId": "4187b8a5fe445eb3a47b8bce4a47bec62fe436cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52b6ea23_b17c9ac5",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-01-23T13:26:53Z",
+      "side": 1,
+      "message": "No background task should be running at this point. Is this mutex needed?",
+      "range": {
+        "startLine": 115,
+        "startChar": 6,
+        "endLine": 115,
+        "endChar": 47
+      },
+      "revId": "4187b8a5fe445eb3a47b8bce4a47bec62fe436cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b201f34_c2de2866",
+        "filename": "src/heap/array-buffer-sweeper.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-01-23T13:26:53Z",
+      "side": 1,
+      "message": "Nit: we usually define types at the top (e.g. near SweepingScope)",
+      "range": {
+        "startLine": 83,
+        "startChar": 2,
+        "endLine": 83,
+        "endChar": 22
+      },
+      "revId": "4187b8a5fe445eb3a47b8bce4a47bec62fe436cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
