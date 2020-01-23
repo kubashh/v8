@@ -46,6 +46,30 @@
       "revId": "f28070f621482606776789bef265a9bbbf5406be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35c2cdc7_29b2bcc8",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-23T16:56:28Z",
+      "side": 1,
+      "message": "Ah, I just see that this would be patchset 3.",
+      "parentUuid": "d0750b07_9d02d909",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 467,
+        "endChar": 40
+      },
+      "revId": "f28070f621482606776789bef265a9bbbf5406be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
