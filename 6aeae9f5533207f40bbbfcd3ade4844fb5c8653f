@@ -55,6 +55,29 @@
     },
     {
       "key": {
+        "uuid": "8a8c9482_ca071d52",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-01-23T13:37:32Z",
+      "side": 1,
+      "message": "Style nit: Local helpers this should have capital case names and be in an anonymous namespace, e.g. \nnamespace {\nGetSnapshotSpace(...){\n...\n}\n}  // namespace",
+      "range": {
+        "startLine": 557,
+        "startChar": 14,
+        "endLine": 557,
+        "endChar": 32
+      },
+      "revId": "6aeae9f5533207f40bbbfcd3ade4844fb5c8653f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed8a7330_3cd917c5",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 7
@@ -84,6 +107,29 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "ed8a7330_3cd917c5",
+      "revId": "6aeae9f5533207f40bbbfcd3ade4844fb5c8653f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9bc3beb_2d1a55f7",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-01-23T13:37:32Z",
+      "side": 1,
+      "message": "What about old space? I guess this is intentional for now - the third party heap might not have old/new spaces. The deserializer can be thought of as an allocator in one sense. We need to serialize all the information needed to allocate the deserialized object in the right place on the other side. Not sure if this would need to fit into the TPH interface in the future, just a thought. This serializer definitely has V8\u0027s current heap structure baked into it.",
+      "range": {
+        "startLine": 568,
+        "startChar": 6,
+        "endLine": 568,
+        "endChar": 33
+      },
       "revId": "6aeae9f5533207f40bbbfcd3ade4844fb5c8653f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
