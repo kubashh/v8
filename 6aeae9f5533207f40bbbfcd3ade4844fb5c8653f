@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "331b1994_acaa743b",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1381601
+      },
+      "writtenOn": "2020-01-23T13:24:49Z",
+      "side": 1,
+      "message": "Yes, I\u0027ll add a comment.\n\nThe code below depends on the specifics of the read-only heap, which a TPH will not generally support.\n\nActually, I\u0027ll just remove it for now.   That was should really be in a separate CL.",
+      "parentUuid": "2b4a2834_ca80a054",
+      "revId": "6aeae9f5533207f40bbbfcd3ade4844fb5c8653f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed8a7330_3cd917c5",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "6aeae9f5533207f40bbbfcd3ade4844fb5c8653f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d18c49d_26231005",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1381601
+      },
+      "writtenOn": "2020-01-23T13:24:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed8a7330_3cd917c5",
+      "revId": "6aeae9f5533207f40bbbfcd3ade4844fb5c8653f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
