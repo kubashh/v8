@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54959673_f8f16760",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-24T14:40:05Z",
+      "side": 1,
+      "message": "It doesn\u0027t just attempt ;)",
+      "range": {
+        "startLine": 9,
+        "startChar": 8,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "1f80bd5b485dd58285b35cffa5eec12ce382ac0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
