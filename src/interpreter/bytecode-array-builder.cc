@@ -1619,6 +1619,10 @@ uint32_t BytecodeArrayBuilder::GetOutputRegisterListOperand(
   return static_cast<uint32_t>(reg_list.first_register().ToOperand());
 }
 
+void BytecodeArrayBuilder::ForceExpressionPosition(int position) {
+  latest_source_info_.ForceExpressionPosition(position);
+}
+
 std::ostream& operator<<(std::ostream& os,
                          const BytecodeArrayBuilder::ToBooleanMode& mode) {
   switch (mode) {

@@ -33,6 +33,11 @@ FrameInspector::FrameInspector(StandardFrame* frame, int inlined_frame_index,
 
   JavaScriptFrame* js_frame =
       frame->is_java_script() ? javascript_frame() : nullptr;
+  if (source_position_ == kNoBytecodeOffset) {
+    CHECK(js_frame);
+    source_position_ = js_frame->function().shared().StartPosition();
+  }
+  DCHECK_GE(source_position_, 0);
   DCHECK(js_frame || frame->is_wasm());
   has_adapted_arguments_ = js_frame && js_frame->has_adapted_arguments();
   is_optimized_ = frame_->is_optimized();
