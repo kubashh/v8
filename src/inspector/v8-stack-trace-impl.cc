@@ -126,8 +126,14 @@ V8StackTraceId::V8StackTraceId(uintptr_t id,
 
 V8StackTraceId::V8StackTraceId(const StringView& json)
     : id(0), debugger_id(V8DebuggerId().pair()) {
-  auto dict =
-      protocol::DictionaryValue::cast(protocol::StringUtil::parseJSON(json));
+  if (json.length() == 0) return;
+  std::vector<uint8_t> cbor;
+  if (json.is8Bit()) {
+    v8_crdtp::json::ConvertJSONToCBOR(v8_crdtp::span<uint8_t>(json.characters8(), json.length()), &cbor);
+  } else {
+    v8_crdtp::json::ConvertJSONToCBOR(v8_crdtp::span<uint16_t>(json.characters16(), json.length()), &cbor);
+  }
+  auto dict = protocol::DictionaryValue::cast(protocol::Value::parseBinary(cbor.data(), cbor.size()));
   if (!dict) return;
   String16 s;
   if (!dict->getString(kId, &s)) return;
