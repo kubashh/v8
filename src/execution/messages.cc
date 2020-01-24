@@ -530,7 +530,9 @@ int JSStackFrame::GetPosition() const {
 
   Handle<SharedFunctionInfo> shared = handle(function_->shared(), isolate_);
   SharedFunctionInfo::EnsureSourcePositionsAvailable(isolate_, shared);
-  cached_position_ = code_->SourcePosition(offset_);
+  cached_position_ = offset_ == kNoBytecodeOffset
+                         ? shared->StartPosition()
+                         : code_->SourcePosition(offset_);
   return *cached_position_;
 }
 
