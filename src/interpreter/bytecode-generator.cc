@@ -1159,8 +1159,10 @@ void BytecodeGenerator::GenerateBytecode(uintptr_t stack_limit) {
 
   AllocateTopLevelRegisters();
 
-  // Perform a stack-check before the body.
-  builder()->StackCheck(info()->literal()->start_position());
+  // Set a default expression position. If the next bytecode set a new position,
+  // this will get overwritten. Otherwise, we make sure that the first bytecode
+  // has a source position.
+  builder()->ForceExpressionPosition(info()->literal()->start_position());
 
   if (info()->literal()->CanSuspend()) {
     BuildGeneratorPrologue();
