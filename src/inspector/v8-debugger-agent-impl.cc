@@ -6,6 +6,7 @@
 
 #include <algorithm>
 
+#include "../../third_party/inspector_protocol/crdtp/json.h"
 #include "src/base/safe_conversions.h"
 #include "src/debug/debug-interface.h"
 #include "src/inspector/injected-script.h"
@@ -1417,8 +1418,13 @@ void V8DebuggerAgentImpl::didParseSource(
   if (inspected) {
     // Script reused between different groups/sessions can have a stale
     // execution context id.
+    std::vector<uint8_t> cbor;
+    v8_crdtp::json::ConvertJSONToCBOR(
+        v8_crdtp::span<uint16_t>(inspected->auxData().characters16(),
+                                 inspected->auxData().length()),
+        &cbor);
     executionContextAuxData = protocol::DictionaryValue::cast(
-        protocol::StringUtil::parseJSON(inspected->auxData()));
+        protocol::Value::parseBinary(cbor.data(), cbor.size()));
   }
   bool isLiveEdit = script->isLiveEdit();
   bool hasSourceURLComment = script->hasSourceURLComment();
