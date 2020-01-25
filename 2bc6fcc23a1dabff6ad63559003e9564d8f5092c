@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4e08da9_95fb5cb8",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-01-25T01:30:25Z",
+      "side": 1,
+      "message": "The comment is out of date with the code, w.r.t. the start node being the only input etc. Could you update the comment?",
+      "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a2bd79e_cf29e886",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-01-25T01:30:25Z",
+      "side": 1,
+      "message": "Does this get hit in practice? If not, should it be a DCHECK?",
+      "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c859b1e_a39d5583",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6941,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-01-25T01:30:25Z",
+      "side": 1,
+      "message": "I don\u0027t think this is right - it looks like this is unconditionally lowering here whether the function has SIMD or not. What you actually want is to tag has_simd_ correctly where parameters are being evaluated. Otherwise this is called twice (once in BuildGraphForWasmFunction, and here) and traverses the entire graph. If has_simd_ is correctly populated on S128 parameters, you wouldn\u0027t need this.",
+      "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
