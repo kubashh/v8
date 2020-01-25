@@ -35,7 +35,7 @@ vars = {
   'check_v8_header_includes': False,
 
   # GN CIPD package version.
-  'gn_version': 'git_revision:0c5557d173ce217cea095086a9c9610068123503',
+  'gn_version': 'git_revision:83dad00afb232d7235dd70dff1ee90292d72a01e',
 
   # luci-go CIPD package version.
   'luci_go': 'git_revision:37a855b64d59b7f079c9a0e5368f2757099d14d3',
@@ -80,15 +80,15 @@ vars = {
 
 deps = {
   'v8/build':
-    Var('chromium_url') + '/chromium/src/build.git' + '@' + 'fd025409e29f096971306fda049161a6dc7422ac',
+    Var('chromium_url') + '/chromium/src/build.git' + '@' + 'cbcd76695281b5a97bb5b084bf633b88da1be45a',
   'v8/third_party/depot_tools':
-    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + '05b001c28df8e2811c24656e7ad260d7232afb9d',
+    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + '1a5fe235929a19ce3e44c899d381f497b38bab50',
   'v8/third_party/icu':
     Var('chromium_url') + '/chromium/deps/icu.git' + '@' + 'dbd3825b31041d782c5b504c59dcfb5ac7dda08c',
   'v8/third_party/instrumented_libraries':
     Var('chromium_url') + '/chromium/src/third_party/instrumented_libraries.git' + '@' + 'bb3f1802c237dd19105dd0f7919f99e536a39d10',
   'v8/buildtools':
-    Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + '73414d522630b27aa3b8d8b63e61d0a5c912a35a',
+    Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + '48cce924d685e103eb320a560b5cb6d7883dc670',
   'v8/buildtools/clang_format/script':
     Var('chromium_url') + '/chromium/llvm-project/cfe/tools/clang-format.git' + '@' + '96636aa0e9f047f17447f2d45a094d0b59ed7917',
   'v8/buildtools/linux64': {
@@ -128,7 +128,7 @@ deps = {
     'condition': 'host_os == "win"',
   },
   'v8/base/trace_event/common':
-    Var('chromium_url') + '/chromium/src/base/trace_event/common.git' + '@' + 'e327c633a24347fbb9cffe21f8df2861db7b8dc6',
+    Var('chromium_url') + '/chromium/src/base/trace_event/common.git' + '@' + '618bcf7a23f0d105140fcf7c189da0f633cad4c3',
   'v8/third_party/android_ndk': {
     'url': Var('chromium_url') + '/android_ndk.git' + '@' + '27c0a8d090c666a50e40fceb4ee5b40b1a2d3f87',
     'condition': 'checkout_android',
@@ -176,7 +176,7 @@ deps = {
       'dep_type': 'cipd',
   },
   'v8/third_party/catapult': {
-    'url': Var('chromium_url') + '/catapult.git' + '@' + '251c7653021328d5d27e26e18a05b7cae9205b8e',
+    'url': Var('chromium_url') + '/catapult.git' + '@' + 'd93fde1cd5a5c8824b034ac8e8150a62ebc5bcb9',
     'condition': 'checkout_android',
   },
   'v8/third_party/colorama/src': {
@@ -224,7 +224,7 @@ deps = {
       'dep_type': 'cipd',
   },
   'v8/tools/clang':
-    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + '42fbdfef1ce265b09dc6bda2ed90d83324c97481',
+    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + 'f2e1fa017ad50fe5864e59c50d925add9b5b2c91',
   'v8/tools/luci-go': {
       'packages': [
         {
@@ -258,7 +258,7 @@ deps = {
   'v8/third_party/protobuf':
     Var('chromium_url') + '/external/github.com/google/protobuf'+ '@' + 'b68a347f56137b4b1a746e8c7438495a6ac1bd91',
   'v8/third_party/zlib':
-    Var('chromium_url') + '/chromium/src/third_party/zlib.git'+ '@' + '94485d9d189ea113d62a4dc9f02cd39f5daf9469',
+    Var('chromium_url') + '/chromium/src/third_party/zlib.git'+ '@' + '2a6432e74981917d2e8a3da8aa294979077f38c0',
   'v8/third_party/ittapi': {
     # Force checkout ittapi libraries to pass v8 header includes check on
     # bots that has check_v8_header_includes enabled.
