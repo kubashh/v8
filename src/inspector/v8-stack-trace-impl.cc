@@ -20,6 +20,18 @@ static const char kId[] = "id";
 static const char kDebuggerId[] = "debuggerId";
 static const char kShouldPause[] = "shouldPause";
 
+v8_crdtp::Status ConvertToCBOR(const StringView& state,
+                               std::vector<uint8_t>* cbor) {
+  return state.is8Bit()
+             ? v8_crdtp::json::ConvertJSONToCBOR(
+                   v8_crdtp::span<uint8_t>(state.characters8(), state.length()),
+                   cbor)
+             : v8_crdtp::json::ConvertJSONToCBOR(
+                   v8_crdtp::span<uint16_t>(state.characters16(),
+                                            state.length()),
+                   cbor);
+}
+
 static const v8::StackTrace::StackTraceOptions stackTraceOptions =
     static_cast<v8::StackTrace::StackTraceOptions>(
         v8::StackTrace::kDetailed |
@@ -126,8 +138,11 @@ V8StackTraceId::V8StackTraceId(uintptr_t id,
 
 V8StackTraceId::V8StackTraceId(const StringView& json)
     : id(0), debugger_id(V8DebuggerId().pair()) {
-  auto dict =
-      protocol::DictionaryValue::cast(protocol::StringUtil::parseJSON(json));
+  if (json.length() == 0) return;
+  std::vector<uint8_t> cbor;
+  ConvertToCBOR(json, &cbor);
+  auto dict = protocol::DictionaryValue::cast(
+      protocol::Value::parseBinary(cbor.data(), cbor.size()));
   if (!dict) return;
   String16 s;
   if (!dict->getString(kId, &s)) return;
