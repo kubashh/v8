@@ -27006,4 +27006,31 @@ UNINITIALIZED_TEST(NestedIsolates) {
   isolate_2->Dispose();
 }
 
+static int is_context_valid_callback_count;
+static bool TestIsContextValidInHostCallback(v8::Local<Context> context) {
+  is_context_valid_callback_count++;
+  return true;
+}
+
+TEST(IsContextValidInHost) {
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
+  v8::Isolate* isolate = v8::Isolate::New(create_params);
+  {
+    v8::Isolate::Scope isolate_scope(isolate);
+    isolate->SetIsContextValidInHostCallback(TestIsContextValidInHostCallback);
+    is_context_valid_callback_count = 0;
+    v8::HandleScope handle_scope(isolate);
+    v8::Local<Context> context = Context::New(isolate);
+    v8::internal::Isolate* i_isolate =
+        reinterpret_cast<v8::internal::Isolate*>(isolate);
+    v8::internal::Handle<v8::internal::Context> i_context =
+        v8::Utils::OpenHandle(*context);
+    CHECK(i_isolate->IsNativeContextValidInHost(
+        v8::internal::Handle<v8::internal::NativeContext>::cast(i_context)));
+    CHECK_EQ(1, is_context_valid_callback_count);
+  }
+  isolate->Dispose();
+}
+
 #undef THREADED_PROFILED_TEST

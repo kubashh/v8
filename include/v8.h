@@ -7196,6 +7196,14 @@ typedef void (*HostCleanupFinalizationGroupCallback)(
     Local<Context> context, Local<FinalizationGroup> fg);
 
 /**
+ * IsContextValidInHostCallback is called when determining the validity of a
+ * context. For example, in a web browser, invalid contexts are those whose
+ * frames have navigated or removed, and scheduled FinalizationGroup cleanup
+ * tasks do not run if their creation contexts are invalid.
+ */
+typedef bool (*IsContextValidInHostCallback)(Local<Context> context);
+
+/**
  * HostImportModuleDynamicallyCallback is called when we require the
  * embedder to load a module. This is used as part of the dynamic
  * import syntax.
@@ -8499,6 +8507,14 @@ class V8_EXPORT Isolate {
    */
   void SetHostCleanupFinalizationGroupCallback(
       HostCleanupFinalizationGroupCallback callback);
+
+  /**
+   * This specifies the callback to determine if a v8::Context is valid in the
+   * host. For example, in web browsers, contexts whose frames have navigated or
+   * removed are invalid. If no callback is set, all contexts are always
+   * considered valid.
+   */
+  void SetIsContextValidInHostCallback(IsContextValidInHostCallback callback);
 
   /**
    * This specifies the callback called by the upcoming dynamic

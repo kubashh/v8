@@ -1393,6 +1393,10 @@ class Isolate final : private HiddenFactory {
       HostCleanupFinalizationGroupCallback callback);
   void RunHostCleanupFinalizationGroupCallback(Handle<JSFinalizationGroup> fg);
 
+  void SetIsNativeContextValidInHostCallback(
+      IsContextValidInHostCallback callback);
+  bool IsNativeContextValidInHost(Handle<NativeContext> context) const;
+
   void SetHostImportModuleDynamicallyCallback(
       HostImportModuleDynamicallyCallback callback);
   V8_EXPORT_PRIVATE MaybeHandle<JSPromise>
@@ -1650,6 +1654,8 @@ class Isolate final : private HiddenFactory {
   PromiseHook promise_hook_ = nullptr;
   HostCleanupFinalizationGroupCallback
       host_cleanup_finalization_group_callback_ = nullptr;
+  IsContextValidInHostCallback is_native_context_valid_in_host_callback_ =
+      nullptr;
   HostImportModuleDynamicallyCallback host_import_module_dynamically_callback_ =
       nullptr;
   HostInitializeImportMetaObjectCallback

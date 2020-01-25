@@ -8326,6 +8326,12 @@ void Isolate::SetHostCleanupFinalizationGroupCallback(
   isolate->SetHostCleanupFinalizationGroupCallback(callback);
 }
 
+void Isolate::SetIsContextValidInHostCallback(
+    IsContextValidInHostCallback callback) {
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
+  isolate->SetIsNativeContextValidInHostCallback(callback);
+}
+
 Maybe<bool> FinalizationGroup::Cleanup(
     Local<FinalizationGroup> finalization_group) {
   i::Handle<i::JSFinalizationGroup> fg = Utils::OpenHandle(*finalization_group);

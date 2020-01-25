@@ -4011,6 +4011,19 @@ void Isolate::RunHostCleanupFinalizationGroupCallback(
   }
 }
 
+void Isolate::SetIsNativeContextValidInHostCallback(
+    IsContextValidInHostCallback callback) {
+  is_native_context_valid_in_host_callback_ = callback;
+}
+
+bool Isolate::IsNativeContextValidInHost(Handle<NativeContext> context) const {
+  if (is_native_context_valid_in_host_callback_ != nullptr) {
+    return is_native_context_valid_in_host_callback_(
+        v8::Utils::ToLocal(Handle<Context>::cast(context)));
+  }
+  return true;
+}
+
 void Isolate::SetHostImportModuleDynamicallyCallback(
     HostImportModuleDynamicallyCallback callback) {
   host_import_module_dynamically_callback_ = callback;
