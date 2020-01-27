@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ac9fe7ec_401555d2",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-01-27T17:34:57Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t understand, the start node is still the only input to the parameter node. That didn\u0027t change in the code.\n\n(there is a typo here that i can fix, 2 the)",
+      "parentUuid": "c4e08da9_95fb5cb8",
+      "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2a2bd79e_cf29e886",
         "filename": "src/compiler/simd-scalar-lowering.cc",
         "patchSetId": 1
@@ -65,6 +83,24 @@
       "writtenOn": "2020-01-25T01:30:25Z",
       "side": 1,
       "message": "I don\u0027t think this is right - it looks like this is unconditionally lowering here whether the function has SIMD or not. What you actually want is to tag has_simd_ correctly where parameters are being evaluated. Otherwise this is called twice (once in BuildGraphForWasmFunction, and here) and traverses the entire graph. If has_simd_ is correctly populated on S128 parameters, you wouldn\u0027t need this.",
+      "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "421bd5eb_257bdaf2",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6941,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-01-27T17:34:57Z",
+      "side": 1,
+      "message": "This lowering call GetI32WasmCallDescriptorForSimd is a no op if the signature does not contain s128 (it checks that the number of lowered parameter count and number of lowered return count is unchanged, and returns early).\n\nI considered has_simd_, but that is part of WasmGraphBuilder, which we no longer have access to anymore. ExecuteTurbofanWasmCompilation calls BuildGraphForWasmFunction, and it is within the latter function we have has_simd_. I can\u0027t think of any good way to reuse has_simd_, we will need to either:\n- change return type of BuildGraphForWasmFunction from a bool (success or failure) into something more\n- store this has_simd_ somewhere else (pass a bool *? to BuildGraphForWasmFunction)\n- get the call descriptor from within BuildGraphForWasmFunction and return it to ExecuteTurbofanWasmCompilation\n\nAnother way is to examine the call descriptor to see if we find any s128 in param or return, but that is exactly what calling GetI32WasmCallDescriptorForSimd will do anyway.",
+      "parentUuid": "4c859b1e_a39d5583",
       "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
