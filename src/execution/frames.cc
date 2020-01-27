@@ -1372,7 +1372,12 @@ bool FrameSummary::JavaScriptFrameSummary::is_subject_to_debugging() const {
 }
 
 int FrameSummary::JavaScriptFrameSummary::SourcePosition() const {
-  return abstract_code()->SourcePosition(code_offset());
+  int offset = code_offset();
+  // kNoBytecodeOffset signals that we are doing a function entry stack guard
+  // interrupt. If so, the FrameInspector will use the function entry source
+  // position, instead of looking into the source position table.
+  return offset == kNoBytecodeOffset ? kNoBytecodeOffset
+                                     : abstract_code()->SourcePosition(offset);
 }
 
 int FrameSummary::JavaScriptFrameSummary::SourceStatementPosition() const {
