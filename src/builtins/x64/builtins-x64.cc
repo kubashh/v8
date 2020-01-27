@@ -65,6 +65,18 @@ static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
 
 namespace {
 
+Operand StackLimitAsOperand(MacroAssembler* masm) {
+  DCHECK(masm->root_array_available());
+  Isolate* isolate = masm->isolate();
+  ExternalReference limit = ExternalReference::address_of_jslimit(isolate);
+  DCHECK(TurboAssembler::IsAddressableThroughRootRegister(isolate, limit));
+
+  intptr_t offset =
+      TurboAssembler::RootRegisterOffsetForExternalReference(isolate, limit);
+  CHECK(is_int32(offset));
+  return Operand(kRootRegister, static_cast<int32_t>(offset));
+}
+
 Operand RealStackLimitAsOperand(MacroAssembler* masm) {
   DCHECK(masm->root_array_available());
   Isolate* isolate = masm->isolate();
@@ -1156,6 +1168,12 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ movq(Operand(rbp, rcx, times_system_pointer_size, 0), rdx);
   __ bind(&no_incoming_new_target_or_generator_register);
 
+  // Perform interrupt stack check
+  Label stack_check_interrupt, continue_stack_check_interrupt;
+  __ cmpq(rsp, StackLimitAsOperand(masm));
+  __ j(below_equal, &stack_check_interrupt, Label::kNear);
+  __ bind(&continue_stack_check_interrupt);
+
   // The accumulator is already loaded with undefined.
 
   // Load the dispatch table into a register and dispatch to the bytecode
@@ -1195,6 +1213,28 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // The return value is in rax.
   LeaveInterpreterFrame(masm, rbx, rcx);
   __ ret(0);
+
+  __ bind(&stack_check_interrupt);
+  // Modify the bytecode offset in the stack to be kNoBytecodeOffset for the
+  // call to the StackGuard.
+  __ movq(Operand(rbp, InterpreterFrameConstants::kBytecodeOffsetFromFp),
+          Immediate(Smi::FromInt(BytecodeArray::kHeaderSize - kHeapObjectTag +
+                                 kNoBytecodeOffset)));
+  __ CallRuntime(Runtime::kStackGuard);
+
+  // After the call, insert the previous values again.
+  // Stack
+  __ movq(Operand(rbp, InterpreterFrameConstants::kBytecodeOffsetFromFp),
+          Immediate(Smi::FromInt(BytecodeArray::kHeaderSize - kHeapObjectTag)));
+
+  // Registers
+  __ movq(kInterpreterBytecodeArrayRegister,
+          Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag));
+  __ SmiUntag(kInterpreterBytecodeOffsetRegister,
+              Operand(rbp, InterpreterFrameConstants::kBytecodeOffsetFromFp));
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+
+  __ jmp(&continue_stack_check_interrupt);
 
   __ bind(&compile_lazy);
   GenerateTailCallToReturnedCode(masm, Runtime::kCompileLazy);
