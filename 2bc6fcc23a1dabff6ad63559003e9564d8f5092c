@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "a79beacc_72b330b8",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-01-27T12:08:33Z",
+      "side": 1,
+      "message": "I think this did happen, at least in the int64-lowering. I think it happened in the context of builtin calls for the wasm-bigint implementation. It could be true though that this case cannot happen for the simd lowering.",
+      "parentUuid": "2a2bd79e_cf29e886",
+      "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c859b1e_a39d5583",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 1
