@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "011b3cf8_53f18872",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-01-28T01:36:45Z",
+      "side": 1,
+      "message": "Sorry I wasn\u0027t clear. It is still the input we care about, but doesn\u0027t explain the index adjustment for the instance parameter, which may be confusing for someone looking at it the first time. There is a comment below that talks about the instance parameter, but explaining why we need instance adjustment at all makes sense to me.",
+      "parentUuid": "ac9fe7ec_401555d2",
+      "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2a2bd79e_cf29e886",
         "filename": "src/compiler/simd-scalar-lowering.cc",
         "patchSetId": 1
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "This lowering call GetI32WasmCallDescriptorForSimd is a no op if the signature does not contain s128 (it checks that the number of lowered parameter count and number of lowered return count is unchanged, and returns early).\n\nI considered has_simd_, but that is part of WasmGraphBuilder, which we no longer have access to anymore. ExecuteTurbofanWasmCompilation calls BuildGraphForWasmFunction, and it is within the latter function we have has_simd_. I can\u0027t think of any good way to reuse has_simd_, we will need to either:\n- change return type of BuildGraphForWasmFunction from a bool (success or failure) into something more\n- store this has_simd_ somewhere else (pass a bool *? to BuildGraphForWasmFunction)\n- get the call descriptor from within BuildGraphForWasmFunction and return it to ExecuteTurbofanWasmCompilation\n\nAnother way is to examine the call descriptor to see if we find any s128 in param or return, but that is exactly what calling GetI32WasmCallDescriptorForSimd will do anyway.",
       "parentUuid": "4c859b1e_a39d5583",
+      "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47767c35_4fa1f7d7",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6941,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-01-28T01:36:45Z",
+      "side": 1,
+      "message": "This makes sense to do unconditionally for Int64Lowering, because all calls will need to be lowered on 32-bit machines, but for SIMD I\u0027d be wary of having all functions going through this unconditionally. Even though it\u0027s functionally a no-op, it does add some overhead across the board. \n\nA more streamlined way is probably to evaluate the signature because we can access it above - I think ContainsSimd already does this above.",
+      "parentUuid": "421bd5eb_257bdaf2",
       "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
