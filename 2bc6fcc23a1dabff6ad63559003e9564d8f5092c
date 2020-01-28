@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "1c7a572b_9866e68e",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-01-28T18:02:06Z",
+      "side": 1,
+      "message": "\u003e Sorry I wasn\u0027t clear. It is still the input we care about, but doesn\u0027t explain the index adjustment for the instance parameter, which may be confusing for someone looking at it the first time. There is a comment below that talks about the instance parameter, but explaining why we need instance adjustment at all makes sense to me.\n\nAdded some comments before `--old_index` and `++new_index`, lmk if it looks okay, thanks!",
+      "parentUuid": "011b3cf8_53f18872",
+      "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a2bd79e_cf29e886",
         "filename": "src/compiler/simd-scalar-lowering.cc",
         "patchSetId": 1
@@ -140,6 +158,24 @@
       "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26a36ac6_fd29f439",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6941,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-01-28T18:02:06Z",
+      "side": 1,
+      "message": "Makes sense, thanks for pointing out ContainsSimd.",
+      "parentUuid": "47767c35_4fa1f7d7",
+      "revId": "2bc6fcc23a1dabff6ad63559003e9564d8f5092c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
