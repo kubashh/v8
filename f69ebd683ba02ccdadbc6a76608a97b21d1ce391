@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb8a6586_bed50272",
+        "filename": "src/parsing/scanner-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1391172
+      },
+      "writtenOn": "2020-01-29T16:43:52Z",
+      "side": 1,
+      "message": "This matches the pattern for other line comments. They all are reported as Token::WHITESPACE.",
+      "revId": "f69ebd683ba02ccdadbc6a76608a97b21d1ce391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
