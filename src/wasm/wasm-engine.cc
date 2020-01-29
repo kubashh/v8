@@ -35,6 +35,15 @@ namespace wasm {
     if (FLAG_trace_wasm_code_gc) PrintF("[wasm-gc] " __VA_ARGS__); \
   } while (false)
 
+#ifndef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+namespace gdb_server {
+// Define an empty class here that is just used to avoid an ABI break when
+// compiling WasmEngine with different settings for the build flag
+// V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+class GdbServer {};
+}  // namespace gdb_server
+#endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
+
 namespace {
 // A task to log a set of {WasmCode} objects in an isolate. It does not own any
 // data itself, since it is owned by the platform, so lifetime is not really
@@ -285,7 +294,7 @@ WasmEngine::WasmEngine() : code_manager_(FLAG_wasm_max_code_space * MB) {}
 WasmEngine::~WasmEngine() {
 #ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
   // Synchronize on the GDB-remote thread, if running.
-  gdb_server_ = nullptr;
+  gdb_server_.reset();
 #endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
   // Synchronize on all background compile tasks.
@@ -753,7 +762,7 @@ std::shared_ptr<NativeModule> WasmEngine::NewNativeModule(
 
 #ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
   if (!gdb_server_) {
-    gdb_server_ = std::make_unique<gdb_server::GdbServer>();
+    gdb_server_ = gdb_server::GdbServer::Create();
   }
 #endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
