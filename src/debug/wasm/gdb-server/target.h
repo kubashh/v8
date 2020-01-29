@@ -6,7 +6,7 @@
 #define V8_WASM_GDB_SERVER_TARGET_H_
 
 #include <atomic>
-#include "src/base/macros.h"
+#include "src/base/platform/mutex.h"
 
 namespace v8 {
 namespace internal {
@@ -14,6 +14,7 @@ namespace wasm {
 namespace gdb_server {
 
 class GdbServer;
+class Packet;
 class Session;
 
 // Class Target represents a debugging target. It contains the logic to decode
@@ -40,6 +41,14 @@ class Target {
   // Processes GDB-remote packets that arrive from the debugger.
   // This method should be called when the debuggee has suspended its execution.
   void ProcessCommands();
+
+  // This function always succeedes, since all errors
+  // are reported as an error string of "E<##>" where
+  // the two digit number.  The error codes are not
+  // not documented, so this implementation uses
+  // ErrDef as errors codes.  This function returns
+  // true a request to continue (or step) is processed.
+  bool ProcessPacket(const Packet* pktIn, Packet* pktOut);
 
   enum class Status { Running, Terminated };
   std::atomic<Status> status_;

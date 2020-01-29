@@ -38,6 +38,10 @@ namespace gdb_server {
 class GdbServer;
 }
 
+namespace gdb_server {
+class GdbServer;
+}
+
 class V8_EXPORT_PRIVATE CompilationResultResolver {
  public:
   virtual void OnCompilationSucceeded(Handle<WasmModuleObject> result) = 0;

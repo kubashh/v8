@@ -209,6 +209,12 @@ class JSTestLoader(GenericTestLoader):
     return [".js", ".mjs"]
 
 
+class PythonTestLoader(GenericTestLoader):
+  @property
+  def extensions(self):
+    return [".py"]
+
+
 class TestGenerator(object):
   def __init__(self, test_count_estimate, slow_tests, fast_tests):
     self.test_count_estimate = test_count_estimate

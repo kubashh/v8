@@ -64,6 +64,7 @@ TEST_MAP = {
     "intl",
     "unittests",
     "wasm-api-tests",
+    "gdb-server",
   ],
   # This needs to stay in sync with group("v8_default") in test/BUILD.gn.
   "default": [
@@ -79,6 +80,7 @@ TEST_MAP = {
     "intl",
     "unittests",
     "wasm-api-tests",
+    "gdb-server",
   ],
   # This needs to stay in sync with group("v8_d8_default") in test/BUILD.gn.
   "d8_default": [
