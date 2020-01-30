@@ -735,8 +735,6 @@ class BytecodeArrayRef : public FixedArrayBaseRef {
   // Exception handler table.
   Address handler_table_address() const;
   int handler_table_size() const;
-
-  void SerializeForCompilation();
 };
 
 class JSArrayRef : public JSObjectRef {

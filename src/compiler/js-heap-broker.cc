@@ -64,11 +64,17 @@ HEAP_BROKER_OBJECT_LIST(FORWARD_DECL)
 //   HeapObject and the data is an instance of ObjectData. For
 //   ReadOnlyHeapObjects, it is OK to access heap even from off-thread, so
 //   these objects need not be serialized.
+//
+// kUnserializedDirectReadHeapObject: the underlying V8 object is a HeapObject
+//   and the data is an instance of ObjectData. For these objects, it is
+//   okay to access the heap even from off-thread as long as the heap's
+//   relocation lock is held for the access.
 enum ObjectDataKind {
   kSmi,
   kSerializedHeapObject,
   kUnserializedHeapObject,
-  kUnserializedReadOnlyHeapObject
+  kUnserializedReadOnlyHeapObject,
+  kUnserializedDirectReadHeapObject
 };
 
 class AllowHandleAllocationIf {
@@ -76,8 +82,12 @@ class AllowHandleAllocationIf {
   explicit AllowHandleAllocationIf(ObjectDataKind kind,
                                    JSHeapBroker::BrokerMode mode) {
     DCHECK_IMPLIES(mode == JSHeapBroker::BrokerMode::kSerialized,
-                   kind == kUnserializedReadOnlyHeapObject);
-    if (kind == kUnserializedHeapObject) maybe_allow_handle_.emplace();
+                   kind == kUnserializedReadOnlyHeapObject ||
+                       kind == kUnserializedDirectReadHeapObject);
+    if (kind == kUnserializedHeapObject ||
+        kind == kUnserializedDirectReadHeapObject) {
+      maybe_allow_handle_.emplace();
+    }
   }
 
  private:
@@ -89,15 +99,18 @@ class AllowHandleDereferenceIf {
   explicit AllowHandleDereferenceIf(ObjectDataKind kind,
                                     JSHeapBroker::BrokerMode mode) {
     DCHECK_IMPLIES(mode == JSHeapBroker::BrokerMode::kSerialized,
-                   kind == kUnserializedReadOnlyHeapObject);
+                   kind == kUnserializedReadOnlyHeapObject ||
+                       kind == kUnserializedDirectReadHeapObject);
     if (kind == kUnserializedHeapObject ||
-        kind == kUnserializedReadOnlyHeapObject)
+        kind == kUnserializedReadOnlyHeapObject ||
+        kind == kUnserializedDirectReadHeapObject)
       maybe_allow_handle_.emplace();
   }
 
   explicit AllowHandleDereferenceIf(ObjectDataKind kind) {
     if (kind == kUnserializedHeapObject ||
-        kind == kUnserializedReadOnlyHeapObject)
+        kind == kUnserializedReadOnlyHeapObject ||
+        kind == kUnserializedDirectReadHeapObject)
       maybe_allow_handle_.emplace();
   }
 
@@ -110,8 +123,12 @@ class AllowHeapAllocationIf {
   explicit AllowHeapAllocationIf(ObjectDataKind kind,
                                  JSHeapBroker::BrokerMode mode) {
     DCHECK_IMPLIES(mode == JSHeapBroker::BrokerMode::kSerialized,
-                   kind == kUnserializedReadOnlyHeapObject);
-    if (kind == kUnserializedHeapObject) maybe_allow_handle_.emplace();
+                   kind == kUnserializedReadOnlyHeapObject ||
+                       kind == kUnserializedDirectReadHeapObject);
+    if (kind == kUnserializedHeapObject ||
+        kind == kUnserializedDirectReadHeapObject) {
+      maybe_allow_handle_.emplace();
+    }
   }
 
  private:
@@ -124,6 +141,10 @@ bool IsReadOnlyHeapObject(Object object) {
   return (object.IsCode() && Code::cast(object).is_builtin()) ||
          (object.IsHeapObject() &&
           ReadOnlyHeap::Contains(HeapObject::cast(object)));
+}
+bool IsDirectReadHeapObject(Object object) {
+  DisallowHeapAllocation no_gc;
+  return object.IsBytecodeArray();
 }
 }  // namespace
 
@@ -165,7 +186,8 @@ class ObjectData : public ZoneObject {
   bool is_smi() const { return kind_ == kSmi; }
   bool should_access_heap() const {
     return kind_ == kUnserializedHeapObject ||
-           kind_ == kUnserializedReadOnlyHeapObject;
+           kind_ == kUnserializedReadOnlyHeapObject ||
+           kind_ == kUnserializedDirectReadHeapObject;
   }
 
 #ifdef DEBUG
@@ -1531,112 +1553,6 @@ void FixedDoubleArrayData::SerializeContents(JSHeapBroker* broker) {
   TRACE(broker, "Copied " << contents_.size() << " elements");
 }
 
-class BytecodeArrayData : public FixedArrayBaseData {
- public:
-  int register_count() const { return register_count_; }
-  int parameter_count() const { return parameter_count_; }
-  interpreter::Register incoming_new_target_or_generator_register() const {
-    return incoming_new_target_or_generator_register_;
-  }
-
-  uint8_t get(int index) const {
-    DCHECK(is_serialized_for_compilation_);
-    return bytecodes_[index];
-  }
-
-  Address GetFirstBytecodeAddress() const {
-    return reinterpret_cast<Address>(bytecodes_.data());
-  }
-
-  Handle<Object> GetConstantAtIndex(int index, Isolate* isolate) const {
-    return constant_pool_[index]->object();
-  }
-
-  bool IsConstantAtIndexSmi(int index) const {
-    return constant_pool_[index]->is_smi();
-  }
-
-  Smi GetConstantAtIndexAsSmi(int index) const {
-    return *(Handle<Smi>::cast(constant_pool_[index]->object()));
-  }
-
-  void SerializeForCompilation(JSHeapBroker* broker) {
-    if (is_serialized_for_compilation_) return;
-
-    Handle<BytecodeArray> bytecode_array =
-        Handle<BytecodeArray>::cast(object());
-
-    DCHECK(bytecodes_.empty());
-    bytecodes_.reserve(bytecode_array->length());
-    for (int i = 0; i < bytecode_array->length(); i++) {
-      bytecodes_.push_back(bytecode_array->get(i));
-    }
-
-    DCHECK(constant_pool_.empty());
-    Handle<FixedArray> constant_pool(bytecode_array->constant_pool(),
-                                     broker->isolate());
-    constant_pool_.reserve(constant_pool->length());
-    for (int i = 0; i < constant_pool->length(); i++) {
-      constant_pool_.push_back(broker->GetOrCreateData(constant_pool->get(i)));
-    }
-
-    Handle<ByteArray> source_position_table(
-        bytecode_array->SourcePositionTableIfCollected(), broker->isolate());
-    source_positions_.reserve(source_position_table->length());
-    for (int i = 0; i < source_position_table->length(); i++) {
-      source_positions_.push_back(source_position_table->get(i));
-    }
-
-    Handle<ByteArray> handlers(bytecode_array->handler_table(),
-                               broker->isolate());
-    handler_table_.reserve(handlers->length());
-    for (int i = 0; i < handlers->length(); i++) {
-      handler_table_.push_back(handlers->get(i));
-    }
-
-    is_serialized_for_compilation_ = true;
-  }
-
-  const byte* source_positions_address() const {
-    return source_positions_.data();
-  }
-
-  size_t source_positions_size() const { return source_positions_.size(); }
-
-  Address handler_table_address() const {
-    CHECK(is_serialized_for_compilation_);
-    return reinterpret_cast<Address>(handler_table_.data());
-  }
-
-  int handler_table_size() const {
-    CHECK(is_serialized_for_compilation_);
-    return static_cast<int>(handler_table_.size());
-  }
-
-  BytecodeArrayData(JSHeapBroker* broker, ObjectData** storage,
-                    Handle<BytecodeArray> object)
-      : FixedArrayBaseData(broker, storage, object),
-        register_count_(object->register_count()),
-        parameter_count_(object->parameter_count()),
-        incoming_new_target_or_generator_register_(
-            object->incoming_new_target_or_generator_register()),
-        bytecodes_(broker->zone()),
-        source_positions_(broker->zone()),
-        handler_table_(broker->zone()),
-        constant_pool_(broker->zone()) {}
-
- private:
-  int const register_count_;
-  int const parameter_count_;
-  interpreter::Register const incoming_new_target_or_generator_register_;
-
-  bool is_serialized_for_compilation_ = false;
-  ZoneVector<uint8_t> bytecodes_;
-  ZoneVector<uint8_t> source_positions_;
-  ZoneVector<uint8_t> handler_table_;
-  ZoneVector<ObjectData*> constant_pool_;
-};
-
 class JSArrayData : public JSObjectData {
  public:
   JSArrayData(JSHeapBroker* broker, ObjectData** storage,
@@ -1739,7 +1655,7 @@ class SharedFunctionInfoData : public HeapObjectData {
 
   int builtin_id() const { return builtin_id_; }
   int context_header_size() const { return context_header_size_; }
-  BytecodeArrayData* GetBytecodeArray() const { return GetBytecodeArray_; }
+  ObjectData* GetBytecodeArray() const { return GetBytecodeArray_; }
   void SerializeFunctionTemplateInfo(JSHeapBroker* broker);
   ScopeInfoData* scope_info() const { return scope_info_; }
   void SerializeScopeInfoChain(JSHeapBroker* broker);
@@ -1766,7 +1682,7 @@ class SharedFunctionInfoData : public HeapObjectData {
  private:
   int const builtin_id_;
   int context_header_size_;
-  BytecodeArrayData* const GetBytecodeArray_;
+  ObjectData* const GetBytecodeArray_;
 #define DECL_MEMBER(type, name) type const name##_;
   BROKER_SFI_FIELDS(DECL_MEMBER)
 #undef DECL_MEMBER
@@ -1785,7 +1701,6 @@ SharedFunctionInfoData::SharedFunctionInfoData(
       GetBytecodeArray_(
           object->HasBytecodeArray()
               ? broker->GetOrCreateData(object->GetBytecodeArray())
-                    ->AsBytecodeArray()
               : nullptr)
 #define INIT_MEMBER(type, name) , name##_(object->name())
           BROKER_SFI_FIELDS(INIT_MEMBER)
@@ -2003,6 +1918,13 @@ class TemplateObjectDescriptionData : public HeapObjectData {
 class CodeData : public HeapObjectData {
  public:
   CodeData(JSHeapBroker* broker, ObjectData** storage, Handle<Code> object)
+      : HeapObjectData(broker, storage, object) {}
+};
+
+class BytecodeArrayData : public HeapObjectData {
+ public:
+  BytecodeArrayData(JSHeapBroker* broker, ObjectData** storage,
+                    Handle<BytecodeArray> object)
       : HeapObjectData(broker, storage, object) {}
 };
 
@@ -2644,6 +2566,9 @@ ObjectData* JSHeapBroker::GetOrCreateData(Handle<Object> object) {
     } else if (IsReadOnlyHeapObject(*object)) {
       new (zone()) ObjectData(this, data_storage, object,
                               kUnserializedReadOnlyHeapObject);
+    } else if (IsDirectReadHeapObject(*object)) {
+      new (zone()) ObjectData(this, data_storage, object,
+                              kUnserializedDirectReadHeapObject);
 #define CREATE_DATA_IF_MATCH(name)                                             \
     } else if (object->Is##name()) {                                           \
       CHECK(SerializingAllowed());                                             \
@@ -3162,111 +3087,87 @@ double FixedDoubleArrayRef::get_scalar(int i) const {
 }
 
 uint8_t BytecodeArrayRef::get(int index) const {
-  if (data_->should_access_heap()) {
-    DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
-    AllowHandleAllocationIf allow_handle_allocation(data()->kind(),
+  CHECK(data_->should_access_heap());
+  DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
+  AllowHandleAllocationIf allow_handle_allocation(data()->kind(),
+                                                  broker()->mode());
+  AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
                                                     broker()->mode());
-    AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
-                                                      broker()->mode());
-    return object()->get(index);
-  }
-  return data()->AsBytecodeArray()->get(index);
+  return object()->get(index);
 }
 
 Address BytecodeArrayRef::GetFirstBytecodeAddress() const {
-  if (data_->should_access_heap()) {
-    DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
-    AllowHandleAllocationIf allow_handle_allocation(data()->kind(),
+  CHECK(data_->should_access_heap());
+  DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
+  AllowHandleAllocationIf allow_handle_allocation(data()->kind(),
+                                                  broker()->mode());
+  AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
                                                     broker()->mode());
-    AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
-                                                      broker()->mode());
-    return object()->GetFirstBytecodeAddress();
-  }
-  return data()->AsBytecodeArray()->GetFirstBytecodeAddress();
+  return object()->GetFirstBytecodeAddress();
 }
 
 Handle<Object> BytecodeArrayRef::GetConstantAtIndex(int index) const {
-  if (data_->should_access_heap()) {
-    DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
-    AllowHandleAllocationIf allow_handle_allocation(data()->kind(),
+  CHECK(data_->should_access_heap());
+  DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
+  AllowHandleAllocationIf allow_handle_allocation(data()->kind(),
+                                                  broker()->mode());
+  AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
                                                     broker()->mode());
-    AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
-                                                      broker()->mode());
-    return handle(object()->constant_pool().get(index), broker()->isolate());
-  }
-  return data()->AsBytecodeArray()->GetConstantAtIndex(index,
-                                                       broker()->isolate());
+  return getHandle(object()->constant_pool().get(index), broker()->isolate());
+  return handle(object()->constant_pool().get(index), broker()->isolate());
 }
 
 bool BytecodeArrayRef::IsConstantAtIndexSmi(int index) const {
-  if (data_->should_access_heap()) {
-    DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
-    AllowHandleAllocationIf allow_handle_allocation(data()->kind(),
+  CHECK(data_->should_access_heap());
+  DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
+  AllowHandleAllocationIf allow_handle_allocation(data()->kind(),
+                                                  broker()->mode());
+  AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
                                                     broker()->mode());
-    AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
-                                                      broker()->mode());
-    return object()->constant_pool().get(index).IsSmi();
-  }
-  return data()->AsBytecodeArray()->IsConstantAtIndexSmi(index);
+  return object()->constant_pool().get(index).IsSmi();
 }
 
 Smi BytecodeArrayRef::GetConstantAtIndexAsSmi(int index) const {
-  if (data_->should_access_heap()) {
-    DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
-    AllowHandleAllocationIf allow_handle_allocation(data()->kind(),
-                                                    broker()->mode());
-    AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
-                                                      broker()->mode());
-    return Smi::cast(object()->constant_pool().get(index));
-  }
-  return data()->AsBytecodeArray()->GetConstantAtIndexAsSmi(index);
-}
-
-void BytecodeArrayRef::SerializeForCompilation() {
+  CHECK(data_->should_access_heap());
   DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
-  if (data_->should_access_heap()) return;
-  data()->AsBytecodeArray()->SerializeForCompilation(broker());
+  AllowHandleAllocationIf allow_handle_allocation(data()->kind(),
+                                                  broker()->mode());
+  AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
+                                                    broker()->mode());
+  return Smi::cast(object()->constant_pool().get(index));
 }
 
 const byte* BytecodeArrayRef::source_positions_address() const {
-  if (data_->should_access_heap()) {
-    DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
-    AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
-                                                      broker()->mode());
-    return object()->SourcePositionTableIfCollected().GetDataStartAddress();
-  }
-  return data()->AsBytecodeArray()->source_positions_address();
+  CHECK(data_->should_access_heap());
+  DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
+  AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
+                                                    broker()->mode());
+  return object()->SourcePositionTableIfCollected().GetDataStartAddress();
 }
 
 int BytecodeArrayRef::source_positions_size() const {
-  if (data_->should_access_heap()) {
-    DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
-    AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
-                                                      broker()->mode());
-    return object()->SourcePositionTableIfCollected().length();
-  }
-  return static_cast<int>(data()->AsBytecodeArray()->source_positions_size());
+  CHECK(data_->should_access_heap());
+  DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
+  AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
+                                                    broker()->mode());
+  return object()->SourcePositionTableIfCollected().length();
 }
 
 Address BytecodeArrayRef::handler_table_address() const {
-  if (data_->should_access_heap()) {
-    DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
-    AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
-                                                      broker()->mode());
-    return reinterpret_cast<Address>(
-        object()->handler_table().GetDataStartAddress());
-  }
-  return data()->AsBytecodeArray()->handler_table_address();
+  CHECK(data_->should_access_heap());
+  DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
+  AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
+                                                    broker()->mode());
+  return reinterpret_cast<Address>(
+      object()->handler_table().GetDataStartAddress());
 }
 
 int BytecodeArrayRef::handler_table_size() const {
-  if (data_->should_access_heap()) {
-    DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
-    AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
-                                                      broker()->mode());
-    return object()->handler_table().length();
-  }
-  return data()->AsBytecodeArray()->handler_table_size();
+  CHECK(data_->should_access_heap());
+  DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
+  AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
+                                                    broker()->mode());
+  return object()->handler_table().length();
 }
 
 Handle<Object> JSHeapBroker::GetRootHandle(Object object) {
@@ -3278,6 +3179,7 @@ Handle<Object> JSHeapBroker::GetRootHandle(Object object) {
 #define IF_ACCESS_FROM_HEAP_C(holder, name)                              \
   if (data_->should_access_heap()) {                                     \
     CHECK(broker()->mode() == JSHeapBroker::kDisabled ||                 \
+          data_->kind() == kUnserializedDirectReadHeapObject ||          \
           ReadOnlyHeap::Contains(HeapObject::cast(*object())));          \
     AllowHandleAllocationIf handle_allocation(data_->kind(),             \
                                               broker()->mode());         \
@@ -3334,10 +3236,30 @@ BIMODAL_ACCESSOR_C(AllocationSite, bool, PointsToLiteral)
 BIMODAL_ACCESSOR_C(AllocationSite, ElementsKind, GetElementsKind)
 BIMODAL_ACCESSOR_C(AllocationSite, AllocationType, GetAllocationType)
 
-BIMODAL_ACCESSOR_C(BytecodeArray, int, register_count)
-BIMODAL_ACCESSOR_C(BytecodeArray, int, parameter_count)
-BIMODAL_ACCESSOR_C(BytecodeArray, interpreter::Register,
-                   incoming_new_target_or_generator_register)
+int BytecodeArrayRef::register_count() const {
+  CHECK(data_->should_access_heap());
+  AllowHandleAllocationIf handle_allocation(data_->kind(), broker()->mode());
+  AllowHandleDereferenceIf allow_handle_dereference(data_->kind(),
+                                                    broker()->mode());
+  return object()->register_count();
+}
+
+int BytecodeArrayRef::parameter_count() const {
+  CHECK(data_->should_access_heap());
+  AllowHandleAllocationIf handle_allocation(data_->kind(), broker()->mode());
+  AllowHandleDereferenceIf allow_handle_dereference(data_->kind(),
+                                                    broker()->mode());
+  return object()->parameter_count();
+}
+
+interpreter::Register
+BytecodeArrayRef::incoming_new_target_or_generator_register() const {
+  CHECK(data_->should_access_heap());
+  AllowHandleAllocationIf handle_allocation(data_->kind(), broker()->mode());
+  AllowHandleDereferenceIf allow_handle_dereference(data_->kind(),
+                                                    broker()->mode());
+  return object()->incoming_new_target_or_generator_register();
+}
 
 BIMODAL_ACCESSOR(Cell, Object, value)
 
@@ -3524,7 +3446,24 @@ HolderLookupResult FunctionTemplateInfoRef::LookupHolderOfExpectedType(
 BIMODAL_ACCESSOR(CallHandlerInfo, Object, data)
 
 BIMODAL_ACCESSOR_C(SharedFunctionInfo, int, builtin_id)
-BIMODAL_ACCESSOR(SharedFunctionInfo, BytecodeArray, GetBytecodeArray)
+
+BytecodeArrayRef SharedFunctionInfoRef::GetBytecodeArray() const {
+  IF_ACCESS_FROM_HEAP(SharedFunctionInfo, BytecodeArray, GetBytecodeArray);
+  ObjectData* data =
+      ObjectRef::data()->AsSharedFunctionInfo()->GetBytecodeArray();
+  if (data->kind() == ObjectDataKind::kUnserializedHeapObject) {
+    return BytecodeArrayRef(broker(), data->object());
+  } else if (data->kind() ==
+             ObjectDataKind::kUnserializedDirectReadHeapObject) {
+    AllowHandleAllocationIf handle_allocation(data->kind(), broker()->mode());
+    return BytecodeArrayRef(broker(), data->object());
+  } else {
+    return BytecodeArrayRef(
+        broker(),
+        ObjectRef::data()->AsSharedFunctionInfo()->GetBytecodeArray());
+  }
+}
+
 #define DEF_SFI_ACCESSOR(type, name) \
   BIMODAL_ACCESSOR_C(SharedFunctionInfo, type, name)
 BROKER_SFI_FIELDS(DEF_SFI_ACCESSOR)

@@ -1292,8 +1292,7 @@ BytecodeAnalysis const& SerializerForBackgroundCompilation::GetBytecodeAnalysis(
 void SerializerForBackgroundCompilation::TraverseBytecode() {
   BytecodeAnalysis const& bytecode_analysis =
       GetBytecodeAnalysis(SerializationPolicy::kSerializeIfNeeded);
-  BytecodeArrayRef(broker(), bytecode_array()).SerializeForCompilation();
-
+  BytecodeArrayRef(broker(), bytecode_array());
   BytecodeArrayIterator iterator(bytecode_array());
   HandlerRangeMatcher try_start_matcher(iterator, bytecode_array());
 

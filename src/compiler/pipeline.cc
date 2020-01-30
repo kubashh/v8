@@ -1521,6 +1521,7 @@ struct SerializationPhase {
     if (data->info()->is_inlining_enabled()) {
       flags |= SerializerForBackgroundCompilationFlag::kEnableTurboInlining;
     }
+    base::MutexGuard guard(data->isolate()->heap()->relocation_mutex());
     RunSerializerForBackgroundCompilation(
         data->zone_stats(), data->broker(), data->dependencies(),
         data->info()->closure(), flags, data->info()->osr_offset());
