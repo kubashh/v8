@@ -406,8 +406,16 @@ void Serializer::ObjectSerializer::SerializeJSArrayBuffer() {
     // to proper value.
     buffer.set_backing_store(reinterpret_cast<void*>(static_cast<size_t>(ref)));
   }
+
+  // Ensure deterministic output by setting extension to null during
+  // serialization.
+  ArrayBufferExtension* extension = buffer.extension();
+  buffer.set_extension(nullptr);
+
   SerializeObject();
+
   buffer.set_backing_store(backing_store);
+  buffer.set_extension(extension);
 }
 
 void Serializer::ObjectSerializer::SerializeExternalString() {
