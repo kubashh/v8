@@ -16,7 +16,7 @@ class Isolate;
 // The incremental marking job uses platform tasks to perform incremental
 // marking steps. The job posts a foreground task that makes a small (~1ms)
 // step and posts another task until the marking is completed.
-class IncrementalMarkingJob {
+class IncrementalMarkingJob final {
  public:
   enum class TaskType { kNormal, kDelayed };
 
@@ -25,6 +25,8 @@ class IncrementalMarkingJob {
   void Start(Heap* heap);
 
   void ScheduleTask(Heap* heap, TaskType task_type = TaskType::kNormal);
+
+  double CurrentTimeToTask(Heap* heap) const;
 
  private:
   class Task;
@@ -42,6 +44,7 @@ class IncrementalMarkingJob {
     }
   }
 
+  double scheduled_time_ = 0.0;
   bool normal_task_pending_ = false;
   bool delayed_task_pending_ = false;
 };
