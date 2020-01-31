@@ -301,11 +301,14 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
     heap_->SetIsMarkingFlag(s >= MARKING);
   }
 
+  double CurrentTimeToMarkingTask() const;
+
   Heap* const heap_;
   MarkCompactCollector* const collector_;
   WeakObjects* weak_objects_;
 
   double start_time_ms_;
+  double first_time_complete_ms_;
   size_t initial_old_generation_size_;
   size_t old_generation_allocation_counter_;
   size_t bytes_marked_;
