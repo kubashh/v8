@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8e34d17a_9a1e9210",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-31T08:14:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9200aee_c7107388",
+      "range": {
+        "startLine": 18,
+        "startChar": 41,
+        "endLine": 18,
+        "endChar": 48
+      },
+      "revId": "4f59bbac03ff96ca16792908e2d8824bd8768b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4d68af1_dad76e72",
         "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "463ad1da_40bd2bf0",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-31T08:14:55Z",
+      "side": 1,
+      "message": "{src} only holds the low word here (see line 444 above). {src.gp()} would be identical to {src_gp}, I just keep both to avoid converting back and forth between {LiftoffRegister} and {Register}.",
+      "parentUuid": "e4d68af1_dad76e72",
+      "range": {
+        "startLine": 450,
+        "startChar": 54,
+        "endLine": 450,
+        "endChar": 57
+      },
+      "revId": "4f59bbac03ff96ca16792908e2d8824bd8768b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e20ad97_50626e42",
         "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "4f59bbac03ff96ca16792908e2d8824bd8768b58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b661b65e_6998e25e",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-31T08:14:55Z",
+      "side": 1,
+      "message": "This could be {LiftoffRegister(src_gp)}, which is exactly the same as {src}.",
+      "parentUuid": "5e20ad97_50626e42",
+      "range": {
+        "startLine": 453,
+        "startChar": 26,
+        "endLine": 453,
+        "endChar": 29
+      },
+      "revId": "4f59bbac03ff96ca16792908e2d8824bd8768b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -114,6 +186,54 @@
       "revId": "4f59bbac03ff96ca16792908e2d8824bd8768b58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5637af8a_937bcb8f",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-31T08:14:55Z",
+      "side": 1,
+      "message": "We are within a \"!src_candidates.has(src)\" block here.",
+      "parentUuid": "8fa1b6e2_b1c0f0c1",
+      "range": {
+        "startLine": 461,
+        "startChar": 6,
+        "endLine": 461,
+        "endChar": 19
+      },
+      "revId": "4f59bbac03ff96ca16792908e2d8824bd8768b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8fbf8f6_2e3ad71f",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-01-31T08:14:55Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "be381d19_c18a1cc3",
+      "range": {
+        "startLine": 461,
+        "startChar": 20,
+        "endLine": 461,
+        "endChar": 23
+      },
+      "revId": "4f59bbac03ff96ca16792908e2d8824bd8768b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
