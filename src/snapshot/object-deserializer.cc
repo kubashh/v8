@@ -34,7 +34,8 @@ ObjectDeserializer::DeserializeSharedFunctionInfo(
 MaybeHandle<HeapObject> ObjectDeserializer::Deserialize(Isolate* isolate) {
   Initialize(isolate);
 
-  if (!allocator()->ReserveSpace()) return MaybeHandle<HeapObject>();
+  if (!V8_ENABLE_THIRD_PARTY_HEAP_BOOL && !allocator()->ReserveSpace())
+    return MaybeHandle<HeapObject>();
 
   DCHECK(deserializing_user_code());
   HandleScope scope(isolate);

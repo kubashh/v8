@@ -16,7 +16,7 @@ namespace internal {
 void StartupDeserializer::DeserializeInto(Isolate* isolate) {
   Initialize(isolate);
 
-  if (!allocator()->ReserveSpace()) {
+  if (!V8_ENABLE_THIRD_PARTY_HEAP_BOOL && !allocator()->ReserveSpace()) {
     V8::FatalProcessOutOfMemory(isolate, "StartupDeserializer");
   }
 

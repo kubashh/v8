@@ -31,7 +31,7 @@ MaybeHandle<Object> PartialDeserializer::Deserialize(
     Isolate* isolate, Handle<JSGlobalProxy> global_proxy,
     v8::DeserializeEmbedderFieldsCallback embedder_fields_deserializer) {
   Initialize(isolate);
-  if (!allocator()->ReserveSpace()) {
+  if (!V8_ENABLE_THIRD_PARTY_HEAP_BOOL && !allocator()->ReserveSpace()) {
     V8::FatalProcessOutOfMemory(isolate, "PartialDeserializer");
   }
 
