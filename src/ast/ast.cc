@@ -520,7 +520,7 @@ void ObjectLiteral::BuildBoilerplateDescription(Isolate* isolate) {
         key_literal->AsArrayIndex(&element_index)
             ? isolate->factory()->NewNumberFromUint(element_index)
             : Handle<Object>::cast(
-                  key_literal->AsRawPropertyName()->string().get<Factory>());
+                  key_literal->AsRawPropertyName()->string().get<Isolate>());
 
     Handle<Object> value = GetBoilerplateValue(property->value(), isolate);
 
@@ -769,11 +769,11 @@ Handle<TemplateObjectDescription> GetTemplateObject::GetOrBuildDescription(
   bool raw_and_cooked_match = true;
   for (int i = 0; i < raw_strings->length(); ++i) {
     if (this->cooked_strings()->at(i) == nullptr ||
-        *this->raw_strings()->at(i)->string().get<Factory>() !=
-            *this->cooked_strings()->at(i)->string().get<Factory>()) {
+        *this->raw_strings()->at(i)->string().get<Isolate>() !=
+            *this->cooked_strings()->at(i)->string().get<Isolate>()) {
       raw_and_cooked_match = false;
     }
-    raw_strings->set(i, *this->raw_strings()->at(i)->string().get<Factory>());
+    raw_strings->set(i, *this->raw_strings()->at(i)->string().get<Isolate>());
   }
   Handle<FixedArray> cooked_strings = raw_strings;
   if (!raw_and_cooked_match) {
@@ -782,7 +782,7 @@ Handle<TemplateObjectDescription> GetTemplateObject::GetOrBuildDescription(
     for (int i = 0; i < cooked_strings->length(); ++i) {
       if (this->cooked_strings()->at(i) != nullptr) {
         cooked_strings->set(
-            i, *this->cooked_strings()->at(i)->string().get<Factory>());
+            i, *this->cooked_strings()->at(i)->string().get<Isolate>());
       } else {
         cooked_strings->set(i, ReadOnlyRoots(isolate).undefined_value());
       }
@@ -967,7 +967,7 @@ Handle<Object> Literal::BuildValue(Isolate* isolate) const {
     case kHeapNumber:
       return isolate->factory()->NewNumber<AllocationType::kOld>(number_);
     case kString:
-      return string_->string().get<Factory>();
+      return string_->string();
     case kSymbol:
       return isolate->factory()->home_object_symbol();
     case kBoolean:
