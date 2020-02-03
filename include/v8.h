@@ -2983,9 +2983,9 @@ enum class NewStringType {
  */
 class V8_EXPORT String : public Name {
  public:
-  static constexpr int kMaxLength = internal::kApiTaggedSize == 4
+  static constexpr int kMaxLength = internal::kApiSystemPointerSize == 4
                                         ? (1 << 28) - 16
-                                        : internal::kSmiMaxValue / 2 - 24;
+                                        : (1 << 30) - 24 - 1;
 
   enum Encoding {
     UNKNOWN_ENCODING = 0x1,
