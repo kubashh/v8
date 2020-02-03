@@ -142,6 +142,8 @@ IGNORE_LINES = [re.compile(exp) for exp in IGNORE_LINES]
 
 ORIGINAL_SOURCE_PREFIX = 'v8-foozzie source: '
 
+LINE_CAPPED_SUFFIX = ['***output capped due to crash***']
+
 
 def get_lines_capped(output1, output2):
   """Returns a pair of stdout line lists.
@@ -153,9 +155,9 @@ def get_lines_capped(output1, output2):
   output1_lines = output1.stdout.splitlines()
   output2_lines = output2.stdout.splitlines()
 
-  # No lenth difference or no crash -> no capping.
+  # No length difference or no crash -> no capping.
   if (len(output1_lines) == len(output2_lines) or
-      not output1.HasCrashed() and not output2.HasCrashed()):
+      (not output1.HasCrashed() and not output2.HasCrashed())):
     return output1_lines, output2_lines
 
   # Both runs have crashed, cap by the shorter output.
@@ -168,7 +170,10 @@ def get_lines_capped(output1, output2):
   else:
     cap = len(output2_lines)
 
-  return output1_lines[0:cap], output2_lines[0:cap]
+  return (
+      output1_lines[0:cap] + LINE_CAPPED_SUFFIX,
+      output2_lines[0:cap] + LINE_CAPPED_SUFFIX,
+  )
 
 
 def line_pairs(lines):
