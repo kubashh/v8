@@ -125,15 +125,19 @@ otherfile.js: TypeError: undefined is not a constructor
           exit_code=exit_code, timed_out=False, stdout=stdout, pid=0)
 
     def check(stdout1, stdout2, is_crash1, is_crash2, capped_lines1,
-              capped_lines2):
+              capped_lines2, capped=True):
       output1 = output(stdout1, is_crash1)
       output2 = output(stdout2, is_crash2)
-      self.assertEquals(
-          (capped_lines1.splitlines(), capped_lines2.splitlines()),
-          v8_suppressions.get_lines_capped(output1, output2))
+      expected1 = capped_lines1.splitlines()
+      expected2 = capped_lines2.splitlines()
+      if capped:
+        expected1 += v8_suppressions.LINE_CAPPED_SUFFIX
+        expected2 += v8_suppressions.LINE_CAPPED_SUFFIX
+      actual = v8_suppressions.get_lines_capped(output1, output2)
+      self.assertEquals((expected1, expected2), actual)
 
     # No capping, already equal.
-    check('1\n2', '1\n2', True, True, '1\n2', '1\n2')
+    check('1\n2', '1\n2', True, True, '1\n2', '1\n2', False)
     # Cap smallest if all runs crash.
     check('1\n2', '1\n2\n3', True, True, '1\n2', '1\n2')
     check('1\n2\n3', '1\n2', True, True, '1\n2', '1\n2')
