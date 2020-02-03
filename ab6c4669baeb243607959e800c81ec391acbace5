@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b16ec81f_8051c0ce",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-02-03T15:49:22Z",
+      "side": 0,
+      "message": "These are the only use cases where v8 initializes less than the max number of tasks.\nNote that the allocated buffer size is the same, but fewer tasks are initialized and traversed (when checking if worklist is empty).\nThis should probably be negligible.",
+      "range": {
+        "startLine": 256,
+        "startChar": 36,
+        "endLine": 256,
+        "endChar": 54
+      },
+      "revId": "ab6c4669baeb243607959e800c81ec391acbace5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
