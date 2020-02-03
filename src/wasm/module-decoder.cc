@@ -232,11 +232,16 @@ class WasmSectionIterator {
     if (section_code == kUnknownSectionCode) {
       // Check for the known "name", "sourceMappingURL", or "compilationHints"
       // section.
+      Decoder inner(decoder_->pc(), decoder_->pc(), section_end_,
+                    decoder_->pc_offset());
       section_code =
-          ModuleDecoder::IdentifyUnknownSection(decoder_, section_end_);
+          ModuleDecoder::IdentifyUnknownSection(&inner, section_end_);
       // As a side effect, the above function will forward the decoder to after
       // the identifier string.
-      payload_start_ = decoder_->pc();
+      payload_start_ = inner.pc();
+      decoder_->consume_bytes(static_cast<uint32_t>(inner.pc() - inner.start()),
+                              "section name");
+
     } else if (!IsValidSectionCode(section_code)) {
       decoder_->errorf(decoder_->pc(), "unknown section code #0x%02x",
                        section_code);
