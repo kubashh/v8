@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "392dc83d_1e5d99a6",
+        "filename": "tools/clusterfuzz/v8_suppressions.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-02-03T14:56:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffc45b17_2443ed5c",
+      "range": {
+        "startLine": 156,
+        "startChar": 7,
+        "endLine": 156,
+        "endChar": 12
+      },
+      "revId": "c245cf5fcef44961636d1639922006b0f51aff43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a3bc6e8_b993464e",
         "filename": "tools/clusterfuzz/v8_suppressions.py",
         "patchSetId": 4
@@ -36,6 +60,24 @@
       "writtenOn": "2020-02-03T14:37:55Z",
       "side": 1,
       "message": "The parenthesis around the full expression does not help here, but I think parenthesis around only the second line would indeed help.",
+      "revId": "c245cf5fcef44961636d1639922006b0f51aff43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "440ac7a9_2b79323e",
+        "filename": "tools/clusterfuzz/v8_suppressions.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-02-03T14:56:45Z",
+      "side": 1,
+      "message": "I need parens around all because of the newline. I don\u0027t need parens in the line below because of \"and\"-precedence, but I add them for readability.",
+      "parentUuid": "0a3bc6e8_b993464e",
       "revId": "c245cf5fcef44961636d1639922006b0f51aff43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
