@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffc45b17_2443ed5c",
+        "filename": "tools/clusterfuzz/v8_suppressions.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-03T14:37:55Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 156,
+        "startChar": 7,
+        "endLine": 156,
+        "endChar": 12
+      },
+      "revId": "c245cf5fcef44961636d1639922006b0f51aff43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a3bc6e8_b993464e",
+        "filename": "tools/clusterfuzz/v8_suppressions.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-03T14:37:55Z",
+      "side": 1,
+      "message": "The parenthesis around the full expression does not help here, but I think parenthesis around only the second line would indeed help.",
+      "revId": "c245cf5fcef44961636d1639922006b0f51aff43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
