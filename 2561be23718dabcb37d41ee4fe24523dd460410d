@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6628ba99_8e9cb53a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-04T09:18:25Z",
+      "side": 1,
+      "message": "nit: party",
+      "revId": "2561be23718dabcb37d41ee4fe24523dd460410d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8782efef_140cc11c",
+        "filename": "src/snapshot/object-deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-04T09:18:25Z",
+      "side": 1,
+      "message": "IMO this would be slightly clearer with an #ifndef\n\n #ifndef V8_ENABLE_THIRD_PARTY_HEAP_BOOL\n  if (!allocator()-\u003eReserveSpace()) return MaybeHandle\u003cHeapObject\u003e();\n #endif  // V8_ENABLE_THIRD_PARTY_HEAP_BOOL\n\nReserveSpace itself could be defined conditionally as well instead of having the DCHECK.",
+      "revId": "2561be23718dabcb37d41ee4fe24523dd460410d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
