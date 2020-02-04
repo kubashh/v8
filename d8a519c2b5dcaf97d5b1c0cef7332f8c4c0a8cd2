@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb839c7d_0cd0488c",
+        "filename": "tools/v8dbg/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-04T23:48:12Z",
+      "side": 1,
+      "message": "What\u0027s the value in having this separate, rather than just rolled into the v8dbg shared library below?",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82f46346_084e2f22",
+        "filename": "tools/v8dbg/src/object-inspection.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-04T23:48:12Z",
+      "side": 1,
+      "message": "Is there anything more TODO here? Or is just bailing out sufficient?",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41856611_4341dadf",
+        "filename": "tools/v8dbg/src/object-inspection.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-04T23:48:12Z",
+      "side": 1,
+      "message": "Can you add a comment to indicate how this is the correct logic to check if it\u0027s compressed.",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "198de507_b0557c60",
+        "filename": "tools/v8dbg/src/object-inspection.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-04T23:48:12Z",
+      "side": 1,
+      "message": "So the extension is built with the same bitness as V8 itself, and WinDbgx can load 32-bit or 64-bit extensions? Or if the extension and WinDbgx need to match bitness, does that mean you have to use 32-bit WinDbg for 32-bit V8, and 64-bit WinDbg for 64-bit V8? Be good to clarify any requirements here in the readme.",
+      "range": {
+        "startLine": 49,
+        "startChar": 29,
+        "endLine": 49,
+        "endChar": 42
+      },
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3df6fda3_a0aaff3c",
+        "filename": "tools/v8dbg/src/object-inspection.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-04T23:48:12Z",
+      "side": 1,
+      "message": "Is this code incorrect for 32-bit environments?",
+      "range": {
+        "startLine": 220,
+        "startChar": 6,
+        "endLine": 220,
+        "endChar": 23
+      },
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f732a5d7_ea65a03e",
+        "filename": "tools/v8dbg/src/object-inspection.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-04T23:48:12Z",
+      "side": 1,
+      "message": "Being that I have an unnatural aversion to macros 😊, any reason this couldn\u0027t be re-written as some short-circuiting conditions, e.g.\n\n```\nULONG64 tagged_value;\n_bstr_t type_name;\nif (arg_count \u003c 1 ||\n    FAILED(UnboxULong64(pp_arguments[0], \u0026tagged_value, /*convert\u003d*/true)) ||\n    arg_count \u003e\u003d 2 \u0026\u0026 FAILED(UnboxString(pp_arguments[1], type_name.GetAddress()))) {\n  sp_data_model_manager-\u003eCreateErrorObject(E_INVALIDARG, usage, pp_result);\n  return E_INVALIDARG;   \n}\n```",
+      "range": {
+        "startLine": 585,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 18
+      },
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee9c2896_5328e341",
+        "filename": "tools/v8dbg/src/v8-debug-helper-interop.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-04T23:48:12Z",
+      "side": 1,
+      "message": "Some comments as to the difference/usage of type_name vs uncompressed_type_name here might be useful. I initially found that confusing when reviewing before.",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
