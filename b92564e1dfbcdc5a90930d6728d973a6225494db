@@ -52,6 +52,24 @@
       "revId": "b92564e1dfbcdc5a90930d6728d973a6225494db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cb3f627_0245e717",
+        "filename": "src/inspector/string-16.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-02-05T22:44:52Z",
+      "side": 1,
+      "message": "No issues, I have now renamed String16::fromUTF16LE to String16::fromUTF16",
+      "parentUuid": "83c6e24b_ea31f51c",
+      "revId": "b92564e1dfbcdc5a90930d6728d973a6225494db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
