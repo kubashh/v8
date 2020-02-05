@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "453337e0_3dd1c7d0",
+        "filename": "test/intl/regress-1044570.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-02-05T16:15:44Z",
+      "side": 1,
+      "message": "Can we use an intrinsic or pass a flag that allows triggering this bug with a smaller number?",
+      "range": {
+        "startLine": 6,
+        "startChar": 12,
+        "endLine": 6,
+        "endChar": 21
+      },
+      "revId": "ee0afcc672762275788c36f44c9170ec5e176f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
