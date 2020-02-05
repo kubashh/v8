@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "badb1e9b_99e17d76",
+        "filename": "tools/v8dbg/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-02-05T21:21:31Z",
+      "side": 1,
+      "message": "I thought it might help enforce the dependencies: things in src can use things in base but not the other way around. Maybe building them in separate targets could help keep V8-specific information from leaking into these files that are meant to be just basic WinDbg framework stuff. Any benefit from this split is pretty minimal though; I\u0027m happy to collapse them into a single build target if you prefer.",
+      "parentUuid": "fb839c7d_0cd0488c",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "89ebbb8c_1c2c5b0c",
         "filename": "tools/v8dbg/README.md",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a67d080_308dc434",
+        "filename": "tools/v8dbg/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-02-05T21:21:31Z",
+      "side": 1,
+      "message": "Good point. V8dbg doesn\u0027t expose a \"version\" function, but I agree that a quick tip regarding how to get a module\u0027s version number would be very useful. I don\u0027t really know the `!dlls` commands, but I found another pretty easy way to get version info using `lm`.\n\nThis business of matching the version number, by the way, is the most annoying part of using v8dbg. In Edge, we have a second extension, v8dbgloader, which reads the version number of msedge.dll, downloads v8dbg from the matching build, and loads it. However, that loader is very Edge-specific. If you have any ideas about more general solutions for easing the burden of version-matching, I\u0027d be happy to hear them.",
+      "parentUuid": "89ebbb8c_1c2c5b0c",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "a9bc48ef_3ffe711c",
+        "filename": "tools/v8dbg/base/dbgext.def",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-02-05T21:21:31Z",
+      "side": 1,
+      "message": "😊",
+      "parentUuid": "8b9f43bc_80682135",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "233376ef_9f95c60a",
         "filename": "tools/v8dbg/src/local-variables.cc",
         "patchSetId": 5
@@ -67,6 +121,24 @@
       "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52360180_9c29118d",
+        "filename": "tools/v8dbg/src/local-variables.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-02-05T21:21:31Z",
+      "side": 1,
+      "message": "Thanks. I\u0027ve been surprised by how useful this info is, even without more specific info about the frame layout. Of course there\u0027s room for improvement, but this implementation is substantially better than nothing.",
+      "parentUuid": "233376ef_9f95c60a",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "6e8a3163_96fb162f",
+        "filename": "tools/v8dbg/src/object-inspection.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-02-05T21:21:31Z",
+      "side": 1,
+      "message": "Good point, I missed this one. The general rule I\u0027ve been using is that allocation failure is catastrophic (don\u0027t check the results of things like WRL::Make or SysAllocString, just deref them and crash the process), but any other failure result should get returned.",
+      "parentUuid": "82f46346_084e2f22",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41856611_4341dadf",
         "filename": "tools/v8dbg/src/object-inspection.cc",
         "patchSetId": 5
@@ -101,6 +191,24 @@
       "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5c019fb_fc5af576",
+        "filename": "tools/v8dbg/src/object-inspection.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-02-05T21:21:31Z",
+      "side": 1,
+      "message": "Good point, this was wrong. I guess I hadn\u0027t tested any TaggedValue objects on builds without pointer compression.",
+      "parentUuid": "41856611_4341dadf",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -124,6 +232,30 @@
       "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aee9ba86_b504e196",
+        "filename": "tools/v8dbg/src/object-inspection.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-02-05T21:21:31Z",
+      "side": 1,
+      "message": "Good point, I\u0027ve added cross-architecture instructions to the readme. When debugging 32-bit processes, 64-bit windbg loads a 32-bit version of enghost.exe, which can of course only load and run 32-bit extensions.",
+      "parentUuid": "198de507_b0557c60",
+      "range": {
+        "startLine": 49,
+        "startChar": 29,
+        "endLine": 49,
+        "endChar": 42
+      },
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +306,30 @@
     },
     {
       "key": {
+        "uuid": "5b77e7b5_829d140d",
+        "filename": "tools/v8dbg/src/object-inspection.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-02-05T21:21:31Z",
+      "side": 1,
+      "message": "Good feedback, thanks. I\u0027ve rewritten it to use sizeof(value) rather than a constant, because that\u0027s what it is trying to check: we\u0027d better not be trying to write something bigger than the space we\u0027ve allocated for `value`.",
+      "parentUuid": "416885e6_e920a024",
+      "range": {
+        "startLine": 220,
+        "startChar": 6,
+        "endLine": 220,
+        "endChar": 23
+      },
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f732a5d7_ea65a03e",
         "filename": "tools/v8dbg/src/object-inspection.cc",
         "patchSetId": 5
@@ -197,6 +353,30 @@
     },
     {
       "key": {
+        "uuid": "159c032c_fc8faac9",
+        "filename": "tools/v8dbg/src/object-inspection.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-02-05T21:21:31Z",
+      "side": 1,
+      "message": "Sure, that seems reasonable.",
+      "parentUuid": "f732a5d7_ea65a03e",
+      "range": {
+        "startLine": 585,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 18
+      },
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "759bfcbc_24a73ba5",
         "filename": "tools/v8dbg/src/v8-debug-helper-interop.cc",
         "patchSetId": 5
@@ -214,6 +394,24 @@
     },
     {
       "key": {
+        "uuid": "0269a6e6_ad012e4a",
+        "filename": "tools/v8dbg/src/v8-debug-helper-interop.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-02-05T21:21:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "759bfcbc_24a73ba5",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee9c2896_5328e341",
         "filename": "tools/v8dbg/src/v8-debug-helper-interop.h",
         "patchSetId": 5
@@ -228,6 +426,24 @@
       "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f29877cd_0c967109",
+        "filename": "tools/v8dbg/src/v8-debug-helper-interop.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-02-05T21:21:31Z",
+      "side": 1,
+      "message": "Good point, I\u0027ve copied the relevant comments from debug-helper.h (since this file is basically re-exposing the same data in a more C++-ish style).",
+      "parentUuid": "ee9c2896_5328e341",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
