@@ -159,11 +159,17 @@ int AbstractCode::SourcePosition(int offset) {
   if (maybe_table.IsException()) return kNoSourcePosition;
 
   ByteArray source_position_table = ByteArray::cast(maybe_table);
-  int position = 0;
   // Subtract one because the current PC is one instruction after the call site.
   if (IsCode()) offset--;
-  for (SourcePositionTableIterator iterator(source_position_table);
-       !iterator.done() && iterator.code_offset() <= offset;
+  SourcePositionTableIterator iterator(source_position_table);
+  // If we are breaking in function entry, return that value.
+  if (offset == kNoBytecodeOffset) {
+    DCHECK_NE(iterator.function_entry_source_position_offset(),
+              kNoSourcePosition);
+    return iterator.function_entry_source_position_offset();
+  }
+  int position = 0;
+  for (; !iterator.done() && iterator.code_offset() <= offset;
        iterator.Advance()) {
     position = iterator.source_position().ScriptOffset();
   }

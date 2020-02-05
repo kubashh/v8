@@ -549,6 +549,9 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
   void OutputStarRaw(Register reg);
   void OutputMovRaw(Register src, Register dest);
 
+  void ForceExpressionPosition(int position);
+  void SetFunctionEntrySourcePosition(int position);
+
   // Accessors
   BytecodeRegisterAllocator* register_allocator() {
     return &register_allocator_;
@@ -612,6 +615,7 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
   BytecodeArrayWriter* bytecode_array_writer() {
     return &bytecode_array_writer_;
   }
+
   ConstantArrayBuilder* constant_array_builder() {
     return &constant_array_builder_;
   }

@@ -65,6 +65,18 @@ static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
 
 namespace {
 
+Operand StackLimitAsOperand(MacroAssembler* masm) {
+  DCHECK(masm->root_array_available());
+  Isolate* isolate = masm->isolate();
+  ExternalReference limit = ExternalReference::address_of_jslimit(isolate);
+  DCHECK(TurboAssembler::IsAddressableThroughRootRegister(isolate, limit));
+
+  intptr_t offset =
+      TurboAssembler::RootRegisterOffsetForExternalReference(isolate, limit);
+  CHECK(is_int32(offset));
+  return Operand(kRootRegister, static_cast<int32_t>(offset));
+}
+
 Operand RealStackLimitAsOperand(MacroAssembler* masm) {
   DCHECK(masm->root_array_available());
   Isolate* isolate = masm->isolate();
@@ -1156,6 +1168,12 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ movq(Operand(rbp, rcx, times_system_pointer_size, 0), rdx);
   __ bind(&no_incoming_new_target_or_generator_register);
 
+  // Perform interrupt stack check
+  Label stack_check_interrupt, continue_stack_check_interrupt;
+  __ cmpq(rsp, StackLimitAsOperand(masm));
+  __ j(below_equal, &stack_check_interrupt, Label::kNear);
+  __ bind(&continue_stack_check_interrupt);
+
   // The accumulator is already loaded with undefined.
 
   // Load the dispatch table into a register and dispatch to the bytecode
@@ -1195,6 +1213,28 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // The return value is in rax.
   LeaveInterpreterFrame(masm, rbx, rcx);
   __ ret(0);
+
+  __ bind(&stack_check_interrupt);
+  // Modify the bytecode offset in the stack to be kNoBytecodeOffset for the
+  // call to the StackGuard.
+  __ movq(Operand(rbp, InterpreterFrameConstants::kBytecodeOffsetFromFp),
+          Immediate(Smi::FromInt(BytecodeArray::kHeaderSize - kHeapObjectTag +
+                                 kNoBytecodeOffset)));
+  __ CallRuntime(Runtime::kStackGuard);
+
+  // After the call, insert the previous values again.
+  // Stack
+  __ movq(Operand(rbp, InterpreterFrameConstants::kBytecodeOffsetFromFp),
+          Immediate(Smi::FromInt(BytecodeArray::kHeaderSize - kHeapObjectTag)));
+
+  // Registers
+  __ movq(kInterpreterBytecodeArrayRegister,
+          Operand(rbp, InterpreterFrameConstants::kBytecodeArrayFromFp));
+  __ movq(kInterpreterBytecodeOffsetRegister,
+          Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag));
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+
+  __ jmp(&continue_stack_check_interrupt);
 
   __ bind(&compile_lazy);
   GenerateTailCallToReturnedCode(masm, Runtime::kCompileLazy);
@@ -1422,7 +1462,20 @@ static void Generate_InterpreterEnterBytecode(MacroAssembler* masm) {
   // Get the target bytecode offset from the frame.
   __ SmiUntag(kInterpreterBytecodeOffsetRegister,
               Operand(rbp, InterpreterFrameConstants::kBytecodeOffsetFromFp));
+  Label normal_bytecode;
+  // The deoptimizer bails out to kNoBytecodeOffset which is not a valid
+  // bytecode offset. Here we advance to the first real bytecode offset to be
+  // able to continue running in the interpreter. This is the common path for
+  // both calls that the deoptimizer can do: InterpreterEnterBytecodeAdvance,
+  // and InterpreterEnterBytecodeDispatch.
+  __ cmpq(kInterpreterBytecodeOffsetRegister,
+          Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag +
+                    kNoBytecodeOffset));
+  __ j(not_equal, &normal_bytecode, Label::kNear);
+  __ movq(kInterpreterBytecodeOffsetRegister,
+          Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag));
 
+  __ bind(&normal_bytecode);
   // Dispatch to the target bytecode.
   __ movzxbq(r11, Operand(kInterpreterBytecodeArrayRegister,
                           kInterpreterBytecodeOffsetRegister, times_1, 0));
@@ -1439,6 +1492,14 @@ void Builtins::Generate_InterpreterEnterBytecodeAdvance(MacroAssembler* masm) {
   __ SmiUntag(kInterpreterBytecodeOffsetRegister,
               Operand(rbp, InterpreterFrameConstants::kBytecodeOffsetFromFp));
 
+  Label function_entry_bytecode;
+  __ cmpq(kInterpreterBytecodeOffsetRegister,
+          Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag +
+                    kNoBytecodeOffset));
+  // The deoptimizer bails out to kNoBytecodeOffset which is not a valid
+  // bytecode offset. We will fix it in Generate_InterpreterEnterBytecode.
+  __ j(equal, &function_entry_bytecode, Label::kNear);
+
   // Load the current bytecode.
   __ movzxbq(rbx, Operand(kInterpreterBytecodeArrayRegister,
                           kInterpreterBytecodeOffsetRegister, times_1, 0));
@@ -1454,6 +1515,7 @@ void Builtins::Generate_InterpreterEnterBytecodeAdvance(MacroAssembler* masm) {
   __ movq(Operand(rbp, InterpreterFrameConstants::kBytecodeOffsetFromFp),
           kInterpreterBytecodeOffsetRegister);
 
+  __ bind(&function_entry_bytecode);
   Generate_InterpreterEnterBytecode(masm);
 
   // We should never take the if_return path.
