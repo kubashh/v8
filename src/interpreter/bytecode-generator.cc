@@ -1206,8 +1206,12 @@ void BytecodeGenerator::GenerateBytecode(uintptr_t stack_limit) {
 
   AllocateTopLevelRegisters();
 
-  // Perform a stack-check before the body.
-  builder()->StackCheck(info()->literal()->start_position());
+  builder()->SetFunctionEntrySourcePosition(
+      info()->literal()->start_position());
+  // Force an expression position to make sure we have one. If the next bytecode
+  // overwrites it, it’s fine since it would mean we have a source position
+  // anyway.
+  builder()->ForceExpressionPosition(info()->literal()->start_position());
 
   if (info()->literal()->CanSuspend()) {
     BuildGeneratorPrologue();
