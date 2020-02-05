@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a08f7cd_d3f80aec",
+        "filename": "src/inspector/string-16.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2020-02-05T19:08:04Z",
+      "side": 1,
+      "message": "Should we rename this to fromUTF16, since it works for both LE and BE?",
+      "revId": "b92564e1dfbcdc5a90930d6728d973a6225494db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
