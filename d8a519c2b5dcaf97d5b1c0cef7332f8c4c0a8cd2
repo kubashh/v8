@@ -19,6 +19,57 @@
     },
     {
       "key": {
+        "uuid": "89ebbb8c_1c2c5b0c",
+        "filename": "tools/v8dbg/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-05T09:13:34Z",
+      "side": 1,
+      "message": "It might be good to mention parenthetically that you can quickly check this in the debugger with (I think) !v8dbg.version, and compare that with v8 or d8 (via !dlls -v \u003caddr\u003e...sorry, my cdb foo is mostly forgotten!).",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b9f43bc_80682135",
+        "filename": "tools/v8dbg/base/dbgext.def",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-05T09:13:34Z",
+      "side": 1,
+      "message": "Just want to say I got nostalgia for working on the Windows platform with this. \"Ach, a DEF file!\" 😊",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "233376ef_9f95c60a",
+        "filename": "tools/v8dbg/src/local-variables.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-05T09:13:34Z",
+      "side": 1,
+      "message": "+1, thanks for doing it this way --\u003e in the absence of precise information a dump of the frame region will serve extremely well.",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "82f46346_084e2f22",
         "filename": "tools/v8dbg/src/object-inspection.cc",
         "patchSetId": 5
@@ -99,6 +150,30 @@
     },
     {
       "key": {
+        "uuid": "416885e6_e920a024",
+        "filename": "tools/v8dbg/src/object-inspection.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-05T09:13:34Z",
+      "side": 1,
+      "message": "Also, could kPointerSize constant be used instead of 4/8?",
+      "parentUuid": "3df6fda3_a0aaff3c",
+      "range": {
+        "startLine": 220,
+        "startChar": 6,
+        "endLine": 220,
+        "endChar": 23
+      },
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f732a5d7_ea65a03e",
         "filename": "tools/v8dbg/src/object-inspection.cc",
         "patchSetId": 5
@@ -122,6 +197,23 @@
     },
     {
       "key": {
+        "uuid": "759bfcbc_24a73ba5",
+        "filename": "tools/v8dbg/src/v8-debug-helper-interop.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-05T09:13:34Z",
+      "side": 1,
+      "message": "Here, constants defined in v8 could be used instead of 4 for pointer compressed builds.",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ee9c2896_5328e341",
         "filename": "tools/v8dbg/src/v8-debug-helper-interop.h",
         "patchSetId": 5
@@ -133,6 +225,23 @@
       "writtenOn": "2020-02-04T23:48:12Z",
       "side": 1,
       "message": "Some comments as to the difference/usage of type_name vs uncompressed_type_name here might be useful. I initially found that confusing when reviewing before.",
+      "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "977722ab_9ceaaba3",
+        "filename": "tools/v8dbg/test/v8dbg-test.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-05T09:13:34Z",
+      "side": 1,
+      "message": "+1 for this excellent validation test!",
       "revId": "d8a519c2b5dcaf97d5b1c0cef7332f8c4c0a8cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
