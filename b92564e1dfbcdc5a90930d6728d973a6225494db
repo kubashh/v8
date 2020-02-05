@@ -16,6 +16,24 @@
       "revId": "b92564e1dfbcdc5a90930d6728d973a6225494db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e71fd2f_e495f0a5",
+        "filename": "src/inspector/string-16.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-02-05T22:20:11Z",
+      "side": 1,
+      "message": "We can definitely do so, however we will also need to undo the name changes in StringUtil under Chromium as well (due to third_party / upstream separation) done by this CL: https://chromium-review.googlesource.com/c/deps/inspector_protocol/+/1680051\n\nJohannes would that be ok?",
+      "parentUuid": "0a08f7cd_d3f80aec",
+      "revId": "b92564e1dfbcdc5a90930d6728d973a6225494db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
