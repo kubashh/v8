@@ -34,6 +34,24 @@
       "revId": "b92564e1dfbcdc5a90930d6728d973a6225494db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83c6e24b_ea31f51c",
+        "filename": "src/inspector/string-16.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2020-02-05T22:31:25Z",
+      "side": 1,
+      "message": "Can we rename String16::fromUTF16LE and leave StringUtil::fromUTF16LE as is? I find it strange that our String16 has a strange method, but StringUtil api for inspector_protocol can do whatever.",
+      "parentUuid": "2e71fd2f_e495f0a5",
+      "revId": "b92564e1dfbcdc5a90930d6728d973a6225494db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
