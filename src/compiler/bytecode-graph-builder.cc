@@ -159,11 +159,14 @@ class BytecodeGraphBuilder {
   // by dedicated {Checkpoint} nodes that are wired into the effect chain.
   // Conceptually this frame state is "before" a given operation.
   void PrepareEagerCheckpoint();
+  void PrepareEagerCheckpoint(int current_offset);
 
   // Prepare information for lazy deoptimization. This information is attached
   // to the given node and the output value produced by the node is combined.
   // Conceptually this frame state is "after" a given operation.
   void PrepareFrameState(Node* node, OutputFrameStateCombine combine);
+  void PrepareFrameState(Node* node, OutputFrameStateCombine combine,
+                         BailoutId bailout_id);
 
   void BuildCreateArguments(CreateArgumentsType type);
   Node* BuildLoadGlobal(NameRef name, uint32_t feedback_slot_index,
@@ -357,6 +360,7 @@ class BytecodeGraphBuilder {
   bool skip_first_stack_check() const { return skip_first_stack_check_; }
   bool visited_first_stack_check() const { return visited_first_stack_check_; }
   void set_visited_first_stack_check() { visited_first_stack_check_ = true; }
+  void FunctionEntryStackCheck();
   int current_exception_handler() const { return current_exception_handler_; }
   void set_current_exception_handler(int index) {
     current_exception_handler_ = index;
@@ -478,6 +482,8 @@ class BytecodeGraphBuilder::Environment : public ZoneObject {
       FrameStateAttachmentMode mode = kDontAttachFrameState);
   void BindGeneratorState(Node* node);
   void RecordAfterState(Node* node,
+                        FrameStateAttachmentMode mode = kDontAttachFrameState);
+  void RecordAfterState(Node* node, BailoutId bailout_id,
                         FrameStateAttachmentMode mode = kDontAttachFrameState);
 
   // Effect dependency tracked by this environment.
@@ -700,6 +706,14 @@ void BytecodeGraphBuilder::Environment::RecordAfterState(
     Node* node, FrameStateAttachmentMode mode) {
   if (mode == FrameStateAttachmentMode::kAttachFrameState) {
     builder()->PrepareFrameState(node, OutputFrameStateCombine::Ignore());
+  }
+}
+
+void BytecodeGraphBuilder::Environment::RecordAfterState(
+    Node* node, BailoutId bailout_id, FrameStateAttachmentMode mode) {
+  if (mode == FrameStateAttachmentMode::kAttachFrameState) {
+    builder()->PrepareFrameState(node, OutputFrameStateCombine::Ignore(),
+                                 bailout_id);
   }
 }
 
@@ -1049,6 +1063,10 @@ void BytecodeGraphBuilder::CreateGraph() {
 }
 
 void BytecodeGraphBuilder::PrepareEagerCheckpoint() {
+  PrepareEagerCheckpoint(bytecode_iterator().current_offset());
+}
+
+void BytecodeGraphBuilder::PrepareEagerCheckpoint(int current_offset) {
   if (needs_eager_checkpoint()) {
     // Create an explicit checkpoint node for before the operation. This only
     // needs to happen if we aren't effect-dominated by a {Checkpoint} already.
@@ -1057,11 +1075,11 @@ void BytecodeGraphBuilder::PrepareEagerCheckpoint() {
     DCHECK_EQ(1, OperatorProperties::GetFrameStateInputCount(node->op()));
     DCHECK_EQ(IrOpcode::kDead,
               NodeProperties::GetFrameStateInput(node)->opcode());
-    BailoutId bailout_id(bytecode_iterator().current_offset());
+    BailoutId bailout_id(current_offset);
 
     const BytecodeLivenessState* liveness_before =
         bytecode_analysis().GetInLivenessFor(
-            bytecode_iterator().current_offset());
+            current_offset != kNoBytecodeOffset ? current_offset : 0);
 
     Node* frame_state_before = environment()->Checkpoint(
         bailout_id, OutputFrameStateCombine::Ignore(), liveness_before);
@@ -1086,16 +1104,31 @@ void BytecodeGraphBuilder::PrepareEagerCheckpoint() {
 void BytecodeGraphBuilder::PrepareFrameState(Node* node,
                                              OutputFrameStateCombine combine) {
   if (OperatorProperties::HasFrameStateInput(node->op())) {
+    PrepareFrameState(node, combine,
+                      BailoutId(bytecode_iterator().current_offset()));
+  }
+}
+
+void BytecodeGraphBuilder::PrepareFrameState(Node* node,
+                                             OutputFrameStateCombine combine,
+                                             BailoutId bailout_id) {
+  if (OperatorProperties::HasFrameStateInput(node->op())) {
     // Add the frame state for after the operation. The node in question has
     // already been created and had a {Dead} frame state input up until now.
     DCHECK_EQ(1, OperatorProperties::GetFrameStateInputCount(node->op()));
     DCHECK_EQ(IrOpcode::kDead,
               NodeProperties::GetFrameStateInput(node)->opcode());
-    BailoutId bailout_id(bytecode_iterator().current_offset());
+    DCHECK_IMPLIES(bailout_id.ToInt() == kNoBytecodeOffset,
+                   bytecode_iterator().current_offset() == 0);
 
+    // If we have kNoBytecodeOffset as the bailout_id, we want to get the
+    // liveness as if we were having the StackCheck (i.e, empty liveness). We
+    // can get that by using the IN liveness of the first actual bytecode.
     const BytecodeLivenessState* liveness_after =
-        bytecode_analysis().GetOutLivenessFor(
-            bytecode_iterator().current_offset());
+        bailout_id.ToInt() == kNoBytecodeOffset
+            ? bytecode_analysis().GetInLivenessFor(0)
+            : bytecode_analysis().GetOutLivenessFor(
+                  bytecode_iterator().current_offset());
 
     Node* frame_state_after =
         environment()->Checkpoint(bailout_id, combine, liveness_after);
@@ -1204,6 +1237,18 @@ void BytecodeGraphBuilder::RemoveMergeEnvironmentsBeforeOffset(
   }
 }
 
+void BytecodeGraphBuilder::FunctionEntryStackCheck() {
+  DCHECK(!visited_first_stack_check());
+  set_visited_first_stack_check();
+  if (!skip_first_stack_check()) {
+    PrepareEagerCheckpoint(kNoBytecodeOffset);
+    Node* node =
+        NewNode(javascript()->StackCheck(StackCheckKind::kJSFunctionEntry));
+    environment()->RecordAfterState(node, BailoutId(kNoBytecodeOffset),
+                                    Environment::kAttachFrameState);
+  }
+}
+
 // We will iterate through the OSR loop, then its parent, and so on
 // until we have reached the outmost loop containing the OSR loop. We do
 // not generate nodes for anything before the outermost loop.
@@ -1307,6 +1352,12 @@ void BytecodeGraphBuilder::VisitBytecodes() {
     // the last copies of the loops it contains) to be generated by the normal
     // bytecode iteration below.
     AdvanceToOsrEntryAndPeelLoops();
+  } else {
+    // When creating the source_position_iterator we already advanced the source
+    // position to the first 'real' one (i.e skip the FunctionEntry one).
+    // However, we still need to set the current position.
+    source_positions_->SetCurrentPosition(start_position_);
+    FunctionEntryStackCheck();
   }
 
   bool has_one_shot_bytecode = false;
@@ -3253,20 +3304,15 @@ void BytecodeGraphBuilder::VisitSwitchOnSmiNoFeedback() {
 }
 
 void BytecodeGraphBuilder::VisitStackCheck() {
-  // Note: The stack check kind is determined heuristically: we simply assume
-  // that the first seen stack check is at function-entry, and all other stack
-  // checks are at iteration-body. An alternative precise solution would be to
-  // parameterize the StackCheck bytecode; but this has the caveat of increased
-  // code size.
-  StackCheckKind kind = StackCheckKind::kJSIterationBody;
-  if (!visited_first_stack_check()) {
-    set_visited_first_stack_check();
-    kind = StackCheckKind::kJSFunctionEntry;
-    if (skip_first_stack_check()) return;
-  }
+  // TODO(v8:9977): In Osr we don't generate a FunctionEntry. However, we visit
+  // the osr bytecodes. These bytecodes will contain a JumpLoop which will have
+  // an IterationBody stack check. In Non-Osr we guarantee that we have visited
+  // the FunctionEntry StackCheck before visiting the IterationBody ones.
+  DCHECK(osr_ || visited_first_stack_check());
 
   PrepareEagerCheckpoint();
-  Node* node = NewNode(javascript()->StackCheck(kind));
+  Node* node =
+      NewNode(javascript()->StackCheck(StackCheckKind::kJSIterationBody));
   environment()->RecordAfterState(node, Environment::kAttachFrameState);
 }
 

@@ -418,6 +418,9 @@ enum ArgvMode { kArgvOnStack, kArgvInRegister };
 // This constant is used as an undefined value when passing source positions.
 constexpr int kNoSourcePosition = -1;
 
+// This constant is used as an undefined value when passing bytecode offsets.
+constexpr int kNoBytecodeOffset = -1;
+
 // This constant is used to indicate missing deoptimization information.
 constexpr int kNoDeoptimizationId = -1;
 

@@ -2050,6 +2050,10 @@ bool Isolate::ComputeLocation(MessageLocation* target) {
   }
   if (summary.AreSourcePositionsAvailable()) {
     int pos = summary.SourcePosition();
+    if (pos == kNoBytecodeOffset) {
+      pos = shared->StartPosition();
+    }
+    DCHECK_GE(pos, 0);
     *target =
         MessageLocation(Handle<Script>::cast(script), pos, pos + 1, shared);
   } else {
