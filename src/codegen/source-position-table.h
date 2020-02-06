@@ -23,7 +23,7 @@ class Zone;
 
 struct PositionTableEntry {
   PositionTableEntry()
-      : code_offset(0), source_position(0), is_statement(false) {}
+      : code_offset(-1), source_position(0), is_statement(false) {}
   PositionTableEntry(int offset, int64_t source, bool statement)
       : code_offset(offset), source_position(source), is_statement(statement) {}
 
@@ -108,6 +108,9 @@ class V8_EXPORT_PRIVATE SourcePositionTableIterator {
     DCHECK(!done());
     return SourcePosition::FromRaw(current_.source_position);
   }
+  int function_entry_source_position_offset() const {
+    return function_entry_offset_;
+  }
   bool is_statement() const {
     DCHECK(!done());
     return current_.is_statement;
@@ -123,12 +126,17 @@ class V8_EXPORT_PRIVATE SourcePositionTableIterator {
   }
 
  private:
+  // Initializes the source position interator with the first valid bytecode.
+  // Also sets the FunctionEntry SourcePosition if it exists.
+  void Initialize();
+
   static const int kDone = -1;
 
   Vector<const byte> raw_table_;
   Handle<ByteArray> table_;
   int index_ = 0;
   PositionTableEntry current_;
+  int function_entry_offset_ = 0;
   IterationFilter filter_;
   DISALLOW_HEAP_ALLOCATION(no_gc)
 };

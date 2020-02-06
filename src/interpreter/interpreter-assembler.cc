@@ -1389,7 +1389,7 @@ void InterpreterAssembler::UpdateInterruptBudgetOnReturn() {
   // length of the back-edge, so we just have to correct for the non-zero offset
   // of the first bytecode.
 
-  const int kFirstBytecodeOffset = BytecodeArray::kHeaderSize - kHeapObjectTag;
+  const int kFirstBytecodeOffset = BytecodeArray::kFirstBytecodeOffset;
   TNode<Int32T> profiling_weight =
       Int32Sub(TruncateIntPtrToInt32(BytecodeOffset()),
                Int32Constant(kFirstBytecodeOffset));
