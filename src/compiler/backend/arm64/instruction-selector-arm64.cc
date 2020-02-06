@@ -154,10 +154,16 @@ void VisitRRR(InstructionSelector* selector, ArchOpcode opcode, Node* node) {
 void VisitSimdShiftRRR(InstructionSelector* selector, ArchOpcode opcode,
                        Node* node) {
   Arm64OperandGenerator g(selector);
-  InstructionOperand temps[] = {g.TempSimd128Register(), g.TempRegister()};
-  selector->Emit(opcode, g.DefineAsRegister(node),
-                 g.UseRegister(node->InputAt(0)),
-                 g.UseRegister(node->InputAt(1)), arraysize(temps), temps);
+  if (g.IsIntegerConstant(node->InputAt(1))) {
+    selector->Emit(opcode, g.DefineSameAsFirst(node),
+                   g.UseRegister(node->InputAt(0)),
+                   g.UseImmediate(node->InputAt(1)));
+  } else {
+    InstructionOperand temps[] = {g.TempSimd128Register(), g.TempRegister()};
+    selector->Emit(opcode, g.DefineAsRegister(node),
+                   g.UseRegister(node->InputAt(0)),
+                   g.UseRegister(node->InputAt(1)), arraysize(temps), temps);
+  }
 }
 
 void VisitRRI(InstructionSelector* selector, ArchOpcode opcode, Node* node) {
