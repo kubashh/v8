@@ -1,0 +1,509 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19b4d667_5c3b3b80",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "Rather than duplicating the code, how about making replacing the current LoadRealStackLimit with LoadStackLimit and pass an enum to decide whether to check kInterruptStackLimit or kRealStackLimit (same for all architectures).",
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "446a8816_a5d7a5b9",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "Could you add a TODO to consider merging both the real and interrupt stack check?",
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc4c4394_c9aec774",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "mov",
+      "range": {
+        "startLine": 1179,
+        "startChar": 5,
+        "endLine": 1179,
+        "endChar": 9
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54fc6060_1bf53665",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "Use kInterpreterBytecodeOffsetRegister for clarity",
+      "range": {
+        "startLine": 1179,
+        "startChar": 10,
+        "endLine": 1179,
+        "endChar": 12
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ffac9c4_9b371efb",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1180,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "Can you pull the calculation of \"BytecodeArray::kHeaderSize - kHeapObjectTag + kFunctionEntryBytecodeOffset\" to a constant in BytecodeArray, since it\u0027s used quite often. You could also add \"BytecodeArray::kHeaderSize - kHeapObjectTag\"",
+      "range": {
+        "startLine": 1180,
+        "startChar": 35,
+        "endLine": 1180,
+        "endChar": 63
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aaa1b54_21662029",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "restore the bytecode offset, bytcode array and accumulator registers again.",
+      "range": {
+        "startLine": 1184,
+        "startChar": 21,
+        "endLine": 1184,
+        "endChar": 53
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f32ccc2f_59227379",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "mov",
+      "range": {
+        "startLine": 1186,
+        "startChar": 5,
+        "endLine": 1186,
+        "endChar": 9
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24ff0dc8_3a114127",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "Move this below and simply write kInterpreterBytecodeOffsetRegister to the location.",
+      "range": {
+        "startLine": 1185,
+        "startChar": 3,
+        "endLine": 1188,
+        "endChar": 36
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa0c0434_3c83d67c",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "mov",
+      "range": {
+        "startLine": 1191,
+        "startChar": 5,
+        "endLine": 1191,
+        "endChar": 9
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f842c96_b5d2dec5",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "after_",
+      "range": {
+        "startLine": 1197,
+        "startChar": 10,
+        "endLine": 1197,
+        "endChar": 19
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c5c25a9_65bc57c7",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "If the code deoptimizes during the implicit function entry stack interrupt check, it will have a bailout ID of kFunctionEntryBytecodeOffset, which is not a valid bytecode offset. Detect this case and advance to the first actual bytecode.",
+      "range": {
+        "startLine": 1400,
+        "startChar": 0,
+        "endLine": 1403,
+        "endChar": 52
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f39b83a3_858ef542",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "As discussed offline, I don\u0027t think we should see InterpreterEnterBytecodeDispatch in this function except when comping to it from InterpreterEnterBytecodeAdvance, if this is the case, could you add a DEBUG_CODE assert here that we never see kFunctionEntryBytecodeOffset and drop this comment text and move the logic into InterpreterEnterBytecodeAdvance instead.",
+      "range": {
+        "startLine": 1403,
+        "startChar": 0,
+        "endLine": 1405,
+        "endChar": 42
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83a8b970_aeb1f852",
+        "filename": "src/codegen/source-position-table.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "How about just calling this Initialize() and doing the initial Advance here too.",
+      "range": {
+        "startLine": 196,
+        "startChar": 34,
+        "endLine": 196,
+        "endChar": 64
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d37df95_166f6a32",
+        "filename": "src/codegen/source-position-table.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "How is this used? Is it an implicit function entry position, or a marker of an invalid offset?",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 22
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cabb8ded_3665ef62",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "Please move this out of the getters (maybe line 266) and call it BuildFunctionEntryStackCheck()",
+      "range": {
+        "startLine": 363,
+        "startChar": 2,
+        "endLine": 364,
+        "endChar": 33
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18f12692_d38bb77b",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "Drop these changes to EagerCheckpoint as discussed",
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cc3b3d9_5cdfd5c1",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "of the function entry, i.e., the first actual bytecode.",
+      "range": {
+        "startLine": 1130,
+        "startChar": 20,
+        "endLine": 1131,
+        "endChar": 77
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1607b14d_cc4469d2",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1365,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "I\u0027m not sure what this is doing? Why is it needed?",
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5071eb9d_938c5f8c",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 3313,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "OSR (and below)",
+      "range": {
+        "startLine": 3313,
+        "startChar": 23,
+        "endLine": 3313,
+        "endChar": 26
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f085cbb6_c55d939b",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 3314,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "OSR",
+      "range": {
+        "startLine": 3314,
+        "startChar": 9,
+        "endLine": 3314,
+        "endChar": 12
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fb567b1_3fa9754d",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 3238,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "Was -1 being used as a marker of undefined SFI\u0027s here?",
+      "range": {
+        "startLine": 3238,
+        "startChar": 33,
+        "endLine": 3238,
+        "endChar": 35
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "056b171f_1256f488",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "Could we do this as part of SetFunctionEntrySourcePosition",
+      "range": {
+        "startLine": 1214,
+        "startChar": 13,
+        "endLine": 1214,
+        "endChar": 36
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a939b8f2_09ed3441",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T11:56:52Z",
+      "side": 1,
+      "message": "Drop discussion of \"breaking\" - breakpoints is only one use of source positions. Maybe: \"If the offset is the implicit kFunctionEntryBytecodeOffset, then return the specific source position for function entry\".",
+      "range": {
+        "startLine": 165,
+        "startChar": 4,
+        "endLine": 165,
+        "endChar": 41
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
