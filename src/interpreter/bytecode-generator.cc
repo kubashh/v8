@@ -1206,8 +1206,7 @@ void BytecodeGenerator::GenerateBytecode(uintptr_t stack_limit) {
 
   AllocateTopLevelRegisters();
 
-  // Perform a stack-check before the body.
-  builder()->StackCheck(info()->literal()->start_position());
+  builder()->SetUpInitialSourcePositons(info()->literal()->start_position());
 
   if (info()->literal()->CanSuspend()) {
     BuildGeneratorPrologue();
