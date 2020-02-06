@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "730b3980_ceff01ea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-06T14:40:58Z",
+      "side": 1,
+      "message": "nit: Please just link to https://crrev.com/c/2020518.",
+      "revId": "8ffcd653a8e65a2857f8a7e95e57b9aa688481a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
