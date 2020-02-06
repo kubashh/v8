@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "472e0da1_b01646cb",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "This is unnecessary, they are the only two enum values (same for other archs)",
+      "range": {
+        "startLine": 73,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 50
+      },
+      "revId": "aaf828afaade8c5dd610ce75cdaf2c1421a29dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b1d0ff2_6c08680b",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "Remove this part of the comment.",
+      "range": {
+        "startLine": 1174,
+        "startChar": 36,
+        "endLine": 1175,
+        "endChar": 18
+      },
+      "revId": "aaf828afaade8c5dd610ce75cdaf2c1421a29dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fdeaf5d_c9348458",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "kFunctionEntryBytecodeOffset",
+      "range": {
+        "startLine": 1177,
+        "startChar": 45,
+        "endLine": 1177,
+        "endChar": 65
+      },
+      "revId": "aaf828afaade8c5dd610ce75cdaf2c1421a29dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46b81d0d_2ab18110",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "I\u0027d still like this comment to be updated like my previous comment. Could you remove the \"Stack\" and \"Registers\" part",
+      "range": {
+        "startLine": 1182,
+        "startChar": 2,
+        "endLine": 1185,
+        "endChar": 40
+      },
+      "revId": "aaf828afaade8c5dd610ce75cdaf2c1421a29dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6773ef53_e72c8e9d",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "Could you just make this comparison \u003e\u003d BytecodeArray::kFirstBytecodeOffset",
+      "revId": "aaf828afaade8c5dd610ce75cdaf2c1421a29dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a29c82b4_5c0fb53f",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 1445,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "Could you make this code out-of-line at the bottom of the function, and jump back to the function_entry_bytecode (renamed enter_bytecode) label.",
+      "range": {
+        "startLine": 1438,
+        "startChar": 1,
+        "endLine": 1445,
+        "endChar": 75
+      },
+      "revId": "aaf828afaade8c5dd610ce75cdaf2c1421a29dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a7b755d_56146475",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 1463,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "enter_bytecode - also this needs to be before saving the offset to the stack frame (we need to do that in the FunctionEntry case too)",
+      "range": {
+        "startLine": 1463,
+        "startChar": 11,
+        "endLine": 1463,
+        "endChar": 34
+      },
+      "revId": "aaf828afaade8c5dd610ce75cdaf2c1421a29dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77f1f8ef_173e1723",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 1209,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "EmitFunctionStartSourcePosition",
+      "range": {
+        "startLine": 1209,
+        "startChar": 13,
+        "endLine": 1209,
+        "endChar": 39
+      },
+      "revId": "aaf828afaade8c5dd610ce75cdaf2c1421a29dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

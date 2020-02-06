@@ -354,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "060c6de2_32715975",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "I\u0027d prefer that we just do the SmiTag seperately - this is the slow path anyway so one extra Smi tag won\u0027t hurt, and the code clarity would be better.",
+      "parentUuid": "ee5727b6_4231693b",
+      "range": {
+        "startLine": 1185,
+        "startChar": 3,
+        "endLine": 1188,
+        "endChar": 36
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa0c0434_3c83d67c",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 40
@@ -636,6 +660,30 @@
     },
     {
       "key": {
+        "uuid": "31f1b405_4bc70832",
+        "filename": "src/codegen/source-position-table.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "Got it. Can we have this be kFunctionEntryBytecodeOffset then for clarity",
+      "parentUuid": "b5dded14_4b8f0a1d",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 22
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cabb8ded_3665ef62",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 40
@@ -762,6 +810,30 @@
       "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76dc9258_1a0b46cf",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8206eaaa_6e25c6dd",
+      "range": {
+        "startLine": 1130,
+        "startChar": 20,
+        "endLine": 1131,
+        "endChar": 77
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -941,6 +1013,30 @@
     },
     {
       "key": {
+        "uuid": "e83220ca_2f71fd27",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 3238,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b3deb56c_6f9f7154",
+      "range": {
+        "startLine": 3238,
+        "startChar": 33,
+        "endLine": 3238,
+        "endChar": 35
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "056b171f_1256f488",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 40
@@ -985,6 +1081,30 @@
       "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a3b8e270_193b9b69",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-06T17:28:20Z",
+      "side": 1,
+      "message": "\u003e Kept ForceExpressionPosition separate since I am using it on iteration loop stack checks as well.\n\nDo you mean in a future CL? I\u0027d prefer you remove it an add it back in that future CL if necessary.",
+      "parentUuid": "4e2fedb4_0e3058c0",
+      "range": {
+        "startLine": 1214,
+        "startChar": 13,
+        "endLine": 1214,
+        "endChar": 36
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
