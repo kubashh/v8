@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "40d7b4df_8515b623",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Unified them.\nFor ia32, I moved it from TurboAssembler to builtins to keep it in line with the other archs.",
+      "parentUuid": "19b4d667_5c3b3b80",
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "446a8816_a5d7a5b9",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 40
@@ -33,6 +51,24 @@
       "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3684909_e986445b",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "446a8816_a5d7a5b9",
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +118,54 @@
     },
     {
       "key": {
+        "uuid": "cf7e4797_c54f8357",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc4c4394_c9aec774",
+      "range": {
+        "startLine": 1179,
+        "startChar": 5,
+        "endLine": 1179,
+        "endChar": 9
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "34ee8216_0a0cfadf",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54fc6060_1bf53665",
+      "range": {
+        "startLine": 1179,
+        "startChar": 10,
+        "endLine": 1179,
+        "endChar": 12
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ffac9c4_9b371efb",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 40
@@ -102,6 +186,30 @@
       "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2ad0aac_079140dd",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1180,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done, for both suggestions.",
+      "parentUuid": "9ffac9c4_9b371efb",
+      "range": {
+        "startLine": 1180,
+        "startChar": 35,
+        "endLine": 1180,
+        "endChar": 63
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "bcdfcefa_b9ba33de",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aaa1b54_21662029",
+      "range": {
+        "startLine": 1184,
+        "startChar": 21,
+        "endLine": 1184,
+        "endChar": 53
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f32ccc2f_59227379",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 40
@@ -151,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "1f41e70e_e2540f10",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f32ccc2f_59227379",
+      "range": {
+        "startLine": 1186,
+        "startChar": 5,
+        "endLine": 1186,
+        "endChar": 9
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24ff0dc8_3a114127",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 40
@@ -162,6 +318,30 @@
       "writtenOn": "2020-02-06T11:56:52Z",
       "side": 1,
       "message": "Move this below and simply write kInterpreterBytecodeOffsetRegister to the location.",
+      "range": {
+        "startLine": 1185,
+        "startChar": 3,
+        "endLine": 1188,
+        "endChar": 36
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee5727b6_4231693b",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "It\u0027s not the same since we need to smi tag it for the stack. We can move it downwards and perform a SmiTag. This new approach seems like it helps clarity but will emit more instructions.\nAlternatively, we can keep this here and do a second mov below to kInterpreterBytecodeOffsetRegister.\n\nImplemented this alternative mentioned and added a comment here and in arm64 regarding this. Intel archs remain unchanged since they don\u0027t need to move the value to a register before storing to the stack.\n\nWDYT?",
+      "parentUuid": "24ff0dc8_3a114127",
       "range": {
         "startLine": 1185,
         "startChar": 3,
@@ -197,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "6e7a6076_a7db09e3",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa0c0434_3c83d67c",
+      "range": {
+        "startLine": 1191,
+        "startChar": 5,
+        "endLine": 1191,
+        "endChar": 9
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f842c96_b5d2dec5",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 40
@@ -217,6 +421,30 @@
       "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0b0a1e2_1d2ba06c",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f842c96_b5d2dec5",
+      "range": {
+        "startLine": 1197,
+        "startChar": 10,
+        "endLine": 1197,
+        "endChar": 19
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -243,6 +471,30 @@
     },
     {
       "key": {
+        "uuid": "8c68b954_a474935d",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c5c25a9_65bc57c7",
+      "range": {
+        "startLine": 1400,
+        "startChar": 0,
+        "endLine": 1403,
+        "endChar": 52
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f39b83a3_858ef542",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 40
@@ -263,6 +515,30 @@
       "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca443e97_f08a5ea6",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f39b83a3_858ef542",
+      "range": {
+        "startLine": 1403,
+        "startChar": 0,
+        "endLine": 1405,
+        "endChar": 42
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -289,6 +565,30 @@
     },
     {
       "key": {
+        "uuid": "3c67c9ac_6b8551b4",
+        "filename": "src/codegen/source-position-table.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "SGTM. Done.",
+      "parentUuid": "83a8b970_aeb1f852",
+      "range": {
+        "startLine": 196,
+        "startChar": 34,
+        "endLine": 196,
+        "endChar": 64
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d37df95_166f6a32",
         "filename": "src/codegen/source-position-table.h",
         "patchSetId": 40
@@ -300,6 +600,30 @@
       "writtenOn": "2020-02-06T11:56:52Z",
       "side": 1,
       "message": "How is this used? Is it an implicit function entry position, or a marker of an invalid offset?",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 22
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5dded14_4b8f0a1d",
+        "filename": "src/codegen/source-position-table.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "It\u0027s the new default bytecode offset.\nFor example, when defining PositionTableEntry current_ below we want it to have the bytecode offset of -1, the new base.",
+      "parentUuid": "2d37df95_166f6a32",
       "range": {
         "startLine": 26,
         "startChar": 20,
@@ -335,6 +659,30 @@
     },
     {
       "key": {
+        "uuid": "3309099a_80f45ca7",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cabb8ded_3665ef62",
+      "range": {
+        "startLine": 363,
+        "startChar": 2,
+        "endLine": 364,
+        "endChar": 33
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18f12692_d38bb77b",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 40
@@ -352,6 +700,24 @@
     },
     {
       "key": {
+        "uuid": "2c2e39c4_0a72e59c",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18f12692_d38bb77b",
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9cc3b3d9_5cdfd5c1",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 40
@@ -363,6 +729,30 @@
       "writtenOn": "2020-02-06T11:56:52Z",
       "side": 1,
       "message": "of the function entry, i.e., the first actual bytecode.",
+      "range": {
+        "startLine": 1130,
+        "startChar": 20,
+        "endLine": 1131,
+        "endChar": 77
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8206eaaa_6e25c6dd",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "There is a difference though. We want the OUT of the stack check, which is the same as the IN for the first actual bytecode.\nRewrote the comment to make it more clear.",
+      "parentUuid": "9cc3b3d9_5cdfd5c1",
       "range": {
         "startLine": 1130,
         "startChar": 20,
@@ -392,6 +782,24 @@
     },
     {
       "key": {
+        "uuid": "548233b9_2f5f2b70",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1365,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Thanks for catching this! Originally I was advancing the current position here. Now that I am advancing when creating the iterator, it is not needed. Removed.",
+      "parentUuid": "1607b14d_cc4469d2",
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5071eb9d_938c5f8c",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 40
@@ -412,6 +820,30 @@
       "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a715c220_45857fa1",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 3313,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5071eb9d_938c5f8c",
+      "range": {
+        "startLine": 3313,
+        "startChar": 23,
+        "endLine": 3313,
+        "endChar": 26
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -438,6 +870,30 @@
     },
     {
       "key": {
+        "uuid": "be5c087f_7eae58de",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 3314,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f085cbb6_c55d939b",
+      "range": {
+        "startLine": 3314,
+        "startChar": 9,
+        "endLine": 3314,
+        "endChar": 12
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fb567b1_3fa9754d",
         "filename": "src/heap/factory.cc",
         "patchSetId": 40
@@ -449,6 +905,30 @@
       "writtenOn": "2020-02-06T11:56:52Z",
       "side": 1,
       "message": "Was -1 being used as a marker of undefined SFI\u0027s here?",
+      "range": {
+        "startLine": 3238,
+        "startChar": 33,
+        "endLine": 3238,
+        "endChar": 35
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3deb56c_6f9f7154",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 3238,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Yes, but it shouldn\u0027t interfere with kFunctionEntryBytecodeOffset since that only happens when we have no SFI.",
+      "parentUuid": "4fb567b1_3fa9754d",
       "range": {
         "startLine": 3238,
         "startChar": 33,
@@ -484,6 +964,30 @@
     },
     {
       "key": {
+        "uuid": "4e2fedb4_0e3058c0",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done.\nKept ForceExpressionPosition separate since I am using it on iteration loop stack checks as well.",
+      "parentUuid": "056b171f_1256f488",
+      "range": {
+        "startLine": 1214,
+        "startChar": 13,
+        "endLine": 1214,
+        "endChar": 36
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a939b8f2_09ed3441",
         "filename": "src/objects/code.cc",
         "patchSetId": 40
@@ -504,6 +1008,30 @@
       "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b40f740_efebd198",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-06T16:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a939b8f2_09ed3441",
+      "range": {
+        "startLine": 165,
+        "startChar": 4,
+        "endLine": 165,
+        "endChar": 41
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
