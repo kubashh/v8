@@ -1056,8 +1056,15 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ mov(Operand(ebp, ecx, times_system_pointer_size, 0), edx);
   __ bind(&no_incoming_new_target_or_generator_register);
 
-  // Load accumulator and bytecode offset into registers.
-  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+  // Perform interrupt stack check
+  // TODO(solanes): Merge with the real stack limit check above
+  Label stack_check_interrupt, after_stack_check_interrupt;
+  __ CompareStackLimit(esp);
+  __ j(below, &stack_check_interrupt, Label::kNear);
+  __ bind(&after_stack_check_interrupt);
+
+  // The accumulator is already loaded with undefined.
+
   __ mov(kInterpreterBytecodeOffsetRegister,
          Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag));
 
@@ -1097,6 +1104,28 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // The return value is in eax.
   LeaveInterpreterFrame(masm, edx, ecx);
   __ ret(0);
+
+  __ bind(&stack_check_interrupt);
+  // Modify the bytecode offset in the stack to be kFunctionEntryBytecodeOffset
+  // for the call to the StackGuard.
+  __ mov(Operand(ebp, InterpreterFrameConstants::kBytecodeOffsetFromFp),
+         Immediate(Smi::FromInt(BytecodeArray::kHeaderSize - kHeapObjectTag +
+                                kFunctionEntryBytecodeOffset)));
+  __ CallRuntime(Runtime::kStackGuard);
+
+  // After the call, insert the previous values again.
+  // Stack
+  __ mov(Operand(ebp, InterpreterFrameConstants::kBytecodeOffsetFromFp),
+         Immediate(Smi::FromInt(BytecodeArray::kHeaderSize - kHeapObjectTag)));
+
+  // Registers
+  __ mov(kInterpreterBytecodeArrayRegister,
+         Operand(ebp, InterpreterFrameConstants::kBytecodeArrayFromFp));
+  // No need to reload kInterpreterBytecodeOffsetRegister. We will do so after
+  // continuing.
+  __ LoadRoot(kInterpreterAccumulatorRegister, RootIndex::kUndefinedValue);
+
+  __ jmp(&after_stack_check_interrupt);
 
   __ bind(&optimized_code_slot_not_empty);
   Label maybe_has_optimized_code;
@@ -1408,6 +1437,16 @@ static void Generate_InterpreterEnterBytecode(MacroAssembler* masm) {
          Operand(ebp, InterpreterFrameConstants::kBytecodeOffsetFromFp));
   __ SmiUntag(kInterpreterBytecodeOffsetRegister);
 
+  if (FLAG_debug_code) {
+    Label okay;
+    __ cmp(kInterpreterBytecodeOffsetRegister,
+           Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag +
+                     kFunctionEntryBytecodeOffset));
+    __ j(not_equal, &okay, Label::kNear);
+    __ int3();
+    __ bind(&okay);
+  }
+
   // Dispatch to the target bytecode.
   __ movzx_b(scratch, Operand(kInterpreterBytecodeArrayRegister,
                               kInterpreterBytecodeOffsetRegister, times_1, 0));
@@ -1425,7 +1464,21 @@ void Builtins::Generate_InterpreterEnterBytecodeAdvance(MacroAssembler* masm) {
          Operand(ebp, InterpreterFrameConstants::kBytecodeOffsetFromFp));
   __ SmiUntag(kInterpreterBytecodeOffsetRegister);
 
+  Label normal_bytecode, function_entry_bytecode;
+  __ cmp(kInterpreterBytecodeOffsetRegister,
+         Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag +
+                   kFunctionEntryBytecodeOffset));
+  __ j(not_equal, &normal_bytecode, Label::kNear);
+  // If the code deoptimizes during the implicit function entry stack interrupt
+  // check, it will have a bailout ID of kFunctionEntryBytecodeOffset, which is
+  // not a valid bytecode offset. Detect this case and advance to the first
+  // actual bytecode.
+  __ mov(kInterpreterBytecodeOffsetRegister,
+         Immediate(BytecodeArray::kHeaderSize - kHeapObjectTag));
+  __ jmp(&function_entry_bytecode, Label::kNear);
+
   // Advance to the next bytecode.
+  __ bind(&normal_bytecode);
   Label if_return;
   AdvanceBytecodeOffsetOrReturn(masm, kInterpreterBytecodeArrayRegister,
                                 kInterpreterBytecodeOffsetRegister, ecx, esi,
@@ -1436,6 +1489,7 @@ void Builtins::Generate_InterpreterEnterBytecodeAdvance(MacroAssembler* masm) {
   __ SmiTag(ecx);
   __ mov(Operand(ebp, InterpreterFrameConstants::kBytecodeOffsetFromFp), ecx);
 
+  __ bind(&function_entry_bytecode);
   Generate_InterpreterEnterBytecode(masm);
 
   // We should never take the if_return path.
