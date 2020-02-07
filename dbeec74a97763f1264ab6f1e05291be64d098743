@@ -378,6 +378,30 @@
     },
     {
       "key": {
+        "uuid": "6e75e65b_e16fcd89",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-07T11:29:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "060c6de2_32715975",
+      "range": {
+        "startLine": 1185,
+        "startChar": 3,
+        "endLine": 1188,
+        "endChar": 36
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa0c0434_3c83d67c",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 40
@@ -681,6 +705,30 @@
       "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aec9347_d6f5b24f",
+        "filename": "src/codegen/source-position-table.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-07T11:29:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31f1b405_4bc70832",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 22
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1105,6 +1153,30 @@
       "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9743219f_4c82a1b4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-07T11:29:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3b8e270_193b9b69",
+      "range": {
+        "startLine": 1214,
+        "startChar": 13,
+        "endLine": 1214,
+        "endChar": 36
+      },
+      "revId": "dbeec74a97763f1264ab6f1e05291be64d098743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
