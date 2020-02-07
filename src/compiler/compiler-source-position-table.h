@@ -61,6 +61,7 @@ class V8_EXPORT_PRIVATE SourcePositionTable final
   Graph* const graph_;
   Decorator* decorator_;
   SourcePosition current_position_;
+
   NodeAuxData<SourcePosition, SourcePosition::Unknown> table_;
 
   DISALLOW_COPY_AND_ASSIGN(SourcePositionTable);
