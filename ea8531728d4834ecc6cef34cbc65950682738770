@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f292c6a_ccdde3a8",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-07T14:09:41Z",
+      "side": 1,
+      "message": "nit - fullstops on comments",
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e88b223_c5adbca3",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 1180,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-07T14:09:41Z",
+      "side": 1,
+      "message": "bytecode offset on the stack",
+      "range": {
+        "startLine": 1180,
+        "startChar": 40,
+        "endLine": 1180,
+        "endChar": 45
+      },
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91bcecd6_a8457b24",
+        "filename": "src/codegen/source-position-table.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-07T14:09:41Z",
+      "side": 1,
+      "message": "Should this be put around the Advance instead, i.e.:\n\n  if (current_.code_offset \u003d\u003d kFunctionEntryBytecodeOffset) {\n    function_entry_offset_ \u003d source_position().ScriptOffset();  \n  }\n  if (!done()) {\n    Advance();\n  }\n\n?",
+      "range": {
+        "startLine": 198,
+        "startChar": 62,
+        "endLine": 198,
+        "endChar": 69
+      },
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13ad5899_db9ea23a",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-07T14:09:41Z",
+      "side": 1,
+      "message": "nit - move this above \"// Control flow plumbing.\" with it\u0027s own comment - it\u0027s not really about control flow",
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "620056fc_bea7d969",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-07T14:09:41Z",
+      "side": 1,
+      "message": "Rather than creating this extra RecordAfterState, let\u0027s just directly call PrepareFrameState from BuildFunctionEntryStackCheck",
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b891568c_303be51d",
+        "filename": "src/compiler/compiler-source-position-table.h",
+        "patchSetId": 43
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-07T14:09:41Z",
+      "side": 1,
+      "message": "leftover from debugging?",
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14c4c678_4793e58c",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 5893,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-07T14:09:41Z",
+      "side": 1,
+      "message": "kFunctionEntryBytecodeOffset",
+      "range": {
+        "startLine": 5893,
+        "startChar": 50,
+        "endLine": 5893,
+        "endChar": 53
+      },
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

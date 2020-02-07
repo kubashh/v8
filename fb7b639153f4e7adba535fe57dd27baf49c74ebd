@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "35d7f44c_c1180090",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 42
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-07T14:09:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e43a142b_08990392",
+      "range": {
+        "startLine": 1187,
+        "startChar": 0,
+        "endLine": 1188,
+        "endChar": 79
+      },
+      "revId": "fb7b639153f4e7adba535fe57dd27baf49c74ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa596856_5363fa64",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 42
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-07T11:29:56Z",
       "side": 1,
       "message": "There\u0027s room for improvement by moving this mov upwards, making it a conditional mov and having one less branch (i.e the function_entry_bytecode branch would disappear).\n\nIt is a question of performance vs readability, and I would err towards readability.",
+      "range": {
+        "startLine": 1449,
+        "startChar": 0,
+        "endLine": 1450,
+        "endChar": 55
+      },
+      "revId": "fb7b639153f4e7adba535fe57dd27baf49c74ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8777dce9_f2146ca9",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 42
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-07T14:09:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fa596856_5363fa64",
       "range": {
         "startLine": 1449,
         "startChar": 0,
