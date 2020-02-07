@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "1f623d9f_c6040276",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-07T17:29:53Z",
+      "side": 1,
+      "message": "If we remove the kHeapObjectTag, kFirstBytecodeOffsetIncludingHeader is the same as kHeaderSize.\n\nThe other one kFunctionEntryBytecodeOffsetIncludingHeader might make sense (equal to kHeaderSize + kFunctionEntryBytecodeOffset) but its name is so big that it\u0027s roughly the same as writing the sum.",
+      "parentUuid": "98196e6d_5dc665db",
+      "range": {
+        "startLine": 1177,
+        "startChar": 45,
+        "endLine": 1177,
+        "endChar": 65
+      },
+      "revId": "aaf828afaade8c5dd610ce75cdaf2c1421a29dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46b81d0d_2ab18110",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 41

@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a309407d_abeb8a4f",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-07T17:29:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f292c6a_ccdde3a8",
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e88b223_c5adbca3",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 43
@@ -39,6 +57,30 @@
       "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d281b732_75c3d59c",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 1180,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-07T17:29:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e88b223_c5adbca3",
+      "range": {
+        "startLine": 1180,
+        "startChar": 40,
+        "endLine": 1180,
+        "endChar": 45
+      },
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "51a6499b_ff3b919f",
+        "filename": "src/codegen/source-position-table.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-07T17:29:53Z",
+      "side": 1,
+      "message": "No. If we do that, we would be skipping the first bytecode all the time, regardless of it being kFunctionEntryBytecodeOffset or not.\nWe only want to advance if we encounter a kFunctionEntryBytecodeOffset as the first value.\n\nAnother question can be, why not nest the ifs? i.e \n  if (current_.code_offset \u003d\u003d kFunctionEntryBytecodeOffset) {\n    function_entry_offset_ \u003d source_position().ScriptOffset();  \n  if (!done()) { Advance(); }\n}\n\nThis also doesn\u0027t work. The only case where \"!done()\" is true here is when we did the advance in line 197 and had no source positions. In that case \"current_.code_offset \u003d\u003d kFunctionEntryBytecodeOffset\" is true since the default value is kFunctionEntryBytecodeOffset.\n\nThen, the !done() is needed where it is.",
+      "parentUuid": "91bcecd6_a8457b24",
+      "range": {
+        "startLine": 198,
+        "startChar": 62,
+        "endLine": 198,
+        "endChar": 69
+      },
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13ad5899_db9ea23a",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 43
@@ -79,6 +145,24 @@
       "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8b97a96_edf98f96",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-07T17:29:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13ad5899_db9ea23a",
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "92138545_1fa36e04",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-07T17:29:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "620056fc_bea7d969",
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b891568c_303be51d",
         "filename": "src/compiler/compiler-source-position-table.h",
         "patchSetId": 43
@@ -113,6 +215,24 @@
       "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8701b701_a788f933",
+        "filename": "src/compiler/compiler-source-position-table.h",
+        "patchSetId": 43
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-07T17:29:53Z",
+      "side": 1,
+      "message": "Yes. Removed.",
+      "parentUuid": "b891568c_303be51d",
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -136,6 +256,30 @@
       "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42e5731c_cbfccda9",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 5893,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-07T17:29:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14c4c678_4793e58c",
+      "range": {
+        "startLine": 5893,
+        "startChar": 50,
+        "endLine": 5893,
+        "endChar": 53
+      },
+      "revId": "ea8531728d4834ecc6cef34cbc65950682738770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
