@@ -149,7 +149,9 @@ void SourcePositionTableBuilder::AddEntry(const PositionTableEntry& entry) {
   EncodeEntry(&bytes_, tmp);
   previous_ = entry;
 #ifdef ENABLE_SLOW_DCHECKS
-  raw_entries_.push_back(entry);
+  if (entry.code_offset != kFunctionEntryBytecodeOffset) {
+    raw_entries_.push_back(entry);
+  }
 #endif
 }
 
@@ -191,16 +193,26 @@ OwnedVector<byte> SourcePositionTableBuilder::ToSourcePositionTableVector() {
   return table;
 }
 
+void SourcePositionTableIterator::Initialize() {
+  Advance();
+  if (current_.code_offset == kFunctionEntryBytecodeOffset && !done()) {
+    // Set the function entry offset and advance the source position iterator to
+    // have the first 'real' value.
+    function_entry_offset_ = source_position().ScriptOffset();
+    Advance();
+  }
+}
+
 SourcePositionTableIterator::SourcePositionTableIterator(ByteArray byte_array,
                                                          IterationFilter filter)
     : raw_table_(VectorFromByteArray(byte_array)), filter_(filter) {
-  Advance();
+  Initialize();
 }
 
 SourcePositionTableIterator::SourcePositionTableIterator(
     Handle<ByteArray> byte_array, IterationFilter filter)
     : table_(byte_array), filter_(filter) {
-  Advance();
+  Initialize();
 #ifdef DEBUG
   // We can enable allocation because we keep the table in a handle.
   no_gc.Release();
@@ -210,7 +222,7 @@ SourcePositionTableIterator::SourcePositionTableIterator(
 SourcePositionTableIterator::SourcePositionTableIterator(
     Vector<const byte> bytes, IterationFilter filter)
     : raw_table_(bytes), filter_(filter) {
-  Advance();
+  Initialize();
 #ifdef DEBUG
   // We can enable allocation because the underlying vector does not move.
   no_gc.Release();
