@@ -961,7 +961,7 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
 
   // The bytecode offset was mentioned explicitly in the BEGIN_FRAME.
   const int raw_bytecode_offset =
-      BytecodeArray::kHeaderSize - kHeapObjectTag + bytecode_offset;
+      BytecodeArray::kFirstBytecodeOffset + bytecode_offset;
   Smi smi_bytecode_offset = Smi::FromInt(raw_bytecode_offset);
   frame_writer.PushRawObject(smi_bytecode_offset, "bytecode offset\n");
 
