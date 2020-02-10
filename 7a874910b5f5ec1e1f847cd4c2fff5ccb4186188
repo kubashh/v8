@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7f21bcb0_8b8bd3ba",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2020-02-10T13:26:42Z",
+      "side": 1,
+      "message": "Keep this comment with the code below that it is referring to.",
+      "range": {
+        "startLine": 752,
+        "startChar": 2,
+        "endLine": 752,
+        "endChar": 73
+      },
+      "revId": "7a874910b5f5ec1e1f847cd4c2fff5ccb4186188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3feceff6_9afd9196",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 19
