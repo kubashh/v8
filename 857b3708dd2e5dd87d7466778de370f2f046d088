@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8de831ec_252dbaa3",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "Looks like you accidentally copied the previous line.",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40f693f1_847a5b33",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "nit: could be __ instead of masm-\u003e",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d2e70ed_57b1df76",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "bytecode, same in other files.",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7651dc71_b66283b9",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "Note other spots above use \u0027below\u0027, out of curiosity why \u0027below_equal\u0027 here?",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cc2cfc8_54ee10b8",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "bytecode",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9c783ef_0e587244",
+        "filename": "src/codegen/source-position-table.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "😭 If there\u0027s a decent way of avoiding special-casing, let\u0027s please do that (see also a later comment). If not, CheckTableEquals should at least verify the function entry position too.",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3da62c4a_975c3c41",
+        "filename": "src/codegen/source-position-table.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "q: Why this change?",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04bbb068_5b054d05",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "Should this be taken from bailout_id?",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "637d0dc0_ad6b78d6",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "Given the new mechanism, I don\u0027t think we still need visited_first_stack_check. AFAICT BuildFunctionEntryStackCheck is guaranteed to be visited first and only once.",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a706ae95_1e373d34",
+        "filename": "src/compiler/compiler-source-position-table.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "super-nit: leftover",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ced8246d_95fafe42",
+        "filename": "src/interpreter/bytecode-array-builder.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "Is the latter part of this comment still accurate? Bytecodes probably cannot overwrite the artificial offset added here, right?",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d1d20cc_b68cb175",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T08:43:51Z",
+      "side": 1,
+      "message": "With this solution the burden is still on use-sites of SourcePositionTableIterator to add custom handling in case they can ever have kFunctionEntryBytecodeOffset as input. Just making sure we\u0027ve considered the alternatives:\n\n- The design doc mentions places that go out of sync if the new entry is not skipped during iteration. Are there many of those?\n- If not, what about adding a flag to SourcePositionTableIterator (e.g. kSkipArtificialBytecodeOffsets), with default behavior to *not* skip?",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
