@@ -160,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "2096e60e_e696f022",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T14:38:16Z",
+      "side": 1,
+      "message": "The majority is \u0027below\u0027. Done.",
+      "parentUuid": "d1b75686_b1c2980b",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2cc2cfc8_54ee10b8",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 44
@@ -227,6 +245,24 @@
       "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7d98a85_38e91626",
+        "filename": "src/codegen/source-position-table.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T14:38:16Z",
+      "side": 1,
+      "message": "Since we now have a way of deciding if we want to skip the FunctionEntry entry or not, this if is not needed.\nAs a bonus, we now also check for the FunctionEntry entry in CheckTableEquals if we have slow DCHECKs enabled.",
+      "parentUuid": "f00d5011_6e0cff45",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -353,6 +389,24 @@
     },
     {
       "key": {
+        "uuid": "eff976bf_e933d504",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T14:38:16Z",
+      "side": 1,
+      "message": "Ack. Removed that DCHECK.\nI would keep the rest (e.g visited_first_stack_check()) around for now until the iteration loop StackCheck is implicit.",
+      "parentUuid": "ff50f8d7_5756c937",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a706ae95_1e373d34",
         "filename": "src/compiler/compiler-source-position-table.h",
         "patchSetId": 44
@@ -470,6 +524,24 @@
       "side": 1,
       "message": "Oh I see. Hmm, judgement call. I do think having it as a flag makes the behavioral switch clearer, opinions? Flipping the default sgtm.",
       "parentUuid": "ec2a8f59_88bfbf23",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cc0184d_ad6147c0",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T14:38:16Z",
+      "side": 1,
+      "message": "Implemented it as a filter named FunctionEntryFilter, with the default value of skipping function entry.\n\nWe already had an IterationFilter. As a first approach, I tried making only one filter instead of two. However, they filter at different times. IterationFilter occurs at every Advance(), whereas FunctionEntryFilter only happens to the first one.\nAlso, merging them into only one filter had the downside of duplicating the existing filters (e.g kAllButNotFunctionEntry), as well as making the implementation of filter_satisfied in Advance() more difficult.\n\nNamed it \u0027filter\u0027 and not \u0027flag\u0027 to keep it in the same page as the IterationFilter.\n\nWDYT?",
+      "parentUuid": "173a81aa_f839ef3a",
       "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
