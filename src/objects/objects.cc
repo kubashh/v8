@@ -7966,7 +7966,7 @@ int JSGeneratorObject::source_position() const {
 
   // The stored bytecode offset is relative to a different base than what
   // is used in the source position table, hence the subtraction.
-  code_offset -= BytecodeArray::kHeaderSize - kHeapObjectTag;
+  code_offset -= BytecodeArray::kFirstBytecodeOffset;
   AbstractCode code =
       AbstractCode::cast(function().shared().GetBytecodeArray());
   return code.SourcePosition(code_offset);

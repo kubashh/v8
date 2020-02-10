@@ -571,7 +571,7 @@ class FrameArrayBuilder {
     int offset = Smi::ToInt(generator_object->input_or_debug_pos());
     // The stored bytecode offset is relative to a different base than what
     // is used in the source position table, hence the subtraction.
-    offset -= BytecodeArray::kHeaderSize - kHeapObjectTag;
+    offset -= BytecodeArray::kFirstBytecodeOffset;
 
     Handle<FixedArray> parameters = isolate_->factory()->empty_fixed_array();
     if (V8_UNLIKELY(FLAG_detailed_error_stack_trace)) {
