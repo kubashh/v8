@@ -841,6 +841,10 @@ class BytecodeArray : public FixedArrayBase {
   // Maximal length of a single BytecodeArray.
   static const int kMaxLength = kMaxSize - kHeaderSize;
 
+  static const int kFirstBytecodeOffset = kHeaderSize - kHeapObjectTag;
+  static const int kFunctionEntryOffset =
+      kFirstBytecodeOffset + kFunctionEntryBytecodeOffset;
+
   class BodyDescriptor;
 
   OBJECT_CONSTRUCTORS(BytecodeArray, FixedArrayBase);
