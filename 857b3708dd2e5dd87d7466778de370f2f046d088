@@ -407,6 +407,24 @@
     },
     {
       "key": {
+        "uuid": "c59a9760_ea2a13fb",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T14:44:42Z",
+      "side": 1,
+      "message": "Isn\u0027t removing just the DCHECK the worst of both worlds? IMO either remove the variable+DCHECK, or keep both.",
+      "parentUuid": "eff976bf_e933d504",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a706ae95_1e373d34",
         "filename": "src/compiler/compiler-source-position-table.h",
         "patchSetId": 44
@@ -545,6 +563,24 @@
       "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea5e0e99_c4cfa421",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T14:44:42Z",
+      "side": 1,
+      "message": "👍",
+      "parentUuid": "1cc0184d_ad6147c0",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
