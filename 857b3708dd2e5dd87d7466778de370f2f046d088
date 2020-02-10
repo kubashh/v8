@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "d1b75686_b1c2980b",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T13:33:27Z",
+      "side": 1,
+      "message": "\u003e Is there one that you prefer over the other?\n\nLet\u0027s just go with the majority - is that \u0027below\u0027? Note that \u0027below\u0027 also matches the inverse \u0027above_equal\u0027 used e.g. in Generate_PushBoundArguments, and also matches https://cs.chromium.org/chromium/src/v8/src/execution/isolate.cc?l\u003d4420\u0026rcl\u003d25c49d2bd6cbdc72b0779545d2a32406657befda.",
+      "parentUuid": "5376b14a_5a44b05e",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2cc2cfc8_54ee10b8",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 44
@@ -317,6 +335,24 @@
     },
     {
       "key": {
+        "uuid": "ff50f8d7_5756c937",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T13:33:27Z",
+      "side": 1,
+      "message": "Sure but I wouldn\u0027t keep variables like this around just for a DCHECK. I recently added `visited_first_stack_check()` to heuristically distinguish function-entry and loop stack checks. Now that we precisely know which is which, it is no longer necessary.",
+      "parentUuid": "fb5ad554_6fd2173b",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a706ae95_1e373d34",
         "filename": "src/compiler/compiler-source-position-table.h",
         "patchSetId": 44
@@ -416,6 +452,24 @@
       "side": 1,
       "message": "There are several places. What about adding the flag but making the default value the reverse? i.e skip unless the flag is set.\nThis function should be the only one that uses that not-skip behavior.",
       "parentUuid": "7d1d20cc_b68cb175",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "173a81aa_f839ef3a",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-10T13:33:27Z",
+      "side": 1,
+      "message": "Oh I see. Hmm, judgement call. I do think having it as a flag makes the behavioral switch clearer, opinions? Flipping the default sgtm.",
+      "parentUuid": "ec2a8f59_88bfbf23",
       "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
