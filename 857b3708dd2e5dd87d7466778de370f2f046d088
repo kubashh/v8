@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "437ec238_4dac8525",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "Thanks for catching. One one them should be the array. Updated.",
+      "parentUuid": "8de831ec_252dbaa3",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40f693f1_847a5b33",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 44
@@ -33,6 +51,24 @@
       "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c448b08_dedcd23d",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40f693f1_847a5b33",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fdfa9331_8c77485c",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d2e70ed_57b1df76",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7651dc71_b66283b9",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 44
@@ -64,6 +118,24 @@
       "writtenOn": "2020-02-10T08:43:51Z",
       "side": 1,
       "message": "Note other spots above use \u0027below\u0027, out of curiosity why \u0027below_equal\u0027 here?",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5376b14a_5a44b05e",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "That was an inconsistency we talked with Ross offline a while back. On the builtins, we sometimes use below and sometimes below equal (e.g https://cs.chromium.org/chromium/src/v8/src/builtins/x64/builtins-x64.cc?l\u003d97\u0026rcl\u003d25c49d2bd6cbdc72b0779545d2a32406657befda).\nIs there one that you prefer over the other?",
+      "parentUuid": "7651dc71_b66283b9",
       "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "ccd0e108_c0a9d938",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cc2cfc8_54ee10b8",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9c783ef_0e587244",
         "filename": "src/codegen/source-position-table.cc",
         "patchSetId": 44
@@ -98,6 +188,24 @@
       "writtenOn": "2020-02-10T08:43:51Z",
       "side": 1,
       "message": "😭 If there\u0027s a decent way of avoiding special-casing, let\u0027s please do that (see also a later comment). If not, CheckTableEquals should at least verify the function entry position too.",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f00d5011_6e0cff45",
+        "filename": "src/codegen/source-position-table.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "I am guessing that the later comment is the one about the flag in SourcePositionTableIterator. I have a couple of ideas on how to solve this special casing but it will depend on how we solve the other one first.\nI will leave this as unresolved, to be modified later.",
+      "parentUuid": "a9c783ef_0e587244",
       "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "f3e9593b_9ff6763e",
+        "filename": "src/codegen/source-position-table.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "It\u0027s the new default bytecode offset.\nFor example, when defining PositionTableEntry current_ below we want it to have the bytecode offset of -1, the new base.",
+      "parentUuid": "3da62c4a_975c3c41",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04bbb068_5b054d05",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 44
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "67789123_e5a37552",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "04bbb068_5b054d05",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "637d0dc0_ad6b78d6",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 44
@@ -149,6 +293,24 @@
       "writtenOn": "2020-02-10T08:43:51Z",
       "side": 1,
       "message": "Given the new mechanism, I don\u0027t think we still need visited_first_stack_check. AFAICT BuildFunctionEntryStackCheck is guaranteed to be visited first and only once.",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb5ad554_6fd2173b",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "But isn\u0027t that the point of DCHECKs? To flush out possible bugs like calling this function twice.",
+      "parentUuid": "637d0dc0_ad6b78d6",
       "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -172,6 +334,24 @@
     },
     {
       "key": {
+        "uuid": "13c65fdb_df7370fe",
+        "filename": "src/compiler/compiler-source-position-table.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a706ae95_1e373d34",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ced8246d_95fafe42",
         "filename": "src/interpreter/bytecode-array-builder.cc",
         "patchSetId": 44
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "3a2014ed_6e120f3f",
+        "filename": "src/interpreter/bytecode-array-builder.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "Yes they can if they call either MakeStatementPosition or MakeExpressionPosition. See CreateArrayLiteral in the first snippet of ArrayLiterals.golden for example (https://chromium-review.googlesource.com/c/v8/v8/+/1914218/44/test/cctest/interpreter/bytecode_expectations/ArrayLiterals.golden). We force the expression position 30, but then it gets overwritten to statement position 34.",
+      "parentUuid": "ced8246d_95fafe42",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d1d20cc_b68cb175",
         "filename": "src/objects/code.cc",
         "patchSetId": 44
@@ -200,6 +398,24 @@
       "writtenOn": "2020-02-10T08:43:51Z",
       "side": 1,
       "message": "With this solution the burden is still on use-sites of SourcePositionTableIterator to add custom handling in case they can ever have kFunctionEntryBytecodeOffset as input. Just making sure we\u0027ve considered the alternatives:\n\n- The design doc mentions places that go out of sync if the new entry is not skipped during iteration. Are there many of those?\n- If not, what about adding a flag to SourcePositionTableIterator (e.g. kSkipArtificialBytecodeOffsets), with default behavior to *not* skip?",
+      "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec2a8f59_88bfbf23",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-02-10T12:10:30Z",
+      "side": 1,
+      "message": "There are several places. What about adding the flag but making the default value the reverse? i.e skip unless the flag is set.\nThis function should be the only one that uses that not-skip behavior.",
+      "parentUuid": "7d1d20cc_b68cb175",
       "revId": "857b3708dd2e5dd87d7466778de370f2f046d088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
