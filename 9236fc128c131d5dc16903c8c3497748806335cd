@@ -22,6 +22,30 @@
       "revId": "9236fc128c131d5dc16903c8c3497748806335cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47205fff_6c9d1941",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3763,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-02-11T22:12:14Z",
+      "side": 1,
+      "message": "I\u0027ve moved up the function as well as created a separate function to handle BE cases",
+      "parentUuid": "8bcc723c_82df109f",
+      "range": {
+        "startLine": 3763,
+        "startChar": 0,
+        "endLine": 3763,
+        "endChar": 33
+      },
+      "revId": "9236fc128c131d5dc16903c8c3497748806335cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
