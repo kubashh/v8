@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43705cee_d6817fd4",
+        "filename": "tools/clusterfuzz/v8_suppressions.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-02-11T21:13:33Z",
+      "side": 0,
+      "message": "Still scratching my head about this one. I\u0027ll teach the new fuzzer to just not produce this. Not sure if that\u0027s easy in the old.",
+      "range": {
+        "startLine": 40,
+        "startChar": 29,
+        "endLine": 40,
+        "endChar": 40
+      },
+      "revId": "1166f87a1cbecd819e8450522abe0fab1c7f4f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "990a8872_6d16530c",
+        "filename": "tools/clusterfuzz/v8_suppressions.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-02-11T21:13:33Z",
+      "side": 0,
+      "message": "Used https://clusterfuzz.com/testcase-detail/5727577638502400 to verify it doesn\u0027t repro.",
+      "revId": "1166f87a1cbecd819e8450522abe0fab1c7f4f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6cc08ab_cbbd337b",
+        "filename": "tools/clusterfuzz/v8_suppressions.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-02-11T21:13:33Z",
+      "side": 0,
+      "message": "Both suppressions were made for spurious errors comparing with eager parsing.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 4
+      },
+      "revId": "1166f87a1cbecd819e8450522abe0fab1c7f4f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28c2a1c6_f52d91bf",
+        "filename": "tools/clusterfuzz/v8_suppressions.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-02-11T21:13:33Z",
+      "side": 0,
+      "message": "This is mocked out in D8.",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 65,
+        "endChar": 4
+      },
+      "revId": "1166f87a1cbecd819e8450522abe0fab1c7f4f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
