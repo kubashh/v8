@@ -34,6 +34,24 @@
       "revId": "49884cd7f1ce2efdb988db08b5ae8f0e885487ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4481cc7e_006f8b49",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2020-02-11T10:33:00Z",
+      "side": 1,
+      "message": "Either way you do not need DefineSameAsFirst() no. Using EmitIdentity() will not emit any instruction in the sequence but instead indicate the input and output are the same virtual register.\n\nAs an example, we do something similar for shuffles: https://source.chromium.org/chromium/v8/v8.git/+/0920f17628a50d58728f77739afd1c89979e93da:src/compiler/backend/arm64/instruction-selector-arm64.cc;l\u003d3484 where we call EmitIdentity() if the instruction is actually a no-op.",
+      "parentUuid": "1f303cc3_c9a02b8d",
+      "revId": "49884cd7f1ce2efdb988db08b5ae8f0e885487ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
