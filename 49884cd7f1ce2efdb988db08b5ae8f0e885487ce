@@ -16,6 +16,24 @@
       "revId": "49884cd7f1ce2efdb988db08b5ae8f0e885487ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f303cc3_c9a02b8d",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-02-11T00:00:09Z",
+      "side": 1,
+      "message": "I think this is a good idea! To clarify, if we were to call EmitIdentity, we would need to keep DefineSameAsFirst, right? Since EmitIdentity does nothing.\nBut if we emit kArm64S128Dup, then we can drop the DefineSameAsFirst.",
+      "parentUuid": "4ec33770_f56b3a2f",
+      "revId": "49884cd7f1ce2efdb988db08b5ae8f0e885487ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
