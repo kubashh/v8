@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d836369a_a50268fd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-02-11T14:09:51Z",
+      "side": 1,
+      "message": "Just a naming comment: v8dbg sounds a bit too generic, given that it\u0027s a windbg extension. Something like v8windbg would be better in this regard, especially if we should end up having non-windbg extensions with similar functionality in the future.\nWould it be trouble to rename it?",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "a2d119895018aea659ee84d07e8e83ecbb1c3c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41db9669_511ef9e2",
+        "filename": "tools/v8dbg/base/utilities.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-02-11T14:09:51Z",
+      "side": 1,
+      "message": "Another static_assert(sizeof(wchar_t) \u003d\u003d sizeof(char16_t)) here might be a good idea.",
+      "revId": "a2d119895018aea659ee84d07e8e83ecbb1c3c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
