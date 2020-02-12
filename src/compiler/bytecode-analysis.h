@@ -98,16 +98,21 @@ struct V8_EXPORT_PRIVATE LoopInfo {
 // non-OSR (osr_bailout_id is None).
 class V8_EXPORT_PRIVATE BytecodeAnalysis : public ZoneObject {
  public:
+  struct OsrEntryPoint {
+    int bytecode_offset;
+    int loop_level;  // 0 being the innermost loop, + 1 going to the outermost
+  };
+
   BytecodeAnalysis(Handle<BytecodeArray> bytecode_array, Zone* zone,
                    BailoutId osr_bailout_id, bool analyze_liveness);
 
   // Return true if the given offset is a loop header
   bool IsLoopHeader(int offset) const;
-  // Get the loop header offset of the containing loop for arbitrary
-  // {offset}, or -1 if the {offset} is not inside any loop.
-  int GetLoopOffsetFor(int offset) const;
+  // Get the <loop header offset, loop level> of the containing loop for
+  // arbitrary {offset}, or <-1, -1> if the {offset} is not inside any loop.
+  std::pair<int, int> GetLoopOffsetFor(int offset) const;
   // Get the loop info of the loop header at {header_offset}.
-  const LoopInfo& GetLoopInfoFor(int header_offset) const;
+  const ZoneVector<LoopInfo>& GetLoopInfoFor(int header_offset) const;
 
   // Get the top-level resume jump targets.
   const ZoneVector<ResumeJumpTarget>& resume_jump_targets() const {
@@ -118,11 +123,12 @@ class V8_EXPORT_PRIVATE BytecodeAnalysis : public ZoneObject {
   const BytecodeLivenessState* GetInLivenessFor(int offset) const;
   const BytecodeLivenessState* GetOutLivenessFor(int offset) const;
 
-  // In the case of OSR, the analysis also computes the (bytecode offset of the)
-  // OSR entry point from the {osr_bailout_id} that was given to the
-  // constructor.
-  int osr_entry_point() const {
-    CHECK_LE(0, osr_entry_point_);
+  // In the case of OSR, the analysis also computes the bytecode offset and
+  // level of the OSR entry point from the {osr_bailout_id} that was given to
+  // the constructor.
+  OsrEntryPoint osr_entry_point() const {
+    CHECK_LE(0, osr_entry_point_.bytecode_offset);
+    CHECK_LE(0, osr_entry_point_.loop_level);
     return osr_entry_point_;
   }
   // Return the osr_bailout_id (for verification purposes).
@@ -163,8 +169,9 @@ class V8_EXPORT_PRIVATE BytecodeAnalysis : public ZoneObject {
   ZoneVector<int> loop_end_index_queue_;
   ZoneVector<ResumeJumpTarget> resume_jump_targets_;
   ZoneMap<int, int> end_to_header_;
-  ZoneMap<int, LoopInfo> header_to_info_;
-  int osr_entry_point_;
+  ZoneMap<int, int> end_to_loop_level_;
+  ZoneMap<int, ZoneVector<LoopInfo>> header_to_info_;
+  OsrEntryPoint osr_entry_point_;
   BytecodeLivenessMap liveness_map_;
 
   DISALLOW_COPY_AND_ASSIGN(BytecodeAnalysis);
