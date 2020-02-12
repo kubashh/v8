@@ -322,13 +322,18 @@ void FastKeyAccumulator::Prepare() {
   // Fully walk the prototype chain and find the last prototype with keys.
   is_receiver_simple_enum_ = false;
   has_empty_prototype_ = true;
+  only_own_has_packed_elements_ =
+      IsFastPackedElementsKind(receiver_->map().elements_kind());
   JSReceiver last_prototype;
   may_have_elements_ = MayHaveElements(*receiver_);
   for (PrototypeIterator iter(isolate_, *receiver_); !iter.IsAtEnd();
        iter.Advance()) {
     JSReceiver current = iter.GetCurrent<JSReceiver>();
-    if (!may_have_elements_) {
-      may_have_elements_ = MayHaveElements(current);
+    if (!may_have_elements_ || only_own_has_packed_elements_) {
+      if (MayHaveElements(current)) {
+        may_have_elements_ = true;
+        only_own_has_packed_elements_ = false;
+      }
     }
     bool has_no_properties = CheckAndInitalizeEmptyEnumCache(current);
     if (has_no_properties) continue;
@@ -563,8 +568,15 @@ MaybeHandle<FixedArray> FastKeyAccumulator::GetKeysSlow(
 
 MaybeHandle<FixedArray> FastKeyAccumulator::GetKeysWithPrototypeInfoCache(
     GetKeysConversion keys_conversion) {
-  Handle<FixedArray> own_keys = KeyAccumulator::GetOwnEnumPropertyKeys(
-      isolate_, Handle<JSObject>::cast(receiver_));
+  Handle<FixedArray> own_keys;
+  if (may_have_elements_) {
+    GetOwnKeysWithElements<true>(isolate_, Handle<JSObject>::cast(receiver_),
+                                 keys_conversion, skip_indices_)
+        .ToHandle(&own_keys);
+  } else {
+    own_keys = KeyAccumulator::GetOwnEnumPropertyKeys(
+        isolate_, Handle<JSObject>::cast(receiver_));
+  }
   Handle<FixedArray> prototype_chain_keys;
   if (has_prototype_info_cache_) {
     prototype_chain_keys =
@@ -597,7 +609,7 @@ bool FastKeyAccumulator::MayHaveElements(JSReceiver receiver) {
 }
 
 bool FastKeyAccumulator::TryPrototypeInfoCache(Handle<JSReceiver> receiver) {
-  if (may_have_elements_) return false;
+  if (may_have_elements_ && !only_own_has_packed_elements_) return false;
   Handle<JSObject> object = Handle<JSObject>::cast(receiver);
   if (!object->HasFastProperties()) return false;
   if (object->HasNamedInterceptor()) return false;

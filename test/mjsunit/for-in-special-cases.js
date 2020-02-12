@@ -179,7 +179,7 @@ for_in_string_prototype();
   }
 })();
 
-(function for_in_prototype_change_element() {
+(function for_in_prototype_change_element1() {
   let prototype1 = {prop: 0, prop1: 1};
   let derived1 = {prop2: 2, prop3: 3};
 
@@ -196,6 +196,18 @@ for_in_string_prototype();
   derived1.__proto__ = {1: 1, 3: 3};
   for (let i = 0; i < 3; i++) {
     assertEquals(['prop2', 'prop3', '1', '3'], Accumulate(derived1));
+  }
+})();
+
+(function for_in_prototype_change_element2() {
+  Array.prototype.__proto__ = {'A': 1};
+  let array = ['a', 'b', 'c', 'd', 'e'];
+  for (let i = 0; i < 3; i++) {
+    assertEquals(['0', '1', '2', '3', '4', 'A'], Accumulate(array));
+  }
+  Array.prototype[10] = 'b';
+  for (let i = 0; i < 3; i++) {
+    assertEquals(['0', '1', '2', '3', '4', '10', 'A'], Accumulate(array));
   }
 })();
 
