@@ -6073,6 +6073,7 @@ void Heap::AddDirtyJSFinalizationGroup(
     JSFinalizationGroup finalization_group,
     std::function<void(HeapObject object, ObjectSlot slot, Object target)>
         gc_notify_updated_slot) {
+  // Add a FinalizationGroup to the head of the dirty list.
   DCHECK(!HasDirtyJSFinalizationGroups() ||
          dirty_js_finalization_groups_list().IsJSFinalizationGroup());
   DCHECK(finalization_group.next_dirty().IsUndefined(isolate()));
@@ -6088,14 +6089,28 @@ void Heap::AddDirtyJSFinalizationGroup(
 }
 
 MaybeHandle<JSFinalizationGroup> Heap::TakeOneDirtyJSFinalizationGroup() {
+  // Take a FinalizationGroup from the tail of the dirty list for fairness.
+  //
+  // TODO(syg): Implement a doubly linked version of VisitWeakList so this is
+  // O(1).
   if (HasDirtyJSFinalizationGroups()) {
-    Handle<JSFinalizationGroup> finalization_group(
+    Handle<JSFinalizationGroup> current(
         JSFinalizationGroup::cast(dirty_js_finalization_groups_list()),
         isolate());
-    set_dirty_js_finalization_groups_list(finalization_group->next_dirty());
-    finalization_group->set_next_dirty(
-        ReadOnlyRoots(isolate()).undefined_value());
-    return finalization_group;
+    MaybeHandle<JSFinalizationGroup> maybe_prev;
+    while (!current->next_dirty().IsUndefined(isolate())) {
+      maybe_prev = current;
+      current =
+          handle(JSFinalizationGroup::cast(current->next_dirty()), isolate());
+    }
+    Handle<JSFinalizationGroup> prev;
+    if (maybe_prev.ToHandle(&prev)) {
+      prev->set_next_dirty(ReadOnlyRoots(this).undefined_value());
+    } else {
+      set_dirty_js_finalization_groups_list(
+          ReadOnlyRoots(this).undefined_value());
+    }
+    return current;
   }
   return {};
 }
