@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9266596_bdbad53d",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6105,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-02-12T11:30:07Z",
+      "side": 1,
+      "message": "I would prefer avoiding O(n^2) complexity.\n\nHow about keeping track of dirty_js_finalization_groups_list_tail and inserting new FGs at the end.\n\nWeakListVisitor\u003cJSFinalizationGroup\u003e::VisitLiveObject and Heap::ProcessWeakListRoots  have to update the new dirty_js_finalization_groups_list_tail",
+      "range": {
+        "startLine": 6101,
+        "startChar": 4,
+        "endLine": 6105,
+        "endChar": 5
+      },
+      "revId": "e0a39068828b9849157a89fccfe9e0d1aa420991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
