@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e30872c_c0f88843",
+        "filename": "src/objects/keys.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-02-12T14:53:19Z",
+      "side": 1,
+      "message": "Why not support holey fast elements as well?",
+      "revId": "d4c5f3727c77821d808dd46437c748f1f118d549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
