@@ -52,6 +52,24 @@
       "revId": "49884cd7f1ce2efdb988db08b5ae8f0e885487ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45b12fe3_99c56a58",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-02-13T20:44:41Z",
+      "side": 1,
+      "message": "Ah, makes sense, thanks for the explanation. I tweaked this in the instruction selector, to check for shift % width \u003d\u003d 0, since a shift value of 32 on a i32x4 would wrap to 0 too.",
+      "parentUuid": "4481cc7e_006f8b49",
+      "revId": "49884cd7f1ce2efdb988db08b5ae8f0e885487ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
