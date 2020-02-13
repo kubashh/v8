@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cea7a3a1_f50ed3c7",
+        "filename": "src/debug/wasm/gdb-server/gdb-server.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2020-02-13T03:06:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83600724_03336117",
+      "revId": "7a874910b5f5ec1e1f847cd4c2fff5ccb4186188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f21bcb0_8b8bd3ba",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 19
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "0079acf8_07507dcc",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2020-02-13T03:06:54Z",
+      "side": 1,
+      "message": "This comment was actually recently deleted, this was a rebase error.",
+      "parentUuid": "7f21bcb0_8b8bd3ba",
+      "range": {
+        "startLine": 752,
+        "startChar": 2,
+        "endLine": 752,
+        "endChar": 73
+      },
+      "revId": "7a874910b5f5ec1e1f847cd4c2fff5ccb4186188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3feceff6_9afd9196",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 19
@@ -56,6 +98,24 @@
       "revId": "7a874910b5f5ec1e1f847cd4c2fff5ccb4186188",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9391e9e_71b1e0d2",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2020-02-13T03:06:54Z",
+      "side": 1,
+      "message": "Oops... I must have lost this check in some refactoring... :-|.",
+      "parentUuid": "3feceff6_9afd9196",
+      "revId": "7a874910b5f5ec1e1f847cd4c2fff5ccb4186188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
