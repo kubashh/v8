@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "355092fe_796ce2d1",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3759,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-02-13T16:42:51Z",
+      "side": 1,
+      "message": "We have 64x2LoadSplat too, so I think we can add in a case here. The previous patch did not implement it because we don\u0027t handle 64x2 scalar lowering yet, so it wasn\u0027t included. But in general 64x2 should be handled as well.",
+      "range": {
+        "startLine": 3759,
+        "startChar": 29,
+        "endLine": 3759,
+        "endChar": 44
+      },
+      "revId": "844fd49196a81b2e89dd3cd169e3fca60c2acc50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86eca0e9_06e4eedd",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-02-13T16:42:51Z",
+      "side": 1,
+      "message": "can we guard this with a #if V8_TARGET_BIG_ENDIAN, and similar wrap the definition with a #if too?",
+      "range": {
+        "startLine": 286,
+        "startChar": 1,
+        "endLine": 288,
+        "endChar": 44
+      },
+      "revId": "844fd49196a81b2e89dd3cd169e3fca60c2acc50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
