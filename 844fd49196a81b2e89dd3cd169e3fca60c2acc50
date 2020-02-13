@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cca6da8c_5455675e",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3759,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-02-13T18:11:25Z",
+      "side": 1,
+      "message": "I have now also included 64x2Splat.",
+      "parentUuid": "355092fe_796ce2d1",
+      "range": {
+        "startLine": 3759,
+        "startChar": 29,
+        "endLine": 3759,
+        "endChar": 44
+      },
+      "revId": "844fd49196a81b2e89dd3cd169e3fca60c2acc50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86eca0e9_06e4eedd",
         "filename": "src/compiler/wasm-compiler.h",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "844fd49196a81b2e89dd3cd169e3fca60c2acc50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f1c527a_90634870",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-02-13T18:11:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86eca0e9_06e4eedd",
+      "range": {
+        "startLine": 286,
+        "startChar": 1,
+        "endLine": 288,
+        "endChar": 44
+      },
+      "revId": "844fd49196a81b2e89dd3cd169e3fca60c2acc50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
