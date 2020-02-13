@@ -110,7 +110,7 @@ class V8_EXPORT_PRIVATE LoopBuilder final : public BreakableControlFlowBuilder {
 
   void LoopHeader();
   void LoopBody();
-  void JumpToHeader(int loop_depth);
+  void JumpToHeader(int loop_depth, bool emit_stack_check = false);
   void BindContinueTarget();
 
   // This method is called when visiting continue statements in the AST.

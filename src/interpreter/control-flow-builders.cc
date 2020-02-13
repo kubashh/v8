@@ -64,7 +64,12 @@ void LoopBuilder::LoopBody() {
   }
 }
 
-void LoopBuilder::JumpToHeader(int loop_depth) {
+void LoopBuilder::JumpToHeader(int loop_depth, bool emit_stack_check) {
+  if (emit_stack_check) {
+    // Emit the stack check without updating the source position.
+    builder()->StackCheck(kNoSourcePosition);
+  }
+
   // Pass the proper loop nesting level to the backwards branch, to trigger
   // on-stack replacement when armed for the given loop nesting depth.
   int level = Min(loop_depth, AbstractCode::kMaxLoopNestingMarker - 1);
