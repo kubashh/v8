@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9769394f_99d8ddf0",
+        "filename": "src/debug/wasm/gdb-server/gdb-remote-util.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-13T22:50:11Z",
+      "side": 1,
+      "message": "Really? I always though big/little endian changed the byte order, but not the hex representation of an actual byte. (e.g. a short value of 15 is 0x0F00 little endian and 0x000F big endian - not 0x00F0).",
+      "revId": "d8dbb3398623dbbf81ec8d365d0b806caf1f0151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "324cf77f_fd1fb21e",
+        "filename": "src/debug/wasm/gdb-server/gdb-remote-util.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-13T22:50:11Z",
+      "side": 1,
+      "message": "Why doesn\u0027t this need to care about endian if the above does?",
+      "range": {
+        "startLine": 27,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 51
+      },
+      "revId": "d8dbb3398623dbbf81ec8d365d0b806caf1f0151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8053826_cde4fb97",
+        "filename": "src/debug/wasm/gdb-server/gdb-remote-util.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-13T22:50:11Z",
+      "side": 1,
+      "message": "This code looked a little funky to me, so I searched for how it\u0027s used, but don\u0027t see it called anywhere in this CL. Why is this needed?",
+      "range": {
+        "startLine": 62,
+        "startChar": 25,
+        "endLine": 62,
+        "endChar": 36
+      },
+      "revId": "d8dbb3398623dbbf81ec8d365d0b806caf1f0151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61881fa1_0ddd71cc",
+        "filename": "src/debug/wasm/gdb-server/gdb-remote-util.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-13T22:50:11Z",
+      "side": 1,
+      "message": "I don\u0027t know how big \"count\" can be, but as you know it up front, maybe use string::reserve to avoid the constant reallocation as it grows. (Also, can you reuse UInt8ToHex which you already wrote above?)",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 34
+      },
+      "revId": "d8dbb3398623dbbf81ec8d365d0b806caf1f0151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13bb757b_791c9a11",
+        "filename": "src/debug/wasm/gdb-server/packet.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-13T22:50:11Z",
+      "side": 1,
+      "message": "Is this right? Did you mean `capacity`? Or do you expect it to be a 64-byte char vector after clearing it? (If this is the intent, please add a comment as to why).",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 26
+      },
+      "revId": "d8dbb3398623dbbf81ec8d365d0b806caf1f0151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9055aeb7_937f1599",
+        "filename": "src/debug/wasm/gdb-server/packet.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-13T22:50:11Z",
+      "side": 1,
+      "message": "Again, is it expected that the packet bytes are always a multiple of 64 bytes? Else seems just push_back and letting the vector take care of reallocating would be easier.",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 39,
+        "endChar": 3
+      },
+      "revId": "d8dbb3398623dbbf81ec8d365d0b806caf1f0151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76fdca1c_a9482639",
+        "filename": "src/debug/wasm/gdb-server/packet.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-13T22:50:11Z",
+      "side": 1,
+      "message": "So individual bytes and shorts (uint8_t and uint16_t) always go in little-endian, but uint64_t big endian? If this is deliberate, can you note this, as it seems a little surprising.",
+      "range": {
+        "startLine": 90,
+        "startChar": 38,
+        "endLine": 90,
+        "endChar": 42
+      },
+      "revId": "d8dbb3398623dbbf81ec8d365d0b806caf1f0151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1989c9f9_ee5e4438",
+        "filename": "src/debug/wasm/gdb-server/packet.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-13T22:50:11Z",
+      "side": 1,
+      "message": "\"any non-null character\" I assume, being that it only being called with a char* and no length.",
+      "range": {
+        "startLine": 48,
+        "startChar": 12,
+        "endLine": 48,
+        "endChar": 25
+      },
+      "revId": "d8dbb3398623dbbf81ec8d365d0b806caf1f0151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b81c5269_91d606e7",
+        "filename": "src/debug/wasm/gdb-server/packet.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2020-02-13T22:50:11Z",
+      "side": 1,
+      "message": "I don\u0027t understand this. If SEP is null, then how does it know what the separator is to throw away? (Unless SEP does not mean the \"sep\" parameter here).",
+      "range": {
+        "startLine": 65,
+        "startChar": 43,
+        "endLine": 66,
+        "endChar": 29
+      },
+      "revId": "d8dbb3398623dbbf81ec8d365d0b806caf1f0151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
