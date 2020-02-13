@@ -1353,6 +1353,11 @@ class FeedbackVectorData : public HeapObjectData {
 
   double invocation_count() const { return invocation_count_; }
 
+  SharedFunctionInfoData* shared_function_info() {
+    CHECK(serialized_);
+    return shared_function_info_;
+  }
+
   void Serialize(JSHeapBroker* broker);
   FeedbackCellData* GetClosureFeedbackCell(JSHeapBroker* broker,
                                            int index) const;
@@ -1361,6 +1366,7 @@ class FeedbackVectorData : public HeapObjectData {
   double const invocation_count_;
 
   bool serialized_ = false;
+  SharedFunctionInfoData* shared_function_info_;
   ZoneVector<ObjectData*> closure_feedback_cell_array_;
 };
 
@@ -1392,6 +1398,9 @@ void FeedbackVectorData::Serialize(JSHeapBroker* broker) {
 
   TraceScope tracer(broker, this, "FeedbackVectorData::Serialize");
   Handle<FeedbackVector> vector = Handle<FeedbackVector>::cast(object());
+  Handle<SharedFunctionInfo> sfi(vector->shared_function_info(),
+                                 broker->isolate());
+  shared_function_info_ = broker->GetOrCreateData(sfi)->AsSharedFunctionInfo();
   DCHECK(closure_feedback_cell_array_.empty());
   int length = vector->closure_feedback_cell_array().length();
   closure_feedback_cell_array_.reserve(length);
@@ -3692,6 +3701,22 @@ ScopeInfoRef NativeContextRef::scope_info() const {
                         handle(object()->scope_info(), broker()->isolate()));
   }
   return ScopeInfoRef(broker(), data()->AsNativeContext()->scope_info());
+}
+
+SharedFunctionInfoRef FeedbackVectorRef::shared_function_info() const {
+  if (data_->should_access_heap()) {
+    DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
+    AllowHandleAllocationIf allow_handle_allocation(data()->kind(),
+                                                    broker()->mode());
+    AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
+                                                      broker()->mode());
+    return SharedFunctionInfoRef(
+        broker(),
+        handle(object()->shared_function_info(), broker()->isolate()));
+  }
+
+  return SharedFunctionInfoRef(
+      broker(), data()->AsFeedbackVector()->shared_function_info());
 }
 
 MapRef NativeContextRef::GetFunctionMapFromIndex(int index) const {
