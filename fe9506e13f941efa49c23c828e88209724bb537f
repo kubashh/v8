@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "48fc944e_7aac970e",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3744,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-02-13T19:26:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc03ecf5_cda94605",
+      "revId": "fe9506e13f941efa49c23c828e88209724bb537f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4675b933_6b2f5f62",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 9
@@ -30,6 +48,30 @@
       "writtenOn": "2020-02-13T18:33:32Z",
       "side": 1,
       "message": "nit: is it worth describing why we do this special case for big endian here? essentially copy your commit message here, so that it\u0027s clearer",
+      "range": {
+        "startLine": 3785,
+        "startChar": 0,
+        "endLine": 3785,
+        "endChar": 33
+      },
+      "revId": "fe9506e13f941efa49c23c828e88209724bb537f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e682f805_5b55d351",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3785,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-02-13T19:26:48Z",
+      "side": 1,
+      "message": "I have now added comments about the change.",
+      "parentUuid": "4675b933_6b2f5f62",
       "range": {
         "startLine": 3785,
         "startChar": 0,
