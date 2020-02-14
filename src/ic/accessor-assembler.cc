@@ -481,6 +481,10 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
                    IntPtrConstant(LoadHandler::kConstantFromPrototype)),
          &constant);
 
+  GotoIf(WordEqual(handler_kind,
+                   IntPtrConstant(LoadHandler::kCachedAccessorResult)),
+         &constant);
+
   GotoIf(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kNonExistent)),
          &nonexistent);
 
@@ -926,11 +930,17 @@ void AccessorAssembler::HandleLoadICProtoHandler(
 
   BIND(&is_smi);
   {
-    CSA_ASSERT(
-        this,
-        WordEqual(
-            Signed(DecodeWord<LoadHandler::KindBits>(SmiUntag(smi_handler))),
-            IntPtrConstant(LoadHandler::kConstantFromPrototype)));
+#ifdef DEBUG
+    TNode<IntPtrT> handler_type =
+        Signed(DecodeWord<LoadHandler::KindBits>(SmiUntag(smi_handler)));
+    TNode<BoolT> is_constant_from_prototype = WordEqual(
+        handler_type, IntPtrConstant(LoadHandler::kConstantFromPrototype));
+    TNode<BoolT> is_cached_accessor_result = WordEqual(
+        handler_type, IntPtrConstant(LoadHandler::kCachedAccessorResult));
+    CSA_ASSERT(this,
+               Word32Or(is_constant_from_prototype, is_cached_accessor_result));
+#endif
+
     if (access_mode == LoadAccessMode::kHas) {
       exit_point->Return(TrueConstant());
     } else {

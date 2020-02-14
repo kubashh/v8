@@ -170,7 +170,7 @@ class LoadIC : public IC {
  public:
   LoadIC(Isolate* isolate, Handle<FeedbackVector> vector, FeedbackSlot slot,
          FeedbackSlotKind kind)
-      : IC(isolate, vector, slot, kind) {
+      : IC(isolate, vector, slot, kind), store_accessor_result_(false) {
     DCHECK(IsAnyLoad() || IsAnyHas());
   }
 
@@ -194,6 +194,7 @@ class LoadIC : public IC {
  private:
   Handle<Object> ComputeHandler(LookupIterator* lookup);
 
+  bool store_accessor_result_;
   friend class IC;
   friend class NamedLoadHandlerCompiler;
 };

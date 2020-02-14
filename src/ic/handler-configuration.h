@@ -46,7 +46,8 @@ class LoadHandler final : public DataHandler {
     kSlow,
     kProxy,
     kNonExistent,
-    kModuleExport
+    kModuleExport,
+    kCachedAccessorResult
   };
   using KindBits = base::BitField<Kind, 0, 4>;
 
@@ -123,6 +124,10 @@ class LoadHandler final : public DataHandler {
   // Creates a Smi-handler for loading a cached constant from fast
   // prototype object.
   static inline Handle<Smi> LoadConstantFromPrototype(Isolate* isolate);
+
+  // Creates a Smi-handler for loading a cached result of an accessor
+  // from an object.
+  static inline Handle<Smi> LoadCachedAccessorResult(Isolate* isolate);
 
   // Creates a Smi-handler for calling a getter on a fast object.
   static inline Handle<Smi> LoadAccessor(Isolate* isolate, int descriptor);
