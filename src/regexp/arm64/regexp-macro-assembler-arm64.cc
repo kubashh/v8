@@ -124,6 +124,8 @@ RegExpMacroAssemblerARM64::RegExpMacroAssemblerARM64(Isolate* isolate,
   // We can cache at most 16 W registers in x0-x7.
   STATIC_ASSERT(kNumCachedRegisters <= 16);
   STATIC_ASSERT((kNumCachedRegisters % 2) == 0);
+  __ CFICallTarget();
+
   __ B(&entry_label_);   // We'll write the entry code later.
   __ Bind(&start_label_);  // And then continue from here.
 }
@@ -212,6 +214,9 @@ void RegExpMacroAssemblerARM64::Bind(Label* label) {
   __ Bind(label);
 }
 
+void RegExpMacroAssemblerARM64::CFIJumpTarget(Label* label) {
+  __ CFIJumpTarget(label);
+}
 
 void RegExpMacroAssemblerARM64::CheckCharacter(uint32_t c, Label* on_equal) {
   CompareAndBranchOrBacktrack(current_character(), c, eq, on_equal);

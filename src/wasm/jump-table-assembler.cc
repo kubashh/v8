@@ -134,6 +134,7 @@ void JumpTableAssembler::NopBytes(int bytes) {
 void JumpTableAssembler::EmitLazyCompileJumpSlot(uint32_t func_index,
                                                  Address lazy_compile_target) {
   int start = pc_offset();
+  CFIEntryPoint();
   Mov(kWasmCompileLazyFuncIndexRegister.W(), func_index);  // 1-2 instr
   Jump(lazy_compile_target, RelocInfo::NONE);              // 1 instr
   int nop_bytes = start + kLazyCompileTableSlotSize - pc_offset();
@@ -147,6 +148,8 @@ bool JumpTableAssembler::EmitJumpSlot(Address target) {
     return false;
   }
 
+  CFIEntryPoint();
+
   Jump(target, RelocInfo::NONE);
   return true;
 }
@@ -157,6 +160,18 @@ void JumpTableAssembler::EmitFarJumpSlot(Address target) {
   // will only be called for the very specific runtime slot table, and we want
   // to have maximum control over the generated code.
   // Do not reuse this code without validating that the same assumptions hold.
+#ifdef ENABLE_CONTROL_FLOW_INTEGRITY
+  CFIEntryPoint();
+  constexpr Register kTmpReg = x16;
+  DCHECK(TmpList()->IncludesAliasOf(kTmpReg));
+  // Load from [pc + 3 * kInstrSize] to {kTmpReg}, then branch there.
+  ldr_pcrel(kTmpReg, 3);  // 1 instruction
+  br(kTmpReg);            // 1 instruction
+  nop();       // To keep the target below aligned to kSystemPointerSize.
+  dq(target);  // 8 bytes (== 2 instructions)
+  STATIC_ASSERT(2 * kInstrSize == kSystemPointerSize);
+  STATIC_ASSERT(kFarJumpTableSlotSize == 6 * kInstrSize);
+#else
   constexpr Register kTmpReg = x16;
   DCHECK(TmpList()->IncludesAliasOf(kTmpReg));
   // Load from [pc + 2 * kInstrSize] to {kTmpReg}, then branch there.
@@ -165,14 +180,21 @@ void JumpTableAssembler::EmitFarJumpSlot(Address target) {
   dq(target);             // 8 bytes (== 2 instructions)
   STATIC_ASSERT(2 * kInstrSize == kSystemPointerSize);
   STATIC_ASSERT(kFarJumpTableSlotSize == 4 * kInstrSize);
+#endif
 }
 
 // static
 void JumpTableAssembler::PatchFarJumpSlot(Address slot, Address target) {
-  // The slot needs to be pointer-size aligned so we can atomically update it.
-  DCHECK(IsAligned(slot, kSystemPointerSize));
+#ifdef ENABLE_CONTROL_FLOW_INTEGRITY
+  // Offset of the target is at 16 bytes, see {EmitFarJumpSlot}.
+  int kPointerOffset = 4 * kInstrSize;
+#else
   // Offset of the target is at 8 bytes, see {EmitFarJumpSlot}.
-  reinterpret_cast<std::atomic<Address>*>(slot + kSystemPointerSize)
+  int kPointerOffset = 2 * kInstrSize;
+#endif
+  // The slot needs to be pointer-size aligned so we can atomically update it.
+  DCHECK(IsAligned(slot + kPointerOffset, kSystemPointerSize));
+  reinterpret_cast<std::atomic<Address>*>(slot + kPointerOffset)
       ->store(target, std::memory_order_relaxed);
   // The data update is guaranteed to be atomic since it's a properly aligned
   // and stores a single machine word. This update will eventually be observed
