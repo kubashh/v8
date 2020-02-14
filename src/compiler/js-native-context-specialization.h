@@ -207,15 +207,19 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
   bool CanTreatHoleAsUndefined(ZoneVector<Handle<Map>> const& receiver_maps);
 
   void RemoveImpossibleReceiverMaps(
-      Node* receiver, ZoneVector<Handle<Map>>* receiver_maps) const;
+      Node* receiver,
+      ZoneVector<std::pair<Handle<Map>, MaybeHandle<Object>>>* receiver_maps)
+      const;
 
   ElementAccessFeedback const& TryRefineElementAccessFeedback(
       ElementAccessFeedback const& feedback, Node* receiver,
       Node* effect) const;
 
   // Try to infer maps for the given {receiver} at the current {effect}.
-  bool InferReceiverMaps(Node* receiver, Node* effect,
-                         ZoneVector<Handle<Map>>* receiver_maps) const;
+  bool InferReceiverMaps(
+      Node* receiver, Node* effect,
+      ZoneVector<std::pair<Handle<Map>, MaybeHandle<Object>>>* receiver_maps)
+      const;
 
   // Try to infer a root map for the {receiver} independent of the current
   // program location.

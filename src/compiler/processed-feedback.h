@@ -157,15 +157,22 @@ class ElementAccessFeedback : public ProcessedFeedback {
 
 class NamedAccessFeedback : public ProcessedFeedback {
  public:
-  NamedAccessFeedback(NameRef const& name, ZoneVector<Handle<Map>> const& maps,
-                      FeedbackSlotKind slot_kind);
+  NamedAccessFeedback(
+      NameRef const& name,
+      ZoneVector<std::pair<Handle<Map>, MaybeHandle<Object>>> const&
+          maps_and_results,
+      FeedbackSlotKind slot_kind);
 
   NameRef const& name() const { return name_; }
-  ZoneVector<Handle<Map>> const& maps() const { return maps_; }
+  ZoneVector<std::pair<Handle<Map>, MaybeHandle<Object>>> const&
+  maps_and_results() const {
+    return maps_and_results_;
+  }
 
  private:
   NameRef const name_;
-  ZoneVector<Handle<Map>> const maps_;
+  ZoneVector<std::pair<Handle<Map>, MaybeHandle<Object>>> const
+      maps_and_results_;
 };
 
 class CallFeedback : public ProcessedFeedback {

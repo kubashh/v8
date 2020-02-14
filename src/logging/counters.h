@@ -1066,6 +1066,7 @@ class RuntimeCallTimer final {
   V(LoadIC_LoadCallback)                          \
   V(LoadIC_LoadConstantDH)                        \
   V(LoadIC_LoadConstantFromPrototypeDH)           \
+  V(LoadIC_LoadCachedAccessorResult)              \
   V(LoadIC_LoadFieldDH)                           \
   V(LoadIC_LoadFieldFromPrototypeDH)              \
   V(LoadIC_LoadGlobalDH)                          \

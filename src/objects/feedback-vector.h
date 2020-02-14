@@ -143,6 +143,8 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,
                                            FeedbackSlotKind kind);
 
 using MaybeObjectHandles = std::vector<MaybeObjectHandle>;
+using MapAndResultHandles =
+    std::vector<std::pair<Handle<Map>, MaybeHandle<Object>>>;
 
 class FeedbackMetadata;
 
@@ -649,6 +651,8 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   int ExtractMaps(MapHandles* maps) const;
   int ExtractMapsAndHandlers(MapHandles* maps,
                              MaybeObjectHandles* handlers) const;
+  int ExtractMapsAndCachedAccessorResults(
+      MapAndResultHandles* maps_and_results) const;
   MaybeObjectHandle FindHandlerForMap(Handle<Map> map) const;
 
   bool IsCleared() const {

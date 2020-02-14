@@ -7997,6 +7997,11 @@ AccessCheckInfo AccessCheckInfo::Get(Isolate* isolate,
   return AccessCheckInfo::cast(data_obj);
 }
 
+bool FunctionTemplateInfo::CanCacheAccessorResult(Handle<Object> getter) {
+  return getter->IsFunctionTemplateInfo() &&
+         FunctionTemplateInfo::cast(*getter).can_cache_accessor_result();
+}
+
 MaybeHandle<Name> FunctionTemplateInfo::TryGetCachedPropertyName(
     Isolate* isolate, Handle<Object> getter) {
   if (getter->IsFunctionTemplateInfo()) {

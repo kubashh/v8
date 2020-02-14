@@ -1018,6 +1018,101 @@ int FeedbackNexus::ExtractMapsAndHandlers(MapHandles* maps,
   return 0;
 }
 
+namespace {
+
+bool GetCachedAccessorResult(Isolate* isolate, MaybeObject maybe_handler,
+                             Object* result) {
+  DCHECK(!maybe_handler->IsCleared());
+  HeapObject handler;
+  if (!maybe_handler->GetHeapObjectIfStrong(&handler)) return false;
+
+  if (!handler.IsDataHandler()) return false;
+
+  DataHandler data_handler = DataHandler::cast(handler);
+  if (!data_handler.smi_handler().IsSmi()) return false;
+
+  Smi smi_handler = Smi::cast(data_handler.smi_handler());
+  if (LoadHandler::GetHandlerKind(smi_handler) !=
+      LoadHandler::Kind::kCachedAccessorResult)
+    return false;
+
+  MaybeObject maybe_result = data_handler.data1();
+  Smi smi;
+  if (maybe_result->ToSmi(&smi)) {
+    *result = smi;
+    return true;
+  }
+
+  HeapObject heap_obj;
+  if (maybe_result->GetHeapObjectIfWeak(&heap_obj)) {
+    *result = heap_obj;
+    return true;
+  }
+
+  return false;
+}
+
+}  // namespace
+
+int FeedbackNexus::ExtractMapsAndCachedAccessorResults(
+    MapAndResultHandles* maps_and_results) const {
+  DCHECK(IsLoadICKind(kind()));
+
+  DisallowHeapAllocation no_gc;
+  Isolate* isolate = GetIsolate();
+  MaybeObject feedback = GetFeedback();
+  bool is_named_feedback = IsPropertyNameFeedback(feedback);
+  HeapObject heap_object;
+  if ((feedback->GetHeapObjectIfStrong(&heap_object) &&
+       heap_object.IsWeakFixedArray()) ||
+      is_named_feedback) {
+    int found = 0;
+    WeakFixedArray array;
+    if (is_named_feedback) {
+      array =
+          WeakFixedArray::cast(GetFeedbackExtra()->GetHeapObjectAssumeStrong());
+    } else {
+      array = WeakFixedArray::cast(heap_object);
+    }
+    const int increment = 2;
+    HeapObject heap_object;
+    for (int i = 0; i < array.length(); i += increment) {
+      DCHECK(array.Get(i)->IsWeakOrCleared());
+      if (array.Get(i)->GetHeapObjectIfWeak(&heap_object)) {
+        MaybeObject handler = array.Get(i + 1);
+        if (!handler->IsCleared()) {
+          DCHECK(IC::IsHandler(handler));
+          Handle<Map> map = handle(Map::cast(heap_object), isolate);
+          std::pair<Handle<Map>, MaybeHandle<Object>> result = {
+              map, MaybeHandle<Object>()};
+          Object value;
+          if (GetCachedAccessorResult(isolate, handler, &value)) {
+            result = {map, handle(value, isolate)};
+          }
+          found++;
+        }
+      }
+    }
+    return found;
+  } else if (feedback->GetHeapObjectIfWeak(&heap_object)) {
+    MaybeObject handler = GetFeedbackExtra();
+    if (!handler->IsCleared()) {
+      DCHECK(IC::IsHandler(handler));
+      Handle<Map> map = handle(Map::cast(heap_object), isolate);
+      std::pair<Handle<Map>, MaybeHandle<Object>> result = {
+          map, MaybeHandle<Object>()};
+      Object value;
+      if (GetCachedAccessorResult(isolate, handler, &value)) {
+        result = {map, handle(value, isolate)};
+      }
+      maps_and_results->push_back(result);
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
 MaybeObjectHandle FeedbackNexus::FindHandlerForMap(Handle<Map> map) const {
   DCHECK(IsLoadICKind(kind()) || IsStoreICKind(kind()) ||
          IsKeyedLoadICKind(kind()) || IsKeyedStoreICKind(kind()) ||

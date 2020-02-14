@@ -69,7 +69,8 @@ class PropertyAccessInfo final {
     kDataConstant,
     kAccessorConstant,
     kModuleExport,
-    kStringLength
+    kStringLength,
+    kCachedAccessorResult
   };
 
   static PropertyAccessInfo NotFound(Zone* zone, Handle<Map> receiver_map,
@@ -93,6 +94,10 @@ class PropertyAccessInfo final {
                                              Handle<Map> receiver_map,
                                              Handle<Object> constant,
                                              MaybeHandle<JSObject> holder);
+  static PropertyAccessInfo CachedAccessorResult(Zone* zone,
+                                                 Handle<Map> receiver_map,
+                                                 Handle<Object> result,
+                                                 MaybeHandle<JSObject> holder);
   static PropertyAccessInfo ModuleExport(Zone* zone, Handle<Map> receiver_map,
                                          Handle<Cell> cell);
   static PropertyAccessInfo StringLength(Zone* zone, Handle<Map> receiver_map);
@@ -110,6 +115,9 @@ class PropertyAccessInfo final {
   bool IsAccessorConstant() const { return kind() == kAccessorConstant; }
   bool IsModuleExport() const { return kind() == kModuleExport; }
   bool IsStringLength() const { return kind() == kStringLength; }
+  bool IsCachedAccessorResult() const {
+    return kind() == kCachedAccessorResult;
+  }
 
   bool HasTransitionMap() const { return !transition_map().is_null(); }
   ConstFieldInfo GetConstFieldInfo() const;
@@ -173,6 +181,7 @@ class AccessInfoFactory final {
 
   PropertyAccessInfo ComputePropertyAccessInfo(Handle<Map> map,
                                                Handle<Name> name,
+                                               MaybeHandle<Object> result,
                                                AccessMode access_mode) const;
 
   // Convenience wrapper around {ComputePropertyAccessInfo} for multiple maps.
@@ -207,8 +216,8 @@ class AccessInfoFactory final {
                                                 InternalIndex descriptor,
                                                 AccessMode access_mode) const;
   PropertyAccessInfo ComputeAccessorDescriptorAccessInfo(
-      Handle<Map> receiver_map, Handle<Name> name, Handle<Map> map,
-      MaybeHandle<JSObject> holder, InternalIndex descriptor,
+      Handle<Map> receiver_map, Handle<Name> name, MaybeHandle<Object> result,
+      Handle<Map> map, MaybeHandle<JSObject> holder, InternalIndex descriptor,
       AccessMode access_mode) const;
 
   void MergePropertyAccessInfos(ZoneVector<PropertyAccessInfo> infos,

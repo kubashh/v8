@@ -155,7 +155,7 @@ bool ShouldUseMegamorphicLoadBuiltin(FeedbackSource const& source,
   if (feedback.kind() == ProcessedFeedback::kElementAccess) {
     return feedback.AsElementAccess().transition_groups().empty();
   } else if (feedback.kind() == ProcessedFeedback::kNamedAccess) {
-    return feedback.AsNamedAccess().maps().empty();
+    return feedback.AsNamedAccess().maps_and_results().empty();
   } else if (feedback.kind() == ProcessedFeedback::kInsufficient) {
     return false;
   }

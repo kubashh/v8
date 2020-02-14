@@ -126,6 +126,14 @@ PropertyAccessInfo PropertyAccessInfo::StringLength(Zone* zone,
                             {{receiver_map}, zone});
 }
 
+// static
+PropertyAccessInfo PropertyAccessInfo::CachedAccessorResult(
+    Zone* zone, Handle<Map> receiver_map, Handle<Object> result,
+    MaybeHandle<JSObject> holder) {
+  return PropertyAccessInfo(zone, kAccessorConstant, holder, result,
+                            {{receiver_map}, zone});
+}
+
 PropertyAccessInfo::PropertyAccessInfo(Zone* zone)
     : kind_(kInvalid),
       receiver_maps_(zone),
@@ -238,6 +246,8 @@ bool PropertyAccessInfo::Merge(PropertyAccessInfo const* that,
       return false;
     }
 
+    // TODO(neis): Is this correct?
+    case kCachedAccessorResult:
     case kAccessorConstant: {
       // Check if we actually access the same constant.
       if (this->constant_.address() == that->constant_.address()) {
@@ -412,8 +422,8 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
 }
 
 PropertyAccessInfo AccessInfoFactory::ComputeAccessorDescriptorAccessInfo(
-    Handle<Map> receiver_map, Handle<Name> name, Handle<Map> map,
-    MaybeHandle<JSObject> holder, InternalIndex descriptor,
+    Handle<Map> receiver_map, Handle<Name> name, MaybeHandle<Object> result,
+    Handle<Map> map, MaybeHandle<JSObject> holder, InternalIndex descriptor,
     AccessMode access_mode) const {
   DCHECK(descriptor.is_found());
   Handle<DescriptorArray> descriptors(map->instance_descriptors(), isolate());
@@ -468,9 +478,17 @@ PropertyAccessInfo AccessInfoFactory::ComputeAccessorDescriptorAccessInfo(
     Handle<Name> cached_property_name;
     if (FunctionTemplateInfo::TryGetCachedPropertyName(isolate(), accessor)
             .ToHandle(&cached_property_name)) {
-      PropertyAccessInfo access_info =
-          ComputePropertyAccessInfo(map, cached_property_name, access_mode);
+      PropertyAccessInfo access_info = ComputePropertyAccessInfo(
+          map, cached_property_name, result, access_mode);
       if (!access_info.IsInvalid()) return access_info;
+    }
+
+    if (FunctionTemplateInfo::CanCacheAccessorResult(accessor)) {
+      Handle<Object> result_obj;
+      if (result.ToHandle(&result_obj)) {
+        return PropertyAccessInfo::CachedAccessorResult(zone(), receiver_map,
+                                                        result_obj, holder);
+      }
     }
   }
   return PropertyAccessInfo::AccessorConstant(zone(), receiver_map, accessor,
@@ -478,7 +496,8 @@ PropertyAccessInfo AccessInfoFactory::ComputeAccessorDescriptorAccessInfo(
 }
 
 PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
-    Handle<Map> map, Handle<Name> name, AccessMode access_mode) const {
+    Handle<Map> map, Handle<Name> name, MaybeHandle<Object> result,
+    AccessMode access_mode) const {
   CHECK(name->IsUniqueName());
 
   if (access_mode == AccessMode::kHas && !map->IsJSReceiverMap()) {
@@ -531,8 +550,8 @@ PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
       } else {
         DCHECK_EQ(kDescriptor, details.location());
         DCHECK_EQ(kAccessor, details.kind());
-        return ComputeAccessorDescriptorAccessInfo(receiver_map, name, map,
-                                                   holder, number, access_mode);
+        return ComputeAccessorDescriptorAccessInfo(
+            receiver_map, name, result, map, holder, number, access_mode);
       }
       UNREACHABLE();
     }
@@ -622,7 +641,8 @@ void AccessInfoFactory::ComputePropertyAccessInfos(
     ZoneVector<PropertyAccessInfo>* access_infos) const {
   DCHECK(access_infos->empty());
   for (Handle<Map> map : maps) {
-    access_infos->push_back(ComputePropertyAccessInfo(map, name, access_mode));
+    access_infos->push_back(
+        ComputePropertyAccessInfo(map, name, {}, access_mode));
   }
 }
 

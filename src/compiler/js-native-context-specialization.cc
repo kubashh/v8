@@ -411,12 +411,12 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
     access_info = broker()->GetPropertyAccessInfo(
         receiver_map,
         NameRef(broker(), isolate()->factory()->has_instance_symbol()),
-        AccessMode::kLoad);
+        base::nullopt, AccessMode::kLoad);
   } else {
     AccessInfoFactory access_info_factory(broker(), dependencies(),
                                           graph()->zone());
     access_info = access_info_factory.ComputePropertyAccessInfo(
-        receiver_map.object(), factory()->has_instance_symbol(),
+        receiver_map.object(), factory()->has_instance_symbol(), {},
         AccessMode::kLoad);
   }
 
@@ -720,7 +720,7 @@ Reduction JSNativeContextSpecialization::ReduceJSResolvePromise(Node* node) {
       MapRef map_ref(broker(), map);
       access_infos.push_back(broker()->GetPropertyAccessInfo(
           map_ref, NameRef(broker(), isolate()->factory()->then_string()),
-          AccessMode::kLoad));
+          base::nullopt, AccessMode::kLoad));
     }
   }
   PropertyAccessInfo access_info =
@@ -1055,9 +1055,9 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
   Node* control = NodeProperties::GetControlInput(node);
 
   // Either infer maps from the graph or use the feedback.
-  ZoneVector<Handle<Map>> receiver_maps(zone());
+  ZoneVector<std::pair<Handle<Map>, MaybeHandle<Object>>> receiver_maps(zone());
   if (!InferReceiverMaps(receiver, effect, &receiver_maps)) {
-    receiver_maps = feedback.maps();
+    receiver_maps = feedback.maps_and_results();
   }
   RemoveImpossibleReceiverMaps(receiver, &receiver_maps);
 
@@ -1065,7 +1065,7 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
   // contexts' global proxy, and turn that into a direct access to the
   // corresponding global object instead.
   if (receiver_maps.size() == 1) {
-    MapRef receiver_map(broker(), receiver_maps[0]);
+    MapRef receiver_map(broker(), receiver_maps[0].first);
     if (receiver_map.equals(
             broker()->target_native_context().global_proxy_object().map()) &&
         !broker()->target_native_context().global_object().IsDetached()) {
@@ -1077,11 +1077,18 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
   ZoneVector<PropertyAccessInfo> access_infos(zone());
   {
     ZoneVector<PropertyAccessInfo> access_infos_for_feedback(zone());
-    for (Handle<Map> map_handle : receiver_maps) {
+    for (std::pair<Handle<Map>, MaybeHandle<Object>> pair : receiver_maps) {
+      base::Optional<ObjectRef> cached_accessor_result;
+      if (!pair.second.is_null()) {
+        cached_accessor_result =
+            ObjectRef(broker(), pair.second.ToHandleChecked());
+      }
+      Handle<Map> map_handle = pair.first;
       MapRef map(broker(), map_handle);
       if (map.is_deprecated()) continue;
       PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
-          map, feedback.name(), access_mode, dependencies(),
+          map, feedback.name(), cached_accessor_result, access_mode,
+          dependencies(),
           should_disallow_heap_access()
               ? SerializationPolicy::kAssumeSerialized
               : SerializationPolicy::kSerializeIfNeeded);
@@ -1503,14 +1510,17 @@ base::Optional<JSTypedArrayRef> GetTypedArrayConstant(JSHeapBroker* broker,
 }  // namespace
 
 void JSNativeContextSpecialization::RemoveImpossibleReceiverMaps(
-    Node* receiver, ZoneVector<Handle<Map>>* receiver_maps) const {
+    Node* receiver,
+    ZoneVector<std::pair<Handle<Map>, MaybeHandle<Object>>>* receiver_maps)
+    const {
   base::Optional<MapRef> root_map = InferReceiverRootMap(receiver);
   if (root_map.has_value()) {
     DCHECK(!root_map->is_abandoned_prototype_map());
     receiver_maps->erase(
         std::remove_if(receiver_maps->begin(), receiver_maps->end(),
-                       [root_map, this](Handle<Map> map) {
-                         MapRef map_ref(broker(), map);
+                       [root_map, this](
+                           std::pair<Handle<Map>, MaybeHandle<Object>> pair) {
+                         MapRef map_ref(broker(), pair.first);
                          return map_ref.is_abandoned_prototype_map() ||
                                 (map_ref.FindRootMap().has_value() &&
                                  !map_ref.FindRootMap()->equals(*root_map));
@@ -1528,15 +1538,21 @@ JSNativeContextSpecialization::TryRefineElementAccessFeedback(
       access_mode == AccessMode::kLoad || access_mode == AccessMode::kHas;
   if (!use_inference) return feedback;
 
-  ZoneVector<Handle<Map>> inferred_maps(zone());
+  ZoneVector<std::pair<Handle<Map>, MaybeHandle<Object>>> inferred_maps(zone());
   if (!InferReceiverMaps(receiver, effect, &inferred_maps)) return feedback;
 
   RemoveImpossibleReceiverMaps(receiver, &inferred_maps);
+
+  ZoneVector<Handle<Map>> maps(zone());
+  for (std::pair<Handle<Map>, MaybeHandle<Object>> pair : inferred_maps) {
+    maps.push_back(pair.first);
+  }
+
   // TODO(neis): After Refine, the resulting feedback can still contain
   // impossible maps when a target is kept only because more than one of its
   // sources was inferred. Think of a way to completely rule out impossible
   // maps.
-  return feedback.Refine(inferred_maps, zone());
+  return feedback.Refine(maps, zone());
 }
 
 Reduction JSNativeContextSpecialization::ReduceElementAccess(
@@ -2182,6 +2198,9 @@ JSNativeContextSpecialization::BuildPropertyLoad(
   Node* value;
   if (access_info.IsNotFound()) {
     value = jsgraph()->UndefinedConstant();
+  } else if (access_info.IsCachedAccessorResult()) {
+    ObjectRef constant(broker(), access_info.constant());
+    value = jsgraph()->Constant(constant);
   } else if (access_info.IsAccessorConstant()) {
     value = InlinePropertyGetterCall(receiver, context, frame_state, &effect,
                                      &control, if_exceptions, access_info);
@@ -2255,6 +2274,7 @@ JSNativeContextSpecialization::BuildPropertyStore(
   }
 
   DCHECK(!access_info.IsNotFound());
+  DCHECK(!access_info.IsCachedAccessorResult());
 
   // Generate the actual property access.
   if (access_info.IsAccessorConstant()) {
@@ -3230,14 +3250,17 @@ bool JSNativeContextSpecialization::CanTreatHoleAsUndefined(
 
 bool JSNativeContextSpecialization::InferReceiverMaps(
     Node* receiver, Node* effect,
-    ZoneVector<Handle<Map>>* receiver_maps) const {
+    ZoneVector<std::pair<Handle<Map>, MaybeHandle<Object>>>* receiver_maps)
+    const {
   ZoneHandleSet<Map> maps;
+  // TODO(gsathya): Where are these inferred from? Do we need to
+  // change this to account for the cached accessor result as well?
   NodeProperties::InferReceiverMapsResult result =
       NodeProperties::InferReceiverMapsUnsafe(broker(), receiver, effect,
                                               &maps);
   if (result == NodeProperties::kReliableReceiverMaps) {
     for (size_t i = 0; i < maps.size(); ++i) {
-      receiver_maps->push_back(maps[i]);
+      receiver_maps->push_back({maps[i], {}});
     }
     return true;
   } else if (result == NodeProperties::kUnreliableReceiverMaps) {
@@ -3248,7 +3271,7 @@ bool JSNativeContextSpecialization::InferReceiverMaps(
       if (!map.is_stable()) return false;
     }
     for (size_t i = 0; i < maps.size(); ++i) {
-      receiver_maps->push_back(maps[i]);
+      receiver_maps->push_back({maps[i], {}});
     }
     return true;
   }

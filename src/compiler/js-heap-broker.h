@@ -178,8 +178,8 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   // If {policy} is {kAssumeSerialized} and the broker doesn't know about the
   // combination of {map}, {name}, and {access_mode}, returns Invalid.
   PropertyAccessInfo GetPropertyAccessInfo(
-      MapRef map, NameRef name, AccessMode access_mode,
-      CompilationDependencies* dependencies = nullptr,
+      MapRef map, NameRef name, base::Optional<ObjectRef> result,
+      AccessMode access_mode, CompilationDependencies* dependencies = nullptr,
       SerializationPolicy policy = SerializationPolicy::kAssumeSerialized);
 
   StringRef GetTypedArrayStringTag(ElementsKind kind);

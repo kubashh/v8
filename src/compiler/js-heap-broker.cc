@@ -4560,10 +4560,14 @@ bool ElementAccessFeedback::HasOnlyStringMaps(JSHeapBroker* broker) const {
   return true;
 }
 
-NamedAccessFeedback::NamedAccessFeedback(NameRef const& name,
-                                         ZoneVector<Handle<Map>> const& maps,
-                                         FeedbackSlotKind slot_kind)
-    : ProcessedFeedback(kNamedAccess, slot_kind), name_(name), maps_(maps) {
+NamedAccessFeedback::NamedAccessFeedback(
+    NameRef const& name,
+    ZoneVector<std::pair<Handle<Map>, MaybeHandle<Object>>> const&
+        maps_and_results,
+    FeedbackSlotKind slot_kind)
+    : ProcessedFeedback(kNamedAccess, slot_kind),
+      name_(name),
+      maps_and_results_(maps_and_results) {
   DCHECK(IsLoadICKind(slot_kind) || IsStoreICKind(slot_kind) ||
          IsStoreOwnICKind(slot_kind) || IsKeyedLoadICKind(slot_kind) ||
          IsKeyedHasICKind(slot_kind) || IsKeyedStoreICKind(slot_kind) ||
@@ -4608,17 +4612,43 @@ bool JSHeapBroker::FeedbackIsInsufficient(FeedbackSource const& source) const {
 }
 
 namespace {
-MapHandles GetRelevantReceiverMaps(Isolate* isolate, MapHandles const& maps) {
-  MapHandles result;
-  for (Handle<Map> map : maps) {
-    if (Map::TryUpdate(isolate, map).ToHandle(&map) &&
-        !map->is_abandoned_prototype_map()) {
-      DCHECK(!map->is_deprecated());
-      result.push_back(map);
+std::vector<std::pair<Handle<Map>, MaybeHandle<Object>>>
+GetRelevantReceiverMapsAndResults(
+    Isolate* isolate,
+    std::vector<std::pair<Handle<Map>, MaybeHandle<Object>>> const&
+        maps_and_results) {
+  std::vector<std::pair<Handle<Map>, MaybeHandle<Object>>> results;
+
+  for (std::pair<Handle<Map>, MaybeHandle<Object>> pair : maps_and_results) {
+    Handle<Map> old_map = pair.first;
+    Handle<Map> new_map;
+    if (Map::TryUpdate(isolate, old_map).ToHandle(&new_map) &&
+        !new_map->is_abandoned_prototype_map()) {
+      DCHECK(!new_map->is_deprecated());
+
+      MaybeHandle<Object> result;
+      if (old_map.equals(new_map)) {
+        // TODO(gsathya): Should we just replace the old map with the
+        // new one? Is Map::TryUpdate safe?
+        result = pair.second;
+      }
+
+      results.push_back({new_map, result});
     }
   }
-  return result;
-}  // namespace
+  return results;
+}
+
+MapHandles ExtractMaps(
+    std::vector<std::pair<Handle<Map>, MaybeHandle<Object>>> const&
+        maps_and_results) {
+  MapHandles maps;
+  for (std::pair<Handle<Map>, MaybeHandle<Object>> pair : maps_and_results) {
+    maps.push_back(pair.first);
+  }
+  return maps;
+}
+
 }  // namespace
 
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
@@ -4628,24 +4658,30 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
   FeedbackSlotKind kind = nexus.kind();
   if (nexus.IsUninitialized()) return *new (zone()) InsufficientFeedback(kind);
 
-  MapHandles maps;
-  nexus.ExtractMaps(&maps);
-  if (!maps.empty()) {
-    maps = GetRelevantReceiverMaps(isolate(), maps);
-    if (maps.empty()) return *new (zone()) InsufficientFeedback(kind);
+  std::vector<std::pair<Handle<Map>, MaybeHandle<Object>>> maps_and_results;
+  nexus.ExtractMapsAndCachedAccessorResults(&maps_and_results);
+
+  if (!maps_and_results.empty()) {
+    maps_and_results =
+        GetRelevantReceiverMapsAndResults(isolate(), maps_and_results);
+    if (maps_and_results.empty())
+      return *new (zone()) InsufficientFeedback(kind);
   }
 
   base::Optional<NameRef> name =
       static_name.has_value() ? static_name : GetNameFeedback(nexus);
   if (name.has_value()) {
     return *new (zone()) NamedAccessFeedback(
-        *name, ZoneVector<Handle<Map>>(maps.begin(), maps.end(), zone()), kind);
-  } else if (nexus.GetKeyType() == ELEMENT && !maps.empty()) {
+        *name,
+        ZoneVector<std::pair<Handle<Map>, MaybeHandle<Object>>>(
+            maps_and_results.begin(), maps_and_results.end(), zone()),
+        kind);
+  } else if (nexus.GetKeyType() == ELEMENT && !maps_and_results.empty()) {
     return ProcessFeedbackMapsForElementAccess(
-        maps, KeyedAccessMode::FromNexus(nexus), kind);
+        ExtractMaps(maps_and_results), KeyedAccessMode::FromNexus(nexus), kind);
   } else {
     // No actionable feedback.
-    DCHECK(maps.empty());
+    DCHECK(maps_and_results.empty());
     // TODO(neis): Investigate if we really want to treat cleared the same as
     // megamorphic (also for global accesses).
     // TODO(neis): Using ElementAccessFeedback here is kind of an abuse.
@@ -5072,8 +5108,9 @@ base::Optional<NameRef> JSHeapBroker::GetNameFeedback(
 }
 
 PropertyAccessInfo JSHeapBroker::GetPropertyAccessInfo(
-    MapRef map, NameRef name, AccessMode access_mode,
-    CompilationDependencies* dependencies, SerializationPolicy policy) {
+    MapRef map, NameRef name, base::Optional<ObjectRef> result,
+    AccessMode access_mode, CompilationDependencies* dependencies,
+    SerializationPolicy policy) {
   PropertyAccessTarget target({map, name, access_mode});
   auto it = property_access_infos_.find(target);
   if (it != property_access_infos_.end()) return it->second;
@@ -5087,8 +5124,10 @@ PropertyAccessInfo JSHeapBroker::GetPropertyAccessInfo(
 
   CHECK_NOT_NULL(dependencies);
   AccessInfoFactory factory(this, dependencies, zone());
+  MaybeHandle<Object> maybe_result;
+  if (result.has_value()) maybe_result = result->object();
   PropertyAccessInfo access_info = factory.ComputePropertyAccessInfo(
-      map.object(), name.object(), access_mode);
+      map.object(), name.object(), maybe_result, access_mode);
   if (is_concurrent_inlining_) {
     CHECK(SerializingAllowed());
     TRACE(this, "Storing PropertyAccessInfo for "

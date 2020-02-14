@@ -37,6 +37,8 @@ BOOL_ACCESSORS(FunctionTemplateInfo, flag, remove_prototype,
 BOOL_ACCESSORS(FunctionTemplateInfo, flag, do_not_cache, kDoNotCacheBit)
 BOOL_ACCESSORS(FunctionTemplateInfo, flag, accept_any_receiver,
                kAcceptAnyReceiver)
+BOOL_ACCESSORS(FunctionTemplateInfo, flag, can_cache_accessor_result,
+               kCacheAccessorResultBit)
 TQ_SMI_ACCESSORS(FunctionTemplateInfo, flag)
 
 // static

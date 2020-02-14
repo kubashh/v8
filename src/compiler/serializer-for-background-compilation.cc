@@ -2544,7 +2544,7 @@ void SerializerForBackgroundCompilation::ProcessHintsForPromiseResolve(
     broker()->GetPropertyAccessInfo(
         MapRef(broker(), map),
         NameRef(broker(), broker()->isolate()->factory()->then_string()),
-        AccessMode::kLoad, dependencies(),
+        base::nullopt, AccessMode::kLoad, dependencies(),
         SerializationPolicy::kSerializeIfNeeded);
   };
 
@@ -2577,7 +2577,7 @@ PropertyAccessInfo SerializerForBackgroundCompilation::ProcessMapForRegExpTest(
     MapRef map) {
   PropertyAccessInfo ai_exec = broker()->GetPropertyAccessInfo(
       map, NameRef(broker(), broker()->isolate()->factory()->exec_string()),
-      AccessMode::kLoad, dependencies(),
+      base::nullopt, AccessMode::kLoad, dependencies(),
       SerializationPolicy::kSerializeIfNeeded);
 
   Handle<JSObject> holder;
@@ -2918,7 +2918,7 @@ SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
   }
 
   PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
-      receiver_map, name, access_mode, dependencies(),
+      receiver_map, name, base::nullopt, access_mode, dependencies(),
       SerializationPolicy::kSerializeIfNeeded);
 
   // For JSNativeContextSpecialization::InlinePropertySetterCall
@@ -3078,11 +3078,16 @@ void SerializerForBackgroundCompilation::ProcessNamedPropertyAccess(
 void SerializerForBackgroundCompilation::ProcessNamedAccess(
     Hints* receiver, NamedAccessFeedback const& feedback,
     AccessMode access_mode, Hints* result_hints) {
-  for (Handle<Map> map : feedback.maps()) {
-    MapRef map_ref(broker(), map);
+  for (std::pair<Handle<Map>, MaybeHandle<Object>> element :
+       feedback.maps_and_results()) {
+    MapRef map_ref(broker(), element.first);
     TRACE_BROKER(broker(), "Propagating feedback map "
                                << map_ref << " to receiver hints.");
-    receiver->AddMap(map, zone(), broker_, false);
+    receiver->AddMap(element.first, zone(), broker_, false);
+
+    if (!element.second.is_null()) {
+      ObjectRef result_ref(broker(), element.second.ToHandleChecked());
+    }
   }
 
   for (Handle<Map> map :
@@ -3253,7 +3258,7 @@ void SerializerForBackgroundCompilation::ProcessConstantForInstanceOf(
   PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
       constructor_heap_object.map(),
       NameRef(broker(), broker()->isolate()->factory()->has_instance_symbol()),
-      AccessMode::kLoad, dependencies(),
+      base::nullopt, AccessMode::kLoad, dependencies(),
       SerializationPolicy::kSerializeIfNeeded);
 
   if (access_info.IsNotFound()) {

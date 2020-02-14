@@ -449,6 +449,25 @@ MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name,
 
     ASSIGN_RETURN_ON_EXCEPTION(
         isolate(), result, Object::GetProperty(&it, IsLoadGlobalIC()), Object);
+
+    if (store_accessor_result_) {
+      MaybeObjectHandle maybe_handler =
+          nexus()->FindHandlerForMap(receiver_map());
+      if (!maybe_handler.is_null()) {
+        Handle<LoadHandler> handler =
+            Handle<LoadHandler>::cast(maybe_handler.object());
+#ifdef DEBUG
+        HeapObject obj;
+        CHECK(handler->data1()->GetHeapObjectIfWeak(&obj));
+        DCHECK(obj.IsNull(isolate()));
+#endif
+        MaybeObjectHandle weak_result =
+            result->IsSmi() ? MaybeObjectHandle(*result, isolate())
+                            : MaybeObjectHandle::Weak(*result, isolate());
+        handler->set_data1(*weak_result);
+      }
+    }
+
     if (it.IsFound()) {
       return result;
     } else if (!ShouldThrowReferenceError()) {
@@ -841,6 +860,16 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
           CallOptimization::HolderLookup holder_lookup;
           call_optimization.LookupHolderOfExpectedType(map, &holder_lookup);
 
+          if (FunctionTemplateInfo::CanCacheAccessorResult(getter)) {
+            store_accessor_result_ = true;
+            smi_handler = LoadHandler::LoadCachedAccessorResult(isolate());
+            MaybeObjectHandle constant_ref(isolate()->factory()->null_value());
+
+            // TODO(gsathya): Change this trace event?
+            TRACE_HANDLER_STATS(isolate(), LoadIC_LoadApiGetterFromPrototypeDH);
+            return LoadHandler::LoadFromPrototype(isolate(), map, holder,
+                                                  smi_handler, constant_ref);
+          }
           smi_handler = LoadHandler::LoadApiGetter(
               isolate(), holder_lookup == CallOptimization::kHolderIsReceiver);
 

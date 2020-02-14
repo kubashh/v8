@@ -110,6 +110,11 @@ class FunctionTemplateInfo
 
   // If not set an access may be performed on calling the associated JSFunction.
   DECL_BOOLEAN_ACCESSORS(accept_any_receiver)
+
+  // If set, cache the result in the IC instead of calling the
+  // accessor every time.
+  DECL_BOOLEAN_ACCESSORS(can_cache_accessor_result)
+
   // End flag bits ---------------------
 
   // Dispatched behavior.
@@ -133,6 +138,8 @@ class FunctionTemplateInfo
   static MaybeHandle<Name> TryGetCachedPropertyName(Isolate* isolate,
                                                     Handle<Object> getter);
 
+  static bool CanCacheAccessorResult(Handle<Object> getter);
+
   // Bit position in the flag, from least significant bit position.
   static const int kUndetectableBit = 0;
   static const int kNeedsAccessCheckBit = 1;
@@ -140,6 +147,7 @@ class FunctionTemplateInfo
   static const int kRemovePrototypeBit = 3;
   static const int kDoNotCacheBit = 4;
   static const int kAcceptAnyReceiver = 5;
+  static const int kCacheAccessorResultBit = 6;
 
  private:
   static inline FunctionTemplateRareData EnsureFunctionTemplateRareData(
