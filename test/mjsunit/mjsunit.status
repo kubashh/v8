@@ -369,6 +369,7 @@
   'compiler/serializer-transition-propagation': [SKIP],
   'regress/regress-1049982-1': [SKIP],
   'regress/regress-1049982-2': [SKIP],
+  'array-reduce': [SKIP],
 
   # These tests check that we can trace the compiler.
   'tools/compiler-trace-flags': [SKIP],
@@ -1134,6 +1135,7 @@
   'compiler/opt-higher-order-functions': [SKIP],
   'regress/regress-1049982-1': [SKIP],
   'regress/regress-1049982-2': [SKIP],
+  'array-reduce': [SKIP],
 }],  # variant == turboprop
 
 ##############################################################################
