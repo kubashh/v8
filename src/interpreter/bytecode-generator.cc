@@ -1782,7 +1782,9 @@ void BytecodeGenerator::VisitIterationBody(IterationStatement* stmt,
                                            LoopBuilder* loop_builder) {
   loop_builder->LoopBody();
   ControlScopeForIteration execution_control(this, stmt, loop_builder);
-  builder()->StackCheck(stmt->position());
+  if (stmt->position() != kNoSourcePosition) {
+    builder()->ForceExpressionPosition(stmt->position());
+  }
   Visit(stmt->body());
   loop_builder->BindContinueTarget();
 }
@@ -1904,7 +1906,6 @@ void BytecodeGenerator::VisitForInStatement(ForInStatement* stmt) {
       builder()->SetExpressionPosition(stmt->each());
       BuildAssignment(lhs_data, Token::ASSIGN, LookupHoistingMode::kNormal);
     }
-
     VisitIterationBody(stmt, &loop_builder);
     builder()->ForInStep(index);
     builder()->StoreAccumulatorInRegister(index);
