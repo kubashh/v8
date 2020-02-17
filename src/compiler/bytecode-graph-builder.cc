@@ -1143,17 +1143,31 @@ class BytecodeGraphBuilder::OsrIteratorState {
 
   void ProcessOsrPrelude() {
     ZoneVector<int> outer_loop_offsets(graph_builder_->local_zone());
-    int osr_entry = graph_builder_->bytecode_analysis().osr_entry_point();
+    BytecodeAnalysis::OffsetAndLoopLevel osr_entry =
+        graph_builder_->bytecode_analysis().osr_entry_point();
 
     // We find here the outermost loop which contains the OSR loop.
-    int outermost_loop_offset = osr_entry;
-    while ((outermost_loop_offset = graph_builder_->bytecode_analysis()
-                                        .GetLoopInfoFor(outermost_loop_offset)
-                                        .parent_offset()) != -1) {
-      outer_loop_offsets.push_back(outermost_loop_offset);
+    // TODO(solanes): Should we iterate through the loop_infos? Or just use
+    // back()?
+    int outermost_loop_offset = osr_entry.bytecode_offset;
+    int current_loop_level = osr_entry.loop_level;
+    while (outermost_loop_offset != -1) {
+      const ZoneVector<LoopInfo>& loop_info_vector =
+          graph_builder_->bytecode_analysis().GetLoopInfoFor(
+              outermost_loop_offset);
+      for (unsigned int i = current_loop_level; i < loop_info_vector.size();
+           ++i) {
+        outermost_loop_offset = loop_info_vector[i].parent_offset();
+        if (outermost_loop_offset == -1) {
+          break;
+        }
+        outer_loop_offsets.push_back(outermost_loop_offset);
+      }
+      current_loop_level = 0;
     }
-    outermost_loop_offset =
-        outer_loop_offsets.empty() ? osr_entry : outer_loop_offsets.back();
+    outermost_loop_offset = outer_loop_offsets.empty()
+                                ? osr_entry.bytecode_offset
+                                : outer_loop_offsets.back();
     graph_builder_->AdvanceIteratorsTo(outermost_loop_offset);
 
     // We save some iterators states at the offsets of the loop headers of the
@@ -1171,15 +1185,15 @@ class BytecodeGraphBuilder::OsrIteratorState {
     }
 
     // Finishing by advancing to the OSR entry
-    graph_builder_->AdvanceIteratorsTo(osr_entry);
+    graph_builder_->AdvanceIteratorsTo(osr_entry.bytecode_offset);
 
     // Enters all remaining exception handler which end before the OSR loop
     // so that on next call of VisitSingleBytecode they will get popped from
     // the exception handlers stack.
-    graph_builder_->ExitThenEnterExceptionHandlers(osr_entry);
+    graph_builder_->ExitThenEnterExceptionHandlers(osr_entry.bytecode_offset);
     graph_builder_->set_currently_peeled_loop_offset(
         graph_builder_->bytecode_analysis()
-            .GetLoopInfoFor(osr_entry)
+            .GetLoopInfoFor(osr_entry.bytecode_offset)[osr_entry.loop_level]
             .parent_offset());
   }
 
@@ -1240,8 +1254,9 @@ void BytecodeGraphBuilder::BuildFunctionEntryStackCheck() {
 void BytecodeGraphBuilder::AdvanceToOsrEntryAndPeelLoops() {
   OsrIteratorState iterator_states(this);
   iterator_states.ProcessOsrPrelude();
-  int osr_entry = bytecode_analysis().osr_entry_point();
-  DCHECK_EQ(bytecode_iterator().current_offset(), osr_entry);
+  BytecodeAnalysis::OffsetAndLoopLevel osr_entry =
+      bytecode_analysis().osr_entry_point();
+  DCHECK_EQ(bytecode_iterator().current_offset(), osr_entry.bytecode_offset);
 
   environment()->FillWithOsrValues();
 
@@ -1259,46 +1274,77 @@ void BytecodeGraphBuilder::AdvanceToOsrEntryAndPeelLoops() {
   // parent loop entirely, and so on.
 
   int current_parent_offset =
-      bytecode_analysis().GetLoopInfoFor(osr_entry).parent_offset();
+      bytecode_analysis()
+          .GetLoopInfoFor(osr_entry.bytecode_offset)[osr_entry.loop_level]
+          .parent_offset();
+  // We need to peel the outer loops that have the same bytecode offset as the
+  // OSR loop. If we have the same offset as our parent, then our parent is the
+  // direct outer loop (i.e our loop_level +1). Otherwise, our parent's level is
+  // the innermost loop (i.e 0).
+  int parent_level = current_parent_offset == osr_entry.bytecode_offset
+                         ? osr_entry.loop_level + 1
+                         : 0;
+  // searching_level is used to search for the correct OSR kJumpLoop at the
+  // beginning.
+  int searching_level = osr_entry.loop_level;
+
   while (current_parent_offset != -1) {
-    const LoopInfo& current_parent_loop =
+    const ZoneVector<LoopInfo>& loop_info_vector =
         bytecode_analysis().GetLoopInfoFor(current_parent_offset);
-    // We iterate until the back edge of the parent loop, which we detect by
-    // the offset that the JumpLoop targets.
-    for (; !bytecode_iterator().done(); bytecode_iterator().Advance()) {
-      if (bytecode_iterator().current_bytecode() ==
-              interpreter::Bytecode::kJumpLoop &&
-          bytecode_iterator().GetJumpTargetOffset() == current_parent_offset) {
-        // Reached the end of the current parent loop.
-        break;
+    for (int i = parent_level; i < static_cast<int>(loop_info_vector.size()) &&
+                               current_parent_offset != -1;
+         i++) {
+      const LoopInfo& current_parent_loop = loop_info_vector[parent_level];
+      // We iterate until the back edge of the parent loop, which we detect by
+      // the offset that the JumpLoop targets.
+      for (; !bytecode_iterator().done(); bytecode_iterator().Advance()) {
+        if (bytecode_iterator().current_bytecode() ==
+                interpreter::Bytecode::kJumpLoop &&
+            bytecode_iterator().GetJumpTargetOffset() ==
+                current_parent_offset) {
+          if (searching_level == 0) {
+            // Reached the end of the current parent loop.
+            break;
+          } else {
+            // Otherwise, we continue searching for the correct loop
+            searching_level--;
+          }
+        }
+        VisitSingleBytecode();
       }
-      VisitSingleBytecode();
+      // Should have found the loop's jump target.
+      DCHECK(!bytecode_iterator().done());
+
+      // We also need to take care of the merge environments and exceptions
+      // handlers here because the omitted JumpLoop bytecode can still be the
+      // target of jumps or the first bytecode after a try block.
+      ExitThenEnterExceptionHandlers(bytecode_iterator().current_offset());
+      SwitchToMergeEnvironment(bytecode_iterator().current_offset());
+
+      // This jump is the jump of our parent loop, which is not yet created.
+      // So we do not build the jump nodes, but restore the bytecode ...
+      // TODO(solanes): This restoring the bytecode is potentially an issue.
+      // If we have the same offset as our parent and we restore before the OSR
+      // we might visit loops an extra time (and potentially other loops too).
+      // If we set the bytecode to be after we would be potentially *skipping*
+      // some loops.
+      // and the SourcePosition iterators to the values they had
+      // when we were visiting the offset pointed at by the JumpLoop we've just
+      // reached. We have already built nodes for inner loops, but now we will
+      // iterate again over them and build new nodes corresponding to the same
+      // bytecode offsets. Any jump or reference to this inner loops must now
+      // point to the new nodes we will build, hence we clear the relevant part
+      // of the environment.
+      // Completely clearing the environment is not possible because merge
+      // environments for forward jumps out of the loop need to be preserved
+      // (e.g. a return or a labeled break in the middle of a loop).
+      RemoveMergeEnvironmentsBeforeOffset(bytecode_iterator().current_offset());
+      iterator_states.RestoreState(current_parent_offset,
+                                   current_parent_loop.parent_offset());
+      current_parent_offset = current_parent_loop.parent_offset();
     }
-    DCHECK(!bytecode_iterator()
-                .done());  // Should have found the loop's jump target.
-
-    // We also need to take care of the merge environments and exceptions
-    // handlers here because the omitted JumpLoop bytecode can still be the
-    // target of jumps or the first bytecode after a try block.
-    ExitThenEnterExceptionHandlers(bytecode_iterator().current_offset());
-    SwitchToMergeEnvironment(bytecode_iterator().current_offset());
-
-    // This jump is the jump of our parent loop, which is not yet created.
-    // So we do not build the jump nodes, but restore the bytecode and the
-    // SourcePosition iterators to the values they had when we were visiting
-    // the offset pointed at by the JumpLoop we've just reached.
-    // We have already built nodes for inner loops, but now we will
-    // iterate again over them and build new nodes corresponding to the same
-    // bytecode offsets. Any jump or reference to this inner loops must now
-    // point to the new nodes we will build, hence we clear the relevant part
-    // of the environment.
-    // Completely clearing the environment is not possible because merge
-    // environments for forward jumps out of the loop need to be preserved
-    // (e.g. a return or a labeled break in the middle of a loop).
-    RemoveMergeEnvironmentsBeforeOffset(bytecode_iterator().current_offset());
-    iterator_states.RestoreState(current_parent_offset,
-                                 current_parent_loop.parent_offset());
-    current_parent_offset = current_parent_loop.parent_offset();
+    // reset parent_level to peel all loops on the outer offsets
+    parent_level = 0;
   }
 }
 
@@ -3628,34 +3674,43 @@ void BytecodeGraphBuilder::SwitchToMergeEnvironment(int current_offset) {
 
 void BytecodeGraphBuilder::BuildLoopHeaderEnvironment(int current_offset) {
   if (bytecode_analysis().IsLoopHeader(current_offset)) {
+    // TODO(solanes): We iterate through the vector and do this N
+    // times, where N is the size of the vector.
     mark_as_needing_eager_checkpoint(true);
-    const LoopInfo& loop_info =
+    const ZoneVector<LoopInfo>& loop_info_vector =
         bytecode_analysis().GetLoopInfoFor(current_offset);
     const BytecodeLivenessState* liveness =
         bytecode_analysis().GetInLivenessFor(current_offset);
+    for (int i = 0; i < static_cast<int>(loop_info_vector.size()); i++) {
+      const LoopInfo& loop_info = loop_info_vector[i];
 
-    const auto& resume_jump_targets = loop_info.resume_jump_targets();
-    bool generate_suspend_switch = !resume_jump_targets.empty();
+      const auto& resume_jump_targets = loop_info.resume_jump_targets();
+      bool generate_suspend_switch = !resume_jump_targets.empty();
 
-    // Add loop header.
-    environment()->PrepareForLoop(loop_info.assignments(), liveness);
+      // Add loop header.
+      environment()->PrepareForLoop(loop_info.assignments(), liveness);
 
-    // Store a copy of the environment so we can connect merged back edge inputs
-    // to the loop header.
-    merge_environments_[current_offset] = environment()->Copy();
+      // Store a copy of the environment so we can connect merged back edge
+      // inputs to the loop header.
+      // TODO(solanes): How to handle several merge_environments_ in the same
+      // offset?
+      // See void BytecodeGraphBuilder::BuildLoopExitsUntilLoop that uses
+      // merge_environments_.
+      merge_environments_[current_offset] = environment()->Copy();
 
-    // If this loop contains resumes, create a new switch just after the loop
-    // for those resumes.
-    if (generate_suspend_switch) {
-      BuildSwitchOnGeneratorState(loop_info.resume_jump_targets(), true);
+      // If this loop contains resumes, create a new switch just after the loop
+      // for those resumes.
+      if (generate_suspend_switch) {
+        BuildSwitchOnGeneratorState(loop_info.resume_jump_targets(), true);
 
-      // TODO(leszeks): At this point we know we are executing rather than
-      // resuming, so we should be able to prune off the phis in the environment
-      // related to the resume path.
+        // TODO(leszeks): At this point we know we are executing rather than
+        // resuming, so we should be able to prune off the phis in the
+        // environment related to the resume path.
 
-      // Set the generator state to a known constant.
-      environment()->BindGeneratorState(
-          jsgraph()->SmiConstant(JSGeneratorObject::kGeneratorExecuting));
+        // Set the generator state to a known constant.
+        environment()->BindGeneratorState(
+            jsgraph()->SmiConstant(JSGeneratorObject::kGeneratorExecuting));
+      }
     }
   }
 }
@@ -3688,7 +3743,7 @@ void BytecodeGraphBuilder::BuildLoopExitsForBranch(int target_offset) {
   // Only build loop exits for forward edges.
   if (target_offset > origin_offset) {
     BuildLoopExitsUntilLoop(
-        bytecode_analysis().GetLoopOffsetFor(target_offset),
+        bytecode_analysis().GetLoopOffsetFor(target_offset).bytecode_offset,
         bytecode_analysis().GetInLivenessFor(target_offset));
   }
 }
@@ -3696,18 +3751,33 @@ void BytecodeGraphBuilder::BuildLoopExitsForBranch(int target_offset) {
 void BytecodeGraphBuilder::BuildLoopExitsUntilLoop(
     int loop_offset, const BytecodeLivenessState* liveness) {
   int origin_offset = bytecode_iterator().current_offset();
-  int current_loop = bytecode_analysis().GetLoopOffsetFor(origin_offset);
+  BytecodeAnalysis::OffsetAndLoopLevel offset_loop_level =
+      bytecode_analysis().GetLoopOffsetFor(origin_offset);
   // The limit_offset is the stop offset for building loop exists, used for OSR.
   // It prevents the creations of loopexits for loops which do not exist.
   loop_offset = std::max(loop_offset, currently_peeled_loop_offset_);
 
-  while (loop_offset < current_loop) {
-    Node* loop_node = merge_environments_[current_loop]->GetControlDependency();
-    const LoopInfo& loop_info =
-        bytecode_analysis().GetLoopInfoFor(current_loop);
-    environment()->PrepareForLoopExit(loop_node, loop_info.assignments(),
-                                      liveness);
-    current_loop = loop_info.parent_offset();
+  while (loop_offset < offset_loop_level.bytecode_offset) {
+    Node* loop_node = merge_environments_[offset_loop_level.bytecode_offset]
+                          ->GetControlDependency();
+    const ZoneVector<LoopInfo>& loop_info_vector =
+        bytecode_analysis().GetLoopInfoFor(offset_loop_level.bytecode_offset);
+    for (unsigned int i = offset_loop_level.loop_level;
+         i < loop_info_vector.size(); ++i) {
+      LoopInfo loop_info = loop_info_vector[i];
+      // TODO(solanes): This is an issue since I don't know the nesting level
+      // that I am in. We are able to retrieve that information by changing
+      // GetLoopOffsetFor.
+      //
+      // Do we need the same structure for the incoming loop_offset?
+      // Do we also need to do the same for currently_peeled_loop_offset_?
+      // i.e when do we know when to stop?
+
+      environment()->PrepareForLoopExit(loop_node, loop_info.assignments(),
+                                        liveness);
+    }
+    offset_loop_level.bytecode_offset = loop_info_vector.back().parent_offset();
+    offset_loop_level.loop_level = 0;
   }
 }
 

@@ -88,9 +88,9 @@ BytecodeAnalysis::BytecodeAnalysis(Handle<BytecodeArray> bytecode_array,
       loop_stack_(zone),
       loop_end_index_queue_(zone),
       resume_jump_targets_(zone),
-      end_to_header_(zone),
+      end_to_header_offset_and_loop_level_(zone),
       header_to_info_(zone),
-      osr_entry_point_(-1),
+      osr_entry_point_({-1, -1}),
       liveness_map_(bytecode_array->length(), zone) {
   Analyze();
 }
@@ -335,15 +335,20 @@ void BytecodeAnalysis::Analyze() {
       // instruction is considered part of the loop, set loop end accordingly.
       int loop_end = current_offset + iterator.current_bytecode_size();
       int loop_header = iterator.GetJumpTargetOffset();
+      // int loop_level = GetLoopLevel(loop_header);
       PushLoop(loop_header, loop_end);
 
       if (current_offset == osr_loop_end_offset) {
-        osr_entry_point_ = loop_header;
+        int loop_level =
+            static_cast<int>(GetLoopInfoFor(loop_header).size()) - 1;
+        DCHECK_GE(loop_level, 0);
+        osr_entry_point_ = {loop_header, loop_level};
       } else if (current_offset < osr_loop_end_offset) {
         // Assert that we've found the osr_entry_point if we've gone past the
         // osr_loop_end_offset. Note, we are iterating the bytecode in reverse,
         // so the less-than in the above condition is correct.
-        DCHECK_LE(0, osr_entry_point_);
+        DCHECK_LE(0, osr_entry_point_.bytecode_offset);
+        DCHECK_LE(0, osr_entry_point_.loop_level);
       }
 
       // Save the index so that we can do another pass later.
@@ -371,10 +376,12 @@ void BytecodeAnalysis::Analyze() {
       // If we've reached the header of the loop, pop it off the stack.
       if (current_offset == current_loop.header_offset) {
         loop_stack_.pop();
-        if (loop_stack_.size() > 1) {
+        while (loop_stack_.size() > 1) {
           // If there is still an outer loop, propagate inner loop assignments.
-          LoopInfo* parent_loop_info = loop_stack_.top().loop_info;
-
+          // TODO(solanes): If there is an outer loop, and the offset is the
+          // same, do we would need to loop to work all the nested loops?
+          const LoopStackEntry loop_stack_entry = loop_stack_.top();
+          LoopInfo* parent_loop_info = loop_stack_entry.loop_info;
           parent_loop_info->assignments().Union(
               current_loop_info->assignments());
 
@@ -407,7 +414,27 @@ void BytecodeAnalysis::Analyze() {
                 ResumeJumpTarget::AtLoopHeader(current_offset, target));
           }
 
-        } else {
+          // If the parent has another offset, continue (we will pop it later).
+          if (current_offset != loop_stack_entry.header_offset) {
+            break;
+          }
+          // If it has the same offset, pop it now.
+          current_loop = loop_stack_.top();
+          current_loop_info = current_loop.loop_info;
+          loop_stack_.pop();
+
+          // TODO(solanes): Do we need to update assignments with the new
+          // current_loop_info?
+          // TODO(leszeks): Ideally, we'd only set values that were assigned in
+          // the loop *and* are live when the loop exits. However, this requires
+          // tracking the out-liveness of *all* loop exits, which is not
+          // information we currently have.
+          UpdateAssignments(bytecode, &current_loop_info->assignments(),
+                            iterator);
+        }
+
+        DCHECK_GE(loop_stack_.size(), 1u);
+        if (loop_stack_.size() == 1) {
           // Otherwise, just propagate inner loop suspends to top-level.
           for (const auto& target : current_loop_info->resume_jump_targets()) {
             resume_jump_targets_.push_back(
@@ -553,20 +580,48 @@ void BytecodeAnalysis::Analyze() {
 }
 
 void BytecodeAnalysis::PushLoop(int loop_header, int loop_end) {
-  DCHECK(loop_header < loop_end);
-  DCHECK(loop_stack_.top().header_offset < loop_header);
-  DCHECK(end_to_header_.find(loop_end) == end_to_header_.end());
-  DCHECK(header_to_info_.find(loop_header) == header_to_info_.end());
+  DCHECK_LT(loop_header, loop_end);
+  // We allow two loops to have the same header offset
+  DCHECK_LE(loop_stack_.top().header_offset, loop_header);
+  DCHECK_EQ(end_to_header_offset_and_loop_level_.find(loop_end),
+            end_to_header_offset_and_loop_level_.end());
+  // DCHECK_EQ(header_to_info_.find(loop_header), header_to_info_.end());
 
-  int parent_offset = loop_stack_.top().header_offset;
+  auto iterator = header_to_info_.find(loop_header);
+  if (iterator == header_to_info_.end()) {
+    // If it didn't exist, create it.
+    auto pair =
+        header_to_info_.insert({loop_header, ZoneVector<LoopInfo>(zone_)});
+    // Update the iterator
+    iterator = pair.first;
+  }
 
-  end_to_header_.insert({loop_end, loop_header});
-  auto it = header_to_info_.insert(
-      {loop_header, LoopInfo(parent_offset, bytecode_array_->parameter_count(),
-                             bytecode_array_->register_count(), zone_)});
-  // Get the loop info pointer from the output of insert.
-  LoopInfo* loop_info = &it.first->second;
+  int loop_level = static_cast<int>(iterator->second.size());
+  end_to_header_offset_and_loop_level_.insert(
+      {loop_end, {loop_header, loop_level}});
 
+  int parent_offset;
+  if (loop_level > 0) {
+    // We already have a loop with the same offset as the loop we are going to
+    // push, we grab the parent offset from this inner loop.
+    parent_offset = iterator->second.back().parent_offset();
+    // And update the inner loop with the correct parent offset
+    iterator->second[loop_level - 1].set_parent_offset(loop_header);
+  } else {
+    DCHECK_EQ(loop_level, 0);
+    // We are the first loop to be pushed of header_offset. This means we are
+    // the current outermost loop.
+    parent_offset = loop_stack_.top().header_offset;
+  }
+  // Push the first value.
+  iterator->second.push_back(
+      LoopInfo(parent_offset, bytecode_array_->parameter_count(),
+               bytecode_array_->register_count(), zone_));
+
+  // Get the loop info pointer from the otput of insert.
+  LoopInfo* loop_info = &iterator->second.back();
+
+  // TODO(solanes): keep as-is.
   loop_stack_.push({loop_header, loop_info});
 }
 
@@ -574,21 +629,22 @@ bool BytecodeAnalysis::IsLoopHeader(int offset) const {
   return header_to_info_.find(offset) != header_to_info_.end();
 }
 
-int BytecodeAnalysis::GetLoopOffsetFor(int offset) const {
-  auto loop_end_to_header = end_to_header_.upper_bound(offset);
+BytecodeAnalysis::OffsetAndLoopLevel BytecodeAnalysis::GetLoopOffsetFor(
+    int offset) const {
+  auto iterator = end_to_header_offset_and_loop_level_.upper_bound(offset);
   // If there is no next end => offset is not in a loop.
-  if (loop_end_to_header == end_to_header_.end()) {
-    return -1;
+  if (iterator == end_to_header_offset_and_loop_level_.end()) {
+    return {-1, -1};
   }
   // If the header precedes the offset, this is the loop
   //
-  //   .> header  <--loop_end_to_header
+  //   .> header  <--iterator
   //   |
   //   |  <--offset
   //   |
   //   `- end
-  if (loop_end_to_header->second <= offset) {
-    return loop_end_to_header->second;
+  if (iterator->second.bytecode_offset <= offset) {
+    return iterator->second;
   }
   // Otherwise there is a (potentially nested) loop after this offset.
   //
@@ -596,19 +652,25 @@ int BytecodeAnalysis::GetLoopOffsetFor(int offset) const {
   //
   //   .> header
   //   |
-  //   | .> header  <--loop_end_to_header
+  //   | .> header  <--iterator
   //   | |
   //   | `- end
   //   |
   //   `- end
-  // We just return the parent of the next loop (might be -1).
   DCHECK(header_to_info_.upper_bound(offset) != header_to_info_.end());
 
-  return header_to_info_.upper_bound(offset)->second.parent_offset();
+  // We use back() to get the outermost loop since the next header might have
+  // several loops. Its parent is the loop we are in. We just return the parent
+  // of the next loop (might be -1) and its loop level.
+  int parent_offset =
+      header_to_info_.upper_bound(offset)->second.back().parent_offset();
+  return {parent_offset, parent_offset == -1 ? -1 : 0};
 }
 
-const LoopInfo& BytecodeAnalysis::GetLoopInfoFor(int header_offset) const {
+const ZoneVector<LoopInfo>& BytecodeAnalysis::GetLoopInfoFor(
+    int header_offset) const {
   DCHECK(IsLoopHeader(header_offset));
+  DCHECK_GE(header_to_info_.find(header_offset)->second.size(), 1);
 
   return header_to_info_.find(header_offset)->second;
 }
@@ -677,13 +739,16 @@ bool BytecodeAnalysis::ResumeJumpTargetsAreValid() {
       valid = false;
     }
     // Check loops.
-    for (const std::pair<const int, LoopInfo>& loop_info : header_to_info_) {
-      if (!loop_info.second.resume_jump_targets().empty()) {
-        PrintF(stderr,
-               "Found %zu resume targets at loop at offset %d, but no resume "
-               "switch\n",
-               loop_info.second.resume_jump_targets().size(), loop_info.first);
-        valid = false;
+    for (const std::pair<const int, ZoneVector<LoopInfo>>& loop_info_list :
+         header_to_info_) {
+      for (const LoopInfo loop_info : loop_info_list.second) {
+        if (!loop_info.resume_jump_targets().empty()) {
+          PrintF(stderr,
+                 "Found %zu resume targets at loop at offset %d, but no resume "
+                 "switch\n",
+                 loop_info.resume_jump_targets().size(), loop_info_list.first);
+          valid = false;
+        }
       }
     }
 
@@ -711,11 +776,14 @@ bool BytecodeAnalysis::ResumeJumpTargetsAreValid() {
     valid = false;
   }
   // Check loops.
-  for (const std::pair<const int, LoopInfo>& loop_info : header_to_info_) {
-    if (!ResumeJumpTargetLeavesResolveSuspendIds(
-            loop_info.first, loop_info.second.resume_jump_targets(),
-            &unresolved_suspend_ids)) {
-      valid = false;
+  for (const std::pair<const int, ZoneVector<LoopInfo>>& loop_info_list :
+       header_to_info_) {
+    for (const LoopInfo loop_info : loop_info_list.second) {
+      if (!ResumeJumpTargetLeavesResolveSuspendIds(
+              loop_info_list.first, loop_info.resume_jump_targets(),
+              &unresolved_suspend_ids)) {
+        valid = false;
+      }
     }
   }
 
@@ -786,7 +854,9 @@ bool BytecodeAnalysis::ResumeJumpTargetLeavesResolveSuspendIds(
                target.suspend_id(), target.target_offset());
         valid = false;
       } else {
-        LoopInfo loop_info = GetLoopInfoFor(target.target_offset());
+        // TODO(solanes): Getting the outermost loop should do the trick? All
+        // loop's parents it will be the same offset, except for the outermost.
+        LoopInfo loop_info = GetLoopInfoFor(target.target_offset()).back();
         if (loop_info.parent_offset() != parent_offset) {
           PrintF(stderr,
                  "Expected non-leaf resume target for id %d to have a direct "
@@ -861,7 +931,7 @@ bool BytecodeAnalysis::LivenessIsValid() {
        ++iterator) {
     Bytecode bytecode = iterator.current_bytecode();
     int current_offset = iterator.current_offset();
-    int loop_header = GetLoopOffsetFor(current_offset);
+    int loop_header = GetLoopOffsetFor(current_offset).bytecode_offset;
 
     // We only care if we're inside a loop.
     if (loop_header == -1) continue;
@@ -873,7 +943,7 @@ bool BytecodeAnalysis::LivenessIsValid() {
 
     // If this is a forward jump to somewhere else in the same loop, ignore it.
     if (Bytecodes::IsForwardJump(bytecode) &&
-        GetLoopOffsetFor(jump_target) == loop_header) {
+        GetLoopOffsetFor(jump_target).bytecode_offset == loop_header) {
       continue;
     }
 
@@ -924,6 +994,11 @@ bool BytecodeAnalysis::LivenessIsValid() {
       if (forward_iterator.current_bytecode() == Bytecode::kJumpLoop) {
         of << "`-";
       } else if (IsLoopHeader(current_offset)) {
+        // TODO(solanes): Here we would need to iterate through the vector and
+        // do this N times, where N is the size of the vector. How to handle the
+        // liveness? We probably need to have an extra loop in this function
+        // that iterates through the LoopInfo and prints all the loop headers'
+        // information (liveness and such) that share the same offset.
         of << ".>";
         loop_indent++;
       }

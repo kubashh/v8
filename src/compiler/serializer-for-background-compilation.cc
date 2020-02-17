@@ -1279,11 +1279,15 @@ void SerializerForBackgroundCompilation::TraverseBytecode() {
         save_handler_environments);
 
     if (bytecode_analysis.IsLoopHeader(current_offset)) {
+      // TODO(solanes): Iterated through the loop infos.
       // Graph builder might insert jumps to resume targets in the loop body.
-      LoopInfo const& loop_info =
+      const ZoneVector<LoopInfo>& loop_info_vector =
           bytecode_analysis.GetLoopInfoFor(current_offset);
-      for (const auto& target : loop_info.resume_jump_targets()) {
-        ContributeToJumpTargetEnvironment(target.target_offset());
+      for (int i = 0; i < static_cast<int>(loop_info_vector.size()); i++) {
+        const LoopInfo& loop_info = loop_info_vector[i];
+        for (const auto& target : loop_info.resume_jump_targets()) {
+          ContributeToJumpTargetEnvironment(target.target_offset());
+        }
       }
     }
 

@@ -74,6 +74,7 @@ struct V8_EXPORT_PRIVATE LoopInfo {
         resume_jump_targets_(zone) {}
 
   int parent_offset() const { return parent_offset_; }
+  void set_parent_offset(int parent_offset) { parent_offset_ = parent_offset; }
 
   const ZoneVector<ResumeJumpTarget>& resume_jump_targets() const {
     return resume_jump_targets_;
@@ -98,16 +99,25 @@ struct V8_EXPORT_PRIVATE LoopInfo {
 // non-OSR (osr_bailout_id is None).
 class V8_EXPORT_PRIVATE BytecodeAnalysis : public ZoneObject {
  public:
+  struct OffsetAndLoopLevel {
+    int bytecode_offset;
+    // Tracks the loop_level of the offset. It starts at 0 for the innermost
+    // loop, it adds 1 for each loop_level towards to the outermost. This number
+    // only increases if we have loops that are nested that share the same
+    // bytecode offset.
+    int loop_level;
+  };
+
   BytecodeAnalysis(Handle<BytecodeArray> bytecode_array, Zone* zone,
                    BailoutId osr_bailout_id, bool analyze_liveness);
 
   // Return true if the given offset is a loop header
   bool IsLoopHeader(int offset) const;
-  // Get the loop header offset of the containing loop for arbitrary
-  // {offset}, or -1 if the {offset} is not inside any loop.
-  int GetLoopOffsetFor(int offset) const;
+  // Get the <loop header offset, loop level> of the containing loop for
+  // arbitrary {offset}, or <-1, -1> if the {offset} is not inside any loop.
+  OffsetAndLoopLevel GetLoopOffsetFor(int offset) const;
   // Get the loop info of the loop header at {header_offset}.
-  const LoopInfo& GetLoopInfoFor(int header_offset) const;
+  const ZoneVector<LoopInfo>& GetLoopInfoFor(int header_offset) const;
 
   // Get the top-level resume jump targets.
   const ZoneVector<ResumeJumpTarget>& resume_jump_targets() const {
@@ -118,11 +128,12 @@ class V8_EXPORT_PRIVATE BytecodeAnalysis : public ZoneObject {
   const BytecodeLivenessState* GetInLivenessFor(int offset) const;
   const BytecodeLivenessState* GetOutLivenessFor(int offset) const;
 
-  // In the case of OSR, the analysis also computes the (bytecode offset of the)
-  // OSR entry point from the {osr_bailout_id} that was given to the
-  // constructor.
-  int osr_entry_point() const {
-    CHECK_LE(0, osr_entry_point_);
+  // In the case of OSR, the analysis also computes the bytecode offset and
+  // level of the OSR entry point from the {osr_bailout_id} that was given to
+  // the constructor.
+  OffsetAndLoopLevel osr_entry_point() const {
+    CHECK_LE(0, osr_entry_point_.bytecode_offset);
+    CHECK_LE(0, osr_entry_point_.loop_level);
     return osr_entry_point_;
   }
   // Return the osr_bailout_id (for verification purposes).
@@ -162,9 +173,9 @@ class V8_EXPORT_PRIVATE BytecodeAnalysis : public ZoneObject {
   ZoneStack<LoopStackEntry> loop_stack_;
   ZoneVector<int> loop_end_index_queue_;
   ZoneVector<ResumeJumpTarget> resume_jump_targets_;
-  ZoneMap<int, int> end_to_header_;
-  ZoneMap<int, LoopInfo> header_to_info_;
-  int osr_entry_point_;
+  ZoneMap<int, OffsetAndLoopLevel> end_to_header_offset_and_loop_level_;
+  ZoneMap<int, ZoneVector<LoopInfo>> header_to_info_;
+  OffsetAndLoopLevel osr_entry_point_;
   BytecodeLivenessMap liveness_map_;
 
   DISALLOW_COPY_AND_ASSIGN(BytecodeAnalysis);
