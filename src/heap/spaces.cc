@@ -2183,15 +2183,15 @@ void PagedSpace::Verify(Isolate* isolate, ObjectVisitor* visitor) {
       // The object itself should look OK.
       object.ObjectVerify(isolate);
 
-      if (!FLAG_verify_heap_skip_remembered_set) {
-        isolate->heap()->VerifyRememberedSetFor(object);
-      }
-
       // All the interior pointers should be contained in the heap.
       int size = object.Size();
       object.IterateBody(map, size, visitor);
       CHECK(object.address() + size <= top);
       end_of_previous_object = object.address() + size;
+
+      if (!FLAG_verify_heap_skip_remembered_set) {
+        isolate->heap()->VerifyRememberedSetFor(object);
+      }
 
       if (object.IsExternalString()) {
         ExternalString external_string = ExternalString::cast(object);

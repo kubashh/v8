@@ -28,7 +28,8 @@ Handle<AccessorInfo> Accessors::MakeAccessor(
     Isolate* isolate, Handle<Name> name, AccessorNameGetterCallback getter,
     AccessorNameBooleanSetterCallback setter) {
   Factory* factory = isolate->factory();
-  Handle<AccessorInfo> info = factory->NewAccessorInfo();
+  Handle<AccessorInfo> info =
+      factory->NewAccessorInfo(AllocationType::kReadOnly);
   info->set_all_can_read(false);
   info->set_all_can_write(false);
   info->set_is_special_data_property(true);
@@ -38,15 +39,15 @@ Handle<AccessorInfo> Accessors::MakeAccessor(
   info->set_setter_side_effect_type(SideEffectType::kHasSideEffect);
   name = factory->InternalizeName(name);
   info->set_name(*name);
-  Handle<Object> get = v8::FromCData(isolate, getter);
+  Handle<Object> get = v8::FromCDataReadOnly(isolate, getter);
   if (setter == nullptr) setter = &ReconfigureToDataProperty;
-  Handle<Object> set = v8::FromCData(isolate, setter);
-  info->set_getter(*get);
-  info->set_setter(*set);
+  Handle<Object> set = v8::FromCDataReadOnly(isolate, setter);
+  info->set_getter(*get, SKIP_WRITE_BARRIER);
+  info->set_setter(*set, SKIP_WRITE_BARRIER);
   Address redirected = info->redirected_getter();
   if (redirected != kNullAddress) {
-    Handle<Object> js_get = v8::FromCData(isolate, redirected);
-    info->set_js_getter(*js_get);
+    Handle<Object> js_get = v8::FromCDataReadOnly(isolate, redirected);
+    info->set_js_getter(*js_get, SKIP_WRITE_BARRIER);
   }
   return info;
 }

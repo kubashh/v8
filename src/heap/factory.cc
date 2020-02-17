@@ -1232,9 +1232,9 @@ Handle<AliasedArgumentsEntry> Factory::NewAliasedArgumentsEntry(
   return entry;
 }
 
-Handle<AccessorInfo> Factory::NewAccessorInfo() {
-  Handle<AccessorInfo> info = Handle<AccessorInfo>::cast(
-      NewStruct(ACCESSOR_INFO_TYPE, AllocationType::kOld));
+Handle<AccessorInfo> Factory::NewAccessorInfo(AllocationType allocation) {
+  Handle<AccessorInfo> info =
+      Handle<AccessorInfo>::cast(NewStruct(ACCESSOR_INFO_TYPE, allocation));
   DisallowHeapAllocation no_gc;
   info->set_name(*empty_string());
   info->set_flags(0);  // Must clear the flags, it was initialized as undefined.
@@ -1317,12 +1317,12 @@ Handle<PromiseResolveThenableJobTask> Factory::NewPromiseResolveThenableJobTask(
   return microtask;
 }
 
-Handle<Foreign> Factory::NewForeign(Address addr) {
+Handle<Foreign> Factory::NewForeign(Address addr, AllocationType allocation) {
   // Statically ensure that it is safe to allocate foreigns in paged spaces.
   STATIC_ASSERT(Foreign::kSize <= kMaxRegularHeapObjectSize);
   Map map = *foreign_map();
-  HeapObject result = AllocateRawWithImmortalMap(map.instance_size(),
-                                                 AllocationType::kYoung, map);
+  HeapObject result =
+      AllocateRawWithImmortalMap(map.instance_size(), allocation, map);
   Handle<Foreign> foreign(Foreign::cast(result), isolate());
   foreign->set_foreign_address(addr);
   return foreign;

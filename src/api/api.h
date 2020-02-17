@@ -55,8 +55,16 @@ template <typename T>
 inline v8::internal::Handle<v8::internal::Object> FromCData(
     v8::internal::Isolate* isolate, T obj);
 
+template <typename T>
+inline v8::internal::Handle<v8::internal::Object> FromCDataReadOnly(
+    v8::internal::Isolate* isolate, T obj);
+
 template <>
 inline v8::internal::Handle<v8::internal::Object> FromCData(
+    v8::internal::Isolate* isolate, v8::internal::Address obj);
+
+template <>
+inline v8::internal::Handle<v8::internal::Object> FromCDataReadOnly(
     v8::internal::Isolate* isolate, v8::internal::Address obj);
 
 class ApiFunction {

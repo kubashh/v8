@@ -374,7 +374,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   Handle<AliasedArgumentsEntry> NewAliasedArgumentsEntry(
       int aliased_context_slot);
 
-  Handle<AccessorInfo> NewAccessorInfo();
+  Handle<AccessorInfo> NewAccessorInfo(
+      AllocationType allocation = AllocationType::kOld);
 
   Handle<Script> CloneScript(Handle<Script> script);
 
@@ -395,7 +396,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
       Handle<JSReceiver> thenable, Handle<Context> context);
 
   // Foreign objects are pretenured when allocated by the bootstrapper.
-  Handle<Foreign> NewForeign(Address addr);
+  Handle<Foreign> NewForeign(
+      Address addr, AllocationType allocation = AllocationType::kYoung);
 
   Handle<ByteArray> NewByteArray(
       int length, AllocationType allocation = AllocationType::kYoung);

@@ -37,6 +37,16 @@ inline v8::internal::Handle<v8::internal::Object> FromCData(
       reinterpret_cast<v8::internal::Address>(obj));
 }
 
+template <typename T>
+inline v8::internal::Handle<v8::internal::Object> FromCDataReadOnly(
+    v8::internal::Isolate* isolate, T obj) {
+  STATIC_ASSERT(sizeof(T) == sizeof(v8::internal::Address));
+  if (obj == nullptr) return handle(v8::internal::Smi::zero(), isolate);
+  return isolate->factory()->NewForeign(
+      reinterpret_cast<v8::internal::Address>(obj),
+      v8::internal::AllocationType::kReadOnly);
+}
+
 template <>
 inline v8::internal::Handle<v8::internal::Object> FromCData(
     v8::internal::Isolate* isolate, v8::internal::Address obj) {
@@ -44,6 +54,16 @@ inline v8::internal::Handle<v8::internal::Object> FromCData(
     return handle(v8::internal::Smi::zero(), isolate);
   }
   return isolate->factory()->NewForeign(obj);
+}
+
+template <>
+inline v8::internal::Handle<v8::internal::Object> FromCDataReadOnly(
+    v8::internal::Isolate* isolate, v8::internal::Address obj) {
+  if (obj == v8::internal::kNullAddress) {
+    return handle(v8::internal::Smi::zero(), isolate);
+  }
+  return isolate->factory()->NewForeign(
+      obj, v8::internal::AllocationType::kReadOnly);
 }
 
 template <class From, class To>
