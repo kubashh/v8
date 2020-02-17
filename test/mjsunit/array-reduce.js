@@ -25,7 +25,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Flags: --allow-natives-syntax --opt --no-lazy-feedback-allocation
+// Flags: --allow-natives-syntax --opt
 
 // TODO(v8:10195): Fix these tests s.t. we assert deoptimization occurs when
 // expected (e.g. in a %DeoptimizeNow call), then remove
@@ -572,6 +572,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let g = function(a) {
     return a.reduce(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   let a = [1,2,3,4,5,6,7,8,9,10];
   g(a); g(a);
@@ -585,6 +586,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let g = function(a) {
     return a.reduce(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   let a = [1,2,3,4,5,6,7,8,9,10];
   g(a); g(a); g(a);
@@ -595,10 +597,18 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 
 (function OptimizedReduceLazyDeopt() {
   let deopt = false;
-  let f = (a,current) => { if (deopt) %DeoptimizeNow(); return a + current; };
+  let f = (a,current) => {
+    if (deopt) {
+      assertFalse(%IsBeingInterpreted());
+      %DeoptimizeNow();
+      deopt = false;
+    }
+    return a + current;
+  };
   let g = function(a) {
     return a.reduce(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   let a = [1,2,3,4,5,6,7,8,9,10];
   g(a); g(a);
@@ -612,12 +622,17 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 (function OptimizedReduceLazyDeoptMiddleOfIteration() {
   let deopt = false;
   let f = (a,current) => {
-    if (current == 6 && deopt) %DeoptimizeNow();
+    if (current == 6 && deopt) {
+      assertFalse(%IsBeingInterpreted());
+      %DeoptimizeNow();
+      deopt = false;
+    }
     return a + current;
   };
   let g = function(a) {
     return a.reduce(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   let a = [11,22,33,45,56,6,77,84,93,101];
   g(a); g(a);
@@ -632,12 +647,17 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let deopt = false;
   let array = [11,22,33,45,56,6,77,84,93,101];
   let f = (a,current) => {
-    if (current == 6 && deopt) {array[0] = 1.5; }
+    if (current == 6 && deopt) {
+      deopt = false;
+      assertFalse(%IsBeingInterpreted());
+      array[0] = 1.5;
+    }
     return a + current;
   };
   let g = function() {
     return array.reduce(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -645,6 +665,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   g();
   deopt = true;
   g();
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   deopt = false;
   array = [11,22,33,45,56,6,77,84,93,101];
@@ -664,6 +685,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let g = function() {
     return array.reduce(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -671,6 +693,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   g();
   deopt = true;
   g();
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   deopt = false;
   array = [11,22,33,45,56,6,77,84,93,101];
@@ -681,14 +704,14 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 })();
 
 (function TriggerReduceRightPreLoopDeopt() {
-  function f(a) {
-    a.reduceRight((x) => { return x + 1 });
-  };
+  function f(x) { return x + 1 };
+  function g(a) { a.reduceRight(f); };
   %PrepareFunctionForOptimization(f);
-  f([1,2,]);
-  f([1,2,]);
-  %OptimizeFunctionOnNextCall(f);
-  assertThrows(() => f([]), TypeError);
+  %PrepareFunctionForOptimization(g);
+  g([1,2,]);
+  g([1,2,]);
+  %OptimizeFunctionOnNextCall(g);
+  assertThrows(() => g([]), TypeError);
 })();
 
 (function OptimizedReduceRightEagerDeoptMiddleOfIterationHoley() {
@@ -701,6 +724,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let g = function() {
     return array.reduceRight(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -708,6 +732,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   g();
   deopt = true;
   g();
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   deopt = false;
   array = [11,22,33,45,56,6,77,84,93,101];
@@ -727,6 +752,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
     } catch (e) {
     }
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -750,6 +776,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
       return null;
     }
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -759,6 +786,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   done = true;
   assertEquals(null, g());
   done = false;
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   %OptimizeFunctionOnNextCall(g);
@@ -816,6 +844,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
       if (done) return null;
     }
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -825,6 +854,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   done = true;
   assertEquals(null, g());
   done = false;
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   %OptimizeFunctionOnNextCall(g);
@@ -877,6 +907,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let g = function() {
     return array.reduce(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -891,6 +922,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let done = false;
   let f = (a, current) => {
     if (done) {
+      assertFalse(%IsBeingInterpreted());
       %DeoptimizeNow();
       throw "x";
     }
@@ -904,6 +936,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
       if (done) return null;
     }
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -913,6 +946,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   done = true;
   assertEquals(null, g());
   done = false;
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   %OptimizeFunctionOnNextCall(g);
@@ -926,6 +960,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let done = false;
   let f = (a, current) => {
     if (done) {
+      assertFalse(%IsBeingInterpreted());
       %DeoptimizeNow();
       throw "x";
     }
@@ -940,6 +975,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
       if (done) return null;
     }
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -949,6 +985,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   done = true;
   assertEquals(null, g());
   done = false;
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   %OptimizeFunctionOnNextCall(g);
@@ -965,6 +1002,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
     count = 0;
     return a.reduceRight(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   let a = [1,2,3,4,5,6,7,8,9,10];
   g(a); g(a);
@@ -980,6 +1018,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
     count = 0;
     return a.reduceRight(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   let a = [1,2,3,4,5,6,7,8,9,10];
   g(a); g(a); g(a);
@@ -990,10 +1029,18 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 
 (function OptimizedReduceLazyDeopt() {
   let deopt = false;
-  let f = (a,current) => { if (deopt) %DeoptimizeNow(); return a + current; };
+  let f = (a,current) => {
+    if (deopt) {
+      deopt = false;
+      assertFalse(%IsBeingInterpreted());
+      %DeoptimizeNow();
+    }
+    return a + current;
+  };
   let g = function(a) {
     return a.reduceRight(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   let a = [1,2,3,4,5,6,7,8,9,10];
   g(a); g(a);
@@ -1007,12 +1054,17 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 (function OptimizedReduceLazyDeoptMiddleOfIteration() {
   let deopt = false;
   let f = (a,current) => {
-    if (current == 6 && deopt) %DeoptimizeNow();
+    if (current == 6 && deopt) {
+      deopt = false;
+      assertFalse(%IsBeingInterpreted());
+      %DeoptimizeNow();
+    }
     return a + current;
   };
   let g = function(a) {
     return a.reduceRight(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   let a = [11,22,33,45,56,6,77,84,93,101];
   g(a); g(a);
@@ -1027,12 +1079,17 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let deopt = false;
   let array = [11,22,33,45,56,6,77,84,93,101];
   let f = (a,current) => {
-    if (current == 6 && deopt) {array[9] = 1.5; }
+    if (current == 6 && deopt) {
+      deopt = false;
+      assertFalse(%IsBeingInterpreted());
+      array[9] = 1.5;
+    }
     return a + current;
   };
   let g = function() {
     return array.reduceRight(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -1040,6 +1097,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   g();
   deopt = true;
   g();
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   deopt = false;
   array = [11,22,33,45,56,6,77,84,93,101];
@@ -1059,6 +1117,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
     } catch (e) {
     }
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -1082,6 +1141,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
       return null;
     }
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -1091,6 +1151,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   done = true;
   assertEquals(null, g());
   done = false;
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   %OptimizeFunctionOnNextCall(g);
@@ -1103,7 +1164,11 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 (function ReduceThrow() {
   let done = false;
   let f = (a, current) => {
-    if (done) throw "x";
+    if (done) {
+      done = false;
+      assertFalse(%IsBeingInterpreted());
+      throw "x";
+    }
     return a + current;
   };
   %NeverOptimizeFunction(f);
@@ -1136,7 +1201,10 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 (function ReduceFinally() {
   let done = false;
   let f = (a, current) => {
-    if (done) throw "x";
+    if (done) {
+      assertFalse(%IsBeingInterpreted());
+      throw "x";
+    }
     return a + current;
   };
   let array = [1,2,3];
@@ -1148,6 +1216,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
       if (done) return null;
     }
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -1157,6 +1226,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   done = true;
   assertEquals(null, g());
   done = false;
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   %OptimizeFunctionOnNextCall(g);
@@ -1169,7 +1239,10 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 (function ReduceFinallyNoInline() {
   let done = false;
   let f = (a, current) => {
-    if (done) throw "x";
+    if (done) {
+      assertFalse(%IsBeingInterpreted());
+      throw "x";
+    }
     return a + current;
   };
   %NeverOptimizeFunction(f);
@@ -1209,6 +1282,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let g = function() {
     return array.reduceRight(f);
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -1223,6 +1297,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let done = false;
   let f = (a, current) => {
     if (done) {
+      assertFalse(%IsBeingInterpreted());
       %DeoptimizeNow();
       throw "x";
     }
@@ -1236,6 +1311,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
       if (done) return null;
     }
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -1245,6 +1321,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   done = true;
   assertEquals(null, g());
   done = false;
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   %OptimizeFunctionOnNextCall(g);
@@ -1258,6 +1335,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   let done = false;
   let f = (a, current) => {
     if (done) {
+      assertFalse(%IsBeingInterpreted());
       %DeoptimizeNow();
       throw "x";
     }
@@ -1272,6 +1350,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
       if (done) return null;
     }
   };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   let total = g();
@@ -1281,6 +1360,7 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
   done = true;
   assertEquals(null, g());
   done = false;
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(g);
   g(); g();
   %OptimizeFunctionOnNextCall(g);
@@ -1292,12 +1372,9 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 
 (function ReduceHoleyArrayWithDefaultAccumulator() {
   var holey = new Array(10);
-  function reduce(a) {
-    let callback = function(accumulator, currentValue) {
-      return currentValue;
-    };
-    return a.reduce(callback, 13);
-  };
+  let f = function(accumulator, currentValue) { return currentValue; };
+  function reduce(a) { return a.reduce(f, 13); };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(reduce);
   assertEquals(13, reduce(holey));
   assertEquals(13, reduce(holey));
@@ -1308,12 +1385,9 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 
 (function ReduceRightHoleyArrayWithDefaultAccumulator() {
   var holey = new Array(10);
-  function reduce(a) {
-    let callback = function(accumulator, currentValue) {
-      return currentValue;
-    };
-    return a.reduceRight(callback, 13);
-  };
+  let f = function(accumulator, currentValue) { return currentValue; };
+  function reduce(a) { return a.reduceRight(f, 13); };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(reduce);
   assertEquals(13, reduce(holey));
   assertEquals(13, reduce(holey));
@@ -1325,12 +1399,9 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 (function ReduceHoleyArrayOneElementWithDefaultAccumulator() {
   var holey = new Array(10);
   holey[1] = 5;
-  function reduce(a) {
-    let callback = function(accumulator, currentValue) {
-      return currentValue + accumulator;
-    };
-    return a.reduce(callback, 13);
-  };
+  let f = function(accumulator, currentValue) { return currentValue + accumulator; };
+  function reduce(a) { return a.reduce(f, 13); };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(reduce);
   assertEquals(18, reduce(holey));
   assertEquals(18, reduce(holey));
@@ -1342,12 +1413,9 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 (function ReduceRightHoleyArrayOneElementWithDefaultAccumulator() {
   var holey = new Array(10);
   holey[1] = 5;
-  function reduce(a) {
-    let callback = function(accumulator, currentValue) {
-      return currentValue + accumulator;
-    };
-    return a.reduceRight(callback, 13);
-  };
+  let f = function(accumulator, currentValue) { return currentValue + accumulator; };
+  function reduce(a) { return a.reduceRight(f, 13); };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(reduce);
   assertEquals(18, reduce(holey));
   assertEquals(18, reduce(holey));
@@ -1357,9 +1425,9 @@ assertEquals(undefined, arr.reduceRight(function(val) { return val }));
 })();
 
 (function ReduceMixedHoleyArrays() {
-  function r(a) {
-    return a.reduce((acc, i) => {acc[0]});
-  };
+  function f(acc, i) { return acc[0]; }
+  function r(a) { return a.reduce(f); };
+  %PrepareFunctionForOptimization(f);
   %PrepareFunctionForOptimization(r);
   r([[0]]);
   r([[0]]);
