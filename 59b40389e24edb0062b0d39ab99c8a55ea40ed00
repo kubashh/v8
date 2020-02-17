@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7486fd88_fb79e382",
+        "filename": "test/mjsunit/array-reduce.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-17T12:09:01Z",
+      "side": 1,
+      "message": "I\u0027m starting to question the value of this entire CL. IsBeingInterpreted only matters for eager deopts. For lazy deopts we don\u0027t actually care whether the current function is inlined, but whether the target function (in this case g) has an optimized frame on the stack.\n\nTheoretically, we have a mjsunit helper to at least partially express this in assertOptimized(f), but its use is problematic:\n\n if (deopt) {\n   assertOptimized(g);\n   ...\n\nThis snippet will actually trigger a deopt due to missing call feedback on the `assertOptimized` call. We could fix this by using %GetOptimizationStatus directly, but that doesn\u0027t make these tests any more readable (and GetOptimizationStatus + the helpers in mjsunit.js are really complex and hacky since they try to make tests work in jitless mode). \n\nPerhaps the --no-lazy-feedback-allocation plus a new testing variant is the best way to proceed for legacy tests.",
+      "parentUuid": "7a77ebd4_60402859",
+      "revId": "59b40389e24edb0062b0d39ab99c8a55ea40ed00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae2a5da2_fa51aabf",
         "filename": "test/mjsunit/array-reduce.js",
         "patchSetId": 2
