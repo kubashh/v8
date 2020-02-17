@@ -3428,6 +3428,13 @@ class RepresentationSelector {
         VisitUnop(node, UseInfo::AnyTagged(), MachineRepresentation::kTagged);
         return;
       }
+      case IrOpcode::kCheckClosure: {
+        // TODO(mvstanton): should feedback slot from the call come here?
+        VisitUnop(node,
+                  UseInfo::CheckedHeapObjectAsTaggedPointer(FeedbackSource()),
+                  MachineRepresentation::kTaggedPointer);
+        return;
+      }
       case IrOpcode::kConvertTaggedHoleToUndefined: {
         if (InputIs(node, Type::NumberOrOddball()) &&
             truncation.IsUsedAsWord32()) {

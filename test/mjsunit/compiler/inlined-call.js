@@ -196,3 +196,19 @@ copy.push(1, 2, 3, 1, 2, 3);
 assertOptimized(callInlined);
 assertArrayEquals(copy, this.array);
 assertEquals(6, called);
+
+
+function make_closure() { return () => { return 42; } }
+%PrepareFunctionForOptimization(make_closure);
+%PrepareFunctionForOptimization(make_closure());
+
+function inline_polymorphic(f) {
+  let answer = f();
+  %TurbofanStaticAssert(answer == 42);
+}
+
+%PrepareFunctionForOptimization(inline_polymorphic);
+inline_polymorphic(make_closure());
+inline_polymorphic(make_closure());
+%OptimizeFunctionOnNextCall(inline_polymorphic);
+inline_polymorphic(make_closure());
