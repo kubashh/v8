@@ -981,7 +981,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // the JS bitwise operations. See ECMA-262 9.5: ToInt32.
   // Exits with 'result' holding the answer.
   void TruncateDoubleToI(Isolate* isolate, Zone* zone, Register result,
-                         DoubleRegister double_input, StubCallMode stub_mode);
+                         DoubleRegister double_input, StubCallMode stub_mode,
+                         LinkRegisterStatus lr_status);
 
   inline void Mul(const Register& rd, const Register& rn, const Register& rm);
 
