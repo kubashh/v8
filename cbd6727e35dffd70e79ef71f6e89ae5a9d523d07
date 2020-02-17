@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85119e20_ccbd0629",
+        "filename": "test/mjsunit/for-in-special-cases.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-02-17T10:53:20Z",
+      "side": 1,
+      "message": "These tests would be a bit more interesting if you\u0027d also actually access the deleting element to see whether the subsequent key shows up.",
+      "revId": "cbd6727e35dffd70e79ef71f6e89ae5a9d523d07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
