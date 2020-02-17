@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77ebd4_60402859",
+        "filename": "test/mjsunit/array-reduce.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-17T11:08:54Z",
+      "side": 1,
+      "message": "+1. Gotta police these things! :)",
+      "revId": "59b40389e24edb0062b0d39ab99c8a55ea40ed00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae2a5da2_fa51aabf",
+        "filename": "test/mjsunit/array-reduce.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-17T11:08:54Z",
+      "side": 1,
+      "message": "I think we are really on a border here with the %Prepare... idiom for the complex cases we care about in many of these tests (trying to hit specific deopt points). I\u0027d like to test production code, and at first blush it seems running without --nolazy-feedback-allocation does that. However, we subvert production like crazy with all the %Prepare....AND it\u0027s harder to read.",
+      "revId": "59b40389e24edb0062b0d39ab99c8a55ea40ed00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
