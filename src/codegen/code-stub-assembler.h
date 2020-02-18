@@ -2026,10 +2026,15 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   // Collect the callable |maybe_target| feedback for either a CALL_IC or
   // an INSTANCEOF_IC in the |feedback_vector| at |slot_id|.
+  enum class CallableFeedbackMode {
+    kCollectSharedFunctionInfo,
+    kDontCollectSharedFunctionInfo
+  };
   void CollectCallableFeedback(TNode<Object> maybe_target,
                                TNode<Context> context,
                                TNode<FeedbackVector> feedback_vector,
-                               TNode<UintPtrT> slot_id);
+                               TNode<UintPtrT> slot_id,
+                               CallableFeedbackMode mode);
 
   // Collect CALL_IC feedback for |maybe_target| function in the
   // |feedback_vector| at |slot_id|, and the call counts in
