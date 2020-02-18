@@ -16,6 +16,24 @@
       "revId": "b45a1064411c4a5aeb8a5658879eb549ec6e5e25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da101981_6123b545",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2020-02-18T10:52:28Z",
+      "side": 1,
+      "message": "Looking into this a little more, it might be good to extend the tests to cover out-of-range immediate shifts to check that the backend generates code that wraps around: https://source.chromium.org/chromium/v8/v8.git/+/0439220c36237e894cbadc61948d051813d9f2db:test/cctest/wasm/test-run-wasm-simd.cc;l\u003d1945",
+      "parentUuid": "878b03bf_5afd2b07",
+      "revId": "b45a1064411c4a5aeb8a5658879eb549ec6e5e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
