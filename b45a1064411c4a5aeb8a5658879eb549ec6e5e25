@@ -52,6 +52,24 @@
       "revId": "b45a1064411c4a5aeb8a5658879eb549ec6e5e25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab3034b0_af0b25a7",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2020-02-18T15:47:22Z",
+      "side": 1,
+      "message": "\u003e We made sure that the immediate is in the rage of the width in the code-gen, by using `i.InputInt##width(1)`, where width matches the lane sizes, so 64x2 has width 6, 32x4 has width 5, etc..., so the shift value is taken modulo width.\n\nAh I missed that, sorry! Perfect then :-)",
+      "parentUuid": "5c93b673_305a2c0e",
+      "revId": "b45a1064411c4a5aeb8a5658879eb549ec6e5e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
