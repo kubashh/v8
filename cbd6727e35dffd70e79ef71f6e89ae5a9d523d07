@@ -16,6 +16,24 @@
       "revId": "cbd6727e35dffd70e79ef71f6e89ae5a9d523d07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac9280b9_bbdbb34a",
+        "filename": "test/mjsunit/for-in-special-cases.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-02-18T00:56:36Z",
+      "side": 1,
+      "message": "We access the deleting element and test it in line 232~235. Is that what you want?",
+      "parentUuid": "85119e20_ccbd0629",
+      "revId": "cbd6727e35dffd70e79ef71f6e89ae5a9d523d07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
