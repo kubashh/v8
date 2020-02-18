@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "878b03bf_5afd2b07",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2020-02-18T10:34:16Z",
+      "side": 1,
+      "message": "Do we also need to make sure the immediate is in range of the width in the non-zero case? If the SIMD semantics for shifts is to wrap around, I guess we can do a `modulo width` as well. \n\nOtherwise we might hit one of those assertions: https://source.chromium.org/chromium/v8/v8.git/+/0439220c36237e894cbadc61948d051813d9f2db:src/codegen/arm64/assembler-arm64.cc;l\u003d1586",
+      "revId": "b45a1064411c4a5aeb8a5658879eb549ec6e5e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
