@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e90c6d87_1ba1474c",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3105,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-18T10:43:27Z",
+      "side": 0,
+      "message": "Can we get rid of kDontSignLR / kDontAuthLR now? These seem to be their only non-test uses.",
+      "range": {
+        "startLine": 3105,
+        "startChar": 17,
+        "endLine": 3105,
+        "endChar": 28
+      },
+      "revId": "9001b90f700d21611149a3adf2bff5b8440c8fe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
