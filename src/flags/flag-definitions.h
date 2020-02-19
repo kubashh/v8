@@ -1287,6 +1287,11 @@ DEFINE_GENERIC_IMPLICATION(
     runtime_call_stats,
     TracingFlags::runtime_stats.store(
         v8::tracing::TracingCategoryObserver::ENABLED_BY_NATIVE))
+DEFINE_BOOL(rcs, false, "report runtime call counts and times")
+DEFINE_IMPLICATION(rcs, runtime_call_stats)
+
+DEFINE_BOOL(rcs_cpu_time, false,
+            "report runtime times in cpu time (the deafult is wall time)")
 
 // snapshot-common.cc
 DEFINE_BOOL(profile_deserialization, false,
