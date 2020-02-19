@@ -21,10 +21,8 @@ namespace test_code_pages {
 // 2 - Have code pages. ARM32 only
 // 3 - Nothing - This feature does not work on other platforms.
 #if defined(V8_TARGET_ARCH_ARM)
-static const bool kHaveCodeRange = false;
 static const bool kHaveCodePages = true;
 #else
-static const bool kHaveCodeRange = kRequiresCodeRange;
 static const bool kHaveCodePages = false;
 #endif  // defined(V8_TARGET_ARCH_ARM)
 
@@ -86,7 +84,7 @@ bool PagesContainsAddress(std::vector<MemoryRange>* pages,
 }  // namespace
 
 TEST(CodeRangeCorrectContents) {
-  if (!kHaveCodeRange) return;
+  if (!Heap::RequiresCodeRange()) return;
 
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
@@ -128,7 +126,7 @@ TEST(CodePagesCorrectContents) {
 }
 
 TEST(OptimizedCodeWithCodeRange) {
-  if (!kHaveCodeRange) return;
+  if (!Heap::RequiresCodeRange()) return;
 
   FLAG_allow_natives_syntax = true;
   LocalContext env;
@@ -255,7 +253,7 @@ TEST(OptimizedCodeWithCodePages) {
 }
 
 TEST(LargeCodeObject) {
-  if (!kHaveCodeRange && !kHaveCodePages) return;
+  if (!Heap::RequiresCodeRange() && !kHaveCodePages) return;
   // We don't want incremental marking to start which could cause the code to
   // not be collected on the CollectGarbage() call.
   ManualGCScope manual_gc_scope;
@@ -290,7 +288,7 @@ TEST(LargeCodeObject) {
 
     std::vector<MemoryRange>* pages = i_isolate->GetCodePages();
 
-    if (kHaveCodeRange) {
+    if (Heap::RequiresCodeRange()) {
       CHECK(PagesContainsAddress(pages, foo_code->address()));
     } else {
       CHECK(PagesHasExactPage(pages, foo_code->address()));
@@ -371,7 +369,7 @@ class SamplingThread : public base::Thread {
 };
 
 TEST(LargeCodeObjectWithSignalHandler) {
-  if (!kHaveCodeRange && !kHaveCodePages) return;
+  if (!Heap::RequiresCodeRange() && !kHaveCodePages) return;
   // We don't want incremental marking to start which could cause the code to
   // not be collected on the CollectGarbage() call.
   ManualGCScope manual_gc_scope;
@@ -421,7 +419,7 @@ TEST(LargeCodeObjectWithSignalHandler) {
     // Check that the page was added.
     std::vector<MemoryRange> pages =
         SamplingThread::DoSynchronousSample(isolate);
-    if (kHaveCodeRange) {
+    if (Heap::RequiresCodeRange()) {
       CHECK(PagesContainsAddress(&pages, foo_code->address()));
     } else {
       CHECK(PagesHasExactPage(&pages, foo_code->address()));
@@ -447,7 +445,7 @@ TEST(LargeCodeObjectWithSignalHandler) {
 }
 
 TEST(Sorted) {
-  if (!kHaveCodeRange && !kHaveCodePages) return;
+  if (!Heap::RequiresCodeRange() && !kHaveCodePages) return;
   // We don't want incremental marking to start which could cause the code to
   // not be collected on the CollectGarbage() call.
   ManualGCScope manual_gc_scope;
@@ -507,7 +505,7 @@ TEST(Sorted) {
       // Check that the pages were added.
       std::vector<MemoryRange> pages =
           SamplingThread::DoSynchronousSample(isolate);
-      if (kHaveCodeRange) {
+      if (Heap::RequiresCodeRange()) {
         CHECK_EQ(pages.size(), initial_num_pages);
       } else {
         CHECK_EQ(pages.size(), initial_num_pages + 3);
@@ -528,7 +526,7 @@ TEST(Sorted) {
 
     std::vector<MemoryRange> pages =
         SamplingThread::DoSynchronousSample(isolate);
-    if (kHaveCodeRange) {
+    if (Heap::RequiresCodeRange()) {
       CHECK_EQ(pages.size(), initial_num_pages);
     } else {
       CHECK_EQ(pages.size(), initial_num_pages + 2);

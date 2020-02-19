@@ -732,6 +732,8 @@ class Heap {
   // Returns whether SetUp has been called.
   bool HasBeenSetUp();
 
+  V8_EXPORT_PRIVATE static bool RequiresCodeRange();
+
   // ===========================================================================
   // Getters for spaces. =======================================================
   // ===========================================================================
