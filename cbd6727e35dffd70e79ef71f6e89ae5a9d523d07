@@ -52,6 +52,24 @@
       "revId": "cbd6727e35dffd70e79ef71f6e89ae5a9d523d07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd74acef_1e812482",
+        "filename": "test/mjsunit/for-in-special-cases.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-02-19T05:55:07Z",
+      "side": 1,
+      "message": "Done, we added the access inside the for-in iteration.",
+      "parentUuid": "d051485a_e1938efb",
+      "revId": "cbd6727e35dffd70e79ef71f6e89ae5a9d523d07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
