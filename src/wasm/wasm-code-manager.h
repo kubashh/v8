@@ -588,7 +588,7 @@ class V8_EXPORT_PRIVATE NativeModule final {
                VirtualMemory code_space,
                std::shared_ptr<const WasmModule> module,
                std::shared_ptr<Counters> async_counters,
-               std::shared_ptr<NativeModule>* shared_this);
+               std::shared_ptr<NativeModule>* shared_this, bool tier_down);
 
   std::unique_ptr<WasmCode> AddCodeWithCodeSpace(
       uint32_t index, const CodeDesc& desc, uint32_t stack_slots,
