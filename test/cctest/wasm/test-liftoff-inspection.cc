@@ -159,7 +159,7 @@ void CheckDebugSideTable(std::vector<ValueType> expected_local_types,
                          const wasm::DebugSideTable* debug_side_table) {
   std::vector<ValueType> local_types;
   for (int i = 0; i < debug_side_table->num_locals(); ++i) {
-    local_types.push_back(debug_side_table->local_type(i));
+    local_types.push_back(debug_side_table->value_type(i));
   }
   std::vector<DebugSideTableEntry> entries;
   for (auto& entry : debug_side_table->entries()) {
