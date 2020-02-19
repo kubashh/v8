@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88214ac4_4623196f",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-19T15:04:56Z",
+      "side": 1,
+      "message": "nit: Since this does not have an initialization part, I think it would more naturally be expressed as a while-loop:\nwhile (!new_it.done() \u0026\u0026 new_it.soruce_position().. !\u003d old_...) { new_it.Advance(); }",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00a7dae1_244de213",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-19T15:04:56Z",
+      "side": 1,
+      "message": "There is a DCHECK above, so this if (and the UNREACHABLE below) can be skipped.",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8085ac73_af67810a",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-19T15:04:56Z",
+      "side": 1,
+      "message": "This variable looks dead.",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ba00a42_b3087015",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-19T15:04:56Z",
+      "side": 1,
+      "message": "Please put this DCHECK at the beginning of the method.",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2492a7e_5b28f741",
+        "filename": "src/wasm/wasm-debug.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-19T15:04:56Z",
+      "side": 1,
+      "message": "Can we name the Isolate* parameter \"current_isolate\", and put it last? This would hopefully make it a bit more visible that the operation itself is not isolate dependent.",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d14bc43_ca349dbc",
+        "filename": "test/inspector/debugger/wasm-set-breakpoint-liftoff-expected.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-19T15:04:56Z",
+      "side": 1,
+      "message": "It looks like we would execute one iteration less than before. Any idea why?",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
