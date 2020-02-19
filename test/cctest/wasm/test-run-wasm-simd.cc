@@ -880,10 +880,11 @@ WASM_SIMD_TEST_NO_LOWERING(F32x4Qfma) {
                                WASM_SIMD_F32x4_SPLAT(WASM_GET_LOCAL(value3)))),
         WASM_ONE);
 
+  // Check actual execution tier in case of fallback.
+  bool use_fused_result = ExpectFused(r.builder().GetFunctionCode(0)->tier());
   for (FMOperation<float> x : qfma_vector<float>()) {
     r.Call(x.a, x.b, x.c);
-    float expected =
-        ExpectFused(execution_tier) ? x.fused_result : x.unfused_result;
+    float expected = use_fused_result ? x.fused_result : x.unfused_result;
     for (int i = 0; i < 4; i++) {
       float actual = ReadLittleEndianValue<float>(&g[i]);
       CheckFloatResult(x.a, x.b, expected, actual, true /* exact */);
@@ -904,10 +905,11 @@ WASM_SIMD_TEST_NO_LOWERING(F32x4Qfms) {
                                WASM_SIMD_F32x4_SPLAT(WASM_GET_LOCAL(value3)))),
         WASM_ONE);
 
+  // Check actual execution tier in case of fallback.
+  bool use_fused_result = ExpectFused(r.builder().GetFunctionCode(0)->tier());
   for (FMOperation<float> x : qfms_vector<float>()) {
     r.Call(x.a, x.b, x.c);
-    float expected =
-        ExpectFused(execution_tier) ? x.fused_result : x.unfused_result;
+    float expected = use_fused_result ? x.fused_result : x.unfused_result;
     for (int i = 0; i < 4; i++) {
       float actual = ReadLittleEndianValue<float>(&g[i]);
       CheckFloatResult(x.a, x.b, expected, actual, true /* exact */);
@@ -1503,10 +1505,11 @@ WASM_SIMD_TEST_NO_LOWERING(F64x2Qfma) {
                                WASM_SIMD_F64x2_SPLAT(WASM_GET_LOCAL(value3)))),
         WASM_ONE);
 
+  // Check actual execution tier in case of fallback.
+  bool use_fused_result = ExpectFused(r.builder().GetFunctionCode(0)->tier());
   for (FMOperation<double> x : qfma_vector<double>()) {
     r.Call(x.a, x.b, x.c);
-    double expected =
-        ExpectFused(execution_tier) ? x.fused_result : x.unfused_result;
+    double expected = use_fused_result ? x.fused_result : x.unfused_result;
     for (int i = 0; i < 2; i++) {
       double actual = ReadLittleEndianValue<double>(&g[i]);
       CheckDoubleResult(x.a, x.b, expected, actual, true /* exact */);
@@ -1527,10 +1530,11 @@ WASM_SIMD_TEST_NO_LOWERING(F64x2Qfms) {
                                WASM_SIMD_F64x2_SPLAT(WASM_GET_LOCAL(value3)))),
         WASM_ONE);
 
+  // Check actual execution tier in case of fallback.
+  bool use_fused_result = ExpectFused(r.builder().GetFunctionCode(0)->tier());
   for (FMOperation<double> x : qfms_vector<double>()) {
     r.Call(x.a, x.b, x.c);
-    double expected =
-        ExpectFused(execution_tier) ? x.fused_result : x.unfused_result;
+    double expected = use_fused_result ? x.fused_result : x.unfused_result;
     for (int i = 0; i < 2; i++) {
       double actual = ReadLittleEndianValue<double>(&g[i]);
       CheckDoubleResult(x.a, x.b, expected, actual, true /* exact */);
