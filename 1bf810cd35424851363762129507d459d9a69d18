@@ -209,6 +209,24 @@
       "revId": "1bf810cd35424851363762129507d459d9a69d18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e1d8b01_f0461a1c",
+        "filename": "test/inspector/debugger/wasm-set-breakpoint-liftoff-expected.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-19T16:22:38Z",
+      "side": 1,
+      "message": "Ah, that makes sense. Thanks for the explanation!",
+      "parentUuid": "0ced5103_e9a06a95",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
