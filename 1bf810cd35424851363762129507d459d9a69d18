@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a11be21d_d2d5709d",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-02-19T16:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88214ac4_4623196f",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00a7dae1_244de213",
         "filename": "src/wasm/wasm-debug.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "1bf810cd35424851363762129507d459d9a69d18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "984d78b5_4b12ef55",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-02-19T16:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00a7dae1_244de213",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "06a787ee_14c3c737",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-02-19T16:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8085ac73_af67810a",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ba00a42_b3087015",
         "filename": "src/wasm/wasm-debug.cc",
         "patchSetId": 2
@@ -67,6 +121,24 @@
       "revId": "1bf810cd35424851363762129507d459d9a69d18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4af443d1_5109c371",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-02-19T16:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ba00a42_b3087015",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "e6159927_7b3fa4a0",
+        "filename": "src/wasm/wasm-debug.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-02-19T16:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2492a7e_5b28f741",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d14bc43_ca349dbc",
         "filename": "test/inspector/debugger/wasm-set-breakpoint-liftoff-expected.txt",
         "patchSetId": 2
@@ -98,6 +188,24 @@
       "writtenOn": "2020-02-19T15:04:56Z",
       "side": 1,
       "message": "It looks like we would execute one iteration less than before. Any idea why?",
+      "revId": "1bf810cd35424851363762129507d459d9a69d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ced5103_e9a06a95",
+        "filename": "test/inspector/debugger/wasm-set-breakpoint-liftoff-expected.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-02-19T16:07:02Z",
+      "side": 1,
+      "message": "That\u0027s because breakpoints are not set yet during the first iteration. A is called at the end of the loop, and only then do we set breakpoints for B.",
+      "parentUuid": "0d14bc43_ca349dbc",
       "revId": "1bf810cd35424851363762129507d459d9a69d18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
