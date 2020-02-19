@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a15e1cd_efb7a106",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-19T16:21:46Z",
+      "side": 1,
+      "message": "Good comment...I think this area is extremely subtle, could it be expressed in tabular form?\n// ...\n// a) Fallback reason: induction variable is not initially of type integer\n//    Why: we want to work with ranges (below)\n// b) Fallback reason: when the increment is zero\n//    Why: phi typing will generally yield a better type\n// ...\n\nSomething like that.",
+      "revId": "7b4c71a32c2932f61f4855ed43e7406af8e23f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
