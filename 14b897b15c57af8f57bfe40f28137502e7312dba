@@ -22,6 +22,23 @@
       "revId": "14b897b15c57af8f57bfe40f28137502e7312dba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c10a2e73_3e750bc2",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2020-02-19T18:55:59Z",
+      "side": 1,
+      "message": "Should this be `if constexpr (...)`?",
+      "revId": "14b897b15c57af8f57bfe40f28137502e7312dba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
