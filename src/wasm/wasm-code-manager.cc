@@ -721,13 +721,15 @@ NativeModule::NativeModule(WasmEngine* engine, const WasmFeatures& enabled,
                            VirtualMemory code_space,
                            std::shared_ptr<const WasmModule> module,
                            std::shared_ptr<Counters> async_counters,
-                           std::shared_ptr<NativeModule>* shared_this)
+                           std::shared_ptr<NativeModule>* shared_this,
+                           bool tier_down)
     : code_allocator_(engine->code_manager(), std::move(code_space),
                       async_counters),
       enabled_features_(enabled),
       module_(std::move(module)),
       import_wrapper_cache_(std::unique_ptr<WasmImportWrapperCache>(
           new WasmImportWrapperCache())),
+      tier_down_(tier_down),
       engine_(engine),
       use_trap_handler_(trap_handler::IsTrapHandlerEnabled() ? kUseTrapHandler
                                                              : kNoTrapHandler) {
@@ -784,8 +786,8 @@ void NativeModule::LogWasmCodes(Isolate* isolate) {
 }
 
 CompilationEnv NativeModule::CreateCompilationEnv() const {
-  return {module(), use_trap_handler_, kRuntimeExceptionSupport,
-          enabled_features_};
+  return CompilationEnv(module(), use_trap_handler_, kRuntimeExceptionSupport,
+                        enabled_features_, kNoLowerSimd, tier_down_);
 }
 
 WasmCode* NativeModule::AddCodeForTesting(Handle<Code> code) {
@@ -1697,9 +1699,10 @@ std::shared_ptr<NativeModule> WasmCodeManager::NewNativeModule(
   Address start = code_space.address();
   size_t size = code_space.size();
   Address end = code_space.end();
+  bool tier_down = FLAG_debug_in_liftoff && isolate->debug()->is_active();
   std::shared_ptr<NativeModule> ret;
   new NativeModule(engine, enabled, std::move(code_space), std::move(module),
-                   isolate->async_counters(), &ret);
+                   isolate->async_counters(), &ret, tier_down);
   // The constructor initialized the shared_ptr.
   DCHECK_NOT_NULL(ret);
   TRACE_HEAP("New NativeModule %p: Mem: %" PRIuPTR ",+%zu\n", ret.get(), start,
