@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26d98d51_ea126d16",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-19T14:49:29Z",
+      "side": 1,
+      "message": "Can you add a short comment here (and below) why we are adding another source position?",
+      "revId": "bcecf0306f36b1d576b89754ed4d8bbba2c83fa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09d949a0_8d17936f",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-19T14:49:29Z",
+      "side": 1,
+      "message": "There is already quite similar logic in the WasmEngine, see https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-engine.cc?l\u003d850\u0026rcl\u003dac15544d48cc6923ef33e7f1a8ccbf5400bc9aef.\n\nThis happens immediately after calling this method. Can we reuse that logic?",
+      "revId": "bcecf0306f36b1d576b89754ed4d8bbba2c83fa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
