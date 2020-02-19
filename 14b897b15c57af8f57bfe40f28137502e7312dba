@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b70361d7_6b607fcd",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-02-19T12:02:50Z",
+      "side": 1,
+      "message": "Can you make this a typeswitch?",
+      "range": {
+        "startLine": 489,
+        "startChar": 2,
+        "endLine": 489,
+        "endChar": 58
+      },
+      "revId": "14b897b15c57af8f57bfe40f28137502e7312dba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
