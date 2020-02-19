@@ -6,6 +6,7 @@
 
 const {session, contextGroup, Protocol} =
     InspectorTest.start('Tests stepping through wasm scripts.');
+session.setupScriptMap();
 
 utils.load('test/mjsunit/wasm/wasm-module-builder.js');
 
@@ -62,14 +63,47 @@ function setBreakpoint(offset, script) {
       .then(getResult);
 }
 
-Protocol.Debugger.onPaused(pause_msg => {
-  let loc = pause_msg.params.callFrames[0].location;
-  if (loc.lineNumber != 0) {
-    InspectorTest.log('Unexpected line number: ' + loc.lineNumber);
+Protocol.Debugger.onPaused(printPauseLocationsAndContinue);
+
+async function printPauseLocationsAndContinue(msg) {
+  let loc = msg.params.callFrames[0].location;
+  InspectorTest.log('Paused:');
+  await session.logSourceLocation(loc);
+  InspectorTest.log('Scope:');
+  for (var frame of msg.params.callFrames) {
+    var functionName = frame.functionName || '(anonymous)';
+    var lineNumber = frame.location.lineNumber;
+    var columnNumber = frame.location.columnNumber;
+    InspectorTest.log(`at ${functionName} (${lineNumber}:${columnNumber}):`);
+    if (!/^wasm/.test(frame.url)) {
+      InspectorTest.log('   -- skipped');
+      continue;
+    }
+    for (var scope of frame.scopeChain) {
+      InspectorTest.logObject(' - scope (' + scope.type + '):');
+      var properties = await Protocol.Runtime.getProperties(
+          {'objectId': scope.object.objectId});
+      for (var value of properties.result.result) {
+        var value_str = await getScopeValues(value.value);
+        InspectorTest.log('   ' + value.name + ': ' + value_str);
+      }
+    }
   }
-  InspectorTest.log('Breaking on byte offset ' + loc.columnNumber);
   Protocol.Debugger.resume();
-});
+}
+
+async function getScopeValues(value) {
+  if (value.type != 'object') {
+    InspectorTest.log('Expected object. Found:');
+    InspectorTest.logObject(value);
+    return;
+  }
+
+  let msg = await Protocol.Runtime.getProperties({objectId: value.objectId});
+  let printProperty = elem => '"' + elem.name + '"' +
+      ': ' + elem.value.value + ' (' + elem.value.type + ')';
+  return msg.result.result.map(printProperty).join(', ');
+}
 
 (async function test() {
   await Protocol.Debugger.enable();
