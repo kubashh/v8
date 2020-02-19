@@ -16,6 +16,24 @@
       "revId": "7b4c71a32c2932f61f4855ed43e7406af8e23f76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3043ad88_1136c60b",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-19T16:39:08Z",
+      "side": 1,
+      "message": "Ack, I\u0027ll try to do that tomorrow, landing as is now to get canary coverage asap.",
+      "parentUuid": "6a15e1cd_efb7a106",
+      "revId": "7b4c71a32c2932f61f4855ed43e7406af8e23f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
