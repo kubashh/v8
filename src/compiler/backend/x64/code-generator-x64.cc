@@ -3087,6 +3087,16 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Pcmpeqd(dst, src);
       break;
     }
+    case kX64I32x4Abs: {
+      if (CpuFeatures::IsSupported(AVX)) {
+        CpuFeatureScope avx_scope(tasm(), AVX);
+        __ vpabsd(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      } else {
+        CpuFeatureScope sse_scope(tasm(), SSSE3);
+        __ pabsd(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      }
+      break;
+    }
     case kX64S128Zero: {
       XMMRegister dst = i.OutputSimd128Register();
       __ xorps(dst, dst);
@@ -3284,6 +3294,16 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kX64I16x8RoundingAverageU: {
       __ Pavgw(i.OutputSimd128Register(), i.InputSimd128Register(1));
+      break;
+    }
+    case kX64I16x8Abs: {
+      if (CpuFeatures::IsSupported(AVX)) {
+        CpuFeatureScope avx_scope(tasm(), AVX);
+        __ vpabsw(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      } else {
+        CpuFeatureScope sse_scope(tasm(), SSSE3);
+        __ pabsw(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      }
       break;
     }
     case kX64I8x16Splat: {
@@ -3527,6 +3547,16 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kX64I8x16RoundingAverageU: {
       __ Pavgb(i.OutputSimd128Register(), i.InputSimd128Register(1));
+      break;
+    }
+    case kX64I8x16Abs: {
+      if (CpuFeatures::IsSupported(AVX)) {
+        CpuFeatureScope avx_scope(tasm(), AVX);
+        __ vpabsb(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      } else {
+        CpuFeatureScope sse_scope(tasm(), SSSE3);
+        __ pabsb(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      }
       break;
     }
     case kX64S128And: {
