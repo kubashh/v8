@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "482d3691_b9279184",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-02-20T14:51:24Z",
+      "side": 1,
+      "message": "Why was the \"const\" dropped?",
+      "revId": "34bb9193391a8ef059641c5543876057079c70d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "203a15e7_eba56f34",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-02-20T14:51:24Z",
+      "side": 1,
+      "message": "I think it would be more readable to remove the type argument and deduce it from the index here rather than in the caller, or at least DCHECK that the types match. Not necessarily part of this CL though, just a thought.",
+      "revId": "34bb9193391a8ef059641c5543876057079c70d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
