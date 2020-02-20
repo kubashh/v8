@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c30c14d8_eb78d851",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3091,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-02-20T05:22:40Z",
+      "side": 1,
+      "message": "Any reason these aren\u0027t all abstracted out to the macro-assembler?",
+      "revId": "4f5f339eefa7cd738ea033a8cf18d18f560fbf0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
