@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4025e64f_36b5d6ef",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-20T15:24:58Z",
+      "side": 1,
+      "message": "Because we want to std::move the {values_} vector. The {std::move}s before, in the const method, just didn\u0027t have any effect. You get a \"const std::vector\u003c...\u003e\u0026\u0026\", which does not match the move constructor, so the copy constructor is invoked instead.",
+      "parentUuid": "482d3691_b9279184",
+      "revId": "34bb9193391a8ef059641c5543876057079c70d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "203a15e7_eba56f34",
         "filename": "src/wasm/wasm-debug.cc",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "34bb9193391a8ef059641c5543876057079c70d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f7f087d_53fb34d3",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-20T15:24:58Z",
+      "side": 1,
+      "message": "Oh, totally makes sense. Done, thanks!",
+      "parentUuid": "203a15e7_eba56f34",
+      "revId": "34bb9193391a8ef059641c5543876057079c70d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
