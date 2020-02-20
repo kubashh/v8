@@ -1,0 +1,152 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15301477_86a94e0c",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-20T11:22:11Z",
+      "side": 1,
+      "message": "Can you update the comments to be the same as below. Could we just pull this out of the if/else to avoid repetition, i.e.:\n\nGotoIf(IsCleared(feedback), \u0026initialize);\n\nif (mode \u003d\u003d CallableFeedbackMode::kDontCollectSharedFunctionInfo) {\n  Goto(\u0026mark_megamorphic);\n} else {\n  TNode\u003cHeapObject\u003e feedback_value \u003d GetHeapObjectAssumeWeak(feedback);\n  ...",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfc3fa9b_3dc2a451",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-20T11:22:11Z",
+      "side": 1,
+      "message": "nit - move this comment to the top of the block (i.e., above TNode\u003cHeapObject\u003e feedback_value...)",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6464cd2c_889a4690",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-20T11:22:11Z",
+      "side": 1,
+      "message": "Could we pull this out of this branch too too avoid duplication with is_initialized, maybe as:\n\nGotoIf(IsCleared(feedback), \u0026initialize);\nGotoIf(TaggedIsSmi(maybe_target), \u0026mark_megamorphic);\n\n...",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95858b16_d7179877",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-20T11:22:11Z",
+      "side": 1,
+      "message": "Could you put the code from here to 215 in it\u0027s own block with a label (e.g., try_transition_to_polymorphic) so it\u0027s clear where the transition logic is.",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a042e04_8f1996d6",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-20T11:22:11Z",
+      "side": 1,
+      "message": "Please add a comment on the difference in feedback (e.g., with kCollectSharedFunctionInfo we start by collecting JSFunctions but devolve to SFIs...)",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "356051c3_d45a8702",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-20T11:22:11Z",
+      "side": 1,
+      "message": "Should we do this now?",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "558914ea_8ee30b47",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1731,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-20T11:22:11Z",
+      "side": 1,
+      "message": "Question: would it be useful to have a different deoptimization reason for this?",
+      "range": {
+        "startLine": 1731,
+        "startChar": 39,
+        "endLine": 1731,
+        "endChar": 55
+      },
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "086c6667_7ba8f0b4",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-02-20T11:22:11Z",
+      "side": 1,
+      "message": "nit - move this to just above the the \"return MONOMORPHIC\" case. Also, for clarity could you structure this as:\n\nif (heap_object.IsFeedbackCell()) {\n  return POLYMORPHIC;\n} else {\n  CHECK(...)\n  return MONOMORPHIC;\n}",
+      "range": {
+        "startLine": 639,
+        "startChar": 24,
+        "endLine": 639,
+        "endChar": 25
+      },
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
