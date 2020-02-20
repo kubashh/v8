@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd043ac6_8d22aaeb",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-02-20T05:38:25Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be based on FMA being enabled in CPU features, and not on execution tier? A future liftoff implementation of this would also differentiate based on FMA being enabled, and not default to unfused results. What am I missing?",
+      "revId": "2c9542131a190bb2d2aacdc0a5bb23ef04278ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
