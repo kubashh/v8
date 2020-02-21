@@ -16,6 +16,24 @@
       "revId": "2c9542131a190bb2d2aacdc0a5bb23ef04278ed5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b693aa8_a223eedf",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-02-21T02:54:43Z",
+      "side": 1,
+      "message": "ExpectFused checks the FMA cpu enabled (see the definition of ExpectFused. This change is to handle the case when we requested for Liftoff, but fallback to TurboFan. Right now, this will cause a failure, since Liftoff doesn\u0027t yet implement FMA, and will fallback to TF.\n\nI guess another way to fix this is to change ExpectFused to check for TF or Liftoff. This will probably be a better change, because if we eventually add FMA to Liftoff, the test will continue passing. I\u0027ll make the change in the next PS.",
+      "parentUuid": "bd043ac6_8d22aaeb",
+      "revId": "2c9542131a190bb2d2aacdc0a5bb23ef04278ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
