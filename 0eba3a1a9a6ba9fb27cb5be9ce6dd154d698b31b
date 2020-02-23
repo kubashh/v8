@@ -104,6 +104,41 @@
     },
     {
       "key": {
+        "uuid": "13478915_403724cd",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-23T08:31:38Z",
+      "side": 1,
+      "message": "The call feedback will become megamorphic, so there\u0027s no need to disable speculation (that\u0027s what the feedback source argument here is for).",
+      "parentUuid": "356051c3_d45a8702",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9259e225_6d41f9d0",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-23T08:31:38Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "558914ea_8ee30b47",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
@@ -121,6 +156,131 @@
         "endLine": 1731,
         "endChar": 55
       },
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4f99228_f9a96467",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-23T08:31:38Z",
+      "side": 1,
+      "message": "(Feel free to remove this comment as it\u0027s incompatible with our concurrency work.)",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c98476ee_3ba66d50",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-23T08:31:38Z",
+      "side": 1,
+      "message": "Good point!",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d540bb6_7535e0f8",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-23T08:31:38Z",
+      "side": 1,
+      "message": "This makes me wonder why VirtualClosure stores more than just the feedback vector. I think I didn\u0027t know at the time that the vector points to the SFI.",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f71feed6_11cb8abe",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2103,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-23T08:31:38Z",
+      "side": 1,
+      "message": "It doesn\u0027t make sense to pass the current context hints. We don\u0027t know the closure\u0027s context, so let\u0027s pass empty Hints.",
+      "range": {
+        "startLine": 2103,
+        "startChar": 16,
+        "endLine": 2103,
+        "endChar": 54
+      },
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18f825f4_2b7a70dd",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-23T08:31:38Z",
+      "side": 1,
+      "message": "Please move that up one level so that it\u0027s parallel to the \"Construct; \" comment, and extend it to something like \"Call; target is callee or feedback cell\".",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0db6d430_a2abed73",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3432,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-23T08:31:38Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6630ecb1_77a772e9",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-23T08:31:38Z",
+      "side": 1,
+      "message": "Can\u0027t we drop the SFI here and extract it from the cell when needed?",
       "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
