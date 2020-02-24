@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "271fb6b1_00915a50",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-24T11:28:11Z",
+      "side": 1,
+      "message": "The assignment of opcodes to SIMD operations seems a bit arbitrary. So far, we ordered these constants by their opcode, which is at least an easy and consistent ordering.\nI am not sure which ordering you are using here now.\nWould it make sense to reorder according to the opcode?",
+      "revId": "fe089040de1c863d6cd04f8b94dba748c7d34623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
