@@ -2299,12 +2299,6 @@ class ThreadImpl {
       BINOP_CASE(I64x2Add, i64x2, int2, 2, base::AddWithWraparound(a, b))
       BINOP_CASE(I64x2Sub, i64x2, int2, 2, base::SubWithWraparound(a, b))
       BINOP_CASE(I64x2Mul, i64x2, int2, 2, base::MulWithWraparound(a, b))
-      BINOP_CASE(I64x2MinS, i64x2, int2, 2, a < b ? a : b)
-      BINOP_CASE(I64x2MinU, i64x2, int2, 2,
-                 static_cast<uint64_t>(a) < static_cast<uint64_t>(b) ? a : b)
-      BINOP_CASE(I64x2MaxS, i64x2, int2, 2, a > b ? a : b)
-      BINOP_CASE(I64x2MaxU, i64x2, int2, 2,
-                 static_cast<uint64_t>(a) > static_cast<uint64_t>(b) ? a : b)
       BINOP_CASE(I32x4Add, i32x4, int4, 4, base::AddWithWraparound(a, b))
       BINOP_CASE(I32x4Sub, i32x4, int4, 4, base::SubWithWraparound(a, b))
       BINOP_CASE(I32x4Mul, i32x4, int4, 4, base::MulWithWraparound(a, b))
@@ -2404,20 +2398,6 @@ class ThreadImpl {
       CMPOP_CASE(F32x4Ge, f32x4, float4, int4, 4, a >= b)
       CMPOP_CASE(F32x4Lt, f32x4, float4, int4, 4, a < b)
       CMPOP_CASE(F32x4Le, f32x4, float4, int4, 4, a <= b)
-      CMPOP_CASE(I64x2Eq, i64x2, int2, int2, 2, a == b)
-      CMPOP_CASE(I64x2Ne, i64x2, int2, int2, 2, a != b)
-      CMPOP_CASE(I64x2GtS, i64x2, int2, int2, 2, a > b)
-      CMPOP_CASE(I64x2GeS, i64x2, int2, int2, 2, a >= b)
-      CMPOP_CASE(I64x2LtS, i64x2, int2, int2, 2, a < b)
-      CMPOP_CASE(I64x2LeS, i64x2, int2, int2, 2, a <= b)
-      CMPOP_CASE(I64x2GtU, i64x2, int2, int2, 2,
-                 static_cast<uint64_t>(a) > static_cast<uint64_t>(b))
-      CMPOP_CASE(I64x2GeU, i64x2, int2, int2, 2,
-                 static_cast<uint64_t>(a) >= static_cast<uint64_t>(b))
-      CMPOP_CASE(I64x2LtU, i64x2, int2, int2, 2,
-                 static_cast<uint64_t>(a) < static_cast<uint64_t>(b))
-      CMPOP_CASE(I64x2LeU, i64x2, int2, int2, 2,
-                 static_cast<uint64_t>(a) <= static_cast<uint64_t>(b))
       CMPOP_CASE(I32x4Eq, i32x4, int4, int4, 4, a == b)
       CMPOP_CASE(I32x4Ne, i32x4, int4, int4, 4, a != b)
       CMPOP_CASE(I32x4GtS, i32x4, int4, int4, 4, a > b)
@@ -2645,7 +2625,6 @@ class ThreadImpl {
         Push(WasmValue(Simd128(res)));
         return true;
       }
-      case kExprS1x2AnyTrue:
       case kExprS1x4AnyTrue:
       case kExprS1x8AnyTrue:
       case kExprS1x16AnyTrue: {
@@ -2664,7 +2643,6 @@ class ThreadImpl {
     Push(WasmValue(res));                                 \
     return true;                                          \
   }
-        REDUCTION_CASE(S1x2AllTrue, i64x2, int2, 2, &)
         REDUCTION_CASE(S1x4AllTrue, i32x4, int4, 4, &)
         REDUCTION_CASE(S1x8AllTrue, i16x8, int8, 8, &)
         REDUCTION_CASE(S1x16AllTrue, i8x16, int16, 16, &)

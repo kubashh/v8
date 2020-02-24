@@ -2057,22 +2057,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
 
       break;
     }
-      SIMD_BINOP_CASE(kArm64I64x2Eq, Cmeq, 2D);
-    case kArm64I64x2Ne: {
-      VRegister dst = i.OutputSimd128Register().V2D();
-      __ Cmeq(dst, i.InputSimd128Register(0).V2D(),
-              i.InputSimd128Register(1).V2D());
-      __ Mvn(dst, dst);
-      break;
-    }
-      SIMD_BINOP_CASE(kArm64I64x2GtS, Cmgt, 2D);
-      SIMD_BINOP_CASE(kArm64I64x2GeS, Cmge, 2D);
     case kArm64I64x2ShrU: {
       ASSEMBLE_SIMD_SHIFT_RIGHT(Ushr, 6, V2D, Ushl, X);
       break;
     }
-      SIMD_BINOP_CASE(kArm64I64x2GtU, Cmhi, 2D);
-      SIMD_BINOP_CASE(kArm64I64x2GeU, Cmhs, 2D);
     case kArm64I32x4Splat: {
       __ Dup(i.OutputSimd128Register().V4S(), i.InputRegister32(0));
       break;
@@ -2446,17 +2434,6 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       SIMD_UNOP_CASE(kArm64S8x8Reverse, Rev64, 16B);
       SIMD_UNOP_CASE(kArm64S8x4Reverse, Rev32, 16B);
       SIMD_UNOP_CASE(kArm64S8x2Reverse, Rev16, 16B);
-    case kArm64S1x2AllTrue: {
-      UseScratchRegisterScope scope(tasm());
-      VRegister temp1 = scope.AcquireV(kFormat2D);
-      VRegister temp2 = scope.AcquireV(kFormatS);
-
-      __ Cmeq(temp1, i.InputSimd128Register(0).V2D(), 0);
-      __ Umaxv(temp2, temp1.V4S());
-      __ Umov(i.OutputRegister32(), temp2, 0);
-      __ Add(i.OutputRegister32(), i.OutputRegister32(), 1);
-      break;
-    }
     case kArm64S8x16LoadSplat: {
       __ ld1r(i.OutputSimd128Register().V16B(), i.MemoryOperand(0));
       break;
@@ -2514,7 +2491,6 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     break;                                                 \
   }
       // for AnyTrue, the format does not matter, umaxv does not support 2D
-      SIMD_REDUCE_OP_CASE(kArm64S1x2AnyTrue, Umaxv, kFormatS, 4S);
       SIMD_REDUCE_OP_CASE(kArm64S1x4AnyTrue, Umaxv, kFormatS, 4S);
       SIMD_REDUCE_OP_CASE(kArm64S1x4AllTrue, Uminv, kFormatS, 4S);
       SIMD_REDUCE_OP_CASE(kArm64S1x8AnyTrue, Umaxv, kFormatH, 8H);

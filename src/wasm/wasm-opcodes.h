@@ -306,16 +306,6 @@ bool IsJSCompatibleSignature(const FunctionSig* sig, const WasmFeatures&);
   V(I32x4LeU, 0xfd33, s_ss)              \
   V(I32x4GeS, 0xfd34, s_ss)              \
   V(I32x4GeU, 0xfd35, s_ss)              \
-  V(I64x2Eq, 0xfd36, s_ss)               \
-  V(I64x2Ne, 0xfd37, s_ss)               \
-  V(I64x2LtS, 0xfd38, s_ss)              \
-  V(I64x2LtU, 0xfd39, s_ss)              \
-  V(I64x2GtS, 0xfd3a, s_ss)              \
-  V(I64x2GtU, 0xfd3b, s_ss)              \
-  V(I64x2LeS, 0xfd3c, s_ss)              \
-  V(I64x2LeU, 0xfd3d, s_ss)              \
-  V(I64x2GeS, 0xfd3e, s_ss)              \
-  V(I64x2GeU, 0xfd3f, s_ss)              \
   V(F32x4Eq, 0xfd40, s_ss)               \
   V(F32x4Ne, 0xfd41, s_ss)               \
   V(F32x4Lt, 0xfd42, s_ss)               \
@@ -381,18 +371,12 @@ bool IsJSCompatibleSignature(const FunctionSig* sig, const WasmFeatures&);
   V(I32x4MaxS, 0xfd82, s_ss)             \
   V(I32x4MaxU, 0xfd83, s_ss)             \
   V(I64x2Neg, 0xfd84, s_s)               \
-  V(S1x2AnyTrue, 0xfd85, i_s)            \
-  V(S1x2AllTrue, 0xfd86, i_s)            \
   V(I64x2Shl, 0xfd87, s_si)              \
   V(I64x2ShrS, 0xfd88, s_si)             \
   V(I64x2ShrU, 0xfd89, s_si)             \
   V(I64x2Add, 0xfd8a, s_ss)              \
   V(I64x2Sub, 0xfd8d, s_ss)              \
   V(I64x2Mul, 0xfd8c, s_ss)              \
-  V(I64x2MinS, 0xfd8e, s_ss)             \
-  V(I64x2MinU, 0xfd8f, s_ss)             \
-  V(I64x2MaxS, 0xfd90, s_ss)             \
-  V(I64x2MaxU, 0xfd91, s_ss)             \
   V(F32x4Abs, 0xfd95, s_s)               \
   V(F32x4Neg, 0xfd96, s_s)               \
   V(F32x4Sqrt, 0xfd97, s_s)              \

@@ -353,17 +353,7 @@ MachineType AtomicOpType(Operator const* op) {
   V(I64x2Add, Operator::kCommutative, 2, 0, 1)                             \
   V(I64x2Sub, Operator::kNoProperties, 2, 0, 1)                            \
   V(I64x2Mul, Operator::kCommutative, 2, 0, 1)                             \
-  V(I64x2MinS, Operator::kCommutative, 2, 0, 1)                            \
-  V(I64x2MaxS, Operator::kCommutative, 2, 0, 1)                            \
-  V(I64x2Eq, Operator::kCommutative, 2, 0, 1)                              \
-  V(I64x2Ne, Operator::kCommutative, 2, 0, 1)                              \
-  V(I64x2GtS, Operator::kNoProperties, 2, 0, 1)                            \
-  V(I64x2GeS, Operator::kNoProperties, 2, 0, 1)                            \
   V(I64x2ShrU, Operator::kNoProperties, 2, 0, 1)                           \
-  V(I64x2MinU, Operator::kCommutative, 2, 0, 1)                            \
-  V(I64x2MaxU, Operator::kCommutative, 2, 0, 1)                            \
-  V(I64x2GtU, Operator::kNoProperties, 2, 0, 1)                            \
-  V(I64x2GeU, Operator::kNoProperties, 2, 0, 1)                            \
   V(I32x4Splat, Operator::kNoProperties, 1, 0, 1)                          \
   V(I32x4SConvertF32x4, Operator::kNoProperties, 1, 0, 1)                  \
   V(I32x4SConvertI16x8Low, Operator::kNoProperties, 1, 0, 1)               \
@@ -453,8 +443,6 @@ MachineType AtomicOpType(Operator const* op) {
   V(S128Not, Operator::kNoProperties, 1, 0, 1)                             \
   V(S128Select, Operator::kNoProperties, 3, 0, 1)                          \
   V(S128AndNot, Operator::kNoProperties, 2, 0, 1)                          \
-  V(S1x2AnyTrue, Operator::kNoProperties, 1, 0, 1)                         \
-  V(S1x2AllTrue, Operator::kNoProperties, 1, 0, 1)                         \
   V(S1x4AnyTrue, Operator::kNoProperties, 1, 0, 1)                         \
   V(S1x4AllTrue, Operator::kNoProperties, 1, 0, 1)                         \
   V(S1x8AnyTrue, Operator::kNoProperties, 1, 0, 1)                         \

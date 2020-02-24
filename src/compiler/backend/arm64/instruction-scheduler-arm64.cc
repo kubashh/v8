@@ -188,13 +188,7 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArm64I64x2Add:
     case kArm64I64x2Sub:
     case kArm64I64x2Mul:
-    case kArm64I64x2Eq:
-    case kArm64I64x2Ne:
-    case kArm64I64x2GtS:
-    case kArm64I64x2GeS:
     case kArm64I64x2ShrU:
-    case kArm64I64x2GtU:
-    case kArm64I64x2GeU:
     case kArm64I32x4Splat:
     case kArm64I32x4ExtractLane:
     case kArm64I32x4ReplaceLane:
@@ -319,8 +313,6 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArm64S8x8Reverse:
     case kArm64S8x4Reverse:
     case kArm64S8x2Reverse:
-    case kArm64S1x2AnyTrue:
-    case kArm64S1x2AllTrue:
     case kArm64S1x4AnyTrue:
     case kArm64S1x4AllTrue:
     case kArm64S1x8AnyTrue:
