@@ -16,6 +16,24 @@
       "revId": "fe089040de1c863d6cd04f8b94dba748c7d34623",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "105fe7e2_85f503d9",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-02-24T11:39:23Z",
+      "side": 1,
+      "message": "The ordering we use elsewhere is something like, F64x2, I64x2, F32x4, I32x4, I16x8, I8x16, and within each size, order by opcode byte, and I was trying to follow that here. I can switch it to be ascending order of bytecode, probably easier to keep it consistent that way.",
+      "parentUuid": "271fb6b1_00915a50",
+      "revId": "fe089040de1c863d6cd04f8b94dba748c7d34623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
