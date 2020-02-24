@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf04495f_831b6cd9",
+        "filename": "src/objects/js-break-iterator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-02-24T12:27:27Z",
+      "side": 1,
+      "message": "nit: the most efficient pattern is:\n\nIntl::ResolvedLocale r;\nMaybe\u003cIntl::ResolvedLocale\u003e maybe_resolved_locale \u003d ...;\nif (!maybe_resolved_locale.To(\u0026r)) {\n  THROW...\n}\n// go on using {r}",
+      "range": {
+        "startLine": 52,
+        "startChar": 27,
+        "endLine": 52,
+        "endChar": 36
+      },
+      "revId": "bf167ec43e876d98e217315dfcd59cc0d77981bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
