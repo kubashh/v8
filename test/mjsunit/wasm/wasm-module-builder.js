@@ -473,6 +473,7 @@ let kExprI32x4Splat = 0x0c;
 let kExprI32x4Eq = 0x2c;
 let kExprS1x4AllTrue = 0x75;
 let kExprF32x4Min = 0x9e;
+let kExprS8x16LoadSplat = 0xc2;
 
 // Compilation hint constants.
 let kCompilationHintStrategyDefault = 0x00;
