@@ -138,10 +138,6 @@ const RegList kCalleeSavedDoubles = 1 << 14 |  // d14
 
 const int kNumCalleeSavedDoubles = 18;
 
-// Number of registers for which space is reserved in safepoints. Must be a
-// multiple of 8.
-const int kNumSafepointRegisters = 32;
-
 // The following constants describe the stack frame linkage area as
 // defined by the ABI.  Note that kNumRequiredStackFrameSlots must
 // satisfy alignment requirements (rounding up if required).
@@ -176,12 +172,6 @@ const int kNumRequiredStackFrameSlots = 14;
 const int kStackFrameLRSlot = 2;
 const int kStackFrameExtraParamSlot = 14;
 #endif
-
-// Define the list of registers actually saved at safepoints.
-// Note that the number of saved registers may be smaller than the reserved
-// space, i.e. kNumSafepointSavedRegisters <= kNumSafepointRegisters.
-const RegList kSafepointSavedRegisters = kJSCallerSaved | kCalleeSaved;
-const int kNumSafepointSavedRegisters = kNumJSCallerSaved + kNumCalleeSaved;
 
 enum RegisterCode {
 #define REGISTER_CODE(R) kRegCode_##R,
