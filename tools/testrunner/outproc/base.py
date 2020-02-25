@@ -17,9 +17,14 @@ OUTCOMES_FAIL_OR_TIMEOUT = [statusfile.FAIL, statusfile.TIMEOUT]
 
 
 class BaseOutProc(object):
-  def process(self, output, reduction=None):
+  def process(self, output, reduction=None, regenerate_expected_files=False):
     has_unexpected_output = self.has_unexpected_output(output)
+    if has_unexpected_output and regenerate_expected_files:
+      self.regenerate_expected_files(output)
     return self._create_result(has_unexpected_output, output, reduction)
+
+  def regenerate_expected_files(self, output):
+    raise NotImplementedError()
 
   def has_unexpected_output(self, output):
     return self.get_outcome(output) not in self.expected_outcomes
@@ -142,6 +147,13 @@ class ExpectedOutProc(OutProc):
         if expected != actual:
           return True
       return False
+
+  def regenerate_expected_files(self, output):
+    lines = output.stdout.splitlines()
+    with open(self._expected_filename, 'w') as f:
+      for _, line in enumerate(lines):
+        f.write(line+'\n')
+
 
   def _act_block_iterator(self, output):
     """Iterates over blocks of actual output lines."""

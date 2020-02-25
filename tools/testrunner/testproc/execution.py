@@ -24,16 +24,17 @@ ProcessContext = collections.namedtuple('ProcessContext', ['result_reduction'])
 
 
 class Job(object):
-  def __init__(self, test_id, cmd, outproc, keep_output):
+  def __init__(self, test_id, cmd, outproc, keep_output, regenerate_expected_files=False):
     self.test_id = test_id
     self.cmd = cmd
     self.outproc = outproc
     self.keep_output = keep_output
+    self.regenerate_expected_files = regenerate_expected_files
 
   def run(self, process_ctx):
     output = self.cmd.execute()
     reduction = process_ctx.result_reduction if not self.keep_output else None
-    result = self.outproc.process(output, reduction)
+    result = self.outproc.process(output, reduction, self.regenerate_expected_files)
     return JobResult(self.test_id, result)
 
 
@@ -43,11 +44,12 @@ class ExecutionProc(base.TestProc):
   sends results to the previous processor.
   """
 
-  def __init__(self, jobs, outproc_factory=None):
+  def __init__(self, jobs, outproc_factory=None, regenerate_expected_files=False):
     super(ExecutionProc, self).__init__()
     self._pool = pool.Pool(jobs, notify_fun=self.notify_previous)
     self._outproc_factory = outproc_factory or (lambda t: t.output_proc)
     self._tests = {}
+    self._regenerate_expected_files = regenerate_expected_files
 
   def connect_to(self, next_proc):
     assert False, 'ExecutionProc cannot be connected to anything'
@@ -71,7 +73,7 @@ class ExecutionProc(base.TestProc):
     self._tests[test_id] = test, cmd
 
     outproc = self._outproc_factory(test)
-    self._pool.add([Job(test_id, cmd, outproc, test.keep_output)])
+    self._pool.add([Job(test_id, cmd, outproc, test.keep_output, regenerate_expected_files=self._regenerate_expected_files)])
 
     return True
 
