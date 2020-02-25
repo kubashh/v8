@@ -34,6 +34,24 @@
       "revId": "2c9542131a190bb2d2aacdc0a5bb23ef04278ed5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "328ad30d_2dd17fb6",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-02-25T20:19:57Z",
+      "side": 1,
+      "message": "Ack. Thanks for clarifying.",
+      "parentUuid": "3b693aa8_a223eedf",
+      "revId": "2c9542131a190bb2d2aacdc0a5bb23ef04278ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
