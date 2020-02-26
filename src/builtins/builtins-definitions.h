@@ -853,7 +853,9 @@ namespace internal {
   ASM(WasmDebugBreak, Dummy)                                                   \
   TFC(WasmAtomicNotify, WasmAtomicNotify)                                      \
   TFC(WasmI32AtomicWait, WasmI32AtomicWait)                                    \
+  TFC(WasmI32PairAtomicWait, WasmI32PairAtomicWait)                            \
   TFC(WasmI64AtomicWait, WasmI64AtomicWait)                                    \
+  TFC(WasmI64PairAtomicWait, WasmI64PairAtomicWait)                            \
   TFC(WasmMemoryGrow, WasmMemoryGrow)                                          \
   TFC(WasmTableGet, WasmTableGet)                                              \
   TFC(WasmTableSet, WasmTableSet)                                              \

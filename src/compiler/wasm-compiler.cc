@@ -4060,7 +4060,58 @@ Signature<MachineRepresentation>* CreateMachineSignature(
   }
   return builder.Build();
 }
+
+template <typename BuiltinDescriptor>
+CallDescriptor* GetBuiltinCallDescriptor(WasmGraphBuilder* builder,
+                                         StubCallMode stub_mode) {
+  BuiltinDescriptor interface_descriptor;
+  return Linkage::GetStubCallDescriptor(
+      builder->mcgraph()->zone(),                     // zone
+      interface_descriptor,                           // descriptor
+      interface_descriptor.GetStackParameterCount(),  // stack parameter count
+      CallDescriptor::kNoFlags,                       // flags
+      Operator::kNoProperties,                        // properties
+      stub_mode);                                     // stub call mode
+}
+
 }  // namespace
+
+Int64LoweringSpecialCase* WasmGraphBuilder::GetInt64LoweringSpecialCase() {
+  if (!lowering_special_case_) {
+    lowering_special_case_ = std::make_unique<Int64LoweringSpecialCase>();
+  }
+  return lowering_special_case_.get();
+}
+
+CallDescriptor* WasmGraphBuilder::GetI32AtomicWaitCallDescriptor() {
+  if (i32_atomic_wait_descriptor_) return i32_atomic_wait_descriptor_;
+
+  i32_atomic_wait_descriptor_ =
+      GetBuiltinCallDescriptor<WasmI32AtomicWaitDescriptor>(
+          this, StubCallMode::kCallWasmRuntimeStub);
+
+  GetInt64LoweringSpecialCase()->replacements.insert(
+      {i32_atomic_wait_descriptor_,
+       GetBuiltinCallDescriptor<WasmI32PairAtomicWaitDescriptor>(
+           this, StubCallMode::kCallWasmRuntimeStub)});
+
+  return i32_atomic_wait_descriptor_;
+}
+
+CallDescriptor* WasmGraphBuilder::GetI64AtomicWaitCallDescriptor() {
+  if (i64_atomic_wait_descriptor_) return i64_atomic_wait_descriptor_;
+
+  i64_atomic_wait_descriptor_ =
+      GetBuiltinCallDescriptor<WasmI64AtomicWaitDescriptor>(
+          this, StubCallMode::kCallWasmRuntimeStub);
+
+  GetInt64LoweringSpecialCase()->replacements.insert(
+      {i64_atomic_wait_descriptor_,
+       GetBuiltinCallDescriptor<WasmI64PairAtomicWaitDescriptor>(
+           this, StubCallMode::kCallWasmRuntimeStub)});
+
+  return i64_atomic_wait_descriptor_;
+}
 
 void WasmGraphBuilder::LowerInt64(CallOrigin origin) {
   if (mcgraph()->machine()->Is64()) return;
@@ -4803,23 +4854,18 @@ Node* WasmGraphBuilder::AtomicOp(wasm::WasmOpcode opcode, Node* const* inputs,
       // Now that we've bounds-checked, compute the effective address.
       Node* address = graph()->NewNode(mcgraph()->machine()->Int32Add(),
                                        Uint32Constant(offset), index);
-      Node* timeout;
-      if (mcgraph()->machine()->Is32()) {
-        timeout = BuildF64SConvertI64(inputs[2]);
-      } else {
-        timeout = graph()->NewNode(mcgraph()->machine()->RoundInt64ToFloat64(),
-                                   inputs[2]);
-      }
-      WasmI32AtomicWaitDescriptor interface_descriptor;
-      auto call_descriptor = Linkage::GetStubCallDescriptor(
-          mcgraph()->zone(), interface_descriptor,
-          interface_descriptor.GetStackParameterCount(),
-          CallDescriptor::kNoFlags, Operator::kNoProperties,
-          StubCallMode::kCallWasmRuntimeStub);
-      Node* call_target = mcgraph()->RelocatableIntPtrConstant(
-          wasm::WasmCode::kWasmI32AtomicWait, RelocInfo::WASM_STUB_CALL);
+
+      auto call_descriptor = GetI32AtomicWaitCallDescriptor();
+
+      Node* call_target = mcgraph()->machine()->Is64()
+                              ? mcgraph()->RelocatableIntPtrConstant(
+                                    wasm::WasmCode::kWasmI32AtomicWait,
+                                    RelocInfo::WASM_STUB_CALL)
+                              : mcgraph()->RelocatableIntPtrConstant(
+                                    wasm::WasmCode::kWasmI32PairAtomicWait,
+                                    RelocInfo::WASM_STUB_CALL);
       node = graph()->NewNode(mcgraph()->common()->Call(call_descriptor),
-                              call_target, address, inputs[1], timeout,
+                              call_target, address, inputs[1], inputs[2],
                               effect(), control());
       break;
     }
@@ -4831,30 +4877,20 @@ Node* WasmGraphBuilder::AtomicOp(wasm::WasmOpcode opcode, Node* const* inputs,
       // Now that we've bounds-checked, compute the effective address.
       Node* address = graph()->NewNode(mcgraph()->machine()->Int32Add(),
                                        Uint32Constant(offset), index);
-      Node* timeout;
-      if (mcgraph()->machine()->Is32()) {
-        timeout = BuildF64SConvertI64(inputs[2]);
-      } else {
-        timeout = graph()->NewNode(mcgraph()->machine()->RoundInt64ToFloat64(),
-                                   inputs[2]);
-      }
-      Node* expected_value_low = graph()->NewNode(
-          mcgraph()->machine()->TruncateInt64ToInt32(), inputs[1]);
-      Node* tmp = graph()->NewNode(mcgraph()->machine()->Word64Shr(), inputs[1],
-                                   Int64Constant(32));
-      Node* expected_value_high =
-          graph()->NewNode(mcgraph()->machine()->TruncateInt64ToInt32(), tmp);
-      WasmI64AtomicWaitDescriptor interface_descriptor;
-      auto call_descriptor = Linkage::GetStubCallDescriptor(
-          mcgraph()->zone(), interface_descriptor,
-          interface_descriptor.GetStackParameterCount(),
-          CallDescriptor::kNoFlags, Operator::kNoProperties,
-          StubCallMode::kCallWasmRuntimeStub);
-      Node* call_target = mcgraph()->RelocatableIntPtrConstant(
-          wasm::WasmCode::kWasmI64AtomicWait, RelocInfo::WASM_STUB_CALL);
+
+      CallDescriptor* call_descriptor = GetI64AtomicWaitCallDescriptor();
+
+      Node* call_target = mcgraph()->machine()->Is64()
+                              ? mcgraph()->RelocatableIntPtrConstant(
+                                    wasm::WasmCode::kWasmI64AtomicWait,
+                                    RelocInfo::WASM_STUB_CALL)
+                              : mcgraph()->RelocatableIntPtrConstant(
+                                    wasm::WasmCode::kWasmI64PairAtomicWait,
+                                    RelocInfo::WASM_STUB_CALL);
+
       node = graph()->NewNode(mcgraph()->common()->Call(call_descriptor),
-                              call_target, address, expected_value_high,
-                              expected_value_low, timeout, effect(), control());
+                              call_target, address, inputs[1], inputs[2],
+                              effect(), control());
       break;
     }
 
@@ -5085,18 +5121,6 @@ void WasmGraphBuilder::RemoveBytecodePositionDecorator() {
 }
 
 namespace {
-template <typename BuiltinDescriptor>
-CallDescriptor* GetBuiltinCallDescriptor(WasmGraphBuilder* builder,
-                                         StubCallMode stub_mode) {
-  BuiltinDescriptor interface_descriptor;
-  return Linkage::GetStubCallDescriptor(
-      builder->mcgraph()->zone(),                     // zone
-      interface_descriptor,                           // descriptor
-      interface_descriptor.GetStackParameterCount(),  // stack parameter count
-      CallDescriptor::kNoFlags,                       // flags
-      Operator::kNoProperties,                        // properties
-      stub_mode);                                     // stub call mode
-}
 
 class WasmWrapperGraphBuilder : public WasmGraphBuilder {
  public:
@@ -5110,12 +5134,11 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
 
   CallDescriptor* GetI64ToBigIntCallDescriptor() {
     if (i64_to_bigint_descriptor_) return i64_to_bigint_descriptor_;
+
     i64_to_bigint_descriptor_ =
         GetBuiltinCallDescriptor<I64ToBigIntDescriptor>(this, stub_mode_);
-    if (!lowering_special_case_) {
-      lowering_special_case_ = std::make_unique<Int64LoweringSpecialCase>();
-    }
-    lowering_special_case_->replacements.insert(
+
+    GetInt64LoweringSpecialCase()->replacements.insert(
         {i64_to_bigint_descriptor_,
          GetBuiltinCallDescriptor<I32PairToBigIntDescriptor>(this,
                                                              stub_mode_)});
@@ -5124,14 +5147,11 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
 
   CallDescriptor* GetBigIntToI64CallDescriptor() {
     if (bigint_to_i64_descriptor_) return bigint_to_i64_descriptor_;
-    if (!lowering_special_case_) {
-      lowering_special_case_ = std::make_unique<Int64LoweringSpecialCase>();
-    }
 
     bigint_to_i64_descriptor_ =
         GetBuiltinCallDescriptor<BigIntToI64Descriptor>(this, stub_mode_);
 
-    lowering_special_case_->replacements.insert(
+    GetInt64LoweringSpecialCase()->replacements.insert(
         {bigint_to_i64_descriptor_,
          GetBuiltinCallDescriptor<BigIntToI32PairDescriptor>(this,
                                                              stub_mode_)});
