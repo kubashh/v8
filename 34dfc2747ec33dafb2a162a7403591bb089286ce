@@ -16,6 +16,24 @@
       "revId": "34dfc2747ec33dafb2a162a7403591bb089286ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2886239c_4d0c7576",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-02-26T02:56:35Z",
+      "side": 1,
+      "message": "Not at all! Luckily for us clusterfuzz is here to help :)",
+      "parentUuid": "999bdb5f_431f9cb7",
+      "revId": "34dfc2747ec33dafb2a162a7403591bb089286ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
