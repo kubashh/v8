@@ -21,12 +21,12 @@ DispatchResponse DispatchResponse::OK()
 }
 
 // static
-DispatchResponse DispatchResponse::Error(const String& error)
+DispatchResponse DispatchResponse::Error(std::string error)
 {
     DispatchResponse result;
     result.m_status = kError;
     result.m_errorCode = kServerError;
-    result.m_errorMessage = error;
+    result.m_errorMessage = std::move(error);
     return result;
 }
 
@@ -41,12 +41,12 @@ DispatchResponse DispatchResponse::InternalError()
 }
 
 // static
-DispatchResponse DispatchResponse::InvalidParams(const String& error)
+DispatchResponse DispatchResponse::InvalidParams(std::string error)
 {
     DispatchResponse result;
     result.m_status = kError;
     result.m_errorCode = kInvalidParams;
-    result.m_errorMessage = error;
+    result.m_errorMessage = std::move(error);
     return result;
 }
 
@@ -70,10 +70,10 @@ DispatcherBase::WeakPtr::~WeakPtr()
         m_dispatcher->m_weakPtrs.erase(this);
 }
 
-DispatcherBase::Callback::Callback(std::unique_ptr<DispatcherBase::WeakPtr> backendImpl, int callId, const String& method, {{config.crdtp.namespace}}::span<uint8_t> message)
+DispatcherBase::Callback::Callback(std::unique_ptr<DispatcherBase::WeakPtr> backendImpl, int callId, {{config.crdtp.namespace}}::span<uint8_t> method, {{config.crdtp.namespace}}::span<uint8_t> message)
     : m_backendImpl(std::move(backendImpl))
     , m_callId(callId)
-    , m_method(method)
+    , m_method(method.begin(), method.end())
     , m_message(message.begin(), message.end()) { }
 
 DispatcherBase::Callback::~Callback() = default;
@@ -95,7 +95,7 @@ void DispatcherBase::Callback::fallThroughIfActive()
 {
     if (!m_backendImpl || !m_backendImpl->get())
         return;
-    m_backendImpl->get()->channel()->fallThrough(m_callId, m_method, {{config.crdtp.namespace}}::SpanFrom(m_message));
+    m_backendImpl->get()->channel()->fallThrough(m_callId, {{config.crdtp.namespace}}::SpanFrom(m_method), {{config.crdtp.namespace}}::SpanFrom(m_message));
     m_backendImpl = nullptr;
 }
 
@@ -127,74 +127,84 @@ namespace {
 
 class ProtocolError : public Serializable {
 public:
-    static std::unique_ptr<ProtocolError> createErrorResponse(int callId, DispatchResponse::ErrorCode code, const String& errorMessage, ErrorSupport* errors)
+    static std::unique_ptr<ProtocolError> createErrorResponse(int callId, DispatchResponse::ErrorCode code, std::string errorMessage, ErrorSupport* errors)
     {
-        std::unique_ptr<ProtocolError> protocolError(new ProtocolError(code, errorMessage));
+        auto protocolError = std::make_unique<ProtocolError>(code, std::move(errorMessage));
         protocolError->m_callId = callId;
         protocolError->m_hasCallId = true;
         if (errors && !errors->Errors().empty()) {
-            protocolError->m_data =
-                StringUtil::fromUTF8(errors->Errors().data(), errors->Errors().size());
+            protocolError->m_data = std::string(errors->Errors().begin(),
+	                                        errors->Errors().end());
         }
         return protocolError;
     }
 
-    static std::unique_ptr<ProtocolError> createErrorNotification(DispatchResponse::ErrorCode code, const String& errorMessage)
+    static std::unique_ptr<ProtocolError> createErrorNotification(DispatchResponse::ErrorCode code, std::string errorMessage)
     {
-        return std::unique_ptr<ProtocolError>(new ProtocolError(code, errorMessage));
+        return std::make_unique<ProtocolError>(code, errorMessage);
     }
 
     void AppendSerialized(std::vector<uint8_t>* out) const override
     {
-        toDictionary()->AppendSerialized(out);
+      using {{config.crdtp.namespace}}::cbor::NewCBOREncoder;
+      using {{config.crdtp.namespace}}::ParserHandler;
+      using {{config.crdtp.namespace}}::Status;
+      using {{config.crdtp.namespace}}::SpanFrom;
+      Status status;
+      std::unique_ptr<ParserHandler> encoder = NewCBOREncoder(out, &status);
+      encoder->HandleMapBegin();
+      if (m_hasCallId) {
+        encoder->HandleString8(SpanFrom("id"));
+        encoder->HandleInt32(m_callId);
+      }
+      encoder->HandleString8(SpanFrom("error"));
+      encoder->HandleMapBegin();
+      encoder->HandleString8(SpanFrom("code"));
+      encoder->HandleInt32(m_code);
+      encoder->HandleString8(SpanFrom("message"));
+      encoder->HandleString8(SpanFrom(m_errorMessage));
+      if (!m_data.empty()) {
+        encoder->HandleString8(SpanFrom("data"));
+	encoder->HandleString8(SpanFrom(m_data));
+      }
+      encoder->HandleMapEnd();
+      encoder->HandleMapEnd();
+      DCHECK(status.ok());
     }
 
     ~ProtocolError() override {}
 
-private:
-    ProtocolError(DispatchResponse::ErrorCode code, const String& errorMessage)
+    ProtocolError(DispatchResponse::ErrorCode code, std::string errorMessage)
         : m_code(code)
-        , m_errorMessage(errorMessage)
+        , m_errorMessage(std::move(errorMessage))
     {
     }
-
-    std::unique_ptr<DictionaryValue> toDictionary() const {
-        std::unique_ptr<protocol::DictionaryValue> error = DictionaryValue::create();
-        error->setInteger("code", m_code);
-        error->setString("message", m_errorMessage);
-        if (m_data.length())
-            error->setString("data", m_data);
-        std::unique_ptr<protocol::DictionaryValue> message = DictionaryValue::create();
-        message->setObject("error", std::move(error));
-        if (m_hasCallId)
-            message->setInteger("id", m_callId);
-        return message;
-    }
-
+    
+  private:
     DispatchResponse::ErrorCode m_code;
-    String m_errorMessage;
-    String m_data;
+    std::string m_errorMessage;
+    std::string m_data;
     int m_callId = 0;
     bool m_hasCallId = false;
 };
 
 } // namespace
 
-static void reportProtocolErrorTo(FrontendChannel* frontendChannel, int callId, DispatchResponse::ErrorCode code, const String& errorMessage, ErrorSupport* errors)
+static void reportProtocolErrorTo(FrontendChannel* frontendChannel, int callId, DispatchResponse::ErrorCode code, std::string errorMessage, ErrorSupport* errors)
 {
     if (frontendChannel)
-        frontendChannel->sendProtocolResponse(callId, ProtocolError::createErrorResponse(callId, code, errorMessage, errors));
+        frontendChannel->sendProtocolResponse(callId, ProtocolError::createErrorResponse(callId, code, std::move(errorMessage), errors));
 }
 
-static void reportProtocolErrorTo(FrontendChannel* frontendChannel, DispatchResponse::ErrorCode code, const String& errorMessage)
+static void reportProtocolErrorTo(FrontendChannel* frontendChannel, DispatchResponse::ErrorCode code, std::string errorMessage)
 {
     if (frontendChannel)
-        frontendChannel->sendProtocolNotification(ProtocolError::createErrorNotification(code, errorMessage));
+        frontendChannel->sendProtocolNotification(ProtocolError::createErrorNotification(code, std::move(errorMessage)));
 }
 
-void DispatcherBase::reportProtocolError(int callId, DispatchResponse::ErrorCode code, const String& errorMessage, ErrorSupport* errors)
+void DispatcherBase::reportProtocolError(int callId, DispatchResponse::ErrorCode code, std::string errorMessage, ErrorSupport* errors)
 {
-    reportProtocolErrorTo(m_frontendChannel, callId, code, errorMessage, errors);
+    reportProtocolErrorTo(m_frontendChannel, callId, code, std::move(errorMessage), errors);
 }
 
 void DispatcherBase::clearFrontend()
@@ -215,12 +225,12 @@ std::unique_ptr<DispatcherBase::WeakPtr> DispatcherBase::weakPtr()
 UberDispatcher::UberDispatcher(FrontendChannel* frontendChannel)
     : m_frontendChannel(frontendChannel) { }
 
-void UberDispatcher::registerBackend(const String& name, std::unique_ptr<protocol::DispatcherBase> dispatcher)
+void UberDispatcher::registerBackend({{config.crdtp.namespace}}::span<uint8_t> name, std::unique_ptr<protocol::DispatcherBase> dispatcher)
 {
     m_dispatchers[name] = std::move(dispatcher);
 }
 
-void UberDispatcher::setupRedirects(const std::unordered_map<String, String>& redirects)
+void UberDispatcher::setupRedirects(const {{config.crdtp.namespace}}::SpanMap<{{config.crdtp.namespace}}::span<uint8_t>>& redirects)
 {
     for (const auto& pair : redirects)
         m_redirects[pair.first] = pair.second;
@@ -259,37 +269,42 @@ bool UberDispatcher::parseCommand(Value* parsedMessage, int* outCallId, String* 
     return true;
 }
 
-protocol::DispatcherBase* UberDispatcher::findDispatcher(const String& method) {
-    size_t dotIndex = StringUtil::find(method, ".");
-    if (dotIndex == StringUtil::kNotFound)
-        return nullptr;
-    String domain = StringUtil::substring(method, 0, dotIndex);
-    auto it = m_dispatchers.find(domain);
-    if (it == m_dispatchers.end())
-        return nullptr;
-    if (!it->second->canDispatch(method))
-        return nullptr;
-    return it->second.get();
+protocol::DispatcherBase* UberDispatcher::findDispatcher({{config.crdtp.namespace}}::span<uint8_t> method) {
+    for (size_t dot_idx = 0; dot_idx < method.size(); ++dot_idx) {
+      if (method[dot_idx] == '.') {
+        auto domain = method.subspan(0, dot_idx);
+        auto it = m_dispatchers.find(domain);
+        if (it == m_dispatchers.end())
+          return nullptr;
+        if (!it->second->canDispatch(method))
+          return nullptr;
+        return it->second.get();
+      }
+    }
+    return nullptr;
 }
 
-bool UberDispatcher::canDispatch(const String& in_method)
+bool UberDispatcher::canDispatch({{config.crdtp.namespace}}::span<uint8_t> in_method)
 {
-    String method = in_method;
+    auto method = in_method;
     auto redirectIt = m_redirects.find(method);
     if (redirectIt != m_redirects.end())
         method = redirectIt->second;
     return !!findDispatcher(method);
 }
 
-void UberDispatcher::dispatch(int callId, const String& in_method, std::unique_ptr<Value> parsedMessage, {{config.crdtp.namespace}}::span<uint8_t> rawMessage)
+void UberDispatcher::dispatch(int callId, {{config.crdtp.namespace}}::span<uint8_t> in_method, std::unique_ptr<Value> parsedMessage, {{config.crdtp.namespace}}::span<uint8_t> rawMessage)
 {
-    String method = in_method;
+    auto method = in_method;
     auto redirectIt = m_redirects.find(method);
     if (redirectIt != m_redirects.end())
         method = redirectIt->second;
     protocol::DispatcherBase* dispatcher = findDispatcher(method);
+    std::string msg = "'";
+    msg.insert(msg.end(), in_method.begin(), in_method.end());
+    msg += "' wasn't found";
     if (!dispatcher) {
-        reportProtocolErrorTo(m_frontendChannel, callId, DispatchResponse::kMethodNotFound, "'" + method + "' wasn't found", nullptr);
+        reportProtocolErrorTo(m_frontendChannel, callId, DispatchResponse::kMethodNotFound, std::move(msg), nullptr);
         return;
     }
     std::unique_ptr<protocol::DictionaryValue> messageObject = DictionaryValue::cast(std::move(parsedMessage));
@@ -311,9 +326,9 @@ std::unique_ptr<Serializable> InternalResponse::createNotification(const char* m
 }
 
 // static
-std::unique_ptr<Serializable> InternalResponse::createErrorResponse(int callId, DispatchResponse::ErrorCode code, const String& message)
+std::unique_ptr<Serializable> InternalResponse::createErrorResponse(int callId, DispatchResponse::ErrorCode code, std::string message)
 {
-    return ProtocolError::createErrorResponse(callId, code, message, nullptr);
+    return ProtocolError::createErrorResponse(callId, code, std::move(message), nullptr);
 }
 
 void InternalResponse::AppendSerialized(std::vector<uint8_t>* out) const

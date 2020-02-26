@@ -40,19 +40,21 @@ public:
     };
 
     Status status() const { return m_status; }
-    const String& errorMessage() const { return m_errorMessage; }
+    const std::string& errorMessage() const {
+       return m_errorMessage;
+    }
     ErrorCode errorCode() const { return m_errorCode; }
     bool isSuccess() const { return m_status == kSuccess; }
 
     static DispatchResponse OK();
-    static DispatchResponse Error(const String&);
+    static DispatchResponse Error(std::string);
     static DispatchResponse InternalError();
-    static DispatchResponse InvalidParams(const String&);
+    static DispatchResponse InvalidParams(std::string);
     static DispatchResponse FallThrough();
 
 private:
     Status m_status;
-    String m_errorMessage;
+    std::string m_errorMessage;
     ErrorCode m_errorCode;
 };
 
@@ -73,7 +75,7 @@ public:
 
     class {{config.lib.export_macro}} Callback {
     public:
-        Callback(std::unique_ptr<WeakPtr> backendImpl, int callId, const String& method, {{config.crdtp.namespace}}::span<uint8_t> message);
+        Callback(std::unique_ptr<WeakPtr> backendImpl, int callId, {{config.crdtp.namespace}}::span<uint8_t> method, {{config.crdtp.namespace}}::span<uint8_t> message);
         virtual ~Callback();
         void dispose();
 
@@ -84,21 +86,21 @@ public:
     private:
         std::unique_ptr<WeakPtr> m_backendImpl;
         int m_callId;
-        String m_method;
+        std::vector<uint8_t> m_method;
         std::vector<uint8_t> m_message;
     };
 
     explicit DispatcherBase(FrontendChannel*);
     virtual ~DispatcherBase();
 
-    virtual bool canDispatch(const String& method) = 0;
-    virtual void dispatch(int callId, const String& method, {{config.crdtp.namespace}}::span<uint8_t> rawMessage, std::unique_ptr<protocol::DictionaryValue> messageObject) = 0;
+    virtual bool canDispatch({{config.crdtp.namespace}}::span<uint8_t> method) = 0;
+    virtual void dispatch(int callId, {{config.crdtp.namespace}}::span<uint8_t> method, {{config.crdtp.namespace}}::span<uint8_t> rawMessage, std::unique_ptr<protocol::DictionaryValue> messageObject) = 0;
     FrontendChannel* channel() { return m_frontendChannel; }
 
     void sendResponse(int callId, const DispatchResponse&, std::unique_ptr<protocol::DictionaryValue> result);
     void sendResponse(int callId, const DispatchResponse&);
 
-    void reportProtocolError(int callId, DispatchResponse::ErrorCode, const String& errorMessage, ErrorSupport* errors);
+    void reportProtocolError(int callId, DispatchResponse::ErrorCode, std::string errorMessage, ErrorSupport* errors);
     void clearFrontend();
 
     std::unique_ptr<WeakPtr> weakPtr();
@@ -112,19 +114,19 @@ class {{config.lib.export_macro}} UberDispatcher {
     PROTOCOL_DISALLOW_COPY(UberDispatcher);
 public:
     explicit UberDispatcher(FrontendChannel*);
-    void registerBackend(const String& name, std::unique_ptr<protocol::DispatcherBase>);
-    void setupRedirects(const std::unordered_map<String, String>&);
+    void registerBackend({{config.crdtp.namespace}}::span<uint8_t> name, std::unique_ptr<protocol::DispatcherBase>);
+    void setupRedirects(const {{config.crdtp.namespace}}::SpanMap<{{config.crdtp.namespace}}::span<uint8_t>>&);
     bool parseCommand(Value* message, int* callId, String* method);
-    bool canDispatch(const String& method);
-    void dispatch(int callId, const String& method, std::unique_ptr<Value> message, {{config.crdtp.namespace}}::span<uint8_t> rawMessage);
+    bool canDispatch({{config.crdtp.namespace}}::span<uint8_t> method);
+    void dispatch(int callId, {{config.crdtp.namespace}}::span<uint8_t> method, std::unique_ptr<Value> message, {{config.crdtp.namespace}}::span<uint8_t> rawMessage);
     FrontendChannel* channel() { return m_frontendChannel; }
     virtual ~UberDispatcher();
 
 private:
-    protocol::DispatcherBase* findDispatcher(const String& method);
+    protocol::DispatcherBase* findDispatcher({{config.crdtp.namespace}}::span<uint8_t> method);
     FrontendChannel* m_frontendChannel;
-    std::unordered_map<String, String> m_redirects;
-    std::unordered_map<String, std::unique_ptr<protocol::DispatcherBase>> m_dispatchers;
+    {{config.crdtp.namespace}}::SpanMap<{{config.crdtp.namespace}}::span<uint8_t>>  m_redirects;
+    {{config.crdtp.namespace}}::SpanMap<std::unique_ptr<protocol::DispatcherBase>> m_dispatchers;
 };
 
 class InternalResponse : public Serializable {
@@ -132,7 +134,7 @@ class InternalResponse : public Serializable {
 public:
     static std::unique_ptr<Serializable> createResponse(int callId, std::unique_ptr<Serializable> params);
     static std::unique_ptr<Serializable> createNotification(const char* method, std::unique_ptr<Serializable> params = nullptr);
-    static std::unique_ptr<Serializable> createErrorResponse(int callId, DispatchResponse::ErrorCode code, const String& message);
+    static std::unique_ptr<Serializable> createErrorResponse(int callId, DispatchResponse::ErrorCode code, std::string message);
 
     void AppendSerialized(std::vector<uint8_t>* out) const override;
 

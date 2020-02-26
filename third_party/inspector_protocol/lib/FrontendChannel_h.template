@@ -22,7 +22,7 @@ public:
     virtual void sendProtocolResponse(int callId, std::unique_ptr<Serializable> message) = 0;
     virtual void sendProtocolNotification(std::unique_ptr<Serializable> message) = 0;
 
-    virtual void fallThrough(int callId, const String& method, {{config.crdtp.namespace}}::span<uint8_t> message) = 0;
+    virtual void fallThrough(int callId, {{config.crdtp.namespace}}::span<uint8_t> method, {{config.crdtp.namespace}}::span<uint8_t> message) = 0;
     virtual void flushProtocolNotifications() = 0;
 };
 
