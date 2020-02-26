@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0941589f_81230909",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 12466,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-02-26T12:23:59Z",
+      "side": 1,
+      "message": "Why this off-by-one everywhere? Wouldn\u0027t it simplify things to always point at the same spot and only modify the sign of the offset?",
+      "revId": "2e39757c935d93cfff775e8238bc22dc68c8bb85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
