@@ -182,6 +182,8 @@ void LiftoffAssembler::AtomicCompareExchange(
   bailout(kAtomics, "AtomicCompareExchange");
 }
 
+void LiftoffAssembler::AtomicFence() { bailout(kAtomics, "AtomicFence"); }
+
 void LiftoffAssembler::LoadCallerFrameSlot(LiftoffRegister dst,
                                            uint32_t caller_slot_idx,
                                            ValueType type) {

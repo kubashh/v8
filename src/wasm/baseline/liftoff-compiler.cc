@@ -2624,9 +2624,7 @@ class LiftoffCompiler {
 #undef ATOMIC_BINOP_INSTRUCTION_LIST
 #undef ATOMIC_COMPARE_EXCHANGE_LIST
 
-  void AtomicFence(FullDecoder* decoder) {
-    unsupported(decoder, kAtomics, "atomic.fence");
-  }
+  void AtomicFence(FullDecoder* decoder) { __ AtomicFence(); }
   void MemoryInit(FullDecoder* decoder,
                   const MemoryInitImmediate<validate>& imm, const Value& dst,
                   const Value& src, const Value& size) {
