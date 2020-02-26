@@ -878,7 +878,7 @@ Response V8DebuggerAgentImpl::searchInContent(
   v8::HandleScope handles(m_isolate);
   ScriptsMap::iterator it = m_scripts.find(scriptId);
   if (it == m_scripts.end())
-    return Response::Error("No script for id: " + scriptId);
+    return Response::Error("No script for id: " + scriptId.utf8());
 
   *results = std::make_unique<protocol::Array<protocol::Debugger::SearchMatch>>(
       searchInTextByLinesImpl(m_session, it->second->source(0), query,
@@ -964,7 +964,7 @@ Response V8DebuggerAgentImpl::getScriptSource(
   if (!enabled()) return Response::Error(kDebuggerNotEnabled);
   ScriptsMap::iterator it = m_scripts.find(scriptId);
   if (it == m_scripts.end())
-    return Response::Error("No script for id: " + scriptId);
+    return Response::Error("No script for id: " + scriptId.utf8());
   *scriptSource = it->second->source(0);
   v8::MemorySpan<const uint8_t> span;
   if (it->second->wasmBytecode().To(&span)) {
@@ -978,10 +978,10 @@ Response V8DebuggerAgentImpl::getWasmBytecode(const String16& scriptId,
   if (!enabled()) return Response::Error(kDebuggerNotEnabled);
   ScriptsMap::iterator it = m_scripts.find(scriptId);
   if (it == m_scripts.end())
-    return Response::Error("No script for id: " + scriptId);
+    return Response::Error("No script for id: " + scriptId.utf8());
   v8::MemorySpan<const uint8_t> span;
   if (!it->second->wasmBytecode().To(&span))
-    return Response::Error("Script with id " + scriptId +
+    return Response::Error("Script with id " + scriptId.utf8() +
                            " is not WebAssembly");
   *bytecode = protocol::Binary::fromSpan(span.data(), span.size());
   return Response::OK();
@@ -1083,7 +1083,7 @@ Response V8DebuggerAgentImpl::setPauseOnExceptions(
     pauseState = v8::debug::BreakOnUncaughtException;
   } else {
     return Response::Error("Unknown pause on exceptions mode: " +
-                           stringPauseState);
+                           stringPauseState.utf8());
   }
   setPauseOnExceptionsImpl(pauseState);
   return Response::OK();
@@ -1237,7 +1237,8 @@ Response V8DebuggerAgentImpl::setBlackboxPattern(const String16& pattern) {
   std::unique_ptr<V8Regex> regex(new V8Regex(
       m_inspector, pattern, true /** caseSensitive */, false /** multiline */));
   if (!regex->isValid())
-    return Response::Error("Pattern parser error: " + regex->errorMessage());
+    return Response::Error("Pattern parser error: " +
+                           regex->errorMessage().utf8());
   m_blackboxPattern = std::move(regex);
   return Response::OK();
 }
