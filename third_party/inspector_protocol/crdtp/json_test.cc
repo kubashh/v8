@@ -184,6 +184,15 @@ TEST(JsonStdStringWriterTest, HelloWorld) {
       out);
 }
 
+TEST(JsonStdStringWriterTest, ScalarsAreRenderedAsInt) {
+  std::string out;
+  Status status;
+  std::unique_ptr<ParserHandler> writer = NewJSONEncoder(&out, &status);
+  writer->HandleDouble(int64_t(1) << 54);
+  EXPECT_TRUE(status.ok());
+  EXPECT_EQ("18014398509481984", out);
+}
+
 TEST(JsonStdStringWriterTest, RepresentingNonFiniteValuesAsNull) {
   // JSON can't represent +Infinity, -Infinity, or NaN.
   // So in practice it's mapped to null.
