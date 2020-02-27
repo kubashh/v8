@@ -8,6 +8,7 @@
 #include "src/codegen/compiler.h"
 #include "src/codegen/optimized-compilation-info.h"
 #include "src/codegen/tick-counter.h"
+#include "src/compiler/access-builder.h"
 #include "src/compiler/all-nodes.h"
 #include "src/compiler/bytecode-graph-builder.h"
 #include "src/compiler/common-operator.h"
@@ -317,13 +318,13 @@ base::Optional<SharedFunctionInfoRef> JSInliner::DetermineCallTarget(
   //  - JSConstruct(JSCreateClosure[shared](context), args..., new.target)
   if (match.IsJSCreateClosure()) {
     CreateClosureParameters const& p = CreateClosureParametersOf(match.op());
-
-    // TODO(turbofan): We might consider to eagerly create the feedback vector
-    // in such a case (in {DetermineCallContext} below) eventually.
     FeedbackCellRef cell(broker(), p.feedback_cell());
     if (!cell.value().IsFeedbackVector()) return base::nullopt;
 
     return SharedFunctionInfoRef(broker(), p.shared_info());
+  } else if (match.IsCheckClosure()) {
+    CheckClosureParameters const& p = CheckClosureParametersOf(match.op());
+    return SharedFunctionInfoRef(broker(), p.shared_info(broker()));
   }
 
   return base::nullopt;
@@ -358,6 +359,18 @@ FeedbackVectorRef JSInliner::DetermineCallContext(Node* node,
 
     // The inlinee uses the locally provided context at instantiation.
     *context_out = NodeProperties::GetContextInput(match.node());
+    return cell.value().AsFeedbackVector();
+  } else if (match.IsCheckClosure()) {
+    CheckClosureParameters const& p = CheckClosureParametersOf(match.op());
+
+    Node* effect = NodeProperties::GetEffectInput(node);
+    Node* control = NodeProperties::GetControlInput(node);
+    *context_out = effect = graph()->NewNode(
+        simplified()->LoadField(AccessBuilder::ForJSFunctionContext()),
+        match.node(), effect, control);
+    NodeProperties::ReplaceEffectInput(node, effect);
+
+    FeedbackCellRef cell(FeedbackCellRef(broker(), p.feedback_cell()));
     return cell.value().AsFeedbackVector();
   }
 

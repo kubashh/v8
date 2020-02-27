@@ -2025,11 +2025,26 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   enum class DestroySource { kNo, kYes };
 
   // Collect the callable |maybe_target| feedback for either a CALL_IC or
-  // an INSTANCEOF_IC in the |feedback_vector| at |slot_id|.
+  // an INSTANCEOF_IC in the |feedback_vector| at |slot_id|. There are
+  // two modes for feedback collection:
+  //
+  //   kCollectSharedFunctionInfo - collect JSFunctions, but devolve
+  //                                to SharedFunctionInfo as long as all
+  //                                JSFunctions seen share the same one.
+  //   kDontCollectSharedFunctionInfo - collect JSFunctions without
+  //                                devolving to SharedFunctionInfo in
+  //                                case a different JSFunction appears.
+  //                                Go directly to the Megamorphic
+  //                                sentinel value in this case.
+  enum class CallableFeedbackMode {
+    kCollectSharedFunctionInfo,
+    kDontCollectSharedFunctionInfo
+  };
   void CollectCallableFeedback(TNode<Object> maybe_target,
                                TNode<Context> context,
                                TNode<FeedbackVector> feedback_vector,
-                               TNode<UintPtrT> slot_id);
+                               TNode<UintPtrT> slot_id,
+                               CallableFeedbackMode mode);
 
   // Collect CALL_IC feedback for |maybe_target| function in the
   // |feedback_vector| at |slot_id|, and the call counts in
