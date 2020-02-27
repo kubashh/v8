@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ba5700e_82b7bb7f",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2410,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-27T09:33:19Z",
+      "side": 1,
+      "message": "Is this a typo? Should it be \"the stack\"?",
+      "range": {
+        "startLine": 2410,
+        "startChar": 30,
+        "endLine": 2410,
+        "endChar": 39
+      },
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "954f51a8_dc2f1b82",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2410,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-27T09:33:19Z",
+      "side": 1,
+      "message": "nit: \"i64\"",
+      "range": {
+        "startLine": 2410,
+        "startChar": 14,
+        "endLine": 2410,
+        "endChar": 17
+      },
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c3e9369_f710111f",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-27T09:33:19Z",
+      "side": 1,
+      "message": "You should pass |pinned| here.",
+      "range": {
+        "startLine": 2416,
+        "startChar": 51,
+        "endLine": 2416,
+        "endChar": 64
+      },
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b0a9adb_7adb7d30",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2427,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-27T09:33:19Z",
+      "side": 1,
+      "message": "Please add \"if (offset !\u003d 0)\" for smaller code size.",
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a117868c_1d5c998f",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2434,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-27T09:33:19Z",
+      "side": 1,
+      "message": "If I look at builtins-wasm-gen.cc, it looks like the timeout parameter would still be assumed to be a float64. Am I missing something?",
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cad89db1_197c176e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2456,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-27T09:33:19Z",
+      "side": 1,
+      "message": "Looks like a ternary would make this simpler:\n__ CallRuntimeStub(type \u003d\u003d kWasmI32 ? ... : ...);",
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
