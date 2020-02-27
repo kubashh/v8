@@ -8,8 +8,11 @@
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
+#include <memory>
 #include <string>
 #include <vector>
+
+#include "export.h"
 
 namespace v8_crdtp {
 // =============================================================================
@@ -76,18 +79,41 @@ inline span<typename C::value_type> SpanFrom(const C& v) {
 
 // Less than / equality comparison functions for sorting / searching for byte
 // spans. These are similar to absl::string_view's < and == operators.
-constexpr inline bool SpanLessThan(span<uint8_t> x, span<uint8_t> y) noexcept {
-  auto min_size = std::min(x.size(), y.size());
-  const int r = min_size == 0 ? 0 : memcmp(x.data(), y.data(), min_size);
-  return (r < 0) || (r == 0 && x.size() < y.size());
+bool SpanLessThan(span<uint8_t> x, span<uint8_t> y) noexcept;
+
+bool SpanEquals(span<uint8_t> x, span<uint8_t> y) noexcept;
+
+struct SpanLt {
+  bool operator()(span<uint8_t> l, span<uint8_t> r) const {
+    return SpanLessThan(l, r);
+  }
+};
+
+template <typename T>
+T FindByFirst(const std::vector<std::pair<span<uint8_t>, T>>& sorted_by_first,
+              span<uint8_t> key,
+              T default_value) {
+  auto it = std::lower_bound(
+      sorted_by_first.begin(), sorted_by_first.end(), key,
+      [](const std::pair<span<uint8_t>, T>& left, span<uint8_t> right) {
+        return SpanLessThan(left.first, right);
+      });
+  return (it != sorted_by_first.end() && SpanEquals(it->first, key))
+             ? it->second
+             : default_value;
 }
 
-constexpr inline bool SpanEquals(span<uint8_t> x, span<uint8_t> y) noexcept {
-  auto len = x.size();
-  if (len != y.size())
-    return false;
-  return x.data() == y.data() || len == 0 ||
-         std::memcmp(x.data(), y.data(), len) == 0;
+template <typename T>
+T* FindByFirst(const std::vector<std::pair<span<uint8_t>, std::unique_ptr<T>>>&
+                   sorted_by_first,
+               span<uint8_t> key) {
+  auto it = std::lower_bound(
+      sorted_by_first.begin(), sorted_by_first.end(), key,
+      [](const std::pair<span<uint8_t>, std::unique_ptr<T>>& left,
+         span<uint8_t> right) { return SpanLessThan(left.first, right); });
+  return (it != sorted_by_first.end() && SpanEquals(it->first, key))
+             ? it->second.get()
+             : nullptr;
 }
 }  // namespace v8_crdtp
 
