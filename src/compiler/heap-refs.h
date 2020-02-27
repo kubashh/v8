@@ -502,9 +502,11 @@ class FeedbackVectorRef : public HeapObjectRef {
 
   Handle<FeedbackVector> object() const;
 
+  SharedFunctionInfoRef shared_function_info() const;
   double invocation_count() const;
 
   void Serialize();
+  bool serialized() const;
   FeedbackCellRef GetClosureFeedbackCell(int index) const;
 };
 
