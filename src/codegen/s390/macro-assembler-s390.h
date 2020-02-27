@@ -417,7 +417,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void LoadDouble(DoubleRegister dst, const MemOperand& opnd);
   void LoadFloat32(DoubleRegister dst, const MemOperand& opnd);
   void LoadFloat32ConvertToDouble(DoubleRegister dst, const MemOperand& mem);
-  void LoadSimd128(Simd128Register dst, const MemOperand& mem);
+  void LoadSimd128(Simd128Register dst, const MemOperand& mem,
+                   Register scratch);
 
   void AddFloat32(DoubleRegister dst, const MemOperand& opnd,
                   DoubleRegister scratch);
@@ -449,7 +450,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void StoreFloat32(DoubleRegister dst, const MemOperand& opnd);
   void StoreDoubleAsFloat32(DoubleRegister src, const MemOperand& mem,
                             DoubleRegister scratch);
-  void StoreSimd128(Simd128Register src, const MemOperand& mem);
+  void StoreSimd128(Simd128Register src, const MemOperand& mem,
+                    Register scratch);
 
   void Branch(Condition c, const Operand& opnd);
   void BranchOnCount(Register r1, Label* l);
