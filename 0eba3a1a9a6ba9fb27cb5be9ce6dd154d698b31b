@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f64f5d49_3bb443bb",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Very good suggestion.",
+      "parentUuid": "15301477_86a94e0c",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfc3fa9b_3dc2a451",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b874c709_fb4b2ac0",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfc3fa9b_3dc2a451",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "024ead9c_621de15a",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6464cd2c_889a4690",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95858b16_d7179877",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 5
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "8fc68442_d5f48c57",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95858b16_d7179877",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a042e04_8f1996d6",
         "filename": "src/codegen/code-stub-assembler.h",
         "patchSetId": 5
@@ -84,6 +156,24 @@
       "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0830757_492d4feb",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a042e04_8f1996d6",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "2b3d466c_84bf9dd3",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Thanks for clarifying the reasoning, Georg! I\u0027ll remove the TODO.",
+      "parentUuid": "13478915_403724cd",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9259e225_6d41f9d0",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
@@ -136,6 +244,24 @@
       "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a93bd939_9f103b14",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9259e225_6d41f9d0",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -162,6 +288,30 @@
     },
     {
       "key": {
+        "uuid": "a1312ede_976caec3",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1731,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "It is truly a different reason, so I say yes. I added kWrongFeedbackCell.",
+      "parentUuid": "558914ea_8ee30b47",
+      "range": {
+        "startLine": 1731,
+        "startChar": 39,
+        "endLine": 1731,
+        "endChar": 55
+      },
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4f99228_f9a96467",
         "filename": "src/compiler/js-inlining.cc",
         "patchSetId": 5
@@ -176,6 +326,24 @@
       "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef3d8576_99c782e8",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4f99228_f9a96467",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -196,6 +364,24 @@
     },
     {
       "key": {
+        "uuid": "36f1d662_688c261b",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c98476ee_3ba66d50",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d540bb6_7535e0f8",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 5
@@ -210,6 +396,24 @@
       "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d02a2cd_ee936285",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "I agree. I created a task for it in our tracker (https://bugs.chromium.org/p/v8/issues/detail?id\u003d10282).",
+      "parentUuid": "1d540bb6_7535e0f8",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -236,6 +440,30 @@
     },
     {
       "key": {
+        "uuid": "ca244a8d_07a139dc",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2103,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f71feed6_11cb8abe",
+      "range": {
+        "startLine": 2103,
+        "startChar": 16,
+        "endLine": 2103,
+        "endChar": 54
+      },
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18f825f4_2b7a70dd",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 5
@@ -250,6 +478,24 @@
       "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0317f1ce_9348b892",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18f825f4_2b7a70dd",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -270,6 +516,24 @@
     },
     {
       "key": {
+        "uuid": "24d6832d_b7c532c1",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3432,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Right. I removed the comment.",
+      "parentUuid": "0db6d430_a2abed73",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6630ecb1_77a772e9",
         "filename": "src/compiler/simplified-operator.h",
         "patchSetId": 5
@@ -284,6 +548,24 @@
       "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3938c382_a21efa22",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Yep, sure can. I keep \nHandle\u003cSharedFunctionInfo\u003e shared_info(JSHeapBroker* broker) const; \n\nas a convenience method that extracts the SFI with the help of a broker.",
+      "parentUuid": "6630ecb1_77a772e9",
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -307,6 +589,30 @@
       "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5301844b_5a062131",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-27T11:01:34Z",
+      "side": 1,
+      "message": "Actually we want to return MONOMORPHIC if it\u0027s a weak object that\u0027s been cleared, too (not just if we have a JSFunction or a JSBoundFunction). That was an old decision that the feedback state should remain stable despite gc activity.\n\nSo, I expressed it as a fall through to MONOMORPHIC if we didn\u0027t find a heap object, and protected the CHECK in the same way.",
+      "parentUuid": "086c6667_7ba8f0b4",
+      "range": {
+        "startLine": 639,
+        "startChar": 24,
+        "endLine": 639,
+        "endChar": 25
+      },
+      "revId": "0eba3a1a9a6ba9fb27cb5be9ce6dd154d698b31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
