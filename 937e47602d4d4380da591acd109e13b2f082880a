@@ -22,6 +22,30 @@
       "revId": "937e47602d4d4380da591acd109e13b2f082880a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48161d31_bd78f10e",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-02-27T12:18:44Z",
+      "side": 1,
+      "message": "I had another look and came to the conclusion that it\u0027s better not to change Float64Trunc, since it has a more simple and straightforward implementation this way. So I\u0027d suggest to keep the current solution.",
+      "parentUuid": "b3186f53_79135229",
+      "range": {
+        "startLine": 447,
+        "startChar": 8,
+        "endLine": 448,
+        "endChar": 26
+      },
+      "revId": "937e47602d4d4380da591acd109e13b2f082880a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
