@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94f5317e_9630e716",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-27T18:35:58Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this at least mention feedback cells given that that\u0027s what we actually remember.",
+      "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b87d2d3_f89fdc9d",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1715,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-27T18:35:58Z",
+      "side": 1,
+      "message": "Just to make sure: the UseInfo that you pass in simplified lowering ensures that we already deopted if value was a Smi, right?\n\n(I\u0027m wondering if lines like https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/js-native-context-specialization.cc;l\u003d938?q\u003dCheckHeapObject\u0026ss\u003dchromium%2Fchromium%2Fsrc\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F are redundant. CheckMaps has a similar simplified lowering.)",
+      "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe1a82b6_77c513fd",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-27T18:35:58Z",
+      "side": 1,
+      "message": "We could remove that whole class since there is now just one thing stored as parameter.",
+      "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f54795e8_06ee6c9c",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-27T18:35:58Z",
+      "side": 1,
+      "message": "You could make that return a SharedFunctionInfoRef. I think in all cases that\u0027s what you want anyways. Also it mirrors some other methods we have like Ref(broker) on HeapObjectMatcher.",
+      "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
