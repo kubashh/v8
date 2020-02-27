@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac6d3c8_f4d3e515",
+        "filename": "src/numbers/conversions.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-02-27T09:59:48Z",
+      "side": 1,
+      "message": "This is formatted badly now. I think the NOLINT is not needed any more (since \"kBufferSize\" is detected as constant). Please just remove it. If this does not work, make it a NOLINTNEXTLINE and put it in a separate line above.",
+      "revId": "7f170d6362c8f11685053308051ea8edf1c7db9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
