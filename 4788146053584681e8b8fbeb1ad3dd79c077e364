@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72076e91_9fd7d041",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-02-28T08:20:38Z",
+      "side": 1,
+      "message": "This implies a radical loss of precision: e.g. even if the input is already known to be either 0 or 1, ToInteger will now just say its result is any integer.\n\nPlease do the following instead:\n\ntype \u003d ToNumber(type, t);\nif (type.Is(t-\u003ecache_-\u003ekInteger)) return type;\nif (type.Is(t-\u003ecache_-\u003ekIntegerOrMinusZeroOrNaN)) {\n  return Type::Union(\n      Type::Intersect(type, t-\u003ecache_-\u003ekInteger, t-\u003ezone()),\n      t-\u003ecache_-\u003ekSingletonZero, t-\u003ezone());\n}\nreturn t-\u003ecache_-\u003ekInteger;",
+      "revId": "4788146053584681e8b8fbeb1ad3dd79c077e364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
