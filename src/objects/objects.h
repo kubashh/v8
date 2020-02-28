@@ -416,12 +416,12 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
       Isolate* isolate, Handle<Object> value);
 
   // ES6 section 7.1.15 ToLength
-  V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object> ToLength(
-      Isolate* isolate, Handle<Object> input);
+  V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object>
+  ToLength(Isolate* isolate, Handle<Object> input);
 
   // ES6 section 7.1.17 ToIndex
-  V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object> ToIndex(
-      Isolate* isolate, Handle<Object> input, MessageTemplate error_index);
+  V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object>
+  ToIndex(Isolate* isolate, Handle<Object> input, MessageTemplate error_index);
 
   // ES6 section 7.3.9 GetMethod
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> GetMethod(
