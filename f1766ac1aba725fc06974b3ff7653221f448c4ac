@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "f0d36c59_cf340bbb",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2410,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-02-28T15:04:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "954f51a8_dc2f1b82",
+      "range": {
+        "startLine": 2410,
+        "startChar": 14,
+        "endLine": 2410,
+        "endChar": 17
+      },
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb01149_4b510dd5",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2410,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-02-28T15:04:22Z",
+      "side": 1,
+      "message": "No, it\u0027s not a typo. It does pass I64 values to builtins over registers. If it passed them over the stack it would not be a problem. The problem is that 64-bit parameters don\u0027t fit into 32-bit registers.",
+      "parentUuid": "4ba5700e_82b7bb7f",
+      "range": {
+        "startLine": 2410,
+        "startChar": 30,
+        "endLine": 2410,
+        "endChar": 39
+      },
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c3e9369_f710111f",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 1
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4f4fbd63_802f3e22",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-02-28T15:04:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c3e9369_f710111f",
+      "range": {
+        "startLine": 2416,
+        "startChar": 51,
+        "endLine": 2416,
+        "endChar": 64
+      },
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b0a9adb_7adb7d30",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 1
@@ -85,6 +157,24 @@
       "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7149074_9947d7f4",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2427,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-02-28T15:04:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b0a9adb_7adb7d30",
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "46f37f06_25a9b57e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2434,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-02-28T15:04:22Z",
+      "side": 1,
+      "message": "There is a CL in the dependency chain that changes that.",
+      "parentUuid": "a117868c_1d5c998f",
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cad89db1_197c176e",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 1
@@ -119,6 +227,24 @@
       "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e67eb11_38e9f22b",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2456,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-02-28T15:04:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cad89db1_197c176e",
+      "revId": "f1766ac1aba725fc06974b3ff7653221f448c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
