@@ -14,6 +14,7 @@
 
 #include "unicode/putil.h"
 #include "unicode/udata.h"
+#include "unicode/utrace.h"
 
 #include "src/base/build_config.h"
 #include "src/base/file-utils.h"
@@ -59,17 +60,36 @@ bool InitializeICUDefaultLocation(const char* exec_path,
 #endif
 }
 
+static void U_CALLCONV traceData(const void* context, int32_t fnNumber,
+                                 int32_t level, const char* fmt, va_list args) {
+  if (UTRACE_UDATA_DATA_FILE != fnNumber) return;
+  const char* name = va_arg(args, const char*);
+  if (strchr(name, '-') == name + 8) name += 9;
+  printf("%d %s\n", fnNumber, name);
+  va_end(args);
+}
+
+void CommonInit() {
+  const void* context = nullptr;
+  utrace_setFunctions(context, nullptr, nullptr, traceData);
+  utrace_setLevel(UTRACE_VERBOSE);
+}
+
 bool InitializeICU(const char* icu_data_file) {
 #if !defined(V8_INTL_SUPPORT)
   return true;
 #else
 #if ICU_UTIL_DATA_IMPL == ICU_UTIL_DATA_STATIC
   // Use bundled ICU data.
+  CommonInit();
   return true;
 #elif ICU_UTIL_DATA_IMPL == ICU_UTIL_DATA_FILE
   if (!icu_data_file) return false;
 
-  if (g_icu_data_ptr) return true;
+  if (g_icu_data_ptr) {
+    CommonInit();
+    return true;
+  }
 
   FILE* inf = fopen(icu_data_file, "rb");
   if (!inf) return false;
@@ -93,6 +113,7 @@ bool InitializeICU(const char* icu_data_file) {
   udata_setCommonData(reinterpret_cast<void*>(g_icu_data_ptr), &err);
   // Never try to load ICU data from files.
   udata_setFileAccess(UDATA_ONLY_PACKAGES, &err);
+  if (err == U_ZERO_ERROR) CommonInit();
   return err == U_ZERO_ERROR;
 #endif
 #endif
