@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4d25294a_abf288e3",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-29T08:21:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "286328fb_e9f25065",
+      "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4852aea3_4b4a028e",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3042e3f6_b39b895d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-29T08:21:48Z",
+      "side": 1,
+      "message": "So strange/frightening that my eye just tolerated that! I changed the comment say we are checking if we have a JSFunction. I also moved the line that loads feedback_value down to below this actual check.",
+      "parentUuid": "4852aea3_4b4a028e",
+      "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ec0c7e22_a040fbdc",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-29T08:21:48Z",
+      "side": 1,
+      "message": "Good point. I\u0027ve changed the terminology to refer to FeedbackCell. I think we should by now understand it\u0027s role and relationship.",
+      "parentUuid": "94f5317e_9630e716",
+      "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b87d2d3_f89fdc9d",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 7
@@ -67,6 +121,24 @@
       "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81121a18_f5b0ad48",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1715,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-29T08:21:48Z",
+      "side": 1,
+      "message": "Indeed! I added a line to the mjsunit test at the end, passing a smi instead of a closure. Thanks to the correct UseInfo, we check for smi-ness and deopt if found. Changing the UseInfo to AnyTagged and relaxing the MachineRepresentation accordingly, we\u0027ll segfault on the LoadField instruction.\n\n...\u003cbad case\u003e\n0x355c00082b70    50  REX.W movq rdx,[rbp+0x10]\n0x355c00082b74    54  movl rcx,[rdx-0x1]        SEGFAULT\n...\n\nI\u0027ll do a followup CL on the site you pointed to. It enhances understanding to eliminate redundancies!",
+      "parentUuid": "7b87d2d3_f89fdc9d",
+      "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "ab1585af_b89070c2",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-29T08:21:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe1a82b6_77c513fd",
+      "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f54795e8_06ee6c9c",
         "filename": "src/compiler/simplified-operator.h",
         "patchSetId": 7
@@ -101,6 +191,24 @@
       "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "068b9569_4189749b",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-02-29T08:21:48Z",
+      "side": 1,
+      "message": "Good point. I\u0027ve now eliminated this class per your other comment, but offered (essentially) that utility method on the FeedbackCellRef.",
+      "parentUuid": "f54795e8_06ee6c9c",
+      "revId": "c124b63b90a13c0d8d83c992e9e7ab6aa74ac732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
