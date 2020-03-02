@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4eec9884_72e1f581",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-03-02T09:49:39Z",
+      "side": 0,
+      "message": "This!\n\nThis is not the same as what the right side does. Test expectations are additive. With [ALWAYS, [FAIL]], [noi18n, [PASS]], you\u0027re re-creating the earlier situation of the test failing without anyone noticing, because the resulting expectations are:\n(normal): [FAIL]\n(noi18n): [PASS, FAIL]\nWhereas what you want is:\n(normal): [FAIL, PASS] # Don\u0027t care\n(noi18n): [PASS]",
+      "range": {
+        "startLine": 68,
+        "startChar": 2,
+        "endLine": 70,
+        "endChar": 0
+      },
+      "revId": "32f01eaff1984f0890b71a45fe6fedb6f4fac487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
