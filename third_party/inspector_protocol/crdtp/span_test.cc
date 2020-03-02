@@ -13,7 +13,6 @@ namespace v8_crdtp {
 // =============================================================================
 // span - sequence of bytes
 // =============================================================================
-
 template <typename T>
 class SpanTest : public ::testing::Test {};
 
@@ -109,40 +108,69 @@ TEST(SpanComparisons, ByteWiseLexicographicalOrder) {
   EXPECT_FALSE(SpanEquals(SpanFrom(msg), SpanFrom(lesser_msg)));
 }
 
-// TODO(johannes): The following shows how the span can be used in an
-// std::unordered_map as a key. Once we have a production usage, we'll move
-// SpanHash, SpanEq, SpanHasher into the header.
-
-// A simple hash code, inspired by http://stackoverflow.com/q/1646807.
-constexpr inline size_t SpanHash(span<uint8_t> s) noexcept {
-  size_t hash = 17;
-  for (uint8_t c : s)
-    hash = 31 * hash + c;
-  return hash;
+// =============================================================================
+// FindByFirst - Efficient retrieval from a sorted vector.
+// =============================================================================
+TEST(FindByFirst, SpanBySpan) {
+  std::vector<std::pair<span<uint8_t>, span<uint8_t>>> sorted_span_by_span = {
+      {SpanFrom("foo1"), SpanFrom("bar1")},
+      {SpanFrom("foo2"), SpanFrom("bar2")},
+      {SpanFrom("foo3"), SpanFrom("bar3")},
+  };
+  {
+    auto result = FindByFirst(sorted_span_by_span, SpanFrom("foo1"),
+                              SpanFrom("not_found"));
+    EXPECT_EQ("bar1", std::string(result.begin(), result.end()));
+  }
+  {
+    auto result = FindByFirst(sorted_span_by_span, SpanFrom("foo3"),
+                              SpanFrom("not_found"));
+    EXPECT_EQ("bar3", std::string(result.begin(), result.end()));
+  }
+  {
+    auto result = FindByFirst(sorted_span_by_span, SpanFrom("baz"),
+                              SpanFrom("not_found"));
+    EXPECT_EQ("not_found", std::string(result.begin(), result.end()));
+  }
 }
 
-// Structs for making std::unordered_map with std::span<uint8_t> keys.
-struct SpanEq {
-  constexpr inline bool operator()(span<uint8_t> l, span<uint8_t> r) const {
-    return SpanEquals(l, r);
-  }
-};
+namespace {
+class TestObject {
+ public:
+  explicit TestObject(const std::string& message) : message_(message) {}
 
-struct SpanHasher {
-  constexpr inline size_t operator()(span<uint8_t> s) const {
-    return SpanHash(s);
-  }
-};
+  const std::string& message() const { return message_; }
 
-TEST(SpanHasherAndSpanEq, SpanAsKeyInUnorderedMap) {
-  // A very simple smoke test for unordered_map, storing three key/value pairs.
-  std::unordered_map<span<uint8_t>, int32_t, SpanHasher, SpanEq> a_map;
-  a_map[SpanFrom("foo")] = 1;
-  a_map[SpanFrom("bar")] = 2;
-  a_map[SpanFrom("baz")] = 3;
-  EXPECT_EQ(3u, a_map.size());
-  EXPECT_EQ(1, a_map[SpanFrom("foo")]);
-  EXPECT_EQ(2, a_map[SpanFrom("bar")]);
-  EXPECT_EQ(3, a_map[SpanFrom("baz")]);
+ private:
+  std::string message_;
+};
+}  // namespace
+
+TEST(FindByFirst, ObjectBySpan) {
+  std::vector<std::pair<span<uint8_t>, std::unique_ptr<TestObject>>>
+      sorted_object_by_span;
+  sorted_object_by_span.push_back(
+      std::make_pair(SpanFrom("foo1"), std::make_unique<TestObject>("bar1")));
+  sorted_object_by_span.push_back(
+      std::make_pair(SpanFrom("foo2"), std::make_unique<TestObject>("bar2")));
+  sorted_object_by_span.push_back(
+      std::make_pair(SpanFrom("foo3"), std::make_unique<TestObject>("bar3")));
+  {
+    TestObject* result =
+        FindByFirst<TestObject>(sorted_object_by_span, SpanFrom("foo1"));
+    ASSERT_TRUE(result);
+    ASSERT_EQ("bar1", result->message());
+  }
+  {
+    TestObject* result =
+        FindByFirst<TestObject>(sorted_object_by_span, SpanFrom("foo3"));
+    ASSERT_TRUE(result);
+    ASSERT_EQ("bar3", result->message());
+  }
+  {
+    TestObject* result =
+        FindByFirst<TestObject>(sorted_object_by_span, SpanFrom("baz"));
+    ASSERT_FALSE(result);
+  }
 }
 }  // namespace v8_crdtp

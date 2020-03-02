@@ -100,4 +100,13 @@ String16 stackTraceIdToString(uintptr_t id);
 
 }  //  namespace v8_inspector
 
+// See third_party/inspector_protocol/crdtp/serializer_traits.h.
+namespace v8_crdtp {
+template <>
+struct SerializerTraits<v8_inspector::protocol::Binary> {
+  static void Serialize(const v8_inspector::protocol::Binary& binary,
+                        std::vector<uint8_t>* out);
+};
+}  // namespace v8_crdtp
+
 #endif  // V8_INSPECTOR_STRING_UTIL_H_
