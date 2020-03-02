@@ -34,7 +34,7 @@ class TestSuiteTest(unittest.TestCase):
         run_skipped=False,
         shell_dir='fake_testsuite/fake_d8',
         timeout=10,
-        verbose=False,
+        verbose=False
     )
 
     self.suite = TestSuite.Load(
