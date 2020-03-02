@@ -22,6 +22,30 @@
       "revId": "32f01eaff1984f0890b71a45fe6fedb6f4fac487",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6419b854_a3416bad",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-02T10:02:21Z",
+      "side": 0,
+      "message": "Damnit. I thought of our conversation while writing this CL but then forgot about checking whether this applies just to inline conditions (as above) or also to entire variant blocks like L385 below. \n\nAssuming it does apply to variant blocks, that\u0027s super-unexpected. Each block should really override any other settings for the same test case, or abort execution and print a warning about conflicting settings..\n\nIn any case I\u0027ll fix the issue here.",
+      "parentUuid": "4eec9884_72e1f581",
+      "range": {
+        "startLine": 68,
+        "startChar": 2,
+        "endLine": 70,
+        "endChar": 0
+      },
+      "revId": "32f01eaff1984f0890b71a45fe6fedb6f4fac487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
