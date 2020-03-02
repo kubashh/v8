@@ -335,10 +335,10 @@
 }],  # '(arch == mipsel or arch == mips64el or arch == mips or arch == mips64) and not simd_mips'
 
 ##############################################################################
-['arch == mips or arch == mips64', {
+['arch == mips or arch == mips64 or arch == ppc', {
   # TODO(mips-team): Implement I64Atomic operations on MIPS
   'test-run-wasm-atomics64/*': [SKIP],
-}],  # 'arch == mipsel or arch == mips64el or arch == mips or arch == mips64'
+}],  # 'arch == mips or arch == mips64 or arch == ppc'
 
 ##############################################################################
 ['mips_arch_variant == r6', {
@@ -401,7 +401,7 @@
 
 }],  # 'arch == ppc or arch == ppc64 or arch == s390 or arch == s390x'
 
-['arch == ppc64', {
+['arch == ppc64 or arch == ppc', {
   # https://crbug.com/v8/8766
   'test-bytecode-generator/WideRegisters': [SKIP],
 }],
