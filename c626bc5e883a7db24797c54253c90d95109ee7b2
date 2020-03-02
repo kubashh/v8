@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5183b00_0221b109",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-03-02T17:42:32Z",
+      "side": 1,
+      "message": "Hi Clemens, serialized_code_start is now \"4 byte\" aligned due to this change therefore we are not taking this if statement anymore, buffer isn\u0027t re-aligned any longer and we are getting failures under ppc:\n\nFatal error in ../../src/base/memory.h, line 22\n# Debug check failed: IsAligned(addr, alignof(T)).\n\nI\u0027m not sure how using \"new byte[code_size]\" is 4/8 byte aligning this since the type input a byte, however, changing kInt32Size above to kInt64Size assure the if statement is taken and tests pass.\n\nWas wondering if this is the proper way of fixing it?",
+      "revId": "c626bc5e883a7db24797c54253c90d95109ee7b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
