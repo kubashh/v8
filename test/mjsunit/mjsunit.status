@@ -62,11 +62,8 @@
   # Issue 9380: Memory leaks of shared WebAssembly.Memory objects
   'wasm/shared-memory-worker-gc': [SKIP],
 
-  # crbug.com/v8/10120: This test is meant to pass (only) in no_i18n builds,
-  # but currently doesn't:
+  # Passes only in no_i18n.
   'es6/unicode-regexp-ignore-case-noi18n': [FAIL],
-  # Once the bug is fixed, the expectations should be:
-  # 'es6/unicode-regexp-ignore-case-noi18n': [PASS, ['no_i18n == False', FAIL]],
 
   # BUG(v8:10197)
   'regress/regress-748069': [SKIP],
@@ -388,6 +385,7 @@
 ['no_i18n', {
   # case-insensitive unicode regexp relies on case mapping provided by ICU.
   'es6/unicode-regexp-ignore-case': [FAIL],
+  'es6/unicode-regexp-ignore-case-noi18n': [PASS],
   'regress/regress-5036': [FAIL],
   'es7/regexp-ui-word': [FAIL],
   'regexp-modifiers-i18n': [FAIL],
