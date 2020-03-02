@@ -130,6 +130,8 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     # Extra features.
     parser.add_option('--time', help='Print timing information after running',
                       default=False, action='store_true')
+    parser.add_option('--regenerate-expected-files', default=False, action='store_true',
+                      help='Regenerate expected files')
 
     # Noop
     parser.add_option('--cfi-vptr',

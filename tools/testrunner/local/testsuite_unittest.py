@@ -35,6 +35,7 @@ class TestSuiteTest(unittest.TestCase):
         shell_dir='fake_testsuite/fake_d8',
         timeout=10,
         verbose=False,
+        regenerate_expected_files=False,
     )
 
     self.suite = TestSuite.Load(

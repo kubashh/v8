@@ -721,6 +721,7 @@ class BaseTestRunner(object):
         shell_dir=self.outdir,
         timeout=timeout,
         verbose=options.verbose,
+        regenerate_expected_files=options.regenerate_expected_files,
     )
 
   def _timeout_scalefactor(self, options):
