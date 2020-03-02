@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e680015_e79758ba",
+        "filename": "tools/testrunner/outproc/base.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-03-02T14:54:58Z",
+      "side": 1,
+      "message": "Could we hide the feature in this output processor, since it doesn\u0027t affect the others? I\u0027d also prefer if this didn\u0027t require going through the execution layer. How about the following:\nAdd the option to https://cs.chromium.org/chromium/src/v8/tools/testrunner/test_config.py?l\u003d10\nInitialize it in https://cs.chromium.org/chromium/src/v8/tools/testrunner/base_runner.py?l\u003d710 - also move the option to base_runner.py.\n\nRequire regenerate_expected_files as a parameter in the constructor below, so that all clients of this kind of output processing are forced to pass it.\n\nThen pass it in all testsuites that use this outproc, probably only webkit and inspector.  E.g. in https://cs.chromium.org/chromium/src/v8/test/inspector/testcfg.py?q\u003dExpectedOutProc+file:%5Esrc/v8/test/+package:%5Echromium$\u0026g\u003d0\u0026l\u003d62 it can be accessed with self.suite.test_config... it\u0027s used for accessing a couple of other options already, e.g.:\nhttps://cs.chromium.org/chromium/src/v8/test/mjsunit/testcfg.py?l\u003d135",
+      "range": {
+        "startLine": 129,
+        "startChar": 6,
+        "endLine": 129,
+        "endChar": 21
+      },
+      "revId": "395a09b9bcaed3fe9e3fb3a0b2c25028c67306e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
