@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f7e24b6f_c14c52a0",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-02T11:04:44Z",
+      "side": 0,
+      "message": "No longer exists.",
+      "revId": "32f01eaff1984f0890b71a45fe6fedb6f4fac487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4eec9884_72e1f581",
         "filename": "test/mjsunit/mjsunit.status",
         "patchSetId": 2
@@ -46,6 +63,23 @@
       "revId": "32f01eaff1984f0890b71a45fe6fedb6f4fac487",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9090521_82043bc9",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 5
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-02T11:04:44Z",
+      "side": 0,
+      "message": "AFAICT this was not meaningful.",
+      "revId": "32f01eaff1984f0890b71a45fe6fedb6f4fac487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
