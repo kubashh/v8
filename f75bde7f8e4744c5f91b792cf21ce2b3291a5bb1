@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61f11db9_55e7220f",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-02T10:00:11Z",
+      "side": 1,
+      "message": "Please add a comment that in case of reversed args the receiver() implementation is inherited from JavaScriptFrame.",
+      "revId": "f75bde7f8e4744c5f91b792cf21ce2b3291a5bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
