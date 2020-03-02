@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "d34da1b7_206aa3d6",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-02T11:05:09Z",
+      "side": 0,
+      "message": "Fixed in the latest PS.",
+      "parentUuid": "6419b854_a3416bad",
+      "range": {
+        "startLine": 68,
+        "startChar": 2,
+        "endLine": 70,
+        "endChar": 0
+      },
+      "revId": "32f01eaff1984f0890b71a45fe6fedb6f4fac487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9090521_82043bc9",
         "filename": "test/mjsunit/mjsunit.status",
         "patchSetId": 5
