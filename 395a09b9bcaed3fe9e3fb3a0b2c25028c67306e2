@@ -22,6 +22,30 @@
       "revId": "395a09b9bcaed3fe9e3fb3a0b2c25028c67306e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cebd100_bc626b0f",
+        "filename": "tools/testrunner/outproc/base.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-03-02T21:37:49Z",
+      "side": 1,
+      "message": "Thanks for very details instruction 😊",
+      "parentUuid": "1e680015_e79758ba",
+      "range": {
+        "startLine": 129,
+        "startChar": 6,
+        "endLine": 129,
+        "endChar": 21
+      },
+      "revId": "395a09b9bcaed3fe9e3fb3a0b2c25028c67306e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
