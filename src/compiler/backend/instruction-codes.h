@@ -19,8 +19,10 @@
 #include "src/compiler/backend/mips64/instruction-codes-mips64.h"
 #elif V8_TARGET_ARCH_X64
 #include "src/compiler/backend/x64/instruction-codes-x64.h"
-#elif V8_TARGET_ARCH_PPC || V8_TARGET_ARCH_PPC64
+#elif V8_TARGET_ARCH_PPC
 #include "src/compiler/backend/ppc/instruction-codes-ppc.h"
+#elif V8_TARGET_ARCH_PPC64
+#include "src/compiler/backend/ppc64/instruction-codes-ppc64.h"
 #elif V8_TARGET_ARCH_S390
 #include "src/compiler/backend/s390/instruction-codes-s390.h"
 #else

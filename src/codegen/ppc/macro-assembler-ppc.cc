@@ -2434,9 +2434,17 @@ void TurboAssembler::LoadP(Register dst, const MemOperand& mem,
       // Todo: enhance to use scratch if dst is unsuitable
       DCHECK_NE(dst, r0);
       addi(dst, mem.ra(), Operand(adj));
+#if V8_TARGET_ARCH_PPC64
       ld(dst, MemOperand(dst, alignedOffset));
+#else
+      lwz(dst, MemOperand(dst, alignedOffset));
+#endif
     } else {
+#if V8_TARGET_ARCH_PPC64
       ld(dst, mem);
+#else
+      lwz(dst, mem);
+#endif
     }
   }
 }
@@ -2898,7 +2906,11 @@ void TurboAssembler::JumpIfLessThan(Register x, int32_t y, Label* dest) {
 }
 
 void TurboAssembler::LoadEntryFromBuiltinIndex(Register builtin_index) {
+#if V8_TARGET_ARCH_PPC64
   STATIC_ASSERT(kSystemPointerSize == 8);
+#else
+  STATIC_ASSERT(kSystemPointerSize == 4);
+#endif
   STATIC_ASSERT(kSmiTagSize == 1);
   STATIC_ASSERT(kSmiTag == 0);
 
@@ -3025,15 +3037,27 @@ void TurboAssembler::CallForDeoptimization(Address target, int deopt_id) {
 }
 
 void TurboAssembler::ZeroExtByte(Register dst, Register src) {
+#if V8_TARGET_ARCH_PPC64
   clrldi(dst, src, Operand(56));
+#else
+  clrlwi(dst, src, Operand(24));
+#endif
 }
 
 void TurboAssembler::ZeroExtHalfWord(Register dst, Register src) {
+#if V8_TARGET_ARCH_PPC64
   clrldi(dst, src, Operand(48));
+#else
+  clrlwi(dst, src, Operand(16));
+#endif
 }
 
 void TurboAssembler::ZeroExtWord32(Register dst, Register src) {
+#if V8_TARGET_ARCH_PPC64
   clrldi(dst, src, Operand(32));
+#else
+  // makes no sense on 32 bit architecture
+#endif
 }
 
 void TurboAssembler::Trap() { stop(); }

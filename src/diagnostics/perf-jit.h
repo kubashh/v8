@@ -85,6 +85,7 @@ class PerfJitLogger : public CodeEventLogger {
   static const uint32_t kElfMachMIPS64 = 8;
   static const uint32_t kElfMachARM64 = 183;
   static const uint32_t kElfMachS390x = 22;
+  static const uint32_t kElfMachPPC = 20;
   static const uint32_t kElfMachPPC64 = 21;
 
   uint32_t GetElfMach() {
@@ -102,6 +103,8 @@ class PerfJitLogger : public CodeEventLogger {
     return kElfMachARM64;
 #elif V8_TARGET_ARCH_S390X
     return kElfMachS390x;
+#elif V8_TARGET_ARCH_PPC
+    return kElfMachPPC;
 #elif V8_TARGET_ARCH_PPC64
     return kElfMachPPC64;
 #else

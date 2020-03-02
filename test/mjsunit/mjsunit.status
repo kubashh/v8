@@ -427,12 +427,12 @@
 
 ##############################################################################
 # 32-bit platforms
-['arch in (ia32, arm, mips, mipsel)', {
+['arch in (ia32, arm, mips, mipsel, ppc)', {
   # Needs >2GB of available contiguous memory.
   'wasm/grow-huge-memory': [SKIP],
   'wasm/huge-memory': [SKIP],
   'wasm/huge-typedarray': [SKIP],
-}],  # 'arch in (ia32, arm, mips, mipsel)'
+}],  # 'arch in (ia32, arm, mips, mipsel, ppc)'
 
 ##############################################################################
 ['arch == arm64', {
@@ -655,6 +655,13 @@
   'string-indexof-2': [PASS, SLOW],
   'wasm/atomics': [PASS, SLOW],
 }],  # 'arch == arm
+
+##############################################################################
+['arch == ppc', {
+  # do not run 64bit stress tests on 32bit
+  'wasm/atomics64-stress': [SKIP],
+  'wasm/compare-exchange64-stress': [SKIP],
+}],  # 'arch == ppc'
 
 ##############################################################################
 ['arch in (mipsel, mips, mips64el, mips64) and not simulator_run', {
