@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0df09034_2051ab8c",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-03-02T16:01:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6e74b1f_11d0474e",
+      "revId": "b29c8d5997e0f089a276cdfdafe697715f749e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d479d98_62577881",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-02-27T10:05:59Z",
       "side": 1,
       "message": "Just a thought: If it\u0027s easier you could also introduce a separate method (\"PrepareRuntimeCall\" or similar) which implements the recurring pattern you are using here.",
+      "revId": "b29c8d5997e0f089a276cdfdafe697715f749e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed235cba_d04801ee",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-03-02T16:01:17Z",
+      "side": 1,
+      "message": "I think this makes sense. Is it okay if I do this in a separate, later CL, and continue like this for now?",
+      "parentUuid": "5d479d98_62577881",
       "revId": "b29c8d5997e0f089a276cdfdafe697715f749e96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
