@@ -153,7 +153,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void Ret() { b(r14); }
   void Ret(Condition cond) { b(cond, r14); }
 
-  void CallForDeoptimization(Address target, int deopt_id);
+  void CallForDeoptimization(Address target, int deopt_id, Label* exit,
+                             DeoptimizeKind kind);
 
   // Emit code to discard a non-negative number of pointer-sized elements
   // from the stack, clobbering only the sp register.
@@ -995,6 +996,19 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void ResetSpeculationPoisonRegister();
   void ComputeCodeStartAddress(Register dst);
   void LoadPC(Register dst);
+
+  // Control-flow integrity: This is required for compatibility with
+  // architecture-independent code.
+  // Define a function entrypoint. This doesn't emit any code for this
+  // architecture, as control-flow integrity is not supported for it.
+  void CFIEntryPoint() {}
+
+  // Control-flow integrity: This is required for compatibility with
+  // architecture-independent code.
+  //  Define an exception handler. Optionally binds a label.
+  void CFIExceptionHandler(Label* label = nullptr) {
+    if (label != nullptr) bind(label);
+  }
 
   // Generates an instruction sequence s.t. the return address points to the
   // instruction following the call.

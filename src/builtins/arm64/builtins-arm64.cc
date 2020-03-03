@@ -35,6 +35,8 @@ namespace internal {
 #define __ ACCESS_MASM(masm)
 
 void Builtins::Generate_Adaptor(MacroAssembler* masm, Address address) {
+  __ CFIJumpOrCallTarget();
+
   __ Mov(kJavaScriptCallExtraArg1Register, ExternalReference::Create(address));
   __ Jump(BUILTIN_CODE(masm->isolate(), AdaptorWithBuiltinExitFrame),
           RelocInfo::CODE_TARGET);
@@ -696,7 +698,7 @@ void Generate_JSEntryVariant(MacroAssembler* masm, StackFrame::Type type,
   // that.
   {
     Assembler::BlockPoolsScope block_pools(masm);
-    __ bind(&handler_entry);
+    __ CFIJumpTarget(&handler_entry);
 
     // Store the current pc as the handler offset. It's used later to create the
     // handler table.
