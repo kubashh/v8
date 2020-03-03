@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fb303d08_a1d870b1",
+        "filename": "tools/testrunner/outproc/base.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-03-03T16:44:16Z",
+      "side": 1,
+      "message": "My logic is that we only regenerate expected files when the flag is set and output is unexpected. After that, it should pass. WDYT?",
+      "parentUuid": "7cf59a6f_6d930a41",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 29
+      },
+      "revId": "5a68e8d9a8b3b9c8d979a17de814f543853438c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e397eed4_24e7808b",
         "filename": "tools/testrunner/outproc/base.py",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-03T10:25:27Z",
       "side": 1,
       "message": "nit: 80char limit:\n  def __init__(self, expected_outcomes, expected_filename,\n               regenerate_expected_files\u003dFalse):",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 92
+      },
+      "revId": "5a68e8d9a8b3b9c8d979a17de814f543853438c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f5e524a_72c9b668",
+        "filename": "tools/testrunner/outproc/base.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-03-03T16:44:16Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "e397eed4_24e7808b",
       "range": {
         "startLine": 133,
         "startChar": 0,
