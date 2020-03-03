@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7cf59a6f_6d930a41",
+        "filename": "tools/testrunner/outproc/base.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-03-03T10:25:27Z",
+      "side": 1,
+      "message": "Btw: Is this the behavior you want? If a test fails, the expectations are re-generated. But technically with the new expectations it would pass. So maybe set has_unexpected_output to False in this branch?",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 29
+      },
+      "revId": "5a68e8d9a8b3b9c8d979a17de814f543853438c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e397eed4_24e7808b",
+        "filename": "tools/testrunner/outproc/base.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-03-03T10:25:27Z",
+      "side": 1,
+      "message": "nit: 80char limit:\n  def __init__(self, expected_outcomes, expected_filename,\n               regenerate_expected_files\u003dFalse):",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 92
+      },
+      "revId": "5a68e8d9a8b3b9c8d979a17de814f543853438c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
