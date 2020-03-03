@@ -6073,17 +6073,18 @@ Handle<Object> JSPromise::TriggerPromiseReactions(Isolate* isolate,
       secondary_handler = handle(reaction->fulfill_handler(), isolate);
     }
 
+    bool empty_handler_context;
     if (primary_handler->IsJSReceiver()) {
-      JSReceiver::GetContextForMicrotask(
-          Handle<JSReceiver>::cast(primary_handler))
-          .ToHandle(&handler_context);
+      empty_handler_context = JSReceiver::GetContextForMicrotask(
+                                  Handle<JSReceiver>::cast(primary_handler))
+                                  .ToHandle(&handler_context);
     }
     if (handler_context.is_null() && secondary_handler->IsJSReceiver()) {
-      JSReceiver::GetContextForMicrotask(
-          Handle<JSReceiver>::cast(secondary_handler))
-          .ToHandle(&handler_context);
+      empty_handler_context = JSReceiver::GetContextForMicrotask(
+                                  Handle<JSReceiver>::cast(secondary_handler))
+                                  .ToHandle(&handler_context);
     }
-    if (handler_context.is_null()) handler_context = isolate->native_context();
+    if (empty_handler_context) handler_context = isolate->native_context();
 
     STATIC_ASSERT(
         static_cast<int>(PromiseReaction::kSize) ==
