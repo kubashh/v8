@@ -637,6 +637,7 @@ class WasmExportedFunction : public JSFunction {
   Address GetWasmCallTarget();
 
   const wasm::FunctionSig* sig();
+  bool MatchesSignature(const wasm::FunctionSig* sig);
 
   DECL_CAST(WasmExportedFunction)
   OBJECT_CONSTRUCTORS(WasmExportedFunction, JSFunction);

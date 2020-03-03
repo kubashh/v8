@@ -1515,12 +1515,36 @@ void WebAssemblyFunction(const v8::FunctionCallbackInfo<v8::Value>& args) {
     thrower.TypeError("Argument 1 must be a function");
     return;
   }
-
   const i::wasm::FunctionSig* sig = builder.Build();
-  i::Handle<i::JSReceiver> callable =
-      Utils::OpenHandle(*args[1].As<Function>());
-  i::Handle<i::JSFunction> result =
-      i::WasmJSFunction::New(i_isolate, sig, callable);
+
+  i::Handle<i::Object> callable = Utils::OpenHandle(*args[1]);
+  if (i::WasmExportedFunction::IsWasmExportedFunction(*callable)) {
+    if (i::Handle<i::WasmExportedFunction>::cast(callable)->MatchesSignature(
+            sig)) {
+      args.GetReturnValue().Set(Utils::ToLocal(callable));
+      return;
+    }
+
+    thrower.TypeError(
+        "The signature of Argument 1 (a WebAssembly function) does "
+        "not match the signature specified in Argument 0");
+    return;
+  }
+
+  if (i::WasmJSFunction::IsWasmJSFunction(*callable)) {
+    if (i::Handle<i::WasmJSFunction>::cast(callable)->MatchesSignature(sig)) {
+      args.GetReturnValue().Set(Utils::ToLocal(callable));
+      return;
+    }
+
+    thrower.TypeError(
+        "The signature of Argument 1 (a WebAssembly function) does "
+        "not match the signature specified in Argument 0");
+    return;
+  }
+
+  i::Handle<i::JSFunction> result = i::WasmJSFunction::New(
+      i_isolate, sig, i::Handle<i::JSReceiver>::cast(callable));
   args.GetReturnValue().Set(Utils::ToLocal(result));
 }
 
