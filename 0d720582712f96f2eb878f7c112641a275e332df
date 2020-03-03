@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b071f415_fbcc26cd",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-03T16:12:35Z",
+      "side": 1,
+      "message": "(for instance by enable the cpu profiler), and the compiled bytecode is missing source positions.",
+      "range": {
+        "startLine": 2395,
+        "startChar": 27,
+        "endLine": 2397,
+        "endChar": 20
+      },
+      "revId": "0d720582712f96f2eb878f7c112641a275e332df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
