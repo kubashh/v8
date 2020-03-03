@@ -1814,6 +1814,22 @@ const wasm::FunctionSig* WasmExportedFunction::sig() {
   return instance().module()->functions[function_index()].sig;
 }
 
+bool WasmExportedFunction::IsSignatureEqual(const wasm::FunctionSig* sig) {
+  const wasm::FunctionSig* this_sig = this->sig();
+
+  if (this_sig->parameter_count() != sig->parameter_count()) return false;
+  for (size_t i = 0, e = sig->parameter_count(); i < e; ++i) {
+    if (this_sig->GetParam(i) != sig->GetParam(i)) return false;
+  }
+
+  if (this_sig->return_count() != sig->return_count()) return false;
+  for (size_t i = 0, e = sig->return_count(); i < e; ++i) {
+    if (this_sig->GetReturn(i) != sig->GetReturn(i)) return false;
+  }
+
+  return true;
+}
+
 // static
 bool WasmJSFunction::IsWasmJSFunction(Object object) {
   if (!object.IsJSFunction()) return false;

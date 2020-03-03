@@ -637,6 +637,7 @@ class WasmExportedFunction : public JSFunction {
   Address GetWasmCallTarget();
 
   const wasm::FunctionSig* sig();
+  bool IsSignatureEqual(const wasm::FunctionSig* sig);
 
   DECL_CAST(WasmExportedFunction)
   OBJECT_CONSTRUCTORS(WasmExportedFunction, JSFunction);
