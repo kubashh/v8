@@ -34,6 +34,24 @@
       "revId": "c626bc5e883a7db24797c54253c90d95109ee7b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da37b1b6_b9e024ef",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-03-04T13:30:00Z",
+      "side": 1,
+      "message": "Thanks for your help, I have left a comment for now indicating the issue, here is the CL:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/2087692",
+      "parentUuid": "b2f32314_75e7e640",
+      "revId": "c626bc5e883a7db24797c54253c90d95109ee7b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
