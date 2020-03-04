@@ -12,12 +12,12 @@ namespace internal {
 namespace compiler {
 
 Node** CommonNodeCache::FindExternalConstant(ExternalReference value) {
-  return external_constants_.Find(zone(), bit_cast<intptr_t>(value.address()));
+  return external_constants_.Find(bit_cast<intptr_t>(value.address()));
 }
 
 
 Node** CommonNodeCache::FindHeapConstant(Handle<HeapObject> value) {
-  return heap_constants_.Find(zone(), bit_cast<intptr_t>(value.address()));
+  return heap_constants_.Find(bit_cast<intptr_t>(value.address()));
 }
 
 
