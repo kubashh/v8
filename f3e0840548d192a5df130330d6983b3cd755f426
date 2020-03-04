@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "406a74ab_8966c5eb",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-03-04T10:37:38Z",
+      "side": 1,
+      "message": "JSReceiver (or even JSFunction) here is safe after the check in line 1514, and would avoid the need for the cast in line 1547. I don\u0027t mind either way though.",
+      "range": {
+        "startLine": 1520,
+        "startChar": 15,
+        "endLine": 1520,
+        "endChar": 21
+      },
+      "revId": "f3e0840548d192a5df130330d6983b3cd755f426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
