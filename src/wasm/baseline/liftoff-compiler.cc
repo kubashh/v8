@@ -2281,11 +2281,36 @@ class LiftoffCompiler {
     }
   }
 
+  template <ValueType result_type, typename EmitFn>
+  void EmitSimdExtractLaneOp(EmitFn fn,
+                             const SimdLaneImmediate<validate>& imm) {
+    static constexpr RegClass result_rc = reg_class_for(result_type);
+    LiftoffRegister lhs = __ PopToRegister();
+    LiftoffRegister dst = __ GetUnusedRegister(result_rc);
+    fn(dst, lhs, imm.lane);
+    __ PushRegister(result_type, dst);
+  }
+
   void SimdLaneOp(FullDecoder* decoder, WasmOpcode opcode,
                   const SimdLaneImmediate<validate>& imm,
                   const Vector<Value> inputs, Value* result) {
-    unsupported(decoder, kSimd, "simd");
+    if (!CpuFeatures::SupportsWasmSimd128()) {
+      return unsupported(decoder, kSimd, "simd");
+    }
+    switch (opcode) {
+      case wasm::kExprI32x4ExtractLane:
+        EmitSimdExtractLaneOp<kWasmI32>(
+            [=](LiftoffRegister dst, LiftoffRegister lhs,
+                uint8_t imm_lane_idx) {
+              __ emit_i32x4_extract_lane(dst, lhs, imm_lane_idx);
+            },
+            imm);
+        break;
+      default:
+        unsupported(decoder, kSimd, "simd");
+    }
   }
+
   void Simd8x16ShuffleOp(FullDecoder* decoder,
                          const Simd8x16ShuffleImmediate<validate>& imm,
                          const Value& input0, const Value& input1,

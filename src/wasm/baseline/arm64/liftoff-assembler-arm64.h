@@ -1091,6 +1091,12 @@ void LiftoffAssembler::emit_i32x4_splat(LiftoffRegister dst,
   Dup(dst.fp().V4S(), src.gp().W());
 }
 
+void LiftoffAssembler::emit_i32x4_extract_lane(LiftoffRegister dst,
+                                               LiftoffRegister lhs,
+                                               uint8_t imm_lane_idx) {
+  bailout(kSimd, "i32x4extractlane");
+}
+
 void LiftoffAssembler::emit_i16x8_splat(LiftoffRegister dst,
                                         LiftoffRegister src) {
   Dup(dst.fp().V8H(), src.gp().W());

@@ -1799,6 +1799,12 @@ void LiftoffAssembler::emit_i32x4_splat(LiftoffRegister dst,
   Pshufd(dst.fp(), dst.fp(), static_cast<uint8_t>(0));
 }
 
+void LiftoffAssembler::emit_i32x4_extract_lane(LiftoffRegister dst,
+                                               LiftoffRegister lhs,
+                                               uint8_t imm_lane_idx) {
+  Pextrd(dst.gp(), lhs.fp(), imm_lane_idx);
+}
+
 void LiftoffAssembler::emit_i16x8_splat(LiftoffRegister dst,
                                         LiftoffRegister src) {
   Movd(dst.fp(), src.gp());

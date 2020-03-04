@@ -1560,6 +1560,12 @@ void LiftoffAssembler::emit_i32x4_splat(LiftoffRegister dst,
   vdup(Neon32, liftoff::GetSimd128Register(dst.low_fp()), src.gp());
 }
 
+void LiftoffAssembler::emit_i32x4_extract_lane(LiftoffRegister dst,
+                                               LiftoffRegister lhs,
+                                               uint8_t imm_lane_idx) {
+  bailout(kSimd, "i32x4extractlane");
+}
+
 void LiftoffAssembler::emit_i16x8_splat(LiftoffRegister dst,
                                         LiftoffRegister src) {
   vdup(Neon16, liftoff::GetSimd128Register(dst.low_fp()), src.gp());
