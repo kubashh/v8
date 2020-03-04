@@ -16,6 +16,24 @@
       "revId": "c626bc5e883a7db24797c54253c90d95109ee7b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2f32314_75e7e640",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-04T08:24:25Z",
+      "side": 1,
+      "message": "It looks like checking for kSystemPointerSize alignment would be the right solution.\n\nAnd I agree, the byte array allocation below does not guarantee the alignment either, but I guess most existing allocators just naturally guarantee system word alignment. You could put a TODO or at least a comment to say that this is not 100% safe, but seems to work well enough in practice.\n\nAlternatively, you could overallocate the {aligned_buffer} by {kSystemPointerSize - 1} bytes, and adjust the start pointer to the first aligned address within that allocation.",
+      "parentUuid": "f5183b00_0221b109",
+      "revId": "c626bc5e883a7db24797c54253c90d95109ee7b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
