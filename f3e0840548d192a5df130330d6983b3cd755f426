@@ -22,6 +22,23 @@
       "revId": "f3e0840548d192a5df130330d6983b3cd755f426",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b339ca21_710c366b",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1817,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-05T15:28:41Z",
+      "side": 1,
+      "message": "Can\u0027t we use Signature::operator\u003d\u003d here?",
+      "revId": "f3e0840548d192a5df130330d6983b3cd755f426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
