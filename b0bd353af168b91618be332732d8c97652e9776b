@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "402dff76_48651ea4",
+        "filename": "src/codegen/arm64/macro-assembler-arm64-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-05T16:30:21Z",
+      "side": 1,
+      "message": "Would CFIFunctionEntry or CFIFunctionStart or CFICodeEntry or CFICodeStart be a better name?",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f6119f1_5ef2b21c",
+        "filename": "src/codegen/arm64/macro-assembler-arm64-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-05T16:30:21Z",
+      "side": 1,
+      "message": "I don\u0027t understand the comment. Isn\u0027t the point simply that we need to allow jumps because tail calls jump to the same point as regular calls?",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a91520f_d77ec5fa",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1569,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-05T16:30:21Z",
+      "side": 1,
+      "message": "It makes more sense to me to move this up to OffHeapTrampolineGenerator::Generate, even if that means exposing CFICallTarget. What do you think?",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "695741c6_54398b12",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-05T16:30:21Z",
+      "side": 1,
+      "message": "I don\u0027t understand this comment about compatibility here and below.",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73259a87_0060233a",
+        "filename": "src/execution/arm64/simulator-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-05T16:30:21Z",
+      "side": 1,
+      "message": "Here and in a few other places it would be handy to have a ENABLE_CONTROL_FLOW_INTEGRITY_BOOL macro, similar to COMPRESS_POINTERS_BOOL.",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15c80553_d80c7d78",
+        "filename": "src/execution/arm64/simulator-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3663,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-05T16:30:21Z",
+      "side": 1,
+      "message": "Is it possible to add a test for this?",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

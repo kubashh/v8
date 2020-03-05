@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34ef08dd_35927862",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-05T16:30:21Z",
+      "side": 1,
+      "message": "Nit: Please move that after the comment below.",
+      "revId": "5858ec3c1d4ad75049a307fdb5c5f168d477e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f74651f9_173f7b52",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1978,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-05T16:30:21Z",
+      "side": 1,
+      "message": "Nit: I\u0027d move that to the end, below the DCHECk.",
+      "revId": "5858ec3c1d4ad75049a307fdb5c5f168d477e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a408567c_a571c1c2",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-05T16:30:21Z",
+      "side": 1,
+      "message": "Can it ever be \u003d\u003d lazy_deopt_start?",
+      "revId": "5858ec3c1d4ad75049a307fdb5c5f168d477e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
