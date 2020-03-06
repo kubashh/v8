@@ -153,6 +153,103 @@
       "revId": "b0bd353af168b91618be332732d8c97652e9776b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb65ef0e_25b8667d",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-06T11:14:32Z",
+      "side": 1,
+      "message": "This is 0-1 instructions I assume? Can you add a comment similar to the lines below?",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1b81096_8c5dd832",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-06T11:14:32Z",
+      "side": 1,
+      "message": "Can we try to reuse more code here? It seems that most code is the same anyway.\nWould this work?\n\n#ifdef V8_ENABLE_CONTROL_FLOW_INTEGRITY\n  CFIEntryPoint();\n  nop();  // alignment...\n#endif\n  // all the rest (modulo static_asserts)",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d86d86c4_6237d34d",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-06T11:14:32Z",
+      "side": 1,
+      "message": "I assume it would be unaligned since {CFIEntryPoint()} emits one instruction, right? Please add a \"// 1 instruction\" comment to that line then.",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40e86a18_ecef6c2d",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-06T11:14:32Z",
+      "side": 1,
+      "message": "nit: Can we name this \"kTargetOffset\"?",
+      "range": {
+        "startLine": 190,
+        "startChar": 6,
+        "endLine": 190,
+        "endChar": 20
+      },
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b196a0df_336f620c",
+        "filename": "src/wasm/jump-table-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-06T11:14:32Z",
+      "side": 1,
+      "message": "In order to reduce nesting, I would prefer\n\n#elif V8_TARGET_ARCH_ARM64 \u0026\u0026 V8_ENABLE_CONTROL_FLOW_INTEGRITY\n[...]\n#elif V8_TARGET_ARCH_ARM64 \u0026\u0026 !V8_ENABLE_CONTROL_FLOW_INTEGRITY\n[...]",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 36
+      },
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
