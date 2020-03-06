@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "db80713c_12c20ce2",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-06T10:54:51Z",
+      "side": 1,
+      "message": "Can we call this BindJumpTarget (I don\u0027t think we need the CFI here)",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "402dff76_48651ea4",
         "filename": "src/codegen/arm64/macro-assembler-arm64-inl.h",
         "patchSetId": 4
@@ -30,6 +47,23 @@
       "writtenOn": "2020-03-05T16:30:21Z",
       "side": 1,
       "message": "I don\u0027t understand the comment. Isn\u0027t the point simply that we need to allow jumps because tail calls jump to the same point as regular calls?",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1af69a5b_80dc9c7e",
+        "filename": "src/codegen/arm64/macro-assembler-arm64-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-06T10:54:51Z",
+      "side": 1,
+      "message": "Personally I would prefer the label versions are seperate, i.e.: \n\nCFIJumpOrCallTarget() and BindCFIJumpOrCallTarget(label) so it\u0027s clear the label is being bound (for all these functions). Would that work?",
       "revId": "b0bd353af168b91618be332732d8c97652e9776b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -81,6 +115,24 @@
       "writtenOn": "2020-03-05T16:30:21Z",
       "side": 1,
       "message": "Here and in a few other places it would be handy to have a ENABLE_CONTROL_FLOW_INTEGRITY_BOOL macro, similar to COMPRESS_POINTERS_BOOL.",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a05b306_77a019eb",
+        "filename": "src/execution/arm64/simulator-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-06T10:54:51Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "73259a87_0060233a",
       "revId": "b0bd353af168b91618be332732d8c97652e9776b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
