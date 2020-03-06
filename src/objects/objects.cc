@@ -4957,6 +4957,7 @@ void SharedFunctionInfo::Init(ReadOnlyRoots ro_roots, int unique_id) {
   set_internal_formal_parameter_count(0);
   set_expected_nof_properties(0);
   set_raw_function_token_offset(0);
+  set_inlined_bytecode_size(0);
 
   // All flags default to false or 0, except ConstructAsBuiltinBit just because
   // we're using the kIllegal builtin.
