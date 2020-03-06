@@ -285,6 +285,7 @@ class SharedFunctionInfo : public HeapObject {
   // SharedFunctionInfo represents within its script, or -1 if this
   // SharedFunctionInfo object doesn't correspond to a parsed FunctionLiteral.
   DECL_INT32_ACCESSORS(function_literal_id)
+  DECL_INT32_ACCESSORS(inlined_bytecode_size)
 
 #if V8_SFI_HAS_UNIQUE_ID
   // [unique_id] - For --trace-maps purposes, an identifier that's persistent
