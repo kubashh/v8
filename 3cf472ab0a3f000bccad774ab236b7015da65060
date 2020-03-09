@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dce6efb9_d7725ac0",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-03-09T13:16:44Z",
+      "side": 1,
+      "message": "There is already a comparator struct TypeLess from src/torque/types.h that can be used here:\n\n  std::set\u003cconst StructType*, TypeLess\u003e structs_used_in_classes;",
+      "range": {
+        "startLine": 3896,
+        "startChar": 32,
+        "endLine": 3896,
+        "endChar": 44
+      },
+      "revId": "3cf472ab0a3f000bccad774ab236b7015da65060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
