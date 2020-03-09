@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f5b22aa_483598cd",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-03-09T12:46:13Z",
+      "side": 1,
+      "message": "Replacing ToIntegerImpl with ToInteger here should reduce code size a lot: a builtin call instead of inlining the implementation.",
+      "range": {
+        "startLine": 474,
+        "startChar": 13,
+        "endLine": 474,
+        "endChar": 26
+      },
+      "revId": "8c8bd658c6f3a765a73ac49e57b7b138a67db635",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
