@@ -70,6 +70,8 @@ std::string Status::ToASCIIString() const {
       return ToASCIIString("CBOR: unexpected eof in map");
     case Error::CBOR_INVALID_MAP_KEY:
       return ToASCIIString("CBOR: invalid map key");
+    case Error::CBOR_DUPLICATE_MAP_KEY:
+      return ToASCIIString("CBOR: duplicate map key");
     case Error::CBOR_STACK_LIMIT_EXCEEDED:
       return ToASCIIString("CBOR: stack limit exceeded");
     case Error::CBOR_TRAILING_JUNK:
@@ -97,6 +99,8 @@ std::string Status::ToASCIIString() const {
       return ToASCIIString("BINDINGS: string8 value expected");
     case Error::BINDINGS_BINARY_VALUE_EXPECTED:
       return ToASCIIString("BINDINGS: binary value expected");
+    case Error::BINDINGS_ENVELOPE_EXPECTED:
+      return ToASCIIString("BINDINGS: envelope expected");
   }
   // Some compilers can't figure out that we can't get here.
   return "INVALID ERROR CODE";
