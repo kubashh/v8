@@ -22,6 +22,23 @@
       "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1456f6b3_4951d294",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-09T18:08:55Z",
+      "side": 1,
+      "message": "This seems a bit hacky. If I understand it correctly you are having the caller\u0027s push the arguments in reverse so that they are correct for the runtime function. Instead I think you should have this function allocate local registers for the number of arguments and do move them from the incoming parameters into the local registers (reversing the order as you go) then call the runtime with the transposed arguments.",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
