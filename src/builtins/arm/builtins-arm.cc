@@ -947,31 +947,45 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
           ExternalReference::bytecode_size_table_address());
 
   // Check if the bytecode is a Wide or ExtraWide prefix bytecode.
-  Label process_bytecode;
+  Label wide_or_extra_wide, extra_wide, after_jumploop, jump_loop,
+      jump_loop_wide, jump_loop_extra_wide, emulate_jump, end;
   STATIC_ASSERT(0 == static_cast<int>(interpreter::Bytecode::kWide));
   STATIC_ASSERT(1 == static_cast<int>(interpreter::Bytecode::kExtraWide));
   STATIC_ASSERT(2 == static_cast<int>(interpreter::Bytecode::kDebugBreakWide));
   STATIC_ASSERT(3 ==
                 static_cast<int>(interpreter::Bytecode::kDebugBreakExtraWide));
   __ cmp(bytecode, Operand(0x3));
-  __ b(hi, &process_bytecode);
+  __ b(le, &wide_or_extra_wide);
+  // We need to special case JumpLoop here (and below for wide and extra wide)
+  // since we have to advance the bytecode by emulating the jump, as opposed to
+  // moving to the literal next bytecode.
+  __ cmp(bytecode, Operand(static_cast<int>(interpreter::Bytecode::kJumpLoop)));
+  __ b(eq, &jump_loop);
+  __ b(&after_jumploop);
+
+  __ bind(&wide_or_extra_wide);
   __ tst(bytecode, Operand(0x1));
   // Load the next bytecode.
   __ add(bytecode_offset, bytecode_offset, Operand(1));
   __ ldrb(bytecode, MemOperand(bytecode_array, bytecode_offset));
+  __ b(ne, &extra_wide);
 
+  __ cmp(bytecode, Operand(static_cast<int>(interpreter::Bytecode::kJumpLoop)));
+  __ b(eq, &jump_loop_wide);
   // Update table to the wide scaled table.
   __ add(bytecode_size_table, bytecode_size_table,
          Operand(kIntSize * interpreter::Bytecodes::kBytecodeCount));
-  // Conditionally update table to the extra wide scaled table. We are taking
-  // advantage of the fact that the extra wide follows the wide one.
+  __ b(&after_jumploop);
+
+  __ bind(&extra_wide);
+  __ cmp(bytecode, Operand(static_cast<int>(interpreter::Bytecode::kJumpLoop)));
+  __ b(eq, &jump_loop_extra_wide);
+  // Update table to the extra wide scaled table.
   __ add(bytecode_size_table, bytecode_size_table,
-         Operand(kIntSize * interpreter::Bytecodes::kBytecodeCount), LeaveCC,
-         ne);
+         Operand(2 * kIntSize * interpreter::Bytecodes::kBytecodeCount));
+  __ bind(&after_jumploop);
 
-  __ bind(&process_bytecode);
-
-// Bailout to the return label if this is a return bytecode.
+  // Bailout to the return label if this is a return bytecode.
 
   // Create cmp, cmpne, ..., cmpne to check for a return bytecode.
   Condition flag = al;
@@ -987,6 +1001,29 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
   // Otherwise, load the size of the current bytecode and advance the offset.
   __ ldr(scratch1, MemOperand(bytecode_size_table, bytecode, LSL, 2));
   __ add(bytecode_offset, bytecode_offset, scratch1);
+  __ b(&end);
+
+  // Load the parameter offset for the jump, depending on its width. Fine to
+  // reuse scratch1 since we are not going to be using bytecode_size_table on
+  // this path.
+  __ bind(&jump_loop);
+  __ add(scratch1, bytecode_offset, Operand(1));
+  __ ldrb(scratch1, MemOperand(bytecode_array, scratch1));
+  __ jmp(&emulate_jump);
+
+  __ bind(&jump_loop_wide);
+  __ add(scratch1, bytecode_offset, Operand(1));
+  __ ldrh(scratch1, MemOperand(bytecode_array, scratch1));
+  __ jmp(&emulate_jump);
+
+  __ bind(&jump_loop_extra_wide);
+  __ add(scratch1, bytecode_offset, Operand(1));
+  __ ldr(scratch1, MemOperand(bytecode_array, scratch1));
+
+  __ bind(&emulate_jump);
+  __ sub(bytecode_offset, bytecode_offset, scratch1);
+
+  __ bind(&end);
 }
 
 // Generate code for entering a JS function with the interpreter.
