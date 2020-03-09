@@ -12543,19 +12543,30 @@ CodeStubArguments::CodeStubArguments(CodeStubAssembler* assembler,
 
 TNode<Object> CodeStubArguments::GetReceiver() const {
   DCHECK_EQ(receiver_mode_, ReceiverMode::kHasReceiver);
-  return assembler_->UncheckedCast<Object>(assembler_->LoadFullTagged(
-      base_, assembler_->IntPtrConstant(kSystemPointerSize)));
+#ifdef V8_REVERSE_JSARGS
+  intptr_t offset = -kSystemPointerSize;
+#else
+  intptr_t offset = kSystemPointerSize;
+#endif
+  return assembler_->UncheckedCast<Object>(
+      assembler_->LoadFullTagged(base_, assembler_->IntPtrConstant(offset)));
 }
 
 void CodeStubArguments::SetReceiver(TNode<Object> object) const {
   DCHECK_EQ(receiver_mode_, ReceiverMode::kHasReceiver);
+#ifdef V8_REVERSE_JSARGS
+  intptr_t offset = -kSystemPointerSize;
+#else
+  intptr_t offset = kSystemPointerSize;
+#endif
   assembler_->StoreFullTaggedNoWriteBarrier(
-      base_, assembler_->IntPtrConstant(kSystemPointerSize), object);
+      base_, assembler_->IntPtrConstant(offset), object);
 }
 
 TNode<RawPtrT> CodeStubArguments::AtIndexPtr(TNode<IntPtrT> index) const {
 #ifdef V8_REVERSE_JSARGS
-  TNode<IntPtrT> offset = index;
+  TNode<IntPtrT> offset =
+      assembler_->ElementOffsetFromIndex(index, SYSTEM_POINTER_ELEMENTS, 0);
 #else
   TNode<IntPtrT> negated_index =
       assembler_->IntPtrOrSmiSub(assembler_->IntPtrConstant(0), index);
@@ -13085,8 +13096,14 @@ TNode<JSArray> CodeStubAssembler::ArrayCreate(TNode<Context> context,
     TNode<NativeContext> native_context = LoadNativeContext(context);
     TNode<JSFunction> array_function =
         CAST(LoadContextElement(native_context, Context::ARRAY_FUNCTION_INDEX));
+#ifdef V8_REVERSE_JSARGS
+    array =
+        CAST(CallRuntime(Runtime::kNewArray, context, length, array_function,
+                         array_function, UndefinedConstant()));
+#else
     array = CAST(CallRuntime(Runtime::kNewArray, context, array_function,
                              length, array_function, UndefinedConstant()));
+#endif
     Goto(&done);
   }
 

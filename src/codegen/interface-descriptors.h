@@ -1045,6 +1045,24 @@ class ArrayNoArgumentConstructorDescriptor
                      ArrayNArgumentsConstructorDescriptor)
 };
 
+#ifdef V8_REVERSE_JSARGS
+class ArraySingleArgumentConstructorDescriptor
+    : public ArrayNArgumentsConstructorDescriptor {
+ public:
+  // This descriptor declares same register arguments as the parent
+  // ArrayNArgumentsConstructorDescriptor and it declares indices for
+  // JS arguments passed on the expression stack.
+  DEFINE_PARAMETERS(kFunction, kAllocationSite, kActualArgumentsCount,
+                    kArraySizeSmiParameter, kFunctionParameter)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kFunction
+                         MachineType::AnyTagged(),  // kAllocationSite
+                         MachineType::Int32(),      // kActualArgumentsCount
+                         MachineType::AnyTagged(),  // kArraySizeSmiParameter
+                         MachineType::AnyTagged())  // kFunctionParameter
+  DECLARE_DESCRIPTOR(ArraySingleArgumentConstructorDescriptor,
+                     ArrayNArgumentsConstructorDescriptor)
+};
+#else
 class ArraySingleArgumentConstructorDescriptor
     : public ArrayNArgumentsConstructorDescriptor {
  public:
@@ -1061,6 +1079,7 @@ class ArraySingleArgumentConstructorDescriptor
   DECLARE_DESCRIPTOR(ArraySingleArgumentConstructorDescriptor,
                      ArrayNArgumentsConstructorDescriptor)
 };
+#endif
 
 class CompareDescriptor : public CallInterfaceDescriptor {
  public:
