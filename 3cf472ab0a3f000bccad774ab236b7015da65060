@@ -70,6 +70,30 @@
       "revId": "3cf472ab0a3f000bccad774ab236b7015da65060",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bf2d8f4_a411a488",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1400694
+      },
+      "writtenOn": "2020-03-09T15:03:51Z",
+      "side": 1,
+      "message": "OK.",
+      "parentUuid": "12453bad_ee453681",
+      "range": {
+        "startLine": 3896,
+        "startChar": 32,
+        "endLine": 3896,
+        "endChar": 44
+      },
+      "revId": "3cf472ab0a3f000bccad774ab236b7015da65060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
