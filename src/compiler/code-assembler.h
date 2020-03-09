@@ -1010,6 +1010,71 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                                       descriptor, 1, target, context, args...));
   }
 
+  template <class T = Object, class... TArgs>
+  TNode<T> CallJSStub(Callable const& callable, SloppyTNode<Object> context,
+                      SloppyTNode<Object> function, SloppyTNode<Int32T> arity,
+                      TArgs... args) {
+    TNode<Code> target = HeapConstant(callable.code());
+    return CallJSStub<T>(callable.descriptor(), target, context, function,
+                         arity, args...);
+  }
+
+  template <class T = Object, class... TArgs>
+  TNode<T> CallJSStub(const CallInterfaceDescriptor& descriptor,
+                      SloppyTNode<Code> target, SloppyTNode<Object> context,
+                      SloppyTNode<Object> function, SloppyTNode<Int32T> arity,
+                      TArgs... args) {
+    return UncheckedCast<T>(CallJSStubR(StubCallMode::kCallCodeObject,
+                                        descriptor, 1, target, context,
+                                        function, arity, args...));
+  }
+
+  template <class... TArgs>
+  Node* CallJSStubR(StubCallMode call_mode,
+                    const CallInterfaceDescriptor& descriptor,
+                    size_t result_size, SloppyTNode<Object> target,
+                    SloppyTNode<Object> context, SloppyTNode<Object> function,
+                    SloppyTNode<Int32T> arity, TArgs... args) {
+    return CallJSStubRImpl(call_mode, descriptor, result_size, target, context,
+                           function, arity, {args...});
+  }
+
+  template <class T = Object, class... TArgs>
+  TNode<T> ConstructJSStub(Callable const& callable,
+                           SloppyTNode<Object> context,
+                           SloppyTNode<Object> old_target,
+                           SloppyTNode<Object> new_target,
+                           SloppyTNode<Int32T> arity, TArgs... args) {
+    TNode<Code> target = HeapConstant(callable.code());
+    return ConstructJSStub<T>(callable.descriptor(), target, context,
+                              old_target, new_target, arity, args...);
+  }
+
+  template <class T = Object, class... TArgs>
+  TNode<T> ConstructJSStub(const CallInterfaceDescriptor& descriptor,
+                           SloppyTNode<Code> target,
+                           SloppyTNode<Object> context,
+                           SloppyTNode<Object> old_target,
+                           SloppyTNode<Object> new_target,
+                           SloppyTNode<Int32T> arity, TArgs... args) {
+    return UncheckedCast<T>(
+        ConstructJSStubR(StubCallMode::kCallCodeObject, descriptor, 1, target,
+                         context, old_target, new_target, arity, args...));
+  }
+
+  template <class... TArgs>
+  Node* ConstructJSStubR(StubCallMode call_mode,
+                         const CallInterfaceDescriptor& descriptor,
+                         size_t result_size, SloppyTNode<Object> target,
+                         SloppyTNode<Object> context,
+                         SloppyTNode<Object> old_target,
+                         SloppyTNode<Object> new_target,
+                         SloppyTNode<Int32T> arity, TArgs... args) {
+    return ConstructJSStubRImpl(call_mode, descriptor, result_size, target,
+                                context, old_target, new_target, arity,
+                                {args...});
+  }
+
   template <class... TArgs>
   void TailCallStub(Callable const& callable, TNode<Object> context,
                     TArgs... args) {
@@ -1051,8 +1116,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                        Node* receiver, TArgs... args) {
     int argc = static_cast<int>(sizeof...(args));
     TNode<Int32T> arity = Int32Constant(argc);
-    return CallStub(callable, CAST(context), function, arity, receiver,
-                    args...);
+    return CallJSStub(callable, CAST(context), function, arity, receiver,
+                      args...);
   }
 
   template <class... TArgs>
@@ -1063,8 +1128,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
     TNode<Object> receiver = LoadRoot(RootIndex::kUndefinedValue);
 
     // Construct(target, new_target, arity, receiver, arguments...)
-    return CallStub(callable, CAST(context), target, new_target, arity,
-                    receiver, args...);
+    return ConstructJSStub(callable, CAST(context), target, new_target, arity,
+                           receiver, args...);
   }
   template <class... TArgs>
   Node* ConstructJS(Callable const& callable, Node* context, Node* new_target,
@@ -1172,6 +1237,19 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                       const CallInterfaceDescriptor& descriptor,
                       size_t result_size, TNode<Object> target,
                       TNode<Object> context, std::initializer_list<Node*> args);
+
+  Node* CallJSStubRImpl(StubCallMode call_mode,
+                        const CallInterfaceDescriptor& descriptor,
+                        size_t result_size, TNode<Object> target,
+                        TNode<Object> context, TNode<Object> function,
+                        TNode<Int32T> arity, std::initializer_list<Node*> args);
+
+  Node* ConstructJSStubRImpl(StubCallMode call_mode,
+                             const CallInterfaceDescriptor& descriptor,
+                             size_t result_size, TNode<Object> target,
+                             TNode<Object> context, TNode<Object> function,
+                             TNode<Object> new_target, TNode<Int32T> arity,
+                             std::initializer_list<Node*> args);
 
   // These two don't have definitions and are here only for catching use cases
   // where the cast is not necessary.

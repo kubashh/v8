@@ -994,6 +994,59 @@ Node* CodeAssembler::CallStubRImpl(StubCallMode call_mode,
                    inputs.data());
 }
 
+Node* CodeAssembler::CallJSStubRImpl(StubCallMode call_mode,
+                                     const CallInterfaceDescriptor& descriptor,
+                                     size_t result_size, TNode<Object> target,
+                                     TNode<Object> context,
+                                     TNode<Object> function,
+                                     TNode<Int32T> arity,
+                                     std::initializer_list<Node*> args) {
+  DCHECK(call_mode == StubCallMode::kCallCodeObject ||
+         call_mode == StubCallMode::kCallBuiltinPointer);
+  constexpr size_t kMaxNumArgs = 10;
+  DCHECK_GE(kMaxNumArgs, args.size());
+  NodeArray<kMaxNumArgs + 2> inputs;
+  inputs.Add(target);
+  inputs.Add(function);
+  inputs.Add(arity);
+#ifdef V8_REVERSE_JSARGS
+  for (auto arg : base::Reversed(args)) inputs.Add(arg);
+#else
+  for (auto arg : args) inputs.Add(arg);
+#endif
+  if (descriptor.HasContextParameter()) {
+    inputs.Add(context);
+  }
+  return CallStubN(call_mode, descriptor, result_size, inputs.size(),
+                   inputs.data());
+}
+
+Node* CodeAssembler::ConstructJSStubRImpl(
+    StubCallMode call_mode, const CallInterfaceDescriptor& descriptor,
+    size_t result_size, TNode<Object> target, TNode<Object> context,
+    TNode<Object> function, TNode<Object> new_target, TNode<Int32T> arity,
+    std::initializer_list<Node*> args) {
+  DCHECK(call_mode == StubCallMode::kCallCodeObject ||
+         call_mode == StubCallMode::kCallBuiltinPointer);
+  constexpr size_t kMaxNumArgs = 10;
+  DCHECK_GE(kMaxNumArgs, args.size());
+  NodeArray<kMaxNumArgs + 2> inputs;
+  inputs.Add(target);
+  inputs.Add(function);
+  inputs.Add(new_target);
+  inputs.Add(arity);
+#ifdef V8_REVERSE_JSARGS
+  for (auto arg : base::Reversed(args)) inputs.Add(arg);
+#else
+  for (auto arg : args) inputs.Add(arg);
+#endif
+  if (descriptor.HasContextParameter()) {
+    inputs.Add(context);
+  }
+  return CallStubN(call_mode, descriptor, result_size, inputs.size(),
+                   inputs.data());
+}
+
 void CodeAssembler::TailCallStubThenBytecodeDispatchImpl(
     const CallInterfaceDescriptor& descriptor, Node* target, Node* context,
     std::initializer_list<Node*> args) {
