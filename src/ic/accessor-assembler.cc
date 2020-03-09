@@ -1676,8 +1676,15 @@ void AccessorAssembler::HandleStoreICProtoHandler(
       BIND(&store);
       Callable callable = CodeFactory::CallApiCallback(isolate());
       TNode<IntPtrT> argc = IntPtrConstant(1);
+#ifdef V8_REVERSE_JSARGS
+      // Note: arguments after the api_holder need to reversed (in the JS
+      // order).
+      Return(CallStub(callable, context, callback, argc, data,
+                      api_holder.value(), p->value(), p->receiver()));
+#else
       Return(CallStub(callable, context, callback, argc, data,
                       api_holder.value(), p->receiver(), p->value()));
+#endif
     }
 
     BIND(&if_store_global_proxy);

@@ -1870,8 +1870,14 @@ void ArrayBuiltinsAssembler::GenerateConstructor(
 
   BIND(&call_runtime);
   {
+#ifdef V8_REVERSE_JSARGS
+    // We manually call NewArray with arguments reversed.
+    TailCallRuntime(Runtime::kNewArray, context, array_size, array_function,
+                    array_function, allocation_site);
+#else
     TailCallRuntime(Runtime::kNewArray, context, array_function, array_size,
                     array_function, allocation_site);
+#endif
   }
 }
 

@@ -28,9 +28,17 @@ class InvokeIntrinsicHelper {
   template <class... A>
   Handle<Object> Invoke(A... args) {
     CHECK(IntrinsicsHelper::IsSupported(function_id_));
-    BytecodeArrayBuilder builder(zone_, sizeof...(args), 0, nullptr);
-    RegisterList reg_list = InterpreterTester::NewRegisterList(
-        builder.Receiver().index(), sizeof...(args));
+    int parameter_count = sizeof...(args) + 1;
+    BytecodeArrayBuilder builder(zone_, parameter_count, 0, nullptr);
+#ifdef V8_REVERSE_JSARGS
+    int first_param =
+        Register::FromParameterIndex(parameter_count - 1, parameter_count)
+            .index();
+#else
+    int first_param = Register::FromParameterIndex(1, parameter_count).index();
+#endif
+    RegisterList reg_list =
+        InterpreterTester::NewRegisterList(first_param, sizeof...(args));
     builder.CallRuntime(function_id_, reg_list).Return();
     InterpreterTester tester(isolate_, builder.ToBytecodeArray(isolate_));
     auto callable = tester.GetCallable<A...>();
@@ -126,6 +134,23 @@ TEST(Call) {
   InvokeIntrinsicHelper helper(isolate, handles.main_zone(),
                                Runtime::kInlineCall);
 
+#ifdef V8_REVERSE_JSARGS
+  // NOTE: Intrinsics and Runtime functions receiver arguments in the opposite
+  // of a JS function.
+  CHECK_EQ(Smi::FromInt(20),
+           *helper.Invoke(helper.NewObject("({ x: 20 })"),
+                          helper.NewObject("(function() { return this.x; })")));
+  CHECK_EQ(Smi::FromInt(50),
+           *helper.Invoke(
+               handle(Smi::FromInt(50), isolate), factory->undefined_value(),
+               helper.NewObject("(function(arg1) { return arg1; })")));
+  CHECK_EQ(
+      Smi::FromInt(20),
+      *helper.Invoke(
+          handle(Smi::FromInt(3), isolate), handle(Smi::FromInt(7), isolate),
+          handle(Smi::FromInt(10), isolate), factory->undefined_value(),
+          helper.NewObject("(function(a, b, c) { return a + b + c; })")));
+#else   // !V8_REVERSE_JSARGS
   CHECK_EQ(Smi::FromInt(20),
            *helper.Invoke(helper.NewObject("(function() { return this.x; })"),
                           helper.NewObject("({ x: 20 })")));
@@ -139,6 +164,7 @@ TEST(Call) {
           helper.NewObject("(function(a, b, c) { return a + b + c; })"),
           factory->undefined_value(), handle(Smi::FromInt(10), isolate),
           handle(Smi::FromInt(7), isolate), handle(Smi::FromInt(3), isolate)));
+#endif  // !V8_REVERSE_JSARGS
 }
 
 TEST(IntrinsicAsStubCall) {
@@ -148,6 +174,18 @@ TEST(IntrinsicAsStubCall) {
 
   InvokeIntrinsicHelper has_property_helper(isolate, handles.main_zone(),
                                             Runtime::kInlineHasProperty);
+#ifdef V8_REVERSE_JSARGS
+  // NOTE: Intrinsics and Runtime functions receiver arguments in the opposite
+  // of a JS function.
+  CHECK_EQ(*factory->true_value(),
+           *has_property_helper.Invoke(
+               has_property_helper.NewObject("'x'"),
+               has_property_helper.NewObject("({ x: 20 })")));
+  CHECK_EQ(*factory->false_value(),
+           *has_property_helper.Invoke(
+               has_property_helper.NewObject("'y'"),
+               has_property_helper.NewObject("({ x: 20 })")));
+#else   // !V8_REVERSE_JSARGS
   CHECK_EQ(
       *factory->true_value(),
       *has_property_helper.Invoke(has_property_helper.NewObject("({ x: 20 })"),
@@ -156,6 +194,7 @@ TEST(IntrinsicAsStubCall) {
       *factory->false_value(),
       *has_property_helper.Invoke(has_property_helper.NewObject("({ x: 20 })"),
                                   has_property_helper.NewObject("'y'")));
+#endif  // !V8_REVERSE_JSA
 }
 
 }  // namespace interpreter
