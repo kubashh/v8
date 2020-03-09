@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f40ba44_9eb998b3",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 4
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-03-09T16:05:24Z",
+      "side": 1,
+      "message": "Nit: In the future I prefer URLs to the bugs for easier copy/pasting",
+      "revId": "24ff355c0822938f6bbafd74f7c09df8c91cc112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
