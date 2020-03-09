@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d993b05_d550f485",
+        "filename": "src/builtins/builtins-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-09T15:50:08Z",
+      "side": 1,
+      "message": "I had issues with the commas and ## when running with V8_REVERSE_JSARGS.\n\nSince we plan to delete the code guarded when the macro is false later, I don\u0027t think the repetition is a huge problem.",
+      "range": {
+        "startLine": 29,
+        "startChar": 1,
+        "endLine": 58,
+        "endChar": 6
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
