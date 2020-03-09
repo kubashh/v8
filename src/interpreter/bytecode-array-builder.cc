@@ -1643,6 +1643,10 @@ void BytecodeArrayBuilder::EmitFunctionStartSourcePosition(int position) {
   // Force an expression position to make sure we have one. If the next bytecode
   // overwrites it, it’s fine since it would mean we have a source position
   // anyway.
+  ForceExpressionPosition(position);
+}
+
+void BytecodeArrayBuilder::ForceExpressionPosition(int position) {
   latest_source_info_.ForceExpressionPosition(position);
 }
 

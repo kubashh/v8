@@ -1860,7 +1860,10 @@ void BytecodeGenerator::VisitIterationBody(IterationStatement* stmt,
                                            LoopBuilder* loop_builder) {
   loop_builder->LoopBody();
   ControlScopeForIteration execution_control(this, stmt, loop_builder);
-  builder()->StackCheck(stmt->position());
+  // TODO(solanes): Assess if we need to force an expression position here.
+  if (stmt->position() != kNoSourcePosition) {
+    builder()->ForceExpressionPosition(stmt->position());
+  }
   Visit(stmt->body());
   loop_builder->BindContinueTarget();
 }
