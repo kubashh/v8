@@ -22,6 +22,30 @@
       "revId": "3cf472ab0a3f000bccad774ab236b7015da65060",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff0708ac_dacadcdc",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1400694
+      },
+      "writtenOn": "2020-03-09T14:00:06Z",
+      "side": 1,
+      "message": "Yes. It\u0027s based on comparing type IDs that are assigned to specific types based on the order in which the types themselves are created. I\u0027m not sure this yields the same type ids \u003c-\u003e Type mapping between torque runs.",
+      "parentUuid": "dce6efb9_d7725ac0",
+      "range": {
+        "startLine": 3896,
+        "startChar": 32,
+        "endLine": 3896,
+        "endChar": 44
+      },
+      "revId": "3cf472ab0a3f000bccad774ab236b7015da65060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
