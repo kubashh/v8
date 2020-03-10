@@ -2322,11 +2322,48 @@ class LiftoffCompiler {
     }
   }
 
+  template <ValueType src_type, ValueType result_type, typename EmitFn>
+  void EmitSimdExtractLaneOp(EmitFn fn,
+                             const SimdLaneImmediate<validate>& imm) {
+    static constexpr RegClass src_rc = reg_class_for(src_type);
+    static constexpr RegClass result_rc = reg_class_for(result_type);
+    LiftoffRegister lhs = __ PopToRegister();
+    LiftoffRegister dst = src_rc == result_rc
+                              ? __ GetUnusedRegister(result_rc, {lhs})
+                              : __ GetUnusedRegister(result_rc);
+    fn(dst, lhs, imm.lane);
+    __ PushRegister(result_type, dst);
+  }
+
   void SimdLaneOp(FullDecoder* decoder, WasmOpcode opcode,
                   const SimdLaneImmediate<validate>& imm,
                   const Vector<Value> inputs, Value* result) {
-    unsupported(decoder, kSimd, "simd");
+#define CASE_SIMD_EXTRACT_LANE_OP(opcode, type, fn)                           \
+  case wasm::kExpr##opcode:                                                   \
+    EmitSimdExtractLaneOp<kWasmS128, kWasm##type>(                            \
+        [=](LiftoffRegister dst, LiftoffRegister lhs, uint8_t imm_lane_idx) { \
+          __ emit_##fn(dst, lhs, imm_lane_idx);                               \
+        },                                                                    \
+        imm);                                                                 \
+    break;
+    if (!CpuFeatures::SupportsWasmSimd128()) {
+      return unsupported(decoder, kSimd, "simd");
+    }
+    switch (opcode) {
+      CASE_SIMD_EXTRACT_LANE_OP(F64x2ExtractLane, F64, f64x2_extract_lane)
+      CASE_SIMD_EXTRACT_LANE_OP(F32x4ExtractLane, F32, f32x4_extract_lane)
+      CASE_SIMD_EXTRACT_LANE_OP(I64x2ExtractLane, I64, i64x2_extract_lane)
+      CASE_SIMD_EXTRACT_LANE_OP(I32x4ExtractLane, I32, i32x4_extract_lane)
+      CASE_SIMD_EXTRACT_LANE_OP(I16x8ExtractLaneU, I32, i16x8_extract_lane_u)
+      CASE_SIMD_EXTRACT_LANE_OP(I16x8ExtractLaneS, I32, i16x8_extract_lane_s)
+      CASE_SIMD_EXTRACT_LANE_OP(I8x16ExtractLaneU, I32, i8x16_extract_lane_u)
+      CASE_SIMD_EXTRACT_LANE_OP(I8x16ExtractLaneS, I32, i8x16_extract_lane_s)
+      default:
+        unsupported(decoder, kSimd, "simd");
+    }
+#undef CASE_SIMD_EXTRACT_LANE_OP
   }
+
   void Simd8x16ShuffleOp(FullDecoder* decoder,
                          const Simd8x16ShuffleImmediate<validate>& imm,
                          const Value& input0, const Value& input1,
