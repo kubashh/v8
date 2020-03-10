@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fed66bcc_11704202",
+        "filename": "src/parsing/parse-info.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-10T10:37:37Z",
+      "side": 1,
+      "message": "I\u0027m not sure about the name, this sounds like we are setting flags on the script. How about SetFlagsForFunctionFromScript (to match top-level above).",
+      "revId": "85666b63cdad087597682125d8761b6b4ef4aae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
