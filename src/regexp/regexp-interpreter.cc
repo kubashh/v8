@@ -1029,38 +1029,5 @@ IrregexpInterpreter::Result IrregexpInterpreter::MatchInternal(
   }
 }
 
-// This method is called through an external reference from RegExpExecInternal
-// builtin.
-IrregexpInterpreter::Result IrregexpInterpreter::MatchForCallFromJs(
-    Address subject, int32_t start_position, Address, Address, int* registers,
-    int32_t registers_length, Address, RegExp::CallOrigin call_origin,
-    Isolate* isolate, Address regexp) {
-  DCHECK_NOT_NULL(isolate);
-  DCHECK_NOT_NULL(registers);
-  DCHECK(call_origin == RegExp::CallOrigin::kFromJs);
-
-  DisallowHeapAllocation no_gc;
-  DisallowJavascriptExecution no_js(isolate);
-
-  String subject_string = String::cast(Object(subject));
-  JSRegExp regexp_obj = JSRegExp::cast(Object(regexp));
-
-  if (regexp_obj.MarkedForTierUp()) {
-    // Returning RETRY will re-enter through runtime, where actual recompilation
-    // for tier-up takes place.
-    return IrregexpInterpreter::RETRY;
-  }
-
-  return Match(isolate, regexp_obj, subject_string, registers, registers_length,
-               start_position, call_origin);
-}
-
-IrregexpInterpreter::Result IrregexpInterpreter::MatchForCallFromRuntime(
-    Isolate* isolate, Handle<JSRegExp> regexp, Handle<String> subject_string,
-    int* registers, int registers_length, int start_position) {
-  return Match(isolate, *regexp, *subject_string, registers, registers_length,
-               start_position, RegExp::CallOrigin::kFromRuntime);
-}
-
 }  // namespace internal
 }  // namespace v8
