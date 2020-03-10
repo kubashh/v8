@@ -34,6 +34,70 @@
       "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d04a8919_857a0e1f",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 0,
+      "message": "I think it makes sense to keep testing builder.Receiver() as well. But in order to fix the test we need to ensure the receiver argument is properly passed through InterpreterCallable-\u003eCallInterpreter machinery.\n\nI\u0027d suggest to add an explicit receiver parameter to InterpreterCallable::operator() and to CallInterpreter() function instead of passing undefined receiver. This should fix all the tests with minimal changes.",
+      "parentUuid": "a286e9a9_56acd704",
+      "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "431a52fc_dc4fa932",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 0,
+      "message": "Suggestion: \"SUB\" in order to make the test sensitive to the arguments order.",
+      "range": {
+        "startLine": 602,
+        "startChar": 37,
+        "endLine": 602,
+        "endChar": 40
+      },
+      "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44387b97_5da258a9",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 0,
+      "message": "If you follow the suggestion above then \"22\".",
+      "range": {
+        "startLine": 624,
+        "startChar": 48,
+        "endLine": 624,
+        "endChar": 50
+      },
+      "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

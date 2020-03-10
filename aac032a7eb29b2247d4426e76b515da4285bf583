@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "d943afc9_53d88804",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1880,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 1,
+      "message": "You can use REVERSE_XXX to improve readability and please add a comment why you are reversing the arguments you are reversing.",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d993b05_d550f485",
         "filename": "src/builtins/builtins-descriptors.h",
         "patchSetId": 1
@@ -22,6 +39,179 @@
       "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "632dc691_239687bd",
+        "filename": "src/builtins/builtins-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d993b05_d550f485",
+      "range": {
+        "startLine": 29,
+        "startChar": 1,
+        "endLine": 58,
+        "endChar": 6
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c498d0f8_9e823a7a",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 12551,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 1,
+      "message": "While you are here, this UncheckedCast is not necessary.",
+      "range": {
+        "startLine": 12551,
+        "startChar": 9,
+        "endLine": 12551,
+        "endChar": 43
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98d2172c_c72afa00",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 13106,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 1,
+      "message": "REVERSE_XXX and please add a comment why you are reversing the arguments you are reversing.",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdd508a9_eb596f5a",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 1,
+      "message": "Again, just REVERSE_2() of these guys.\n\nHmm. I really wonder what does kFunctionParameter actually mean? kReceiver?\n\nWhile you are here, please rename kArraySizeSmiParameter to kArraySizeParameter.",
+      "range": {
+        "startLine": 1073,
+        "startChar": 20,
+        "endLine": 1073,
+        "endChar": 62
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faec210c_d78e8c46",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 1,
+      "message": "// REVERSE_2(kFunctionParameter,\n\nor just\n// JS arguments on the stack\n// ...",
+      "range": {
+        "startLine": 1077,
+        "startChar": 55,
+        "endLine": 1077,
+        "endChar": 73
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae001543_a3fdce62",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 1,
+      "message": "// kArraySizeSmiParameter)",
+      "range": {
+        "startLine": 1078,
+        "startChar": 55,
+        "endLine": 1078,
+        "endChar": 77
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dc71045_7e6ebe9a",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 1,
+      "message": "You can use REVERSE_XXX() here.",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f531cfb2_10c94763",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 1,
+      "message": "I guess it\u0027s the same \"receiver is undefined\" issue as in the tests above?\nConsider adding an explicit \"receiver\" argument to the Invoke method.",
+      "range": {
+        "startLine": 31,
+        "startChar": 41,
+        "endLine": 31,
+        "endChar": 45
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -54,6 +244,41 @@
       "side": 1,
       "message": "I agree it is a bit hacky. I will try your approach.",
       "parentUuid": "1456f6b3_4951d294",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ad0d5c2_ce4b527e",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 1,
+      "message": "+1 to Ross\u0027s suggestion.",
+      "parentUuid": "96b70c30_443dae68",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b66e83cf_503c24dc",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-10T18:50:04Z",
+      "side": 1,
+      "message": "How about using REVERSE_XXX() macros here and below to minimize changes in tests?",
       "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
