@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ec7f5d46_b6323e92",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-10T11:53:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "26617a06_fea4dd30",
+      "range": {
+        "startLine": 1008,
+        "startChar": 26,
+        "endLine": 1008,
+        "endChar": 27
+      },
+      "revId": "b279d3debfd6837cb9a2da24292b8d3d416ee5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90260d2b_4d74f91a",
         "filename": "src/compiler/code-assembler.cc",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b842282d_eca57274",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-10T11:53:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "90260d2b_4d74f91a",
+      "range": {
+        "startLine": 1033,
+        "startChar": 26,
+        "endLine": 1033,
+        "endChar": 27
+      },
+      "revId": "b279d3debfd6837cb9a2da24292b8d3d416ee5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "17d9a7f6_21204a12",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 1
@@ -59,6 +107,24 @@
       "writtenOn": "2020-03-10T11:26:16Z",
       "side": 1,
       "message": "Why do we need three versions of each?",
+      "revId": "b279d3debfd6837cb9a2da24292b8d3d416ee5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4043411_8243b4d4",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-10T11:53:46Z",
+      "side": 1,
+      "message": "I don\u0027t! I was just following the same approach as in CallStub with CallStubR and CallStubRImpl.\n\nI can simplify this if it is better!\nWhat do you think?",
+      "parentUuid": "17d9a7f6_21204a12",
       "revId": "b279d3debfd6837cb9a2da24292b8d3d416ee5dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
