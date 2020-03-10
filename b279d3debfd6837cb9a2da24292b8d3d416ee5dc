@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26617a06_fea4dd30",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-10T11:26:16Z",
+      "side": 1,
+      "message": "4",
+      "range": {
+        "startLine": 1008,
+        "startChar": 26,
+        "endLine": 1008,
+        "endChar": 27
+      },
+      "revId": "b279d3debfd6837cb9a2da24292b8d3d416ee5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90260d2b_4d74f91a",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-10T11:26:16Z",
+      "side": 1,
+      "message": "5",
+      "range": {
+        "startLine": 1033,
+        "startChar": 26,
+        "endLine": 1033,
+        "endChar": 27
+      },
+      "revId": "b279d3debfd6837cb9a2da24292b8d3d416ee5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17d9a7f6_21204a12",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-10T11:26:16Z",
+      "side": 1,
+      "message": "Why do we need three versions of each?",
+      "revId": "b279d3debfd6837cb9a2da24292b8d3d416ee5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
