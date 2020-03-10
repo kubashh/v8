@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "774e1be9_b7bb186b",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-10T13:09:43Z",
+      "side": 1,
+      "message": "Since they are almost identical, how about having only one and passing nullptr as new_target for normal calls?",
+      "revId": "1d0a9a2d4730554806219d860c4740786e178822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
