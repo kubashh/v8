@@ -39,6 +39,24 @@
       "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96b70c30_443dae68",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-10T13:53:08Z",
+      "side": 1,
+      "message": "I agree it is a bit hacky. I will try your approach.",
+      "parentUuid": "1456f6b3_4951d294",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
