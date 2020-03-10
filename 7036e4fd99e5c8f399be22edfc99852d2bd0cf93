@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7b77144_f0d7accb",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-10T11:00:35Z",
+      "side": 1,
+      "message": "Consider ZoneDeque which uses the RecyclingZoneAllocator (otherwise each grow/shrink will allocate a fresh region).",
+      "revId": "7036e4fd99e5c8f399be22edfc99852d2bd0cf93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
