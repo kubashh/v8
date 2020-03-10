@@ -22,6 +22,30 @@
       "revId": "8c8bd658c6f3a765a73ac49e57b7b138a67db635",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0af969fe_f94f8128",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-10T08:27:04Z",
+      "side": 1,
+      "message": "+1 nice catch, that was the entire point of the _Inline variants (an inline fast path together with a builtin call for the generic case).",
+      "parentUuid": "1f5b22aa_483598cd",
+      "range": {
+        "startLine": 474,
+        "startChar": 13,
+        "endLine": 474,
+        "endChar": 26
+      },
+      "revId": "8c8bd658c6f3a765a73ac49e57b7b138a67db635",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
