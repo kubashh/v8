@@ -142,6 +142,8 @@ class DebugInfo {
 
   Handle<JSObject> GetLocalScopeObject(Isolate*, Address pc, Address fp);
 
+  Handle<JSObject> GetStackScopeObject(Isolate*, Address pc, Address fp);
+
   WireBytesRef GetLocalName(int func_index, int local_index);
 
   void SetBreakpoint(int func_index, int offset, Isolate* current_isolate);

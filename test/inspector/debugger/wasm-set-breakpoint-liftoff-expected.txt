@@ -10,11 +10,13 @@ at wasm_A (0:38):
  - scope (global):
  - scope (local):
    stack: 
+ - scope (stack):
 at wasm_B (0:56):
  - scope (global):
  - scope (local):
    locals: "$var0": 3 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Setting breakpoint at offset 39 on script v8://test/runWasm
@@ -31,11 +33,13 @@ at wasm_A (0:39):
  - scope (global):
  - scope (local):
    stack: 
+ - scope (stack):
 at wasm_B (0:56):
  - scope (global):
  - scope (local):
    locals: "$var0": 3 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -46,6 +50,7 @@ at wasm_B (0:45):
  - scope (local):
    locals: "$var0": 3 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -56,6 +61,8 @@ at wasm_B (0:47):
  - scope (local):
    locals: "$var0": 3 (number)
    stack: "0": -11 (number)
+ - scope (stack):
+   0: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -66,6 +73,7 @@ at wasm_B (0:49):
  - scope (local):
    locals: "$var0": 3 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -76,6 +84,8 @@ at wasm_B (0:51):
  - scope (local):
    locals: "$var0": 3 (number)
    stack: "0": -11 (number)
+ - scope (stack):
+   0: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -86,6 +96,9 @@ at wasm_B (0:53):
  - scope (local):
    locals: "$var0": 3 (number)
    stack: "0": -11 (number), "1": 1 (number)
+ - scope (stack):
+   0: 1 (number)
+   1: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -96,6 +109,8 @@ at wasm_B (0:54):
  - scope (local):
    locals: "$var0": 3 (number)
    stack: "0": -11 (number)
+ - scope (stack):
+   0: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -105,11 +120,13 @@ at wasm_A (0:38):
  - scope (global):
  - scope (local):
    stack: 
+ - scope (stack):
 at wasm_B (0:56):
  - scope (global):
  - scope (local):
    locals: "$var0": 2 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -119,11 +136,13 @@ at wasm_A (0:39):
  - scope (global):
  - scope (local):
    stack: 
+ - scope (stack):
 at wasm_B (0:56):
  - scope (global):
  - scope (local):
    locals: "$var0": 2 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -134,6 +153,7 @@ at wasm_B (0:45):
  - scope (local):
    locals: "$var0": 2 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -144,6 +164,8 @@ at wasm_B (0:47):
  - scope (local):
    locals: "$var0": 2 (number)
    stack: "0": -11 (number)
+ - scope (stack):
+   0: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -154,6 +176,7 @@ at wasm_B (0:49):
  - scope (local):
    locals: "$var0": 2 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -164,6 +187,8 @@ at wasm_B (0:51):
  - scope (local):
    locals: "$var0": 2 (number)
    stack: "0": -11 (number)
+ - scope (stack):
+   0: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -174,6 +199,9 @@ at wasm_B (0:53):
  - scope (local):
    locals: "$var0": 2 (number)
    stack: "0": -11 (number), "1": 1 (number)
+ - scope (stack):
+   0: 1 (number)
+   1: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -184,6 +212,8 @@ at wasm_B (0:54):
  - scope (local):
    locals: "$var0": 2 (number)
    stack: "0": -11 (number)
+ - scope (stack):
+   0: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -193,11 +223,13 @@ at wasm_A (0:38):
  - scope (global):
  - scope (local):
    stack: 
+ - scope (stack):
 at wasm_B (0:56):
  - scope (global):
  - scope (local):
    locals: "$var0": 1 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -207,11 +239,13 @@ at wasm_A (0:39):
  - scope (global):
  - scope (local):
    stack: 
+ - scope (stack):
 at wasm_B (0:56):
  - scope (global):
  - scope (local):
    locals: "$var0": 1 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -222,6 +256,7 @@ at wasm_B (0:45):
  - scope (local):
    locals: "$var0": 1 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -232,6 +267,8 @@ at wasm_B (0:47):
  - scope (local):
    locals: "$var0": 1 (number)
    stack: "0": -11 (number)
+ - scope (stack):
+   0: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -242,6 +279,7 @@ at wasm_B (0:49):
  - scope (local):
    locals: "$var0": 1 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -252,6 +290,8 @@ at wasm_B (0:51):
  - scope (local):
    locals: "$var0": 1 (number)
    stack: "0": -11 (number)
+ - scope (stack):
+   0: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -262,6 +302,9 @@ at wasm_B (0:53):
  - scope (local):
    locals: "$var0": 1 (number)
    stack: "0": -11 (number), "1": 1 (number)
+ - scope (stack):
+   0: 1 (number)
+   1: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -272,6 +315,8 @@ at wasm_B (0:54):
  - scope (local):
    locals: "$var0": 1 (number)
    stack: "0": -11 (number)
+ - scope (stack):
+   0: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -281,11 +326,13 @@ at wasm_A (0:38):
  - scope (global):
  - scope (local):
    stack: 
+ - scope (stack):
 at wasm_B (0:56):
  - scope (global):
  - scope (local):
    locals: "$var0": 0 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -295,11 +342,13 @@ at wasm_A (0:39):
  - scope (global):
  - scope (local):
    stack: 
+ - scope (stack):
 at wasm_B (0:56):
  - scope (global):
  - scope (local):
    locals: "$var0": 0 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -310,6 +359,7 @@ at wasm_B (0:45):
  - scope (local):
    locals: "$var0": 0 (number)
    stack: 
+ - scope (stack):
 at (anonymous) (0:17):
    -- skipped
 Paused:
@@ -320,6 +370,8 @@ at wasm_B (0:47):
  - scope (local):
    locals: "$var0": 0 (number)
    stack: "0": -11 (number)
+ - scope (stack):
+   0: -11 (number)
 at (anonymous) (0:17):
    -- skipped
 exports.main returned!
