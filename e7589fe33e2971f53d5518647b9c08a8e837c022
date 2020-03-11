@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8752f25_0f4b9de0",
+        "filename": "src/regexp/regexp-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-11T06:21:23Z",
+      "side": 1,
+      "message": "Can some of these includes now be removed from the files these functions were taken from?",
+      "revId": "e7589fe33e2971f53d5518647b9c08a8e837c022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3188ff5f_f0c85528",
+        "filename": "src/regexp/regexp-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-11T06:21:23Z",
+      "side": 1,
+      "message": "Please clarify what the conditions are for functions to be in this file. For example, how is IrregexpInterpreter::MatchForCallFromJs different to other things in regexp-interpreter.cc (other fns also use the Isolate and heap objects)? Also mention the motivation behind splitting them out.\n\nSince there\u0027s only 7 functions here, could we think about more natural refactors that do not put seemingly arbitrary functions into a separate file? For example, StringCharacterPosition could move into strc/objects/string.h.\n\nFor the NativeRegExpMacroAssembler methods, what would be necessary to keep them in regexp-macro-assembler.cc?",
+      "revId": "e7589fe33e2971f53d5518647b9c08a8e837c022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
