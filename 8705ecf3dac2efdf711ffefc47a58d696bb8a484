@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ad99005d_ac3d6ddd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2020-03-11T21:01:33Z",
+      "side": 1,
+      "message": "Thanks for reminding me, Clemens! And also thanks for the sources, will try to adhere to the guidelines in the future :).",
+      "parentUuid": "a4393b11_18072c64",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "8705ecf3dac2efdf711ffefc47a58d696bb8a484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72e6dba8_8ca33f0d",
         "filename": "test/inspector/debugger/wasm-scope-info.js",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "f666e04c_e7924d96",
+        "filename": "test/inspector/debugger/wasm-scope-info.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2020-03-11T21:01:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72e6dba8_8ca33f0d",
+      "range": {
+        "startLine": 153,
+        "startChar": 4,
+        "endLine": 153,
+        "endChar": 32
+      },
+      "revId": "8705ecf3dac2efdf711ffefc47a58d696bb8a484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d67f879_40dd73a7",
         "filename": "test/inspector/debugger/wasm-scope-info.js",
         "patchSetId": 6
@@ -59,6 +107,30 @@
       "writtenOn": "2020-03-11T14:34:38Z",
       "side": 1,
       "message": "Use a `` string: `\"${elem.name}\": ${elem.value.value} (${elem.value.type})`",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 63
+      },
+      "revId": "8705ecf3dac2efdf711ffefc47a58d696bb8a484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b11af0ca_cc526485",
+        "filename": "test/inspector/debugger/wasm-scope-info.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2020-03-11T21:01:33Z",
+      "side": 1,
+      "message": "Thanks for the comments, Eric! I\u0027ve changed it accordingly.",
+      "parentUuid": "0d67f879_40dd73a7",
       "range": {
         "startLine": 154,
         "startChar": 8,
