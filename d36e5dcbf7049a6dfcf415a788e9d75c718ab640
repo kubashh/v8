@@ -22,6 +22,30 @@
       "revId": "d36e5dcbf7049a6dfcf415a788e9d75c718ab640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78f533c3_c2babd91",
+        "filename": "src/compiler/operation-typer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-11T11:33:29Z",
+      "side": 1,
+      "message": "It can be the hole. Requiring NonInternal is the future-proof version of requiring it\u0027s not the hole.",
+      "parentUuid": "18b280b7_624a3201",
+      "range": {
+        "startLine": 1248,
+        "startChar": 10,
+        "endLine": 1248,
+        "endChar": 53
+      },
+      "revId": "d36e5dcbf7049a6dfcf415a788e9d75c718ab640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
