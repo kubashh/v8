@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "a4393b11_18072c64",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-11T14:46:32Z",
+      "side": 1,
+      "message": "Oh, a minor nit here: Try to use active tense in commit messages, i.e. \"Add stack scope...\".\nFor background, see http://go/chromium-commit-messages and especially the linked https://chris.beams.io/posts/git-commit/.",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "8705ecf3dac2efdf711ffefc47a58d696bb8a484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72e6dba8_8ca33f0d",
         "filename": "test/inspector/debugger/wasm-scope-info.js",
         "patchSetId": 6
