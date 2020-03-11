@@ -16,6 +16,24 @@
       "revId": "2089ff68359c0be83cd001d676f226abd1d1ca8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95dc9eb1_53559e0b",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-11T14:27:18Z",
+      "side": 1,
+      "message": "Alternatively I change Type::NewConstant to recognize the oddballs for which we have a bitset type and never create a HeapConstant type for them.",
+      "parentUuid": "22795ad8_f78e659a",
+      "revId": "2089ff68359c0be83cd001d676f226abd1d1ca8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
