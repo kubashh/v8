@@ -109,14 +109,18 @@ async function waitForPauseAndStep(stepAction) {
         InspectorTest.logObject('   -- skipped');
       } else {
         const {result: {result: {value}}} =
-          await Protocol.Runtime.callFunctionOn({
-            objectId: scope.object.objectId,
-            functionDeclaration: 'function() { return this; }',
-            returnByValue: true
-          });
-        if (value.locals)
+              await Protocol.Runtime.callFunctionOn({
+                objectId: scope.object.objectId,
+                functionDeclaration: 'function() { return this; }',
+                returnByValue: true
+              });
+        if (scope.type === 'local') {
+          if (value.locals)
           InspectorTest.log(`   locals: ${JSON.stringify(value.locals)}`);
-        InspectorTest.log(`   stack: ${JSON.stringify(value.stack)}`);
+          InspectorTest.log(`   stack: ${JSON.stringify(value.stack)}`);
+        } else {
+          InspectorTest.log(`   ${JSON.stringify(value)}`);
+        }
       }
     }
   }
