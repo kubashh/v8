@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba459ced_d6dc1647",
+        "filename": "src/regexp/regexp-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1399096
+      },
+      "writtenOn": "2020-03-11T20:56:29Z",
+      "side": 1,
+      "message": "Good idea. I will prune header files once we\u0027ve finalized what\u0027s moving where.",
+      "parentUuid": "c8752f25_0f4b9de0",
+      "revId": "e7589fe33e2971f53d5518647b9c08a8e837c022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3188ff5f_f0c85528",
         "filename": "src/regexp/regexp-interface.cc",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-03-11T06:21:23Z",
       "side": 1,
       "message": "Please clarify what the conditions are for functions to be in this file. For example, how is IrregexpInterpreter::MatchForCallFromJs different to other things in regexp-interpreter.cc (other fns also use the Isolate and heap objects)? Also mention the motivation behind splitting them out.\n\nSince there\u0027s only 7 functions here, could we think about more natural refactors that do not put seemingly arbitrary functions into a separate file? For example, StringCharacterPosition could move into strc/objects/string.h.\n\nFor the NativeRegExpMacroAssembler methods, what would be necessary to keep them in regexp-macro-assembler.cc?",
+      "revId": "e7589fe33e2971f53d5518647b9c08a8e837c022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3df958eb_a4fed83f",
+        "filename": "src/regexp/regexp-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1399096
+      },
+      "writtenOn": "2020-03-11T20:56:29Z",
+      "side": 1,
+      "message": "From the point of view of SpiderMonkey, the conditions for functions to be in this file are that they aren\u0027t usable by SM, but they\u0027re not called from inside irregexp, so it\u0027s possible to just omit them instead of rewriting them. If irregexp were a separate project being embedded by V8, I think these functions would be on the V8 side of the line, not the irregexp side.\n\nFrom the point of view of V8, that\u0027s a very fuzzy line. To get more concrete:\n\n1. The string code in StringCharacterPosition and NativeRegExpMacroAssembler::Match is tightly entangled with V8\u0027s string representation. The parallels between V8\u0027s strings and SM\u0027s strings are surprisingly close, but not so close to make me want to try to share this code. Moving this code into string.h would be a reasonable alternative.\n\n2. SpiderMonkey has two separate mechanisms for calling into C++ code from jitcode: a fast call for callees that can\u0027t GC (callWithABI), and a slower call that must ensure everything is properly rooted (callVM). This is enforced with an RAII object at each callWithABI entrypoint, which means that SM can\u0027t callWithABI any V8 code directly. This makes MatchForCallFromJS, GrowStack, and CheckStackGuardState dead code for SM. (GrowStack can be left in as dead code without causing any additional issues, though.)\n\n3. SpiderMonkey\u0027s Values (roughly equivalent to V8\u0027s Objects) are stored as NaN-boxed doubles. This means that they are always 8 bytes, even on 32-bit, which makes it very difficult to safely convert them to Address and back. Unfortunately this seems to be the V8 idiom for function signatures called with GeneratedCode. This is relevant in MatchForCallFromJs and CheckStackGuardState. Leaving those functions present as dead code would involve adding a few conversion functions between Object and Address. They could be safely be marked as unreachable, so that\u0027s not too bad.\n\n4. SM\u0027s macroassembler is architecture-independent, which is mostly nice for keeping down the amount of code we have to write, but makes calling conventions awkward. It\u0027s a lot easier to write my own function than try to make the use of GeneratedCode in NativeRegExpMacroAssembler::Execute work. So Execute is, practically speaking, dead code. The amount of template code necessary to get GeneratedCode to *compile* is pretty small, though.\n\n5. SM\u0027s interrupts can run JS. V8 has a scary-looking system of rewriting the handles after the fact to make everything work out. I\u0027m not confident that SM and V8 have sufficiently identical GC invariants to be sure that everything would also work out for us, so instead of using any of that code I\u0027ve written StackGuard::HandleInterrupts to always return false so that we unwind the stack and can handle interrupts from a less tenuous position. So even if I *could* use CheckStackGuardState, it\u0027s nicer to write my own simpler version. Again, though, I can leave CheckStackGuardState as dead code with minimal shim additions.\n\ntl;dr: The minimum reasonable change to get SM to compile is to move the string code elsewhere. Everything else can theoretically be left as dead code, with any necessary shims marked as unreachable.\n\nAnother alternative would be to move some of these functions to regexp.cc.",
+      "parentUuid": "3188ff5f_f0c85528",
       "revId": "e7589fe33e2971f53d5518647b9c08a8e837c022",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
