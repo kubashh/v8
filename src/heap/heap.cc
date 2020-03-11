@@ -40,6 +40,7 @@
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/heap/incremental-marking-inl.h"
 #include "src/heap/incremental-marking.h"
+#include "src/heap/local-heap.h"
 #include "src/heap/mark-compact-inl.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/memory-measurement.h"
@@ -3868,6 +3869,23 @@ void Heap::RemoveNearHeapLimitCallback(v8::NearHeapLimitCallback callback,
 void Heap::AppendArrayBufferExtension(JSArrayBuffer object,
                                       ArrayBufferExtension* extension) {
   array_buffer_sweeper_->Append(object, extension);
+}
+
+void Heap::AddLocalHeap(LocalHeap* local_heap) {
+  base::MutexGuard guard(&local_heaps_mutex_);
+  if (local_heaps_head_) local_heaps_head_->prev_ = local_heap;
+  local_heap->prev_ = nullptr;
+  local_heap->next_ = local_heaps_head_;
+  local_heaps_head_ = local_heap;
+}
+
+void Heap::RemoveLocalHeap(LocalHeap* local_heap) {
+  base::MutexGuard guard(&local_heaps_mutex_);
+  if (local_heap->next_) local_heap->next_->prev_ = local_heap->prev_;
+  if (local_heap->prev_)
+    local_heap->prev_->next_ = local_heap->next_;
+  else
+    local_heaps_head_ = local_heap->next_;
 }
 
 void Heap::AutomaticallyRestoreInitialHeapLimit(double threshold_percent) {
