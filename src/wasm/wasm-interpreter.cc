@@ -43,7 +43,7 @@ using base::WriteUnalignedValue;
     if (FLAG_trace_wasm_interpreter) PrintF(__VA_ARGS__); \
   } while (false)
 
-#if V8_TARGET_BIG_ENDIAN
+#if V8_HOST_BIG_ENDIAN
 #define LANE(i, type) ((sizeof(type.val) / sizeof(type.val[0])) - (i)-1)
 #else
 #define LANE(i, type) (i)
@@ -1981,7 +1981,7 @@ class ThreadImpl {
 
   template <typename type>
   type AdjustByteOrder(type param) {
-#if V8_TARGET_BIG_ENDIAN
+#if V8_HOST_BIG_ENDIAN
     return ByteReverse(param);
 #else
     return param;
@@ -1990,7 +1990,7 @@ class ThreadImpl {
 
   bool ExecuteAtomicOp(WasmOpcode opcode, Decoder* decoder,
                        InterpreterCode* code, pc_t pc, int* const len) {
-#if V8_TARGET_BIG_ENDIAN
+#if V8_HOST_BIG_ENDIAN
     constexpr bool kBigEndian = true;
 #else
     constexpr bool kBigEndian = false;

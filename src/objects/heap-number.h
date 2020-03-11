@@ -36,7 +36,7 @@ class HeapNumber : public PrimitiveHeapObject {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
   static const int kMantissaOffset = kValueOffset;
   static const int kExponentOffset = kValueOffset + 4;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
   static const int kMantissaOffset = kValueOffset + 4;
   static const int kExponentOffset = kValueOffset;
 #else

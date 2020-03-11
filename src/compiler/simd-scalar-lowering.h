@@ -41,7 +41,7 @@ class SimdScalarLowering {
     kInt8x16
   };
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
   static constexpr int kLaneOffsets[16] = {15, 14, 13, 12, 11, 10, 9, 8,
                                            7,  6,  5,  4,  3,  2,  1, 0};
 #else

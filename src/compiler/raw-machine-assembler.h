@@ -228,7 +228,7 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
     return AddNode(machine()->Word32AtomicLoad(type), base, index);
   }
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
 #define VALUE_HALVES value_high, value
 #else
 #define VALUE_HALVES value, value_high

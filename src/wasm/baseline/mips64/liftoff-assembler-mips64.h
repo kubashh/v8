@@ -109,7 +109,7 @@ inline void push(LiftoffAssembler* assm, LiftoffRegister reg, ValueType type) {
   }
 }
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
 inline void ChangeEndiannessLoad(LiftoffAssembler* assm, LiftoffRegister dst,
                                  LoadType type, LiftoffRegList pinned) {
   bool is_float = false;
@@ -218,7 +218,7 @@ inline void ChangeEndiannessStore(LiftoffAssembler* assm, LiftoffRegister src,
     }
   }
 }
-#endif  // V8_TARGET_BIG_ENDIAN
+#endif  // V8_HOST_BIG_ENDIAN
 
 }  // namespace liftoff
 
@@ -378,7 +378,7 @@ void LiftoffAssembler::Load(LiftoffRegister dst, Register src_addr,
       UNREACHABLE();
   }
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
   if (is_load_mem) {
     pinned.set(src_op.rm());
     liftoff::ChangeEndiannessLoad(this, dst, type, pinned);
@@ -401,7 +401,7 @@ void LiftoffAssembler::Store(Register dst_addr, Register offset_reg,
     dst_op = MemOperand(dst, offset_imm);
   }
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
   if (is_store_mem) {
     pinned.set(dst_op.rm());
     LiftoffRegister tmp = GetUnusedRegister(src.reg_class(), pinned);

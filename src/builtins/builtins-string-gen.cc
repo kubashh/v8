@@ -2010,7 +2010,7 @@ TNode<Int32T> StringBuiltinsAssembler::LoadSurrogatePairAt(
       case UnicodeEncoding::UTF16:
         var_result = Word32Or(
 // Need to swap the order for big-endian platforms
-#if V8_TARGET_BIG_ENDIAN
+#if V8_HOST_BIG_ENDIAN
             Word32Shl(lead, Int32Constant(16)), trail);
 #else
             Word32Shl(trail, Int32Constant(16)), lead);

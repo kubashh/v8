@@ -43,7 +43,7 @@ inline unsigned int FastD2UI(double x) {
   if (x < k2Pow52) {
     x += k2Pow52;
     uint32_t result;
-#ifndef V8_TARGET_BIG_ENDIAN
+#ifndef V8_HOST_BIG_ENDIAN
     void* mantissa_ptr = reinterpret_cast<void*>(&x);
 #else
     void* mantissa_ptr =

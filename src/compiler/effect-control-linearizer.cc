@@ -4148,7 +4148,7 @@ Node* EffectControlLinearizer::LowerStringFromSingleCodePoint(Node* node) {
                               __ Int32Constant(0xDC00));
 
     // codpoint = (trail << 16) | lead;
-#if V8_TARGET_BIG_ENDIAN
+#if V8_HOST_BIG_ENDIAN
     code = __ Word32Or(__ Word32Shl(lead, __ Int32Constant(16)), trail);
 #else
     code = __ Word32Or(__ Word32Shl(trail, __ Int32Constant(16)), lead);

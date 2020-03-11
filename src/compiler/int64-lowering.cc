@@ -154,7 +154,7 @@ void Int64Lowering::GetIndexNodes(Node* index, Node** index_low,
   *index_low = index;
   *index_high = graph()->NewNode(machine()->Int32Add(), index,
                                  graph()->NewNode(common()->Int32Constant(4)));
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
   *index_low = graph()->NewNode(machine()->Int32Add(), index,
                                 graph()->NewNode(common()->Int32Constant(4)));
   *index_high = index;

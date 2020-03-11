@@ -160,7 +160,7 @@ TEST_F(Int64LoweringTest, Int64Constant) {
                     start()),                                                  \
           AllOf(CaptureEq(&high_word_load), high_word_load_matcher), start(),  \
           start()));
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
 #define LOAD_VERIFY(kLoad)                                                     \
   Matcher<Node*> high_word_load_matcher =                                      \
       Is##kLoad(MachineType::Int32(), IsInt32Constant(base),                   \
@@ -209,7 +209,7 @@ TEST_F(Int64LoweringTest, UnalignedInt64Load) {
                        IsInt32Constant(high_word_value(0)), start(), start()), \
                    start()),                                                   \
                start()));
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
 #define STORE_VERIFY(kStore, kRep)                                             \
   EXPECT_THAT(                                                                 \
       graph()->end()->InputAt(1),                                              \

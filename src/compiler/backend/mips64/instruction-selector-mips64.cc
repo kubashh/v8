@@ -220,7 +220,7 @@ struct ExtendingLoadMatcher {
       if (g.CanBeImmediate(offset, opcode_)) {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
         immediate_ = g.GetIntegerConstantValue(offset) + 4;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
         immediate_ = g.GetIntegerConstantValue(offset);
 #endif
         matches_ = g.CanBeImmediate(immediate_, kMips64Lw);

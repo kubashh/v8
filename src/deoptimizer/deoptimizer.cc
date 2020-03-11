@@ -2592,7 +2592,7 @@ uint64_t TranslatedState::GetUInt64Slot(Address fp, int slot_offset) {
 
 uint32_t TranslatedState::GetUInt32Slot(Address fp, int slot_offset) {
   Address address = fp + slot_offset;
-#if V8_TARGET_BIG_ENDIAN && V8_HOST_ARCH_64_BIT
+#if V8_HOST_BIG_ENDIAN && V8_HOST_ARCH_64_BIT
   return Memory<uint32_t>(address + kIntSize);
 #else
   return Memory<uint32_t>(address);

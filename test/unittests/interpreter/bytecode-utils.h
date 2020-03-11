@@ -18,7 +18,7 @@ namespace interpreter {
 #define U16(i) EXTRACT(i, 0), EXTRACT(i, 1)
 #define U32(i) EXTRACT(i, 0), EXTRACT(i, 1), EXTRACT(i, 2), EXTRACT(i, 3)
 
-#elif V8_TARGET_BIG_ENDIAN
+#elif V8_HOST_BIG_ENDIAN
 
 #define EXTRACT(x, n) static_cast<uint8_t>((x) >> (8 * n))
 

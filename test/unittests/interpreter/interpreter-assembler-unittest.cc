@@ -127,7 +127,7 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsUnsignedShortOperand(
 #if V8_TARGET_LITTLE_ENDIAN
     const int kStep = -1;
     const int kMsbOffset = 1;
-#elif V8_TARGET_BIG_ENDIAN
+#elif V8_HOST_BIG_ENDIAN
     const int kStep = 1;
     const int kMsbOffset = 0;
 #else
@@ -163,7 +163,7 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsSignedShortOperand(
 #if V8_TARGET_LITTLE_ENDIAN
     const int kStep = -1;
     const int kMsbOffset = 1;
-#elif V8_TARGET_BIG_ENDIAN
+#elif V8_HOST_BIG_ENDIAN
     const int kStep = 1;
     const int kMsbOffset = 0;
 #else
@@ -199,7 +199,7 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsUnsignedQuadOperand(
 #if V8_TARGET_LITTLE_ENDIAN
     const int kStep = -1;
     const int kMsbOffset = 3;
-#elif V8_TARGET_BIG_ENDIAN
+#elif V8_HOST_BIG_ENDIAN
     const int kStep = 1;
     const int kMsbOffset = 0;
 #else
@@ -240,7 +240,7 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::IsSignedQuadOperand(
 #if V8_TARGET_LITTLE_ENDIAN
     const int kStep = -1;
     int kMsbOffset = 3;
-#elif V8_TARGET_BIG_ENDIAN
+#elif V8_HOST_BIG_ENDIAN
     const int kStep = 1;
     int kMsbOffset = 0;
 #else

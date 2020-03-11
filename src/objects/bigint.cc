@@ -1991,7 +1991,7 @@ void BigInt::SerializeDigits(uint8_t* storage) {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
   int bytelength = length() * kDigitSize;
   memcpy(storage, digits, bytelength);
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
   digit_t* digit_storage = reinterpret_cast<digit_t*>(storage);
   const digit_t* digit = reinterpret_cast<const digit_t*>(digits);
   for (int i = 0; i < length(); i++) {
@@ -1999,7 +1999,7 @@ void BigInt::SerializeDigits(uint8_t* storage) {
     digit_storage++;
     digit++;
   }
-#endif  // V8_TARGET_BIG_ENDIAN
+#endif  // V8_HOST_BIG_ENDIAN
 }
 
 // The serialization format MUST NOT CHANGE without updating the format
@@ -2020,7 +2020,7 @@ MaybeHandle<BigInt> BigInt::FromSerializedDigits(
   void* padding_start =
       reinterpret_cast<void*>(reinterpret_cast<Address>(digits) + bytelength);
   memset(padding_start, 0, length * kDigitSize - bytelength);
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
   digit_t* digit = reinterpret_cast<digit_t*>(digits);
   const digit_t* digit_storage =
       reinterpret_cast<const digit_t*>(digits_storage.begin());
@@ -2041,7 +2041,7 @@ MaybeHandle<BigInt> BigInt::FromSerializedDigits(
       digit_storage_byte++;
     }
   }
-#endif  // V8_TARGET_BIG_ENDIAN
+#endif  // V8_HOST_BIG_ENDIAN
   return MutableBigInt::MakeImmutable(result);
 }
 

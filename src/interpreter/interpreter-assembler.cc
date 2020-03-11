@@ -417,7 +417,7 @@ TNode<Word32T> InterpreterAssembler::BytecodeOperandReadUnaligned(
 #if V8_TARGET_LITTLE_ENDIAN
   const int kStep = -1;
   int msb_offset = count - 1;
-#elif V8_TARGET_BIG_ENDIAN
+#elif V8_HOST_BIG_ENDIAN
   const int kStep = 1;
   int msb_offset = 0;
 #else

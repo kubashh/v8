@@ -35,7 +35,7 @@ namespace liftoff {
 //       |                    |   v
 //  -----+--------------------+  <-- stack ptr (sp)
 //
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
 constexpr int32_t kLowWordOffset = 4;
 constexpr int32_t kHighWordOffset = 0;
 #else
@@ -137,7 +137,7 @@ inline Register EnsureNoAlias(Assembler* assm, Register reg,
   return tmp;
 }
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
 inline void ChangeEndiannessLoad(LiftoffAssembler* assm, LiftoffRegister dst,
                                  LoadType type, LiftoffRegList pinned) {
   bool is_float = false;
@@ -260,7 +260,7 @@ inline void ChangeEndiannessStore(LiftoffAssembler* assm, LiftoffRegister src,
     }
   }
 }
-#endif  // V8_TARGET_BIG_ENDIAN
+#endif  // V8_HOST_BIG_ENDIAN
 
 }  // namespace liftoff
 
@@ -450,7 +450,7 @@ void LiftoffAssembler::Load(LiftoffRegister dst, Register src_addr,
       UNREACHABLE();
   }
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
   if (is_load_mem) {
     pinned.set(src_op.rm());
     liftoff::ChangeEndiannessLoad(this, dst, type, pinned);
@@ -473,7 +473,7 @@ void LiftoffAssembler::Store(Register dst_addr, Register offset_reg,
     dst_op = MemOperand(dst, offset_imm);
   }
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
   if (is_store_mem) {
     pinned = pinned | LiftoffRegList::ForRegs(dst_op.rm(), src);
     LiftoffRegister tmp = GetUnusedRegister(src.reg_class(), pinned);

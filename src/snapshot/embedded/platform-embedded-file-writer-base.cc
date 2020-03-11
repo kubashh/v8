@@ -45,13 +45,13 @@ int PlatformEmbeddedFileWriterBase::WriteByteChunk(const uint8_t* data) {
 
   uint64_t part1, part2;
   // Use memcpy for the reads since {data} is not guaranteed to be aligned.
-#ifdef V8_TARGET_BIG_ENDIAN
+#ifdef V8_HOST_BIG_ENDIAN
   memcpy(&part1, data, kSize);
   memcpy(&part2, data + kSize, kSize);
 #else
   memcpy(&part1, data + kSize, kSize);
   memcpy(&part2, data, kSize);
-#endif  // V8_TARGET_BIG_ENDIAN
+#endif  // V8_HOST_BIG_ENDIAN
 
   if (part1 != 0) {
     return fprintf(fp(), "0x%" PRIx64 "%016" PRIx64, part1, part2);

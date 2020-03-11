@@ -168,27 +168,27 @@
 #define V8_TARGET_LITTLE_ENDIAN 1
 #elif V8_TARGET_ARCH_MIPS
 #if defined(__MIPSEB__)
-#define V8_TARGET_BIG_ENDIAN 1
+#define V8_HOST_BIG_ENDIAN 1
 #else
 #define V8_TARGET_LITTLE_ENDIAN 1
 #endif
 #elif V8_TARGET_ARCH_MIPS64
 #if defined(__MIPSEB__) || defined(V8_TARGET_ARCH_MIPS64_BE)
-#define V8_TARGET_BIG_ENDIAN 1
+#define V8_HOST_BIG_ENDIAN 1
 #else
 #define V8_TARGET_LITTLE_ENDIAN 1
 #endif
 #elif __BIG_ENDIAN__  // FOR PPCGR on AIX
-#define V8_TARGET_BIG_ENDIAN 1
+#define V8_HOST_BIG_ENDIAN 1
 #elif V8_TARGET_ARCH_PPC_LE
 #define V8_TARGET_LITTLE_ENDIAN 1
 #elif V8_TARGET_ARCH_PPC_BE
-#define V8_TARGET_BIG_ENDIAN 1
+#define V8_HOST_BIG_ENDIAN 1
 #elif V8_TARGET_ARCH_S390
 #if V8_TARGET_ARCH_S390_LE_SIM
 #define V8_TARGET_LITTLE_ENDIAN 1
 #else
-#define V8_TARGET_BIG_ENDIAN 1
+#define V8_HOST_BIG_ENDIAN 1
 #endif
 #else
 #error Unknown target architecture endianness

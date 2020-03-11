@@ -177,7 +177,7 @@ class Register : public RegisterBase<Register, kRegAfterLast> {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
   static constexpr int kMantissaOffset = 0;
   static constexpr int kExponentOffset = 4;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
   static constexpr int kMantissaOffset = 4;
   static constexpr int kExponentOffset = 0;
 #else

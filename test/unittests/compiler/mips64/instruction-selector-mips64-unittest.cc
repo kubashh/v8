@@ -1794,7 +1794,7 @@ TEST_F(InstructionSelectorTest, LoadAndShiftRight) {
       ASSERT_EQ(InstructionOperand::IMMEDIATE, s[0]->InputAt(1)->kind());
 #if defined(V8_TARGET_LITTLE_ENDIAN)
       EXPECT_EQ(index + 4, s.ToInt32(s[0]->InputAt(1)));
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
       EXPECT_EQ(index, s.ToInt32(s[0]->InputAt(1)));
 #endif
 

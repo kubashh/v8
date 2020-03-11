@@ -44,7 +44,7 @@ enum Endianness { kLittle, kBig };
 
 #if defined(V8_TARGET_LITTLE_ENDIAN)
 static const Endianness kArchEndian = kLittle;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
 static const Endianness kArchEndian = kBig;
 #else
 #error Unknown endianness
@@ -82,7 +82,7 @@ const bool IsMipsSoftFloatABI = true;
 #if defined(V8_TARGET_LITTLE_ENDIAN)
 const uint32_t kHoleNanUpper32Offset = 4;
 const uint32_t kHoleNanLower32Offset = 0;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
 const uint32_t kHoleNanUpper32Offset = 0;
 const uint32_t kHoleNanLower32Offset = 4;
 #else
@@ -105,7 +105,7 @@ const uint32_t kMipsLwrOffset = 0;
 const uint32_t kMipsLwlOffset = 3;
 const uint32_t kMipsSwrOffset = 0;
 const uint32_t kMipsSwlOffset = 3;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
 const uint32_t kMipsLwrOffset = 3;
 const uint32_t kMipsLwlOffset = 0;
 const uint32_t kMipsSwrOffset = 3;
@@ -116,7 +116,7 @@ const uint32_t kMipsSwlOffset = 0;
 
 #if defined(V8_TARGET_LITTLE_ENDIAN)
 const uint32_t kLeastSignificantByteInInt32Offset = 0;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
 const uint32_t kLeastSignificantByteInInt32Offset = 3;
 #else
 #error Unknown endianness

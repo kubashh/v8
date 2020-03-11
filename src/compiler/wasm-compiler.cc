@@ -3317,7 +3317,7 @@ Node* WasmGraphBuilder::GlobalGet(uint32_t index) {
                          &offset);
   Node* result = SetEffect(graph()->NewNode(
       mcgraph()->machine()->Load(mem_type), base, offset, effect(), control()));
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
   result = BuildChangeEndiannessLoad(result, mem_type,
                                      env_->module->globals[index].type);
 #endif
@@ -3352,7 +3352,7 @@ Node* WasmGraphBuilder::GlobalSet(uint32_t index, Node* val) {
                          &offset);
   const Operator* op = mcgraph()->machine()->Store(
       StoreRepresentation(mem_type.representation(), kNoWriteBarrier));
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
   val = BuildChangeEndiannessStore(val, mem_type.representation(),
                                    env_->module->globals[index].type);
 #endif
@@ -3719,7 +3719,7 @@ LoadKind GetLoadKind(MachineGraph* mcgraph, MachineType memtype,
 }
 }  // namespace
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
 Node* WasmGraphBuilder::LoadTransformBigEndian(
     MachineType memtype, wasm::LoadTransformationKind transform, Node* value) {
   Node* result;
@@ -3767,7 +3767,7 @@ Node* WasmGraphBuilder::LoadTransform(wasm::ValueType type, MachineType memtype,
 
   Node* load;
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
   // LoadTransform cannot efficiently be executed on BE machines as a
   // single operation since loaded bytes need to be reversed first,
   // therefore we divide them into separate "load" and "operation" nodes.
@@ -3833,7 +3833,7 @@ Node* WasmGraphBuilder::LoadMem(wasm::ValueType type, MachineType memtype,
 
   SetEffect(load);
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
   load = BuildChangeEndiannessLoad(load, memtype, type);
 #endif
 
@@ -3871,7 +3871,7 @@ Node* WasmGraphBuilder::StoreMem(MachineRepresentation mem_rep, Node* index,
   index = BoundsCheckMem(i::ElementSizeInBytes(mem_rep), index, offset,
                          position, kCanOmitBoundsCheck);
 
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
   val = BuildChangeEndiannessStore(val, mem_rep, type);
 #endif
 

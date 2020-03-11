@@ -911,7 +911,7 @@ static inline int AssembleUnaryOp(Instruction* instr, _R _r, _M _m, _I _i) {
                               Operand(64 - shift_amount), true);            \
   }
 
-#ifdef V8_TARGET_BIG_ENDIAN
+#ifdef V8_HOST_BIG_ENDIAN
 #define ATOMIC_COMP_EXCHANGE_BYTE(i)                             \
   {                                                              \
     constexpr int idx = (i);                                     \
@@ -1061,7 +1061,7 @@ static inline int AssembleUnaryOp(Instruction* instr, _R _r, _M _m, _I _i) {
     __ bne(&do_cs, Label::kNear);                                           \
   } while (false)
 
-#ifdef V8_TARGET_BIG_ENDIAN
+#ifdef V8_HOST_BIG_ENDIAN
 #define ATOMIC_BIN_OP_HALFWORD(bin_inst, index, extract_result) \
   {                                                             \
     constexpr int offset = -(2 * index);                        \
@@ -1099,7 +1099,7 @@ static inline int AssembleUnaryOp(Instruction* instr, _R _r, _M _m, _I _i) {
     ATOMIC_BIN_OP(bin_inst, offset, shift_amount, start, end); \
     extract_result();                                          \
   }
-#endif  // V8_TARGET_BIG_ENDIAN
+#endif  // V8_HOST_BIG_ENDIAN
 
 #define ASSEMBLE_ATOMIC_BINOP_HALFWORD(bin_inst, extract_result) \
   do {                                                           \
@@ -2670,7 +2670,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     __ bne(&do_cs, Label::kNear);                                      \
     __ srl(output, Operand(shift_amount));                             \
   }
-#ifdef V8_TARGET_BIG_ENDIAN
+#ifdef V8_HOST_BIG_ENDIAN
 #define ATOMIC_EXCHANGE_BYTE(i)                                  \
   {                                                              \
     constexpr int idx = (i);                                     \
@@ -2906,7 +2906,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kS390_F32x4Splat: {
-#ifdef V8_TARGET_BIG_ENDIAN
+#ifdef V8_HOST_BIG_ENDIAN
       __ vrep(i.OutputSimd128Register(), i.InputDoubleRegister(0), Operand(0),
               Condition(2));
 #else

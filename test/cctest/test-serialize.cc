@@ -982,7 +982,7 @@ UNINITIALIZED_TEST(CustomSnapshotDataBlobSharedArrayBuffer) {
   Int32Expectations expectations = {
     std::make_tuple("x[0]", 12),
     std::make_tuple("x[1]", 24),
-#if !V8_TARGET_BIG_ENDIAN
+#if !V8_HOST_BIG_ENDIAN
     std::make_tuple("y[0]", 12),
     std::make_tuple("y[1]", 0),
     std::make_tuple("y[2]", 0),

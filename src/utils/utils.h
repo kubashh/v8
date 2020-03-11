@@ -256,7 +256,7 @@ inline uint32_t ComputeAddressHash(Address address) {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
 static const int kInt64LowerHalfMemoryOffset = 0;
 static const int kInt64UpperHalfMemoryOffset = 4;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
 static const int kInt64LowerHalfMemoryOffset = 4;
 static const int kInt64UpperHalfMemoryOffset = 0;
 #endif  // V8_TARGET_LITTLE_ENDIAN

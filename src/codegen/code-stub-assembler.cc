@@ -2255,7 +2255,7 @@ TNode<BigInt> CodeStubAssembler::LoadFixedBigInt64ArrayElementAsTagged(
     return BigIntFromInt64(value);
   } else {
     DCHECK(!Is64());
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
     TNode<IntPtrT> high = Load<IntPtrT>(data_pointer, offset);
     TNode<IntPtrT> low = Load<IntPtrT>(
         data_pointer, IntPtrAdd(offset, IntPtrConstant(kSystemPointerSize)));
@@ -2381,7 +2381,7 @@ TNode<BigInt> CodeStubAssembler::LoadFixedBigUint64ArrayElementAsTagged(
     return BigIntFromUint64(value);
   } else {
     DCHECK(!Is64());
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
     TNode<UintPtrT> high = Load<UintPtrT>(data_pointer, offset);
     TNode<UintPtrT> low = Load<UintPtrT>(
         data_pointer, IntPtrAdd(offset, IntPtrConstant(kSystemPointerSize)));
@@ -9612,7 +9612,7 @@ void CodeStubAssembler::StoreElement(Node* elements, ElementsKind kind,
     BigIntToRawBytes(CAST(value), &var_low, &var_high);
 
     MachineRepresentation rep = WordT::kMachineRepresentation;
-#if defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_HOST_BIG_ENDIAN)
     if (!Is64()) {
       StoreNoWriteBarrier(rep, elements, offset, var_high.value());
       StoreNoWriteBarrier(rep, elements,

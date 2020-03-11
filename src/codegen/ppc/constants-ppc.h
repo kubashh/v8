@@ -20,8 +20,8 @@
 #define UNIMPLEMENTED_PPC()
 #endif
 
-#if (V8_HOST_ARCH_PPC || V8_HOST_ARCH_PPC64) &&                    \
-    (V8_OS_AIX || (V8_TARGET_ARCH_PPC64 && V8_TARGET_BIG_ENDIAN && \
+#if (V8_HOST_ARCH_PPC || V8_HOST_ARCH_PPC64) &&                  \
+    (V8_OS_AIX || (V8_TARGET_ARCH_PPC64 && V8_HOST_BIG_ENDIAN && \
                    (!defined(_CALL_ELF) || _CALL_ELF == 1)))
 #define ABI_USES_FUNCTION_DESCRIPTORS 1
 #else

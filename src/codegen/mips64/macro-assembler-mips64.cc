@@ -1223,7 +1223,7 @@ void TurboAssembler::Ulh(Register rd, const MemOperand& rs) {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
       Lb(rd, MemOperand(source.rm(), source.offset() + 1));
       Lbu(scratch, source);
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
       Lb(rd, source);
       Lbu(scratch, MemOperand(source.rm(), source.offset() + 1));
 #endif
@@ -1231,7 +1231,7 @@ void TurboAssembler::Ulh(Register rd, const MemOperand& rs) {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
       Lbu(scratch, source);
       Lb(rd, MemOperand(source.rm(), source.offset() + 1));
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
       Lbu(scratch, MemOperand(source.rm(), source.offset() + 1));
       Lb(rd, source);
 #endif
@@ -1257,7 +1257,7 @@ void TurboAssembler::Ulhu(Register rd, const MemOperand& rs) {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
       Lbu(rd, MemOperand(source.rm(), source.offset() + 1));
       Lbu(scratch, source);
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
       Lbu(rd, source);
       Lbu(scratch, MemOperand(source.rm(), source.offset() + 1));
 #endif
@@ -1265,7 +1265,7 @@ void TurboAssembler::Ulhu(Register rd, const MemOperand& rs) {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
       Lbu(scratch, source);
       Lbu(rd, MemOperand(source.rm(), source.offset() + 1));
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
       Lbu(scratch, MemOperand(source.rm(), source.offset() + 1));
       Lbu(rd, source);
 #endif
@@ -1296,7 +1296,7 @@ void TurboAssembler::Ush(Register rd, const MemOperand& rs, Register scratch) {
     Sb(scratch, source);
     srl(scratch, scratch, 8);
     Sb(scratch, MemOperand(source.rm(), source.offset() + 1));
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
     Sb(scratch, MemOperand(source.rm(), source.offset() + 1));
     srl(scratch, scratch, 8);
     Sb(scratch, source);

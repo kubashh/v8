@@ -34,7 +34,7 @@ enum Endianness { kLittle, kBig };
 
 #if defined(V8_TARGET_LITTLE_ENDIAN)
 static const Endianness kArchEndian = kLittle;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
 static const Endianness kArchEndian = kBig;
 #else
 #error Unknown endianness
@@ -63,7 +63,7 @@ const uint32_t kMipsLdrOffset = 0;
 const uint32_t kMipsLdlOffset = 7;
 const uint32_t kMipsSdrOffset = 0;
 const uint32_t kMipsSdlOffset = 7;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
 const uint32_t kMipsLwrOffset = 3;
 const uint32_t kMipsLwlOffset = 0;
 const uint32_t kMipsSwrOffset = 3;
@@ -79,7 +79,7 @@ const uint32_t kMipsSdlOffset = 0;
 #if defined(V8_TARGET_LITTLE_ENDIAN)
 const uint32_t kLeastSignificantByteInInt32Offset = 0;
 const uint32_t kLessSignificantWordInDoublewordOffset = 0;
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
 const uint32_t kLeastSignificantByteInInt32Offset = 3;
 const uint32_t kLessSignificantWordInDoublewordOffset = 4;
 #else

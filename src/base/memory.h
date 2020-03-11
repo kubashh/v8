@@ -45,7 +45,7 @@ template <typename V>
 static inline V ReadLittleEndianValue(Address p) {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
   return ReadUnalignedValue<V>(p);
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
   V ret{};
   const byte* src = reinterpret_cast<const byte*>(p);
   byte* dst = reinterpret_cast<byte*>(&ret);
@@ -60,7 +60,7 @@ template <typename V>
 static inline void WriteLittleEndianValue(Address p, V value) {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
   WriteUnalignedValue<V>(p, value);
-#elif defined(V8_TARGET_BIG_ENDIAN)
+#elif defined(V8_HOST_BIG_ENDIAN)
   byte* src = reinterpret_cast<byte*>(&value);
   byte* dst = reinterpret_cast<byte*>(p);
   for (size_t i = 0; i < sizeof(V); i++) {
