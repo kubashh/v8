@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d86702aa_df7f083b",
+        "filename": "src/compiler/js-heap-copy-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-12T12:31:19Z",
+      "side": 1,
+      "message": "That\u0027s implicitly done in the next line.",
+      "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be95e569_dfe8114f",
+        "filename": "src/compiler/js-heap-copy-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-12T12:31:19Z",
+      "side": 1,
+      "message": "Hmm it\u0027s unfortunate that we still need to add stuff to this. Let\u0027s discuss this at some point.",
+      "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eee47c9f_89b4248d",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1667,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-12T12:31:19Z",
+      "side": 1,
+      "message": "Check if we know the SFI of {target}.",
+      "range": {
+        "startLine": 1667,
+        "startChar": 34,
+        "endLine": 1667,
+        "endChar": 44
+      },
+      "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97816b76_cf455421",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1681,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-12T12:31:19Z",
+      "side": 1,
+      "message": "The type seems irrelevant here, we\u0027re not using it. (I.e. even if the typer was less precise than that, the code here would be fine).",
+      "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f8ba264_c092374b",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-12T12:31:19Z",
+      "side": 1,
+      "message": "dito",
+      "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
