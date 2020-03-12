@@ -1657,6 +1657,36 @@ String ConsStringIterator::NextLeaf(bool* blew_stack) {
   UNREACHABLE();
 }
 
+const byte* String::AddressOfCharacterAt(int start_index,
+                                         const DisallowHeapAllocation& no_gc) {
+  String subject = *this;
+  if (subject.IsConsString()) {
+    subject = ConsString::cast(subject).first();
+  } else if (subject.IsSlicedString()) {
+    start_index += SlicedString::cast(subject).offset();
+    subject = SlicedString::cast(subject).parent();
+  }
+  if (subject.IsThinString()) {
+    subject = ThinString::cast(subject).actual();
+  }
+  DCHECK_LE(0, start_index);
+  DCHECK_LE(start_index, subject.length());
+  if (subject.IsSeqOneByteString()) {
+    return reinterpret_cast<const byte*>(
+        SeqOneByteString::cast(subject).GetChars(no_gc) + start_index);
+  } else if (subject.IsSeqTwoByteString()) {
+    return reinterpret_cast<const byte*>(
+        SeqTwoByteString::cast(subject).GetChars(no_gc) + start_index);
+  } else if (subject.IsExternalOneByteString()) {
+    return reinterpret_cast<const byte*>(
+        ExternalOneByteString::cast(subject).GetChars() + start_index);
+  } else {
+    DCHECK(subject.IsExternalTwoByteString());
+    return reinterpret_cast<const byte*>(
+        ExternalTwoByteString::cast(subject).GetChars() + start_index);
+  }
+}
+
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) void String::WriteToFlat(
     String source, uint16_t* sink, int from, int to);
 
