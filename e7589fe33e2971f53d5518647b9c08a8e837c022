@@ -69,6 +69,24 @@
       "revId": "e7589fe33e2971f53d5518647b9c08a8e837c022",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6a01b68_0d5bb4dd",
+        "filename": "src/regexp/regexp-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-12T06:45:35Z",
+      "side": 1,
+      "message": "Very interesting, thanks for the explanation. What do you think about this approach:\n\n - Call this file regexp-v8.cc to clarify these are V8-specific functions.\n - Keep it as small as possible and prefer moving to more meaningful spots (e.g. objects/string, execution/isolate).\n - Add a header comment explaining the need for this file, and the possibility of creating a clean separation between V8 and irregexp in the future.\n - Move StringCharacterPosition to a static String helper (perhaps String::AddressOfCharacterAt or so?).\n- GrowStack could move to Isolate::GrowRegExpStack.\n\nAlternatively, we could keep these functions in their original spots and wrap them in #ifndef COMPILING_IRREGEXP_FOR_EXTERNAL_EMBEDDER or so (that seems less intrusive to me).",
+      "parentUuid": "3df958eb_a4fed83f",
+      "revId": "e7589fe33e2971f53d5518647b9c08a8e837c022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
