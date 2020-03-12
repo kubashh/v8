@@ -888,18 +888,27 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
           Immediate(ExternalReference::bytecode_size_table_address()));
 
   // Load the current bytecode.
-  __ movzx_b(bytecode, Operand(kInterpreterBytecodeArrayRegister,
-                               kInterpreterBytecodeOffsetRegister, times_1, 0));
+  __ movzx_b(bytecode, Operand(bytecode_array, bytecode_offset, times_1, 0));
 
   // Check if the bytecode is a Wide or ExtraWide prefix bytecode.
-  Label process_bytecode, extra_wide;
+  Label wide_or_extra_wide, extra_wide, after_jumploop, jump_loop,
+      jump_loop_wide, jump_loop_extra_wide, emulate_jump, end;
   STATIC_ASSERT(0 == static_cast<int>(interpreter::Bytecode::kWide));
   STATIC_ASSERT(1 == static_cast<int>(interpreter::Bytecode::kExtraWide));
   STATIC_ASSERT(2 == static_cast<int>(interpreter::Bytecode::kDebugBreakWide));
   STATIC_ASSERT(3 ==
                 static_cast<int>(interpreter::Bytecode::kDebugBreakExtraWide));
   __ cmp(bytecode, Immediate(0x3));
-  __ j(above, &process_bytecode, Label::kNear);
+  __ j(below_equal, &wide_or_extra_wide, Label::kNear);
+  // We need to special case JumpLoop here (and below for wide and extra wide)
+  // since we have to advance the bytecode by emulating the jump, as opposed to
+  // moving to the literal next bytecode.
+  __ cmp(bytecode,
+         Immediate(static_cast<int>(interpreter::Bytecode::kJumpLoop)));
+  __ j(equal, &jump_loop, Label::kNear);
+  __ jmp(&after_jumploop);
+
+  __ bind(&wide_or_extra_wide);
   // The code to load the next bytecode is common to both wide and extra wide.
   // We can hoist them up here. inc has to happen before test since it
   // modifies the ZF flag.
@@ -908,17 +917,23 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
   __ movzx_b(bytecode, Operand(bytecode_array, bytecode_offset, times_1, 0));
   __ j(not_equal, &extra_wide, Label::kNear);
 
+  __ cmp(bytecode,
+         Immediate(static_cast<int>(interpreter::Bytecode::kJumpLoop)));
+  __ j(equal, &jump_loop_wide, Label::kNear);
   // Load the next bytecode and update table to the wide scaled table.
   __ add(bytecode_size_table,
          Immediate(kIntSize * interpreter::Bytecodes::kBytecodeCount));
-  __ jmp(&process_bytecode, Label::kNear);
+  __ jmp(&after_jumploop, Label::kNear);
 
   __ bind(&extra_wide);
+  __ cmp(bytecode,
+         Immediate(static_cast<int>(interpreter::Bytecode::kJumpLoop)));
+  __ j(equal, &jump_loop_extra_wide, Label::kNear);
   // Update table to the extra wide scaled table.
   __ add(bytecode_size_table,
          Immediate(2 * kIntSize * interpreter::Bytecodes::kBytecodeCount));
 
-  __ bind(&process_bytecode);
+  __ bind(&after_jumploop);
 
 // Bailout to the return label if this is a return bytecode.
 #define JUMP_IF_EQUAL(NAME)                                            \
@@ -931,6 +946,26 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
   // Otherwise, load the size of the current bytecode and advance the offset.
   __ add(bytecode_offset,
          Operand(bytecode_size_table, bytecode, times_int_size, 0));
+  __ jmp(&end, Label::kNear);
+
+  // Load the parameter offset for the jump, depending on its width. Fine to
+  // reuse scratch1 since we are not going to be using bytecode_size_table on
+  // this path.
+  __ bind(&jump_loop);
+  __ movzx_b(scratch1, Operand(bytecode_array, bytecode_offset, times_1, 1));
+  __ jmp(&emulate_jump, Label::kNear);
+
+  __ bind(&jump_loop_wide);
+  __ movzx_w(scratch1, Operand(bytecode_array, bytecode_offset, times_1, 1));
+  __ jmp(&emulate_jump, Label::kNear);
+
+  __ bind(&jump_loop_extra_wide);
+  __ mov(scratch1, Operand(bytecode_array, bytecode_offset, times_1, 1));
+
+  __ bind(&emulate_jump);
+  __ sub(bytecode_offset, scratch1);
+
+  __ bind(&end);
 }
 
 // Generate code for entering a JS function with the interpreter.
@@ -1078,7 +1113,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // TODO(solanes): Merge with the real stack limit check above.
   Label stack_check_interrupt, after_stack_check_interrupt;
   CompareStackLimit(masm, esp, StackLimitKind::kInterruptStackLimit);
-  __ j(below, &stack_check_interrupt, Label::kNear);
+  __ j(below, &stack_check_interrupt);
   __ bind(&after_stack_check_interrupt);
 
   // The accumulator is already loaded with undefined.
