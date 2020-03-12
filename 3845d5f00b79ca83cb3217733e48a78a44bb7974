@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6d9b7abb_e10ab5b6",
+        "filename": "src/compiler/js-heap-copy-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-03-12T12:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d86702aa_df7f083b",
+      "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be95e569_dfe8114f",
         "filename": "src/compiler/js-heap-copy-reducer.cc",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60bae604_8ea30af9",
+        "filename": "src/compiler/js-heap-copy-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-03-12T12:56:22Z",
+      "side": 1,
+      "message": "Indeed, as we move to direct read this big switch statement should wither away.",
+      "parentUuid": "be95e569_dfe8114f",
+      "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "e06ef92e_ca0eeb1f",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1667,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-03-12T12:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eee47c9f_89b4248d",
+      "range": {
+        "startLine": 1667,
+        "startChar": 34,
+        "endLine": 1667,
+        "endChar": 44
+      },
+      "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97816b76_cf455421",
         "filename": "src/compiler/js-typed-lowering.cc",
         "patchSetId": 5
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "861c246e_dcadf051",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1681,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-03-12T12:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97816b76_cf455421",
+      "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f8ba264_c092374b",
         "filename": "src/compiler/js-typed-lowering.cc",
         "patchSetId": 5
@@ -90,6 +168,24 @@
       "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f21fe32a_fc280786",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-03-12T12:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f8ba264_c092374b",
+      "revId": "3845d5f00b79ca83cb3217733e48a78a44bb7974",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
