@@ -22,6 +22,30 @@
       "revId": "b31fb589236b11e3ebf75299dc51a10670118927",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc2e93f9_53a0d414",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-03-13T14:48:27Z",
+      "side": 1,
+      "message": "Yes, the frame info allows us to skip recompilation when stepping in the same function, so we should not reset it between each step.",
+      "parentUuid": "ab839492_3544ca63",
+      "range": {
+        "startLine": 794,
+        "startChar": 0,
+        "endLine": 795,
+        "endChar": 25
+      },
+      "revId": "b31fb589236b11e3ebf75299dc51a10670118927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
