@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2373b4da_2ec74813",
+        "filename": "src/torque/implementation-visitor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-03-13T15:53:31Z",
+      "side": 1,
+      "message": "nit: I\u0027d prefer IsAccessible.",
+      "range": {
+        "startLine": 367,
+        "startChar": 7,
+        "endLine": 367,
+        "endChar": 17
+      },
+      "revId": "49e32ffbc2426d9870545ff0450a1286ac84398d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
