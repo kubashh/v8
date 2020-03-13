@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5c48fde7_4c9c2c9a",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db80713c_12c20ce2",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "402dff76_48651ea4",
         "filename": "src/codegen/arm64/macro-assembler-arm64-inl.h",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "45e6d68f_d60c1243",
+        "filename": "src/codegen/arm64/macro-assembler-arm64-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "I\u0027ve named this CodeEntry, based on Ross\u0027 comment about dropping the \"CFI\" part from one of the other methods, to be consistent.",
+      "parentUuid": "402dff76_48651ea4",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f6119f1_5ef2b21c",
         "filename": "src/codegen/arm64/macro-assembler-arm64-inl.h",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2020-03-05T16:30:21Z",
       "side": 1,
       "message": "I don\u0027t understand the comment. Isn\u0027t the point simply that we need to allow jumps because tail calls jump to the same point as regular calls?",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cd9f3ba_b951ed9f",
+        "filename": "src/codegen/arm64/macro-assembler-arm64-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "\"BTI c\" can also be used as a target of BR x16/x17, in addition to BLR (any register).\n\nIf we used one of x16/x17 as targets of calls instead of kJavaScriptCallCodeStartRegister, we could get away with \"BTI c\" instead of \"BTI jc\". I\u0027ve added a TODO here, we can consider changing this to allow for the stricter BTI instruction.",
+      "parentUuid": "0f6119f1_5ef2b21c",
       "revId": "b0bd353af168b91618be332732d8c97652e9776b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "defa4c1f_5193d124",
+        "filename": "src/codegen/arm64/macro-assembler-arm64-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1af69a5b_80dc9c7e",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a91520f_d77ec5fa",
         "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
         "patchSetId": 4
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "84cd49d3_211eab65",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1569,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "I\u0027ve done that, and also used the more conservative CodeEntry() which maps to \"BTI jc\", considering we don\u0027t normally use the trampolines AFAIK, so I am not sure how well tested they are with the tests I have run (there might be some configuration that breaks with \"BTI c\"). I\u0027d like to look at restricting \"BTI jc\" to \"BTI c\" in other places, anyway (I\u0027ve added a TODO in CodeEntry()).",
+      "parentUuid": "5a91520f_d77ec5fa",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "695741c6_54398b12",
         "filename": "src/codegen/arm64/macro-assembler-arm64.h",
         "patchSetId": 4
@@ -98,6 +188,24 @@
       "writtenOn": "2020-03-05T16:30:21Z",
       "side": 1,
       "message": "I don\u0027t understand this comment about compatibility here and below.",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9dceb82_7b30152b",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "It\u0027s just something I\u0027ve copied from other places where an interface used in architecture-independent code has been used, e.g. https://chromium-review.googlesource.com/c/v8/v8/+/1967315/4/src/codegen/arm64/macro-assembler-arm64.h#199. It\u0027s mostly useful in the other backends, should I rephrase/remove it from here?",
+      "parentUuid": "695741c6_54398b12",
       "revId": "b0bd353af168b91618be332732d8c97652e9776b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -139,6 +247,24 @@
     },
     {
       "key": {
+        "uuid": "81c208c6_897ab9d1",
+        "filename": "src/execution/arm64/simulator-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a05b306_77a019eb",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "15c80553_d80c7d78",
         "filename": "src/execution/arm64/simulator-arm64.cc",
         "patchSetId": 4
@@ -153,6 +279,24 @@
       "revId": "b0bd353af168b91618be332732d8c97652e9776b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54839d02_18717777",
+        "filename": "src/execution/arm64/simulator-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3663,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Actually, this isn\u0027t necessary, since the HLT instruction already sets btype to 0. I\u0027ve removed it.",
+      "parentUuid": "15c80553_d80c7d78",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -173,6 +317,24 @@
     },
     {
       "key": {
+        "uuid": "8080c03f_2e78402d",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb65ef0e_25b8667d",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1b81096_8c5dd832",
         "filename": "src/wasm/jump-table-assembler.cc",
         "patchSetId": 4
@@ -190,6 +352,24 @@
     },
     {
       "key": {
+        "uuid": "0ea22ca4_0541c494",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1b81096_8c5dd832",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d86d86c4_6237d34d",
         "filename": "src/wasm/jump-table-assembler.cc",
         "patchSetId": 4
@@ -204,6 +384,24 @@
       "revId": "b0bd353af168b91618be332732d8c97652e9776b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34d30ac1_1e13105b",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d86d86c4_6237d34d",
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -230,6 +428,30 @@
     },
     {
       "key": {
+        "uuid": "e8addf55_ef644c12",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40e86a18_ecef6c2d",
+      "range": {
+        "startLine": 190,
+        "startChar": 6,
+        "endLine": 190,
+        "endChar": 20
+      },
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b196a0df_336f620c",
         "filename": "src/wasm/jump-table-assembler.h",
         "patchSetId": 4
@@ -250,6 +472,30 @@
       "revId": "b0bd353af168b91618be332732d8c97652e9776b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f18ae2f4_d8399421",
+        "filename": "src/wasm/jump-table-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b196a0df_336f620c",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 36
+      },
+      "revId": "b0bd353af168b91618be332732d8c97652e9776b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da5740c3_c13db667",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34ef08dd_35927862",
+      "revId": "5858ec3c1d4ad75049a307fdb5c5f168d477e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f74651f9_173f7b52",
         "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "420cc143_dc9241a1",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1978,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f74651f9_173f7b52",
+      "revId": "5858ec3c1d4ad75049a307fdb5c5f168d477e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a408567c_a571c1c2",
         "filename": "src/deoptimizer/deoptimizer.cc",
         "patchSetId": 3
@@ -50,6 +86,24 @@
       "revId": "5858ec3c1d4ad75049a307fdb5c5f168d477e321",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfae5279_f301f22e",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-03-13T14:56:42Z",
+      "side": 1,
+      "message": "Yes, when this is the last non-lazy deopt, {from_} will be equal to {lazy_deopt_start}, because {from_} is the value the link register has after calling the deoptimizer (so will be one instruction after the deopt call that brought us here). I\u0027ve added a comment to point this out.",
+      "parentUuid": "a408567c_a571c1c2",
+      "revId": "5858ec3c1d4ad75049a307fdb5c5f168d477e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
