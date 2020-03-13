@@ -1677,7 +1677,8 @@ void AccessorAssembler::HandleStoreICProtoHandler(
       Callable callable = CodeFactory::CallApiCallback(isolate());
       TNode<IntPtrT> argc = IntPtrConstant(1);
       Return(CallStub(callable, context, callback, argc, data,
-                      api_holder.value(), p->receiver(), p->value()));
+                      api_holder.value(),
+                      JS_STACK_ARGS_2(p->receiver(), p->value())));
     }
 
     BIND(&if_store_global_proxy);
