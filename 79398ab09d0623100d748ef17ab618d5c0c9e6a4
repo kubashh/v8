@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "d9b60846_4f85e37d",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-13T12:53:53Z",
+      "side": 0,
+      "message": "+1. To be clear, I was suggesting that have the receiver be a seperate explicit argument, and we update other users to pass undefined_value for the reciever rather than using it as a first argument. \n\nOne way we could do this cleanly would be to modify GetCallable() to be GetCallable(Handle\u003cObject\u003e reciever \u003d isolate-\u003efactory()-\u003eundefined_value()), so most code continues as it is now, but code which want\u0027s to pass a reciever can do so by passing it to the GetCallable function. I agree with Igor that this should be a seperate CL before this one.",
+      "parentUuid": "04eff92c_67a267e9",
+      "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "431a52fc_dc4fa932",
         "filename": "test/cctest/interpreter/test-interpreter.cc",
         "patchSetId": 1
