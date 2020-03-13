@@ -127,6 +127,24 @@
     },
     {
       "key": {
+        "uuid": "7ef31f04_f2c701c4",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T13:20:10Z",
+      "side": 0,
+      "message": "@Ross: If you do this, you still need to update all the Receiver() to Parameter(0), since the receiver will be undefined.\n\nI\u0027ve started a new CL. I am adding the receiver manually to the tests that need the receiver to be undefined.",
+      "parentUuid": "d9b60846_4f85e37d",
+      "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "431a52fc_dc4fa932",
         "filename": "test/cctest/interpreter/test-interpreter.cc",
         "patchSetId": 1
