@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "05f096d9_ec5fdcc9",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2020-03-13T08:54:42Z",
+      "side": 1,
+      "message": "I follow the naming in implementation of binop with imm operand elsewhere, eg. EmitBinOpImm, EmitCommutativeBinOpImm",
+      "parentUuid": "5dce65ad_c8b94df6",
+      "range": {
+        "startLine": 1934,
+        "startChar": 63,
+        "endLine": 1934,
+        "endChar": 66
+      },
+      "revId": "8456abe59c11b7fd32dde87a4bce2faf3c28f443",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d380272_22df7ec5",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-12T22:47:51Z",
       "side": 1,
       "message": "I think this should go below `if (!CpuFeatures::SupportsWasmSimd128()) {`.\nMaybe put it right below the `switch (opcode) {`.\nSimilarly the #undef should be immediately after the last use, before `default:`",
+      "range": {
+        "startLine": 2342,
+        "startChar": 1,
+        "endLine": 2348,
+        "endChar": 10
+      },
+      "revId": "8456abe59c11b7fd32dde87a4bce2faf3c28f443",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a09ac50b_edba2bdf",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2348,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2020-03-13T08:54:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d380272_22df7ec5",
       "range": {
         "startLine": 2342,
         "startChar": 1,
