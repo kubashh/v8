@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "e8959f64_fdde2e30",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2238,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-03-13T14:12:37Z",
+      "side": 1,
+      "message": "Yes and no. If you have something like \n\n  struct Foo { const x: int; }\n  \n  const a: \u0026Foo \u003d ...\n\nthen *a \u003d Foo{x: 7} is possible, but (*a).x \u003d 7 is forbidden, similar to how with\n\n  let a: Foo \u003d ...\n\nit\u0027s allowed to do a \u003d Foo{x: 7}, but a.x \u003d 7 is forbidden. The reasoning in both cases is that if you see structs as values, then protecting invariants between their fields by making them non-assignable makes sense, but it should always be possible to copy and assign values as a whole. It\u0027s roughly the semantics you get in functional programming languages, where algebraic data types are immutable but always copyable.\n\nThis is different from what const means for C++ fields, where it disallows copying and assigning of the whole struct.",
+      "parentUuid": "bdc2ce41_7d775602",
+      "range": {
+        "startLine": 2238,
+        "startChar": 54,
+        "endLine": 2238,
+        "endChar": 58
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a6bc3d3_b5c8550a",
         "filename": "src/torque/implementation-visitor.cc",
         "patchSetId": 4
