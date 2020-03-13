@@ -46,6 +46,30 @@
       "revId": "b31fb589236b11e3ebf75299dc51a10670118927",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdc12f1a_4673e8e7",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-13T14:51:03Z",
+      "side": 1,
+      "message": "Ah, that makes sense. We would then just need to ensure that the flooded code is removed when we are continuing, right? Otherwise, we would hit major slowdowns in that function from that point on.",
+      "parentUuid": "dc2e93f9_53a0d414",
+      "range": {
+        "startLine": 794,
+        "startChar": 0,
+        "endLine": 795,
+        "endChar": 25
+      },
+      "revId": "b31fb589236b11e3ebf75299dc51a10670118927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
