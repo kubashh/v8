@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "150f014b_9d3021a9",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 0,
+      "message": "I did what Igor suggested, but that was actually not a great idea. The reason being is that receivers have special semantics:\n\n* Any undefined object is converted to the global proxy. The test test-interpreter-intrinsics/IsJSReceiver fails because of that. PS: although intrinsics do not convert receivers, the test harness is setup in a way that every test is called inside a function \"function f(args) { test }\" which call the builtin CallFunction that converts receivers.\n* Any primitive object is encapsulated by a JSPrimitiveWrapper. The test-interpreter/InterpreterParameter1 fails because of that.\n\nOf course, one can massage these tests (by for example adding an undefined receiver), but I think it is morally wrong to use the receiver as incoming arguments and expect the same semantics.",
+      "parentUuid": "954b63d6_5a59faed",
+      "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "431a52fc_dc4fa932",
         "filename": "test/cctest/interpreter/test-interpreter.cc",
         "patchSetId": 1
@@ -96,6 +114,30 @@
     },
     {
       "key": {
+        "uuid": "dfba63d3_e94b2186",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 0,
+      "message": "The bytecode generated is this:\n         0x2fa60820e58e @    0 : 25 09             Ldar a0\n         0x2fa60820e590 @    2 : 34 08 00          Add a1, [0]\n         0x2fa60820e593 @    5 : 34 07 01          Add a2, [1]\n         0x2fa60820e596 @    8 : 34 06 02          Add a3, [2]\n         0x2fa60820e599 @   11 : 34 05 03          Add a4, [3]\n         0x2fa60820e59c @   14 : 34 04 04          Add a5, [4]\n         0x2fa60820e59f @   17 : 35 03 05          Sub a6, [5]\n         0x2fa60820e5a2 @   20 : 34 02 06          Add a7, [6]\n         0x2fa60820e5a5 @   23 : ab                Return \n\nThe semantics of the bytecode Sub is: LHS(argument) - RHS(accumulator).\nSo in this case LHS(7) - RHS(21) \u003d -15.\nTo finish, we add 8, so the result returned is -6, instead of 22.",
+      "parentUuid": "431a52fc_dc4fa932",
+      "range": {
+        "startLine": 602,
+        "startChar": 37,
+        "endLine": 602,
+        "endChar": 40
+      },
+      "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44387b97_5da258a9",
         "filename": "test/cctest/interpreter/test-interpreter.cc",
         "patchSetId": 1
@@ -116,6 +158,30 @@
       "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "346913c2_7568f5e6",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 0,
+      "message": "-6",
+      "parentUuid": "44387b97_5da258a9",
+      "range": {
+        "startLine": 624,
+        "startChar": 48,
+        "endLine": 624,
+        "endChar": 50
+      },
+      "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

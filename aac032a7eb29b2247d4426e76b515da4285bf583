@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9816e17e_f510fb8a",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1880,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 1,
+      "message": "I\u0027ve created a new one JS_STACK_ARGS_XXX",
+      "parentUuid": "d943afc9_53d88804",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4d993b05_d550f485",
         "filename": "src/builtins/builtins-descriptors.h",
         "patchSetId": 1
@@ -89,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "d87fa778_d7639dc8",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 12551,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c498d0f8_9e823a7a",
+      "range": {
+        "startLine": 12551,
+        "startChar": 9,
+        "endLine": 12551,
+        "endChar": 43
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98d2172c_c72afa00",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 1
@@ -103,6 +145,24 @@
       "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ab6ca9e_25aa67d5",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 13106,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 1,
+      "message": "JS_STACK_ARGS_XXX",
+      "parentUuid": "98d2172c_c72afa00",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -129,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "4c04df68_5c3d2ae6",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 1,
+      "message": "Yes, that\u0027s the receiver. I will rename it, I think it is clearer.",
+      "parentUuid": "cdd508a9_eb596f5a",
+      "range": {
+        "startLine": 1073,
+        "startChar": 20,
+        "endLine": 1073,
+        "endChar": 62
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faec210c_d78e8c46",
         "filename": "src/codegen/interface-descriptors.h",
         "patchSetId": 1
@@ -149,6 +233,30 @@
       "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c13775e_e5b99448",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 1,
+      "message": "I think it is clearer if we just add the comment.",
+      "parentUuid": "faec210c_d78e8c46",
+      "range": {
+        "startLine": 1077,
+        "startChar": 55,
+        "endLine": 1077,
+        "endChar": 73
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -175,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "13311443_0c39d4a3",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 1,
+      "message": "Why?",
+      "parentUuid": "ae001543_a3fdce62",
+      "range": {
+        "startLine": 1078,
+        "startChar": 55,
+        "endLine": 1078,
+        "endChar": 77
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9dc71045_7e6ebe9a",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 1
@@ -189,6 +321,24 @@
       "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4ac4641_3cdde88c",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 1,
+      "message": "JS_STACK_ARGS_XXX",
+      "parentUuid": "9dc71045_7e6ebe9a",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -268,6 +418,24 @@
     },
     {
       "key": {
+        "uuid": "8792d938_8941d1df",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 1,
+      "message": "I\u0027ve added a TODO and a bug. I want to tackle this problem in another CL.\n// TODO(victor, v8:10322)",
+      "parentUuid": "1ad0d5c2_ce4b527e",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b66e83cf_503c24dc",
         "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
         "patchSetId": 1
@@ -282,6 +450,24 @@
       "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "016ed53c_dd0248a6",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-13T09:53:17Z",
+      "side": 1,
+      "message": "JS_STACK_ARGS_XXX",
+      "parentUuid": "b66e83cf_503c24dc",
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
