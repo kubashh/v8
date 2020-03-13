@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "04eff92c_67a267e9",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-13T11:39:43Z",
+      "side": 0,
+      "message": "Yeah, the receiver argument has special semantics and on the other hand we need to be able to test it. For example, \"return this + a + b;\" is still a valid code.\nIf you stop using Receiver() then we will no longer test this logic. I still think it makes sense to update the test harness and fix the tests you mentioned. It could be another CL before this one.",
+      "parentUuid": "150f014b_9d3021a9",
+      "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "431a52fc_dc4fa932",
         "filename": "test/cctest/interpreter/test-interpreter.cc",
         "patchSetId": 1
@@ -138,6 +156,30 @@
     },
     {
       "key": {
+        "uuid": "00e07db1_b42be75c",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-13T11:39:43Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "dfba63d3_e94b2186",
+      "range": {
+        "startLine": 602,
+        "startChar": 37,
+        "endLine": 602,
+        "endChar": 40
+      },
+      "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44387b97_5da258a9",
         "filename": "test/cctest/interpreter/test-interpreter.cc",
         "patchSetId": 1
@@ -173,6 +215,30 @@
       "side": 0,
       "message": "-6",
       "parentUuid": "44387b97_5da258a9",
+      "range": {
+        "startLine": 624,
+        "startChar": 48,
+        "endLine": 624,
+        "endChar": 50
+      },
+      "revId": "79398ab09d0623100d748ef17ab618d5c0c9e6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bb244add_3525ca2a",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-13T11:39:43Z",
+      "side": 0,
+      "message": "Maybe add a comment\n// The code above computes 8 + 7 - (6 + 5 + 4 + 3 + 2 + 1)",
+      "parentUuid": "346913c2_7568f5e6",
       "range": {
         "startLine": 624,
         "startChar": 48,

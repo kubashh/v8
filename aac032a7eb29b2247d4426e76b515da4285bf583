@@ -213,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "d9a7e0ae_bd52c298",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-13T11:39:43Z",
+      "side": 1,
+      "message": "My suggestion was that you can use\n  JS_STACK_ARGS_2(these two)\nhere two and you don\u0027t have to ifdef this whole descriptor.",
+      "parentUuid": "4c04df68_5c3d2ae6",
+      "range": {
+        "startLine": 1073,
+        "startChar": 20,
+        "endLine": 1073,
+        "endChar": 62
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faec210c_d78e8c46",
         "filename": "src/codegen/interface-descriptors.h",
         "patchSetId": 1
@@ -260,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "47957813_4979e53f",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-13T11:39:43Z",
+      "side": 1,
+      "message": "See above comment.",
+      "parentUuid": "2c13775e_e5b99448",
+      "range": {
+        "startLine": 1077,
+        "startChar": 55,
+        "endLine": 1077,
+        "endChar": 73
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae001543_a3fdce62",
         "filename": "src/codegen/interface-descriptors.h",
         "patchSetId": 1
@@ -295,6 +343,30 @@
       "side": 1,
       "message": "Why?",
       "parentUuid": "ae001543_a3fdce62",
+      "range": {
+        "startLine": 1078,
+        "startChar": 55,
+        "endLine": 1078,
+        "endChar": 77
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf697641_01b7a588",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-13T11:39:43Z",
+      "side": 1,
+      "message": "See above comment.",
+      "parentUuid": "13311443_0c39d4a3",
       "range": {
         "startLine": 1078,
         "startChar": 55,
