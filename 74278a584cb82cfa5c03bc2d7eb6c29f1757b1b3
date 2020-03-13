@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27a24b97_939eca7a",
+        "filename": "src/torque/csa-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-03-13T13:57:33Z",
+      "side": 1,
+      "message": "I wonder if this is necessary?",
+      "range": {
+        "startLine": 266,
+        "startChar": 8,
+        "endLine": 266,
+        "endChar": 44
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdc2ce41_7d775602",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2238,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-03-13T13:57:33Z",
+      "side": 1,
+      "message": "This means that we can assign to const fields of a struct through a mutable reference to that, right? Can you please put a 1-line comment here about that.",
+      "range": {
+        "startLine": 2238,
+        "startChar": 54,
+        "endLine": 2238,
+        "endChar": 58
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a6bc3d3_b5c8550a",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4027,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-03-13T13:57:33Z",
+      "side": 1,
+      "message": "Is there a reason for that? Do you plan to add this? Maybe put a TODO comment then.",
+      "range": {
+        "startLine": 4027,
+        "startChar": 24,
+        "endLine": 4027,
+        "endChar": 69
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cec2de2b_957c0b7a",
+        "filename": "src/torque/implementation-visitor.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-03-13T13:57:33Z",
+      "side": 1,
+      "message": "Uh, this relies on the \"side effect\" of the CHECK, which works here, but I would feel better if you would rewrite it such that if I remove the CHECK the code still works.",
+      "range": {
+        "startLine": 97,
+        "startChar": 6,
+        "endLine": 98,
+        "endChar": 57
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a4635f8_97a53f93",
+        "filename": "test/unittests/torque/torque-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-03-13T13:57:33Z",
+      "side": 1,
+      "message": "Can you please make these a little more specific.\n\nWould be great for testing if we would have error codes / objects instead of pure strings 😞",
+      "range": {
+        "startLine": 654,
+        "startChar": 27,
+        "endLine": 654,
+        "endChar": 45
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c553de1_5de4eeeb",
+        "filename": "test/unittests/torque/torque-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-03-13T13:57:33Z",
+      "side": 1,
+      "message": "Is let constRefX: const \u0026int32 valid as well? Can references be reassigned (like c++ pointers?). If so we should have a test to test that. If not, we should have a test that checks that this is rejected.",
+      "range": {
+        "startLine": 717,
+        "startChar": 6,
+        "endLine": 717,
+        "endChar": 42
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7370b89_b6354251",
+        "filename": "test/unittests/torque/torque-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-03-13T13:57:33Z",
+      "side": 1,
+      "message": "You always stated the type explicitly. Whould inference be correct without? I guess const constRefY \u003d refY would still infer a const\u0026 type since in order to get the value you would need to explicitly deref?",
+      "range": {
+        "startLine": 719,
+        "startChar": 6,
+        "endLine": 719,
+        "endChar": 42
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
