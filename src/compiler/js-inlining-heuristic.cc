@@ -186,6 +186,10 @@ Reduction JSInliningHeuristic::Reduce(Node* node) {
       can_inline_candidate = true;
       BytecodeArrayRef bytecode = candidate.bytecode[i].value();
       candidate.total_size += bytecode.length();
+      if (candidate.functions[i].has_value()) {
+        candidate.total_size +=
+            candidate.functions[i]->object()->code().inlined_bytecode_size();
+      }
       candidate_is_small = candidate_is_small && IsSmall(bytecode);
     }
   }
@@ -253,8 +257,12 @@ void JSInliningHeuristic::Finalize() {
     }
 
     Reduction const reduction = InlineCandidate(candidate, false);
-    if (reduction.Changed()) return;
+    if (reduction.Changed()) {
+      info_->set_inlined_bytecode_size(total_inlined_bytecode_size_);
+      return;
+    }
   }
+  info_->set_inlined_bytecode_size(total_inlined_bytecode_size_);
 }
 
 namespace {
