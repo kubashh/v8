@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f02d938_396fbc35",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1570,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-15T17:33:03Z",
+      "side": 1,
+      "message": "Why the additional parentheses here (and below)?",
+      "revId": "9800e04fdfb8223fdc02f30f92d576c02582aa93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
