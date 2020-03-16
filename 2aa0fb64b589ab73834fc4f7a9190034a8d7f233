@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "158c1c1f_26f727e8",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-16T14:20:59Z",
+      "side": 1,
+      "message": "Let\u0027s make that unsigned.",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79211c5d_a29024ea",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-16T14:20:59Z",
+      "side": 1,
+      "message": "With --concurrent-inlining, JSInliningHeuristic is not allowed to access the JS heap directly. Here you\u0027re doing a direct read, that\u0027s why some tests are failing.\n\nPlease extend CodeRef and CodeData in heap-refs.h with an inlined_bytecode_size() getter and inlined_bytecode_size_ data member, respectively. Initialize CodeData::inlined_bytecode_size_ in the CodeData constructor.",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "307da93a_6ace0ab8",
+        "filename": "src/compiler/js-inlining-heuristic.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-16T14:20:59Z",
+      "side": 1,
+      "message": "This can be const.",
+      "range": {
+        "startLine": 96,
+        "startChar": 28,
+        "endLine": 96,
+        "endChar": 33
+      },
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af0ce873_a1b431a1",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-16T14:20:59Z",
+      "side": 1,
+      "message": "uint32_t here (and elsewhere) would make more sense to me.",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62487f69_5070ea96",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-16T14:20:59Z",
+      "side": 1,
+      "message": "DCHECK_EQ(kind(), OPTIMIZED_FUNCTION);",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f9578a5_c31052e2",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-16T14:20:59Z",
+      "side": 1,
+      "message": "Just return directly.",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00400fca_40af6a7b",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-16T14:20:59Z",
+      "side": 1,
+      "message": "DCHECK_EQ(kind(), OPTIMIZED_FUNCTION);",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
