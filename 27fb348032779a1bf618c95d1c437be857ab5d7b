@@ -22,6 +22,30 @@
       "revId": "27fb348032779a1bf618c95d1c437be857ab5d7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e14e2db_8b3fd341",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5969,
+      "author": {
+        "id": 1002507
+      },
+      "writtenOn": "2020-03-16T08:18:12Z",
+      "side": 1,
+      "message": "Let me cross-check.  Are you fine that the name will be a little different from %ObjProto_valueOf% in the ECMA standard?  I don\u0027t have a strong opinion and I don\u0027t know V8\u0027s convention very well.  This is just a cross-check.",
+      "parentUuid": "8d812d36_2832bebe",
+      "range": {
+        "startLine": 5969,
+        "startChar": 4,
+        "endLine": 5969,
+        "endChar": 12
+      },
+      "revId": "27fb348032779a1bf618c95d1c437be857ab5d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
