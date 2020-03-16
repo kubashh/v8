@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fd67343_19113233",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-16T11:24:37Z",
+      "side": 1,
+      "message": "Could you add a bit more detail to the description here (e.g., how the codegen changes for particular operations, etc.).",
+      "revId": "c09d41f9b220f3de0300a3300fe62a6c73867607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf6a4db5_0ed64239",
+        "filename": "src/codegen/arm/macro-assembler-arm.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-16T11:24:37Z",
+      "side": 1,
+      "message": "Maybe just make Control-flow integrity a header for this section of the functions (i.e., have it once and not on every function).",
+      "range": {
+        "startLine": 536,
+        "startChar": 2,
+        "endLine": 536,
+        "endChar": 29
+      },
+      "revId": "c09d41f9b220f3de0300a3300fe62a6c73867607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29068555_59aafbd4",
+        "filename": "src/codegen/arm/macro-assembler-arm.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-16T11:24:37Z",
+      "side": 1,
+      "message": "I\u0027d drop this",
+      "range": {
+        "startLine": 536,
+        "startChar": 29,
+        "endLine": 537,
+        "endChar": 35
+      },
+      "revId": "c09d41f9b220f3de0300a3300fe62a6c73867607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a8a9075_c74f632c",
+        "filename": "src/codegen/arm/macro-assembler-arm.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-16T11:24:37Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 542,
+        "startChar": 5,
+        "endLine": 543,
+        "endChar": 35
+      },
+      "revId": "c09d41f9b220f3de0300a3300fe62a6c73867607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c790501b_0395c6e1",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-16T11:24:37Z",
+      "side": 1,
+      "message": "Same comment as above, define a header stating this section is for control-flow integrity and just describe the functions them selfs with the comments.",
+      "range": {
+        "startLine": 637,
+        "startChar": 32,
+        "endLine": 637,
+        "endChar": 45
+      },
+      "revId": "c09d41f9b220f3de0300a3300fe62a6c73867607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
