@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df711b9c_48156af1",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 9
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2020-03-16T09:34:06Z",
+      "side": 1,
+      "message": "For my understanding: this enum type can only be used when the frame is a wasm frame, right?\n\nDoes it make sense to explicitly call this wasm-stack, or just wasm?",
+      "range": {
+        "startLine": 122,
+        "startChar": 8,
+        "endLine": 122,
+        "endChar": 13
+      },
+      "revId": "7782fdcc4f83519a0f54715fcf09d5e6f1874d76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
