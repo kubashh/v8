@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "429229f1_488167ec",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1928,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-03-16T18:03:52Z",
+      "side": 1,
+      "message": "Do we want this in namespace liftoff? Maybe anonymous namespace? Wdty Clemens?",
+      "range": {
+        "startLine": 1928,
+        "startChar": 0,
+        "endLine": 1928,
+        "endChar": 19
+      },
+      "revId": "4b9a2378ea69253e511d262625e64cd3526c4c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
