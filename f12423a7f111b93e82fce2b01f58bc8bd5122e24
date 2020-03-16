@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fca250f_5491d4e8",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-16T07:00:58Z",
+      "side": 1,
+      "message": "Please add DCHECK(IsFlat()) and mention the precondition to the header file (similar to the comments for e.g. GetUnderlying).",
+      "revId": "f12423a7f111b93e82fce2b01f58bc8bd5122e24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fe8cf03_bfea6332",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-16T07:00:58Z",
+      "side": 1,
+      "message": "I\u0027m tempted to turn this into a CHECK to prevent returning pointers into nowhere.",
+      "revId": "f12423a7f111b93e82fce2b01f58bc8bd5122e24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
