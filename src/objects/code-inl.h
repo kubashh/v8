@@ -454,6 +454,15 @@ void Code::set_builtin_index(int index) {
 
 bool Code::is_builtin() const { return builtin_index() != -1; }
 
+int Code::inlined_bytecode_size() const {
+  int index = ReadField<int>(kInlinedBytecodeSizeOffset);
+  return index;
+}
+
+void Code::set_inlined_bytecode_size(int index) {
+  WriteField<int>(kInlinedBytecodeSizeOffset, index);
+}
+
 bool Code::has_safepoint_info() const {
   return is_turbofanned() || is_wasm_code();
 }
