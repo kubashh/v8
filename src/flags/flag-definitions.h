@@ -1139,6 +1139,8 @@ DEFINE_BOOL(external_reference_stats, false,
 
 // compilation-cache.cc
 DEFINE_BOOL(compilation_cache, true, "enable compilation cache")
+DEFINE_BOOL(use_embedder_code_cache, true,
+            "Use cached code provided by the embedder")
 
 DEFINE_BOOL(cache_prototype_transitions, true, "cache prototype transitions")
 
