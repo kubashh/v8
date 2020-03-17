@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7414a2b8_94844055",
+        "filename": "test/inspector/debugger/wasm-stepping-liftoff.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-03-17T17:16:07Z",
+      "side": 1,
+      "message": "super nit: We usually prefer let over var.",
+      "range": {
+        "startLine": 90,
+        "startChar": 2,
+        "endLine": 90,
+        "endChar": 5
+      },
+      "revId": "f322e132711ef1938803f4745ee12dbb1a0bb6da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb0fed4d_ff46afc1",
+        "filename": "test/inspector/debugger/wasm-stepping-liftoff.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-03-17T17:16:07Z",
+      "side": 1,
+      "message": "super nit: Unneeded comment, next line says the same thing 1:1.",
+      "range": {
+        "startLine": 109,
+        "startChar": 2,
+        "endLine": 109,
+        "endChar": 40
+      },
+      "revId": "f322e132711ef1938803f4745ee12dbb1a0bb6da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a2d10f74_3d268c7e",
+        "filename": "test/inspector/debugger/wasm-stepping-liftoff.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-03-17T17:16:07Z",
+      "side": 1,
+      "message": "super nit: Just inline bpmsg.result.actualLocation.",
+      "range": {
+        "startLine": 119,
+        "startChar": 2,
+        "endLine": 119,
+        "endChar": 16
+      },
+      "revId": "f322e132711ef1938803f4745ee12dbb1a0bb6da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
