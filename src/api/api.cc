@@ -2475,8 +2475,8 @@ i::Compiler::ScriptDetails GetScriptDetails(
 }  // namespace
 
 MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
-    Isolate* v8_isolate, Source* source, CompileOptions options,
-    NoCacheReason no_cache_reason) {
+    Isolate* v8_isolate, Source* source, CompileOptions embedder_options,
+    NoCacheReason embedder_no_cache_reason) {
   auto isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
   TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.ScriptCompiler");
   ENTER_V8_NO_SCRIPT(isolate, v8_isolate->GetCurrentContext(), ScriptCompiler,
@@ -2484,6 +2484,12 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
                      InternalEscapableScope);
 
   i::ScriptData* script_data = nullptr;
+  CompileOptions options = embedder_options;
+  NoCacheReason no_cache_reason = embedder_no_cache_reason;
+  if (V8_UNLIKELY(!i::FLAG_use_embedder_code_cache)) {
+    options = ScriptCompiler::kNoCompileOptions;
+    no_cache_reason = ScriptCompiler::kNoCacheBecauseCachingDisabled;
+  }
   if (options == kConsumeCodeCache) {
     DCHECK(source->cached_data);
     // ScriptData takes care of pointer-aligning the data.
@@ -2582,8 +2588,8 @@ bool IsIdentifier(i::Isolate* isolate, i::Handle<i::String> string) {
 MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
     Local<Context> v8_context, Source* source, size_t arguments_count,
     Local<String> arguments[], size_t context_extension_count,
-    Local<Object> context_extensions[], CompileOptions options,
-    NoCacheReason no_cache_reason,
+    Local<Object> context_extensions[], CompileOptions embedder_options,
+    NoCacheReason embedder_no_cache_reason,
     Local<ScriptOrModule>* script_or_module_out) {
   Local<Function> result;
 
@@ -2592,6 +2598,12 @@ MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
                           Function);
     TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.ScriptCompiler");
 
+    CompileOptions options = embedder_options;
+    NoCacheReason no_cache_reason = embedder_no_cache_reason;
+    if (V8_UNLIKELY(!i::FLAG_use_embedder_code_cache)) {
+      options = ScriptCompiler::kNoCompileOptions;
+      no_cache_reason = ScriptCompiler::kNoCacheBecauseCachingDisabled;
+    }
     DCHECK(options == CompileOptions::kConsumeCodeCache ||
            options == CompileOptions::kEagerCompile ||
            options == CompileOptions::kNoCompileOptions);
