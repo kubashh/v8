@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf2452c7_7dc08ea6",
+        "filename": "test/inspector/debugger/wasm-stepping-liftoff.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-17T16:50:30Z",
+      "side": 1,
+      "message": "We usually just write \"await Protocol.Debugger.stepOver()\". The explicit property lookup only makes sense if the action is dynamic (from a variable or computation).",
+      "revId": "6afe45fda48f97c5fc0f5d411894c64bba3e7031",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
