@@ -647,6 +647,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Smi> SmiFromIntPtr(SloppyTNode<IntPtrT> value) { return SmiTag(value); }
   TNode<Smi> SmiFromInt32(SloppyTNode<Int32T> value);
   TNode<Smi> SmiFromUint32(TNode<Uint32T> value);
+  TNode<Smi> SmiFromUint32WithSaturation(TNode<Uint32T> value, int32_t max);
   TNode<IntPtrT> SmiToIntPtr(SloppyTNode<Smi> value) { return SmiUntag(value); }
   TNode<Int32T> SmiToInt32(SloppyTNode<Smi> value);
 
