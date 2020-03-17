@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "a51cf078_57deef90",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-17T17:45:39Z",
+      "side": 1,
+      "message": "We cannot do this here, it would embed a #if macro inside another macro.\nThe compile crashes with: embedding a #include directive within macro arguments is not supported,\n\nThe #else branch will be hopefully deleted in the future anyway.",
+      "parentUuid": "d9a7e0ae_bd52c298",
+      "range": {
+        "startLine": 1073,
+        "startChar": 20,
+        "endLine": 1073,
+        "endChar": 62
+      },
+      "revId": "aac032a7eb29b2247d4426e76b515da4285bf583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faec210c_d78e8c46",
         "filename": "src/codegen/interface-descriptors.h",
         "patchSetId": 1
