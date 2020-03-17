@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 #include "src/heap/safepoint.h"
+
+#include "src/heap/gc-tracer.h"
 #include "src/heap/heap.h"
 #include "src/heap/local-heap.h"
 
@@ -12,6 +14,7 @@ namespace internal {
 Safepoint::Safepoint(Heap* heap) : heap_(heap), local_heaps_head_(nullptr) {}
 
 void Safepoint::StopThreads() {
+  TRACE_GC(heap_->tracer(), GCTracer::Scope::SAFEPOINT_STOP_THREADS);
   local_heaps_mutex_.Lock();
 
   barrier_.Arm();
@@ -32,6 +35,7 @@ void Safepoint::StopThreads() {
 }
 
 void Safepoint::ResumeThreads() {
+  TRACE_GC(heap_->tracer(), GCTracer::Scope::SAFEPOINT_STOP_THREADS);
   for (LocalHeap* current = local_heaps_head_; current;
        current = current->next_) {
     current->state_mutex_.Unlock();
