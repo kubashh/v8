@@ -21,6 +21,11 @@ enum class ReportErrorsAndStatisticsMode { kYes, kNo };
 // function literal.  Returns false (and deallocates any allocated AST
 // nodes) if parsing failed.
 V8_EXPORT_PRIVATE bool ParseProgram(
+    ParseInfo* info, Handle<Script> script, MaybeHandle<ScopeInfo> outer_scope,
+    Isolate* isolate,
+    ReportErrorsAndStatisticsMode mode = ReportErrorsAndStatisticsMode::kYes);
+
+V8_EXPORT_PRIVATE bool ParseProgram(
     ParseInfo* info, Handle<Script> script, Isolate* isolate,
     ReportErrorsAndStatisticsMode mode = ReportErrorsAndStatisticsMode::kYes);
 
