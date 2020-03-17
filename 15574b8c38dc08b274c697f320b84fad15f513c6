@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69358817_6cacf506",
+        "filename": "src/builtins/builtins-wasm-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-17T14:42:57Z",
+      "side": 1,
+      "message": "Is the idea here that if {dst_raw} is \u003e\u003d the maximum, then we will unconditionally trap anyway?\nI think it would help to document the reasoning here.",
+      "revId": "15574b8c38dc08b274c697f320b84fad15f513c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51621d84_36531b49",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-17T14:42:57Z",
+      "side": 1,
+      "message": "Is this a performance optimization?\nWouldn\u0027t it be better to express this via SelectInt32Constant + SmiFromInt32?",
+      "revId": "15574b8c38dc08b274c697f320b84fad15f513c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
