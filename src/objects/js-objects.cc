@@ -4567,11 +4567,16 @@ void JSObject::EnsureCanContainElements(Handle<JSObject> object,
                                         JavaScriptArguments* args,
                                         uint32_t first_arg, uint32_t arg_count,
                                         EnsureElementsMode mode) {
+#ifdef V8_REVERSE_JSARGS
+  return EnsureCanContainElements(object, args->slot_at(first_arg), arg_count,
+                                  mode);
+#else
   // Elements in |Arguments| are ordered backwards (because they're on the
   // stack), but the method that's called here iterates over them in forward
   // direction.
   return EnsureCanContainElements(
       object, args->slot_at(first_arg + arg_count - 1), arg_count, mode);
+#endif
 }
 
 void JSObject::ValidateElements(JSObject object) {

@@ -60,8 +60,8 @@ class Arguments {
   }
 
   inline Address* address_of_arg_at(int index) const {
-    DCHECK_LT(static_cast<uint32_t>(index), static_cast<uint32_t>(length_));
-    int offset = index * kSystemPointerSize;
+    DCHECK_LE(static_cast<uint32_t>(index), static_cast<uint32_t>(length_));
+    uintptr_t offset = index * kSystemPointerSize;
 #ifdef V8_REVERSE_JSARGS
     if (arguments_type == ArgumentsType::kJS) {
       offset = (length_ - index - 1) * kSystemPointerSize;
@@ -109,6 +109,12 @@ double ClobberDoubleRegisters(double x1, double x2, double x3, double x4);
 #define CLOBBER_DOUBLE_REGISTERS() ClobberDoubleRegisters(1, 2, 3, 4);
 #else
 #define CLOBBER_DOUBLE_REGISTERS()
+#endif
+
+#ifdef V8_REVERSE_JSARGS
+#define JS_STACK_ARGS_2(rcv, arg0) arg0, rcv
+#else
+#define JS_STACK_ARGS_2(rcv, arg0) rcv, arg0
 #endif
 
 // TODO(cbruni): add global flag to check whether any tracing events have been
