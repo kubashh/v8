@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f885d191_99a7eb8f",
+        "filename": "src/handles/maybe-handles.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-17T18:11:08Z",
+      "side": 1,
+      "message": "I guess I\u0027m missing something, why is this different from the default constructor?",
+      "revId": "93377169abc08a43b21d3b81e67a1bc8523dc696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed51fc7b_0b2e087d",
+        "filename": "src/parsing/parsing.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-17T18:11:08Z",
+      "side": 1,
+      "message": "Could you swap these two ParseProgram and add a comment specifying what outer_scope is for the other function please.",
+      "revId": "93377169abc08a43b21d3b81e67a1bc8523dc696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
