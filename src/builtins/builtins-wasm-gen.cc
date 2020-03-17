@@ -214,6 +214,28 @@ TF_BUILTIN(WasmMemoryGrow, WasmBuiltinsAssembler) {
   Return(Int32Constant(-1));
 }
 
+TF_BUILTIN(WasmTableInit, WasmBuiltinsAssembler) {
+  TNode<Int32T> dst_raw =
+      UncheckedCast<Int32T>(Parameter(Descriptor::kDestination));
+  TNode<Smi> dst =
+      SmiFromInt32WithSaturation(dst_raw, FLAG_wasm_max_table_size);
+  TNode<Int32T> src_raw = UncheckedCast<Int32T>(Parameter(Descriptor::kSource));
+  TNode<Smi> src =
+      SmiFromInt32WithSaturation(src_raw, FLAG_wasm_max_table_size);
+  TNode<Int32T> size_raw = UncheckedCast<Int32T>(Parameter(Descriptor::kSize));
+  TNode<Smi> size =
+      SmiFromInt32WithSaturation(size_raw, FLAG_wasm_max_table_size);
+  TNode<Smi> table_index =
+      UncheckedCast<Smi>(Parameter(Descriptor::kTableIndex));
+  TNode<Smi> segment_index =
+      UncheckedCast<Smi>(Parameter(Descriptor::kSegmentIndex));
+  TNode<WasmInstanceObject> instance = LoadInstanceFromFrame();
+  TNode<Context> context = LoadContextFromInstance(instance);
+
+  TailCallRuntime(Runtime::kWasmTableInit, context, instance, table_index,
+                  segment_index, dst, src, size);
+}
+
 TF_BUILTIN(WasmTableGet, WasmBuiltinsAssembler) {
   TNode<Int32T> entry_index =
       UncheckedCast<Int32T>(Parameter(Descriptor::kEntryIndex));

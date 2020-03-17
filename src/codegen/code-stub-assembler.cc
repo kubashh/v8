@@ -822,6 +822,24 @@ TNode<Smi> CodeStubAssembler::SmiFromInt32(SloppyTNode<Int32T> value) {
   return SmiTag(ChangeInt32ToIntPtr(value));
 }
 
+TNode<Smi> CodeStubAssembler::SmiFromInt32WithSaturation(TNode<Int32T> value,
+                                                         int32_t max) {
+  TVARIABLE(Smi, result);
+  DCHECK_LE(max, Smi::kMaxValue);
+  Label in_range(this);
+  Label done(this);
+  GotoIf(Int32LessThanOrEqual(value, Int32Constant(max)), &in_range);
+
+  result = SmiConstant(max);
+  Goto(&done);
+
+  BIND(&in_range);
+  result = SmiFromInt32(value);
+  Goto(&done);
+  BIND(&done);
+  return result.value();
+}
+
 TNode<Smi> CodeStubAssembler::SmiFromUint32(TNode<Uint32T> value) {
   CSA_ASSERT(this, IntPtrLessThan(ChangeUint32ToWord(value),
                                   IntPtrConstant(Smi::kMaxValue)));
