@@ -339,11 +339,19 @@ class JsonTestProgressIndicator(ProgressIndicator):
 
   def process_results(self, test, results):
     for run, result in enumerate(results):
+      def outcome(test, result, run):
+        if result.has_unexpected_output:
+          return "unexpected"
+        if run != 0:
+          return "rerun"
+        else:
+          return test.output_proc.get_outcome(result.output)
+
       # TODO(majeski): Support for dummy/grouped results
       output = result.output
       # Buffer all tests for sorting the durations in the end.
       # TODO(machenbach): Running average + buffer only slowest 20 tests.
-      self.tests.append((test, output.duration, result.cmd))
+      self.tests.append((test, result, run, outcome(test, result, run)))
 
       # Omit tests that run as expected on the first try.
       # Everything that happens after the first run is included in the output
@@ -380,11 +388,11 @@ class JsonTestProgressIndicator(ProgressIndicator):
     if self.tests:
       # Get duration mean.
       duration_mean = (
-          sum(duration for (_, duration, cmd) in self.tests) /
+          sum(result.output.duration for (_, result, _, _) in self.tests) /
           float(len(self.tests)))
 
     # Sort tests by duration.
-    self.tests.sort(key=lambda __duration_cmd: __duration_cmd[1], reverse=True)
+    self.tests.sort(key=lambda __result____: __result____[1].output.duration, reverse=True)
     cutoff = self.options.slow_tests_cutoff
     slowest_tests = self._test_records(self.tests[:cutoff])
 
@@ -404,9 +412,16 @@ class JsonTestProgressIndicator(ProgressIndicator):
     return [
       {
         "name": str(test),
-        "flags": cmd.args,
-        "command": cmd.to_string(relative=True),
-        "duration": duration,
+        "flags": result.cmd.args,
+        "command": result.cmd.to_string(relative=True),
+        "duration": result.output.duration,
         "marked_slow": test.is_slow,
-      } for (test, duration, cmd) in tests
+        "run": run + 1,
+        "exit_code": result.output.exit_code,
+        "result": outcome,
+        "expected": test.expected_outcomes,
+        "random_seed": test.random_seed,
+        "target_name": test.get_shell(),
+        "variant": test.variant,
+      } for (test, result, run, outcome) in tests
     ]
