@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fadc233c_3402b993",
+        "filename": "src/torque/csa-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-03-17T18:54:30Z",
+      "side": 1,
+      "message": "Yes, because these cast-checks don\u0027t work for structs.",
+      "parentUuid": "27a24b97_939eca7a",
+      "range": {
+        "startLine": 266,
+        "startChar": 8,
+        "endLine": 266,
+        "endChar": 44
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bdc2ce41_7d775602",
         "filename": "src/torque/implementation-visitor.cc",
         "patchSetId": 4
@@ -118,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "5b11a801_e8b427fa",
+        "filename": "src/torque/implementation-visitor.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-03-17T18:54:30Z",
+      "side": 1,
+      "message": "This is a common pattern in the V8 codebase. But I agree, it\u0027s not too nice. I\u0027ll remove it.",
+      "parentUuid": "cec2de2b_957c0b7a",
+      "range": {
+        "startLine": 97,
+        "startChar": 6,
+        "endLine": 98,
+        "endChar": 57
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5a4635f8_97a53f93",
         "filename": "test/unittests/torque/torque-unittest.cc",
         "patchSetId": 4
@@ -129,6 +177,30 @@
       "writtenOn": "2020-03-13T13:57:33Z",
       "side": 1,
       "message": "Can you please make these a little more specific.\n\nWould be great for testing if we would have error codes / objects instead of pure strings 😞",
+      "range": {
+        "startLine": 654,
+        "startChar": 27,
+        "endLine": 654,
+        "endChar": 45
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b729767_3a5e5845",
+        "filename": "test/unittests/torque/torque-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-03-17T18:54:30Z",
+      "side": 1,
+      "message": "Yeah, but that\u0027s probably not worth the effort given that this is not user-facing.",
+      "parentUuid": "5a4635f8_97a53f93",
       "range": {
         "startLine": 654,
         "startChar": 27,
@@ -164,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "96d3afbb_ae60c538",
+        "filename": "test/unittests/torque/torque-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-03-17T18:54:30Z",
+      "side": 1,
+      "message": "References are just values, so yes, they are more like pointers than like C++ references.",
+      "parentUuid": "5c553de1_5de4eeeb",
+      "range": {
+        "startLine": 717,
+        "startChar": 6,
+        "endLine": 717,
+        "endChar": 42
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7370b89_b6354251",
         "filename": "test/unittests/torque/torque-unittest.cc",
         "patchSetId": 4
@@ -175,6 +271,30 @@
       "writtenOn": "2020-03-13T13:57:33Z",
       "side": 1,
       "message": "You always stated the type explicitly. Whould inference be correct without? I guess const constRefY \u003d refY would still infer a const\u0026 type since in order to get the value you would need to explicitly deref?",
+      "range": {
+        "startLine": 719,
+        "startChar": 6,
+        "endLine": 719,
+        "endChar": 42
+      },
+      "revId": "74278a584cb82cfa5c03bc2d7eb6c29f1757b1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e95f75d5_1153c6b0",
+        "filename": "test/unittests/torque/torque-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-03-17T18:54:30Z",
+      "side": 1,
+      "message": "The type annotations are not necessary, I added them to make sure that the corresponding subtyping checks succeed. If I didn\u0027t put the type annotation here, it would infer type \u0026int32 for constRefY, which was not what I wanted to test.",
+      "parentUuid": "b7370b89_b6354251",
       "range": {
         "startLine": 719,
         "startChar": 6,
