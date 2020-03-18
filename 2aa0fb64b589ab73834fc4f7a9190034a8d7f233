@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f5502765_4763877e",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-18T05:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "158c1c1f_26f727e8",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79211c5d_a29024ea",
         "filename": "src/compiler/js-inlining-heuristic.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99987081_ed758dd6",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-18T05:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79211c5d_a29024ea",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "8c1c1918_bbc27343",
+        "filename": "src/compiler/js-inlining-heuristic.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-18T05:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "307da93a_6ace0ab8",
+      "range": {
+        "startLine": 96,
+        "startChar": 28,
+        "endLine": 96,
+        "endChar": 33
+      },
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af0ce873_a1b431a1",
         "filename": "src/heap/factory.h",
         "patchSetId": 4
@@ -73,6 +133,24 @@
       "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e1eb3f1_22613af7",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-18T05:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af0ce873_a1b431a1",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "ae5f39b3_261dd027",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-18T05:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62487f69_5070ea96",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f9578a5_c31052e2",
         "filename": "src/objects/code-inl.h",
         "patchSetId": 4
@@ -110,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "b9a3176f_050bd509",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-18T05:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f9578a5_c31052e2",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00400fca_40af6a7b",
         "filename": "src/objects/code-inl.h",
         "patchSetId": 4
@@ -121,6 +235,24 @@
       "writtenOn": "2020-03-16T14:20:59Z",
       "side": 1,
       "message": "DCHECK_EQ(kind(), OPTIMIZED_FUNCTION);",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "881e23fa_0c1c03e4",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-18T05:55:57Z",
+      "side": 1,
+      "message": "We could not guarantee the OPTIMIZED_FUNCTION here because we need to initialize this field via this function in factory.cc:168 for different kinds of code objects.",
+      "parentUuid": "00400fca_40af6a7b",
       "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
