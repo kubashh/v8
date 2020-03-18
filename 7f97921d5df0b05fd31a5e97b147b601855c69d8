@@ -16,6 +16,24 @@
       "revId": "7f97921d5df0b05fd31a5e97b147b601855c69d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a40ebc9a_4d0e1357",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-03-18T12:14:53Z",
+      "side": 1,
+      "message": "Yes, this is why I added Igor as a reviewer.",
+      "parentUuid": "5fd2c769_8be3943f",
+      "revId": "7f97921d5df0b05fd31a5e97b147b601855c69d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
