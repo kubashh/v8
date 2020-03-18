@@ -46,6 +46,30 @@
       "revId": "4d2c0dbedbc539d9e79fcdb5b162f415e904fc65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "834af6a6_c8c7ef9a",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-03-18T10:07:26Z",
+      "side": 1,
+      "message": "Oh, sorry, somehow I read r.type() as type of the right-hand-side, while of course it\u0027s the type of the whole node... Sorry for the noise, I\u0027m perfectly happy with your solution.",
+      "parentUuid": "5575f5c8_27ec7689",
+      "range": {
+        "startLine": 851,
+        "startChar": 6,
+        "endLine": 851,
+        "endChar": 28
+      },
+      "revId": "4d2c0dbedbc539d9e79fcdb5b162f415e904fc65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
