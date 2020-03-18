@@ -917,6 +917,110 @@ void CodeAssembler::TailCallRuntimeImpl(
   raw_assembler()->TailCallN(call_descriptor, inputs.size(), inputs.data());
 }
 
+TNode<Object> CodeAssembler::CallApiCallbackImpl(
+    TNode<Object> context, TNode<RawPtrT> callback, TNode<IntPtrT> argc,
+    TNode<Object> data, TNode<Object> holder,
+    std::initializer_list<TNode<Object>> args) {
+  Callable callable = CodeFactory::CallApiCallback(isolate());
+  TNode<Code> target = HeapConstant(callable.code());
+
+  constexpr size_t kMaxNumArgs = 10;
+  DCHECK_GE(kMaxNumArgs, args.size());
+
+  NodeArray<kMaxNumArgs + 6> inputs;
+  inputs.Add(target);
+  inputs.Add(callback);
+  inputs.Add(argc);
+  inputs.Add(data);
+  inputs.Add(holder);
+#ifdef V8_REVERSE_JSARGS
+  for (auto arg : base::Reversed(args)) inputs.Add(arg);
+#else
+  for (auto arg : args) inputs.Add(arg);
+#endif
+  inputs.Add(context);
+
+  return CAST(CallStubN(StubCallMode::kCallCodeObject, callable.descriptor(), 1,
+                        inputs.size(), inputs.data()));
+}
+
+TNode<Object> CodeAssembler::CallRuntimeNewArrayImpl(
+    TNode<Object> context, std::initializer_list<TNode<Object>> args) {
+  auto function = Runtime::kNewArray;
+  int result_size = Runtime::FunctionForId(function)->result_size;
+  TNode<Code> centry =
+      HeapConstant(CodeFactory::RuntimeCEntry(isolate(), result_size));
+  constexpr size_t kMaxNumArgs = 6;
+  DCHECK_GE(kMaxNumArgs, args.size());
+  int argc = static_cast<int>(args.size());
+  auto call_descriptor = Linkage::GetRuntimeCallDescriptor(
+      zone(), function, argc, Operator::kNoProperties,
+      CallDescriptor::kNoFlags);
+
+  TNode<ExternalReference> ref =
+      ExternalConstant(ExternalReference::Create(function));
+  TNode<Int32T> arity = Int32Constant(argc);
+
+  NodeArray<kMaxNumArgs + 4> inputs;
+  inputs.Add(centry);
+#ifdef V8_REVERSE_JSARGS
+  auto it = std::rbegin(args);
+  auto type_info = *it;
+  auto new_target = *(++it);
+  for (++it; it != std::rend(args); ++it) inputs.Add(*it);
+  inputs.Add(new_target);
+  inputs.Add(type_info);
+#else
+  for (auto arg : args) inputs.Add(arg);
+#endif
+  inputs.Add(ref);
+  inputs.Add(arity);
+  inputs.Add(context);
+
+  CallPrologue();
+  Node* return_value =
+      raw_assembler()->CallN(call_descriptor, inputs.size(), inputs.data());
+  HandleException(return_value);
+  CallEpilogue();
+  return UncheckedCast<Object>(return_value);
+}
+
+void CodeAssembler::TailCallRuntimeNewArrayImpl(
+    TNode<Object> context, std::initializer_list<TNode<Object>> args) {
+  auto function = Runtime::kNewArray;
+  int result_size = Runtime::FunctionForId(function)->result_size;
+  TNode<Code> centry =
+      HeapConstant(CodeFactory::RuntimeCEntry(isolate(), result_size));
+  constexpr size_t kMaxNumArgs = 6;
+  DCHECK_GE(kMaxNumArgs, args.size());
+  int argc = static_cast<int>(args.size());
+  auto call_descriptor = Linkage::GetRuntimeCallDescriptor(
+      zone(), function, argc, Operator::kNoProperties,
+      CallDescriptor::kNoFlags);
+  TNode<Int32T> arity = Int32Constant(argc);
+
+  TNode<ExternalReference> ref =
+      ExternalConstant(ExternalReference::Create(function));
+
+  NodeArray<kMaxNumArgs + 4> inputs;
+  inputs.Add(centry);
+#ifdef V8_REVERSE_JSARGS
+  auto it = std::rbegin(args);
+  auto type_info = *it;
+  auto new_target = *(++it);
+  for (++it; it != std::rend(args); ++it) inputs.Add(*it);
+  inputs.Add(new_target);
+  inputs.Add(type_info);
+#else
+  for (auto arg : args) inputs.Add(arg);
+#endif
+  inputs.Add(ref);
+  inputs.Add(arity);
+  inputs.Add(context);
+
+  raw_assembler()->TailCallN(call_descriptor, inputs.size(), inputs.data());
+}
+
 Node* CodeAssembler::CallStubN(StubCallMode call_mode,
                                const CallInterfaceDescriptor& descriptor,
                                size_t result_size, int input_count,
