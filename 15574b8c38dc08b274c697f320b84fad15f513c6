@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "864bcbf2_d0245ce3",
+        "filename": "src/builtins/builtins-wasm-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-03-18T11:50:10Z",
+      "side": 1,
+      "message": "I added a comment, and also a static_assert.",
+      "parentUuid": "69358817_6cacf506",
+      "revId": "15574b8c38dc08b274c697f320b84fad15f513c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d7e08fdb_3eca60c1",
         "filename": "src/builtins/builtins-wasm-gen.cc",
         "patchSetId": 2
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "48a73d5e_a011a669",
+        "filename": "src/builtins/builtins-wasm-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-03-18T11:50:10Z",
+      "side": 1,
+      "message": "Ha, indeed. I changed the code now to use a constant.",
+      "parentUuid": "d7e08fdb_3eca60c1",
+      "range": {
+        "startLine": 225,
+        "startChar": 43,
+        "endLine": 225,
+        "endChar": 67
+      },
+      "revId": "15574b8c38dc08b274c697f320b84fad15f513c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51621d84_36531b49",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 2
@@ -56,6 +98,24 @@
       "revId": "15574b8c38dc08b274c697f320b84fad15f513c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f26037d5_4f6d32f9",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-03-18T11:50:10Z",
+      "side": 1,
+      "message": "Ha, it could be so easy. Thanks.",
+      "parentUuid": "51621d84_36531b49",
+      "revId": "15574b8c38dc08b274c697f320b84fad15f513c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
