@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ddc33b28_2f772427",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-03-18T10:26:59Z",
+      "side": 1,
+      "message": "super nit: Could be const",
+      "range": {
+        "startLine": 263,
+        "startChar": 2,
+        "endLine": 263,
+        "endChar": 19
+      },
+      "revId": "7750b518ffffda8a792cf654356d5645ee0e9d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
