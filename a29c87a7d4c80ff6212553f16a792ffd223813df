@@ -16,6 +16,24 @@
       "revId": "a29c87a7d4c80ff6212553f16a792ffd223813df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a560245_b50b354c",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-18T10:54:49Z",
+      "side": 1,
+      "message": "Shit! Yes! Sorry about that!",
+      "parentUuid": "e4c0c2cf_a6d3b7dc",
+      "revId": "a29c87a7d4c80ff6212553f16a792ffd223813df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
