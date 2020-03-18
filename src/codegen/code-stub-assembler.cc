@@ -828,6 +828,13 @@ TNode<Smi> CodeStubAssembler::SmiFromUint32(TNode<Uint32T> value) {
   return SmiFromInt32(Signed(value));
 }
 
+TNode<Smi> CodeStubAssembler::SmiFromUint32WithSaturation(TNode<Uint32T> value,
+                                                          uint32_t max) {
+  TNode<Uint32T> capped_value = SelectConstant(
+      Uint32LessThan(value, Uint32Constant(max)), value, Uint32Constant(max));
+  return SmiFromUint32(capped_value);
+}
+
 TNode<BoolT> CodeStubAssembler::IsValidPositiveSmi(TNode<IntPtrT> value) {
   intptr_t constant_value;
   if (ToIntPtrConstant(value, &constant_value)) {
