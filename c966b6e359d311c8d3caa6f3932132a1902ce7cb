@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e513b08d_65fc8eaa",
+        "filename": "src/execution/arguments.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-18T12:50:47Z",
+      "side": 1,
+      "message": "So, right now when we write in JS \u0027new Array(1, 2, 3)\u0027.\nIt calls the ArrayConstructor builtin with the stack:\n\n- 3\n- 2\n- 1\n- Receiver\n- Return Address\n\nThe builtin do some checks and eventually tail calls to Runtime_NewArray pushing two extra arguments (allocation site and new target).\n\n-------- RUNTIME STACK\n- allocation_site\n- new_target\n-------- JS STACK\n- 3\n- 2\n- 1\n- Receiver\n- Return Address\n\nWe have then a mix of JS stack and Runtime stack. They are accessed in different order.\n\nSometimes however, we call directly Runtime_NewArray directly (without a previous stack coming from JS), that\u0027s the case in buitins-array-gen.cc:1873. In this case, we need to reverse the JS stack arguments because CallRuntime and TailCallRuntime follows the Runtime order.\n\nNote that Runtime_NewArray is the only runtime function mixing the two stacks (at least, running \u0027gm x64.release.check\u0027 everything seems to work). I\u0027ve talked to Toon previously, he doesn\u0027t know why this function is a runtime function instead of a builtin. If we had a direct builtin call, we wouldn\u0027t need to do that.\n\nI could try to change that, but I think this is outside the scope of this CL. We might have performance regression, since as I understand a runtime call is slightly cheaper than a builtin one, so it would be better to be a separate CL.\n\n@Ross: What do you think? Do you know why this is a runtime function? Should we have this macro for the time being and delete it later? We will also eventually get rid of all the #else branches and of this JS_STACK_ARGS macro as well.",
+      "parentUuid": "80fb67db_30e114cb",
+      "revId": "c966b6e359d311c8d3caa6f3932132a1902ce7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32392419_85ec2447",
         "filename": "src/objects/js-objects.cc",
         "patchSetId": 6
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "b51056d6_3511fd2c",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4571,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-18T12:50:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "32392419_85ec2447",
+      "range": {
+        "startLine": 4571,
+        "startChar": 42,
+        "endLine": 4571,
+        "endChar": 46
+      },
+      "revId": "c966b6e359d311c8d3caa6f3932132a1902ce7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f4a4f547_50257882",
         "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
         "patchSetId": 6
@@ -62,6 +104,30 @@
       "revId": "c966b6e359d311c8d3caa6f3932132a1902ce7cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "951d8f72_247f0fbe",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-03-18T12:50:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f4a4f547_50257882",
+      "range": {
+        "startLine": 46,
+        "startChar": 8,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "c966b6e359d311c8d3caa6f3932132a1902ce7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
