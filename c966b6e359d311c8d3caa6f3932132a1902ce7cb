@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "9c13f2de_a3a5f8fd",
+        "filename": "src/execution/arguments.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-18T15:14:07Z",
+      "side": 1,
+      "message": "Thanks for the explanations. It makes sense that we need to have some special casing for tailcalling Runtime_NewArray and keeping the JS arguments. However, I think we should bottleneck the special casing of explicitly calling Runtime_NewArray to one place. Could we add a new CSA function (e.g., CallRuntimeNewArray) that takes the arguments in a fixed order (I\u0027d suggest the natural, not reversed order) and then does the actual reversing and calling of Runtime_NewArray) - then we can add a comment to that CSA function explaining why we need it (and avoid the need for the macro as well).",
+      "parentUuid": "8c87b350_bfe3f659",
+      "revId": "c966b6e359d311c8d3caa6f3932132a1902ce7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32392419_85ec2447",
         "filename": "src/objects/js-objects.cc",
         "patchSetId": 6
