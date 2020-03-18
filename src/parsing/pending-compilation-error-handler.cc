@@ -77,8 +77,8 @@ void PendingCompilationErrorHandler::ReportWarnings(Isolate* isolate,
 
 void PendingCompilationErrorHandler::ReportWarnings(OffThreadIsolate* isolate,
                                                     Handle<Script> script) {
-  // TODO(leszeks): Do nothing, re-report on the main thread.
-  UNREACHABLE();
+  // Do nothing, re-report on the main thread.
+  DCHECK(!has_pending_error());
 }
 
 void PendingCompilationErrorHandler::ReportErrors(
@@ -90,6 +90,27 @@ void PendingCompilationErrorHandler::ReportErrors(
     DCHECK(has_pending_error());
     // Internalize ast values for throwing the pending error.
     ast_value_factory->Internalize(isolate);
+    ThrowPendingError(isolate, script);
+  }
+}
+
+void PendingCompilationErrorHandler::PrepareErrorsOffThread(
+    OffThreadIsolate* isolate, Handle<Script> script,
+    AstValueFactory* ast_value_factory) {
+  // Prepare
+  if (!stack_overflow()) {
+    // Internalize ast values for later throwing the pending error.
+    ast_value_factory->Internalize(isolate);
+  }
+}
+
+void PendingCompilationErrorHandler::ReportErrorsAfterOffThreadFinalization(
+    Isolate* isolate, Handle<Script> script) {
+  if (stack_overflow()) {
+    isolate->StackOverflow();
+  } else {
+    DCHECK(has_pending_error());
+    // Ast values should already be internalized.
     ThrowPendingError(isolate, script);
   }
 }
