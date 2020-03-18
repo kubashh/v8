@@ -987,7 +987,6 @@
 ['variant == stress', {
   # Slow tests.
   'array-natives-elements': [SKIP],
-  'es6/array-iterator-turbo': [SKIP],
   'ignition/regress-599001-verifyheap': [SKIP],
   'unicode-test': [SKIP],
 
