@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3506dceb_26dbb52d",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-18T11:08:43Z",
+      "side": 1,
+      "message": "This wasn\u0027t what I was meaning. I was wanting to get rid of the need for the caller to have to swap arguments. I was suggesting that we pass the arguments in the same order to the InterpreterHelper, but then here we have the interpreter helper do something like the following:\n\n// Allocate parameter_count locals in case we need to reverse parameters.\nBytecodeArrayBuilder builder(zone_, parameter_count, parameter_count, nullptr);\nRegisterList reg_list;\n#ifdef V8_REVERSE_JSARGS\n  RegisterList reg_list \u003d \n      InterpreterTester::NewRegisterList(0, sizeof...(args));\n  for (int i \u003d 0; i \u003c sizeof...(args); i++) {\n    builder.MoveRegister(builder.Parameter(i), builder.Local(i));\n  }\n#else\n  RegisterList reg_list \u003d\n      InterpreterTester::NewRegisterList(builder.Receiver().index(), \n                                           sizeof...(args));\n#endif\n  builder.CallRuntime(function_id_, reg_list).Return();\n\nThat way the callers don\u0027t need to know about the swapping of arguments.",
+      "revId": "a29c87a7d4c80ff6212553f16a792ffd223813df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4c0c2cf_a6d3b7dc",
         "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
         "patchSetId": 4
@@ -31,6 +48,24 @@
       "side": 1,
       "message": "Shit! Yes! Sorry about that!",
       "parentUuid": "e4c0c2cf_a6d3b7dc",
+      "revId": "a29c87a7d4c80ff6212553f16a792ffd223813df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "835631fa_5b611875",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-18T11:08:43Z",
+      "side": 1,
+      "message": "Please don\u0027t use offensive language on CLs.",
+      "parentUuid": "0a560245_b50b354c",
       "revId": "a29c87a7d4c80ff6212553f16a792ffd223813df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
