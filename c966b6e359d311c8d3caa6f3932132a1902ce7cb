@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2ca8cf76_801788a7",
+        "filename": "src/execution/arguments.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-18T13:15:02Z",
+      "side": 1,
+      "message": "Just one correction. When we tail call to Runtime_NewArray the stack looks like this:\n-------- RUNTIME STACK\n-------- JS STACK\n3\n2\n1\nReceiver\n-- additional args for runtime function.\nallocation_site\nnew_target\nReturn Address\n\nThe idea behind this tail call is to leave JS arguments on the stack where they are (imagine we pass 100 arguments to NewArray - we don\u0027t want to copy them) and put additional args below JS args. Thus the allocation_site and new_target are JS arguments order independent but the JS arguments depend on the order.\nThus when we call Runtime_NewArray manually with one argument we have to pass receiver and parameter0 in the JS order and the rest two as is.\n\nOnce we stick with the new arguments order all these macros will go away.\nMaybe we could add a comment or two in Runtime_NewArray explaining the reasoning above.",
+      "parentUuid": "e513b08d_65fc8eaa",
+      "revId": "c966b6e359d311c8d3caa6f3932132a1902ce7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32392419_85ec2447",
         "filename": "src/objects/js-objects.cc",
         "patchSetId": 6
