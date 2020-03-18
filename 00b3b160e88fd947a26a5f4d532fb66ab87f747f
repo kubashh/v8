@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fa1b32f_26fb7e1d",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-18T23:05:55Z",
+      "side": 1,
+      "message": "These should all live in code-stub-assembler.cc",
+      "revId": "00b3b160e88fd947a26a5f4d532fb66ab87f747f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8c70045_3815af83",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-18T23:05:55Z",
+      "side": 1,
+      "message": "I was actually thinking to specify the parameters that the builtins explicitly use, rather than specifying varargs. That way the implementation can be much simpler (just swap the two arguments that need swapped and  CallRuntime(...).",
+      "revId": "00b3b160e88fd947a26a5f4d532fb66ab87f747f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
