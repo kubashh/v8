@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "8c87b350_bfe3f659",
+        "filename": "src/execution/arguments.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-18T13:50:43Z",
+      "side": 1,
+      "message": "Runtime_NewArray is a fallback implementation which we call as a last resort from other array construction builtins. CPP builtins follow JS calling convention and I guess it would be even more messy to pass additional arguments there given that we would like to keep the existing JS arguments on the stack.",
+      "parentUuid": "58153e9a_76008a6e",
+      "revId": "c966b6e359d311c8d3caa6f3932132a1902ce7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32392419_85ec2447",
         "filename": "src/objects/js-objects.cc",
         "patchSetId": 6
