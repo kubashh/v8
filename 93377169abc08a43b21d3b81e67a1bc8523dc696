@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "62fec017_7c16300f",
+        "filename": "src/handles/maybe-handles.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-18T12:33:12Z",
+      "side": 1,
+      "message": "That\u0027s a cool trick!",
+      "parentUuid": "80e66e3b_33a59141",
+      "revId": "93377169abc08a43b21d3b81e67a1bc8523dc696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed51fc7b_0b2e087d",
         "filename": "src/parsing/parsing.h",
         "patchSetId": 1
