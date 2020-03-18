@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "78add791_e933ac8c",
+        "filename": "src/builtins/builtins-wasm-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-18T13:41:54Z",
+      "side": 1,
+      "message": "uint32_t?",
+      "range": {
+        "startLine": 224,
+        "startChar": 12,
+        "endLine": 224,
+        "endChar": 15
+      },
+      "revId": "7f97921d5df0b05fd31a5e97b147b601855c69d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5fd2c769_8be3943f",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 4
@@ -49,6 +72,47 @@
       "side": 1,
       "message": "There is still at least one more builtin that will also need this helper.",
       "parentUuid": "a40ebc9a_4d0e1357",
+      "revId": "7f97921d5df0b05fd31a5e97b147b601855c69d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "746a40c4_b21d6768",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-18T13:41:54Z",
+      "side": 1,
+      "message": "I\u0027m not aware of a need for such a helper in non-Wasm code. So if all the users are supposed to be in Wasm builtins I\u0027d +1 to move this helper there.",
+      "parentUuid": "93ffaa22_b5962d1f",
+      "revId": "7f97921d5df0b05fd31a5e97b147b601855c69d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "851386c3_441c642b",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-18T13:41:54Z",
+      "side": 1,
+      "message": "Nit: this function does a dynamic check that capped_value is less than kMaxSmiValue.\nI think it makes sense to add\n  DCHECK_LE(max, static_cast\u003cuint32_t\u003e(Smi::kMaxValue)); \nto the beginning of this function. kCap is guarded by static assert but in future there could be other usages.",
+      "range": {
+        "startLine": 835,
+        "startChar": 9,
+        "endLine": 835,
+        "endChar": 22
+      },
       "revId": "7f97921d5df0b05fd31a5e97b147b601855c69d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
