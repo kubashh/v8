@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "961435b9_be30232c",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-03-18T09:48:23Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand why this condition works. Why not just check if node has type True or False? This is more straightforward and certainly prevents type widening.",
+      "range": {
+        "startLine": 851,
+        "startChar": 6,
+        "endLine": 851,
+        "endChar": 28
+      },
+      "revId": "4d2c0dbedbc539d9e79fcdb5b162f415e904fc65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
