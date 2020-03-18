@@ -22,6 +22,30 @@
       "revId": "4d2c0dbedbc539d9e79fcdb5b162f415e904fc65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5575f5c8_27ec7689",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-18T10:04:26Z",
+      "side": 1,
+      "message": "\"has type True or False\" implies \"IsHeapConstant\" implies \"IsSingleton\", that\u0027s why it works. I like \"IsSingleton\" here because it\u0027s much shorter than \"r.type().Is(Type::Constant(broker, factory()-\u003etrue_value(), graph()-\u003ezone())) || r.type().Is(Type::Constant(broker, factory()-\u003efalse_value(), graph()-\u003ezone()))\" and because it leads to a generic check than can potentially be repeated in other places that suffer from a similar issue.",
+      "parentUuid": "961435b9_be30232c",
+      "range": {
+        "startLine": 851,
+        "startChar": 6,
+        "endLine": 851,
+        "endChar": 28
+      },
+      "revId": "4d2c0dbedbc539d9e79fcdb5b162f415e904fc65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
