@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "729e2c55_3f8c62c8",
+        "filename": "src/handles/maybe-handles.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-03-18T10:20:22Z",
+      "side": 1,
+      "message": "It\u0027s consistent with nullopt in base/std::optional, it allows us to construct a null MaybeHandle without having to specify the type. So, for\n\n    void foo(MaybeHandle\u003cScript\u003e);\n\nwe can write\n\n    foo(kNullMaybeHandle);\n\nrather than\n\n    foo(MaybeHandle\u003cScript\u003e());\n\nor\n\n    foo({});\n\nThat said, this could redirect to the default constructor, I can change that if you want.",
+      "parentUuid": "f885d191_99a7eb8f",
+      "revId": "93377169abc08a43b21d3b81e67a1bc8523dc696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed51fc7b_0b2e087d",
         "filename": "src/parsing/parsing.h",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "93377169abc08a43b21d3b81e67a1bc8523dc696",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6000b57a_97f5e58e",
+        "filename": "src/parsing/parsing.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-03-18T10:20:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed51fc7b_0b2e087d",
+      "revId": "93377169abc08a43b21d3b81e67a1bc8523dc696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
