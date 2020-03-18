@@ -34,6 +34,24 @@
       "revId": "7f97921d5df0b05fd31a5e97b147b601855c69d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93ffaa22_b5962d1f",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-03-18T12:15:33Z",
+      "side": 1,
+      "message": "There is still at least one more builtin that will also need this helper.",
+      "parentUuid": "a40ebc9a_4d0e1357",
+      "revId": "7f97921d5df0b05fd31a5e97b147b601855c69d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
