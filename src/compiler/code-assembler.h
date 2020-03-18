@@ -949,6 +949,33 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   }
 
   // Calls
+
+  // CallApiCallback receives the first four arguments in registers
+  // (callback, argc, data and holder). The last arguments are in the stack in
+  // JS ordering. See ApiCallbackDescriptor.
+  template <class... TArgs>
+  TNode<Object> CallApiCallback(TNode<Object> context, TNode<RawPtrT> callback,
+                                TNode<IntPtrT> argc, TNode<Object> data,
+                                TNode<Object> holder, TArgs... args) {
+    return CallApiCallbackImpl(context, callback, argc, data, holder,
+                               {implicit_cast<TNode<Object>>(args)...});
+  }
+
+  // Runtime_NewArray receives arguments in the JS order (to avoid unnecessary
+  // copy). Except the last two (new_target and allocation_site) which are add
+  // on top of the stack later.
+  template <class... TArgs>
+  TNode<Object> CallRuntimeNewArray(TNode<Object> context, TArgs... args) {
+    return CallRuntimeNewArrayImpl(context,
+                                   {implicit_cast<TNode<Object>>(args)...});
+  }
+
+  template <class... TArgs>
+  void TailCallRuntimeNewArray(TNode<Object> context, TArgs... args) {
+    return TailCallRuntimeNewArrayImpl(context,
+                                       {implicit_cast<TNode<Object>>(args)...});
+  }
+
   template <class... TArgs>
   TNode<Object> CallRuntime(Runtime::FunctionId function, TNode<Object> context,
                             TArgs... args) {
@@ -1161,6 +1188,18 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   void TailCallRuntimeImpl(Runtime::FunctionId function, TNode<Int32T> arity,
                            TNode<Object> context,
                            std::initializer_list<TNode<Object>> args);
+
+  TNode<Object> CallApiCallbackImpl(TNode<Object> context,
+                                    TNode<RawPtrT> callback,
+                                    TNode<IntPtrT> argc, TNode<Object> data,
+                                    TNode<Object> holder,
+                                    std::initializer_list<TNode<Object>> args);
+
+  TNode<Object> CallRuntimeNewArrayImpl(
+      TNode<Object> context, std::initializer_list<TNode<Object>> args);
+
+  void TailCallRuntimeNewArrayImpl(TNode<Object> context,
+                                   std::initializer_list<TNode<Object>> args);
 
   void TailCallStubImpl(const CallInterfaceDescriptor& descriptor,
                         TNode<Code> target, TNode<Object> context,
