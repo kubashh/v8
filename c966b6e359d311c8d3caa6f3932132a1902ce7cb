@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80fb67db_30e114cb",
+        "filename": "src/execution/arguments.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-18T12:05:51Z",
+      "side": 1,
+      "message": "I would really like that we avoid macros like this. It seems to being used for the NewArray runtime call (and only a subset of the arguments at that, which seems even more confusing). \n\nSorry if I missed the discussion earlier, but why is this necessary? Can\u0027t we do some argument shuffling in NewArray instead of reversing them in the call?",
+      "revId": "c966b6e359d311c8d3caa6f3932132a1902ce7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32392419_85ec2447",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4571,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-18T12:05:51Z",
+      "side": 1,
+      "message": "Could we make JavaScriptArguments have a function that returns the right slot instead of having callers have to #ifdef on V8_REVERSE_JSARGS ?",
+      "range": {
+        "startLine": 4571,
+        "startChar": 42,
+        "endLine": 4571,
+        "endChar": 46
+      },
+      "revId": "c966b6e359d311c8d3caa6f3932132a1902ce7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4a4f547_50257882",
+        "filename": "test/cctest/interpreter/test-interpreter-intrinsics.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-18T12:05:51Z",
+      "side": 1,
+      "message": "builder.Parameter(0)",
+      "range": {
+        "startLine": 46,
+        "startChar": 8,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "c966b6e359d311c8d3caa6f3932132a1902ce7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
