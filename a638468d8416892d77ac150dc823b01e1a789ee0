@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30ab897b_c490128d",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2019,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-18T14:35:28Z",
+      "side": 1,
+      "message": "Let\u0027s just unconditionally copy object-\u003einlined_bytecode_size(). See my other comment on the DCHECK in the getter.",
+      "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2eacdaeb_f7d51881",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-18T14:35:28Z",
+      "side": 1,
+      "message": "This can then be const.",
+      "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a22d3dd4_8a57321d",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-18T14:35:28Z",
+      "side": 1,
+      "message": "Have you thought about making IsSmall take the inlined_bytecode_size into account as well?",
+      "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a963fae3_9e4f03c1",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-18T14:35:28Z",
+      "side": 1,
+      "message": "Let\u0027s replace these two lines with a break and then set the size only in one place (at the end).",
+      "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0417f25_e7fe939e",
+        "filename": "src/compiler/js-inlining-heuristic.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-18T14:35:28Z",
+      "side": 1,
+      "message": "Instead of having JSInlingHeuristic repeatedly write the current total size into the OptimizedCompilationInfo, I\u0027d prefer if JSInliningHeuristic made the number available via total_inlined_bytecode_size() and in the pipeline at the end of InliningPhase::Run we take it from there and write it into the OptimizedCompilationInfo.",
+      "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

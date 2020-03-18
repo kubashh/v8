@@ -256,6 +256,24 @@
       "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edd55378_34548007",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-18T14:35:28Z",
+      "side": 1,
+      "message": "I see. Then I suggest to add\n  DCHECK(kind() \u003d\u003d OPTIMIZED_FUNCTION || size \u003d\u003d 0)\nhere and also in the getter (and remove the existing DCHECK in the getter).",
+      "parentUuid": "881e23fa_0c1c03e4",
+      "revId": "2aa0fb64b589ab73834fc4f7a9190034a8d7f233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
