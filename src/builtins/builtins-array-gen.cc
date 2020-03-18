@@ -1870,8 +1870,9 @@ void ArrayBuiltinsAssembler::GenerateConstructor(
 
   BIND(&call_runtime);
   {
-    TailCallRuntime(Runtime::kNewArray, context, array_function, array_size,
-                    array_function, allocation_site);
+    TailCallRuntime(Runtime::kNewArray, context,
+                    JS_STACK_ARGS_2(array_function, array_size), array_function,
+                    allocation_site);
   }
 }
 

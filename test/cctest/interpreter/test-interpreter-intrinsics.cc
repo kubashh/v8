@@ -10,6 +10,14 @@
 #include "src/objects/objects-inl.h"
 #include "test/cctest/interpreter/interpreter-tester.h"
 
+#ifdef V8_REVERSE_JSARGS
+#define JS_STACK_ARGS_3(a, b, c) c, b, a
+#define JS_STACK_ARGS_5(a, b, c, d, e) e, d, c, b, a
+#else
+#define JS_STACK_ARGS_3(a, b, c) a, b, c
+#define JS_STACK_ARGS_5(a, b, c, d, e) a, b, c, d, e
+#endif
+
 namespace v8 {
 namespace internal {
 namespace interpreter {
@@ -28,9 +36,20 @@ class InvokeIntrinsicHelper {
   template <class... A>
   Handle<Object> Invoke(A... args) {
     CHECK(IntrinsicsHelper::IsSupported(function_id_));
-    BytecodeArrayBuilder builder(zone_, sizeof...(args), 0, nullptr);
-    RegisterList reg_list = InterpreterTester::NewRegisterList(
-        builder.Receiver().index(), sizeof...(args));
+    int parameter_count = sizeof...(args) + 1;
+    BytecodeArrayBuilder builder(zone_, parameter_count, 0, nullptr);
+#ifdef V8_REVERSE_JSARGS
+    // TODO(victor, v8:10322): Allocate local registers for the number of
+    // arguments and move them from the incoming parameters into the local
+    // registers (reversing the order as you go).
+    int first_param =
+        Register::FromParameterIndex(parameter_count - 1, parameter_count)
+            .index();
+#else
+    int first_param = Register::FromParameterIndex(1, parameter_count).index();
+#endif
+    RegisterList reg_list =
+        InterpreterTester::NewRegisterList(first_param, sizeof...(args));
     builder.CallRuntime(function_id_, reg_list).Return();
     InterpreterTester tester(isolate_, builder.ToBytecodeArray(isolate_));
     auto callable = tester.GetCallable<A...>();
@@ -127,18 +146,19 @@ TEST(Call) {
                                Runtime::kInlineCall);
 
   CHECK_EQ(Smi::FromInt(20),
-           *helper.Invoke(helper.NewObject("(function() { return this.x; })"),
-                          helper.NewObject("({ x: 20 })")));
+           *helper.Invoke(JS_STACK_ARGS_2(
+               helper.NewObject("(function() { return this.x; })"),
+               helper.NewObject("({ x: 20 })"))));
   CHECK_EQ(Smi::FromInt(50),
-           *helper.Invoke(helper.NewObject("(function(arg1) { return arg1; })"),
-                          factory->undefined_value(),
-                          handle(Smi::FromInt(50), isolate)));
+           *helper.Invoke(JS_STACK_ARGS_3(
+               helper.NewObject("(function(arg1) { return arg1; })"),
+               factory->undefined_value(), handle(Smi::FromInt(50), isolate))));
   CHECK_EQ(
       Smi::FromInt(20),
-      *helper.Invoke(
+      *helper.Invoke(JS_STACK_ARGS_5(
           helper.NewObject("(function(a, b, c) { return a + b + c; })"),
           factory->undefined_value(), handle(Smi::FromInt(10), isolate),
-          handle(Smi::FromInt(7), isolate), handle(Smi::FromInt(3), isolate)));
+          handle(Smi::FromInt(7), isolate), handle(Smi::FromInt(3), isolate))));
 }
 
 TEST(IntrinsicAsStubCall) {
@@ -148,14 +168,14 @@ TEST(IntrinsicAsStubCall) {
 
   InvokeIntrinsicHelper has_property_helper(isolate, handles.main_zone(),
                                             Runtime::kInlineHasProperty);
-  CHECK_EQ(
-      *factory->true_value(),
-      *has_property_helper.Invoke(has_property_helper.NewObject("({ x: 20 })"),
-                                  has_property_helper.NewObject("'x'")));
-  CHECK_EQ(
-      *factory->false_value(),
-      *has_property_helper.Invoke(has_property_helper.NewObject("({ x: 20 })"),
-                                  has_property_helper.NewObject("'y'")));
+  CHECK_EQ(*factory->true_value(),
+           *has_property_helper.Invoke(
+               JS_STACK_ARGS_2(has_property_helper.NewObject("({ x: 20 })"),
+                               has_property_helper.NewObject("'x'"))));
+  CHECK_EQ(*factory->false_value(),
+           *has_property_helper.Invoke(
+               JS_STACK_ARGS_2(has_property_helper.NewObject("({ x: 20 })"),
+                               has_property_helper.NewObject("'y'"))));
 }
 
 }  // namespace interpreter
