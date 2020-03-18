@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5fd2c769_8be3943f",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-18T12:04:42Z",
+      "side": 1,
+      "message": "This looks really good now!\nI am just wondering if this pattern is generic enough to put it in the CodeStubAssembler, or whether this should just be a little helper in the builtins-wasm-gen.cc file.\nIgor, WDYT?",
+      "revId": "7f97921d5df0b05fd31a5e97b147b601855c69d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
