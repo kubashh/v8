@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d35893f_c534a6e1",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-03-18T13:31:03Z",
+      "side": 1,
+      "message": "The result includes stderr and stdout. If you add it here it can\u0027t get garbage collected. In large test runs this might breach memory and can also cause slow down. I\u0027d filter the items you need first so that the original results can get garbage collected.",
+      "range": {
+        "startLine": 346,
+        "startChar": 31,
+        "endLine": 346,
+        "endChar": 37
+      },
+      "revId": "24d78b193a7c9369e2a8e1ff35af331559b1d30b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54ec9801_7cc3887b",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-03-18T13:31:03Z",
+      "side": 1,
+      "message": "Could you maybe reuse this code? The version for duration is probably the same - stdout and stderr. Not sure about the \"result\" in the pass case. Saw you blanked it below, what would it contain if you don\u0027t?",
+      "range": {
+        "startLine": 354,
+        "startChar": 6,
+        "endLine": 370,
+        "endChar": 8
+      },
+      "revId": "24d78b193a7c9369e2a8e1ff35af331559b1d30b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
