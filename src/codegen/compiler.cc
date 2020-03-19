@@ -503,7 +503,7 @@ void EnsureSharedFunctionInfosArrayOnScript(Handle<Script> script,
     return;
   }
   Handle<WeakFixedArray> infos(isolate->factory()->NewWeakFixedArray(
-      parse_info->max_function_literal_id() + 1, AllocationType::kOld));
+      parse_info->max_function_literal_id() + 1, AllocationType::kYoung));
   script->set_shared_function_infos(*infos);
 }
 
