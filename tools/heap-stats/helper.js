@@ -21,3 +21,9 @@ function formatBytes(bytes) {
 function formatSeconds(millis) {
   return (millis * kMillis2Seconds).toFixed(2) + 's';
 }
+
+function defineCustomElement(name, htmlTemplatePath, generator) {
+  fetch('elements/'+htmlTemplatePath)
+    .then(stream => stream.text())
+    .then(templateText => customElements.define(name, generator(templateText)));
+}

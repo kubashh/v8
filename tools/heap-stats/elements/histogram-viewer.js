@@ -4,15 +4,14 @@
 
 'use strict';
 
-const histogram_viewer_template =
-    document.currentScript.ownerDocument.querySelector(
-        '#histogram-viewer-template');
-
+defineCustomElement('histogram-viewer',
+  'histogram-viewer.html',
+  (templateText) =>
 class HistogramViewer extends HTMLElement {
   constructor() {
     super();
     const shadowRoot = this.attachShadow({mode: 'open'});
-    shadowRoot.appendChild(histogram_viewer_template.content.cloneNode(true));
+    shadowRoot.innerHTML = templateText;
   }
 
   $(id) {
@@ -185,6 +184,4 @@ class HistogramViewer extends HTMLElement {
     this.show();
     chart.draw(data, options);
   }
-}
-
-customElements.define('histogram-viewer', HistogramViewer);
+});

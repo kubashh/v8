@@ -4,15 +4,14 @@
 
 'use strict';
 
-const global_timeline_template =
-    document.currentScript.ownerDocument.querySelector(
-        '#global-timeline-template');
-
+defineCustomElement('global-timeline',
+  'global-timeline.html',
+  (templateText) =>
 class GlobalTimeline extends HTMLElement {
   constructor() {
     super();
     const shadowRoot = this.attachShadow({mode: 'open'});
-    shadowRoot.appendChild(global_timeline_template.content.cloneNode(true));
+    shadowRoot.innerHTML = templateText;
   }
 
   $(id) {
@@ -217,6 +216,4 @@ class GlobalTimeline extends HTMLElement {
     this.show();
     chart.draw(data, google.charts.Line.convertOptions(options));
   }
-}
-
-customElements.define('global-timeline', GlobalTimeline);
+});
