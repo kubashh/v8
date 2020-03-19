@@ -188,8 +188,7 @@ namespace promise {
     //   slots to onFinally.
     let thenFinally: JSAny;
     let catchFinally: JSAny;
-    if (!TaggedIsSmi(onFinally) &&
-        IsCallable(UnsafeCast<HeapObject>(onFinally))) {
+    if (TaggedIsCallable(onFinally)) {
       const pair = CreatePromiseFinallyFunctions(
           nativeContext, UnsafeCast<Callable>(onFinally), constructor);
       thenFinally = pair.then_finally;
