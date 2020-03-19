@@ -1323,6 +1323,8 @@ void BackgroundCompileTask::Run() {
                "V8.FinalizeCodeBackground");
 
   OffThreadIsolate* isolate = off_thread_isolate();
+  isolate->PinToCurrentThread();
+
   OffThreadHandleScope handle_scope(isolate);
 
   // We don't have the script source or the script origin yet, so use a few
