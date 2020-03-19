@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de9b3813_1d0c3410",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-19T10:39:42Z",
+      "side": 1,
+      "message": "I think this should be\n  IsSmall(bytecode.length() + (function.IsOptimized() ? function.code().inlined_bytecode_size() : 0))\n\ncandidate.total_size includes the sizes of the previous functions for this candidate.",
+      "revId": "5021f8ad2e3767032ad994a7215355983f334e2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

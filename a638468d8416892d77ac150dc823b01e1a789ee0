@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "0a83cb72_1518e6af",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-03-19T10:39:42Z",
+      "side": 1,
+      "message": "I\u0027m not 100% certain about this, it would be great if you could run the benchmarks with and without the change to IsSmall.",
+      "parentUuid": "f7792850_c4389a60",
+      "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a963fae3_9e4f03c1",
         "filename": "src/compiler/js-inlining-heuristic.cc",
         "patchSetId": 5
