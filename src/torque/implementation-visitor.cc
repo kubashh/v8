@@ -3356,7 +3356,7 @@ class CppClassGenerator {
   void GenerateFieldAccessor(const Field& f);
   void GenerateFieldAccessorForUntagged(const Field& f);
   void GenerateFieldAccessorForSmi(const Field& f);
-  void GenerateFieldAccessorForObject(const Field& f);
+  void GenerateFieldAccessorForTagged(const Field& f);
 
   void GenerateClassCasts();
 
@@ -3532,11 +3532,25 @@ void CppClassGenerator::GenerateClassConstructors() {
 
   hdr_ << "protected:\n";
   hdr_ << "  inline explicit " << gen_name_ << "(Address ptr);\n";
+  hdr_ << "  // Special-purpose constructor for subclasses that have fast "
+          "paths where\n";
+  hdr_ << "  // their ptr() is a Smi.\n";
+  hdr_ << "  inline explicit " << gen_name_
+       << "(Address ptr, HeapObject::AllowInlineSmiStorage allow_smi);\n";
 
   inl_ << "template<class D, class P>\n";
   inl_ << "inline " << gen_name_T_ << "::" << gen_name_ << "(Address ptr)\n";
   inl_ << "  : P(ptr) {\n";
   inl_ << "  SLOW_DCHECK(this->Is" << name_ << "());\n";
+  inl_ << "}\n";
+
+  inl_ << "template<class D, class P>\n";
+  inl_ << "inline " << gen_name_T_ << "::" << gen_name_
+       << "(Address ptr, HeapObject::AllowInlineSmiStorage allow_smi)\n";
+  inl_ << "  : P(ptr, allow_smi) {\n";
+  inl_ << "  SLOW_DCHECK((allow_smi == "
+          "HeapObject::AllowInlineSmiStorage::kAllowBeingASmi && "
+       << "this->IsSmi()) || this->Is" << name_ << "());\n";
   inl_ << "}\n";
 }
 
@@ -3554,8 +3568,8 @@ void CppClassGenerator::GenerateFieldAccessor(const Field& f) {
   if (f.name_and_type.type->IsSubtypeOf(TypeOracle::GetSmiType())) {
     return GenerateFieldAccessorForSmi(f);
   }
-  if (f.name_and_type.type->IsSubtypeOf(TypeOracle::GetObjectType())) {
-    return GenerateFieldAccessorForObject(f);
+  if (f.name_and_type.type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
+    return GenerateFieldAccessorForTagged(f);
   }
 
   Error("Generation of field accessor for ", type_->name(),
@@ -3677,18 +3691,16 @@ void CppClassGenerator::GenerateFieldAccessorForSmi(const Field& f) {
   inl_ << "}\n\n";
 }
 
-void CppClassGenerator::GenerateFieldAccessorForObject(const Field& f) {
+void CppClassGenerator::GenerateFieldAccessorForTagged(const Field& f) {
   const Type* field_type = f.name_and_type.type;
-  DCHECK(field_type->IsSubtypeOf(TypeOracle::GetObjectType()));
+  DCHECK(field_type->IsSubtypeOf(TypeOracle::GetTaggedType()));
   const std::string& name = f.name_and_type.name;
   const std::string offset = "k" + CamelifyString(name) + "Offset";
-  base::Optional<const ClassType*> class_type = field_type->ClassSupertype();
+  bool strong_pointer = field_type->IsSubtypeOf(TypeOracle::GetObjectType());
 
-  std::string type =
-      class_type ? (*class_type)->GetGeneratedTNodeTypeName() : "Object";
-
+  std::string type = field_type->GetRuntimeType();
   // Generate declarations in header.
-  if (!class_type && field_type != TypeOracle::GetObjectType()) {
+  if (!field_type->IsClassType() && field_type != TypeOracle::GetObjectType()) {
     hdr_ << "  // Torque type: " << field_type->ToString() << "\n";
   }
 
@@ -3700,9 +3712,11 @@ void CppClassGenerator::GenerateFieldAccessorForObject(const Field& f) {
        << type << " value, WriteBarrierMode mode = UPDATE_WRITE_BARRIER);\n\n";
 
   std::string type_check;
-  for (const RuntimeType& runtime_type : field_type->GetRuntimeTypes()) {
-    if (!type_check.empty()) type_check += " || ";
-    type_check += "value.Is" + runtime_type.type + "()";
+  if (strong_pointer) {
+    for (const RuntimeType& runtime_type : field_type->GetRuntimeTypes()) {
+      if (!type_check.empty()) type_check += " || ";
+      type_check += "value.Is" + runtime_type.type + "()";
+    }
   }
 
   // Generate implementation in inline header.
@@ -3719,28 +3733,24 @@ void CppClassGenerator::GenerateFieldAccessorForObject(const Field& f) {
        << "(const Isolate* isolate" << (f.index ? ", int i" : "")
        << ") const {\n";
 
-  if (class_type) {
-    if (f.index) {
-      inl_ << "  int offset = " << offset << " + i * kTaggedSize;\n";
-      inl_ << "  return " << type
-           << "::cast(RELAXED_READ_FIELD(*this, offset));\n";
-    } else {
-      inl_ << "  return TaggedField<" << type << ", " << offset
-           << ">::load(isolate, *this);\n";
-    }
+  // TODO(tebbi): The distinction between relaxed and non-relaxed accesses here
+  // is pretty arbitrary and just tries to preserve what was there before.
+  // It currently doesn't really make a difference due to concurrent marking
+  // turning all loads and stores to be relaxed. We should probably drop the
+  // distinction at some point, even though in principle non-relaxed operations
+  // would give us TSAN protection.
+  if (f.index) {
+    inl_ << "  int offset = " << offset << " + i * kTaggedSize;\n";
+    inl_ << "  auto value = TaggedField<" << type
+         << ">::Relaxed_Load(isolate, *this, offset);\n";
   } else {
-    // TODO(tebbi): load value as HeapObject when possible
-    if (f.index) {
-      inl_ << "  int offset = " << offset << " + i * kTaggedSize;\n";
-      inl_ << "  Object value = Object::cast(RELAXED_READ_FIELD(*this, "
-              "offset));\n";
-    } else {
-      inl_ << "  Object value = TaggedField<Object, " << offset
-           << ">::load(isolate, *this);\n";
-    }
-    inl_ << "  DCHECK(" << type_check << ");\n";
-    inl_ << "  return value;\n";
+    inl_ << "  auto value = TaggedField<" << type << ", " << offset
+         << ">::load(isolate, *this);\n";
   }
+  if (!type_check.empty()) {
+    inl_ << "  DCHECK(" << type_check << ");\n";
+  }
+  inl_ << "  return value;\n";
   inl_ << "}\n";
 
   inl_ << "template <class D, class P>\n";
@@ -3749,22 +3759,28 @@ void CppClassGenerator::GenerateFieldAccessorForObject(const Field& f) {
     inl_ << "int i, ";
   }
   inl_ << type << " value, WriteBarrierMode mode) {\n";
-  inl_ << "  SLOW_DCHECK(" << type_check << ");\n";
-  if (f.index) {
-    inl_ << "  int offset = " << offset << " + i * kTaggedSize;\n";
-    inl_ << "  WRITE_FIELD(*this, offset, value);\n";
-  } else {
-    inl_ << "  WRITE_FIELD(*this, " << offset << ", value);\n";
+  if (!type_check.empty()) {
+    inl_ << "  SLOW_DCHECK(" << type_check << ");\n";
   }
-  inl_ << "  CONDITIONAL_WRITE_BARRIER(*this, " << offset
-       << ", value, mode);\n";
+  if (f.index) {
+    const char* write_macro =
+        strong_pointer ? "WRITE_FIELD" : "RELAXED_WRITE_WEAK_FIELD";
+    inl_ << "  int offset = " << offset << " + i * kTaggedSize;\n";
+    inl_ << "  " << write_macro << "(*this, offset, value);\n";
+  } else {
+    const char* write_macro =
+        strong_pointer ? "RELAXED_WRITE_FIELD" : "RELAXED_WRITE_WEAK_FIELD";
+    inl_ << "  " << write_macro << "(*this, " << offset << ", value);\n";
+  }
+  const char* write_barrier = strong_pointer ? "CONDITIONAL_WRITE_BARRIER"
+                                             : "CONDITIONAL_WEAK_WRITE_BARRIER";
+  inl_ << "  " << write_barrier << "(*this, " << offset << ", value, mode);\n";
   inl_ << "}\n\n";
 }
 
 void EmitClassDefinitionHeadersIncludes(const std::string& basename,
                                         std::stringstream& header,
                                         std::stringstream& inline_header) {
-  header << "#include \"src/objects/fixed-array.h\"\n";
   header << "#include \"src/objects/objects.h\"\n";
   header << "#include \"src/objects/smi.h\"\n";
   header << "#include \"torque-generated/field-offsets-tq.h\"\n";
@@ -3834,8 +3850,8 @@ void ImplementationVisitor::GenerateClassDefinitions(
     IncludeGuardScope internal_inline_header_guard(
         inline_internal_header, internal_basename + "-inl.h");
 
-    external_header
-        << "#include \"torque-generated/internal-class-definitions-tq.h\"\n";
+    internal_header << "#include \"torque-generated/class-definitions-tq.h\"\n";
+    internal_header << "#include \"src/objects/fixed-array.h\"\n";
 
     EmitClassDefinitionHeadersIncludes(basename, external_header,
                                        inline_external_header);
