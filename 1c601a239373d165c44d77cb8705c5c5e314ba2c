@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c2407612_024d3b3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-03-19T20:47:19Z",
+      "side": 1,
+      "message": "I think this work can be considered part of the performance improvements to Wasm import wrappers. Adding the BUG.",
+      "parentUuid": "db9ef01a_6cc64b52",
+      "revId": "1c601a239373d165c44d77cb8705c5c5e314ba2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f86ec71_f689252a",
         "filename": "src/compiler/linkage.cc",
         "patchSetId": 4
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "283916b7_9b6ca705",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-03-19T20:47:19Z",
+      "side": 1,
+      "message": "Good catch. Done",
+      "parentUuid": "e9c6c0b1_b52e67e9",
+      "revId": "1c601a239373d165c44d77cb8705c5c5e314ba2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "390c9e98_4dcb7747",
         "filename": "src/compiler/linkage.cc",
         "patchSetId": 4
@@ -64,6 +100,24 @@
       "writtenOn": "2020-03-19T20:16:42Z",
       "side": 1,
       "message": "This conflicts with the DCHECK just above.",
+      "revId": "1c601a239373d165c44d77cb8705c5c5e314ba2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08cbb261_e822d86c",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-03-19T20:47:19Z",
+      "side": 1,
+      "message": "I was worried about this somehow being hit in non-debug builds. I guess that\u0027s harmless from a security standpoint.",
+      "parentUuid": "390c9e98_4dcb7747",
       "revId": "1c601a239373d165c44d77cb8705c5c5e314ba2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -84,6 +138,24 @@
       "revId": "1c601a239373d165c44d77cb8705c5c5e314ba2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4cdf6aa_8f1a4275",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-03-19T20:47:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e625caf_80d78c6c",
+      "revId": "1c601a239373d165c44d77cb8705c5c5e314ba2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
