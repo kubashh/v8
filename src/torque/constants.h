@@ -29,6 +29,7 @@ static const char* const JS_FUNCTION_TYPE_STRING = "JSFunction";
 static const char* const MAP_TYPE_STRING = "Map";
 static const char* const OBJECT_TYPE_STRING = "Object";
 static const char* const HEAP_OBJECT_TYPE_STRING = "HeapObject";
+static const char* const WEAK_HEAP_OBJECT_TYPE_STRING = "WeakHeapObject";
 static const char* const JSANY_TYPE_STRING = "JSAny";
 static const char* const JSOBJECT_TYPE_STRING = "JSObject";
 static const char* const SMI_TYPE_STRING = "Smi";
@@ -126,7 +127,6 @@ enum class ClassFlag {
   kIsShape = 1 << 5,
   kHasSameInstanceTypeAsParent = 1 << 6,
   kGenerateCppClassDefinitions = 1 << 7,
-  kHasIndexedField = 1 << 8,
   kHighestInstanceTypeWithinParent = 1 << 9,
   kLowestInstanceTypeWithinParent = 1 << 10,
   kUndefinedLayout = 1 << 11,

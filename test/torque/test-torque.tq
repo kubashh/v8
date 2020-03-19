@@ -1134,6 +1134,10 @@ namespace test {
     b: HeapObject;
   }
 
+  class AbstractInternalClass extends HeapObject {}
+  class AbstractInternalClassSubclass1 extends AbstractInternalClass {}
+  class AbstractInternalClassSubclass2 extends AbstractInternalClass {}
+
   class InternalClassWithSmiElements extends FixedArrayBase {
     data: Smi;
     object: Oddball;
