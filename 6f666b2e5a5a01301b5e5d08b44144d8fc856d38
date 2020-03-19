@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8da8eb11_594c6e56",
+        "filename": "src/codegen/interface-descriptors.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-03-19T17:55:05Z",
+      "side": 1,
+      "message": "I think for now we can work around the problem with a platform-specific InterfaceDescriptor, rather than add this more generally. I\u0027ll leave a TODO to revisit this if the need for FP parameters becomes more pressing.",
+      "parentUuid": "424f5d89_0c64612b",
+      "revId": "6f666b2e5a5a01301b5e5d08b44144d8fc856d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b318006_f60facce",
         "filename": "src/compiler/linkage.cc",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "side": 1,
       "message": "I wonder which register (0 or 1) should we actually use here if the first return type was a floating point one?",
       "parentUuid": "0b318006_f60facce",
+      "revId": "6f666b2e5a5a01301b5e5d08b44144d8fc856d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11dc45f7_6e95c720",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-03-19T17:55:05Z",
+      "side": 1,
+      "message": "I reworked this code into a loop to assign registers in the proper sequence.",
+      "parentUuid": "0b2ff458_10040663",
       "revId": "6f666b2e5a5a01301b5e5d08b44144d8fc856d38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
