@@ -3916,6 +3916,18 @@ v8_source_set("fuzzer_support") {
   ]
 }
 
+v8_source_set("cppgc_base") {
+  visibility = [ ":*" ]
+
+  sources = [
+    "include/cppgc/finalizer-trait.h",
+    "include/v8config.h",
+    "src/heap/cppgc/cppgc.cc",
+  ]
+
+  configs = [ ":internal_config_base" ]
+}
+
 ###############################################################################
 # Produce a single static library for embedders
 #
@@ -3960,6 +3972,12 @@ v8_static_library("wee8") {
     "third_party/wasm-api/wasm.h",
     "third_party/wasm-api/wasm.hh",
   ]
+}
+
+v8_static_library("cppgc") {
+  deps = [ ":cppgc_base" ]
+
+  configs = [ ":internal_config" ]
 }
 
 ###############################################################################
@@ -4253,6 +4271,14 @@ if (is_component_build) {
 
     public_configs = [ ":external_config" ]
   }
+
+  v8_component("cppgc_for_testing") {
+    testonly = true
+
+    public_deps = [ ":cppgc_base" ]
+
+    configs = [ ":internal_config" ]
+  }
 } else {
   group("v8") {
     public_deps = [
@@ -4273,6 +4299,14 @@ if (is_component_build) {
       ":v8_initializers",
       ":v8_snapshot",
     ]
+
+    public_configs = [ ":external_config" ]
+  }
+
+  group("cppgc_for_testing") {
+    testonly = true
+
+    public_deps = [ ":cppgc_base" ]
 
     public_configs = [ ":external_config" ]
   }
