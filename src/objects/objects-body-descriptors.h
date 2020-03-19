@@ -78,7 +78,7 @@ class BodyDescriptorBase {
 // in which all pointer fields are located in the [start_offset, end_offset)
 // interval.
 template <int start_offset, int end_offset, int size>
-class FixedBodyDescriptor final : public BodyDescriptorBase {
+class FixedBodyDescriptor : public BodyDescriptorBase {
  public:
   static const int kStartOffset = start_offset;
   static const int kEndOffset = end_offset;
@@ -106,7 +106,7 @@ class FixedBodyDescriptor final : public BodyDescriptorBase {
 // in which all pointer fields are located in the [start_offset, object_size)
 // interval.
 template <int start_offset>
-class FlexibleBodyDescriptor final : public BodyDescriptorBase {
+class FlexibleBodyDescriptor : public BodyDescriptorBase {
  public:
   static const int kStartOffset = start_offset;
 
@@ -126,7 +126,7 @@ class FlexibleBodyDescriptor final : public BodyDescriptorBase {
 using StructBodyDescriptor = FlexibleBodyDescriptor<HeapObject::kHeaderSize>;
 
 template <int start_offset>
-class FlexibleWeakBodyDescriptor final : public BodyDescriptorBase {
+class FlexibleWeakBodyDescriptor : public BodyDescriptorBase {
  public:
   static const int kStartOffset = start_offset;
 
@@ -141,6 +141,21 @@ class FlexibleWeakBodyDescriptor final : public BodyDescriptorBase {
   }
 
   static inline int SizeOf(Map map, HeapObject object);
+};
+
+class DataOnlyBodyDescriptor : public BodyDescriptorBase {
+ public:
+  static bool IsValidSlot(Map map, HeapObject obj, int offset) { return false; }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Map map, HeapObject obj, int object_size,
+                                 ObjectVisitor* v) {}
+
+ private:
+  static inline int SizeOf(Map map, HeapObject object) {
+    // Has to be implemented by the subclass.
+    UNREACHABLE();
+  }
 };
 
 // This class describes a body of an object which has a parent class that also
@@ -179,10 +194,6 @@ class SubclassBodyDescriptor final : public BodyDescriptorBase {
     return ChildBodyDescriptor::SizeOf(map, object);
   }
 };
-
-#define TORQUE_BODY_DESCRIPTOR_LIST_ADAPTER(V, TYPE, TypeName) V(TYPE, TypeName)
-#define TORQUE_BODY_DESCRIPTOR_LIST(V) \
-  TORQUE_BODY_DESCRIPTOR_LIST_GENERATOR(TORQUE_BODY_DESCRIPTOR_LIST_ADAPTER, V)
 
 }  // namespace internal
 }  // namespace v8
