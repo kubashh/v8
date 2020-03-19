@@ -1978,6 +1978,20 @@ void LiftoffAssembler::emit_f64x2_extract_lane(LiftoffRegister dst,
   }
 }
 
+void LiftoffAssembler::emit_f64x2_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  if (dst.fp() == src.fp()) {
+    Pcmpeqd(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg);
+    Psllq(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg,
+          static_cast<byte>(63));
+    Xorpd(dst.fp(), liftoff::kScratchDoubleReg);
+  } else {
+    Pcmpeqd(dst.fp(), dst.fp());
+    Psllq(dst.fp(), dst.fp(), static_cast<byte>(63));
+    Xorpd(dst.fp(), src.fp());
+  }
+}
+
 void LiftoffAssembler::emit_f64x2_add(LiftoffRegister dst, LiftoffRegister lhs,
                                       LiftoffRegister rhs) {
   liftoff::EmitSimdCommutativeBinOp<&Assembler::vaddpd, &Assembler::addpd>(
@@ -2015,6 +2029,20 @@ void LiftoffAssembler::emit_f32x4_extract_lane(LiftoffRegister dst,
   }
 }
 
+void LiftoffAssembler::emit_f32x4_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  if (dst.fp() == src.fp()) {
+    Pcmpeqd(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg);
+    Pslld(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg,
+          static_cast<byte>(31));
+    Xorps(dst.fp(), liftoff::kScratchDoubleReg);
+  } else {
+    Pcmpeqd(dst.fp(), dst.fp());
+    Pslld(dst.fp(), dst.fp(), static_cast<byte>(31));
+    Xorps(dst.fp(), src.fp());
+  }
+}
+
 void LiftoffAssembler::emit_f32x4_add(LiftoffRegister dst, LiftoffRegister lhs,
                                       LiftoffRegister rhs) {
   liftoff::EmitSimdCommutativeBinOp<&Assembler::vaddps, &Assembler::addps>(
@@ -2041,6 +2069,16 @@ void LiftoffAssembler::emit_i64x2_extract_lane(LiftoffRegister dst,
   Pextrd(dst.high_gp(), lhs.fp(), imm_lane_idx * 2 + 1);
 }
 
+void LiftoffAssembler::emit_i64x2_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  if (dst.fp() == src.fp()) {
+    Movapd(liftoff::kScratchDoubleReg, dst.fp());
+    dst.fp() = liftoff::kScratchDoubleReg;
+  }
+  Pxor(dst.fp(), dst.fp());
+  Psubq(dst.fp(), src.fp());
+}
+
 void LiftoffAssembler::emit_i64x2_add(LiftoffRegister dst, LiftoffRegister lhs,
                                       LiftoffRegister rhs) {
   liftoff::EmitSimdCommutativeBinOp<&Assembler::vpaddq, &Assembler::paddq>(
@@ -2063,6 +2101,17 @@ void LiftoffAssembler::emit_i32x4_extract_lane(LiftoffRegister dst,
                                                LiftoffRegister lhs,
                                                uint8_t imm_lane_idx) {
   Pextrd(dst.gp(), lhs.fp(), imm_lane_idx);
+}
+
+void LiftoffAssembler::emit_i32x4_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  if (dst.fp() == src.fp()) {
+    Pcmpeqd(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg);
+    Psignd(dst.fp(), liftoff::kScratchDoubleReg);
+  } else {
+    Pxor(dst.fp(), dst.fp());
+    Psubd(dst.fp(), src.fp());
+  }
 }
 
 void LiftoffAssembler::emit_i32x4_add(LiftoffRegister dst, LiftoffRegister lhs,
@@ -2097,6 +2146,17 @@ void LiftoffAssembler::emit_i16x8_extract_lane_s(LiftoffRegister dst,
   movsx_w(dst.gp(), dst.gp());
 }
 
+void LiftoffAssembler::emit_i16x8_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  if (dst.fp() == src.fp()) {
+    Pcmpeqd(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg);
+    Psignw(dst.fp(), liftoff::kScratchDoubleReg);
+  } else {
+    Pxor(dst.fp(), dst.fp());
+    Psubw(dst.fp(), src.fp());
+  }
+}
+
 void LiftoffAssembler::emit_i16x8_add(LiftoffRegister dst, LiftoffRegister lhs,
                                       LiftoffRegister rhs) {
   liftoff::EmitSimdCommutativeBinOp<&Assembler::vpaddw, &Assembler::paddw>(
@@ -2127,6 +2187,17 @@ void LiftoffAssembler::emit_i8x16_extract_lane_s(LiftoffRegister dst,
                                                  uint8_t imm_lane_idx) {
   Pextrb(dst.gp(), lhs.fp(), imm_lane_idx);
   movsx_b(dst.gp(), dst.gp());
+}
+
+void LiftoffAssembler::emit_i8x16_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  if (dst.fp() == src.fp()) {
+    Pcmpeqd(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg);
+    Psignb(dst.fp(), liftoff::kScratchDoubleReg);
+  } else {
+    Pxor(dst.fp(), dst.fp());
+    Psubb(dst.fp(), src.fp());
+  }
 }
 
 void LiftoffAssembler::emit_i8x16_add(LiftoffRegister dst, LiftoffRegister lhs,
