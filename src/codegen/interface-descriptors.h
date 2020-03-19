@@ -122,9 +122,10 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
 
   // A copy of the passed in registers and param_representations is made
   // and owned by the CallInterfaceDescriptorData.
-
+  // |fp_register_code_offset| is added to the GP register code for FP params.
   void InitializePlatformSpecific(int register_parameter_count,
-                                  const Register* registers);
+                                  const Register* registers,
+                                  int fp_register_code_offset = 0);
 
   // if machine_types is null, then an array of size
   // (return_count + parameter_count) will be created with
@@ -152,6 +153,11 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
   int register_param_count() const { return register_param_count_; }
   Register register_param(int index) const { return register_params_[index]; }
   Register* register_params() const { return register_params_; }
+  DoubleRegister fp_register_param(int index) const {
+    // Use the offset to skip unallocatable FP registers (xmm0 on ia32).
+    return DoubleRegister::from_code(register_params_[index].code() +
+                                     fp_register_code_offset_);
+  }
   MachineType return_type(int index) const {
     DCHECK_LT(index, return_count_);
     return machine_types_[index];
@@ -191,6 +197,7 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
 #endif  // DEBUG
 
   int register_param_count_ = -1;
+  int fp_register_code_offset_ = 0;
   int return_count_ = -1;
   int param_count_ = -1;
   Flags flags_ = kNoFlags;
@@ -279,6 +286,10 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
 
   Register GetRegisterParameter(int index) const {
     return data()->register_param(index);
+  }
+
+  DoubleRegister GetFPRegisterParameter(int index) const {
+    return data()->fp_register_param(index);
   }
 
   MachineType GetParameterType(int index) const {

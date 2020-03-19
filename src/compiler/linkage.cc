@@ -21,6 +21,10 @@ inline LinkageLocation regloc(Register reg, MachineType type) {
   return LinkageLocation::ForRegister(reg.code(), type);
 }
 
+inline LinkageLocation regloc(DoubleRegister reg, MachineType type) {
+  return LinkageLocation::ForRegister(reg.code(), type);
+}
+
 }  // namespace
 
 
@@ -381,7 +385,12 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
 
   // Add returns.
   if (locations.return_count_ > 0) {
-    locations.AddReturn(regloc(kReturnRegister0, descriptor.GetReturnType(0)));
+    MachineType type = descriptor.GetReturnType(0);
+    if (IsFloatingPoint(type.representation())) {
+      locations.AddReturn(regloc(kFPReturnRegister0, type));
+    } else {
+      locations.AddReturn(regloc(kReturnRegister0, type));
+    }
   }
   if (locations.return_count_ > 1) {
     locations.AddReturn(regloc(kReturnRegister1, descriptor.GetReturnType(1)));
@@ -394,9 +403,12 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
   for (int i = 0; i < js_parameter_count; i++) {
     if (i < register_parameter_count) {
       // The first parameters go in registers.
-      Register reg = descriptor.GetRegisterParameter(i);
       MachineType type = descriptor.GetParameterType(i);
-      locations.AddParam(regloc(reg, type));
+      if (IsFloatingPoint(type.representation())) {
+        locations.AddParam(regloc(descriptor.GetFPRegisterParameter(i), type));
+      } else {
+        locations.AddParam(regloc(descriptor.GetRegisterParameter(i), type));
+      }
     } else {
       // The rest of the parameters go on the stack.
       int stack_slot = i - register_parameter_count - stack_parameter_count;
