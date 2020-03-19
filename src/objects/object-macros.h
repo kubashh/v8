@@ -451,17 +451,24 @@
     set(IndexForEntry(i) + k##name##Offset, value);             \
   }
 
-#define TQ_OBJECT_CONSTRUCTORS(Type)               \
- public:                                           \
-  constexpr Type() = default;                      \
-                                                   \
- protected:                                        \
-  template <typename TFieldType, int kFieldOffset> \
-  friend class TaggedField;                        \
-                                                   \
-  inline explicit Type(Address ptr);               \
+#define TQ_OBJECT_CONSTRUCTORS(Type)                                 \
+ public:                                                             \
+  constexpr Type() = default;                                        \
+                                                                     \
+ protected:                                                          \
+  template <typename TFieldType, int kFieldOffset>                   \
+  friend class TaggedField;                                          \
+                                                                     \
+  inline explicit Type(Address ptr);                                 \
+  /* Templatize to only type-check when needed. */                   \
+  template <class Dummy = void>                                      \
+  inline explicit Type(Address ptr,                                  \
+                       HeapObject::AllowInlineSmiStorage allow_smi); \
   friend class TorqueGenerated##Type<Type, Super>;
 
-#define TQ_OBJECT_CONSTRUCTORS_IMPL(Type) \
-  inline Type::Type(Address ptr)          \
-      : TorqueGenerated##Type<Type, Type::Super>(ptr) {}
+#define TQ_OBJECT_CONSTRUCTORS_IMPL(Type)                                     \
+  inline Type::Type(Address ptr)                                              \
+      : TorqueGenerated##Type<Type, Type::Super>(ptr) {}                      \
+  template <class Dummy>                                                      \
+  inline Type::Type(Address ptr, HeapObject::AllowInlineSmiStorage allow_smi) \
+      : TorqueGenerated##Type<Type, Type::Super>(ptr, allow_smi) {}
