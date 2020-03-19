@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db9ef01a_6cc64b52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-19T20:16:42Z",
+      "side": 1,
+      "message": "Is there a tracking bug for this?",
+      "revId": "1c601a239373d165c44d77cb8705c5c5e314ba2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f86ec71_f689252a",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-19T20:16:42Z",
+      "side": 1,
+      "message": "Could this and the above be static constexpr?",
+      "revId": "1c601a239373d165c44d77cb8705c5c5e314ba2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9c6c0b1_b52e67e9",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-19T20:16:42Z",
+      "side": 1,
+      "message": "Should probably be i instead of 0.",
+      "revId": "1c601a239373d165c44d77cb8705c5c5e314ba2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "390c9e98_4dcb7747",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-19T20:16:42Z",
+      "side": 1,
+      "message": "This conflicts with the DCHECK just above.",
+      "revId": "1c601a239373d165c44d77cb8705c5c5e314ba2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e625caf_80d78c6c",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-03-19T20:16:42Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "1c601a239373d165c44d77cb8705c5c5e314ba2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
