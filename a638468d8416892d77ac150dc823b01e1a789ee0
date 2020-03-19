@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8fe5d4bc_9196625e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2019,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-19T05:26:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30ab897b_c490128d",
+      "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2eacdaeb_f7d51881",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80027c42_49d065ee",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-19T05:26:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2eacdaeb_f7d51881",
+      "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f7792850_c4389a60",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-19T05:26:30Z",
+      "side": 1,
+      "message": "Thanks for the reminder! IsSmall is handled as well now.",
+      "parentUuid": "a22d3dd4_8a57321d",
+      "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a963fae3_9e4f03c1",
         "filename": "src/compiler/js-inlining-heuristic.cc",
         "patchSetId": 5
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "3e92bb20_89618086",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-19T05:26:30Z",
+      "side": 1,
+      "message": "The size is set in the pipeline at the end of InliningPhase::Run now.",
+      "parentUuid": "a963fae3_9e4f03c1",
+      "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b0417f25_e7fe939e",
         "filename": "src/compiler/js-inlining-heuristic.h",
         "patchSetId": 5
@@ -84,6 +156,24 @@
       "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb679b85_b9d4086b",
+        "filename": "src/compiler/js-inlining-heuristic.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-19T05:26:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0417f25_e7fe939e",
+      "revId": "a638468d8416892d77ac150dc823b01e1a789ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
