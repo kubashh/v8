@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "322dc733_3c2959f3",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-03-19T10:06:56Z",
+      "side": 1,
+      "message": "Or we could have two overloads for calling Api getter (with just a receiver) and Api setter (with receiver and value).\nThe third use case (calling an Api function) we can leave as is as.",
+      "parentUuid": "1fa1b32f_26fb7e1d",
+      "revId": "00b3b160e88fd947a26a5f4d532fb66ab87f747f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f8c70045_3815af83",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 8
