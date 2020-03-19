@@ -19,8 +19,9 @@ void CallInterfaceDescriptor::DefaultInitializePlatformSpecific(
   STATIC_ASSERT(arraysize(default_stub_registers) == kMaxBuiltinRegisterParams);
   CHECK_LE(static_cast<size_t>(register_parameter_count),
            arraysize(default_stub_registers));
-  data->InitializePlatformSpecific(register_parameter_count,
-                                   default_stub_registers);
+  const int kFPRegisterCodeOffset = 1;  // xmm0 is not allocatable.
+  data->InitializePlatformSpecific(
+      register_parameter_count, default_stub_registers, kFPRegisterCodeOffset);
 }
 
 void RecordWriteDescriptor::InitializePlatformSpecific(

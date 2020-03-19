@@ -10,10 +10,12 @@ namespace v8 {
 namespace internal {
 
 void CallInterfaceDescriptorData::InitializePlatformSpecific(
-    int register_parameter_count, const Register* registers) {
+    int register_parameter_count, const Register* registers,
+    int fp_register_code_offset) {
   DCHECK(!IsInitializedPlatformIndependent());
 
   register_param_count_ = register_parameter_count;
+  fp_register_code_offset_ = fp_register_code_offset;
 
   // UBSan doesn't like creating zero-length arrays.
   if (register_parameter_count == 0) return;
