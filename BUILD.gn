@@ -3921,11 +3921,17 @@ v8_source_set("cppgc_base") {
 
   sources = [
     "include/cppgc/finalizer-trait.h",
+    "include/cppgc/gc-info.h",
+    "include/cppgc/platform.h",
     "include/v8config.h",
-    "src/heap/cppgc/cppgc.cc",
+    "src/heap/cppgc/api.cc",
+    "src/heap/cppgc/gc-info-table.cc",
+    "src/heap/cppgc/gc-info-table.h",
   ]
 
   configs = [ ":internal_config_base" ]
+
+  public_deps = [ ":v8_libbase" ]
 }
 
 ###############################################################################
