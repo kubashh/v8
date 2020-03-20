@@ -14,6 +14,8 @@ v8_source_set("crdtp") {
   sources = [
     "crdtp/cbor.cc",
     "crdtp/cbor.h",
+    "crdtp/dispatch.cc",
+    "crdtp/dispatch.h",
     "crdtp/error_support.cc",
     "crdtp/error_support.h",
     "crdtp/export.h",
@@ -24,6 +26,7 @@ v8_source_set("crdtp") {
     "crdtp/serializable.cc",
     "crdtp/serializable.h",
     "crdtp/serializer_traits.h",
+    "crdtp/span.cc",
     "crdtp/span.h",
     "crdtp/status.cc",
     "crdtp/status.h",
@@ -47,6 +50,7 @@ v8_source_set("crdtp_platform") {
 v8_source_set("crdtp_test") {
   sources = [
     "crdtp/cbor_test.cc",
+    "crdtp/dispatch_test.cc",
     "crdtp/error_support_test.cc",
     "crdtp/glue_test.cc",
     "crdtp/json_test.cc",
