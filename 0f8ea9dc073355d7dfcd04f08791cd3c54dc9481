@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ca540793_baf29c47",
+        "filename": "src/builtins/promise-finally.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1292474
+      },
+      "writtenOn": "2020-03-20T21:35:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63a367f9_5271624a",
+      "range": {
+        "startLine": 191,
+        "startChar": 4,
+        "endLine": 191,
+        "endChar": 38
+      },
+      "revId": "0f8ea9dc073355d7dfcd04f08791cd3c54dc9481",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "decc3788_3552f07d",
         "filename": "src/builtins/promise-resolve.tq",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "0f8ea9dc073355d7dfcd04f08791cd3c54dc9481",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e967bde_058ee8c7",
+        "filename": "src/builtins/promise-resolve.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1292474
+      },
+      "writtenOn": "2020-03-20T21:35:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "decc3788_3552f07d",
+      "range": {
+        "startLine": 168,
+        "startChar": 10,
+        "endLine": 168,
+        "endChar": 33
+      },
+      "revId": "0f8ea9dc073355d7dfcd04f08791cd3c54dc9481",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
