@@ -33,6 +33,41 @@
       "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0caa63e0_819091ea",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-20T14:44:26Z",
+      "side": 1,
+      "message": "Thanks for explaining offline, didn\u0027t see the little trick in the OSR.",
+      "parentUuid": "5024d886_d02fdfe7",
+      "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "55598197_9b9cdaa7",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-20T14:44:26Z",
+      "side": 1,
+      "message": "This is neat! We could actually do something similar when initially flooding a function. We only need to rewrite the return address into the stepping frame, other could stay untouched.\n\nBut I am wondering: Wouldn\u0027t we need to skip the frame, if it\u0027s the one *called from* the stepping frame, i.e. one before the stepping frame in the iterator? Because what we patch here is the *return address* of that frame, i.e. where in the caller to continue.",
+      "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
