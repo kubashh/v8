@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59ee5a87_5e1e0e31",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-03-20T12:39:03Z",
+      "side": 1,
+      "message": "Rather than have two separate versions of this that do very different things, how about just moving the call for FinalizeScriptCompilation out off FinalizeTopLevel and instead have it in GetSharedFunctionInfoForStreamedScript here [1], similar to how CompileTopLevel does it?\n\n[1] https://cs.chromium.org/chromium/src/v8/src/codegen/compiler.cc?type\u003dcs\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d2471",
+      "revId": "1733e8e81469b66d1d98aefb15f8aedb0491db9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
