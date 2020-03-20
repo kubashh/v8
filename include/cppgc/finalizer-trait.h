@@ -87,6 +87,9 @@ struct FinalizerTrait {
       kNonTrivialFinalizer ? Finalize : nullptr;
 };
 
+template <typename T>
+constexpr FinalizationCallback FinalizerTrait<T>::kCallback;
+
 }  // namespace internal
 }  // namespace cppgc
 
