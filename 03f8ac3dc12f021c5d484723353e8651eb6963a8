@@ -104,6 +104,24 @@
       "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8d3c88b_15d7169d",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-20T15:37:48Z",
+      "side": 1,
+      "message": "Yeah, that missing source position is definitely what we should fix next.",
+      "parentUuid": "5bd5ee58_01bfe2fc",
+      "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
