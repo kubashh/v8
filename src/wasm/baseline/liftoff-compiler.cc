@@ -2933,7 +2933,32 @@ class LiftoffCompiler {
 
   void TableInit(FullDecoder* decoder, const TableInitImmediate<validate>& imm,
                  Vector<Value> args) {
-    unsupported(decoder, kBulkMemory, "table.init");
+    LiftoffAssembler::VarState table_index(
+        kWasmI32, static_cast<uint32_t>(Smi::FromInt(imm.table.index).ptr()),
+        0);
+    LiftoffAssembler::VarState element_segment_index(
+        kWasmI32,
+        static_cast<uint32_t>(Smi::FromInt(imm.elem_segment_index).ptr()), 0);
+    LiftoffAssembler::VarState size = __ cache_state()->stack_state.end()[-1];
+    LiftoffAssembler::VarState src = __ cache_state()->stack_state.end()[-2];
+    LiftoffAssembler::VarState dst = __ cache_state()->stack_state.end()[-3];
+
+    WasmCode::RuntimeStubId target = WasmCode::kWasmTableInit;
+    compiler::CallDescriptor* call_descriptor =
+        GetBuiltinCallDescriptor<WasmTableInitDescriptor>(compilation_zone_);
+
+    ValueType sig_reps[] = {kWasmI32, kWasmI32, kWasmI32, kWasmI32, kWasmI32};
+    FunctionSig sig(0, 5, sig_reps);
+
+    __ PrepareBuiltinCall(&sig, call_descriptor,
+                          {dst, src, size, table_index, element_segment_index});
+    __ CallRuntimeStub(target);
+
+    // Pop parameters from the value stack.
+    __ cache_state()->stack_state.pop_back(3);
+
+    RegisterDebugSideTableEntry(DebugSideTableBuilder::kDidSpill);
+    safepoint_table_builder_.DefineSafepoint(&asm_, Safepoint::kNoLazyDeopt);
   }
 
   void ElemDrop(FullDecoder* decoder, const ElemDropImmediate<validate>& imm) {
