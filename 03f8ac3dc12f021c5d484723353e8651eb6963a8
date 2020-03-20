@@ -140,6 +140,24 @@
       "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35b92354_80c4a6fb",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-20T16:08:21Z",
+      "side": 1,
+      "message": "Oh, yes. It would have been surprising if this was all totally wrong and we didn\u0027t notice 😊\nHere you see that the \"pc address\" of a frame is computed based on the fp of the callee frame: https://source.chromium.org/chromium/_/chromium/v8/v8.git/+/65a9440479ce9c71d50b4bf861f8e5be90035d64:src/execution/frames.cc;l\u003d689;drc\u003dae03752fd9d0dd54ca3471c1b4a5212f3e2c391e\n\nSo we are good, phew...",
+      "parentUuid": "0b4ae630_99500ec1",
+      "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
