@@ -81,3 +81,13 @@ class NameFilterProc(base.TestProcFilter):
         return False
     exact_matches = self._exact_matches.get(test.suite.name, {})
     return test.path not in exact_matches
+
+class TestNameFilterProc(base.TestProcFilter):
+  """Filters tests based on exact matches for test names."""
+  def __init__(self, test_names):
+    super(TestNameFilterProc, self).__init__()
+
+    self._names = test_names.split(",")
+
+  def _filter(self, test):
+    return test.name not in self._names

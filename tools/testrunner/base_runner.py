@@ -320,6 +320,9 @@ class BaseTestRunner(object):
                       "directory will be used")
     parser.add_option("--test-root", help="Root directory of the test suites",
                       default=os.path.join(self.basedir, 'test'))
+    parser.add_option("--test-names",
+                      help="Comma separated names of the specific tests to run",
+                      default="", type="string")
     parser.add_option("--total-timeout-sec", default=0, type="int",
                       help="How long should fuzzer run")
     parser.add_option("--swarming", default=False, action="store_true",
