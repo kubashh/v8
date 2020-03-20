@@ -321,6 +321,7 @@ TNode<Float64T> Float64Add(TNode<Float64T> a, TNode<Float64T> b);
   V(BitcastMaybeObjectToWord, IntPtrT, MaybeObject)            \
   V(BitcastWordToTagged, Object, WordT)                        \
   V(BitcastWordToTaggedSigned, Smi, WordT)                     \
+  V(TruncateFloat32ToInt32, Int32T, Float32T)                  \
   V(TruncateFloat64ToFloat32, Float32T, Float64T)              \
   V(TruncateFloat64ToWord32, Uint32T, Float64T)                \
   V(TruncateInt64ToInt32, Int32T, Int64T)                      \
@@ -572,6 +573,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   void Return(TNode<Int32T> value);
   void Return(TNode<Uint32T> value);
   void Return(TNode<WordT> value);
+  void Return(TNode<Float32T> value);
+  void Return(TNode<Float64T> value);
   void Return(TNode<WordT> value1, TNode<WordT> value2);
   void PopAndReturn(Node* pop, Node* value);
 

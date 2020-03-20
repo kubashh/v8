@@ -21,6 +21,15 @@ inline LinkageLocation regloc(Register reg, MachineType type) {
   return LinkageLocation::ForRegister(reg.code(), type);
 }
 
+inline LinkageLocation stub_regloc(Register reg, MachineType type) {
+  int reg_code = reg.code();
+#if V8_TARGET_ARCH_IA32
+  // Skip xmm0, which is not allocatable on x86.
+  if (IsFloatingPoint(type.representation())) reg_code += 1;
+#endif
+  return LinkageLocation::ForRegister(reg_code, type);
+}
+
 }  // namespace
 
 
@@ -381,13 +390,16 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
 
   // Add returns.
   if (locations.return_count_ > 0) {
-    locations.AddReturn(regloc(kReturnRegister0, descriptor.GetReturnType(0)));
+    locations.AddReturn(
+        stub_regloc(kReturnRegister0, descriptor.GetReturnType(0)));
   }
   if (locations.return_count_ > 1) {
-    locations.AddReturn(regloc(kReturnRegister1, descriptor.GetReturnType(1)));
+    locations.AddReturn(
+        stub_regloc(kReturnRegister1, descriptor.GetReturnType(1)));
   }
   if (locations.return_count_ > 2) {
-    locations.AddReturn(regloc(kReturnRegister2, descriptor.GetReturnType(2)));
+    locations.AddReturn(
+        stub_regloc(kReturnRegister2, descriptor.GetReturnType(2)));
   }
 
   // Add parameters in registers and on the stack.
@@ -396,7 +408,7 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
       // The first parameters go in registers.
       Register reg = descriptor.GetRegisterParameter(i);
       MachineType type = descriptor.GetParameterType(i);
-      locations.AddParam(regloc(reg, type));
+      locations.AddParam(stub_regloc(reg, type));
     } else {
       // The rest of the parameters go on the stack.
       int stack_slot = i - register_parameter_count - stack_parameter_count;

@@ -15,7 +15,9 @@ const Register CallInterfaceDescriptor::ContextRegister() { return esi; }
 
 void CallInterfaceDescriptor::DefaultInitializePlatformSpecific(
     CallInterfaceDescriptorData* data, int register_parameter_count) {
-  constexpr Register default_stub_registers[] = {eax, ecx, edx, edi};
+  // Make eax (register 0) last in order to avoid using xmm0 for floating
+  // point operands. xmm0 is not allocatable on ia32.
+  constexpr Register default_stub_registers[] = {ecx, edx, edi, eax};
   STATIC_ASSERT(arraysize(default_stub_registers) == kMaxBuiltinRegisterParams);
   CHECK_LE(static_cast<size_t>(register_parameter_count),
            arraysize(default_stub_registers));
