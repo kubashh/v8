@@ -16,6 +16,24 @@
       "revId": "5021f8ad2e3767032ad994a7215355983f334e2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfb0db79_aa15caab",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2020-03-20T08:23:26Z",
+      "side": 1,
+      "message": "You are right, sorry for the miss.",
+      "parentUuid": "de9b3813_1d0c3410",
+      "revId": "5021f8ad2e3767032ad994a7215355983f334e2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
