@@ -1,0 +1,125 @@
+// Copyright 2020 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include "src/heap/cppgc/gc-info-table.h"
+
+#include <limits>
+#include <memory>
+
+#include "include/cppgc/gc-info.h"
+#include "include/cppgc/platform.h"
+#include "src/base/bits.h"
+#include "src/base/lazy-instance.h"
+#include "src/base/logging.h"
+#include "src/base/macros.h"
+#include "src/base/platform/mutex.h"
+
+namespace cppgc {
+namespace internal {
+
+namespace {
+
+constexpr size_t kEntrySize = sizeof(GCInfo*);
+static_assert(v8::base::bits::IsPowerOfTwo(kEntrySize),
+              "GCInfoTable entries size must be power of "
+              "two");
+
+}  // namespace
+
+GCInfoTable* GlobalGCInfoTable::global_table_ = nullptr;
+constexpr GCInfoIndex GCInfoTable::kMaxIndex;
+constexpr GCInfoIndex GCInfoTable::kMinIndex;
+
+void GlobalGCInfoTable::Create(PageAllocator* page_allocator) {
+  static v8::base::LeakyObject<GCInfoTable> table(page_allocator);
+  if (!global_table_) {
+    global_table_ = table.get();
+  }
+}
+
+GCInfoTable::GCInfoTable(PageAllocator* page_allocator)
+    : page_allocator_(page_allocator),
+      table_(static_cast<decltype(table_)>(page_allocator_->AllocatePages(
+          nullptr, MaxTableSize(), page_allocator_->AllocatePageSize(),
+          PageAllocator::kNoAccess))) {
+  CHECK(table_);
+  Resize();
+}
+
+size_t GCInfoTable::MaxTableSize() const {
+  return RoundUp(GCInfoTable::kMaxIndex * kEntrySize,
+                 page_allocator_->AllocatePageSize());
+}
+
+GCInfoIndex GCInfoTable::InitialTableLimit() const {
+  // (Light) experimentation suggests that Blink doesn't need more than this
+  // while handling content on popular web properties.
+  constexpr GCInfoIndex kInitialWantedLimit = 512;
+
+  // Different OSes have different page sizes, so we have to choose the minimum
+  // of memory wanted and OS page size.
+  constexpr size_t memory_wanted = kInitialWantedLimit * kEntrySize;
+  const size_t initial_limit =
+      RoundUp(memory_wanted, page_allocator_->AllocatePageSize()) / kEntrySize;
+  CHECK_GT(std::numeric_limits<GCInfoIndex>::max(), initial_limit);
+  return static_cast<GCInfoIndex>(initial_limit);
+}
+
+void GCInfoTable::Resize() {
+  const GCInfoIndex new_limit = (limit_) ? 2 * limit_ : InitialTableLimit();
+  CHECK_GT(new_limit, limit_);
+  const size_t old_committed_size = limit_ * kEntrySize;
+  const size_t new_committed_size = new_limit * kEntrySize;
+  CHECK(table_);
+  CHECK_EQ(0u, new_committed_size % page_allocator_->AllocatePageSize());
+  CHECK_GE(MaxTableSize(), limit_ * kEntrySize);
+  // Recommit new area as read/write.
+  uint8_t* const current_table_end =
+      reinterpret_cast<uint8_t*>(table_) + old_committed_size;
+  const size_t table_size_delta = new_committed_size - old_committed_size;
+  CHECK(page_allocator_->SetPermissions(current_table_end, table_size_delta,
+                                        PageAllocator::kReadWrite));
+  // Recommit old area as read-only.
+  CHECK(page_allocator_->SetPermissions(
+      table_, current_table_end - reinterpret_cast<uint8_t*>(table_),
+      PageAllocator::kRead));
+
+#if DEBUG
+  // Check that newly-committed memory is zero-initialized.
+  for (size_t i = 0; i < (table_size_delta / sizeof(uintptr_t)); ++i) {
+    DCHECK(!reinterpret_cast<uintptr_t*>(current_table_end)[i]);
+  }
+#endif  // DEBUG
+
+  limit_ = new_limit;
+}
+
+GCInfoIndex GCInfoTable::EnsureGCInfoIndex(
+    const GCInfo& info, std::atomic<GCInfoIndex>* index_slot) {
+  DCHECK(index_slot);
+
+  // Ensuring a new index involves current index adjustment as well as
+  // potentially resizing the table. For simplicity we use a lock.
+  v8::base::MutexGuard guard(&table_mutex_);
+
+  // If more than one thread ends up allocating a slot for the same GCInfo, have
+  // later threads reuse the slot allocated by the first.
+  GCInfoIndex gc_info_index = index_slot->load(std::memory_order_relaxed);
+  if (gc_info_index) {
+    return gc_info_index;
+  }
+
+  if (current_index_ == limit_) {
+    Resize();
+  }
+
+  gc_info_index = current_index_++;
+  CHECK_LT(gc_info_index, GCInfoTable::kMaxIndex);
+  table_[gc_info_index] = &info;
+  index_slot->store(gc_info_index, std::memory_order_release);
+  return gc_info_index;
+}
+
+}  // namespace internal
+}  // namespace cppgc
