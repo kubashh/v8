@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f3a49b7_c93ce21c",
+        "filename": "src/builtins/promise-then.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1292474
+      },
+      "writtenOn": "2020-03-20T21:40:25Z",
+      "side": 1,
+      "message": "Is there a more idiomatic way to do this? I wanted to look for something to the sense of CastOrDefault\u003cCallable\u003e(onFulfilled, Undefined) but couldn\u0027t find one.",
+      "range": {
+        "startLine": 63,
+        "startChar": 24,
+        "endLine": 65,
+        "endChar": 17
+      },
+      "revId": "4fdb408ce1b06103e8b6f68f73934953191e040a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
