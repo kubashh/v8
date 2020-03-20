@@ -21,6 +21,7 @@ namespace internal {
 class DeferredHandles;
 class HandleScopeImplementer;
 class Isolate;
+class LocalHeap;
 class OffThreadIsolate;
 template <typename T>
 class MaybeHandle;
@@ -28,6 +29,7 @@ class Object;
 class OrderedHashMap;
 class OrderedHashSet;
 class OrderedNameDictionary;
+class RootVisitor;
 class SmallOrderedHashMap;
 class SmallOrderedHashSet;
 class SmallOrderedNameDictionary;
@@ -40,6 +42,7 @@ class HandleBase {
   V8_INLINE explicit HandleBase(Address* location) : location_(location) {}
   V8_INLINE explicit HandleBase(Address object, Isolate* isolate);
   V8_INLINE explicit HandleBase(Address object, OffThreadIsolate* isolate);
+  V8_INLINE explicit HandleBase(Address object, LocalHeap* local_heap);
 
   // Check if this handle refers to the exact same object as the other handle.
   V8_INLINE bool is_identical_to(const HandleBase that) const {
@@ -121,6 +124,7 @@ class Handle final : public HandleBase {
 
   V8_INLINE Handle(T object, Isolate* isolate);
   V8_INLINE Handle(T object, OffThreadIsolate* isolate);
+  V8_INLINE Handle(T object, LocalHeap* local_heap);
 
   // Allocate a new handle for the object, do not canonicalize.
   V8_INLINE static Handle<T> New(T object, Isolate* isolate);
@@ -229,6 +233,11 @@ class HandleScope {
   // slack for future changes to natives.
   static const int kCheckHandleThreshold = 30 * 1024;
 
+#ifdef ENABLE_HANDLE_ZAPPING
+  // Zaps the handles in the half-open interval [start, end).
+  V8_EXPORT_PRIVATE static void ZapRange(Address* start, Address* end);
+#endif
+
  private:
   // Prevent heap allocation or illegal handle scopes.
   void* operator new(size_t size);
@@ -244,11 +253,6 @@ class HandleScope {
 
   // Extend the handle scope making room for more handles.
   V8_EXPORT_PRIVATE static Address* Extend(Isolate* isolate);
-
-#ifdef ENABLE_HANDLE_ZAPPING
-  // Zaps the handles in the half-open interval [start, end).
-  V8_EXPORT_PRIVATE static void ZapRange(Address* start, Address* end);
-#endif
 
   friend class v8::HandleScope;
   friend class DeferredHandles;
@@ -371,6 +375,39 @@ class OffThreadHandleScope {
 
   template <typename T>
   inline Handle<T> CloseAndEscape(Handle<T> handle_value);
+};
+
+class LocalHandles {
+ public:
+  V8_INLINE Address* CreateHandle(Address value);
+
+  void Iterate(RootVisitor* visitor);
+
+ private:
+  HandleScopeData scope_;
+  std::vector<Address*> blocks_;
+
+  V8_EXPORT_PRIVATE Address* AddBlock();
+  V8_EXPORT_PRIVATE void RemoveBlocks();
+
+  friend class LocalHandleScope;
+};
+
+class LocalHandleScope {
+ public:
+  explicit inline LocalHandleScope(LocalHeap* local_heap);
+  inline ~LocalHandleScope();
+
+ private:
+  // Prevent heap allocation or illegal handle scopes.
+  void* operator new(size_t size);
+  void operator delete(void* size_t);
+
+  LocalHeap* local_heap_;
+  Address* prev_limit_;
+  Address* prev_next_;
+
+  DISALLOW_COPY_AND_ASSIGN(LocalHandleScope);
 };
 
 }  // namespace internal

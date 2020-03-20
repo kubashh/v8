@@ -9,6 +9,7 @@
 
 #include "src/base/platform/condition-variable.h"
 #include "src/base/platform/mutex.h"
+#include "src/handles/handles.h"
 
 namespace v8 {
 namespace internal {
@@ -28,6 +29,8 @@ class LocalHeap {
   // Frequently invoked by local thread to check whether safepoint was requested
   // from the main thread.
   V8_EXPORT_PRIVATE void Safepoint();
+
+  LocalHandles* handles() { return &handles_; }
 
  private:
   enum class ThreadState {
@@ -59,6 +62,8 @@ class LocalHeap {
 
   LocalHeap* prev_;
   LocalHeap* next_;
+
+  LocalHandles handles_;
 
   friend class Heap;
   friend class Safepoint;
