@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e746a7c3_271ff794",
+        "filename": "include/cppgc/gc-info.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-20T11:55:08Z",
+      "side": 1,
+      "message": "Ulan: Not sure we can avoid exposing this type on the API because it\u0027s filled by the trait below. The only thing we could do is have a different name here than we have internally, but imho that would not get us anything. wdyt?",
+      "range": {
+        "startLine": 22,
+        "startChar": 7,
+        "endLine": 22,
+        "endChar": 13
+      },
+      "revId": "756c15b5cf8de835ca138277c18df48bfa06c31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66fcd611_9d763b87",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-20T11:55:08Z",
+      "side": 1,
+      "message": "This is a new \"feature\". (See unittests for crash on write.)",
+      "range": {
+        "startLine": 83,
+        "startChar": 5,
+        "endLine": 83,
+        "endChar": 13
+      },
+      "revId": "756c15b5cf8de835ca138277c18df48bfa06c31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0b98104_b43482c8",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-20T11:55:08Z",
+      "side": 1,
+      "message": "We always assumed that an uncontended lock here is as fast as playing around with atomics. We can try out whether that is really the case. Especially during startup we should expect to see hundreds of different types which need to go through this path.",
+      "range": {
+        "startLine": 104,
+        "startChar": 12,
+        "endLine": 104,
+        "endChar": 22
+      },
+      "revId": "756c15b5cf8de835ca138277c18df48bfa06c31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
