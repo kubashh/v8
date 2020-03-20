@@ -1747,7 +1747,7 @@ void PagedSpace::MergeLocalSpace(LocalSpace* other) {
       DCHECK_NULL(p->sweeping_slot_set());
       p->SetOldGenerationPageFlags(heap()->incremental_marking()->IsMarking());
       if (heap()->incremental_marking()->black_allocation()) {
-        p->CreateBlackArea(p->area_start(), p->HighWaterMark());
+        p->CreateBlackArea(p->area_start(), p->area_end());
       }
     } else {
       p->MergeOldToNewRememberedSets();
