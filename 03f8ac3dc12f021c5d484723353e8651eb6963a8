@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4d55750f_94aa2637",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-03-20T15:33:01Z",
+      "side": 1,
+      "message": "Ack. Will add a comment about it so that we don\u0027t forget.",
+      "parentUuid": "5e53de8e_568f9c03",
+      "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5024d886_d02fdfe7",
         "filename": "src/runtime/runtime-wasm.cc",
         "patchSetId": 1
@@ -65,6 +83,24 @@
       "writtenOn": "2020-03-20T14:44:26Z",
       "side": 1,
       "message": "This is neat! We could actually do something similar when initially flooding a function. We only need to rewrite the return address into the stepping frame, other could stay untouched.\n\nBut I am wondering: Wouldn\u0027t we need to skip the frame, if it\u0027s the one *called from* the stepping frame, i.e. one before the stepping frame in the iterator? Because what we patch here is the *return address* of that frame, i.e. where in the caller to continue.",
+      "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bd5ee58_01bfe2fc",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-03-20T15:33:01Z",
+      "side": 1,
+      "message": "That makes sense, somehow I thought the pc referred to the callee\u0027s pc. I will change it but unfortunately I can\u0027t test it yet, because we are still missing the source pos, so no frame is updated at all.",
+      "parentUuid": "55598197_9b9cdaa7",
       "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
