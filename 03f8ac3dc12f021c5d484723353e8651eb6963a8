@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e53de8e_568f9c03",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-20T14:00:35Z",
+      "side": 1,
+      "message": "Another scenario (that we don\u0027t need to support yet) is that another isolate has set the breakpoint.",
+      "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5024d886_d02fdfe7",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-20T14:00:35Z",
+      "side": 1,
+      "message": "In this case (case 3), wouldn\u0027t we effectively unflood the function?",
+      "revId": "03f8ac3dc12f021c5d484723353e8651eb6963a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
