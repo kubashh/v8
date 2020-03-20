@@ -21,7 +21,8 @@ from testrunner.local import utils
 from testrunner.local.variants import ALL_VARIANTS
 from testrunner.objects import predictable
 from testrunner.testproc.execution import ExecutionProc
-from testrunner.testproc.filter import StatusFileFilterProc, NameFilterProc
+from testrunner.testproc.filter import (
+  StatusFileFilterProc, NameFilterProc, TestNameFilterProc)
 from testrunner.testproc.loader import LoadProc
 from testrunner.testproc.seed import SeedProc
 from testrunner.testproc.variant import VariantProc
@@ -313,6 +314,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     procs = [
       loader,
       NameFilterProc(args) if args else None,
+      TestNameFilterProc(options.test_names) if options.test_names else None,
       StatusFileFilterProc(options.slow_tests, options.pass_fail_tests),
       VariantProc(self._variants),
       StatusFileFilterProc(options.slow_tests, options.pass_fail_tests),
