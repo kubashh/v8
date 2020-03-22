@@ -23,20 +23,17 @@
 #define OFFSET_OF(type, field) \
   (reinterpret_cast<intptr_t>(&(reinterpret_cast<type*>(16)->field)) - 16)
 
-
 // The arraysize(arr) macro returns the # of elements in an array arr.
 // The expression is a compile-time constant, and therefore can be
 // used in defining new arrays, for example.  If you use arraysize on
 // a pointer by mistake, you will get a compile-time error.
 #define arraysize(array) (sizeof(ArraySizeHelper(array)))
 
-
 // This template function declaration is used in defining arraysize.
 // Note that the function doesn't need an implementation, as we only
 // use its type.
 template <typename T, size_t N>
 char (&ArraySizeHelper(T (&array)[N]))[N];
-
 
 #if !V8_CC_MSVC
 // That gcc wants both of these prototypes seems mysterious. VC, for
@@ -144,11 +141,11 @@ V8_INLINE Dest bit_cast(Source const& source) {
 // Extract from 3.2.2 of C++11 spec:
 //  [...] A non-placement deallocation function for a class is
 //  odr-used by the definition of the destructor of that class, [...]
-#define DISALLOW_NEW_AND_DELETE()                            \
-  void* operator new(size_t) { base::OS::Abort(); }          \
-  void* operator new[](size_t) { base::OS::Abort(); }        \
-  void operator delete(void*, size_t) { base::OS::Abort(); } \
-  void operator delete[](void*, size_t) { base::OS::Abort(); }
+#define DISALLOW_NEW_AND_DELETE()                                \
+  void* operator new(size_t) { v8::base::OS::Abort(); }          \
+  void* operator new[](size_t) { v8::base::OS::Abort(); }        \
+  void operator delete(void*, size_t) { v8::base::OS::Abort(); } \
+  void operator delete[](void*, size_t) { v8::base::OS::Abort(); }
 
 // Define V8_USE_ADDRESS_SANITIZER macro.
 #if defined(__has_feature)
@@ -191,7 +188,7 @@ V8_INLINE Dest bit_cast(Source const& source) {
 #if V8_CC_GNU
 #define V8_IMMEDIATE_CRASH() __builtin_trap()
 #else
-#define V8_IMMEDIATE_CRASH() ((void(*)())0)()
+#define V8_IMMEDIATE_CRASH() ((void (*)())0)()
 #endif
 
 // A convenience wrapper around static_assert without a string message argument.
@@ -278,20 +275,20 @@ V8_INLINE A implicit_cast(A x) {
 // than defining __STDC_CONSTANT_MACROS before including <stdint.h>, and it
 // works on compilers that don't have it (like MSVC).
 #if V8_CC_MSVC
-# if V8_HOST_ARCH_64_BIT
-#  define V8_PTR_PREFIX   "ll"
-# else
-#  define V8_PTR_PREFIX   ""
-# endif  // V8_HOST_ARCH_64_BIT
+#if V8_HOST_ARCH_64_BIT
+#define V8_PTR_PREFIX "ll"
+#else
+#define V8_PTR_PREFIX ""
+#endif  // V8_HOST_ARCH_64_BIT
 #elif V8_CC_MINGW64
-# define V8_PTR_PREFIX    "I64"
+#define V8_PTR_PREFIX "I64"
 #elif V8_HOST_ARCH_64_BIT
-# define V8_PTR_PREFIX    "l"
+#define V8_PTR_PREFIX "l"
 #else
 #if V8_OS_AIX
 #define V8_PTR_PREFIX "l"
 #else
-# define V8_PTR_PREFIX    ""
+#define V8_PTR_PREFIX ""
 #endif
 #endif
 
