@@ -2,14 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "include/cppgc/gc-info.h"
 #include "include/v8config.h"
+#include "src/heap/cppgc/gc-info-table.h"
 
 namespace cppgc {
 namespace internal {
 
-V8_EXPORT void Dummy() {
-  // TODO(mlippautz): Placeholder to force building a library. Remove as soon as
-  // actual code is available.
+GCInfoIndex GCInfoTableProxy::EnsureGCInfoIndex(
+    const GCInfo& info, std::atomic<GCInfoIndex>* index) {
+  return GlobalGCInfoTable::GetMutable()->EnsureGCInfoIndex(info, index);
 }
 
 }  // namespace internal
