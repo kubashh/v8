@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0cd54e17_74b48959",
+        "filename": "tools/testrunner/testproc/filter.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-03-22T12:50:57Z",
+      "side": 1,
+      "message": "Why is this not enough? Is the problem here that we don\u0027t want a fully qualified path? Note that this can lead to confusion due to equal test names in different suites or subdirectories. Also, how do we know which suites to run? You\u0027d still need to provide a name for the suite (though there\u0027s a default).\n\nIMO a test\u0027s name is it\u0027s fully-qualified path.\n\nAs I understand the bug description, we want the ability to list the tests that could be run and then allow choosing tests from that list to run. The latter part we can already do with the filter above.",
+      "range": {
+        "startLine": 83,
+        "startChar": 11,
+        "endLine": 83,
+        "endChar": 41
+      },
+      "revId": "90a90d0204741f4fee951d3637f7fb3dd5195ca0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
