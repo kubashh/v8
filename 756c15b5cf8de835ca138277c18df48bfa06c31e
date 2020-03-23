@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "92d54fb8_e993a0c3",
+        "filename": "include/cppgc/gc-info.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T09:47:47Z",
+      "side": 1,
+      "message": "Currently the only overrides for GCInfoTrait in Oilpan are made by us (for on-heap collections in heap_allocator.h). I don\u0027t think it should be overridable by anyone else.",
+      "parentUuid": "e66de0fe_a22edb99",
+      "range": {
+        "startLine": 22,
+        "startChar": 7,
+        "endLine": 22,
+        "endChar": 13
+      },
+      "revId": "756c15b5cf8de835ca138277c18df48bfa06c31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66fcd611_9d763b87",
         "filename": "src/heap/cppgc/gc-info-table.cc",
         "patchSetId": 4
