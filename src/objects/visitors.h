@@ -28,6 +28,7 @@ class CodeDataContainer;
   V(kDebug, "(Debugger)")                              \
   V(kCompilationCache, "(Compilation cache)")          \
   V(kHandleScope, "(Handle scope)")                    \
+  V(kLocalHandleScope, "(Local handle scope)")         \
   V(kBuiltins, "(Builtins)")                           \
   V(kGlobalHandles, "(Global handles)")                \
   V(kEternalHandles, "(Eternal handles)")              \
