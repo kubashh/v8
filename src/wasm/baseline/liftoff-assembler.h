@@ -698,12 +698,16 @@ class LiftoffAssembler : public TurboAssembler {
                              LiftoffRegister rhs);
   inline void emit_f64x2_sub(LiftoffRegister dst, LiftoffRegister lhs,
                              LiftoffRegister rhs);
+  inline void emit_f64x2_mul(LiftoffRegister dst, LiftoffRegister lhs,
+                             LiftoffRegister rhs);
   inline void emit_f32x4_splat(LiftoffRegister dst, LiftoffRegister src);
   inline void emit_f32x4_extract_lane(LiftoffRegister dst, LiftoffRegister lhs,
                                       uint8_t imm_lane_idx);
   inline void emit_f32x4_add(LiftoffRegister dst, LiftoffRegister lhs,
                              LiftoffRegister rhs);
   inline void emit_f32x4_sub(LiftoffRegister dst, LiftoffRegister lhs,
+                             LiftoffRegister rhs);
+  inline void emit_f32x4_mul(LiftoffRegister dst, LiftoffRegister lhs,
                              LiftoffRegister rhs);
   inline void emit_i64x2_splat(LiftoffRegister dst, LiftoffRegister src);
   inline void emit_i64x2_extract_lane(LiftoffRegister dst, LiftoffRegister lhs,
@@ -712,12 +716,16 @@ class LiftoffAssembler : public TurboAssembler {
                              LiftoffRegister rhs);
   inline void emit_i64x2_sub(LiftoffRegister dst, LiftoffRegister lhs,
                              LiftoffRegister rhs);
+  inline void emit_i64x2_mul(LiftoffRegister dst, LiftoffRegister lhs,
+                             LiftoffRegister rhs);
   inline void emit_i32x4_splat(LiftoffRegister dst, LiftoffRegister src);
   inline void emit_i32x4_extract_lane(LiftoffRegister dst, LiftoffRegister lhs,
                                       uint8_t imm_lane_idx);
   inline void emit_i32x4_add(LiftoffRegister dst, LiftoffRegister lhs,
                              LiftoffRegister rhs);
   inline void emit_i32x4_sub(LiftoffRegister dst, LiftoffRegister lhs,
+                             LiftoffRegister rhs);
+  inline void emit_i32x4_mul(LiftoffRegister dst, LiftoffRegister lhs,
                              LiftoffRegister rhs);
   inline void emit_i16x8_splat(LiftoffRegister dst, LiftoffRegister src);
   inline void emit_i16x8_extract_lane_u(LiftoffRegister dst,
@@ -730,6 +738,8 @@ class LiftoffAssembler : public TurboAssembler {
                              LiftoffRegister rhs);
   inline void emit_i16x8_sub(LiftoffRegister dst, LiftoffRegister lhs,
                              LiftoffRegister rhs);
+  inline void emit_i16x8_mul(LiftoffRegister dst, LiftoffRegister lhs,
+                             LiftoffRegister rhs);
   inline void emit_i8x16_splat(LiftoffRegister dst, LiftoffRegister src);
   inline void emit_i8x16_extract_lane_u(LiftoffRegister dst,
                                         LiftoffRegister lhs,
@@ -740,6 +750,8 @@ class LiftoffAssembler : public TurboAssembler {
   inline void emit_i8x16_add(LiftoffRegister dst, LiftoffRegister lhs,
                              LiftoffRegister rhs);
   inline void emit_i8x16_sub(LiftoffRegister dst, LiftoffRegister lhs,
+                             LiftoffRegister rhs);
+  inline void emit_i8x16_mul(LiftoffRegister dst, LiftoffRegister lhs,
                              LiftoffRegister rhs);
 
   inline void StackCheck(Label* ool_code, Register limit_address);
