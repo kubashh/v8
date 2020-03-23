@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "b265bc36_7dc78a78",
+        "filename": "include/cppgc/platform.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T13:46:20Z",
+      "side": 1,
+      "message": "Then option 1. Ok, that\u0027s what I assumed but wanted to be sure.",
+      "parentUuid": "369f7420_9cacfafb",
+      "range": {
+        "startLine": 14,
+        "startChar": 26,
+        "endLine": 14,
+        "endChar": 39
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25bdc1a5_62f8510d",
         "filename": "src/base/macros.h",
         "patchSetId": 12
