@@ -1057,20 +1057,25 @@ void LiveEdit::PatchScript(Isolate* isolate, Handle<Script> script,
     return;
   }
 
+  UnoptimizedCompileState compile_state(isolate);
+  UnoptimizedCompilePerThreadState compile_per_thread_state(isolate);
   UnoptimizedCompileFlags flags =
       UnoptimizedCompileFlags::ForScriptCompile(isolate, *script);
   flags.is_eager = true;
-  ParseInfo parse_info(isolate, flags);
+  ParseInfo parse_info(flags, &compile_state, compile_per_thread_state);
   std::vector<FunctionLiteral*> literals;
   if (!ParseScript(isolate, script, &parse_info, false, &literals, result))
     return;
 
   Handle<Script> new_script = isolate->factory()->CloneScript(script);
   new_script->set_source(*new_source);
+  UnoptimizedCompileState new_compile_state(isolate);
+  UnoptimizedCompilePerThreadState new_compile_per_thread_state(isolate);
   UnoptimizedCompileFlags new_flags =
       UnoptimizedCompileFlags::ForScriptCompile(isolate, *new_script);
   new_flags.is_eager = true;
-  ParseInfo new_parse_info(isolate, new_flags);
+  ParseInfo new_parse_info(new_flags, &new_compile_state,
+                           new_compile_per_thread_state);
   std::vector<FunctionLiteral*> new_literals;
   if (!ParseScript(isolate, new_script, &new_parse_info, true, &new_literals,
                    result)) {

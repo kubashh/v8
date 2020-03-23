@@ -1154,14 +1154,15 @@ BackgroundCompileTask::BackgroundCompileTask(ScriptStreamingData* streamed_data,
     : flags_(UnoptimizedCompileFlags::ForToplevelCompile(
           isolate, true, construct_language_mode(FLAG_use_strict),
           REPLMode::kNo)),
-      info_(std::make_unique<ParseInfo>(isolate, flags_)),
+      compile_state_(isolate),
+      info_(std::make_unique<ParseInfo>(
+          flags_, &compile_state_, UnoptimizedCompilePerThreadState(isolate))),
       start_position_(0),
       end_position_(0),
       function_literal_id_(kFunctionLiteralIdTopLevel),
       stack_size_(i::FLAG_stack_size),
       worker_thread_runtime_call_stats_(
           isolate->counters()->worker_thread_runtime_call_stats()),
-      allocator_(isolate->allocator()),
       timer_(isolate->counters()->compile_script_on_background()),
       collected_source_positions_(false) {
   VMState<PARSER> state(isolate);
@@ -1184,25 +1185,27 @@ BackgroundCompileTask::BackgroundCompileTask(ScriptStreamingData* streamed_data,
 }
 
 BackgroundCompileTask::BackgroundCompileTask(
-    AccountingAllocator* allocator, const ParseInfo* outer_parse_info,
-    const AstRawString* function_name, const FunctionLiteral* function_literal,
+    const ParseInfo* outer_parse_info, const AstRawString* function_name,
+    const FunctionLiteral* function_literal,
     WorkerThreadRuntimeCallStats* worker_thread_runtime_stats,
     TimedHistogram* timer, int max_stack_size)
     : flags_(UnoptimizedCompileFlags::ForToplevelFunction(
           outer_parse_info->flags(), function_literal)),
-      info_(ParseInfo::FromParent(outer_parse_info, flags_, allocator,
-                                  function_literal, function_name)),
+      compile_state_(*outer_parse_info->state()),
+      info_(ParseInfo::ForToplevelFunction(flags_, &compile_state_,
+                                           function_literal, function_name)),
       start_position_(function_literal->start_position()),
       end_position_(function_literal->end_position()),
       function_literal_id_(function_literal->function_literal_id()),
       stack_size_(max_stack_size),
       worker_thread_runtime_call_stats_(worker_thread_runtime_stats),
-      allocator_(allocator),
       timer_(timer),
       language_mode_(info_->language_mode()),
       collected_source_positions_(false),
       finalize_on_background_thread_(false) {
-  DCHECK(outer_parse_info->flags().is_toplevel);
+  DCHECK_EQ(outer_parse_info->parameters_end_pos(), kNoSourcePosition);
+  DCHECK_NULL(outer_parse_info->extension());
+
   DCHECK(!function_literal->is_toplevel());
 
   // Clone the character stream so both can be accessed independently.
@@ -1227,23 +1230,24 @@ namespace {
 // A scope object that ensures a parse info's runtime call stats and stack limit
 // are set correctly during worker-thread compile, and restores it after going
 // out of scope.
+// TODO(leszeks): Eventually we can remove this and pass the right
+// UnoptimizedCompilePerThreadState to the parser directly.
 class OffThreadParseInfoScope {
  public:
   OffThreadParseInfoScope(
       ParseInfo* parse_info,
       WorkerThreadRuntimeCallStats* worker_thread_runtime_stats, int stack_size)
       : parse_info_(parse_info),
-        original_runtime_call_stats_(parse_info_->runtime_call_stats()),
-        original_stack_limit_(parse_info_->stack_limit()),
+        original_per_thread_state_(parse_info_->per_thread_state()),
         worker_thread_scope_(worker_thread_runtime_stats) {
-    parse_info_->set_runtime_call_stats(worker_thread_scope_.Get());
-    parse_info_->set_stack_limit(GetCurrentStackPosition() - stack_size * KB);
+    parse_info_->set_per_thread_state(UnoptimizedCompilePerThreadState(
+        GetCurrentStackPosition() - stack_size * KB,
+        worker_thread_scope_.Get()));
   }
 
   ~OffThreadParseInfoScope() {
     if (parse_info_) {
-      parse_info_->set_stack_limit(original_stack_limit_);
-      parse_info_->set_runtime_call_stats(original_runtime_call_stats_);
+      parse_info_->set_per_thread_state(original_per_thread_state_);
     }
   }
 
@@ -1251,8 +1255,7 @@ class OffThreadParseInfoScope {
 
  private:
   ParseInfo* parse_info_;
-  RuntimeCallStats* original_runtime_call_stats_;
-  uintptr_t original_stack_limit_;
+  UnoptimizedCompilePerThreadState original_per_thread_state_;
   WorkerThreadRuntimeCallStatsScope worker_thread_scope_;
 
   DISALLOW_COPY_AND_ASSIGN(OffThreadParseInfoScope);
@@ -1287,8 +1290,8 @@ void BackgroundCompileTask::Run() {
                              function_literal_id_);
   if (info_->literal() != nullptr) {
     // Parsing has succeeded, compile.
-    outer_function_job_ = CompileOnBackgroundThread(info_.get(), allocator_,
-                                                    &inner_function_jobs_);
+    outer_function_job_ = CompileOnBackgroundThread(
+        info_.get(), compile_state_.allocator(), &inner_function_jobs_);
     // Save the language mode and record whether we collected source positions.
     language_mode_ = info_->language_mode();
     collected_source_positions_ = info_->flags().collect_source_positions;
@@ -1403,7 +1406,10 @@ bool Compiler::CollectSourcePositions(Isolate* isolate,
   flags.collect_source_positions = true;
   flags.allow_natives_syntax = FLAG_allow_natives_syntax;
 
-  ParseInfo parse_info(isolate, flags);
+  UnoptimizedCompileState compile_state(isolate);
+  UnoptimizedCompilePerThreadState compile_per_thread_state(isolate);
+
+  ParseInfo parse_info(flags, &compile_state, compile_per_thread_state);
 
   // Parse and update ParseInfo with the results. Don't update parsing
   // statistics since we've already parsed the code before.
@@ -1487,7 +1493,10 @@ bool Compiler::Compile(Handle<SharedFunctionInfo> shared_info,
       UnoptimizedCompileFlags::ForFunctionCompile(isolate, *shared_info);
   flags.is_lazy_compile = true;
 
-  ParseInfo parse_info(isolate, flags);
+  UnoptimizedCompileState compile_state(isolate);
+  UnoptimizedCompilePerThreadState compile_per_thread_state(isolate);
+
+  ParseInfo parse_info(flags, &compile_state, compile_per_thread_state);
 
   // Check if the compiler dispatcher has shared_info enqueued for compile.
   CompilerDispatcher* dispatcher = isolate->compiler_dispatcher();
@@ -1740,7 +1749,10 @@ MaybeHandle<JSFunction> Compiler::GetFunctionFromEval(
     flags.is_eval = true;
     flags.parse_restriction = restriction;
 
-    ParseInfo parse_info(isolate, flags);
+    UnoptimizedCompileState compile_state(isolate);
+    UnoptimizedCompilePerThreadState compile_per_thread_state(isolate);
+
+    ParseInfo parse_info(flags, &compile_state, compile_per_thread_state);
     parse_info.set_parameters_end_pos(parameters_end_pos);
     DCHECK(!parse_info.flags().is_module);
 
@@ -2279,7 +2291,10 @@ MaybeHandle<SharedFunctionInfo> Compiler::GetSharedFunctionInfoForScript(
     flags.is_module = origin_options.IsModule();
     flags.is_eager = compile_options == ScriptCompiler::kEagerCompile;
 
-    ParseInfo parse_info(isolate, flags);
+    UnoptimizedCompileState compile_state(isolate);
+    UnoptimizedCompilePerThreadState compile_per_thread_state(isolate);
+
+    ParseInfo parse_info(flags, &compile_state, compile_per_thread_state);
     parse_info.set_extension(extension);
 
     Handle<Script> script = NewScript(isolate, &parse_info, source,
@@ -2359,7 +2374,10 @@ MaybeHandle<JSFunction> Compiler::GetWrappedFunction(
     flags.collect_source_positions = true;
     // flags.eager = compile_options == ScriptCompiler::kEagerCompile;
 
-    ParseInfo parse_info(isolate, flags);
+    UnoptimizedCompileState compile_state(isolate);
+    UnoptimizedCompilePerThreadState compile_per_thread_state(isolate);
+    ParseInfo parse_info(flags, &compile_state, compile_per_thread_state);
+
     MaybeHandle<ScopeInfo> maybe_outer_scope_info;
     if (!context->IsNativeContext()) {
       maybe_outer_scope_info = handle(context->scope_info(), isolate);
