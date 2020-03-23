@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "6df9f84a_9d0b24ca",
+        "filename": "include/cppgc/gc-info.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-23T10:06:03Z",
+      "side": 1,
+      "message": "As clarified offline: GCInfoTrait needs to be on the API as we loose type information when calling from the API into the internals.\n\nCode will look something like:\n\n  template\u003ctypename T\u003e\n  T* MakeGCed(Args\u0026\u0026... args) {\n    GCInfoIndex index \u003d GCInfoTrait\u003cT\u003e::Index();\n    // Other stuff needed for allocation/ctor.\n    void* memory \u003d AllocateInternally(index, ...);\n    T* object \u003d ::new (memory) T(std::forward\u003cArgs\u003e(args)...);\n    // Other stuff needed for allocation/ctor.\n    return object;\n  }",
+      "parentUuid": "e66de0fe_a22edb99",
+      "range": {
+        "startLine": 22,
+        "startChar": 7,
+        "endLine": 22,
+        "endChar": 13
+      },
+      "revId": "756c15b5cf8de835ca138277c18df48bfa06c31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66fcd611_9d763b87",
         "filename": "src/heap/cppgc/gc-info-table.cc",
         "patchSetId": 4
