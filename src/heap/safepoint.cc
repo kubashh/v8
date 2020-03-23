@@ -117,5 +117,12 @@ bool Safepoint::ContainsAnyLocalHeap() {
   return local_heaps_head_ != nullptr;
 }
 
+void Safepoint::Iterate(RootVisitor* visitor) {
+  for (LocalHeap* current = local_heaps_head_; current;
+       current = current->next_) {
+    current->handles()->Iterate(visitor);
+  }
+}
+
 }  // namespace internal
 }  // namespace v8

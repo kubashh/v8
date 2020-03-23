@@ -819,15 +819,10 @@ bool Heap::UncommitFromSpace() { return new_space_->UncommitFromSpace(); }
 
 void Heap::GarbageCollectionPrologue() {
   TRACE_GC(tracer(), GCTracer::Scope::HEAP_PROLOGUE);
+
   {
     AllowHeapAllocation for_the_first_part_of_prologue;
     gc_count_++;
-
-#ifdef VERIFY_HEAP
-    if (FLAG_verify_heap) {
-      Verify();
-    }
-#endif
   }
 
   // Reset GC statistics.
@@ -1120,12 +1115,6 @@ void Heap::GarbageCollectionEpilogue() {
   if (Heap::ShouldZapGarbage() || FLAG_clear_free_memory) {
     ZapFromSpace();
   }
-
-#ifdef VERIFY_HEAP
-  if (FLAG_verify_heap) {
-    Verify();
-  }
-#endif
 
   AllowHeapAllocation for_the_rest_of_the_epilogue;
 
@@ -2022,98 +2011,114 @@ bool Heap::PerformGarbageCollection(
     }
   }
 
-  EnsureFromSpaceIsCommitted();
-
-  size_t start_young_generation_size =
-      Heap::new_space()->Size() + new_lo_space()->SizeOfObjects();
-
-  switch (collector) {
-    case MARK_COMPACTOR:
-      UpdateOldGenerationAllocationCounter();
-      // Perform mark-sweep with optional compaction.
-      MarkCompact();
-      old_generation_size_configured_ = true;
-      // This should be updated before PostGarbageCollectionProcessing, which
-      // can cause another GC. Take into account the objects promoted during
-      // GC.
-      old_generation_allocation_counter_at_last_gc_ +=
-          static_cast<size_t>(promoted_objects_size_);
-      old_generation_size_at_last_gc_ = OldGenerationSizeOfObjects();
-      break;
-    case MINOR_MARK_COMPACTOR:
-      MinorMarkCompact();
-      break;
-    case SCAVENGER:
-      if ((fast_promotion_mode_ &&
-           CanExpandOldGeneration(new_space()->Size() +
-                                  new_lo_space()->Size()))) {
-        tracer()->NotifyYoungGenerationHandling(
-            YoungGenerationHandling::kFastPromotionDuringScavenge);
-        EvacuateYoungGeneration();
-      } else {
-        tracer()->NotifyYoungGenerationHandling(
-            YoungGenerationHandling::kRegularScavenge);
-
-        Scavenge();
-      }
-      break;
-  }
-
-  ProcessPretenuringFeedback();
-
-  UpdateSurvivalStatistics(static_cast<int>(start_young_generation_size));
-  ConfigureInitialOldGenerationSize();
-
-  if (collector != MARK_COMPACTOR) {
-    // Objects that died in the new space might have been accounted
-    // as bytes marked ahead of schedule by the incremental marker.
-    incremental_marking()->UpdateMarkedBytesAfterScavenge(
-        start_young_generation_size - SurvivedYoungObjectSize());
-  }
-
-  if (!fast_promotion_mode_ || collector == MARK_COMPACTOR) {
-    ComputeFastPromotionMode();
-  }
-
-  isolate_->counters()->objs_since_last_young()->Set(0);
-
   {
-    TRACE_GC(tracer(), GCTracer::Scope::HEAP_EXTERNAL_WEAK_GLOBAL_HANDLES);
-    // First round weak callbacks are not supposed to allocate and trigger
-    // nested GCs.
-    freed_global_handles =
-        isolate_->global_handles()->InvokeFirstPassWeakCallbacks();
-  }
+    SafepointScope safepoint(this);
 
-  if (collector == MARK_COMPACTOR) {
-    TRACE_GC(tracer(), GCTracer::Scope::HEAP_EMBEDDER_TRACING_EPILOGUE);
-    // TraceEpilogue may trigger operations that invalidate global handles. It
-    // has to be called *after* all other operations that potentially touch and
-    // reset global handles. It is also still part of the main garbage
-    // collection pause and thus needs to be called *before* any operation that
-    // can potentially trigger recursive garbage
-    local_embedder_heap_tracer()->TraceEpilogue();
-  }
-
-  {
-    TRACE_GC(tracer(), GCTracer::Scope::HEAP_EXTERNAL_WEAK_GLOBAL_HANDLES);
-    gc_post_processing_depth_++;
-    {
-      AllowHeapAllocation allow_allocation;
-      AllowJavascriptExecution allow_js(isolate());
-      freed_global_handles +=
-          isolate_->global_handles()->PostGarbageCollectionProcessing(
-              collector, gc_callback_flags);
+#ifdef VERIFY_HEAP
+    if (FLAG_verify_heap) {
+      Verify();
     }
-    gc_post_processing_depth_--;
+#endif
+
+    EnsureFromSpaceIsCommitted();
+
+    size_t start_young_generation_size =
+        Heap::new_space()->Size() + new_lo_space()->SizeOfObjects();
+
+    switch (collector) {
+      case MARK_COMPACTOR:
+        UpdateOldGenerationAllocationCounter();
+        // Perform mark-sweep with optional compaction.
+        MarkCompact();
+        old_generation_size_configured_ = true;
+        // This should be updated before PostGarbageCollectionProcessing, which
+        // can cause another GC. Take into account the objects promoted during
+        // GC.
+        old_generation_allocation_counter_at_last_gc_ +=
+            static_cast<size_t>(promoted_objects_size_);
+        old_generation_size_at_last_gc_ = OldGenerationSizeOfObjects();
+        break;
+      case MINOR_MARK_COMPACTOR:
+        MinorMarkCompact();
+        break;
+      case SCAVENGER:
+        if ((fast_promotion_mode_ &&
+             CanExpandOldGeneration(new_space()->Size() +
+                                    new_lo_space()->Size()))) {
+          tracer()->NotifyYoungGenerationHandling(
+              YoungGenerationHandling::kFastPromotionDuringScavenge);
+          EvacuateYoungGeneration();
+        } else {
+          tracer()->NotifyYoungGenerationHandling(
+              YoungGenerationHandling::kRegularScavenge);
+
+          Scavenge();
+        }
+        break;
+    }
+
+    ProcessPretenuringFeedback();
+
+    UpdateSurvivalStatistics(static_cast<int>(start_young_generation_size));
+    ConfigureInitialOldGenerationSize();
+
+    if (collector != MARK_COMPACTOR) {
+      // Objects that died in the new space might have been accounted
+      // as bytes marked ahead of schedule by the incremental marker.
+      incremental_marking()->UpdateMarkedBytesAfterScavenge(
+          start_young_generation_size - SurvivedYoungObjectSize());
+    }
+
+    if (!fast_promotion_mode_ || collector == MARK_COMPACTOR) {
+      ComputeFastPromotionMode();
+    }
+
+    isolate_->counters()->objs_since_last_young()->Set(0);
+
+    {
+      TRACE_GC(tracer(), GCTracer::Scope::HEAP_EXTERNAL_WEAK_GLOBAL_HANDLES);
+      // First round weak callbacks are not supposed to allocate and trigger
+      // nested GCs.
+      freed_global_handles =
+          isolate_->global_handles()->InvokeFirstPassWeakCallbacks();
+    }
+
+    if (collector == MARK_COMPACTOR) {
+      TRACE_GC(tracer(), GCTracer::Scope::HEAP_EMBEDDER_TRACING_EPILOGUE);
+      // TraceEpilogue may trigger operations that invalidate global handles. It
+      // has to be called *after* all other operations that potentially touch
+      // and reset global handles. It is also still part of the main garbage
+      // collection pause and thus needs to be called *before* any operation
+      // that can potentially trigger recursive garbage
+      local_embedder_heap_tracer()->TraceEpilogue();
+    }
+
+    {
+      TRACE_GC(tracer(), GCTracer::Scope::HEAP_EXTERNAL_WEAK_GLOBAL_HANDLES);
+      gc_post_processing_depth_++;
+      {
+        AllowHeapAllocation allow_allocation;
+        AllowJavascriptExecution allow_js(isolate());
+        freed_global_handles +=
+            isolate_->global_handles()->PostGarbageCollectionProcessing(
+                collector, gc_callback_flags);
+      }
+      gc_post_processing_depth_--;
+    }
+
+    isolate_->eternal_handles()->PostGarbageCollectionProcessing();
+
+    // Update relocatables.
+    Relocatable::PostGarbageCollectionProcessing(isolate_);
+
+    RecomputeLimits(collector);
+
+#ifdef VERIFY_HEAP
+    if (FLAG_verify_heap) {
+      Verify();
+    }
+#endif
   }
-
-  isolate_->eternal_handles()->PostGarbageCollectionProcessing();
-
-  // Update relocatables.
-  Relocatable::PostGarbageCollectionProcessing(isolate_);
-
-  RecomputeLimits(collector);
 
   {
     GCCallbacksScope scope(this);
@@ -4475,6 +4480,8 @@ void Heap::IterateStrongRoots(RootVisitor* v, VisitMode mode) {
   FixStaleLeftTrimmedHandlesVisitor left_trim_visitor(this);
   isolate_->handle_scope_implementer()->Iterate(&left_trim_visitor);
   isolate_->handle_scope_implementer()->Iterate(v);
+  safepoint_->Iterate(&left_trim_visitor);
+  safepoint_->Iterate(v);
   isolate_->IterateDeferredHandles(&left_trim_visitor);
   isolate_->IterateDeferredHandles(v);
   v->Synchronize(VisitorSynchronization::kHandleScope);
