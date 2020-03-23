@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "1da7dce8_65dbca28",
+        "filename": "include/cppgc/gc-info.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T09:41:52Z",
+      "side": 1,
+      "message": "nit: The max index supported by the table is 14 bits. You can use uint16_t instead.",
+      "range": {
+        "startLine": 18,
+        "startChar": 20,
+        "endLine": 18,
+        "endChar": 28
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b63d364_6fb330df",
+        "filename": "include/cppgc/platform.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T09:41:52Z",
+      "side": 1,
+      "message": "Is this meant to replace HeapAllocator?",
+      "range": {
+        "startLine": 14,
+        "startChar": 26,
+        "endLine": 14,
+        "endChar": 39
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25bdc1a5_62f8510d",
+        "filename": "src/base/macros.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T09:41:52Z",
+      "side": 1,
+      "message": "Why use a dynamic abort instead of deleting the operator and getting a compile time error?",
+      "range": {
+        "startLine": 148,
+        "startChar": 45,
+        "endLine": 148,
+        "endChar": 50
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d57b0cef_7ebc6924",
         "filename": "src/heap/cppgc/gc-info-table.cc",
         "patchSetId": 12
@@ -18,6 +87,52 @@
         "startChar": 4,
         "endLine": 35,
         "endChar": 32
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45ee4bd3_279758a2",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T09:41:52Z",
+      "side": 1,
+      "message": "This seems odd. 2 lines above you multiply kInitialWantedLimit by kEntrySize and here you divide by it. This would be like comparing apples and oranges as one is in bytes and one in #entries.\nGiven the std::max below, I\u0027m assuming this was supposed to be #entries, so the multiplication above should probably go.",
+      "range": {
+        "startLine": 66,
+        "startChar": 68,
+        "endLine": 66,
+        "endChar": 78
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04d4444f_f6ee68f7",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T09:41:52Z",
+      "side": 1,
+      "message": "This should always return kMaxIndex since the limit should always be below that. If initial_limit is higher than kMaxIndex we have a problem. Did you mean std::min?\n\nAlso, I think this should be a DCHECK to make sure we are always below kMaxIndex and then return initial_limit.",
+      "range": {
+        "startLine": 68,
+        "startChar": 9,
+        "endLine": 68,
+        "endChar": 17
       },
       "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -48,6 +163,29 @@
     },
     {
       "key": {
+        "uuid": "5ce1ed0f_c2ff4c78",
+        "filename": "src/heap/cppgc/gc-info-table.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T09:41:52Z",
+      "side": 1,
+      "message": "Can we make the *ForTesting methods private with GCInfoTableTest as a friend class?",
+      "range": {
+        "startLine": 52,
+        "startChar": 29,
+        "endLine": 52,
+        "endChar": 39
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "73e59402_74b58a24",
         "filename": "test/unittests/heap/cppgc/gc-info_unittest.cc",
         "patchSetId": 12
@@ -64,6 +202,29 @@
         "startChar": 0,
         "endLine": 15,
         "endChar": 37
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c97bb7c_ff2cdce3",
+        "filename": "test/unittests/heap/cppgc/gc-info_unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T09:41:52Z",
+      "side": 1,
+      "message": "I suspect the current implementation always returns here (because of the std::max in the implementation)",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 61,
+        "endChar": 10
       },
       "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
