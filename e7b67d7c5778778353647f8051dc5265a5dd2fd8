@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "369f7420_9cacfafb",
+        "filename": "include/cppgc/platform.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-23T13:28:03Z",
+      "side": 1,
+      "message": "If you are talking about this HeapAllocator: https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/platform/heap/heap_allocator.h;l\u003d52?q\u003dHeapAllocator\u0026ss\u003dchromium\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2Fsearch%2F\n\nIt\u0027s a bag of internals that interface with WTF. We will need to provide low-level APIs that HeapAllocator can use to interface with WTF.\n\nPageAllocator here will not provide that interface. I haven\u0027t looked into the details of what exact APIs we need there. (A few things at the top of my head: Write barrier, moving callbacks, allocation to specific area)",
+      "parentUuid": "f8e0071b_56cdd00d",
+      "range": {
+        "startLine": 14,
+        "startChar": 26,
+        "endLine": 14,
+        "endChar": 39
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "25bdc1a5_62f8510d",
         "filename": "src/base/macros.h",
         "patchSetId": 12
@@ -486,6 +510,30 @@
       "side": 1,
       "message": "Ack\n(Was not aware that *ForTesting are stripped in release builds)",
       "parentUuid": "bb4bba38_d40c2596",
+      "range": {
+        "startLine": 52,
+        "startChar": 29,
+        "endLine": 52,
+        "endChar": 39
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc7a4c79_74d43881",
+        "filename": "src/heap/cppgc/gc-info-table.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-23T13:28:03Z",
+      "side": 1,
+      "message": "for reference: https://chromium.googlesource.com/chromium/src/+/refs/tags/74.0.3698.0/styleguide/c++/c++.md#test_only-code",
+      "parentUuid": "f90dc9c8_0262f77e",
       "range": {
         "startLine": 52,
         "startChar": 29,
