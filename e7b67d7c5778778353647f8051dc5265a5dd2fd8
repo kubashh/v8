@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "094158ad_3c66762c",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-23T11:53:34Z",
+      "side": 1,
+      "message": "As discussed offline: This is not just a LazyInstance as we need the allocator parameter as well. Let\u0027s leave the race for now and hook it up with whatever global initialization we will have. (Example: Setting the platform before any heap gets created.)",
+      "parentUuid": "d57b0cef_7ebc6924",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 32
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45ee4bd3_279758a2",
         "filename": "src/heap/cppgc/gc-info-table.cc",
         "patchSetId": 12
