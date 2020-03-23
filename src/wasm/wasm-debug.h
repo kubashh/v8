@@ -146,6 +146,10 @@ class DebugInfo {
   Handle<JSObject> GetLocalScopeObject(Isolate*, Address pc, Address fp,
                                        Address debug_break_fp);
 
+  Handle<JSObject> GetWasmExpressionStackScopeObject(Isolate*, Address pc,
+                                                     Address fp,
+                                                     Address debug_break_fp);
+
   WireBytesRef GetLocalName(int func_index, int local_index);
 
   void SetBreakpoint(int func_index, int offset, Isolate* current_isolate);

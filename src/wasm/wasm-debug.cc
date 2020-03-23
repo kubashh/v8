@@ -436,6 +436,24 @@ class InterpreterHandle {
     return local_scope_object;
   }
 
+  Handle<JSObject> GetWasmExpressionStackScopeObject(
+      InterpretedFrame* frame, Handle<WasmDebugInfo> debug_info) {
+    // Fill wasm expression stack values.
+    int stack_count = frame->GetStackHeight();
+    // Use an object without prototype instead of an Array, for nicer displaying
+    // in DevTools. For Arrays, the length field and prototype is displayed,
+    // which does not make too much sense here.
+    Handle<JSObject> wasm_expression_stack_scope_obj =
+        isolate_->factory()->NewJSObjectWithNullProto();
+    for (int i = 0; i < stack_count; ++i) {
+      WasmValue value = frame->GetStackValue(stack_count - i - 1);
+      Handle<Object> value_obj = WasmValueToValueObject(isolate_, value);
+      JSObject::AddDataElement(wasm_expression_stack_scope_obj,
+                               static_cast<uint32_t>(i), value_obj, NONE);
+    }
+    return wasm_expression_stack_scope_obj;
+  }
+
  private:
   DISALLOW_COPY_AND_ASSIGN(InterpreterHandle);
 };
@@ -604,6 +622,40 @@ class DebugInfoImpl {
                                value_obj, NONE);
     }
     return local_scope_object;
+  }
+
+  Handle<JSObject> GetWasmExpressionStackScopeObject(Isolate* isolate,
+                                                     Address pc, Address fp,
+                                                     Address debug_break_fp) {
+    Handle<JSObject> wasm_expression_stack_scope_obj =
+        isolate->factory()->NewJSObjectWithNullProto();
+    wasm::WasmCodeRefScope wasm_code_ref_scope;
+
+    wasm::WasmCode* code =
+        isolate->wasm_engine()->code_manager()->LookupCode(pc);
+    // Only Liftoff code can be inspected.
+    if (!code->is_liftoff()) return wasm_expression_stack_scope_obj;
+
+    auto* debug_side_table = GetDebugSideTable(code, isolate->allocator());
+    int pc_offset = static_cast<int>(pc - code->instruction_start());
+    auto* debug_side_table_entry = debug_side_table->GetEntry(pc_offset);
+    DCHECK_NOT_NULL(debug_side_table_entry);
+
+    // Fill wasm expression stack values.
+    // Use an object without prototype instead of an Array, for nicer displaying
+    // in DevTools. For Arrays, the length field and prototype is displayed,
+    // which does not make too much sense here.
+    int num_locals = static_cast<int>(debug_side_table->num_locals());
+    int value_count = debug_side_table_entry->num_values();
+    int stack_count = value_count - num_locals;
+    for (int i = 0; i < stack_count; ++i) {
+      WasmValue value = GetValue(debug_side_table_entry, value_count - i - 1,
+                                 fp, debug_break_fp);
+      Handle<Object> value_obj = WasmValueToValueObject(isolate, value);
+      JSObject::AddDataElement(wasm_expression_stack_scope_obj,
+                               static_cast<uint32_t>(i), value_obj, NONE);
+    }
+    return wasm_expression_stack_scope_obj;
   }
 
   WireBytesRef GetLocalName(int func_index, int local_index) {
@@ -831,6 +883,12 @@ Handle<JSObject> DebugInfo::GetLocalScopeObject(Isolate* isolate, Address pc,
   return impl_->GetLocalScopeObject(isolate, pc, fp, debug_break_fp);
 }
 
+Handle<JSObject> DebugInfo::GetWasmExpressionStackScopeObject(
+    Isolate* isolate, Address pc, Address fp, Address debug_break_fp) {
+  return impl_->GetWasmExpressionStackScopeObject(isolate, pc, fp,
+                                                  debug_break_fp);
+}
+
 WireBytesRef DebugInfo::GetLocalName(int func_index, int local_index) {
   return impl_->GetLocalName(func_index, local_index);
 }
@@ -1027,6 +1085,15 @@ Handle<JSObject> WasmDebugInfo::GetLocalScopeObject(
   auto* interp_handle = GetInterpreterHandle(*debug_info);
   auto frame = interp_handle->GetInterpretedFrame(frame_pointer, frame_index);
   return interp_handle->GetLocalScopeObject(frame.get(), debug_info);
+}
+
+// static
+Handle<JSObject> WasmDebugInfo::GetWasmExpressionStackScopeObject(
+    Handle<WasmDebugInfo> debug_info, Address frame_pointer, int frame_index) {
+  auto* interp_handle = GetInterpreterHandle(*debug_info);
+  auto frame = interp_handle->GetInterpretedFrame(frame_pointer, frame_index);
+  return interp_handle->GetWasmExpressionStackScopeObject(frame.get(),
+                                                          debug_info);
 }
 
 // static
