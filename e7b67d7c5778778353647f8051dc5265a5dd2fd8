@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d57b0cef_7ebc6924",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-23T09:25:49Z",
+      "side": 1,
+      "message": "Isn\u0027t this a data race? I was expecting  LazyInstance or CallOnce",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 32
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e7eb5a7_f6dc8dca",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-23T09:25:49Z",
+      "side": 1,
+      "message": "Instead of undoing the growing heuristic in line 72, how about tracking the read_only_table_end_ separately?",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 74
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73e59402_74b58a24",
+        "filename": "test/unittests/heap/cppgc/gc-info_unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-23T09:25:49Z",
+      "side": 1,
+      "message": "Could you please add a multithreaded test?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 37
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

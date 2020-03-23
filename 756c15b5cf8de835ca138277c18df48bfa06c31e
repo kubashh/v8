@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e66de0fe_a22edb99",
+        "filename": "include/cppgc/gc-info.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-23T09:25:49Z",
+      "side": 1,
+      "message": "To check my understanding: GCInfoTrait is overridable by the embedder for some types?\nIf so, I agree that we have to expose GCInfo and I think that would be ok.",
+      "parentUuid": "e746a7c3_271ff794",
+      "range": {
+        "startLine": 22,
+        "startChar": 7,
+        "endLine": 22,
+        "endChar": 13
+      },
+      "revId": "756c15b5cf8de835ca138277c18df48bfa06c31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66fcd611_9d763b87",
         "filename": "src/heap/cppgc/gc-info-table.cc",
         "patchSetId": 4
