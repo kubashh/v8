@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "f8e0071b_56cdd00d",
+        "filename": "include/cppgc/platform.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T12:33:27Z",
+      "side": 1,
+      "message": "I wasn\u0027t referring to the TODO.\n\nTo be more specific, which of the following 3 options will be the end state:\n1) HeapAllocator depends on PageAllocator\n2) PageAllocator \u003d HeapAllocator\n3) HeapAllocator is deprecated and removed\n?",
+      "parentUuid": "43c80b77_a9ced238",
+      "range": {
+        "startLine": 14,
+        "startChar": 26,
+        "endLine": 14,
+        "endChar": 39
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25bdc1a5_62f8510d",
         "filename": "src/base/macros.h",
         "patchSetId": 12
@@ -140,6 +164,30 @@
       "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fb95e0e_f6586c20",
+        "filename": "src/base/macros.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T12:33:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ecdcecb6_5b318d0e",
+      "range": {
+        "startLine": 148,
+        "startChar": 45,
+        "endLine": 148,
+        "endChar": 50
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -237,6 +285,30 @@
     },
     {
       "key": {
+        "uuid": "6eb11bbd_9c1d3abd",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T12:33:27Z",
+      "side": 1,
+      "message": "I misread the parenthesis.",
+      "parentUuid": "a11e1fb2_826ebe1d",
+      "range": {
+        "startLine": 66,
+        "startChar": 68,
+        "endLine": 66,
+        "endChar": 78
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04d4444f_f6ee68f7",
         "filename": "src/heap/cppgc/gc-info-table.cc",
         "patchSetId": 12
@@ -281,6 +353,30 @@
       "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce75d354_e61cb7c7",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T12:33:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ab44b7c4_30db7696",
+      "range": {
+        "startLine": 68,
+        "startChar": 9,
+        "endLine": 68,
+        "endChar": 17
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -375,6 +471,30 @@
       "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f90dc9c8_0262f77e",
+        "filename": "src/heap/cppgc/gc-info-table.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-23T12:33:27Z",
+      "side": 1,
+      "message": "Ack\n(Was not aware that *ForTesting are stripped in release builds)",
+      "parentUuid": "bb4bba38_d40c2596",
+      "range": {
+        "startLine": 52,
+        "startChar": 29,
+        "endLine": 52,
+        "endChar": 39
+      },
+      "revId": "e7b67d7c5778778353647f8051dc5265a5dd2fd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
