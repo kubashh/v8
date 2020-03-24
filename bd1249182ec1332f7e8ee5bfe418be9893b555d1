@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3b672fe2_1c46aeaa",
+        "filename": "include/cppgc/platform.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-24T13:36:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8054a391_5d78b0ca",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 29
+      },
+      "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6c76f3fd_25b729dc",
         "filename": "src/heap/cppgc/gc-info-table.cc",
         "patchSetId": 21
@@ -45,6 +69,30 @@
       "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca9414d1_42cd352b",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-24T13:36:24Z",
+      "side": 1,
+      "message": "Done. Moved this one to the header as well.\n\nLet\u0027s see how many constants we need. I suspect the most interesting ones will end up in something like globals.h",
+      "parentUuid": "6c76f3fd_25b729dc",
+      "range": {
+        "startLine": 61,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 11
+      },
+      "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "de8a198f_ccc319bb",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-24T13:36:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6eec6847_c18e985e",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 9
+      },
+      "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6cac1ffe_856afd12",
         "filename": "src/heap/cppgc/gc-info-table.h",
         "patchSetId": 21
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "6e6d1626_6137ab61",
+        "filename": "src/heap/cppgc/gc-info-table.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-24T13:36:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cac1ffe_856afd12",
+      "range": {
+        "startLine": 32,
+        "startChar": 28,
+        "endLine": 32,
+        "endChar": 30
+      },
+      "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ca8469f_2a8ea6b8",
         "filename": "src/heap/cppgc/gc-info-table.h",
         "patchSetId": 21
@@ -114,6 +210,30 @@
       "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21c2a4ce_ce709077",
+        "filename": "src/heap/cppgc/gc-info-table.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-24T13:36:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ca8469f_2a8ea6b8",
+      "range": {
+        "startLine": 36,
+        "startChar": 27,
+        "endLine": 36,
+        "endChar": 28
+      },
+      "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

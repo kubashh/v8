@@ -164,6 +164,30 @@
       "revId": "756c15b5cf8de835ca138277c18df48bfa06c31e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2139cc53_46b01589",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-24T13:36:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f4fecb14_081154b5",
+      "range": {
+        "startLine": 104,
+        "startChar": 12,
+        "endLine": 104,
+        "endChar": 22
+      },
+      "revId": "756c15b5cf8de835ca138277c18df48bfa06c31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
