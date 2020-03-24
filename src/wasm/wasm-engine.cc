@@ -461,10 +461,9 @@ MaybeHandle<WasmModuleObject> WasmEngine::SyncCompile(
   }
 #endif
 
-  Handle<Script> script =
-      CreateWasmScript(isolate, bytes.module_bytes(),
-                       VectorOf(native_module->module()->source_map_url),
-                       native_module->module()->name);
+  Handle<Script> script = CreateWasmScript(
+      isolate, bytes.module_bytes(), native_module->module()->debug_symbols,
+      native_module->module()->name);
 
   // Create the compiled module object and populate with compiled functions
   // and information needed at instantiation time. This object needs to be
@@ -632,10 +631,9 @@ Handle<WasmModuleObject> WasmEngine::ImportNativeModule(
     Isolate* isolate, std::shared_ptr<NativeModule> shared_native_module) {
   NativeModule* native_module = shared_native_module.get();
   ModuleWireBytes wire_bytes(native_module->wire_bytes());
-  Handle<Script> script =
-      CreateWasmScript(isolate, wire_bytes.module_bytes(),
-                       VectorOf(native_module->module()->source_map_url),
-                       native_module->module()->name);
+  Handle<Script> script = CreateWasmScript(
+      isolate, wire_bytes.module_bytes(),
+      native_module->module()->debug_symbols, native_module->module()->name);
   Handle<FixedArray> export_wrappers;
   CompileJsToWasmWrappers(isolate, native_module->module(), &export_wrappers);
   Handle<WasmModuleObject> module_object = WasmModuleObject::New(

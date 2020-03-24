@@ -611,9 +611,8 @@ MaybeHandle<WasmModuleObject> DeserializeNativeModule(
   if (decode_result.failed()) return {};
   std::shared_ptr<WasmModule> module = std::move(decode_result.value());
   CHECK_NOT_NULL(module);
-  Handle<Script> script = CreateWasmScript(isolate, wire_bytes_vec,
-                                           VectorOf(module->source_map_url),
-                                           module->name, source_url);
+  Handle<Script> script = CreateWasmScript(
+      isolate, wire_bytes_vec, module->debug_symbols, module->name, source_url);
 
   auto shared_native_module = wasm_engine->MaybeGetNativeModule(
       module->origin, wire_bytes_vec, isolate);

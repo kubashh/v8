@@ -11,6 +11,7 @@
 
 #include "src/base/optional.h"
 #include "src/common/globals.h"
+#include "src/debug/debug-interface.h"
 #include "src/tasks/cancelable-task.h"
 #include "src/wasm/compilation-environment.h"
 #include "src/wasm/wasm-features.h"
@@ -62,7 +63,7 @@ WasmCode* CompileImportWrapper(
 
 V8_EXPORT_PRIVATE Handle<Script> CreateWasmScript(
     Isolate* isolate, Vector<const uint8_t> wire_bytes,
-    Vector<const char> source_map_url, WireBytesRef name,
+    const debug::WasmDebugSymbols& debug_symbols, WireBytesRef name,
     Vector<const char> source_url = {});
 
 // Triggered by the WasmCompileLazy builtin. The return value indicates whether

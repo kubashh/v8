@@ -16,6 +16,7 @@
 #include "src/base/platform/time.h"
 #include "src/base/utils/random-number-generator.h"
 #include "src/compiler/wasm-compiler.h"
+#include "src/debug/debug-interface.h"
 #include "src/heap/heap-inl.h"  // For CodeSpaceMemoryModificationScope.
 #include "src/logging/counters.h"
 #include "src/objects/property-descriptor.h"
@@ -1598,9 +1599,9 @@ void AsyncCompileJob::PrepareRuntimeObjects() {
   DCHECK(module_object_.is_null());
   const WasmModule* module = native_module_->module();
   auto source_url = stream_ ? stream_->url() : Vector<const char>();
-  Handle<Script> script = CreateWasmScript(
-      isolate_, native_module_->wire_bytes(), VectorOf(module->source_map_url),
-      module->name, source_url);
+  Handle<Script> script =
+      CreateWasmScript(isolate_, native_module_->wire_bytes(),
+                       module->debug_symbols, module->name, source_url);
 
   Handle<WasmModuleObject> module_object =
       WasmModuleObject::New(isolate_, native_module_, script);
@@ -1634,9 +1635,12 @@ void AsyncCompileJob::FinishCompile(bool is_after_cache_hit) {
   // Finish the wasm script now and make it public to the debugger.
   Handle<Script> script(module_object_->script(), isolate_);
   if (script->type() == Script::TYPE_WASM &&
-      module_object_->module()->source_map_url.size() != 0) {
+      module_object_->module()->debug_symbols.type ==
+          debug::WasmDebugSymbols::Type::SourceMap &&
+      !module_object_->module()->debug_symbols.external_url.size()) {
     MaybeHandle<String> src_map_str = isolate_->factory()->NewStringFromUtf8(
-        CStrVector(module_object_->module()->source_map_url.c_str()),
+        CStrVector(
+            module_object_->module()->debug_symbols.external_url.c_str()),
         AllocationType::kOld);
     script->set_source_mapping_url(*src_map_str.ToHandleChecked());
   }
@@ -2991,7 +2995,7 @@ WasmCode* CompileImportWrapper(
 
 Handle<Script> CreateWasmScript(Isolate* isolate,
                                 Vector<const uint8_t> wire_bytes,
-                                Vector<const char> source_map_url,
+                                const debug::WasmDebugSymbols& debug_symbols,
                                 WireBytesRef name,
                                 Vector<const char> source_url) {
   Handle<Script> script =
@@ -3046,9 +3050,10 @@ Handle<Script> CreateWasmScript(Isolate* isolate,
   }
   script->set_source_url(*url_str.ToHandleChecked());
 
-  if (!source_map_url.empty()) {
+  if (debug_symbols.type == debug::WasmDebugSymbols::Type::SourceMap &&
+      !debug_symbols.external_url.empty()) {
     MaybeHandle<String> src_map_str = isolate->factory()->NewStringFromUtf8(
-        source_map_url, AllocationType::kOld);
+        VectorOf(debug_symbols.external_url), AllocationType::kOld);
     script->set_source_mapping_url(*src_map_str.ToHandleChecked());
   }
   return script;

@@ -43,7 +43,10 @@ InspectorTest.log(
 // Sample .debug_info section.
 // Content doesn't matter, as we don't try to parse it in V8,
 // but should be non-empty to check that we're skipping it correctly.
-const dwarfSection = { name: '.debug_info', value: [1, 2, 3, 4, 5] };
+const embeddedDWARFSection = { name: '.debug_info', value: [1, 2, 3, 4, 5] };
+
+// Sample external_debug_info section set to "abc".
+const externalDWARFSection = { name: '.external_debug_info', value: [3, 97, 98, 99] };
 
 // Sample sourceMappingURL section set to "abc".
 const sourceMapSection = { name: 'sourceMappingURL', value: [3, 97, 98, 99] };
@@ -55,17 +58,32 @@ sessions[0].Protocol.Runtime
       // no debug info
       testFunction([${createModule()}]);
 
-      // DWARF
-      testFunction([${createModule(dwarfSection)}]);
+      // External DWARF
+      testFunction([${createModule(externalDWARFSection)}]);
+
+      // Embedded DWARF
+      testFunction([${createModule(embeddedDWARFSection)}]);
 
       // Source map
       testFunction([${createModule(sourceMapSection)}]);
 
-      // DWARF + source map
-      testFunction([${createModule(dwarfSection, sourceMapSection)}]);
+      // SourceMap + External DWARF
+      testFunction([${createModule(sourceMapSection, externalDWARFSection)}]);
 
-      // Source map + DWARF (different order)
-      testFunction([${createModule(sourceMapSection, dwarfSection)}]);
+      // External DWARF + SourceMap (different order)
+      testFunction([${createModule(externalDWARFSection, sourceMapSection)}]);
+
+      // Embedded DWARF + External DWARF
+      testFunction([${createModule(embeddedDWARFSection, externalDWARFSection)}]);
+
+      // External + Embedded DWARF (different order)
+      testFunction([${createModule(externalDWARFSection, embeddedDWARFSection)}]);
+
+      // Embedded DWARF + source map
+      testFunction([${createModule(embeddedDWARFSection, sourceMapSection)}]);
+
+      // Source map + Embedded DWARF (different order)
+      testFunction([${createModule(sourceMapSection, externalDWARFSection)}]);
       `
     })
     .then(() => (
@@ -85,11 +103,20 @@ function trackScripts(debuggerParams) {
   Protocol.Debugger.enable(debuggerParams);
   Protocol.Debugger.onScriptParsed(handleScriptParsed);
 
-  async function loadScript(
-      {url, scriptId, sourceMapURL, startColumn, endColumn, codeOffset}) {
+  async function loadScript({
+    url,
+    scriptId,
+    sourceMapURL,
+    startColumn,
+    endColumn,
+    codeOffset,
+    debugSymbols
+  }) {
     InspectorTest.log(`Session #${sessionId}: Script #${
         scripts.length} parsed. URL: ${url}. Source map URL: ${
-        sourceMapURL}, module begin: ${startColumn}, module end: ${endColumn}, code offset: ${codeOffset}`);
+        sourceMapURL}, debug symbols: ${debugSymbols.type}:${
+        debugSymbols.externalURL}. module begin: ${startColumn}, module end: ${
+        endColumn}, code offset: ${codeOffset}`);
     let {result: {scriptSource, bytecode}} =
         await Protocol.Debugger.getScriptSource({scriptId});
     if (bytecode) {
@@ -101,10 +128,17 @@ function trackScripts(debuggerParams) {
       bytecode = InspectorTest.decodeBase64(bytecode);
       // Check that it can be parsed back to a WebAssembly module.
       let module = new WebAssembly.Module(bytecode);
-      scriptSource = `
+      scriptSource =
+          `
 Raw: ${Array.from(bytecode, b => ('0' + b.toString(16)).slice(-2)).join(' ')}
-Imports: [${WebAssembly.Module.imports(module).map(i => `${i.name}: ${i.kind} from "${i.module}"`).join(', ')}]
-Exports: [${WebAssembly.Module.exports(module).map(e => `${e.name}: ${e.kind}`).join(', ')}]
+Imports: [${
+              WebAssembly.Module.imports(module)
+                  .map(i => `${i.name}: ${i.kind} from "${i.module}"`)
+                  .join(', ')}]
+Exports: [${
+              WebAssembly.Module.exports(module)
+                  .map(e => `${e.name}: ${e.kind}`)
+                  .join(', ')}]
       `.trim();
     }
     InspectorTest.log(`Session #${sessionId}: Source for ${url}:`);
