@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8054a391_5d78b0ca",
+        "filename": "include/cppgc/platform.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2020-03-24T13:23:29Z",
+      "side": 1,
+      "message": "+1",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 29
+      },
+      "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c76f3fd_25b729dc",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2020-03-24T13:23:29Z",
+      "side": 1,
+      "message": "I am wondering if we should move the \"configuration constants\" into a special header in the section... to make it cbustomizable for other C++ users later (easier).",
+      "range": {
+        "startLine": 61,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 11
+      },
+      "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6eec6847_c18e985e",
+        "filename": "src/heap/cppgc/gc-info-table.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2020-03-24T13:23:29Z",
+      "side": 1,
+      "message": "Can you factor this out into a separate functions which contains the #if?",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 9
+      },
+      "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cac1ffe_856afd12",
+        "filename": "src/heap/cppgc/gc-info-table.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2020-03-24T13:23:29Z",
+      "side": 1,
+      "message": "are",
+      "range": {
+        "startLine": 32,
+        "startChar": 28,
+        "endLine": 32,
+        "endChar": 30
+      },
+      "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ca8469f_2a8ea6b8",
+        "filename": "src/heap/cppgc/gc-info-table.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2020-03-24T13:23:29Z",
+      "side": 1,
+      "message": "Let\u0027s make it clear that we are talking about Blink here (and that this number would need to change when used in a different context).",
+      "range": {
+        "startLine": 36,
+        "startChar": 27,
+        "endLine": 36,
+        "endChar": 28
+      },
+      "revId": "bd1249182ec1332f7e8ee5bfe418be9893b555d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
