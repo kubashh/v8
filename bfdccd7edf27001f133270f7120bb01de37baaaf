@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f88d5610_7d151f4b",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3117,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-03-24T16:51:42Z",
+      "side": 0,
+      "message": "I think this comment and the issue it describes still hold, after OSRing we can have frames whose return addresses are not after a call. So if we try to OSR them again for instance, we would expect some source location before the return address corresponding to the call, but there won\u0027t be any so we will use the previous call instead. I will see if I can create a test that triggers this.",
+      "range": {
+        "startLine": 3107,
+        "startChar": 0,
+        "endLine": 3117,
+        "endChar": 9
+      },
+      "revId": "bfdccd7edf27001f133270f7120bb01de37baaaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
