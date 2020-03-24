@@ -85,6 +85,9 @@ void CallDescriptors::InitializeOncePerProcess() {
   DCHECK(!AllocateDescriptor{}.HasContextParameter());
   DCHECK(!AllocateHeapNumberDescriptor{}.HasContextParameter());
   DCHECK(!AbortDescriptor{}.HasContextParameter());
+  DCHECK(!WasmInt32ToHeapNumberDescriptor{}.HasContextParameter());
+  DCHECK(!WasmFloat32ToNumberDescriptor{}.HasContextParameter());
+  DCHECK(!WasmFloat64ToNumberDescriptor{}.HasContextParameter());
 }
 
 void CallDescriptors::TearDown() {
@@ -373,6 +376,34 @@ void ArrayNArgumentsConstructorDescriptor::InitializePlatformSpecific(
                           kJavaScriptCallExtraArg1Register,
                           kJavaScriptCallArgCountRegister};
   data->InitializePlatformSpecific(arraysize(registers), registers);
+}
+
+void WasmInt32ToHeapNumberDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  DefaultInitializePlatformSpecific(data, kParameterCount);
+}
+
+void WasmTaggedNonSmiToInt32Descriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  DefaultInitializePlatformSpecific(data, kParameterCount);
+}
+
+#if !V8_TARGET_ARCH_IA32
+// Use custom descriptors on ia32 to avoid xmm0 for FP parameters.
+void WasmFloat32ToNumberDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  DefaultInitializePlatformSpecific(data, kParameterCount);
+}
+
+void WasmFloat64ToNumberDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  DefaultInitializePlatformSpecific(data, kParameterCount);
+}
+#endif  // !V8_TARGET_ARCH_IA32
+
+void WasmTaggedToFloat64Descriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  DefaultInitializePlatformSpecific(data, kParameterCount);
 }
 
 void WasmMemoryGrowDescriptor::InitializePlatformSpecific(
