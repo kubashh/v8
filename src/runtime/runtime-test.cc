@@ -24,6 +24,7 @@
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/ic/stub-cache.h"
 #include "src/logging/counters.h"
+#include "src/logging/log.h"
 #include "src/objects/heap-object-inl.h"
 #include "src/objects/js-array-inl.h"
 #include "src/objects/js-regexp-inl.h"
@@ -735,6 +736,21 @@ RUNTIME_FUNCTION(Runtime_SimulateNewspaceFull) {
     FillUpOneNewSpacePage(isolate, heap);
   } while (space->AddFreshPage());
 
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+RUNTIME_FUNCTION(Runtime_PrintOptimizedExecCount) {
+  SealHandleScope shs(isolate);
+  DCHECK_EQ(1, args.length());
+
+  if (FLAG_trace_opt) {
+    MaybeObject maybe_object(*args.address_of_arg_at(0));
+    FeedbackVector vector = FeedbackVector::cast(maybe_object.GetHeapObject());
+
+    std::stringstream str;
+    str << "ExecCount50 " << Brief(vector.shared_function_info()) << std::endl;
+    LOG(isolate, LogEvent(str.str().c_str()));
+  }
   return ReadOnlyRoots(isolate).undefined_value();
 }
 

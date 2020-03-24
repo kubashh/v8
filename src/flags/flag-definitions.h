@@ -495,6 +495,7 @@ DEFINE_BOOL(turboprop, false,
 DEFINE_NEG_IMPLICATION(turboprop, turbo_inlining)
 DEFINE_IMPLICATION(turboprop, concurrent_inlining)
 DEFINE_VALUE_IMPLICATION(turboprop, interrupt_budget, 15 * KB)
+DEFINE_BOOL(trace_optimized_exec_count, false, "print when exec cout is 50")
 
 // Flags for concurrent recompilation.
 DEFINE_BOOL(concurrent_recompilation, true,

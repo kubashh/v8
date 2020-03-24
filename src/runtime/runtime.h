@@ -458,6 +458,7 @@ namespace internal {
   F(ConstructConsString, 2, 1)                \
   F(ConstructDouble, 2, 1)                    \
   F(ConstructSlicedString, 2, 1)              \
+  F(PrintOptimizedExecCount, 1, 1)            \
   F(DebugPrint, 1, 1)                         \
   F(DebugTrace, 0, 1)                         \
   F(DebugTrackRetainingPath, -1, 1)           \

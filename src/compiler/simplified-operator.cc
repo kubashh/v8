@@ -940,6 +940,13 @@ struct SimplifiedOperatorGlobalCache final {
   };
   ArgumentsFrameOperator kArgumentsFrame;
 
+  struct CountOptimizationOperator final : public Operator {
+    CountOptimizationOperator()
+        : Operator(IrOpcode::kCountOptimization, Operator::kNoThrow,
+                   "ComputeOptimization", 1, 1, 1, 0, 1, 0) {}
+  };
+  CountOptimizationOperator kCountOptimization;
+
   template <CheckForMinusZeroMode kMode>
   struct ChangeFloat64ToTaggedOperator final
       : public Operator1<CheckForMinusZeroMode> {
@@ -1189,6 +1196,7 @@ GET_FROM_CACHE(ArgumentsFrame)
 GET_FROM_CACHE(FindOrderedHashMapEntry)
 GET_FROM_CACHE(FindOrderedHashMapEntryForInt32Key)
 GET_FROM_CACHE(LoadFieldByIndex)
+GET_FROM_CACHE(CountOptimization)
 #undef GET_FROM_CACHE
 
 #define GET_FROM_CACHE_WITH_FEEDBACK(Name, value_input_count,               \

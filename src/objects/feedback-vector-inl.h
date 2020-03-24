@@ -108,13 +108,7 @@ ACCESSORS(FeedbackVector, closure_feedback_cell_array, ClosureFeedbackCellArray,
 INT32_ACCESSORS(FeedbackVector, length, kLengthOffset)
 INT32_ACCESSORS(FeedbackVector, invocation_count, kInvocationCountOffset)
 INT32_ACCESSORS(FeedbackVector, profiler_ticks, kProfilerTicksOffset)
-
-void FeedbackVector::clear_padding() {
-  if (FIELD_SIZE(kPaddingOffset) == 0) return;
-  DCHECK_EQ(4, FIELD_SIZE(kPaddingOffset));
-  memset(reinterpret_cast<void*>(address() + kPaddingOffset), 0,
-         FIELD_SIZE(kPaddingOffset));
-}
+INT32_ACCESSORS(FeedbackVector, opt_execution_count, kOptExecutionCountOffset)
 
 bool FeedbackVector::is_empty() const { return length() == 0; }
 

@@ -209,8 +209,9 @@ class FeedbackVector : public HeapObject {
   // runtime profiler.
   DECL_INT32_ACCESSORS(profiler_ticks)
 
+  DECL_INT32_ACCESSORS(opt_execution_count)
+
   // Initialize the padding if necessary.
-  inline void clear_padding();
 
   inline void clear_invocation_count();
 

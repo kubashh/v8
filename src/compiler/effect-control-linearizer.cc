@@ -202,6 +202,7 @@ class EffectControlLinearizer {
   Node* LowerFoldConstant(Node* node);
   Node* LowerConvertReceiver(Node* node);
   Node* LowerDateNow(Node* node);
+  void LowerCountOptimization(Node* node, Node* frame_state);
 
   // Lowering of optional operators.
   Maybe<Node*> LowerFloat64RoundUp(Node* node);
@@ -1310,6 +1311,9 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       break;
     case IrOpcode::kFoldConstant:
       result = LowerFoldConstant(node);
+      break;
+    case IrOpcode::kCountOptimization:
+      LowerCountOptimization(node, frame_state);
       break;
     default:
       return false;
@@ -6022,6 +6026,34 @@ Node* EffectControlLinearizer::LowerDateNow(Node* node) {
   return __ Call(call_descriptor, __ CEntryStubConstant(1),
                  __ ExternalConstant(ExternalReference::Create(id)),
                  __ Int32Constant(0), __ NoContextConstant());
+}
+
+void EffectControlLinearizer::LowerCountOptimization(Node* node,
+                                                     Node* frame_state) {
+  auto done = __ MakeLabel();
+  auto call_print = __ MakeDeferredLabel();
+  Node* vector = NodeProperties::GetValueInput(node, 0);
+  FieldAccess access = AccessBuilder::ForFeedbackVectorExecutionCount();
+  Node* old_value = __ LoadField(access, vector);
+  Node* value = __ Int32Add(old_value, __ Int32Constant(1));
+  __ StoreField(access, vector, value);
+
+  if (FLAG_trace_optimized_exec_count) {
+    __ GotoIf(__ Word32Equal(value, __ Int32Constant(50)), &call_print);
+    __ Goto(&done);
+
+    __ Bind(&call_print);
+    Operator::Properties properties = Operator::kNoDeopt | Operator::kNoThrow;
+    Runtime::FunctionId id = Runtime::kPrintOptimizedExecCount;
+    auto call_descriptor = Linkage::GetRuntimeCallDescriptor(
+        graph()->zone(), id, 1, properties, CallDescriptor::kNoFlags);
+    __ Call(call_descriptor, __ CEntryStubConstant(1), vector,
+            __ ExternalConstant(ExternalReference::Create(id)),
+            __ Int32Constant(1), __ NoContextConstant());
+    __ Goto(&done);
+
+    __ Bind(&done);
+  }
 }
 
 #undef __

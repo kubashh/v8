@@ -846,6 +846,7 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
       break;
 
     case IrOpcode::kJSStackCheck:
+    case IrOpcode::kCountOptimization:
     case IrOpcode::kJSDebugger:
       CheckNotTyped(node);
       break;

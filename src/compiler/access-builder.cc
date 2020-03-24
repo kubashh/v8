@@ -1133,6 +1133,18 @@ FieldAccess AccessBuilder::ForDictionaryObjectHashIndex() {
   return access;
 }
 
+// static
+FieldAccess AccessBuilder::ForFeedbackVectorExecutionCount() {
+  FieldAccess access = {kTaggedBase,
+                        FeedbackVector::kOptExecutionCountOffset,
+                        Handle<Name>(),
+                        MaybeHandle<Map>(),
+                        TypeCache::Get()->kInt32,
+                        MachineType::Int32(),
+                        kNoWriteBarrier};
+  return access;
+}
+
 }  // namespace compiler
 }  // namespace internal
 }  // namespace v8

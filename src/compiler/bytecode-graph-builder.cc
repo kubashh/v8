@@ -1042,6 +1042,10 @@ void BytecodeGraphBuilder::CreateGraph() {
                   graph()->start());
   set_environment(&env);
 
+  Node* vector = jsgraph()->Constant(feedback_vector());
+  Node* node = NewNode(simplified()->CountOptimization(), vector);
+  environment()->RecordAfterState(node, Environment::kAttachFrameState);
+
   VisitBytecodes();
 
   // Finish the basic structure of the graph.

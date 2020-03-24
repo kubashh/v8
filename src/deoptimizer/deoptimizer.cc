@@ -758,8 +758,10 @@ void Deoptimizer::DoComputeOutputFrames() {
     deopt_str << "DeoptimizationData native_context: "
               << AsHex::Address(native_context.ptr()) << " , "
               << AsHex::Address(function_.ptr()) << " ,  "
-              << Brief(function_.shared()) << " , " << bailout_id_ << " , "
-              << bytecode_size << " , " << MessageFor(deopt_kind_) << " , "
+              << Brief(function_.shared()) << " , "
+              << function_.feedback_vector().opt_execution_count() << " , "
+              << bailout_id_ << " , " << bytecode_size << " , "
+              << MessageFor(deopt_kind_) << " , "
               << interpreter::Bytecodes::FromByte(
                      function_.shared().GetBytecodeArray().get(node_id.ToInt()))
               << "  ";

@@ -956,6 +956,8 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* FastApiCall(const CFunctionInfo* signature,
                               FeedbackSource const& feedback);
 
+  const Operator* CountOptimization();
+
  private:
   Zone* zone() const { return zone_; }
 

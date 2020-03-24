@@ -3722,6 +3722,9 @@ class RepresentationSelector {
       case IrOpcode::kAssertType:
         return VisitUnop(node, UseInfo::AnyTagged(),
                          MachineRepresentation::kTagged);
+      case IrOpcode::kCountOptimization:
+        return VisitUnop(node, UseInfo::AnyTagged(),
+                         MachineRepresentation::kTagged);
       default:
         FATAL(
             "Representation inference: unsupported opcode %i (%s), node #%i\n.",
