@@ -224,13 +224,16 @@ class Logger : public CodeEventListener {
 
   void ICEvent(const char* type, bool keyed, Handle<Map> map,
                Handle<Object> key, char old_state, char new_state,
-               const char* modifier, const char* slow_stub_reason);
+               const char* modifier, const char* slow_stub_reason,
+               Handle<JSFunction> function);
 
   void MapEvent(const char* type, Handle<Map> from, Handle<Map> to,
                 const char* reason = nullptr,
                 Handle<HeapObject> name_or_sfi = Handle<HeapObject>());
   void MapCreate(Map map);
   void MapDetails(Map map);
+
+  void LogEvent(const char* data);
 
   void SharedLibraryEvent(const std::string& library_path, uintptr_t start,
                           uintptr_t end, intptr_t aslr_slide);

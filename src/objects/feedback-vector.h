@@ -293,6 +293,7 @@ class FeedbackVector : public HeapObject {
   DECL_VERIFIER(FeedbackVector)
 
   void FeedbackSlotPrint(std::ostream& os, FeedbackSlot slot);  // NOLINT
+  std::string Summarize();
 
   // Clears the vector slots. Return true if feedback has changed.
   bool ClearSlots(Isolate* isolate);

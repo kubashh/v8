@@ -15,6 +15,7 @@
 #include "src/interpreter/bytecode-array-iterator.h"
 #include "src/interpreter/bytecode-decoder.h"
 #include "src/interpreter/interpreter.h"
+#include "src/logging/log.h"
 #include "src/objects/allocation-site-inl.h"
 #include "src/roots/roots-inl.h"
 #include "src/snapshot/embedded/embedded-data.h"
@@ -1015,6 +1016,11 @@ void Code::SetMarkedForDeoptimization(const char* reason) {
            "[marking dependent code " V8PRIxPTR_FMT
            " (opt #%d) for deoptimization, reason: %s]\n",
            ptr(), deopt_data.OptimizationId().value(), reason);
+    std::stringstream log_str;
+    log_str << "[marking dependent code " << ptr() << " (opt #"
+            << deopt_data.OptimizationId().value()
+            << " for deoptimization, reason: " << reason << "]\n";
+    LOG(GetIsolate(), LogEvent(log_str.str().c_str()));
   }
 }
 

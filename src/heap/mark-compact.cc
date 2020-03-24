@@ -2130,7 +2130,9 @@ void MarkCompactCollector::MarkDependentCodeForDeoptimization() {
     if (!non_atomic_marking_state()->IsBlackOrGrey(object) &&
         !code.embedded_objects_cleared()) {
       if (!code.marked_for_deoptimization()) {
-        code.SetMarkedForDeoptimization("weak objects");
+        std::stringstream obj_str;
+        obj_str << " weak objects " << Brief(object);
+        code.SetMarkedForDeoptimization(obj_str.str().c_str());
         have_code_to_deoptimize_ = true;
       }
       code.ClearEmbeddedObjects(heap_);

@@ -286,6 +286,16 @@ void OptimizedCompilationJob::RecordCompilationStats(CompilationMode mode,
     function->ShortPrint(scope.file());
     PrintF(scope.file(), " - took %0.3f, %0.3f, %0.3f ms]\n", ms_creategraph,
            ms_optimize, ms_codegen);
+    std::stringstream opt_str;
+    opt_str << "[DataOptimizing "
+            << "function: " << AsHex::Address(function->ptr())
+            << ", native_context: "
+            << AsHex::Address(function->native_context().ptr())
+            << ", sfi: " << Brief(function->shared())
+            << ", code: " << function->code() << ", inv_count:  "
+            << function->feedback_vector().invocation_count() << ", "
+            << function->feedback_vector().Summarize() << " ";
+    LOG(isolate, LogEvent(opt_str.str().c_str()));
   }
   if (FLAG_trace_opt_stats) {
     static double compilation_time = 0.0;
@@ -838,9 +848,9 @@ bool GetOptimizedCodeNow(OptimizedCompilationJob* job, Isolate* isolate) {
   }
 
   // Success!
-  job->RecordCompilationStats(OptimizedCompilationJob::kSynchronous, isolate);
   DCHECK(!isolate->has_pending_exception());
   InsertCodeIntoOptimizedCodeCache(compilation_info);
+  job->RecordCompilationStats(OptimizedCompilationJob::kSynchronous, isolate);
   job->RecordFunctionCompilation(CodeEventListener::LAZY_COMPILE_TAG, isolate);
   return true;
 }
@@ -2573,18 +2583,18 @@ bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
     if (shared->optimization_disabled()) {
       job->RetryOptimization(BailoutReason::kOptimizationDisabled);
     } else if (job->FinalizeJob(isolate) == CompilationJob::SUCCEEDED) {
+      InsertCodeIntoOptimizedCodeCache(compilation_info);
+      compilation_info->closure()->set_code(*compilation_info->code());
       job->RecordCompilationStats(OptimizedCompilationJob::kConcurrent,
                                   isolate);
       job->RecordFunctionCompilation(CodeEventListener::LAZY_COMPILE_TAG,
                                      isolate);
-      InsertCodeIntoOptimizedCodeCache(compilation_info);
       if (FLAG_trace_opt) {
         CodeTracer::Scope scope(isolate->GetCodeTracer());
         PrintF(scope.file(), "[completed optimizing ");
         compilation_info->closure()->ShortPrint(scope.file());
         PrintF(scope.file(), "]\n");
       }
-      compilation_info->closure()->set_code(*compilation_info->code());
       return CompilationJob::SUCCEEDED;
     }
   }

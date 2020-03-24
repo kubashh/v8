@@ -11,6 +11,7 @@
 #include "src/base/bits.h"
 #include "src/builtins/accessors.h"
 #include "src/codegen/code-factory.h"
+#include "src/diagnostics/code-tracer.h"
 #include "src/execution/arguments-inl.h"
 #include "src/execution/execution.h"
 #include "src/execution/frames-inl.h"
@@ -111,17 +112,18 @@ void IC::TraceIC(const char* type, Handle<Object> name, State old_state,
 
   bool keyed_prefix = is_keyed() && !IsStoreInArrayLiteralICKind(kind());
 
-  if (!(TracingFlags::ic_stats.load(std::memory_order_relaxed) &
-        v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
-    LOG(isolate(), ICEvent(type, keyed_prefix, map, name,
-                           TransitionMarkFromState(old_state),
-                           TransitionMarkFromState(new_state), modifier,
-                           slow_stub_reason_));
-    return;
-  }
-
   JavaScriptFrameIterator it(isolate());
   JavaScriptFrame* frame = it.frame();
+
+  if (!(TracingFlags::ic_stats.load(std::memory_order_relaxed) &
+        v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
+    LOG(isolate(),
+        ICEvent(type, keyed_prefix, map, name,
+                TransitionMarkFromState(old_state),
+                TransitionMarkFromState(new_state), modifier, slow_stub_reason_,
+                handle(frame->function(), isolate())));
+    return;
+  }
 
   DisallowHeapAllocation no_gc;
   JSFunction function = frame->function();

@@ -26,6 +26,7 @@
 #include "src/objects/heap-number-inl.h"
 #include "src/objects/smi.h"
 #include "src/tracing/trace-event.h"
+#include "src/utils/ostreams.h"
 
 // Has to be the last include (doesn't have include guards)
 #include "src/objects/object-macros.h"
@@ -735,8 +736,11 @@ void Deoptimizer::DoComputeOutputFrames() {
   CHECK_GT(static_cast<uintptr_t>(caller_frame_top_),
            stack_guard->real_jslimit());
 
+  BailoutId node_id = input_data.BytecodeOffset(bailout_id_);
   if (trace_scope_ != nullptr) {
     timer.Start();
+    NativeContext native_context = function_.context().native_context();
+    int bytecode_size = function_.shared().GetBytecodeArray().length();
     PrintF(trace_scope_->file(), "[deoptimizing (DEOPT %s): begin ",
            MessageFor(deopt_kind_));
     PrintFunctionName();
@@ -750,9 +754,31 @@ void Deoptimizer::DoComputeOutputFrames() {
       compiled_code_.PrintDeoptLocation(
           trace_scope_->file(), "            ;;; deoptimize at ", from_);
     }
+    std::stringstream deopt_str;
+    deopt_str << "DeoptimizationData native_context: "
+              << AsHex::Address(native_context.ptr()) << " , "
+              << AsHex::Address(function_.ptr()) << " ,  "
+              << Brief(function_.shared()) << " , " << bailout_id_ << " , "
+              << bytecode_size << " , " << MessageFor(deopt_kind_) << " , "
+              << interpreter::Bytecodes::FromByte(
+                     function_.shared().GetBytecodeArray().get(node_id.ToInt()))
+              << "  ";
+    if (deopt_kind_ == DeoptimizeKind::kEager ||
+        deopt_kind_ == DeoptimizeKind::kSoft) {
+      compiled_code_.PrintDeoptLocation(trace_scope_->file(),
+                                        ", reason: ", from_);
+      Deoptimizer::DeoptInfo info =
+          Deoptimizer::GetDeoptInfo(compiled_code_, from_);
+      class SourcePosition pos = info.position;
+      if (info.deopt_reason != DeoptimizeReason::kUnknown || pos.IsKnown()) {
+        deopt_str << " , ";
+        pos.Print(deopt_str, compiled_code_);
+        deopt_str << DeoptimizeReasonToString(info.deopt_reason);
+      }
+    }
+    LOG(isolate(), LogEvent(deopt_str.str().c_str()));
   }
 
-  BailoutId node_id = input_data.BytecodeOffset(bailout_id_);
   ByteArray translations = input_data.TranslationByteArray();
   unsigned translation_index = input_data.TranslationIndex(bailout_id_).value();
 

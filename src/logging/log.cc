@@ -33,6 +33,7 @@
 #include "src/strings/unicode-inl.h"
 #include "src/tracing/tracing-category-observer.h"
 #include "src/utils/memcopy.h"
+#include "src/utils/ostreams.h"
 #include "src/wasm/wasm-code-manager.h"
 #include "src/wasm/wasm-objects-inl.h"
 
@@ -1638,9 +1639,16 @@ void Logger::TickEvent(TickSample* sample, bool overflow) {
   msg.WriteToLogFile();
 }
 
+void Logger::LogEvent(const char* data) {
+  Log::MessageBuilder msg(log_.get());
+  msg << data;
+  msg.WriteToLogFile();
+}
+
 void Logger::ICEvent(const char* type, bool keyed, Handle<Map> map,
                      Handle<Object> key, char old_state, char new_state,
-                     const char* modifier, const char* slow_stub_reason) {
+                     const char* modifier, const char* slow_stub_reason,
+                     Handle<JSFunction> function) {
   if (!log_->IsEnabled() || !FLAG_trace_ic) return;
   Log::MessageBuilder msg(log_.get());
   if (keyed) msg << "Keyed";
@@ -1649,7 +1657,8 @@ void Logger::ICEvent(const char* type, bool keyed, Handle<Map> map,
   Address pc = isolate_->GetAbstractPC(&line, &column);
   msg << type << kNext << reinterpret_cast<void*>(pc) << kNext << line << kNext
       << column << kNext << old_state << kNext << new_state << kNext
-      << AsHex::Address(map.is_null() ? kNullAddress : map->ptr()) << kNext;
+      << AsHex::Address(map.is_null() ? kNullAddress : map->ptr()) << kNext
+      << Brief(function->shared()) << kNext;
   if (key->IsSmi()) {
     msg << Smi::ToInt(*key);
   } else if (key->IsNumber()) {
@@ -1907,7 +1916,12 @@ bool Logger::SetUp(Isolate* isolate) {
 
   std::ostringstream log_file_name;
   std::ostringstream source_log_file_name;
+#ifdef ANDROID
+  PrepareLogFileName(log_file_name, isolate, "/sdcard/Download/ic-log%p.txt");
+#else
   PrepareLogFileName(log_file_name, isolate, FLAG_logfile);
+#endif
+  // log_ = std::make_unique<Log>(this, "/sdcard/Download/ic-log.txt");
   log_ = std::make_unique<Log>(this, log_file_name.str().c_str());
 
 #if V8_OS_LINUX

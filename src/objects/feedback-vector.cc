@@ -1424,5 +1424,72 @@ void FeedbackNexus::ResetTypeProfile() {
   SetFeedback(*FeedbackVector::UninitializedSentinel(GetIsolate()));
 }
 
+std::string FeedbackVector::Summarize() {
+  FeedbackMetadataIterator iter(metadata());
+  int KIND_INDEX = 3;
+  int STATE_INDEX = 5;
+  int a[KIND_INDEX][STATE_INDEX];
+
+  for (int i = 0; i < KIND_INDEX; i++) {
+    for (int j = 0; j < STATE_INDEX; j++) {
+      a[i][j] = 0;
+    }
+  }
+
+  int total_count = 0;
+  while (iter.HasNext()) {
+    FeedbackSlot slot = iter.Next();
+    FeedbackSlotKind kind = iter.kind();
+    FeedbackNexus nexus(*this, slot);
+    int state_index;
+    int kind_index = 0;
+    if (kind == FeedbackSlotKind::kBinaryOp ||
+        kind == FeedbackSlotKind::kCompareOp)
+      kind_index = 1;
+    if (IsCallICKind(kind) || IsLoadICKind(kind) || IsLoadGlobalICKind(kind) ||
+        IsKeyedLoadICKind(kind) || IsKeyedHasICKind(kind) ||
+        IsStoreGlobalICKind(kind) || IsStoreICKind(kind) ||
+        IsStoreOwnICKind(kind) || IsStoreDataPropertyInLiteralKind(kind) ||
+        IsKeyedStoreICKind(kind) || IsStoreInArrayLiteralICKind(kind)) {
+      kind_index = 2;
+    }
+
+    switch (nexus.ic_state()) {
+      case UNINITIALIZED: {
+        state_index = 0;
+        break;
+      }
+      case MONOMORPHIC: {
+        state_index = 1;
+        break;
+      }
+      case POLYMORPHIC: {
+        state_index = 2;
+        break;
+      }
+      case MEGAMORPHIC:
+      case GENERIC:
+        state_index = 3;
+        break;
+      case NO_FEEDBACK:
+      case RECOMPUTE_HANDLER:
+        state_index = 4;
+    }
+    a[kind_index][state_index]++;
+    total_count++;
+  }
+
+  std::ostringstream str;
+  str << "FeedbackStatus: " << total_count << "  ";
+  for (int i = 0; i < KIND_INDEX; i++) {
+    str << "[ ";
+    for (int j = 0; j < STATE_INDEX; j++) {
+      str << " " << a[i][j] << "  ";
+    }
+    str << " ]";
+  }
+  return str.str();
+}
+
 }  // namespace internal
 }  // namespace v8
