@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c861b76_9d64e92f",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-03-24T21:58:43Z",
+      "side": 1,
+      "message": "What if the field is bigger than the tagged size, as is the case for int64 and float64 on some platforms? In that case we\u0027d need to push two slots for the field. Overall I\u0027m a little uncomfortable with dynamically growing this array rather than initializing it at a fixed size based on header_size(), but I guess dynamic growth makes the usage in ComputeArraySlotKind simpler.",
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7217444_6b234307",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-03-24T21:58:43Z",
+      "side": 1,
+      "message": "I think we need to update the offset here before continuing",
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbb08d0c_3011b830",
+        "filename": "src/torque/types.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-03-24T21:58:43Z",
+      "side": 1,
+      "message": "This makes sense to me right now, but if I come back to it in six months I\u0027ll probably appreciate a comment mentioning that a slot is a tagged pointer worth of data.",
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
