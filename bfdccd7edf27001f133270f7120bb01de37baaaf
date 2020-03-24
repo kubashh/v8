@@ -22,6 +22,30 @@
       "revId": "bfdccd7edf27001f133270f7120bb01de37baaaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "460c0397_20918a8a",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3117,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-24T17:42:38Z",
+      "side": 0,
+      "message": "As discussed, this might also need adaption in the OSR logic, since if we replace a breakpoint we are now just looking for the first position which has \"is_instruction\" set. That would be the first nop, and not the second, hence it wouldn\u0027t work out of the box.\nLet\u0027s fix this later once we have a test for this.",
+      "parentUuid": "f88d5610_7d151f4b",
+      "range": {
+        "startLine": 3107,
+        "startChar": 0,
+        "endLine": 3117,
+        "endChar": 9
+      },
+      "revId": "bfdccd7edf27001f133270f7120bb01de37baaaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
