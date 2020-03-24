@@ -8,6 +8,7 @@
 #include "src/execution/isolate.h"
 #include "src/execution/off-thread-isolate.h"
 #include "src/handles/handles.h"
+#include "src/heap/local-heap.h"
 #include "src/sanitizer/msan.h"
 
 namespace v8 {
@@ -18,6 +19,9 @@ HandleBase::HandleBase(Address object, Isolate* isolate)
 
 HandleBase::HandleBase(Address object, OffThreadIsolate* isolate)
     : location_(isolate->NewHandle(object)) {}
+
+HandleBase::HandleBase(Address object, LocalHeap* local_heap)
+    : location_(local_heap->handles()->CreateHandle(object)) {}
 
 // Allocate a new handle for the object, do not canonicalize.
 
@@ -42,6 +46,10 @@ Handle<T>::Handle(T object, OffThreadIsolate* isolate)
     : HandleBase(object.ptr(), isolate) {}
 
 template <typename T>
+Handle<T>::Handle(T object, LocalHeap* local_heap)
+    : HandleBase(object.ptr(), local_heap) {}
+
+template <typename T>
 V8_INLINE Handle<T> handle(T object, Isolate* isolate) {
   return Handle<T>(object, isolate);
 }
@@ -49,6 +57,11 @@ V8_INLINE Handle<T> handle(T object, Isolate* isolate) {
 template <typename T>
 V8_INLINE Handle<T> handle(T object, OffThreadIsolate* isolate) {
   return Handle<T>(object, isolate);
+}
+
+template <typename T>
+V8_INLINE Handle<T> handle(T object, LocalHeap* local_heap) {
+  return Handle<T>(object, local_heap);
 }
 
 // Convenience overloads for when we already have a Handle, but want
@@ -60,6 +73,10 @@ V8_INLINE Handle<T> handle(Handle<T> handle, Isolate* isolate) {
 template <typename T>
 V8_INLINE Handle<T> handle(Handle<T> handle, OffThreadIsolate* isolate) {
   return Handle<T>(*handle);
+}
+template <typename T>
+V8_INLINE Handle<T> handle(Handle<T> handle, LocalHeap* local_heap) {
+  return Handle<T>(*handle, local_heap);
 }
 
 template <typename T>
@@ -201,6 +218,55 @@ Handle<T> OffThreadHandleScope::CloseAndEscape(Handle<T> handle_value) {
   // At the moment, off-thread handle scopes do nothing on close, so we can
   // safely return the same handle value.
   return handle_value;
+}
+
+Address* LocalHandles::CreateHandle(Address value) {
+  Address* result = scope_.next;
+  if (result == scope_.limit) {
+    result = AddBlock();
+  }
+  DCHECK_LT(result, scope_.limit);
+  scope_.next++;
+  *result = value;
+  return result;
+}
+
+LocalHandleScope::LocalHandleScope(LocalHeap* local_heap) {
+  LocalHandles* handles = local_heap->handles();
+  local_heap_ = local_heap;
+  prev_next_ = handles->scope_.next;
+  prev_limit_ = handles->scope_.limit;
+  handles->scope_.level++;
+}
+
+LocalHandleScope::~LocalHandleScope() {
+  LocalHandles* handles = local_heap_->handles();
+
+  Address* old_limit = handles->scope_.limit;
+  Address* old_next = handles->scope_.next;
+
+  handles->scope_.next = prev_next_;
+  handles->scope_.limit = prev_limit_;
+  handles->scope_.level--;
+
+  if (old_limit != handles->scope_.limit) {
+    handles->RemoveBlocks();
+    old_limit = handles->scope_.limit;
+#ifdef ENABLE_HANDLE_ZAPPING
+    HandleScope::ZapRange(handles->scope_.next, old_limit);
+#endif
+  } else {
+#ifdef ENABLE_HANDLE_ZAPPING
+    HandleScope::ZapRange(handles->scope_.next, old_next);
+#else
+    (void)old_next;  // Make sure variable is always used
+#endif
+  }
+
+  MSAN_ALLOCATED_UNINITIALIZED_MEMORY(
+      handles->scope_.next,
+      static_cast<size_t>(reinterpret_cast<Address>(old_limit) -
+                          reinterpret_cast<Address>(handles->scope_.next)));
 }
 
 }  // namespace internal
