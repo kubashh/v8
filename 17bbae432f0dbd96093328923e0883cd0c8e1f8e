@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "71b87e26_2c88c76a",
+        "filename": "include/cppgc/gc-info.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-24T13:04:33Z",
+      "side": 1,
+      "message": "Done (thread-safe static local init).\nDone (storing GCInfo in table instead of splitting apart GCInfo and its ptr).",
+      "parentUuid": "dc81d86d_51016c8b",
+      "revId": "17bbae432f0dbd96093328923e0883cd0c8e1f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ec3c4ab_e42cab7b",
         "filename": "src/heap/cppgc/api.cc",
         "patchSetId": 17
@@ -51,6 +69,24 @@
       "revId": "17bbae432f0dbd96093328923e0883cd0c8e1f8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7344bbb8_2563f1d3",
+        "filename": "src/heap/cppgc/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-24T13:04:33Z",
+      "side": 1,
+      "message": "Done. (`api.cc`-\u003e`gc-info.cc`)\n\nV8 has a single api.cc for its API but then again it also has a single v8.h. Let\u0027s see how the split works out.",
+      "parentUuid": "0ec3c4ab_e42cab7b",
+      "revId": "17bbae432f0dbd96093328923e0883cd0c8e1f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -74,6 +110,30 @@
       "revId": "17bbae432f0dbd96093328923e0883cd0c8e1f8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40c8ecf1_e5b29027",
+        "filename": "src/heap/cppgc/gc-info-table.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-24T13:04:33Z",
+      "side": 1,
+      "message": "Done: I couldn\u0027t find a rule, so I think you are right.",
+      "parentUuid": "0cad3317_4c160e20",
+      "range": {
+        "startLine": 87,
+        "startChar": 20,
+        "endLine": 87,
+        "endChar": 21
+      },
+      "revId": "17bbae432f0dbd96093328923e0883cd0c8e1f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
