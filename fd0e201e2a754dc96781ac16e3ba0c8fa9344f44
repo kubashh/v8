@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06b4ae89_9889b0e7",
+        "filename": "src/handles/handles-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-24T11:11:15Z",
+      "side": 1,
+      "message": "Nit: USE(old_next), but see my other comment about avoiding zapping.",
+      "range": {
+        "startLine": 262,
+        "startChar": 4,
+        "endLine": 262,
+        "endChar": 18
+      },
+      "revId": "fd0e201e2a754dc96781ac16e3ba0c8fa9344f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5497de1_50cc43c5",
+        "filename": "src/handles/handles.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-24T11:11:15Z",
+      "side": 1,
+      "message": "Let\u0027s try to minimize changes in the existing code for now.\n\nInstead of zapping please add TODO() to zap in local handles.",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 6
+      },
+      "revId": "fd0e201e2a754dc96781ac16e3ba0c8fa9344f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2acaca66_842df31f",
+        "filename": "src/handles/handles.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-24T11:11:15Z",
+      "side": 1,
+      "message": "Can this be in a separate file for now? (e.g. local-handles.h/cc)",
+      "range": {
+        "startLine": 380,
+        "startChar": 0,
+        "endLine": 380,
+        "endChar": 20
+      },
+      "revId": "fd0e201e2a754dc96781ac16e3ba0c8fa9344f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6db3a74_ab606288",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-24T11:11:15Z",
+      "side": 1,
+      "message": "As discussed offline, let\u0027s for now replace this scope with explicit begin/end to minimize changes in the existing code.",
+      "range": {
+        "startLine": 2015,
+        "startChar": 3,
+        "endLine": 2015,
+        "endChar": 35
+      },
+      "revId": "fd0e201e2a754dc96781ac16e3ba0c8fa9344f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
