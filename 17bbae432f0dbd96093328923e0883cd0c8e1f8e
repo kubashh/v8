@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8622bdd5_a4b864ab",
+        "filename": "include/cppgc/gc-info.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-03-24T10:26:36Z",
+      "side": 1,
+      "message": "Why don\u0027t we simplify DCL now to simple thread-safe static local initialization? With something like\n\ntemplate \u003ctypename T\u003e\nclass RegisterGCInfoIndex {\npublic:\n  // Definition is hidden in .cc file.\n  RegisterGCInfoIndex(const GCInfo* gc_info):\n    index_{GlobalGCInfoTable::GetMutable().RegisterNewEntry(\u0026gc_info)}\n  {}\n  \n  GCInfoIndex GetIndex() const { return index_; }\n\nprivate:\n  GCInfoIndex index_;\n};\n\ntemplate \u003ctypename T\u003e\nstruct GCInfoTrait {\n  static GCInfoIndex Index() {\n    static_assert(sizeof(T), \"T must be fully defined\");\n    static const GCInfo kGCInfo \u003d {FinalizerTrait\u003cT\u003e::kCallback,\n                                   std::is_polymorphic\u003cT\u003e::value};\n    static const RegisterGCInfoIndex\u003cT\u003e kNewEntry(\u0026kGCInfo);\n    return kNewEntry.GetIndex();\n  }\n};\n\nAs another thing, why don\u0027t we simplify it even further and store GCInfo directly in the table (not pointers to them)?",
+      "revId": "17bbae432f0dbd96093328923e0883cd0c8e1f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ec3c4ab_e42cab7b",
+        "filename": "src/heap/cppgc/api.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-03-24T10:26:36Z",
+      "side": 1,
+      "message": "I think having this api.cc file contradicts the Google\u0027s style guide rule that all .cc files (except for tests and main) need to have corresponding .h files. Or are we planning to add api.h later?\n\nJust wonder: do we really want to merge all API functions into single .cc file? Why not separate API and implementation on the directory basis (e.g. move all backend into detail/)?",
+      "revId": "17bbae432f0dbd96093328923e0883cd0c8e1f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cad3317_4c160e20",
+        "filename": "src/heap/cppgc/gc-info-table.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-03-24T10:26:36Z",
+      "side": 1,
+      "message": "nit: Why not return \u0026 (as for constant Get()) to keep caller code consistent? IIRC, the Google\u0027s Style Guide has mutable-as-a-pointer rule only for parameters (correct me if I\u0027m wrong).",
+      "range": {
+        "startLine": 87,
+        "startChar": 20,
+        "endLine": 87,
+        "endChar": 21
+      },
+      "revId": "17bbae432f0dbd96093328923e0883cd0c8e1f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
