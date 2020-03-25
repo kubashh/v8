@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c258cd42_f996b777",
+        "filename": "src/handles/handles-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-03-25T10:04:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "06b4ae89_9889b0e7",
+      "range": {
+        "startLine": 262,
+        "startChar": 4,
+        "endLine": 262,
+        "endChar": 18
+      },
+      "revId": "fd0e201e2a754dc96781ac16e3ba0c8fa9344f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5497de1_50cc43c5",
         "filename": "src/handles/handles.h",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c9752242_37d88e46",
+        "filename": "src/handles/handles.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-03-25T10:04:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5497de1_50cc43c5",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 6
+      },
+      "revId": "fd0e201e2a754dc96781ac16e3ba0c8fa9344f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2acaca66_842df31f",
         "filename": "src/handles/handles.h",
         "patchSetId": 8
@@ -59,6 +107,30 @@
       "writtenOn": "2020-03-24T11:11:15Z",
       "side": 1,
       "message": "Can this be in a separate file for now? (e.g. local-handles.h/cc)",
+      "range": {
+        "startLine": 380,
+        "startChar": 0,
+        "endLine": 380,
+        "endChar": 20
+      },
+      "revId": "fd0e201e2a754dc96781ac16e3ba0c8fa9344f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44e3055d_a49c1c37",
+        "filename": "src/handles/handles.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-03-25T10:04:49Z",
+      "side": 1,
+      "message": "I\u0027ve now moved almost everything into a different file. There are still a couple of lines for creating local handles needed in handles.h though. Not sure if it makes sense to move them out as well.",
+      "parentUuid": "2acaca66_842df31f",
       "range": {
         "startLine": 380,
         "startChar": 0,
