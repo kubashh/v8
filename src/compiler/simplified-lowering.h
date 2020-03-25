@@ -9,6 +9,7 @@
 #include "src/compiler/machine-operator.h"
 #include "src/compiler/node.h"
 #include "src/compiler/simplified-operator.h"
+#include "src/logging/counters.h"
 
 namespace v8 {
 namespace internal {
@@ -26,11 +27,12 @@ class TypeCache;
 
 class V8_EXPORT_PRIVATE SimplifiedLowering final {
  public:
-  SimplifiedLowering(JSGraph* jsgraph, JSHeapBroker* broker, Zone* zone,
-                     SourcePositionTable* source_position,
-                     NodeOriginTable* node_origins,
-                     PoisoningMitigationLevel poisoning_level,
-                     TickCounter* tick_counter);
+  SimplifiedLowering(
+      JSGraph* jsgraph, JSHeapBroker* broker, Zone* zone,
+      SourcePositionTable* source_position, NodeOriginTable* node_origins,
+      PoisoningMitigationLevel poisoning_level, TickCounter* tick_counter,
+      RuntimeCallStats* runtime_call_stats =
+          nullptr /* To make unittests compile (but break at runtime)*/);
   ~SimplifiedLowering() = default;
 
   void LowerAllNodes();
@@ -48,6 +50,8 @@ class V8_EXPORT_PRIVATE SimplifiedLowering final {
   void DoNumberToUint8Clamped(Node* node);
   void DoSigned32ToUint8Clamped(Node* node);
   void DoUnsigned32ToUint8Clamped(Node* node);
+
+  RuntimeCallStats* runtime_call_stats() { return runtime_call_stats_; }
 
  private:
   JSGraph* const jsgraph_;
@@ -72,6 +76,8 @@ class V8_EXPORT_PRIVATE SimplifiedLowering final {
   PoisoningMitigationLevel poisoning_level_;
 
   TickCounter* const tick_counter_;
+
+  RuntimeCallStats* runtime_call_stats_;
 
   Node* Float64Round(Node* const node);
   Node* Float64Sign(Node* const node);
