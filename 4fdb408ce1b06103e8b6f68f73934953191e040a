@@ -22,6 +22,30 @@
       "revId": "4fdb408ce1b06103e8b6f68f73934953191e040a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17ff4b1c_6e9406be",
+        "filename": "src/builtins/promise-then.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-03-26T15:13:48Z",
+      "side": 1,
+      "message": "I guess we don\u0027t have it yet. But it\u0027s not difficult to define:\n macro CastOrDefault\u003cT: type, Arg: type, Default: type\u003e(x: Arg, default: \n Default): T | Default {\n   return Cast\u003cT\u003e(x) otherwise return default;\n }\n\nFeel free to add this to cast.tq",
+      "parentUuid": "6f3a49b7_c93ce21c",
+      "range": {
+        "startLine": 63,
+        "startChar": 24,
+        "endLine": 65,
+        "endChar": 17
+      },
+      "revId": "4fdb408ce1b06103e8b6f68f73934953191e040a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
