@@ -393,6 +393,9 @@ class V8_EXPORT_PRIVATE BackgroundCompileTask {
   PendingCompilationErrorHandler* pending_error_handler() {
     return compile_state_.pending_error_handler();
   }
+  UnoptimizedCompileState::ParallelTasks* parallel_tasks() {
+    return compile_state_.parallel_tasks();
+  }
   SharedFunctionInfo outer_function_sfi() {
     // Make sure that this is an off-thread object, so that it won't have been
     // moved by the GC.
