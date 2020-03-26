@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad2c2b4a_5b34e41c",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-26T07:51:29Z",
+      "side": 1,
+      "message": "This seems to cause the inversion (see comment below). In the original code (above), we just use \"i\" here.",
+      "range": {
+        "startLine": 666,
+        "startChar": 57,
+        "endLine": 666,
+        "endChar": 76
+      },
+      "revId": "0b4b6af2b4272c2a7ef6a0952b9aa4e5f7e5e2ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b1dc3b1_756b3189",
+        "filename": "test/inspector/debugger/wasm-scope-info-expected.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-26T07:51:29Z",
+      "side": 1,
+      "message": "Oh, seeing only now that the order of elements is switched here. Is this on purpose? It looks like new values would appear in front of the list now, instead of at the back. And elements are also popped from the front.",
+      "range": {
+        "startLine": 279,
+        "startChar": 0,
+        "endLine": 282,
+        "endChar": 16
+      },
+      "revId": "0b4b6af2b4272c2a7ef6a0952b9aa4e5f7e5e2ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
