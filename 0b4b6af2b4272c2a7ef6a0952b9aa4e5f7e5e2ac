@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f6fd0967_ef06715d",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2020-03-26T09:07:08Z",
+      "side": 1,
+      "message": "The idea was part of the original issue description; nevertheless I think this idea makes sense, since the top of the stack is always at position 0. When unfolding the stack, the first values you see are therefore the ones that have been used recently. WDYT?",
+      "parentUuid": "ad2c2b4a_5b34e41c",
+      "range": {
+        "startLine": 666,
+        "startChar": 57,
+        "endLine": 666,
+        "endChar": 76
+      },
+      "revId": "0b4b6af2b4272c2a7ef6a0952b9aa4e5f7e5e2ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1b1dc3b1_756b3189",
         "filename": "test/inspector/debugger/wasm-scope-info-expected.txt",
         "patchSetId": 14
