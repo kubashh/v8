@@ -690,7 +690,7 @@ class LiftoffCompiler {
       if (*next_breakpoint_ptr_ == 0) {
         // A single breakpoint at offset 0 indicates stepping.
         DCHECK_EQ(next_breakpoint_ptr_ + 1, next_breakpoint_end_);
-        EmitBreakpoint(decoder);
+        if (WasmOpcodes::IsBreakable(opcode)) EmitBreakpoint(decoder);
       } else {
         while (next_breakpoint_ptr_ != next_breakpoint_end_ &&
                *next_breakpoint_ptr_ < decoder->position()) {
