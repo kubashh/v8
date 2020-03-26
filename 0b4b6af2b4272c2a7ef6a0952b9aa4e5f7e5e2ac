@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a569dc9d_f9ae854c",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-26T09:45:44Z",
+      "side": 1,
+      "message": "Sorry, I must have missed this in the design doc. It seems counterintuitive for me. A stack usually works by pushing and popping values to/from the end of the stack. Especially if you step through code, I would have expected the stack to grow at the end, like\n\nstack: [1, 11]\ni32.const 13\nstack: [1, 11, 13]\n\nand not\n\nstack: [1, 11]\ni32.const 13\nstack: [13, 1, 11]\n\n\nThe inverted order is also confusing if you pop multiple values (via the multi-value proposal, or function call). The stack contains arguments in order, so if your stack is [1,2,3,4] and you call a function with 2 arguments, the first argument will have value 3 and the second one 4. If you show the stack in inverted order, this is less obvious.",
+      "parentUuid": "f6fd0967_ef06715d",
+      "range": {
+        "startLine": 666,
+        "startChar": 57,
+        "endLine": 666,
+        "endChar": 76
+      },
+      "revId": "0b4b6af2b4272c2a7ef6a0952b9aa4e5f7e5e2ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1b1dc3b1_756b3189",
         "filename": "test/inspector/debugger/wasm-scope-info-expected.txt",
         "patchSetId": 14
