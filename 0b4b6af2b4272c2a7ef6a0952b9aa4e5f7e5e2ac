@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "6a255bc9_ec761f8a",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2020-03-26T10:36:11Z",
+      "side": 1,
+      "message": "Ok, see your point. Will create another CL to update this, thanks Clemens!",
+      "parentUuid": "a569dc9d_f9ae854c",
+      "range": {
+        "startLine": 666,
+        "startChar": 57,
+        "endLine": 666,
+        "endChar": 76
+      },
+      "revId": "0b4b6af2b4272c2a7ef6a0952b9aa4e5f7e5e2ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1b1dc3b1_756b3189",
         "filename": "test/inspector/debugger/wasm-scope-info-expected.txt",
         "patchSetId": 14
