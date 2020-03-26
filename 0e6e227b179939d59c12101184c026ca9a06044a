@@ -16,6 +16,24 @@
       "revId": "0e6e227b179939d59c12101184c026ca9a06044a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82c0091d_35a7001a",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1939,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2020-03-26T13:43:51Z",
+      "side": 1,
+      "message": "Thanks for the comments! Please correct me if I misunderstood. We call the assemblers inside a CpuFeatureScope only when the optional argument of feature is passed, otherwise, the same assemblers without CpuFeatureScope are called. Only one branch would be executed with/without CpuFeature argument. This was revised to adapt to i32x4.mul, whose instruction pmulld should be called with an SSE4_1 CpuFeatureScope.\n\nAs macros inside template should be avoided, I need to redesign the implementation. There might be two alternatives: 1) replace the macro with its value which may results in unexpected duplicate code; 2) define another function with CpuFeature as a parameter, for example, EmitSimdCommutativeBinOpScope. I\u0027m not sure if there is better ideas, could you share with me your advice?",
+      "parentUuid": "4e7b03fd_a05281d1",
+      "revId": "0e6e227b179939d59c12101184c026ca9a06044a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
