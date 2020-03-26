@@ -370,6 +370,7 @@ enum ContextLookupFlags {
   V(WEAKMAP_GET_INDEX, JSFunction, weakmap_get)                                \
   V(WEAKSET_ADD_INDEX, JSFunction, weakset_add)                                \
   V(OSR_CODE_CACHE_INDEX, WeakFixedArray, osr_code_cache)                      \
+  V(RETAINED_MAPS, WeakArrayList, retained_maps)                               \
   NATIVE_CONTEXT_INTRINSIC_FUNCTIONS(V)
 
 // A table of all script contexts. Every loaded top-level script with top-level
