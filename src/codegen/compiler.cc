@@ -1043,14 +1043,13 @@ bool FailWithPendingExceptionAfterOffThreadFinalization(
   return false;
 }
 
-void FinalizeScriptCompilation(Isolate* isolate, Handle<Script> script,
-                               ParseInfo* parse_info) {
-  script->set_compilation_state(Script::COMPILATION_STATE_COMPILED);
-
-  // Register any pending parallel tasks with the associated SFI.
-  if (parse_info->parallel_tasks()) {
-    CompilerDispatcher* dispatcher = parse_info->parallel_tasks()->dispatcher();
-    for (auto& it : *parse_info->parallel_tasks()) {
+// Register any pending parallel tasks with the associated SFI.
+void RegisterParallelTasks(
+    Isolate* isolate, Handle<Script> script,
+    UnoptimizedCompileState::ParallelTasks* parallel_tasks) {
+  if (parallel_tasks) {
+    CompilerDispatcher* dispatcher = parallel_tasks->dispatcher();
+    for (auto& it : *parallel_tasks) {
       FunctionLiteral* literal = it.first;
       CompilerDispatcher::JobId job_id = it.second;
       MaybeHandle<SharedFunctionInfo> maybe_shared_for_task =
@@ -1065,10 +1064,16 @@ void FinalizeScriptCompilation(Isolate* isolate, Handle<Script> script,
   }
 }
 
+void FinalizeScriptCompilation(Isolate* isolate, Handle<Script> script,
+                               ParseInfo* parse_info) {
+  script->set_compilation_state(Script::COMPILATION_STATE_COMPILED);
+  RegisterParallelTasks(isolate, script, parse_info->parallel_tasks());
+}
+
 void FinalizeScriptCompilation(OffThreadIsolate* isolate, Handle<Script> script,
                                ParseInfo* parse_info) {
   script->set_compilation_state(Script::COMPILATION_STATE_COMPILED);
-  DCHECK(!parse_info->parallel_tasks());
+  // Register parallel tasks on main thread merge.
 }
 
 template <typename LocalIsolate>
@@ -2631,6 +2636,8 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
                   isolate, handle(SharedFunctionInfo::cast(entry), isolate));
             }
           });
+
+          RegisterParallelTasks(isolate, script, task->parallel_tasks());
         }
       }
     } else {
