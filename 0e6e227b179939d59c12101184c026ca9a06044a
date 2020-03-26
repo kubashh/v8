@@ -52,6 +52,24 @@
       "revId": "0e6e227b179939d59c12101184c026ca9a06044a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea3d0b26_2efedd51",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1939,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-03-26T23:48:27Z",
+      "side": 1,
+      "message": "I think duplicating these 5 lines of code is alright, it is much easier to follow than macros in template.",
+      "parentUuid": "73767352_3ccb688f",
+      "revId": "0e6e227b179939d59c12101184c026ca9a06044a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
