@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e7b03fd_a05281d1",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1939,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-26T12:49:40Z",
+      "side": 1,
+      "message": "Please avoid the macro inside the template.\n\nAlso, I don\u0027t quite get why this is OK. We call the same assembler methods, once inside a CpuFeatureScope, and once without it. Why is both OK?",
+      "revId": "0e6e227b179939d59c12101184c026ca9a06044a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
