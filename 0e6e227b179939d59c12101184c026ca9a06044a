@@ -34,6 +34,24 @@
       "revId": "0e6e227b179939d59c12101184c026ca9a06044a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73767352_3ccb688f",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1939,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-26T13:47:29Z",
+      "side": 1,
+      "message": "Oh, I see. Which of the two branches is executed is a static decision really.\n\nA third (maybe most elegant?) solution would be to put the CpuFeatureScope in a base::Optional, and just share the macro code afterwards.\n\nI assume putting the CPUFeatureScope in the caller is not an option, because it could be that AVX is used but the passed feature is not supported?",
+      "parentUuid": "82c0091d_35a7001a",
+      "revId": "0e6e227b179939d59c12101184c026ca9a06044a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
