@@ -19,7 +19,6 @@ extern macro IsNumberDictionary(HeapObject): bool;
 extern macro IsContext(HeapObject): bool;
 extern macro IsNativeContext(HeapObject): bool;
 extern macro IsJSReceiver(HeapObject): bool;
-extern macro TaggedIsCallable(Object): bool;
 extern macro IsHeapNumber(HeapObject): bool;
 extern macro IsBigInt(HeapObject): bool;
 extern macro IsFixedArray(HeapObject): bool;
@@ -739,4 +738,9 @@ UnsafeCast<RegExpMatchInfo>(implicit context: Context)(o: Object):
     RegExpMatchInfo {
   assert(Is<FixedArray>(o));
   return %RawDownCast<RegExpMatchInfo>(o);
+}
+
+macro CastOrDefault<T: type, Arg: type, Default: type>(
+    implicit context: Context)(x: Arg, default: Default): T|Default {
+  return Cast<T>(x) otherwise return default;
 }
