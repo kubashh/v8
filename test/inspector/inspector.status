@@ -14,6 +14,15 @@
 
   # https://crbug.com/v8/9029
   'debugger/script-on-after-compile-snapshot': [SKIP],
+
+  # https://crbug.com/v8/10351
+  # --debug-in-liftoff is staged behind --future, but still shows some
+  # differences to the old behaviour (in particular, anyref is not
+  # implemented in Liftoff yet).
+  # TODO(clemensb/thibaudm): Get this list to zero and remove this block.
+  'debugger/wasm-scope-info-liftoff': ['variant == future', FAIL],
+  'debugger/wasm-stepping-in-from-js': ['variant == future', FAIL],
+  'debugger/wasm-anyref-global': ['variant == future', FAIL],
 }],  # ALWAYS
 
 ##############################################################################
