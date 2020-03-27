@@ -673,8 +673,8 @@ class RepresentationSelector {
   // it's been visited.
   void EnqueueInput(Node* use_node, int index,
                     UseInfo use_info = UseInfo::None()) {
+    if (!propagate()) return;
     Node* node = use_node->InputAt(index);
-    if (phase_ != PROPAGATE) return;
     NodeInfo* info = GetInfo(node);
 #ifdef DEBUG
     // Check monotonicity of input requirements.
@@ -832,10 +832,10 @@ class RepresentationSelector {
   // it takes the input from the input node {TypeOf(node->InputAt(index))}.
   void ConvertInput(Node* node, int index, UseInfo use,
                     Type input_type = Type::Invalid()) {
-    Node* input = node->InputAt(index);
     // In the change phase, insert a change before the use if necessary.
     if (use.representation() == MachineRepresentation::kNone)
       return;  // No input requirement on the use.
+    Node* input = node->InputAt(index);
     DCHECK_NOT_NULL(input);
     NodeInfo* input_info = GetInfo(input);
     MachineRepresentation input_rep = input_info->representation();
@@ -876,15 +876,17 @@ class RepresentationSelector {
   }
 
   void ProcessRemainingInputs(Node* node, int index) {
-    DCHECK_GE(index, NodeProperties::PastValueIndex(node));
-    DCHECK_GE(index, NodeProperties::PastContextIndex(node));
-    for (int i = std::max(index, NodeProperties::FirstEffectIndex(node));
-         i < NodeProperties::PastEffectIndex(node); ++i) {
-      EnqueueInput(node, i);  // Effect inputs: just visit
-    }
-    for (int i = std::max(index, NodeProperties::FirstControlIndex(node));
-         i < NodeProperties::PastControlIndex(node); ++i) {
-      EnqueueInput(node, i);  // Control inputs: just visit
+    if (propagate()) {
+      DCHECK_GE(index, NodeProperties::PastValueIndex(node));
+      DCHECK_GE(index, NodeProperties::PastContextIndex(node));
+      for (int i = std::max(index, NodeProperties::FirstEffectIndex(node));
+           i < NodeProperties::PastEffectIndex(node); ++i) {
+        EnqueueInput(node, i);  // Effect inputs: just visit
+      }
+      for (int i = std::max(index, NodeProperties::FirstControlIndex(node));
+           i < NodeProperties::PastControlIndex(node); ++i) {
+        EnqueueInput(node, i);  // Control inputs: just visit
+      }
     }
   }
 
@@ -893,6 +895,9 @@ class RepresentationSelector {
   // inputs should have {kRepTagged} representation and can observe all output
   // values {kTypeAny}.
   void VisitInputs(Node* node) {
+    if (retype()) {
+      return;
+    }
     int tagged_count = node->op()->ValueInputCount() +
                        OperatorProperties::GetContextInputCount(node->op()) +
                        OperatorProperties::GetFrameStateInputCount(node->op());
@@ -900,13 +905,18 @@ class RepresentationSelector {
     for (int i = 0; i < tagged_count; i++) {
       ProcessInput(node, i, UseInfo::AnyTagged());
     }
-    // Only enqueue other inputs (effects, control).
-    for (int i = tagged_count; i < node->InputCount(); i++) {
-      EnqueueInput(node, i);
+    if (propagate()) {
+      // Only enqueue other inputs (effects, control).
+      for (int i = tagged_count; i < node->InputCount(); i++) {
+        EnqueueInput(node, i);
+      }
     }
   }
 
   void VisitReturn(Node* node) {
+    if (retype()) {
+      return;
+    }
     int tagged_limit = node->op()->ValueInputCount() +
                        OperatorProperties::GetContextInputCount(node->op()) +
                        OperatorProperties::GetFrameStateInputCount(node->op());
@@ -917,22 +927,29 @@ class RepresentationSelector {
     for (int i = 1; i < tagged_limit; i++) {
       ProcessInput(node, i, UseInfo::AnyTagged());
     }
-    // Only enqueue other inputs (effects, control).
-    for (int i = tagged_limit; i < node->InputCount(); i++) {
-      EnqueueInput(node, i);
+    if (propagate()) {
+      // Only enqueue other inputs (effects, control).
+      for (int i = tagged_limit; i < node->InputCount(); i++) {
+        EnqueueInput(node, i);
+      }
     }
   }
 
   // Helper for an unused node.
   void VisitUnused(Node* node) {
+    if (retype()) return;
     int value_count = node->op()->ValueInputCount() +
                       OperatorProperties::GetContextInputCount(node->op()) +
                       OperatorProperties::GetFrameStateInputCount(node->op());
     for (int i = 0; i < value_count; i++) {
       ProcessInput(node, i, UseInfo::None());
     }
-    ProcessRemainingInputs(node, value_count);
-    if (lower()) Kill(node);
+    if (propagate()) {
+      ProcessRemainingInputs(node, value_count);
+    } else {
+      DCHECK(lower());
+      Kill(node);
+    }
   }
 
   // Helper for no-op node.
@@ -949,10 +966,14 @@ class RepresentationSelector {
                   MachineRepresentation output,
                   Type restriction_type = Type::Any()) {
     DCHECK_EQ(2, node->op()->ValueInputCount());
-    ProcessInput(node, 0, left_use);
-    ProcessInput(node, 1, right_use);
-    for (int i = 2; i < node->InputCount(); i++) {
-      EnqueueInput(node, i);
+    if (!retype()) {
+      ProcessInput(node, 0, left_use);
+      ProcessInput(node, 1, right_use);
+      if (propagate()) {
+        for (int i = 2; i < node->InputCount(); i++) {
+          EnqueueInput(node, i);
+        }
+      }
     }
     SetOutput(node, output, restriction_type);
   }
@@ -978,8 +999,12 @@ class RepresentationSelector {
   void VisitUnop(Node* node, UseInfo input_use, MachineRepresentation output,
                  Type restriction_type = Type::Any()) {
     DCHECK_EQ(1, node->op()->ValueInputCount());
-    ProcessInput(node, 0, input_use);
-    ProcessRemainingInputs(node, 1);
+    if (!retype()) {
+      ProcessInput(node, 0, input_use);
+      if (propagate()) {
+        ProcessRemainingInputs(node, 1);
+      }
+    }
     SetOutput(node, output, restriction_type);
   }
 
