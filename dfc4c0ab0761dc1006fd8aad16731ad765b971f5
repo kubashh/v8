@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c0a5ba0_9d544b90",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1940,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-27T13:29:37Z",
+      "side": 1,
+      "message": "Won\u0027t this DCHECK happen automatically in the CPUFeatureScope constructor?",
+      "revId": "dfc4c0ab0761dc1006fd8aad16731ad765b971f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56f0016d_00055063",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-27T13:29:37Z",
+      "side": 1,
+      "message": "I think it\u0027s slightly easier to split this:\nbase::Optional\u003cCpuFeatureScope\u003e sse_scope;\nif (feature.has_value()) sse_scope.emplace(assm, *feature);",
+      "revId": "dfc4c0ab0761dc1006fd8aad16731ad765b971f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32131af8_8ead28bc",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1890,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-27T13:29:37Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "dfc4c0ab0761dc1006fd8aad16731ad765b971f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
