@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "86d48665_eff3f82e",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1940,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2020-03-27T23:54:57Z",
+      "side": 1,
+      "message": "Indeed, this DCHECK is not necessary as CPUFeatureScope constructor would check if this feature is supported. Removed it in the latest patchset. Thanks!",
+      "parentUuid": "3c0a5ba0_9d544b90",
+      "revId": "dfc4c0ab0761dc1006fd8aad16731ad765b971f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "56f0016d_00055063",
         "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
         "patchSetId": 6
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5af94c15_2c7eb6cd",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2020-03-27T23:54:57Z",
+      "side": 1,
+      "message": "It looks really neat. Revised accordingly, thanks!",
+      "parentUuid": "56f0016d_00055063",
+      "revId": "dfc4c0ab0761dc1006fd8aad16731ad765b971f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32131af8_8ead28bc",
         "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
         "patchSetId": 6
@@ -47,6 +83,24 @@
       "writtenOn": "2020-03-27T13:29:37Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "dfc4c0ab0761dc1006fd8aad16731ad765b971f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6490d96b_00031bff",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1890,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2020-03-27T23:54:57Z",
+      "side": 1,
+      "message": "Done. Thanks!",
+      "parentUuid": "32131af8_8ead28bc",
       "revId": "dfc4c0ab0761dc1006fd8aad16731ad765b971f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
