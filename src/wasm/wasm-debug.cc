@@ -787,8 +787,7 @@ class DebugInfoImpl {
   bool IsStepping(WasmCompiledFrame* frame) {
     Isolate* isolate = frame->wasm_instance().GetIsolate();
     StepAction last_step_action = isolate->debug()->last_step_action();
-    return stepping_frame_ == frame->id() ||
-           (last_step_action == StepIn && stepping_frame_ != NO_ID);
+    return stepping_frame_ == frame->id() || last_step_action == StepIn;
   }
 
   void RemoveBreakpoint(int func_index, int offset, Isolate* current_isolate) {

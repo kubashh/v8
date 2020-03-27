@@ -872,8 +872,9 @@ void Debug::PrepareStepIn(Handle<JSFunction> function) {
   if (in_debug_scope()) return;
   if (break_disabled()) return;
   Handle<SharedFunctionInfo> shared(function->shared(), isolate_);
-  // If stepping from JS into Wasm, prepare for it.
-  if (shared->HasWasmExportedFunctionData()) {
+  // If stepping from JS into Wasm, and we are using the wasm interpreter for
+  // debugging, prepare the interpreter for step in.
+  if (shared->HasWasmExportedFunctionData() && !FLAG_debug_in_liftoff) {
     auto imported_function = Handle<WasmExportedFunction>::cast(function);
     Handle<WasmInstanceObject> wasm_instance(imported_function->instance(),
                                              isolate_);
