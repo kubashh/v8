@@ -1,0 +1,44 @@
+// Copyright 2020 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#ifndef V8_HEAP_CPPGC_STACK_H_
+#define V8_HEAP_CPPGC_STACK_H_
+
+#include "src/base/macros.h"
+
+namespace cppgc {
+namespace internal {
+
+class StackVisitor {
+ public:
+  virtual void VisitPointer(void* address) = 0;
+};
+
+// Abstraction over the stack. Supports handling of:
+// - native stack;
+//
+// TODO(mlippautz): Support for
+// - ASAN fake stack;
+// - Fuchsia's safe stack;
+class V8_EXPORT_PRIVATE Stack final {
+ public:
+  explicit Stack(void* stack_start);
+
+  // Returns true if |slot| is part of the stack and false otherwise.
+  bool IsOnStack(void* slot) const;
+
+  // Word-aligned iteration of the task. Slot values are  passed on to
+  // |visitor|.
+  void IteratePointers(StackVisitor* visitor) const;
+
+ private:
+  void IteratePointersImpl(StackVisitor* visitor, intptr_t* stack_end) const;
+
+  void* stack_start_;
+};
+
+}  // namespace internal
+}  // namespace cppgc
+
+#endif  // V8_HEAP_CPPGC_STACK_H_
