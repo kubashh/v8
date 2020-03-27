@@ -1396,10 +1396,16 @@ void OS::AdjustSchedulingParams() {}
 
 // static
 void* Stack::GetStackStart() {
-#if defined(V8_TARGET_ARCH_32_BIT)
-  return reinterpret_cast<void*>(__readfsdword(offsetof(NT_TIB, StackBase)));
-#else
+#if defined(V8_TARGET_ARCH_X64)
   return reinterpret_cast<void*>(__readgsqword(offsetof(NT_TIB64, StackBase)));
+#elif defined(V8_TARGET_ARCH_32_BIT)
+  return reinterpret_cast<void*>(__readfsdword(offsetof(NT_TIB, StackBase)));
+#elif defined(V8_TARGET_ARCH_ARM64)
+  ULONG_PTR lowLimit, highLimit;
+  ::GetCurrentThreadStackLimits(&lowLimit, &highLimit);
+  return reinterpret_cast<void*>(highLimit);
+#else
+#error Unsupported GetStackStart.
 #endif
 }
 
