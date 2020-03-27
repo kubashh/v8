@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "f9e4bb61_4e6d13bc",
+        "filename": "src/heap/off-thread-factory.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-27T15:38:39Z",
+      "side": 1,
+      "message": "As discussed offline, the caller of Publish performs synchronization so that all writes are visible on the main thread.",
+      "parentUuid": "ef3439ba_a19ff2bc",
+      "range": {
+        "startLine": 164,
+        "startChar": 35,
+        "endLine": 164,
+        "endChar": 53
+      },
+      "revId": "627bae9a3223cbaef2a6ad3dbbeb1edd3dfb4d6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "12e0b2af_d2084e5c",
         "filename": "src/heap/off-thread-factory.cc",
         "patchSetId": 1
