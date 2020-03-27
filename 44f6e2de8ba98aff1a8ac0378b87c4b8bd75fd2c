@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72420ea4_b32a26a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-03-27T14:44:47Z",
+      "side": 1,
+      "message": "nit: I count four new breaks.",
+      "revId": "44f6e2de8ba98aff1a8ac0378b87c4b8bd75fd2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
