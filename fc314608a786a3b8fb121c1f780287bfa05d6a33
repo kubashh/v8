@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1428aba0_db389765",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-03-30T14:17:38Z",
+      "side": 1,
+      "message": "We could eliminate this enum once phase_ is not needed.",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 12
+      },
+      "revId": "fc314608a786a3b8fb121c1f780287bfa05d6a33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "517e7996_79caae52",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-03-30T14:17:38Z",
+      "side": 1,
+      "message": "When templating on enum values, you need to create a new class e.g\n  template \u003cPhase\u003e\n  struct Subsphase;\nand use it like VisitNode\u003cSubphase\u003cPhase::PROPAGATE\u003e\u003e.\n\nWe can instead create three empty structs to represent the phases for template purposes, since 1) this solution is verbose, 2) we would have no need for Phase once we template the file, and 3) we would be creating an extra struct.",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 19
+      },
+      "revId": "fc314608a786a3b8fb121c1f780287bfa05d6a33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
