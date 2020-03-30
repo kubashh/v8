@@ -15,6 +15,7 @@
 #include "src/logging/code-events.h"
 #include "src/objects/contexts.h"
 #include "src/parsing/parse-info.h"
+#include "src/parsing/pending-compilation-error-handler.h"
 #include "src/utils/allocation.h"
 #include "src/zone/zone.h"
 
@@ -389,11 +390,21 @@ class V8_EXPORT_PRIVATE BackgroundCompileTask {
     return finalize_on_background_thread_;
   }
   OffThreadIsolate* off_thread_isolate() { return off_thread_isolate_.get(); }
+  PendingCompilationErrorHandler* pending_error_handler() {
+    return compile_state_.pending_error_handler();
+  }
   SharedFunctionInfo outer_function_sfi() {
     // Make sure that this is an off-thread object, so that it won't have been
     // moved by the GC.
-    DCHECK(Heap::InOffThreadSpace(outer_function_sfi_));
+    DCHECK(outer_function_sfi_.is_null() ||
+           Heap::InOffThreadSpace(outer_function_sfi_));
     return outer_function_sfi_;
+  }
+  Script script() {
+    // Make sure that this is an off-thread object, so that it won't have been
+    // moved by the GC.
+    DCHECK(Heap::InOffThreadSpace(script_));
+    return script_;
   }
 
  private:
@@ -416,6 +427,7 @@ class V8_EXPORT_PRIVATE BackgroundCompileTask {
   std::unique_ptr<OffThreadIsolate> off_thread_isolate_;
   // This is a raw pointer to the off-thread allocated SharedFunctionInfo.
   SharedFunctionInfo outer_function_sfi_;
+  Script script_;
 
   // Single function data for top-level function compilation.
   int start_position_;
