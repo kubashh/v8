@@ -474,6 +474,30 @@
     },
     {
       "key": {
+        "uuid": "0afde670_f66ba189",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T14:23:05Z",
+      "side": 1,
+      "message": "Done as it doesn\u0027t hurt right now but I don\u0027t believe this particular restriction has any benefit in the long run. In the best case it stays as is. In the worst case, we need mutability (as there is no reason to not have it for this visitation) and will either spread const_cast (UB) or have to change all visitors.",
+      "parentUuid": "1d40746a_615b7ba1",
+      "range": {
+        "startLine": 15,
+        "startChar": 28,
+        "endLine": 15,
+        "endChar": 32
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97f2c901_6e9cd26e",
         "filename": "src/heap/cppgc/stack.h",
         "patchSetId": 35
@@ -793,6 +817,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "f89aaeaf_c1341d56",
+      "range": {
+        "startLine": 114,
+        "startChar": 5,
+        "endLine": 114,
+        "endChar": 13
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d8b6df2_c369e154",
+        "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T14:23:05Z",
+      "side": 1,
+      "message": "This example here on x64 w/ pointer compression enabled does not provide a monotonically increasing count.\n\nIt will keep alive from 1 slot after setup and it will keep alive from 1 slot after assignment.",
+      "parentUuid": "d938290b_1718bd05",
       "range": {
         "startLine": 114,
         "startChar": 5,
