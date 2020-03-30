@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46ec2bd2_bacebac2",
+        "filename": "src/heap/cppgc/asm/x64/push_registers_win.S",
+        "patchSetId": 35
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-30T11:47:59Z",
+      "side": 1,
+      "message": "72?",
+      "range": {
+        "startLine": 16,
+        "startChar": 32,
+        "endLine": 16,
+        "endChar": 34
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf930e34_98c66d30",
+        "filename": "src/heap/cppgc/stack.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-30T11:47:59Z",
+      "side": 1,
+      "message": "This is not consistent with IteratePointersImpl that does not include start_start_",
+      "range": {
+        "startLine": 29,
+        "startChar": 19,
+        "endLine": 29,
+        "endChar": 20
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a8f2577_d0e19901",
+        "filename": "src/heap/cppgc/stack.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-30T11:47:59Z",
+      "side": 1,
+      "message": "Nit: real_stack_slot would be easier to understand for me.",
+      "range": {
+        "startLine": 73,
+        "startChar": 10,
+        "endLine": 73,
+        "endChar": 20
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bfb0591_8c518363",
+        "filename": "src/heap/cppgc/stack.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-30T11:47:59Z",
+      "side": 1,
+      "message": "Should this be a strict \u003e ?",
+      "range": {
+        "startLine": 78,
+        "startChar": 52,
+        "endLine": 78,
+        "endChar": 53
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9643e78b_e7bac222",
+        "filename": "src/heap/cppgc/stack.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-30T11:47:59Z",
+      "side": 1,
+      "message": "Ditto?",
+      "range": {
+        "startLine": 81,
+        "startChar": 22,
+        "endLine": 81,
+        "endChar": 23
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a91cb83e_0abc98ac",
+        "filename": "src/heap/cppgc/stack.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-03-30T11:47:59Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we round up here?",
+      "range": {
+        "startLine": 99,
+        "startChar": 7,
+        "endLine": 99,
+        "endChar": 61
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
