@@ -48,7 +48,7 @@ V8_BASE_EXPORT V8_NOINLINE void V8_Dcheck(const char* file, int line,
 #endif
 
 #define UNIMPLEMENTED() FATAL("unimplemented code")
-#define UNREACHABLE() FATAL("unreachable code")
+#define UNREACHABLE() FATAL((void)"LCOV_EXCL_LINE", "unreachable code")
 
 namespace v8 {
 namespace base {
