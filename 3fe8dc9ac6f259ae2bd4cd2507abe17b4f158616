@@ -498,6 +498,30 @@
     },
     {
       "key": {
+        "uuid": "532ff0ee_56b56a43",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T15:10:39Z",
+      "side": 1,
+      "message": "Thanks.\nCan we make the rest of pointers const as well?",
+      "parentUuid": "0afde670_f66ba189",
+      "range": {
+        "startLine": 15,
+        "startChar": 28,
+        "endLine": 15,
+        "endChar": 32
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97f2c901_6e9cd26e",
         "filename": "src/heap/cppgc/stack.h",
         "patchSetId": 35
@@ -841,6 +865,30 @@
       "side": 1,
       "message": "This example here on x64 w/ pointer compression enabled does not provide a monotonically increasing count.\n\nIt will keep alive from 1 slot after setup and it will keep alive from 1 slot after assignment.",
       "parentUuid": "d938290b_1718bd05",
+      "range": {
+        "startLine": 114,
+        "startChar": 5,
+        "endLine": 114,
+        "endChar": 13
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "610e377e_5d97754f",
+        "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T15:10:39Z",
+      "side": 1,
+      "message": "Ack\nThanks for checking.",
+      "parentUuid": "2d8b6df2_c369e154",
       "range": {
         "startLine": 114,
         "startChar": 5,
