@@ -307,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "07176805_fc933830",
+        "filename": "src/heap/cppgc/stack.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T13:09:40Z",
+      "side": 1,
+      "message": "Removing rounding and added CHECK for alignment.",
+      "parentUuid": "a91cb83e_0abc98ac",
+      "range": {
+        "startLine": 99,
+        "startChar": 7,
+        "endLine": 99,
+        "endChar": 61
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "984086fb_55c11269",
         "filename": "src/heap/cppgc/stack.h",
         "patchSetId": 35
