@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21244a3c_88cfb137",
+        "filename": "src/heap/cppgc/asm/x64/push_registers.S",
+        "patchSetId": 43
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-03-30T17:16:31Z",
+      "side": 1,
+      "message": "Just wondering, what\u0027s the purpose of special Mac treatment?\nBoth gas and clang integrated assembler supports .global and .globl. Why is the symbol not hidden for Mac?",
+      "range": {
+        "startLine": 9,
+        "startChar": 7,
+        "endLine": 9,
+        "endChar": 26
+      },
+      "revId": "cd1c17880877255da332f7a727febcb056e201ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "204a9043_e54c3542",
+        "filename": "src/heap/cppgc/asm/x64/push_registers.S",
+        "patchSetId": 43
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-03-30T17:16:31Z",
+      "side": 1,
+      "message": "Thanks for making this correct 😊(I\u0027ve run into multiple issues when due to similar trampolines stack got misaligned and the program trapped later on an SSE instruction (movaps)). Just curious, why not a common pattern, e.g. 0xcdcdcdcd (0xcd is x86 interrupt opcode)?",
+      "revId": "cd1c17880877255da332f7a727febcb056e201ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "052a6a6c_8053d312",
+        "filename": "src/heap/cppgc/stack.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-03-30T17:16:31Z",
+      "side": 1,
+      "message": "I remember we talked about the redzone (when investigating the bug in base::Optional) and you assured me that we don\u0027t need to take redzone into account when iterating the stack 😊\nAs far as I recall, the main idea was that we anyway make a call to IteratePointerImpl from the asm trampoline, so we are guaranteed to not have interesting pointers in the IteratePointerImpl\u0027s frame that the compiler could allocate below the stack pointer.",
+      "range": {
+        "startLine": 48,
+        "startChar": 19,
+        "endLine": 48,
+        "endChar": 32
+      },
+      "revId": "cd1c17880877255da332f7a727febcb056e201ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6af6d9d6_b4169b17",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 43
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-03-30T17:16:31Z",
+      "side": 1,
+      "message": "nit: Would it be possible to encapsulate all of these in the .cc file to make the interface simpler?",
+      "revId": "cd1c17880877255da332f7a727febcb056e201ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
