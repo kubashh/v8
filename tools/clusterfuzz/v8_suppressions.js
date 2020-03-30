@@ -6,3 +6,6 @@
 // You can temporarily change JS behavior here to silence known problems.
 // Please refer to a bug in a comment and remove the suppression once the
 // problem is fixed.
+
+// https://crbug.com/1065741
+String.prototype.startsWith = function() {}
