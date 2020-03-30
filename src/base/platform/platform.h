@@ -424,7 +424,7 @@ class V8_BASE_EXPORT Stack {
   static V8_NOINLINE void* GetCurrentStackPosition();
 
   // Translates an ASAN-based slot to a real stack slot if necessary.
-  static void* GetStackSlot(void* slot) {
+  static const void* GetStackSlot(const void* slot) {
 #ifdef V8_USE_ADDRESS_SANITIZER
     void* fake_stack = __asan_get_current_fake_stack();
     if (fake_stack) {
