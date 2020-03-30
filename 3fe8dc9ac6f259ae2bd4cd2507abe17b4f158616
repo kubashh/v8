@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "c321dfed_c5dccc38",
+        "filename": "src/heap/cppgc/stack.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T13:41:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6807a7a0_496b6a65",
+      "range": {
+        "startLine": 62,
+        "startChar": 12,
+        "endLine": 62,
+        "endChar": 43
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a8f2577_d0e19901",
         "filename": "src/heap/cppgc/stack.cc",
         "patchSetId": 35
@@ -378,6 +402,30 @@
     },
     {
       "key": {
+        "uuid": "1b641f7b_a6d76192",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T13:41:05Z",
+      "side": 1,
+      "message": "In the current Oilpan, the method that returns HeapObjectHeader always returns a mutable object since the common case where we need the header is when we need to change it (i.e. in marking or sweeping). If the current usage didn\u0027t need it to be mutable, it simply held it as a const locally. Why not align with that?\n\nhttps://osscs.corp.google.com/chromium/chromium/src/+/master:third_party/blink/renderer/platform/heap/heap_page.h;bpv\u003d1;bpt\u003d1;l\u003d205?q\u003dheap_page.h\u0026ss\u003dchromium\u0026gsn\u003dFromPayload\u0026gs\u003dkythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fplatform%2Fheap%2Fheap_page.h%23W8vU10hil6ElvLokfVwhzsy-53QSvQHPb0Wv0XRhWYM",
+      "parentUuid": "6c080d02_11da3cbe",
+      "range": {
+        "startLine": 15,
+        "startChar": 28,
+        "endLine": 15,
+        "endChar": 32
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97f2c901_6e9cd26e",
         "filename": "src/heap/cppgc/stack.h",
         "patchSetId": 35
@@ -601,6 +649,30 @@
       "side": 1,
       "message": "It\u0027s not robust as we may add more than 1 more slot where it\u0027s reachable. It depends on how the compiler uses registers and redzone.",
       "parentUuid": "bdc38867_4e01de44",
+      "range": {
+        "startLine": 114,
+        "startChar": 5,
+        "endLine": 114,
+        "endChar": 13
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "001d9f77_67bc6070",
+        "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T13:41:05Z",
+      "side": 1,
+      "message": "Adding more than 1 slot is still fine. We can check that we found *more* than we did before. The idea would be to verify that putting the value on the stack introduces more locations where we can find it. Otherwise, we could for example always find it in the redzone or temporary (as your comment mentions) but completely miss method parameters.",
+      "parentUuid": "c8947664_f5caae6e",
       "range": {
         "startLine": 114,
         "startChar": 5,
