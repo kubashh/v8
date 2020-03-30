@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d52dff03_2fb6e3af",
+        "filename": "src/heap/cppgc/sanitizers.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T07:33:30Z",
+      "side": 1,
+      "message": "FYI: V8\u0027s *SAN macros are currently not in base.",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 7
+      },
+      "revId": "1dcdeb06bcdd8ebb06cdd6da831140b0aa7fe504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dad31bf5_bc2741c9",
+        "filename": "src/heap/cppgc/stack.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T07:33:30Z",
+      "side": 1,
+      "message": "IIUC, then this is missing form Oilpan in Blink and should be a bug there.",
+      "range": {
+        "startLine": 44,
+        "startChar": 46,
+        "endLine": 44,
+        "endChar": 59
+      },
+      "revId": "1dcdeb06bcdd8ebb06cdd6da831140b0aa7fe504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0a8450f_ec4d88f9",
+        "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T07:33:30Z",
+      "side": 1,
+      "message": "The test works relatively well but there\u0027s some implementation dependency here. asm() and register clobbering only protect the current asm() block. This means that the register could get clobbered till the invocation of the trampoline.\n\nE.g., on ASAN, I had a more expensive instruction sequence here which would clobber the register.\n\nI think, I would still keep the test. WDYT?",
+      "range": {
+        "startLine": 145,
+        "startChar": 17,
+        "endLine": 145,
+        "endChar": 28
+      },
+      "revId": "1dcdeb06bcdd8ebb06cdd6da831140b0aa7fe504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
