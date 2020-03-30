@@ -320,6 +320,9 @@ struct WasmEngine::IsolateInfo {
   // grows, never shrinks).
   std::set<NativeModule*> native_modules;
 
+  // Scripts created for each native module in this isolate.
+  std::unordered_map<NativeModule*, Handle<Script>> scripts;
+
   // Caches whether code needs to be logged on this isolate.
   bool log_codes;
 
@@ -461,10 +464,11 @@ MaybeHandle<WasmModuleObject> WasmEngine::SyncCompile(
   }
 #endif
 
+  bool new_script;
   Handle<Script> script =
-      CreateWasmScript(isolate, bytes.module_bytes(),
-                       VectorOf(native_module->module()->source_map_url),
-                       native_module->module()->name);
+      GetOrCreateScript(isolate, native_module.get(),
+                        VectorOf(native_module->module()->source_map_url),
+                        native_module->module()->name, &new_script);
 
   // Create the compiled module object and populate with compiled functions
   // and information needed at instantiation time. This object needs to be
@@ -473,8 +477,10 @@ MaybeHandle<WasmModuleObject> WasmEngine::SyncCompile(
   Handle<WasmModuleObject> module_object = WasmModuleObject::New(
       isolate, std::move(native_module), script, export_wrappers);
 
-  // Finish the Wasm script now and make it public to the debugger.
-  isolate->debug()->OnAfterCompile(script);
+  if (new_script) {
+    // Finish the Wasm script now and make it public to the debugger.
+    isolate->debug()->OnAfterCompile(script);
+  }
   return module_object;
 }
 
@@ -928,6 +934,7 @@ void WasmEngine::FreeNativeModule(NativeModule* native_module) {
     IsolateInfo* info = isolates_[isolate].get();
     DCHECK_EQ(1, info->native_modules.count(native_module));
     info->native_modules.erase(native_module);
+    info->scripts.erase(native_module);
     // If there are {WasmCode} objects of the deleted {NativeModule}
     // outstanding to be logged in this isolate, remove them. Decrementing the
     // ref count is not needed, since the {NativeModule} dies anyway.
@@ -1087,6 +1094,27 @@ void WasmEngine::FreeDeadCodeLocked(const DeadCodeMap& dead_code) {
     }
     native_module->FreeCode(VectorOf(code_vec));
   }
+}
+
+Handle<Script> WasmEngine::GetOrCreateScript(Isolate* isolate,
+                                             NativeModule* native_module,
+                                             Vector<const char> source_map_url,
+                                             WireBytesRef name,
+                                             bool* new_script_out,
+                                             Vector<const char> source_url) {
+  if (new_script_out) *new_script_out = true;
+  DCHECK_EQ(1, isolates_.count(isolate));
+  auto& scripts = isolates_[isolate]->scripts;
+  auto it = scripts.find(native_module);
+  if (it != scripts.end()) {
+    *new_script_out = false;
+    return it->second;
+  }
+  auto script = CreateWasmScript(isolate, native_module->wire_bytes(),
+                                 source_map_url, name, source_url);
+  auto global_handle = isolate->global_handles()->Create(*script);
+  scripts.emplace(native_module, global_handle);
+  return script;
 }
 
 void WasmEngine::TriggerGC(int8_t gc_sequence_index) {

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Flags: --allow-natives-syntax --expose-gc
+// Flags: --allow-natives-syntax
 
 load('test/mjsunit/wasm/wasm-module-builder.js');
 
@@ -90,8 +90,9 @@ function checkStack(stack, expected_lines) {
   assertEquals(initial_interpreted + 9, %WasmNumInterpretedCalls(instance));
 })();
 
-function createTwoInstancesCallingEachOther(inner_throws = false) {
+function createTwoInstancesCallingEachOther(inner_throws = false, name = '') {
   let builder1 = new WasmModuleBuilder();
+  builder1.setName(name);
 
   let id_imp = builder1.addImport('q', 'id', kSig_i_i);
   let plus_one = builder1.addFunction('plus_one', kSig_i_i)
@@ -109,6 +110,7 @@ function createTwoInstancesCallingEachOther(inner_throws = false) {
   let instance1 = builder1.instantiate({q: {id: imp}});
 
   let builder2 = new WasmModuleBuilder();
+  builder2.setName(name);
 
   let plus_one_imp = builder2.addImport('q', 'plus_one', kSig_i_i);
   let plus_two = builder2.addFunction('plus_two', kSig_i_i)
@@ -144,32 +146,25 @@ function redirectToInterpreter(
   // Three runs: Break in instance 1, break in instance 2, or both.
   for (let run = 0; run < 3; ++run) {
     print(" - run " + run);
-    (() => {
-      // Trigger a GC to ensure that the underlying native module is not a cached
-      // one from a previous run, with functions already redirected to the
-      // interpreter. This is not observable from pure JavaScript, but this is
-      // observable with the internal runtime functions used in this test.
-      // Run in a local scope to ensure previous native modules are
-      // unreachable.
-      gc();
-      let [instance1, instance2] = createTwoInstancesCallingEachOther();
-      let interpreted_before_1 = %WasmNumInterpretedCalls(instance1);
-      let interpreted_before_2 = %WasmNumInterpretedCalls(instance2);
-      // Call plus_two, which calls plus_one.
-      assertEquals(9, instance2.exports.plus_two(7));
-      // Nothing interpreted:
-      assertEquals(interpreted_before_1, %WasmNumInterpretedCalls(instance1));
-      assertEquals(interpreted_before_2, %WasmNumInterpretedCalls(instance2));
-      // Now redirect functions to the interpreter.
-      redirectToInterpreter(instance1, instance2, run != 1, run != 0);
-      // Call plus_two, which calls plus_one.
-      assertEquals(9, instance2.exports.plus_two(7));
-      // TODO(6668): Fix patching of instances which imported others' code.
-      //assertEquals(interpreted_before_1 + (run == 1 ? 0 : 1),
-      //             %WasmNumInterpretedCalls(instance1));
-      assertEquals(interpreted_before_2 + (run == 0 ? 0 : 1),
-                   %WasmNumInterpretedCalls(instance2))
-    })();
+    // Use the run as a module name to get different bytes. This ensures that
+    // the underlying script is not cached from a previous run.
+    let [instance1, instance2] = createTwoInstancesCallingEachOther(false, run);
+    let interpreted_before_1 = %WasmNumInterpretedCalls(instance1);
+    let interpreted_before_2 = %WasmNumInterpretedCalls(instance2);
+    // Call plus_two, which calls plus_one.
+    assertEquals(9, instance2.exports.plus_two(7));
+    // Nothing interpreted:
+    assertEquals(interpreted_before_1, %WasmNumInterpretedCalls(instance1));
+    assertEquals(interpreted_before_2, %WasmNumInterpretedCalls(instance2));
+    // Now redirect functions to the interpreter.
+    redirectToInterpreter(instance1, instance2, run != 1, run != 0);
+    // Call plus_two, which calls plus_one.
+    assertEquals(9, instance2.exports.plus_two(7));
+    // TODO(6668): Fix patching of instances which imported others' code.
+    //assertEquals(interpreted_before_1 + (run == 1 ? 0 : 1),
+    //             %WasmNumInterpretedCalls(instance1));
+    assertEquals(interpreted_before_2 + (run == 0 ? 0 : 1),
+        %WasmNumInterpretedCalls(instance2))
   }
 })();
 
@@ -188,8 +183,8 @@ function redirectToInterpreter(
       checkStack(stripPath(e.stack), [
         'Error: i=8',                                                   // -
         /^    at imp \(file:\d+:29\)$/,                                 // -
-        '    at plus_one (<anonymous>:wasm-function[1]:0x3b)',          // -
-        '    at plus_two (<anonymous>:wasm-function[1]:0x3e)',          // -
+        '    at .plus_one (<anonymous>:wasm-function[1]:0x3b)',         // -
+        '    at .plus_two (<anonymous>:wasm-function[1]:0x3e)',         // -
         /^    at testStackTraceThroughCWasmEntry \(file:\d+:25\)$/,     // -
         /^    at file:\d+:3$/
       ]);
