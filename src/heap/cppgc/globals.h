@@ -14,6 +14,8 @@ namespace internal {
 using Address = uint8_t*;
 using ConstAddress = const uint8_t*;
 
+constexpr size_t kAddressMask = ~(sizeof(Address) - 1);
+
 // See 6.7.6 (http://eel.is/c++draft/basic.align) for alignment restrictions. We
 // do not fully support all alignment restrictions (following
 // alignof(std​::​max_­align_­t)) but limit to alignof(double).
