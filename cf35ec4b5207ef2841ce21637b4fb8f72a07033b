@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9e0fde5f_766bfa96",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T15:31:40Z",
+      "side": 1,
+      "message": "The implementation needs the stub which is only implemented for x64. The linker fails if we don\u0027t put the ifdef here temporarily.",
+      "parentUuid": "9352c22e_dc368bad",
+      "range": {
+        "startLine": 33,
+        "startChar": 7,
+        "endLine": 33,
+        "endChar": 25
+      },
+      "revId": "cf35ec4b5207ef2841ce21637b4fb8f72a07033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e6cfb49_4fc4c665",
         "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
         "patchSetId": 40
@@ -45,6 +69,30 @@
       "revId": "cf35ec4b5207ef2841ce21637b4fb8f72a07033b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32ceed16_a970eead",
+        "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T15:31:40Z",
+      "side": 1,
+      "message": "1. Done, although the compiler needs to align for us.\n2. Done",
+      "parentUuid": "5e6cfb49_4fc4c665",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 6
+      },
+      "revId": "cf35ec4b5207ef2841ce21637b4fb8f72a07033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

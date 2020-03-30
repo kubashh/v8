@@ -522,6 +522,30 @@
     },
     {
       "key": {
+        "uuid": "309c8b14_f8088c4f",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T15:31:40Z",
+      "side": 1,
+      "message": "I made the constructor const as well.",
+      "parentUuid": "532ff0ee_56b56a43",
+      "range": {
+        "startLine": 15,
+        "startChar": 28,
+        "endLine": 15,
+        "endChar": 32
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97f2c901_6e9cd26e",
         "filename": "src/heap/cppgc/stack.h",
         "patchSetId": 35
