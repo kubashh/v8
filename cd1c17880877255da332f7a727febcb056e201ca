@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "65240068_9ca04092",
+        "filename": "src/heap/cppgc/asm/x64/push_registers.S",
+        "patchSetId": 43
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T18:21:18Z",
+      "side": 1,
+      "message": "Chromium indeed uses clang to compile assembly files on Mac. It\u0027s not upstream clang but clang shipped through Xcode which doesn\u0027t support .global and .hidden.",
+      "parentUuid": "21244a3c_88cfb137",
+      "range": {
+        "startLine": 9,
+        "startChar": 7,
+        "endLine": 9,
+        "endChar": 26
+      },
+      "revId": "cd1c17880877255da332f7a727febcb056e201ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "204a9043_e54c3542",
         "filename": "src/heap/cppgc/asm/x64/push_registers.S",
         "patchSetId": 43
@@ -39,6 +63,24 @@
       "revId": "cd1c17880877255da332f7a727febcb056e201ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cce2a336_d9b17012",
+        "filename": "src/heap/cppgc/asm/x64/push_registers.S",
+        "patchSetId": 43
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T18:21:18Z",
+      "side": 1,
+      "message": "I thought it\u0027s less used in Chromium but I was wrong :) Let\u0027s use 0xCD to make searching easier.",
+      "parentUuid": "204a9043_e54c3542",
+      "revId": "cd1c17880877255da332f7a727febcb056e201ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "afc03f93_78b8eed5",
+        "filename": "src/heap/cppgc/stack.cc",
+        "patchSetId": 43
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T18:21:18Z",
+      "side": 1,
+      "message": "Forgot my own argument there. I left the redzone (as discussed offline) but added a comment that unless with have LTO inlining the asm trampoline we are safe.",
+      "parentUuid": "052a6a6c_8053d312",
+      "range": {
+        "startLine": 48,
+        "startChar": 19,
+        "endLine": 48,
+        "endChar": 32
+      },
+      "revId": "cd1c17880877255da332f7a727febcb056e201ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6af6d9d6_b4169b17",
         "filename": "src/heap/cppgc/stack.h",
         "patchSetId": 43
@@ -79,6 +145,24 @@
       "revId": "cd1c17880877255da332f7a727febcb056e201ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f40aa75_ad3e3da5",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 43
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T18:21:18Z",
+      "side": 1,
+      "message": "IteratePointersImpl has to stay but the rest is moved to the .cc file.",
+      "parentUuid": "6af6d9d6_b4169b17",
+      "revId": "cd1c17880877255da332f7a727febcb056e201ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
