@@ -426,6 +426,30 @@
     },
     {
       "key": {
+        "uuid": "39272092_a3e7c513",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T13:47:27Z",
+      "side": 1,
+      "message": "Why do you think that the memory returned here is not mutable? The visitor returns some void* and the caller needs to figure out whether it\u0027s safe to modify that memory or not. The visitor doesn\u0027t care.",
+      "parentUuid": "1b641f7b_a6d76192",
+      "range": {
+        "startLine": 15,
+        "startChar": 28,
+        "endLine": 15,
+        "endChar": 32
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "97f2c901_6e9cd26e",
         "filename": "src/heap/cppgc/stack.h",
         "patchSetId": 35
@@ -673,6 +697,30 @@
       "side": 1,
       "message": "Adding more than 1 slot is still fine. We can check that we found *more* than we did before. The idea would be to verify that putting the value on the stack introduces more locations where we can find it. Otherwise, we could for example always find it in the redzone or temporary (as your comment mentions) but completely miss method parameters.",
       "parentUuid": "c8947664_f5caae6e",
+      "range": {
+        "startLine": 114,
+        "startChar": 5,
+        "endLine": 114,
+        "endChar": 13
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7775b763_31d50eb6",
+        "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T13:47:27Z",
+      "side": 1,
+      "message": "All these tests are approximate.\n\nWe cannot even check for more, because there could be multiple references in the redzone after the setup and 0 after the assignment to a stack-local. The only thing we know is that after assignment there should be \u003e0 slots to keep it alive from.",
+      "parentUuid": "001d9f77_67bc6070",
       "range": {
         "startLine": 114,
         "startChar": 5,
