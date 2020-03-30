@@ -450,6 +450,30 @@
     },
     {
       "key": {
+        "uuid": "1d40746a_615b7ba1",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T13:54:56Z",
+      "side": 1,
+      "message": "\"The visitor returns some void*\" - The visitor doesn\u0027t return anything as it is implemented here.\n\nIf this is meant to be used for conservative stack scanning for marking, why would the visitor need to mutate anything?",
+      "parentUuid": "39272092_a3e7c513",
+      "range": {
+        "startLine": 15,
+        "startChar": 28,
+        "endLine": 15,
+        "endChar": 32
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "97f2c901_6e9cd26e",
         "filename": "src/heap/cppgc/stack.h",
         "patchSetId": 35
@@ -745,6 +769,30 @@
       "side": 1,
       "message": "(Checking monotonicity anyways, maybe we are lucky.)",
       "parentUuid": "7775b763_31d50eb6",
+      "range": {
+        "startLine": 114,
+        "startChar": 5,
+        "endLine": 114,
+        "endChar": 13
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d938290b_1718bd05",
+        "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T13:54:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f89aaeaf_c1341d56",
       "range": {
         "startLine": 114,
         "startChar": 5,
