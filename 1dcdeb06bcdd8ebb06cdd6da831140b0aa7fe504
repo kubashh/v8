@@ -68,6 +68,30 @@
       "revId": "1dcdeb06bcdd8ebb06cdd6da831140b0aa7fe504",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a66c2fa_105d0d73",
+        "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-03-30T09:34:28Z",
+      "side": 1,
+      "message": "As discussed in the meeting: I moved the value directly in the inline asm block instead of using a temporary which mitigates the problem.",
+      "parentUuid": "f0a8450f_ec4d88f9",
+      "range": {
+        "startLine": 145,
+        "startChar": 17,
+        "endLine": 145,
+        "endChar": 28
+      },
+      "revId": "1dcdeb06bcdd8ebb06cdd6da831140b0aa7fe504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
