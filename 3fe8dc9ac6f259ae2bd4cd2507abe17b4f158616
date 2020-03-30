@@ -48,6 +48,29 @@
     },
     {
       "key": {
+        "uuid": "4ed94b72_12b26829",
+        "filename": "src/heap/cppgc/stack.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T12:44:14Z",
+      "side": 1,
+      "message": "Why do we really need to scan the fake stack? Everything that is reachable should be reachable from the regular stack. Maybe this is an opportunity to rethink this.\n(I would understand why we would need it if we were compacting while there are pointers on the stack, but given that we don\u0027t I\u0027m not sure why we will miss live objects if we don\u0027t scan it.)",
+      "range": {
+        "startLine": 62,
+        "startChar": 12,
+        "endLine": 62,
+        "endChar": 43
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8a8f2577_d0e19901",
         "filename": "src/heap/cppgc/stack.cc",
         "patchSetId": 35
@@ -133,6 +156,144 @@
         "startChar": 7,
         "endLine": 99,
         "endChar": 61
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "984086fb_55c11269",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T12:44:14Z",
+      "side": 1,
+      "message": "nit: const void*",
+      "range": {
+        "startLine": 15,
+        "startChar": 28,
+        "endLine": 15,
+        "endChar": 32
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97f2c901_6e9cd26e",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T12:44:14Z",
+      "side": 1,
+      "message": "Please use \"const void*\" here and below.\nNone of this is supposed to change the stack (with the exception of the embedded asm), so we can make everything const.",
+      "range": {
+        "startLine": 24,
+        "startChar": 17,
+        "endLine": 24,
+        "endChar": 21
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "237dd451_720cd7c8",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T12:44:14Z",
+      "side": 1,
+      "message": "stack?",
+      "range": {
+        "startLine": 29,
+        "startChar": 35,
+        "endLine": 29,
+        "endChar": 39
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0dd1b21_689eabbe",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T12:44:14Z",
+      "side": 1,
+      "message": "double space",
+      "range": {
+        "startLine": 29,
+        "startChar": 56,
+        "endLine": 29,
+        "endChar": 57
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7ab7839_0950cade",
+        "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T12:44:14Z",
+      "side": 1,
+      "message": "nit: you can move this outside \"#ifdef V8_OS_WIN\"",
+      "range": {
+        "startLine": 56,
+        "startChar": 8,
+        "endLine": 56,
+        "endChar": 35
+      },
+      "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdc38867_4e01de44",
+        "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-03-30T12:44:14Z",
+      "side": 1,
+      "message": "If you keep count of how many times you found the needle rather than if you found it, you could verify that keeping it on stack adds another location where it is found.",
+      "range": {
+        "startLine": 114,
+        "startChar": 5,
+        "endLine": 114,
+        "endChar": 13
       },
       "revId": "3fe8dc9ac6f259ae2bd4cd2507abe17b4f158616",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
