@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9352c22e_dc368bad",
+        "filename": "src/heap/cppgc/stack.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2020-03-30T14:46:08Z",
+      "side": 1,
+      "message": "Do we need the ifdef?",
+      "range": {
+        "startLine": 33,
+        "startChar": 7,
+        "endLine": 33,
+        "endChar": 25
+      },
+      "revId": "cf35ec4b5207ef2841ce21637b4fb8f72a07033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e6cfb49_4fc4c665",
+        "filename": "test/unittests/heap/cppgc/stack_unittest.cc",
+        "patchSetId": 40
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2020-03-30T14:46:08Z",
+      "side": 1,
+      "message": "2 more test cases could make sense:\n1. Trying to get a non-aligned test case (by adding a char as local variable)\n2. calling a few functions and finding the needle at the inner most function (or something like that)\nWDYT?",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 6
+      },
+      "revId": "cf35ec4b5207ef2841ce21637b4fb8f72a07033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
