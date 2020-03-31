@@ -55,6 +55,9 @@ sessions[0].Protocol.Runtime
       // no debug info
       testFunction([${createModule()}]);
 
+      // no new script
+      testFunction([${createModule()}]);
+
       // DWARF
       testFunction([${createModule(dwarfSection)}]);
 
