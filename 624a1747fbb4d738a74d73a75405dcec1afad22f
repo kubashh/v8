@@ -16,6 +16,24 @@
       "revId": "624a1747fbb4d738a74d73a75405dcec1afad22f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e67d6ec_445540de",
+        "filename": "src/strings/string-builder-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-03-31T11:00:49Z",
+      "side": 1,
+      "message": "That felt confusing compared to AppendCString, I went with N to parallel strncmp vs strcmp. But, it is confusing still, maybe AppendSubstring would make more sense?",
+      "parentUuid": "87014e4a_6e38030e",
+      "revId": "624a1747fbb4d738a74d73a75405dcec1afad22f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
