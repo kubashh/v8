@@ -152,7 +152,7 @@ class AsyncCompileJob {
   // Return true for cache hit, false for cache miss.
   bool GetOrCreateNativeModule(std::shared_ptr<const WasmModule> module,
                                size_t code_size_estimate);
-  void PrepareRuntimeObjects();
+  void PrepareRuntimeObjects(bool* new_script_out);
 
   void FinishCompile(bool is_after_cache_hit);
 

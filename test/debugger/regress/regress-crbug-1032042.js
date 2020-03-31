@@ -2,10 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// Flags: --expose-gc
+
 load("test/mjsunit/wasm/wasm-module-builder.js");
 
 const Debug = new DebugWrapper();
 Debug.enable();
+
+// Call the GC to flush cached scripts from previous runs.
+gc();
 
 // Record the ID of the first script reported. This is to ignore
 // the (now deprecated) fake scripts that are generated for every

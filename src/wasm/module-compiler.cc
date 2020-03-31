@@ -1592,16 +1592,15 @@ bool AsyncCompileJob::GetOrCreateNativeModule(
   return true;
 }
 
-void AsyncCompileJob::PrepareRuntimeObjects() {
+void AsyncCompileJob::PrepareRuntimeObjects(bool* new_script_out) {
   // Create heap objects for script and module bytes to be stored in the
   // module object. Asm.js is not compiled asynchronously.
   DCHECK(module_object_.is_null());
   const WasmModule* module = native_module_->module();
   auto source_url = stream_ ? stream_->url() : Vector<const char>();
-  Handle<Script> script = CreateWasmScript(
-      isolate_, native_module_->wire_bytes(), VectorOf(module->source_map_url),
-      module->name, source_url);
-
+  auto script = isolate_->wasm_engine()->GetOrCreateScript(
+      isolate_, native_module_.get(), VectorOf(module->source_map_url),
+      module->name, new_script_out, source_url);
   Handle<WasmModuleObject> module_object =
       WasmModuleObject::New(isolate_, native_module_, script);
 
@@ -1615,11 +1614,12 @@ void AsyncCompileJob::FinishCompile(bool is_after_cache_hit) {
                "AsyncCompileJob::FinishCompile");
   bool is_after_deserialization = !module_object_.is_null();
   auto compilation_state = Impl(native_module_->compilation_state());
+  bool new_script = false;
   if (!is_after_deserialization) {
     if (stream_) {
       stream_->NotifyNativeModuleCreated(native_module_);
     }
-    PrepareRuntimeObjects();
+    PrepareRuntimeObjects(&new_script);
   }
 
   // Measure duration of baseline compilation or deserialization from cache.
@@ -1640,7 +1640,7 @@ void AsyncCompileJob::FinishCompile(bool is_after_cache_hit) {
         AllocationType::kOld);
     script->set_source_mapping_url(*src_map_str.ToHandleChecked());
   }
-  {
+  if (new_script) {
     TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm"), "Debug::OnAfterCompile");
     isolate_->debug()->OnAfterCompile(script);
   }
