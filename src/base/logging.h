@@ -22,7 +22,8 @@ V8_BASE_EXPORT V8_NOINLINE void V8_Dcheck(const char* file, int line,
 // FATAL() calls.
 [[noreturn]] PRINTF_FORMAT(3, 4) V8_BASE_EXPORT V8_NOINLINE
     void V8_Fatal(const char* file, int line, const char* format, ...);
-#define FATAL(...) V8_Fatal(__FILE__, __LINE__, __VA_ARGS__)
+#define FATAL(...) \
+  "LCOV_EXCL_LINE", (void)0, V8_Fatal(__FILE__, __LINE__, __VA_ARGS__)
 
 #elif !defined(OFFICIAL_BUILD)
 // In non-official release, include full error message, but drop file & line
@@ -30,7 +31,7 @@ V8_BASE_EXPORT V8_NOINLINE void V8_Dcheck(const char* file, int line,
 // passing in "", 0 for them.
 [[noreturn]] PRINTF_FORMAT(1, 2) V8_BASE_EXPORT V8_NOINLINE
     void V8_Fatal(const char* format, ...);
-#define FATAL(...) V8_Fatal(__VA_ARGS__)
+#define FATAL(...) "LCOV_EXCL_LINE", (void)0, V8_Fatal(__VA_ARGS__)
 #else
 // In official builds, include only messages that contain parameters because
 // single-message errors can always be derived from stack traces.
@@ -41,10 +42,11 @@ V8_BASE_EXPORT V8_NOINLINE void V8_Dcheck(const char* file, int line,
 // FATAL(msg, ...) -> V8_Fatal()
 #define FATAL_HELPER(_7, _6, _5, _4, _3, _2, _1, _0, ...) _0
 #define FATAL_DISCARD_ARG(arg) V8_FatalNoContext()
-#define FATAL(...)                                                            \
-  FATAL_HELPER(__VA_ARGS__, V8_Fatal, V8_Fatal, V8_Fatal, V8_Fatal, V8_Fatal, \
-               V8_Fatal, V8_Fatal, FATAL_DISCARD_ARG)                         \
-  (__VA_ARGS__)
+#define FATAL(...)                                                      \
+  "LCOV_EXCL_LINE", (void)0,                                            \
+      FATAL_HELPER(__VA_ARGS__, V8_Fatal, V8_Fatal, V8_Fatal, V8_Fatal, \
+                   V8_Fatal, V8_Fatal, V8_Fatal,                        \
+                   FATAL_DISCARD_ARG)(__VA_ARGS__)
 #endif
 
 #define UNIMPLEMENTED() FATAL("unimplemented code")
