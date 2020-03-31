@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5eaa7bc5_757d0d05",
+        "filename": "src/base/logging.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-31T09:00:14Z",
+      "side": 1,
+      "message": "This doesn\u0027t compile. We could do something like:\nfalse ? \"LCOV_EXCL_LINE\" : \"unreachable code\"\n\nOr what do you think about introducing a LCOV_EXCL_LINE method (with an appropriate comment), and using:\nLCOV_EXCL_LINE(\"unreachable code\")",
+      "revId": "990c40ee7126f220c87c12705ecd5017b6b12b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
