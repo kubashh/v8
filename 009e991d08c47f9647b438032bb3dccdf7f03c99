@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd355eb0_581f0e6f",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-03-31T07:23:21Z",
+      "side": 1,
+      "message": "The tmp registers are only needed to preserve the value in left and right, right?\nWe *could* optimize this by not requiring tmp registers if the registers are not used afterwards anyway. This could be checked via {cache_state_.is_used(reg)}.\n\nSince this not only generates better code, but can also make compilation faster (by avoiding the {GetUnusedRegister} call), I think it would be worth doing that.",
+      "range": {
+        "startLine": 1693,
+        "startChar": 0,
+        "endLine": 1694,
+        "endChar": 20
+      },
+      "revId": "009e991d08c47f9647b438032bb3dccdf7f03c99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
