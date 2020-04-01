@@ -55,6 +55,9 @@ sessions[0].Protocol.Runtime
       // no debug info
       testFunction([${createModule()}]);
 
+      // shared script for identical modules
+      testFunction([${createModule()}]);
+
       // DWARF
       testFunction([${createModule(dwarfSection)}]);
 
@@ -88,7 +91,7 @@ function trackScripts(debuggerParams) {
   async function loadScript(
       {url, scriptId, sourceMapURL, startColumn, endColumn, codeOffset}) {
     InspectorTest.log(`Session #${sessionId}: Script #${
-        scripts.length} parsed. URL: ${url}. Source map URL: ${
+        scripts.length} parsed. URL: ${url}. Script ID: ${scriptId}, Source map URL: ${
         sourceMapURL}, module begin: ${startColumn}, module end: ${endColumn}, code offset: ${codeOffset}`);
     let {result: {scriptSource, bytecode}} =
         await Protocol.Debugger.getScriptSource({scriptId});
