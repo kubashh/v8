@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "742f7fa5_8fa11832",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-01T14:04:24Z",
+      "side": 1,
+      "message": "This looks dead now. Can be removed.",
+      "revId": "9e436bc103135fbce5e8e220b1b2e11b0f1b2fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15193956_145863fc",
+        "filename": "test/inspector/debugger/wasm-scripts.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-01T14:04:24Z",
+      "side": 1,
+      "message": "Script IDs have historically been considered unstable, hence they are never dumped (see nonStableFields in protocol-test.js). What we could do is assigning a unique ID to every new script id we see, that should be stable then.",
+      "range": {
+        "startLine": 94,
+        "startChar": 58,
+        "endLine": 94,
+        "endChar": 66
+      },
+      "revId": "9e436bc103135fbce5e8e220b1b2e11b0f1b2fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
