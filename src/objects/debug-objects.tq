@@ -69,3 +69,11 @@ extern class CoverageInfo extends HeapObject {
   const slot_count: int32;
   slots[slot_count]: CoverageInfoSlot;
 }
+
+@generateCppClass
+extern class WasmValue extends Struct {
+  // The type, should map to ValueType::Kind values in value-type.h.
+  value_type: int32;
+  // Holds the actual value.
+  bytes: ByteArray;
+}
