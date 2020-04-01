@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "72798f6a_42472e92",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-01T11:33:51Z",
+      "side": 1,
+      "message": "Ah of course, done.",
+      "parentUuid": "6e714f59_f4e974da",
+      "range": {
+        "startLine": 136,
+        "startChar": 11,
+        "endLine": 136,
+        "endChar": 27
+      },
+      "revId": "e4efb80a2443741fedccd30d5f11234281203565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac70d51b_64804042",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 8
@@ -188,6 +212,30 @@
       "revId": "e4efb80a2443741fedccd30d5f11234281203565",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a628b9c_108849ce",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-01T11:33:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ec6eb68_88425c50",
+      "range": {
+        "startLine": 144,
+        "startChar": 1,
+        "endLine": 144,
+        "endChar": 18
+      },
+      "revId": "e4efb80a2443741fedccd30d5f11234281203565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
