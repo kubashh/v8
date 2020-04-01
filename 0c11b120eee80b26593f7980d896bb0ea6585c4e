@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f1dbf4c_28783ef9",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-01T07:25:33Z",
+      "side": 1,
+      "message": "I think we should call them \"left\" and \"right\", and initialize them with the most common value:\nQwNeonRegister left \u003d liftoff::GetSimd128Register(lhs.low_fp());               \nQwNeonRegister right \u003d liftoff::GetSimd128Register(rhs.low_fp());              \n\nThat will save some lines of code further down.\n\nI also thought about restructuring the checks below and merging them with the {vmov}s, like this:\n  // Ensure that {left} and {right} can be modified.\n  if (cache_state_.is_used(lhs)) {\n    QwNeonRegister tmp1 \u003d temps.AcquireQ();\n    vmov(tmp1, left);\n    left \u003d tmp1;\n    if (cache_state_.is_used(rhs)) {\n      // We only have 1 scratch Q register, so acquire another ourselves.\n      LiftoffRegList pinned \u003d LiftoffRegList::ForRegs(dst);\n      LiftoffRegister unused_pair \u003d GetUnusedRegister(kFpRegPair, pinned);\n      QwNeonRegister tmp2 \u003d liftoff::GetSimd128Register(unused_pair.low_fp());\n      if (tmp2 !\u003d right) vmov(tmp2, right);\n      right \u003d tmp2;\n    }\n  } else if (cache_state_.is_used(rhs)) {\n    QwNeonRegister tmp \u003d temps.AcquireQ();\n    vmov(tmp, left);\n    right \u003d tmp;\n  }\n\nThis gives slightly shorter and more explicit code. If you think it\u0027s less readable overall, feel free to ignore this comment.",
+      "range": {
+        "startLine": 1684,
+        "startChar": 0,
+        "endLine": 1685,
+        "endChar": 69
+      },
+      "revId": "0c11b120eee80b26593f7980d896bb0ea6585c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d0b40ef_8d1bd989",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-01T07:25:33Z",
+      "side": 1,
+      "message": "I think the only thing we need to pin here is {dst}.",
+      "revId": "0c11b120eee80b26593f7980d896bb0ea6585c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
