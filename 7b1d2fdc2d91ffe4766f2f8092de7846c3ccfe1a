@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "351fe2ab_ece24989",
+        "filename": "src/handles/handles.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-01T12:35:30Z",
+      "side": 1,
+      "message": "SGTM, I uploaded the change. Ulan, could you please take another look?",
+      "parentUuid": "5c7ce404_3b980329",
+      "revId": "7b1d2fdc2d91ffe4766f2f8092de7846c3ccfe1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8434ed94_1be23999",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 10
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "0f79d709_6c6eaccb",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-01T12:35:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8434ed94_1be23999",
+      "revId": "7b1d2fdc2d91ffe4766f2f8092de7846c3ccfe1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62c71ed7_f7a706a1",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 10
@@ -47,6 +83,30 @@
       "writtenOn": "2020-04-01T12:01:23Z",
       "side": 1,
       "message": "since emplace already calls the constructor, you should be able to just do:\nscripts.emplace(native_module, global_handle);",
+      "range": {
+        "startLine": 1134,
+        "startChar": 0,
+        "endLine": 1135,
+        "endChar": 64
+      },
+      "revId": "7b1d2fdc2d91ffe4766f2f8092de7846c3ccfe1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37f5b396_989c7697",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-01T12:35:30Z",
+      "side": 1,
+      "message": "Done, with the script instead of the global handle, since the global handle is created in the constructor now as per your other suggestion.",
+      "parentUuid": "62c71ed7_f7a706a1",
       "range": {
         "startLine": 1134,
         "startChar": 0,
