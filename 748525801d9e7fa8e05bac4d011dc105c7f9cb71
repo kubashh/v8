@@ -22,6 +22,30 @@
       "revId": "748525801d9e7fa8e05bac4d011dc105c7f9cb71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4af5524d_6d39e974",
+        "filename": "src/heap/off-thread-factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-01T11:09:28Z",
+      "side": 1,
+      "message": "Forgot \"heap-\u003e\" for both functions.",
+      "parentUuid": "ef05a925_41b5be05",
+      "range": {
+        "startLine": 177,
+        "startChar": 15,
+        "endLine": 177,
+        "endChar": 37
+      },
+      "revId": "748525801d9e7fa8e05bac4d011dc105c7f9cb71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
