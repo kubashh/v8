@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "679e1cf8_61e24305",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-04-01T17:27:31Z",
+      "side": 1,
+      "message": "I find this slightly harder to follow, and the vmov is in between the other lines of code trying to get temporaries. Your suggestion gave me some idea to shorten the code a little, by defaulting tmp1 and tmp2 to be left and right first, so the default case is if both lhs and rhs are not used, ptal.",
+      "parentUuid": "7f1dbf4c_28783ef9",
+      "range": {
+        "startLine": 1684,
+        "startChar": 0,
+        "endLine": 1685,
+        "endChar": 69
+      },
+      "revId": "0c11b120eee80b26593f7980d896bb0ea6585c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d0b40ef_8d1bd989",
         "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "0c11b120eee80b26593f7980d896bb0ea6585c4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba75f2e5_e8ba38ff",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-04-01T17:27:31Z",
+      "side": 1,
+      "message": "Good point, fixed!",
+      "parentUuid": "7d0b40ef_8d1bd989",
+      "revId": "0c11b120eee80b26593f7980d896bb0ea6585c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
