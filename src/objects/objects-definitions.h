@@ -127,6 +127,7 @@ namespace internal {
     async_generator_request)                                                  \
   V(_, BREAK_POINT_TYPE, BreakPoint, break_point)                             \
   V(_, BREAK_POINT_INFO_TYPE, BreakPointInfo, break_point_info)               \
+  V(_, WASM_VALUE_TYPE, WasmValue, wasm_value)                                \
   V(_, CACHED_TEMPLATE_OBJECT_TYPE, CachedTemplateObject,                     \
     cached_template_object)                                                   \
   V(_, CLASS_POSITIONS_TYPE, ClassPositions, class_positions)                 \
