@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "ee8b451c_31b0c52f",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-01T10:25:56Z",
+      "side": 1,
+      "message": "I cannot find any method named DestroyHandle.",
+      "parentUuid": "f0f4f971_4fe1967d",
+      "range": {
+        "startLine": 136,
+        "startChar": 11,
+        "endLine": 136,
+        "endChar": 27
+      },
+      "revId": "e4efb80a2443741fedccd30d5f11234281203565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ac70d51b_64804042",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 8
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "7787beba_a9f11c45",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-01T10:25:56Z",
+      "side": 1,
+      "message": "Wouldn\u0027t there be a risk that the object is moved around and invalidates the location address passed to MakeWeak?",
+      "parentUuid": "ac70d51b_64804042",
+      "range": {
+        "startLine": 144,
+        "startChar": 1,
+        "endLine": 144,
+        "endChar": 18
+      },
+      "revId": "e4efb80a2443741fedccd30d5f11234281203565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85cab403_e6d0dabd",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 8
@@ -82,6 +130,30 @@
       "writtenOn": "2020-04-01T10:00:29Z",
       "side": 1,
       "message": "If scripts are reclaimed, we will end up with many empty WeakScriptHandles that are still in the scripts hashtable. Is it okay? Or should we also remove the entry from the table when the corrsponding script is reclaimed?",
+      "range": {
+        "startLine": 337,
+        "startChar": 36,
+        "endLine": 337,
+        "endChar": 52
+      },
+      "revId": "e4efb80a2443741fedccd30d5f11234281203565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b6e80ea_a23355cc",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-01T10:25:56Z",
+      "side": 1,
+      "message": "They are removed when the native module is removed (see the change in FreeNativeModule), so this should be fine.",
+      "parentUuid": "85cab403_e6d0dabd",
       "range": {
         "startLine": 337,
         "startChar": 36,
