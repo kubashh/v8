@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f3c2e21_76b01096",
+        "filename": "src/handles/handles.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-01T10:00:29Z",
+      "side": 1,
+      "message": "Please add comment that this should be used only for global handles when making them weak.",
+      "range": {
+        "startLine": 62,
+        "startChar": 22,
+        "endLine": 62,
+        "endChar": 38
+      },
+      "revId": "e4efb80a2443741fedccd30d5f11234281203565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0f4f971_4fe1967d",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-01T10:00:29Z",
+      "side": 1,
+      "message": "Destructor of this class must call DestroyHandle",
+      "range": {
+        "startLine": 136,
+        "startChar": 11,
+        "endLine": 136,
+        "endChar": 27
+      },
+      "revId": "e4efb80a2443741fedccd30d5f11234281203565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac70d51b_64804042",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-01T10:00:29Z",
+      "side": 1,
+      "message": "No need for unique_ptr",
+      "range": {
+        "startLine": 144,
+        "startChar": 1,
+        "endLine": 144,
+        "endChar": 18
+      },
+      "revId": "e4efb80a2443741fedccd30d5f11234281203565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85cab403_e6d0dabd",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-01T10:00:29Z",
+      "side": 1,
+      "message": "If scripts are reclaimed, we will end up with many empty WeakScriptHandles that are still in the scripts hashtable. Is it okay? Or should we also remove the entry from the table when the corrsponding script is reclaimed?",
+      "range": {
+        "startLine": 337,
+        "startChar": 36,
+        "endLine": 337,
+        "endChar": 52
+      },
+      "revId": "e4efb80a2443741fedccd30d5f11234281203565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
