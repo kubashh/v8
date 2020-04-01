@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef05a925_41b5be05",
+        "filename": "src/heap/off-thread-factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-01T11:08:55Z",
+      "side": 1,
+      "message": "Let\u0027s use ShouldExpandOldGenerationOnSlowAllocation to trigger ordinary GC here for the cases when incremental marking is disabled:\nif (!ShouldExpandOldGenerationOnSlowAllocation() || !heap-\u003eCanExpandOldGeneration(1 * MB)) {\n   CollectGarbage(OLD_SPACE,\n                   GarbageCollectionReason::kAllocationFailure);\n}",
+      "range": {
+        "startLine": 177,
+        "startChar": 15,
+        "endLine": 177,
+        "endChar": 37
+      },
+      "revId": "748525801d9e7fa8e05bac4d011dc105c7f9cb71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
