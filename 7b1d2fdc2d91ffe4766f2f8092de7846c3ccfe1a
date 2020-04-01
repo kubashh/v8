@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c7ce404_3b980329",
+        "filename": "src/handles/handles.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-01T12:01:23Z",
+      "side": 1,
+      "message": "This looks like a footgun, since it\u0027s returning a pointer *into* this handle. Handles are often stack-allocated, so this can easily lead to use-after-free bugs if used incorrectly.\n\nAs discussed offline, wouldn\u0027t it be better to store a std::unique_ptr\u003cAddress*\u003e instead of std::unique_ptr\u003cHandle\u003cScript\u003e\u003e? The weak global handles seem to be based on Address** anyway, and we can always get back a handle via the Handle(Address*) constructor.",
+      "revId": "7b1d2fdc2d91ffe4766f2f8092de7846c3ccfe1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8434ed94_1be23999",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-01T12:01:23Z",
+      "side": 1,
+      "message": "Since we destroy the global handle in the destructor, I think it makes sense to also create it in the constructor.",
+      "revId": "7b1d2fdc2d91ffe4766f2f8092de7846c3ccfe1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62c71ed7_f7a706a1",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-01T12:01:23Z",
+      "side": 1,
+      "message": "since emplace already calls the constructor, you should be able to just do:\nscripts.emplace(native_module, global_handle);",
+      "range": {
+        "startLine": 1134,
+        "startChar": 0,
+        "endLine": 1135,
+        "endChar": 64
+      },
+      "revId": "7b1d2fdc2d91ffe4766f2f8092de7846c3ccfe1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
