@@ -434,9 +434,6 @@ class Heap {
 
   void NotifyOldGenerationExpansion();
 
-  // Notifies the heap that an off-thread space has been merged into it.
-  void NotifyOffThreadSpaceMerged();
-
   inline Address* NewSpaceAllocationTopAddress();
   inline Address* NewSpaceAllocationLimitAddress();
   inline Address* OldSpaceAllocationTopAddress();
@@ -2243,6 +2240,7 @@ class Heap {
 
   // The allocator interface.
   friend class Factory;
+  friend class OffThreadFactory;
 
   // The Isolate constructs us.
   friend class Isolate;
