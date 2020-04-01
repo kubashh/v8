@@ -59,6 +59,9 @@ class HandleBase {
   // used for hashing handles; do not ever try to dereference it.
   V8_INLINE Address address() const { return bit_cast<Address>(location_); }
 
+  // This should only be used when making global handles weak.
+  V8_INLINE Address** location_address() { return &location_; }
+
   // Returns the address to where the raw pointer is stored.
   V8_INLINE Address* location() const {
     SLOW_DCHECK(location_ == nullptr || IsDereferenceAllowed());
