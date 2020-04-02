@@ -634,6 +634,8 @@ class LiftoffCompiler {
   }
 
   void GenerateOutOfLineCode(OutOfLineCode* ool) {
+    DEBUG_CODE_COMMENT(
+        (std::string("Out of line: ") + GetRuntimeStubName(ool->stub)).c_str());
     __ bind(ool->label.get());
     const bool is_stack_check = ool->stub == WasmCode::kWasmStackGuard;
     const bool is_mem_out_of_bounds =
@@ -660,6 +662,12 @@ class LiftoffCompiler {
     }
 
     if (!ool->regs_to_save.is_empty()) __ PushRegisters(ool->regs_to_save);
+
+    // In debug code, spill all registers so we can inspect them when "break on
+    // exception" is enabled.
+    if (V8_UNLIKELY(env_->debug) && !is_stack_check) {
+      __ SpillAllRegisters();
+    }
 
     source_position_table_builder_.AddPosition(
         __ pc_offset(), SourcePosition(ool->position), true);
