@@ -22,6 +22,30 @@
       "revId": "85a7ffaf23eea2139f42aed85cf76ee7496b8989",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4171ee4d_346f43e5",
+        "filename": "test/inspector/debugger/wasm-scripts.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-02T13:15:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea2d803f_59e5de6b",
+      "range": {
+        "startLine": 43,
+        "startChar": 20,
+        "endLine": 43,
+        "endChar": 26
+      },
+      "revId": "85a7ffaf23eea2139f42aed85cf76ee7496b8989",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
