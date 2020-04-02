@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea2d803f_59e5de6b",
+        "filename": "test/inspector/debugger/wasm-scripts.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-02T12:33:45Z",
+      "side": 1,
+      "message": "You can use {scriptIds.length} instead of {nextId}.",
+      "range": {
+        "startLine": 43,
+        "startChar": 20,
+        "endLine": 43,
+        "endChar": 26
+      },
+      "revId": "85a7ffaf23eea2139f42aed85cf76ee7496b8989",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
