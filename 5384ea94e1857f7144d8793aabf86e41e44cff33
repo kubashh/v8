@@ -16,6 +16,24 @@
       "revId": "5384ea94e1857f7144d8793aabf86e41e44cff33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2569c27a_d4291174",
+        "filename": "test/inspector/debugger/asm-js-breakpoint-before-exec.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-04-02T13:18:02Z",
+      "side": 1,
+      "message": "inspector tests seem to rely on expected output rather than asserts (I tried to use the mjsunit assertTrue function and it didn\u0027t seem to exist).",
+      "parentUuid": "8aabb1c7_d50e899a",
+      "revId": "5384ea94e1857f7144d8793aabf86e41e44cff33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
