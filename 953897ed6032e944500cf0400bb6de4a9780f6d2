@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e687d9c_cf8c77ea",
+        "filename": "src/objects/debug-objects.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-02T07:12:18Z",
+      "side": 1,
+      "message": "Can we say anything about the encoding here?",
+      "revId": "953897ed6032e944500cf0400bb6de4a9780f6d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
