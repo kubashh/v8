@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0de89436_9724f553",
+        "filename": "src/parsing/parse-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-04-02T13:13:25Z",
+      "side": 0,
+      "message": "Can we remove the function from OffThreadIsolate now?",
+      "range": {
+        "startLine": 244,
+        "startChar": 15,
+        "endLine": 244,
+        "endChar": 47
+      },
+      "revId": "bb6f9a707180ea34370334a3628d44bd5dc656c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

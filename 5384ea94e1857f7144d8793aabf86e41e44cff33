@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8aabb1c7_d50e899a",
+        "filename": "test/inspector/debugger/asm-js-breakpoint-before-exec.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-04-02T13:13:25Z",
+      "side": 1,
+      "message": "Should this be some kind of assert instead?",
+      "revId": "5384ea94e1857f7144d8793aabf86e41e44cff33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
