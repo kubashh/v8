@@ -34,6 +34,24 @@
       "revId": "5384ea94e1857f7144d8793aabf86e41e44cff33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61620608_6035e074",
+        "filename": "test/inspector/debugger/asm-js-breakpoint-before-exec.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-04-02T13:19:10Z",
+      "side": 1,
+      "message": "How about printing something explicitly here (which would definitely mess up the output and make it obvious why).",
+      "parentUuid": "2569c27a_d4291174",
+      "revId": "5384ea94e1857f7144d8793aabf86e41e44cff33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
