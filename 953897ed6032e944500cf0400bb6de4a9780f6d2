@@ -16,6 +16,24 @@
       "revId": "953897ed6032e944500cf0400bb6de4a9780f6d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b580d52_4267f165",
+        "filename": "src/objects/debug-objects.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-04-02T20:13:34Z",
+      "side": 1,
+      "message": "Done, lmk if it needs rewording, thanks!",
+      "parentUuid": "3e687d9c_cf8c77ea",
+      "revId": "953897ed6032e944500cf0400bb6de4a9780f6d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
