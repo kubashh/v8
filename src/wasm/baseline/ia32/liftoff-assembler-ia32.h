@@ -2012,6 +2012,19 @@ void LiftoffAssembler::emit_f64x2_replace_lane(LiftoffRegister dst,
   }
 }
 
+void LiftoffAssembler::emit_f64x2_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  if (dst.fp() == src.fp()) {
+    Pcmpeqd(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg);
+    Psllq(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg, 63);
+    Xorpd(dst.fp(), liftoff::kScratchDoubleReg);
+  } else {
+    Pcmpeqd(dst.fp(), dst.fp());
+    Psllq(dst.fp(), dst.fp(), 63);
+    Xorpd(dst.fp(), src.fp());
+  }
+}
+
 void LiftoffAssembler::emit_f64x2_add(LiftoffRegister dst, LiftoffRegister lhs,
                                       LiftoffRegister rhs) {
   liftoff::EmitSimdCommutativeBinOp<&Assembler::vaddpd, &Assembler::addpd>(
@@ -2069,6 +2082,19 @@ void LiftoffAssembler::emit_f32x4_replace_lane(LiftoffRegister dst,
   }
 }
 
+void LiftoffAssembler::emit_f32x4_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  if (dst.fp() == src.fp()) {
+    Pcmpeqd(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg);
+    Pslld(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg, 31);
+    Xorps(dst.fp(), liftoff::kScratchDoubleReg);
+  } else {
+    Pcmpeqd(dst.fp(), dst.fp());
+    Pslld(dst.fp(), dst.fp(), 31);
+    Xorps(dst.fp(), src.fp());
+  }
+}
+
 void LiftoffAssembler::emit_f32x4_add(LiftoffRegister dst, LiftoffRegister lhs,
                                       LiftoffRegister rhs) {
   liftoff::EmitSimdCommutativeBinOp<&Assembler::vaddps, &Assembler::addps>(
@@ -2114,6 +2140,20 @@ void LiftoffAssembler::emit_i64x2_replace_lane(LiftoffRegister dst,
     if (dst.fp() != src1.fp()) movaps(dst.fp(), src1.fp());
     pinsrd(dst.fp(), src2.low_gp(), imm_lane_idx * 2);
     pinsrd(dst.fp(), src2.high_gp(), imm_lane_idx * 2 + 1);
+  }
+}
+
+void LiftoffAssembler::emit_i64x2_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  DoubleRegister tmp =
+      dst.fp() == src.fp() ? liftoff::kScratchDoubleReg : dst.fp();
+  Pxor(tmp, tmp);
+  if (CpuFeatures::IsSupported(AVX)) {
+    CpuFeatureScope scope(this, AVX);
+    vpsubq(dst.fp(), tmp, src.fp());
+  } else {
+    psubq(tmp, src.fp());
+    if (src.fp() == dst.fp()) movapd(dst.fp(), tmp);
   }
 }
 
@@ -2182,6 +2222,17 @@ void LiftoffAssembler::emit_i32x4_replace_lane(LiftoffRegister dst,
   }
 }
 
+void LiftoffAssembler::emit_i32x4_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  if (dst.fp() == src.fp()) {
+    Pcmpeqd(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg);
+    Psignd(dst.fp(), liftoff::kScratchDoubleReg);
+  } else {
+    Pxor(dst.fp(), dst.fp());
+    Psubd(dst.fp(), src.fp());
+  }
+}
+
 void LiftoffAssembler::emit_i32x4_add(LiftoffRegister dst, LiftoffRegister lhs,
                                       LiftoffRegister rhs) {
   liftoff::EmitSimdCommutativeBinOp<&Assembler::vpaddd, &Assembler::paddd>(
@@ -2230,6 +2281,17 @@ void LiftoffAssembler::emit_i16x8_replace_lane(LiftoffRegister dst,
   } else {
     if (dst.fp() != src1.fp()) movaps(dst.fp(), src1.fp());
     pinsrw(dst.fp(), src2.gp(), imm_lane_idx);
+  }
+}
+
+void LiftoffAssembler::emit_i16x8_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  if (dst.fp() == src.fp()) {
+    Pcmpeqd(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg);
+    Psignw(dst.fp(), liftoff::kScratchDoubleReg);
+  } else {
+    Pxor(dst.fp(), dst.fp());
+    Psubw(dst.fp(), src.fp());
   }
 }
 
@@ -2296,6 +2358,17 @@ void LiftoffAssembler::emit_i8x16_replace_lane(LiftoffRegister dst,
     CpuFeatureScope scope(this, SSE4_1);
     if (dst.fp() != src1.fp()) movaps(dst.fp(), src1.fp());
     pinsrb(dst.fp(), src2.gp(), imm_lane_idx);
+  }
+}
+
+void LiftoffAssembler::emit_i8x16_neg(LiftoffRegister dst,
+                                      LiftoffRegister src) {
+  if (dst.fp() == src.fp()) {
+    Pcmpeqd(liftoff::kScratchDoubleReg, liftoff::kScratchDoubleReg);
+    Psignb(dst.fp(), liftoff::kScratchDoubleReg);
+  } else {
+    Pxor(dst.fp(), dst.fp());
+    Psubb(dst.fp(), src.fp());
   }
 }
 
