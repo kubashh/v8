@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab938c9e_84a7d59d",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2638,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-04-03T18:58:51Z",
+      "side": 1,
+      "message": "This is all of V8\u0027s supported architectures, and other unimplemented stubs should go into backend specific instruction selectors. Maybe remove the stubs here?",
+      "revId": "0b6e1e507aafa7bb5f8551d59489b48ebb98e129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb8c7e8b_a82f01b4",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-04-03T18:58:51Z",
+      "side": 1,
+      "message": "Same comment as the the one in the instruction-selector, though I feel less strongly about it here.",
+      "revId": "0b6e1e507aafa7bb5f8551d59489b48ebb98e129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
