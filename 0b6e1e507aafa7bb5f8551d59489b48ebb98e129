@@ -51,6 +51,24 @@
       "revId": "0b6e1e507aafa7bb5f8551d59489b48ebb98e129",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bea21654_999b7d23",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-04-03T23:16:04Z",
+      "side": 1,
+      "message": "Ah yes, good point. Initially I was thinking since this is a prototype for implementation, let\u0027s guard this, so other unsupported archs don\u0027t have to care yet, because if we decide to strip this out (bitmask does not get into the proposal), we can remove this code without affect those other archs. Wdyt?",
+      "parentUuid": "f8b26c21_155fd05e",
+      "revId": "0b6e1e507aafa7bb5f8551d59489b48ebb98e129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
