@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c2f705f_5832f096",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-03T16:41:02Z",
+      "side": 1,
+      "message": "I looks like GetSimd128Register is almost always used with a LiftoffRegister. Might be worth overloading it to save the \".low_fp()\" on all the call sites.",
+      "revId": "d1da44d834e4aec3a6aca3a6e951a2f9bbe87a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
