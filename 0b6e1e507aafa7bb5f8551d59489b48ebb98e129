@@ -69,6 +69,24 @@
       "revId": "0b6e1e507aafa7bb5f8551d59489b48ebb98e129",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3de4fbf0_9443d9fc",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-04-04T00:29:02Z",
+      "side": 1,
+      "message": "Oh sure, that makes sense. We can leave the ifdefs in for now. The tests should be okay, but perhaps add a todo in the instruction-selector to remove? Just so there\u0027s a note for why they are still there.",
+      "parentUuid": "bea21654_999b7d23",
+      "revId": "0b6e1e507aafa7bb5f8551d59489b48ebb98e129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
