@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "76a2d59f_e19f79d6",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3492,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-04-06T14:19:18Z",
+      "side": 1,
+      "message": "Is there no need to align size in all other cases?",
+      "range": {
+        "startLine": 3492,
+        "startChar": 10,
+        "endLine": 3492,
+        "endChar": 70
+      },
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8933a3c5_ca34953e",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4146,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-04-06T14:19:18Z",
+      "side": 1,
+      "message": "As discussed offline, please add a comment why this is like that.",
+      "range": {
+        "startLine": 4139,
+        "startChar": 2,
+        "endLine": 4146,
+        "endChar": 3
+      },
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "622f47ff_8243948a",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-04-06T14:19:18Z",
+      "side": 1,
+      "message": "For functions that are expected to be called only once, I prefer names like InitializeXYZ instead of SetXYZ.",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 557,
+        "endChar": 44
+      },
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3c861b76_9d64e92f",
         "filename": "src/torque/types.cc",
         "patchSetId": 10
@@ -47,6 +116,29 @@
       "writtenOn": "2020-03-24T21:58:43Z",
       "side": 1,
       "message": "This makes sense to me right now, but if I come back to it in six months I\u0027ll probably appreciate a comment mentioning that a slot is a tagged pointer worth of data.",
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03360595_21356ca2",
+        "filename": "src/torque/types.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-04-06T14:19:18Z",
+      "side": 1,
+      "message": "Why is this const (and why are the respective members mutable)? Please add a comment.",
+      "range": {
+        "startLine": 702,
+        "startChar": 2,
+        "endLine": 703,
+        "endChar": 72
+      },
       "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
