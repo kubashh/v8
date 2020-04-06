@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/builtins/builtins-wasm-gen.h"
+
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/codegen/code-stub-assembler.h"
 #include "src/codegen/interface-descriptors.h"
@@ -12,30 +14,39 @@
 namespace v8 {
 namespace internal {
 
-class WasmBuiltinsAssembler : public CodeStubAssembler {
- public:
-  explicit WasmBuiltinsAssembler(compiler::CodeAssemblerState* state)
-      : CodeStubAssembler(state) {}
+TNode<WasmInstanceObject> WasmBuiltinsAssembler::LoadInstanceFromFrame() {
+  return CAST(
+      LoadFromParentFrame(WasmCompiledFrameConstants::kWasmInstanceOffset));
+}
 
- protected:
-  TNode<WasmInstanceObject> LoadInstanceFromFrame() {
-    return CAST(
-        LoadFromParentFrame(WasmCompiledFrameConstants::kWasmInstanceOffset));
-  }
+TNode<Context> WasmBuiltinsAssembler::LoadContextFromInstance(
+    TNode<WasmInstanceObject> instance) {
+  return CAST(Load(MachineType::AnyTagged(), instance,
+                   IntPtrConstant(WasmInstanceObject::kNativeContextOffset -
+                                  kHeapObjectTag)));
+}
 
-  TNode<Context> LoadContextFromInstance(TNode<WasmInstanceObject> instance) {
-    return CAST(Load(MachineType::AnyTagged(), instance,
-                     IntPtrConstant(WasmInstanceObject::kNativeContextOffset -
-                                    kHeapObjectTag)));
-  }
+TNode<Smi> WasmBuiltinsAssembler::SmiFromUint32WithSaturation(
+    TNode<Uint32T> value, uint32_t max) {
+  DCHECK_LE(max, static_cast<uint32_t>(Smi::kMaxValue));
+  TNode<Uint32T> capped_value = SelectConstant(
+      Uint32LessThan(value, Uint32Constant(max)), value, Uint32Constant(max));
+  return SmiFromUint32(capped_value);
+}
 
-  TNode<Smi> SmiFromUint32WithSaturation(TNode<Uint32T> value, uint32_t max) {
-    DCHECK_LE(max, static_cast<uint32_t>(Smi::kMaxValue));
-    TNode<Uint32T> capped_value = SelectConstant(
-        Uint32LessThan(value, Uint32Constant(max)), value, Uint32Constant(max));
-    return SmiFromUint32(capped_value);
-  }
-};
+// Manually generate this Wasm builtin since it requires custom FP register
+// linkage on ia32. TODO(bbudge) Torque-ify this when the FP issue is fixed.
+TF_BUILTIN(WasmFloat32ToNumber, WasmBuiltinsAssembler) {
+  TNode<Float32T> val = UncheckedCast<Float32T>(Parameter(Descriptor::kValue));
+  Return(ChangeFloat32ToTagged(val));
+}
+
+// Manually generate this Wasm builtin since it requires custom FP register
+// linkage on ia32. TODO(bbudge) Torque-ify this when the FP issue is fixed.
+TF_BUILTIN(WasmFloat64ToNumber, WasmBuiltinsAssembler) {
+  TNode<Float64T> val = UncheckedCast<Float64T>(Parameter(Descriptor::kValue));
+  Return(ChangeFloat64ToTagged(val));
+}
 
 TF_BUILTIN(WasmStackGuard, WasmBuiltinsAssembler) {
   TNode<WasmInstanceObject> instance = LoadInstanceFromFrame();

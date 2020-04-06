@@ -851,6 +851,8 @@ namespace internal {
   /* Wasm */                                                                   \
   ASM(WasmCompileLazy, Dummy)                                                  \
   ASM(WasmDebugBreak, Dummy)                                                   \
+  TFC(WasmFloat32ToNumber, WasmFloat32ToNumber)                                \
+  TFC(WasmFloat64ToNumber, WasmFloat64ToNumber)                                \
   TFC(WasmAtomicNotify, WasmAtomicNotify)                                      \
   TFC(WasmI32AtomicWait32, WasmI32AtomicWait32)                                \
   TFC(WasmI32AtomicWait64, WasmI32AtomicWait64)                                \

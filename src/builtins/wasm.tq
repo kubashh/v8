@@ -1,0 +1,21 @@
+// Copyright 2020 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include 'src/builtins/builtins-array-gen.h'
+
+namespace wasm {
+  builtin WasmInt32ToHeapNumber(implicit context: Context)(val: int32):
+      HeapNumber {
+    return AllocateHeapNumberWithValue(Convert<float64>(val));
+  }
+
+  builtin WasmTaggedNonSmiToInt32(implicit context: Context)(val: Object):
+      int32 {
+    return ChangeTaggedNonSmiToInt32(context, val);
+  }
+
+  builtin WasmTaggedToFloat64(implicit context: Context)(val: Object): float64 {
+    return ChangeTaggedToFloat64(context, val);
+  }
+}

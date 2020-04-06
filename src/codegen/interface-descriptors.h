@@ -90,6 +90,8 @@ namespace internal {
   V(TypeConversionStackParameter)     \
   V(Typeof)                           \
   V(Void)                             \
+  V(WasmFloat32ToNumber)              \
+  V(WasmFloat64ToNumber)              \
   V(WasmAtomicNotify)                 \
   V(WasmI32AtomicWait32)              \
   V(WasmI32AtomicWait64)              \
@@ -1308,6 +1310,22 @@ class RunMicrotasksDescriptor final : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR(RunMicrotasksDescriptor, CallInterfaceDescriptor)
 
   static Register MicrotaskQueueRegister();
+};
+
+class WasmFloat32ToNumberDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kValue)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),  // result
+                                    MachineType::Float32())    // value
+  DECLARE_DESCRIPTOR(WasmFloat32ToNumberDescriptor, CallInterfaceDescriptor)
+};
+
+class WasmFloat64ToNumberDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kValue)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),  // result
+                                    MachineType::Float64())    // value
+  DECLARE_DESCRIPTOR(WasmFloat64ToNumberDescriptor, CallInterfaceDescriptor)
 };
 
 class WasmMemoryGrowDescriptor final : public CallInterfaceDescriptor {
