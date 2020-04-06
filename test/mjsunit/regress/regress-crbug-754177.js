@@ -10,3 +10,6 @@
 %NeverOptimizeFunction(1);
 %NeverOptimizeFunction({});
 assertThrows("%NeverOptimizeFunction()", SyntaxError);
+
+%PrepareFunctionForOptimization(print);
+%OptimizeFunctionOnNextCall(print);
