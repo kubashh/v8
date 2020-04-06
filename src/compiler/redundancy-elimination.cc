@@ -333,8 +333,7 @@ Reduction RedundancyElimination::ReduceSpeculativeNumberComparison(Node* node) {
           // the regular Number comparisons in JavaScript also identify
           // 0 and -0 (unlike special comparisons as Object.is).
           NodeProperties::ReplaceValueInput(node, check, 0);
-          Reduction const reduction = ReduceSpeculativeNumberComparison(node);
-          return reduction.Changed() ? reduction : Changed(node);
+          return Changed(node).Combine(ReduceSpeculativeNumberComparison(node));
         }
       }
     }
@@ -351,8 +350,7 @@ Reduction RedundancyElimination::ReduceSpeculativeNumberComparison(Node* node) {
           // the regular Number comparisons in JavaScript also identify
           // 0 and -0 (unlike special comparisons as Object.is).
           NodeProperties::ReplaceValueInput(node, check, 1);
-          Reduction const reduction = ReduceSpeculativeNumberComparison(node);
-          return reduction.Changed() ? reduction : Changed(node);
+          return Changed(node).Combine(ReduceSpeculativeNumberComparison(node));
         }
       }
     }
