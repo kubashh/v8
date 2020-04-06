@@ -17,9 +17,9 @@ class Heap;
 class LocalHeap;
 class RootVisitor;
 
-class Safepoint {
+class SafepointManager {
  public:
-  explicit Safepoint(Heap* heap);
+  explicit SafepointManager(Heap* heap);
 
   // Enter the safepoint from a thread
   void EnterFromThread(LocalHeap* local_heap);
@@ -34,7 +34,7 @@ class Safepoint {
   void Start();
   void End();
 
-  bool IsActive() { return is_active_; }
+  bool IsActive() { return level_ > 0; }
 
  private:
   class Barrier {
@@ -62,7 +62,7 @@ class Safepoint {
   base::Mutex local_heaps_mutex_;
   LocalHeap* local_heaps_head_;
 
-  bool is_active_;
+  int level_;
 
   friend class SafepointScope;
   friend class LocalHeap;
@@ -75,7 +75,7 @@ class SafepointScope {
   V8_EXPORT_PRIVATE ~SafepointScope();
 
  private:
-  Safepoint* safepoint_;
+  SafepointManager* safepoint_;
 };
 
 }  // namespace internal

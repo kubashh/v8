@@ -202,7 +202,7 @@ Heap::Heap()
     : isolate_(isolate()),
       memory_pressure_level_(MemoryPressureLevel::kNone),
       global_pretenuring_feedback_(kInitialFeedbackCapacity),
-      safepoint_(new Safepoint(this)),
+      safepoint_(new SafepointManager(this)),
       external_string_table_(this) {
   // Ensure old_generation_size_ is a multiple of kPageSize.
   DCHECK_EQ(0, max_old_generation_size_ & (Page::kPageSize - 1));
@@ -2010,7 +2010,7 @@ bool Heap::PerformGarbageCollection(
     }
   }
 
-  if (FLAG_local_heaps) safepoint()->Start();
+  safepoint()->Start();
 #ifdef VERIFY_HEAP
   if (FLAG_verify_heap) {
     Verify();
@@ -2095,7 +2095,7 @@ bool Heap::PerformGarbageCollection(
     Verify();
   }
 #endif
-  if (FLAG_local_heaps) safepoint()->End();
+  safepoint()->End();
 
   {
     TRACE_GC(tracer(), GCTracer::Scope::HEAP_EXTERNAL_WEAK_GLOBAL_HANDLES);
@@ -3157,6 +3157,7 @@ FixedArrayBase Heap::LeftTrimFixedArray(FixedArrayBase object,
     // Make sure the stack or other roots (e.g., Handles) don't contain pointers
     // to the original FixedArray (which is now the filler object).
     LeftTrimmerVerifierRootVisitor root_visitor(object);
+    SafepointScope scope(this);
     ReadOnlyRoots(this).Iterate(&root_visitor);
     IterateRoots(&root_visitor, VISIT_ALL);
   }
@@ -4115,6 +4116,7 @@ class VerifyReadOnlyPointersVisitor : public VerifyPointersVisitor {
 void Heap::Verify() {
   CHECK(HasBeenSetUp());
   HandleScope scope(isolate());
+  SafepointScope safepoint(this);
 
   // We have to wait here for the sweeper threads to have an iterable heap.
   mark_compact_collector()->EnsureSweepingCompleted();
@@ -4470,12 +4472,12 @@ void Heap::IterateStrongRoots(RootVisitor* v, VisitMode mode) {
   isolate_->handle_scope_implementer()->Iterate(&left_trim_visitor);
   isolate_->handle_scope_implementer()->Iterate(v);
 
-  if (FLAG_local_heaps) {
-    safepoint_->Iterate(&left_trim_visitor);
-    safepoint_->Iterate(v);
-    isolate_->persistent_handles_list()->Iterate(&left_trim_visitor);
-    isolate_->persistent_handles_list()->Iterate(v);
-  }
+  // Iterate local handles in local heaps
+  safepoint_->Iterate(&left_trim_visitor);
+  safepoint_->Iterate(v);
+
+  isolate_->persistent_handles_list()->Iterate(&left_trim_visitor);
+  isolate_->persistent_handles_list()->Iterate(v);
 
   isolate_->IterateDeferredHandles(&left_trim_visitor);
   isolate_->IterateDeferredHandles(v);
@@ -5378,12 +5380,8 @@ void Heap::StartTearDown() {
   // a good time to run heap verification (if requested), before starting to
   // tear down parts of the Isolate.
   if (FLAG_verify_heap) {
-    if (FLAG_local_heaps) {
       SafepointScope scope(this);
       Verify();
-    } else {
-      Verify();
-    }
   }
 #endif
 }

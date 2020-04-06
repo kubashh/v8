@@ -78,7 +78,7 @@ class LocalHeap {
   std::unique_ptr<PersistentHandles> persistent_handles_;
 
   friend class Heap;
-  friend class Safepoint;
+  friend class SafepointManager;
   friend class ParkedScope;
 };
 

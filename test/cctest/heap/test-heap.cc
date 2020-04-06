@@ -44,6 +44,7 @@
 #include "src/heap/mark-compact.h"
 #include "src/heap/memory-reducer.h"
 #include "src/heap/remembered-set.h"
+#include "src/heap/safepoint.h"
 #include "src/ic/ic.h"
 #include "src/numbers/hash-seed-inl.h"
 #include "src/objects/elements.h"
@@ -4889,6 +4890,7 @@ TEST(Regress507979) {
   CHECK(Heap::InYoungGeneration(*o1));
   CHECK(Heap::InYoungGeneration(*o2));
 
+  SafepointScope scope(isolate->heap());
   HeapObjectIterator it(isolate->heap(),
                         i::HeapObjectIterator::kFilterUnreachable);
 

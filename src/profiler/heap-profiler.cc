@@ -8,6 +8,7 @@
 #include "src/debug/debug.h"
 #include "src/heap/combined-heap.h"
 #include "src/heap/heap-inl.h"
+#include "src/heap/safepoint.h"
 #include "src/profiler/allocation-tracker.h"
 #include "src/profiler/heap-snapshot-generator-inl.h"
 #include "src/profiler/sampling-heap-profiler.h"
@@ -185,6 +186,7 @@ void HeapProfiler::UpdateObjectSizeEvent(Address addr, int size) {
 
 Handle<HeapObject> HeapProfiler::FindHeapObjectById(SnapshotObjectId id) {
   HeapObject object;
+  SafepointScope scope(heap());
   CombinedHeapObjectIterator iterator(heap(),
                                       HeapObjectIterator::kFilterUnreachable);
   // Make sure that object with the given id is still reachable.
@@ -215,6 +217,7 @@ Isolate* HeapProfiler::isolate() const { return heap()->isolate(); }
 void HeapProfiler::QueryObjects(Handle<Context> context,
                                 debug::QueryObjectPredicate* predicate,
                                 PersistentValueVector<v8::Object>* objects) {
+  SafepointScope scope(heap());
   {
     CombinedHeapObjectIterator function_heap_iterator(
         heap(), HeapObjectIterator::kFilterUnreachable);
