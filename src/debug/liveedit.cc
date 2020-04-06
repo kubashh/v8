@@ -17,6 +17,7 @@
 #include "src/execution/frames-inl.h"
 #include "src/execution/isolate-inl.h"
 #include "src/execution/v8threads.h"
+#include "src/heap/safepoint.h"
 #include "src/init/v8.h"
 #include "src/logging/log.h"
 #include "src/objects/hash-table-inl.h"
@@ -827,6 +828,7 @@ class FunctionDataMap : public ThreadVisitor {
 
   void Fill(Isolate* isolate, Address* restart_frame_fp) {
     {
+      SafepointScope safepoint(isolate->heap());
       HeapObjectIterator iterator(isolate->heap(),
                                   HeapObjectIterator::kFilterUnreachable);
       for (HeapObject obj = iterator.Next(); !obj.is_null();

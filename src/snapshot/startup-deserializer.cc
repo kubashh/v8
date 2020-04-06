@@ -8,6 +8,7 @@
 #include "src/codegen/assembler-inl.h"
 #include "src/execution/v8threads.h"
 #include "src/heap/heap-inl.h"
+#include "src/heap/safepoint.h"
 #include "src/snapshot/snapshot.h"
 
 namespace v8 {
@@ -31,6 +32,7 @@ void StartupDeserializer::DeserializeInto(Isolate* isolate) {
 
   {
     DisallowHeapAllocation no_gc;
+    SafepointScope scope(isolate->heap());
     isolate->heap()->IterateSmiRoots(this);
     isolate->heap()->IterateStrongRoots(this, VISIT_FOR_SERIALIZATION);
     Iterate(isolate, this);

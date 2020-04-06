@@ -10,6 +10,7 @@
 #include "src/handles/global-handles.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/read-only-heap.h"
+#include "src/heap/safepoint.h"
 #include "src/objects/contexts.h"
 #include "src/objects/foreign-inl.h"
 #include "src/objects/objects-inl.h"
@@ -145,6 +146,7 @@ void StartupSerializer::SerializeStrongReferences() {
 
   // Visit smi roots and immortal immovables first to make sure they end up in
   // the first page.
+  SafepointScope scope(isolate->heap());
   isolate->heap()->IterateSmiRoots(this);
   isolate->heap()->IterateStrongRoots(this, VISIT_FOR_SERIALIZATION);
 }

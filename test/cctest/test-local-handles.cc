@@ -66,7 +66,6 @@ class LocalHandlesThread final : public v8::base::Thread {
 
 TEST(CreateLocalHandles) {
   CcTest::InitializeVM();
-  FLAG_local_heaps = true;
   Isolate* isolate = CcTest::i_isolate();
 
   Address object = kNullAddress;

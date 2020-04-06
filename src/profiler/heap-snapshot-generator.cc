@@ -11,6 +11,7 @@
 #include "src/debug/debug.h"
 #include "src/handles/global-handles.h"
 #include "src/heap/combined-heap.h"
+#include "src/heap/safepoint.h"
 #include "src/numbers/conversions.h"
 #include "src/objects/allocation-site-inl.h"
 #include "src/objects/api-callbacks.h"
@@ -1485,6 +1486,7 @@ bool V8HeapExplorer::IterateAndExtractReferences(
   // Make sure builtin code objects get their builtin tags
   // first. Otherwise a particular JSFunction object could set
   // its custom name to a generic builtin.
+  SafepointScope scope(heap_);
   RootsReferencesExtractor extractor(this);
   ReadOnlyRoots(heap_).Iterate(&extractor);
   heap_->IterateRoots(&extractor, VISIT_ONLY_STRONG);
@@ -2021,6 +2023,7 @@ class NullContextForSnapshotScope {
 }  //  namespace
 
 bool HeapSnapshotGenerator::GenerateSnapshot() {
+  SafepointScope scope(heap_);
   v8_heap_explorer_.TagGlobalObjects();
 
   // TODO(1562) Profiler assumes that any object that is in the heap after
