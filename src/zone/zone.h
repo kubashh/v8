@@ -141,6 +141,9 @@ class ZoneObject {
  public:
   // Allocate a new ZoneObject of 'size' bytes in the Zone.
   void* operator new(size_t size, Zone* zone) { return zone->New(size); }
+  // Preserve the ability to do normal placement new on ZoneObjects.
+  // This is necessary to use base::LeakyInstance with ZoneObject.
+  void* operator new(size_t size, void* storage) { return storage; }
 
   // Ideally, the delete operator should be private instead of
   // public, but unfortunately the compiler sometimes synthesizes
