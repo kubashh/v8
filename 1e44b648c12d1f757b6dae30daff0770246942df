@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d200ed3a_f29ba784",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3492,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-04-07T07:35:03Z",
+      "side": 1,
+      "message": "TargetArchitecture::TaggedSize() is the basic alignment of all allocations maintained by the GC. So there is no point in having bigger alignments.",
+      "parentUuid": "76a2d59f_e19f79d6",
+      "range": {
+        "startLine": 3492,
+        "startChar": 10,
+        "endLine": 3492,
+        "endChar": 70
+      },
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8933a3c5_ca34953e",
         "filename": "src/torque/implementation-visitor.cc",
         "patchSetId": 10
