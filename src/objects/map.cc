@@ -655,7 +655,7 @@ Map Map::FindRootMap(Isolate* isolate) const {
     if (back.IsUndefined(isolate)) {
       // Initial map must not contain descriptors in the descriptors array
       // that do not belong to the map.
-      DCHECK_EQ(result.NumberOfOwnDescriptors(),
+      DCHECK_LE(result.NumberOfOwnDescriptors(),
                 result.instance_descriptors().number_of_descriptors());
       return result;
     }
@@ -2374,19 +2374,58 @@ Handle<Map> Map::CopyAddDescriptor(Isolate* isolate, Handle<Map> map,
     return ShareDescriptor(isolate, map, descriptors, descriptor);
   }
 
-  int nof = map->NumberOfOwnDescriptors();
-  Handle<DescriptorArray> new_descriptors =
-      DescriptorArray::CopyUpTo(isolate, descriptors, nof, 1);
-  new_descriptors->Append(descriptor);
+  Handle<DescriptorArray> new_descriptors;
+  Handle<LayoutDescriptor> new_layout_descriptor;
+  if (map->is_prototype_map()) {
+    if (descriptors->number_of_slack_descriptors() == 0) {
+      int old_size = descriptors->number_of_descriptors();
+      if (old_size == 0) {
+        new_descriptors = DescriptorArray::Allocate(isolate, 0, 1);
+      } else {
+        int slack = SlackForArraySize(old_size, kMaxNumberOfDescriptors);
+        EnsureDescriptorSlack(isolate, map, slack);
+        new_descriptors = handle(map->instance_descriptors(), isolate);
+      }
+    } else {
+      new_descriptors = descriptors;
+    }
+    new_layout_descriptor =
+        FLAG_unbox_double_fields
+            ? LayoutDescriptor::ShareAppend(isolate, map,
+                                            descriptor->GetDetails())
+            : handle(LayoutDescriptor::FastPointerLayout(), isolate);
+  } else {
+    int nof = map->NumberOfOwnDescriptors();
+    new_descriptors = DescriptorArray::CopyUpTo(isolate, descriptors, nof, 1);
+    new_layout_descriptor =
+        FLAG_unbox_double_fields
+            ? LayoutDescriptor::New(isolate, map, new_descriptors, nof + 1)
+            : handle(LayoutDescriptor::FastPointerLayout(), isolate);
+  }
 
-  Handle<LayoutDescriptor> new_layout_descriptor =
-      FLAG_unbox_double_fields
-          ? LayoutDescriptor::New(isolate, map, new_descriptors, nof + 1)
-          : handle(LayoutDescriptor::FastPointerLayout(), isolate);
+  Handle<Map> result = CopyDropDescriptors(isolate, map);
 
-  return CopyReplaceDescriptors(
-      isolate, map, new_descriptors, new_layout_descriptor, flag,
-      descriptor->GetKey(), "CopyAddDescriptor", SIMPLE_PROPERTY_TRANSITION);
+  if (descriptor->GetKey()->IsInterestingSymbol()) {
+    result->set_may_have_interesting_symbols(true);
+  }
+
+  {
+    DisallowHeapAllocation no_gc;
+    new_descriptors->Append(descriptor);
+    result->InitializeDescriptors(isolate, *new_descriptors,
+                                  *new_layout_descriptor);
+  }
+
+  if (FLAG_trace_maps &&
+      // Mirror conditions above that did not call ConnectTransition().
+      (map->is_prototype_map() ||
+       !(flag == INSERT_TRANSITION &&
+         TransitionsAccessor(isolate, map).CanHaveMoreTransitions()))) {
+    LOG(isolate, MapEvent("ReplaceDescriptors", map, result,
+                          "CopyAddDescriptor", descriptor->GetKey()));
+  }
+
+  return result;
 }
 
 Handle<Map> Map::CopyInsertDescriptor(Isolate* isolate, Handle<Map> map,
