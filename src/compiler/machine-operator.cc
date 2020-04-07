@@ -582,7 +582,7 @@ MachineType AtomicOpType(Operator const* op) {
 template <IrOpcode::Value op, int value_input_count, int effect_input_count,
           int control_input_count, int value_output_count,
           int effect_output_count, int control_output_count>
-struct CachedOperator : public Operator {
+struct CachedOperator : Operator {
   CachedOperator(Operator::Properties properties, const char* mnemonic)
       : Operator(op, properties, mnemonic, value_input_count,
                  effect_input_count, control_input_count, value_output_count,
@@ -591,7 +591,7 @@ struct CachedOperator : public Operator {
 
 template <IrOpcode::Value op, int value_input_count, int control_input_count,
           int value_output_count>
-struct CachedPureOperator : public Operator {
+struct CachedPureOperator : Operator {
   CachedPureOperator(Operator::Properties properties, const char* mnemonic)
       : Operator(op, Operator::kPure | properties, mnemonic, value_input_count,
                  0, control_input_count, value_output_count, 0, 0) {}
@@ -651,14 +651,14 @@ OVERFLOW_OP_LIST(OVERFLOW_OP)
 #undef OVERFLOW_OP
 
 template <MachineRepresentation rep, MachineSemantic sem>
-struct LoadOperator : public Operator1<LoadRepresentation> {
+struct LoadOperator : Operator1<LoadRepresentation> {
   LoadOperator()
       : Operator1(IrOpcode::kLoad, Operator::kEliminatable, "Load", 2, 1, 1, 1,
                   1, 0, LoadRepresentation(rep, sem)) {}
 };
 
 template <MachineRepresentation rep, MachineSemantic sem>
-struct PoisonedLoadOperator : public Operator1<LoadRepresentation> {
+struct PoisonedLoadOperator : Operator1<LoadRepresentation> {
   PoisonedLoadOperator()
       : Operator1(IrOpcode::kPoisonedLoad, Operator::kEliminatable,
                   "PoisonedLoad", 2, 1, 1, 1, 1, 0,
@@ -666,7 +666,7 @@ struct PoisonedLoadOperator : public Operator1<LoadRepresentation> {
 };
 
 template <MachineRepresentation rep, MachineSemantic sem>
-struct UnalignedLoadOperator : public Operator1<LoadRepresentation> {
+struct UnalignedLoadOperator : Operator1<LoadRepresentation> {
   UnalignedLoadOperator()
       : Operator1(IrOpcode::kUnalignedLoad, Operator::kEliminatable,
                   "UnalignedLoad", 2, 1, 1, 1, 1, 0,
@@ -674,7 +674,7 @@ struct UnalignedLoadOperator : public Operator1<LoadRepresentation> {
 };
 
 template <MachineRepresentation rep, MachineSemantic sem>
-struct ProtectedLoadOperator : public Operator1<LoadRepresentation> {
+struct ProtectedLoadOperator : Operator1<LoadRepresentation> {
   ProtectedLoadOperator()
       : Operator1(IrOpcode::kProtectedLoad,
                   Operator::kNoDeopt | Operator::kNoThrow, "ProtectedLoad", 2,
@@ -682,7 +682,7 @@ struct ProtectedLoadOperator : public Operator1<LoadRepresentation> {
 };
 
 template <LoadKind kind, LoadTransformation type>
-struct LoadTransformOperator : public Operator1<LoadTransformParameters> {
+struct LoadTransformOperator : Operator1<LoadTransformParameters> {
   LoadTransformOperator()
       : Operator1(IrOpcode::kLoadTransform, Operator::kEliminatable,
                   "LoadTransform", 2, 1, 1, 1, 1, 0,
@@ -690,7 +690,7 @@ struct LoadTransformOperator : public Operator1<LoadTransformParameters> {
 };
 
 template <MachineRepresentation rep, WriteBarrierKind write_barrier_kind>
-struct StoreOperator : public Operator1<StoreRepresentation> {
+struct StoreOperator : Operator1<StoreRepresentation> {
   StoreOperator()
       : Operator1(IrOpcode::kStore,
                   Operator::kNoDeopt | Operator::kNoRead | Operator::kNoThrow,
@@ -699,7 +699,7 @@ struct StoreOperator : public Operator1<StoreRepresentation> {
 };
 
 template <MachineRepresentation rep>
-struct UnalignedStoreOperator : public Operator1<UnalignedStoreRepresentation> {
+struct UnalignedStoreOperator : Operator1<UnalignedStoreRepresentation> {
   UnalignedStoreOperator()
       : Operator1(IrOpcode::kUnalignedStore,
                   Operator::kNoDeopt | Operator::kNoRead | Operator::kNoThrow,
@@ -716,7 +716,7 @@ struct ProtectedStoreOperator : public Operator1<StoreRepresentation> {
 };
 
 template <MachineRepresentation rep, MachineSemantic sem>
-struct Word32AtomicLoadOperator : public Operator1<LoadRepresentation> {
+struct Word32AtomicLoadOperator : Operator1<LoadRepresentation> {
   Word32AtomicLoadOperator()
       : Operator1(IrOpcode::kWord32AtomicLoad, Operator::kEliminatable,
                   "Word32AtomicLoad", 2, 1, 1, 1, 1, 0, MachineType(rep, sem)) {
@@ -724,7 +724,7 @@ struct Word32AtomicLoadOperator : public Operator1<LoadRepresentation> {
 };
 
 template <MachineRepresentation rep, MachineSemantic sem>
-struct Word64AtomicLoadOperator : public Operator1<LoadRepresentation> {
+struct Word64AtomicLoadOperator : Operator1<LoadRepresentation> {
   Word64AtomicLoadOperator()
       : Operator1(IrOpcode::kWord64AtomicLoad, Operator::kEliminatable,
                   "Word64AtomicLoad", 2, 1, 1, 1, 1, 0, MachineType(rep, sem)) {
@@ -732,7 +732,7 @@ struct Word64AtomicLoadOperator : public Operator1<LoadRepresentation> {
 };
 
 template <MachineRepresentation rep>
-struct Word32AtomicStoreOperator : public Operator1<MachineRepresentation> {
+struct Word32AtomicStoreOperator : Operator1<MachineRepresentation> {
   Word32AtomicStoreOperator()
       : Operator1(IrOpcode::kWord32AtomicStore,
                   Operator::kNoDeopt | Operator::kNoRead | Operator::kNoThrow,
@@ -740,7 +740,7 @@ struct Word32AtomicStoreOperator : public Operator1<MachineRepresentation> {
 };
 
 template <MachineRepresentation rep>
-struct Word64AtomicStoreOperator : public Operator1<MachineRepresentation> {
+struct Word64AtomicStoreOperator : Operator1<MachineRepresentation> {
   Word64AtomicStoreOperator()
       : Operator1(IrOpcode::kWord64AtomicStore,
                   Operator::kNoDeopt | Operator::kNoRead | Operator::kNoThrow,
@@ -769,7 +769,7 @@ ATOMIC_OP(Word64AtomicExchange)
 #undef ATOMIC_OP
 
 template <MachineRepresentation rep, MachineSemantic sem>
-struct Word32AtomicCompareExchangeOperator : public Operator1<MachineType> {
+struct Word32AtomicCompareExchangeOperator : Operator1<MachineType> {
   Word32AtomicCompareExchangeOperator()
       : Operator1(IrOpcode::kWord32AtomicCompareExchange,
                   Operator::kNoDeopt | Operator::kNoThrow,
@@ -778,7 +778,7 @@ struct Word32AtomicCompareExchangeOperator : public Operator1<MachineType> {
 };
 
 template <MachineRepresentation rep, MachineSemantic sem>
-struct Word64AtomicCompareExchangeOperator : public Operator1<MachineType> {
+struct Word64AtomicCompareExchangeOperator : Operator1<MachineType> {
   Word64AtomicCompareExchangeOperator()
       : Operator1(IrOpcode::kWord64AtomicCompareExchange,
                   Operator::kNoDeopt | Operator::kNoThrow,
@@ -801,7 +801,7 @@ struct Word32AtomicPairStoreOperator : public Operator {
 };
 
 #define ATOMIC_PAIR_OP(op)                                      \
-  struct Word32AtomicPair##op##Operator : public Operator {     \
+  struct Word32AtomicPair##op##Operator : Operator {            \
     Word32AtomicPair##op##Operator()                            \
         : Operator(IrOpcode::kWord32AtomicPair##op,             \
                    Operator::kNoDeopt | Operator::kNoThrow,     \
@@ -834,68 +834,68 @@ struct MemoryBarrierOperator : public Operator {
 // might decide to split these operators, thus potentially creating live
 // ranges of allocation top across calls or other things that might allocate.
 // See https://bugs.chromium.org/p/v8/issues/detail?id=6059 for more details.
-struct BitcastWordToTaggedOperator : public Operator {
+struct BitcastWordToTaggedOperator : Operator {
   BitcastWordToTaggedOperator()
       : Operator(IrOpcode::kBitcastWordToTagged,
                  Operator::kEliminatable | Operator::kNoWrite,
                  "BitcastWordToTagged", 1, 1, 1, 1, 1, 0) {}
 };
 
-struct BitcastTaggedToWordOperator : public Operator {
+struct BitcastTaggedToWordOperator : Operator {
   BitcastTaggedToWordOperator()
       : Operator(IrOpcode::kBitcastTaggedToWord,
                  Operator::kEliminatable | Operator::kNoWrite,
                  "BitcastTaggedToWord", 1, 1, 1, 1, 1, 0) {}
 };
 
-struct BitcastMaybeObjectToWordOperator : public Operator {
+struct BitcastMaybeObjectToWordOperator : Operator {
   BitcastMaybeObjectToWordOperator()
       : Operator(IrOpcode::kBitcastTaggedToWord,
                  Operator::kEliminatable | Operator::kNoWrite,
                  "BitcastMaybeObjectToWord", 1, 1, 1, 1, 1, 0) {}
 };
 
-struct TaggedPoisonOnSpeculationOperator : public Operator {
+struct TaggedPoisonOnSpeculationOperator : Operator {
   TaggedPoisonOnSpeculationOperator()
       : Operator(IrOpcode::kTaggedPoisonOnSpeculation,
                  Operator::kEliminatable | Operator::kNoWrite,
                  "TaggedPoisonOnSpeculation", 1, 1, 1, 1, 1, 0) {}
 };
 
-struct Word32PoisonOnSpeculationOperator : public Operator {
+struct Word32PoisonOnSpeculationOperator : Operator {
   Word32PoisonOnSpeculationOperator()
       : Operator(IrOpcode::kWord32PoisonOnSpeculation,
                  Operator::kEliminatable | Operator::kNoWrite,
                  "Word32PoisonOnSpeculation", 1, 1, 1, 1, 1, 0) {}
 };
 
-struct Word64PoisonOnSpeculationOperator : public Operator {
+struct Word64PoisonOnSpeculationOperator : Operator {
   Word64PoisonOnSpeculationOperator()
       : Operator(IrOpcode::kWord64PoisonOnSpeculation,
                  Operator::kEliminatable | Operator::kNoWrite,
                  "Word64PoisonOnSpeculation", 1, 1, 1, 1, 1, 0) {}
 };
 
-struct AbortCSAAssertOperator : public Operator {
+struct AbortCSAAssertOperator : Operator {
   AbortCSAAssertOperator()
       : Operator(IrOpcode::kAbortCSAAssert, Operator::kNoThrow,
                  "AbortCSAAssert", 1, 1, 1, 0, 1, 0) {}
 };
 
-struct DebugBreakOperator : public Operator {
+struct DebugBreakOperator : Operator {
   DebugBreakOperator()
       : Operator(IrOpcode::kDebugBreak, Operator::kNoThrow, "DebugBreak", 0, 1,
                  1, 0, 1, 0) {}
 };
 
-struct UnsafePointerAddOperator : public Operator {
+struct UnsafePointerAddOperator : Operator {
   UnsafePointerAddOperator()
       : Operator(IrOpcode::kUnsafePointerAdd, Operator::kKontrol,
                  "UnsafePointerAdd", 2, 1, 1, 1, 1, 0) {}
 };
 
 template <StackCheckKind kind>
-struct StackPointerGreaterThanOperator : public Operator1<StackCheckKind> {
+struct StackPointerGreaterThanOperator : Operator1<StackCheckKind> {
   StackPointerGreaterThanOperator()
       : Operator1(IrOpcode::kStackPointerGreaterThan, Operator::kEliminatable,
                   "StackPointerGreaterThan", 1, 1, 0, 1, 1, 0, kind) {}
