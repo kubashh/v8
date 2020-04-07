@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Flags: --harmony-weak-refs
+// Flags: --harmony-weak-refs-with-cleanup-some
 
 (function TestConstructFinalizationRegistry() {
   let fg = new FinalizationRegistry(() => {});
