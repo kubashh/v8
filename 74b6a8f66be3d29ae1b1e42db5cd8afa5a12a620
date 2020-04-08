@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "67e5742b_f0af54ed",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4324,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-04-08T18:44:45Z",
+      "side": 1,
+      "message": "Yes, but I\u0027m asking if we need to store it on the native context at all. It isn\u0027t used anywhere other than here in the bootstrapper so we don\u0027t have to waste a word on the native context to store this.",
+      "parentUuid": "3c5df009_b8383bac",
+      "revId": "74b6a8f66be3d29ae1b1e42db5cd8afa5a12a620",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "251a2f96_af4cfa40",
         "filename": "test/mjsunit/harmony/weakrefs/basics.js",
         "patchSetId": 2
