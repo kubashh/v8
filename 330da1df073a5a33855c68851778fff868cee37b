@@ -33,6 +33,24 @@
       "revId": "330da1df073a5a33855c68851778fff868cee37b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e75fa608_c1a46c0a",
+        "filename": "src/regexp/regexp-macro-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-08T06:03:35Z",
+      "side": 1,
+      "message": "\u003e why not inline LCCImpl into its single use in LCC\n\nI see, probably because of the tracer. Wdyt of doing the above and making LoadCurrentCharacter (non-pure) virtual? Then we could just change RMATracer::LCCImpl to RMATracer::LCC.",
+      "parentUuid": "c726befe_0da316b1",
+      "revId": "330da1df073a5a33855c68851778fff868cee37b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
