@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b01008f_5f955131",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 24436,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-08T14:25:13Z",
+      "side": 0,
+      "message": "So these were never always no-ops? Interesting. Good that we\u0027re making the runtime fns stricter now.",
+      "revId": "3836adc755e2ae64c6240f0452d0cccc463f2658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

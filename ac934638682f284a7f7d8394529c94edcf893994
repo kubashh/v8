@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3ed337c_88b26c7b",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-08T14:25:13Z",
+      "side": 1,
+      "message": "nit: These and other related comments read like invalid inputs are ignored, while we in fact crash in non-fuzzing configs.",
+      "revId": "ac934638682f284a7f7d8394529c94edcf893994",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "373be45a_4332b638",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-08T14:25:13Z",
+      "side": 1,
+      "message": "I don\u0027t think this or below is used by fuzzers, is it? In that case we should just CHECK the condition here.\n\nSame below. machenbach@: we have a whitelist of runtime functions used by fuzzers, right? Or is that not used by all fuzzers?",
+      "revId": "ac934638682f284a7f7d8394529c94edcf893994",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aedf677_a5c21cd6",
+        "filename": "test/inspector/debugger/asm-js-breakpoint-before-exec-expected.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-08T14:25:13Z",
+      "side": 1,
+      "message": "If your q was regarding this and below, you changed the definition of the function (it now has fewer lines and statements) thus the line numbers and # of breakpoints here change.",
+      "revId": "ac934638682f284a7f7d8394529c94edcf893994",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
