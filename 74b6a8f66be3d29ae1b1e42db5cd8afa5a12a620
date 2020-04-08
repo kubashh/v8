@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3c5df009_b8383bac",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4324,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-04-08T18:35:09Z",
+      "side": 1,
+      "message": "Isn\u0027t that what InstallWithIntrinsicDefaultProto does? It sets the value on isolate-\u003enative_context() at JS_FINALIZATION_REGISTRY_FUNCTION_INDEX. In InitializeGlobal_harmony_weak_refs_with_cleanup_some below, it\u0027s pulled off isolate()-\u003ejs_finalization_registry_fun(), which is really shorthand for Handle\u003cJSFunction\u003e(isolate()-\u003eraw_native_context().js_finalization_registry_fun(), isolate().",
+      "parentUuid": "4b4dc9a3_7b48c409",
+      "revId": "74b6a8f66be3d29ae1b1e42db5cd8afa5a12a620",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "251a2f96_af4cfa40",
         "filename": "test/mjsunit/harmony/weakrefs/basics.js",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-04-08T06:48:28Z",
       "side": 1,
       "message": "Should we split the tests into different files for the two flags? Worried about the flags diverging in the future.\n\nAlso should we add tests that check cleanupSome is undefined without the flag in case we ship this by mistake",
+      "revId": "74b6a8f66be3d29ae1b1e42db5cd8afa5a12a620",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef62dd66_61bfac1b",
+        "filename": "test/mjsunit/harmony/weakrefs/basics.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-04-08T18:35:09Z",
+      "side": 1,
+      "message": "Ack. I\u0027ll split the basics test.\n\nAlso good idea on tests that check cleanupSome is undefined without the flag.",
+      "parentUuid": "251a2f96_af4cfa40",
       "revId": "74b6a8f66be3d29ae1b1e42db5cd8afa5a12a620",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
