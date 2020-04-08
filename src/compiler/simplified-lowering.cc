@@ -303,38 +303,47 @@ class RepresentationSelector {
         tick_counter_(tick_counter) {
   }
 
-  // Forward propagation of types from type feedback.
-  void RunTypePropagationPhase() {
-    // Run type propagation.
-    TRACE("--{Type propagation phase}--\n");
-    ResetNodeInfoState();
-
-    DCHECK(typing_stack_.empty());
-    typing_stack_.push({graph()->end(), 0});
-    GetInfo(graph()->end())->set_pushed();
-    while (!typing_stack_.empty()) {
-      NodeState& current = typing_stack_.top();
-
-      // If there is an unvisited input, push it and continue.
-      bool pushed_unvisited = false;
-      while (current.input_index < current.node->InputCount()) {
-        Node* input = current.node->InputAt(current.input_index);
-        NodeInfo* input_info = GetInfo(input);
-        current.input_index++;
-        if (input_info->unvisited()) {
-          input_info->set_pushed();
-          typing_stack_.push({input, 0});
-          pushed_unvisited = true;
-          break;
-        } else if (input_info->pushed()) {
-          // If we had already pushed (and not visited) an input, it means that
-          // the current node will be visited before one of its inputs. If this
-          // happens, the current node might need to be revisited.
-          MarkAsPossibleRevisit<RETYPE>(current.node, input);
-        }
+  bool PushedUnvisited() {
+    // If there is an unvisited input, push it and continue.
+    NodeState& current = typing_stack_.top();
+    bool pushed_unvisited = false;
+    while (current.input_index < current.node->InputCount()) {
+      Node* input = current.node->InputAt(current.input_index);
+      NodeInfo* input_info = GetInfo(input);
+      current.input_index++;
+      if (input_info->unvisited()) {
+        input_info->set_pushed();
+        typing_stack_.push({input, 0});
+        pushed_unvisited = true;
+        break;
+      } else if (input_info->pushed()) {
+        // If we had already pushed (and not visited) an input, it means that
+        // the current node will be visited before one of its inputs. If this
+        // happens, the current node might need to be revisited.
+        MarkAsPossibleRevisit<RETYPE>(current.node, input);
       }
-      if (pushed_unvisited) continue;
+    }
+    return pushed_unvisited;
+  }
 
+  void PushUsesToQueue(Node* node) {
+    auto it = might_need_revisit.find(node);
+    if (it == might_need_revisit.end()) return;
+
+    for (Node* const user : it->second) {
+      if (GetInfo(user)->visited()) {
+        TRACE(" QUEUEING #%d: %s\n", user->id(), user->op()->mnemonic());
+        GetInfo(user)->set_queued();
+        queue_.push(user);
+      }
+    }
+  }
+
+  void V8_NOINLINE VisitRetype() {
+    while (!typing_stack_.empty()) {
+      if (PushedUnvisited()) continue;
+
+      NodeState& current = typing_stack_.top();
       // Process the top of the stack.
       Node* node = current.node;
       typing_stack_.pop();
@@ -347,19 +356,12 @@ class RepresentationSelector {
       PrintOutputInfo(info);
       TRACE("\n");
       if (updated) {
-        auto it = might_need_revisit.find(node);
-        if (it == might_need_revisit.end()) continue;
-
-        for (Node* const user : it->second) {
-          if (GetInfo(user)->visited()) {
-            TRACE(" QUEUEING #%d: %s\n", user->id(), user->op()->mnemonic());
-            GetInfo(user)->set_queued();
-            queue_.push(user);
-          }
-        }
+        PushUsesToQueue(node);
       }
     }
+  }
 
+  void V8_NOINLINE RevisitRetype() {
     // Process the revisit queue.
     while (!queue_.empty()) {
       Node* node = queue_.front();
@@ -385,6 +387,19 @@ class RepresentationSelector {
         }
       }
     }
+  }
+
+  // Forward propagation of types from type feedback.
+  void V8_NOINLINE RunTypePropagationPhase() {
+    // Run type propagation.
+    TRACE("--{Type propagation phase}--\n");
+    ResetNodeInfoState();
+
+    DCHECK(typing_stack_.empty());
+    typing_stack_.push({graph()->end(), 0});
+    GetInfo(graph()->end())->set_pushed();
+    VisitRetype();
+    RevisitRetype();
   }
 
   void ResetNodeInfoState() {
@@ -621,6 +636,43 @@ class RepresentationSelector {
     }
   }
 
+  void V8_NOINLINE FinalReplacements() {
+    for (NodeVector::iterator i = replacements_.begin();
+         i != replacements_.end(); ++i) {
+      Node* node = *i;
+      Node* replacement = *(++i);
+      node->ReplaceUses(replacement);
+      node->Kill();
+      // We also need to replace the node in the rest of the vector.
+      for (NodeVector::iterator j = i + 1; j != replacements_.end(); ++j) {
+        ++j;
+        if (*j == node) *j = replacement;
+      }
+    }
+  }
+
+  void V8_NOINLINE LowerNodes(SimplifiedLowering* lowering) {
+    // Process nodes from the collected {nodes_} vector.
+    for (NodeVector::iterator i = nodes_.begin(); i != nodes_.end(); ++i) {
+      Node* node = *i;
+      NodeInfo* info = GetInfo(node);
+      TRACE(" visit #%d: %s\n", node->id(), node->op()->mnemonic());
+      // Reuse {VisitNode()} so the representation rules are in one place.
+      SourcePositionTable::Scope scope(
+          source_positions_, source_positions_->GetSourcePosition(node));
+      NodeOriginTable::Scope origin_scope(node_origins_, "simplified lowering",
+                                          node);
+      VisitNode<LOWER>(node, info->truncation(), lowering);
+    }
+  }
+
+  void V8_NOINLINE RunLoweringPhase(SimplifiedLowering* lowering) {
+    // Run lowering and change insertion phase.
+    TRACE("--{Simplified lowering phase}--\n");
+    LowerNodes(lowering);
+    FinalReplacements();
+  }
+
   void Run(SimplifiedLowering* lowering) {
     {
       RuntimeCallTimerScope runtimeTimer(
@@ -642,34 +694,7 @@ class RepresentationSelector {
         lowering->runtime_call_stats(),
         RuntimeCallCounterId::kOptimizeSimplifiedLoweringLoweringPhase,
         RuntimeCallStats::kThreadSpecific);
-    // Run lowering and change insertion phase.
-    TRACE("--{Simplified lowering phase}--\n");
-    // Process nodes from the collected {nodes_} vector.
-    for (NodeVector::iterator i = nodes_.begin(); i != nodes_.end(); ++i) {
-      Node* node = *i;
-      NodeInfo* info = GetInfo(node);
-      TRACE(" visit #%d: %s\n", node->id(), node->op()->mnemonic());
-      // Reuse {VisitNode()} so the representation rules are in one place.
-      SourcePositionTable::Scope scope(
-          source_positions_, source_positions_->GetSourcePosition(node));
-      NodeOriginTable::Scope origin_scope(node_origins_, "simplified lowering",
-                                          node);
-      VisitNode<LOWER>(node, info->truncation(), lowering);
-    }
-
-    // Perform the final replacements.
-    for (NodeVector::iterator i = replacements_.begin();
-         i != replacements_.end(); ++i) {
-      Node* node = *i;
-      Node* replacement = *(++i);
-      node->ReplaceUses(replacement);
-      node->Kill();
-      // We also need to replace the node in the rest of the vector.
-      for (NodeVector::iterator j = i + 1; j != replacements_.end(); ++j) {
-        ++j;
-        if (*j == node) *j = replacement;
-      }
-    }
+    RunLoweringPhase(lowering);
   }
 
   void EnqueueInitial(Node* node) {
