@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28701915_e0f60f87",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-08T14:59:00Z",
+      "side": 1,
+      "message": "Looks like we should just use patterns here:\n\u0027test-wasm-breakpoints/*\u0027 : [SKIP],\n\u0027test-wasm-debug-evaluate/*\u0027: [SKIP],",
+      "revId": "04b3ec23d186609ce0bf075fbb866fea950704a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f849c440_6f27af3f",
+        "filename": "test/inspector/inspector.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-08T14:59:00Z",
+      "side": 1,
+      "message": "Similarly here. There is not much left, so we also just skip all wasm debugging test (\u0027debugger/wasm-*\u0027).",
+      "revId": "04b3ec23d186609ce0bf075fbb866fea950704a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
