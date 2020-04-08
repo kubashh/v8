@@ -193,9 +193,6 @@ enum ContextLookupFlags {
   V(WEAK_CELL_MAP_INDEX, Map, weak_cell_map)                                   \
   V(JS_WEAK_MAP_FUN_INDEX, JSFunction, js_weak_map_fun)                        \
   V(JS_WEAK_SET_FUN_INDEX, JSFunction, js_weak_set_fun)                        \
-  V(JS_WEAK_REF_FUNCTION_INDEX, JSFunction, js_weak_ref_fun)                   \
-  V(JS_FINALIZATION_REGISTRY_FUNCTION_INDEX, JSFunction,                       \
-    js_finalization_registry_fun)                                              \
   /* Context maps */                                                           \
   V(NATIVE_CONTEXT_MAP_INDEX, Map, native_context_map)                         \
   V(FUNCTION_CONTEXT_MAP_INDEX, Map, function_context_map)                     \
