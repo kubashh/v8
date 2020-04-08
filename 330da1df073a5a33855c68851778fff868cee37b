@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63be4a62_87058c3e",
+        "filename": "src/regexp/regexp-macro-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-08T05:54:34Z",
+      "side": 1,
+      "message": "Since we\u0027re here, do you know if there\u0027s any reason this isn\u0027t\n\n DCHECK(base::IsInRange(cp_offset, kMinCPOffset, kMaxCPOffset))\n\nNote kMaxCPOffset is 1\u003c\u003c15 - 1.. :) We can also remove the comment.",
+      "revId": "330da1df073a5a33855c68851778fff868cee37b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c726befe_0da316b1",
+        "filename": "src/regexp/regexp-macro-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-08T05:54:34Z",
+      "side": 1,
+      "message": "These seem to fit better in RegExpMacroAssembler around line 146. Is something from NativeRegExpMacroAssembler needed? In fact, why not inline LCCImpl into its single use in LCC?",
+      "revId": "330da1df073a5a33855c68851778fff868cee37b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
