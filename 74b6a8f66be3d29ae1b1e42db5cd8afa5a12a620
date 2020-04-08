@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "251a2f96_af4cfa40",
+        "filename": "test/mjsunit/harmony/weakrefs/basics.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-04-08T06:48:28Z",
+      "side": 1,
+      "message": "Should we split the tests into different files for the two flags? Worried about the flags diverging in the future.\n\nAlso should we add tests that check cleanupSome is undefined without the flag in case we ship this by mistake",
+      "revId": "74b6a8f66be3d29ae1b1e42db5cd8afa5a12a620",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
