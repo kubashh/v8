@@ -4315,13 +4315,11 @@ void Genesis::InitializeGlobal_harmony_weak_refs() {
         isolate()->object_function(), AllocationType::kOld);
 
     // Create %FinalizationRegistry%
-    Handle<JSFunction> finalization_registry_fun = CreateFunction(
-        isolate(), finalization_registry_name, JS_FINALIZATION_REGISTRY_TYPE,
-        JSFinalizationRegistry::kHeaderSize, 0, finalization_registry_prototype,
+    Handle<JSFunction> finalization_registry_fun = InstallFunction(
+        isolate(), global, finalization_registry_name,
+        JS_FINALIZATION_REGISTRY_TYPE, JSFinalizationRegistry::kHeaderSize, 0,
+        finalization_registry_prototype,
         Builtins::kFinalizationRegistryConstructor);
-    InstallWithIntrinsicDefaultProto(
-        isolate(), finalization_registry_fun,
-        Context::JS_FINALIZATION_REGISTRY_FUNCTION_INDEX);
 
     finalization_registry_fun->shared().DontAdaptArguments();
     finalization_registry_fun->shared().set_length(1);
@@ -4334,9 +4332,6 @@ void Genesis::InitializeGlobal_harmony_weak_refs() {
     InstallToStringTag(isolate(), finalization_registry_prototype,
                        finalization_registry_name);
 
-    JSObject::AddProperty(isolate(), global, finalization_registry_name,
-                          finalization_registry_fun, DONT_ENUM);
-
     SimpleInstallFunction(isolate(), finalization_registry_prototype,
                           "register", Builtins::kFinalizationRegistryRegister,
                           2, false);
@@ -4344,10 +4339,6 @@ void Genesis::InitializeGlobal_harmony_weak_refs() {
     SimpleInstallFunction(isolate(), finalization_registry_prototype,
                           "unregister",
                           Builtins::kFinalizationRegistryUnregister, 1, false);
-
-    SimpleInstallFunction(isolate(), finalization_registry_prototype,
-                          "cleanupSome",
-                          Builtins::kFinalizationRegistryCleanupSome, 0, false);
   }
   {
     // Create %WeakRefPrototype%
@@ -4367,11 +4358,10 @@ void Genesis::InitializeGlobal_harmony_weak_refs() {
 
     // Create %WeakRef%
     Handle<String> weak_ref_name = factory->InternalizeUtf8String("WeakRef");
-    Handle<JSFunction> weak_ref_fun = CreateFunction(
-        isolate(), weak_ref_name, JS_WEAK_REF_TYPE, JSWeakRef::kHeaderSize, 0,
-        weak_ref_prototype, Builtins::kWeakRefConstructor);
-    InstallWithIntrinsicDefaultProto(isolate(), weak_ref_fun,
-                                     Context::JS_WEAK_REF_FUNCTION_INDEX);
+    Handle<JSFunction> weak_ref_fun =
+        InstallFunction(isolate(), global, weak_ref_name, JS_WEAK_REF_TYPE,
+                        JSWeakRef::kHeaderSize, 0, weak_ref_prototype,
+                        Builtins::kWeakRefConstructor);
 
     weak_ref_fun->shared().DontAdaptArguments();
     weak_ref_fun->shared().set_length(1);
@@ -4380,10 +4370,26 @@ void Genesis::InitializeGlobal_harmony_weak_refs() {
     JSObject::AddProperty(isolate(), weak_ref_prototype,
                           factory->constructor_string(), weak_ref_fun,
                           DONT_ENUM);
-
-    JSObject::AddProperty(isolate(), global, weak_ref_name, weak_ref_fun,
-                          DONT_ENUM);
   }
+}
+
+void Genesis::InitializeGlobal_harmony_weak_refs_with_cleanup_some() {
+  if (!FLAG_harmony_weak_refs_with_cleanup_some) return;
+  DCHECK(FLAG_harmony_weak_refs);
+
+  Handle<JSGlobalObject> global(native_context()->global_object(), isolate());
+  Handle<JSFunction> finalization_registry_fun = Handle<JSFunction>::cast(
+      JSReceiver::GetProperty(
+          isolate(), global,
+          factory()->InternalizeUtf8String("FinalizationRegistry"))
+          .ToHandleChecked());
+  Handle<JSObject> finalization_registry_prototype(
+      JSObject::cast(finalization_registry_fun->instance_prototype()),
+      isolate());
+
+  SimpleInstallFunction(isolate(), finalization_registry_prototype,
+                        "cleanupSome",
+                        Builtins::kFinalizationRegistryCleanupSome, 0, false);
 }
 
 void Genesis::InitializeGlobal_harmony_promise_all_settled() {
