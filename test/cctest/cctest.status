@@ -393,6 +393,24 @@
 
   # Liftoff is not currently supported on ppc and s390
   'test-liftoff-*': [SKIP],
+  'test-wasm-breakpoints/RunWasmTurbofan_WasmRemoveBreakPoint': [SKIP],
+  'test-wasm-breakpoints/RunWasmTurbofan_WasmGetLocalsAndStack': [SKIP],
+  'test-wasm-breakpoints/RunWasmTurbofan_WasmSimpleBreak': [SKIP],
+  'test-wasm-breakpoints/RunWasmLiftoff_WasmSimpleStepping': [SKIP],
+  'test-wasm-breakpoints/RunWasmTurbofan_WasmRemoveLastBreakPoint': [SKIP],
+  'test-wasm-breakpoints/RunWasmLiftoff_WasmNonBreakablePosition': [SKIP],
+  'test-wasm-breakpoints/RunWasmTurbofan_WasmStepInAndOut': [SKIP],
+  'test-wasm-breakpoints/RunWasmTurbofan_WasmSimpleStepping': [SKIP],
+  'test-wasm-breakpoints/RunWasmLiftoff_WasmSimpleBreak': [SKIP],
+  'test-wasm-breakpoints/RunWasmLiftoff_WasmRemoveAllBreakPoint': [SKIP],
+  'test-wasm-breakpoints/RunWasmLiftoff_WasmRemoveLastBreakPoint': [SKIP],
+  'test-wasm-breakpoints/RunWasmTurbofan_WasmNonBreakablePosition': [SKIP],
+  'test-wasm-breakpoints/RunWasmLiftoff_WasmStepInAndOut': [SKIP],
+  'test-wasm-breakpoints/RunWasmLiftoff_WasmRemoveBreakPoint': [SKIP],
+  'test-wasm-breakpoints/RunWasmLiftoff_WasmGetLocalsAndStack': [SKIP],
+  'test-wasm-debug-evaluate/RunWasmTurbofan_WasmDebugEvaluate_*': [SKIP],
+  'test-wasm-breakpoints/RunWasmTurbofan_WasmRemoveAllBreakPoint': [SKIP],
+  'test-wasm-debug-evaluate/RunWasmLiftoff_WasmDebugEvaluate_*': [SKIP],
 
   # SIMD not fully implemented yet
   'test-run-wasm-simd-liftoff/*': [SKIP],
