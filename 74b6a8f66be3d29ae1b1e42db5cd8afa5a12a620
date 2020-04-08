@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "8a1cb7ae_6125b812",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4324,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-04-08T23:05:32Z",
+      "side": 1,
+      "message": "Ha, we can\u0027t, as evidenced by the test262 failures. I forgot about this, you gotta keep these constructors on the NativeContext for cross-realm construction shenanigans. Ran into this before with Intl constructors: https://chromium-review.googlesource.com/c/v8/v8/+/1801252",
+      "parentUuid": "0ba9eb2c_df689e0e",
+      "revId": "74b6a8f66be3d29ae1b1e42db5cd8afa5a12a620",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "251a2f96_af4cfa40",
         "filename": "test/mjsunit/harmony/weakrefs/basics.js",
         "patchSetId": 2
