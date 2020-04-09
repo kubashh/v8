@@ -11,8 +11,9 @@
 #include "src/logging/log.h"
 #include "src/objects/objects.h"
 #include "src/snapshot/embedded/embedded-data.h"
+#include "src/snapshot/external-reference-encoder.h"
 #include "src/snapshot/serializer-allocator.h"
-#include "src/snapshot/serializer-common.h"
+#include "src/snapshot/serializer-deserializer.h"
 #include "src/snapshot/snapshot-source-sink.h"
 
 namespace v8 {

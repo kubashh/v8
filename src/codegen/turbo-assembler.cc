@@ -8,7 +8,7 @@
 #include "src/builtins/constants-table-builder.h"
 #include "src/execution/isolate-data.h"
 #include "src/execution/isolate-inl.h"
-#include "src/snapshot/serializer-common.h"
+#include "src/snapshot/external-reference-encoder.h"
 
 namespace v8 {
 namespace internal {
