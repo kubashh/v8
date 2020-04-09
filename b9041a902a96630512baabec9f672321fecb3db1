@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbde061e_50af9a50",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1370170
+      },
+      "writtenOn": "2020-04-09T14:55:31Z",
+      "side": 1,
+      "message": "I don\u0027t know V8 code conventions, but perhaps a `Maybe\u003csize_t\u003e` as a return type would\u0027ve been a bit clearer?",
+      "revId": "b9041a902a96630512baabec9f672321fecb3db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
