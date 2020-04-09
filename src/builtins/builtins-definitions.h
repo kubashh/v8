@@ -861,6 +861,7 @@ namespace internal {
   TFC(WasmTableCopy, WasmTableCopy)                                            \
   TFC(WasmTableGet, WasmTableGet)                                              \
   TFC(WasmTableSet, WasmTableSet)                                              \
+  TFC(WasmAllocateJSArray, WasmAllocateJSArray)                                \
   TFC(WasmStackGuard, NoContext)                                               \
   TFC(WasmStackOverflow, NoContext)                                            \
   TFC(WasmThrow, WasmThrow)                                                    \
