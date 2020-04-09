@@ -91,7 +91,8 @@ class BasicBlock;
   V(WordAnd)                              \
   V(WordEqual)                            \
   V(WordSar)                              \
-  V(WordShl)
+  V(WordShl)                              \
+  V(WordXor)
 
 #define CHECKED_ASSEMBLER_MACH_BINOP_LIST(V) \
   V(Int32AddWithOverflow)                    \

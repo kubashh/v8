@@ -24,7 +24,9 @@ GlobalContext::GlobalContext(Ast ast)
 
 TargetArchitecture::TargetArchitecture(bool force_32bit)
     : tagged_size_(force_32bit ? sizeof(int32_t) : kTaggedSize),
-      raw_ptr_size_(force_32bit ? sizeof(int32_t) : kSystemPointerSize) {}
+      raw_ptr_size_(force_32bit ? sizeof(int32_t) : kSystemPointerSize),
+      external_ptr_size_(force_32bit ? sizeof(int32_t) : kExternalPointerSize) {
+}
 
 }  // namespace torque
 }  // namespace internal
