@@ -4,6 +4,7 @@
 
 #include "src/compiler/memory-optimizer.h"
 
+#include "src/base/logging.h"
 #include "src/codegen/interface-descriptors.h"
 #include "src/codegen/tick-counter.h"
 #include "src/compiler/js-graph.h"
@@ -321,8 +322,24 @@ void MemoryOptimizer::VisitLoadElement(Node* node,
 
 void MemoryOptimizer::VisitLoadField(Node* node, AllocationState const* state) {
   DCHECK_EQ(IrOpcode::kLoadField, node->opcode());
-  memory_lowering()->ReduceLoadField(node);
-  EnqueueUses(node, state);
+  Reduction reduction = memory_lowering()->ReduceLoadField(node);
+  DCHECK(reduction.Changed());
+  // Node can be replaced only when V8_HEAP_SANDBOX_BOOL is enabled and
+  // when loading an external pointer value.
+  DCHECK_IMPLIES(!V8_HEAP_SANDBOX_BOOL, reduction.replacement() == node);
+  if (V8_HEAP_SANDBOX_BOOL && reduction.replacement() != node) {
+    Node* effect = NodeProperties::GetEffectInput(node);
+    // Replace all uses of node and kill the node to make sure we don't leave
+    // dangling dead uses.
+    NodeProperties::ReplaceUses(node, reduction.replacement(),
+                                graph_assembler_.effect(),
+                                graph_assembler_.control());
+    node->Kill();
+    // Proceed iterating the effect chain from the incoming effect input node.
+    EnqueueUses(effect, state);
+  } else {
+    EnqueueUses(node, state);
+  }
 }
 
 void MemoryOptimizer::VisitStoreElement(Node* node,
