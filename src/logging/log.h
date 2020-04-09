@@ -264,6 +264,8 @@ class Logger : public CodeEventListener {
   // Logs all Maps found on the heap.
   void LogAllMaps();
 
+  void LogBasicBlockCounts();
+
   // Converts tag to a corresponding NATIVE_... if the script is native.
   V8_INLINE static CodeEventListener::LogEventsAndTags ToNativeByScript(
       CodeEventListener::LogEventsAndTags, Script);

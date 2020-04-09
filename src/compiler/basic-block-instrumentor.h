@@ -23,6 +23,7 @@ class BasicBlockInstrumentor : public AllStatic {
   static BasicBlockProfiler::Data* Instrument(OptimizedCompilationInfo* info,
                                               Graph* graph, Schedule* schedule,
                                               Isolate* isolate);
+  static void UpdateNextIdCounter(Schedule* schedule, Isolate* isolate);
 };
 
 }  // namespace compiler

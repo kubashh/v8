@@ -164,6 +164,18 @@ declare_args() {
   # while rolling in a new version of V8.
   v8_check_microtasks_scopes_consistency = ""
 
+  # To do profile-guided optimizations of builtins:
+  # 1. Build with v8_instrument_builtins = true
+  # 2. Run your tests with --log-builtin-basic-block-counts flags, like this:
+  #    chrome --no-sandbox --disable-extensions
+  #      --js-flags="--log-builtin-basic-block-counts --logfile=path/to/v8.log"
+  #      "http://localhost/test-suite"
+  # 3. Build again with v8_builtins_block_counts_logfile set to the file created
+  #    in step 2.
+  # TODO support multiple logfiles or a log directory
+  v8_instrument_builtins = false
+  v8_builtins_block_counts_logfile = ""
+
   # Enable mitigations for executing untrusted code.
   # Disabled by default on ia32 due to conflicting requirements with embedded
   # builtins. Enabled by default on Android since it doesn't support
@@ -1374,6 +1386,17 @@ template("run_mksnapshot") {
       "--embedded_src",
       rebase_path("$target_gen_dir/embedded${suffix}.S", root_build_dir),
     ]
+
+    if (v8_instrument_builtins) {
+      args += [ "--turbo-profiling" ]
+    }
+
+    if (v8_builtins_block_counts_logfile != "") {
+      args += [
+        "--builtins_block_counts_logfile",
+        v8_builtins_block_counts_logfile,
+      ]
+    }
 
     # This is needed to distinguish between generating code for the simulator
     # and cross-compiling. The latter may need to run code on the host with the

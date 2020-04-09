@@ -4,6 +4,8 @@
 
 #include "src/init/setup-isolate.h"
 
+#include <fstream>
+
 #include "src/builtins/accessors.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/execution/isolate.h"
@@ -611,6 +613,40 @@ void Heap::CreateApiObjects() {
   set_noop_interceptor_info(*info);
 }
 
+namespace {
+
+void MaybeInitializeBasicBlockCountsFromLog(
+    Handle<FixedArray> branch_counters) {
+  const char* filename = i::FLAG_builtins_block_counts_logfile;
+  if (!filename) return;
+  std::ifstream file(filename);
+  CHECK_WITH_MSG(file.good(), "Can't read log file");
+  const char* begin_marker = "---basic block counters:---";
+  const char* end_marker = "---end basic block counters---";
+  // There can be other stuff in the log file; skip it.
+  for (std::string line; std::getline(file, line);) {
+    if (line == begin_marker) {
+      break;
+    }
+  }
+  CHECK_WITH_MSG(!file.eof(), "Can't find basic block counters in log file");
+  int index = 0;
+  for (std::string line; std::getline(file, line); ++index) {
+    if (line == end_marker) {
+      break;
+    }
+    CHECK_WITH_MSG(index < branch_counters->length(),
+                   "Too many basic block counters in log file");
+    int value = atoi(line.c_str());
+    branch_counters->set(index, i::Smi::FromInt(value));
+  }
+  // First element is the counter; reset it so we can update it while counting
+  // through all of the functions.
+  branch_counters->set(0, i::Smi::FromInt(1));
+}
+
+}  // namespace
+
 void Heap::CreateInitialObjects() {
   HandleScope scope(isolate());
   Factory* factory = isolate()->factory();
@@ -755,6 +791,24 @@ void Heap::CreateInitialObjects() {
 
   set_number_string_cache(*factory->NewFixedArray(
       kInitialNumberStringCacheSize * 2, AllocationType::kOld));
+
+  // Allocate space for tracking branch outcomes.
+  {
+    // Currently there are 162230 basic blocks in all builtins, so allocate
+    // enough space for all of them. TODO resize this during mksnapshot so we
+    // don't need a hard-coded value.
+    int num_basic_blocks = 200000;
+    Handle<FixedArray> branch_counters =
+        factory->NewFixedArray(num_basic_blocks, AllocationType::kOld);
+    for (int i = 0; i < num_basic_blocks; ++i) {
+      branch_counters->set(i, Smi::zero());
+    }
+    MaybeInitializeBasicBlockCountsFromLog(branch_counters);
+    // The first element is used during mksnapshot as the counter for the next
+    // unassigned index.
+    branch_counters->set(0, Smi::FromInt(1));
+    set_branch_counters(*branch_counters);
+  }
 
   // Allocate cache for string split and regexp-multiple.
   set_string_split_cache(*factory->NewFixedArray(

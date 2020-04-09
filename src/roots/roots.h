@@ -228,6 +228,7 @@ class Symbol;
   V(FixedArray, single_character_string_cache, SingleCharacterStringCache)     \
   V(FixedArray, string_split_cache, StringSplitCache)                          \
   V(FixedArray, regexp_multiple_cache, RegExpMultipleCache)                    \
+  V(FixedArray, branch_counters, BranchCounters)                               \
   /* Indirection lists for isolate-independent builtins */                     \
   V(FixedArray, builtins_constants_table, BuiltinsConstantsTable)
 

@@ -14,6 +14,8 @@
 #include "src/compiler/node-marker.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/node.h"
+#include "src/heap/heap-inl.h"
+#include "src/objects/fixed-array-inl.h"
 #include "src/utils/bit-vector.h"
 #include "src/zone/zone-containers.h"
 
@@ -27,7 +29,8 @@ namespace compiler {
   } while (false)
 
 Scheduler::Scheduler(Zone* zone, Graph* graph, Schedule* schedule, Flags flags,
-                     size_t node_count_hint, TickCounter* tick_counter)
+                     size_t node_count_hint, TickCounter* tick_counter,
+                     Isolate* isolate)
     : zone_(zone),
       graph_(graph),
       schedule_(schedule),
@@ -36,13 +39,15 @@ Scheduler::Scheduler(Zone* zone, Graph* graph, Schedule* schedule, Flags flags,
       schedule_root_nodes_(zone),
       schedule_queue_(zone),
       node_data_(zone),
-      tick_counter_(tick_counter) {
+      tick_counter_(tick_counter),
+      isolate_(isolate) {
   node_data_.reserve(node_count_hint);
   node_data_.resize(graph->NodeCount(), DefaultSchedulerData());
 }
 
 Schedule* Scheduler::ComputeSchedule(Zone* zone, Graph* graph, Flags flags,
-                                     TickCounter* tick_counter) {
+                                     TickCounter* tick_counter,
+                                     Isolate* isolate) {
   Zone* schedule_zone =
       (flags & Scheduler::kTempSchedule) ? zone : graph->zone();
 
@@ -54,7 +59,7 @@ Schedule* Scheduler::ComputeSchedule(Zone* zone, Graph* graph, Flags flags,
   Schedule* schedule =
       new (schedule_zone) Schedule(schedule_zone, node_count_hint);
   Scheduler scheduler(zone, graph, schedule, flags, node_count_hint,
-                      tick_counter);
+                      tick_counter, isolate);
 
   scheduler.BuildCFG();
   scheduler.ComputeSpecialRPONumbering();
@@ -472,9 +477,51 @@ class CFGBuilder : public ZoneObject {
     CollectSuccessorBlocks(branch, successor_blocks,
                            arraysize(successor_blocks));
 
+    BranchHint hint_from_profile = BranchHint::kNone;
+    if (FLAG_builtins_block_counts_logfile) {
+      // Phase 1: just print them here
+      // Phase 2: actually use them to set_deferred the bad block.
+      AllowHandleDereference allow_handle_dereference;
+      Isolate* isolate = scheduler_->isolate_;
+      HandleScope scope(isolate);
+      Handle<FixedArray> branch_counters(isolate->heap()->branch_counters(),
+                                         isolate);
+      int base_index = Smi::ToInt(branch_counters->get(0));
+      int block_zero_index = base_index + successor_blocks[0]->id().ToInt();
+      int block_one_index = base_index + successor_blocks[1]->id().ToInt();
+      CHECK(block_zero_index < branch_counters->length() &&
+            block_one_index < branch_counters->length());
+      int block_zero_count = Smi::ToInt(branch_counters->get(block_zero_index));
+      int block_one_count = Smi::ToInt(branch_counters->get(block_one_index));
+      // If anything overflowed, treat it as maximum value.
+      if (block_zero_count < 0) block_zero_count = INT_MAX;
+      if (block_one_count < 0) block_one_count = INT_MAX;
+      // std::cout << "base index: " << base_index << ", " << block_zero_count
+      // << " vs " << block_one_count << "\n";
+      // If a branch is visited a
+      // non-trivial number of times and substantially more often than its
+      // alternative, then mark it as likely.
+      if (block_zero_count > 100 && block_zero_count / 4 > block_one_count) {
+        hint_from_profile = BranchHint::kTrue;
+      } else if (block_one_count > 100 &&
+                 block_one_count / 4 > block_zero_count) {
+        hint_from_profile = BranchHint::kFalse;
+      }
+    }
+
     // Consider branch hints.
-    switch (BranchHintOf(branch->op())) {
+    switch (hint_from_profile) {
       case BranchHint::kNone:
+        switch (BranchHintOf(branch->op())) {
+          case BranchHint::kNone:
+            break;
+          case BranchHint::kTrue:
+            successor_blocks[1]->set_deferred(true);
+            break;
+          case BranchHint::kFalse:
+            successor_blocks[0]->set_deferred(true);
+            break;
+        }
         break;
       case BranchHint::kTrue:
         successor_blocks[1]->set_deferred(true);

@@ -1202,6 +1202,10 @@ DEFINE_BOOL(use_idle_notification, true,
 // ic.cc
 DEFINE_BOOL(trace_ic, false,
             "trace inline cache state transitions for tools/ic-processor")
+DEFINE_BOOL(log_builtin_basic_block_counts, false,
+            "When closing down, log how many times each basic block from the "
+            "builtins was run. Data is only collected if mksnapshot was run "
+            "with --turbo-profiling.")
 DEFINE_IMPLICATION(trace_ic, log_code)
 DEFINE_GENERIC_IMPLICATION(
     trace_ic, TracingFlags::ic_stats.store(
@@ -1378,6 +1382,9 @@ DEFINE_BOOL(target_is_simulator, false,
             "Instruct mksnapshot that the target is meant to run in the "
             "simulator and it can generate simulator-specific instructions. "
             "(mksnapshot only)")
+DEFINE_STRING(builtins_block_counts_logfile, nullptr,
+              "Path of the input file containing basic block counters for "
+              "builtins. (mksnapshot only)")
 
 //
 // Minor mark compact collector flags.

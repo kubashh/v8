@@ -37,7 +37,7 @@ class V8_EXPORT_PRIVATE Scheduler {
   // The complete scheduling algorithm. Creates a new schedule and places all
   // nodes from the graph into it.
   static Schedule* ComputeSchedule(Zone* temp_zone, Graph* graph, Flags flags,
-                                   TickCounter* tick_counter);
+                                   TickCounter* tick_counter, Isolate* isolate);
 
   // Compute the RPO of blocks in an existing schedule.
   static BasicBlockVector* ComputeSpecialRPO(Zone* zone, Schedule* schedule);
@@ -85,9 +85,11 @@ class V8_EXPORT_PRIVATE Scheduler {
   SpecialRPONumberer* special_rpo_;      // Special RPO numbering of blocks.
   ControlEquivalence* equivalence_;      // Control dependence equivalence.
   TickCounter* const tick_counter_;
+  Isolate* isolate_;
 
   Scheduler(Zone* zone, Graph* graph, Schedule* schedule, Flags flags,
-            size_t node_count_hint_, TickCounter* tick_counter);
+            size_t node_count_hint_, TickCounter* tick_counter,
+            Isolate* isolate);
 
   inline SchedulerData DefaultSchedulerData();
   inline SchedulerData* GetData(Node* node);
