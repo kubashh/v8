@@ -21,8 +21,11 @@ TEST_F(BackingStoreTest, GrowWasmMemoryInPlace) {
   EXPECT_EQ(1 * wasm::kWasmPageSize, backing_store->byte_length());
   EXPECT_EQ(2 * wasm::kWasmPageSize, backing_store->byte_capacity());
 
-  bool success = backing_store->GrowWasmMemoryInPlace(isolate(), 1, 2);
+  size_t old_pages = 0;
+  bool success =
+      backing_store->GrowWasmMemoryInPlace(isolate(), 1, 2, &old_pages);
   EXPECT_TRUE(success);
+  EXPECT_EQ(old_pages, 1u);
   EXPECT_EQ(2 * wasm::kWasmPageSize, backing_store->byte_length());
 }
 
@@ -34,7 +37,9 @@ TEST_F(BackingStoreTest, GrowWasmMemoryInPlace_neg) {
   EXPECT_EQ(1 * wasm::kWasmPageSize, backing_store->byte_length());
   EXPECT_EQ(2 * wasm::kWasmPageSize, backing_store->byte_capacity());
 
-  bool success = backing_store->GrowWasmMemoryInPlace(isolate(), 2, 2);
+  size_t old_pages = 0;
+  bool success =
+      backing_store->GrowWasmMemoryInPlace(isolate(), 2, 2, &old_pages);
   EXPECT_FALSE(success);
   EXPECT_EQ(1 * wasm::kWasmPageSize, backing_store->byte_length());
 }
@@ -47,8 +52,11 @@ TEST_F(BackingStoreTest, GrowSharedWasmMemoryInPlace) {
   EXPECT_EQ(2 * wasm::kWasmPageSize, backing_store->byte_length());
   EXPECT_EQ(3 * wasm::kWasmPageSize, backing_store->byte_capacity());
 
-  bool success = backing_store->GrowWasmMemoryInPlace(isolate(), 1, 3);
+  size_t old_pages = 0;
+  bool success =
+      backing_store->GrowWasmMemoryInPlace(isolate(), 1, 3, &old_pages);
   EXPECT_TRUE(success);
+  EXPECT_EQ(old_pages, 2u);
   EXPECT_EQ(3 * wasm::kWasmPageSize, backing_store->byte_length());
 }
 
@@ -81,10 +89,12 @@ class GrowerThread : public base::Thread {
     while (true) {
       size_t current_length = backing_store_->byte_length();
       if (current_length >= max_length) break;
-      bool result =
-          backing_store_->GrowWasmMemoryInPlace(isolate_, increment_, max_);
+      size_t old_pages = 0;
+      bool result = backing_store_->GrowWasmMemoryInPlace(isolate_, increment_,
+                                                          max_, &old_pages);
       size_t new_length = backing_store_->byte_length();
       if (result) {
+        CHECK_LE(current_length / wasm::kWasmPageSize, old_pages);
         CHECK_GE(new_length, current_length + increment_);
       } else {
         CHECK_EQ(max_length, new_length);

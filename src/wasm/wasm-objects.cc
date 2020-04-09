@@ -903,7 +903,8 @@ int32_t WasmMemoryObject::Grow(Isolate* isolate,
   if (old_buffer->is_shared()) {
     if (FLAG_wasm_grow_shared_memory) {
       // Shared memories can only be grown in place; no copying.
-      if (backing_store->GrowWasmMemoryInPlace(isolate, pages, maximum_pages)) {
+      if (backing_store->GrowWasmMemoryInPlace(isolate, pages, maximum_pages,
+                                               &old_pages)) {
         BackingStore::BroadcastSharedWasmMemoryGrow(isolate, backing_store,
                                                     new_pages);
         // Broadcasting the update should update this memory object too.
@@ -923,7 +924,8 @@ int32_t WasmMemoryObject::Grow(Isolate* isolate,
   }
 
   // Try to grow non-shared memory in-place.
-  if (backing_store->GrowWasmMemoryInPlace(isolate, pages, maximum_pages)) {
+  if (backing_store->GrowWasmMemoryInPlace(isolate, pages, maximum_pages,
+                                           &old_pages)) {
     // Detach old and create a new one with the grown backing store.
     old_buffer->Detach(true);
     Handle<JSArrayBuffer> new_buffer =
