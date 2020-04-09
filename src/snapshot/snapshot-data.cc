@@ -4,6 +4,8 @@
 
 #include "src/snapshot/snapshot-data.h"
 
+#include "src/snapshot/serializer.h"
+
 #ifdef V8_SNAPSHOT_COMPRESSION
 #include "src/snapshot/snapshot-compression.h"
 #endif
