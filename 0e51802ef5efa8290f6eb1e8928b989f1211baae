@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26efa778_2070f34d",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2281,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-04-09T16:56:17Z",
+      "side": 1,
+      "message": "Nit: It will be easier to read if we change this to reg !\u003d dst.fp(), although due to the way we assign reg above, it is essentially the same check.",
+      "range": {
+        "startLine": 2281,
+        "startChar": 8,
+        "endLine": 2281,
+        "endChar": 28
+      },
+      "revId": "0e51802ef5efa8290f6eb1e8928b989f1211baae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f2c349c_72009ea9",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2224,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-04-09T16:56:17Z",
+      "side": 1,
+      "message": "same nit as above, change the check to dst.fp() !\u003d reg.",
+      "range": {
+        "startLine": 2224,
+        "startChar": 8,
+        "endLine": 2224,
+        "endChar": 28
+      },
+      "revId": "0e51802ef5efa8290f6eb1e8928b989f1211baae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
