@@ -85,7 +85,7 @@ class V8_EXPORT_PRIVATE BackingStore : public BackingStoreBase {
 
   // Attempt to grow this backing store in place.
   bool GrowWasmMemoryInPlace(Isolate* isolate, size_t delta_pages,
-                             size_t max_pages);
+                             size_t max_pages, size_t* old_pages);
 
   // Wrapper around ArrayBuffer::Allocator::Reallocate.
   bool Reallocate(Isolate* isolate, size_t new_byte_length);

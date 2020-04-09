@@ -460,7 +460,7 @@ std::unique_ptr<BackingStore> BackingStore::CopyWasmMemory(Isolate* isolate,
 
 // Try to grow the size of a wasm memory in place, without realloc + copy.
 bool BackingStore::GrowWasmMemoryInPlace(Isolate* isolate, size_t delta_pages,
-                                         size_t max_pages) {
+                                         size_t max_pages, size_t* old_pages) {
   DCHECK(is_wasm_memory_);
   max_pages = std::min(max_pages, byte_capacity_ / wasm::kWasmPageSize);
 
@@ -499,6 +499,7 @@ bool BackingStore::GrowWasmMemoryInPlace(Isolate* isolate, size_t delta_pages,
     reinterpret_cast<v8::Isolate*>(isolate)
         ->AdjustAmountOfExternalAllocatedMemory(new_length - old_length);
   }
+  *old_pages = old_length / wasm::kWasmPageSize;
   return true;
 }
 
