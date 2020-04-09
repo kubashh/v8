@@ -210,6 +210,8 @@ WasmCompilationResult WasmCompilationUnit::ExecuteFunctionCompilation(
       break;
   }
 
+  result.for_debugging = for_debugging_;
+
   return result;
 }
 
