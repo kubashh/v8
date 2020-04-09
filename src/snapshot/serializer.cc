@@ -742,13 +742,21 @@ void Serializer::ObjectSerializer::VisitExternalReference(Foreign host,
                                                           Address* p) {
   auto encoded_reference =
       serializer_->EncodeExternalReference(host.foreign_address());
-  if (encoded_reference.is_from_api()) {
-    sink_->Put(kApiReference, "ApiRef");
+  if (V8_HEAP_SANDBOX_BOOL) {
+    if (encoded_reference.is_from_api()) {
+      sink_->Put(kSandboxedApiReference, "SandboxedApiRef");
+    } else {
+      sink_->Put(kSandboxedExternalReference, "SandboxedExternalRef");
+    }
   } else {
-    sink_->Put(kExternalReference, "ExternalRef");
+    if (encoded_reference.is_from_api()) {
+      sink_->Put(kApiReference, "ApiRef");
+    } else {
+      sink_->Put(kExternalReference, "ExternalRef");
+    }
   }
   sink_->PutInt(encoded_reference.index(), "reference index");
-  bytes_processed_so_far_ += kSystemPointerSize;
+  bytes_processed_so_far_ += kExternalPointerSize;
 }
 
 void Serializer::ObjectSerializer::VisitExternalReference(Code host,
