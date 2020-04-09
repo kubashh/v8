@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c62ae051_f3033b7b",
+        "filename": "src/regexp/regexp-macro-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1399096
+      },
+      "writtenOn": "2020-04-09T22:18:33Z",
+      "side": 1,
+      "message": "I suspect that this code has been copied around without thinking for years. (The exact same comment shows up in our old import of irregexp.) I\u0027ll test the change.",
+      "parentUuid": "63be4a62_87058c3e",
+      "revId": "330da1df073a5a33855c68851778fff868cee37b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c726befe_0da316b1",
         "filename": "src/regexp/regexp-macro-assembler.h",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "side": 1,
       "message": "\u003e why not inline LCCImpl into its single use in LCC\n\nI see, probably because of the tracer. Wdyt of doing the above and making LoadCurrentCharacter (non-pure) virtual? Then we could just change RMATracer::LCCImpl to RMATracer::LCC.",
       "parentUuid": "c726befe_0da316b1",
+      "revId": "330da1df073a5a33855c68851778fff868cee37b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dcecb98_83643741",
+        "filename": "src/regexp/regexp-macro-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1399096
+      },
+      "writtenOn": "2020-04-09T22:18:33Z",
+      "side": 1,
+      "message": "There\u0027s a different version of LCCImpl in RegExpBytecodeGenerator, and it\u0027s not obvious to me that it can be unified with this version.",
+      "parentUuid": "e75fa608_c1a46c0a",
       "revId": "330da1df073a5a33855c68851778fff868cee37b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
