@@ -262,7 +262,8 @@ if (v8_enable_fast_torque == "") {
   v8_enable_fast_torque = v8_enable_fast_mksnapshot
 }
 if (v8_enable_heap_sandbox == "") {
-  v8_enable_heap_sandbox = false
+  # TODO(v8:10391): temporarily enable V8 heap sandbox on x64
+  v8_enable_heap_sandbox = v8_current_cpu == "x64"
 }
 if (v8_enable_single_generation == "") {
   v8_enable_single_generation = v8_disable_write_barriers
