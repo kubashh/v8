@@ -3461,7 +3461,8 @@ bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
     set_event_logger(Logger::DefaultEventLoggerSentinel);
   }
 
-  if (FLAG_trace_turbo || FLAG_trace_turbo_graph || FLAG_turbo_profiling) {
+  if (FLAG_trace_turbo || FLAG_trace_turbo_graph || FLAG_turbo_profiling ||
+      FLAG_builtins_block_counts_logfile) {
     PrintF("Concurrent recompilation has been disabled for tracing.\n");
   } else if (OptimizingCompileDispatcher::Enabled()) {
     optimizing_compile_dispatcher_ = new OptimizingCompileDispatcher(this);
@@ -3682,6 +3683,7 @@ void Isolate::DumpAndResetStats() {
     counters()->runtime_call_stats()->Print();
     counters()->runtime_call_stats()->Reset();
   }
+  logger_->LogBasicBlockCounts();  // TODO(seth.brenith): should also reset them
 }
 
 void Isolate::AbortConcurrentOptimization(BlockingBehavior behavior) {

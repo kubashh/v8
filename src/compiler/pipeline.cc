@@ -82,6 +82,7 @@
 #include "src/diagnostics/code-tracer.h"
 #include "src/diagnostics/disassembler.h"
 #include "src/execution/isolate-inl.h"
+#include "src/heap/heap-inl.h"
 #include "src/init/bootstrapper.h"
 #include "src/logging/counters.h"
 #include "src/objects/shared-function-info.h"
@@ -1695,7 +1696,7 @@ struct EffectControlLinearizationPhase {
       // 'floating' allocation regions.)
       Schedule* schedule = Scheduler::ComputeSchedule(
           temp_zone, data->graph(), Scheduler::kTempSchedule,
-          &data->info()->tick_counter());
+          &data->info()->tick_counter(), data->isolate());
       TraceScheduleAndVerify(data->info(), data, schedule,
                              "effect linearization schedule");
 
@@ -1993,7 +1994,7 @@ struct ComputeSchedulePhase {
         temp_zone, data->graph(),
         data->info()->is_splitting_enabled() ? Scheduler::kSplitNodes
                                              : Scheduler::kNoFlags,
-        &data->info()->tick_counter());
+        &data->info()->tick_counter(), data->isolate());
     data->set_schedule(schedule);
   }
 };
@@ -2290,9 +2291,9 @@ struct PrintGraphPhase {
       AccountingAllocator allocator;
       Schedule* schedule = data->schedule();
       if (schedule == nullptr) {
-        schedule = Scheduler::ComputeSchedule(temp_zone, data->graph(),
-                                              Scheduler::kNoFlags,
-                                              &info->tick_counter());
+        schedule = Scheduler::ComputeSchedule(
+            temp_zone, data->graph(), Scheduler::kNoFlags,
+            &info->tick_counter(), data->isolate());
       }
 
       AllowHandleDereference allow_deref;
@@ -2679,11 +2680,21 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
                                 isolate->counters()->runtime_call_stats());
   second_data.set_verify_graph(FLAG_verify_csa);
   PipelineImpl second_pipeline(&second_data);
+  int saved_next_index = 0;
+  if (FLAG_turbo_profiling || FLAG_builtins_block_counts_logfile) {
+    saved_next_index = Smi::ToInt(isolate->heap()->branch_counters().get(0));
+  }
   second_pipeline.SelectInstructionsAndAssemble(call_descriptor);
 
   Handle<Code> code;
   if (jump_opt.is_optimizable()) {
     jump_opt.set_optimizing();
+    // Before generating code again, reset the next basic block index so that
+    // the code generated the second time matches the first, and the index moves
+    // forward a consistent amount regardless of jump optimization.
+    if (FLAG_turbo_profiling || FLAG_builtins_block_counts_logfile) {
+      isolate->heap()->branch_counters().set(0, Smi::FromInt(saved_next_index));
+    }
     code = pipeline.GenerateCode(call_descriptor).ToHandleChecked();
   } else {
     code = second_pipeline.FinalizeCode().ToHandleChecked();
@@ -3051,6 +3062,11 @@ bool PipelineImpl::SelectInstructions(Linkage* linkage) {
   if (FLAG_turbo_profiling) {
     data->set_profiler_data(BasicBlockInstrumentor::Instrument(
         info(), data->graph(), data->schedule(), data->isolate()));
+  }
+
+  if (FLAG_turbo_profiling || FLAG_builtins_block_counts_logfile) {
+    BasicBlockInstrumentor::UpdateNextIdCounter(data->schedule(),
+                                                data->isolate());
   }
 
   bool verify_stub_graph =

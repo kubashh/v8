@@ -19,6 +19,7 @@
 #include "src/execution/runtime-profiler.h"
 #include "src/execution/vm-state-inl.h"
 #include "src/handles/global-handles.h"
+#include "src/heap/heap-inl.h"
 #include "src/init/bootstrapper.h"
 #include "src/interpreter/bytecodes.h"
 #include "src/interpreter/interpreter.h"
@@ -1662,6 +1663,29 @@ void Logger::ICEvent(const char* type, bool keyed, Handle<Map> map,
     msg << slow_stub_reason;
   }
   msg.WriteToLogFile();
+}
+
+void Logger::LogBasicBlockCounts() {
+  if (!log_->IsEnabled() || !FLAG_log_builtin_basic_block_counts) return;
+  HandleScope scope(isolate_);
+  Handle<FixedArray> branch_counters(isolate_->heap()->branch_counters(),
+                                     isolate_);
+  {
+    Log::MessageBuilder msg(log_.get());
+    msg << "---basic block counters:---";
+    msg.WriteToLogFile();
+  }
+  for (int i = 0; i < branch_counters->length(); ++i) {
+    Log::MessageBuilder msg(log_.get());
+    msg << Smi::ToInt(branch_counters->get(i));
+    msg.WriteToLogFile();
+  }
+  {
+    Log::MessageBuilder msg(log_.get());
+    msg << "---end basic block counters---";
+    msg.WriteToLogFile();
+  }
+  log_->os_.flush();
 }
 
 void Logger::MapEvent(const char* type, Handle<Map> from, Handle<Map> to,
