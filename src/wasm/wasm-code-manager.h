@@ -60,6 +60,7 @@ struct WasmModule;
   V(WasmTableCopy)                       \
   V(WasmTableGet)                        \
   V(WasmTableSet)                        \
+  V(WasmAllocateJSArray)                 \
   V(WasmStackGuard)                      \
   V(WasmStackOverflow)                   \
   V(WasmThrow)                           \
