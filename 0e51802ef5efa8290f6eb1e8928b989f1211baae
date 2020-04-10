@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0adf86d0_5e10bbc3",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2281,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2020-04-10T01:45:01Z",
+      "side": 1,
+      "message": "Revised accordingly. Thanks!",
+      "parentUuid": "26efa778_2070f34d",
+      "range": {
+        "startLine": 2281,
+        "startChar": 8,
+        "endLine": 2281,
+        "endChar": 28
+      },
+      "revId": "0e51802ef5efa8290f6eb1e8928b989f1211baae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7f2c349c_72009ea9",
         "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2020-04-09T16:56:17Z",
       "side": 1,
       "message": "same nit as above, change the check to dst.fp() !\u003d reg.",
+      "range": {
+        "startLine": 2224,
+        "startChar": 8,
+        "endLine": 2224,
+        "endChar": 28
+      },
+      "revId": "0e51802ef5efa8290f6eb1e8928b989f1211baae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "486217f6_c66c73a4",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2224,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2020-04-10T01:45:01Z",
+      "side": 1,
+      "message": "Revised accordingly. Thanks!",
+      "parentUuid": "7f2c349c_72009ea9",
       "range": {
         "startLine": 2224,
         "startChar": 8,
