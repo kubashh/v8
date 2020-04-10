@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "fc6205fd_ea610bcd",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-04-10T05:21:28Z",
+      "side": 1,
+      "message": "I\u0027m trying to reason what happens here if there is another call to Grow between the return statement and the one where we actually obtain the original size of the buffer. I guess if it succeeds, then it still guarantees that no two grow calls will return the same value of old_size so this still retains RMW behavior, does that match your reasoning for this as well?",
+      "revId": "b9041a902a96630512baabec9f672321fecb3db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9eb6491a_a2efa152",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
