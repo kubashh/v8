@@ -16,6 +16,40 @@
       "revId": "b9041a902a96630512baabec9f672321fecb3db1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88514feb_7c1240f9",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-04-10T05:18:37Z",
+      "side": 1,
+      "message": "Could you add a comment here with a condensed description of what\u0027s in the CL description? Possibly better to preserve context in code.",
+      "revId": "b9041a902a96630512baabec9f672321fecb3db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eb6491a_a2efa152",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-04-10T05:18:37Z",
+      "side": 1,
+      "message": "It\u0027s a little confusing here that we calculate old_pages above, and then overwrite it again here for the non-shared case. An option to make this better would be to restructure the checks above that use old_pages to use new_pages, or to move the checks where we obtain old_pages.",
+      "revId": "b9041a902a96630512baabec9f672321fecb3db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
