@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "966f99ea_37de0998",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2020-04-10T17:16:58Z",
+      "side": 1,
+      "message": "old_pages is not set in this case. It seems that this is OK in the existing caller. But I agree w/ Ingvar above that returning a Maybe\u003csize_t\u003e would prevent issues like this.",
+      "revId": "b9041a902a96630512baabec9f672321fecb3db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88514feb_7c1240f9",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
