@@ -1107,7 +1107,7 @@ void LiftoffAssembler::emit_f64x2_replace_lane(LiftoffRegister dst,
 
 void LiftoffAssembler::emit_f64x2_neg(LiftoffRegister dst,
                                       LiftoffRegister src) {
-  bailout(kSimd, "f64x2neg");
+  Fneg(dst.fp().V2D(), src.fp().V2D());
 }
 
 void LiftoffAssembler::emit_f64x2_add(LiftoffRegister dst, LiftoffRegister lhs,
@@ -1148,7 +1148,7 @@ void LiftoffAssembler::emit_f32x4_replace_lane(LiftoffRegister dst,
 
 void LiftoffAssembler::emit_f32x4_neg(LiftoffRegister dst,
                                       LiftoffRegister src) {
-  bailout(kSimd, "f32x4neg");
+  Fneg(dst.fp().V4S(), src.fp().V4S());
 }
 
 void LiftoffAssembler::emit_f32x4_add(LiftoffRegister dst, LiftoffRegister lhs,
@@ -1189,7 +1189,7 @@ void LiftoffAssembler::emit_i64x2_replace_lane(LiftoffRegister dst,
 
 void LiftoffAssembler::emit_i64x2_neg(LiftoffRegister dst,
                                       LiftoffRegister src) {
-  bailout(kSimd, "i64x2neg");
+  Neg(dst.fp().V2D(), src.fp().V2D());
 }
 
 void LiftoffAssembler::emit_i64x2_add(LiftoffRegister dst, LiftoffRegister lhs,
@@ -1246,7 +1246,7 @@ void LiftoffAssembler::emit_i32x4_replace_lane(LiftoffRegister dst,
 
 void LiftoffAssembler::emit_i32x4_neg(LiftoffRegister dst,
                                       LiftoffRegister src) {
-  bailout(kSimd, "i32x4neg");
+  Neg(dst.fp().V4S(), src.fp().V4S());
 }
 
 void LiftoffAssembler::emit_i32x4_add(LiftoffRegister dst, LiftoffRegister lhs,
@@ -1317,7 +1317,7 @@ void LiftoffAssembler::emit_i16x8_replace_lane(LiftoffRegister dst,
 
 void LiftoffAssembler::emit_i16x8_neg(LiftoffRegister dst,
                                       LiftoffRegister src) {
-  bailout(kSimd, "i16x8neg");
+  Neg(dst.fp().V8H(), src.fp().V8H());
 }
 
 void LiftoffAssembler::emit_i16x8_add(LiftoffRegister dst, LiftoffRegister lhs,
@@ -1412,7 +1412,7 @@ void LiftoffAssembler::emit_i8x16_replace_lane(LiftoffRegister dst,
 
 void LiftoffAssembler::emit_i8x16_neg(LiftoffRegister dst,
                                       LiftoffRegister src) {
-  bailout(kSimd, "i8x16neg");
+  Neg(dst.fp().V16B(), src.fp().V16B());
 }
 
 void LiftoffAssembler::emit_i8x16_add(LiftoffRegister dst, LiftoffRegister lhs,
