@@ -22,6 +22,30 @@
       "revId": "9531e315c2e2d6b49354a362f8613f523e9ce9b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41f61649_0bc517bf",
+        "filename": "test/mjsunit/never-optimize.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-14T11:28:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6105a58a_5383572c",
+      "range": {
+        "startLine": 41,
+        "startChar": 20,
+        "endLine": 41,
+        "endChar": 26
+      },
+      "revId": "9531e315c2e2d6b49354a362f8613f523e9ce9b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
