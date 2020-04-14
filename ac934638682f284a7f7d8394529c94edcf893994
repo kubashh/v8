@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3293d254_ec78abbf",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-14T10:48:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3ed337c_88b26c7b",
+      "revId": "ac934638682f284a7f7d8394529c94edcf893994",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "373be45a_4332b638",
         "filename": "src/runtime/runtime-test.cc",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2020-04-08T14:25:13Z",
       "side": 1,
       "message": "I don\u0027t think this or below is used by fuzzers, is it? In that case we should just CHECK the condition here.\n\nSame below. machenbach@: we have a whitelist of runtime functions used by fuzzers, right? Or is that not used by all fuzzers?",
+      "revId": "ac934638682f284a7f7d8394529c94edcf893994",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da742821_b5968e3c",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-14T10:48:58Z",
+      "side": 1,
+      "message": "You\u0027re right that it\u0027s not used by fuzzers. It makes sense to me though to keep calling InvalidUse even then, it does no harm but it makes it easy to enable an intrinsic for fuzzing by just adding it to the whitelist in runtime.cc.\n\nWhile looking at that whitelist, I realized that there exists a flag --allow-natives-for-fuzzing that might have become redundant with the new --fuzzing flag.\n\nMichael, what do you think about those two points?",
+      "parentUuid": "373be45a_4332b638",
       "revId": "ac934638682f284a7f7d8394529c94edcf893994",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
