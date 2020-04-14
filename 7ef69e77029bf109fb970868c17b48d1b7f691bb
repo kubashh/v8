@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ad40cb2_77057744",
+        "filename": "src/compiler/graph-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-04-14T15:49:41Z",
+      "side": 1,
+      "message": "We don\u0027t seem to have examples of this, but Replace(other_node).FollowedBy(Reduce(other_node)) might make sense if we lower to a new node, it\u0027s just that we usually mutate the old node instead.\nIf {this} is NoChange(), then this function becomes the identity and there is no difference between NoChange().FollowedBy(Reduce(whatever)) and just Reduce(whatever), so there is not much of a point in writing that, but it wouldn\u0027t be wrong and might be nice for consistency, or because the current reduction is a variable. This can make sense if you want to forward to a more general reduction function no matter whether the current one changed the node. The callsites to ReduceWord32Comparisons in my follow-up CL would in principle be examples of this, just that there all the reduction done before are replacing with a constant, so there it only made sense to call the reduction if nothing changed.\nYour std::function proposal won\u0027t work because these reduce functions are typically non-static, so they can\u0027t be passed as an std::function.",
+      "parentUuid": "f486f216_e99ca480",
+      "revId": "7ef69e77029bf109fb970868c17b48d1b7f691bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34fa6ef5_2802184a",
         "filename": "src/zone/zone.h",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-04-14T14:15:10Z",
       "side": 1,
       "message": "??",
+      "revId": "7ef69e77029bf109fb970868c17b48d1b7f691bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27ea2f7a_1efd8899",
+        "filename": "src/zone/zone.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-04-14T15:49:41Z",
+      "side": 1,
+      "message": "oops",
+      "parentUuid": "34fa6ef5_2802184a",
       "revId": "7ef69e77029bf109fb970868c17b48d1b7f691bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
