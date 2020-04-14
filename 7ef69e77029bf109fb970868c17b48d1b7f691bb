@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f486f216_e99ca480",
+        "filename": "src/compiler/graph-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-14T14:15:10Z",
+      "side": 1,
+      "message": "The fact that we only call this on Changed(x) suggests that it\u0027s not the best abstraction. E.g. if {this} is not Changed, then why do we even compute {next}?\n\nCould we instead have a static function CombinedChange(Node*, std::function\u003cReduction(Node*)\u003e)?\n\nCombinedChange(node, ReduceJSCall);",
+      "revId": "7ef69e77029bf109fb970868c17b48d1b7f691bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34fa6ef5_2802184a",
+        "filename": "src/zone/zone.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-14T14:15:10Z",
+      "side": 1,
+      "message": "??",
+      "revId": "7ef69e77029bf109fb970868c17b48d1b7f691bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
