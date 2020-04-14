@@ -144,6 +144,24 @@
     },
     {
       "key": {
+        "uuid": "858567b1_9a05ee05",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-14T11:46:58Z",
+      "side": 1,
+      "message": "This sounds like an orthogonal issue. If you want to protect against certain intrinsics being moved to the fuzzing whitelist, the way to do that is to have a CHECK(!FLAG_fuzzing) or CHECK(!IsWhiteListed) at the top of their code, rather than to hope that the fuzzer generates invalid input that then triggers an assertion failure. I\u0027m happy to add such a CHECK to the top of that intrinsic and any other where it\u0027s important.\n\nI still think it makes sense to use InvalidUse to deal with unexpected input or other conditions in the body of intrinsics. It would be nice if InvalidUse itself could consult the whitelist, but for that we would have to pass around the function id which is a little ugly or use perhaps use a macro, for virtually no benefit.",
+      "parentUuid": "1ccbdcde_0fbbc273",
+      "revId": "ac934638682f284a7f7d8394529c94edcf893994",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1aedf677_a5c21cd6",
         "filename": "test/inspector/debugger/asm-js-breakpoint-before-exec-expected.txt",
         "patchSetId": 7
