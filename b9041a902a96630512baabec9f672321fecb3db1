@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6d5b8e98_4b32db98",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-04-14T14:12:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbde061e_50af9a50",
+      "revId": "b9041a902a96630512baabec9f672321fecb3db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "966f99ea_37de0998",
         "filename": "src/objects/backing-store.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "b9041a902a96630512baabec9f672321fecb3db1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e45ae600_662c68fa",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-04-14T14:12:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "966f99ea_37de0998",
+      "revId": "b9041a902a96630512baabec9f672321fecb3db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "0d23a769_9c5c65bc",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-04-14T14:12:23Z",
+      "side": 1,
+      "message": "I added the comment, but with the re-structuring of GrowWasmMemoryInPlace I think it\u0027s already more clear anyways.",
+      "parentUuid": "88514feb_7c1240f9",
+      "revId": "b9041a902a96630512baabec9f672321fecb3db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fc6205fd_ea610bcd",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -67,6 +121,24 @@
       "revId": "b9041a902a96630512baabec9f672321fecb3db1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cc439af_ff5eeee7",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-04-14T14:12:23Z",
+      "side": 1,
+      "message": "I took a look at that code now, and it turns out that reading {old_size} in the beginning is mostly unnecessary. It is just used to check if memory.grow will fail trivially. It was also used to calculate {new_pages}, but that value was not actually used in the multi-threaded case. I removed {new_pages} now where it is not necessary, to make it more clear.",
+      "parentUuid": "fc6205fd_ea610bcd",
+      "revId": "b9041a902a96630512baabec9f672321fecb3db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
