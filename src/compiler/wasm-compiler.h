@@ -385,6 +385,8 @@ class WasmGraphBuilder {
   Node* TableSize(uint32_t table_index);
   Node* TableFill(uint32_t table_index, Node* start, Node* value, Node* count);
 
+  Node* AllocateJSArray(Node* array_size);
+
   bool has_simd() const { return has_simd_; }
 
   wasm::UseTrapHandler use_trap_handler() const {
