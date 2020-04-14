@@ -126,6 +126,24 @@
     },
     {
       "key": {
+        "uuid": "1ccbdcde_0fbbc273",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-14T11:31:58Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t know what you mean by \"introduce more behavioral changes\".\n\nInvalidUse crashes does nothing on fuzzers, and crashes on the CHECK in the default config. That is the behavioral difference I meant.\n\nIn some cases, like DeoptimizeNow, that is what we actually want, since fuzzers are known to use the functions and can pass invalid arguments in or call them in invalid situations.\n\nBut in other cases the behavior should *not* diverge between fuzzers and the default config. For example, AFAIK Runtime_DebugTrackRetainingPath should never be called by a fuzzer. Silently doing nothing may hide real bugs that would otherwise be exposed.\n\nSo what I am arguing for is to make the set of \"runtime functions that are more permissive in --fuzzing mode\" as small as possible. Maybe just reuse the list in Runtime::IsWhitelistedForFuzzing?",
+      "parentUuid": "d907e054_cd7a780b",
+      "revId": "ac934638682f284a7f7d8394529c94edcf893994",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1aedf677_a5c21cd6",
         "filename": "test/inspector/debugger/asm-js-breakpoint-before-exec-expected.txt",
         "patchSetId": 7
