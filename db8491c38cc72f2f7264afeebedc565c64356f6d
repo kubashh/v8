@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8c92dc0e_a9d5f5bd",
+        "filename": "test/unittests/heap/spaces-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-04-14T08:56:43Z",
+      "side": 0,
+      "message": "No need, I added this myself very recently specifically to deal with this Isolate test state leakage.",
+      "parentUuid": "2ed292b4_5698c8fd",
+      "revId": "db8491c38cc72f2f7264afeebedc565c64356f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "82e2c6f7_284154d0",
         "filename": "test/unittests/test-utils.h",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2020-04-13T19:17:06Z",
       "side": 0,
       "message": "I think it\u0027s worth keeping these guys in the mixing classes in case the parent will ever require some static setup/teardown. Just to avoid surprises in the future.",
+      "revId": "db8491c38cc72f2f7264afeebedc565c64356f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dccfd6be_77152587",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-04-14T08:56:43Z",
+      "side": 0,
+      "message": "This shouldn\u0027t prevent it, these \u0027no-op\u0027 static methods are just not needed. If you have\n    \n    class Foo { public: static void foo(); };\n    class Bar : public Foo {};\n\nthen `Bar::foo()` will still work (and will call `Foo::foo()`): https://godbolt.org/z/CZDW5U",
+      "parentUuid": "82e2c6f7_284154d0",
       "revId": "db8491c38cc72f2f7264afeebedc565c64356f6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
