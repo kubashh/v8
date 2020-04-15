@@ -98,6 +98,8 @@ Dump each object constructor name.
 Running test: testQueryObjectsWithFeedbackVector
 Before/After difference: 1
 
+Running test: testQueryObjectsWithArrayBuffer
+
 Running test: testWithObjectGroup
 Query for Array.prototype 3 times
 Results since initial: 0
