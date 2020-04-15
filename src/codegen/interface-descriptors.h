@@ -100,6 +100,7 @@ namespace internal {
   V(WasmTableCopy)                    \
   V(WasmTableGet)                     \
   V(WasmTableSet)                     \
+  V(WasmAllocateJSArray)              \
   V(WasmThrow)                        \
   BUILTIN_LIST_TFS(V)                 \
   TORQUE_BUILTIN_LIST_TFC(V)
@@ -1380,6 +1381,14 @@ class WasmTableSetDescriptor final : public CallInterfaceDescriptor {
                          MachineType::Int32(),         // kEntryIndex
                          MachineType::AnyTagged())     // kValue
   DECLARE_DESCRIPTOR(WasmTableSetDescriptor, CallInterfaceDescriptor)
+};
+
+class WasmAllocateJSArrayDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kArraySize)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),
+                                    MachineType::Int32())
+  DECLARE_DESCRIPTOR(WasmAllocateJSArrayDescriptor, CallInterfaceDescriptor)
 };
 
 class WasmThrowDescriptor final : public CallInterfaceDescriptor {

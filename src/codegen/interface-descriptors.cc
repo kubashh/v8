@@ -402,6 +402,11 @@ void WasmTableSetDescriptor::InitializePlatformSpecific(
   DefaultInitializePlatformSpecific(data, kParameterCount);
 }
 
+void WasmAllocateJSArrayDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  DefaultInitializePlatformSpecific(data, kParameterCount);
+}
+
 void WasmThrowDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   DefaultInitializePlatformSpecific(data, kParameterCount);
