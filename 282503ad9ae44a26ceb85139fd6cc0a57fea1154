@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "950e8ca8_c6185266",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-15T15:38:43Z",
+      "side": 1,
+      "message": "Same comment as before.",
+      "revId": "282503ad9ae44a26ceb85139fd6cc0a57fea1154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
