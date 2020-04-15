@@ -338,6 +338,17 @@ TF_BUILTIN(WasmTableSet, WasmBuiltinsAssembler) {
                   SmiConstant(static_cast<int>(message_id)));
 }
 
+TF_BUILTIN(WasmAllocateJSArray, WasmBuiltinsAssembler) {
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Smi> array_size = CAST(Parameter(Descriptor::kArraySize));
+
+  TNode<Map> array_map = CAST(
+      LoadContextElement(context, Context::JS_ARRAY_PACKED_ELEMENTS_MAP_INDEX));
+
+  Return(CodeStubAssembler::AllocateJSArray(PACKED_ELEMENTS, array_map,
+                                            array_size, array_size));
+}
+
 #define DECLARE_THROW_RUNTIME_FN(name)                            \
   TF_BUILTIN(ThrowWasm##name, WasmBuiltinsAssembler) {            \
     TNode<WasmInstanceObject> instance = LoadInstanceFromFrame(); \
