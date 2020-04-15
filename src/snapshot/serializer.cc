@@ -389,13 +389,9 @@ void Serializer::ObjectSerializer::SerializeJSTypedArray() {
           reinterpret_cast<Address>(typed_array.DataPtr()) - byte_offset);
 
       uint32_t ref = SerializeBackingStore(backing_store, byte_length);
-      // To properly share the buffer, we set the backing store ref as an
-      // off-heap offset from nullptr. On deserialization we re-set data
-      // pointer to proper value.
-      typed_array.SetOffHeapDataPtr(nullptr, ref);
-      DCHECK_EQ(ref, reinterpret_cast<Address>(typed_array.DataPtr()));
+      typed_array.SetExternalBackingStoreRefForSerialization(ref);
     } else {
-      typed_array.SetOffHeapDataPtr(nullptr, 0);
+      typed_array.SetExternalBackingStoreRefForSerialization(0);
     }
   }
   SerializeObject();
