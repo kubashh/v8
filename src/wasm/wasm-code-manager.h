@@ -50,6 +50,7 @@ struct WasmModule;
   FOREACH_WASM_TRAPREASON(VTRAP)         \
   V(WasmCompileLazy)                     \
   V(WasmDebugBreak)                      \
+  V(WasmAllocateJSArray)                 \
   V(WasmAtomicNotify)                    \
   V(WasmI32AtomicWait32)                 \
   V(WasmI32AtomicWait64)                 \

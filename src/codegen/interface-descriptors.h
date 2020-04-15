@@ -90,6 +90,7 @@ namespace internal {
   V(TypeConversionStackParameter)     \
   V(Typeof)                           \
   V(Void)                             \
+  V(WasmAllocateJSArray)              \
   V(WasmAtomicNotify)                 \
   V(WasmI32AtomicWait32)              \
   V(WasmI32AtomicWait64)              \
@@ -1308,6 +1309,14 @@ class RunMicrotasksDescriptor final : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR(RunMicrotasksDescriptor, CallInterfaceDescriptor)
 
   static Register MicrotaskQueueRegister();
+};
+
+class WasmAllocateJSArrayDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kArraySize)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),
+                                    MachineType::TaggedSigned())
+  DECLARE_DESCRIPTOR(WasmAllocateJSArrayDescriptor, CallInterfaceDescriptor)
 };
 
 class WasmMemoryGrowDescriptor final : public CallInterfaceDescriptor {

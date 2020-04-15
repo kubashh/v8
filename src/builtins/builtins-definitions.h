@@ -842,6 +842,7 @@ namespace internal {
   /* Wasm */                                                                   \
   ASM(WasmCompileLazy, Dummy)                                                  \
   ASM(WasmDebugBreak, Dummy)                                                   \
+  TFC(WasmAllocateJSArray, WasmAllocateJSArray)                                \
   TFC(WasmAtomicNotify, WasmAtomicNotify)                                      \
   TFC(WasmI32AtomicWait32, WasmI32AtomicWait32)                                \
   TFC(WasmI32AtomicWait64, WasmI32AtomicWait64)                                \
