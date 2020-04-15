@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ded8886f_e0565f66",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-15T09:27:38Z",
+      "side": 1,
+      "message": "Please add a tracking bug that adds some context, or write a few lines here on the motivation.",
+      "revId": "f14e9d109387327c2d6bd5eb1bf81b59139e36a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c07c69d_59b742e4",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-15T09:27:38Z",
+      "side": 1,
+      "message": "Don\u0027t define this, just declare it.",
+      "revId": "f14e9d109387327c2d6bd5eb1bf81b59139e36a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8da8196a_8eaeed8f",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-15T09:27:38Z",
+      "side": 1,
+      "message": "Can you instead add a static_assert that this implementation will only get used for RETYPE and LOWER?",
+      "revId": "f14e9d109387327c2d6bd5eb1bf81b59139e36a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
