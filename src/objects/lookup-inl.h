@@ -216,6 +216,7 @@ void LookupIterator::UpdateProtector(Isolate* isolate, Handle<Object> receiver,
 
 void LookupIterator::UpdateProtector() {
   if (IsElement()) return;
+  if (state() == LookupIterator::ACCESS_CHECK && !HasAccess()) return;
   UpdateProtector(isolate_, receiver_, name_);
 }
 

@@ -26,7 +26,7 @@ void TraceProtectorInvalidation(const char* protector_name) {
   DCHECK(FLAG_trace_protector_invalidation);
 
   // TODO(jgruber): Remove the PrintF once tracing can output to stdout.
-  i::PrintF("Invalidating protector cell %s", protector_name);
+  i::PrintF("Invalidating protector cell %s\n", protector_name);
   TRACE_EVENT_INSTANT1("v8", kInvalidateProtectorTracingCategory,
                        TRACE_EVENT_SCOPE_THREAD, kInvalidateProtectorTracingArg,
                        protector_name);
