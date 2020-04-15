@@ -1991,6 +1991,24 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kPPC_LoadDouble:
       ASSEMBLE_LOAD_FLOAT(lfd, lfdx);
       break;
+    case kPPC_LoadSimd128: {
+      Simd128Register result = i.OutputSimd128Register();
+      AddressingMode mode = kMode_None;
+      MemOperand operand = i.MemoryOperand(&mode);
+      bool is_atomic = i.InputInt32(2);
+      if (mode == kMode_MRI) {
+        // UNIMPLEMENTED();
+        //__ asm_instr(result, operand);
+        __ mov(kScratchReg, Operand(operand.offset()));
+        __ lvx(result, MemOperand(operand.ra(), kScratchReg));
+
+      } else {
+        __ lvx(result, operand);
+      }
+      if (is_atomic) __ lwsync();
+      DCHECK_EQ(LeaveRC, i.OutputRCBit());
+      break;
+    }
     case kPPC_StoreWord8:
       ASSEMBLE_STORE_INTEGER(stb, stbx);
       break;
@@ -2011,6 +2029,23 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kPPC_StoreDouble:
       ASSEMBLE_STORE_FLOAT(stfd, stfdx);
       break;
+    case kPPC_StoreSimd128: {
+      size_t index = 0;
+      AddressingMode mode = kMode_None;
+      MemOperand operand = i.MemoryOperand(&mode, &index);
+      Simd128Register value = i.InputSimd128Register(index);
+      bool is_atomic = i.InputInt32(3);
+      if (is_atomic) __ lwsync();
+      if (mode == kMode_MRI) {
+        __ mov(kScratchReg, Operand(operand.offset()));
+        __ stvx(value, MemOperand(operand.ra(), kScratchReg));
+      } else {
+        __ stvx(value, operand);
+      }
+      if (is_atomic) __ sync();
+      DCHECK_EQ(LeaveRC, i.OutputRCBit());
+      break;
+    }
     case kWord32AtomicLoadInt8:
     case kPPC_AtomicLoadUint8:
     case kWord32AtomicLoadInt16:
