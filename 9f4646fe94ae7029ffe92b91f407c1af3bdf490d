@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c7fc974_98e1b158",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-15T09:44:56Z",
+      "side": 1,
+      "message": "Can we keep this list alpha-sorted?",
+      "revId": "9f4646fe94ae7029ffe92b91f407c1af3bdf490d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59a5a3d6_7ac80c33",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-15T09:44:56Z",
+      "side": 1,
+      "message": "You specify this parameter as Int32, but it\u0027s read as Smi in the builtin. This does not match. The machine type for Smi is TaggedSigned. But it might be better overall to keep this as Int32, and do the int to Smi conversion in the builtin.",
+      "revId": "9f4646fe94ae7029ffe92b91f407c1af3bdf490d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
