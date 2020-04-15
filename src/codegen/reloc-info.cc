@@ -11,7 +11,7 @@
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/objects/code-inl.h"
 #include "src/snapshot/embedded/embedded-data.h"
-#include "src/snapshot/serializer-common.h"  // For ExternalReferenceEncoder.
+#include "src/snapshot/external-reference-encoder.h"
 
 namespace v8 {
 namespace internal {
