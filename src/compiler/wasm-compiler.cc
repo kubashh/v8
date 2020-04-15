@@ -5850,15 +5850,15 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       // === General case of unknown callable ==================================
       // =======================================================================
       case WasmImportCallKind::kUseCallBuiltin: {
-        base::SmallVector<Node*, 16> args(wasm_count + 7);
+        base::SmallVector<Node*, 16> args(wasm_count + 6);
         int pos = 0;
         args[pos++] = GetBuiltinPointerTarget(Builtins::kCall_ReceiverIsAny);
         args[pos++] = callable_node;
-        args[pos++] = mcgraph()->Int32Constant(wasm_count);  // argument count
-        args[pos++] = undefined_node;                        // receiver
+        args[pos++] = mcgraph()->Int32Constant(wasm_count - 1);  // arg count
+        // args[pos++] = undefined_node;                        // receiver
 
         auto call_descriptor = Linkage::GetStubCallDescriptor(
-            graph()->zone(), CallTrampolineDescriptor{}, wasm_count + 1,
+            graph()->zone(), CallTrampolineDescriptor{}, wasm_count + 0,
             CallDescriptor::kNoFlags, Operator::kNoProperties,
             StubCallMode::kCallBuiltinPointer);
 
