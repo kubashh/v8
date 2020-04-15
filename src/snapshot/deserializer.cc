@@ -303,12 +303,14 @@ HeapObject Deserializer::PostProcessNewObject(HeapObject obj,
                                    typed_array.external_pointer());
     } else {
       // Serializer writes backing store ref as a DataPtr() value.
-      size_t store_index = reinterpret_cast<size_t>(typed_array.DataPtr());
+      uint32_t store_index =
+          typed_array.GetExternalBackingStoreRefForDeserialization();
       auto backing_store = backing_stores_[store_index];
       auto start = backing_store
                        ? reinterpret_cast<byte*>(backing_store->buffer_start())
                        : nullptr;
-      typed_array.SetOffHeapDataPtr(start, typed_array.byte_offset());
+      typed_array.SetOffHeapDataPtr(isolate(), start,
+                                    typed_array.byte_offset());
     }
   } else if (obj.IsJSArrayBuffer()) {
     JSArrayBuffer buffer = JSArrayBuffer::cast(obj);

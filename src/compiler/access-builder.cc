@@ -420,7 +420,7 @@ FieldAccess AccessBuilder::ForJSTypedArrayExternalPointer() {
                         JSTypedArray::kExternalPointerOffset,
                         MaybeHandle<Name>(),
                         MaybeHandle<Map>(),
-                        Type::ExternalPointer(),
+                        Type::SandboxedExternalPointer(),
                         MachineType::Pointer(),
                         kNoWriteBarrier,
                         LoadSensitivity::kCritical};
