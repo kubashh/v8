@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea341a64_bb9dfa69",
+        "filename": "src/objects/lookup-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-04-15T12:42:42Z",
+      "side": 1,
+      "message": "If we\u0027re still in ACCESS_CHECK here, can we assumed !HasAccess()? It seems like the embedder doesn\u0027t want additional calls...",
+      "revId": "48bb677be87de8f20ebdac3cac1473a826aa473b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
