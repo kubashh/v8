@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "84625325_9801c8dd",
+        "filename": "src/objects/js-array-buffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-04-16T08:22:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee624d1c_698b3719",
+      "revId": "f97e8281cf02155169681a0153408366111c2eb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4aaf525_3d6488a4",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "f97e8281cf02155169681a0153408366111c2eb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db632c2c_ef0132ec",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-04-16T08:22:49Z",
+      "side": 1,
+      "message": "We\u0027ll address this in the JSArrayBuffer-related CL.",
+      "parentUuid": "d4aaf525_3d6488a4",
+      "revId": "f97e8281cf02155169681a0153408366111c2eb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
