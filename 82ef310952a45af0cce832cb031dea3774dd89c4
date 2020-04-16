@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3036723_6a155b12",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-16T06:45:51Z",
+      "side": 1,
+      "message": "Please return CrashUnlessFuzzing(isolate) on invalid input.",
+      "revId": "82ef310952a45af0cce832cb031dea3774dd89c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
