@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2816d442_407e54e0",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-04-16T14:08:13Z",
+      "side": 1,
+      "message": "This is not really an external pointer, just an offset inside of the heap. So perhaps we should store that unencoded? Or is the plan to eventually put these offsets into the external pointer table too?",
+      "range": {
+        "startLine": 401,
+        "startChar": 14,
+        "endLine": 401,
+        "endChar": 69
+      },
+      "revId": "6ad9c15520f30697bdc6efa0a114c5294dd179cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
