@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee624d1c_698b3719",
+        "filename": "src/objects/js-array-buffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-16T07:15:44Z",
+      "side": 1,
+      "message": "The the",
+      "revId": "f97e8281cf02155169681a0153408366111c2eb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4aaf525_3d6488a4",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-16T07:15:44Z",
+      "side": 1,
+      "message": "A similar helper with ForSerialization suffix would be nice here too :)",
+      "revId": "f97e8281cf02155169681a0153408366111c2eb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
