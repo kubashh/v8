@@ -22,6 +22,30 @@
       "revId": "6ad9c15520f30697bdc6efa0a114c5294dd179cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8cef7f6_e73f8351",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-04-16T14:25:05Z",
+      "side": 1,
+      "message": "The reason for such an approach is to make data pointer computation as fast as possible: currently it\u0027s branchless and is just a (base_pointer + external_pointer) for both on-heap and off-heap typed arrays\nThe way it works is:\n1) On-heap typed array case: base_pointer contains some HeapObject, external_pointer contains offset in that base_pointer object\n2) Off-heap typed array case: base_pointer contains Smi-zero, external_pointer contains the actual off-heap data pointer (with decompensation for Smi-corrupting decompression of Smi-zero)\n\nWe might end up having a completely different machinery for typed arrays in sandboxed V8, but that\u0027s outside of the scope of this CL.",
+      "parentUuid": "2816d442_407e54e0",
+      "range": {
+        "startLine": 401,
+        "startChar": 14,
+        "endLine": 401,
+        "endChar": 69
+      },
+      "revId": "6ad9c15520f30697bdc6efa0a114c5294dd179cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
