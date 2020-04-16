@@ -496,6 +496,8 @@ DEFINE_BOOL(trace_generalization, false, "trace map generalization")
 // Flags for TurboProp.
 DEFINE_BOOL(turboprop, false,
             "enable experimental turboprop mid-tier compiler.")
+DEFINE_INT(reuse_opt_code_count, 2,
+           "don't discard optimized code for the specified number of deopts.")
 DEFINE_NEG_IMPLICATION(turboprop, turbo_inlining)
 DEFINE_IMPLICATION(turboprop, concurrent_inlining)
 DEFINE_VALUE_IMPLICATION(turboprop, interrupt_budget, 15 * KB)
