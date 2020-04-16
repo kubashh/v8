@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ce9dbbf_ee04b445",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-16T14:27:37Z",
+      "side": 1,
+      "message": "That\u0027s impossible via the DCHECK in 397 (I guess fuzzers at least respect the number of arguments for intrinsics).",
+      "range": {
+        "startLine": 401,
+        "startChar": 6,
+        "endLine": 401,
+        "endChar": 27
+      },
+      "revId": "85bfcda9dba57329093db6edd369ff99ba4d90ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bd41eb6_5959f172",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-16T14:27:37Z",
+      "side": 1,
+      "message": "This can be simplified to\nint stack_depth \u003d args.length() \u003d\u003d 1 ? args.smi_at(0) : 0;\n\nMaybe merge it with the conditional to:\n\nint stack_depth \u003d 0;\nif (args.length() \u003d\u003d 1) {\n  if (!args[0].IsSmi()) return CrashUnlessFuzzing(isolate);\n  stack_depth \u003d args.smi_at(0);\n}",
+      "revId": "85bfcda9dba57329093db6edd369ff99ba4d90ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
