@@ -34,6 +34,24 @@
       "revId": "282503ad9ae44a26ceb85139fd6cc0a57fea1154",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3835a78d_f636d8f2",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-16T09:20:31Z",
+      "side": 1,
+      "message": "Thanks for providing the background.\nI don\u0027t think that we need to worry about linking files compiled with different flags (that generally does not work in v8). Also, I don\u0027t think that this definition fixes this. In order to be (more) ABI compliant independent of build flags, we would need to unconditionally include the gdb_server_ field in the WasmEngine.\n\nBut I think the current conditional inclusion is actually better, and we can just skip the definition here.",
+      "parentUuid": "7270f139_cb37cd4c",
+      "revId": "282503ad9ae44a26ceb85139fd6cc0a57fea1154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
