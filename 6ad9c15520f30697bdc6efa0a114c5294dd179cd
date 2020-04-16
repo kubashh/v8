@@ -70,6 +70,30 @@
       "revId": "6ad9c15520f30697bdc6efa0a114c5294dd179cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec0f5cd6_987b0eeb",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-04-16T15:38:13Z",
+      "side": 1,
+      "message": "Well, for the sandbox performance project - Encode/DecodeExternalPointer are already kind of TODO. Data pointer computation is a known performance bottleneck for some Octane benchmarks, so we\u0027ll not miss this point.\nFor non-sandbox version, there\u0027s nothing to do here.",
+      "parentUuid": "88faae8d_45763c47",
+      "range": {
+        "startLine": 401,
+        "startChar": 14,
+        "endLine": 401,
+        "endChar": 69
+      },
+      "revId": "6ad9c15520f30697bdc6efa0a114c5294dd179cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
