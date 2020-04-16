@@ -398,8 +398,12 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
 
   Handle<JSFunction> function;
 
+  if (args.length() > 1 || (args.length() == 1 && !args[0].IsSmi())) {
+    return CrashUnlessFuzzing(isolate);
+  }
   // The optional parameter determines the frame being targeted.
-  int stack_depth = args.length() == 1 ? args.smi_at(0) : 0;
+  int stack_depth =
+      (args.length() == 1 && args[0].IsSmi()) ? args.smi_at(0) : 0;
 
   // Find the JavaScript function on the top of the stack.
   JavaScriptFrameIterator it(isolate);
