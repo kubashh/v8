@@ -16,6 +16,24 @@
       "revId": "282503ad9ae44a26ceb85139fd6cc0a57fea1154",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7270f139_cb37cd4c",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2020-04-16T05:44:36Z",
+      "side": 1,
+      "message": "There was a comment regarding this in the first CL related to this feature: https://chromium-review.googlesource.com/c/v8/v8/+/1923407/2/src/wasm/wasm-engine.h#284\nThere was a concern that we could have an ABI break if we build class WasmEngine with V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING set as true, so having the data member \u0027gdb_server_\u0027, and use it from other V8 component compiled with V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING\u003dfalse.\n\nI am not sure if this is really a problem, since we are in v8::internal, but that is the reason for this code. I agree that it would be better to remove this empty-class implementation if this is a non-issue.",
+      "parentUuid": "950e8ca8_c6185266",
+      "revId": "282503ad9ae44a26ceb85139fd6cc0a57fea1154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
