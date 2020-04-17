@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2761e8e_b1788baf",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2797,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-04-17T11:04:33Z",
+      "side": 1,
+      "message": "Is it correct that back_edge_in_bundle is false if and only if there is an input to the phi node that has a use position at a point where the phi itself (i.e. its output) also has a use position?\n\nDoes this mean the heuristic here is that spilling at the loop header is not beneficial if one of the inputs of the phi conflicts at a use position with the phi itself?",
+      "range": {
+        "startLine": 2796,
+        "startChar": 6,
+        "endLine": 2797,
+        "endChar": 76
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5aed92f1_2c94b3d7",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4525,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-04-17T11:04:33Z",
+      "side": 1,
+      "message": "What is the connection between this change and the heuristic for SpillAtLoopHeaderNotBeneficial?",
+      "range": {
+        "startLine": 4522,
+        "startChar": 4,
+        "endLine": 4525,
+        "endChar": 65
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59520408_a17de5d8",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4526,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-04-17T11:04:33Z",
+      "side": 1,
+      "message": "Why is this use position and not register position?",
+      "range": {
+        "startLine": 4526,
+        "startChar": 35,
+        "endLine": 4526,
+        "endChar": 50
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
