@@ -34,6 +34,24 @@
       "revId": "48bb677be87de8f20ebdac3cac1473a826aa473b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "512bb234_b06815bd",
+        "filename": "src/objects/lookup-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-04-17T11:28:10Z",
+      "side": 1,
+      "message": "Yuki: The callback is called to check whether we can proceed deleting / adding / ..., and right after the check succeeds we will do that, even if the callback itself doesn\u0027t. My question was around whether it\u0027s a problem that we\u0027d perform additional calls, since we have tests that verify how often exactly it\u0027s called. I guess that\u0027s mostly for performance reasons; and maybe we should keep it this way (we could also cache the result of HasAccess but that has other risks...)\n\nI think we\u0027re probably simply calling UpdateProtector too aggressively, even if e.g., delete won\u0027t actually delete anything. It\u0027s called e.g., at the beginning of DeleteProperty, while we could move it further down.",
+      "parentUuid": "a8995a09_01560a1f",
+      "revId": "48bb677be87de8f20ebdac3cac1473a826aa473b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
