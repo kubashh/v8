@@ -52,6 +52,24 @@
       "revId": "282503ad9ae44a26ceb85139fd6cc0a57fea1154",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1a34e49_e07569d7",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1318771
+      },
+      "writtenOn": "2020-04-17T01:01:53Z",
+      "side": 1,
+      "message": "You are right, it didn\u0027t even work because between the various patchsets I ended up conditionally including the gdb_server_ field in the WasmEngine. Removed the empty class.",
+      "parentUuid": "3835a78d_f636d8f2",
+      "revId": "282503ad9ae44a26ceb85139fd6cc0a57fea1154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
