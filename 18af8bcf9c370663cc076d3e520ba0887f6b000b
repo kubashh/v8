@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "316b2f66_2780fa4d",
+        "filename": "src/inspector/v8-console.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-04-17T08:16:06Z",
+      "side": 1,
+      "message": "{scope} can be null or garbage here. When InjectedScript::Scope is destroyed, the std::unique_ptr\u003cCommandLineAPIScope\u003e is still destructured, since its a normal field.\n\nAccessing {scope} here is a user-after free.",
+      "range": {
+        "startLine": 789,
+        "startChar": 0,
+        "endLine": 792,
+        "endChar": 22
+      },
+      "revId": "18af8bcf9c370663cc076d3e520ba0887f6b000b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99e76d16_bce6d2b3",
+        "filename": "test/inspector/runtime/regress-986051.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-04-17T08:16:06Z",
+      "side": 1,
+      "message": "nit:\n\n{\n  expression,\n  includeCommandLineAPI,\n  replMode: true,\n}",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 19
+      },
+      "revId": "18af8bcf9c370663cc076d3e520ba0887f6b000b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
