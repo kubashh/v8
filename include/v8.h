@@ -9603,7 +9603,8 @@ class V8_EXPORT V8 {
   V8_INLINE static bool Initialize() {
     const int kBuildConfiguration =
         (internal::PointerCompressionIsEnabled() ? kPointerCompression : 0) |
-        (internal::SmiValuesAre31Bits() ? k31BitSmis : 0);
+        (internal::SmiValuesAre31Bits() ? k31BitSmis : 0) |
+        (internal::HeapSandboxIsEnabled() ? kHeapSandbox : 0);
     return Initialize(kBuildConfiguration);
   }
 
@@ -9742,6 +9743,7 @@ class V8_EXPORT V8 {
   enum BuildConfigurationFeatures {
     kPointerCompression = 1 << 0,
     k31BitSmis = 1 << 1,
+    kHeapSandbox = 1 << 2,
   };
 
   /**
@@ -11383,7 +11385,10 @@ void* Object::GetAlignedPointerFromInternalField(int index) {
                 instance_type == I::kJSApiObjectType ||
                 instance_type == I::kJSSpecialApiObjectType)) {
     int offset = I::kJSObjectHeaderSize + (I::kEmbedderDataSlotSize * index);
-    return I::ReadRawField<void*>(obj, offset);
+    internal::Isolate* isolate =
+        internal::IsolateFromNeverReadOnlySpaceObject(obj);
+    A value = I::ReadExternalPointerField(isolate, obj, offset);
+    return reinterpret_cast<void*>(value);
   }
 #endif
   return SlowGetAlignedPointerFromInternalField(index);
@@ -12024,7 +12029,10 @@ void* Context::GetAlignedPointerFromEmbedderData(int index) {
       I::ReadTaggedPointerField(ctx, I::kNativeContextEmbedderDataOffset);
   int value_offset =
       I::kEmbedderDataArrayHeaderSize + (I::kEmbedderDataSlotSize * index);
-  return I::ReadRawField<void*>(embedder_data, value_offset);
+  internal::Isolate* isolate = internal::IsolateFromNeverReadOnlySpaceObject(
+      *reinterpret_cast<A*>(this));
+  return reinterpret_cast<void*>(
+      I::ReadExternalPointerField(isolate, embedder_data, value_offset));
 #else
   return SlowGetAlignedPointerFromEmbedderData(index);
 #endif
