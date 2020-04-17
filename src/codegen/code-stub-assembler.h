@@ -2411,20 +2411,30 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                           TVariable<BigInt>* var_maybe_bigint,
                                           TVariable<Smi>* var_feedback);
 
+  // Truncate a Number to an Int32.
+  TNode<Int32T> TruncateNumberToWord32(TNode<Number> value);
   // Truncate the floating point value of a HeapNumber to an Int32.
   TNode<Int32T> TruncateHeapNumberValueToWord32(TNode<HeapNumber> object);
 
   // Conversions.
   void TryHeapNumberToSmi(TNode<HeapNumber> number, TVariable<Smi>* output,
                           Label* if_smi);
+  void TryFloat32ToSmi(TNode<Float32T> number, TVariable<Smi>* output,
+                       Label* if_smi);
   void TryFloat64ToSmi(TNode<Float64T> number, TVariable<Smi>* output,
                        Label* if_smi);
+  TNode<Number> ChangeFloat32ToTagged(SloppyTNode<Float32T> value);
   TNode<Number> ChangeFloat64ToTagged(SloppyTNode<Float64T> value);
   TNode<Number> ChangeInt32ToTagged(SloppyTNode<Int32T> value);
   TNode<Number> ChangeUint32ToTagged(SloppyTNode<Uint32T> value);
   TNode<Number> ChangeUintPtrToTagged(TNode<UintPtrT> value);
   TNode<Uint32T> ChangeNumberToUint32(TNode<Number> value);
   TNode<Float64T> ChangeNumberToFloat64(TNode<Number> value);
+
+  TNode<Int32T> ChangeTaggedNonSmiToInt32(SloppyTNode<Context> context,
+                                          SloppyTNode<Object> input);
+  TNode<Float64T> ChangeTaggedToFloat64(SloppyTNode<Context> context,
+                                        SloppyTNode<Object> input);
 
   void TaggedToNumeric(TNode<Context> context, TNode<Object> value,
                        TVariable<Numeric>* var_numeric);
