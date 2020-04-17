@@ -1704,6 +1704,14 @@ class AllocationStats {
  public:
   AllocationStats() { Clear(); }
 
+  AllocationStats& operator=(const AllocationStats& stats) V8_NOEXCEPT {
+    capacity_ += stats.capacity_;
+    max_capacity_ = stats.max_capacity_;
+    size_ = stats.size_;
+    allocated_on_page_ = stats.allocated_on_page_;
+    return *this;
+  }
+
   // Zero out all the allocation statistics (i.e., no capacity).
   void Clear() {
     capacity_ = 0;
@@ -1810,7 +1818,7 @@ class V8_EXPORT_PRIVATE FreeListLegacy : public FreeList {
   inline Page* GetPageForSize(size_t size_in_bytes) override;
 
   FreeListLegacy();
-  ~FreeListLegacy();
+  ~FreeListLegacy() override;
 
   V8_WARN_UNUSED_RESULT FreeSpace Allocate(size_t size_in_bytes,
                                            size_t* node_size,
@@ -1894,7 +1902,7 @@ class V8_EXPORT_PRIVATE FreeListFastAlloc : public FreeList {
   inline Page* GetPageForSize(size_t size_in_bytes) override;
 
   FreeListFastAlloc();
-  ~FreeListFastAlloc();
+  ~FreeListFastAlloc() override;
 
   V8_WARN_UNUSED_RESULT FreeSpace Allocate(size_t size_in_bytes,
                                            size_t* node_size,
@@ -1940,7 +1948,7 @@ class V8_EXPORT_PRIVATE FreeListMany : public FreeList {
   Page* GetPageForSize(size_t size_in_bytes) override;
 
   FreeListMany();
-  ~FreeListMany();
+  ~FreeListMany() override;
 
   V8_WARN_UNUSED_RESULT FreeSpace Allocate(size_t size_in_bytes,
                                            size_t* node_size,
@@ -2136,7 +2144,7 @@ class V8_EXPORT_PRIVATE FreeListMap : public FreeList {
   Page* GetPageForSize(size_t size_in_bytes) override;
 
   FreeListMap();
-  ~FreeListMap();
+  ~FreeListMap() override;
 
   V8_WARN_UNUSED_RESULT FreeSpace Allocate(size_t size_in_bytes,
                                            size_t* node_size,
@@ -3208,11 +3216,31 @@ class V8_EXPORT_PRIVATE OffThreadSpace : public LocalSpace {
 };
 
 // -----------------------------------------------------------------------------
+// Artifacts used to construct a new SharedReadOnlySpace
+class ReadOnlyArtifacts {
+ public:
+  explicit ReadOnlyArtifacts(const AllocationStats& stats);
+
+  base::List<MemoryChunk>& pages() { return pages_; }
+  void TransferPages(base::List<MemoryChunk>&& pages) {
+    pages_ = std::move(pages);
+  }
+
+  const AllocationStats& accounting_stats() const { return stats_; }
+
+ private:
+  base::List<MemoryChunk> pages_;
+  AllocationStats stats_;
+};
+
+// -----------------------------------------------------------------------------
 // Read Only space for all Immortal Immovable and Immutable objects
 
 class ReadOnlySpace : public PagedSpace {
  public:
   explicit ReadOnlySpace(Heap* heap);
+  std::pair<std::shared_ptr<ReadOnlyArtifacts>, class SharedReadOnlySpace*>
+  Detach();
 
   // TODO(v8:7464): Remove this once PagedSpace::Unseal no longer writes to
   // memory_chunk_list_.
@@ -3238,20 +3266,29 @@ class ReadOnlySpace : public PagedSpace {
 
   size_t Available() override { return 0; }
 
- private:
-  // Unseal the space after is has been sealed, by making it writable.
-  // TODO(v8:7464): Only possible if the space hasn't been detached.
-  void Unseal();
+ protected:
   void SetPermissionsForPages(MemoryAllocator* memory_allocator,
                               PageAllocator::Permission access);
 
   bool is_marked_read_only_ = false;
+
+ private:
+  // Unseal the space after is has been sealed, by making it writable.
+  // TODO(v8:7464): Only possible if the space hasn't been detached.
+  void Unseal();
 
   //
   // String padding must be cleared just before serialization and therefore the
   // string padding in the space will already have been cleared if the space was
   // deserialized.
   bool is_string_padding_cleared_;
+};
+
+class SharedReadOnlySpace : public ReadOnlySpace {
+ public:
+  SharedReadOnlySpace(Heap* heap, std::shared_ptr<ReadOnlyArtifacts> artifacts);
+
+ private:
 };
 
 // -----------------------------------------------------------------------------
