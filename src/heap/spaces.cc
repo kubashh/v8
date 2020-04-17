@@ -3948,6 +3948,29 @@ ReadOnlySpace::ReadOnlySpace(Heap* heap)
       is_string_padding_cleared_(heap->isolate()->initialized_from_snapshot()) {
 }
 
+ReadOnlyArtifacts::ReadOnlyArtifacts(const AllocationStats& stats) {
+  stats_ = stats;
+}
+
+SharedReadOnlySpace::SharedReadOnlySpace(
+    Heap* heap, std::shared_ptr<ReadOnlyArtifacts> artifacts)
+    : ReadOnlySpace(heap) {
+  memory_chunk_list_ = artifacts->pages();
+  is_marked_read_only_ = true;
+  accounting_stats_ = artifacts->accounting_stats();
+}
+
+std::pair<std::shared_ptr<ReadOnlyArtifacts>, class SharedReadOnlySpace*>
+ReadOnlySpace::Detach() {
+  Heap* heap = ReadOnlySpace::heap();
+  Seal(SealMode::kDetachFromHeapAndForget);
+  auto artifacts = std::make_shared<ReadOnlyArtifacts>(accounting_stats_);
+  artifacts->TransferPages(std::move(memory_chunk_list_));
+  auto* shared_space = new SharedReadOnlySpace(heap, artifacts);
+  heap->ReplaceReadOnlySpace(shared_space);
+  return {artifacts, shared_space};
+}
+
 void ReadOnlyPage::MakeHeaderRelocatable() {
   ReleaseAllocatedMemoryNeededForWritableChunk();
   // Detached read-only space needs to have a valid marking bitmap and free list
