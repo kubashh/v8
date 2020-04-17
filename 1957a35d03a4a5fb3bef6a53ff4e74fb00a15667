@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "592f12ff_8ad4c3b9",
+        "filename": "src/objects/code.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-04-17T11:03:24Z",
+      "side": 1,
+      "message": "This field should be only used in TurboProp.",
+      "revId": "1957a35d03a4a5fb3bef6a53ff4e74fb00a15667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09675e8c_d017112d",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 9
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-04-17T11:03:24Z",
+      "side": 1,
+      "message": "We could pass --reuse-opt-code\u003d0 for these tests to work in TurboProp, but I guess it is better to skip them for now and think of a solution to make these tests work with TurboProp later.",
+      "revId": "1957a35d03a4a5fb3bef6a53ff4e74fb00a15667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
