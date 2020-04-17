@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "38a6e26d_1d32db6f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-17T12:58:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cc282e8_dfc8a43f",
+      "revId": "4639784bffbee6b12827de00a6c4d1b70ca4c5a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c9fa47b_eb8ed10a",
         "filename": "test/wasm-spec-tests/testcfg.py",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "4639784bffbee6b12827de00a6c4d1b70ca4c5a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62cae010_cc40abb8",
+        "filename": "test/wasm-spec-tests/testcfg.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-17T12:58:48Z",
+      "side": 1,
+      "message": "Done, thanks for the suggestion. I will wait a bit for landing in case someone has a better idea.",
+      "parentUuid": "2c9fa47b_eb8ed10a",
+      "revId": "4639784bffbee6b12827de00a6c4d1b70ca4c5a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
