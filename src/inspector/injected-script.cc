@@ -901,6 +901,7 @@ void InjectedScript::Scope::installCommandLineAPI() {
          !m_commandLineAPIScope.get());
   m_commandLineAPIScope.reset(new V8Console::CommandLineAPIScope(
       m_context, m_injectedScript->commandLineAPI(), m_context->Global()));
+  m_commandLineAPIScope->initialize(&m_commandLineAPIScope);
 }
 
 void InjectedScript::Scope::ignoreExceptionsAndMuteConsole() {

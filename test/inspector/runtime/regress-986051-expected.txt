@@ -1,0 +1,29 @@
+Regression test for 986051
+Regression test
+{
+    id : <messageId>
+    result : {
+        result : {
+            className : global
+            description : global
+            objectId : <objectId>
+            type : object
+        }
+    }
+}
+{
+    id : <messageId>
+    result : {
+        result : {
+            type : undefined
+        }
+    }
+}
+{
+    id : <messageId>
+    result : {
+        result : {
+            type : undefined
+        }
+    }
+}
