@@ -2769,6 +2769,7 @@ void BundleBuilder::BuildBundles() {
       }
       TRACE("Processing phi for v%d with %d:%d\n", phi->virtual_register(),
             out_range->TopLevel()->vreg(), out_range->relative_id());
+      bool back_edge_in_bundle = true;
       for (auto input : phi->operands()) {
         LiveRange* input_range = data()->GetOrCreateLiveRangeFor(input);
         TRACE("Input value v%d with range %d:%d\n", input,
@@ -2776,16 +2777,26 @@ void BundleBuilder::BuildBundles() {
         LiveRangeBundle* input_bundle = input_range->get_bundle();
         if (input_bundle != nullptr) {
           TRACE("Merge\n");
-          if (out->TryMerge(input_bundle, data()->is_trace_alloc()))
+          if (out->TryMerge(input_bundle, data()->is_trace_alloc())) {
             TRACE("Merged %d and %d to %d\n", phi->virtual_register(), input,
                   out->id());
+          } else if (input_range->Start() > out_range->Start()) {
+            back_edge_in_bundle = false;
+          }
         } else {
           TRACE("Add\n");
-          if (out->TryAddRange(input_range))
+          if (out->TryAddRange(input_range)) {
             TRACE("Added %d and %d to %d\n", phi->virtual_register(), input,
                   out->id());
+          } else if (input_range->Start() > out_range->Start()) {
+            back_edge_in_bundle = false;
+          }
         }
       }
+      // Spill backward to the loop header is not beneficial if inputs from
+      // back edges do not belong to the same liveRangebundle as the output.
+      if (!back_edge_in_bundle)
+        out_range->TopLevel()->set_spilling_at_loop_header_not_beneficial();
     }
     TRACE("Done block B%d\n", block_id);
   }
@@ -2993,7 +3004,9 @@ LifetimePosition RegisterAllocator::FindOptimalSpillingPos(
   *begin_spill_out = range;
   // TODO(herhut): Be more clever here as long as we do not move pos out of
   // deferred code.
-  if (spill_mode == SpillMode::kSpillDeferred) return pos;
+  if (spill_mode == SpillMode::kSpillDeferred ||
+      range->TopLevel()->SpillAtLoopHeaderNotBeneficial())
+    return pos;
   const InstructionBlock* block = GetInstructionBlock(code(), pos.Start());
   const InstructionBlock* loop_header =
       block->IsLoopHeader() ? block : GetContainingLoop(code(), block);
@@ -4505,11 +4518,22 @@ void LinearScanAllocator::SplitAndSpillIntersecting(LiveRange* current,
       }
     }
 
+    LifetimePosition spill_pos;
+    // If range has a UsePosition at the split position, the UsePosition
+    // will belong to the first range after splitting. This may save a gap move
+    // between range and current as they share the same register.
+    // It's beneficial to not spill previous ranges in such case.
+    UsePosition* next_use = range->NextUsePosition(split_pos);
+    if (next_use != nullptr && next_use->pos() == split_pos) {
+      spill_pos = split_pos;
+    } else {
+      LiveRange* begin_spill = nullptr;
+      spill_pos =
+          FindOptimalSpillingPos(range, split_pos, spill_mode, &begin_spill);
+      MaybeSpillPreviousRanges(begin_spill, spill_pos, range);
+    }
+
     UsePosition* next_pos = range->NextRegisterPosition(current->Start());
-    LiveRange* begin_spill = nullptr;
-    LifetimePosition spill_pos =
-        FindOptimalSpillingPos(range, split_pos, spill_mode, &begin_spill);
-    MaybeSpillPreviousRanges(begin_spill, spill_pos, range);
     if (next_pos == nullptr) {
       SpillAfter(range, spill_pos, spill_mode);
     } else {
