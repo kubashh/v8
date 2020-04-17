@@ -1591,10 +1591,10 @@ struct SimplifiedLoweringPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(SimplifiedLowering)
 
   void Run(PipelineData* data, Zone* temp_zone) {
-    SimplifiedLowering lowering(data->jsgraph(), data->broker(), temp_zone,
-                                data->source_positions(), data->node_origins(),
-                                data->info()->GetPoisoningMitigationLevel(),
-                                &data->info()->tick_counter());
+    SimplifiedLowering lowering(
+        data->jsgraph(), data->broker(), temp_zone, data->source_positions(),
+        data->node_origins(), data->info()->GetPoisoningMitigationLevel(),
+        &data->info()->tick_counter(), data->runtime_call_stats());
     lowering.LowerAllNodes();
   }
 };

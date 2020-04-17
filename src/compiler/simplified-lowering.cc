@@ -610,10 +610,26 @@ class RepresentationSelector {
   }
 
   void Run(SimplifiedLowering* lowering) {
-    RunTruncationPropagationPhase();
+    {
+      RuntimeCallTimerScope runtimeTimer(
+          lowering->runtime_call_stats(),
+          RuntimeCallCounterId::kOptimizeSimplifiedLoweringPropagatePhase,
+          RuntimeCallStats::kThreadSpecific);
+      RunTruncationPropagationPhase();
+    }
 
-    RunTypePropagationPhase();
+    {
+      RuntimeCallTimerScope runtimeTimer(
+          lowering->runtime_call_stats(),
+          RuntimeCallCounterId::kOptimizeSimplifiedLoweringRetypePhase,
+          RuntimeCallStats::kThreadSpecific);
+      RunTypePropagationPhase();
+    }
 
+    RuntimeCallTimerScope runtimeTimer(
+        lowering->runtime_call_stats(),
+        RuntimeCallCounterId::kOptimizeSimplifiedLoweringLoweringPhase,
+        RuntimeCallStats::kThreadSpecific);
     // Run lowering and change insertion phase.
     TRACE("--{Simplified lowering phase}--\n");
     phase_ = LOWER;
@@ -3838,7 +3854,8 @@ SimplifiedLowering::SimplifiedLowering(JSGraph* jsgraph, JSHeapBroker* broker,
                                        SourcePositionTable* source_positions,
                                        NodeOriginTable* node_origins,
                                        PoisoningMitigationLevel poisoning_level,
-                                       TickCounter* tick_counter)
+                                       TickCounter* tick_counter,
+                                       RuntimeCallStats* runtime_call_stats)
     : jsgraph_(jsgraph),
       broker_(broker),
       zone_(zone),
@@ -3846,7 +3863,8 @@ SimplifiedLowering::SimplifiedLowering(JSGraph* jsgraph, JSHeapBroker* broker,
       source_positions_(source_positions),
       node_origins_(node_origins),
       poisoning_level_(poisoning_level),
-      tick_counter_(tick_counter) {}
+      tick_counter_(tick_counter),
+      runtime_call_stats_(runtime_call_stats) {}
 
 void SimplifiedLowering::LowerAllNodes() {
   RepresentationChanger changer(jsgraph(), broker_);
