@@ -31,6 +31,8 @@ class V8Console : public v8::debug::ConsoleDelegate {
                         v8::Local<v8::Object> global);
     ~CommandLineAPIScope();
 
+    void initialize(std::unique_ptr<CommandLineAPIScope>* this_ptr);
+
    private:
     static void accessorGetterCallback(
         v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>&);

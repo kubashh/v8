@@ -783,18 +783,24 @@ static bool isCommandLineAPIGetter(const String16& name) {
 
 void V8Console::CommandLineAPIScope::accessorGetterCallback(
     v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  CommandLineAPIScope* scope = static_cast<CommandLineAPIScope*>(
-      info.Data().As<v8::External>()->Value());
+  std::unique_ptr<CommandLineAPIScope>* scope =
+      static_cast<std::unique_ptr<CommandLineAPIScope>*>(
+          info.Data().As<v8::External>()->Value());
   DCHECK(scope);
 
   v8::Local<v8::Context> context = info.GetIsolate()->GetCurrentContext();
-  if (scope->m_cleanup) {
+  if (!scope->get()) {
+    // TODO(1071734): The CommandLineAPIScope has already been destroyed, and
+    // not restored. This can happen if the CommandLineAPIScope destructor
+    // failed to clean up.
+    return;
+  }
+  if (scope->get()->m_cleanup) {
     bool removed = info.Holder()->Delete(context, name).FromMaybe(false);
-    DCHECK(removed);
     USE(removed);
     return;
   }
-  v8::Local<v8::Object> commandLineAPI = scope->m_commandLineAPI;
+  v8::Local<v8::Object> commandLineAPI = scope->get()->m_commandLineAPI;
 
   v8::Local<v8::Value> value;
   if (!commandLineAPI->Get(context, name).ToLocal(&value)) return;
@@ -834,27 +840,31 @@ V8Console::CommandLineAPIScope::CommandLineAPIScope(
       m_commandLineAPI(commandLineAPI),
       m_global(global),
       m_installedMethods(v8::Set::New(context->GetIsolate())),
-      m_cleanup(false) {
-  v8::MicrotasksScope microtasksScope(context->GetIsolate(),
+      m_cleanup(false) {}
+
+void V8Console::CommandLineAPIScope::initialize(
+    std::unique_ptr<CommandLineAPIScope>* this_ptr) {
+  v8::MicrotasksScope microtasksScope(m_context->GetIsolate(),
                                       v8::MicrotasksScope::kDoNotRunMicrotasks);
   v8::Local<v8::Array> names;
-  if (!m_commandLineAPI->GetOwnPropertyNames(context).ToLocal(&names)) return;
+  if (!m_commandLineAPI->GetOwnPropertyNames(m_context).ToLocal(&names)) return;
   v8::Local<v8::External> externalThis =
-      v8::External::New(context->GetIsolate(), this);
+      v8::External::New(m_context->GetIsolate(), this_ptr);
   for (uint32_t i = 0; i < names->Length(); ++i) {
     v8::Local<v8::Value> name;
-    if (!names->Get(context, i).ToLocal(&name) || !name->IsName()) continue;
-    if (m_global->Has(context, name).FromMaybe(true)) continue;
-    if (!m_installedMethods->Add(context, name).ToLocal(&m_installedMethods))
+    if (!names->Get(m_context, i).ToLocal(&name) || !name->IsName()) continue;
+    if (m_global->Has(m_context, name).FromMaybe(true)) continue;
+    if (!m_installedMethods->Add(m_context, name).ToLocal(&m_installedMethods))
       continue;
     if (!m_global
-             ->SetAccessor(context, v8::Local<v8::Name>::Cast(name),
+             ->SetAccessor(m_context, v8::Local<v8::Name>::Cast(name),
                            CommandLineAPIScope::accessorGetterCallback,
                            CommandLineAPIScope::accessorSetterCallback,
                            externalThis, v8::DEFAULT, v8::DontEnum,
                            v8::SideEffectType::kHasNoSideEffect)
              .FromMaybe(false)) {
-      bool removed = m_installedMethods->Delete(context, name).FromMaybe(false);
+      bool removed =
+          m_installedMethods->Delete(m_context, name).FromMaybe(false);
       DCHECK(removed);
       USE(removed);
       continue;
