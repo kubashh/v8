@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3cc282e8_dfc8a43f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-04-17T11:38:27Z",
+      "side": 1,
+      "message": "Could you mention in the CL title and description that this CL also changes the memory limit?",
+      "revId": "4639784bffbee6b12827de00a6c4d1b70ca4c5a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c9fa47b_eb8ed10a",
+        "filename": "test/wasm-spec-tests/testcfg.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-04-17T11:38:27Z",
+      "side": 1,
+      "message": "As discussed \"offline\", could you write an e-mail to the team describing the problem why you added the flag here, that thereby we do not test the default configuration anymore, but that we have to disable too many tests otherwise.",
+      "revId": "4639784bffbee6b12827de00a6c4d1b70ca4c5a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
