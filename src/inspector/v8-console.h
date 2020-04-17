@@ -42,6 +42,7 @@ class V8Console : public v8::debug::ConsoleDelegate {
     v8::Local<v8::Object> m_commandLineAPI;
     v8::Local<v8::Object> m_global;
     v8::Local<v8::Set> m_installedMethods;
+    v8::Local<v8::ArrayBuffer> m_thisReference;
     bool m_cleanup;
 
     DISALLOW_COPY_AND_ASSIGN(CommandLineAPIScope);
