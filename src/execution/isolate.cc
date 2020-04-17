@@ -25,6 +25,7 @@
 #include "src/builtins/constants-table-builder.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/compilation-cache.h"
+#include "src/common/external-pointer-inl.h"
 #include "src/common/ptr-compr.h"
 #include "src/compiler-dispatcher/compiler-dispatcher.h"
 #include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
@@ -2863,6 +2864,9 @@ Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator)
       next_unique_sfi_id_(0),
 #endif
       cancelable_task_manager_(new CancelableTaskManager()) {
+  for (uint32_t i = 0; i < Internals::kNumIsolateDataSlots; i++) {
+    SetData(i, nullptr);
+  }
   TRACE_ISOLATE(constructor);
   CheckIsolateLayout();
 
@@ -3725,6 +3729,18 @@ bool Isolate::NeedsSourcePositionsForProfiling() const {
   return FLAG_trace_deopt || FLAG_trace_turbo || FLAG_trace_turbo_graph ||
          FLAG_turbo_profiling || FLAG_perf_prof || is_profiling() ||
          debug_->is_active() || logger_->is_logging() || FLAG_trace_maps;
+}
+
+void Isolate::SetData(uint32_t slot, void* data) {
+  DCHECK_LT(slot, Internals::kNumIsolateDataSlots);
+  isolate_data_.embedder_data_[slot] =
+      EncodeExternalPointer(this, reinterpret_cast<Address>(data));
+}
+
+void* Isolate::GetData(uint32_t slot) {
+  DCHECK_LT(slot, Internals::kNumIsolateDataSlots);
+  return reinterpret_cast<void*>(
+      DecodeExternalPointer(this, isolate_data_.embedder_data_[slot]));
 }
 
 void Isolate::SetFeedbackVectorsForProfilingTools(Object value) {

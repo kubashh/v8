@@ -1072,14 +1072,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   THREAD_LOCAL_TOP_ACCESSOR(StateTag, current_vm_state)
 
-  void SetData(uint32_t slot, void* data) {
-    DCHECK_LT(slot, Internals::kNumIsolateDataSlots);
-    isolate_data_.embedder_data_[slot] = data;
-  }
-  void* GetData(uint32_t slot) {
-    DCHECK_LT(slot, Internals::kNumIsolateDataSlots);
-    return isolate_data_.embedder_data_[slot];
-  }
+  void SetData(uint32_t slot, void* data);
+  void* GetData(uint32_t slot);
 
   bool serializer_enabled() const { return serializer_enabled_; }
 

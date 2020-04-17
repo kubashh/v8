@@ -282,7 +282,10 @@ class Internals {
     internal::Address addr = reinterpret_cast<internal::Address>(isolate) +
                              kIsolateEmbedderDataOffset +
                              slot * kApiSystemPointerSize;
-    *reinterpret_cast<void**>(addr) = data;
+    ExternalPointer_t p =
+        EncodeExternalPointer(reinterpret_cast<v8::internal::Isolate*>(isolate),
+                              reinterpret_cast<internal::Address>(data));
+    *reinterpret_cast<ExternalPointer_t*>(addr) = p;
   }
 
   V8_INLINE static void* GetEmbedderData(const v8::Isolate* isolate,
@@ -290,7 +293,10 @@ class Internals {
     internal::Address addr = reinterpret_cast<internal::Address>(isolate) +
                              kIsolateEmbedderDataOffset +
                              slot * kApiSystemPointerSize;
-    return *reinterpret_cast<void* const*>(addr);
+    ExternalPointer_t p = *reinterpret_cast<ExternalPointer_t*>(addr);
+    internal::Address data = DecodeExternalPointer(
+        reinterpret_cast<const v8::internal::Isolate*>(isolate), p);
+    return reinterpret_cast<void*>(data);
   }
 
   V8_INLINE static internal::Address* GetRoot(v8::Isolate* isolate, int index) {
@@ -370,6 +376,15 @@ class Internals {
       internal::Address heap_object_ptr, uint32_t value) {
     internal::Address root = GetRootFromOnHeapAddress(heap_object_ptr);
     return root + static_cast<internal::Address>(static_cast<uintptr_t>(value));
+  }
+
+  V8_INLINE static ExternalPointer_t EncodeExternalPointer(
+      const Isolate* isolate, Address external_pointer) {
+#ifndef V8_HEAP_SANDBOX
+    return external_pointer;
+#else
+    return external_pointer ^ kExternalPointerSalt;
+#endif
   }
 
   V8_INLINE static Address DecodeExternalPointer(

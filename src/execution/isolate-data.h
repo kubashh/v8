@@ -148,7 +148,7 @@ class IsolateData final {
   // with v8::internal::Internals (in include/v8-internal.h) constants.
   // The layout consitency is verified in Isolate::CheckIsolateLayout() using
   // runtime checks.
-  void* embedder_data_[Internals::kNumIsolateDataSlots] = {};
+  ExternalPointer_t embedder_data_[Internals::kNumIsolateDataSlots] = {};
 
   // TODO(ishell): Move these external memory counters back to Heap once the
   // Node JS bot issue is solved.
