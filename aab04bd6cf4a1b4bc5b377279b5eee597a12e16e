@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efde75c5_85e27ae9",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-04-20T23:36:23Z",
+      "side": 0,
+      "message": "Please add a comment that non-simple LHSes are runtime errors instead of syntax errors for web compat. No need to file a new issue.",
+      "range": {
+        "startLine": 719,
+        "startChar": 2,
+        "endLine": 719,
+        "endChar": 3
+      },
+      "revId": "aab04bd6cf4a1b4bc5b377279b5eee597a12e16e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
