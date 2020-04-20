@@ -1318,25 +1318,7 @@ bool WasmScript::SetBreakPointForFunction(Handle<Script> script, int func_index,
   WasmScript::AddBreakpointToInfo(script, func.code.offset() + offset,
                                   break_point);
 
-  if (FLAG_debug_in_liftoff) {
-    native_module->GetDebugInfo()->SetBreakpoint(func_index, offset, isolate);
-  } else {
-    // Iterate over all instances and tell them to set this new breakpoint.
-    // We do this using the weak list of all instances from the script.
-    Handle<WeakArrayList> weak_instance_list(script->wasm_weak_instance_list(),
-                                             isolate);
-    for (int i = 0; i < weak_instance_list->length(); ++i) {
-      MaybeObject maybe_instance = weak_instance_list->Get(i);
-      if (maybe_instance->IsWeak()) {
-        Handle<WasmInstanceObject> instance(
-            WasmInstanceObject::cast(maybe_instance->GetHeapObjectAssumeWeak()),
-            isolate);
-        Handle<WasmDebugInfo> debug_info =
-            WasmInstanceObject::GetOrCreateDebugInfo(instance);
-        WasmDebugInfo::SetBreakpoint(debug_info, func_index, offset);
-      }
-    }
-  }
+  native_module->GetDebugInfo()->SetBreakpoint(func_index, offset, isolate);
 
   return true;
 }
@@ -1355,24 +1337,6 @@ bool WasmScript::ClearBreakPoint(Handle<Script> script, int position,
 
   if (!WasmScript::RemoveBreakpointFromInfo(script, position, break_point)) {
     return false;
-  }
-
-  if (!FLAG_debug_in_liftoff) {
-    // Iterate over all instances and tell them to remove this breakpoint.
-    // We do this using the weak list of all instances from the script.
-    Handle<WeakArrayList> weak_instance_list(script->wasm_weak_instance_list(),
-                                             isolate);
-    for (int i = 0; i < weak_instance_list->length(); ++i) {
-      MaybeObject maybe_instance = weak_instance_list->Get(i);
-      if (maybe_instance->IsWeak()) {
-        Handle<WasmInstanceObject> instance(
-            WasmInstanceObject::cast(maybe_instance->GetHeapObjectAssumeWeak()),
-            isolate);
-        Handle<WasmDebugInfo> debug_info =
-            WasmInstanceObject::GetOrCreateDebugInfo(instance);
-        WasmDebugInfo::ClearBreakpoint(debug_info, func_index, offset_in_func);
-      }
-    }
   }
 
   return true;
