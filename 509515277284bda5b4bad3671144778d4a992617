@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9894b355_8df8a8fc",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-20T12:35:40Z",
+      "side": 1,
+      "message": "How about a less general increment_deoptimization_count() function instead? Also please add DCHECK somewhere that it\u0027s always non-negative.",
+      "revId": "509515277284bda5b4bad3671144778d4a992617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cea8dc50_39150caf",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-20T12:35:40Z",
+      "side": 1,
+      "message": "Alternatively we could always do this (not only in Turboprop) but set the non-turboprop default value to 0.",
+      "revId": "509515277284bda5b4bad3671144778d4a992617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
