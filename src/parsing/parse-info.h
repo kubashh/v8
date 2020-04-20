@@ -66,63 +66,64 @@ class V8_EXPORT_PRIVATE ParseInfo {
   Zone* zone() const { return zone_.get(); }
 
 // Convenience accessor methods for flags.
-#define FLAG_ACCESSOR(flag, getter, setter)     \
-  bool getter() const { return GetFlag(flag); } \
-  void setter() { SetFlag(flag); }              \
-  void setter(bool val) { SetFlag(flag, val); }
+#define FLAG_ACCESSOR(bitfield, getter, setter)              \
+  bool getter() const { return bitfield::decode(flags_); }   \
+  void setter() { flags_ = bitfield::update(flags_, true); } \
+  void setter(bool val) { flags_ = bitfield::update(flags_, val); }
 
-  FLAG_ACCESSOR(kToplevel, is_toplevel, set_toplevel)
-  FLAG_ACCESSOR(kEager, is_eager, set_eager)
-  FLAG_ACCESSOR(kEval, is_eval, set_eval)
-  FLAG_ACCESSOR(kStrictMode, is_strict_mode, set_strict_mode)
-  FLAG_ACCESSOR(kModule, is_module, set_module)
-  FLAG_ACCESSOR(kAllowLazyParsing, allow_lazy_parsing, set_allow_lazy_parsing)
-  FLAG_ACCESSOR(kLazyCompile, lazy_compile, set_lazy_compile)
-  FLAG_ACCESSOR(kCollectTypeProfile, collect_type_profile,
+  FLAG_ACCESSOR(ToplevelBit, is_toplevel, set_toplevel)
+  FLAG_ACCESSOR(EagerBit, is_eager, set_eager)
+  FLAG_ACCESSOR(EvalBit, is_eval, set_eval)
+  FLAG_ACCESSOR(StrictModeBit, is_strict_mode, set_strict_mode)
+  FLAG_ACCESSOR(ModuleBit, is_module, set_module)
+  FLAG_ACCESSOR(AllowLazyParsingBit, allow_lazy_parsing, set_allow_lazy_parsing)
+  FLAG_ACCESSOR(LazyCompileBit, lazy_compile, set_lazy_compile)
+  FLAG_ACCESSOR(CollectTypeProfileBit, collect_type_profile,
                 set_collect_type_profile)
-  FLAG_ACCESSOR(kIsAsmWasmBroken, is_asm_wasm_broken, set_asm_wasm_broken)
-  FLAG_ACCESSOR(kContainsAsmModule, contains_asm_module,
+  FLAG_ACCESSOR(IsAsmWasmBrokenBit, is_asm_wasm_broken, set_asm_wasm_broken)
+  FLAG_ACCESSOR(ContainsAsmModuleBit, contains_asm_module,
                 set_contains_asm_module)
-  FLAG_ACCESSOR(kCoverageEnabled, coverage_enabled, set_coverage_enabled)
-  FLAG_ACCESSOR(kBlockCoverageEnabled, block_coverage_enabled,
+  FLAG_ACCESSOR(CoverageEnabledBit, coverage_enabled, set_coverage_enabled)
+  FLAG_ACCESSOR(BlockCoverageEnabledBit, block_coverage_enabled,
                 set_block_coverage_enabled)
-  FLAG_ACCESSOR(kAllowEvalCache, allow_eval_cache, set_allow_eval_cache)
-  FLAG_ACCESSOR(kRequiresInstanceMembersInitializer,
+  FLAG_ACCESSOR(AllowEvalCacheBit, allow_eval_cache, set_allow_eval_cache)
+  FLAG_ACCESSOR(RequiresInstanceMembersInitializerBit,
                 requires_instance_members_initializer,
                 set_requires_instance_members_initializer)
-  FLAG_ACCESSOR(kClassScopeHasPrivateBrand, class_scope_has_private_brand,
+  FLAG_ACCESSOR(ClassScopeHasPrivateBrandBit, class_scope_has_private_brand,
                 set_class_scope_has_private_brand)
-  FLAG_ACCESSOR(kHasStaticPrivateMethodsOrAccessors,
+  FLAG_ACCESSOR(HasStaticPrivateMethodsOrAccessorsBit,
                 has_static_private_methods_or_accessors,
                 set_has_static_private_methods_or_accessors)
-  FLAG_ACCESSOR(kMightAlwaysOpt, might_always_opt, set_might_always_opt)
-  FLAG_ACCESSOR(kAllowNativeSyntax, allow_natives_syntax,
+  FLAG_ACCESSOR(MightAlwaysOptBit, might_always_opt, set_might_always_opt)
+  FLAG_ACCESSOR(AllowNativeSyntaxBit, allow_natives_syntax,
                 set_allow_natives_syntax)
-  FLAG_ACCESSOR(kAllowLazyCompile, allow_lazy_compile, set_allow_lazy_compile)
-  FLAG_ACCESSOR(kAllowNativeSyntax, allow_native_syntax,
+  FLAG_ACCESSOR(AllowLazyCompileBit, allow_lazy_compile, set_allow_lazy_compile)
+  FLAG_ACCESSOR(AllowNativeSyntaxBit, allow_native_syntax,
                 set_allow_native_syntax)
-  FLAG_ACCESSOR(kAllowHarmonyDynamicImport, allow_harmony_dynamic_import,
+  FLAG_ACCESSOR(AllowHarmonyDynamicImportBit, allow_harmony_dynamic_import,
                 set_allow_harmony_dynamic_import)
-  FLAG_ACCESSOR(kAllowHarmonyImportMeta, allow_harmony_import_meta,
+  FLAG_ACCESSOR(AllowHarmonyImportMetaBit, allow_harmony_import_meta,
                 set_allow_harmony_import_meta)
-  FLAG_ACCESSOR(kAllowHarmonyPrivateMethods, allow_harmony_private_methods,
+  FLAG_ACCESSOR(AllowHarmonyPrivateMethodsBit, allow_harmony_private_methods,
                 set_allow_harmony_private_methods)
-  FLAG_ACCESSOR(kIsOneshotIIFE, is_oneshot_iife, set_is_oneshot_iife)
-  FLAG_ACCESSOR(kCollectSourcePositions, collect_source_positions,
+  FLAG_ACCESSOR(IsOneshotIIFEBit, is_oneshot_iife, set_is_oneshot_iife)
+  FLAG_ACCESSOR(CollectSourcePositionsBit, collect_source_positions,
                 set_collect_source_positions)
-  FLAG_ACCESSOR(kAllowHarmonyTopLevelAwait, allow_harmony_top_level_await,
+  FLAG_ACCESSOR(AllowHarmonyTopLevelAwaitBit, allow_harmony_top_level_await,
                 set_allow_harmony_top_level_await)
-  FLAG_ACCESSOR(kREPLMode, is_repl_mode, set_repl_mode)
+  FLAG_ACCESSOR(REPLModeBit, is_repl_mode, set_repl_mode)
 
 #undef FLAG_ACCESSOR
 
   void set_parse_restriction(ParseRestriction restriction) {
-    SetFlag(kParseRestriction, restriction != NO_PARSE_RESTRICTION);
+    flags_ = ParseRestrictionBit::update(flags_,
+                                         restriction != NO_PARSE_RESTRICTION);
   }
 
   ParseRestriction parse_restriction() const {
-    return GetFlag(kParseRestriction) ? ONLY_SINGLE_FUNCTION_LITERAL
-                                      : NO_PARSE_RESTRICTION;
+    return ParseRestrictionBit::decode(flags_) ? ONLY_SINGLE_FUNCTION_LITERAL
+                                               : NO_PARSE_RESTRICTION;
   }
 
   Utf16CharacterStream* character_stream() const {
@@ -293,42 +294,38 @@ class V8_EXPORT_PRIVATE ParseInfo {
   template <typename T>
   void SetFunctionInfo(T function);
 
-  // Various configuration flags for parsing.
-  enum Flag : uint32_t {
-    // ---------- Input flags ---------------------------
-    kToplevel = 1u << 0,
-    kEager = 1u << 1,
-    kEval = 1u << 2,
-    kStrictMode = 1u << 3,
-    kNative = 1u << 4,
-    kParseRestriction = 1u << 5,
-    kModule = 1u << 6,
-    kAllowLazyParsing = 1u << 7,
-    kLazyCompile = 1u << 8,
-    kCollectTypeProfile = 1u << 9,
-    kCoverageEnabled = 1u << 10,
-    kBlockCoverageEnabled = 1u << 11,
-    kIsAsmWasmBroken = 1u << 12,
-    kAllowEvalCache = 1u << 13,
-    kRequiresInstanceMembersInitializer = 1u << 14,
-    kContainsAsmModule = 1u << 15,
-    kMightAlwaysOpt = 1u << 16,
-    kAllowLazyCompile = 1u << 17,
-    kAllowNativeSyntax = 1u << 18,
-    kAllowHarmonyPublicFields = 1u << 19,
-    kAllowHarmonyStaticFields = 1u << 20,
-    kAllowHarmonyDynamicImport = 1u << 21,
-    kAllowHarmonyImportMeta = 1u << 22,
-    kAllowHarmonyOptionalChaining = 1u << 23,
-    kHasStaticPrivateMethodsOrAccessors = 1u << 24,
-    kAllowHarmonyPrivateMethods = 1u << 25,
-    kIsOneshotIIFE = 1u << 26,
-    kCollectSourcePositions = 1u << 27,
-    kAllowHarmonyNullish = 1u << 28,
-    kAllowHarmonyTopLevelAwait = 1u << 29,
-    kREPLMode = 1u << 30,
-    kClassScopeHasPrivateBrand = 1u << 31,
-  };
+#define PARSING_FLAGS_BIT_FIELDS(V, _)                 \
+  V(ToplevelBit, bool, 1, _)                           \
+  V(EagerBit, bool, 1, _)                              \
+  V(EvalBit, bool, 1, _)                               \
+  V(StrictModeBit, bool, 1, _)                         \
+  V(ParseRestrictionBit, bool, 1, _)                   \
+  V(ModuleBit, bool, 1, _)                             \
+  V(AllowLazyParsingBit, bool, 1, _)                   \
+  V(LazyCompileBit, bool, 1, _)                        \
+  V(CollectTypeProfileBit, bool, 1, _)                 \
+  V(CoverageEnabledBit, bool, 1, _)                    \
+  V(BlockCoverageEnabledBit, bool, 1, _)               \
+  V(IsAsmWasmBrokenBit, bool, 1, _)                    \
+  V(AllowEvalCacheBit, bool, 1, _)                     \
+  V(RequiresInstanceMembersInitializerBit, bool, 1, _) \
+  V(ContainsAsmModuleBit, bool, 1, _)                  \
+  V(MightAlwaysOptBit, bool, 1, _)                     \
+  V(AllowLazyCompileBit, bool, 1, _)                   \
+  V(AllowNativeSyntaxBit, bool, 1, _)                  \
+  V(HasStaticPrivateMethodsOrAccessorsBit, bool, 1, _) \
+  V(IsOneshotIIFEBit, bool, 1, _)                      \
+  V(CollectSourcePositionsBit, bool, 1, _)             \
+  V(ClassScopeHasPrivateBrandBit, bool, 1, _)          \
+  V(AllowHarmonyDynamicImportBit, bool, 1, _)          \
+  V(AllowHarmonyImportMetaBit, bool, 1, _)             \
+  V(AllowHarmonyPrivateMethodsBit, bool, 1, _)         \
+  V(AllowHarmonyTopLevelAwaitBit, bool, 1, _)          \
+  V(REPLModeBit, bool, 1, _)
+  DEFINE_BIT_FIELDS(PARSING_FLAGS_BIT_FIELDS)
+#undef PARSING_FLAGS_BIT_FIELDS
+  static_assert(REPLModeBit::kLastUsedBit < 32,
+                "ParseInfo::flags_ field exhausted");
 
   //------------- Inputs to parsing and scope analysis -----------------------
   std::unique_ptr<Zone> zone_;
@@ -360,10 +357,6 @@ class V8_EXPORT_PRIVATE ParseInfo {
   //----------- Output of parsing and scope analysis ------------------------
   FunctionLiteral* literal_;
   PendingCompilationErrorHandler pending_error_handler_;
-
-  void SetFlag(Flag f) { flags_ |= f; }
-  void SetFlag(Flag f, bool v) { flags_ = v ? flags_ | f : flags_ & ~f; }
-  bool GetFlag(Flag f) const { return (flags_ & f) != 0; }
 };
 
 }  // namespace internal
