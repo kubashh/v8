@@ -212,6 +212,29 @@
       "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6461ed6c_182b5bbd",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4526,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-20T11:57:32Z",
+      "side": 1,
+      "message": "I took a better look at the example you shared on the issue, and to me it looks like the reason the second part of the split is not spilled is that it is already available in a memory location (pos 34), do you think it could be another criterion for not applying the heuristic?\nI am not sure I fully understand the reasoning with the use position, I think it deserves a brief explanation for why this is supposed to be a good change in general.",
+      "range": {
+        "startLine": 4522,
+        "startChar": 0,
+        "endLine": 4526,
+        "endChar": 0
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
