@@ -457,6 +457,8 @@ Parser::Parser(ParseInfo* info)
   set_allow_harmony_import_meta(info->allow_harmony_import_meta());
   set_allow_harmony_private_methods(info->allow_harmony_private_methods());
   set_allow_harmony_top_level_await(info->allow_harmony_top_level_await());
+  set_allow_harmony_logical_assignment(
+      info->allow_harmony_logical_assignment());
   for (int feature = 0; feature < v8::Isolate::kUseCounterFeatureCount;
        ++feature) {
     use_counts_[feature] = 0;

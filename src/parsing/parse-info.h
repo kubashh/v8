@@ -113,6 +113,9 @@ class V8_EXPORT_PRIVATE ParseInfo {
   FLAG_ACCESSOR(kAllowHarmonyTopLevelAwait, allow_harmony_top_level_await,
                 set_allow_harmony_top_level_await)
   FLAG_ACCESSOR(kREPLMode, is_repl_mode, set_repl_mode)
+  FLAG_ACCESSOR(kAllowHarmonyLogicalAssignment,
+                allow_harmony_logical_assignment,
+                set_allow_harmony_logical_assignment)
 
 #undef FLAG_ACCESSOR
 
@@ -328,6 +331,7 @@ class V8_EXPORT_PRIVATE ParseInfo {
     kAllowHarmonyTopLevelAwait = 1u << 29,
     kREPLMode = 1u << 30,
     kClassScopeHasPrivateBrand = 1u << 31,
+    kAllowHarmonyLogicalAssignment = 1u << 23,
   };
 
   //------------- Inputs to parsing and scope analysis -----------------------

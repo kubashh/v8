@@ -266,6 +266,7 @@ class ParserBase {
         allow_harmony_import_meta_(false),
         allow_harmony_private_methods_(false),
         allow_harmony_top_level_await_(false),
+        allow_harmony_logical_assignment_(false),
         allow_eval_cache_(true) {
     pointer_buffer_.reserve(32);
     variable_buffer_.reserve(32);
@@ -280,6 +281,7 @@ class ParserBase {
   ALLOW_ACCESSORS(harmony_import_meta)
   ALLOW_ACCESSORS(harmony_private_methods)
   ALLOW_ACCESSORS(harmony_top_level_await)
+  ALLOW_ACCESSORS(harmony_logical_assignment)
   ALLOW_ACCESSORS(eval_cache)
 
 #undef ALLOW_ACCESSORS
@@ -1576,6 +1578,7 @@ class ParserBase {
   bool allow_harmony_import_meta_;
   bool allow_harmony_private_methods_;
   bool allow_harmony_top_level_await_;
+  bool allow_harmony_logical_assignment_;
   bool allow_eval_cache_;
 };
 
@@ -2771,6 +2774,11 @@ ParserBase<Impl>::ParseAssignmentExpressionCoverGrammar() {
   Token::Value op = peek();
 
   if (!Token::IsArrowOrAssignmentOp(op)) return expression;
+  if ((op == Token::ASSIGN_NULLISH || op == Token::ASSIGN_OR ||
+       op == Token::ASSIGN_AND) &&
+      !allow_harmony_logical_assignment()) {
+    return expression;
+  }
 
   // Arrow functions.
   if (V8_UNLIKELY(op == Token::ARROW)) {
