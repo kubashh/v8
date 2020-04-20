@@ -4143,6 +4143,42 @@ void BytecodeGenerator::VisitCompoundAssignment(CompoundAssignment* expr) {
   }
 
   BinaryOperation* binop = expr->AsCompoundAssignment()->binary_operation();
+
+  switch (binop->op()) {
+    case Token::NULLISH:
+    case Token::OR:
+    case Token::AND: {
+      BytecodeLabel short_circuit;
+      switch (binop->op()) {
+        case Token::NULLISH: {
+          BytecodeLabel nullish;
+          builder()
+              ->JumpIfUndefinedOrNull(&nullish)
+              .Jump(&short_circuit)
+              .Bind(&nullish);
+          break;
+        }
+        case Token::OR:
+          builder()->JumpIfTrue(ToBooleanMode::kConvertToBoolean,
+                                &short_circuit);
+          break;
+        case Token::AND:
+          builder()->JumpIfFalse(ToBooleanMode::kConvertToBoolean,
+                                 &short_circuit);
+          break;
+        default:
+          UNREACHABLE();
+      }
+      VisitForAccumulatorValue(expr->value());
+      BuildAssignment(lhs_data, expr->op(), expr->lookup_hoisting_mode());
+      builder()->Bind(&short_circuit);
+      return;
+    }
+    default:
+      // Fall through to normal logic below
+      break;
+  }
+
   FeedbackSlot slot = feedback_spec()->AddBinaryOpICSlot();
   if (expr->value()->IsSmiLiteral()) {
     builder()->BinaryOperationSmiLiteral(
