@@ -71,8 +71,8 @@ TEST_F(DisjointAllocationPoolTest, SimpleExtract) {
   a.Merge(b);
   CheckPool(a, {{1, 4}});
   CHECK_EQ(a.regions().size(), 1);
-  CHECK_EQ(a.regions().front().begin(), 1);
-  CHECK_EQ(a.regions().front().end(), 5);
+  CHECK_EQ(a.regions().begin()->begin(), 1);
+  CHECK_EQ(a.regions().begin()->end(), 5);
 }
 
 TEST_F(DisjointAllocationPoolTest, ExtractAll) {

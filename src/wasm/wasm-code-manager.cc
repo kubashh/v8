@@ -48,46 +48,52 @@ namespace wasm {
 using trap_handler::ProtectedInstructionData;
 
 base::AddressRegion DisjointAllocationPool::Merge(base::AddressRegion region) {
-  auto dest_it = regions_.begin();
-  auto dest_end = regions_.end();
+  // Find the possible insertion position by identifying the first region whose
+  // start address is not less than that of {region}. Since there cannot be any
+  // overlap between regions, this also means that the start of {above} is
+  // bigger or equal than the *end* of {region}.
+  auto above = regions_.lower_bound(region);
+  DCHECK(above == regions_.end() || above->begin() >= region.end());
 
-  // Skip over dest regions strictly before {region}.
-  while (dest_it != dest_end && dest_it->end() < region.begin()) ++dest_it;
-
-  // After last dest region: insert and done.
-  if (dest_it == dest_end) {
-    regions_.push_back(region);
-    return region;
-  }
-
-  // Adjacent (from below) to dest: merge and done.
-  if (dest_it->begin() == region.end()) {
+  // No element below. Either insert before {above}, or merge with {above}.
+  if (above == regions_.begin()) {
+    // No regions in this pool, or not adjavent to {above}: insert and done.
+    if (above == regions_.end() || above->begin() > region.end()) {
+      regions_.insert(above, region);
+      return region;
+    }
     base::AddressRegion merged_region{region.begin(),
-                                      region.size() + dest_it->size()};
-    DCHECK_EQ(merged_region.end(), dest_it->end());
-    *dest_it = merged_region;
+                                      region.size() + above->size()};
+    DCHECK_EQ(merged_region.end(), above->end());
+    auto erased = regions_.erase(above);
+    regions_.insert(erased, merged_region);
     return merged_region;
   }
 
-  // Before dest: insert and done.
-  if (dest_it->begin() > region.end()) {
-    regions_.insert(dest_it, region);
-    return region;
+  auto below = above;
+  --below;
+  // Sanity check:
+  DCHECK(above == regions_.end() || below->end() < above->begin());
+
+  // Adjacent to {below}: Merge, and check whether to merge with {above}.
+  if (below->end() == region.begin()) {
+    base::AddressRegion merged_region{below->begin(),
+                                      below->size() + region.size()};
+    DCHECK_EQ(merged_region.end(), region.end());
+    regions_.erase(below);
+    if (above != regions_.end() && above->begin() == region.end()) {
+      merged_region.set_size(merged_region.size() + above->size());
+      DCHECK_EQ(above->end(), merged_region.end());
+      above = regions_.erase(above);
+    }
+    regions_.insert(above, merged_region);
+    return merged_region;
   }
 
-  // Src is adjacent from above. Merge and check whether the merged region is
-  // now adjacent to the next region.
-  DCHECK_EQ(dest_it->end(), region.begin());
-  dest_it->set_size(dest_it->size() + region.size());
-  DCHECK_EQ(dest_it->end(), region.end());
-  auto next_dest = dest_it;
-  ++next_dest;
-  if (next_dest != dest_end && dest_it->end() == next_dest->begin()) {
-    dest_it->set_size(dest_it->size() + next_dest->size());
-    DCHECK_EQ(dest_it->end(), next_dest->end());
-    regions_.erase(next_dest);
-  }
-  return *dest_it;
+  // Not adjacent to any existing region: insert between {below} and {above}.
+  DCHECK_LT(below->end(), region.begin());
+  regions_.insert(above, region);
+  return region;
 }
 
 base::AddressRegion DisjointAllocationPool::Allocate(size_t size) {
@@ -97,25 +103,34 @@ base::AddressRegion DisjointAllocationPool::Allocate(size_t size) {
 
 base::AddressRegion DisjointAllocationPool::AllocateInRegion(
     size_t size, base::AddressRegion region) {
-  for (auto it = regions_.begin(), end = regions_.end(); it != end; ++it) {
+  // Get an iterator to the first contained region whose start address is not
+  // smaller than the start address of {region}. Start the search from the
+  // region one before that (the last one whose start address is smaller).
+  auto it = regions_.lower_bound(region);
+  if (it != regions_.begin()) --it;
+
+  for (auto end = regions_.end(); it != end; ++it) {
     base::AddressRegion overlap = it->GetOverlap(region);
     if (size > overlap.size()) continue;
     base::AddressRegion ret{overlap.begin(), size};
-    if (size == it->size()) {
-      // We use the full region --> erase the region from {regions_}.
-      regions_.erase(it);
-    } else if (ret.begin() == it->begin()) {
+    base::AddressRegion remaining = *it;
+    auto insert_pos = regions_.erase(it);
+    if (ret.begin() == remaining.begin()) {
       // We return a region at the start --> shrink remaining region from front.
-      *it = base::AddressRegion{it->begin() + size, it->size() - size};
+      remaining =
+          base::AddressRegion{remaining.begin() + size, it->size() - size};
     } else if (ret.end() == it->end()) {
       // We return a region at the end --> shrink remaining region.
-      *it = base::AddressRegion{it->begin(), it->size() - size};
+      remaining.set_size(remaining.size() - size);
     } else {
-      // We return something in the middle --> split the remaining region.
-      regions_.insert(
-          it, base::AddressRegion{it->begin(), ret.begin() - it->begin()});
-      *it = base::AddressRegion{ret.end(), it->end() - ret.end()};
+      // We return something in the middle --> split the remaining region
+      // (insert the region with smaller address first).
+      regions_.insert(insert_pos,
+                      base::AddressRegion{remaining.begin(),
+                                          ret.begin() - remaining.begin()});
+      remaining = base::AddressRegion{ret.end(), it->end() - ret.end()};
     }
+    if (!remaining.is_empty()) regions_.insert(insert_pos, remaining);
     return ret;
   }
   return {};
