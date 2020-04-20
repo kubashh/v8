@@ -270,7 +270,9 @@ class ConstPool {
   explicit ConstPool(Assembler* assm) : assm_(assm) {}
   // Returns true when partial constant pool is valid for this entry.
   bool TryRecordEntry(intptr_t data, RelocInfo::Mode mode);
-  bool IsEmpty() const { return entries_.empty(); }
+  bool IsEmpty() const { return entries_.empty() && s128_entries_.empty(); }
+
+  bool TryRecordS128(uint64_t, uint64_t);
 
   void PatchEntries();
   // Discard any pending pool entries.
@@ -289,6 +291,8 @@ class ConstPool {
   // Values, pc offsets of entries.
   using EntryMap = std::multimap<uint64_t, int>;
   EntryMap entries_;
+  using S128Map = std::multimap<std::pair<uint64_t, uint64_t>, int>;
+  S128Map s128_entries_;
 
   // Number of bytes taken up by the displacement of rip-relative addressing.
   static constexpr int kRipRelativeDispSize = 4;  // 32-bit displacement.
@@ -461,6 +465,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   }
   ASSEMBLER_INSTRUCTION_LIST(DECLARE_INSTRUCTION)
 #undef DECLARE_INSTRUCTION
+
+  void Get128Const(uint64_t high, uint64_t low);
 
   // Insert the smallest number of nop instructions
   // possible to align the pc offset to a multiple

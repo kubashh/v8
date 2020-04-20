@@ -359,6 +359,12 @@ bool ConstPool::AddSharedEntry(uint64_t data, int offset) {
   return true;
 }
 
+bool ConstPool::TryRecordS128(uint64_t high, uint64_t low) {
+  int offset = assm_->pc_offset();
+  s128_entries_.insert(std::make_pair(std::make_pair(high, low), offset));
+  return true;
+}
+
 bool ConstPool::TryRecordEntry(intptr_t data, RelocInfo::Mode mode) {
   if (!FLAG_partial_constant_pool) return false;
   if (!RelocInfo::IsShareableRelocMode(mode)) return false;
@@ -379,7 +385,10 @@ bool ConstPool::IsMoveRipRelative(Address instr) {
          kMoveRipRelativeInstr;
 }
 
-void ConstPool::Clear() { entries_.clear(); }
+void ConstPool::Clear() {
+  entries_.clear();
+  s128_entries_.clear();
+}
 
 void ConstPool::PatchEntries() {
   for (EntryMap::iterator iter = entries_.begin(); iter != entries_.end();
@@ -403,6 +412,35 @@ void ConstPool::PatchEntries() {
       DCHECK(IsMoveRipRelative(disp_addr - kMoveRipRelativeDispOffset));
       // The displacement of the rip-relative move should be 0 before patching.
       DCHECK(ReadUnalignedValue<uint32_t>(disp_addr) == 0);
+      WriteUnalignedValue(disp_addr, disp32);
+    }
+  }
+
+  // We get a performance hit on older hardware if we try to access memory
+  // location that is not 16-byte aligned.
+  int current_offset = assm_->pc_offset();
+  assm_->Nop(0x10 - (current_offset & 0xf));
+  for (S128Map::iterator iter = s128_entries_.begin();
+       iter != s128_entries_.end();
+       iter = s128_entries_.upper_bound(iter->first)) {
+    std::pair<S128Map::iterator, S128Map::iterator> range =
+        s128_entries_.equal_range(iter->first);
+    for (S128Map::iterator it = range.first; it != range.second; it++) {
+      int s128_dst = assm_->pc_offset();
+      // little endian, emit low first
+      assm_->emitq(it->first.second);
+      assm_->emitq(it->first.first);
+      // Patch instruction
+      // if is vmovdqu, same length
+
+      int size = 0;
+      if (assm_->byte_at(it->second) == 0xc4) {
+        size = 5;
+      } else if (assm_->byte_at(it->second) == 0xc5) {
+        size = 4;
+      }
+      Address disp_addr = assm_->addr_at(it->second + size);
+      int32_t disp32 = s128_dst - it->second - size - 4;
       WriteUnalignedValue(disp_addr, disp32);
     }
   }
@@ -512,6 +550,10 @@ win64_unwindinfo::BuiltinUnwindInfo Assembler::GetUnwindInfo() const {
   return xdata_encoder_->unwinding_info();
 }
 #endif
+
+void Assembler::Get128Const(uint64_t high, uint64_t low) {
+  constpool_.TryRecordS128(high, low);
+}
 
 void Assembler::Align(int m) {
   DCHECK(base::bits::IsPowerOfTwo(m));

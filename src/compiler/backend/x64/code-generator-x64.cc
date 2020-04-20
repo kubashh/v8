@@ -670,15 +670,6 @@ void AdjustStackPointerForTailCall(TurboAssembler* assembler,
   }
 }
 
-void SetupShuffleMaskInTempRegister(TurboAssembler* assembler, uint32_t* mask,
-                                    XMMRegister tmp) {
-  uint64_t shuffle_mask = (mask[0]) | (static_cast<uint64_t>(mask[1]) << 32);
-  assembler->Move(tmp, shuffle_mask);
-  shuffle_mask = (mask[2]) | (static_cast<uint64_t>(mask[3]) << 32);
-  assembler->movq(kScratchRegister, shuffle_mask);
-  assembler->Pinsrq(tmp, kScratchRegister, int8_t{1});
-}
-
 }  // namespace
 
 void CodeGenerator::AssembleTailCallBeforeGap(Instruction* instr,
@@ -1578,20 +1569,18 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kX64F64x2Abs:
     case kSSEFloat64Abs: {
-      // TODO(bmeurer): Use RIP relative 128-bit constants.
-      XMMRegister tmp = i.ToDoubleRegister(instr->TempAt(0));
-      __ Pcmpeqd(tmp, tmp);
-      __ Psrlq(tmp, 1);
-      __ Andpd(i.OutputDoubleRegister(), tmp);
+      Label label;
+      __ Get128Const(0x7FFFFFFFFFFFFFFF, 0x7FFFFFFFFFFFFFFF);
+      __ Andpd(i.OutputDoubleRegister(), Operand(&label, 0));
+      __ bind(&label);
       break;
     }
     case kX64F64x2Neg:
     case kSSEFloat64Neg: {
-      // TODO(bmeurer): Use RIP relative 128-bit constants.
-      XMMRegister tmp = i.ToDoubleRegister(instr->TempAt(0));
-      __ Pcmpeqd(tmp, tmp);
-      __ Psllq(tmp, 63);
-      __ Xorpd(i.OutputDoubleRegister(), tmp);
+      Label label;
+      __ Get128Const(0x8000000000000000, 0x8000000000000000);
+      __ Xorpd(i.OutputDoubleRegister(), Operand(&label, 0));
+      __ bind(&label);
       break;
     }
     case kSSEFloat64Sqrt:
@@ -1889,13 +1878,16 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       // TODO(bmeurer): Use RIP relative 128-bit constants.
       CpuFeatureScope avx_scope(tasm(), AVX);
       XMMRegister tmp = i.ToDoubleRegister(instr->TempAt(0));
-      __ vpcmpeqd(tmp, tmp, tmp);
-      __ vpsllq(tmp, tmp, 63);
+      Label label;
+      __ Get128Const(0x8000000000000000, 0x8000000000000000);
       if (instr->InputAt(0)->IsFPRegister()) {
-        __ vxorpd(i.OutputDoubleRegister(), tmp, i.InputDoubleRegister(0));
+        __ vxorpd(i.OutputDoubleRegister(), i.InputDoubleRegister(0),
+                  Operand(&label, 0));
       } else {
+        __ vmovdqu(tmp, Operand(&label, 0));
         __ vxorpd(i.OutputDoubleRegister(), tmp, i.InputOperand(0));
       }
+      __ bind(&label);
       break;
     }
     case kSSEFloat64SilenceNaN:
@@ -3595,16 +3587,18 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kX64S8x16Shuffle: {
       XMMRegister dst = i.OutputSimd128Register();
-      XMMRegister tmp_simd = i.TempSimd128Register(0);
       if (instr->InputCount() == 5) {  // only one input operand
         uint32_t mask[4] = {};
         DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0));
         for (int j = 4; j > 0; j--) {
           mask[j - 1] = i.InputUint32(j);
         }
-
-        SetupShuffleMaskInTempRegister(tasm(), mask, tmp_simd);
-        __ Pshufb(dst, tmp_simd);
+        uint64_t hi_mask = (mask[2]) | (static_cast<uint64_t>(mask[3]) << 32);
+        uint64_t lo_mask = (mask[0]) | (static_cast<uint64_t>(mask[1]) << 32);
+        Label label;
+        __ Get128Const(hi_mask, lo_mask);
+        __ Pshufb(dst, Operand(&label, 0));
+        __ bind(&label);
       } else {  // two input operands
         DCHECK_EQ(6, instr->InputCount());
         ASSEMBLE_SIMD_INSTR(Movups, kScratchDoubleReg, 0);
@@ -3616,8 +3610,13 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
             mask1[j - 2] |= (lane < kSimd128Size ? lane : 0x80) << k;
           }
         }
-        SetupShuffleMaskInTempRegister(tasm(), mask1, tmp_simd);
-        __ Pshufb(kScratchDoubleReg, tmp_simd);
+        uint64_t hi_mask = (mask1[2]) | (static_cast<uint64_t>(mask1[3]) << 32);
+        uint64_t lo_mask = (mask1[0]) | (static_cast<uint64_t>(mask1[1]) << 32);
+        Label label;
+        __ Get128Const(hi_mask, lo_mask);
+        __ Pshufb(kScratchDoubleReg, Operand(&label, 0));
+        __ bind(&label);
+
         uint32_t mask2[4] = {};
         if (instr->InputAt(1)->IsSimd128Register()) {
           XMMRegister src1 = i.InputSimd128Register(1);
@@ -3632,8 +3631,12 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
             mask2[j - 2] |= (lane >= kSimd128Size ? (lane & 0x0F) : 0x80) << k;
           }
         }
-        SetupShuffleMaskInTempRegister(tasm(), mask2, tmp_simd);
-        __ Pshufb(dst, tmp_simd);
+        hi_mask = (mask2[2]) | (static_cast<uint64_t>(mask2[3]) << 32);
+        lo_mask = (mask2[0]) | (static_cast<uint64_t>(mask2[1]) << 32);
+        Label label2;
+        __ Get128Const(hi_mask, lo_mask);
+        __ Pshufb(dst, Operand(&label2, 0));
+        __ bind(&label2);
         __ Por(dst, kScratchDoubleReg);
       }
       break;
