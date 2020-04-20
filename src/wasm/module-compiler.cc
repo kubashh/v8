@@ -96,15 +96,69 @@ class BackgroundCompileToken {
 
  private:
   friend class BackgroundCompileScope;
-  base::SharedMutex mutex_;
-  std::weak_ptr<NativeModule> native_module_;
 
   std::shared_ptr<NativeModule> StartScope() {
     mutex_.LockShared();
     return native_module_.lock();
   }
 
+  // This private method can only be called via {BackgroundCompileScope}.
+  void SchedulePublishCode(NativeModule* native_module,
+                           std::vector<std::unique_ptr<WasmCode>> codes) {
+    // If we can easily become the publisher, publish the code.
+    if (BecomePublisher()) {
+      PublishCode(native_module, VectorOf(codes));
+      if (StopPublishing()) return;
+    } else {
+      // Otherwise, schedule our code to be published.
+      PublishEntry* new_entry =
+          new PublishEntry{publish_queue_.load(), std::move(codes)};
+      while (
+          !publish_queue_.compare_exchange_weak(new_entry->next, new_entry)) {
+        // {new_entry->next} was updated with the current value. Retry.
+      }
+
+      // Now try again to become the publisher, in case the previous publisher
+      // just went away (if a publisher is still running, we are done).
+      if (!BecomePublisher()) return;
+    }
+
+    // We are the publisher now, so publish all queued code.
+    do {
+      PublishEntry* to_publish = publish_queue_.exchange(nullptr);
+      while (to_publish != nullptr) {
+        PublishCode(native_module, VectorOf(to_publish->code));
+        PublishEntry* next = to_publish->next;
+        delete to_publish;
+        to_publish = next;
+      }
+    } while (!StopPublishing());
+  }
+
+  bool BecomePublisher() { return publisher_running_.exchange(true) == false; }
+
+  // Return true if it is safe to stop, false if we need to keep processing.
+  bool StopPublishing() {
+    DCHECK(publisher_running_.load());
+    publisher_running_.store(false);
+    // After resetting {publisher_running_}, check again whether there is code
+    // scheduled and no one to publish it (in that order).
+    return publish_queue_.load() == nullptr || !BecomePublisher();
+  }
+
+  void PublishCode(NativeModule*, Vector<std::unique_ptr<WasmCode>>);
+
   void ExitScope() { mutex_.UnlockShared(); }
+
+  struct PublishEntry {
+    PublishEntry* next;
+    std::vector<std::unique_ptr<WasmCode>> code;
+  };
+
+  base::SharedMutex mutex_;
+  std::weak_ptr<NativeModule> native_module_;
+  std::atomic<bool> publisher_running_{false};
+  std::atomic<PublishEntry*> publish_queue_{nullptr};
 };
 
 class CompilationStateImpl;
@@ -128,6 +182,12 @@ class BackgroundCompileScope {
   }
 
   inline CompilationStateImpl* compilation_state();
+
+  // Call {SchedulePublishCode} via the {BackgroundCompileScope} to guarantee
+  // that the {NativeModule} stays alive.
+  void SchedulePublishCode(std::vector<std::unique_ptr<WasmCode>> codes) {
+    token_->SchedulePublishCode(native_module_.get(), std::move(codes));
+  }
 
  private:
   BackgroundCompileToken* const token_;
@@ -577,6 +637,16 @@ const CompilationStateImpl* Impl(const CompilationState* compilation_state) {
 
 CompilationStateImpl* BackgroundCompileScope::compilation_state() {
   return Impl(native_module()->compilation_state());
+}
+
+void BackgroundCompileToken::PublishCode(
+    NativeModule* native_module, Vector<std::unique_ptr<WasmCode>> code) {
+  WasmCodeRefScope code_ref_scope;
+  std::vector<WasmCode*> published_code = native_module->PublishCode(code);
+  native_module->engine()->LogCode(VectorOf(published_code));
+
+  Impl(native_module->compilation_state())
+      ->OnFinishedUnits(VectorOf(published_code));
 }
 
 void UpdateFeatureUseCounts(Isolate* isolate, const WasmFeatures& detected) {
@@ -1058,22 +1128,16 @@ bool ExecuteCompilationUnits(
     TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("v8.wasm"), "PublishResults",
                  "num_results", results_to_publish.size());
     if (results_to_publish.empty()) return;
-    WasmCodeRefScope code_ref_scope;
     std::vector<std::unique_ptr<WasmCode>> unpublished_code =
         compile_scope->native_module()->AddCompiledCode(
             VectorOf(results_to_publish));
     results_to_publish.clear();
-    // TODO(clemensb): Avoid blocking to publish code
-    // (https://crbug.com/v8/10330).
-    std::vector<WasmCode*> code_vector =
-        compile_scope->native_module()->PublishCode(
-            VectorOf(std::move(unpublished_code)));
 
     // For import wrapper compilation units, add result to the cache.
     const NativeModule* native_module = compile_scope->native_module();
     int num_imported_functions = native_module->num_imported_functions();
     WasmImportWrapperCache* cache = native_module->import_wrapper_cache();
-    for (WasmCode* code : code_vector) {
+    for (const auto& code : unpublished_code) {
       int func_index = code->index();
       DCHECK_LE(0, func_index);
       DCHECK_LT(func_index, native_module->num_functions());
@@ -1086,14 +1150,12 @@ bool ExecuteCompilationUnits(
         // have been added as a compilation unit. So it is always the first time
         // we compile a wrapper for this key here.
         DCHECK_NULL((*cache)[key]);
-        (*cache)[key] = code;
+        (*cache)[key] = code.get();
         code->IncRef();
       }
     }
 
-    native_module->engine()->LogCode(VectorOf(code_vector));
-
-    compile_scope->compilation_state()->OnFinishedUnits(VectorOf(code_vector));
+    compile_scope->SchedulePublishCode(std::move(unpublished_code));
   };
 
   bool compilation_failed = false;
