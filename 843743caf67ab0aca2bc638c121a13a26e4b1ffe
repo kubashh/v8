@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b7ee0689_c213e221",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2797,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-04-20T09:23:11Z",
+      "side": 1,
+      "message": "Thanks, this was a very helpful explanation. \n\nLet\u0027s rename back_edge_in_bundle to phi_interferes_with_backedge_input, I think this is clearer, because live range bundles are an implementation detail of this allocator, while interference of a phi with its inputs is a general notion.\n\nLet\u0027s change the comment to\n\n  // Spilling the phi at the loop header is not beneficial if there is a back-edge\n  // with an input for the phi that interferes with the phi\u0027s value, because in case\n  // that input gets spilled it might introduce a stack-to-stack move at the back-edge.\n\nLet\u0027s also add comments in the two conditionals if (input_range-\u003eStart() \u003e out_range-\u003eStart())\nto say that we are only interested in values defined after the phi, because those are values that\nwill go over a back-edge.\n\nSince with will prevent a stack-to-stack move, it looks like a good change to me.",
+      "parentUuid": "da14e496_40a9c172",
+      "range": {
+        "startLine": 2796,
+        "startChar": 6,
+        "endLine": 2797,
+        "endChar": 76
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5aed92f1_2c94b3d7",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 5
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "This actually has no direct connection to the heuristic for SpillAtLoopHeaderNotBeneficial.\nThis patch is to resolve another corner case described at Comment 7 of\nhttps://bugs.chromium.org/p/chromium/issues/detail?id\u003d1063831#c7",
       "parentUuid": "5aed92f1_2c94b3d7",
+      "range": {
+        "startLine": 4522,
+        "startChar": 4,
+        "endLine": 4525,
+        "endChar": 65
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1fa09ce_5ff24852",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4525,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-04-20T09:23:11Z",
+      "side": 1,
+      "message": "If you don\u0027t have any objections, then let\u0027s split this out into another CL so we see the performance impact of each change on its own.",
+      "parentUuid": "5b1cc253_e72de627",
       "range": {
         "startLine": 4522,
         "startChar": 4,
@@ -140,6 +188,30 @@
       "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ed41758_52b88a37",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4526,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-04-20T09:23:11Z",
+      "side": 1,
+      "message": "OK I am less certain that this is a good change in all cases, but let\u0027s try and see.",
+      "parentUuid": "4ca7dd0a_ad3927ea",
+      "range": {
+        "startLine": 4526,
+        "startChar": 35,
+        "endLine": 4526,
+        "endChar": 50
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
