@@ -42,6 +42,7 @@
 #include "src/objects/map.h"
 #include "src/objects/object-list-macros.h"
 #include "src/objects/shared-function-info.h"
+#include "src/objects/string.h"
 #include "src/parsing/parse-info.h"
 #include "src/parsing/parser.h"
 #include "src/parsing/parsing.h"
@@ -2206,6 +2207,119 @@ void FixUpOffThreadAllocatedScript(Isolate* isolate, Handle<Script> script,
   LOG(isolate, ScriptDetails(*script));
 }
 
+MaybeHandle<SharedFunctionInfo> CompileScriptOnMainThread(
+    const UnoptimizedCompileFlags flags, Handle<String> source,
+    const Compiler::ScriptDetails& script_details,
+    ScriptOriginOptions origin_options, NativesFlag natives,
+    v8::Extension* extension, Isolate* isolate,
+    IsCompiledScope* is_compiled_scope) {
+  UnoptimizedCompileState compile_state(isolate);
+  ParseInfo parse_info(isolate, flags, &compile_state);
+  parse_info.set_extension(extension);
+
+  Handle<Script> script = NewScript(isolate, &parse_info, source,
+                                    script_details, origin_options, natives);
+  DCHECK_IMPLIES(parse_info.flags().collect_type_profile,
+                 script->IsUserJavaScript());
+  DCHECK_EQ(parse_info.flags().is_repl_mode, script->is_repl_mode());
+
+  return CompileToplevel(&parse_info, script, isolate, is_compiled_scope);
+}
+
+class StressBackgroundCompileThread : public base::Thread {
+ public:
+  StressBackgroundCompileThread(Isolate* isolate, Handle<String> source)
+      : base::Thread(
+            base::Thread::Options("StressBackgroundCompileThread", 2 * i::MB)),
+        source_(source),
+        streamed_source_(std::make_unique<SourceStream>(source, isolate),
+                         v8::ScriptCompiler::StreamedSource::UTF8) {
+    data()->task = std::make_unique<i::BackgroundCompileTask>(data(), isolate);
+  }
+
+  void Run() override { data()->task->Run(); }
+
+  ScriptStreamingData* data() { return streamed_source_.impl(); }
+
+ private:
+  // Dummy external source stream which returns the whole source in one go.
+  // TODO(leszeks): Also test chunking the data.
+  class SourceStream : public v8::ScriptCompiler::ExternalSourceStream {
+   public:
+    SourceStream(Handle<String> source, Isolate* isolate) : done_(false) {
+      source_buffer_ = source->ToCString(ALLOW_NULLS, FAST_STRING_TRAVERSAL,
+                                         &source_length_);
+    }
+
+    size_t GetMoreData(const uint8_t** src) override {
+      if (done_) {
+        return 0;
+      }
+      *src = reinterpret_cast<uint8_t*>(source_buffer_.release());
+      done_ = true;
+
+      return source_length_;
+    }
+
+   private:
+    int source_length_;
+    std::unique_ptr<char[]> source_buffer_;
+    bool done_;
+  };
+
+  Handle<String> source_;
+  v8::ScriptCompiler::StreamedSource streamed_source_;
+};
+
+bool CanBackgroundCompile(const Compiler::ScriptDetails& script_details,
+                          ScriptOriginOptions origin_options,
+                          v8::Extension* extension,
+                          ScriptCompiler::CompileOptions compile_options,
+                          NativesFlag natives) {
+  // TODO(leszeks): Remove the module check once background compilation of
+  // modules is supported.
+  return !origin_options.IsModule() && !extension &&
+         script_details.repl_mode == REPLMode::kNo &&
+         compile_options == ScriptCompiler::kNoCompileOptions &&
+         natives == NOT_NATIVES_CODE;
+}
+
+MaybeHandle<SharedFunctionInfo> CompileScriptOnBothBackgroundAndMainThread(
+    Handle<String> source, const Compiler::ScriptDetails& script_details,
+    ScriptOriginOptions origin_options, Isolate* isolate,
+    IsCompiledScope* is_compiled_scope) {
+  // Start a background thread compiling the script.
+  StressBackgroundCompileThread background_compile_thread(isolate, source);
+
+  UnoptimizedCompileFlags flags =
+      background_compile_thread.data()->task->flags();
+
+  CHECK(background_compile_thread.Start());
+  // In parallel, compile on the main thread to flush out any data races.
+  // TODO(leszeks): Compare the results of the two compiles.
+  {
+    IsCompiledScope inner_is_compiled_scope;
+    TryCatch ignore_try_catch(reinterpret_cast<v8::Isolate*>(isolate));
+    flags.script_id = Script::kTemporaryScriptId;
+    USE(CompileScriptOnMainThread(flags, source, script_details, origin_options,
+                                  NOT_NATIVES_CODE, nullptr, isolate,
+                                  &inner_is_compiled_scope));
+  }
+  // Join with background thread and finalize compilation.
+  background_compile_thread.Join();
+  MaybeHandle<SharedFunctionInfo> maybe_result =
+      Compiler::GetSharedFunctionInfoForStreamedScript(
+          isolate, source, script_details, origin_options,
+          background_compile_thread.data());
+
+  Handle<SharedFunctionInfo> result;
+  if (maybe_result.ToHandle(&result)) {
+    *is_compiled_scope = result->is_compiled_scope();
+  }
+
+  return maybe_result;
+}
+
 }  // namespace
 
 MaybeHandle<SharedFunctionInfo> Compiler::GetSharedFunctionInfoForScript(
@@ -2276,27 +2390,29 @@ MaybeHandle<SharedFunctionInfo> Compiler::GetSharedFunctionInfoForScript(
   }
 
   if (maybe_result.is_null()) {
-    // No cache entry found compile the script.
-    UnoptimizedCompileFlags flags = UnoptimizedCompileFlags::ForToplevelCompile(
-        isolate, natives == NOT_NATIVES_CODE, language_mode,
-        script_details.repl_mode);
+    // No cache entry found compile the script. If the
+    // --stress-background-compile flag is set, do the actual compilation on a
+    // background thread, and wait for its result.
+    if (FLAG_stress_background_compile &&
+        CanBackgroundCompile(script_details, origin_options, extension,
+                             compile_options, natives)) {
+      maybe_result = CompileScriptOnBothBackgroundAndMainThread(
+          source, script_details, origin_options, isolate, &is_compiled_scope);
+    } else {
+      UnoptimizedCompileFlags flags =
+          UnoptimizedCompileFlags::ForToplevelCompile(
+              isolate, natives == NOT_NATIVES_CODE, language_mode,
+              script_details.repl_mode);
 
-    flags.is_module = origin_options.IsModule();
-    flags.is_eager = compile_options == ScriptCompiler::kEagerCompile;
+      flags.is_eager = compile_options == ScriptCompiler::kEagerCompile;
+      flags.is_module = origin_options.IsModule();
 
-    UnoptimizedCompileState compile_state(isolate);
-    ParseInfo parse_info(isolate, flags, &compile_state);
-    parse_info.set_extension(extension);
+      maybe_result = CompileScriptOnMainThread(
+          flags, source, script_details, origin_options, natives, extension,
+          isolate, &is_compiled_scope);
+    }
 
-    Handle<Script> script = NewScript(isolate, &parse_info, source,
-                                      script_details, origin_options, natives);
-    DCHECK_IMPLIES(parse_info.flags().collect_type_profile,
-                   script->IsUserJavaScript());
-    DCHECK_EQ(parse_info.flags().is_repl_mode, script->is_repl_mode());
-
-    // Compile the function and add it to the isolate cache.
-    maybe_result =
-        CompileToplevel(&parse_info, script, isolate, &is_compiled_scope);
+    // Add the result to the isolate cache.
     Handle<SharedFunctionInfo> result;
     if (extension == nullptr && maybe_result.ToHandle(&result)) {
       DCHECK(is_compiled_scope.is_compiled());
