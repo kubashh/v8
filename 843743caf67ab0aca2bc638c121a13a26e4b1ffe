@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da14e496_40a9c172",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2797,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-04-20T05:37:28Z",
+      "side": 1,
+      "message": "Hi, Sigurd\n\nNot quite. If back_edge_in_bundle is false, it means there is one input of phi on the back edge cannot share the same LiveRangeBundle as the phi itself. This also means the live ranges/use intervals of this input has some interaction with the live ranges/use intervals of the phi, thus it cannot be added or merged to the same LiveRangeBundle of phi. After allocation any spilled ranges of this input and the phi will be allocated to different stack slots because they don\u0027t share LiveRangeBundle. If the phi get spilled at the loop header and so does the input from the back edge, the gap move from the input to phi will be a stack to stack move, that cannot be saved since their stack slots are different. This is otherwise if the input can be added or merged to the same LiveRangeBundle as phi\u0027s.\n\nNot sure if this is clear. I have shared the problem I encountered regarding this in comment 9 of issue 106381 with a snapshot: \nhttps://bugs.chromium.org/p/chromium/issues/detail?id\u003d1063831#c9\n\nHope this helps.",
+      "parentUuid": "e2761e8e_b1788baf",
+      "range": {
+        "startLine": 2796,
+        "startChar": 6,
+        "endLine": 2797,
+        "endChar": 76
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5aed92f1_2c94b3d7",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5b1cc253_e72de627",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4525,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-04-20T05:37:28Z",
+      "side": 1,
+      "message": "This actually has no direct connection to the heuristic for SpillAtLoopHeaderNotBeneficial.\nThis patch is to resolve another corner case described at Comment 7 of\nhttps://bugs.chromium.org/p/chromium/issues/detail?id\u003d1063831#c7",
+      "parentUuid": "5aed92f1_2c94b3d7",
+      "range": {
+        "startLine": 4522,
+        "startChar": 4,
+        "endLine": 4525,
+        "endChar": 65
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "59520408_a17de5d8",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 5
@@ -59,6 +107,30 @@
       "writtenOn": "2020-04-17T11:04:33Z",
       "side": 1,
       "message": "Why is this use position and not register position?",
+      "range": {
+        "startLine": 4526,
+        "startChar": 35,
+        "endLine": 4526,
+        "endChar": 50
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ca7dd0a_ad3927ea",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4526,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-04-20T05:37:28Z",
+      "side": 1,
+      "message": "Because in the corner case described above, the UsePosition (at split_pos) is neither register beneficial nor register position, otherwise the blocked register cannot be assigned to the current range.",
+      "parentUuid": "59520408_a17de5d8",
       "range": {
         "startLine": 4526,
         "startChar": 35,
