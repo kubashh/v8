@@ -87,6 +87,7 @@ class RootVisitor;
 class ScavengeJob;
 class Scavenger;
 class ScavengerCollector;
+class SharedReadOnlySpace;
 class Space;
 class StressScavengeObserver;
 class TimedHistogram;
@@ -713,6 +714,8 @@ class Heap {
 
   // Sets read-only heap and space.
   void SetUpFromReadOnlyHeap(ReadOnlyHeap* ro_heap);
+
+  void ReplaceReadOnlySpace(SharedReadOnlySpace* shared_ro_space);
 
   // Sets up the heap memory without creating any objects.
   void SetUpSpaces();

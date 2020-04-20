@@ -22,6 +22,14 @@ namespace internal {
 #ifdef V8_SHARED_RO_HEAP
 V8_DECLARE_ONCE(setup_ro_heap_once);
 ReadOnlyHeap* ReadOnlyHeap::shared_ro_heap_ = nullptr;
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wexit-time-destructors"
+#endif
+std::weak_ptr<ReadOnlyArtifacts> artifacts_;
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 #endif
 
 // static
@@ -83,11 +91,13 @@ void ReadOnlyHeap::DeseralizeIntoIsolate(Isolate* isolate,
                                          ReadOnlyDeserializer* des) {
   DCHECK_NOT_NULL(des);
   des->DeserializeInto(isolate);
+
   InitFromIsolate(isolate);
 }
 
 void ReadOnlyHeap::OnCreateHeapObjectsComplete(Isolate* isolate) {
   DCHECK_NOT_NULL(isolate);
+
   InitFromIsolate(isolate);
 }
 
@@ -100,8 +110,11 @@ ReadOnlyHeap* ReadOnlyHeap::CreateAndAttachToIsolate(Isolate* isolate) {
 
 void ReadOnlyHeap::InitFromIsolate(Isolate* isolate) {
   DCHECK(!init_complete_);
-  read_only_space_->ShrinkImmortalImmovablePages();
 #ifdef V8_SHARED_RO_HEAP
+  auto space_and_artifacts = read_only_space()->Detach();
+  artifacts_ = space_and_artifacts.first;
+  shared_ro_heap_->read_only_space_ = space_and_artifacts.second;
+
   void* const isolate_ro_roots = reinterpret_cast<void*>(
       isolate->roots_table().read_only_roots_begin().address());
   std::memcpy(read_only_roots_, isolate_ro_roots,
@@ -109,7 +122,7 @@ void ReadOnlyHeap::InitFromIsolate(Isolate* isolate) {
   // N.B. Since pages are manually allocated with mmap, Lsan doesn't track
   // their pointers. Seal explicitly ignores the necessary objects.
   LSAN_IGNORE_OBJECT(this);
-  read_only_space_->Seal(ReadOnlySpace::SealMode::kDetachFromHeapAndForget);
+  // read_only_space_->Seal(ReadOnlySpace::SealMode::kDetachFromHeapAndForget);
 #else
   read_only_space_->Seal(ReadOnlySpace::SealMode::kDoNotDetachFromHeap);
 #endif
