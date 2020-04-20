@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b2c0ba8_c85cba15",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4156,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-04-20T23:13:32Z",
+      "side": 1,
+      "message": "should i add JumpIfNotUndefinedOrNull instead of this?",
+      "revId": "78144b78f34ec57a7b280b15c2fa296d4b81c642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dfa13d2_5690d062",
+        "filename": "src/parsing/parse-info.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-04-20T23:13:32Z",
+      "side": 1,
+      "message": "shu is working on a cl to clean up unused flags here, will update this after it lands",
+      "revId": "78144b78f34ec57a7b280b15c2fa296d4b81c642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
