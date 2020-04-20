@@ -1053,14 +1053,17 @@ Type OperationTyper::NumberMax(Type lhs, Type rhs) {
 
   bool maybe_minus_zero = lhs_maybe_minus_zero || rhs_maybe_minus_zero;
   if (!lhs.IsNone() || !rhs.IsNone()) {
-    double min = std::max(lhs.IsNone() ? -V8_INFINITY : lhs.Min(),
-                          rhs.IsNone() ? -V8_INFINITY : rhs.Min());
-    double max = std::max(lhs.IsNone() ? -V8_INFINITY : lhs.Max(),
-                          rhs.IsNone() ? -V8_INFINITY : rhs.Max());
+    double lhs_min = lhs.IsNone() ? -V8_INFINITY : lhs.Min();
+    double rhs_min = rhs.IsNone() ? -V8_INFINITY : rhs.Min();
+    double lhs_max = lhs.IsNone() ? -V8_INFINITY : lhs.Max();
+    double rhs_max = rhs.IsNone() ? -V8_INFINITY : rhs.Max();
+    double min = std::max(lhs_min, rhs_min);
+    double max = std::max(lhs_max, rhs_max);
     type = Type::Union(type, Type::Range(min, max, zone()), zone());
     maybe_minus_zero =
-        maybe_minus_zero && (min < 0.0 || (min == 0.0 && lhs_maybe_minus_zero &&
-                                           rhs_maybe_minus_zero));
+        maybe_minus_zero &&
+        ((lhs_maybe_minus_zero && (rhs_maybe_minus_zero || rhs_min < 0)) ||
+         ((lhs_maybe_minus_zero || lhs_min < 0) && rhs_maybe_minus_zero));
   }
 
   if (maybe_minus_zero) {
@@ -1086,18 +1089,24 @@ Type OperationTyper::NumberMin(Type lhs, Type rhs) {
     return Type::Union(type, Type::Union(lhs, rhs, zone()), zone());
   }
 
-  bool maybe_minus_zero =
-      lhs.Maybe(Type::MinusZero()) || rhs.Maybe(Type::MinusZero());
+  bool const lhs_maybe_minus_zero = lhs.Maybe(Type::MinusZero());
+  bool const rhs_maybe_minus_zero = rhs.Maybe(Type::MinusZero());
   lhs = Type::Intersect(lhs, cache_->kInteger, zone());
   rhs = Type::Intersect(rhs, cache_->kInteger, zone());
 
+  bool maybe_minus_zero = lhs_maybe_minus_zero || rhs_maybe_minus_zero;
   if (!lhs.IsNone() || !rhs.IsNone()) {
-    double min = std::min(lhs.IsNone() ? +V8_INFINITY : lhs.Min(),
-                          rhs.IsNone() ? +V8_INFINITY : rhs.Min());
-    double max = std::min(lhs.IsNone() ? +V8_INFINITY : lhs.Max(),
-                          rhs.IsNone() ? +V8_INFINITY : rhs.Max());
+    double lhs_min = lhs.IsNone() ? +V8_INFINITY : lhs.Min();
+    double rhs_min = rhs.IsNone() ? +V8_INFINITY : rhs.Min();
+    double lhs_max = lhs.IsNone() ? +V8_INFINITY : lhs.Max();
+    double rhs_max = rhs.IsNone() ? +V8_INFINITY : rhs.Max();
+    double min = std::min(lhs_min, rhs_min);
+    double max = std::min(lhs_max, rhs_max);
     type = Type::Union(type, Type::Range(min, max, zone()), zone());
-    maybe_minus_zero = maybe_minus_zero && max >= 0.0;
+    maybe_minus_zero =
+        maybe_minus_zero &&
+        ((lhs_maybe_minus_zero && (rhs_maybe_minus_zero || rhs_max >= 0)) ||
+         ((lhs_maybe_minus_zero || lhs_max >= 0) && rhs_maybe_minus_zero));
   }
 
   if (maybe_minus_zero) {
