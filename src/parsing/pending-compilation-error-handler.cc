@@ -5,6 +5,7 @@
 #include "src/parsing/pending-compilation-error-handler.h"
 
 #include "src/ast/ast-value-factory.h"
+#include "src/base/logging.h"
 #include "src/debug/debug.h"
 #include "src/execution/isolate.h"
 #include "src/execution/messages.h"
@@ -14,15 +15,34 @@
 namespace v8 {
 namespace internal {
 
+void PendingCompilationErrorHandler::MessageDetails::ChangeAstStringToRawObj() {
+  if (type_ != kAstRawString) return;
+  raw_arg_obj_ = arg_->string()->ptr();
+  type_ = kRawObjectAddress;
+}
+void PendingCompilationErrorHandler::MessageDetails::HandlifyRawObj(
+    Isolate* isolate) {
+  if (type_ != kRawObjectAddress) return;
+  arg_handle_ = handle(String::cast(Object(raw_arg_obj_)), isolate);
+  type_ = kMainThreadHandle;
+}
+
 Handle<String> PendingCompilationErrorHandler::MessageDetails::ArgumentString(
     Isolate* isolate) const {
-  if (arg_ != nullptr) return arg_->string();
-  if (char_arg_ != nullptr) {
-    return isolate->factory()
-        ->NewStringFromUtf8(CStrVector(char_arg_))
-        .ToHandleChecked();
+  switch (type_) {
+    case kAstRawString:
+      return arg_->string();
+    case kNone:
+      return isolate->factory()->undefined_string();
+    case kConstCharString:
+      return isolate->factory()
+          ->NewStringFromUtf8(CStrVector(char_arg_))
+          .ToHandleChecked();
+    case kMainThreadHandle:
+      return arg_handle_;
+    case kRawObjectAddress:
+      UNREACHABLE();
   }
-  return isolate->factory()->undefined_string();
 }
 
 MessageLocation PendingCompilationErrorHandler::MessageDetails::GetLocation(
@@ -37,8 +57,7 @@ void PendingCompilationErrorHandler::ReportMessageAt(int start_position,
   if (has_pending_error_) return;
   has_pending_error_ = true;
 
-  error_details_ =
-      MessageDetails(start_position, end_position, message, nullptr, arg);
+  error_details_ = MessageDetails(start_position, end_position, message, arg);
 }
 
 void PendingCompilationErrorHandler::ReportMessageAt(int start_position,
@@ -48,8 +67,7 @@ void PendingCompilationErrorHandler::ReportMessageAt(int start_position,
   if (has_pending_error_) return;
   has_pending_error_ = true;
 
-  error_details_ =
-      MessageDetails(start_position, end_position, message, arg, nullptr);
+  error_details_ = MessageDetails(start_position, end_position, message, arg);
 }
 
 void PendingCompilationErrorHandler::ReportWarningAt(int start_position,
@@ -57,7 +75,7 @@ void PendingCompilationErrorHandler::ReportWarningAt(int start_position,
                                                      MessageTemplate message,
                                                      const char* arg) {
   warning_messages_.emplace_front(
-      MessageDetails(start_position, end_position, message, nullptr, arg));
+      MessageDetails(start_position, end_position, message, arg));
 }
 
 void PendingCompilationErrorHandler::ReportWarnings(Isolate* isolate,
@@ -77,8 +95,12 @@ void PendingCompilationErrorHandler::ReportWarnings(Isolate* isolate,
 
 void PendingCompilationErrorHandler::ReportWarnings(OffThreadIsolate* isolate,
                                                     Handle<Script> script) {
-  // TODO(leszeks): Do nothing, re-report on the main thread.
-  UNREACHABLE();
+  // Change any AstRawStrings to raw object pointers before the Ast Zone dies,
+  // re-report later on the main thread.
+  DCHECK(!has_pending_error());
+  for (MessageDetails& warning : warning_messages_) {
+    warning.ChangeAstStringToRawObj();
+  }
 }
 
 void PendingCompilationErrorHandler::ReportErrors(
@@ -90,6 +112,29 @@ void PendingCompilationErrorHandler::ReportErrors(
     DCHECK(has_pending_error());
     // Internalize ast values for throwing the pending error.
     ast_value_factory->Internalize(isolate);
+    ThrowPendingError(isolate, script);
+  }
+}
+
+void PendingCompilationErrorHandler::PrepareErrorsOffThread(
+    OffThreadIsolate* isolate, Handle<Script> script,
+    AstValueFactory* ast_value_factory) {
+  // Prepare
+  if (!stack_overflow()) {
+    DCHECK(has_pending_error());
+    // Internalize ast values for later throwing the pending error.
+    ast_value_factory->Internalize(isolate);
+    error_details_.ChangeAstStringToRawObj();
+  }
+}
+
+void PendingCompilationErrorHandler::ReportErrorsAfterOffThreadFinalization(
+    Isolate* isolate, Handle<Script> script) {
+  if (stack_overflow()) {
+    isolate->StackOverflow();
+  } else {
+    DCHECK(has_pending_error());
+    // Ast values should already be internalized.
     ThrowPendingError(isolate, script);
   }
 }
@@ -106,6 +151,19 @@ void PendingCompilationErrorHandler::ThrowPendingError(Isolate* isolate,
   Handle<JSObject> error =
       factory->NewSyntaxError(error_details_.message(), argument);
   isolate->ThrowAt(error, &location);
+}
+
+void PendingCompilationErrorHandler::FixUpHandlesAfterOffThreadFinalization(
+    Isolate* isolate) {
+  if (stack_overflow()) return;
+
+  if (has_pending_error()) {
+    error_details_.HandlifyRawObj(isolate);
+  } else {
+    for (MessageDetails& warning : warning_messages_) {
+      warning.HandlifyRawObj(isolate);
+    }
+  }
 }
 
 Handle<String> PendingCompilationErrorHandler::FormatErrorMessageForTest(

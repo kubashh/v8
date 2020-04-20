@@ -27,6 +27,8 @@ class PendingCompilationErrorHandler {
   PendingCompilationErrorHandler()
       : has_pending_error_(false), stack_overflow_(false) {}
 
+  MOVE_ONLY_NO_DEFAULT_CONSTRUCTOR(PendingCompilationErrorHandler);
+
   void ReportMessageAt(int start_position, int end_position,
                        MessageTemplate message, const char* arg = nullptr);
 
@@ -49,6 +51,11 @@ class PendingCompilationErrorHandler {
   // Handle errors detected during parsing.
   void ReportErrors(Isolate* isolate, Handle<Script> script,
                     AstValueFactory* ast_value_factory);
+  void PrepareErrorsOffThread(OffThreadIsolate* isolate, Handle<Script> script,
+                              AstValueFactory* ast_value_factory);
+  void ReportErrorsAfterOffThreadFinalization(Isolate* isolate,
+                                              Handle<Script> script);
+  void FixUpHandlesAfterOffThreadFinalization(Isolate* isolate);
 
   // Handle warnings detected during compilation.
   void ReportWarnings(Isolate* isolate, Handle<Script> script);
@@ -77,27 +84,53 @@ class PendingCompilationErrorHandler {
         : start_position_(-1),
           end_position_(-1),
           message_(MessageTemplate::kNone),
-          arg_(nullptr),
-          char_arg_(nullptr) {}
+          type_(kNone) {}
     MessageDetails(int start_position, int end_position,
-                   MessageTemplate message, const AstRawString* arg,
-                   const char* char_arg)
+                   MessageTemplate message, const AstRawString* arg)
         : start_position_(start_position),
           end_position_(end_position),
           message_(message),
           arg_(arg),
-          char_arg_(char_arg) {}
+          type_(arg ? kAstRawString : kNone) {}
+    MessageDetails(int start_position, int end_position,
+                   MessageTemplate message, const char* char_arg)
+        : start_position_(start_position),
+          end_position_(end_position),
+          message_(message),
+          char_arg_(char_arg),
+          type_(char_arg_ ? kConstCharString : kNone) {}
 
     Handle<String> ArgumentString(Isolate* isolate) const;
     MessageLocation GetLocation(Handle<Script> script) const;
     MessageTemplate message() const { return message_; }
 
+    // After off-thread finalization, the Ast Zone will be deleted, so before
+    // that happens we have to convert AstRawStrings into raw object pointers.
+    void ChangeAstStringToRawObj();
+    // After off-thread finalization, on the main thread, raw object pointers
+    // have to be converted into Handles before the off-thread space is merged
+    // into the main thread.
+    void HandlifyRawObj(Isolate* isolate);
+
    private:
+    enum Type {
+      kNone,
+      kAstRawString,
+      kConstCharString,
+      kRawObjectAddress,
+      kMainThreadHandle
+    };
+
     int start_position_;
     int end_position_;
     MessageTemplate message_;
-    const AstRawString* arg_;
-    const char* char_arg_;
+    union {
+      const AstRawString* arg_;
+      const char* char_arg_;
+      Address raw_arg_obj_;
+      Handle<String> arg_handle_;
+    };
+    Type type_;
   };
 
   void ThrowPendingError(Isolate* isolate, Handle<Script> script);
@@ -109,8 +142,6 @@ class PendingCompilationErrorHandler {
   MessageDetails error_details_;
 
   std::forward_list<MessageDetails> warning_messages_;
-
-  DISALLOW_COPY_AND_ASSIGN(PendingCompilationErrorHandler);
 };
 
 }  // namespace internal
