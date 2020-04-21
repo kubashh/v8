@@ -81,6 +81,30 @@
       "revId": "9a1580742ff1181bf5e5033b2dfe20aa5695741f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7342bb35_1768646e",
+        "filename": "src/parsing/parse-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-04-21T15:39:46Z",
+      "side": 1,
+      "message": "The removal CL is here: https://chromium-review.googlesource.com/c/v8/v8/+/2157800, though that has a mid-air collision with something Leszek is working on that also changes the representation of those flag bits. Should be resolved by end of the week, sorry for the delay.",
+      "parentUuid": "48217cbb_ef660f92",
+      "range": {
+        "startLine": 334,
+        "startChar": 43,
+        "endLine": 334,
+        "endChar": 45
+      },
+      "revId": "9a1580742ff1181bf5e5033b2dfe20aa5695741f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
