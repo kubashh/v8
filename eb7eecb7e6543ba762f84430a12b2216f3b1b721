@@ -16,6 +16,24 @@
       "revId": "eb7eecb7e6543ba762f84430a12b2216f3b1b721",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c80b76_091ccc90",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-21T16:50:58Z",
+      "side": 1,
+      "message": "Ack, I should have anticipated that comment ;)\n\nI am not sure if the assumption that the mutex will not be contented is true, since thousands of functions finish per second and want to be published (if they are TurboFan). But I am open to an experimental approach here. Since the mutex version is much simpler indeed, I refactored to this for now. I am assuming that some perf bots complain about this CL anyway, and in follow-up CLs we can still improve the synchronization technique if the mutex turns out to be a problem.",
+      "parentUuid": "aeca14a1_98107aa1",
+      "revId": "eb7eecb7e6543ba762f84430a12b2216f3b1b721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
