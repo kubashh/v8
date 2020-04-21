@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/builtins/builtins-wasm-gen.h"
+
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/codegen/code-stub-assembler.h"
 #include "src/codegen/interface-descriptors.h"
@@ -12,30 +14,25 @@
 namespace v8 {
 namespace internal {
 
-class WasmBuiltinsAssembler : public CodeStubAssembler {
- public:
-  explicit WasmBuiltinsAssembler(compiler::CodeAssemblerState* state)
-      : CodeStubAssembler(state) {}
+TNode<WasmInstanceObject> WasmBuiltinsAssembler::LoadInstanceFromFrame() {
+  return CAST(
+      LoadFromParentFrame(WasmCompiledFrameConstants::kWasmInstanceOffset));
+}
 
- protected:
-  TNode<WasmInstanceObject> LoadInstanceFromFrame() {
-    return CAST(
-        LoadFromParentFrame(WasmCompiledFrameConstants::kWasmInstanceOffset));
-  }
+TNode<Context> WasmBuiltinsAssembler::LoadContextFromInstance(
+    TNode<WasmInstanceObject> instance) {
+  return CAST(Load(MachineType::AnyTagged(), instance,
+                   IntPtrConstant(WasmInstanceObject::kNativeContextOffset -
+                                  kHeapObjectTag)));
+}
 
-  TNode<Context> LoadContextFromInstance(TNode<WasmInstanceObject> instance) {
-    return CAST(Load(MachineType::AnyTagged(), instance,
-                     IntPtrConstant(WasmInstanceObject::kNativeContextOffset -
-                                    kHeapObjectTag)));
-  }
-
-  TNode<Smi> SmiFromUint32WithSaturation(TNode<Uint32T> value, uint32_t max) {
-    DCHECK_LE(max, static_cast<uint32_t>(Smi::kMaxValue));
-    TNode<Uint32T> capped_value = SelectConstant(
-        Uint32LessThan(value, Uint32Constant(max)), value, Uint32Constant(max));
-    return SmiFromUint32(capped_value);
-  }
-};
+TNode<Smi> WasmBuiltinsAssembler::SmiFromUint32WithSaturation(
+    TNode<Uint32T> value, uint32_t max) {
+  DCHECK_LE(max, static_cast<uint32_t>(Smi::kMaxValue));
+  TNode<Uint32T> capped_value = SelectConstant(
+      Uint32LessThan(value, Uint32Constant(max)), value, Uint32Constant(max));
+  return SmiFromUint32(capped_value);
+}
 
 TF_BUILTIN(WasmInt32ToHeapNumber, WasmBuiltinsAssembler) {
   TNode<Int32T> val = UncheckedCast<Int32T>(Parameter(Descriptor::kValue));
@@ -46,6 +43,11 @@ TF_BUILTIN(WasmTaggedNonSmiToInt32, WasmBuiltinsAssembler) {
   TNode<Context> context = CAST(Parameter(Descriptor::kContext));
   Return(
       ChangeTaggedNonSmiToInt32(context, CAST(Parameter(Descriptor::kValue))));
+}
+
+TF_BUILTIN(WasmFloat32ToNumber, WasmBuiltinsAssembler) {
+  TNode<Float32T> val = UncheckedCast<Float32T>(Parameter(Descriptor::kValue));
+  Return(ChangeFloat32ToTagged(val));
 }
 
 TF_BUILTIN(WasmFloat64ToNumber, WasmBuiltinsAssembler) {
