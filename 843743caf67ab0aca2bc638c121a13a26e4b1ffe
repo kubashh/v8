@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "ee455b85_f415e1cc",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2797,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-04-21T11:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7ee0689_c213e221",
+      "range": {
+        "startLine": 2796,
+        "startChar": 6,
+        "endLine": 2797,
+        "endChar": 76
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5aed92f1_2c94b3d7",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 5
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "If you don\u0027t have any objections, then let\u0027s split this out into another CL so we see the performance impact of each change on its own.",
       "parentUuid": "5b1cc253_e72de627",
+      "range": {
+        "startLine": 4522,
+        "startChar": 4,
+        "endLine": 4525,
+        "endChar": 65
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "998cbe05_15a2186e",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4525,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-04-21T11:03:38Z",
+      "side": 1,
+      "message": "Yes, no problem. I will create a new CL for this part.",
+      "parentUuid": "b1fa09ce_5ff24852",
       "range": {
         "startLine": 4522,
         "startChar": 4,
@@ -226,6 +274,30 @@
       "writtenOn": "2020-04-20T11:57:32Z",
       "side": 1,
       "message": "I took a better look at the example you shared on the issue, and to me it looks like the reason the second part of the split is not spilled is that it is already available in a memory location (pos 34), do you think it could be another criterion for not applying the heuristic?\nI am not sure I fully understand the reasoning with the use position, I think it deserves a brief explanation for why this is supposed to be a good change in general.",
+      "range": {
+        "startLine": 4522,
+        "startChar": 0,
+        "endLine": 4526,
+        "endChar": 0
+      },
+      "revId": "843743caf67ab0aca2bc638c121a13a26e4b1ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beb62654_58f9fe5b",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4526,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-04-21T11:03:38Z",
+      "side": 1,
+      "message": "Hi, Thibaud\n\nI did try other way to improve this case like making this UsePosition register beneficial with some criterion, but it will make another blocked register being taken when encounter intersection. As suggested I\u0027m going to split this to a seperate CL and will provide you with more details then.",
+      "parentUuid": "6461ed6c_182b5bbd",
       "range": {
         "startLine": 4522,
         "startChar": 0,
