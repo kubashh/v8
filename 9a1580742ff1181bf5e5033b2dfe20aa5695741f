@@ -57,6 +57,30 @@
       "revId": "9a1580742ff1181bf5e5033b2dfe20aa5695741f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48217cbb_ef660f92",
+        "filename": "src/parsing/parse-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-04-21T14:56:07Z",
+      "side": 1,
+      "message": "no I commented on the first patchset, there are some old flags here that shu is removing, once that\u0027s updated I\u0027ll be able to fix this (2^32 is out of range here)",
+      "parentUuid": "3fbc3238_ec6cd38c",
+      "range": {
+        "startLine": 334,
+        "startChar": 43,
+        "endLine": 334,
+        "endChar": 45
+      },
+      "revId": "9a1580742ff1181bf5e5033b2dfe20aa5695741f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
