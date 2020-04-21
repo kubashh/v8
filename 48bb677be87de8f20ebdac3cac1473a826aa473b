@@ -88,6 +88,24 @@
       "revId": "48bb677be87de8f20ebdac3cac1473a826aa473b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb9c9694_09e607d6",
+        "filename": "src/objects/lookup-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-21T13:59:31Z",
+      "side": 1,
+      "message": "I\u0027ve uploaded a CL to move the protector back to the isolate here: https://crrev.com/c/2157382",
+      "parentUuid": "a6b72f4d_bfdd18aa",
+      "revId": "48bb677be87de8f20ebdac3cac1473a826aa473b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
