@@ -66,6 +66,7 @@ ParseInfo::ParseInfo(Isolate* isolate, AccountingAllocator* zone_allocator,
   set_allow_harmony_import_meta(FLAG_harmony_import_meta);
   set_allow_harmony_private_methods(FLAG_harmony_private_methods);
   set_allow_harmony_top_level_await(FLAG_harmony_top_level_await);
+  set_allow_harmony_logical_assignment(FLAG_harmony_logical_assignment);
 }
 
 ParseInfo::ParseInfo(Isolate* isolate)
