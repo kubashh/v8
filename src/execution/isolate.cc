@@ -2843,6 +2843,11 @@ void Isolate::SetUpFromReadOnlyHeap(ReadOnlyHeap* ro_heap) {
   heap_.SetUpFromReadOnlyHeap(ro_heap);
 }
 
+void Isolate::SetReadOnlyArtifacts(
+    std::shared_ptr<ReadOnlyArtifacts> artifacts) {
+  artifacts_ = artifacts;
+}
+
 v8::PageAllocator* Isolate::page_allocator() {
   return isolate_allocator_->page_allocator();
 }

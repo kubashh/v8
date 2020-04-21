@@ -56,10 +56,6 @@ class ReadOnlyHeap final {
   V8_EXPORT_PRIVATE inline static ReadOnlyRoots GetReadOnlyRoots(
       HeapObject object);
 
-  // Clears any shared read-only heap artifacts for testing, forcing read-only
-  // heap to be re-created on next set up.
-  V8_EXPORT_PRIVATE static void ClearSharedHeapForTest();
-
   // Extends the read-only object cache with new zero smi and returns a
   // reference to it.
   Object* ExtendReadOnlyObjectCache();
