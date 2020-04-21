@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fbc3238_ec6cd38c",
+        "filename": "src/parsing/parse-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-04-21T08:17:36Z",
+      "side": 1,
+      "message": "Did you mean 32 here?",
+      "range": {
+        "startLine": 334,
+        "startChar": 43,
+        "endLine": 334,
+        "endChar": 45
+      },
+      "revId": "9a1580742ff1181bf5e5033b2dfe20aa5695741f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
