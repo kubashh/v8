@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aeca14a1_98107aa1",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-04-21T13:28:43Z",
+      "side": 1,
+      "message": "Please don\u0027t try to implement a non-blocking queue here. Non-blocking data structures are just a source of subtle concurrency bugs, and in a low contention scenario like here (one call per thread every x milliseconds) absolutely not worth the risk it. By risk I don\u0027t only mean that it\u0027s correct now, but that it will be correct for all future refactorings of the code here. Just introduce a normal queue with a lock around it, and be done with it. It\u0027s easy to reason about, and it\u0027s just correct. The code within the lock would be very small, so there should be absolutely no performance issue. Moreover, you would have clear memory ownership of the {PublishEntry} objects you allocate here.\n\nYou could also set the {publisher_running_} flag within the lock of the queue, then all this {StopPublishing} magic also goes away. What I have in mind:\n\n{\n  lockscope;\n  enqueue task;\n  try to become publisher;\n}\nif (!publisher) return;\nwhile (publisher) {\n  {\n    lockscope;\n    retrieve all tasks from the queue;\n    if there are no tasks, reset the publisher flag;\n  }\n  process all tasks;\n}",
+      "revId": "eb7eecb7e6543ba762f84430a12b2216f3b1b721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
