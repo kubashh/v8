@@ -16,6 +16,24 @@
       "revId": "de906b2083764e52c705643ac0447a05c3432615",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0b3365f_7ff8a040",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-04-21T14:21:07Z",
+      "side": 1,
+      "message": "Done. Yes, I agree it\u0027s a bit odd especially given the value can be changed by a flag. Moved it to CHECK_LE.",
+      "parentUuid": "b7e67781_e0d6ed89",
+      "revId": "de906b2083764e52c705643ac0447a05c3432615",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
