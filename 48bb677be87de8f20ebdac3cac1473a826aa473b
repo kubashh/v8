@@ -70,6 +70,24 @@
       "revId": "48bb677be87de8f20ebdac3cac1473a826aa473b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6b72f4d_bfdd18aa",
+        "filename": "src/objects/lookup-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-21T07:48:43Z",
+      "side": 1,
+      "message": "\u003e I think we\u0027re probably simply calling UpdateProtector too aggressively, even if e.g., delete won\u0027t actually delete anything. It\u0027s called e.g., at the beginning of DeleteProperty, while we could move it further down.\n\nThat sounds good to me too. \n\nRegarding the bug this CL is intended to fix, I\u0027m still tending towards removing the native-context protector for regexp species. I\u0027m not really comfortable with the intricacies it adds, and it\u0027s unclear how much it really helps (vs. the original isolate protector solution).",
+      "parentUuid": "9263f12b_d35b206d",
+      "revId": "48bb677be87de8f20ebdac3cac1473a826aa473b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
