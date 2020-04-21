@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e7ca03a5_07b3e7d8",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4152,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-04-21T10:03:47Z",
+      "side": 1,
+      "message": "I\u0027m not keen on the double switch here. I think we should avoid early returning here and integrate this logic into the block below, to ensure we keep the same logic for the assignment (e.g., right now you don\u0027t have the \nbuilder()-\u003eSetExpressionPosition(expr) on this operation which will cause debugging issues).\n\nMaybe something like:\n\nLabel short_circuit;\nif (binop-\u003eop() \u003d\u003d Token::NULLISH) {\n  BytecodeLabel nullish;\n  builder()\n     -\u003eJumpIfUndefinedOrNull(\u0026nullish)\n     .Jump(\u0026short_circuit)\n     .Bind(\u0026nullish);\n     VisitForAccumulatorValue(expr-\u003evalue());\n} else if (binop-\u003eop() \u003d\u003d Token::OR) {\n  builder()-\u003eJumpIfTrue(ToBooleanMode::kConvertToBoolean,\n                        \u0026short_circuit);\n  VisitForAccumulatorValue(expr-\u003evalue());\n} else if (binop-\u003eop() \u003d\u003d Token::AND) {\n  ...\n} else if (expr-\u003evalue()-\u003eIsSmiLiteral()) {\n  ...\n} else {\n  ...\n}\n\nbuilder()-\u003eSetExpressionPosition(expr);\nBuildAssignment(lhs_data, expr-\u003eop(), expr-\u003elookup_hoisting_mode());\nbuilder()-\u003eBind(\u0026short_circuit);",
+      "revId": "9a1580742ff1181bf5e5033b2dfe20aa5695741f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3fbc3238_ec6cd38c",
         "filename": "src/parsing/parse-info.h",
         "patchSetId": 2
