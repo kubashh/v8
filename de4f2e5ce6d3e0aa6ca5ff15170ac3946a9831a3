@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f165b6e_763fafe4",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3031,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-04-21T12:25:43Z",
+      "side": 1,
+      "message": "nit: it\u0027s easier to follow if we return pos here instead of break IMO, and also consistent with other early returns.",
+      "revId": "de4f2e5ce6d3e0aa6ca5ff15170ac3946a9831a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
