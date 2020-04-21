@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fcd44cd8_ce5aeb62",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4156,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-04-21T10:48:12Z",
+      "side": 1,
+      "message": "JumpIfUndefinedOrNull is good. I don\u0027t think we need to add JumpIfNotUndefinedOrNull.",
+      "parentUuid": "7b2c0ba8_c85cba15",
+      "revId": "78144b78f34ec57a7b280b15c2fa296d4b81c642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9dfa13d2_5690d062",
         "filename": "src/parsing/parse-info.h",
         "patchSetId": 1
