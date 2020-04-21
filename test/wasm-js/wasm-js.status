@@ -6,7 +6,6 @@
 [ALWAYS, {
   # These are slow, and not useful to run for the proposals:
   'proposals/reference-types/limits': [SKIP],
-  'proposals/multi-value/limits': [SKIP],
   'proposals/bulk-memory-operations/limits': [SKIP],
   'proposals/JS-BigInt-integration/limits': [SKIP],
   'proposals/js-types/limits': [SKIP],

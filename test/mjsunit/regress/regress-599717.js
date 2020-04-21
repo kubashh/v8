@@ -15,7 +15,7 @@ function __f_61(stdlib, foreign, buffer) {
 }
 var ok = false;
 try {
-  var __v_12 = new ArrayBuffer(2147483648);
+  var __v_12 = new ArrayBuffer(4294967304);
   ok = true;
 } catch (e) {
   // Can happen if the allocation fails.

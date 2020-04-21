@@ -18,7 +18,7 @@ namespace wasm {
 
 // These two constants are defined in the Wasm JS API spec and as such only
 // concern JS embeddings.
-constexpr size_t kSpecMaxWasmInitialMemoryPages = 32767;
+constexpr size_t kSpecMaxWasmInitialMemoryPages = 65536;
 constexpr size_t kSpecMaxWasmMaximumMemoryPages = 65536;
 
 // The following limits are imposed by V8 on WebAssembly modules.
