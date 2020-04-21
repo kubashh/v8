@@ -5199,6 +5199,10 @@ void Heap::SetUpFromReadOnlyHeap(ReadOnlyHeap* ro_heap) {
   space_[RO_SPACE] = read_only_space_ = ro_heap->read_only_space();
 }
 
+void Heap::ReplaceReadOnlySpace(SharedReadOnlySpace* space) {
+  read_only_space_ = space;
+}
+
 void Heap::SetUpSpaces() {
   // Ensure SetUpFromReadOnlySpace has been ran.
   DCHECK_NOT_NULL(read_only_space_);
