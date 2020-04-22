@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d255d202_79fe25e1",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-04-22T14:54:38Z",
+      "side": 1,
+      "message": "Hi Bill, regarding the issue discussed under https://crrev.com/c/2099445, it appears that we\nare not taking this if stmt. Hence the value is put in a different register under else.\nOur \"type\" here is returned as: \"v8::internal::MachineRepresentation::kTagged\". Not sure if this is related to us not having ptr-compression enabled yet.",
+      "revId": "ab5470212eb90c9aa8b3d2541bf51f8f2b4bc992",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
