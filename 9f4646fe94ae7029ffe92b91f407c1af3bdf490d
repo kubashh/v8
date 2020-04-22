@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b67d5774_f1bc32c9",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-22T07:57:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6c7fc974_98e1b158",
+      "revId": "9f4646fe94ae7029ffe92b91f407c1af3bdf490d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59a5a3d6_7ac80c33",
         "filename": "src/codegen/interface-descriptors.h",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "9f4646fe94ae7029ffe92b91f407c1af3bdf490d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a76dd139_2d183c99",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-22T07:57:07Z",
+      "side": 1,
+      "message": "You\u0027re right. The code somehow worked, but I fixed it anyway for better readability.",
+      "parentUuid": "59a5a3d6_7ac80c33",
+      "revId": "9f4646fe94ae7029ffe92b91f407c1af3bdf490d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
