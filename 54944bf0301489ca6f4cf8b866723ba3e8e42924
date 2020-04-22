@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "8cf735b4_964e5ec9",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5290,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-22T07:26:10Z",
+      "side": 1,
+      "message": "Yes this is CSA style. The intent is to clarify the block structure tied associated with a label for easier reading. Short, trivial blocks are often written as\n\n BIND(\u0026label);\n \u003cone or two lines of code\u003e\n\nLonger blocks as\n\n BIND(\u0026label);\n { \n   \u003clonger, more involved code\u003e\n }\n\nThis convention is used to clarify where block-like constructs begin and end.",
+      "parentUuid": "ab6c5105_45ce31c6",
+      "revId": "54944bf0301489ca6f4cf8b866723ba3e8e42924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "af431bd9_a580ae92",
         "filename": "test/cctest/test-code-stub-assembler.cc",
         "patchSetId": 8
