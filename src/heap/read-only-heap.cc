@@ -6,8 +6,9 @@
 
 #include <cstring>
 
+#include "src/base/lazy-instance.h"
 #include "src/base/lsan.h"
-#include "src/base/once.h"
+#include "src/base/platform/mutex.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/heap/spaces.h"
@@ -20,7 +21,15 @@ namespace v8 {
 namespace internal {
 
 #ifdef V8_SHARED_RO_HEAP
-V8_DECLARE_ONCE(setup_ro_heap_once);
+// Mutex used to ensure that ReadOnlyArtifacts creation is only done once.
+base::LazyMutex read_only_heap_creation_mutex_ = LAZY_MUTEX_INITIALIZER;
+
+// Weak pointer holding ReadOnlyArtifacts. ReadOnlyHeap::SetUp creates a
+// std::shared_ptr from this when it attempts to reuse it. Since all Isolates
+// hold a std::shared_ptr to this, the object is destroyed when no Isolates
+// remain.
+base::LazyInstance<std::weak_ptr<ReadOnlyArtifacts>>::type artifacts_ =
+    LAZY_INSTANCE_INITIALIZER;
 ReadOnlyHeap* ReadOnlyHeap::shared_ro_heap_ = nullptr;
 #endif
 
@@ -28,26 +37,30 @@ ReadOnlyHeap* ReadOnlyHeap::shared_ro_heap_ = nullptr;
 void ReadOnlyHeap::SetUp(Isolate* isolate, ReadOnlyDeserializer* des) {
   DCHECK_NOT_NULL(isolate);
 #ifdef V8_SHARED_RO_HEAP
-  bool call_once_ran = false;
+
+  bool read_only_heap_created = false;
   base::Optional<uint32_t> des_checksum;
 #ifdef DEBUG
   if (des != nullptr) des_checksum = des->GetChecksum();
 #endif  // DEBUG
 
-  base::CallOnce(&setup_ro_heap_once,
-                 [isolate, des, des_checksum, &call_once_ran]() {
-                   USE(des_checksum);
-                   shared_ro_heap_ = CreateAndAttachToIsolate(isolate);
-                   if (des != nullptr) {
+  {
+    base::MutexGuard guard(read_only_heap_creation_mutex_.Pointer());
+    std::shared_ptr<ReadOnlyArtifacts> artifacts = artifacts_.Get().lock();
+    if (!artifacts) {
+      USE(des_checksum);
+      shared_ro_heap_ = CreateAndAttachToIsolate(isolate);
+      if (des != nullptr) {
 #ifdef DEBUG
-                     shared_ro_heap_->read_only_blob_checksum_ = des_checksum;
+        shared_ro_heap_->read_only_blob_checksum_ = des_checksum;
 #endif  // DEBUG
-                     shared_ro_heap_->DeseralizeIntoIsolate(isolate, des);
-                   }
-                   call_once_ran = true;
-                 });
+        shared_ro_heap_->DeseralizeIntoIsolate(isolate, des);
+      }
+      read_only_heap_created = true;
+    }
+  }
 
-  USE(call_once_ran);
+  USE(read_only_heap_created);
   USE(des_checksum);
 #ifdef DEBUG
   const base::Optional<uint32_t> last_checksum =
@@ -62,7 +75,7 @@ void ReadOnlyHeap::SetUp(Isolate* isolate, ReadOnlyDeserializer* des) {
   } else {
     // The read-only heap objects were created. Make sure this happens only
     // once, during this call.
-    CHECK(call_once_ran);
+    CHECK(read_only_heap_created);
   }
 #endif  // DEBUG
 
@@ -100,16 +113,19 @@ ReadOnlyHeap* ReadOnlyHeap::CreateAndAttachToIsolate(Isolate* isolate) {
 
 void ReadOnlyHeap::InitFromIsolate(Isolate* isolate) {
   DCHECK(!init_complete_);
-  read_only_space_->ShrinkImmortalImmovablePages();
 #ifdef V8_SHARED_RO_HEAP
+  auto space_and_artifacts = read_only_space()->Detach();
+  (*artifacts_.Pointer()) = space_and_artifacts.first;
+  shared_ro_heap_->read_only_space_ = space_and_artifacts.second;
+
+  isolate->SetReadOnlyArtifacts(space_and_artifacts.first);
   void* const isolate_ro_roots = reinterpret_cast<void*>(
       isolate->roots_table().read_only_roots_begin().address());
   std::memcpy(read_only_roots_, isolate_ro_roots,
               kEntriesCount * sizeof(Address));
-  // N.B. Since pages are manually allocated with mmap, Lsan doesn't track
-  // their pointers. Seal explicitly ignores the necessary objects.
+  // N.B. Since pages are manually allocated with mmap, Lsan doesn't track their
+  // pointers. Seal explicitly ignores the necessary objects.
   LSAN_IGNORE_OBJECT(this);
-  read_only_space_->Seal(ReadOnlySpace::SealMode::kDetachFromHeapAndForget);
 #else
   read_only_space_->Seal(ReadOnlySpace::SealMode::kDoNotDetachFromHeap);
 #endif
@@ -127,17 +143,6 @@ void ReadOnlyHeap::OnHeapTearDown() {
 // static
 const ReadOnlyHeap* ReadOnlyHeap::Instance() { return shared_ro_heap_; }
 #endif
-
-// static
-void ReadOnlyHeap::ClearSharedHeapForTest() {
-#ifdef V8_SHARED_RO_HEAP
-  DCHECK_NOT_NULL(shared_ro_heap_);
-  // TODO(v8:7464): Just leak read-only space for now. The paged-space heap
-  // is null so there isn't a nice way to do this.
-  shared_ro_heap_ = nullptr;
-  setup_ro_heap_once = 0;
-#endif
-}
 
 // static
 bool ReadOnlyHeap::Contains(Address address) {
