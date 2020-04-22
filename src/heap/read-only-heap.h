@@ -28,15 +28,19 @@ class ReadOnlyHeap final {
   static constexpr size_t kEntriesCount =
       static_cast<size_t>(RootIndex::kReadOnlyRootsCount);
 
-  // If necessary creates read-only heap and initializes its artifacts (if
-  // the deserializer is provided). Then attaches the read-only heap to the
-  // isolate.
+  // If necessary creates read-only heap and initializes its artifacts (if the
+  // deserializer is provided). Then attaches the read-only heap to the isolate.
+  // If the deserializer is not provided, then the read-only heap will be only
+  // finish initializing when initial heap object creation in the Isolate is
+  // completed, which is signalled by calling OnCreateHeapObjectsComplete. When
+  // V8_SHARED_RO_HEAP is enabled, a lock will be held until that method is
+  // called.
   // TODO(v8:7464): Ideally we'd create this without needing a heap.
   static void SetUp(Isolate* isolate, ReadOnlyDeserializer* des);
   // Indicates that the isolate has been set up and all read-only space objects
-  // have been created and will not be written to. This is not thread safe, and
-  // should really only be used during snapshot creation or when read-only heap
-  // sharing is disabled.
+  // have been created and will not be written to. This should only be called if
+  // a deserializer was not previously provided to Setup. When V8_SHARED_RO_HEAP
+  // is enabled, this releases the ReadOnlyHeap creation lock.
   void OnCreateHeapObjectsComplete(Isolate* isolate);
   // Indicates that the current isolate no longer requires the read-only heap
   // and it may be safely disposed of.
@@ -55,10 +59,6 @@ class ReadOnlyHeap final {
   // specific roots table.
   V8_EXPORT_PRIVATE inline static ReadOnlyRoots GetReadOnlyRoots(
       HeapObject object);
-
-  // Clears any shared read-only heap artifacts for testing, forcing read-only
-  // heap to be re-created on next set up.
-  V8_EXPORT_PRIVATE static void ClearSharedHeapForTest();
 
   // Extends the read-only object cache with new zero smi and returns a
   // reference to it.
