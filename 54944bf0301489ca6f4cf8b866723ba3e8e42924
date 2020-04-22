@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "a4c791c2_c1a9a431",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5290,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-22T09:23:31Z",
+      "side": 1,
+      "message": "Thanks for clarifying! This makes sense then. Even though I have to say that I like the first style way better, even for a few more lines.",
+      "parentUuid": "8cf735b4_964e5ec9",
+      "revId": "54944bf0301489ca6f4cf8b866723ba3e8e42924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af431bd9_a580ae92",
         "filename": "test/cctest/test-code-stub-assembler.cc",
         "patchSetId": 8
