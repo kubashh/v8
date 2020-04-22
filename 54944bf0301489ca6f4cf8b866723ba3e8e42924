@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "ab6c5105_45ce31c6",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5290,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-22T07:20:09Z",
+      "side": 1,
+      "message": "I don\u0027t get these blocks. Saw them on previous CLs already (and commented on them). Is this common CSA style? What to they enclose?",
+      "revId": "54944bf0301489ca6f4cf8b866723ba3e8e42924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "af431bd9_a580ae92",
         "filename": "test/cctest/test-code-stub-assembler.cc",
         "patchSetId": 8
