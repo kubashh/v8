@@ -148,6 +148,11 @@ class Decoder {
         errorf(pc, "Invalid SIMD opcode %d", index);
       }
     } else {
+      if (!validate) {
+        DCHECK(validate_size(pc, 2, "expected 2 bytes"));
+      } else if (!validate_size(pc, 2, "expected 2 bytes")) {
+        return static_cast<WasmOpcode>(*pc);
+      }
       index = *(pc + 1);
       *length = 1;
     }
