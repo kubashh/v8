@@ -16,6 +16,24 @@
       "revId": "de4f2e5ce6d3e0aa6ca5ff15170ac3946a9831a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d59d03b8_1ed563b2",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3031,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-04-22T05:28:44Z",
+      "side": 1,
+      "message": "Thank you for the comment. I agree that using \"return pos\" here is more consistent with other early returns in this function.",
+      "parentUuid": "5f165b6e_763fafe4",
+      "revId": "de4f2e5ce6d3e0aa6ca5ff15170ac3946a9831a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
