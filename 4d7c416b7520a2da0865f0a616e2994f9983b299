@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b09a17a_52333e2f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-04-22T08:52:32Z",
+      "side": 1,
+      "message": "Is the first call to {PublishCode} here a no-op, because {codes} is an empty list? Is it worth reusing {codes} here, instead of having another vector?",
+      "revId": "4d7c416b7520a2da0865f0a616e2994f9983b299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db65a3b6_71c4e94f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-04-22T08:52:32Z",
+      "side": 1,
+      "message": "The publish queue could just be a std::vector\u003cstd::vector\u003cstd::unique_ptr\u003cWasmCode\u003e\u003e\u003e, i.e. you could just enqueue the vector of to-be-published code into the queue. This should make the critical section smaller.",
+      "revId": "4d7c416b7520a2da0865f0a616e2994f9983b299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
