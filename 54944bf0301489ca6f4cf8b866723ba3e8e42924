@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bd464eb_16abe1ec",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5280,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-22T06:26:37Z",
+      "side": 1,
+      "message": "Same comment here as in the previous CL, I suspect performance could improve by removing the kDeferred here.",
+      "revId": "54944bf0301489ca6f4cf8b866723ba3e8e42924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af431bd9_a580ae92",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3806,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-22T06:26:37Z",
+      "side": 1,
+      "message": "Perhaps also add smi max,max+1,min,min-1 values.",
+      "revId": "54944bf0301489ca6f4cf8b866723ba3e8e42924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
