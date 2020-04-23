@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53e98e66_86d36e0f",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2020-04-23T07:12:52Z",
+      "side": 1,
+      "message": "This should return a MaybeHandle.",
+      "range": {
+        "startLine": 1471,
+        "startChar": 0,
+        "endLine": 1471,
+        "endChar": 6
+      },
+      "revId": "d613f0cbc4bb6ef080e759df19d8a84edab177d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
