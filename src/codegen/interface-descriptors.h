@@ -94,6 +94,7 @@ namespace internal {
   V(WasmTaggedNonSmiToInt32)          \
   V(WasmFloat64ToNumber)              \
   V(WasmTaggedToFloat64)              \
+  V(WasmAllocateJSArray)              \
   V(WasmAtomicNotify)                 \
   V(WasmI32AtomicWait32)              \
   V(WasmI32AtomicWait64)              \
@@ -1344,6 +1345,14 @@ class WasmTaggedToFloat64Descriptor final : public CallInterfaceDescriptor {
   DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Float64(),    // result
                                     MachineType::AnyTagged())  // value
   DECLARE_DESCRIPTOR(WasmTaggedToFloat64Descriptor, CallInterfaceDescriptor)
+};
+
+class WasmAllocateJSArrayDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kArraySize)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),
+                                    MachineType::TaggedSigned())
+  DECLARE_DESCRIPTOR(WasmAllocateJSArrayDescriptor, CallInterfaceDescriptor)
 };
 
 class WasmMemoryGrowDescriptor final : public CallInterfaceDescriptor {
