@@ -391,7 +391,7 @@ bool UseAsmWasm(FunctionLiteral* literal, bool asm_wasm_broken) {
 
 void InstallBytecodeArray(Handle<BytecodeArray> bytecode_array,
                           Handle<SharedFunctionInfo> shared_info,
-                          ParseInfo* parse_info, Isolate* isolate) {
+                          Isolate* isolate) {
   if (!FLAG_interpreted_frames_native_stack) {
     shared_info->set_bytecode_array(*bytecode_array);
     return;
@@ -447,7 +447,7 @@ void InstallUnoptimizedCode(UnoptimizedCompilationInfo* compilation_info,
     }
 
     InstallBytecodeArray(compilation_info->bytecode_array(), shared_info,
-                         parse_info, isolate);
+                         isolate);
 
     Handle<FeedbackMetadata> feedback_metadata = FeedbackMetadata::New(
         isolate, compilation_info->feedback_vector_spec());
@@ -2648,8 +2648,14 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
             !task->collected_source_positions() &&
             isolate->NeedsDetailedOptimizedCodeLineInfo();
         bool should_log_compilations = ShouldLogFunctionCompilation(isolate);
+        bool should_install_native_trampolines =
+            FLAG_interpreted_frames_native_stack;
 
-        if (should_ensure_source_positions || should_log_compilations) {
+        // If we need to do any of the above per-function operations, then
+        // iterate over all the SharedFunctionInfos in the Script and do
+        // whatever is necessary with them.
+        if (should_ensure_source_positions || should_log_compilations ||
+            should_install_native_trampolines) {
           HandleScope scope(isolate);
           SharedFunctionInfo::ScriptIterator iter(isolate, *script);
 
@@ -2668,6 +2674,10 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
               LogFunctionCompilation(
                   CodeEventListener::SCRIPT_TAG, shared, script,
                   handle(shared->abstract_code(), isolate), false, 0, isolate);
+            }
+            if (should_install_native_trampolines) {
+              InstallBytecodeArray(handle(shared->GetBytecodeArray(), isolate),
+                                   shared, isolate);
             }
           }
         }
