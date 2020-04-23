@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "357eed52_7ae476a2",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-04-23T15:42:18Z",
+      "side": 1,
+      "message": "Rather than passing through a bool, could we instead add a is_asm_wasm field to UnoptimizedCompilationJobList and then just loop through all the jobs to see if any are asm_wasm and disable off-thread finalization there? We\u0027d need to do something like this anyway if we want to make it possible to finalize all non-asm-wasm jobs off-thread in a later followup.",
+      "revId": "44dbbad76e15f9cede2b5e1d222ae9acb07cc019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
