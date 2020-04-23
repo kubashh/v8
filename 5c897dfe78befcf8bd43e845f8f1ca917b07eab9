@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "56130866_4b4f7e8c",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2667,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-04-23T16:24:20Z",
+      "side": 1,
+      "message": "I think pre-work would be best so we know if there is issues doing the fixups on the main-thread before we commit to it as a plan for the off-thread approach. I\u0027m not sure how this affects your chain of CLs though :/.",
+      "parentUuid": "af9ddc8f_7e2b9e8c",
+      "range": {
+        "startLine": 2666,
+        "startChar": 14,
+        "endLine": 2667,
+        "endChar": 26
+      },
+      "revId": "5c897dfe78befcf8bd43e845f8f1ca917b07eab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd82af9d_17f60bbd",
         "filename": "src/execution/off-thread-isolate.h",
         "patchSetId": 2
