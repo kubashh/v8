@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2181f669_3dd716a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-23T12:32:07Z",
+      "side": 1,
+      "message": "nit: the message is slightly misleading for me since in fact you implement a normal builtin with a single return value.\n\nCould you perhaps expand the explanation a bit and add a linked bug if one exists?",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ce60a28_e4c7288a",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-23T12:32:07Z",
+      "side": 1,
+      "message": "AFAICT this could just be a TFS builtin (\u003d without a custom descriptor) since it only takes tagged arguments.",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa3f1263_3000d0b2",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5459,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-23T12:32:07Z",
+      "side": 1,
+      "message": "Did you notice GraphAssembler::LoadField?\n\nNote that I started moving GraphAssembler towards TNodes a while ago. So far it has only been used in js-call-reducer, so the system will not be perfect or complete. But you could consider starting to pull in types here as well, e.g. make this function return TNode\u003cFixedArrayBase\u003e or so.",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e601fad_dd2e02fc",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5568,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-23T12:32:07Z",
+      "side": 1,
+      "message": "q: Would GraphAssembler::StoreElement work here? Maybe you can skip the manual elements load. Same below.",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
