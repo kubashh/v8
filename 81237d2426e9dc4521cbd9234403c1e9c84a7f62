@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77c7e84c_308fd02c",
+        "filename": "src/wasm/decoder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-23T09:26:16Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s a good idea to just return the prefix opcode itself here. This is a return value that can only happen via this error case. In other error cases (like SIMD), we just set index to 0. Can we do the same here?\nWe could initialize index to 0 above, and just do this here:\n\nif (!validate || validate_size(...)) {\n  DCHECK(validate_size(...));\n  index \u003d ...;\n  *length \u003d 1;\n}",
+      "revId": "81237d2426e9dc4521cbd9234403c1e9c84a7f62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "182f2dd1_a09dc0be",
+        "filename": "test/mjsunit/regress/wasm/regress-1073553.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-23T09:26:16Z",
+      "side": 1,
+      "message": "Even though this is just a regression test, it would be nice if it would be more readable. Can we create it by generating a proper module containing SIMD (via the module builder), and then truncating after the SIMD prefix?",
+      "revId": "81237d2426e9dc4521cbd9234403c1e9c84a7f62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
