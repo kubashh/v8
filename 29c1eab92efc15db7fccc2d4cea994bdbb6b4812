@@ -63,6 +63,30 @@
       "revId": "29c1eab92efc15db7fccc2d4cea994bdbb6b4812",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dd1073b_6efb0a6c",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2020-04-23T15:28:19Z",
+      "side": 0,
+      "message": "ReportMessageFromMicrotasksQueue would imply that there is no outer JS try-catch to worry about.",
+      "parentUuid": "29408fef_2407df54",
+      "range": {
+        "startLine": 611,
+        "startChar": 11,
+        "endLine": 611,
+        "endChar": 46
+      },
+      "revId": "29c1eab92efc15db7fccc2d4cea994bdbb6b4812",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
