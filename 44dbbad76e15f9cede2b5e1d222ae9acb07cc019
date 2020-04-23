@@ -16,6 +16,24 @@
       "revId": "44dbbad76e15f9cede2b5e1d222ae9acb07cc019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5911209_83b04740",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-04-23T16:12:31Z",
+      "side": 1,
+      "message": "I like it.",
+      "parentUuid": "357eed52_7ae476a2",
+      "revId": "44dbbad76e15f9cede2b5e1d222ae9acb07cc019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
