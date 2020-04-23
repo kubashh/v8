@@ -5453,6 +5453,28 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         iterable, length, context, effect(), control()));
   }
 
+  // Extract the FixedArray implementing
+  // the backing storage of a JavaScript array.
+  Node* BuildLoadArrayBackingStorage(Node* js_array) {
+    return gasm_->Load(MachineType::AnyTagged(), js_array,
+                       JSObject::kElementsOffset - kHeapObjectTag);
+  }
+
+  // Generate a call to the AllocateJSArray builtin.
+  Node* BuildCallAllocateJSArray(Node* array_length, Node* context) {
+    // Since we don't check that args will fit in an array,
+    // we make sure this is true based on statically known limits.
+    STATIC_ASSERT(wasm::kV8MaxWasmFunctionMultiReturns <=
+                  JSArray::kInitialMaxFastElementArray);
+    auto call_descriptor =
+        GetBuiltinCallDescriptor<WasmAllocateJSArrayDescriptor>(
+            this, StubCallMode::kCallBuiltinPointer);
+    Node* call_target = GetBuiltinPointerTarget(Builtins::kWasmAllocateJSArray);
+    return SetEffect(graph()->NewNode(
+        mcgraph()->common()->Call(call_descriptor), call_target, array_length,
+        context, effect(), control()));
+  }
+
   void BuildJSToWasmWrapper(bool is_import) {
     const int wasm_count = static_cast<int>(sig_->parameter_count());
     const int rets_count = static_cast<int>(sig_->return_count());
@@ -5536,15 +5558,15 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       int32_t return_count = static_cast<int32_t>(sig_->return_count());
       Node* size =
           graph()->NewNode(mcgraph()->common()->NumberConstant(return_count));
-      // TODO(thibaudm): Replace runtime calls with TurboFan code.
-      Node* fixed_array =
-          BuildCallToRuntime(Runtime::kWasmNewMultiReturnFixedArray, &size, 1);
+
+      jsval = BuildCallAllocateJSArray(size, js_context);
+
+      Node* fixed_array = BuildLoadArrayBackingStorage(jsval);
+
       for (int i = 0; i < return_count; ++i) {
         Node* value = ToJS(rets[i], sig_->GetReturn(i));
         STORE_FIXED_ARRAY_SLOT_ANY(fixed_array, i, value);
       }
-      jsval = BuildCallToRuntimeWithContext(Runtime::kWasmNewMultiReturnJSArray,
-                                            js_context, &fixed_array, 1);
     }
     Return(jsval);
     if (ContainsInt64(sig_)) LowerInt64(kCalledFromJS);
@@ -6005,16 +6027,14 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       int32_t return_count = static_cast<int32_t>(sig_->return_count());
       Node* size =
           graph()->NewNode(mcgraph()->common()->NumberConstant(return_count));
-      Node* result_fixed_array =
-          BuildCallToRuntime(Runtime::kWasmNewMultiReturnFixedArray, &size, 1);
+      jsval = BuildCallAllocateJSArray(size, context);
+      Node* result_fixed_array = BuildLoadArrayBackingStorage(jsval);
       for (unsigned i = 0; i < sig_->return_count(); ++i) {
         const auto& type = sig_->GetReturn(i);
         Node* elem = LOAD_FIXED_ARRAY_SLOT_ANY(fixed_array, i);
         Node* cast = ToJS(FromJS(elem, context, type), type);
         STORE_FIXED_ARRAY_SLOT_ANY(result_fixed_array, i, cast);
       }
-      jsval = BuildCallToRuntimeWithContext(Runtime::kWasmNewMultiReturnJSArray,
-                                            context, &result_fixed_array, 1);
     }
     Return(jsval);
   }
