@@ -582,11 +582,12 @@ CompilationJob::Status FinalizeUnoptimizedCompilationJob(
 std::unique_ptr<UnoptimizedCompilationJob> ExecuteUnoptimizedCompileJobs(
     ParseInfo* parse_info, FunctionLiteral* literal,
     AccountingAllocator* allocator,
-    UnoptimizedCompilationJobList* inner_function_jobs) {
+    UnoptimizedCompilationJobList* inner_function_jobs, bool* has_asm) {
   if (UseAsmWasm(literal, parse_info->flags().is_asm_wasm_broken())) {
     std::unique_ptr<UnoptimizedCompilationJob> asm_job(
         AsmJs::NewCompilationJob(parse_info, literal, allocator));
     if (asm_job->ExecuteJob() == CompilationJob::SUCCEEDED) {
+      *has_asm = true;
       return asm_job;
     }
     // asm.js validation failed, fall through to standard unoptimized compile.
@@ -609,7 +610,7 @@ std::unique_ptr<UnoptimizedCompilationJob> ExecuteUnoptimizedCompileJobs(
   for (FunctionLiteral* inner_literal : eager_inner_literals) {
     std::unique_ptr<UnoptimizedCompilationJob> inner_job(
         ExecuteUnoptimizedCompileJobs(parse_info, inner_literal, allocator,
-                                      inner_function_jobs));
+                                      inner_function_jobs, has_asm));
     // Compilation failed, return null.
     if (!inner_job) return std::unique_ptr<UnoptimizedCompilationJob>();
     inner_function_jobs->emplace_front(std::move(inner_job));
@@ -620,14 +621,15 @@ std::unique_ptr<UnoptimizedCompilationJob> ExecuteUnoptimizedCompileJobs(
 
 std::unique_ptr<UnoptimizedCompilationJob> GenerateUnoptimizedCode(
     ParseInfo* parse_info, AccountingAllocator* allocator,
-    UnoptimizedCompilationJobList* inner_function_jobs) {
+    UnoptimizedCompilationJobList* inner_function_jobs, bool* has_asm) {
   DisallowHeapAccess no_heap_access;
   DCHECK(inner_function_jobs->empty());
 
   std::unique_ptr<UnoptimizedCompilationJob> job;
   if (Compiler::Analyze(parse_info)) {
-    job = ExecuteUnoptimizedCompileJobs(parse_info, parse_info->literal(),
-                                        allocator, inner_function_jobs);
+    job =
+        ExecuteUnoptimizedCompileJobs(parse_info, parse_info->literal(),
+                                      allocator, inner_function_jobs, has_asm);
   }
 
   // Character stream shouldn't be used again.
@@ -1145,7 +1147,7 @@ MaybeHandle<SharedFunctionInfo> CompileToplevel(
 
 std::unique_ptr<UnoptimizedCompilationJob> CompileOnBackgroundThread(
     ParseInfo* parse_info, AccountingAllocator* allocator,
-    UnoptimizedCompilationJobList* inner_function_jobs) {
+    UnoptimizedCompilationJobList* inner_function_jobs, bool* has_asm) {
   DisallowHeapAccess no_heap_access;
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                "V8.CompileCodeBackground");
@@ -1159,7 +1161,8 @@ std::unique_ptr<UnoptimizedCompilationJob> CompileOnBackgroundThread(
 
   // Generate the unoptimized bytecode or asm-js data.
   std::unique_ptr<UnoptimizedCompilationJob> outer_function_job(
-      GenerateUnoptimizedCode(parse_info, allocator, inner_function_jobs));
+      GenerateUnoptimizedCode(parse_info, allocator, inner_function_jobs,
+                              has_asm));
   return outer_function_job;
 }
 
@@ -1309,10 +1312,13 @@ void BackgroundCompileTask::Run() {
 
   parser_->ParseOnBackground(info_.get(), start_position_, end_position_,
                              function_literal_id_);
+
+  bool has_asm = false;
   if (info_->literal() != nullptr) {
     // Parsing has succeeded, compile.
-    outer_function_job_ = CompileOnBackgroundThread(
-        info_.get(), compile_state_.allocator(), &inner_function_jobs_);
+    outer_function_job_ =
+        CompileOnBackgroundThread(info_.get(), compile_state_.allocator(),
+                                  &inner_function_jobs_, &has_asm);
   }
   // Save the language mode and record whether we collected source positions.
   language_mode_ = info_->language_mode();
@@ -1324,6 +1330,16 @@ void BackgroundCompileTask::Run() {
   // At this point, off-thread compilation has completed and we are off-thread
   // finalizing.
   // ---
+
+  if (has_asm) {
+    // We don't currently support off-thread finalization for asm.js, so release
+    // the off-thread isolate and fall back to main-thread finalization.
+    // TODO(leszeks): Still finalize Ignition tasks on the background thread,
+    // and fallback to main-thread finalization for asm.js jobs only.
+    finalize_on_background_thread_ = false;
+    off_thread_isolate_.reset();
+    return;
+  }
 
   DCHECK(info_->flags().is_toplevel());
 
@@ -1564,9 +1580,10 @@ bool Compiler::Compile(Handle<SharedFunctionInfo> shared_info,
 
   // Generate the unoptimized bytecode or asm-js data.
   UnoptimizedCompilationJobList inner_function_jobs;
+  bool has_asm = false;
   std::unique_ptr<UnoptimizedCompilationJob> outer_function_job(
       GenerateUnoptimizedCode(&parse_info, isolate->allocator(),
-                              &inner_function_jobs));
+                              &inner_function_jobs, &has_asm));
   if (!outer_function_job) {
     return FailWithPendingException(
         isolate, handle(Script::cast(shared_info->script()), isolate),
