@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "9e2e2e4f_10df2051",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-23T13:18:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5ce60a28_e4c7288a",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa3f1263_3000d0b2",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 8
@@ -64,6 +82,24 @@
       "writtenOn": "2020-04-23T12:32:07Z",
       "side": 1,
       "message": "Did you notice GraphAssembler::LoadField?\n\nNote that I started moving GraphAssembler towards TNodes a while ago. So far it has only been used in js-call-reducer, so the system will not be perfect or complete. But you could consider starting to pull in types here as well, e.g. make this function return TNode\u003cFixedArrayBase\u003e or so.",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8e41b00_745bbcc1",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5459,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-23T13:18:18Z",
+      "side": 1,
+      "message": "It seems to me this function is defined in JSGraphAssembler and is not available in wasm-compiler. I don\u0027t see it being used anywhere else in wasm-compiler either. Am I missing something?",
+      "parentUuid": "aa3f1263_3000d0b2",
       "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "49b845fc_af1df86d",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5463,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-23T13:18:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "164e4cb2_8f0f261a",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b3bb7d48_a6c1cc6f",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 8
@@ -104,6 +158,24 @@
     },
     {
       "key": {
+        "uuid": "071ec66e_5d1d08ba",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5466,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-23T13:18:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b3bb7d48_a6c1cc6f",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eeb05c37_cc5018c4",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 8
@@ -115,6 +187,24 @@
       "writtenOn": "2020-04-23T12:40:29Z",
       "side": 1,
       "message": "Do we need two separate variable js_array and js_val to keep the same content?",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87a25adc_91d25197",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5562,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-23T13:18:18Z",
+      "side": 1,
+      "message": "Certainly not, but I did it this way for symmetry with the above cases. I\u0027ll change it in any case.",
+      "parentUuid": "eeb05c37_cc5018c4",
       "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -138,6 +228,24 @@
     },
     {
       "key": {
+        "uuid": "1265e5ec_53f81bff",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5568,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-23T13:18:18Z",
+      "side": 1,
+      "message": "Same as above",
+      "parentUuid": "2e601fad_dd2e02fc",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db6efc48_726ef8f5",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 8
@@ -152,6 +260,24 @@
       "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d65c928_7d76918f",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 6031,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-23T13:18:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "db6efc48_726ef8f5",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
