@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72ad79a6_853dddd8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-04-23T06:46:29Z",
+      "side": 1,
+      "message": "Please add details to the commit message with what this CL fixes and how/why",
+      "revId": "936b662591f5fae2f08d6688f03fbc54cef5a969",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
