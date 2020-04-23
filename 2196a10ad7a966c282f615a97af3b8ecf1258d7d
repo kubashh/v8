@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "fbfb47e9_4dd98332",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-04-23T12:40:29Z",
+      "side": 1,
+      "message": "Please be a little more verbose with the commit message, e.g. add tags to the title like `[wasm] Implement builtin for multi-value returns` and also add additional motivation in a separate paragraph.\n\nIf you have a bug, you may also mention it here (Bug: v8/1234), as well as the reviewers (R\u003dclemensb@chromium.org) in separate lines each.",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5ce60a28_e4c7288a",
         "filename": "src/builtins/builtins-definitions.h",
         "patchSetId": 8
@@ -53,6 +70,57 @@
     },
     {
       "key": {
+        "uuid": "164e4cb2_8f0f261a",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5463,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-04-23T12:40:29Z",
+      "side": 1,
+      "message": "Please finish all sentences with a full stop.",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3bb7d48_a6c1cc6f",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5466,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-04-23T12:40:29Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeb05c37_cc5018c4",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5562,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-04-23T12:40:29Z",
+      "side": 1,
+      "message": "Do we need two separate variable js_array and js_val to keep the same content?",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e601fad_dd2e02fc",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 8
@@ -64,6 +132,23 @@
       "writtenOn": "2020-04-23T12:32:07Z",
       "side": 1,
       "message": "q: Would GraphAssembler::StoreElement work here? Maybe you can skip the manual elements load. Same below.",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db6efc48_726ef8f5",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 6031,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-04-23T12:40:29Z",
+      "side": 1,
+      "message": "Same as above",
       "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
