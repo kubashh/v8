@@ -1325,6 +1325,28 @@ void BackgroundCompileTask::Run() {
   // finalizing.
   // ---
 
+  bool can_off_thread_finalize_all =
+      outer_function_job_->can_off_thread_finalize();
+  if (can_off_thread_finalize_all) {
+    for (auto& job : inner_function_jobs_) {
+      if (!job->can_off_thread_finalize()) {
+        can_off_thread_finalize_all = false;
+        break;
+      }
+    }
+  }
+
+  if (!can_off_thread_finalize_all) {
+    // We don't currently support off-thread finalization for some jobs (namely,
+    // asm.js), so release the off-thread isolate and fall back to main-thread
+    // finalization.
+    // TODO(leszeks): Still finalize Ignition tasks on the background thread,
+    // and fallback to main-thread finalization for asm.js jobs only.
+    finalize_on_background_thread_ = false;
+    off_thread_isolate_.reset();
+    return;
+  }
+
   DCHECK(info_->flags().is_toplevel());
 
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),

@@ -187,7 +187,7 @@ class AsmJsCompilationJob final : public UnoptimizedCompilationJob {
   explicit AsmJsCompilationJob(ParseInfo* parse_info, FunctionLiteral* literal,
                                AccountingAllocator* allocator)
       : UnoptimizedCompilationJob(parse_info->stack_limit(), parse_info,
-                                  &compilation_info_),
+                                  &compilation_info_, false),
         allocator_(allocator),
         zone_(allocator, ZONE_NAME),
         compilation_info_(&zone_, parse_info, literal),
