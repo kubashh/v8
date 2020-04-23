@@ -104,12 +104,7 @@ function handleScriptParsed(messageObject)
 
   var startLine = messageObject.params.startLine + 3;
   var endLine = messageObject.params.endLine;
-  if (startLine > endLine) {
-    InspectorTest.log(
-      `Terminating early: start line ${startLine} is after end line ${endLine}.`
-    );
-    return;
-  }
+  if (startLine > endLine) return;
 
   InspectorTest.log('First script; assuming testFunction.');
   InspectorTest.log(

@@ -86,6 +86,12 @@ struct ScopedTimer {
 
 namespace {
 
+bool ShouldLogFunctionCompilation(Isolate* isolate) {
+  return isolate->logger()->is_listening_to_code_events() ||
+         isolate->is_profiling() || FLAG_log_function_events ||
+         isolate->code_event_dispatcher()->IsListeningToCodeEvents();
+}
+
 void LogFunctionCompilation(CodeEventListener::LogEventsAndTags tag,
                             Handle<SharedFunctionInfo> shared,
                             Handle<Script> script,
@@ -97,9 +103,7 @@ void LogFunctionCompilation(CodeEventListener::LogEventsAndTags tag,
   // Log the code generation. If source information is available include
   // script name and line number. Check explicitly whether logging is
   // enabled as finding the line number is not free.
-  if (!isolate->logger()->is_listening_to_code_events() &&
-      !isolate->is_profiling() && !FLAG_log_function_events &&
-      !isolate->code_event_dispatcher()->IsListeningToCodeEvents()) {
+  if (!ShouldLogFunctionCompilation(isolate)) {
     return;
   }
 
@@ -574,7 +578,11 @@ CompilationJob::Status FinalizeUnoptimizedCompilationJob(
   if (status == CompilationJob::SUCCEEDED) {
     InstallUnoptimizedCode(compilation_info, shared_info, parse_info, isolate);
 
-    // TODO(leszeks): Record the function compilation and compilation stats.
+    // Ensuring source positions are available and recording function
+    // compilation are done when merging into the main thread, in
+    // Compiler::GetSharedFunctionInfoForStreamedScript.
+
+    // TODO(leszeks): Record the compilation stats.
   }
   return status;
 }
@@ -2636,19 +2644,32 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
         // profiler), and the compiled bytecode is missing source positions. So,
         // walk all the SharedFunctionInfos in the script and force source
         // position collection.
-        if (!task->collected_source_positions() &&
-            isolate->NeedsDetailedOptimizedCodeLineInfo()) {
-          Handle<WeakFixedArray> shared_function_infos(
-              script->shared_function_infos(isolate), isolate);
-          int length = shared_function_infos->length();
-          FOR_WITH_HANDLE_SCOPE(isolate, int, i = 0, i, i < length, i++, {
-            Object entry = shared_function_infos->Get(isolate, i)
-                               .GetHeapObjectOrSmi(isolate);
-            if (entry.IsSharedFunctionInfo(isolate)) {
-              SharedFunctionInfo::EnsureSourcePositionsAvailable(
-                  isolate, handle(SharedFunctionInfo::cast(entry), isolate));
+        bool should_ensure_source_positions =
+            !task->collected_source_positions() &&
+            isolate->NeedsDetailedOptimizedCodeLineInfo();
+        bool should_log_compilations = ShouldLogFunctionCompilation(isolate);
+
+        if (should_ensure_source_positions || should_log_compilations) {
+          HandleScope scope(isolate);
+          SharedFunctionInfo::ScriptIterator iter(isolate, *script);
+
+          for (SharedFunctionInfo raw_shared = iter.Next();
+               !raw_shared.is_null(); raw_shared = iter.Next()) {
+            if (!raw_shared.HasBytecodeArray()) continue;
+
+            Handle<SharedFunctionInfo> shared = handle(raw_shared, isolate);
+            if (should_ensure_source_positions) {
+              SharedFunctionInfo::EnsureSourcePositionsAvailable(isolate,
+                                                                 shared);
             }
-          });
+            if (should_log_compilations) {
+              // TODO(leszeks): Record proper timing here, and make sure the tag
+              // is right.
+              LogFunctionCompilation(
+                  CodeEventListener::SCRIPT_TAG, shared, script,
+                  handle(shared->abstract_code(), isolate), false, 0, isolate);
+            }
+          }
         }
 
         FinalizeScriptCompilation(isolate, script, task->parallel_tasks());

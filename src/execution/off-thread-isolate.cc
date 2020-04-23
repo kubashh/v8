@@ -135,6 +135,11 @@ int OffThreadIsolate::GetNextUniqueSharedFunctionInfoId() {
 }
 #endif  // V8_SFI_HAS_UNIQUE_ID
 
+bool OffThreadIsolate::NeedsSourcePositionsForProfiling() {
+  // TODO(leszeks): Figure out if it makes sense to check this asynchronously.
+  return isolate_->NeedsSourcePositionsForProfiling();
+}
+
 bool OffThreadIsolate::is_collecting_type_profile() {
   // TODO(leszeks): Figure out if it makes sense to check this asynchronously.
   return isolate_->is_collecting_type_profile();
