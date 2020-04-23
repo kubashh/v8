@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fc2d70c_00d91734",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2667,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-04-23T15:35:15Z",
+      "side": 1,
+      "message": "A lot of this seems placeholder (e.g., no timings and always using SCRIPT_TAG). This feels like something we would forget to ever do in the future. Is there a reason you need to add partial support for logging compiles right now?\n\nCould we refactor RecordFunctionCompilation / RecordCompilationStats out of UnoptimizedCompilationJob and use them directly here instead?",
+      "range": {
+        "startLine": 2666,
+        "startChar": 14,
+        "endLine": 2667,
+        "endChar": 26
+      },
+      "revId": "5c897dfe78befcf8bd43e845f8f1ca917b07eab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd82af9d_17f60bbd",
+        "filename": "src/execution/off-thread-isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-04-23T15:35:15Z",
+      "side": 1,
+      "message": "Looks like this isn\u0027t called?",
+      "revId": "5c897dfe78befcf8bd43e845f8f1ca917b07eab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
