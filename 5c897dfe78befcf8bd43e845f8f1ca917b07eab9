@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4a365f39_8ecdaff9",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2667,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-04-23T15:44:03Z",
+      "side": 1,
+      "message": "Well, the reason I need to do it is to pass tests :)\n\nAlways using SCRIPT_TAG isn\u0027t a place holder though, it\u0027s duplicating logic from the main thread FinalizeUnoptimizedCompilationJob, given knowledge of what kinds of compiles end up here.\n\nThe issue with timings is moving them to here from the now-dead jobs; I don\u0027t think refactoring out will help with that. Perhaps a more reasonable refactoring would be to not actually delete the jobs after off-thread compilation, but keep them around in a reduced capacity (e.g allow them to release their data but keep things like compilation stats)?",
+      "parentUuid": "1fc2d70c_00d91734",
+      "range": {
+        "startLine": 2666,
+        "startChar": 14,
+        "endLine": 2667,
+        "endChar": 26
+      },
+      "revId": "5c897dfe78befcf8bd43e845f8f1ca917b07eab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd82af9d_17f60bbd",
         "filename": "src/execution/off-thread-isolate.h",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2020-04-23T15:35:15Z",
       "side": 1,
       "message": "Looks like this isn\u0027t called?",
+      "revId": "5c897dfe78befcf8bd43e845f8f1ca917b07eab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c440d736_dfc2b539",
+        "filename": "src/execution/off-thread-isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-04-23T15:44:03Z",
+      "side": 1,
+      "message": "Ah, rebase error.",
+      "parentUuid": "cd82af9d_17f60bbd",
       "revId": "5c897dfe78befcf8bd43e845f8f1ca917b07eab9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
