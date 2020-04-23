@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "01097bf4_17fd96cb",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1538,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-04-23T15:27:03Z",
+      "side": 0,
+      "message": "Isolate::CreateMessage does this better, so i factored it out to only the Isolate::ReportBootstrappingException case where we can\u0027t use Isolate::CreateMessage.",
+      "revId": "29c1eab92efc15db7fccc2d4cea994bdbb6b4812",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4ccad1b0_988adf7d",
         "filename": "src/runtime/runtime-internal.cc",
         "patchSetId": 3
