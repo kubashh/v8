@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "af9ddc8f_7e2b9e8c",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2667,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-04-23T16:18:33Z",
+      "side": 1,
+      "message": "It makes sense, but the jobs are just in very different states after main-thread and off-thread finalization. I could imagine extracting out a shared PostFinalization though, and changing the main-thread finalization to require the same \"fixups\" (e.g. trampoline copy, ensure source positions, log compilation) as the off-thread -- that would be blocked on keeping jobs around, which is blocked on allowing jobs to release memory.\n\nI think I like that plan though, I\u0027m also not pleased about the creeping code complexity -- would you prefer it as pre-work or post-work?",
+      "parentUuid": "ad3b62ea_0a7166dd",
+      "range": {
+        "startLine": 2666,
+        "startChar": 14,
+        "endLine": 2667,
+        "endChar": 26
+      },
+      "revId": "5c897dfe78befcf8bd43e845f8f1ca917b07eab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd82af9d_17f60bbd",
         "filename": "src/execution/off-thread-isolate.h",
         "patchSetId": 2
