@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "563ac5fa_1824d528",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 5473,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-23T13:58:27Z",
+      "side": 1,
+      "message": "You should be able to use GraphAssembler::Call here. This avoids the need to fiddle with the effect and control chains manually. So you can skip the \"SetEffect\" as well as the \"effect()\" and \"control()\" arguments.",
+      "revId": "34d5d313803c36037e48ee37e54149e0d03aca5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
