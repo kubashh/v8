@@ -22,6 +22,30 @@
       "revId": "bb6f9a707180ea34370334a3628d44bd5dc656c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63105660_9cb883c8",
+        "filename": "src/parsing/parse-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-04-23T14:39:13Z",
+      "side": 0,
+      "message": "Yes we can!",
+      "parentUuid": "0de89436_9724f553",
+      "range": {
+        "startLine": 244,
+        "startChar": 15,
+        "endLine": 244,
+        "endChar": 47
+      },
+      "revId": "bb6f9a707180ea34370334a3628d44bd5dc656c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

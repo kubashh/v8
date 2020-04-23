@@ -52,6 +52,24 @@
       "revId": "5384ea94e1857f7144d8793aabf86e41e44cff33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be903a64_ebb95984",
+        "filename": "test/inspector/debugger/asm-js-breakpoint-before-exec.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-04-23T14:39:13Z",
+      "side": 1,
+      "message": "Nice idea, done.",
+      "parentUuid": "61620608_6035e074",
+      "revId": "5384ea94e1857f7144d8793aabf86e41e44cff33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
