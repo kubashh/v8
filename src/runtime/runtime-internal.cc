@@ -604,12 +604,18 @@ RUNTIME_FUNCTION(Runtime_ReportMessage) {
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
 
-  CONVERT_ARG_HANDLE_CHECKED(Object, message_obj, 0);
+  CONVERT_ARG_HANDLE_CHECKED(Object, exception, 0);
 
   DCHECK(!isolate->has_pending_exception());
-  isolate->set_pending_exception(*message_obj);
-  isolate->ReportPendingMessagesFromJavaScript();
+  isolate->set_pending_exception(*exception);
+  MessageLocation location;
+  isolate->ComputeLocation(&location);
+  Handle<JSMessageObject> message =
+      isolate->MaybeCreateMessage(exception, &location);
   isolate->clear_pending_exception();
+  if (!message.is_null()) {
+    MessageHandler::ReportMessage(isolate, &location, message);
+  }
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
