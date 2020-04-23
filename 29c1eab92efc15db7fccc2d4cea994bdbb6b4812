@@ -22,6 +22,30 @@
       "revId": "29c1eab92efc15db7fccc2d4cea994bdbb6b4812",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29408fef_2407df54",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-04-23T15:24:44Z",
+      "side": 0,
+      "message": "What name change did you have in mind? Now that it skips checking catch handlers, I think the name \"ReportMessage\" makes a lot of sense.",
+      "parentUuid": "4ccad1b0_988adf7d",
+      "range": {
+        "startLine": 611,
+        "startChar": 11,
+        "endLine": 611,
+        "endChar": 46
+      },
+      "revId": "29c1eab92efc15db7fccc2d4cea994bdbb6b4812",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
