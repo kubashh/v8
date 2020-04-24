@@ -262,7 +262,6 @@ DEFINE_IMPLICATION(harmony_weak_refs_with_cleanup_some, harmony_weak_refs)
   HARMONY_SHIPPING_BASE(V)                                \
   V(harmony_intl_add_calendar_numbering_system,           \
     "Add calendar and numberingSystem to DateTimeFormat") \
-  V(harmony_intl_displaynames, "Intl.DisplayNames")       \
   V(harmony_intl_other_calendars, "DateTimeFormat other calendars")
 #else
 #define HARMONY_SHIPPING(V) HARMONY_SHIPPING_BASE(V)
