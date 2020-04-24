@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8d521c07_63057cd4",
+        "filename": "src/wasm/decoder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-04-24T16:42:36Z",
+      "side": 1,
+      "message": "Makes sense, originally I thought returning 0 is not great, since prefix + 0 actually a valid opcode. Thanks!",
+      "parentUuid": "77c7e84c_308fd02c",
+      "revId": "81237d2426e9dc4521cbd9234403c1e9c84a7f62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "182f2dd1_a09dc0be",
         "filename": "test/mjsunit/regress/wasm/regress-1073553.js",
         "patchSetId": 1
