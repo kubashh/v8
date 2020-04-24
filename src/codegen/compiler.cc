@@ -38,10 +38,11 @@
 #include "src/init/bootstrapper.h"
 #include "src/interpreter/interpreter.h"
 #include "src/logging/log-inl.h"
+#include "src/objects/code.h"
 #include "src/objects/feedback-cell-inl.h"
 #include "src/objects/map.h"
 #include "src/objects/object-list-macros.h"
-#include "src/objects/shared-function-info.h"
+#include "src/objects/shared-function-info-inl.h"
 #include "src/objects/string.h"
 #include "src/parsing/parse-info.h"
 #include "src/parsing/parser.h"
@@ -385,13 +386,12 @@ bool UseAsmWasm(FunctionLiteral* literal, bool asm_wasm_broken) {
   return literal->scope()->IsAsmModule();
 }
 
-void InstallBytecodeArray(Handle<BytecodeArray> bytecode_array,
-                          Handle<SharedFunctionInfo> shared_info,
-                          ParseInfo* parse_info, Isolate* isolate) {
-  if (!FLAG_interpreted_frames_native_stack) {
-    shared_info->set_bytecode_array(*bytecode_array);
-    return;
-  }
+void InstallInterpreterTrampolineCopy(Handle<SharedFunctionInfo> shared_info,
+                                      Isolate* isolate) {
+  DCHECK(FLAG_interpreted_frames_native_stack);
+  DCHECK(shared_info->function_data(isolate).IsBytecodeArray(isolate));
+  Handle<BytecodeArray> bytecode_array(shared_info->GetBytecodeArray(),
+                                       isolate);
 
   Handle<Code> code = isolate->factory()->CopyCode(Handle<Code>::cast(
       isolate->factory()->interpreter_entry_trampoline_for_profiling()));
@@ -421,9 +421,10 @@ void InstallBytecodeArray(Handle<BytecodeArray> bytecode_array,
                                    script_name, line_num, column_num));
 }
 
+template <typename LocalIsolate>
 void InstallUnoptimizedCode(UnoptimizedCompilationInfo* compilation_info,
                             Handle<SharedFunctionInfo> shared_info,
-                            ParseInfo* parse_info, Isolate* isolate) {
+                            LocalIsolate* isolate) {
   DCHECK_EQ(shared_info->language_mode(),
             compilation_info->literal()->language_mode());
 
@@ -442,17 +443,33 @@ void InstallUnoptimizedCode(UnoptimizedCompilationInfo* compilation_info,
       shared_info->set_is_asm_wasm_broken(true);
     }
 
-    InstallBytecodeArray(compilation_info->bytecode_array(), shared_info,
-                         parse_info, isolate);
+    shared_info->set_bytecode_array(*compilation_info->bytecode_array());
 
     Handle<FeedbackMetadata> feedback_metadata = FeedbackMetadata::New(
         isolate, compilation_info->feedback_vector_spec());
     shared_info->set_feedback_metadata(*feedback_metadata);
   } else {
     DCHECK(compilation_info->has_asm_wasm_data());
+    // We should only have asm/wasm data when finalizing on the main thread.
+    DCHECK((std::is_same<LocalIsolate, Isolate>::value));
     shared_info->set_asm_wasm_data(*compilation_info->asm_wasm_data());
     shared_info->set_feedback_metadata(
         ReadOnlyRoots(isolate).empty_feedback_metadata());
+  }
+
+  // We should only have coverage info when finalizing on the main thread.
+  DCHECK_IMPLIES((std::is_same<LocalIsolate, OffThreadIsolate>::value),
+                 !compilation_info->has_coverage_info());
+}
+
+void PostProcessCompleteUnoptimizedCompilationJob(
+    UnoptimizedCompilationJob* job, Handle<SharedFunctionInfo> shared_info,
+    Isolate* isolate) {
+  const UnoptimizedCompilationInfo* compilation_info = job->compilation_info();
+  const UnoptimizedCompileFlags& flags = compilation_info->flags();
+
+  if (FLAG_interpreted_frames_native_stack && shared_info->HasBytecodeArray()) {
+    InstallInterpreterTrampolineCopy(shared_info, isolate);
   }
 
   // Install coverage info on the shared function info.
@@ -462,36 +479,33 @@ void InstallUnoptimizedCode(UnoptimizedCompilationInfo* compilation_info,
     isolate->debug()->InstallCoverageInfo(shared_info,
                                           compilation_info->coverage_info());
   }
-}
 
-void InstallUnoptimizedCode(UnoptimizedCompilationInfo* compilation_info,
-                            Handle<SharedFunctionInfo> shared_info,
-                            ParseInfo* parse_info, OffThreadIsolate* isolate) {
-  DCHECK_EQ(shared_info->language_mode(),
-            compilation_info->literal()->language_mode());
-
-  // Update the shared function info with the scope info.
-  Handle<ScopeInfo> scope_info = compilation_info->scope()->scope_info();
-  shared_info->set_scope_info(*scope_info);
-
-  DCHECK(compilation_info->has_bytecode_array());
-  DCHECK(!shared_info->HasBytecodeArray());  // Only compiled once.
-  DCHECK(!compilation_info->has_asm_wasm_data());
-  DCHECK(!shared_info->HasFeedbackMetadata());
-
-  // If the function failed asm-wasm compilation, mark asm_wasm as broken
-  // to ensure we don't try to compile as asm-wasm.
-  if (compilation_info->literal()->scope()->IsAsmModule()) {
-    shared_info->set_is_asm_wasm_broken(true);
+  // It's possible that source position collection was enabled after the
+  // background compile was started in which the compiled bytecode will not be
+  // missing source positions (for instance by enabling the cpu profiler). So
+  // force source position collection now in that case.
+  if (!flags.collect_source_positions() &&
+      isolate->NeedsDetailedOptimizedCodeLineInfo()) {
+    SharedFunctionInfo::EnsureSourcePositionsAvailable(isolate, shared_info);
   }
 
-  shared_info->set_bytecode_array(*compilation_info->bytecode_array());
+  CodeEventListener::LogEventsAndTags log_tag;
+  if (flags.is_toplevel()) {
+    log_tag = flags.is_eval() ? CodeEventListener::EVAL_TAG
+                              : CodeEventListener::SCRIPT_TAG;
+  } else {
+    log_tag = flags.is_lazy_compile() ? CodeEventListener::LAZY_COMPILE_TAG
+                                      : CodeEventListener::FUNCTION_TAG;
+  }
+  job->RecordFunctionCompilation(log_tag, shared_info, isolate);
+  job->RecordCompilationStats(isolate);
+}
 
-  Handle<FeedbackMetadata> feedback_metadata =
-      FeedbackMetadata::New(isolate, compilation_info->feedback_vector_spec());
-  shared_info->set_feedback_metadata(*feedback_metadata);
-
-  DCHECK(!compilation_info->has_coverage_info());
+void PostProcessCompleteUnoptimizedCompilationJob(
+    UnoptimizedCompilationJob* job, Handle<SharedFunctionInfo> shared_info,
+    OffThreadIsolate* isolate) {
+  // Do nothing off-thread post-finalize, run post-finalize again on the
+  // main-thread merge.
 }
 
 template <typename LocalIsolate>
@@ -526,55 +540,18 @@ void SetSharedFunctionFlagsFromLiteral(FunctionLiteral* literal,
       literal->has_static_private_methods_or_accessors());
 }
 
+template <typename LocalIsolate>
 CompilationJob::Status FinalizeUnoptimizedCompilationJob(
     UnoptimizedCompilationJob* job, Handle<SharedFunctionInfo> shared_info,
-    Isolate* isolate) {
+    LocalIsolate* isolate) {
   UnoptimizedCompilationInfo* compilation_info = job->compilation_info();
-  ParseInfo* parse_info = job->parse_info();
-  const UnoptimizedCompileFlags flags = parse_info->flags();
 
   SetSharedFunctionFlagsFromLiteral(compilation_info->literal(), *shared_info);
 
   CompilationJob::Status status = job->FinalizeJob(shared_info, isolate);
   if (status == CompilationJob::SUCCEEDED) {
-    InstallUnoptimizedCode(compilation_info, shared_info, parse_info, isolate);
-
-    // It's possible that source position collection was enabled after the
-    // background compile was started in which the compiled bytecode will not be
-    // missing source positions (for instance by enabling the cpu profiler). So
-    // force source position collection now in that case.
-    if (!flags.collect_source_positions() &&
-        isolate->NeedsDetailedOptimizedCodeLineInfo()) {
-      SharedFunctionInfo::EnsureSourcePositionsAvailable(isolate, shared_info);
-    }
-
-    CodeEventListener::LogEventsAndTags log_tag;
-    if (flags.is_toplevel()) {
-      log_tag = flags.is_eval() ? CodeEventListener::EVAL_TAG
-                                : CodeEventListener::SCRIPT_TAG;
-    } else {
-      log_tag = flags.is_lazy_compile() ? CodeEventListener::LAZY_COMPILE_TAG
-                                        : CodeEventListener::FUNCTION_TAG;
-    }
-    job->RecordFunctionCompilation(log_tag, shared_info, isolate);
-    job->RecordCompilationStats(isolate);
-  }
-  return status;
-}
-
-CompilationJob::Status FinalizeUnoptimizedCompilationJob(
-    UnoptimizedCompilationJob* job, Handle<SharedFunctionInfo> shared_info,
-    OffThreadIsolate* isolate) {
-  UnoptimizedCompilationInfo* compilation_info = job->compilation_info();
-  ParseInfo* parse_info = job->parse_info();
-
-  SetSharedFunctionFlagsFromLiteral(compilation_info->literal(), *shared_info);
-
-  CompilationJob::Status status = job->FinalizeJob(shared_info, isolate);
-  if (status == CompilationJob::SUCCEEDED) {
-    InstallUnoptimizedCode(compilation_info, shared_info, parse_info, isolate);
-
-    // TODO(leszeks): Record the function compilation and compilation stats.
+    InstallUnoptimizedCode(compilation_info, shared_info, isolate);
+    PostProcessCompleteUnoptimizedCompilationJob(job, shared_info, isolate);
   }
   return status;
 }
@@ -1177,8 +1154,7 @@ BackgroundCompileTask::BackgroundCompileTask(ScriptStreamingData* streamed_data,
       worker_thread_runtime_call_stats_(
           isolate->counters()->worker_thread_runtime_call_stats()),
       timer_(isolate->counters()->compile_script_on_background()),
-      language_mode_(info_->language_mode()),
-      collected_source_positions_(false) {
+      language_mode_(info_->language_mode()) {
   VMState<PARSER> state(isolate);
 
   // Prepare the data for the internalization phase and compilation phase, which
@@ -1217,7 +1193,6 @@ BackgroundCompileTask::BackgroundCompileTask(
       worker_thread_runtime_call_stats_(worker_thread_runtime_stats),
       timer_(timer),
       language_mode_(info_->language_mode()),
-      collected_source_positions_(false),
       finalize_on_background_thread_(false) {
   DCHECK_EQ(outer_parse_info->parameters_end_pos(), kNoSourcePosition);
   DCHECK_NULL(outer_parse_info->extension());
@@ -1323,7 +1298,6 @@ void BackgroundCompileTask::Run() {
   }
   // Save the language mode and record whether we collected source positions.
   language_mode_ = info_->language_mode();
-  collected_source_positions_ = info_->flags().collect_source_positions();
 
   // We don't currently support off-thread finalization for some jobs (namely,
   // asm.js), so release the off-thread isolate and fall back to main-thread
@@ -1392,8 +1366,6 @@ void BackgroundCompileTask::Run() {
   off_thread_scope.reset();
   parser_.reset();
   info_.reset();
-  outer_function_job_.reset();
-  inner_function_jobs_.clear();
 }
 
 // ----------------------------------------------------------------------------
@@ -2639,24 +2611,17 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
           task->pending_error_handler()->ReportWarnings(isolate, script);
         }
 
-        // It's possible that source position collection was enabled after the
-        // background compile was started (for instance by enabling the cpu
-        // profiler), and the compiled bytecode is missing source positions. So,
-        // walk all the SharedFunctionInfos in the script and force source
-        // position collection.
-        if (!task->collected_source_positions() &&
-            isolate->NeedsDetailedOptimizedCodeLineInfo()) {
-          Handle<WeakFixedArray> shared_function_infos(
-              script->shared_function_infos(isolate), isolate);
-          int length = shared_function_infos->length();
-          FOR_WITH_HANDLE_SCOPE(isolate, int, i = 0, i, i < length, i++, {
-            Object entry = shared_function_infos->Get(isolate, i)
-                               .GetHeapObjectOrSmi(isolate);
-            if (entry.IsSharedFunctionInfo(isolate)) {
-              SharedFunctionInfo::EnsureSourcePositionsAvailable(
-                  isolate, handle(SharedFunctionInfo::cast(entry), isolate));
-            }
-          });
+        PostProcessCompleteUnoptimizedCompilationJob(
+            task->outer_function_job(), maybe_result.ToHandleChecked(),
+            isolate);
+        for (auto&& inner_job : *task->inner_function_jobs()) {
+          Handle<SharedFunctionInfo> inner_shared_info =
+              script
+                  ->FindSharedFunctionInfo(
+                      isolate, inner_job->compilation_info()->literal())
+                  .ToHandleChecked();
+          PostProcessCompleteUnoptimizedCompilationJob(
+              inner_job.get(), inner_shared_info, isolate);
         }
 
         FinalizeScriptCompilation(isolate, script, task->parallel_tasks());
