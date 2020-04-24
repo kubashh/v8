@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14109b99_5e320695",
+        "filename": "src/asmjs/asm-js.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-24T12:41:52Z",
+      "side": 1,
+      "message": "nit: We could introduce a boolean enum for readability, like\nenum class CanOffThreadFinalize : bool { kYes \u003d true, kNo \u003d false};",
+      "revId": "ed3ca53b28745384200787b6c15d1c03324ff5e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
