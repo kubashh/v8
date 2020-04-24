@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e77097c3_5687d7ac",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-04-24T13:09:28Z",
+      "side": 1,
+      "message": "Could we move this to a function and then update finalize_on_background_thread_ before checking it, e.g.:\n\nfinalize_on_background_thread_ \u0026\u003d CanOffThreadFinalizeAllJobs();\nif (!finalize_on_background_thread_) {\n  off_thread_isolate_.reset();\n  return;\n}",
+      "revId": "cfb9fd760a76f7622641e575006bb900b90c0d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
