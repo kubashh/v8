@@ -45,7 +45,10 @@ class InterpreterCompilationJob final : public UnoptimizedCompilationJob {
                          OffThreadIsolate* isolate) final;
 
  private:
-  BytecodeGenerator* generator() { return &generator_; }
+  BytecodeGenerator* generator() {
+    DCHECK(generator_.has_value());
+    return &generator_.value();
+  }
   template <typename LocalIsolate>
   void CheckAndPrintBytecodeMismatch(LocalIsolate* isolate,
                                      Handle<Script> script,
@@ -55,9 +58,9 @@ class InterpreterCompilationJob final : public UnoptimizedCompilationJob {
   Status DoFinalizeJobImpl(Handle<SharedFunctionInfo> shared_info,
                            LocalIsolate* isolate);
 
-  Zone zone_;
+  base::Optional<Zone> zone_;
   UnoptimizedCompilationInfo compilation_info_;
-  BytecodeGenerator generator_;
+  base::Optional<BytecodeGenerator> generator_;
 
   DISALLOW_COPY_AND_ASSIGN(InterpreterCompilationJob);
 };
@@ -150,10 +153,10 @@ InterpreterCompilationJob::InterpreterCompilationJob(
     std::vector<FunctionLiteral*>* eager_inner_literals)
     : UnoptimizedCompilationJob(parse_info->stack_limit(), parse_info,
                                 &compilation_info_, CanOffThreadFinalize::kYes),
-      zone_(allocator, ZONE_NAME),
-      compilation_info_(&zone_, parse_info, literal),
-      generator_(&compilation_info_, parse_info->ast_string_constants(),
-                 eager_inner_literals) {}
+      zone_(base::in_place, allocator, ZONE_NAME),
+      compilation_info_(&zone_.value(), parse_info, literal),
+      generator_(base::in_place, &zone_.value(), &compilation_info_,
+                 parse_info->ast_string_constants(), eager_inner_literals) {}
 
 InterpreterCompilationJob::Status InterpreterCompilationJob::ExecuteJobImpl() {
   RuntimeCallTimerScope runtimeTimerScope(
@@ -231,7 +234,14 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl(
       RuntimeCallCounterId::kCompileBackgroundIgnitionFinalization);
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                "V8.CompileIgnitionFinalization");
-  return DoFinalizeJobImpl(shared_info, isolate);
+  InterpreterCompilationJob::Status status =
+      DoFinalizeJobImpl(shared_info, isolate);
+
+  // Clear the zone and generator, they're not needed anymore.
+  zone_.reset();
+  generator_.reset();
+
+  return status;
 }
 
 template <typename LocalIsolate>

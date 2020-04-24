@@ -394,7 +394,6 @@ class V8_EXPORT_PRIVATE BackgroundCompileTask {
   }
   UnoptimizedCompileFlags flags() const { return flags_; }
   LanguageMode language_mode() { return language_mode_; }
-  bool collected_source_positions() { return collected_source_positions_; }
   bool finalize_on_background_thread() {
     return finalize_on_background_thread_;
   }
@@ -444,7 +443,6 @@ class V8_EXPORT_PRIVATE BackgroundCompileTask {
   WorkerThreadRuntimeCallStats* worker_thread_runtime_call_stats_;
   TimedHistogram* timer_;
   LanguageMode language_mode_;
-  bool collected_source_positions_;
 
   // True if the background compilation should be finalized on the background
   // thread. When this is true, the ParseInfo, Parser and compilation jobs are
