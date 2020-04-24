@@ -1061,6 +1061,9 @@ void FinalizeScriptCompilation(Isolate* isolate, Handle<Script> script,
       }
     }
   }
+  if (isolate->NeedsSourcePositionsForProfiling()) {
+    Script::InitLineEnds(isolate, script);
+  }
 }
 
 void FinalizeScriptCompilation(OffThreadIsolate* isolate, Handle<Script> script,
