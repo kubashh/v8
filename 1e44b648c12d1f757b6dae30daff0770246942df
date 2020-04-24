@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "aa19b5e1_1ccf0341",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4146,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-04-24T17:14:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8933a3c5_ca34953e",
+      "range": {
+        "startLine": 4139,
+        "startChar": 2,
+        "endLine": 4146,
+        "endChar": 3
+      },
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "622f47ff_8243948a",
         "filename": "src/torque/types.cc",
         "patchSetId": 10
@@ -95,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3c86c4ad_9c91722a",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-04-24T17:14:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "622f47ff_8243948a",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 557,
+        "endChar": 44
+      },
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c861b76_9d64e92f",
         "filename": "src/torque/types.cc",
         "patchSetId": 10
@@ -106,6 +154,24 @@
       "writtenOn": "2020-03-24T21:58:43Z",
       "side": 1,
       "message": "What if the field is bigger than the tagged size, as is the case for int64 and float64 on some platforms? In that case we\u0027d need to push two slots for the field. Overall I\u0027m a little uncomfortable with dynamically growing this array rather than initializing it at a fixed size based on header_size(), but I guess dynamic growth makes the usage in ComputeArraySlotKind simpler.",
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f378614_eaa7d088",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-04-24T17:14:05Z",
+      "side": 1,
+      "message": "Indeed, I did it this way to keep the interface simple. I fixed this to properly allocate enough slots to cover all the fields up to this point.",
+      "parentUuid": "3c861b76_9d64e92f",
       "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -129,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "28273899_ac86badf",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-04-24T17:14:05Z",
+      "side": 1,
+      "message": "Right, thanks a lot for finding this bug! I refactored it to no longer use continue.",
+      "parentUuid": "d7217444_6b234307",
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fbb08d0c_3011b830",
         "filename": "src/torque/types.h",
         "patchSetId": 10
@@ -146,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "1c759cb5_d6f5c269",
+        "filename": "src/torque/types.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-04-24T17:14:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbb08d0c_3011b830",
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03360595_21356ca2",
         "filename": "src/torque/types.h",
         "patchSetId": 10
@@ -157,6 +259,30 @@
       "writtenOn": "2020-04-06T14:19:18Z",
       "side": 1,
       "message": "Why is this const (and why are the respective members mutable)? Please add a comment.",
+      "range": {
+        "startLine": 702,
+        "startChar": 2,
+        "endLine": 703,
+        "endChar": 72
+      },
+      "revId": "1e44b648c12d1f757b6dae30daff0770246942df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1814376d_8f421340",
+        "filename": "src/torque/types.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-04-24T17:14:05Z",
+      "side": 1,
+      "message": "I added a comment, this is an unfortunate consequence of passing around types as const pointers...",
+      "parentUuid": "03360595_21356ca2",
       "range": {
         "startLine": 702,
         "startChar": 2,
