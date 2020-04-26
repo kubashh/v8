@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69d1b4ee_ab4a32b7",
+        "filename": "src/compiler/backend/mips64/code-generator-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1896,
+      "author": {
+        "id": 1317343
+      },
+      "writtenOn": "2020-04-26T07:41:40Z",
+      "side": 1,
+      "message": "this name is misleading, this register is used just as a scratch regiter, maybe we add some comment at the register define location or change it to another name.",
+      "range": {
+        "startLine": 1896,
+        "startChar": 15,
+        "endLine": 1896,
+        "endChar": 30
+      },
+      "revId": "3322537c3ebb10a9296dbcd241ef5f8fe70fef39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
