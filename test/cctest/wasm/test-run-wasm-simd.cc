@@ -1215,7 +1215,8 @@ WASM_SIMD_TEST_NO_LOWERING(F64x2ReplaceLane) {
   CHECK_EQ(1., ReadLittleEndianValue<double>(&g1[1]));
 }
 
-#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_S390X
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_S390X || \
+    V8_TARGET_ARCH_MIPS64
 WASM_SIMD_TEST_NO_LOWERING(F64x2ExtractLaneWithI64x2) {
   WasmRunner<int64_t> r(execution_tier, lower_simd);
   BUILD_V(r, WASM_IF_ELSE_L(
@@ -1235,7 +1236,8 @@ WASM_SIMD_TEST_NO_LOWERING(I64x2ExtractWithF64x2) {
                  WASM_I64V(1), WASM_I64V(0)));
   CHECK_EQ(1, r.Call());
 }
-#endif  // V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_S390X
+#endif  // V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_S390X ||
+        // V8_TARGET_ARCH_MIPS64
 
 bool IsExtreme(double x) {
   double abs_x = std::fabs(x);
