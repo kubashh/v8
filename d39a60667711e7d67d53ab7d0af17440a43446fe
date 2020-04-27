@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fb01d8fa_f8662eef",
+        "filename": "src/base/list.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-04-27T15:48:29Z",
+      "side": 1,
+      "message": "Good point: Created ShallowCopyTo.\n\nThe presence of a move constructor means the implicit copy constructors will not be generated: https://en.cppreference.com/w/cpp/language/copy_constructor",
+      "parentUuid": "1537ee16_a086e03b",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33eddea4_6b78f2bf",
         "filename": "src/heap/read-only-heap.cc",
         "patchSetId": 17
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c9a2a270_27bdfe7f",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-04-27T15:48:29Z",
+      "side": 1,
+      "message": "It\u0027s holding it for a long time, but it\u0027s only in mksnapshot so it\u0027s not really an issue.",
+      "parentUuid": "33eddea4_6b78f2bf",
+      "range": {
+        "startLine": 73,
+        "startChar": 31,
+        "endLine": 73,
+        "endChar": 58
+      },
+      "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1f5de89_3f40162b",
         "filename": "src/heap/read-only-heap.cc",
         "patchSetId": 17
@@ -59,6 +107,30 @@
       "writtenOn": "2020-04-27T11:23:37Z",
       "side": 1,
       "message": "This seems to contradict the lock above. If multiple threads may run this code, then the second thread may see non-null artifacts?\nIf only one thread runs this code, then we don\u0027t need the lock?",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 22
+      },
+      "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddf8deb5_82cc0cac",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-04-27T15:48:29Z",
+      "side": 1,
+      "message": "I could add a comment here to explain.\n\nThis is basically saying that we should only allow a single ReadOnlyArtifacts to be constructed via the setup-heap-internal.cc flow. Since this flow only happens with mksnapshot, the locks aren\u0027t strictly   necessary and more an abundance of caution.\n\nIt does guard against one thread running this code more than once without calling OnCreateHeapObjectsComplete, the lock will fail and the code will crash as the same thread can\u0027t acquire the lock twice without releasing it. (I\u0027ve tested this and confirm it crashes with a DCHECK at OnCreateHeapObjectsComplete as the return code is EDEADLK: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/base/platform/mutex.cc;l\u003d57?q\u003dbase::Mutex\u0026ss\u003dchromium\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2Fsearch%2F).\n\nOr I can just remove the lock and assume these kind of bad cases would just hit the CHECKs on 89, 92 or 96.",
+      "parentUuid": "e1f5de89_3f40162b",
       "range": {
         "startLine": 77,
         "startChar": 4,
