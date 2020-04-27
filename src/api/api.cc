@@ -33,6 +33,7 @@
 #include "src/date/date.h"
 #include "src/debug/debug-coverage.h"
 #include "src/debug/debug-evaluate.h"
+#include "src/debug/debug-interface.h"
 #include "src/debug/debug-type-profile.h"
 #include "src/debug/debug.h"
 #include "src/debug/liveedit.h"
@@ -9752,6 +9753,13 @@ v8::Platform* debug::GetCurrentPlatform() {
 debug::WasmScript* debug::WasmScript::Cast(debug::Script* script) {
   CHECK(script->IsWasm());
   return static_cast<WasmScript*>(script);
+}
+
+const debug::WasmDebugSymbols& debug::WasmScript::GetDebugSymbols() const {
+  i::DisallowHeapAllocation no_gc;
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+  DCHECK_EQ(i::Script::TYPE_WASM, script->type());
+  return script->wasm_native_module()->module()->debug_symbols;
 }
 
 int debug::WasmScript::NumFunctions() const {
