@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "872dc035_5b29cbaa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-27T06:02:09Z",
+      "side": 1,
+      "message": "Please briefly explain the confusing logic here, I guess you already spent the time to understand it :)",
+      "revId": "87a836c6969258b693318db6538d700af6fbf072",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6515c43_b7531d85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-27T06:02:09Z",
+      "side": 1,
+      "message": "Please spell out what that is.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "87a836c6969258b693318db6538d700af6fbf072",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e2eead7_6af6dc8f",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-27T06:02:09Z",
+      "side": 1,
+      "message": "nit: while you\u0027re here, please wrap this in an anonymous namespace.",
+      "revId": "87a836c6969258b693318db6538d700af6fbf072",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be3c7b07_110fcb97",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-27T06:02:09Z",
+      "side": 1,
+      "message": "q: Would it make sense to move all this into Isolate::CreateMessage? Do we ever want to distinguish between CreateMessage and CreateMessageOrAbort?",
+      "revId": "87a836c6969258b693318db6538d700af6fbf072",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
