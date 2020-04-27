@@ -9,6 +9,7 @@
 
 #include "src/base/optional.h"
 #include "src/common/globals.h"
+#include "src/debug/debug-interface.h"
 #include "src/handles/handles.h"
 #include "src/utils/vector.h"
 #include "src/wasm/signature-map.h"
@@ -335,6 +336,7 @@ struct V8_EXPORT_PRIVATE WasmModule {
   ModuleOrigin origin = kWasmOrigin;  // origin of the module
   LazilyGeneratedNames lazily_generated_names;
   std::string source_map_url;
+  debug::WasmDebugSymbols debug_symbols;
 
   // Asm.js source position information. Only available for modules compiled
   // from asm.js.

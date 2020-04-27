@@ -122,6 +122,11 @@ class ActualScript : public V8DebuggerScript {
     return v8::Just(v8::debug::WasmScript::Cast(*script)->Bytecode());
   }
   Language getLanguage() const override { return m_language; }
+  const v8::debug::WasmDebugSymbols* getDebugSymbols() const override {
+    auto script = this->script();
+    if (!script->IsWasm()) return nullptr;
+    return &v8::debug::WasmScript::Cast(*script)->GetDebugSymbols();
+  }
   int startLine() const override { return m_startLine; }
   int startColumn() const override { return m_startColumn; }
   int endLine() const override { return m_endLine; }
