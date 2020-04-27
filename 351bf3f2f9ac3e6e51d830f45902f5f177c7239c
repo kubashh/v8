@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1da4de14_056a9cdb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-27T07:42:39Z",
+      "side": 1,
+      "message": "Please use Jakob\u0027s chromium address: jkummerow@chromium.org",
+      "revId": "351bf3f2f9ac3e6e51d830f45902f5f177c7239c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
