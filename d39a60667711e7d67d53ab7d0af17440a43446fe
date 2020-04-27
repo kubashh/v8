@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "a6bb67cb_fa4a7141",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-04-27T16:50:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26b30de2_368074cd",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 22
+      },
+      "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "462d43f4_8c902a45",
         "filename": "src/heap/spaces.h",
         "patchSetId": 17
@@ -178,6 +202,30 @@
       "writtenOn": "2020-04-27T16:38:23Z",
       "side": 1,
       "message": "A questions that is not blocking this CL: these two references will be removed in the future and SharedReadOnlySpace and ReadOnlyHeap will be owned by V8 isolate/heap?",
+      "range": {
+        "startLine": 3265,
+        "startChar": 2,
+        "endLine": 3266,
+        "endChar": 48
+      },
+      "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74887e19_43e4f246",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 3266,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-04-27T16:50:11Z",
+      "side": 1,
+      "message": "That is true only for pointer compression, where we need to have separate ReadOnlyHeap and SharedReadOnlySpace objects for each Isolate.\nFor the non-pc case, the ReadOnlyHeap object is the shared object that can be accessed globally so there should just be one copy of this. The SharedReadOnlySpace object is also the only one I plan to create.\n\nDoes that make sense?",
+      "parentUuid": "462d43f4_8c902a45",
       "range": {
         "startLine": 3265,
         "startChar": 2,
