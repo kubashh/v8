@@ -124,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "5adcbe87_982b14ab",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5459,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-27T06:13:28Z",
+      "side": 1,
+      "message": "Hm I\u0027m not sure. +tebbi made the split between JSGraphAsm and GraphAsm here https://chromium-review.googlesource.com/c/v8/v8/+/1977160 but afaict LoadField doesn\u0027t use any isolate-specific parts. \n\nTobias wdyt about exposing LoadField and similar functionality for wasm?",
+      "parentUuid": "c8e41b00_745bbcc1",
+      "revId": "2196a10ad7a966c282f615a97af3b8ecf1258d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "164e4cb2_8f0f261a",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 8
