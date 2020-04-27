@@ -140,6 +140,53 @@
       "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26b30de2_368074cd",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-27T16:38:23Z",
+      "side": 1,
+      "message": "If this code runs only in mksnapshot, then I\u0027d vote for removing the locks and adding a comment. Otherwise, it seems that the code is multithreaded.",
+      "parentUuid": "ddf8deb5_82cc0cac",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 22
+      },
+      "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "462d43f4_8c902a45",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 3266,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-27T16:38:23Z",
+      "side": 1,
+      "message": "A questions that is not blocking this CL: these two references will be removed in the future and SharedReadOnlySpace and ReadOnlyHeap will be owned by V8 isolate/heap?",
+      "range": {
+        "startLine": 3265,
+        "startChar": 2,
+        "endLine": 3266,
+        "endChar": 48
+      },
+      "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
