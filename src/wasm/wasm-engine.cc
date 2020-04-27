@@ -7,6 +7,7 @@
 #include "src/base/functional.h"
 #include "src/base/platform/time.h"
 #include "src/common/globals.h"
+#include "src/debug/debug-interface.h"
 #include "src/diagnostics/code-tracer.h"
 #include "src/diagnostics/compilation-statistics.h"
 #include "src/execution/frames.h"
@@ -707,10 +708,12 @@ Handle<Script> CreateWasmScript(Isolate* isolate,
   }
   script->set_source_url(*url_str.ToHandleChecked());
 
-  auto source_map_url = VectorOf(module->source_map_url);
-  if (!source_map_url.empty()) {
+  const debug::WasmDebugSymbols& debug_symbols =
+      native_module->module()->debug_symbols;
+  if (debug_symbols.type == debug::WasmDebugSymbols::Type::SourceMap &&
+      !debug_symbols.external_url.empty()) {
     MaybeHandle<String> src_map_str = isolate->factory()->NewStringFromUtf8(
-        source_map_url, AllocationType::kOld);
+        VectorOf(debug_symbols.external_url), AllocationType::kOld);
     script->set_source_mapping_url(*src_map_str.ToHandleChecked());
   }
 

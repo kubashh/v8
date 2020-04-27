@@ -30,6 +30,12 @@ class TypeProfile;
 
 namespace debug {
 
+struct V8_EXPORT_PRIVATE WasmDebugSymbols {
+  enum class Type { None, SourceMap, EmbeddedDWARF, ExternalDWARF };
+  Type type = Type::None;
+  std::string external_url;
+};
+
 void SetContextId(Local<Context> context, int id);
 int GetContextId(Local<Context> context);
 
@@ -173,6 +179,7 @@ class WasmScript : public Script {
  public:
   static WasmScript* Cast(Script* script);
 
+  const WasmDebugSymbols& GetDebugSymbols() const;
   int NumFunctions() const;
   int NumImportedFunctions() const;
   MemorySpan<const uint8_t> Bytecode() const;

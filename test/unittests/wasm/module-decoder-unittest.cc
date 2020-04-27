@@ -4,6 +4,7 @@
 
 #include "test/unittests/test-utils.h"
 
+#include "src/debug/debug-interface.h"
 #include "src/handles/handles.h"
 #include "src/objects/objects-inl.h"
 #include "src/wasm/module-decoder.h"
@@ -2432,7 +2433,9 @@ TEST_F(WasmModuleVerifyTest, SourceMappingURLSection) {
       SECTION_SRC_MAP('s', 'r', 'c', '/', 'x', 'y', 'z', '.', 'c')};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
   EXPECT_TRUE(result.ok());
-  EXPECT_EQ("src/xyz.c", result.value()->source_map_url);
+  EXPECT_EQ(debug::WasmDebugSymbols::Type::SourceMap,
+            result.value()->debug_symbols.type);
+  EXPECT_EQ("src/xyz.c", result.value()->debug_symbols.external_url);
 }
 
 TEST_F(WasmModuleVerifyTest, BadSourceMappingURLSection) {
@@ -2440,7 +2443,9 @@ TEST_F(WasmModuleVerifyTest, BadSourceMappingURLSection) {
       SECTION_SRC_MAP('s', 'r', 'c', '/', 'x', 0xff, 'z', '.', 'c')};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
   EXPECT_TRUE(result.ok());
-  EXPECT_EQ(0u, result.value()->source_map_url.size());
+  EXPECT_EQ(debug::WasmDebugSymbols::Type::None,
+            result.value()->debug_symbols.type);
+  EXPECT_EQ(0u, result.value()->debug_symbols.external_url.size());
 }
 
 TEST_F(WasmModuleVerifyTest, MultipleSourceMappingURLSections) {
@@ -2448,7 +2453,9 @@ TEST_F(WasmModuleVerifyTest, MultipleSourceMappingURLSections) {
                               SECTION_SRC_MAP('p', 'q', 'r')};
   ModuleResult result = DecodeModule(data, data + sizeof(data));
   EXPECT_TRUE(result.ok());
-  EXPECT_EQ("abc", result.value()->source_map_url);
+  EXPECT_EQ(debug::WasmDebugSymbols::Type::SourceMap,
+            result.value()->debug_symbols.type);
+  EXPECT_EQ("abc", result.value()->debug_symbols.external_url);
 }
 
 TEST_F(WasmModuleVerifyTest, MultipleNameSections) {
