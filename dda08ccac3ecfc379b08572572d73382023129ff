@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cedd293b_feccd9f5",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2204,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-04-27T15:16:41Z",
+      "side": 1,
+      "message": "Could you add a comment here explaining that the source mapping may have already have been set by the parser, and if so it gets higher priority.",
+      "revId": "dda08ccac3ecfc379b08572572d73382023129ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31d8e29b_826d933b",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2238,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-04-27T15:16:41Z",
+      "side": 1,
+      "message": "I guess the reason this is necessary is because we do this in a different order for on-thread vs off-thread compilation (before parse vs after parse). As a followup, I don\u0027t suppose we could change the API to allow ScriptDetails to be passed to the BackgroundCompilation task in the first place and do this in the same order for both?",
+      "revId": "dda08ccac3ecfc379b08572572d73382023129ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
