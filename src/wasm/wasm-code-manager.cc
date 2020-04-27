@@ -14,6 +14,7 @@
 #include "src/codegen/macro-assembler-inl.h"
 #include "src/codegen/macro-assembler.h"
 #include "src/common/globals.h"
+#include "src/debug/debug-interface.h"
 #include "src/diagnostics/disassembler.h"
 #include "src/logging/counters.h"
 #include "src/logging/log.h"
@@ -221,14 +222,17 @@ void WasmCode::LogCode(Isolate* isolate) const {
           VectorOf(native_module()->module()->export_table));
   WasmName name = wire_bytes.GetNameOrNull(name_ref);
 
-  const std::string& source_map_url = native_module()->module()->source_map_url;
+  const debug::WasmDebugSymbols& debug_symbols =
+      native_module()->module()->debug_symbols;
   auto load_wasm_source_map = isolate->wasm_load_source_map_callback();
   auto source_map = native_module()->GetWasmSourceMap();
-  if (!source_map && !source_map_url.empty() && load_wasm_source_map) {
+  if (!source_map &&
+      debug_symbols.type == debug::WasmDebugSymbols::Type::SourceMap &&
+      !debug_symbols.external_url.empty() && load_wasm_source_map) {
     HandleScope scope(isolate);
     v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
     Local<v8::String> source_map_str =
-        load_wasm_source_map(v8_isolate, source_map_url.c_str());
+        load_wasm_source_map(v8_isolate, debug_symbols.external_url.c_str());
     native_module()->SetWasmSourceMap(
         std::make_unique<WasmModuleSourceMap>(v8_isolate, source_map_str));
   }
