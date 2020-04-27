@@ -1582,6 +1582,11 @@ Reduction JSNativeContextSpecialization::ReduceElementAccess(
     return NoChange();
   }
 
+  // Don't inline polymorphic access in turboprop
+  if (FLAG_turboprop && (access_infos.size() > 1)) {
+    return NoChange();
+  }
+
   // For holey stores or growing stores, we need to check that the prototype
   // chain contains no setters for elements, and we need to guard those checks
   // via code dependencies on the relevant prototype maps.
