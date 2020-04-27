@@ -6,6 +6,7 @@
 from __future__ import print_function
 
 import datetime
+import heapq
 import json
 import os
 import platform
@@ -341,9 +342,8 @@ class JsonTestProgressIndicator(ProgressIndicator):
     for run, result in enumerate(results):
       # TODO(majeski): Support for dummy/grouped results
       output = result.output
-      # Buffer all tests for sorting the durations in the end.
-      # TODO(machenbach): Running average + buffer only slowest 20 tests.
-      self.tests.append((test, output.duration, result.cmd))
+
+      self._buffer_slow_tests(test, result, output, run)
 
       # Omit tests that run as expected on the first try.
       # Everything that happens after the first run is included in the output
@@ -351,23 +351,49 @@ class JsonTestProgressIndicator(ProgressIndicator):
       if not result.has_unexpected_output and run == 0:
         continue
 
-      self.results.append({
+      rec = self._test_record(test, result, output, run)
+      rec.update({
+          "result": test.output_proc.get_outcome(output),
+          "stdout": output.stdout,
+          "stderr": output.stderr,
+          "variant_flags": test.variant_flags,
+          "framework_name": self.framework_name,
+        })
+      self.results.append(rec)
+
+  def _buffer_slow_tests(self, test, result, output, run):
+    def result_value(test, result, output):
+      if not result.has_unexpected_output:
+        return ""
+      else:
+        return test.output_proc.get_outcome(output),
+
+    def key_f(record):
+      return record['duration']
+
+    rec = self._test_record(test, result, output, run)
+    rec.update({
+        "result": result_value(test, result, output),
+        "marked_slow": test.is_slow,
+      })
+    self.tests.append(rec)
+    cutoff = self.options.slow_tests_cutoff
+    self.tests.sort(key=key_f, reverse=True)
+    self.tests = self.tests[:cutoff]
+
+  def _test_record(self, test, result, output, run):
+    return {
         "name": str(test),
         "flags": result.cmd.args,
         "command": result.cmd.to_string(relative=True),
         "run": run + 1,
-        "stdout": output.stdout,
-        "stderr": output.stderr,
         "exit_code": output.exit_code,
-        "result": test.output_proc.get_outcome(output),
         "expected": test.expected_outcomes,
         "duration": output.duration,
         "random_seed": test.random_seed,
         "target_name": test.get_shell(),
         "variant": test.variant,
-        "variant_flags": test.variant_flags,
-        "framework_name": self.framework_name,
-      })
+      }
 
   def finished(self):
     complete_results = []
@@ -380,33 +406,17 @@ class JsonTestProgressIndicator(ProgressIndicator):
     if self.tests:
       # Get duration mean.
       duration_mean = (
-          sum(duration for (_, duration, cmd) in self.tests) /
+          sum(_res['duration'] for _res in self.tests) /
           float(len(self.tests)))
-
-    # Sort tests by duration.
-    self.tests.sort(key=lambda __duration_cmd: __duration_cmd[1], reverse=True)
-    cutoff = self.options.slow_tests_cutoff
-    slowest_tests = self._test_records(self.tests[:cutoff])
 
     complete_results.append({
       "arch": self.arch,
       "mode": self.mode,
       "results": self.results,
-      "slowest_tests": slowest_tests,
+      "slowest_tests": self.tests,
       "duration_mean": duration_mean,
       "test_total": len(self.tests),
     })
 
     with open(self.options.json_test_results, "w") as f:
       f.write(json.dumps(complete_results))
-
-  def _test_records(self, tests):
-    return [
-      {
-        "name": str(test),
-        "flags": cmd.args,
-        "command": cmd.to_string(relative=True),
-        "duration": duration,
-        "marked_slow": test.is_slow,
-      } for (test, duration, cmd) in tests
-    ]
