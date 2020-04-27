@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07f2c7d7_32f842a1",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-27T20:07:32Z",
+      "side": 1,
+      "message": "Where you planning to use this? It would indeed be interesting to find a more efficient way than resorting the sorted list again with each tests. What is python\u0027s default sorting algo? But whatever it is, we shouldn\u0027t rely on it and if we choose a large cutoff value, this might get slow.",
+      "range": {
+        "startLine": 9,
+        "startChar": 7,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f3b06f6_aa500c2b",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-27T20:07:32Z",
+      "side": 1,
+      "message": "nit: Let\u0027s add those to the common data. They are not costly.\n\nMaybe also the first line above? Otherwise we can\u0027t use PASS/FAIL as decision criteria later in queries. I don\u0027t think calling test.output_proc.get_outcome(output) is very costly in the PASS case. I could be wrong though...",
+      "range": {
+        "startLine": 359,
+        "startChar": 10,
+        "endLine": 360,
+        "endChar": 48
+      },
+      "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f104e38f_ecb7e97d",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-27T20:07:32Z",
+      "side": 1,
+      "message": "As commented above: Could you investigate how expensive calling test.output_proc.get_outcome(output) is? I think it was called anyways to calculate has_unexpected_output. It\u0027d make this code also simpler if it were just included in the default record.\n\nIf has_unexpected_output is True and e.g. expected_outcomes is PASS, then in most cases the result is just FAIL. And if has_unexpected_output is False and then result is PASS.\n\nIn case calling get_outcome reanalyzes the whole output in e.g. webkit tests, maybe we could cache this somewhere.",
+      "range": {
+        "startLine": 369,
+        "startChar": 15,
+        "endLine": 369,
+        "endChar": 51
+      },
+      "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e576eca3_aa9ec54e",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-27T20:07:32Z",
+      "side": 1,
+      "message": "Guess a heap would be a very good data structure here indeed.\n\nOptimization would be to remember the duration of the fastest in the list when over the limit. Every fast test can be skipped right away. Most slow tests come first anyways.\n\nOr you could make it truly buffered. E.g. add X tests without sorting at all then sort after test X and cut off.\n\nOr to go to the beginning: Can we also just buffer everything like in your first version? I had my worries with stdout/stderr, but how large would be all the other values in total for the largest suite we have? But if implementation doesn\u0027t take to long, the heap version would be nicer and more future-proof.",
+      "range": {
+        "startLine": 382,
+        "startChar": 22,
+        "endLine": 382,
+        "endChar": 27
+      },
+      "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
