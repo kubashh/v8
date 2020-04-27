@@ -235,6 +235,30 @@
       "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c7907f8_2d32295d",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 3266,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-27T17:02:22Z",
+      "side": 1,
+      "message": "I thought even for non-pc case, we could keep ReadOnlyHeap and SharedReadOnlySpace local to the  V8 isolate/heap. Multiple instances of ReadOnlyHeap/SharedReadOnlySpace could still share the same set of pages by having a shallow copy of the page list.\n\nThat way the differences between pc and non-pc would be localized in a few SharedReadOnlySpace methods. Everything else (e.g. ReadOnlyArtifacts, Heap) would work the same for pc and non-pc.\n\nLet\u0027s figure this out as we go ahead with the pc case. Maybe I am missing something.",
+      "parentUuid": "74887e19_43e4f246",
+      "range": {
+        "startLine": 3265,
+        "startChar": 2,
+        "endLine": 3266,
+        "endChar": 48
+      },
+      "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
