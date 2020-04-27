@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1537ee16_a086e03b",
+        "filename": "src/base/list.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-27T11:23:37Z",
+      "side": 1,
+      "message": "const List\u0026?\n\nSuch an assignment operator seems a bit dangerous for a basic data-structure. The callers might expect that the list is actually copied.\n\nMaybe we can delete the default copy constructor and assignment operator and use instead a separate functions (e.g. ShallowCopy). wdyt?",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33eddea4_6b78f2bf",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-27T11:23:37Z",
+      "side": 1,
+      "message": "Instead of holding the lock for such a long time, would it be possible to\ncall InitializeSharedReadOnlyArtifacts (adjusted to conditionally update the read_only_artifacts) in OnCreateHeapObjectsComplete?",
+      "range": {
+        "startLine": 73,
+        "startChar": 31,
+        "endLine": 73,
+        "endChar": 58
+      },
+      "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1f5de89_3f40162b",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-27T11:23:37Z",
+      "side": 1,
+      "message": "This seems to contradict the lock above. If multiple threads may run this code, then the second thread may see non-null artifacts?\nIf only one thread runs this code, then we don\u0027t need the lock?",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 22
+      },
+      "revId": "d39a60667711e7d67d53ab7d0af17440a43446fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
