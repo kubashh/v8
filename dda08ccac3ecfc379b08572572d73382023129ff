@@ -33,6 +33,24 @@
       "revId": "dda08ccac3ecfc379b08572572d73382023129ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb411e47_1b0314ce",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2238,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-04-27T15:24:53Z",
+      "side": 1,
+      "message": "Hm, not everything is actually available when the BackgroundCompilationTask is created (certainly the source isn\u0027t), I\u0027ll have to trace through to figure out if the other script details/script origin are. We\u0027ll still need a fix-up for the source though, at least until ownership of the resource data (and decoding!) is transferred to V8.",
+      "parentUuid": "31d8e29b_826d933b",
+      "revId": "dda08ccac3ecfc379b08572572d73382023129ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
