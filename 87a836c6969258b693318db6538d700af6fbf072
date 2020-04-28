@@ -169,6 +169,24 @@
       "revId": "87a836c6969258b693318db6538d700af6fbf072",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b13d0e90_ec53b52d",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-04-28T06:35:27Z",
+      "side": 1,
+      "message": "They aren\u0027t producing a message object for the purpose of throwing it, they\u0027re using it as a source of metadata for exceptions that were caught.",
+      "parentUuid": "61d49cdf_5cbe5b3f",
+      "revId": "87a836c6969258b693318db6538d700af6fbf072",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
