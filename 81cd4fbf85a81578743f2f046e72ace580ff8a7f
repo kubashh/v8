@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d15a6d24_d2c19aa0",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T12:37:18Z",
+      "side": 1,
+      "message": "I thought you\u0027d need heappush and heappop. Though I don\u0027t see them taking a key function. If they expect default sorting, you could arrange the elements as tuples maybe? (duration, object) - not sure what happens if there are two exactly equal durations...",
+      "parentUuid": "049fd656_45a6d972",
+      "range": {
+        "startLine": 9,
+        "startChar": 7,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "529bc678_13c83309",
         "filename": "tools/testrunner/testproc/progress.py",
         "patchSetId": 26
@@ -218,6 +242,30 @@
       "side": 1,
       "message": "As mentioned above, turns up that the heap implementation is a not so smart wrapper around sorted()[:n] . Will find a better solution.",
       "parentUuid": "e576eca3_aa9ec54e",
+      "range": {
+        "startLine": 382,
+        "startChar": 22,
+        "endLine": 382,
+        "endChar": 27
+      },
+      "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "644c0736_a68d5133",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T12:37:18Z",
+      "side": 1,
+      "message": "Hmm, that\u0027s strange. Then maybe a linked list that you keep sorted? That\u0027s O(n) for every insertion. But I thought with a heap it would be O(logn). With the implementation now it seems to be O(n*logn) given the sort call. Probably no problem for small n, but for larger ones?",
+      "parentUuid": "8a82ed58_45a7ca1d",
       "range": {
         "startLine": 382,
         "startChar": 22,
