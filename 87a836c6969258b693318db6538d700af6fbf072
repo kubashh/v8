@@ -151,6 +151,24 @@
       "revId": "87a836c6969258b693318db6538d700af6fbf072",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61d49cdf_5cbe5b3f",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-28T05:17:50Z",
+      "side": 1,
+      "message": "I saw those calls, but why would the API / wasm not want to consider --abort-on-uncaught-exception? My question was, couldn\u0027t they all behave the same way?",
+      "parentUuid": "c69efc44_6cad9f04",
+      "revId": "87a836c6969258b693318db6538d700af6fbf072",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
