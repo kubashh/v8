@@ -22,6 +22,30 @@
       "revId": "a230e9dc42a9a567eaf6b41e6b809a644af0db84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ea76d12_71fad26f",
+        "filename": "test/debugger/debug/regress/regress-10319.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-04-28T18:04:09Z",
+      "side": 1,
+      "message": "Good point, I\u0027ve added that to the test. It works exactly as you predicted: once we continue execution and the real context gets created, we can no longer see the modified value. I stepped through in the debugger and verified that there are no calls to ScopeIterator::SetVariableValue for \"result\" in this case, meaning the debugger is making no attempt to commit this changed value to a scope.",
+      "parentUuid": "bb85b024_883fcdb2",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 53
+      },
+      "revId": "a230e9dc42a9a567eaf6b41e6b809a644af0db84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

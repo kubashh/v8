@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e801ff55_57638fda",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-04-28T18:04:09Z",
+      "side": 1,
+      "message": "Toon, could you please verify that what I\u0027ve written here is true? Based on my understanding of your change https://chromium-review.googlesource.com/c/v8/v8/+/2030733 , it should no longer be possible to ever execute any code for a module before that module\u0027s context is on the stack.",
+      "range": {
+        "startLine": 395,
+        "startChar": 73,
+        "endLine": 398,
+        "endChar": 54
+      },
+      "revId": "4dc024249f34dbbc3d11303f441c13af228588b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
