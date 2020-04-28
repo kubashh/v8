@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47c92587_f0034267",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3561,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-04-28T00:27:01Z",
+      "side": 1,
+      "message": "Nit: Looks like these are now all the supported architectures, please remove the #if statement here.",
+      "revId": "187c9266af4677bc4b472b999e15700b615e5646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
