@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "049fd656_45a6d972",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-28T11:43:01Z",
+      "side": 1,
+      "message": "I started using largestn from this lib, but one error in my key lambda definition revealed that under the hood list.sort[:n] was used by this function. So no efficiency gain there. I will investigate the possibility of using an ordered collection if there is one in std lib. Still learning Python.\n\nI will remove the import.",
+      "parentUuid": "07f2c7d7_32f842a1",
+      "range": {
+        "startLine": 9,
+        "startChar": 7,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "529bc678_13c83309",
         "filename": "tools/testrunner/testproc/progress.py",
         "patchSetId": 26
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "8bd9df10_f71fec27",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-28T11:43:01Z",
+      "side": 1,
+      "message": "OK. I will pull down these fields. \n\nPractically result is in common data, only self.results will not collect records for has_unexpected_output, and we want to collect that in slow tests regardless.",
+      "parentUuid": "8f3b06f6_aa500c2b",
+      "range": {
+        "startLine": 359,
+        "startChar": 10,
+        "endLine": 360,
+        "endChar": 48
+      },
+      "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7eb73482_79d7fdfa",
         "filename": "tools/testrunner/testproc/progress.py",
         "patchSetId": 26
@@ -111,6 +159,30 @@
     },
     {
       "key": {
+        "uuid": "acc5e921_29273fc1",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-28T11:43:01Z",
+      "side": 1,
+      "message": "Actually if I do not guard against has_unexpected_output the get_outcome call will fail in a nasty way. I did not investigate exactly way, but it was a very unpleasant surprise.",
+      "parentUuid": "f104e38f_ecb7e97d",
+      "range": {
+        "startLine": 369,
+        "startChar": 15,
+        "endLine": 369,
+        "endChar": 51
+      },
+      "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e576eca3_aa9ec54e",
         "filename": "tools/testrunner/testproc/progress.py",
         "patchSetId": 26
@@ -131,6 +203,30 @@
       "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a82ed58_45a7ca1d",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-28T11:43:01Z",
+      "side": 1,
+      "message": "As mentioned above, turns up that the heap implementation is a not so smart wrapper around sorted()[:n] . Will find a better solution.",
+      "parentUuid": "e576eca3_aa9ec54e",
+      "range": {
+        "startLine": 382,
+        "startChar": 22,
+        "endLine": 382,
+        "endChar": 27
+      },
+      "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
