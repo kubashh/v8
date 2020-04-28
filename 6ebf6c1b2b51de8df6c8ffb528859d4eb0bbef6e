@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa9d9385_fd511ac7",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-28T06:54:58Z",
+      "side": 1,
+      "message": "nit: this part of the comment no longer applies, let\u0027s remove it.",
+      "range": {
+        "startLine": 604,
+        "startChar": 54,
+        "endLine": 605,
+        "endChar": 56
+      },
+      "revId": "6ebf6c1b2b51de8df6c8ffb528859d4eb0bbef6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e61660b0_d6781980",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-28T06:54:58Z",
+      "side": 1,
+      "message": "nit: to clarify what nullptr is here and below, please pass in:\n\n MessageLocation* no_location \u003d nullptr;",
+      "revId": "6ebf6c1b2b51de8df6c8ffb528859d4eb0bbef6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
