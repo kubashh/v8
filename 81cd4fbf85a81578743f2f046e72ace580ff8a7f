@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "926564e0_5a286381",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T12:44:59Z",
+      "side": 1,
+      "message": "Here some trial how this could look like. Essentially you could just add each test with heappush as tuple of (duration, test) and when we need to cut off you call heappop. In the end, the slowest tests remain.\n\n\u003e\u003e\u003e import heapq\n\u003e\u003e\u003e r \u003d []\n\u003e\u003e\u003e heapq.heappush(r, (3.5, \u0027bla\u0027))\n\u003e\u003e\u003e r\n[(3.5, \u0027bla\u0027)]\n\u003e\u003e\u003e heapq.heappush(r, (3.6, \u0027blub\u0027))\n\u003e\u003e\u003e heapq.heappush(r, (1.2, \u0027blub\u0027))\n\u003e\u003e\u003e heapq.heappush(r, (1.7, \u0027bla\u0027))\n\u003e\u003e\u003e heapq.heappush(r, (100, \u0027ble\u0027))\n\u003e\u003e\u003e r\n[(1.2, \u0027blub\u0027), (1.7, \u0027bla\u0027), (3.5, \u0027bla\u0027), (3.6, \u0027blub\u0027), (100, \u0027ble\u0027)]\n\u003e\u003e\u003e heapq.heappop(r)\n(1.2, \u0027blub\u0027)\n\u003e\u003e\u003e r\n[(1.7, \u0027bla\u0027), (3.6, \u0027blub\u0027), (3.5, \u0027bla\u0027), (100, \u0027ble\u0027)]",
+      "parentUuid": "a2de18ed_0297e7a4",
+      "range": {
+        "startLine": 9,
+        "startChar": 7,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "81cd4fbf85a81578743f2f046e72ace580ff8a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "529bc678_13c83309",
         "filename": "tools/testrunner/testproc/progress.py",
         "patchSetId": 26
