@@ -9,11 +9,37 @@ for more details about the presubmit API built into gcl.
 """
 
 
+
+def CheckLucicfgSemanticDiff(input_api, output_api):
+  return [
+      input_api.Command(
+        'lucicfg semantic-diff',
+        [
+            'lucicfg' if not input_api.is_windows else 'lucicfg.bat',
+            'semantic-diff',
+            'main.star',
+            'cr-buildbucket.cfg',
+            'commit-queue.cfg',
+            'luci-logdog.cfg',
+            'luci-milo.cfg',
+            'luci-scheduler.cfg',
+            '-log-level', 'debug' if input_api.verbose else 'warning',
+        ],
+        {
+          'stderr': input_api.subprocess.STDOUT,
+          'shell': input_api.is_windows,  # to resolve *.bat
+          'cwd': input_api.PresubmitLocalPath(),
+        },
+        output_api.PresubmitError)
+  ]
+
 def _CommonChecks(input_api, output_api):
   """Checks common to both upload and commit."""
   results = []
   results.extend(
       input_api.canned_checks.CheckChangedLUCIConfigs(input_api, output_api))
+  results.extend(
+      input_api.RunTests(CheckLucicfgSemanticDiff(input_api, output_api)))
   return results
 
 
