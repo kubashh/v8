@@ -16,6 +16,24 @@
       "revId": "187c9266af4677bc4b472b999e15700b615e5646",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6cbed24_5f4fb0bb",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3561,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2020-04-28T01:27:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47c92587_f0034267",
+      "revId": "187c9266af4677bc4b472b999e15700b615e5646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
