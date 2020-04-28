@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39120c12_17f1c1bc",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1445,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2020-04-28T13:49:28Z",
+      "side": 1,
+      "message": "Is there a difference between this, and None?",
+      "range": {
+        "startLine": 1445,
+        "startChar": 29,
+        "endLine": 1445,
+        "endChar": 31
+      },
+      "revId": "ed5a3e1ae5c8c84eabd07f47292f15e419d24990",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
