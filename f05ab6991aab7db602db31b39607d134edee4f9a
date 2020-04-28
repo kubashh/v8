@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0dd03981_e787ee0b",
+        "filename": "src/base/list.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-28T12:54:21Z",
+      "side": 1,
+      "message": "Waa, TIL, thanks! std::exchange is super cool!",
+      "revId": "f05ab6991aab7db602db31b39607d134edee4f9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
