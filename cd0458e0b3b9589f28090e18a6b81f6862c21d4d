@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c2e3b3c_4c3c205e",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T17:48:55Z",
+      "side": 1,
+      "message": "nit: I\u0027d just inline options.slow_tests_cutoff\nsince there are already linebreaks.",
+      "range": {
+        "startLine": 338,
+        "startChar": 8,
+        "endLine": 338,
+        "endChar": 14
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25727853_83b38b22",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T17:48:55Z",
+      "side": 1,
+      "message": "I don\u0027t understand this change. Before it was all tests. Isn\u0027t results only containing the failures?",
+      "range": {
+        "startLine": 408,
+        "startChar": 12,
+        "endLine": 408,
+        "endChar": 19
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afd794f5_6e79366b",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T17:48:55Z",
+      "side": 1,
+      "message": "Is the order now slowest-\u003efastest or fastest-\u003eslowest?",
+      "range": {
+        "startLine": 418,
+        "startChar": 34,
+        "endLine": 418,
+        "endChar": 40
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d19cbd1a_94a2bf60",
+        "filename": "tools/testrunner/testproc/util.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T17:48:55Z",
+      "side": 1,
+      "message": "Nice!",
+      "range": {
+        "startLine": 8,
+        "startChar": 6,
+        "endLine": 8,
+        "endChar": 22
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5ba79f4_41603ea0",
+        "filename": "tools/testrunner/testproc/util.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T17:48:55Z",
+      "side": 1,
+      "message": "nit: Do you use \"reversed\"? If not rather remove the feature and tests. YAGNI",
+      "range": {
+        "startLine": 9,
+        "startChar": 37,
+        "endLine": 9,
+        "endChar": 45
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01b0a097_1cdec418",
+        "filename": "tools/testrunner/testproc/util.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T17:48:55Z",
+      "side": 1,
+      "message": "nit: as_list",
+      "range": {
+        "startLine": 24,
+        "startChar": 6,
+        "endLine": 24,
+        "endChar": 12
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd690cf0_9143e04c",
+        "filename": "tools/testrunner/testproc/util_unittest.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T17:48:55Z",
+      "side": 1,
+      "message": "ofsl.asList(), []\n\nlen will be checked implicitly.",
+      "range": {
+        "startLine": 12,
+        "startChar": 21,
+        "endLine": 12,
+        "endChar": 42
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e94e0c80_3b8b54cf",
+        "filename": "tools/testrunner/testproc/util_unittest.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T17:48:55Z",
+      "side": 1,
+      "message": "Also here, rather just:\nself.assertEqual(ofsl.asList(), [1, 2])\n\nAlso similar in tests below. This also tests the sortedness.",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 30
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fdb8dd8_36f169d1",
+        "filename": "tools/testrunner/testproc/util_unittest.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T17:48:55Z",
+      "side": 1,
+      "message": "nit: whitespace",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 4
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef85aaa3_1ca97747",
+        "filename": "tools/testrunner/testproc/util_unittest.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-04-28T17:48:55Z",
+      "side": 1,
+      "message": "nit: space after :",
+      "range": {
+        "startLine": 35,
+        "startChar": 34,
+        "endLine": 35,
+        "endChar": 35
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
