@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb85b024_883fcdb2",
+        "filename": "test/debugger/debug/regress/regress-10319.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-04-28T05:30:57Z",
+      "side": 1,
+      "message": "q: Could you verify that writing to {result} here as a debug evaluate while paused won\u0027t cause a crash? My intuition here is that it should be fine, since we create a \"debug evaluate context\". The only thing is that the write is probably lost after resuming, as the \"real\" function context will be set up and overwrite the \"debug evaluate context\".",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 53
+      },
+      "revId": "a230e9dc42a9a567eaf6b41e6b809a644af0db84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
