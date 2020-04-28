@@ -40,6 +40,7 @@
 #include "src/logging/counters.h"
 #include "src/logging/log.h"
 #include "src/objects/heap-number.h"
+#include "src/roots/roots.h"
 #include "src/tracing/trace-event.h"
 #include "src/trap-handler/trap-handler.h"
 #include "src/utils/vector.h"
@@ -77,6 +78,22 @@ MachineType assert_size(int expected_size, MachineType type) {
 
 #define WASM_INSTANCE_OBJECT_OFFSET(name) \
   wasm::ObjectAccess::ToTagged(WasmInstanceObject::k##name##Offset)
+
+#define CALL_BUILTIN(name, ...)                                             \
+  graph()->NewNode(                                                         \
+      mcgraph()->common()->Call(GetBuiltinCallDescriptor<name##Descriptor>( \
+          this, StubCallMode::kCallBuiltinPointer)),                        \
+      GetBuiltinPointerTarget(Builtins::k##name), ##__VA_ARGS__, effect(),  \
+      control())
+
+#define GET_ROOT_SYMBOL_POINTER(symbol_name) \
+  LOAD_FULL_POINTER(BuildLoadIsolateRoot(),  \
+                    IsolateData::root_slot_offset(RootIndex::k##symbol_name))
+
+#define GET_OWN_PROPERTY(receiver, property_name_pointer) \
+  CALL_BUILTIN(                                           \
+      GetOwnProperty, receiver, property_name_pointer,    \
+      LOAD_INSTANCE_FIELD(NativeContext, MachineType::TaggedPointer()))
 
 #define LOAD_INSTANCE_FIELD(name, type)                           \
   gasm_->Load(assert_size(WASM_INSTANCE_OBJECT_SIZE(name), type), \
@@ -268,11 +285,7 @@ Node* WasmGraphBuilder::EffectPhi(unsigned count, Node** effects_and_control) {
                           effects_and_control);
 }
 
-Node* WasmGraphBuilder::RefNull() {
-  Node* isolate_root = BuildLoadIsolateRoot();
-  return LOAD_FULL_POINTER(
-      isolate_root, IsolateData::root_slot_offset(RootIndex::kNullValue));
-}
+Node* WasmGraphBuilder::RefNull() { return GET_ROOT_SYMBOL_POINTER(NullValue); }
 
 Node* WasmGraphBuilder::RefFunc(uint32_t function_index) {
   auto call_descriptor = GetBuiltinCallDescriptor<WasmRefFuncDescriptor>(
@@ -2035,8 +2048,8 @@ Node* WasmGraphBuilder::Throw(uint32_t exception_index,
       BuildCallToRuntime(Runtime::kWasmThrowCreate, create_parameters,
                          arraysize(create_parameters));
   SetSourcePosition(except_obj, position);
-  Node* values_array =
-      BuildCallToRuntime(Runtime::kWasmExceptionGetValues, &except_obj, 1);
+  Node* values_array = GET_OWN_PROPERTY(
+      except_obj, GET_ROOT_SYMBOL_POINTER(wasm_exception_values_symbol));
   uint32_t index = 0;
   const wasm::WasmExceptionSig* sig = exception->sig;
   MachineOperatorBuilder* m = mcgraph()->machine();
@@ -2175,14 +2188,15 @@ Node* WasmGraphBuilder::GetExceptionTag(Node* except_obj,
                                         wasm::WasmCodePosition position) {
   TrapIfTrue(wasm::kTrapBrOnExnNullRef, gasm_->WordEqual(RefNull(), except_obj),
              position);
-  return BuildCallToRuntime(Runtime::kWasmExceptionGetTag, &except_obj, 1);
+  return GET_OWN_PROPERTY(except_obj,
+                          GET_ROOT_SYMBOL_POINTER(wasm_exception_tag_symbol));
 }
 
 Node* WasmGraphBuilder::GetExceptionValues(Node* except_obj,
                                            const wasm::WasmException* exception,
                                            Vector<Node*> values) {
-  Node* values_array =
-      BuildCallToRuntime(Runtime::kWasmExceptionGetValues, &except_obj, 1);
+  Node* values_array = GET_OWN_PROPERTY(
+      except_obj, GET_ROOT_SYMBOL_POINTER(wasm_exception_values_symbol));
   uint32_t index = 0;
   const wasm::WasmExceptionSig* sig = exception->sig;
   DCHECK_EQ(sig->parameter_count(), values.size());
@@ -2526,6 +2540,11 @@ Node* WasmGraphBuilder::BuildI64RemU(Node* left, Node* right,
   }
   return graph()->NewNode(mcgraph()->machine()->Uint64Mod(), left, right,
                           ZeroCheck64(wasm::kTrapRemByZero, right, position));
+}
+
+Node* WasmGraphBuilder::GetBuiltinPointerTarget(Builtins::Name builtin_id) {
+  static_assert(std::is_same<Smi, BuiltinPtr>(), "BuiltinPtr must be Smi");
+  return graph()->NewNode(mcgraph()->common()->NumberConstant(builtin_id));
 }
 
 Node* WasmGraphBuilder::BuildDiv64Call(Node* left, Node* right,
@@ -5083,11 +5102,6 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     return bigint_to_i64_descriptor_;
   }
 
-  Node* GetBuiltinPointerTarget(Builtins::Name builtin_id) {
-    static_assert(std::is_same<Smi, BuiltinPtr>(), "BuiltinPtr must be Smi");
-    return graph()->NewNode(mcgraph()->common()->NumberConstant(builtin_id));
-  }
-
   Node* GetTargetForBuiltinCall(wasm::WasmCode::RuntimeStubId wasm_stub,
                                 Builtins::Name builtin_id) {
     return (stub_mode_ == StubCallMode::kCallWasmRuntimeStub)
@@ -5455,18 +5469,10 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
 
   Node* BuildMultiReturnFixedArrayFromIterable(const wasm::FunctionSig* sig,
                                                Node* iterable, Node* context) {
-    Node* iterable_to_fixed_array =
-        GetBuiltinPointerTarget(Builtins::kIterableToFixedArrayForWasm);
-    IterableToFixedArrayForWasmDescriptor interface_descriptor;
     Node* length = BuildChangeUint31ToSmi(
         Uint32Constant(static_cast<uint32_t>(sig->return_count())));
-    auto call_descriptor = Linkage::GetStubCallDescriptor(
-        mcgraph()->zone(), interface_descriptor,
-        interface_descriptor.GetStackParameterCount(), CallDescriptor::kNoFlags,
-        Operator::kNoProperties, StubCallMode::kCallBuiltinPointer);
-    return SetEffect(graph()->NewNode(
-        mcgraph()->common()->Call(call_descriptor), iterable_to_fixed_array,
-        iterable, length, context, effect(), control()));
+    return SetEffect(
+        CALL_BUILTIN(IterableToFixedArrayForWasm, iterable, length, context));
   }
 
   // Extract the FixedArray implementing
@@ -5482,11 +5488,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     // we make sure this is true based on statically known limits.
     STATIC_ASSERT(wasm::kV8MaxWasmFunctionMultiReturns <=
                   JSArray::kInitialMaxFastElementArray);
-    auto call_descriptor =
-        GetBuiltinCallDescriptor<WasmAllocateJSArrayDescriptor>(
-            this, StubCallMode::kCallBuiltinPointer);
-    Node* call_target = GetBuiltinPointerTarget(Builtins::kWasmAllocateJSArray);
-    return gasm_->Call(call_descriptor, call_target, array_length, context);
+    return SetEffectControl(
+        CALL_BUILTIN(WasmAllocateJSArray, array_length, context));
   }
 
   void BuildJSToWasmWrapper(bool is_import) {
@@ -7035,6 +7038,9 @@ AssemblerOptions WasmStubAssemblerOptions() {
 }
 
 #undef FATAL_UNSUPPORTED_OPCODE
+#undef CALL_BUILTIN
+#undef GET_ROOT_SYMBOL_POINTER
+#undef GET_OWN_PROPERTY
 #undef WASM_INSTANCE_OBJECT_SIZE
 #undef WASM_INSTANCE_OBJECT_OFFSET
 #undef LOAD_INSTANCE_FIELD
