@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f2f1475_06554d06",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-04-28T15:50:28Z",
+      "side": 1,
+      "message": "Please add a few words.",
+      "revId": "ff72b6193d8ad09fe2170f3cb057c8c8d1c461c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
