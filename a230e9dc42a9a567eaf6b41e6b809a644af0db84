@@ -46,6 +46,30 @@
       "revId": "a230e9dc42a9a567eaf6b41e6b809a644af0db84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3597969_352d763b",
+        "filename": "test/debugger/debug/regress/regress-10319.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-04-29T05:26:03Z",
+      "side": 1,
+      "message": "Ack. I filed https://crbug.com/v8/10474 as a low prio bug. I\u0027d vote to still land the CL as is. The crash didn\u0027t happen too often, so not many users will run into the issue that the values are not properly written.",
+      "parentUuid": "9ea76d12_71fad26f",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 53
+      },
+      "revId": "a230e9dc42a9a567eaf6b41e6b809a644af0db84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
