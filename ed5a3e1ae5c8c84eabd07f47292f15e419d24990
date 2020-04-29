@@ -22,6 +22,30 @@
       "revId": "ed5a3e1ae5c8c84eabd07f47292f15e419d24990",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "525026c7_2d41e30b",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1445,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2020-04-29T12:28:39Z",
+      "side": 1,
+      "message": "You mean None as in nullptr? Then no, a default-constructed unique_ptr wraps a nullptr.",
+      "parentUuid": "39120c12_17f1c1bc",
+      "range": {
+        "startLine": 1445,
+        "startChar": 29,
+        "endLine": 1445,
+        "endChar": 31
+      },
+      "revId": "ed5a3e1ae5c8c84eabd07f47292f15e419d24990",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
