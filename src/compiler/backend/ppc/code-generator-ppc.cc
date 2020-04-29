@@ -2003,6 +2003,13 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       DCHECK_EQ(LeaveRC, i.OutputRCBit());
       break;
     }
+    case kPPC_LoadReverseSimd128RR:
+      // TODO(gaoandre): implement
+      break;
+    case kPPC_LoadReverseSimd128: {
+      // TODO(gaoandre): implement
+      break;
+    }
     case kPPC_StoreWord8:
       ASSEMBLE_STORE_INTEGER(stb, stbx);
       break;
@@ -2035,6 +2042,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ stvx(value, operand);
       if (is_atomic) __ sync();
       DCHECK_EQ(LeaveRC, i.OutputRCBit());
+      break;
+    }
+    case kPPC_StoreReverseSimd128: {
+      // TODO(gaoandre): implement
       break;
     }
     case kWord32AtomicLoadInt8:
