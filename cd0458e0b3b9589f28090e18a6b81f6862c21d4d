@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "9a3ba6a8_8703632d",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-29T09:05:14Z",
+      "side": 1,
+      "message": "Before this change self.tests was home to all tests and calculating an average on it was justified. Now if we continue to use self.tests we only get the top n average. But you have a point, if the results collect only failures we actually do not have a good source for the average calculation. I will collect the duration separately then...",
+      "parentUuid": "25727853_83b38b22",
+      "range": {
+        "startLine": 408,
+        "startChar": 12,
+        "endLine": 408,
+        "endChar": 19
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afd794f5_6e79366b",
         "filename": "tools/testrunner/testproc/progress.py",
         "patchSetId": 31
@@ -68,6 +92,30 @@
       "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecacb02a_2f14ba17",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-29T09:05:14Z",
+      "side": 1,
+      "message": "Well ... this is heap now ... I will go back and sort in as_list()",
+      "parentUuid": "afd794f5_6e79366b",
+      "range": {
+        "startLine": 418,
+        "startChar": 34,
+        "endLine": 418,
+        "endChar": 40
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "e8343f56_4c18527f",
+        "filename": "tools/testrunner/testproc/util.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-29T09:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5ba79f4_41603ea0",
+      "range": {
+        "startLine": 9,
+        "startChar": 37,
+        "endLine": 9,
+        "endChar": 45
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "01b0a097_1cdec418",
         "filename": "tools/testrunner/testproc/util.py",
         "patchSetId": 31
@@ -137,6 +209,30 @@
       "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12e139d4_7bda082c",
+        "filename": "tools/testrunner/testproc/util.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-29T09:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01b0a097_1cdec418",
+      "range": {
+        "startLine": 24,
+        "startChar": 6,
+        "endLine": 24,
+        "endChar": 12
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "e82c3b7f_b9759485",
+        "filename": "tools/testrunner/testproc/util_unittest.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-29T09:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd690cf0_9143e04c",
+      "range": {
+        "startLine": 12,
+        "startChar": 21,
+        "endLine": 12,
+        "endChar": 42
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e94e0c80_3b8b54cf",
         "filename": "tools/testrunner/testproc/util_unittest.py",
         "patchSetId": 31
@@ -183,6 +303,30 @@
       "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4007304_fb41e89b",
+        "filename": "tools/testrunner/testproc/util_unittest.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-29T09:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e94e0c80_3b8b54cf",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 30
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +353,30 @@
     },
     {
       "key": {
+        "uuid": "e731dbbc_533f1aff",
+        "filename": "tools/testrunner/testproc/util_unittest.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-29T09:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fdb8dd8_36f169d1",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 4
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef85aaa3_1ca97747",
         "filename": "tools/testrunner/testproc/util_unittest.py",
         "patchSetId": 31
@@ -229,6 +397,30 @@
       "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "474ccb7f_816987e9",
+        "filename": "tools/testrunner/testproc/util_unittest.py",
+        "patchSetId": 31
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-04-29T09:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef85aaa3_1ca97747",
+      "range": {
+        "startLine": 35,
+        "startChar": 34,
+        "endLine": 35,
+        "endChar": 35
+      },
+      "revId": "cd0458e0b3b9589f28090e18a6b81f6862c21d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
