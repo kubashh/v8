@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6cf3059_3f09b580",
+        "filename": "test/cctest/test-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3621,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2020-04-29T09:41:50Z",
+      "side": 1,
+      "message": "Should this also be removed?",
+      "range": {
+        "startLine": 3621,
+        "startChar": 2,
+        "endLine": 3621,
+        "endChar": 50
+      },
+      "revId": "c4eaecf5eb17219cd6dde7e3a41a1fe8bbe4e8a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
