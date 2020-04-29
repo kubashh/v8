@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "757ea633_b811d7cf",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 7
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-29T15:13:24Z",
+      "side": 1,
+      "message": "nit: Missing punctuation (also on the next two comments).",
+      "revId": "560f89c82d30dcd16f90cf0266b0d22220baa815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cfb492b_247f696f",
+        "filename": "test/inspector/debugger/wasm-scripts.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-29T15:13:24Z",
+      "side": 1,
+      "message": "This should be \"embeddedDWARFSection\". Otherwise you create the same module as above, as can be seen in the output below (same hash and same script ID).",
+      "range": {
+        "startLine": 107,
+        "startChar": 53,
+        "endLine": 107,
+        "endChar": 73
+      },
+      "revId": "560f89c82d30dcd16f90cf0266b0d22220baa815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
