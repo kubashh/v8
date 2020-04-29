@@ -260,6 +260,12 @@ struct TypeDefinition {
   };
 };
 
+struct V8_EXPORT_PRIVATE WasmDebugSymbols {
+  enum class Type { None, SourceMap, EmbeddedDWARF, ExternalDWARF };
+  Type type = Type::None;
+  WireBytesRef external_url;
+};
+
 // Static representation of a module.
 struct V8_EXPORT_PRIVATE WasmModule {
   std::unique_ptr<Zone> signature_zone;
@@ -334,7 +340,7 @@ struct V8_EXPORT_PRIVATE WasmModule {
 
   ModuleOrigin origin = kWasmOrigin;  // origin of the module
   LazilyGeneratedNames lazily_generated_names;
-  std::string source_map_url;
+  WasmDebugSymbols debug_symbols;
 
   // Asm.js source position information. Only available for modules compiled
   // from asm.js.
