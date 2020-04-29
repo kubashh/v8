@@ -253,8 +253,7 @@ class SystemTest(unittest.TestCase):
     # Check relevant properties of the json output.
     with open(actual_json) as f:
       json_output = json.load(f)[0]
-      pretty_json = json.dumps(json_output, indent=2, sort_keys=True)
-
+      
     # Replace duration in actual output as it's non-deterministic. Also
     # replace the python executable prefix as it has a different absolute
     # path dependent on where this runs.
@@ -272,6 +271,7 @@ class SystemTest(unittest.TestCase):
     with open(os.path.join(TEST_DATA_ROOT, expected_results_name)) as f:
       expected_test_results = json.load(f)
 
+    pretty_json = json.dumps(json_output, indent=2, sort_keys=True)
     msg = None  # Set to pretty_json for bootstrapping.
     self.assertDictEqual(json_output, expected_test_results, msg)
 
