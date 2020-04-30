@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ae867ff_cd9ec169",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-30T13:34:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d45e99a9_927b8738",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c89df74a_fcd1648d",
         "filename": "/COMMIT_MSG",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b1a27d3_79c768bd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-30T13:34:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c89df74a_fcd1648d",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -125,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "20b40172_780011ff",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-30T13:34:13Z",
+      "side": 1,
+      "message": "In which cases is the bailout path followed?",
+      "parentUuid": "260609ca_eb2f484c",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "61d9e496_a07c5885",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 5
@@ -136,6 +190,24 @@
       "writtenOn": "2020-04-30T09:15:26Z",
       "side": 1,
       "message": "Is there a reason why we don\u0027t use the GraphAssembler here, i.e. gasm_-\u003e? In that case we would not need to call SetEffect below.",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12a3725f_654d2ecd",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-30T13:34:13Z",
+      "side": 1,
+      "message": "There is: Throw (l.2051) needs to set control branches on its own, otherwise the code fails due to too many attached control branches (it has to do with success/failure control paths, which I\u0027m not an expert in).",
+      "parentUuid": "61d9e496_a07c5885",
       "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -264,6 +336,24 @@
       "side": 1,
       "message": "Since we refactor this anyway, we should try to switch to the GraphAssembler and avoid any manual SetEffect or SetControl in the new code.",
       "parentUuid": "1e84b630_d68859af",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abfbfc2e_ca2cd745",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5491,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-04-30T13:34:13Z",
+      "side": 1,
+      "message": "My initial idea was to use gasm_-\u003eCall to build this macro, but verification for IfSuccess complained, so I ended up doing it this way. A solution would be to use Call in the macro, and not use the macro in that specific case.",
+      "parentUuid": "3edf2e78_4fc2df80",
       "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
