@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "eaf9bf91_13d1576f",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-30T10:24:51Z",
+      "side": 1,
+      "message": "For our use case (loading a private symbol) the existing runtime function probably does the right thing already, since it skips the prototype walk for private symbols.\nSo yes, we could make this wasm specific and call the existing runtime function, or we keep it generic and add another runtime function. What would you prefer, Jakob?",
+      "parentUuid": "680f178a_7ecff5eb",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "61d9e496_a07c5885",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 5
