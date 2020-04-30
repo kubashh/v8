@@ -22,6 +22,47 @@
       "revId": "4dc024249f34dbbc3d11303f441c13af228588b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "811ea934_b38990d8",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-04-30T12:41:50Z",
+      "side": 1,
+      "message": "That is correct for all top-level code. Modules as well as non-module-scripts immediately execute in the context that they need. For non-module this means the ScriptContext is already created.\n\nSince you support both I\u0027m not sure it\u0027s 100% necessary to add it to the comment...",
+      "parentUuid": "e801ff55_57638fda",
+      "range": {
+        "startLine": 395,
+        "startChar": 73,
+        "endLine": 398,
+        "endChar": 54
+      },
+      "revId": "4dc024249f34dbbc3d11303f441c13af228588b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "338e4d49_a194c69b",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-04-30T12:41:50Z",
+      "side": 1,
+      "message": "if ... return false else return true can also be written as !... :)",
+      "revId": "4dc024249f34dbbc3d11303f441c13af228588b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
