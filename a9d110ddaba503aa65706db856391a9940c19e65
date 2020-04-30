@@ -214,6 +214,24 @@
     },
     {
       "key": {
+        "uuid": "0cbb7e8d_743892c1",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-04-30T13:53:34Z",
+      "side": 1,
+      "message": "Ah, interesting. I thought we could just fix this by just adding {SetControl} calls at some special places.\nCan you add a comment that explains this issue, maybe together with a TODO? This sounds like something we want to clean up at some point.",
+      "parentUuid": "12a3725f_654d2ecd",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9a5efbad_3438daa4",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 5
