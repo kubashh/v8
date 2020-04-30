@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "86cf71bc_25b07607",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-04-30T16:02:03Z",
+      "side": 1,
+      "message": "Thanks! I\u0027ve updated the comment to be about top-level code rather than modules in particular. I think an extra sentence here is still useful to explain why the function-entry stack check is problematic only in function scopes and not in top-level code.",
+      "parentUuid": "811ea934_b38990d8",
+      "range": {
+        "startLine": 395,
+        "startChar": 73,
+        "endLine": 398,
+        "endChar": 54
+      },
+      "revId": "4dc024249f34dbbc3d11303f441c13af228588b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "338e4d49_a194c69b",
         "filename": "src/debug/debug-scopes.cc",
         "patchSetId": 2
@@ -63,6 +87,24 @@
       "revId": "4dc024249f34dbbc3d11303f441c13af228588b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6699e449_6dcf598c",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-04-30T16:02:03Z",
+      "side": 1,
+      "message": "Good point, thanks. :) I had written it this way so I could set breakpoints on the outcomes, but I\u0027ll change it back to !(...).",
+      "parentUuid": "338e4d49_a194c69b",
+      "revId": "4dc024249f34dbbc3d11303f441c13af228588b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
