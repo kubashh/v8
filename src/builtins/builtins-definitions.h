@@ -961,6 +961,7 @@ namespace internal {
   ASM(DoubleToI, Dummy)                                                        \
   TFC(GetProperty, GetProperty)                                                \
   TFS(GetPropertyWithReceiver, kObject, kKey, kReceiver, kOnNonExistent)       \
+  TFS(GetOwnProperty, kObject, kUniqueName)                                    \
   TFS(SetProperty, kReceiver, kKey, kValue)                                    \
   TFS(SetPropertyInLiteral, kReceiver, kKey, kValue)                           \
   ASM(MemCopyUint8Uint8, CCall)                                                \
