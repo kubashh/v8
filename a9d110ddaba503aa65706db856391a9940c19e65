@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "260609ca_eb2f484c",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-30T10:36:41Z",
+      "side": 1,
+      "message": "I think either are okay as long as it\u0027s not possible to accidentally hit the case where TryGetOwnProperty needs to bailout but we silently treat it as \"not found\".",
+      "parentUuid": "eaf9bf91_13d1576f",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "61d9e496_a07c5885",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 5
