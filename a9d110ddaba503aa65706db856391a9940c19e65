@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54e84bea_309e9919",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-30T06:56:41Z",
+      "side": 1,
+      "message": "Is it okay to consider the bailout case as \u0027not found\u0027 here?",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c5096c3_6f39b6c0",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-04-30T06:56:41Z",
+      "side": 1,
+      "message": "You could omit the include by passing the builtin id as an int (we do this in quite a few spots).",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
