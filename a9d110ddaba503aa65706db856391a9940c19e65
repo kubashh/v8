@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "d45e99a9_927b8738",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-30T10:15:23Z",
+      "side": 1,
+      "message": "This is exactly the same title as the previous CL, which makes it harder to distinguish them in logs later (for bisection, sheriffing and so on).\n\nIt\u0027s also not very specific.\nWhat about something like:\n[wasm] Avoid runtime calls for exception handling",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c89df74a_fcd1648d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-30T10:15:23Z",
+      "side": 1,
+      "message": "You mean macros instead of builtins I think.",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54e84bea_309e9919",
         "filename": "src/builtins/builtins-internal-gen.cc",
         "patchSetId": 5
@@ -13,6 +47,24 @@
       "writtenOn": "2020-04-30T06:56:41Z",
       "side": 1,
       "message": "Is it okay to consider the bailout case as \u0027not found\u0027 here?",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "609106a8_4daf1f90",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-30T10:15:23Z",
+      "side": 1,
+      "message": "Good question. I guess the alternative would to add another runtime function which will be called in that case?\nSince this is a general builtin now, I think it would be better to make it error-proof.",
+      "parentUuid": "54e84bea_309e9919",
       "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +105,24 @@
     },
     {
       "key": {
+        "uuid": "fea74f3f_1e88c95a",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-30T10:15:23Z",
+      "side": 1,
+      "message": "This is another macro where I wonder if inlining it (i.e. repeating the code) would increase readability (also see comment below).",
+      "parentUuid": "9a5efbad_3438daa4",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a1b4992d_73ef110b",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 5
@@ -64,6 +134,24 @@
       "writtenOn": "2020-04-30T09:15:26Z",
       "side": 1,
       "message": "Also here I would prefer a function over the macro.",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72b43e67_11fb08a3",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-30T10:15:23Z",
+      "side": 1,
+      "message": "+1, or maybe just inline which would have the benefit that it\u0027s obvious that this is a builtin call.\nAbstractions have the risk of hiding such details which are important when reading and writing code.",
+      "parentUuid": "a1b4992d_73ef110b",
       "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -104,6 +192,24 @@
       "writtenOn": "2020-04-30T09:15:26Z",
       "side": 1,
       "message": "If we call {SetEffect} in CALL_BUILTIN, then we would only have to call {SetControl} here.\n\nBtw, is this {SetControl} here needed because of the verification bug with IfSuccess? Could you add a comment about that here?",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3edf2e78_4fc2df80",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5491,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-04-30T10:15:23Z",
+      "side": 1,
+      "message": "Since we refactor this anyway, we should try to switch to the GraphAssembler and avoid any manual SetEffect or SetControl in the new code.",
+      "parentUuid": "1e84b630_d68859af",
       "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
