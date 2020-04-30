@@ -10,6 +10,7 @@
 
 // Clients of this interface shouldn't depend on lots of compiler internals.
 // Do not include anything from src/compiler here!
+#include "src/builtins/builtins.h"
 #include "src/runtime/runtime.h"
 #include "src/wasm/function-body-decoder.h"
 #include "src/wasm/function-compiler.h"
@@ -457,6 +458,7 @@ class WasmGraphBuilder {
   Node* BuildImportCall(const wasm::FunctionSig* sig, Vector<Node*> args,
                         Vector<Node*> rets, wasm::WasmCodePosition position,
                         Node* func_index, IsReturnCall continuation);
+  Node* GetBuiltinPointerTarget(Builtins::Name builtin_id);
 
   Node* BuildF32CopySign(Node* left, Node* right);
   Node* BuildF64CopySign(Node* left, Node* right);
