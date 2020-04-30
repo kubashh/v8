@@ -16,6 +16,24 @@
       "revId": "22242cb18bacca0af60b89f2016356c11bf0ff6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49bae9c6_f82c11d4",
+        "filename": "test/inspector/debugger/wasm-scripts.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2020-04-30T07:33:49Z",
+      "side": 0,
+      "message": "Unfortunate post-merge-conflict mistake.",
+      "parentUuid": "c82f3eff_607f29b0",
+      "revId": "22242cb18bacca0af60b89f2016356c11bf0ff6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
