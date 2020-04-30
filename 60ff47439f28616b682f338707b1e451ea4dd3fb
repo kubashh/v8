@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf578e3f_eea402dc",
+        "filename": "src/objects/fixed-array-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-30T15:41:29Z",
+      "side": 1,
+      "message": "Acquire should not be needed anymore. We can try removing this in a separate CL.",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 26
+      },
+      "revId": "60ff47439f28616b682f338707b1e451ea4dd3fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a440183e_377067a5",
+        "filename": "src/objects/objects-body-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-04-30T15:41:29Z",
+      "side": 1,
+      "message": "The comment is stale now.",
+      "range": {
+        "startLine": 105,
+        "startChar": 49,
+        "endLine": 105,
+        "endChar": 57
+      },
+      "revId": "60ff47439f28616b682f338707b1e451ea4dd3fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
