@@ -780,6 +780,8 @@ Type Typer::Visitor::TypeFloat32Constant(Node* node) { UNREACHABLE(); }
 
 Type Typer::Visitor::TypeFloat64Constant(Node* node) { UNREACHABLE(); }
 
+Type Typer::Visitor::TypeSimd128Constant(Node* node) { UNREACHABLE(); }
+
 Type Typer::Visitor::TypeNumberConstant(Node* node) {
   double number = OpParameter<double>(node->op());
   return Type::Constant(number, zone());

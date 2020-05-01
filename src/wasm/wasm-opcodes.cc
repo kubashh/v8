@@ -159,6 +159,7 @@ const char* WasmOpcodes::OpcodeName(WasmOpcode opcode) {
     CASE_OP(TableGet, "table.get")
     CASE_OP(TableSet, "table.set")
     CASE_ALL_OP(Const, "const")
+    CASE_S128_OP(Const, "const")
     CASE_OP(MemorySize, "memory.size")
     CASE_OP(MemoryGrow, "memory.grow")
     CASE_ALL_OP(LoadMem, "load")
