@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d2d538e_f13f7397",
+        "filename": "src/compiler/backend/ppc64/instruction-codes-ppc64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2020-05-01T14:18:19Z",
+      "side": 1,
+      "message": "hello, what\u0027s the reason for this file and not for every other files? eg. src/compiler/backend/ppc64/instruction-selector-ppc64.cc. If you intend to separate, maybe consider separating all of them?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 0
+      },
+      "revId": "bf428d26cfe2d671c3f54b20d9f62f6d8301530e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
