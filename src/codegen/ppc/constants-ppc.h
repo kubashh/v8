@@ -522,7 +522,9 @@ using Instr = uint32_t;
   /* VSX Vector Test for software Square Root Double-Precision */            \
   V(xvtsqrtdp, XVTSQRTDP, 0xF00003A8)                                        \
   /* VSX Vector Test for software Square Root Single-Precision */            \
-  V(xvtsqrtsp, XVTSQRTSP, 0xF00002A8)
+  V(xvtsqrtsp, XVTSQRTSP, 0xF00002A8)                                        \
+  /* VSX Vector Byte-Reverse Quadword */                                     \
+  V(xxbrq, XXBRQ, 0xF01F01DB)
 
 #define PPC_EVX_OPCODE_LIST(V)                                                \
   /* Vector Load Double Word into Double Word by External PID Indexed */      \
@@ -2178,7 +2180,7 @@ using Instr = uint32_t;
 
 #define PPC_XX4_OPCODE_LIST(V) \
   /* VSX Select */             \
-  V(xxsel, XXSEL, 0xF0000030)
+  V(xxsel, XXSEL, 0xF0000030)  \
 
 #define PPC_I_OPCODE_LIST(V) \
   /* Branch */               \

@@ -415,6 +415,21 @@ class Assembler : public AssemblerBase {
 #undef DECLARE_PPC_X_INSTRUCTIONS_EH_S_FORM
 #undef DECLARE_PPC_X_INSTRUCTIONS_EH_L_FORM
 
+#define DECLARE_PPC_XX2_INSTRUCTIONS(name, instr_name, instr_value)  \
+  inline void name(const DoubleRegister rt, const DoubleRegister rb) {\
+    xx2_form(instr_name, rt, rb);                                    \
+  }
+
+  inline void xx2_form(Instr instr, DoubleRegister t, DoubleRegister b) {
+    int BX = ((b.code() & 0x20) >> 5) & 0x1;
+    int TX = ((t.code() & 0x20) >> 5) & 0x1;
+
+    emit(instr | (t.code() & 0x1F) * B21 | (b.code() & 0x1F) * B11 | BX | TX);
+  }
+
+  PPC_XX2_OPCODE_LIST(DECLARE_PPC_XX2_INSTRUCTIONS)
+#undef DECLARE_PPC_XX2_INSTRUCTIONS
+
 #define DECLARE_PPC_XX3_INSTRUCTIONS(name, instr_name, instr_value)  \
   inline void name(const DoubleRegister rt, const DoubleRegister ra, \
                    const DoubleRegister rb) {                        \
