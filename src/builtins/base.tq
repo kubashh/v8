@@ -307,6 +307,20 @@ extern enum MessageTemplate {
   kProxySetPrototypeOfNonExtensible,
   kProxyDeletePropertyNonExtensible,
   kWeakRefsCleanupMustBeCallable,
+  kWasmTrapUnreachable,
+  kWasmTrapMemOutOfBounds,
+  kWasmTrapUnalignedAccess,
+  kWasmTrapDivByZero,
+  kWasmTrapDivUnrepresentable,
+  kWasmTrapRemByZero,
+  kWasmTrapFloatUnrepresentable,
+  kWasmTrapFuncInvalid,
+  kWasmTrapFuncSigMismatch,
+  kWasmTrapDataSegmentDropped,
+  kWasmTrapElemSegmentDropped,
+  kWasmTrapTableOutOfBounds,
+  kWasmTrapBrOnExnNullRef,
+  kWasmTrapRethrowNullRef,
   ...
 }
 
@@ -588,6 +602,8 @@ extern transitioning runtime NormalizeElements(Context, JSObject);
 extern transitioning runtime TransitionElementsKindWithKind(
     Context, JSObject, Smi);
 
+extern macro LoadReceiverMap(Object): Map;
+
 extern macro LoadBufferObject(RawPtr, constexpr int32): Object;
 extern macro LoadBufferPointer(RawPtr, constexpr int32): RawPtr;
 extern macro LoadBufferSmi(RawPtr, constexpr int32): Smi;
@@ -646,6 +662,7 @@ extern macro IsFastAliasedArgumentsMap(implicit context: Context)(Map): bool;
 extern macro IsSlowAliasedArgumentsMap(implicit context: Context)(Map): bool;
 extern macro IsSloppyArgumentsMap(implicit context: Context)(Map): bool;
 extern macro IsStrictArgumentsMap(implicit context: Context)(Map): bool;
+extern macro IsTuple2Map(Map): bool;
 
 extern macro SmiAbove(Smi, Smi): bool;
 
@@ -884,6 +901,7 @@ extern macro TruncateIntPtrToInt32(intptr): int32;
 extern macro SmiTag(intptr): Smi;
 extern macro SmiFromInt32(int32): Smi;
 extern macro SmiFromUint32(uint32): Smi;
+extern macro SmiFromIntPtr(intptr): Smi;
 extern macro SmiUntag(Smi): intptr;
 macro SmiUntag<T: type>(value: SmiTagged<T>): T {
   return %RawDownCast<T>(Unsigned(SmiToInt32(Convert<Smi>(value))));
@@ -898,6 +916,7 @@ extern macro TaggedIndexToSmi(TaggedIndex): Smi;
 extern macro SmiToTaggedIndex(Smi): TaggedIndex;
 extern macro RoundIntPtrToFloat64(intptr): float64;
 extern macro ChangeFloat32ToFloat64(float32): float64;
+extern macro ChangeNumberToUint32(Number): uint32;
 extern macro ChangeNumberToFloat64(Number): float64;
 extern macro ChangeFloat64ToTagged(float64): Number;
 extern macro ChangeFloat64ToUintPtr(float64): uintptr;
@@ -907,6 +926,7 @@ extern macro ChangeUint32ToWord(uint32): uintptr;  // Doesn't sign-extend.
 extern macro LoadNativeContext(Context): NativeContext;
 extern macro TruncateFloat64ToFloat32(float64): float32;
 extern macro TruncateHeapNumberValueToWord32(HeapNumber): int32;
+extern macro BigIntFromUint64(uintptr): BigInt;
 extern macro LoadJSArrayElementsMap(constexpr ElementsKind, NativeContext): Map;
 extern macro LoadJSArrayElementsMap(ElementsKind, NativeContext): Map;
 extern macro NumberConstant(constexpr float64): Number;

@@ -95,18 +95,8 @@ namespace internal {
   V(WasmFloat32ToNumber)              \
   V(WasmFloat64ToNumber)              \
   V(WasmTaggedToFloat64)              \
-  V(WasmAtomicNotify)                 \
   V(WasmI32AtomicWait32)              \
-  V(WasmI32AtomicWait64)              \
   V(WasmI64AtomicWait32)              \
-  V(WasmI64AtomicWait64)              \
-  V(WasmMemoryGrow)                   \
-  V(WasmRefFunc)                      \
-  V(WasmTableInit)                    \
-  V(WasmTableCopy)                    \
-  V(WasmTableGet)                     \
-  V(WasmTableSet)                     \
-  V(WasmThrow)                        \
   BUILTIN_LIST_TFS(V)                 \
   TORQUE_BUILTIN_LIST_TFC(V)
 
@@ -1358,94 +1348,6 @@ class WasmTaggedToFloat64Descriptor final : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR(WasmTaggedToFloat64Descriptor, CallInterfaceDescriptor)
 };
 
-class WasmMemoryGrowDescriptor final : public CallInterfaceDescriptor {
- public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kNumPages)
-  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Int32(),  // result 1
-                                    MachineType::Int32())  // kNumPages
-  DECLARE_DESCRIPTOR(WasmMemoryGrowDescriptor, CallInterfaceDescriptor)
-};
-
-class WasmRefFuncDescriptor final : public CallInterfaceDescriptor {
- public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kFunctionIndex)
-  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),  // result
-                                    MachineType::Uint32())     // kFunctionIndex
-  DECLARE_DESCRIPTOR(WasmRefFuncDescriptor, CallInterfaceDescriptor)
-};
-
-class WasmTableInitDescriptor final : public CallInterfaceDescriptor {
- public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kDestination, kSource, kSize, kTableIndex,
-                               kSegmentIndex)
-  DEFINE_PARAMETER_TYPES(MachineType::Int32(),      // kDestination
-                         MachineType::Int32(),      // kSource
-                         MachineType::Int32(),      // kSize
-                         MachineType::AnyTagged(),  // kTableIndex
-                         MachineType::AnyTagged(),  // kSegmentindex
-  )
-
-#if V8_TARGET_ARCH_IA32
-  static constexpr bool kPassLastArgOnStack = true;
-#else
-  static constexpr bool kPassLastArgOnStack = false;
-#endif
-
-  // Pass the last parameter through the stack.
-  static constexpr int kStackArgumentsCount = kPassLastArgOnStack ? 1 : 0;
-
-  DECLARE_DESCRIPTOR(WasmTableInitDescriptor, CallInterfaceDescriptor)
-};
-
-class WasmTableCopyDescriptor final : public CallInterfaceDescriptor {
- public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kDestination, kSource, kSize, kDestinationTable,
-                               kSourceTable)
-  DEFINE_PARAMETER_TYPES(MachineType::Int32(),      // kDestination
-                         MachineType::Int32(),      // kSource
-                         MachineType::Int32(),      // kSize
-                         MachineType::AnyTagged(),  // kDestinationTable
-                         MachineType::AnyTagged(),  // kSourceTable
-  )
-
-#if V8_TARGET_ARCH_IA32
-  static constexpr bool kPassLastArgOnStack = true;
-#else
-  static constexpr bool kPassLastArgOnStack = false;
-#endif
-
-  // Pass the last parameter through the stack.
-  static constexpr int kStackArgumentsCount = kPassLastArgOnStack ? 1 : 0;
-
-  DECLARE_DESCRIPTOR(WasmTableCopyDescriptor, CallInterfaceDescriptor)
-};
-
-class WasmTableGetDescriptor final : public CallInterfaceDescriptor {
- public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kTableIndex, kEntryIndex)
-  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),  // result
-                                    MachineType::IntPtr(),     // kTableIndex
-                                    MachineType::Int32())      // kEntryIndex
-  DECLARE_DESCRIPTOR(WasmTableGetDescriptor, CallInterfaceDescriptor)
-};
-
-class WasmTableSetDescriptor final : public CallInterfaceDescriptor {
- public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kTableIndex, kEntryIndex, kValue)
-  DEFINE_PARAMETER_TYPES(MachineType::IntPtr(),     // kTableIndex
-                         MachineType::Int32(),      // kEntryIndex
-                         MachineType::AnyTagged())  // kValue
-  DECLARE_DESCRIPTOR(WasmTableSetDescriptor, CallInterfaceDescriptor)
-};
-
-class WasmThrowDescriptor final : public CallInterfaceDescriptor {
- public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kException)
-  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),  // result 1
-                                    MachineType::AnyTagged())  // kException
-  DECLARE_DESCRIPTOR(WasmThrowDescriptor, CallInterfaceDescriptor)
-};
-
 class V8_EXPORT_PRIVATE I64ToBigIntDescriptor final
     : public CallInterfaceDescriptor {
  public:
@@ -1481,15 +1383,6 @@ class V8_EXPORT_PRIVATE BigIntToI32PairDescriptor final
                                     MachineType::Uint32(),     // result 2
                                     MachineType::AnyTagged())  // kArgument
   DECLARE_DESCRIPTOR(BigIntToI32PairDescriptor, CallInterfaceDescriptor)
-};
-
-class WasmAtomicNotifyDescriptor final : public CallInterfaceDescriptor {
- public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kAddress, kCount)
-  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Uint32(),  // result 1
-                                    MachineType::Uint32(),  // kAddress
-                                    MachineType::Uint32())  // kCount
-  DECLARE_DESCRIPTOR(WasmAtomicNotifyDescriptor, CallInterfaceDescriptor)
 };
 
 class WasmI32AtomicWait32Descriptor final : public CallInterfaceDescriptor {
@@ -1528,26 +1421,6 @@ class WasmI64AtomicWait32Descriptor final : public CallInterfaceDescriptor {
   static constexpr int kStackArgumentsCount = kPassLastArgOnStack ? 1 : 0;
 
   DECLARE_DESCRIPTOR(WasmI64AtomicWait32Descriptor, CallInterfaceDescriptor)
-};
-
-class WasmI32AtomicWait64Descriptor final : public CallInterfaceDescriptor {
- public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kAddress, kExpectedValue, kTimeout)
-  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Uint32(),  // result 1
-                                    MachineType::Uint32(),  // kAddress
-                                    MachineType::Int32(),   // kExpectedValue
-                                    MachineType::Uint64())  // kTimeout
-  DECLARE_DESCRIPTOR(WasmI32AtomicWait64Descriptor, CallInterfaceDescriptor)
-};
-
-class WasmI64AtomicWait64Descriptor final : public CallInterfaceDescriptor {
- public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kAddress, kExpectedValue, kTimeout)
-  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Uint32(),  // result 1
-                                    MachineType::Uint32(),  // kAddress
-                                    MachineType::Uint64(),  // kExpectedValue
-                                    MachineType::Uint64())  // kTimeout
-  DECLARE_DESCRIPTOR(WasmI64AtomicWait64Descriptor, CallInterfaceDescriptor)
 };
 
 class CloneObjectWithVectorDescriptor final : public CallInterfaceDescriptor {
