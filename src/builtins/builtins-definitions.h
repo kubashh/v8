@@ -844,37 +844,9 @@ namespace internal {
   TFC(WasmFloat32ToNumber, WasmFloat32ToNumber)                                \
   TFC(WasmFloat64ToNumber, WasmFloat64ToNumber)                                \
   TFC(WasmTaggedToFloat64, WasmTaggedToFloat64)                                \
-  TFS(WasmAllocateJSArray, kArraySize)                                         \
-  TFC(WasmAtomicNotify, WasmAtomicNotify)                                      \
   TFC(WasmI32AtomicWait32, WasmI32AtomicWait32)                                \
-  TFC(WasmI32AtomicWait64, WasmI32AtomicWait64)                                \
   TFC(WasmI64AtomicWait32, WasmI64AtomicWait32)                                \
-  TFC(WasmI64AtomicWait64, WasmI64AtomicWait64)                                \
-  TFC(WasmMemoryGrow, WasmMemoryGrow)                                          \
-  TFC(WasmRefFunc, WasmRefFunc)                                                \
-  TFC(WasmTableInit, WasmTableInit)                                            \
   TFC(WasmTableCopy, WasmTableCopy)                                            \
-  TFC(WasmTableGet, WasmTableGet)                                              \
-  TFC(WasmTableSet, WasmTableSet)                                              \
-  TFC(WasmStackGuard, NoContext)                                               \
-  TFC(WasmStackOverflow, NoContext)                                            \
-  TFC(WasmThrow, WasmThrow)                                                    \
-  TFC(WasmRethrow, WasmThrow)                                                  \
-  TFS(WasmTraceMemory, kMemoryTracingInfo)                                     \
-  TFS(ThrowWasmTrapUnreachable)                                                \
-  TFS(ThrowWasmTrapMemOutOfBounds)                                             \
-  TFS(ThrowWasmTrapUnalignedAccess)                                            \
-  TFS(ThrowWasmTrapDivByZero)                                                  \
-  TFS(ThrowWasmTrapDivUnrepresentable)                                         \
-  TFS(ThrowWasmTrapRemByZero)                                                  \
-  TFS(ThrowWasmTrapFloatUnrepresentable)                                       \
-  TFS(ThrowWasmTrapFuncInvalid)                                                \
-  TFS(ThrowWasmTrapFuncSigMismatch)                                            \
-  TFS(ThrowWasmTrapDataSegmentDropped)                                         \
-  TFS(ThrowWasmTrapElemSegmentDropped)                                         \
-  TFS(ThrowWasmTrapTableOutOfBounds)                                           \
-  TFS(ThrowWasmTrapBrOnExnNullRef)                                             \
-  TFS(ThrowWasmTrapRethrowNullRef)                                             \
                                                                                \
   /* WeakMap */                                                                \
   TFJ(WeakMapConstructor, kDontAdaptArgumentsSentinel)                         \
