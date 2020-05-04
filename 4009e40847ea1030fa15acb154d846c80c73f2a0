@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4252c846_a400ea3e",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-04T09:39:50Z",
+      "side": 1,
+      "message": "nit: please spell out the types\n\n(with very few exceptions: using `auto` for std::vector iterators etc is fine)",
+      "range": {
+        "startLine": 350,
+        "startChar": 4,
+        "endLine": 350,
+        "endChar": 8
+      },
+      "revId": "4009e40847ea1030fa15acb154d846c80c73f2a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dad99745_38d26fde",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-04T09:39:50Z",
+      "side": 1,
+      "message": "Formatting suggestion: invert the condition, return early. That avoids extra indentation below, and gives you a nice place to put the comments:\n\nif (... \u003d\u003d kLocalVoid) {\n  // 1st case: ...\n  return;\n}\nlength \u003d ...;\nif (length !\u003d 0) {\n  // 2nd case: ...\n  return;\n}\n// 3rd case: ...",
+      "range": {
+        "startLine": 369,
+        "startChar": 4,
+        "endLine": 369,
+        "endChar": 6
+      },
+      "revId": "4009e40847ea1030fa15acb154d846c80c73f2a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "406e4af4_0d67578c",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-04T09:39:50Z",
+      "side": 1,
+      "message": "nit: please s/FIXME/TODO/ for consistency",
+      "range": {
+        "startLine": 190,
+        "startChar": 9,
+        "endLine": 190,
+        "endChar": 14
+      },
+      "revId": "4009e40847ea1030fa15acb154d846c80c73f2a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
