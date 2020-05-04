@@ -6332,6 +6332,10 @@ size_t Heap::NumberOfDetachedContexts() {
   return detached_contexts().length() / 2;
 }
 
+void Heap::SetDetachedContexts(WeakArrayList detached_contexts) {
+  set_detached_contexts(detached_contexts);
+}
+
 void VerifyPointersVisitor::VisitPointers(HeapObject host, ObjectSlot start,
                                           ObjectSlot end) {
   VerifyPointers(host, MaybeObjectSlot(start), MaybeObjectSlot(end));

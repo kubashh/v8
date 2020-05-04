@@ -1130,6 +1130,7 @@ class Heap {
   // The total number of native contexts that were detached but were not
   // garbage collected yet.
   size_t NumberOfDetachedContexts();
+  void SetDetachedContexts(WeakArrayList detached_contexts);
 
   // ===========================================================================
   // Code statistics. ==========================================================
