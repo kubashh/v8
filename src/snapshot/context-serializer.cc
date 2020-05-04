@@ -15,6 +15,50 @@
 namespace v8 {
 namespace internal {
 
+namespace {
+
+class SanitizeNativeContextScope final {
+ public:
+  SanitizeNativeContextScope(Isolate* isolate, NativeContext native_context,
+                             bool allow_active_isolate_for_testing)
+      : native_context_(native_context),
+        microtask_queue_(native_context.microtask_queue()),
+        optimized_code_list_(native_context.OptimizedCodeListHead()),
+        deoptimized_code_list_(native_context.DeoptimizedCodeListHead()) {
+#ifdef DEBUG
+    if (!allow_active_isolate_for_testing) {
+      // Microtasks.
+      DCHECK_EQ(0, microtask_queue_->size());
+      DCHECK(!microtask_queue_->HasMicrotasksSuppressions());
+      DCHECK_EQ(0, microtask_queue_->GetMicrotasksScopeDepth());
+      DCHECK(microtask_queue_->DebugMicrotasksScopeDepthIsZero());
+      // Code lists.
+      DCHECK(optimized_code_list_.IsUndefined(isolate));
+      DCHECK(deoptimized_code_list_.IsUndefined(isolate));
+    }
+#endif
+    Object undefined = ReadOnlyRoots(isolate).undefined_value();
+    native_context.set_microtask_queue(nullptr);
+    native_context.SetOptimizedCodeListHead(undefined);
+    native_context.SetDeoptimizedCodeListHead(undefined);
+  }
+
+  ~SanitizeNativeContextScope() {
+    // Restore saved fields.
+    native_context_.SetDeoptimizedCodeListHead(optimized_code_list_);
+    native_context_.SetOptimizedCodeListHead(deoptimized_code_list_);
+    native_context_.set_microtask_queue(microtask_queue_);
+  }
+
+ private:
+  NativeContext native_context_;
+  MicrotaskQueue* const microtask_queue_;
+  const Object optimized_code_list_;
+  const Object deoptimized_code_list_;
+};
+
+}  // namespace
+
 ContextSerializer::ContextSerializer(
     Isolate* isolate, Snapshot::SerializerFlags flags,
     StartupSerializer* startup_serializer,
@@ -41,22 +85,16 @@ void ContextSerializer::Serialize(Context* o, bool include_global_proxy) {
   // and it's next context pointer may point to the code-stub context.  Clear
   // it before serializing, it will get re-added to the context list
   // explicitly when it's loaded.
+  // TODO(v8:10416): These mutations should not observably affect the running
+  // context.
   context_.set(Context::NEXT_CONTEXT_LINK,
                ReadOnlyRoots(isolate()).undefined_value());
   DCHECK(!context_.global_object().IsUndefined());
   // Reset math random cache to get fresh random numbers.
   MathRandom::ResetContext(context_);
 
-  MicrotaskQueue* microtask_queue = context_.native_context().microtask_queue();
-#ifdef DEBUG
-  if (!allow_microtasks_for_testing()) {
-    DCHECK_EQ(0, microtask_queue->size());
-    DCHECK(!microtask_queue->HasMicrotasksSuppressions());
-    DCHECK_EQ(0, microtask_queue->GetMicrotasksScopeDepth());
-    DCHECK(microtask_queue->DebugMicrotasksScopeDepthIsZero());
-  }
-#endif
-  context_.native_context().set_microtask_queue(nullptr);
+  SanitizeNativeContextScope sanitize_native_context(
+      isolate(), context_.native_context(), allow_active_isolate_for_testing());
 
   VisitRootPointer(Root::kStartupObjectCache, nullptr, FullObjectSlot(o));
   SerializeDeferredObjects();
@@ -69,9 +107,6 @@ void ContextSerializer::Serialize(Context* o, bool include_global_proxy) {
   }
 
   Pad();
-
-  // Restore the microtask queue.
-  context_.native_context().set_microtask_queue(microtask_queue);
 }
 
 void ContextSerializer::SerializeObject(HeapObject obj) {

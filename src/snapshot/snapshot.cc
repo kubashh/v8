@@ -203,8 +203,7 @@ void Snapshot::SerializeDeserializeAndVerifyForTesting(
 
     Snapshot::SerializerFlags flags(
         Snapshot::kAllowUnknownExternalReferencesForTesting |
-        Snapshot::kAllowOpenHandlesForTesting |
-        Snapshot::kAllowMicrotasksForTesting);
+        Snapshot::kAllowActiveIsolateForTesting);
     serialized_data =
         Snapshot::Create(isolate, *default_context, &no_gc, flags);
     auto_delete_serialized_data.reset(serialized_data.data);
