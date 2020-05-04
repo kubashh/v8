@@ -875,6 +875,7 @@ namespace internal {
   TFS(ThrowWasmTrapTableOutOfBounds)                                           \
   TFS(ThrowWasmTrapBrOnExnNullRef)                                             \
   TFS(ThrowWasmTrapRethrowNullRef)                                             \
+  TFS(ThrowWasmTrapNullDereference)                                            \
                                                                                \
   /* WeakMap */                                                                \
   TFJ(WeakMapConstructor, kDontAdaptArgumentsSentinel)                         \

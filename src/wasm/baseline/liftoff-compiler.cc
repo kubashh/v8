@@ -3398,6 +3398,12 @@ class LiftoffCompiler {
     // TODO(7748): Implement.
     unsupported(decoder, kGC, "struct.get");
   }
+  void StructSet(FullDecoder* decoder, const Value& struct_obj,
+                 const Value& field_value,
+                 const FieldIndexImmediate<validate>& field) {
+    // TODO(7748): Implement.
+    unsupported(decoder, kGC, "struct.set");
+  }
 
  private:
   // Emit additional source positions for return addresses. Used by debugging to

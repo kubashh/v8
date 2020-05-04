@@ -614,8 +614,16 @@ class WasmGraphBuildingInterface {
 
   void StructGet(FullDecoder* decoder, const Value& struct_object,
                  const FieldIndexImmediate<validate>& field, Value* result) {
-    result->node = BUILD(StructGet, struct_object.node,
-                         field.struct_index.struct_type, field.index);
+    result->node =
+        BUILD(StructGet, struct_object.node, field.struct_index.struct_type,
+              field.index, decoder->position());
+  }
+
+  void StructSet(FullDecoder* decoder, const Value& struct_object,
+                 const Value& field_value,
+                 const FieldIndexImmediate<validate>& field) {
+    BUILD(StructSet, struct_object.node, field_value.node,
+          field.struct_index.struct_type, field.index, decoder->position());
   }
 
  private:
@@ -729,6 +737,7 @@ class WasmGraphBuildingInterface {
       case ValueType::kFuncRef:
       case ValueType::kNullRef:
       case ValueType::kExnRef:
+      case ValueType::kOptRef:
         return builder_->RefNull();
       default:
         UNREACHABLE();
