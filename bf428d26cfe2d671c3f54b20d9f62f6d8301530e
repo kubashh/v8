@@ -22,6 +22,30 @@
       "revId": "bf428d26cfe2d671c3f54b20d9f62f6d8301530e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02881a00_c8e3f870",
+        "filename": "src/compiler/backend/ppc64/instruction-codes-ppc64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1390565
+      },
+      "writtenOn": "2020-05-04T10:48:22Z",
+      "side": 1,
+      "message": "The separation in the other files is quite limited and is easier to capture for future developers when kept locally to the specific functions. Since this file just contains a list of arch specific instruction codes, I split it off.",
+      "parentUuid": "5d2d538e_f13f7397",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 0
+      },
+      "revId": "bf428d26cfe2d671c3f54b20d9f62f6d8301530e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
