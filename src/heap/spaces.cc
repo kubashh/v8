@@ -2113,7 +2113,6 @@ PagedSpace::SlowGetLinearAllocationAreaBackground(LocalHeap* local_heap,
                                                   AllocationOrigin origin) {
   DCHECK(!is_local_space() && identity() == OLD_SPACE);
   DCHECK_EQ(origin, AllocationOrigin::kRuntime);
-  base::MutexGuard lock(&allocation_mutex_);
 
   auto result = TryAllocationFromFreeListBackground(
       min_size_in_bytes, max_size_in_bytes, alignment, origin);
@@ -2124,7 +2123,10 @@ PagedSpace::SlowGetLinearAllocationAreaBackground(LocalHeap* local_heap,
   if (collector->sweeping_in_progress()) {
     // First try to refill the free-list, concurrent sweeper threads
     // may have freed some objects in the meantime.
-    RefillFreeList();
+    {
+      base::MutexGuard lock(&allocation_mutex_);
+      RefillFreeList();
+    }
 
     // Retry the free list allocation.
     auto result = TryAllocationFromFreeListBackground(
@@ -2139,14 +2141,26 @@ PagedSpace::SlowGetLinearAllocationAreaBackground(LocalHeap* local_heap,
     int max_freed = collector->sweeper()->ParallelSweepSpace(
         identity(), static_cast<int>(min_size_in_bytes), kMaxPagesToSweep,
         invalidated_slots_in_free_space);
-    RefillFreeList();
+    {
+      base::MutexGuard lock(&allocation_mutex_);
+      RefillFreeList();
+    }
+
     if (static_cast<size_t>(max_freed) >= min_size_in_bytes)
       return TryAllocationFromFreeListBackground(
           min_size_in_bytes, max_size_in_bytes, alignment, origin);
   }
 
-  if (heap()->ShouldExpandOldGenerationOnSlowAllocation(local_heap) &&
-      Expand()) {
+  bool expand_succeeded;
+
+  {
+    base::MutexGuard lock(&allocation_mutex_);
+    expand_succeeded =
+        heap()->ShouldExpandOldGenerationOnSlowAllocation(local_heap) &&
+        Expand();
+  }
+
+  if (expand_succeeded) {
     DCHECK((CountTotalPages() > 1) ||
            (min_size_in_bytes <= free_list_->Available()));
     return TryAllocationFromFreeListBackground(
@@ -2165,6 +2179,7 @@ PagedSpace::TryAllocationFromFreeListBackground(size_t min_size_in_bytes,
                                                 AllocationOrigin origin) {
   DCHECK_LE(min_size_in_bytes, max_size_in_bytes);
   DCHECK_EQ(identity(), OLD_SPACE);
+  base::MutexGuard lock(&allocation_mutex_);
 
   size_t new_node_size = 0;
   FreeSpace new_node =
