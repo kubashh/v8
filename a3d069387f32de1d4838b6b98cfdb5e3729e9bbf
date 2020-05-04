@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9adf9b7_699344fa",
+        "filename": "main.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-05-04T07:44:34Z",
+      "side": 1,
+      "message": "nit: newline before comment on toplevel.",
+      "revId": "a3d069387f32de1d4838b6b98cfdb5e3729e9bbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8f4a37b_780a9efa",
+        "filename": "main.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-05-04T07:44:34Z",
+      "side": 1,
+      "message": "nit: What would this line be fore when uncommented? Could you add a comment for that or remove it?",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 23
+      },
+      "revId": "a3d069387f32de1d4838b6b98cfdb5e3729e9bbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
