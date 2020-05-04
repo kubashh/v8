@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "src/init/setup-isolate.h"
-
 #include "src/builtins/accessors.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/execution/isolate.h"
@@ -12,6 +10,7 @@
 #include "src/heap/heap-inl.h"
 #include "src/ic/handler-configuration.h"
 #include "src/init/heap-symbols.h"
+#include "src/init/setup-isolate.h"
 #include "src/interpreter/interpreter.h"
 #include "src/objects/arguments.h"
 #include "src/objects/cell-inl.h"
@@ -50,6 +49,31 @@
 
 namespace v8 {
 namespace internal {
+
+namespace {
+
+V8_NOINLINE Handle<SharedFunctionInfo> SimpleCreateSharedFunctionInfo(
+    Isolate* isolate, Builtins::Name builtin_id, Handle<String> name, int len,
+    FunctionKind kind = FunctionKind::kNormalFunction) {
+  Handle<SharedFunctionInfo> shared =
+      isolate->factory()->NewSharedFunctionInfoForBuiltin(name, builtin_id,
+                                                          kind);
+  shared->set_internal_formal_parameter_count(len);
+  shared->set_length(len);
+  return shared;
+}
+
+V8_NOINLINE Handle<SharedFunctionInfo> SimpleCreateBuiltinSharedFunctionInfo(
+    Isolate* isolate, Builtins::Name builtin_id, Handle<String> name, int len) {
+  Handle<SharedFunctionInfo> shared =
+      isolate->factory()->NewSharedFunctionInfoForBuiltin(name, builtin_id,
+                                                          kNormalFunction);
+  shared->set_internal_formal_parameter_count(len);
+  shared->set_length(len);
+  return shared;
+}
+
+}  // namespace
 
 bool SetupIsolateDelegate::SetupHeapInternal(Heap* heap) {
   return heap->CreateHeapObjects();
@@ -348,7 +372,7 @@ bool Heap::CreateInitialMaps() {
   }
 
 #define ALLOCATE_VARSIZE_MAP(instance_type, field_name) \
-    ALLOCATE_MAP(instance_type, kVariableSizeSentinel, field_name)
+  ALLOCATE_MAP(instance_type, kVariableSizeSentinel, field_name)
 
 #define ALLOCATE_PRIMITIVE_MAP(instance_type, size, field_name, \
                                constructor_function_index)      \
@@ -434,14 +458,14 @@ bool Heap::CreateInitialMaps() {
 
     // The "no closures" and "one closure" FeedbackCell maps need
     // to be marked unstable because their objects can change maps.
-    ALLOCATE_MAP(
-      FEEDBACK_CELL_TYPE, FeedbackCell::kAlignedSize, no_closures_cell)
+    ALLOCATE_MAP(FEEDBACK_CELL_TYPE, FeedbackCell::kAlignedSize,
+                 no_closures_cell)
     roots.no_closures_cell_map().mark_unstable();
-    ALLOCATE_MAP(
-      FEEDBACK_CELL_TYPE, FeedbackCell::kAlignedSize, one_closure_cell)
+    ALLOCATE_MAP(FEEDBACK_CELL_TYPE, FeedbackCell::kAlignedSize,
+                 one_closure_cell)
     roots.one_closure_cell_map().mark_unstable();
-    ALLOCATE_MAP(
-      FEEDBACK_CELL_TYPE, FeedbackCell::kAlignedSize, many_closures_cell)
+    ALLOCATE_MAP(FEEDBACK_CELL_TYPE, FeedbackCell::kAlignedSize,
+                 many_closures_cell)
 
     ALLOCATE_VARSIZE_MAP(TRANSITION_ARRAY_TYPE, transition_array)
 
@@ -988,6 +1012,153 @@ void Heap::CreateInitialObjects() {
 
   // Initialize compilation cache.
   isolate_->compilation_cache()->Clear();
+
+  // SFIs for helper functions
+  {  // AsyncFromSyncIterator
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kAsyncIteratorValueUnwrap, factory->empty_string(),
+        1);
+    set_async_iterator_value_unwrap_shared_fun(*info);
+  }
+
+  {  // AsyncGenerator
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kAsyncGeneratorAwaitResolveClosure,
+        factory->empty_string(), 1);
+    set_async_generator_await_resolve_shared_fun(*info);
+
+    info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kAsyncGeneratorAwaitRejectClosure,
+        factory->empty_string(), 1);
+    set_async_generator_await_reject_shared_fun(*info);
+
+    info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kAsyncGeneratorYieldResolveClosure,
+        factory->empty_string(), 1);
+    set_async_generator_yield_resolve_shared_fun(*info);
+
+    info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kAsyncGeneratorReturnResolveClosure,
+        factory->empty_string(), 1);
+    set_async_generator_return_resolve_shared_fun(*info);
+
+    info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kAsyncGeneratorReturnClosedResolveClosure,
+        factory->empty_string(), 1);
+    set_async_generator_return_closed_resolve_shared_fun(*info);
+
+    info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kAsyncGeneratorReturnClosedRejectClosure,
+        factory->empty_string(), 1);
+    set_async_generator_return_closed_reject_shared_fun(*info);
+  }
+
+  // Promises
+  {
+    Handle<SharedFunctionInfo> info =
+        SimpleCreateSharedFunctionInfo(isolate(), Builtins::kPromiseThenFinally,
+                                       isolate_->factory()->empty_string(), 1);
+    info->set_native(true);
+    set_promise_then_finally_shared_fun(*info);
+  }
+
+  {
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+        isolate(), Builtins::kPromiseCatchFinally,
+        isolate_->factory()->empty_string(), 1);
+    info->set_native(true);
+    set_promise_catch_finally_shared_fun(*info);
+  }
+
+  {
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+        isolate(), Builtins::kPromiseValueThunkFinally,
+        isolate_->factory()->empty_string(), 0);
+    set_promise_value_thunk_finally_shared_fun(*info);
+  }
+
+  {
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+        isolate(), Builtins::kPromiseThrowerFinally,
+        isolate_->factory()->empty_string(), 0);
+    set_promise_thrower_finally_shared_fun(*info);
+  }
+
+  {
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kPromiseCapabilityDefaultResolve,
+        factory->empty_string(), 1, FunctionKind::kConciseMethod);
+    info->set_native(true);
+    info->set_function_map_index(
+        Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX);
+    set_promise_capability_default_resolve_shared_fun(*info);
+
+    info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kPromiseCapabilityDefaultReject,
+        factory->empty_string(), 1, FunctionKind::kConciseMethod);
+    info->set_native(true);
+    info->set_function_map_index(
+        Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX);
+    set_promise_capability_default_reject_shared_fun(*info);
+  }
+
+  {
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kPromiseAllResolveElementClosure,
+        factory->empty_string(), 1);
+    set_promise_all_resolve_element_shared_fun(*info);
+  }
+
+  {
+    Handle<SharedFunctionInfo> info = SimpleCreateBuiltinSharedFunctionInfo(
+        isolate_, Builtins::kPromiseGetCapabilitiesExecutor,
+        factory->empty_string(), 2);
+    set_promise_get_capabilities_executor_shared_fun(*info);
+  }
+
+  if (FLAG_harmony_promise_any) {  // Promise.any
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kPromiseAnyRejectElementClosure,
+        factory->empty_string(), 1);
+    set_promise_any_reject_element_shared_fun(*info);
+  }
+
+  if (FLAG_harmony_promise_all_settled) {
+    {
+      Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+          isolate_, Builtins::kPromiseAllSettledResolveElementClosure,
+          factory->empty_string(), 1);
+      set_promise_all_settled_resolve_element_shared_fun(*info);
+    }
+
+    {
+      Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+          isolate_, Builtins::kPromiseAllSettledRejectElementClosure,
+          factory->empty_string(), 1);
+      set_promise_all_settled_reject_element_shared_fun(*info);
+    }
+  }
+
+  {  // Internal: ProxyRevoke
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kProxyRevoke, factory->empty_string(), 0);
+    set_proxy_revoke_shared_fun(*info);
+  }
+
+  // Async await
+  {
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kAsyncFunctionAwaitRejectClosure,
+        factory->empty_string(), 1);
+    set_async_function_await_reject_shared_fun(*info);
+  }
+
+  {
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
+        isolate_, Builtins::kAsyncFunctionAwaitResolveClosure,
+        factory->empty_string(), 1);
+    set_async_function_await_resolve_shared_fun(*info);
+  }
 }
 
 void Heap::CreateInternalAccessorInfoObjects() {

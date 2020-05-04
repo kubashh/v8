@@ -177,6 +177,59 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(uninitialized_symbol, uninitialized_symbol, UninitializedSymbol)           \
   V(WeakFixedArrayMap, weak_fixed_array_map, WeakFixedArrayMap)                \
   V(zero_string, zero_string, ZeroString)                                      \
+  V(AsyncFunctionAwaitRejectSharedFun, async_function_await_reject_shared_fun, \
+    AsyncFunctionAwaitRejectSharedFun)                                         \
+  V(AsyncFunctionAwaitResolveSharedFun,                                        \
+    async_function_await_resolve_shared_fun,                                   \
+    AsyncFunctionAwaitResolveSharedFun)                                        \
+  V(AsyncGeneratorAwaitRejectSharedFun,                                        \
+    async_generator_await_reject_shared_fun,                                   \
+    AsyncGeneratorAwaitRejectSharedFun)                                        \
+  V(AsyncGeneratorAwaitResolveSharedFun,                                       \
+    async_generator_await_resolve_shared_fun,                                  \
+    AsyncGeneratorAwaitResolveSharedFun)                                       \
+  V(AsyncGeneratorYieldResolveSharedFun,                                       \
+    async_generator_yield_resolve_shared_fun,                                  \
+    AsyncGeneratorYieldResolveSharedFun)                                       \
+  V(AsyncGeneratorReturnResolveSharedFun,                                      \
+    async_generator_return_resolve_shared_fun,                                 \
+    AsyncGeneratorReturnResolveSharedFun)                                      \
+  V(AsyncGeneratorReturnClosedResolveSharedFun,                                \
+    async_generator_return_closed_resolve_shared_fun,                          \
+    AsyncGeneratorReturnClosedResolveSharedFun)                                \
+  V(AsyncGeneratorReturnClosedRejectSharedFun,                                 \
+    async_generator_return_closed_reject_shared_fun,                           \
+    AsyncGeneratorReturnClosedRejectSharedFun)                                 \
+  V(AsyncIteratorValueUnwrapSharedFun, async_iterator_value_unwrap_shared_fun, \
+    AsyncIteratorValueUnwrapSharedFun)                                         \
+  V(PromiseGetCapabilitiesExecutorSharedFun,                                   \
+    promise_get_capabilities_executor_shared_fun,                              \
+    PromiseGetCapabilitiesExecutorSharedFun)                                   \
+  V(PromiseCapabilityDefaultRejectSharedFun,                                   \
+    promise_capability_default_reject_shared_fun,                              \
+    PromiseCapabilityDefaultRejectSharedFun)                                   \
+  V(PromiseCapabilityDefaultResolveSharedFun,                                  \
+    promise_capability_default_resolve_shared_fun,                             \
+    PromiseCapabilityDefaultResolveSharedFun)                                  \
+  V(PromiseThenFinallySharedFun, promise_then_finally_shared_fun,              \
+    PromiseThenFinallySharedFun)                                               \
+  V(PromiseCatchFinallySharedFun, promise_catch_finally_shared_fun,            \
+    PromiseCatchFinallySharedFun)                                              \
+  V(PromiseValueThunkFinallySharedFun, promise_value_thunk_finally_shared_fun, \
+    PromiseValueThunkFinallySharedFun)                                         \
+  V(PromiseAllResolveElementSharedFun, promise_all_resolve_element_shared_fun, \
+    PromiseAllResolveElementSharedFun)                                         \
+  V(PromiseThrowerFinallySharedFun, promise_thrower_finally_shared_fun,        \
+    PromiseThrowerFinallySharedFun)                                            \
+  V(PromiseAllSettledRejectElementSharedFun,                                   \
+    promise_all_settled_reject_element_shared_fun,                             \
+    PromiseAllSettledRejectElementSharedFun)                                   \
+  V(PromiseAllSettledResolveElementSharedFun,                                  \
+    promise_all_settled_resolve_element_shared_fun,                            \
+    PromiseAllSettledResolveElementSharedFun)                                  \
+  V(PromiseAnyRejectElementSharedFun, promise_any_reject_element_shared_fun,   \
+    PromiseAnyRejectElementSharedFun)                                          \
+  V(ProxyRevokeSharedFun, proxy_revoke_shared_fun, ProxyRevokeSharedFun)       \
   TORQUE_INTERNAL_MAP_CSA_LIST(V)
 
 #define HEAP_IMMOVABLE_OBJECT_LIST(V)   \

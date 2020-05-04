@@ -70,28 +70,10 @@ enum ContextLookupFlags {
   V(ARRAY_FUNCTION_INDEX, JSFunction, array_function)                          \
   V(ARRAY_JOIN_STACK_INDEX, HeapObject, array_join_stack)                      \
   V(ASYNC_FROM_SYNC_ITERATOR_MAP_INDEX, Map, async_from_sync_iterator_map)     \
-  V(ASYNC_FUNCTION_AWAIT_REJECT_SHARED_FUN, SharedFunctionInfo,                \
-    async_function_await_reject_shared_fun)                                    \
-  V(ASYNC_FUNCTION_AWAIT_RESOLVE_SHARED_FUN, SharedFunctionInfo,               \
-    async_function_await_resolve_shared_fun)                                   \
   V(ASYNC_FUNCTION_FUNCTION_INDEX, JSFunction, async_function_constructor)     \
   V(ASYNC_FUNCTION_OBJECT_MAP_INDEX, Map, async_function_object_map)           \
   V(ASYNC_GENERATOR_FUNCTION_FUNCTION_INDEX, JSFunction,                       \
     async_generator_function_function)                                         \
-  V(ASYNC_ITERATOR_VALUE_UNWRAP_SHARED_FUN, SharedFunctionInfo,                \
-    async_iterator_value_unwrap_shared_fun)                                    \
-  V(ASYNC_GENERATOR_AWAIT_REJECT_SHARED_FUN, SharedFunctionInfo,               \
-    async_generator_await_reject_shared_fun)                                   \
-  V(ASYNC_GENERATOR_AWAIT_RESOLVE_SHARED_FUN, SharedFunctionInfo,              \
-    async_generator_await_resolve_shared_fun)                                  \
-  V(ASYNC_GENERATOR_YIELD_RESOLVE_SHARED_FUN, SharedFunctionInfo,              \
-    async_generator_yield_resolve_shared_fun)                                  \
-  V(ASYNC_GENERATOR_RETURN_RESOLVE_SHARED_FUN, SharedFunctionInfo,             \
-    async_generator_return_resolve_shared_fun)                                 \
-  V(ASYNC_GENERATOR_RETURN_CLOSED_RESOLVE_SHARED_FUN, SharedFunctionInfo,      \
-    async_generator_return_closed_resolve_shared_fun)                          \
-  V(ASYNC_GENERATOR_RETURN_CLOSED_REJECT_SHARED_FUN, SharedFunctionInfo,       \
-    async_generator_return_closed_reject_shared_fun)                           \
   V(ATOMICS_OBJECT, JSObject, atomics_object)                                  \
   V(BIGINT_FUNCTION_INDEX, JSFunction, bigint_function)                        \
   V(BIGINT64_ARRAY_FUN_INDEX, JSFunction, bigint64_array_fun)                  \
@@ -218,29 +200,6 @@ enum ContextLookupFlags {
   V(PROXY_FUNCTION_INDEX, JSFunction, proxy_function)                          \
   V(PROXY_MAP_INDEX, Map, proxy_map)                                           \
   V(PROXY_REVOCABLE_RESULT_MAP_INDEX, Map, proxy_revocable_result_map)         \
-  V(PROXY_REVOKE_SHARED_FUN, SharedFunctionInfo, proxy_revoke_shared_fun)      \
-  V(PROMISE_GET_CAPABILITIES_EXECUTOR_SHARED_FUN, SharedFunctionInfo,          \
-    promise_get_capabilities_executor_shared_fun)                              \
-  V(PROMISE_CAPABILITY_DEFAULT_REJECT_SHARED_FUN_INDEX, SharedFunctionInfo,    \
-    promise_capability_default_reject_shared_fun)                              \
-  V(PROMISE_CAPABILITY_DEFAULT_RESOLVE_SHARED_FUN_INDEX, SharedFunctionInfo,   \
-    promise_capability_default_resolve_shared_fun)                             \
-  V(PROMISE_THEN_FINALLY_SHARED_FUN, SharedFunctionInfo,                       \
-    promise_then_finally_shared_fun)                                           \
-  V(PROMISE_CATCH_FINALLY_SHARED_FUN, SharedFunctionInfo,                      \
-    promise_catch_finally_shared_fun)                                          \
-  V(PROMISE_VALUE_THUNK_FINALLY_SHARED_FUN, SharedFunctionInfo,                \
-    promise_value_thunk_finally_shared_fun)                                    \
-  V(PROMISE_THROWER_FINALLY_SHARED_FUN, SharedFunctionInfo,                    \
-    promise_thrower_finally_shared_fun)                                        \
-  V(PROMISE_ALL_RESOLVE_ELEMENT_SHARED_FUN, SharedFunctionInfo,                \
-    promise_all_resolve_element_shared_fun)                                    \
-  V(PROMISE_ALL_SETTLED_RESOLVE_ELEMENT_SHARED_FUN, SharedFunctionInfo,        \
-    promise_all_settled_resolve_element_shared_fun)                            \
-  V(PROMISE_ALL_SETTLED_REJECT_ELEMENT_SHARED_FUN, SharedFunctionInfo,         \
-    promise_all_settled_reject_element_shared_fun)                             \
-  V(PROMISE_ANY_REJECT_ELEMENT_SHARED_FUN, SharedFunctionInfo,                 \
-    promise_any_reject_element_shared_fun)                                     \
   V(PROMISE_PROTOTYPE_INDEX, JSObject, promise_prototype)                      \
   V(REGEXP_EXEC_FUNCTION_INDEX, JSFunction, regexp_exec_function)              \
   V(REGEXP_FUNCTION_INDEX, JSFunction, regexp_function)                        \

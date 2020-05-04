@@ -2100,12 +2100,17 @@ TNode<Object> PromiseBuiltinReducerAssembler::ReducePromiseConstructor(
                    TrueConstant());
 
   // Allocate closures for the resolve and reject cases.
-  TNode<JSFunction> resolve = CreateClosureFromBuiltinSharedFunctionInfo(
-      native_context.promise_capability_default_resolve_shared_fun(),
-      promise_context);
-  TNode<JSFunction> reject = CreateClosureFromBuiltinSharedFunctionInfo(
-      native_context.promise_capability_default_reject_shared_fun(),
-      promise_context);
+  ReadOnlyRoots roots(isolate());
+
+  SharedFunctionInfoRef resolve_sfi(
+      broker(), roots.promise_capability_default_resolve_shared_fun());
+  TNode<JSFunction> resolve =
+      CreateClosureFromBuiltinSharedFunctionInfo(resolve_sfi, promise_context);
+
+  SharedFunctionInfoRef reject_sfi(
+      broker_, roots.promise_capability_default_reject_shared_fun());
+  TNode<JSFunction> reject =
+      CreateClosureFromBuiltinSharedFunctionInfo(reject_sfi, promise_context);
 
   FrameState lazy_with_catch_frame_state =
       PromiseConstructorLazyWithCatchFrameState(

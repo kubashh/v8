@@ -194,7 +194,49 @@ class Symbol;
   V(ScopeInfo, empty_function_scope_info, EmptyFunctionScopeInfo)              \
   V(ScopeInfo, native_scope_info, NativeScopeInfo)                             \
   /* Hash seed */                                                              \
-  V(ByteArray, hash_seed, HashSeed)
+  V(ByteArray, hash_seed, HashSeed)                                            \
+  /* SharedFunctionInfos */                                                    \
+  V(SharedFunctionInfo, async_function_await_reject_shared_fun,                \
+    AsyncFunctionAwaitRejectSharedFun)                                         \
+  V(SharedFunctionInfo, async_function_await_resolve_shared_fun,               \
+    AsyncFunctionAwaitResolveSharedFun)                                        \
+  V(SharedFunctionInfo, async_generator_await_reject_shared_fun,               \
+    AsyncGeneratorAwaitRejectSharedFun)                                        \
+  V(SharedFunctionInfo, async_generator_await_resolve_shared_fun,              \
+    AsyncGeneratorAwaitResolveSharedFun)                                       \
+  V(SharedFunctionInfo, async_generator_yield_resolve_shared_fun,              \
+    AsyncGeneratorYieldResolveSharedFun)                                       \
+  V(SharedFunctionInfo, async_generator_return_resolve_shared_fun,             \
+    AsyncGeneratorReturnResolveSharedFun)                                      \
+  V(SharedFunctionInfo, async_generator_return_closed_resolve_shared_fun,      \
+    AsyncGeneratorReturnClosedResolveSharedFun)                                \
+  V(SharedFunctionInfo, async_generator_return_closed_reject_shared_fun,       \
+    AsyncGeneratorReturnClosedRejectSharedFun)                                 \
+  V(SharedFunctionInfo, async_iterator_value_unwrap_shared_fun,                \
+    AsyncIteratorValueUnwrapSharedFun)                                         \
+  V(SharedFunctionInfo, promise_get_capabilities_executor_shared_fun,          \
+    PromiseGetCapabilitiesExecutorSharedFun)                                   \
+  V(SharedFunctionInfo, promise_capability_default_reject_shared_fun,          \
+    PromiseCapabilityDefaultRejectSharedFun)                                   \
+  V(SharedFunctionInfo, promise_capability_default_resolve_shared_fun,         \
+    PromiseCapabilityDefaultResolveSharedFun)                                  \
+  V(SharedFunctionInfo, promise_then_finally_shared_fun,                       \
+    PromiseThenFinallySharedFun)                                               \
+  V(SharedFunctionInfo, promise_catch_finally_shared_fun,                      \
+    PromiseCatchFinallySharedFun)                                              \
+  V(SharedFunctionInfo, promise_value_thunk_finally_shared_fun,                \
+    PromiseValueThunkFinallySharedFun)                                         \
+  V(SharedFunctionInfo, promise_thrower_finally_shared_fun,                    \
+    PromiseThrowerFinallySharedFun)                                            \
+  V(SharedFunctionInfo, promise_all_resolve_element_shared_fun,                \
+    PromiseAllResolveElementSharedFun)                                         \
+  V(SharedFunctionInfo, promise_all_settled_reject_element_shared_fun,         \
+    PromiseAllSettledRejectElementSharedFun)                                   \
+  V(SharedFunctionInfo, promise_all_settled_resolve_element_shared_fun,        \
+    PromiseAllSettledResolveElementSharedFun)                                  \
+  V(SharedFunctionInfo, promise_any_reject_element_shared_fun,                 \
+    PromiseAnyRejectElementSharedFun)                                          \
+  V(SharedFunctionInfo, proxy_revoke_shared_fun, ProxyRevokeSharedFun)
 
 // Mutable roots that are known to be immortal immovable, for which we can
 // safely skip write barriers.

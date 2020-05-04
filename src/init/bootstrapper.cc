@@ -368,27 +368,6 @@ void Bootstrapper::DetachGlobal(Handle<Context> env) {
 
 namespace {
 
-V8_NOINLINE Handle<SharedFunctionInfo> SimpleCreateSharedFunctionInfo(
-    Isolate* isolate, Builtins::Name builtin_id, Handle<String> name, int len,
-    FunctionKind kind = FunctionKind::kNormalFunction) {
-  Handle<SharedFunctionInfo> shared =
-      isolate->factory()->NewSharedFunctionInfoForBuiltin(name, builtin_id,
-                                                          kind);
-  shared->set_internal_formal_parameter_count(len);
-  shared->set_length(len);
-  return shared;
-}
-
-V8_NOINLINE Handle<SharedFunctionInfo> SimpleCreateBuiltinSharedFunctionInfo(
-    Isolate* isolate, Builtins::Name builtin_id, Handle<String> name, int len) {
-  Handle<SharedFunctionInfo> shared =
-      isolate->factory()->NewSharedFunctionInfoForBuiltin(name, builtin_id,
-                                                          kNormalFunction);
-  shared->set_internal_formal_parameter_count(len);
-  shared->set_length(len);
-  return shared;
-}
-
 V8_NOINLINE Handle<JSFunction> CreateFunction(
     Isolate* isolate, Handle<String> name, InstanceType type, int instance_size,
     int inobject_properties, Handle<HeapObject> prototype,
@@ -1613,47 +1592,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     }
   }
 
-  {  // --- A s y n c F r o m S y n c I t e r a t o r
-    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-        isolate_, Builtins::kAsyncIteratorValueUnwrap, factory->empty_string(),
-        1);
-    native_context()->set_async_iterator_value_unwrap_shared_fun(*info);
-  }
-
-  {  // --- A s y n c G e n e r a t o r ---
-    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-        isolate_, Builtins::kAsyncGeneratorAwaitResolveClosure,
-        factory->empty_string(), 1);
-    native_context()->set_async_generator_await_resolve_shared_fun(*info);
-
-    info = SimpleCreateSharedFunctionInfo(
-        isolate_, Builtins::kAsyncGeneratorAwaitRejectClosure,
-        factory->empty_string(), 1);
-    native_context()->set_async_generator_await_reject_shared_fun(*info);
-
-    info = SimpleCreateSharedFunctionInfo(
-        isolate_, Builtins::kAsyncGeneratorYieldResolveClosure,
-        factory->empty_string(), 1);
-    native_context()->set_async_generator_yield_resolve_shared_fun(*info);
-
-    info = SimpleCreateSharedFunctionInfo(
-        isolate_, Builtins::kAsyncGeneratorReturnResolveClosure,
-        factory->empty_string(), 1);
-    native_context()->set_async_generator_return_resolve_shared_fun(*info);
-
-    info = SimpleCreateSharedFunctionInfo(
-        isolate_, Builtins::kAsyncGeneratorReturnClosedResolveClosure,
-        factory->empty_string(), 1);
-    native_context()->set_async_generator_return_closed_resolve_shared_fun(
-        *info);
-
-    info = SimpleCreateSharedFunctionInfo(
-        isolate_, Builtins::kAsyncGeneratorReturnClosedRejectClosure,
-        factory->empty_string(), 1);
-    native_context()->set_async_generator_return_closed_reject_shared_fun(
-        *info);
-  }
-
   Handle<JSFunction> array_prototype_to_string_fun;
   {  // --- A r r a y ---
     Handle<JSFunction> array_function = InstallFunction(
@@ -2336,13 +2274,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
         static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY));
   }
 
-  {
-    Handle<SharedFunctionInfo> info = SimpleCreateBuiltinSharedFunctionInfo(
-        isolate_, Builtins::kPromiseGetCapabilitiesExecutor,
-        factory->empty_string(), 2);
-    native_context()->set_promise_get_capabilities_executor_shared_fun(*info);
-  }
-
   {  // -- P r o m i s e
     Handle<JSFunction> promise_fun = InstallFunction(
         isolate_, global, "Promise", JS_PROMISE_TYPE,
@@ -2389,36 +2320,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     InstallFunctionWithBuiltinId(isolate_, prototype, "finally",
                                  Builtins::kPromisePrototypeFinally, 1, true);
 
-    {
-      Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-          isolate(), Builtins::kPromiseThenFinally,
-          isolate_->factory()->empty_string(), 1);
-      info->set_native(true);
-      native_context()->set_promise_then_finally_shared_fun(*info);
-    }
-
-    {
-      Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-          isolate(), Builtins::kPromiseCatchFinally,
-          isolate_->factory()->empty_string(), 1);
-      info->set_native(true);
-      native_context()->set_promise_catch_finally_shared_fun(*info);
-    }
-
-    {
-      Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-          isolate(), Builtins::kPromiseValueThunkFinally,
-          isolate_->factory()->empty_string(), 0);
-      native_context()->set_promise_value_thunk_finally_shared_fun(*info);
-    }
-
-    {
-      Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-          isolate(), Builtins::kPromiseThrowerFinally,
-          isolate_->factory()->empty_string(), 0);
-      native_context()->set_promise_thrower_finally_shared_fun(*info);
-    }
-
     // Force the Promise constructor to fast properties, so that we can use the
     // fast paths for various things like
     //
@@ -2431,32 +2332,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
 
     Handle<Map> prototype_map(prototype->map(), isolate());
     Map::SetShouldBeFastPrototypeMap(prototype_map, true, isolate_);
-
-    {
-      Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-          isolate_, Builtins::kPromiseCapabilityDefaultResolve,
-          factory->empty_string(), 1, FunctionKind::kConciseMethod);
-      info->set_native(true);
-      info->set_function_map_index(
-          Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX);
-      native_context()->set_promise_capability_default_resolve_shared_fun(
-          *info);
-
-      info = SimpleCreateSharedFunctionInfo(
-          isolate_, Builtins::kPromiseCapabilityDefaultReject,
-          factory->empty_string(), 1, FunctionKind::kConciseMethod);
-      info->set_native(true);
-      info->set_function_map_index(
-          Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX);
-      native_context()->set_promise_capability_default_reject_shared_fun(*info);
-    }
-
-    {
-      Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-          isolate_, Builtins::kPromiseAllResolveElementClosure,
-          factory->empty_string(), 1);
-      native_context()->set_promise_all_resolve_element_shared_fun(*info);
-    }
 
     // Force the Promise constructor to fast properties, so that we can use the
     // fast paths for various things like
@@ -3734,12 +3609,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
 
     SimpleInstallFunction(isolate_, proxy_function, "revocable",
                           Builtins::kProxyRevocable, 2, true);
-
-    {  // Internal: ProxyRevoke
-      Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-          isolate_, Builtins::kProxyRevoke, factory->empty_string(), 0);
-      native_context()->set_proxy_revoke_shared_fun(*info);
-    }
   }
 
   {  // -- R e f l e c t
@@ -4194,20 +4063,6 @@ void Genesis::InitializeIteratorFunctions() {
     Handle<Map> async_function_object_map = factory->NewMap(
         JS_ASYNC_FUNCTION_OBJECT_TYPE, JSAsyncFunctionObject::kHeaderSize);
     native_context->set_async_function_object_map(*async_function_object_map);
-
-    {
-      Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-          isolate, Builtins::kAsyncFunctionAwaitRejectClosure,
-          factory->empty_string(), 1);
-      native_context->set_async_function_await_reject_shared_fun(*info);
-    }
-
-    {
-      Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-          isolate, Builtins::kAsyncFunctionAwaitResolveClosure,
-          factory->empty_string(), 1);
-      native_context->set_async_function_await_resolve_shared_fun(*info);
-    }
   }
 }
 
@@ -4415,13 +4270,6 @@ void Genesis::InitializeGlobal_harmony_promise_any() {
   JSObject::DefineAccessor(prototype, factory->errors_string(), getter,
                            factory->undefined_value(), DONT_ENUM);
 
-  {
-    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-        isolate_, Builtins::kPromiseAnyRejectElementClosure,
-        factory->empty_string(), 1);
-    native_context()->set_promise_any_reject_element_shared_fun(*info);
-  }
-
   Handle<JSFunction> promise_fun(
       JSFunction::cast(
           isolate()->native_context()->get(Context::PROMISE_FUNCTION_INDEX)),
@@ -4436,20 +4284,6 @@ void Genesis::InitializeGlobal_harmony_promise_all_settled() {
   if (!FLAG_harmony_promise_all_settled) return;
   SimpleInstallFunction(isolate(), isolate()->promise_function(), "allSettled",
                         Builtins::kPromiseAllSettled, 1, true);
-  Factory* factory = isolate()->factory();
-  {
-    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-        isolate_, Builtins::kPromiseAllSettledResolveElementClosure,
-        factory->empty_string(), 1);
-    native_context()->set_promise_all_settled_resolve_element_shared_fun(*info);
-  }
-
-  {
-    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
-        isolate_, Builtins::kPromiseAllSettledRejectElementClosure,
-        factory->empty_string(), 1);
-    native_context()->set_promise_all_settled_reject_element_shared_fun(*info);
-  }
 }
 
 void Genesis::InitializeGlobal_harmony_regexp_match_indices() {
