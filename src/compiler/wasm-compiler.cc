@@ -50,6 +50,7 @@
 #include "src/wasm/memory-tracing.h"
 #include "src/wasm/object-access.h"
 #include "src/wasm/wasm-code-manager.h"
+#include "src/wasm/wasm-constants.h"
 #include "src/wasm/wasm-limits.h"
 #include "src/wasm/wasm-linkage.h"
 #include "src/wasm/wasm-module.h"
@@ -5053,10 +5054,33 @@ Node* WasmGraphBuilder::StructNew(uint32_t struct_index,
 
 Node* WasmGraphBuilder::StructGet(Node* struct_object,
                                   const wasm::StructType* type,
-                                  uint32_t field_index) {
+                                  uint32_t field_index,
+                                  wasm::WasmCodePosition position) {
   MachineType machine_type = FieldType(type, field_index);
   Node* offset = FieldOffset(mcgraph(), type, field_index);
+  TrapIfTrue(wasm::kTrapNullDereference,
+             graph()->NewNode(mcgraph()->machine()->WordEqual(), struct_object,
+                              RefNull()),
+             position);
   return gasm_->Load(machine_type, struct_object, offset);
+}
+
+Node* WasmGraphBuilder::StructSet(Node* struct_object, Node* field_value,
+                                  const wasm::StructType* type,
+                                  uint32_t field_index,
+                                  wasm::WasmCodePosition position) {
+  wasm::ValueType field_type = type->field(field_index);
+  Node* offset = FieldOffset(mcgraph(), type, field_index);
+
+  WriteBarrierKind write_barrier =
+      field_type.IsReferenceType() ? kPointerWriteBarrier : kNoWriteBarrier;
+  StoreRepresentation rep(field_type.machine_representation(), write_barrier);
+
+  TrapIfTrue(wasm::kTrapNullDereference,
+             graph()->NewNode(mcgraph()->machine()->WordEqual(), struct_object,
+                              RefNull()),
+             position);
+  return gasm_->Store(rep, struct_object, offset, field_value);
 }
 
 class WasmDecorator final : public GraphDecorator {
