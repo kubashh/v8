@@ -6,6 +6,7 @@
 
 #include <cstring>
 
+#include "include/v8.h"
 #include "src/base/lazy-instance.h"
 #include "src/base/lsan.h"
 #include "src/base/platform/mutex.h"
@@ -160,10 +161,21 @@ void ReadOnlyHeap::OnHeapTearDown() {
 #endif
 }
 
-#ifdef V8_SHARED_RO_HEAP
 // static
-const ReadOnlyHeap* ReadOnlyHeap::Instance() { return shared_ro_heap_; }
-#endif
+void ReadOnlyHeap::PopulateReadOnlySpaceStatistics(
+    SharedMemoryStatistics* statistics) {
+#ifdef V8_SHARED_RO_HEAP
+  auto* ro_space = shared_ro_heap_->read_only_space_;
+  statistics->read_only_space_size_ = ro_space->CommittedMemory();
+  statistics->read_only_space_used_size_ = ro_space->SizeOfObjects();
+  statistics->read_only_space_physical_size_ =
+      ro_space->CommittedPhysicalMemory();
+#else
+  statistics->read_only_space_size_ = 0;
+  statistics->read_only_space_used_size_ = 0;
+  statistics->read_only_space_physical_size_ = 0;
+#endif  // V8_SHARED_RO_HEAP
+}
 
 // static
 bool ReadOnlyHeap::Contains(Address address) {
