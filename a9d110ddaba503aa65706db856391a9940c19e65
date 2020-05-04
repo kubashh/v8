@@ -524,6 +524,24 @@
       "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e18f7faa_1e84ac69",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-04T05:48:18Z",
+      "side": 1,
+      "message": "My point was to avoid unneeded includes in the header file, and builtins.h is not strictly necessary. Up to wasm folks.",
+      "parentUuid": "31765a7d_f9293e07",
+      "revId": "a9d110ddaba503aa65706db856391a9940c19e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
