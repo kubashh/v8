@@ -307,7 +307,21 @@ extern enum MessageTemplate {
   kProxySetPrototypeOfNonExtensible,
   kProxyDeletePropertyNonExtensible,
   kWeakRefsCleanupMustBeCallable,
+  kWasmTrapUnreachable,
+  kWasmTrapMemOutOfBounds,
+  kWasmTrapUnalignedAccess,
+  kWasmTrapDivByZero,
+  kWasmTrapDivUnrepresentable,
+  kWasmTrapRemByZero,
+  kWasmTrapFloatUnrepresentable,
+  kWasmTrapFuncInvalid,
+  kWasmTrapFuncSigMismatch,
+  kWasmTrapDataSegmentDropped,
+  kWasmTrapElemSegmentDropped,
   kWasmTrapTableOutOfBounds,
+  kWasmTrapBrOnExnNullRef,
+  kWasmTrapRethrowNullRef,
+  kWasmTrapNullDereference,
   ...
 }
 
@@ -901,6 +915,7 @@ extern macro TaggedIndexToSmi(TaggedIndex): Smi;
 extern macro SmiToTaggedIndex(Smi): TaggedIndex;
 extern macro RoundIntPtrToFloat64(intptr): float64;
 extern macro ChangeFloat32ToFloat64(float32): float64;
+extern macro ChangeNumberToUint32(Number): uint32;
 extern macro ChangeNumberToFloat64(Number): float64;
 extern macro ChangeTaggedNonSmiToInt32(implicit context: Context)(JSAnyNotSmi):
     int32;
@@ -914,6 +929,7 @@ extern macro ChangeUint32ToWord(uint32): uintptr;  // Doesn't sign-extend.
 extern macro LoadNativeContext(Context): NativeContext;
 extern macro TruncateFloat64ToFloat32(float64): float32;
 extern macro TruncateHeapNumberValueToWord32(HeapNumber): int32;
+extern macro BigIntFromUint64(uintptr): BigInt;
 extern macro LoadJSArrayElementsMap(constexpr ElementsKind, NativeContext): Map;
 extern macro LoadJSArrayElementsMap(ElementsKind, NativeContext): Map;
 extern macro NumberConstant(constexpr float64): Number;

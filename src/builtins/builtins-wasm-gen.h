@@ -17,14 +17,14 @@ class WasmBuiltinsAssembler : public CodeStubAssembler {
 
   TNode<WasmInstanceObject> LoadInstanceFromFrame();
 
-  TNode<Context> LoadContextFromInstance(TNode<WasmInstanceObject> instance);
+  TNode<NativeContext> LoadContextFromInstance(
+      TNode<WasmInstanceObject> instance);
 
   TNode<FixedArray> LoadTablesFromInstance(TNode<WasmInstanceObject> instance);
 
   TNode<FixedArray> LoadExternalFunctionsFromInstance(
       TNode<WasmInstanceObject> instance);
 
- protected:
   TNode<Smi> SmiFromUint32WithSaturation(TNode<Uint32T> value, uint32_t max);
 };
 
