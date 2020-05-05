@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "395c7fda_5d941cb0",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-05T15:46:24Z",
+      "side": 1,
+      "message": "I think `read_value_type` has already registered an error in this case, because `strict` defaulted to true. The error message is different though. How about you drop `strict` from `read_value_type` and handle error message generation at the call site?",
+      "range": {
+        "startLine": 355,
+        "startChar": 6,
+        "endLine": 355,
+        "endChar": 52
+      },
+      "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bd10585_3065fe53",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-05T15:46:24Z",
+      "side": 1,
+      "message": "nit: All comments should end with punctuation.\n\nThat said, you can also just drop this comment, as it only repeats what the next line of code says anyway.",
+      "range": {
+        "startLine": 369,
+        "startChar": 30,
+        "endLine": 369,
+        "endChar": 34
+      },
+      "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1a55c60_0ec42246",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-05T15:46:24Z",
+      "side": 1,
+      "message": "This too can be dropped: it\u0027s fairly obvious that \"read_value_type\" parses a value type.",
+      "range": {
+        "startLine": 374,
+        "startChar": 4,
+        "endLine": 374,
+        "endChar": 30
+      },
+      "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff5a7c1b_0355ce47",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-05T15:46:24Z",
+      "side": 1,
+      "message": "Whereas this is useful. It needs trailing punctuation though.",
+      "range": {
+        "startLine": 382,
+        "startChar": 7,
+        "endLine": 382,
+        "endChar": 43
+      },
+      "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceee68e3_83434aa6",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2049,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-05T15:46:24Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this use `this-\u003eenabled_`?",
+      "range": {
+        "startLine": 2049,
+        "startChar": 44,
+        "endLine": 2049,
+        "endChar": 63
+      },
+      "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
