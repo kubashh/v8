@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33173779_bfbe9b88",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-05-05T08:59:27Z",
+      "side": 1,
+      "message": "The red bots come from {location \u003d\u003d nullptr}. Before your CL there was some code in place which guaranteed that location !\u003d nullptr. I guess you have to restore that code.\n\nCould you add a DCHECK in CreateMessage to check that location !\u003d nullptr? (if possible)",
+      "range": {
+        "startLine": 1482,
+        "startChar": 65,
+        "endLine": 1482,
+        "endChar": 73
+      },
+      "revId": "3487e9d9330ae808c1cefbb9f3036e637aaf7355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
