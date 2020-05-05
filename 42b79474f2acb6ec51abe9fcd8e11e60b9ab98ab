@@ -233,6 +233,30 @@
       "revId": "42b79474f2acb6ec51abe9fcd8e11e60b9ab98ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcbb116b_4a84f097",
+        "filename": "tools/unittests/testdata/expected_test_results1.json",
+        "patchSetId": 36
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-05-05T12:10:18Z",
+      "side": 1,
+      "message": "Did you have time to check back on this one?",
+      "parentUuid": "c6417c52_468f105e",
+      "range": {
+        "startLine": 81,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 5
+      },
+      "revId": "42b79474f2acb6ec51abe9fcd8e11e60b9ab98ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
