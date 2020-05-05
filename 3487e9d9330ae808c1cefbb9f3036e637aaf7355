@@ -22,6 +22,30 @@
       "revId": "3487e9d9330ae808c1cefbb9f3036e637aaf7355",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f49b3c6_d6a68967",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-05-05T13:58:56Z",
+      "side": 1,
+      "message": "I can\u0027t add ComputeLocation to the new path because it happens when the exception is caught, not thrown. It has to use ComputeLocationFromException or CompiteLocationFromStackTrace, the latter of which fails on asmjs frames.",
+      "parentUuid": "33173779_bfbe9b88",
+      "range": {
+        "startLine": 1482,
+        "startChar": 65,
+        "endLine": 1482,
+        "endChar": 73
+      },
+      "revId": "3487e9d9330ae808c1cefbb9f3036e637aaf7355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
