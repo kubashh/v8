@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e01e06e_7025b9d5",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 40
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2020-05-05T14:54:11Z",
+      "side": 1,
+      "message": "this was the reason for the additional result :(",
+      "range": {
+        "startLine": 345,
+        "startChar": 4,
+        "endLine": 345,
+        "endChar": 8
+      },
+      "revId": "33f8f28099b8e2af29682697452aae4e1b13d206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
