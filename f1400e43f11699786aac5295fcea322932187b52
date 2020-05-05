@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99a8c7d3_801dff21",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2020-05-05T06:02:24Z",
+      "side": 1,
+      "message": "This compares a double to a size_t, which MSVC doesn\u0027t like. Failed trybot here: https://ci.chromium.org/p/pdfium/builders/try/win_xfa_msvc/9633",
+      "revId": "f1400e43f11699786aac5295fcea322932187b52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
