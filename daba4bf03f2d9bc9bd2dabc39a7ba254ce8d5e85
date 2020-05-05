@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7194b154_067efa60",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-05-05T12:52:33Z",
+      "side": 1,
+      "message": "Instead of includable_only, the triggered builder should get the two regexps. tandrii, is this possible? I wanted to check if there\u0027s a bug about this but couldn\u0027t find one.",
+      "range": {
+        "startLine": 406,
+        "startChar": 8,
+        "endLine": 407,
+        "endChar": 45
+      },
+      "revId": "daba4bf03f2d9bc9bd2dabc39a7ba254ce8d5e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
