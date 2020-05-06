@@ -34,6 +34,24 @@
       "revId": "f1400e43f11699786aac5295fcea322932187b52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "836c39be_fe4b9f98",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2020-05-06T09:26:38Z",
+      "side": 1,
+      "message": "Because V8 MSVC bots build in release mode, so no DCHECKs.",
+      "parentUuid": "02bbd16f_027e8e95",
+      "revId": "f1400e43f11699786aac5295fcea322932187b52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
