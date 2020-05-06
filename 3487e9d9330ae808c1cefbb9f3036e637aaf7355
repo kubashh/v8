@@ -70,6 +70,30 @@
       "revId": "3487e9d9330ae808c1cefbb9f3036e637aaf7355",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e545f09_ea89cb7d",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-05-06T15:37:26Z",
+      "side": 1,
+      "message": "I think I found a fix: in ComputeLocationFromStackTrace, we do a translation from assembly code offsets to source position table offsets in WasmCode::GetSourcePositionBefore. This translation is done for wasm code, but is missing for asm.js code, see https://cs.chromium.org/chromium/src/v8/src/execution/isolate.cc?l\u003d2111\u0026rcl\u003d6a91312c4fe4c3a4a75101318de7885d60b71e94. If you do it also for asm.js code, then it should fix the red bots.\n\n\u003e\u003e if (elements-\u003eIsWasmCompiledFrame(i) || elements-\u003eIsAsmJsWasmFrame(i)) {\n\nThis fixes all problems on my local machine.",
+      "parentUuid": "e92013bc_88f12f85",
+      "range": {
+        "startLine": 1482,
+        "startChar": 65,
+        "endLine": 1482,
+        "endChar": 73
+      },
+      "revId": "3487e9d9330ae808c1cefbb9f3036e637aaf7355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
