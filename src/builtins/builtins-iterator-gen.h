@@ -55,8 +55,7 @@ class IteratorBuiltinsAssembler : public CodeStubAssembler {
   // https://tc39.github.io/ecma262/#sec-iteratorclose
   void IteratorCloseOnException(TNode<Context> context,
                                 const IteratorRecord& iterator,
-                                Label* if_exception,
-                                TVariable<Object>* exception);
+                                Label* if_exception);
   void IteratorCloseOnException(TNode<Context> context,
                                 const IteratorRecord& iterator,
                                 TNode<Object> exception);

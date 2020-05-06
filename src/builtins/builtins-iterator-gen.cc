@@ -134,27 +134,29 @@ TNode<Object> IteratorBuiltinsAssembler::IteratorValue(
 }
 
 void IteratorBuiltinsAssembler::IteratorCloseOnException(
-    TNode<Context> context, const IteratorRecord& iterator, Label* if_exception,
-    TVariable<Object>* exception) {
+    TNode<Context> context, const IteratorRecord& iterator,
+    Label* if_exception) {
   // Perform ES #sec-iteratorclose when an exception occurs. This simpler
   // algorithm does not include redundant steps which are never reachable from
   // the spec IteratorClose algorithm.
-  DCHECK((if_exception != nullptr && exception != nullptr));
-  CSA_ASSERT(this, IsNotTheHole(exception->value()));
+  DCHECK(if_exception != nullptr);
   CSA_ASSERT(this, IsJSReceiver(iterator.object));
 
-  // Let return be ? GetMethod(iterator, "return").
+  // 4. Let innerResult be GetMethod(iterator, "return").
   TNode<Object> method;
   {
-    compiler::ScopedExceptionHandler handler(this, if_exception, exception);
+    // If an exception occurs, the original exception remains bound.
+    compiler::ScopedExceptionHandler handler(this, if_exception, nullptr);
     method = GetProperty(context, iterator.object, factory()->return_string());
   }
 
-  // If return is undefined, return Completion(completion).
+  // 5. If innerResult.[[Type]] is normal, then
+  //   a. Let return be innerResult.[[Value]].
+  //   b. If return is undefined, return Completion(completion).
   GotoIf(Word32Or(IsUndefined(method), IsNull(method)), if_exception);
 
   {
-    // Let innerResult be Call(return, iterator, « »).
+    // c. Set innerResult to Call(return, iterator).
     // If an exception occurs, the original exception remains bound.
     compiler::ScopedExceptionHandler handler(this, if_exception, nullptr);
     Call(context, method, iterator.object);
@@ -169,7 +171,7 @@ void IteratorBuiltinsAssembler::IteratorCloseOnException(
     TNode<Object> exception) {
   Label rethrow(this, Label::kDeferred);
   TVARIABLE(Object, exception_variable, exception);
-  IteratorCloseOnException(context, iterator, &rethrow, &exception_variable);
+  IteratorCloseOnException(context, iterator, &rethrow);
 
   BIND(&rethrow);
   CallRuntime(Runtime::kReThrow, context, exception_variable.value());

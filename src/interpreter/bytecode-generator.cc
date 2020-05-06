@@ -3562,25 +3562,26 @@ void BytecodeGenerator::BuildFinalizeIteration(
   builder()->LoadAccumulatorWithRegister(done).JumpIfTrue(
       ToBooleanMode::kConvertToBoolean, iterator_is_done.New());
 
-  //   method = iterator.return
-  //   if (method !== null && method !== undefined) {
-  Register method = register_allocator()->NewRegister();
-  builder()
-      ->LoadNamedProperty(iterator.object(),
-                          ast_string_constants()->return_string(),
-                          feedback_index(feedback_spec()->AddLoadICSlot()))
-      .StoreAccumulatorInRegister(method)
-      .JumpIfUndefinedOrNull(iterator_is_done.New());
-
   {
     RegisterAllocationScope register_scope(this);
     BuildTryCatch(
         // try {
-        //   if (typeof(method) !== "function") throw TypeError
-        //   let return_val = method.call(iterator)
-        //   if (!%IsObject(return_val)) throw TypeError
+        //   method = iterator.return
+        //   if (method !== null && method !== undefined) {
+        //     if (typeof(method) !== "function") throw TypeError
+        //     let return_val = method.call(iterator)
+        //     if (!%IsObject(return_val)) throw TypeError
+        //   }
         // }
         [&]() {
+          Register method = register_allocator()->NewRegister();
+          builder()
+              ->LoadNamedProperty(
+                  iterator.object(), ast_string_constants()->return_string(),
+                  feedback_index(feedback_spec()->AddLoadICSlot()))
+              .StoreAccumulatorInRegister(method)
+              .JumpIfUndefinedOrNull(iterator_is_done.New());
+
           BytecodeLabel if_callable;
           builder()
               ->CompareTypeOf(TestTypeOfFlags::LiteralFlag::kFunction)

@@ -168,10 +168,10 @@ bytecodes: [
                 B(Star), R(9),
                 B(Ldar), R(6),
                 B(JumpIfToBooleanTrue), U8(58),
+                B(Mov), R(context), R(11),
                 B(LdaNamedProperty), R(5), U8(10), U8(13),
-                B(Star), R(11),
-                B(JumpIfUndefinedOrNull), U8(50),
-                B(Mov), R(context), R(12),
+                B(Star), R(12),
+                B(JumpIfUndefinedOrNull), U8(47),
                 B(TestTypeOf), U8(6),
                 B(JumpIfTrue), U8(18),
                 B(Wide), B(LdaSmi), I16(159),
@@ -180,16 +180,16 @@ bytecodes: [
                 B(Star), R(14),
                 B(CallRuntime), U16(Runtime::kNewTypeError), R(13), U8(2),
                 B(Throw),
-                B(CallProperty0), R(11), R(5), U8(15),
+                B(CallProperty0), R(12), R(5), U8(15),
                 B(JumpIfJSReceiver), U8(21),
                 B(Star), R(13),
                 B(CallRuntime), U16(Runtime::kThrowIteratorResultNotAnObject), R(13), U8(1),
                 B(Jump), U8(12),
-                B(Star), R(12),
+                B(Star), R(11),
                 B(LdaZero),
                 B(TestReferenceEqual), R(7),
                 B(JumpIfTrue), U8(5),
-                B(Ldar), R(12),
+                B(Ldar), R(11),
                 B(ReThrow),
                 B(Ldar), R(9),
                 B(SetPendingMessage),
@@ -221,7 +221,7 @@ constant pool: [
 ]
 handlers: [
   [72, 155, 163],
-  [187, 220, 222],
+  [179, 220, 222],
 ]
 
 ---
