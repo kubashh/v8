@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c5ae9034_a7cb86e3",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-06T13:40:25Z",
+      "side": 1,
+      "message": "Good point. I think the errors for specific forbidden opcodes should remain though.",
+      "parentUuid": "395c7fda_5d941cb0",
+      "range": {
+        "startLine": 355,
+        "startChar": 6,
+        "endLine": 355,
+        "endChar": 52
+      },
+      "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7bd10585_3065fe53",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 11
@@ -45,6 +69,30 @@
       "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29e5101e_a3298db2",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-06T13:40:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bd10585_3065fe53",
+      "range": {
+        "startLine": 369,
+        "startChar": 30,
+        "endLine": 369,
+        "endChar": 34
+      },
+      "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "da76852d_54d669a4",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-06T13:40:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1a55c60_0ec42246",
+      "range": {
+        "startLine": 374,
+        "startChar": 4,
+        "endLine": 374,
+        "endChar": 30
+      },
+      "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff5a7c1b_0355ce47",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 11
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "b29edf59_86572eb9",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-06T13:40:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff5a7c1b_0355ce47",
+      "range": {
+        "startLine": 382,
+        "startChar": 7,
+        "endLine": 382,
+        "endChar": 43
+      },
+      "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ceee68e3_83434aa6",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 11
@@ -114,6 +210,30 @@
       "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88483d65_f87651f1",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2049,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-06T13:40:25Z",
+      "side": 1,
+      "message": "This is a static function. It may require refactoring, but I think we should leave it as is for now.",
+      "parentUuid": "ceee68e3_83434aa6",
+      "range": {
+        "startLine": 2049,
+        "startChar": 44,
+        "endLine": 2049,
+        "endChar": 63
+      },
+      "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
