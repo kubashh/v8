@@ -16,6 +16,24 @@
       "revId": "f1400e43f11699786aac5295fcea322932187b52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02bbd16f_027e8e95",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-05-06T08:49:22Z",
+      "side": 1,
+      "message": "I wrote a CL that I hope fixes it (https://chromium-review.googlesource.com/c/v8/v8/+/2182474), but I can\u0027t reproduce the problem on our MSVC bots.",
+      "parentUuid": "99a8c7d3_801dff21",
+      "revId": "f1400e43f11699786aac5295fcea322932187b52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
