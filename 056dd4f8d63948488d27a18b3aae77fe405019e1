@@ -234,6 +234,30 @@
       "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b226c1a4_a804df95",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2049,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-06T13:45:26Z",
+      "side": 1,
+      "message": "Given that it uses \"this\" on this same line and \"this-\u003epc_\" on the next, I doubt that it is static ;-)\nBut sure, we can fix that later.",
+      "parentUuid": "88483d65_f87651f1",
+      "range": {
+        "startLine": 2049,
+        "startChar": 44,
+        "endLine": 2049,
+        "endChar": 63
+      },
+      "revId": "056dd4f8d63948488d27a18b3aae77fe405019e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
