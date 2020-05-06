@@ -333,10 +333,7 @@ void BaseCollectionsAssembler::AddConstructorEntriesFromIterable(
     Goto(&loop);
   }
   BIND(&if_exception);
-  {
-    iterator_assembler.IteratorCloseOnException(context, iterator,
-                                                var_exception.value());
-  }
+  { IteratorCloseOnException(context, iterator, var_exception.value()); }
   BIND(&exit);
 }
 
