@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "805a5bfe_b98ec4f8",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-05-06T21:35:45Z",
+      "side": 1,
+      "message": "Done. CSA implementations removed completely.",
+      "parentUuid": "a8bb9346_1d7fc5e8",
+      "range": {
+        "startLine": 173,
+        "startChar": 2,
+        "endLine": 173,
+        "endChar": 51
+      },
+      "revId": "091b87f39cc4771a2a5d3bfcc13bcf17ddb18046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ca50e27_bee31854",
         "filename": "src/builtins/iterator.tq",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9308ff72_e20f0bb6",
+        "filename": "src/builtins/iterator.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-05-06T21:35:45Z",
+      "side": 1,
+      "message": "Done.\n\nGood eye, we can remove a lot of stuff. I also simplified this macro to not take a label anymore, since basically the label is unconditional and the \"if method is undefined\" case is just an early return.",
+      "parentUuid": "9ca50e27_bee31854",
+      "range": {
+        "startLine": 85,
+        "startChar": 8,
+        "endLine": 85,
+        "endChar": 32
+      },
+      "revId": "091b87f39cc4771a2a5d3bfcc13bcf17ddb18046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bccb0f52_05702d13",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "091b87f39cc4771a2a5d3bfcc13bcf17ddb18046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdd493cd_515392e2",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3603,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-05-06T21:35:45Z",
+      "side": 1,
+      "message": "Done.\n\nGreat eye. Smaller bytecode, and keeps my total clstats at net negative lines of code. :)",
+      "parentUuid": "bccb0f52_05702d13",
+      "range": {
+        "startLine": 3583,
+        "startChar": 0,
+        "endLine": 3603,
+        "endChar": 40
+      },
+      "revId": "091b87f39cc4771a2a5d3bfcc13bcf17ddb18046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
