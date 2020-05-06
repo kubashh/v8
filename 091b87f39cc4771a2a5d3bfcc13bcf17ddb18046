@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8bb9346_1d7fc5e8",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-05-06T09:58:19Z",
+      "side": 1,
+      "message": "we can get rid of this variable now, and pass |exception| directly to ReThrow",
+      "range": {
+        "startLine": 173,
+        "startChar": 2,
+        "endLine": 173,
+        "endChar": 51
+      },
+      "revId": "091b87f39cc4771a2a5d3bfcc13bcf17ddb18046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ca50e27_bee31854",
+        "filename": "src/builtins/iterator.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-05-06T09:58:19Z",
+      "side": 1,
+      "message": "having both this and the above seems unnecessary. Could we try using just the torque version, and exposing it to c++ with @export?",
+      "range": {
+        "startLine": 85,
+        "startChar": 8,
+        "endLine": 85,
+        "endChar": 32
+      },
+      "revId": "091b87f39cc4771a2a5d3bfcc13bcf17ddb18046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bccb0f52_05702d13",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3603,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-05-06T09:58:19Z",
+      "side": 1,
+      "message": "I think we can get rid of all of this now, since CallProperty does these checks.",
+      "range": {
+        "startLine": 3583,
+        "startChar": 0,
+        "endLine": 3603,
+        "endChar": 40
+      },
+      "revId": "091b87f39cc4771a2a5d3bfcc13bcf17ddb18046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
