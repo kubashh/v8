@@ -36,6 +36,7 @@ MaybeHandle<Object> ContextDeserializer::Deserialize(
   }
 
   AddAttachedObject(global_proxy);
+  AddAttachedObject(handle(global_proxy->map(), isolate));
 
   Handle<Object> result;
   {
