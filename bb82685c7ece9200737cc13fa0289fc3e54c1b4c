@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8b174b0_24042f5e",
+        "filename": "src/snapshot/context-deserializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-06T10:05:48Z",
+      "side": 1,
+      "message": "The problem was that we replaced references to the GP, but this doesn\u0027t work when objects hanging off the GP (like its map) are referenced without referencing the GP itself. Can you think of other cases besides the map?",
+      "revId": "bb82685c7ece9200737cc13fa0289fc3e54c1b4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
