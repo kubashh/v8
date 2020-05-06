@@ -94,6 +94,30 @@
       "revId": "3487e9d9330ae808c1cefbb9f3036e637aaf7355",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f11bf279_e810f47a",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-05-06T19:37:41Z",
+      "side": 1,
+      "message": "Thank you very much!",
+      "parentUuid": "3e545f09_ea89cb7d",
+      "range": {
+        "startLine": 1482,
+        "startChar": 65,
+        "endLine": 1482,
+        "endChar": 73
+      },
+      "revId": "3487e9d9330ae808c1cefbb9f3036e637aaf7355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
