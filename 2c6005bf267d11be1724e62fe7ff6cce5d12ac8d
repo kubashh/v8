@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0a1c84eb_b4cc37a4",
+        "filename": "src/codegen/arm64/assembler-arm64-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-05-07T20:24:47Z",
+      "side": 1,
+      "message": "On x64 we are doing a CHECK (https://cs.chromium.org/chromium/src/v8/src/codegen/x64/assembler-x64-inl.h?l\u003d314\u0026rcl\u003da3433d822f603cc0642c0a84bf291b0f90a3c493), so I copied that. I think it should be fine either way but whatever we do, I\u0027d do the same on both archs.\n\nDo you have a preference of DCHECK or CHECK?",
+      "parentUuid": "3b727399_d90c89e0",
+      "range": {
+        "startLine": 663,
+        "startChar": 4,
+        "endLine": 663,
+        "endChar": 9
+      },
+      "revId": "2c6005bf267d11be1724e62fe7ff6cce5d12ac8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e3705a04_9bf795b9",
         "filename": "src/heap/remembered-set-inl.h",
         "patchSetId": 4
