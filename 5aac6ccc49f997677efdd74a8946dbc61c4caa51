@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "cba0442b_3f4a8632",
+        "filename": "include/cppgc/custom-space.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-05-07T21:20:53Z",
+      "side": 1,
+      "message": "Ack\nShould CustomSpaceBase be in the internal namespace to discourage users from inheriting from it directly?",
+      "parentUuid": "b96611f8_9448e3b2",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 17
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55acf980_1b0089c3",
         "filename": "include/cppgc/heap.h",
         "patchSetId": 10
@@ -234,6 +258,30 @@
       "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ba3749f_1171f986",
+        "filename": "include/cppgc/heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-05-07T21:20:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9baa5e26_0bbdab31",
+      "range": {
+        "startLine": 44,
+        "startChar": 21,
+        "endLine": 44,
+        "endChar": 31
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
