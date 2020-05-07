@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd62b247_a52c1c13",
+        "filename": "src/parsing/preparse-data.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-05-07T12:10:55Z",
+      "side": 1,
+      "message": "Is there a difference to just not declaring the destructor?",
+      "revId": "be77c635839965cb3cbed7af6c95a93da726a057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
