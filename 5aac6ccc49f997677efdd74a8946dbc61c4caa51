@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "dde407da_fb72488c",
+        "filename": "include/cppgc/custom-space.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-07T21:26:05Z",
+      "side": 1,
+      "message": "Had it internal but it didn\u0027t match HeapOptions which are public.",
+      "parentUuid": "cba0442b_3f4a8632",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 17
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55acf980_1b0089c3",
         "filename": "include/cppgc/heap.h",
         "patchSetId": 10
