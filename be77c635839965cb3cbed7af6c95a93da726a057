@@ -34,6 +34,24 @@
       "revId": "be77c635839965cb3cbed7af6c95a93da726a057",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c47cae39_6edb0cde",
+        "filename": "src/parsing/preparse-data.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-05-07T17:04:09Z",
+      "side": 1,
+      "message": "Yes, if this is just the default destructor, I see no value in declaring it.",
+      "parentUuid": "13842f90_8924bffb",
+      "revId": "be77c635839965cb3cbed7af6c95a93da726a057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
