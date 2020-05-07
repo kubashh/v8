@@ -16,8 +16,8 @@
 
 namespace cppgc {
 
-std::unique_ptr<Heap> Heap::Create() {
-  return std::make_unique<internal::Heap>();
+std::unique_ptr<Heap> Heap::Create(cppgc::Heap::HeapOptions options) {
+  return std::make_unique<internal::Heap>(options.custom_spaces);
 }
 
 void Heap::ForceGarbageCollectionSlow(const char* source, const char* reason,
@@ -89,8 +89,8 @@ class StackMarker final : public StackVisitor {
   const std::vector<HeapObjectHeader*>& objects_;
 };
 
-Heap::Heap()
-    : raw_heap_(this),
+Heap::Heap(size_t custom_spaces)
+    : raw_heap_(this, custom_spaces),
       page_backend_(std::make_unique<PageBackend>(&system_allocator_)),
       object_allocator_(&raw_heap_),
       sweeper_(&raw_heap_),
