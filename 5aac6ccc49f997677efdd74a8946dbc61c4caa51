@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "422b8eed_e518203a",
+        "filename": "include/cppgc/allocation.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-07T20:39:12Z",
+      "side": 1,
+      "message": "\u003e Nit1: we need names for parameters of basic types since the name cannot be inferred from the type.\n\nDone\n\n\u003e Nit2: instead of using size_t, can we use an alias CustomSpaceIndex?\n\nDone\n\n\u003e Nit3: can this function be called Allocate as well since it has a different signature.\n\nDone",
+      "parentUuid": "bfba74c6_2edb4e3f",
+      "range": {
+        "startLine": 40,
+        "startChar": 59,
+        "endLine": 40,
+        "endChar": 73
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75828609_d1343c95",
         "filename": "include/cppgc/custom-space.h",
         "patchSetId": 10
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "539ce286_3d80e3b7",
+        "filename": "include/cppgc/custom-space.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-07T20:39:12Z",
+      "side": 1,
+      "message": "Done: I added it to CustomSpace below though.",
+      "parentUuid": "75828609_d1343c95",
+      "range": {
+        "startLine": 14,
+        "startChar": 3,
+        "endLine": 14,
+        "endChar": 8
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34eea9b2_a670275d",
         "filename": "include/cppgc/custom-space.h",
         "patchSetId": 10
@@ -59,6 +107,30 @@
       "writtenOn": "2020-05-07T16:16:09Z",
       "side": 1,
       "message": "Can we merge CustomSpace and CustomSpaceBase?\nThe spaces you create in the tests inherit from CustomSpace so I think having a separate CustomSpaceBase is not necessarily needed. The implementation here for GetCustomSpaceIndex can be a default implementation and inheriting types either override it or define kSpaceIndex.",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 17
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b96611f8_9448e3b2",
+        "filename": "include/cppgc/custom-space.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-07T20:39:12Z",
+      "side": 1,
+      "message": "We want:\n- Pass the space to Heap to verify that indices form a sequence. We want this as it\u0027s too error prone to mingle with raw indices that are not checked anywhere.\n- In order to pass the custom spaces to Heap we need a general base type which CRTP does not allow.\n- Without CRTP we cannot delegate GetCustomSpaceIndex to the constexpr constant.\n- We want to use the constexpr constant for allocation and avoid a runtime call there.\n\nI\u0027d be happy to merge and remove if you provide a pattern that solves all these things.",
+      "parentUuid": "34eea9b2_a670275d",
       "range": {
         "startLine": 26,
         "startChar": 6,
@@ -117,6 +189,54 @@
     },
     {
       "key": {
+        "uuid": "a4dff59e_cafaf1b2",
+        "filename": "include/cppgc/heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-07T20:39:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55acf980_1b0089c3",
+      "range": {
+        "startLine": 44,
+        "startChar": 50,
+        "endLine": 44,
+        "endChar": 63
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9baa5e26_0bbdab31",
+        "filename": "include/cppgc/heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-07T20:39:12Z",
+      "side": 1,
+      "message": "unique_ptr here is indeed suboptimal as it requires std::move.\n\nWe should use unique_ptr though when we may want to keep things around longer to make ownership clear. The idea was that CustomSpaceBase could hold more interesting data (e.g. a name) which would mean that we want to keep it somewhere alive from Heap.",
+      "parentUuid": "ce3f243c_19504f7b",
+      "range": {
+        "startLine": 44,
+        "startChar": 21,
+        "endLine": 44,
+        "endChar": 31
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bc14671f_8ccaac8a",
         "filename": "src/heap/cppgc/raw-heap.h",
         "patchSetId": 10
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "939aa353_1028b4fd",
+        "filename": "src/heap/cppgc/raw-heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-07T20:39:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc14671f_8ccaac8a",
+      "range": {
+        "startLine": 77,
+        "startChar": 25,
+        "endLine": 77,
+        "endChar": 44
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "309243ce_926bb53c",
         "filename": "test/unittests/heap/cppgc/custom-spaces_unittest.cc",
         "patchSetId": 10
@@ -160,6 +304,30 @@
       "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b187d4dd_7ad7efce",
+        "filename": "test/unittests/heap/cppgc/custom-spaces_unittest.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-07T20:39:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "309243ce_926bb53c",
+      "range": {
+        "startLine": 40,
+        "startChar": 39,
+        "endLine": 40,
+        "endChar": 51
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
