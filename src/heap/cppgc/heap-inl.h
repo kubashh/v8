@@ -20,6 +20,15 @@ void* Heap::Allocate(size_t size, GCInfoIndex index) {
   return result;
 }
 
+void* Heap::AllocateWithCustomSpacePolicy(size_t custom_space, size_t size,
+                                          GCInfoIndex index) {
+  DCHECK(is_allocation_allowed());
+  void* result = object_allocator_.AllocateObjectWithCustomSpacePolicy(
+      custom_space, size, index);
+  objects_.push_back(&HeapObjectHeader::FromPayload(result));
+  return result;
+}
+
 }  // namespace internal
 }  // namespace cppgc
 
