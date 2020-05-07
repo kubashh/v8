@@ -391,18 +391,6 @@ void WasmFloat64ToNumberDescriptor::InitializePlatformSpecific(
 }
 #endif  // !V8_TARGET_ARCH_IA32
 
-void WasmTableInitDescriptor::InitializePlatformSpecific(
-    CallInterfaceDescriptorData* data) {
-  DefaultInitializePlatformSpecific(data,
-                                    kParameterCount - kStackArgumentsCount);
-}
-
-void WasmTableCopyDescriptor::InitializePlatformSpecific(
-    CallInterfaceDescriptorData* data) {
-  DefaultInitializePlatformSpecific(data,
-                                    kParameterCount - kStackArgumentsCount);
-}
-
 void WasmAtomicNotifyDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   DefaultInitializePlatformSpecific(data, kParameterCount);

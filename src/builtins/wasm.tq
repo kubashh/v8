@@ -7,6 +7,10 @@
 namespace runtime {
   extern runtime WasmMemoryGrow(Context, WasmInstanceObject, Smi): Smi;
   extern runtime WasmRefFunc(Context, WasmInstanceObject, Smi): JSAny;
+  extern runtime WasmTableInit(
+      Context, WasmInstanceObject, Object, Object, Smi, Smi, Smi): JSAny;
+  extern runtime WasmTableCopy(
+      Context, WasmInstanceObject, Object, Object, Smi, Smi, Smi): JSAny;
   extern runtime WasmFunctionTableGet(Context, WasmInstanceObject, Smi, Smi):
       JSAny;
   extern runtime WasmFunctionTableSet(
@@ -34,6 +38,8 @@ namespace wasm {
       WasmInstanceObject): FixedArray;
   extern macro WasmBuiltinsAssembler::LoadExternalFunctionsFromInstance(
       WasmInstanceObject): FixedArray;
+  extern macro WasmBuiltinsAssembler::SmiFromUint32WithSaturation(
+      uint32, constexpr uint32): Smi;
 
   macro LoadContextFromFrame(): NativeContext {
     return LoadContextFromInstance(LoadInstanceFromFrame());
@@ -60,6 +66,42 @@ namespace wasm {
     const result: Smi =
         runtime::WasmMemoryGrow(context, instance, SmiFromInt32(numPages));
     return SmiToInt32(result);
+  }
+
+  const kTableSizeCap:
+      constexpr uint32 generates 'wasm::kV8MaxWasmTableSize + 1';
+
+  builtin WasmTableInit(
+      dstRaw: uint32, srcRaw: uint32, sizeRaw: uint32, tableIndexRaw: Number,
+      segmentIndexRaw: Number): JSAny {
+    const instance: WasmInstanceObject = LoadInstanceFromFrame();
+    // We cap {dst}, {src}, and {size} by kTableSizeCap to make sure that the
+    // values fit into a Smi.
+    const dst: Smi = SmiFromUint32WithSaturation(dstRaw, kTableSizeCap);
+    const src: Smi = SmiFromUint32WithSaturation(srcRaw, kTableSizeCap);
+    const size: Smi = SmiFromUint32WithSaturation(sizeRaw, kTableSizeCap);
+    const tableIndex: Smi = SmiFromUint32(ChangeNumberToUint32(tableIndexRaw));
+    const segmentIndex: Smi =
+        SmiFromUint32(ChangeNumberToUint32(segmentIndexRaw));
+    tail runtime::WasmTableInit(
+        LoadContextFromInstance(instance), instance, tableIndex, segmentIndex,
+        dst, src, size);
+  }
+
+  builtin WasmTableCopy(
+      dstRaw: uint32, srcRaw: uint32, sizeRaw: uint32, dstTableRaw: Number,
+      srcTableRaw: Number): JSAny {
+    const instance: WasmInstanceObject = LoadInstanceFromFrame();
+    // We cap {dst}, {src}, and {size} by kTableSizeCap to make sure that the
+    // values fit into a Smi.
+    const dst: Smi = SmiFromUint32WithSaturation(dstRaw, kTableSizeCap);
+    const src: Smi = SmiFromUint32WithSaturation(srcRaw, kTableSizeCap);
+    const size: Smi = SmiFromUint32WithSaturation(sizeRaw, kTableSizeCap);
+    const dstTable: Smi = SmiFromUint32(ChangeNumberToUint32(dstTableRaw));
+    const srcTable: Smi = SmiFromUint32(ChangeNumberToUint32(srcTableRaw));
+    tail runtime::WasmTableCopy(
+        LoadContextFromInstance(instance), instance, dstTable, srcTable, dst,
+        src, size);
   }
 
   builtin WasmTableGet(tableIndex: intptr, index: int32): Object {
