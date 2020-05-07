@@ -14,29 +14,31 @@ namespace internal {
 class Heap;
 }  // namespace internal
 
+template <size_t>
+struct CustomSpaceTrait {
+  // TODO(chromium:1056170): Provide kIsCompactable to specify whether a custom
+  // space should be compacted. Such spaces must adhere to specific rules.
+};
+
 class V8_EXPORT Heap {
  public:
-  // Normal spaces are used to store objects of different size classes:
-  // - kNormal1:  < 32 bytes
-  // - kNormal2:  < 64 bytes
-  // - kNormal3:  < 128 bytes
-  // - kNormal4: >= 128 bytes
-  // Objects of size greater than 2^16 get stored in the large space. Users can
-  // register up to 4 arenas for application specific needs.
-  enum class SpaceType {
-    kNormal1,
-    kNormal2,
-    kNormal3,
-    kNormal4,
-    kLarge,
-    kUserDefined1,
-    kUserDefined2,
-    kUserDefined3,
-    kUserDefined4,
+  /**
+   * Specifies where objects are allocated. Regular users should not touch the
+   * policy. Advanced users may specify the policy to encapsulate objects
+   * into their own spaces.
+   */
+  enum class SpacePolicy : uint8_t {
+    /**
+     * Default policy: The garabge collector figures out placement in spaces.
+     */
+    kDefault,
+    /**
+     * Custom policy: Used together with CustomSpaceTrait and SpacePolicyTrait
+     * to specify the space objects are allocated on and how to treat those
+     * spaces.
+     */
+    kCustom,
   };
-
-  static constexpr size_t kMaxNumberOfSpaces =
-      static_cast<size_t>(SpaceType::kUserDefined4) + 1;
 
   /**
    * Specifies the stack state the embedder is in.
@@ -58,7 +60,13 @@ class V8_EXPORT Heap {
     kNonEmpty,
   };
 
-  static std::unique_ptr<Heap> Create();
+  struct HeapOptions {
+    static HeapOptions Default() { return {0}; }
+
+    size_t custom_spaces = 0;
+  };
+
+  static std::unique_ptr<Heap> Create(HeapOptions = HeapOptions::Default());
 
   virtual ~Heap() = default;
 
