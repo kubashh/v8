@@ -164,6 +164,30 @@
       "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9e834f8_d166f6cd",
+        "filename": "src/heap/remembered-set-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2020-05-07T22:56:14Z",
+      "side": 0,
+      "message": "Constant pool entries is pointer size (64 bit) regardless what type the slot is, and the access of constant pool (by generated code) is always loading the full 64 bit value, so accessing half the slot will cause endianess issue. However, I am not sure how/why the type has to be compressed at this point.",
+      "parentUuid": "3501fb39_ea9ecb42",
+      "range": {
+        "startLine": 321,
+        "startChar": 34,
+        "endLine": 321,
+        "endChar": 55
+      },
+      "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
