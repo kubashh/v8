@@ -4939,7 +4939,7 @@ Node* WasmGraphBuilder::TableInit(uint32_t table_index,
                                   Node* src, Node* size,
                                   wasm::WasmCodePosition position) {
   auto call_descriptor = GetBuiltinCallDescriptor<WasmTableInitDescriptor>(
-      this, StubCallMode::kCallWasmRuntimeStub);
+      this, StubCallMode::kCallBuiltinPointer);
 
   intptr_t target = wasm::WasmCode::kWasmTableInit;
   Node* call_target =
@@ -4973,7 +4973,7 @@ Node* WasmGraphBuilder::TableCopy(uint32_t table_dst_index,
                                   Node* src, Node* size,
                                   wasm::WasmCodePosition position) {
   auto call_descriptor = GetBuiltinCallDescriptor<WasmTableCopyDescriptor>(
-      this, StubCallMode::kCallWasmRuntimeStub);
+      this, StubCallMode::kCallBuiltinPointer);
 
   intptr_t target = wasm::WasmCode::kWasmTableCopy;
   Node* call_target =
