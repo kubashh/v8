@@ -22,5 +22,13 @@ void* MakeGarbageCollectedTraitInternal::Allocate(cppgc::Heap* heap,
   return Heap::From(heap)->Allocate(size, index);
 }
 
+// static
+void* MakeGarbageCollectedTraitInternal::AllocateWithCustomSpacePolicy(
+    cppgc::Heap* heap, size_t custom_space, size_t size, GCInfoIndex index) {
+  DCHECK_NOT_NULL(heap);
+  return Heap::From(heap)->AllocateWithCustomSpacePolicy(custom_space, size,
+                                                         index);
+}
+
 }  // namespace internal
 }  // namespace cppgc
