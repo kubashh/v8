@@ -187,6 +187,7 @@ class WasmGraphBuilder {
   Node* EffectPhi(unsigned count, Node** effects_and_control);
   Node* RefNull();
   Node* RefFunc(uint32_t function_index);
+  Node* RefAsNonNull(Node* arg, wasm::WasmCodePosition position);
   Node* Uint32Constant(uint32_t value);
   Node* Int32Constant(int32_t value);
   Node* Int64Constant(int64_t value);

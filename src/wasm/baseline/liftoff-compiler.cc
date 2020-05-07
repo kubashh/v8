@@ -1513,6 +1513,10 @@ class LiftoffCompiler {
     unsupported(decoder, kAnyRef, "func");
   }
 
+  void RefAsNonNull(FullDecoder* decoder, const Value& arg, Value* result) {
+    unsupported(decoder, kAnyRef, "ref.as_non_null");
+  }
+
   void Drop(FullDecoder* decoder, const Value& value) {
     auto& slot = __ cache_state()->stack_state.back();
     // If the dropped slot contains a register, decrement it's use count.

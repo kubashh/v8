@@ -834,6 +834,7 @@ enum class LoadTransformationKind : uint8_t {
   F(F64Const, Value* result, double value)                                    \
   F(RefNull, Value* result)                                                   \
   F(RefFunc, uint32_t function_index, Value* result)                          \
+  F(RefAsNonNull, Value& arg, Value* result)                                  \
   F(Drop, const Value& value)                                                 \
   F(DoReturn, Vector<Value> values)                                           \
   F(LocalGet, Value* result, const LocalIndexImmediate<validate>& imm)        \
@@ -2207,6 +2208,32 @@ class WasmFullDecoder : public WasmDecoder<validate> {
           auto* value = Push(kWasmFuncRef);
           CALL_INTERFACE_IF_REACHABLE(RefFunc, imm.index, value);
           len = 1 + imm.length;
+          break;
+        }
+        case kExprRefAsNonNull: {
+          CHECK_PROTOTYPE_OPCODE(anyref);
+          auto value = Pop();
+          switch (value.type.kind()) {
+            case ValueType::kOptRef:
+            case ValueType::kRef: {
+              auto* result =
+                  Push(ValueType(ValueType::kRef, value.type.ref_index()));
+              // TODO(7748): optimize this for non-null refs
+              CALL_INTERFACE_IF_REACHABLE(RefAsNonNull, value, result);
+              len = 1;
+              break;
+            }
+            case ValueType::kNullRef:
+              // TODO(7748): Fix this once the standard clears up (see
+              // https://github.com/WebAssembly/function-references/issues/21).
+              CALL_INTERFACE_IF_REACHABLE(Unreachable);
+              EndControl();
+              break;
+            default:
+              this->error(this->pc_ + 1,
+                          "invalid agrument type to ref.as_non_null");
+              break;
+          }
           break;
         }
         case kExprLocalGet: {

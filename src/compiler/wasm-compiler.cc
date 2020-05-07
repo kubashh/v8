@@ -299,6 +299,13 @@ Node* WasmGraphBuilder::RefFunc(uint32_t function_index) {
                        Uint32Constant(function_index), effect(), control()));
 }
 
+Node* WasmGraphBuilder::RefAsNonNull(Node* arg,
+                                     wasm::WasmCodePosition position) {
+  TrapIfTrue(wasm::kTrapIllegalCast, gasm_->WordEqual(arg, RefNull()),
+             position);
+  return arg;
+}
+
 Node* WasmGraphBuilder::NoContextConstant() {
   return mcgraph()->IntPtrConstant(0);
 }
