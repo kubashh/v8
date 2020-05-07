@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3705a04_9bf795b9",
+        "filename": "src/heap/remembered-set-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-05-07T17:42:43Z",
+      "side": 1,
+      "message": "It is a *Compressed* object slot, store the uncompressed value",
+      "range": {
+        "startLine": 325,
+        "startChar": 22,
+        "endLine": 325,
+        "endChar": 55
+      },
+      "revId": "2c6005bf267d11be1724e62fe7ff6cce5d12ac8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

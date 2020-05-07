@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "385ffeb2_9dbf25d3",
+        "filename": "src/heap/remembered-set-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-05-07T17:42:43Z",
+      "side": 0,
+      "message": "Moving comments to patchset 4 and marking as resolved.",
+      "parentUuid": "36a9d54e_60f959cf",
+      "range": {
+        "startLine": 321,
+        "startChar": 34,
+        "endLine": 321,
+        "endChar": 55
+      },
+      "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84a83331_cfcb4a41",
         "filename": "src/heap/remembered-set-inl.h",
         "patchSetId": 1
@@ -45,6 +69,53 @@
       "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d78f868c_e5f17bb7",
+        "filename": "src/heap/remembered-set-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-05-07T17:42:43Z",
+      "side": 0,
+      "message": "Moving comments to patchset 4 and marking as resolved.",
+      "parentUuid": "84a83331_cfcb4a41",
+      "range": {
+        "startLine": 326,
+        "startChar": 10,
+        "endLine": 326,
+        "endChar": 57
+      },
+      "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9d96d62_6a4d245d",
+        "filename": "src/heap/remembered-set-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-05-07T17:42:43Z",
+      "side": 0,
+      "message": "There is no point of casting to Address if we are going to be casting to Tagged_t anyway",
+      "range": {
+        "startLine": 321,
+        "startChar": 34,
+        "endLine": 321,
+        "endChar": 55
+      },
+      "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
