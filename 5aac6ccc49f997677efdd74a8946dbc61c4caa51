@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfba74c6_2edb4e3f",
+        "filename": "include/cppgc/allocation.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-05-07T15:25:54Z",
+      "side": 1,
+      "message": "Nit1: we need names for parameters of basic types since the name cannot be inferred from the type.\n\nNit2: instead of using size_t, can we use an alias CustomSpaceIndex?\n\nNit3: can this function be called Allocate as well since it has a different signature.",
+      "range": {
+        "startLine": 40,
+        "startChar": 59,
+        "endLine": 40,
+        "endChar": 73
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75828609_d1343c95",
+        "filename": "include/cppgc/custom-space.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-05-07T15:25:54Z",
+      "side": 1,
+      "message": "Maybe also add that they should define a unique kSpaceIndex",
+      "range": {
+        "startLine": 14,
+        "startChar": 3,
+        "endLine": 14,
+        "endChar": 8
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55acf980_1b0089c3",
+        "filename": "include/cppgc/heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-05-07T15:25:54Z",
+      "side": 1,
+      "message": "Nit: state the expected requirements for the custom spaces.",
+      "range": {
+        "startLine": 44,
+        "startChar": 50,
+        "endLine": 44,
+        "endChar": 63
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc14671f_8ccaac8a",
+        "filename": "src/heap/cppgc/raw-heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-05-07T15:25:54Z",
+      "side": 1,
+      "message": "Seems redundant.",
+      "range": {
+        "startLine": 77,
+        "startChar": 25,
+        "endLine": 77,
+        "endChar": 44
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
