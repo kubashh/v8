@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "92644156_77ba39df",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-05-07T19:35:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db509442_a01622a2",
+      "range": {
+        "startLine": 336,
+        "startChar": 2,
+        "endLine": 336,
+        "endChar": 4
+      },
+      "revId": "2f5361359fd84375ca29720b8161caf1e8e6bc30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f80b4f8_e679289c",
         "filename": "src/builtins/iterator.tq",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "2f5361359fd84375ca29720b8161caf1e8e6bc30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "172e471d_e91bf359",
+        "filename": "src/builtins/iterator.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-05-07T19:35:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f80b4f8_e679289c",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 3
+      },
+      "revId": "2f5361359fd84375ca29720b8161caf1e8e6bc30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a7cfc4ff_bc0f031b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3544,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-05-07T19:35:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df1d6e03_85e9b7b9",
+      "range": {
+        "startLine": 3541,
+        "startChar": 5,
+        "endLine": 3544,
+        "endChar": 59
+      },
+      "revId": "2f5361359fd84375ca29720b8161caf1e8e6bc30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76371cb5_a53738ce",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "a0d72fb8_f0963daf",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3571,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-05-07T19:35:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76371cb5_a53738ce",
+      "range": {
+        "startLine": 3571,
+        "startChar": 15,
+        "endLine": 3571,
+        "endChar": 65
+      },
+      "revId": "2f5361359fd84375ca29720b8161caf1e8e6bc30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfafed6a_fc3d70d1",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 3
@@ -114,6 +210,30 @@
       "revId": "2f5361359fd84375ca29720b8161caf1e8e6bc30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9388dba_f637366a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3582,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-05-07T19:35:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfafed6a_fc3d70d1",
+      "range": {
+        "startLine": 3582,
+        "startChar": 14,
+        "endLine": 3582,
+        "endChar": 49
+      },
+      "revId": "2f5361359fd84375ca29720b8161caf1e8e6bc30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
