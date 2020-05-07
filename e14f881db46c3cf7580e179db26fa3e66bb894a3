@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39811df6_a7017b97",
+        "filename": "src/heap/cppgc/allocation.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-07T12:43:10Z",
+      "side": 1,
+      "message": "In Blink everything is templatized on GarbageCollected\u003c\u003e and we call the right heap methods from there. I am creating a similar fast path by avoiding the branch for custom spaces for regular objects by creating to allocation entrypoints here.",
+      "range": {
+        "startLine": 26,
+        "startChar": 41,
+        "endLine": 26,
+        "endChar": 70
+      },
+      "revId": "e14f881db46c3cf7580e179db26fa3e66bb894a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
