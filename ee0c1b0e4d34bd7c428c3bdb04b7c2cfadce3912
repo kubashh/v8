@@ -140,6 +140,30 @@
       "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3501fb39_ea9ecb42",
+        "filename": "src/heap/remembered-set-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-05-07T22:13:15Z",
+      "side": 0,
+      "message": "If the entries are full 64bit on PPC then they should be marked as FULL_OBJECT_SLOT instead of compressed shouldn\u0027t they?",
+      "parentUuid": "b2b014d2_cf6ee6dc",
+      "range": {
+        "startLine": 321,
+        "startChar": 34,
+        "endLine": 321,
+        "endChar": 55
+      },
+      "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
