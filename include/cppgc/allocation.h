@@ -6,8 +6,10 @@
 #define INCLUDE_CPPGC_ALLOCATION_H_
 
 #include <stdint.h>
+
 #include <atomic>
 
+#include "cppgc/custom-space.h"
 #include "cppgc/garbage-collected.h"
 #include "cppgc/heap.h"
 #include "cppgc/internal/api-constants.h"
@@ -34,7 +36,9 @@ class V8_EXPORT MakeGarbageCollectedTraitInternal {
     atomic_mutable_bitfield->store(value, std::memory_order_release);
   }
 
-  static void* Allocate(cppgc::Heap* heap, size_t size, GCInfoIndex index);
+  static void* Allocate(cppgc::Heap*, size_t, GCInfoIndex);
+  static void* AllocateWithCustomSpacePolicy(cppgc::Heap*, size_t, size_t,
+                                             GCInfoIndex);
 
   friend class HeapObjectHeader;
 };
@@ -51,6 +55,27 @@ class V8_EXPORT MakeGarbageCollectedTraitInternal {
 template <typename T>
 class MakeGarbageCollectedTraitBase
     : private internal::MakeGarbageCollectedTraitInternal {
+ private:
+  template <typename U, typename CustomSpace>
+  struct SpacePolicy {
+    static void* Allocate(Heap* heap, size_t size) {
+      // Custom space.
+      static_assert(std::is_base_of<CustomSpaceBase, CustomSpace>::value,
+                    "Custom space must inherit from CustomSpaceBase.");
+      return AllocateWithCustomSpacePolicy(heap, CustomSpace::kSpaceIndex, size,
+                                           internal::GCInfoTrait<T>::Index());
+    }
+  };
+
+  template <typename U>
+  struct SpacePolicy<U, void> {
+    static void* Allocate(Heap* heap, size_t size) {
+      // Default space.
+      return internal::MakeGarbageCollectedTraitInternal::Allocate(
+          heap, size, internal::GCInfoTrait<T>::Index());
+    }
+  };
+
  protected:
   /**
    * Allocates memory for an object of type T.
@@ -60,10 +85,7 @@ class MakeGarbageCollectedTraitBase
    * \returns the memory to construct an object of type T on.
    */
   static void* Allocate(Heap* heap, size_t size) {
-    // TODO(chromium:1056170): Allow specifying arena for specific embedder
-    // uses.
-    return internal::MakeGarbageCollectedTraitInternal::Allocate(
-        heap, size, internal::GCInfoTrait<T>::Index());
+    return SpacePolicy<T, typename SpaceTrait<T>::Space>::Allocate(heap, size);
   }
 
   /**

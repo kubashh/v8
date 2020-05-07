@@ -6,7 +6,9 @@
 #define INCLUDE_CPPGC_HEAP_H_
 
 #include <memory>
+#include <vector>
 
+#include "cppgc/custom-space.h"
 #include "v8config.h"  // NOLINT(build/include_directory)
 
 namespace cppgc {
@@ -16,28 +18,6 @@ class Heap;
 
 class V8_EXPORT Heap {
  public:
-  // Normal spaces are used to store objects of different size classes:
-  // - kNormal1:  < 32 bytes
-  // - kNormal2:  < 64 bytes
-  // - kNormal3:  < 128 bytes
-  // - kNormal4: >= 128 bytes
-  // Objects of size greater than 2^16 get stored in the large space. Users can
-  // register up to 4 arenas for application specific needs.
-  enum class SpaceType {
-    kNormal1,
-    kNormal2,
-    kNormal3,
-    kNormal4,
-    kLarge,
-    kUserDefined1,
-    kUserDefined2,
-    kUserDefined3,
-    kUserDefined4,
-  };
-
-  static constexpr size_t kMaxNumberOfSpaces =
-      static_cast<size_t>(SpaceType::kUserDefined4) + 1;
-
   /**
    * Specifies the stack state the embedder is in.
    */
@@ -58,7 +38,13 @@ class V8_EXPORT Heap {
     kNonEmpty,
   };
 
-  static std::unique_ptr<Heap> Create();
+  struct HeapOptions {
+    static HeapOptions Default() { return {}; }
+
+    std::vector<std::unique_ptr<CustomSpaceBase>> custom_spaces;
+  };
+
+  static std::unique_ptr<Heap> Create(HeapOptions = HeapOptions::Default());
 
   virtual ~Heap() = default;
 
