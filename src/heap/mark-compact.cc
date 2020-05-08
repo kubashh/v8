@@ -98,7 +98,7 @@ class MarkingVerifier : public ObjectVisitor, public RootVisitor {
     VerifyRootPointers(start, end);
   }
 
-  void VerifyRoots(VisitMode mode);
+  void VerifyRoots();
   void VerifyMarkingOnPage(const Page* page, Address start, Address end);
   void VerifyMarking(NewSpace* new_space);
   void VerifyMarking(PagedSpace* paged_space);
@@ -107,8 +107,10 @@ class MarkingVerifier : public ObjectVisitor, public RootVisitor {
   Heap* heap_;
 };
 
-void MarkingVerifier::VerifyRoots(VisitMode mode) {
-  heap_->IterateStrongRoots(this, mode);
+void MarkingVerifier::VerifyRoots() {
+  Heap::RootIterationOptions options;
+  options.skip_weak = true;
+  heap_->IterateRoots(this, options);
 }
 
 void MarkingVerifier::VerifyMarkingOnPage(const Page* page, Address start,
@@ -179,7 +181,7 @@ class FullMarkingVerifier : public MarkingVerifier {
             heap->mark_compact_collector()->non_atomic_marking_state()) {}
 
   void Run() override {
-    VerifyRoots(VISIT_ONLY_STRONG);
+    VerifyRoots();
     VerifyMarking(heap_->new_space());
     VerifyMarking(heap_->new_lo_space());
     VerifyMarking(heap_->old_space());
@@ -275,7 +277,7 @@ class EvacuationVerifier : public ObjectVisitor, public RootVisitor {
   virtual void VerifyPointers(MaybeObjectSlot start, MaybeObjectSlot end) = 0;
   virtual void VerifyRootPointers(FullObjectSlot start, FullObjectSlot end) = 0;
 
-  void VerifyRoots(VisitMode mode);
+  void VerifyRoots();
   void VerifyEvacuationOnPage(Address start, Address end);
   void VerifyEvacuation(NewSpace* new_space);
   void VerifyEvacuation(PagedSpace* paged_space);
@@ -283,8 +285,10 @@ class EvacuationVerifier : public ObjectVisitor, public RootVisitor {
   Heap* heap_;
 };
 
-void EvacuationVerifier::VerifyRoots(VisitMode mode) {
-  heap_->IterateStrongRoots(this, mode);
+void EvacuationVerifier::VerifyRoots() {
+  Heap::RootIterationOptions optons;
+  optons.skip_weak = true;
+  heap_->IterateRoots(this, optons);
 }
 
 void EvacuationVerifier::VerifyEvacuationOnPage(Address start, Address end) {
@@ -325,7 +329,7 @@ class FullEvacuationVerifier : public EvacuationVerifier {
   explicit FullEvacuationVerifier(Heap* heap) : EvacuationVerifier(heap) {}
 
   void Run() override {
-    VerifyRoots(VISIT_ALL);
+    VerifyRoots();
     VerifyEvacuation(heap_->new_space());
     VerifyEvacuation(heap_->old_space());
     VerifyEvacuation(heap_->code_space());
@@ -1600,7 +1604,9 @@ void MarkCompactCollector::MarkRoots(RootVisitor* root_visitor,
                                      ObjectVisitor* custom_root_body_visitor) {
   // Mark the heap roots including global variables, stack variables,
   // etc., and all objects reachable from them.
-  heap()->IterateStrongRoots(root_visitor, VISIT_ONLY_STRONG);
+  Heap::RootIterationOptions options;
+  options.skip_weak = true;
+  heap()->IterateRoots(root_visitor, options);
 
   // Custom marking for string table and top optimized frame.
   MarkStringTable(custom_root_body_visitor);
@@ -3873,7 +3879,10 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
   {
     TRACE_GC(heap()->tracer(),
              GCTracer::Scope::MC_EVACUATE_UPDATE_POINTERS_TO_NEW_ROOTS);
-    heap_->IterateRoots(&updating_visitor, VISIT_ALL_IN_SWEEP_NEWSPACE);
+    Heap::RootIterationOptions options;
+    // The external string table is updated at the end.
+    options.skip_external_string_table = true;
+    heap_->IterateRoots(&updating_visitor, options);
   }
 
   {
@@ -4127,7 +4136,7 @@ class YoungGenerationMarkingVerifier : public MarkingVerifier {
   }
 
   void Run() override {
-    VerifyRoots(VISIT_ALL_IN_SCAVENGE);
+    VerifyRoots();
     VerifyMarking(heap_->new_space());
   }
 
@@ -4177,7 +4186,7 @@ class YoungGenerationEvacuationVerifier : public EvacuationVerifier {
       : EvacuationVerifier(heap) {}
 
   void Run() override {
-    VerifyRoots(VISIT_ALL_IN_SCAVENGE);
+    VerifyRoots();
     VerifyEvacuation(heap_->new_space());
     VerifyEvacuation(heap_->old_space());
     VerifyEvacuation(heap_->code_space());
@@ -4457,7 +4466,10 @@ void MinorMarkCompactCollector::UpdatePointersAfterEvacuation() {
   {
     TRACE_GC(heap()->tracer(),
              GCTracer::Scope::MINOR_MC_EVACUATE_UPDATE_POINTERS_TO_NEW_ROOTS);
-    heap_->IterateRoots(&updating_visitor, VISIT_ALL_IN_MINOR_MC_UPDATE);
+    Heap::RootIterationOptions options;
+    options.skip_external_string_table = true;
+    options.skip_old_generation = true;
+    heap()->IterateRoots(&updating_visitor, options);
   }
   {
     TRACE_GC(heap()->tracer(),
@@ -4911,7 +4923,16 @@ void MinorMarkCompactCollector::MarkRootSetInParallel(
       TRACE_GC(heap()->tracer(), GCTracer::Scope::MINOR_MC_MARK_SEED);
       isolate()->global_handles()->IdentifyWeakUnmodifiedObjects(
           &JSObject::IsUnmodifiedApiObject);
-      heap()->IterateRoots(root_visitor, VISIT_ALL_IN_MINOR_MC_MARK);
+      Heap::RootIterationOptions options;
+      // MinorMC treats all weak roots except for global handles as strong.
+      // That is why we don't set skip_weak = true here and instead visit
+      // global handles separately.
+      options.skip_external_string_table = true;
+      options.skip_global_handles = true;
+      options.skip_old_generation = true;
+      heap()->IterateRoots(root_visitor, options);
+      isolate()->global_handles()->IterateYoungStrongAndDependentRoots(
+          root_visitor);
       // Create items for each page.
       RememberedSet<OLD_TO_NEW>::IterateMemoryChunks(
           heap(), [&job, &slots](MemoryChunk* chunk) {
