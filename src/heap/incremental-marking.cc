@@ -415,7 +415,10 @@ void IncrementalMarking::MarkRoots() {
   DCHECK(IsMarking());
 
   IncrementalMarkingRootMarkingVisitor visitor(this);
-  heap_->IterateStrongRoots(&visitor, VISIT_ONLY_STRONG_IGNORE_STACK);
+  Heap::RootIterationOptions options;
+  options.skip_stack = true;
+  options.skip_weak = true;
+  heap_->IterateRoots(&visitor, options);
 }
 
 bool IncrementalMarking::ShouldRetainMap(Map map, int age) {
