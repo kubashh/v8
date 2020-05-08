@@ -259,6 +259,10 @@ class WasmGraphBuildingInterface {
     result->node = BUILD(RefFunc, function_index);
   }
 
+  void RefAsNonNull(FullDecoder* decoder, const Value& arg, Value* result) {
+    result->node = BUILD(RefAsNonNull, arg.node, decoder->position());
+  }
+
   void Drop(FullDecoder* decoder, const Value& value) {}
 
   void DoReturn(FullDecoder* decoder, Vector<Value> values) {
@@ -307,7 +311,7 @@ class WasmGraphBuildingInterface {
   }
 
   void Unreachable(FullDecoder* decoder) {
-    BUILD(Unreachable, decoder->position());
+    BUILD(Trap, wasm::TrapReason::kTrapUnreachable, decoder->position());
   }
 
   void Select(FullDecoder* decoder, const Value& cond, const Value& fval,
@@ -616,14 +620,15 @@ class WasmGraphBuildingInterface {
                  const FieldIndexImmediate<validate>& field, Value* result) {
     result->node =
         BUILD(StructGet, struct_object.node, field.struct_index.struct_type,
-              field.index, decoder->position());
+              field.index, struct_object.type.kind(), decoder->position());
   }
 
   void StructSet(FullDecoder* decoder, const Value& struct_object,
                  const FieldIndexImmediate<validate>& field,
                  const Value& field_value) {
     BUILD(StructSet, struct_object.node, field.struct_index.struct_type,
-          field.index, field_value.node, decoder->position());
+          field.index, field_value.node, struct_object.type.kind(),
+          decoder->position());
   }
 
  private:

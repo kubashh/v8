@@ -187,6 +187,7 @@ class WasmGraphBuilder {
   Node* EffectPhi(unsigned count, Node** effects_and_control);
   Node* RefNull();
   Node* RefFunc(uint32_t function_index);
+  Node* RefAsNonNull(Node* arg, wasm::WasmCodePosition position);
   Node* Uint32Constant(uint32_t value);
   Node* Int32Constant(int32_t value);
   Node* Int64Constant(int64_t value);
@@ -245,7 +246,7 @@ class WasmGraphBuilder {
     Node* arr[] = {fst, more...};
     return Return(ArrayVector(arr));
   }
-  Node* Unreachable(wasm::WasmCodePosition position);
+  Node* Trap(wasm::TrapReason reason, wasm::WasmCodePosition position);
 
   Node* CallDirect(uint32_t index, Vector<Node*> args, Vector<Node*> rets,
                    wasm::WasmCodePosition position);
@@ -369,10 +370,11 @@ class WasmGraphBuilder {
 
   Node* StructNew(uint32_t struct_index, const wasm::StructType* type,
                   Vector<Node*> fields);
-  Node* StructGet(Node* struct_object, const wasm::StructType* type,
-                  uint32_t field_index, wasm::WasmCodePosition position);
-  Node* StructSet(Node* struct_object, const wasm::StructType* type,
-                  uint32_t field_index, Node* value,
+  Node* StructGet(Node* struct_object, const wasm::StructType* struct_type,
+                  uint32_t field_index, wasm::ValueType::Kind kind,
+                  wasm::WasmCodePosition position);
+  Node* StructSet(Node* struct_object, const wasm::StructType* struct_type,
+                  uint32_t field_index, Node* value, wasm::ValueType::Kind kind,
                   wasm::WasmCodePosition position);
 
   bool has_simd() const { return has_simd_; }
