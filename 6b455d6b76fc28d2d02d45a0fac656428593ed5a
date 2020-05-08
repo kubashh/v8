@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c81cb824_673685d8",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4568,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-05-08T15:20:57Z",
+      "side": 1,
+      "message": "Jakob found that the order is not important. Other roots have been already moved to the if branch below.",
+      "parentUuid": "852ae5be_8e6b6632",
+      "range": {
+        "startLine": 4568,
+        "startChar": 41,
+        "endLine": 4568,
+        "endChar": 55
+      },
+      "revId": "6b455d6b76fc28d2d02d45a0fac656428593ed5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2b1ce70_cef20170",
         "filename": "src/heap/heap.h",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "6b455d6b76fc28d2d02d45a0fac656428593ed5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2e62e49_c0a9abde",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-05-08T15:20:57Z",
+      "side": 1,
+      "message": "Done. Thanks for the suggestion!",
+      "parentUuid": "a2b1ce70_cef20170",
+      "range": {
+        "startLine": 924,
+        "startChar": 9,
+        "endLine": 924,
+        "endChar": 29
+      },
+      "revId": "6b455d6b76fc28d2d02d45a0fac656428593ed5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
