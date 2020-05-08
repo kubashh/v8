@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "51fc545d_68676c54",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5136,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-08T13:34:16Z",
+      "side": 1,
+      "message": "nit: please express in the parameter name whose kind this describes. Maybe \"receiver_reference_kind\"? Also, please move it up to group it with struct_object and struct_type.\n\n(As an alternative, especially with the `if`-suggestion below, you could also make the decision at the caller and pass in an enum NullCheck { kWithNullCheck, kNoNullCheck }.)",
+      "range": {
+        "startLine": 5136,
+        "startChar": 56,
+        "endLine": 5136,
+        "endChar": 60
+      },
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74e4588b_0d63c2d6",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5138,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-08T13:34:16Z",
+      "side": 1,
+      "message": "Suggestion for simplification:\n\n  if (kind !\u003d wasm::ValueType::kRef) {\n    TrapIfTrue(...);\n  }\n  MachineType machine_type ...\n  Node* offset ...\n  return gasm_-\u003eLoad;\n\nThat loses the extra optimization for the nullref case (which doesn\u0027t need to be fast: it traps anyway), and saves both C++ code and binary size. (I don\u0027t feel strongly about it though, so if you like the `switch` you can keep it, I just think that a simple `if` would be just as good.)",
+      "range": {
+        "startLine": 5138,
+        "startChar": 2,
+        "endLine": 5138,
+        "endChar": 17
+      },
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36964a59_278b7ea7",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-08T13:34:16Z",
+      "side": 1,
+      "message": "const Value\u0026",
+      "range": {
+        "startLine": 847,
+        "startChar": 18,
+        "endLine": 847,
+        "endChar": 23
+      },
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "74bd1081_619ed579",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 4
@@ -13,6 +82,29 @@
       "writtenOn": "2020-05-08T12:49:47Z",
       "side": 1,
       "message": "Is this ok?",
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ff0f321_cee13248",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-08T13:34:16Z",
+      "side": 1,
+      "message": "Is there a reason this isn\u0027t in the `FOREACH_SIMPLE_PROTOTYPE_OPCODE` list below?",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 16
+      },
       "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
