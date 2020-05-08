@@ -299,6 +299,13 @@ Node* WasmGraphBuilder::RefFunc(uint32_t function_index) {
                        Uint32Constant(function_index), effect(), control()));
 }
 
+Node* WasmGraphBuilder::RefAsNonNull(Node* arg,
+                                     wasm::WasmCodePosition position) {
+  TrapIfTrue(wasm::kTrapIllegalCast, gasm_->WordEqual(arg, RefNull()),
+             position);
+  return arg;
+}
+
 Node* WasmGraphBuilder::NoContextConstant() {
   return mcgraph()->IntPtrConstant(0);
 }
@@ -1115,8 +1122,9 @@ Node* WasmGraphBuilder::Return(Vector<Node*> vals) {
   return ret;
 }
 
-Node* WasmGraphBuilder::Unreachable(wasm::WasmCodePosition position) {
-  TrapIfFalse(wasm::TrapReason::kTrapUnreachable, Int32Constant(0), position);
+Node* WasmGraphBuilder::Trap(wasm::TrapReason reason,
+                             wasm::WasmCodePosition position) {
+  TrapIfFalse(reason, Int32Constant(0), position);
   Return(Vector<Node*>{});
   return nullptr;
 }
@@ -5067,24 +5075,47 @@ Node* WasmGraphBuilder::StructNew(uint32_t struct_index,
 }
 
 Node* WasmGraphBuilder::StructGet(Node* struct_object,
-                                  const wasm::StructType* type,
+                                  const wasm::StructType* struct_type,
                                   uint32_t field_index,
+                                  wasm::ValueType::Kind kind,
                                   wasm::WasmCodePosition position) {
-  MachineType machine_type = FieldType(type, field_index);
-  Node* offset = FieldOffset(mcgraph(), type, field_index);
-  TrapIfTrue(wasm::kTrapNullDereference,
-             gasm_->WordEqual(struct_object, RefNull()), position);
-  return gasm_->Load(machine_type, struct_object, offset);
+  switch (kind) {
+    case wasm::ValueType::kNullRef:
+      return Trap(wasm::kTrapNullDereference, position);
+    case wasm::ValueType::kOptRef:
+      TrapIfTrue(wasm::kTrapNullDereference,
+                 gasm_->WordEqual(struct_object, RefNull()), position);
+      U_FALLTHROUGH;
+    case wasm::ValueType::kRef: {
+      MachineType machine_type = FieldType(struct_type, field_index);
+      Node* offset = FieldOffset(mcgraph(), struct_type, field_index);
+      return gasm_->Load(machine_type, struct_object, offset);
+      break;
+    }
+    default:
+      UNREACHABLE();
+  }
 }
 
 Node* WasmGraphBuilder::StructSet(Node* struct_object,
-                                  const wasm::StructType* type,
+                                  const wasm::StructType* struct_type,
                                   uint32_t field_index, Node* field_value,
+                                  wasm::ValueType::Kind kind,
                                   wasm::WasmCodePosition position) {
-  TrapIfTrue(wasm::kTrapNullDereference,
-             gasm_->WordEqual(struct_object, RefNull()), position);
-  return StoreStructFieldUnchecked(mcgraph(), gasm_.get(), struct_object, type,
-                                   field_index, field_value);
+  switch (kind) {
+    case wasm::ValueType::kNullRef:
+      return Trap(wasm::kTrapNullDereference, position);
+    case wasm::ValueType::kOptRef:
+      TrapIfTrue(wasm::kTrapNullDereference,
+                 gasm_->WordEqual(struct_object, RefNull()), position);
+      U_FALLTHROUGH;
+    case wasm::ValueType::kRef:  // fallthrough
+      return StoreStructFieldUnchecked(mcgraph(), gasm_.get(), struct_object,
+                                       struct_type, field_index, field_value);
+      break;
+    default:
+      UNREACHABLE();
+  }
 }
 
 class WasmDecorator final : public GraphDecorator {
