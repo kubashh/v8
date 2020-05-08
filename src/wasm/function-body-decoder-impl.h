@@ -844,6 +844,7 @@ enum class LoadTransformationKind : uint8_t {
   F(F64Const, Value* result, double value)                                    \
   F(RefNull, Value* result)                                                   \
   F(RefFunc, uint32_t function_index, Value* result)                          \
+  F(RefAsNonNull, Value& arg, Value* result)                                  \
   F(Drop, const Value& value)                                                 \
   F(DoReturn, Vector<Value> values)                                           \
   F(LocalGet, Value* result, const LocalIndexImmediate<validate>& imm)        \
@@ -1573,6 +1574,7 @@ class WasmDecoder : public Decoder {
       case kExprTableGet:
       case kExprLocalTee:
       case kExprMemoryGrow:
+      case kExprRefAsNonNull:
         return {1, 1};
       case kExprLocalSet:
       case kExprGlobalSet:
@@ -2233,6 +2235,35 @@ class WasmFullDecoder : public WasmDecoder<validate> {
           auto* value = Push(kWasmFuncRef);
           CALL_INTERFACE_IF_REACHABLE(RefFunc, imm.index, value);
           len = 1 + imm.length;
+          break;
+        }
+        case kExprRefAsNonNull: {
+          CHECK_PROTOTYPE_OPCODE(anyref);
+          auto value = Pop();
+          switch (value.type.kind()) {
+            case ValueType::kRef: {
+              auto* result =
+                  Push(ValueType(ValueType::kRef, value.type.ref_index()));
+              *result = value;
+              break;
+            }
+            case ValueType::kOptRef: {
+              auto* result =
+                  Push(ValueType(ValueType::kRef, value.type.ref_index()));
+              CALL_INTERFACE_IF_REACHABLE(RefAsNonNull, value, result);
+              break;
+            }
+            case ValueType::kNullRef:
+              // TODO(7748): Fix this once the standard clears up (see
+              // https://github.com/WebAssembly/function-references/issues/21).
+              CALL_INTERFACE_IF_REACHABLE(Unreachable);
+              EndControl();
+              break;
+            default:
+              this->error(this->pc_ + 1,
+                          "invalid agrument type to ref.as_non_null");
+              break;
+          }
           break;
         }
         case kExprLocalGet: {
@@ -2968,7 +2999,6 @@ class WasmFullDecoder : public WasmDecoder<validate> {
         auto struct_obj =
             Pop(0, ValueType(ValueType::kOptRef, field.struct_index.index));
         auto* value = Push(field.struct_index.struct_type->field(field.index));
-        // TODO(7748): Optimize this when struct type is null/ref
         CALL_INTERFACE_IF_REACHABLE(StructGet, struct_obj, field, value);
         break;
       }
@@ -2980,7 +3010,6 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             0, ValueType(field.struct_index.struct_type->field(field.index)));
         auto struct_obj =
             Pop(0, ValueType(ValueType::kOptRef, field.struct_index.index));
-        // TODO(7748): Optimize this when struct type is null/ref
         CALL_INTERFACE_IF_REACHABLE(StructSet, struct_obj, field, field_value);
         break;
       }
