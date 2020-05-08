@@ -921,15 +921,22 @@ class Heap {
   // garbage collection and is usually only performed as part of
   // (de)serialization or heap verification.
 
+  struct RootIterationOptions {
+    bool skip_external_string_table = false;
+    bool skip_global_handles = false;
+    bool skip_old_generation = false;
+    bool skip_stack = false;
+    bool skip_unserializable = false;
+    bool skip_weak = false;
+  };
+
   // Iterates over the strong roots and the weak roots.
-  void IterateRoots(RootVisitor* v, VisitMode mode);
-  // Iterates over the strong roots.
-  void IterateStrongRoots(RootVisitor* v, VisitMode mode);
+  void IterateRoots(RootVisitor* v, const RootIterationOptions& options);
   // Iterates over entries in the smi roots list.  Only interesting to the
   // serializer/deserializer, since GC does not care about smis.
   void IterateSmiRoots(RootVisitor* v);
   // Iterates over weak string tables.
-  void IterateWeakRoots(RootVisitor* v, VisitMode mode);
+  void IterateWeakRoots(RootVisitor* v, const RootIterationOptions& options);
   // Iterates over weak global handles.
   void IterateWeakGlobalHandles(RootVisitor* v);
   // Iterates over builtins.
