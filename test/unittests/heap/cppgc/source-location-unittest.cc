@@ -5,7 +5,6 @@
 #include "include/cppgc/source-location.h"
 
 #include "src/base/macros.h"
-
 #include "testing/gtest/include/gtest/gtest.h"
 
 namespace cppgc {
