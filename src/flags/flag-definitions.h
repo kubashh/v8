@@ -908,6 +908,8 @@ DEFINE_BOOL(parallel_scavenge, true, "parallel scavenge")
 DEFINE_BOOL(scavenge_task, true, "schedule scavenge tasks")
 DEFINE_INT(scavenge_task_trigger, 80,
            "scavenge task trigger in percent of the current heap limit")
+DEFINE_BOOL(scavenge_separate_stack_scanning, false,
+            "separate stack scanning phase in scavenger")
 DEFINE_BOOL(trace_parallel_scavenge, false, "trace parallel scavenge")
 DEFINE_BOOL(write_protect_code_memory, true, "write protect code memory")
 #ifdef V8_CONCURRENT_MARKING
