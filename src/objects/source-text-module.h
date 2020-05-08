@@ -59,6 +59,11 @@ class SourceTextModule
   static Handle<JSModuleNamespace> GetModuleNamespace(
       Isolate* isolate, Handle<SourceTextModule> module, int module_request);
 
+  // Get the import.meta object for [module].  If it doesn't exist yet, it is
+  // created by invoking the embedder callback.
+  static Handle<JSObject> GetImportMeta(Isolate* isolate,
+                                        Handle<SourceTextModule> module);
+
   using BodyDescriptor =
       SubclassBodyDescriptor<Module::BodyDescriptor,
                              FixedBodyDescriptor<kCodeOffset, kSize, kSize>>;
