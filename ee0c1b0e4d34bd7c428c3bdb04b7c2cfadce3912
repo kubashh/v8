@@ -188,6 +188,30 @@
       "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6f6aa77_466ea7a3",
+        "filename": "src/heap/remembered-set-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-05-08T07:47:00Z",
+      "side": 0,
+      "message": "COMPRESSED_OBJECT_SLOT should be 32-bit and FULL_OBJECT_SLOT should be 64-bit. Otherwise there is no advantage in having compressed slots.\n\nIt seems that the PPC CL was not complete and is missing the part that changes constant pool entry size to tagged size (32-bit) and updates the instructions to load 32-bit entries.\n\nWould it be possible to switch PPC to use FULL_OBJECT_SLOT until the missing part is implemented?",
+      "parentUuid": "a9e834f8_d166f6cd",
+      "range": {
+        "startLine": 321,
+        "startChar": 34,
+        "endLine": 321,
+        "endChar": 55
+      },
+      "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

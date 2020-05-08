@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bc02e73f_ac5ad3b1",
+        "filename": "src/codegen/arm64/assembler-arm64-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-05-08T07:47:00Z",
+      "side": 1,
+      "message": "If x64 has a CHECK, then having it here sgtm as well.",
+      "parentUuid": "0a1c84eb_b4cc37a4",
+      "range": {
+        "startLine": 663,
+        "startChar": 4,
+        "endLine": 663,
+        "endChar": 9
+      },
+      "revId": "2c6005bf267d11be1724e62fe7ff6cce5d12ac8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e3705a04_9bf795b9",
         "filename": "src/heap/remembered-set-inl.h",
         "patchSetId": 4
