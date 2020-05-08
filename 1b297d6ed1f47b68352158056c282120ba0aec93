@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4288954e_eed65689",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4221,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-05-08T13:38:19Z",
+      "side": 0,
+      "message": "Note that this is not the same as IterateStrongRoots()!\nIt a strange mode that iterates weak string tables but skips weak global handles.\n\nChanging it to simply iterating all roots.",
+      "range": {
+        "startLine": 4221,
+        "startChar": 1,
+        "endLine": 4221,
+        "endChar": 44
+      },
+      "revId": "1b297d6ed1f47b68352158056c282120ba0aec93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
