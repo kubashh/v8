@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "852ae5be_8e6b6632",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4568,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-08T14:25:58Z",
+      "side": 1,
+      "message": "Does the serializer depend on getting kThreadManager *after* global handles?",
+      "range": {
+        "startLine": 4568,
+        "startChar": 41,
+        "endLine": 4568,
+        "endChar": 55
+      },
+      "revId": "6b455d6b76fc28d2d02d45a0fac656428593ed5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2b1ce70_cef20170",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-08T14:25:58Z",
+      "side": 1,
+      "message": "Not sure it fits better but we have EnumSet as well: https://cs.chromium.org/chromium/src/v8/src/base/enum-set.h?sq\u003dpackage:chromium\u0026dr\u003dCSs\u0026g\u003d0\u0026l\u003d31",
+      "range": {
+        "startLine": 924,
+        "startChar": 9,
+        "endLine": 924,
+        "endChar": 29
+      },
+      "revId": "6b455d6b76fc28d2d02d45a0fac656428593ed5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
