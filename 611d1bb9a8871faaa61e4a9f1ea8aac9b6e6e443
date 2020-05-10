@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ced2719d_701c49e6",
+        "filename": "src/heap/cppgc/raw-heap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-10T10:29:35Z",
+      "side": 1,
+      "message": "nit: missing const",
+      "range": {
+        "startLine": 86,
+        "startChar": 63,
+        "endLine": 86,
+        "endChar": 64
+      },
+      "revId": "611d1bb9a8871faaa61e4a9f1ea8aac9b6e6e443",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61686501_5e9e2e04",
+        "filename": "src/heap/cppgc/raw-heap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-10T10:29:35Z",
+      "side": 1,
+      "message": "nit: Since the number of regular spaces is constant, it\u0027s redundant to keep track the number of custom spaces.",
+      "revId": "611d1bb9a8871faaa61e4a9f1ea8aac9b6e6e443",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "327f5c34_5ee2f69c",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-10T10:29:35Z",
+      "side": 1,
+      "message": "nit: Remove?",
+      "revId": "611d1bb9a8871faaa61e4a9f1ea8aac9b6e6e443",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -309,6 +309,46 @@
     },
     {
       "key": {
+        "uuid": "c4dc7273_8b6ee695",
+        "filename": "src/heap/cppgc/raw-heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-10T10:29:35Z",
+      "side": 1,
+      "message": "nit: a user defined space.",
+      "range": {
+        "startLine": 34,
+        "startChar": 25,
+        "endLine": 34,
+        "endChar": 56
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eff8b92d_bdb19ed0",
+        "filename": "src/heap/cppgc/raw-heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-10T10:29:35Z",
+      "side": 1,
+      "message": "nit: seems the dcheck should change to use kNumberOfRegularSpaces",
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bc14671f_8ccaac8a",
         "filename": "src/heap/cppgc/raw-heap.h",
         "patchSetId": 10
