@@ -99,7 +99,6 @@ class V8_EXPORT_PRIVATE PreparseDataBuilder : public ZoneObject,
   // parse.
   explicit PreparseDataBuilder(Zone* zone, PreparseDataBuilder* parent_builder,
                                std::vector<void*>* children_buffer);
-  ~PreparseDataBuilder() {}
 
   PreparseDataBuilder* parent() const { return parent_; }
 
