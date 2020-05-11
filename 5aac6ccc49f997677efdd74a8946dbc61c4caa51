@@ -332,6 +332,30 @@
     },
     {
       "key": {
+        "uuid": "9e92f347_45761022",
+        "filename": "src/heap/cppgc/raw-heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-11T07:55:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4dc7273_8b6ee695",
+      "range": {
+        "startLine": 34,
+        "startChar": 25,
+        "endLine": 34,
+        "endChar": 56
+      },
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eff8b92d_bdb19ed0",
         "filename": "src/heap/cppgc/raw-heap.h",
         "patchSetId": 10
@@ -346,6 +370,24 @@
       "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae52e0a2_3e893298",
+        "filename": "src/heap/cppgc/raw-heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-11T07:55:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eff8b92d_bdb19ed0",
+      "revId": "5aac6ccc49f997677efdd74a8946dbc61c4caa51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

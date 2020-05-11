@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "adcf65fa_7e953cfa",
+        "filename": "src/heap/cppgc/raw-heap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-11T07:55:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ced2719d_701c49e6",
+      "range": {
+        "startLine": 86,
+        "startChar": 63,
+        "endLine": 86,
+        "endChar": 64
+      },
+      "revId": "611d1bb9a8871faaa61e4a9f1ea8aac9b6e6e443",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61686501_5e9e2e04",
         "filename": "src/heap/cppgc/raw-heap.h",
         "patchSetId": 12
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "b9aa8f64_ba96b768",
+        "filename": "src/heap/cppgc/raw-heap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-11T07:55:58Z",
+      "side": 1,
+      "message": "Done: Removed field as we only need it for a DCHECK (and computed it there).",
+      "parentUuid": "61686501_5e9e2e04",
+      "revId": "611d1bb9a8871faaa61e4a9f1ea8aac9b6e6e443",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "327f5c34_5ee2f69c",
         "filename": "src/heap/cppgc/sweeper.cc",
         "patchSetId": 12
@@ -56,6 +98,24 @@
       "revId": "611d1bb9a8871faaa61e4a9f1ea8aac9b6e6e443",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de91fd2a_d3c2cc5f",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-11T07:55:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "327f5c34_5ee2f69c",
+      "revId": "611d1bb9a8871faaa61e4a9f1ea8aac9b6e6e443",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
