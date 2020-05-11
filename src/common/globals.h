@@ -1605,7 +1605,8 @@ enum class LoadSensitivity {
   V(TrapTableOutOfBounds)          \
   V(TrapBrOnExnNullRef)            \
   V(TrapRethrowNullRef)            \
-  V(TrapNullDereference)
+  V(TrapNullDereference)           \
+  V(TrapIllegalCast)
 
 enum KeyedAccessLoadMode {
   STANDARD_LOAD,
