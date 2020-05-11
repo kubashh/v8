@@ -25,8 +25,10 @@ class Simd128;
 // For every two types connected by a line, the top type is a
 // (direct) subtype of the bottom type.
 //
-//                           AnyRef
-//                         /    |   \
+//                            AnyRef
+//                           /      \
+//                          /      EqRef
+//                         /       /   \
 //                  FuncRef  ExnRef  OptRef(S)
 //                         \    |   /        \
 // I32  I64  F32  F64        NullRef        Ref(S)
@@ -38,7 +40,7 @@ class Simd128;
 // - "ref" types per https://github.com/WebAssembly/function-references
 // - "optref"/"eqref" per https://github.com/WebAssembly/gc
 //
-// TODO(7748): Extend this with eqref, struct and function subtyping.
+// TODO(7748): Extend this with struct and function subtyping.
 //             Keep up to date with funcref vs. anyref subtyping.
 #define FOREACH_VALUE_TYPE(V)                                                \
   V(Stmt, -1, Void, None, 'v', "<stmt>")                                     \
@@ -110,27 +112,25 @@ class ValueType {
     return bit_field_ != other.bit_field_;
   }
 
-  // TODO(7748): Extend this with eqref, struct and function subtyping.
+  // TODO(7748): Extend this with struct and function subtyping.
   //             Keep up to date with funcref vs. anyref subtyping.
-  bool IsSubTypeOf(ValueType other) const {
-    return (*this == other) ||
-           (kind() == kNullRef &&
-            (other.kind() == kAnyRef || other.kind() == kFuncRef ||
-             other.kind() == kExnRef || other.kind() == kOptRef)) ||
-           (other.kind() == kAnyRef &&
-            (kind() == kFuncRef || kind() == kExnRef || kind() == kOptRef ||
-             kind() == kRef)) ||
+  constexpr bool IsSubTypeOf(ValueType other) const {
+    return (*this == other) || (other.kind() == kAnyRef && IsReferenceType()) ||
+           (kind() == kNullRef && other.kind() != kRef &&
+            other.IsReferenceType()) ||
+           (other.kind() == kEqRef &&
+            (kind() == kExnRef || kind() == kOptRef || kind() == kRef)) ||
            (kind() == kRef && other.kind() == kOptRef &&
             ref_index() == other.ref_index());
   }
 
-  bool IsReferenceType() const {
+  constexpr bool IsReferenceType() const {
     return kind() == kAnyRef || kind() == kFuncRef || kind() == kNullRef ||
            kind() == kExnRef || kind() == kRef || kind() == kOptRef ||
            kind() == kEqRef;
   }
 
-  // TODO(7748): Extend this with eqref, struct and function subtyping.
+  // TODO(7748): Extend this with struct and function subtyping.
   //             Keep up to date with funcref vs. anyref subtyping.
   static ValueType CommonSubType(ValueType a, ValueType b) {
     if (a == b) return a;
@@ -143,11 +143,11 @@ class ValueType {
     // {a} and {b} are not each other's subtype.
     // If one of them is not nullable, their greatest subtype is bottom,
     // otherwise null.
-    return (a.kind() == kRef || b.kind() == kRef) ? ValueType(kBottom)
-                                                  : ValueType(kNullRef);
+    if (a.kind() == kRef || b.kind() == kRef) return ValueType(kBottom);
+    return ValueType(kNullRef);
   }
 
-  ValueTypeCode value_type_code() const {
+  constexpr ValueTypeCode value_type_code() const {
     DCHECK_NE(kBottom, kind());
 
     constexpr ValueTypeCode kValueTypeCode[] = {
@@ -159,7 +159,7 @@ class ValueType {
     return kValueTypeCode[kind()];
   }
 
-  MachineType machine_type() const {
+  constexpr MachineType machine_type() const {
     DCHECK_NE(kBottom, kind());
 
     constexpr MachineType kMachineType[] = {
@@ -172,7 +172,7 @@ class ValueType {
     return kMachineType[kind()];
   }
 
-  MachineRepresentation machine_representation() {
+  constexpr MachineRepresentation machine_representation() const {
     return machine_type().representation();
   }
 
