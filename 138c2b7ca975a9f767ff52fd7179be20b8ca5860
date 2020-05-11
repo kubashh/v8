@@ -22,6 +22,30 @@
       "revId": "138c2b7ca975a9f767ff52fd7179be20b8ca5860",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea23a7b0_1151cd44",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-11T15:15:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8b955f4_05ec96c1",
+      "range": {
+        "startLine": 152,
+        "startChar": 2,
+        "endLine": 152,
+        "endChar": 19
+      },
+      "revId": "138c2b7ca975a9f767ff52fd7179be20b8ca5860",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
