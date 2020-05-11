@@ -22,6 +22,30 @@
       "revId": "717cf94233d95c3838d99e17798fbfb14c569a04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01e554f6_fa20eda2",
+        "filename": "src/builtins/builtins-callsite.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-05-11T12:58:46Z",
+      "side": 1,
+      "message": "It just reads a field function_.",
+      "parentUuid": "f0d55b7b_1567733a",
+      "range": {
+        "startLine": 80,
+        "startChar": 7,
+        "endLine": 80,
+        "endChar": 27
+      },
+      "revId": "717cf94233d95c3838d99e17798fbfb14c569a04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
