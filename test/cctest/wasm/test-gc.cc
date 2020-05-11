@@ -99,6 +99,29 @@ WASM_EXEC_TEST(BasicStruct) {
       kExprEnd};
   k->EmitCode(k_code, sizeof(k_code));
 
+  // Test br_on_null.
+  WasmFunctionBuilder* l = builder->AddFunction(sigs.i_v());
+  uint32_t l_field_index = 0;
+  uint32_t l_local_index = l->AddLocal(kOptRefType);
+  l->builder()->AddExport(CStrVector("l"), l);
+  byte l_code[] = {
+      WASM_BLOCK_I(WASM_I32V(42),
+                   // Branch will be taken.
+                   // 42 left on stack outside the block (not 10).
+                   WASM_BR_ON_NULL(0, WASM_GET_LOCAL(l_local_index)),
+                   WASM_I32V(10), WASM_BR(0)),
+      WASM_SET_LOCAL(l_local_index, WASM_STRUCT_NEW(type_index, WASM_I32V(110),
+                                                    WASM_I32V(10))),
+      WASM_BLOCK_I(
+          WASM_I32V(-99),
+          WASM_STRUCT_GET(type_index, l_field_index,
+                          // Branch will not be taken.
+                          // 110 left on stack outside the block (not -99).
+                          WASM_BR_ON_NULL(0, WASM_GET_LOCAL(l_local_index))),
+          WASM_BR(0)),
+      kExprI32Add, kExprEnd};
+  l->EmitCode(l_code, sizeof(l_code));
+
   ZoneBuffer buffer(&zone);
   builder->WriteTo(&buffer);
 
@@ -132,6 +155,9 @@ WASM_EXEC_TEST(BasicStruct) {
 
   CHECK_EQ(55, testing::CallWasmFunctionForTesting(isolate, instance, &thrower,
                                                    "k", 0, nullptr));
+
+  CHECK_EQ(152, testing::CallWasmFunctionForTesting(isolate, instance, &thrower,
+                                                    "l", 0, nullptr));
 }
 
 WASM_EXEC_TEST(BasicArray) {
