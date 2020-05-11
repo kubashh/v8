@@ -260,6 +260,30 @@
       "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b5888d5_b53de554",
+        "filename": "src/heap/remembered-set-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2020-05-11T12:48:54Z",
+      "side": 0,
+      "message": "There is only 1 instance of usage in src/compiler/backend/ppc/code-generator-ppc.cc. If you don\u0027t mind, you can add to this CL:\n\n@@ -2703,7 +2703,7 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,\n           if (IsMaterializableFromRoot(src_object, \u0026index)) {\n             __ LoadRoot(dst, index);\n           } else {\n-            __ Move(dst, src_object, RelocInfo::COMPRESSED_EMBEDDED_OBJECT);\n+            __ Move(dst, src_object, RelocInfo::FULL_EMBEDDED_OBJECT);\n           }\n           break;\n         }",
+      "parentUuid": "be6ac016_fbd2a46e",
+      "range": {
+        "startLine": 321,
+        "startChar": 34,
+        "endLine": 321,
+        "endChar": 55
+      },
+      "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
