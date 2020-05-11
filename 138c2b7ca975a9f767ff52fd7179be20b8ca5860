@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8b955f4_05ec96c1",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-11T13:46:26Z",
+      "side": 1,
+      "message": "nit: unnecessary; line 191 says just as much.",
+      "range": {
+        "startLine": 152,
+        "startChar": 2,
+        "endLine": 152,
+        "endChar": 19
+      },
+      "revId": "138c2b7ca975a9f767ff52fd7179be20b8ca5860",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
