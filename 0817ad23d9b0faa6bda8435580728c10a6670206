@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a53f3b12_cf5753e5",
+        "filename": "src/builtins/cast.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-11T13:07:20Z",
+      "side": 1,
+      "message": "Just alpha-sorted and added IsAllocationSite.",
+      "revId": "0817ad23d9b0faa6bda8435580728c10a6670206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
