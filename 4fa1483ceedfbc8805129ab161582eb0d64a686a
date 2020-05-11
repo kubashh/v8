@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "bc2f3bc4_7f0f7732",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5136,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-11T10:30:47Z",
+      "side": 1,
+      "message": "That\u0027s logical. Other languages allow and encourage naming boolean arguments, e.g., Foo(check_null \u003d true), but here we don\u0027t have this option.",
+      "parentUuid": "653bc4e7_66380f70",
+      "range": {
+        "startLine": 5136,
+        "startChar": 56,
+        "endLine": 5136,
+        "endChar": 60
+      },
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74e4588b_0d63c2d6",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 4
