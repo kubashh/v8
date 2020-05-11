@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "08da964c_82b889b6",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5136,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-11T08:28:13Z",
+      "side": 1,
+      "message": "Can I just pass a boolean value?",
+      "parentUuid": "51fc545d_68676c54",
+      "range": {
+        "startLine": 5136,
+        "startChar": 56,
+        "endLine": 5136,
+        "endChar": 60
+      },
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "74e4588b_0d63c2d6",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c1f64212_81004890",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5138,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-11T08:28:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74e4588b_0d63c2d6",
+      "range": {
+        "startLine": 5138,
+        "startChar": 2,
+        "endLine": 5138,
+        "endChar": 17
+      },
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36964a59_278b7ea7",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 4
@@ -68,6 +116,30 @@
       "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52209436_a0cf4a02",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-11T08:28:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36964a59_278b7ea7",
+      "range": {
+        "startLine": 847,
+        "startChar": 18,
+        "endLine": 847,
+        "endChar": 23
+      },
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -106,6 +178,24 @@
     },
     {
       "key": {
+        "uuid": "f70fdf06_4d5feb92",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2247,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-11T08:28:13Z",
+      "side": 1,
+      "message": "I think in this case the type is the same, but in any case if we have to have a discussion to convince ourselves that it works, then it\u0027s bad code. I will implement it as you suggested.",
+      "parentUuid": "d023efc1_b18ee5dc",
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ff0f321_cee13248",
         "filename": "src/wasm/wasm-opcodes.h",
         "patchSetId": 4
@@ -117,6 +207,30 @@
       "writtenOn": "2020-05-08T13:34:16Z",
       "side": 1,
       "message": "Is there a reason this isn\u0027t in the `FOREACH_SIMPLE_PROTOTYPE_OPCODE` list below?",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 16
+      },
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d0194db_312350ba",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-11T08:28:13Z",
+      "side": 1,
+      "message": "Those instructions need specific types in their signatures, and get handled as operators later. Here I think we cannot do this.",
+      "parentUuid": "6ff0f321_cee13248",
       "range": {
         "startLine": 64,
         "startChar": 4,
