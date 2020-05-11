@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "acb1b566_aeadbaf0",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-05-11T12:32:57Z",
+      "side": 1,
+      "message": "You probably want to use an || here to avoid setting it to false again with a subsequent catch.",
+      "revId": "394705a8f0250a4e0747fc5eaad57623d3ae5152",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
