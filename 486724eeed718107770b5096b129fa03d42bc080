@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e040c897_333ef77f",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-05-11T14:33:46Z",
+      "side": 1,
+      "message": "I find this control flow a bit confusing/unintuitive, maybe we should just pass both labels into CollectConstructFeedback and make it `: never`?",
+      "range": {
+        "startLine": 839,
+        "startChar": 0,
+        "endLine": 841,
+        "endChar": 3
+      },
+      "revId": "486724eeed718107770b5096b129fa03d42bc080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
