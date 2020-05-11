@@ -22,6 +22,30 @@
       "revId": "ba2d457d185e6a89ad59ee6c0089f919734fd318",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90b283ed_170deac5",
+        "filename": "src/compiler/graph-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-05-11T13:38:20Z",
+      "side": 1,
+      "message": "That\u0027s true. WDYT about replacing that with \n  DCHECK_IMPLIES(user \u003d\u003d node, state_.Get(node) !\u003d State::kVisited)\n?\n\nAlternatively, I can just remove it.",
+      "parentUuid": "39004c3f_e309acd3",
+      "range": {
+        "startLine": 166,
+        "startChar": 6,
+        "endLine": 167,
+        "endChar": 23
+      },
+      "revId": "ba2d457d185e6a89ad59ee6c0089f919734fd318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
