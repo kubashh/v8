@@ -1011,7 +1011,7 @@ DEFINE_BOOL(stress_compaction, false,
 DEFINE_BOOL(stress_compaction_random, false,
             "Stress GC compaction by selecting random percent of pages as "
             "evacuation candidates. It overrides stress_compaction.")
-DEFINE_BOOL(stress_incremental_marking, false,
+DEFINE_BOOL(stress_incremental_marking, true,
             "force incremental marking for small heaps and run it more often")
 
 DEFINE_BOOL(fuzzer_gc_analysis, false,
