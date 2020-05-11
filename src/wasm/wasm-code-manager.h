@@ -634,6 +634,7 @@ class V8_EXPORT_PRIVATE NativeModule final {
   NativeModule(WasmEngine* engine, const WasmFeatures& enabled_features,
                VirtualMemory code_space,
                std::shared_ptr<const WasmModule> module,
+               std::shared_ptr<v8::TaskRunner> task_runner,
                std::shared_ptr<Counters> async_counters,
                std::shared_ptr<NativeModule>* shared_this);
 

@@ -773,6 +773,7 @@ size_t WasmCodeAllocator::GetNumCodeSpaces() const {
 NativeModule::NativeModule(WasmEngine* engine, const WasmFeatures& enabled,
                            VirtualMemory code_space,
                            std::shared_ptr<const WasmModule> module,
+                           std::shared_ptr<v8::TaskRunner> task_runner,
                            std::shared_ptr<Counters> async_counters,
                            std::shared_ptr<NativeModule>* shared_this)
     : code_allocator_(engine->code_manager(), std::move(code_space),
@@ -789,8 +790,8 @@ NativeModule::NativeModule(WasmEngine* engine, const WasmFeatures& enabled,
   DCHECK_NOT_NULL(shared_this);
   DCHECK_NULL(*shared_this);
   shared_this->reset(this);
-  compilation_state_ =
-      CompilationState::New(*shared_this, std::move(async_counters));
+  compilation_state_ = CompilationState::New(*shared_this, task_runner,
+                                             std::move(async_counters));
   DCHECK_NOT_NULL(module_);
   if (module_->num_declared_functions > 0) {
     code_table_ =
@@ -1752,6 +1753,8 @@ std::shared_ptr<NativeModule> WasmCodeManager::NewNativeModule(
   Address end = code_space.end();
   std::shared_ptr<NativeModule> ret;
   new NativeModule(engine, enabled, std::move(code_space), std::move(module),
+                   V8::GetCurrentPlatform()->GetForegroundTaskRunner(
+                       reinterpret_cast<v8::Isolate*>(isolate)),
                    isolate->async_counters(), &ret);
   // The constructor initialized the shared_ptr.
   DCHECK_NOT_NULL(ret);

@@ -68,7 +68,11 @@ namespace {
 constexpr int kMaxThreadPoolSize = 16;
 
 int GetActualThreadPoolSize(int thread_pool_size) {
-  DCHECK_GE(thread_pool_size, 0);
+  if (thread_pool_size < 0) {
+    // A thread pool size of -1 indicates that we want to run in single-threaded
+    // mode.
+    return 0;
+  }
   if (thread_pool_size < 1) {
     thread_pool_size = base::SysInfo::NumberOfProcessors() - 1;
   }

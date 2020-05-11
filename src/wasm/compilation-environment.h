@@ -134,7 +134,8 @@ class CompilationState {
   // such that it can keep it alive (by regaining a {std::shared_ptr}) in
   // certain scopes.
   static std::unique_ptr<CompilationState> New(
-      const std::shared_ptr<NativeModule>&, std::shared_ptr<Counters>);
+      const std::shared_ptr<NativeModule>&, std::shared_ptr<v8::TaskRunner>,
+      std::shared_ptr<Counters>);
 };
 
 }  // namespace wasm

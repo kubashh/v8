@@ -3523,9 +3523,13 @@ int Shell::Main(int argc, char* argv[]) {
   }
 
   platform::tracing::TracingController* tracing_controller = tracing.get();
+  // The value for the {thread_pool_size} is a bit confusing here, due to legacy
+  // reasons. A value of -1 means that there is no thread pool, a value of 0
+  // means as many threads as possible, and any other value means that value.
   g_platform = v8::platform::NewDefaultPlatform(
-      options.thread_pool_size, v8::platform::IdleTaskSupport::kEnabled,
-      in_process_stack_dumping, std::move(tracing));
+      i::FLAG_single_threaded ? -1 : options.thread_pool_size,
+      v8::platform::IdleTaskSupport::kEnabled, in_process_stack_dumping,
+      std::move(tracing));
   g_default_platform = g_platform.get();
   if (i::FLAG_verify_predictable) {
     g_platform = MakePredictablePlatform(std::move(g_platform));
