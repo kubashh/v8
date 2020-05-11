@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39004c3f_e309acd3",
+        "filename": "src/compiler/graph-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-05-11T13:15:33Z",
+      "side": 1,
+      "message": "Funnily enough, this check became unnecessary now, since {node} won\u0027t be in state kVisited at this point, so Revisit won\u0027t do anything about it.",
+      "range": {
+        "startLine": 166,
+        "startChar": 6,
+        "endLine": 167,
+        "endChar": 23
+      },
+      "revId": "ba2d457d185e6a89ad59ee6c0089f919734fd318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
