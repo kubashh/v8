@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "653bc4e7_66380f70",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5136,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-11T09:21:57Z",
+      "side": 1,
+      "message": "Please define an enum. You can put it into WasmGraphBuilder; at the top of that class you can also find existing examples.\n\nThe reason we prefer enums over simple bools is that it provides context at the call site. As a hypothetical example, when you see a call:\n\n  result \u003d ComplicatedFunction(..., ..., true, false, true);\n\nit doesn\u0027t tell you much, whereas with:\n\n  result \u003d ComplicatedFunction(..., ..., kWithNullCheck, kNoRetpoline, kEmitDebugInfo);\n\nyou can immediately tell what\u0027s going on.",
+      "parentUuid": "08da964c_82b889b6",
+      "range": {
+        "startLine": 5136,
+        "startChar": 56,
+        "endLine": 5136,
+        "endChar": 60
+      },
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "74e4588b_0d63c2d6",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 4
@@ -240,6 +264,30 @@
       "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77d6e125_978e50de",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-11T09:21:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2d0194db_312350ba",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 16
+      },
+      "revId": "4fa1483ceedfbc8805129ab161582eb0d64a686a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
