@@ -236,6 +236,30 @@
       "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be6ac016_fbd2a46e",
+        "filename": "src/heap/remembered-set-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-05-11T09:07:31Z",
+      "side": 0,
+      "message": "Do you want to switch PPC now to use FULL_OBJECT_SLOT so that your build doesn\u0027t break?",
+      "parentUuid": "df3a6fb3_54880323",
+      "range": {
+        "startLine": 321,
+        "startChar": 34,
+        "endLine": 321,
+        "endChar": 55
+      },
+      "revId": "ee0c1b0e4d34bd7c428c3bdb04b7c2cfadce3912",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
