@@ -22,6 +22,17 @@ namespace ic {
         maybeTarget, context, maybeFeedbackVector, slotId);
   }
 
+  @export
+  macro CollectConstructFeedback(implicit context: Context)(
+      target: JSAny, newTarget: JSAny,
+      maybeFeedbackVector: Undefined|FeedbackVector,
+      slotId: uintptr): never labels ConstructGeneric,
+      ConstructArray(AllocationSite) {
+    ic_callable::CollectConstructFeedback(
+        target, newTarget, maybeFeedbackVector, slotId)
+        otherwise ConstructGeneric, ConstructArray;
+  }
+
   // --- Common functionality.
 
   extern macro MegamorphicSymbolConstant(): Symbol;
