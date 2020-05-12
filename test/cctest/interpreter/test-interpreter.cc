@@ -5011,7 +5011,7 @@ TEST(InterpreterGenerators) {
   }
 }
 
-#if !defined(V8_TARGET_ARCH_ARM) && !defined(V8_TARGET_ARCH_S390X)
+#ifndef V8_TARGET_ARCH_ARM
 TEST(InterpreterWithNativeStack) {
   i::FLAG_interpreted_frames_native_stack = true;
 
@@ -5033,7 +5033,7 @@ TEST(InterpreterWithNativeStack) {
   CHECK(code.is_interpreter_trampoline_builtin());
   CHECK_NE(code.address(), interpreter_entry_trampoline->address());
 }
-#endif  // !V8_TARGET_ARCH_ARM && !V8_TARGET_ARCH_S390X
+#endif  // V8_TARGET_ARCH_ARM
 
 TEST(InterpreterGetBytecodeHandler) {
   HandleAndZoneScope handles;
