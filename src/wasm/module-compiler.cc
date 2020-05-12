@@ -414,6 +414,7 @@ class CompilationUnitQueues {
 class CompilationStateImpl {
  public:
   CompilationStateImpl(const std::shared_ptr<NativeModule>& native_module,
+                       std::shared_ptr<v8::TaskRunner> task_runner,
                        std::shared_ptr<Counters> async_counters);
 
   // Cancel all background compilation and wait for all tasks to finish. Call
@@ -605,6 +606,9 @@ class CompilationStateImpl {
   // End of fields protected by {callbacks_mutex_}.
   //////////////////////////////////////////////////////////////////////////////
 
+  // We need a foreground task runner in case we run in single-threaded mode.
+  std::shared_ptr<v8::TaskRunner> foreground_task_runner_;
+
   // Encoding of fields in the {compilation_progress_} vector.
   using RequiredBaselineTierField = base::BitField8<ExecutionTier, 0, 2>;
   using RequiredTopTierField = base::BitField8<ExecutionTier, 2, 2>;
@@ -684,9 +688,11 @@ bool CompilationState::recompilation_finished() const {
 // static
 std::unique_ptr<CompilationState> CompilationState::New(
     const std::shared_ptr<NativeModule>& native_module,
+    std::shared_ptr<v8::TaskRunner> task_runner,
     std::shared_ptr<Counters> async_counters) {
-  return std::unique_ptr<CompilationState>(reinterpret_cast<CompilationState*>(
-      new CompilationStateImpl(native_module, std::move(async_counters))));
+  return std::unique_ptr<CompilationState>(
+      reinterpret_cast<CompilationState*>(new CompilationStateImpl(
+          native_module, std::move(task_runner), std::move(async_counters))));
 }
 
 // End of PIMPL implementation of {CompilationState}.
@@ -1885,7 +1891,7 @@ void AsyncCompileJob::StartBackgroundTask() {
 
   // If --wasm-num-compilation-tasks=0 is passed, do only spawn foreground
   // tasks. This is used to make timing deterministic.
-  if (FLAG_wasm_num_compilation_tasks > 0) {
+  if (FLAG_wasm_num_compilation_tasks > 0 && !FLAG_single_threaded) {
     V8::GetCurrentPlatform()->CallOnWorkerThread(std::move(task));
   } else {
     foreground_task_runner_->PostTask(std::move(task));
@@ -2459,6 +2465,7 @@ int GetMaxBackgroundTasks() {
 
 CompilationStateImpl::CompilationStateImpl(
     const std::shared_ptr<NativeModule>& native_module,
+    std::shared_ptr<v8::TaskRunner> task_runner,
     std::shared_ptr<Counters> async_counters)
     : native_module_(native_module.get()),
       background_compile_token_(
@@ -2470,7 +2477,8 @@ CompilationStateImpl::CompilationStateImpl(
       async_counters_(std::move(async_counters)),
       max_background_tasks_(std::max(GetMaxBackgroundTasks(), 1)),
       compilation_unit_queues_(max_background_tasks_),
-      available_task_ids_(max_background_tasks_) {
+      available_task_ids_(max_background_tasks_),
+      foreground_task_runner_(std::move(task_runner)) {
   for (int i = 0; i < max_background_tasks_; ++i) {
     // Ids are popped on task creation, so reverse this list. This ensures that
     // the first background task gets id 0.
@@ -2891,7 +2899,11 @@ void CompilationStateImpl::RestartBackgroundTasks() {
     }
   } else {
     for (auto& task : new_tasks) {
-      V8::GetCurrentPlatform()->CallOnWorkerThread(std::move(task));
+      if (FLAG_single_threaded) {
+        foreground_task_runner_->PostTask(std::move(task));
+      } else {
+        V8::GetCurrentPlatform()->CallOnWorkerThread(std::move(task));
+      }
     }
   }
 }
@@ -2966,10 +2978,19 @@ void CompileJsToWasmWrappers(Isolate* isolate, const WasmModule* module,
   // Execute compilation jobs in the background.
   CancelableTaskManager task_manager;
   const int max_background_tasks = GetMaxBackgroundTasks();
+  std::shared_ptr<v8::TaskRunner> foreground_task_runner;
+  if (FLAG_single_threaded) {
+    foreground_task_runner = V8::GetCurrentPlatform()->GetForegroundTaskRunner(
+        reinterpret_cast<v8::Isolate*>(isolate));
+  }
   for (int i = 0; i < max_background_tasks; ++i) {
     auto task = std::make_unique<CompileJSToWasmWrapperTask>(
         &task_manager, &queue, &compilation_units);
-    V8::GetCurrentPlatform()->CallOnWorkerThread(std::move(task));
+    if (FLAG_single_threaded) {
+      foreground_task_runner->PostTask(std::move(task));
+    } else {
+      V8::GetCurrentPlatform()->CallOnWorkerThread(std::move(task));
+    }
   }
 
   // Work in the main thread too.

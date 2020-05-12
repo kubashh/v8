@@ -98,6 +98,11 @@ void DelayedTaskQueue::Terminate() {
   base::MutexGuard guard(&lock_);
   DCHECK(!terminated_);
   terminated_ = true;
+  {
+    // Clear the task queue, we will not execute it anymore.
+    std::queue<std::unique_ptr<Task>> tmp;
+    task_queue_.swap(tmp);
+  }
   queues_condition_var_.NotifyAll();
 }
 
