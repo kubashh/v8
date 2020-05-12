@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e9d32d87_223224df",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-12T13:44:02Z",
+      "side": 1,
+      "message": "Ah, yes I like it. Done.",
+      "parentUuid": "b63a2f20_d1494198",
+      "revId": "feafc480a118aed84a569946c958a51d020b7531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1248affd_5f73b2e7",
         "filename": "src/builtins/ic-callable.tq",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2020-05-12T10:51:00Z",
       "side": 1,
       "message": "Thinking out loud...\nThe Torque code you ported is correct, however, I\u0027m a bit worried that we keep it in a CSA-style with raw down casts and Is\u003c\u003e checks. \n\nWe could take a step back and consider introducing new union types that were not available in early CSA times and are not available in C++ code.\n\nIt looks, in the IC code there could be multiple kinds of feedback values:\na) non-Smi MaybeObject (or MaybeHeapObject): HeapObject|WeakHeapObject|ClearedRef (like in the ICs that you already ported)\nb) any MaybeObject: Object|WeakHeapObject|ClearedRef (like in load/store ICs)\nc) non-Object MaybeObject (or WeakMaybeObject): WeakHeapObject|ClearedRef\n\nIf we had such types then these checks could be implemented as Casts or you could use macros with parameterized labels:\n1) !IsWeakOrCleared() check could be turned to Cast\u003cObject\u003e(maybeObject or maybeHeapObject) otherwise IfWeakOrCleared(WeakMaybeObject)\n2) the existing MaybeObjectToStrong() could be renamed to WeakMaybeObjectToStrong()\n\nAnd finally, how about also avoiding UnsafeCasts?\n  try {\n    const allocationSite \u003d Cast\u003cAllocationSite\u003e(..) otherwise NotAllocationSite;\n    ...\n  \n  } label NotAllocationSite {}",
+      "revId": "feafc480a118aed84a569946c958a51d020b7531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70d9f64d_fcb0d11c",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-12T13:44:02Z",
+      "side": 1,
+      "message": "General answer: I agree we should leverage types more, let\u0027s please keep it as a TODO for future work, potentially done by someone else. I don\u0027t want to do too much in this CL, would like to move on to next steps, plus the more-or-less straight port is already a big improvement imo.\n\nFor casts: I discussed a syntax with Tobias that I think would be perfect for these situations:\n\n if (const x \u003d Cast\u003cType\u003e(y)) {\n   // x available here.\n } else {\n   // y is not Type.\n }\n\nThen one doesn\u0027t need to muck with try/label/otherwise/typeswitch if one really wants to express a simple if-else.\n\nFor MaybeObject in general: handling these in tq currently still feels a bit awkward, utility methods here could use some love. I agree the RawDownCast is a bit hackish..\n\nIdeally the sequence of casts and checks could become just:\n\n if (const site \u003d Cast\u003cAllocationSite\u003e(feedback)) ...",
+      "parentUuid": "1248affd_5f73b2e7",
       "revId": "feafc480a118aed84a569946c958a51d020b7531",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
