@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "989fa575_69d09abb",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-12T15:05:21Z",
+      "side": 1,
+      "message": "The thing is, this is run anyway because we pass WasmFeatures::All() sometimes.",
+      "parentUuid": "edc1fbbd_b5ecfdba",
+      "range": {
+        "startLine": 308,
+        "startChar": 8,
+        "endLine": 308,
+        "endChar": 56
+      },
+      "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "703291d9_5e4aec38",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "554dab59_3bac6b19",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-12T15:05:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "703291d9_5e4aec38",
+      "range": {
+        "startLine": 1582,
+        "startChar": 12,
+        "endLine": 1582,
+        "endChar": 65
+      },
+      "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "2b4f1d51_802e90e4",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-12T15:05:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c69cae8e_c52bf3d8",
+      "range": {
+        "startLine": 1603,
+        "startChar": 20,
+        "endLine": 1603,
+        "endChar": 24
+      },
+      "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "670fc83b_4145b785",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 3
@@ -91,6 +163,30 @@
       "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fe63d8b_e92c2e3e",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-12T15:05:21Z",
+      "side": 1,
+      "message": "This is not temporary code: The default return value should be correct for all the missing opcodes. Notice how I explicitly list the two rtt opcodes.",
+      "parentUuid": "670fc83b_4145b785",
+      "range": {
+        "startLine": 1608,
+        "startChar": 12,
+        "endLine": 1608,
+        "endChar": 21
+      },
+      "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
