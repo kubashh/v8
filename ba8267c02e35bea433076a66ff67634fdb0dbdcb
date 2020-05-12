@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ee4baf7_b4a41e05",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-12T05:29:49Z",
+      "side": 1,
+      "message": "q: I guess left, right are always pointer size and things like pointer compression don\u0027t play a role here?",
+      "revId": "ba8267c02e35bea433076a66ff67634fdb0dbdcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebdda118_ba4a5343",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 3499,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-12T05:29:49Z",
+      "side": 1,
+      "message": "nit: else if",
+      "revId": "ba8267c02e35bea433076a66ff67634fdb0dbdcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
