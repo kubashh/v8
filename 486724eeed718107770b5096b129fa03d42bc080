@@ -46,6 +46,30 @@
       "revId": "486724eeed718107770b5096b129fa03d42bc080",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "acc63495_0a06d6b0",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-05-12T06:36:27Z",
+      "side": 1,
+      "message": "Normally I\u0027d be ok with it too, because normally it\u0027s for fast/slow path and the fast path can be the fallthrough. In this case it\u0027s two arguably equally \u0027good\u0027 paths.",
+      "parentUuid": "4bdc2472_00229434",
+      "range": {
+        "startLine": 839,
+        "startChar": 0,
+        "endLine": 841,
+        "endChar": 3
+      },
+      "revId": "486724eeed718107770b5096b129fa03d42bc080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
