@@ -22,6 +22,40 @@
       "revId": "3772ba88353946398a8c60b665abbb67b15e294a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3a94031_6ae6f52b",
+        "filename": "src/libplatform/delayed-task-queue.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-05-12T08:36:55Z",
+      "side": 1,
+      "message": "I think you can simplify this to\nstd::queue\u003cstd::unique_ptr\u003cTask\u003e\u003e{}.swap(task_queue_);\nor just\ntask_queue_ \u003d {};",
+      "revId": "3772ba88353946398a8c60b665abbb67b15e294a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1760f6ad_429c4ed4",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1894,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-05-12T08:36:55Z",
+      "side": 1,
+      "message": "--single-threaded implies --wasm-num-compilation-tasks\u003d0, so I think this change has no effect.",
+      "revId": "3772ba88353946398a8c60b665abbb67b15e294a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
