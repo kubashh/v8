@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d69ec9e8_1450d752",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-12T10:50:34Z",
+      "side": 1,
+      "message": "Oh, good point, these are always heap pointers, so we do have to consider pointer compression here. I don\u0027t see any precedent in this file, so we may have a more widespread bug there...",
+      "parentUuid": "0ee4baf7_b4a41e05",
+      "revId": "ba8267c02e35bea433076a66ff67634fdb0dbdcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ebdda118_ba4a5343",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 4
