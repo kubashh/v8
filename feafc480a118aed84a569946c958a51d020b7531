@@ -87,6 +87,24 @@
       "revId": "feafc480a118aed84a569946c958a51d020b7531",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b5d7964_62bf6298",
+        "filename": "src/builtins/ic-callable.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-12T14:57:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b435bf81_e7a2cc4b",
+      "revId": "feafc480a118aed84a569946c958a51d020b7531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
