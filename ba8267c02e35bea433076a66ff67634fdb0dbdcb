@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "df8d9e5a_d7da6cd2",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-12T10:57:35Z",
+      "side": 1,
+      "message": "Looks like it should be as easy as using `TaggedEqual` instead of `WordEqual`.",
+      "parentUuid": "d69ec9e8_1450d752",
+      "revId": "ba8267c02e35bea433076a66ff67634fdb0dbdcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ebdda118_ba4a5343",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 4
