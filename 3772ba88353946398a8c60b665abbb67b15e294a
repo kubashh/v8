@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebf99e39_5ddfa83e",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3527,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-12T07:08:32Z",
+      "side": 1,
+      "message": "I understand that you don\u0027t want to hunt down API use cases. Can we get a constant though that is close to DefaultPlatform, e.g., something like kNoThreadPool?",
+      "range": {
+        "startLine": 3527,
+        "startChar": 25,
+        "endLine": 3527,
+        "endChar": 27
+      },
+      "revId": "3772ba88353946398a8c60b665abbb67b15e294a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
