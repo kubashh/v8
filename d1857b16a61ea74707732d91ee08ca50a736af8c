@@ -187,6 +187,30 @@
       "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "452d0d0f_58a1ec44",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-12T17:21:56Z",
+      "side": 1,
+      "message": "\"all the missing opcodes\" is an undefined set: we don\u0027t know which opcodes might get added in the future, so we can\u0027t predict what will be correct for them. I trust that it\u0027s correct for all *currently proposed* opcodes; my concern is about making it easier to avoid implementation mistakes when the spec changes *after* the current proposal.",
+      "parentUuid": "5fe63d8b_e92c2e3e",
+      "range": {
+        "startLine": 1608,
+        "startChar": 12,
+        "endLine": 1608,
+        "endChar": 21
+      },
+      "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
