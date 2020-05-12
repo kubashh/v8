@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "edc1fbbd_b5ecfdba",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-12T12:19:52Z",
+      "side": 1,
+      "message": "I think the old code would have been fine here, as fuzzers don\u0027t set --experimental-wasm-* flags. Fine to keep it like this too.",
+      "range": {
+        "startLine": 308,
+        "startChar": 8,
+        "endLine": 308,
+        "endChar": 56
+      },
+      "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "703291d9_5e4aec38",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-12T12:19:52Z",
+      "side": 1,
+      "message": "Nope, the FieldIndexImmediate contains a StructIndexImmediate. So just drop this line, and simplify the next two (s/ + simm.length// in both).",
+      "range": {
+        "startLine": 1582,
+        "startChar": 12,
+        "endLine": 1582,
+        "endChar": 65
+      },
+      "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c69cae8e_c52bf3d8",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-12T12:19:52Z",
+      "side": 1,
+      "message": "7748, and \"Implement\".",
+      "range": {
+        "startLine": 1603,
+        "startChar": 20,
+        "endLine": 1603,
+        "endChar": 24
+      },
+      "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "670fc83b_4145b785",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-12T12:19:52Z",
+      "side": 1,
+      "message": "I\u0027d rather enumerate all GC opcodes explicitly, and then make the \"default:\" case UNREACHABLE(). That way, when someone implements a new instruction and forgets to update this method, at least they\u0027ll get an easy-to-debug crash once a test hits this path rather than difficult-to-diagnose misbehavior due to an incorrect value having silently been returned.",
+      "range": {
+        "startLine": 1608,
+        "startChar": 12,
+        "endLine": 1608,
+        "endChar": 21
+      },
+      "revId": "d1857b16a61ea74707732d91ee08ca50a736af8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
