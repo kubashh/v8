@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53a1ab83_15053e79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-13T15:09:21Z",
+      "side": 1,
+      "message": "Noticed this too late: please specify the project along with bug numbers, i.e.: chromium:1079337 or v8:123. Apparently gerrit figured it out anyway, but bugdroid failed to update the issues.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 12
+      },
+      "revId": "39932a0467f59f2df4881765a57869e8555d550f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
