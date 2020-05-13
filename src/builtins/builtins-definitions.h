@@ -848,8 +848,6 @@ namespace internal {
   TFC(WasmI32AtomicWait64, WasmI32AtomicWait64)                                \
   TFC(WasmI64AtomicWait32, WasmI64AtomicWait32)                                \
   TFC(WasmI64AtomicWait64, WasmI64AtomicWait64)                                \
-  TFC(WasmTableInit, WasmTableInit)                                            \
-  TFC(WasmTableCopy, WasmTableCopy)                                            \
                                                                                \
   /* WeakMap */                                                                \
   TFJ(WeakMapConstructor, kDontAdaptArgumentsSentinel)                         \
