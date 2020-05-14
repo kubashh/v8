@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de60f269_9ef99d8f",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-05-14T05:42:44Z",
+      "side": 1,
+      "message": "tableIndex is guaranteed to be always a Smi, We don\u0027t have to do the conversion from Number.",
+      "range": {
+        "startLine": 82,
+        "startChar": 26,
+        "endLine": 82,
+        "endChar": 76
+      },
+      "revId": "83e4f6d110f3eb2f70e4718066bfe224250e6c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d9190f7_eb516273",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-05-14T05:42:44Z",
+      "side": 1,
+      "message": "Same here, segmentIndex is already a Smi.",
+      "range": {
+        "startLine": 84,
+        "startChar": 6,
+        "endLine": 84,
+        "endChar": 58
+      },
+      "revId": "83e4f6d110f3eb2f70e4718066bfe224250e6c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dac48e1a_41ed51d5",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-05-14T05:42:44Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 99,
+        "startChar": 24,
+        "endLine": 99,
+        "endChar": 72
+      },
+      "revId": "83e4f6d110f3eb2f70e4718066bfe224250e6c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39ee50d9_2ff7c7cb",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-05-14T05:42:44Z",
+      "side": 1,
+      "message": "Same here. The parameter was marked as tagged because it\u0027s a stack parameter. We guarantee at the call site though that it is always a Smi.",
+      "range": {
+        "startLine": 100,
+        "startChar": 24,
+        "endLine": 100,
+        "endChar": 72
+      },
+      "revId": "83e4f6d110f3eb2f70e4718066bfe224250e6c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
