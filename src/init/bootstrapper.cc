@@ -3788,6 +3788,15 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
                              Builtins::kHandleApiCallAsConstructor, 0, false);
     native_context()->set_call_as_constructor_delegate(*delegate);
   }
+
+  {
+    // Set up the IterableToListWithSymbolLookup builtin.
+    Handle<JSFunction> builtin =
+        SimpleCreateFunction(isolate_, factory->empty_string(),
+                             Builtins::kApiIterableToListWithSymbolLookup,
+                             1, false);
+    native_context()->set_iterable_to_list_with_symbol_lookup(*builtin);
+  }
 }  // NOLINT(readability/fn_size)
 
 Handle<JSFunction> Genesis::InstallTypedArray(const char* name,

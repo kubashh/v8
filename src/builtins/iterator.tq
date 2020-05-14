@@ -99,4 +99,15 @@ transitioning macro IteratorCloseOnException(implicit context: Context)(
 
   // (If completion.[[Type]] is throw) return Completion(completion).
 }
+
+// Makes an array from its members. Callable from the V8 API.
+transitioning javascript builtin
+ApiIterableToListWithSymbolLookup(
+    js-implicit context: NativeContext, receiver: JSAny)(): JSArray {
+  // TODO(jbroman): we could typeswitch on FastJSArrayWithNoCustomIteration
+  // here to avoid the copy at the cost of making the interface weird
+  // (only sometimes copies)
+
+  return IterableToListWithSymbolLookup(receiver);
+}
 }

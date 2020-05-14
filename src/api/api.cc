@@ -6759,6 +6759,18 @@ Local<v8::Array> v8::Array::New(Isolate* isolate, Local<Value>* elements,
       factory->NewJSArrayWithElements(result, i::PACKED_ELEMENTS, len));
 }
 
+MaybeLocal<Array> v8::Array::FromIterable(Local<Context> context, Local<Value> iterable) {
+  PREPARE_FOR_EXECUTION(context, Array, FromIterable, Array);
+
+  i::Handle<i::Object> result;
+  has_pending_exception =
+      !i::Execution::CallBuiltin(isolate, isolate->iterable_to_list_with_symbol_lookup(),
+                                 Utils::OpenHandle(*iterable), 0, nullptr)
+      .ToHandle(&result);
+  RETURN_ON_FAILED_EXECUTION(Array);
+  RETURN_ESCAPED(Local<Array>::Cast(Utils::ToLocal(result)));
+}
+
 uint32_t v8::Array::Length() const {
   i::Handle<i::JSArray> obj = Utils::OpenHandle(this);
   i::Object length = obj->length();

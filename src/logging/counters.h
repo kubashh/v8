@@ -740,6 +740,7 @@ class RuntimeCallTimer final {
   V(ArrayBuffer_NewBackingStore)                           \
   V(ArrayBuffer_BackingStore_Reallocate)                   \
   V(Array_CloneElementAt)                                  \
+  V(Array_FromIterable)                                    \
   V(Array_New)                                             \
   V(BigInt64Array_New)                                     \
   V(BigInt_NewFromWords)                                   \
