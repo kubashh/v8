@@ -4072,6 +4072,15 @@ void Assembler::veor(QwNeonRegister dst, QwNeonRegister src1,
                                  src2.code()));
 }
 
+void Assembler::vorr(DwVfpRegister dst, DwVfpRegister src1,
+                     DwVfpRegister src2) {
+  // Dd = vorr(Dn, Dm) SIMD OR.
+  // Instruction details available in ARM DDI 0406C.b, A8.8.976.
+  DCHECK(IsEnabled(NEON));
+  emit(EncodeNeonBinaryBitwiseOp(VORR, NEON_D, dst.code(), src1.code(),
+                                 src2.code()));
+}
+
 void Assembler::vorr(QwNeonRegister dst, QwNeonRegister src1,
                      QwNeonRegister src2) {
   // Qd = vorr(Qn, Qm) SIMD OR.

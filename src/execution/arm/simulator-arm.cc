@@ -4279,20 +4279,31 @@ void Simulator::DecodeSpecialCondition(Instruction* instr) {
           break;
         }
         case 0x1: {
-          if (instr->Bits(21, 20) == 2 && instr->Bit(6) == 1 &&
-              instr->Bit(4) == 1) {
-            // vmov Qd, Qm.
-            // vorr, Qd, Qm, Qn.
-            uint32_t src1[4];
-            get_neon_register(Vm, src1);
-            if (Vm != Vn) {
-              uint32_t src2[4];
-              get_neon_register(Vn, src2);
-              for (int i = 0; i < 4; i++) {
-                src1[i] = src1[i] | src2[i];
+          if (instr->Bits(21, 20) == 2 && instr->Bit(4) == 1) {
+            if (instr->Bit(6) == 0) {
+              // vorr, Dd, Dn, Dm.
+              uint64_t src1, src2;
+              get_d_register(Vn, &src1);
+              get_d_register(Vm, &src2);
+              // if Vm == Vn, it is vmov Dd, Dm
+              if (Vn != Vm) {
+                src1 |= src2;
               }
+              set_d_register(Vd, &src1);
+            } else {
+              // vmov Qd, Qm.
+              // vorr, Qd, Qm, Qn.
+              uint32_t src1[4];
+              get_neon_register(Vm, src1);
+              if (Vm != Vn) {
+                uint32_t src2[4];
+                get_neon_register(Vn, src2);
+                for (int i = 0; i < 4; i++) {
+                  src1[i] = src1[i] | src2[i];
+                }
+              }
+              set_neon_register(Vd, src1);
             }
-            set_neon_register(Vd, src1);
           } else if (instr->Bits(21, 20) == 0 && instr->Bit(6) == 1 &&
                      instr->Bit(4) == 1) {
             // vand Qd, Qm, Qn.
