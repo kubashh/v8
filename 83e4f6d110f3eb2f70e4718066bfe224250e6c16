@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "525037f9_8a4d61cf",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-05-14T13:22:17Z",
+      "side": 1,
+      "message": "I realized I should make SmiFromUint32WithSaturation a Torque macro. Rebasing and uploading a new patchset.",
+      "parentUuid": "f022461c_736fb256",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 63
+      },
+      "revId": "83e4f6d110f3eb2f70e4718066bfe224250e6c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "de60f269_9ef99d8f",
         "filename": "src/builtins/wasm.tq",
         "patchSetId": 12
