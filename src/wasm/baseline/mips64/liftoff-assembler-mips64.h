@@ -1172,6 +1172,9 @@ bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
       return true;
     default:
       return false;
+    case kExprI32SConvertSatF32:
+      bailout(kNonTrappingFloatToInt, "kExprI32SConvertSatF32");
+      return true;
   }
 }
 
