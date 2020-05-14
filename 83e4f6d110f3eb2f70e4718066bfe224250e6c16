@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "80071702_b09a03b5",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-05-14T13:03:55Z",
+      "side": 1,
+      "message": "Question: why do we add 1 here? Would it be OK to cap to 1 less? Torque style prefers \"uninteresting\" constants.",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 63
+      },
+      "revId": "83e4f6d110f3eb2f70e4718066bfe224250e6c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "de60f269_9ef99d8f",
         "filename": "src/builtins/wasm.tq",
         "patchSetId": 12
@@ -13,6 +36,30 @@
       "writtenOn": "2020-05-14T05:42:44Z",
       "side": 1,
       "message": "tableIndex is guaranteed to be always a Smi, We don\u0027t have to do the conversion from Number.",
+      "range": {
+        "startLine": 82,
+        "startChar": 26,
+        "endLine": 82,
+        "endChar": 76
+      },
+      "revId": "83e4f6d110f3eb2f70e4718066bfe224250e6c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26d7a20f_6ba0f4f5",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-05-14T13:03:55Z",
+      "side": 1,
+      "message": "Thanks for pointing this out. Done",
+      "parentUuid": "de60f269_9ef99d8f",
       "range": {
         "startLine": 82,
         "startChar": 26,
@@ -48,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "a5e6c351_794eae35",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-05-14T13:03:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d9190f7_eb516273",
+      "range": {
+        "startLine": 84,
+        "startChar": 6,
+        "endLine": 84,
+        "endChar": 58
+      },
+      "revId": "83e4f6d110f3eb2f70e4718066bfe224250e6c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dac48e1a_41ed51d5",
         "filename": "src/builtins/wasm.tq",
         "patchSetId": 12
@@ -71,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "825a6502_d093f1b6",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-05-14T13:03:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dac48e1a_41ed51d5",
+      "range": {
+        "startLine": 99,
+        "startChar": 24,
+        "endLine": 99,
+        "endChar": 72
+      },
+      "revId": "83e4f6d110f3eb2f70e4718066bfe224250e6c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39ee50d9_2ff7c7cb",
         "filename": "src/builtins/wasm.tq",
         "patchSetId": 12
@@ -91,6 +186,30 @@
       "revId": "83e4f6d110f3eb2f70e4718066bfe224250e6c16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2eee3a73_8cd42e3e",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-05-14T13:03:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39ee50d9_2ff7c7cb",
+      "range": {
+        "startLine": 100,
+        "startChar": 24,
+        "endLine": 100,
+        "endChar": 72
+      },
+      "revId": "83e4f6d110f3eb2f70e4718066bfe224250e6c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
