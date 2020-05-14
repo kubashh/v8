@@ -44,6 +44,7 @@
 #include "src/execution/isolate-inl.h"
 #include "src/execution/messages.h"
 #include "src/execution/microtask-queue.h"
+#include "src/execution/protectors-inl.h"
 #include "src/execution/runtime-profiler.h"
 #include "src/execution/simulator.h"
 #include "src/execution/v8threads.h"
@@ -6767,6 +6768,28 @@ uint32_t v8::Array::Length() const {
   } else {
     return static_cast<uint32_t>(length.Number());
   }
+}
+
+bool v8::Array::IsFastArrayWithNoCustomIteration(Isolate* isolate) const {
+  // Similar to Cast<FastJSArrayWithNoCustomIteration>.
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+
+  if (!i::Protectors::IsArrayIteratorLookupChainIntact(i_isolate) ||
+      !i::Protectors::IsNoElementsIntact(i_isolate)) {
+    return false;
+  }
+
+  i::Handle<i::JSArray> obj = Utils::OpenHandle(this);
+  if (!obj->HasFastElements()) {
+    return false;
+  }
+
+  if (!i_isolate->IsAnyInitialArrayPrototype(
+          i::handle(i::JSArray::cast(obj->map().prototype()), i_isolate))) {
+    return false;
+  }
+
+  return true;
 }
 
 Local<v8::Map> v8::Map::New(Isolate* isolate) {

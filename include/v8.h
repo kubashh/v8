@@ -4119,6 +4119,11 @@ class V8_EXPORT Array : public Object {
  public:
   uint32_t Length() const;
 
+  // Returns true if this a definitely a plain array with no special elements
+  // (e.g. getters), the normal array prototype, and no custom iterator.
+  // The heuristics to detect this are conservative.
+  bool IsFastArrayWithNoCustomIteration(Isolate* isolate) const;
+
   /**
    * Creates a JavaScript array with the given length. If the length
    * is negative the returned array will have length 0.
