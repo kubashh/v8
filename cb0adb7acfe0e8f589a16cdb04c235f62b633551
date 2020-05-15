@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d51219e_c45050b8",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3038,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-05-15T14:18:52Z",
+      "side": 1,
+      "message": "This comparison won\u0027t distinguish between 0.0 and -0.0, so I believe it will incorrectly recognise some cases where either of the top bits in src.low() or src.high() are set as no bits being set, giving you the wrong result.",
+      "revId": "cb0adb7acfe0e8f589a16cdb04c235f62b633551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e3a7242_0129b176",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4287,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-05-15T14:18:52Z",
+      "side": 1,
+      "message": "Nit: Could this be moved in the if, like below?",
+      "revId": "cb0adb7acfe0e8f589a16cdb04c235f62b633551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
