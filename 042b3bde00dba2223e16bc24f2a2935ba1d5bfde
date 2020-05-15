@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac54a175_0e713482",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-05-15T17:38:27Z",
+      "side": 1,
+      "message": "Since the input nodes could have been changed by GetReplacementsWithType, the number of input lanes should be based on the rep_type.",
+      "range": {
+        "startLine": 1638,
+        "startChar": 6,
+        "endLine": 1638,
+        "endChar": 47
+      },
+      "revId": "042b3bde00dba2223e16bc24f2a2935ba1d5bfde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
