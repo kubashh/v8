@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2a6c7a98_0145e231",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3038,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-05-15T22:42:15Z",
+      "side": 1,
+      "message": "Ah, yes good catch. Thanks for pointing this out, that would be been wrong.\nI wonder if it\u0027s worth doing things like uh, unsigned bit shift everything right by 1...\nI think I will revert the change to use vpmax, I\u0027ve also read that vcmp followed by vmrs introduces data dependency, so this change might reduce the instruction count, but actually increase the runtime?",
+      "parentUuid": "5d51219e_c45050b8",
+      "revId": "cb0adb7acfe0e8f589a16cdb04c235f62b633551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3e3a7242_0129b176",
         "filename": "src/execution/arm/simulator-arm.cc",
         "patchSetId": 1
