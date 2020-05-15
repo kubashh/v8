@@ -1606,6 +1606,14 @@ class LiftoffCompiler {
     LocalSet(index, true);
   }
 
+  void AllocateLocals(FullDecoder* decoder, uint32_t count) {
+    unsupported(decoder, kGC, "let");
+  }
+
+  void DeallocateLocals(FullDecoder* decoder, uint32_t count) {
+    unsupported(decoder, kGC, "let");
+  }
+
   Register GetGlobalBaseAndOffset(const WasmGlobal* global,
                                   LiftoffRegList* pinned, uint32_t* offset) {
     Register addr = pinned->set(__ GetUnusedRegister(kGpReg)).gp();

@@ -283,6 +283,16 @@ class WasmGraphBuildingInterface {
     ssa_env_->locals[index] = value.node;
   }
 
+  void AllocateLocals(FullDecoder* decoder, uint32_t count) {
+    auto locals = ssa_env_->locals;
+    locals.insert(locals.begin(), count, nullptr);
+  }
+
+  void DeallocateLocals(FullDecoder* decoder, uint32_t count) {
+    auto locals = ssa_env_->locals;
+    locals.erase(locals.begin(), locals.begin() + count);
+  }
+
   void GlobalGet(FullDecoder* decoder, Value* result,
                  const GlobalIndexImmediate<validate>& imm) {
     result->node = BUILD(GlobalGet, imm.index);
