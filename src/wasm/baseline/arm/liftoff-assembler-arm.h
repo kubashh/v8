@@ -1771,6 +1771,64 @@ void LiftoffAssembler::emit_f64_copysign(DoubleRegister dst, DoubleRegister lhs,
   VmovHigh(dst, scratch);
 }
 
+namespace liftoff {
+#define __ assm->
+template <typename dst_type, typename src_type>
+inline bool EmitSatTruncateFloatToInt(LiftoffAssembler* assm, Register dst,
+                                      DoubleRegister src) {
+  Label done, not_nan, src_pos;
+
+  UseScratchRegisterScope temps(assm);
+  SwVfpRegister scratch_f = temps.AcquireS();
+  if (std::is_same<float, src_type>::value) {      // f32
+    if (std::is_same<int32_t, dst_type>::value) {  // f32 -> i32 round to zero.
+      __ vcvt_s32_f32(scratch_f, liftoff::GetFloatRegister(src));
+    } else if (std::is_same<uint32_t,
+                            dst_type>::value) {  // f32 -> u32 round to zero.
+      __ vcvt_u32_f32(scratch_f, liftoff::GetFloatRegister(src));
+    } else {
+      UNREACHABLE();
+    }
+  } else if (std::is_same<double, src_type>::value) {  // f64
+    if (std::is_same<int32_t, dst_type>::value) {  // f64 -> i32 round to zero.
+      __ vcvt_s32_f64(scratch_f, src);
+    } else if (std::is_same<uint32_t,
+                            dst_type>::value) {  // f64 -> u32 round to zero.
+      __ vcvt_u32_f64(scratch_f, src);
+    } else {
+      UNREACHABLE();
+    }
+  } else {
+    UNREACHABLE();
+  }
+  __ vmov(dst, scratch_f);
+  if (std::is_same<float, src_type>::value) {
+    __ VFPCompareAndSetFlags(liftoff::GetFloatRegister(src),
+                             liftoff::GetFloatRegister(src));
+  } else {
+    __ VFPCompareAndSetFlags(src, src);
+  }
+
+  __ b(&not_nan, eq);
+  __ mov(dst, Operand(0));
+  __ b(&done);
+
+  __ bind(&not_nan);
+  __ b(&done, vc);  // check if overflow
+  __ vmov(scratch_f, Float32(0.0f));
+  __ VFPCompareAndSetFlags(liftoff::GetFloatRegister(src), scratch_f);
+  __ b(&src_pos, ge);
+  __ mov(dst, Operand(std::numeric_limits<dst_type>::min()));
+
+  __ bind(&src_pos);
+  __ mov(dst, Operand(std::numeric_limits<dst_type>::max()));
+
+  __ bind(&done);
+  return true;
+}
+#undef __
+}  // namespace liftoff
+
 bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
                                             LiftoffRegister dst,
                                             LiftoffRegister src, Label* trap) {
@@ -1843,17 +1901,17 @@ bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
       return true;
     }
     case kExprI32SConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI32SConvertSatF32");
-      return true;
+      return liftoff::EmitSatTruncateFloatToInt<int32_t, float>(this, dst.gp(),
+                                                                src.fp());
     case kExprI32UConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI32UConvertSatF32");
-      return true;
+      return liftoff::EmitSatTruncateFloatToInt<uint32_t, float>(this, dst.gp(),
+                                                                 src.fp());
     case kExprI32SConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI32SConvertSatF64");
-      return true;
+      return liftoff::EmitSatTruncateFloatToInt<int32_t, double>(this, dst.gp(),
+                                                                 src.fp());
     case kExprI32UConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI32UConvertSatF64");
-      return true;
+      return liftoff::EmitSatTruncateFloatToInt<uint32_t, double>(
+          this, dst.gp(), src.fp());
     case kExprI64SConvertSatF32:
       bailout(kNonTrappingFloatToInt, "kExprI64SConvertSatF32");
       return true;
