@@ -1248,6 +1248,16 @@ void LiftoffAssembler::emit_f32x4_sqrt(LiftoffRegister dst,
   Fsqrt(dst.fp().V4S(), src.fp().V4S());
 }
 
+void LiftoffAssembler::emit_f32x4_recip_approx(LiftoffRegister dst,
+                                               LiftoffRegister src) {
+  bailout(kSimd, "f32x4_recip_approx");
+}
+
+void LiftoffAssembler::emit_f32x4_recip_sqrt_approx(LiftoffRegister dst,
+                                                    LiftoffRegister src) {
+  bailout(kSimd, "f32x4_recip_sqrt_approx");
+}
+
 void LiftoffAssembler::emit_f32x4_add(LiftoffRegister dst, LiftoffRegister lhs,
                                       LiftoffRegister rhs) {
   Fadd(dst.fp().V4S(), lhs.fp().V4S(), rhs.fp().V4S());

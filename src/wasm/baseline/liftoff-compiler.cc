@@ -2621,6 +2621,12 @@ class LiftoffCompiler {
         return EmitUnOp<kS128, kS128>(&LiftoffAssembler::emit_f32x4_neg);
       case wasm::kExprF32x4Sqrt:
         return EmitUnOp<kS128, kS128>(&LiftoffAssembler::emit_f32x4_sqrt);
+      case wasm::kExprF32x4RecipApprox:
+        return EmitUnOp<kS128, kS128>(
+            &LiftoffAssembler::emit_f32x4_recip_approx);
+      case wasm::kExprF32x4RecipSqrtApprox:
+        return EmitUnOp<kS128, kS128>(
+            &LiftoffAssembler::emit_f32x4_recip_sqrt_approx);
       case wasm::kExprF32x4Add:
         return EmitBinOp<kS128, kS128>(&LiftoffAssembler::emit_f32x4_add);
       case wasm::kExprF32x4Sub:
