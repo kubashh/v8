@@ -28,18 +28,19 @@ namespace {
 // as well as the current effect and control dependency in the TF graph.
 // It maintains a control state that tracks whether the environment
 // is reachable, has reached a control end, or has been merged.
-struct SsaEnv {
+struct SsaEnv : public ZoneObject {
   enum State { kControlEnd, kUnreachable, kReached, kMerged };
 
   State state;
   TFNode* control;
   TFNode* effect;
   compiler::WasmInstanceCacheNodes instance_cache;
-  TFNode** locals;
+  ZoneVector<TFNode*> locals;
 
+  explicit SsaEnv(Zone* zone) : locals(ZoneVector<TFNode*>(zone)) {}
   void Kill(State new_state = kControlEnd) {
     state = new_state;
-    locals = nullptr;
+    locals.clear();
     control = nullptr;
     effect = nullptr;
     instance_cache = {};
@@ -98,15 +99,10 @@ class WasmGraphBuildingInterface {
       : builder_(builder) {}
 
   void StartFunction(FullDecoder* decoder) {
-    SsaEnv* ssa_env =
-        reinterpret_cast<SsaEnv*>(decoder->zone()->New(sizeof(SsaEnv)));
+    SsaEnv* ssa_env = new (decoder->zone()) SsaEnv(decoder->zone());
     uint32_t num_locals = decoder->num_locals();
-    uint32_t env_count = num_locals;
-    size_t size = sizeof(TFNode*) * env_count;
     ssa_env->state = SsaEnv::kReached;
-    ssa_env->locals =
-        size > 0 ? reinterpret_cast<TFNode**>(decoder->zone()->New(size))
-                 : nullptr;
+    ssa_env->locals = ZoneVector<TFNode*>(num_locals, decoder->zone());
 
     // The first '+ 1' is needed by TF Start node, the second '+ 1' is for the
     // instance parameter.
@@ -941,19 +937,12 @@ class WasmGraphBuildingInterface {
       ssa_env_->control = control();
       ssa_env_->effect = effect();
     }
-    SsaEnv* result =
-        reinterpret_cast<SsaEnv*>(decoder->zone()->New(sizeof(SsaEnv)));
-    size_t size = sizeof(TFNode*) * decoder->num_locals();
+    SsaEnv* result = new (decoder->zone()) SsaEnv(decoder->zone());
     result->control = from->control;
     result->effect = from->effect;
 
     result->state = SsaEnv::kReached;
-    if (size > 0) {
-      result->locals = reinterpret_cast<TFNode**>(decoder->zone()->New(size));
-      memcpy(result->locals, from->locals, size);
-    } else {
-      result->locals = nullptr;
-    }
+    result->locals = from->locals;
     result->instance_cache = from->instance_cache;
 
     return result;
@@ -967,7 +956,7 @@ class WasmGraphBuildingInterface {
       ssa_env_->control = control();
       ssa_env_->effect = effect();
     }
-    SsaEnv* result = reinterpret_cast<SsaEnv*>(zone->New(sizeof(SsaEnv)));
+    SsaEnv* result = new (zone) SsaEnv(zone);
     result->state = SsaEnv::kReached;
     result->locals = from->locals;
     result->control = from->control;
@@ -979,11 +968,10 @@ class WasmGraphBuildingInterface {
 
   // Create an unreachable environment.
   SsaEnv* UnreachableEnv(Zone* zone) {
-    SsaEnv* result = reinterpret_cast<SsaEnv*>(zone->New(sizeof(SsaEnv)));
+    SsaEnv* result = new (zone) SsaEnv(zone);
     result->state = SsaEnv::kUnreachable;
     result->control = nullptr;
     result->effect = nullptr;
-    result->locals = nullptr;
     result->instance_cache = {};
     return result;
   }
