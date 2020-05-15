@@ -2843,6 +2843,16 @@ void LiftoffAssembler::emit_f32x4_sqrt(LiftoffRegister dst,
   Sqrtps(dst.fp(), src.fp());
 }
 
+void LiftoffAssembler::emit_f32x4_recip_approx(LiftoffRegister dst,
+                                               LiftoffRegister src) {
+  Rcpps(dst.fp(), src.fp());
+}
+
+void LiftoffAssembler::emit_f32x4_recip_sqrt_approx(LiftoffRegister dst,
+                                                    LiftoffRegister src) {
+  Rsqrtps(dst.fp(), src.fp());
+}
+
 void LiftoffAssembler::emit_f32x4_add(LiftoffRegister dst, LiftoffRegister lhs,
                                       LiftoffRegister rhs) {
   liftoff::EmitSimdCommutativeBinOp<&Assembler::vaddps, &Assembler::addps>(

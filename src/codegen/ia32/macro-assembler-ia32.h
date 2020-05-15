@@ -277,7 +277,9 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
     }                                                           \
   }
 
+  AVX_OP2_WITH_TYPE(Rcpps, rcpps, XMMRegister, XMMRegister)
   AVX_OP2_WITH_TYPE(Rcpps, rcpps, XMMRegister, const Operand&)
+  AVX_OP2_WITH_TYPE(Rsqrtps, rsqrtps, XMMRegister, XMMRegister)
   AVX_OP2_WITH_TYPE(Rsqrtps, rsqrtps, XMMRegister, const Operand&)
   AVX_OP2_WITH_TYPE(Movdqu, movdqu, XMMRegister, Operand)
   AVX_OP2_WITH_TYPE(Movdqu, movdqu, Operand, XMMRegister)
