@@ -1912,18 +1912,6 @@ bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
     case kExprI32UConvertSatF64:
       return liftoff::EmitSatTruncateFloatToInt<uint32_t, double>(
           this, dst.gp(), src.fp());
-    case kExprI64SConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI64SConvertSatF32");
-      return true;
-    case kExprI64UConvertSatF32:
-      bailout(kNonTrappingFloatToInt, "kExprI64UConvertSatF32");
-      return true;
-    case kExprI64SConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI64SConvertSatF64");
-      return true;
-    case kExprI64UConvertSatF64:
-      bailout(kNonTrappingFloatToInt, "kExprI64UConvertSatF64");
-      return true;
     case kExprI32ReinterpretF32:
       vmov(dst.gp(), liftoff::GetFloatRegister(src.fp()));
       return true;
@@ -1976,10 +1964,14 @@ bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
     case kExprF64UConvertI64:
     case kExprI64SConvertF32:
     case kExprI64UConvertF32:
+    case kExprI64SConvertSatF32:
+    case kExprI64UConvertSatF32:
     case kExprF32SConvertI64:
     case kExprF32UConvertI64:
     case kExprI64SConvertF64:
     case kExprI64UConvertF64:
+    case kExprI64SConvertSatF64:
+    case kExprI64UConvertSatF64:
       // These cases can be handled by the C fallback function.
       return false;
     default:
