@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e010fa01_113edaf7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-15T07:00:24Z",
+      "side": 1,
+      "message": "Please summarize here what has changed.",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
