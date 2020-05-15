@@ -1965,7 +1965,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   //
   // Allocate and return a JSArray with initialized header fields and its
   // uninitialized elements.
-  // The ParameterMode argument is only used for the capacity parameter.
   std::pair<TNode<JSArray>, TNode<FixedArrayBase>>
   AllocateUninitializedJSArrayWithElements(
       ElementsKind kind, TNode<Map> array_map, TNode<Smi> length,
