@@ -1636,7 +1636,7 @@ void SimdScalarLowering::LowerNode(Node* node) {
       DCHECK_EQ(1, node->InputCount());
       SimdType input_rep_type = ReplacementType(node->InputAt(0));
       int input_num_lanes = NumLanes(input_rep_type);
-      Node** rep = GetReplacements(node->InputAt(0));
+      Node** rep = GetReplacementsWithType(node->InputAt(0), rep_type);
       Node** rep_node = zone()->NewArray<Node*>(num_lanes);
       Node* true_node = mcgraph_->Int32Constant(1);
       Node* false_node = mcgraph_->Int32Constant(0);
