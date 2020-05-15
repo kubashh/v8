@@ -272,23 +272,19 @@ class WasmGraphBuildingInterface {
     BUILD(Return, VectorOf(nodes));
   }
 
-  void LocalGet(FullDecoder* decoder, Value* result,
-                const LocalIndexImmediate<validate>& imm) {
-    if (!ssa_env_->locals) return;  // unreachable
-    result->node = ssa_env_->locals[imm.index];
+  void LocalGet(FullDecoder* decoder, Value* result, uint32_t index,
+                ValueType type) {
+    result->node = ssa_env_->locals[index];
   }
 
-  void LocalSet(FullDecoder* decoder, const Value& value,
-                const LocalIndexImmediate<validate>& imm) {
-    if (!ssa_env_->locals) return;  // unreachable
-    ssa_env_->locals[imm.index] = value.node;
+  void LocalSet(FullDecoder* decoder, const Value& value, uint32_t index) {
+    ssa_env_->locals[index] = value.node;
   }
 
   void LocalTee(FullDecoder* decoder, const Value& value, Value* result,
-                const LocalIndexImmediate<validate>& imm) {
+                uint32_t index) {
     result->node = value.node;
-    if (!ssa_env_->locals) return;  // unreachable
-    ssa_env_->locals[imm.index] = value.node;
+    ssa_env_->locals[index] = value.node;
   }
 
   void GlobalGet(FullDecoder* decoder, Value* result,

@@ -848,10 +848,9 @@ enum class LoadTransformationKind : uint8_t {
   F(RefAsNonNull, const Value& arg, Value* result)                            \
   F(Drop, const Value& value)                                                 \
   F(DoReturn, Vector<Value> values)                                           \
-  F(LocalGet, Value* result, const LocalIndexImmediate<validate>& imm)        \
-  F(LocalSet, const Value& value, const LocalIndexImmediate<validate>& imm)   \
-  F(LocalTee, const Value& value, Value* result,                              \
-    const LocalIndexImmediate<validate>& imm)                                 \
+  F(LocalGet, Value* result, uint32_t index, ValueType type)                  \
+  F(LocalSet, const Value& value, uint32_t index)                             \
+  F(LocalTee, const Value& value, Value* result, uint32_t index)              \
   F(GlobalGet, Value* result, const GlobalIndexImmediate<validate>& imm)      \
   F(GlobalSet, const Value& value, const GlobalIndexImmediate<validate>& imm) \
   F(TableGet, const Value& index, Value* result,                              \
@@ -2409,7 +2408,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
           LocalIndexImmediate<validate> imm(this, this->pc_);
           if (!this->Validate(this->pc_, imm)) break;
           auto* value = Push(imm.type);
-          CALL_INTERFACE_IF_REACHABLE(LocalGet, value, imm);
+          CALL_INTERFACE_IF_REACHABLE(LocalGet, value, imm.index, imm.type);
           len = 1 + imm.length;
           break;
         }
@@ -2417,7 +2416,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
           LocalIndexImmediate<validate> imm(this, this->pc_);
           if (!this->Validate(this->pc_, imm)) break;
           auto value = Pop(0, local_type_vec_[imm.index]);
-          CALL_INTERFACE_IF_REACHABLE(LocalSet, value, imm);
+          CALL_INTERFACE_IF_REACHABLE(LocalSet, value, imm.index);
           len = 1 + imm.length;
           break;
         }
@@ -2426,7 +2425,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
           if (!this->Validate(this->pc_, imm)) break;
           auto value = Pop(0, local_type_vec_[imm.index]);
           auto* result = Push(value.type);
-          CALL_INTERFACE_IF_REACHABLE(LocalTee, value, result, imm);
+          CALL_INTERFACE_IF_REACHABLE(LocalTee, value, result, imm.index);
           len = 1 + imm.length;
           break;
         }
