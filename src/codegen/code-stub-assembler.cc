@@ -3729,8 +3729,9 @@ TNode<JSArray> CodeStubAssembler::AllocateJSArray(
 }
 
 TNode<JSArray> CodeStubAssembler::ExtractFastJSArray(
-    TNode<Context> context, TNode<JSArray> array, Node* begin, Node* count,
-    ParameterMode mode, Node* capacity, TNode<AllocationSite> allocation_site) {
+    TNode<Context> context, TNode<JSArray> array, TNode<BInt> begin,
+    TNode<BInt> count, base::Optional<TNode<BInt>> capacity,
+    TNode<AllocationSite> allocation_site) {
   TNode<Map> original_array_map = LoadMap(array);
   TNode<Int32T> elements_kind = LoadMapElementsKind(original_array_map);
 
@@ -3740,10 +3741,10 @@ TNode<JSArray> CodeStubAssembler::ExtractFastJSArray(
 
   TNode<FixedArrayBase> new_elements = ExtractFixedArray(
       LoadElements(array), begin, count, capacity,
-      ExtractFixedArrayFlag::kAllFixedArrays, mode, nullptr, elements_kind);
+      ExtractFixedArrayFlag::kAllFixedArrays, nullptr, elements_kind);
 
   TNode<JSArray> result = AllocateJSArray(
-      array_map, new_elements, ParameterToTagged(count, mode), allocation_site);
+      array_map, new_elements, ParameterToTagged(count), allocation_site);
   return result;
 }
 

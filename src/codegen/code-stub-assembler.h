@@ -396,6 +396,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return IntPtrToParameter(ChangeInt32ToIntPtr(value), mode);
   }
 
+  TNode<Smi> ParameterToTagged(TNode<Smi> value) { return value; }
+
+  TNode<Smi> ParameterToTagged(TNode<IntPtrT> value) { return SmiTag(value); }
+
   TNode<Smi> ParameterToTagged(Node* value, ParameterMode mode) {
     if (mode != SMI_PARAMETERS) return SmiTag(value);
     return UncheckedCast<Smi>(value);
@@ -2017,12 +2021,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       TNode<AllocationSite> allocation_site = {},
       HoleConversionMode convert_holes = HoleConversionMode::kDontConvert);
 
-  TNode<JSArray> ExtractFastJSArray(TNode<Context> context,
-                                    TNode<JSArray> array, Node* begin,
-                                    Node* count,
-                                    ParameterMode mode = INTPTR_PARAMETERS,
-                                    Node* capacity = nullptr,
-                                    TNode<AllocationSite> allocation_site = {});
+  TNode<JSArray> ExtractFastJSArray(
+      TNode<Context> context, TNode<JSArray> array, TNode<BInt> begin,
+      TNode<BInt> count, base::Optional<TNode<BInt>> capacity = base::nullopt,
+      TNode<AllocationSite> allocation_site = {});
 
   TNode<FixedArrayBase> AllocateFixedArray(
       ElementsKind kind, Node* capacity, ParameterMode mode = INTPTR_PARAMETERS,
@@ -2295,20 +2297,32 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<FixedArrayBase> ExtractFixedArray(
       TNode<FixedArrayBase> source, TNode<Smi> first, TNode<Smi> count,
-      TNode<Smi> capacity,
+      base::Optional<TNode<Smi>> capacity,
       ExtractFixedArrayFlags extract_flags =
-          ExtractFixedArrayFlag::kAllFixedArrays) {
-    return ExtractFixedArray(source, first, count, capacity, extract_flags,
-                             SMI_PARAMETERS);
+          ExtractFixedArrayFlag::kAllFixedArrays,
+      TVariable<BoolT>* var_holes_converted = nullptr,
+      base::Optional<TNode<Int32T>> source_elements_kind = base::nullopt) {
+    // TODO(solanes): just use capacity when ExtractFixedArray is fully
+    // converted.
+    Node* capacity_node = capacity ? static_cast<Node*>(*capacity) : nullptr;
+    return ExtractFixedArray(source, first, count, capacity_node, extract_flags,
+                             SMI_PARAMETERS, var_holes_converted,
+                             source_elements_kind);
   }
 
-  TNode<FixedArray> ExtractFixedArray(
-      TNode<FixedArray> source, TNode<IntPtrT> first, TNode<IntPtrT> count,
-      TNode<IntPtrT> capacity,
+  TNode<FixedArrayBase> ExtractFixedArray(
+      TNode<FixedArrayBase> source, TNode<IntPtrT> first, TNode<IntPtrT> count,
+      base::Optional<TNode<IntPtrT>> capacity,
       ExtractFixedArrayFlags extract_flags =
-          ExtractFixedArrayFlag::kAllFixedArrays) {
-    return CAST(ExtractFixedArray(source, first, count, capacity, extract_flags,
-                                  INTPTR_PARAMETERS));
+          ExtractFixedArrayFlag::kAllFixedArrays,
+      TVariable<BoolT>* var_holes_converted = nullptr,
+      base::Optional<TNode<Int32T>> source_elements_kind = base::nullopt) {
+    // TODO(solanes): just use capacity when ExtractFixedArray is fully
+    // converted.
+    Node* capacity_node = capacity ? static_cast<Node*>(*capacity) : nullptr;
+    return ExtractFixedArray(source, first, count, capacity_node, extract_flags,
+                             INTPTR_PARAMETERS, var_holes_converted,
+                             source_elements_kind);
   }
 
   // Copy a portion of an existing FixedArray or FixedDoubleArray into a new
