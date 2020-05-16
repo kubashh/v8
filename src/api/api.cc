@@ -502,7 +502,8 @@ void Utils::ReportOOMFailure(i::Isolate* isolate, const char* location,
     if (fatal_callback == nullptr) {
       base::OS::PrintError("\n#\n# Fatal %s OOM in %s\n#\n\n",
                            is_heap_oom ? "javascript" : "process", location);
-      base::OS::Abort();
+      exit(0);
+//      base::OS::Abort();
     } else {
       fatal_callback(location,
                      is_heap_oom

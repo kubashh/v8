@@ -30,6 +30,7 @@
 #include "src/base/platform/platform.h"
 #include "src/base/platform/time.h"
 #include "src/base/sys-info.h"
+#include "src/d8/cov.h"
 #include "src/d8/d8-console.h"
 #include "src/d8/d8-platforms.h"
 #include "src/d8/d8.h"
@@ -80,6 +81,12 @@
 #define CHECK(condition) assert(condition)
 #endif
 
+// REPRL defines
+#define REPRL_CRFD 100
+#define REPRL_CWFD 101
+#define REPRL_DRFD 102
+#define REPRL_DWFD 103
+
 #define TRACE_BS(...)                                     \
   do {                                                    \
     if (i::FLAG_trace_backing_store) PrintF(__VA_ARGS__); \
@@ -90,6 +97,8 @@ namespace v8 {
 namespace {
 
 const int kMB = 1024 * 1024;
+
+bool reprl_mode = true;
 
 const int kMaxSerializerMemoryUsage =
     1 * kMB;  // Arbitrary maximum for testing.
@@ -1689,6 +1698,49 @@ void Shell::Version(const v8::FunctionCallbackInfo<v8::Value>& args) {
           .ToLocalChecked());
 }
 
+// We have to assume that the fuzzer will be able to call this function e.g. by
+// enumerating the properties of the global object and eval'ing them. As such
+// this function is implemented in a way that requires passing some magic value
+// as first argument (with the idea being that the fuzzer won't be able to
+// generate this value) which then also acts as a selector for the operation
+// to perform.
+void Shell::Fuzzilli(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  HandleScope handle_scope(args.GetIsolate());
+
+  String::Utf8Value operation(args.GetIsolate(), args[0]);
+  if (*operation == nullptr) {
+      return;
+  }
+
+  if (strcmp(*operation, "FUZZILLI_CRASH") == 0) {
+    auto arg = args[1]->Int32Value(args.GetIsolate()->GetCurrentContext()).FromMaybe(0);
+    switch (arg) {
+      case 0:
+        *((int*)0x41414141) = 0x1337;
+        break;
+      case 1:
+        CHECK(0);
+        break;
+      default:
+        DCHECK(false);
+        break;
+    }
+  } else if (strcmp(*operation, "FUZZILLI_PRINT") == 0) {
+    static FILE* fzliout = fdopen(REPRL_DWFD, "w");
+    if (!fzliout) {
+        fprintf(stderr, "Fuzzer output channel not available, printing to stdout instead\n");
+        fzliout = stdout;
+    }
+
+    String::Utf8Value string(args.GetIsolate(), args[1]);
+    if (*string == nullptr) {
+      return;
+    }
+    fprintf(fzliout, "%s\n", *string);
+    fflush(fzliout);
+  }
+}
+
 void Shell::ReportException(Isolate* isolate, Local<v8::Message> message,
                             Local<v8::Value> exception_obj) {
   HandleScope handle_scope(isolate);
@@ -1953,6 +2005,11 @@ Local<ObjectTemplate> Shell::CreateGlobalTemplate(Isolate* isolate) {
   AddOSMethods(isolate, os_templ);
   global_template->Set(isolate, "os", os_templ);
 
+  global_template->Set(
+      String::NewFromUtf8(isolate, "fuzzilli", NewStringType::kNormal)
+          .ToLocalChecked(),
+      FunctionTemplate::New(isolate, Fuzzilli), PropertyAttribute::DontEnum);
+
   if (i::FLAG_expose_async_hooks) {
     Local<ObjectTemplate> async_hooks_templ = ObjectTemplate::New(isolate);
     async_hooks_templ->Set(
@@ -2023,6 +2080,18 @@ void Shell::Initialize(Isolate* isolate, D8Console* console,
       Shell::HostImportModuleDynamically);
   isolate->SetHostInitializeImportMetaObjectCallback(
       Shell::HostInitializeImportMetaObject);
+
+  // REPRL: let parent know we are ready
+  char helo[] = "HELO";
+  if (write(REPRL_CWFD, helo, 4) != 4 ||
+    read(REPRL_CRFD, helo, 4) != 4) {
+    reprl_mode = false;
+  }
+
+  if (memcmp(helo, "HELO", 4) != 0) {
+    fprintf(stderr, "Invalid response from parent\n");
+    _exit(-1);
+  }
 
   debug::SetConsoleDelegate(isolate, console);
 }
@@ -2546,6 +2615,38 @@ bool SourceGroup::Execute(Isolate* isolate) {
         break;
       }
       continue;
+    } else if (strcmp(arg, "--reprl") == 0) {
+      HandleScope handle_scope(isolate);
+      Local<String> file_name =
+        String::NewFromUtf8(isolate, "fuzzcode.js", NewStringType::kNormal)
+            .ToLocalChecked();
+
+      size_t script_size;
+      CHECK(read(REPRL_CRFD, &script_size, 8) == 8);
+      char* buffer = new char[script_size + 1];
+      char* ptr = buffer;
+      size_t remaining = script_size;
+      while (remaining > 0) {
+      ssize_t rv = read(REPRL_DRFD, ptr, remaining);
+      CHECK(rv >= 0);
+      remaining -= rv;
+      ptr += rv;
+      }
+      buffer[script_size] = 0;
+
+      Local<String> source =
+        String::NewFromUtf8(isolate, buffer, NewStringType::kNormal)
+            .ToLocalChecked();
+      delete [] buffer;
+      Shell::set_script_executed();
+      if (!Shell::ExecuteString(isolate, source, file_name,
+                              Shell::kNoPrintResult, Shell::kReportExceptions,
+                              Shell::kNoProcessMessageQueue)) {
+      success = false;
+      break;
+      }
+      ++i;
+      continue;
     } else if (arg[0] == '-') {
       // Ignore other options. They have been parsed already.
       continue;
@@ -2991,6 +3092,8 @@ bool Shell::SetOptions(int argc, char* argv[]) {
       current++;
       current->Begin(argv, i + 1);
     } else if (strcmp(str, "--module") == 0) {
+      // Pass on to SourceGroup, which understands this option.
+    } else if (strcmp(str, "--reprl") == 0) {
       // Pass on to SourceGroup, which understands this option.
     } else if (strncmp(str, "--", 2) == 0) {
       printf("Warning: unknown flag %s.\nTry --help for options\n", str);
@@ -3576,6 +3679,20 @@ int Shell::Main(int argc, char* argv[]) {
     Initialize(isolate, &console);
     PerIsolateData data(isolate);
 
+    // REPRL.
+    do {
+    // Keep original indention here for easier diffing against newer versions.
+    if (reprl_mode) {
+      unsigned action = 0;
+      ssize_t nread = read(REPRL_CRFD, &action, 4);
+      if (nread != 4 || action != 'cexe') {
+        fprintf(stderr, "Unknown action: %u\n", action);
+        _exit(-1);
+      }
+    }
+
+    result = 0;
+
     if (options.trace_enabled) {
       platform::tracing::TraceConfig* trace_config;
       if (options.trace_config) {
@@ -3680,8 +3797,17 @@ int Shell::Main(int argc, char* argv[]) {
     evaluation_context_.Reset();
     stringify_function_.Reset();
     CollectGarbage(isolate);
+
+    // REPRL: send result to parent and reset edge guards
+    if (reprl_mode) {
+      int status = result << 8;
+      CHECK(write(REPRL_CWFD, &status, 4) == 4);
+      __sanitizer_cov_reset_edgeguards();
+    }
+  } while (reprl_mode);
   }
   OnExit(isolate);
+
   V8::Dispose();
   V8::ShutdownPlatform();
 
