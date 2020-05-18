@@ -16,6 +16,24 @@
       "revId": "0e839913ee2393a86c26d2935fad3dddd8050ebd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31336a97_2941a025",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-05-18T17:44:41Z",
+      "side": 1,
+      "message": "The idea was to make sure we don\u0027t clamp to Smi such that we make an invalid call valid.\n\nI struggled quite a bit with converting this from CSA to Torque and making the StaticAssert work.\n\nI like your Convert idea. As long as we\u0027re checking for Smi overflow, we might as well catch such errors here. Therefore I\u0027ve added a path to throw a Table range error here. I also moved the static assert to the runtime, where it\u0027s much easier to perform.",
+      "parentUuid": "8d249cf0_53a49b06",
+      "revId": "0e839913ee2393a86c26d2935fad3dddd8050ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
