@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c9650bb_dd0f3785",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1641,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-05-18T23:19:03Z",
+      "side": 1,
+      "message": "nit: By \"same shape\" do you mean \"bitcast\"? That term might be clearer here as it\u0027s used widely in the codegen layer.",
+      "range": {
+        "startLine": 1639,
+        "startChar": 0,
+        "endLine": 1641,
+        "endChar": 0
+      },
+      "revId": "01faaf0cfe8dbe9482c0faa7b510dfa7b5220c5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
