@@ -22,6 +22,30 @@
       "revId": "01faaf0cfe8dbe9482c0faa7b510dfa7b5220c5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce9e8251_291d029f",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1641,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-05-18T23:42:17Z",
+      "side": 1,
+      "message": "Yup, bitcast is used by GetReplacementsWithType to convert f32x4 -\u003e i32x4, I\u0027ll update the comment to clarify, thanks!",
+      "parentUuid": "3c9650bb_dd0f3785",
+      "range": {
+        "startLine": 1639,
+        "startChar": 0,
+        "endLine": 1641,
+        "endChar": 0
+      },
+      "revId": "01faaf0cfe8dbe9482c0faa7b510dfa7b5220c5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
