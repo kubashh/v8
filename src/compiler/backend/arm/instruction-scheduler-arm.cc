@@ -284,12 +284,12 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArmS8x8Reverse:
     case kArmS8x4Reverse:
     case kArmS8x2Reverse:
-    case kArmS1x4AnyTrue:
-    case kArmS1x4AllTrue:
-    case kArmS1x8AnyTrue:
-    case kArmS1x8AllTrue:
-    case kArmS1x16AnyTrue:
-    case kArmS1x16AllTrue:
+    case kArmI32x4AnyTrue:
+    case kArmI32x4AllTrue:
+    case kArmI16x8AnyTrue:
+    case kArmI16x8AllTrue:
+    case kArmI8x16AnyTrue:
+    case kArmI8x16AllTrue:
       return kNoOpcodeFlags;
 
     case kArmVldrF32:

@@ -265,12 +265,12 @@ namespace compiler {
   V(MipsS128Not)                   \
   V(MipsS128Select)                \
   V(MipsS128AndNot)                \
-  V(MipsS1x4AnyTrue)               \
-  V(MipsS1x4AllTrue)               \
-  V(MipsS1x8AnyTrue)               \
-  V(MipsS1x8AllTrue)               \
-  V(MipsS1x16AnyTrue)              \
-  V(MipsS1x16AllTrue)              \
+  V(MipsI32x4AnyTrue)              \
+  V(MipsI32x4AllTrue)              \
+  V(MipsI16x8AnyTrue)              \
+  V(MipsI16x8AllTrue)              \
+  V(MipsI8x16AnyTrue)              \
+  V(MipsI8x16AllTrue)              \
   V(MipsS32x4InterleaveRight)      \
   V(MipsS32x4InterleaveLeft)       \
   V(MipsS32x4PackEven)             \

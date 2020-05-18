@@ -357,14 +357,14 @@ namespace compiler {
   V(X64S8x8Reverse)                       \
   V(X64S8x4Reverse)                       \
   V(X64S8x2Reverse)                       \
-  V(X64S1x2AnyTrue)                       \
-  V(X64S1x2AllTrue)                       \
-  V(X64S1x4AnyTrue)                       \
-  V(X64S1x4AllTrue)                       \
-  V(X64S1x8AnyTrue)                       \
-  V(X64S1x8AllTrue)                       \
-  V(X64S1x16AnyTrue)                      \
-  V(X64S1x16AllTrue)                      \
+  V(X64I64x2AnyTrue)                      \
+  V(X64I64x2AllTrue)                      \
+  V(X64I32x4AnyTrue)                      \
+  V(X64I32x4AllTrue)                      \
+  V(X64I16x8AnyTrue)                      \
+  V(X64I16x8AllTrue)                      \
+  V(X64I8x16AnyTrue)                      \
+  V(X64I8x16AllTrue)                      \
   V(X64Word64AtomicLoadUint8)             \
   V(X64Word64AtomicLoadUint16)            \
   V(X64Word64AtomicLoadUint32)            \

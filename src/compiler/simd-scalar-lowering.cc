@@ -142,12 +142,12 @@ void SimdScalarLowering::LowerGraph() {
   V(S128Or)                       \
   V(S128Xor)                      \
   V(S128Not)                      \
-  V(S1x4AnyTrue)                  \
-  V(S1x4AllTrue)                  \
-  V(S1x8AnyTrue)                  \
-  V(S1x8AllTrue)                  \
-  V(S1x16AnyTrue)                 \
-  V(S1x16AllTrue)
+  V(I32x4AnyTrue)                 \
+  V(I32x4AllTrue)                 \
+  V(I16x8AnyTrue)                 \
+  V(I16x8AllTrue)                 \
+  V(I8x16AnyTrue)                 \
+  V(I8x16AllTrue)
 
 #define FOREACH_FLOAT64X2_OPCODE(V) V(F64x2Splat)
 
@@ -1627,12 +1627,12 @@ void SimdScalarLowering::LowerNode(Node* node) {
       ReplaceNode(node, rep_node, 16);
       break;
     }
-    case IrOpcode::kS1x4AnyTrue:
-    case IrOpcode::kS1x4AllTrue:
-    case IrOpcode::kS1x8AnyTrue:
-    case IrOpcode::kS1x8AllTrue:
-    case IrOpcode::kS1x16AnyTrue:
-    case IrOpcode::kS1x16AllTrue: {
+    case IrOpcode::kI32x4AnyTrue:
+    case IrOpcode::kI32x4AllTrue:
+    case IrOpcode::kI16x8AnyTrue:
+    case IrOpcode::kI16x8AllTrue:
+    case IrOpcode::kI8x16AnyTrue:
+    case IrOpcode::kI8x16AllTrue: {
       DCHECK_EQ(1, node->InputCount());
       SimdType input_rep_type = ReplacementType(node->InputAt(0));
       int input_num_lanes = NumLanes(input_rep_type);
@@ -1641,18 +1641,18 @@ void SimdScalarLowering::LowerNode(Node* node) {
       Node* true_node = mcgraph_->Int32Constant(1);
       Node* false_node = mcgraph_->Int32Constant(0);
       Node* tmp_result = false_node;
-      if (node->opcode() == IrOpcode::kS1x4AllTrue ||
-          node->opcode() == IrOpcode::kS1x8AllTrue ||
-          node->opcode() == IrOpcode::kS1x16AllTrue) {
+      if (node->opcode() == IrOpcode::kI32x4AllTrue ||
+          node->opcode() == IrOpcode::kI16x8AllTrue ||
+          node->opcode() == IrOpcode::kI8x16AllTrue) {
         tmp_result = true_node;
       }
       for (int i = 0; i < input_num_lanes; ++i) {
         Diamond is_false(
             graph(), common(),
             graph()->NewNode(machine()->Word32Equal(), rep[i], false_node));
-        if (node->opcode() == IrOpcode::kS1x4AllTrue ||
-            node->opcode() == IrOpcode::kS1x8AllTrue ||
-            node->opcode() == IrOpcode::kS1x16AllTrue) {
+        if (node->opcode() == IrOpcode::kI32x4AllTrue ||
+            node->opcode() == IrOpcode::kI16x8AllTrue ||
+            node->opcode() == IrOpcode::kI8x16AllTrue) {
           tmp_result = is_false.Phi(MachineRepresentation::kWord32, false_node,
                                     tmp_result);
         } else {

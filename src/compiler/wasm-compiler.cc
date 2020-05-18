@@ -4577,22 +4577,22 @@ Node* WasmGraphBuilder::SimdOp(wasm::WasmOpcode opcode, Node* const* inputs) {
     case wasm::kExprS128AndNot:
       return graph()->NewNode(mcgraph()->machine()->S128AndNot(), inputs[0],
                               inputs[1]);
-    case wasm::kExprS1x2AnyTrue:
-      return graph()->NewNode(mcgraph()->machine()->S1x2AnyTrue(), inputs[0]);
-    case wasm::kExprS1x2AllTrue:
-      return graph()->NewNode(mcgraph()->machine()->S1x2AllTrue(), inputs[0]);
-    case wasm::kExprS1x4AnyTrue:
-      return graph()->NewNode(mcgraph()->machine()->S1x4AnyTrue(), inputs[0]);
-    case wasm::kExprS1x4AllTrue:
-      return graph()->NewNode(mcgraph()->machine()->S1x4AllTrue(), inputs[0]);
-    case wasm::kExprS1x8AnyTrue:
-      return graph()->NewNode(mcgraph()->machine()->S1x8AnyTrue(), inputs[0]);
-    case wasm::kExprS1x8AllTrue:
-      return graph()->NewNode(mcgraph()->machine()->S1x8AllTrue(), inputs[0]);
-    case wasm::kExprS1x16AnyTrue:
-      return graph()->NewNode(mcgraph()->machine()->S1x16AnyTrue(), inputs[0]);
-    case wasm::kExprS1x16AllTrue:
-      return graph()->NewNode(mcgraph()->machine()->S1x16AllTrue(), inputs[0]);
+    case wasm::kExprI64x2AnyTrue:
+      return graph()->NewNode(mcgraph()->machine()->I64x2AnyTrue(), inputs[0]);
+    case wasm::kExprI64x2AllTrue:
+      return graph()->NewNode(mcgraph()->machine()->I64x2AllTrue(), inputs[0]);
+    case wasm::kExprI32x4AnyTrue:
+      return graph()->NewNode(mcgraph()->machine()->I32x4AnyTrue(), inputs[0]);
+    case wasm::kExprI32x4AllTrue:
+      return graph()->NewNode(mcgraph()->machine()->I32x4AllTrue(), inputs[0]);
+    case wasm::kExprI16x8AnyTrue:
+      return graph()->NewNode(mcgraph()->machine()->I16x8AnyTrue(), inputs[0]);
+    case wasm::kExprI16x8AllTrue:
+      return graph()->NewNode(mcgraph()->machine()->I16x8AllTrue(), inputs[0]);
+    case wasm::kExprI8x16AnyTrue:
+      return graph()->NewNode(mcgraph()->machine()->I8x16AnyTrue(), inputs[0]);
+    case wasm::kExprI8x16AllTrue:
+      return graph()->NewNode(mcgraph()->machine()->I8x16AllTrue(), inputs[0]);
     case wasm::kExprS8x16Swizzle:
       return graph()->NewNode(mcgraph()->machine()->S8x16Swizzle(), inputs[0],
                               inputs[1]);

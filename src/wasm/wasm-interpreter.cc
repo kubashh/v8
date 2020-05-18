@@ -2690,10 +2690,10 @@ class ThreadImpl {
         Push(WasmValue(Simd128(res)));
         return true;
       }
-      case kExprS1x2AnyTrue:
-      case kExprS1x4AnyTrue:
-      case kExprS1x8AnyTrue:
-      case kExprS1x16AnyTrue: {
+      case kExprI64x2AnyTrue:
+      case kExprI32x4AnyTrue:
+      case kExprI16x8AnyTrue:
+      case kExprI8x16AnyTrue: {
         int4 s = Pop().to_s128().to_i32x4();
         bool res = s.val[0] | s.val[1] | s.val[2] | s.val[3];
         Push(WasmValue((res)));
@@ -2709,10 +2709,10 @@ class ThreadImpl {
     Push(WasmValue(res));                                 \
     return true;                                          \
   }
-        REDUCTION_CASE(S1x2AllTrue, i64x2, int2, 2, &)
-        REDUCTION_CASE(S1x4AllTrue, i32x4, int4, 4, &)
-        REDUCTION_CASE(S1x8AllTrue, i16x8, int8, 8, &)
-        REDUCTION_CASE(S1x16AllTrue, i8x16, int16, 16, &)
+        REDUCTION_CASE(I64x2AllTrue, i64x2, int2, 2, &)
+        REDUCTION_CASE(I32x4AllTrue, i32x4, int4, 4, &)
+        REDUCTION_CASE(I16x8AllTrue, i16x8, int8, 8, &)
+        REDUCTION_CASE(I8x16AllTrue, i8x16, int16, 16, &)
 #undef REDUCTION_CASE
 #define QFM_CASE(op, name, stype, count, operation)         \
   case kExpr##op: {                                         \

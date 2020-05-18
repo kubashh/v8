@@ -35,10 +35,6 @@ namespace wasm {
 #define CASE_S32x4_OP(name, str) CASE_OP(S32x4##name, "s32x4." str)
 #define CASE_S16x8_OP(name, str) CASE_OP(S16x8##name, "s16x8." str)
 #define CASE_S8x16_OP(name, str) CASE_OP(S8x16##name, "s8x16." str)
-#define CASE_S1x2_OP(name, str) CASE_OP(S1x2##name, "s1x2." str)
-#define CASE_S1x4_OP(name, str) CASE_OP(S1x4##name, "s1x4." str)
-#define CASE_S1x8_OP(name, str) CASE_OP(S1x8##name, "s1x8." str)
-#define CASE_S1x16_OP(name, str) CASE_OP(S1x16##name, "s1x16." str)
 #define CASE_INT_OP(name, str) CASE_I32_OP(name, str) CASE_I64_OP(name, str)
 #define CASE_FLOAT_OP(name, str) CASE_F32_OP(name, str) CASE_F64_OP(name, str)
 #define CASE_ALL_OP(name, str) CASE_FLOAT_OP(name, str) CASE_INT_OP(name, str)
@@ -290,14 +286,10 @@ const char* WasmOpcodes::OpcodeName(WasmOpcode opcode) {
     CASE_S128_OP(AndNot, "andnot")
     CASE_S8x16_OP(Swizzle, "swizzle")
     CASE_S8x16_OP(Shuffle, "shuffle")
-    CASE_S1x2_OP(AnyTrue, "any_true")
-    CASE_S1x2_OP(AllTrue, "all_true")
-    CASE_S1x4_OP(AnyTrue, "any_true")
-    CASE_S1x4_OP(AllTrue, "all_true")
-    CASE_S1x8_OP(AnyTrue, "any_true")
-    CASE_S1x8_OP(AllTrue, "all_true")
-    CASE_S1x16_OP(AnyTrue, "any_true")
-    CASE_S1x16_OP(AllTrue, "all_true")
+    CASE_SIMDI_OP(AnyTrue, "any_true")
+    CASE_SIMDI_OP(AllTrue, "all_true")
+    CASE_I64x2_OP(AnyTrue, "any_true")
+    CASE_I64x2_OP(AllTrue, "all_true")
     CASE_SIMDF_OP(Qfma, "qfma")
     CASE_SIMDF_OP(Qfms, "qfms")
 
@@ -399,10 +391,6 @@ const char* WasmOpcodes::OpcodeName(WasmOpcode opcode) {
 #undef CASE_S32x4_OP
 #undef CASE_S16x8_OP
 #undef CASE_S8x16_OP
-#undef CASE_S1x2_OP
-#undef CASE_S1x4_OP
-#undef CASE_S1x8_OP
-#undef CASE_S1x16_OP
 #undef CASE_INT_OP
 #undef CASE_FLOAT_OP
 #undef CASE_ALL_OP
