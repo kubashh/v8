@@ -24,16 +24,18 @@ bool DecodeLocalDecls(const WasmFeatures& enabled, BodyLocalDecls* decls,
   WasmFeatures no_features = WasmFeatures::None();
   WasmDecoder<Decoder::kValidate> decoder(nullptr, enabled, &no_features,
                                           nullptr, start, end, 0);
+  // We need to add the decoded locals into decls->type_list
   decoder.local_types_ = &decls->type_list;
   uint32_t length;
   if (decoder.DecodeLocals(decoder.pc(), &length,
-                           decoder.DecodeLocalsMode::kUpdateLocals)) {
+                           static_cast<int>(decoder.local_types_->size()))) {
     DCHECK(decoder.ok());
-    decoder.consume_bytes(length);
-    decls->encoded_size = decoder.pc_offset();
+    decls->encoded_size = length;
     return true;
+  } else {
+    decls->encoded_size = 0;
+    return false;
   }
-  return false;
 }
 
 BytecodeIterator::BytecodeIterator(const byte* start, const byte* end,
@@ -59,7 +61,9 @@ DecodeResult VerifyWasmCode(AccountingAllocator* allocator,
 }
 
 unsigned OpcodeLength(const byte* pc, const byte* end) {
-  Decoder decoder(pc, end);
+  WasmFeatures no_features = WasmFeatures::None();
+  WasmDecoder<Decoder::kNoValidate> decoder(nullptr, no_features, &no_features,
+                                            nullptr, pc, end, 0);
   return WasmDecoder<Decoder::kNoValidate>::OpcodeLength(&decoder, pc);
 }
 
@@ -288,7 +292,9 @@ bool PrintRawWasmCode(AccountingAllocator* allocator, const FunctionBody& body,
 
 BitVector* AnalyzeLoopAssignmentForTesting(Zone* zone, size_t num_locals,
                                            const byte* start, const byte* end) {
-  Decoder decoder(start, end);
+  WasmFeatures no_features = WasmFeatures::None();
+  WasmDecoder<Decoder::kValidate> decoder(nullptr, no_features, &no_features,
+                                          nullptr, start, end, 0);
   return WasmDecoder<Decoder::kValidate>::AnalyzeLoopAssignment(
       &decoder, start, static_cast<uint32_t>(num_locals), zone);
 }

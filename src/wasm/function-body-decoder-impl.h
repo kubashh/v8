@@ -729,7 +729,7 @@ struct Merge {
   // Reachability::kReachable.
   bool reached;
 
-  Merge(bool reached = false) : reached(reached) {}
+  explicit Merge(bool reached = false) : reached(reached) {}
 
   Value& operator[](uint32_t i) {
     DCHECK_GT(arity, i);
@@ -742,6 +742,7 @@ enum ControlKind : uint8_t {
   kControlIfElse,
   kControlBlock,
   kControlLoop,
+  kControlLet,
   kControlTry,
   kControlTryCatch
 };
@@ -759,6 +760,7 @@ enum Reachability : uint8_t {
 template <typename Value>
 struct ControlBase {
   ControlKind kind = kControlBlock;
+  uint32_t locals_count = 0;
   uint32_t stack_depth = 0;  // stack height at the beginning of the construct.
   const uint8_t* pc = nullptr;
   Reachability reachability = kReachable;
@@ -769,13 +771,16 @@ struct ControlBase {
 
   MOVE_ONLY_NO_DEFAULT_CONSTRUCTOR(ControlBase);
 
-  ControlBase(ControlKind kind, uint32_t stack_depth, const uint8_t* pc,
-              Reachability reachability)
+  ControlBase(ControlKind kind, uint32_t locals_count, uint32_t stack_depth,
+              const uint8_t* pc, Reachability reachability)
       : kind(kind),
+        locals_count(locals_count),
         stack_depth(stack_depth),
         pc(pc),
         reachability(reachability),
-        start_merge(reachability == kReachable) {}
+        start_merge(reachability == kReachable) {
+    DCHECK(kind == kControlLet || locals_count == 0);
+  }
 
   // Check whether the current block is reachable.
   bool reachable() const { return reachability == kReachable; }
@@ -795,6 +800,7 @@ struct ControlBase {
   bool is_onearmed_if() const { return kind == kControlIf; }
   bool is_if_else() const { return kind == kControlIfElse; }
   bool is_block() const { return kind == kControlBlock; }
+  bool is_let() const { return kind == kControlLet; }
   bool is_loop() const { return kind == kControlLoop; }
   bool is_incomplete_try() const { return kind == kControlTry; }
   bool is_try_catch() const { return kind == kControlTryCatch; }
@@ -846,6 +852,8 @@ enum class LoadTransformationKind : uint8_t {
   F(LocalSet, const Value& value, const LocalIndexImmediate<validate>& imm)   \
   F(LocalTee, const Value& value, Value* result,                              \
     const LocalIndexImmediate<validate>& imm)                                 \
+  F(AllocateLocals, base::SmallVector<Value, 8> local_values)                 \
+  F(DeallocateLocals, uint32_t count)                                         \
   F(GlobalGet, Value* result, const GlobalIndexImmediate<validate>& imm)      \
   F(GlobalSet, const Value& value, const GlobalIndexImmediate<validate>& imm) \
   F(TableGet, const Value& index, Value* result,                              \
@@ -957,23 +965,21 @@ class WasmDecoder : public Decoder {
     }
   }
 
-  enum DecodeLocalsMode { kUpdateLocals, kNoUpdateLocals };
-
   // Decodes local definitions in the current decoder.
   // Returns true iff locals are found.
-  // Write the total length of decoded locals in 'total_length'.
-  // If 'mode' is kPrependLocals, the 'local_types_' of this decoder
-  // will be updated. Otherwise, this is used just to check legality and
-  // measure the size of the locals.
-  // The decoder's pc is not advanced.
-  // If no locals are found (i.e., no compressed uint32 is found at pc),
-  // this will exit as 'false' and without an error.
+  // Writes the total length of decoded locals in 'total_length'.
+  // If insert_postion >= 0, the decoded locals will be inserted into the
+  // 'local_types_' of this decoder. Otherwise, this is used just to check
+  // legality and measure the length of the locals in bytes. The decoder's pc is
+  // not advanced. If no locals are found (i.e., no compressed uint32 is found
+  // at pc), this will exit as 'false' and without an error.
   bool DecodeLocals(const byte* pc, uint32_t* total_length,
-                    DecodeLocalsMode mode) {
+                    int insert_position) {
     DCHECK_NOT_NULL(local_types_);
 
     uint32_t length;
     *total_length = 0;
+    auto insert_iterator = local_types_->begin() + insert_position;
 
     // Decode local declarations, if any.
     uint32_t entries = read_u32v<kValidate>(pc, &length, "local decls count");
@@ -1010,15 +1016,16 @@ class WasmDecoder : public Decoder {
         return false;
       }
       *total_length += length;
-      if (mode == kUpdateLocals) {
-        local_types_->insert(local_types_->end(), count, type);
+      if (insert_position >= 0) {
+        insert_iterator =
+            local_types_->insert(insert_iterator, count, type) + count;
       }
     }
     DCHECK(ok());
     return true;
   }
 
-  static BitVector* AnalyzeLoopAssignment(Decoder* decoder, const byte* pc,
+  static BitVector* AnalyzeLoopAssignment(WasmDecoder* decoder, const byte* pc,
                                           uint32_t locals_count, Zone* zone) {
     if (pc >= decoder->end()) return nullptr;
     if (*pc != kExprLoop) return nullptr;
@@ -1385,7 +1392,7 @@ class WasmDecoder : public Decoder {
     return true;
   }
 
-  static uint32_t OpcodeLength(Decoder* decoder, const byte* pc) {
+  static uint32_t OpcodeLength(WasmDecoder* decoder, const byte* pc) {
     WasmOpcode opcode = static_cast<WasmOpcode>(*pc);
     switch (opcode) {
 #define DECLARE_OPCODE_CASE(name, opcode, sig) case kExpr##name:
@@ -1428,6 +1435,14 @@ class WasmDecoder : public Decoder {
       case kExprBlock: {
         BlockTypeImmediate<validate> imm(WasmFeatures::All(), decoder, pc);
         return 1 + imm.length;
+      }
+
+      case kExprLet: {
+        BlockTypeImmediate<validate> imm(WasmFeatures::All(), decoder, pc);
+        uint32_t locals_length;
+        bool locals_result = decoder->DecodeLocals(
+            decoder->pc() + 1 + imm.length, &locals_length, -1);
+        return 1 + imm.length + (locals_result ? locals_length : 0);
       }
 
       case kExprThrow: {
@@ -1717,6 +1732,9 @@ class WasmDecoder : public Decoder {
       case kExprReturnCallIndirect:
       case kExprUnreachable:
         return {0, 0};
+      case kExprLet:
+        // TODO(7748): Implement
+        return {0, 0};
       case kNumericPrefix:
       case kAtomicPrefix:
       case kSimdPrefix: {
@@ -1803,7 +1821,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
     this->InitializeLocalsFromSig();
     uint32_t locals_length;
     this->DecodeLocals(this->pc(), &locals_length,
-                       WasmDecoder<validate>::kUpdateLocals);
+                       static_cast<int>(this->local_types_->size()));
     this->consume_bytes(locals_length);
 
     CALL_INTERFACE(StartFunction);
@@ -2115,6 +2133,30 @@ class WasmFullDecoder : public WasmDecoder<validate> {
           }
           break;
         }
+        case kExprLet: {
+          BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_);
+          if (!this->Validate(imm)) break;
+          uint32_t current_local_count =
+              static_cast<uint32_t>(local_type_vec_.size());
+          // Temporarily add the let-defined values
+          // to the beginning of the function locals
+          uint32_t locals_length;
+          if (!this->DecodeLocals(this->pc() + 1 + imm.length, &locals_length,
+                                  0)) {
+            this->error(this->pc_, "'let' with invalid locals");
+          }
+          len = 1 + imm.length + locals_length;
+          uint32_t locals_count = static_cast<uint32_t>(local_type_vec_.size() -
+                                                        current_local_count);
+          auto local_values = PopArgs(local_type_vec_, locals_count);
+          CALL_INTERFACE_IF_REACHABLE(AllocateLocals, local_values);
+          ArgVector args = PopArgs(imm.sig);
+          Control* let_block = PushControl(kControlLet, locals_count);
+          SetBlockType(let_block, imm, args.begin());
+          CALL_INTERFACE_IF_REACHABLE(Block, let_block);
+          PushMergeValues(let_block, &let_block->start_merge);
+          break;
+        }
         case kExprLoop: {
           BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_);
           if (!this->Validate(imm)) break;
@@ -2179,6 +2221,12 @@ class WasmFullDecoder : public WasmDecoder<validate> {
               break;
             }
             if (!TypeCheckOneArmedIf(c)) break;
+          }
+          if (c->is_let()) {
+            this->local_types_->erase(
+                this->local_types_->begin(),
+                this->local_types_->begin() + c->locals_count);
+            CALL_INTERFACE_IF_REACHABLE(DeallocateLocals, c->locals_count);
           }
           if (!TypeCheckFallThru()) break;
 
@@ -2714,6 +2762,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
               break;
             case kControlIfElse:
             case kControlTryCatch:
+            case kControlLet:  // TODO(7748): Implement
               break;
           }
           if (c.start_merge.arity) TRACE_PART("%u-", c.start_merge.arity);
@@ -2816,15 +2865,25 @@ class WasmFullDecoder : public WasmDecoder<validate> {
     return args;
   }
 
+  V8_INLINE ArgVector PopArgs(const ZoneVector<ValueType>& arg_types,
+                              uint32_t count) {
+    ArgVector args(count);
+    for (int i = count - 1; i >= 0; i--) {
+      args[i] = Pop(i, arg_types[i]);
+    }
+    return args;
+  }
+
   ValueType GetReturnType(const FunctionSig* sig) {
     DCHECK_GE(1, sig->return_count());
     return sig->return_count() == 0 ? kWasmStmt : sig->GetReturn();
   }
 
-  Control* PushControl(ControlKind kind) {
+  Control* PushControl(ControlKind kind, uint32_t locals_count = 0) {
     Reachability reachability =
         control_.empty() ? kReachable : control_.back().innerReachability();
-    control_.emplace_back(kind, stack_size(), this->pc_, reachability);
+    control_.emplace_back(kind, locals_count, stack_size(), this->pc_,
+                          reachability);
     return &control_.back();
   }
 

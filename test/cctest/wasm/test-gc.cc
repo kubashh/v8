@@ -158,6 +158,17 @@ WASM_EXEC_TEST(BasicStruct) {
   n->EmitCode(n_code, sizeof(n_code));
   // Result: 0b1001
 
+  WasmFunctionBuilder* let_test = builder->AddFunction(sigs.i_v());
+  uint32_t let_local_index = 0;
+  uint32_t let_field_index = 0;
+  byte let_code[] = {
+      WASM_LET_I(WASM_STRUCT_TYPE(type_index),
+                 WASM_STRUCT_NEW(type_index, WASM_I32V(42), WASM_I32V(52)),
+                 WASM_STRUCT_GET(type_index, let_field_index,
+                                 WASM_GET_LOCAL(let_local_index))),
+      kExprEnd};
+  let_test->EmitCode(let_code, sizeof(let_code));
+
   ZoneBuffer buffer(&zone);
   builder->WriteTo(&buffer);
 
@@ -165,10 +176,11 @@ WASM_EXEC_TEST(BasicStruct) {
   HandleScope scope(isolate);
   testing::SetupIsolateForWasmModule(isolate);
   ErrorThrower thrower(isolate, "Test");
-  Handle<WasmInstanceObject> instance =
+  MaybeHandle<WasmInstanceObject> maybe_instance =
       testing::CompileAndInstantiateForTesting(
-          isolate, &thrower, ModuleWireBytes(buffer.begin(), buffer.end()))
-          .ToHandleChecked();
+          isolate, &thrower, ModuleWireBytes(buffer.begin(), buffer.end()));
+  if (thrower.error()) FATAL("%s", thrower.error_msg());
+  Handle<WasmInstanceObject> instance = maybe_instance.ToHandleChecked();
 
   CHECK_EQ(42, testing::CallWasmFunctionForTesting(isolate, instance, &thrower,
                                                    "f", 0, nullptr));

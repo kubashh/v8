@@ -458,6 +458,12 @@ inline WasmOpcode LoadStoreOpcodeOf(MachineType type, bool store) {
 #define WASM_RETURN_CALL_INDIRECT(sig_index, ...) \
   __VA_ARGS__, kExprReturnCallIndirect, static_cast<byte>(sig_index), TABLE_ZERO
 
+#define WASM_STRUCT_TYPE(typeidx) kLocalRef, static_cast<byte>(typeidx)
+
+#define WASM_LET_I(local_type, value, ...)                                   \
+  value, kExprLet, kLocalI32, U32V_1(1), U32V_1(1), local_type, __VA_ARGS__, \
+      kExprEnd
+
 #define WASM_NOT(x) x, kExprI32Eqz
 #define WASM_SEQ(...) __VA_ARGS__
 
