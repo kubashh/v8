@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59d5582a_8803192d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-05-18T17:26:24Z",
+      "side": 1,
+      "message": "So we never call this with a value to the LoadSensitivity. I am wondering why we added that. I guess this is safe since it is compiling on all configurations.",
+      "revId": "ee9dece932617e024d41db796c63c1ffa2bb9820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
