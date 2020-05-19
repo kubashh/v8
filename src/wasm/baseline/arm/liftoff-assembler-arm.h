@@ -2125,6 +2125,17 @@ void LiftoffAssembler::emit_f64_set_cond(Condition cond, Register dst,
   }
 }
 
+void LiftoffAssembler::emit_s8x16_swizzle(LiftoffRegister dst,
+                                          LiftoffRegister lhs,
+                                          LiftoffRegister rhs) {
+  UseScratchRegisterScope temps(this);
+  QwNeonRegister tbl =
+      dst == lhs ? temps.AcquireQ() : liftoff::GetSimd128Register(lhs);
+  NeonListOperand table(tbl);
+  vtbl(dst.low_fp(), table, rhs.low_fp());
+  vtbl(dst.high_fp(), table, rhs.high_fp());
+}
+
 void LiftoffAssembler::emit_f64x2_splat(LiftoffRegister dst,
                                         LiftoffRegister src) {
   TurboAssembler::Move(dst.low_fp(), src.fp());

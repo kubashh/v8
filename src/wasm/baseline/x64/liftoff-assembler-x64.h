@@ -2174,6 +2174,22 @@ void EmitI64x2ShrS(LiftoffAssembler* assm, LiftoffRegister dst,
 
 }  // namespace liftoff
 
+void LiftoffAssembler::emit_s8x16_swizzle(LiftoffRegister dst,
+                                          LiftoffRegister lhs,
+                                          LiftoffRegister rhs) {
+  XMMRegister mask =
+      GetUnusedRegister(kFpReg, LiftoffRegList::ForRegs(lhs, rhs)).fp();
+  // Out-of-range indices should return 0, add 112 so that any value > 15
+  // saturates to 128 (top bit set), so pshufb will zero that lane.
+  TurboAssembler::Move(mask, uint32_t{0x70707070});
+  Pshufd(mask, mask, uint8_t{0x0});
+  Paddusb(mask, rhs.fp());
+  if (lhs != dst) {
+    Movaps(dst.fp(), lhs.fp());
+  }
+  Pshufb(dst.fp(), mask);
+}
+
 void LiftoffAssembler::emit_i8x16_splat(LiftoffRegister dst,
                                         LiftoffRegister src) {
   Movd(dst.fp(), src.gp());

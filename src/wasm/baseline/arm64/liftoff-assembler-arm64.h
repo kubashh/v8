@@ -1163,6 +1163,12 @@ void LiftoffAssembler::emit_f64_set_cond(Condition cond, Register dst,
   }
 }
 
+void LiftoffAssembler::emit_s8x16_swizzle(LiftoffRegister dst,
+                                          LiftoffRegister lhs,
+                                          LiftoffRegister rhs) {
+  Tbl(dst.fp().V16B(), lhs.fp().V16B(), rhs.fp().V16B());
+}
+
 void LiftoffAssembler::emit_f64x2_splat(LiftoffRegister dst,
                                         LiftoffRegister src) {
   Dup(dst.fp().V2D(), src.fp().D(), 0);
