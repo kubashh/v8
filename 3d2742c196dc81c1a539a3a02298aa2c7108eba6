@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "431bf4a1_e86b28b8",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-05-19T04:22:05Z",
+      "side": 1,
+      "message": "Make this an `else`, and the condition a DCHECK. Then you don\u0027t need the UNREACHABLE();\n\nelse {\n  DCHECK(std::is_same\u003cuint32_t, dst_type\u003e::value);\n  ...",
+      "range": {
+        "startLine": 1855,
+        "startChar": 6,
+        "endLine": 1855,
+        "endChar": 13
+      },
+      "revId": "3d2742c196dc81c1a539a3a02298aa2c7108eba6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd16a6d9_6ab565ca",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1868,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-05-19T04:22:05Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 1868,
+        "startChar": 6,
+        "endLine": 1868,
+        "endChar": 17
+      },
+      "revId": "3d2742c196dc81c1a539a3a02298aa2c7108eba6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a724958_2ae33148",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1871,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-05-19T04:22:05Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 1871,
+        "startChar": 4,
+        "endLine": 1871,
+        "endChar": 15
+      },
+      "revId": "3d2742c196dc81c1a539a3a02298aa2c7108eba6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
