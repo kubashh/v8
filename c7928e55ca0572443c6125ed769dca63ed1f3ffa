@@ -16,6 +16,24 @@
       "revId": "c7928e55ca0572443c6125ed769dca63ed1f3ffa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be40b310_26c9892e",
+        "filename": "src/builtins/promise-all.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-05-19T07:37:00Z",
+      "side": 0,
+      "message": "Ahm, it was meant probably to guard against the remainingElements \u003c 0 case -\u003e restored it.",
+      "parentUuid": "f2dde766_e4185f5d",
+      "revId": "c7928e55ca0572443c6125ed769dca63ed1f3ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

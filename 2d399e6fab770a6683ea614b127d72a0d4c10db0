@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "27c9cfbc_7cc8c388",
+        "filename": "src/builtins/promise-all-element-closure.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-05-19T07:37:00Z",
+      "side": 1,
+      "message": "This was just a silly error, I had prob written \"index \u003e\u003d values.length\" originally. Nothing to do with anything.\n\n(The spaces comment was about ExtractFixedArray setting the \"allow large object allocation\" flag correctly etc so we don\u0027t need to deal with that level of abstraction here.)",
+      "parentUuid": "f86ab6a6_cf45cdb3",
+      "revId": "2d399e6fab770a6683ea614b127d72a0d4c10db0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1dfc61c1_b8bdde21",
         "filename": "src/builtins/promise-all.tq",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "2d399e6fab770a6683ea614b127d72a0d4c10db0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70989c29_72dd0951",
+        "filename": "src/builtins/promise-all.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-05-19T07:37:00Z",
+      "side": 1,
+      "message": "index - 1 is correct here: index is indeed 1-based and we increment it after every Promise. So if we have 1 Promises, index is 2, etc. So we need to reserve index - 1 space for the array, as we use it as a zero-based array later.\n\n-\u003e added a comment here:\n\n    // \u0027index\u0027 is a 1-based index and incremented after every Promise. Later we\n    // use \u0027values\u0027 as a 0-based array, so capacity \u0027index - 1\u0027 is enough.",
+      "parentUuid": "1dfc61c1_b8bdde21",
+      "revId": "2d399e6fab770a6683ea614b127d72a0d4c10db0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
