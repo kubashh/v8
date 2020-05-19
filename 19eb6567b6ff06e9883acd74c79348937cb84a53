@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "09a8f10a_d7f297fa",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1420807
+      },
+      "writtenOn": "2020-05-19T07:28:56Z",
+      "side": 1,
+      "message": "No, the scratch register holds the conversion\u0027s result, which is single precision (int32)",
+      "parentUuid": "5eda95fa_b4a33927",
+      "range": {
+        "startLine": 1934,
+        "startChar": 38,
+        "endLine": 1934,
+        "endChar": 46
+      },
+      "revId": "19eb6567b6ff06e9883acd74c79348937cb84a53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac0d1368_9a19dc6e",
         "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "19eb6567b6ff06e9883acd74c79348937cb84a53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d911231a_51100336",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1420807
+      },
+      "writtenOn": "2020-05-19T07:28:56Z",
+      "side": 1,
+      "message": "same as above",
+      "parentUuid": "ac0d1368_9a19dc6e",
+      "range": {
+        "startLine": 1941,
+        "startChar": 38,
+        "endLine": 1941,
+        "endChar": 46
+      },
+      "revId": "19eb6567b6ff06e9883acd74c79348937cb84a53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
