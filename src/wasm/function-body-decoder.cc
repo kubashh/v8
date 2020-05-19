@@ -24,16 +24,18 @@ bool DecodeLocalDecls(const WasmFeatures& enabled, BodyLocalDecls* decls,
   WasmFeatures no_features = WasmFeatures::None();
   WasmDecoder<Decoder::kValidate> decoder(nullptr, enabled, &no_features,
                                           nullptr, start, end, 0);
+  // We need to add the decoded locals into decls->type_list
   decoder.local_types_ = &decls->type_list;
   uint32_t length;
   if (decoder.DecodeLocals(decoder.pc(), &length,
-                           decoder.DecodeLocalsMode::kUpdateLocals)) {
+                           static_cast<int>(decoder.local_types_->size()))) {
     DCHECK(decoder.ok());
-    decoder.consume_bytes(length);
-    decls->encoded_size = decoder.pc_offset();
+    decls->encoded_size = length;
     return true;
+  } else {
+    decls->encoded_size = 0;
+    return false;
   }
-  return false;
 }
 
 BytecodeIterator::BytecodeIterator(const byte* start, const byte* end,
