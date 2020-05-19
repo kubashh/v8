@@ -16,6 +16,24 @@
       "revId": "ee9dece932617e024d41db796c63c1ffa2bb9820",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ceb0964_3534b81d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-05-19T09:46:02Z",
+      "side": 1,
+      "message": "It seems so. In CSA.cc have been noticing quite a bit of 1) functions that are never called, and 2) functions that have more parameters than what they use.\n\nI am assuming that either 1) it was used in the past, or 2) it was created just in case.\n\nEither way, I think removing the parameters is the way to go and we would re-add them if necessary. This would also help remove part of the clutter in the file.",
+      "parentUuid": "59d5582a_8803192d",
+      "revId": "ee9dece932617e024d41db796c63c1ffa2bb9820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
