@@ -434,6 +434,8 @@ MathHypot(
   return Convert<Number>(Float64Sqrt(sum) * max);
 }
 
+extern macro DebugExecutionModeChecksSideEffects(): bool;
+
 // ES6 #sec-math.random
 extern macro RefillMathRandom(NativeContext): Smi;
 
@@ -446,8 +448,12 @@ MathRandom(js-implicit context: NativeContext, receiver: JSAny)(): Number {
     // refill math random.
     smiIndex = RefillMathRandom(context);
   }
+
   const newSmiIndex: Smi = smiIndex - 1;
-  context[NativeContextSlot::MATH_RANDOM_INDEX_INDEX] = newSmiIndex;
+  // Don't consume cache entry if in no-side-effects mode.
+  if (!DebugExecutionModeChecksSideEffects()) {
+    context[NativeContextSlot::MATH_RANDOM_INDEX_INDEX] = newSmiIndex;
+  }
 
   const array: FixedDoubleArray = Cast<FixedDoubleArray>(
       context[NativeContextSlot::MATH_RANDOM_CACHE_INDEX])
