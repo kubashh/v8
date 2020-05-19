@@ -16,6 +16,24 @@
       "revId": "7835364b62a569f6ca3e993af4cac47bfba244e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02c94dae_e1f7e3d1",
+        "filename": "test/debugger/debugger.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-05-19T14:49:47Z",
+      "side": 1,
+      "message": "Thanks for reviewing, i\u0027ve made the change.",
+      "parentUuid": "872fa0fd_a3df59af",
+      "revId": "7835364b62a569f6ca3e993af4cac47bfba244e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
