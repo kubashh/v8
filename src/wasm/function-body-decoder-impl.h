@@ -1017,7 +1017,7 @@ class WasmDecoder : public Decoder {
     return true;
   }
 
-  static BitVector* AnalyzeLoopAssignment(Decoder* decoder, const byte* pc,
+  static BitVector* AnalyzeLoopAssignment(WasmDecoder* decoder, const byte* pc,
                                           uint32_t locals_count, Zone* zone) {
     if (pc >= decoder->end()) return nullptr;
     if (*pc != kExprLoop) return nullptr;
@@ -1384,7 +1384,7 @@ class WasmDecoder : public Decoder {
     return true;
   }
 
-  static uint32_t OpcodeLength(Decoder* decoder, const byte* pc) {
+  static uint32_t OpcodeLength(WasmDecoder* decoder, const byte* pc) {
     WasmOpcode opcode = static_cast<WasmOpcode>(*pc);
     switch (opcode) {
 #define DECLARE_OPCODE_CASE(name, opcode, sig) case kExpr##name:
