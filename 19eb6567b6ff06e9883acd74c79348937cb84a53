@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5eda95fa_b4a33927",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-05-19T04:30:18Z",
+      "side": 1,
+      "message": "Should this not be an AcquireD, as you use it for a float64 and not for a float32?",
+      "range": {
+        "startLine": 1934,
+        "startChar": 38,
+        "endLine": 1934,
+        "endChar": 46
+      },
+      "revId": "19eb6567b6ff06e9883acd74c79348937cb84a53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac0d1368_9a19dc6e",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-05-19T04:30:18Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 1941,
+        "startChar": 38,
+        "endLine": 1941,
+        "endChar": 46
+      },
+      "revId": "19eb6567b6ff06e9883acd74c79348937cb84a53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
