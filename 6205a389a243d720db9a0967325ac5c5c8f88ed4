@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad063342_c1427c4b",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-19T05:42:59Z",
+      "side": 1,
+      "message": "To guarantee this, I think the comparison should be \u0027\u003c\u0027.",
+      "revId": "6205a389a243d720db9a0967325ac5c5c8f88ed4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
