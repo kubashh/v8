@@ -13230,6 +13230,17 @@ TNode<Smi> CodeStubAssembler::RefillMathRandom(
                             std::make_pair(type_tagged, native_context)));
 }
 
+TNode<BoolT> CodeStubAssembler::DebugExecutionModeChecksSideEffects() {
+  STATIC_ASSERT(sizeof(DebugInfo::ExecutionMode) >= sizeof(int32_t));
+
+  TNode<ExternalReference> execution_mode_address = ExternalConstant(
+      ExternalReference::debug_execution_mode_address(isolate()));
+  TNode<Int32T> execution_mode =
+      UncheckedCast<Int32T>(Load(MachineType::Int32(), execution_mode_address));
+
+  return Word32Equal(execution_mode, Int32Constant(DebugInfo::kSideEffects));
+}
+
 TNode<String> CodeStubAssembler::TaggedToDirectString(TNode<Object> value,
                                                       Label* fail) {
   ToDirectStringAssembler to_direct(state(), CAST(value));

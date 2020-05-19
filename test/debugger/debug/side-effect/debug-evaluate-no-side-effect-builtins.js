@@ -144,11 +144,23 @@ function listener(event, exec_state, event_data, data) {
 
     // Test Math functions.
     for (f of Object.getOwnPropertyNames(Math)) {
-      if (typeof Math[f] === "function") {
+      if (f !== "random" && typeof Math[f] === "function") {
         var result = exec_state.frame(0).evaluate(
                          `Math.${f}(0.5, -0.5);`, true).value();
-        if (f != "random") assertEquals(Math[f](0.5, -0.5), result);
+        assertEquals(Math[f](0.5, -0.5), result);
       }
+    }
+    {
+      const source = "Math.random()";
+      const r0 = exec_state.frame(0).evaluate(source, false).value();
+      const r1 = exec_state.frame(0).evaluate(source, true).value();
+      const r2 = exec_state.frame(0).evaluate(source, true).value();
+      const r3 = exec_state.frame(0).evaluate(source, false).value();
+      const r4 = exec_state.frame(0).evaluate(source, false).value();
+      assertNotEquals(r0, r1);
+      assertEquals(r1, r2);
+      assertEquals(r2, r3);
+      assertNotEquals(r3, r4);
     }
 
     // Test Number functions.
