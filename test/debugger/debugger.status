@@ -148,6 +148,7 @@
   'regress/regress-crbug-840288': [SKIP],
   'debug/wasm/asm-debug': [SKIP],
   'debug/wasm/debug-enabled-tier-down-wasm': [SKIP],
+  'debug/wasm/debug-enabled-tier-down-wasm-streaming': [SKIP],
   'debug/wasm/debug-step-into-wasm': [SKIP],
   'debug/wasm/frame-inspection': [SKIP],
 }],
