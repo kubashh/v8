@@ -158,7 +158,8 @@ class V8_EXPORT_PRIVATE RegExpParser {
                Zone* zone);
 
   static bool ParseRegExp(Isolate* isolate, Zone* zone, FlatStringReader* input,
-                          JSRegExp::Flags flags, RegExpCompileData* result);
+                          JSRegExp::Flags flags, RegExpCompileData* result,
+                          bool syntax_only = false);
 
   RegExpTree* ParsePattern();
   RegExpTree* ParseDisjunction();

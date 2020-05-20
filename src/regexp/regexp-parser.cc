@@ -1789,10 +1789,9 @@ RegExpTree* RegExpParser::ParseCharacterClass(const RegExpBuilder* builder) {
 
 #undef CHECK_FAILED
 
-
 bool RegExpParser::ParseRegExp(Isolate* isolate, Zone* zone,
                                FlatStringReader* input, JSRegExp::Flags flags,
-                               RegExpCompileData* result) {
+                               RegExpCompileData* result, bool syntax_only) {
   DCHECK(result != nullptr);
   RegExpParser parser(input, flags, isolate, zone);
   RegExpTree* tree = parser.ParsePattern();
@@ -1813,7 +1812,9 @@ bool RegExpParser::ParseRegExp(Isolate* isolate, Zone* zone,
     int capture_count = parser.captures_started();
     result->simple = tree->IsAtom() && parser.simple() && capture_count == 0;
     result->contains_anchor = parser.contains_anchor();
-    result->capture_name_map = parser.CreateCaptureNameMap();
+    if (!syntax_only) {
+      result->capture_name_map = parser.CreateCaptureNameMap();
+    }
     result->capture_count = capture_count;
   }
   return !parser.failed();
