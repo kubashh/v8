@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa935706_8b7ba1d6",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-05-20T13:50:25Z",
+      "side": 1,
+      "message": "A little bit shorter would be {VectorOf(local_type_vec.data(), locals_count)}. The downside is that the type of the vector would be implicit then, so your choice whether you use it or not.",
+      "range": {
+        "startLine": 2155,
+        "startChar": 22,
+        "endLine": 2155,
+        "endChar": 77
+      },
+      "revId": "17f80f1dd77851d7058aec06ea84f921147fd413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63e6c73a_48f0453f",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2162,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-05-20T13:50:25Z",
+      "side": 1,
+      "message": "You can use {VectorOf(let_local_values)}, and then just inline it in the call below.",
+      "revId": "17f80f1dd77851d7058aec06ea84f921147fd413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d51b8d2f_44c59b06",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-05-20T13:50:25Z",
+      "side": 1,
+      "message": "nit: This is a full sentence, hence needs proper punctuation.",
+      "revId": "17f80f1dd77851d7058aec06ea84f921147fd413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
