@@ -1532,6 +1532,8 @@ void NormalizedMapCache::NormalizedMapCacheVerify(Isolate* isolate) {
   }
 }
 
+USE_TORQUE_VERIFIER(StackFrameInfo)
+
 void PreparseData::PreparseDataVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::PreparseDataVerify(*this, isolate);
   CHECK_LE(0, data_length());
