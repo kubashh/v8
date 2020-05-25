@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abf605e_a66f5f69",
+        "filename": "src/wasm/struct-types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-05-25T08:45:51Z",
+      "side": 1,
+      "message": "Will the default copy assignment and constructor work with unions?",
+      "revId": "04072ee612a6b182b5df7827e857e5e46bd8154c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
