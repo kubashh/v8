@@ -16,6 +16,172 @@
       "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceb26aae_c2f4d1cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-25T13:32:56Z",
+      "side": 1,
+      "message": "You wrote a nice summary, please copy that here and add a sentence about the root of the bug that the reland is fixing.",
+      "parentUuid": "e010fa01_113edaf7",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "301abeee_71b3f2c5",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 11300,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-25T13:32:56Z",
+      "side": 1,
+      "message": "If it\u0027s a non-boolean oddball, then it must be null or undefined here, no?",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a0fb7db_9491452c",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2707,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-25T13:32:56Z",
+      "side": 1,
+      "message": "Please add a more precise reason.",
+      "range": {
+        "startLine": 2707,
+        "startChar": 43,
+        "endLine": 2707,
+        "endChar": 63
+      },
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc5cdc88_b97191b0",
+        "filename": "src/compiler/js-operator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-25T13:32:56Z",
+      "side": 1,
+      "message": "This is confusing given that we define kStrictEqualNumberOrBooleanOperator.",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "007fd286_4bb83b4a",
+        "filename": "src/compiler/js-operator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-25T13:32:56Z",
+      "side": 1,
+      "message": "Nit: use UNIMPLEMENTED(), also remove the return statement.",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6dd9f0f_cd900dd4",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-25T13:32:56Z",
+      "side": 1,
+      "message": "Please update.",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa650c88_304f0b75",
+        "filename": "src/compiler/representation-change.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-25T13:32:56Z",
+      "side": 1,
+      "message": "This seems to be the wrong reason.",
+      "range": {
+        "startLine": 715,
+        "startChar": 40,
+        "endLine": 715,
+        "endChar": 55
+      },
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36e7ec0f_8ce1e827",
+        "filename": "test/mjsunit/compiler/abstract-equal-oddball.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-25T13:32:56Z",
+      "side": 1,
+      "message": "(null, 0) might be more natural here.",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8e31491_08ea2c16",
+        "filename": "test/mjsunit/compiler/abstract-equal-oddball.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-25T13:32:56Z",
+      "side": 1,
+      "message": "Please add some oddball \u003d\u003d oddball tests.",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
