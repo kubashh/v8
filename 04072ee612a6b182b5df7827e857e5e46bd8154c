@@ -16,6 +16,29 @@
       "revId": "04072ee612a6b182b5df7827e857e5e46bd8154c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94c14494_3fd90cad",
+        "filename": "src/wasm/wasm-constants.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-05-25T11:23:01Z",
+      "side": 1,
+      "message": "The prototype spec (https://bit.ly/3cWcm6Q) defines 0x7a and 0x79 for these.\n\nAlso, as discussed, I think our implementation would be conceptually simpler if we just added these values to ValueTypeCode (and supported them in the ValueType class).",
+      "range": {
+        "startLine": 45,
+        "startChar": 44,
+        "endLine": 45,
+        "endChar": 48
+      },
+      "revId": "04072ee612a6b182b5df7827e857e5e46bd8154c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
