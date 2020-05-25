@@ -1789,34 +1789,49 @@ RegExpTree* RegExpParser::ParseCharacterClass(const RegExpBuilder* builder) {
 
 #undef CHECK_FAILED
 
+bool RegExpParser::Parse(RegExpCompileData* result) {
+  DCHECK(result != nullptr);
+  RegExpTree* tree = ParsePattern();
+  if (failed()) {
+    DCHECK(tree == nullptr);
+    DCHECK(error_ != RegExpError::kNone);
+    result->error = error_;
+    result->error_pos = error_pos_;
+  } else {
+    DCHECK(tree != nullptr);
+    DCHECK(error_ == RegExpError::kNone);
+    if (FLAG_trace_regexp_parser) {
+      StdoutStream os;
+      tree->Print(os, zone());
+      os << "\n";
+    }
+    result->tree = tree;
+    int capture_count = captures_started();
+    result->simple = tree->IsAtom() && simple() && capture_count == 0;
+    result->contains_anchor = contains_anchor();
+    result->capture_count = capture_count;
+  }
+  return !failed();
+}
 
 bool RegExpParser::ParseRegExp(Isolate* isolate, Zone* zone,
                                FlatStringReader* input, JSRegExp::Flags flags,
                                RegExpCompileData* result) {
-  DCHECK(result != nullptr);
   RegExpParser parser(input, flags, isolate, zone);
-  RegExpTree* tree = parser.ParsePattern();
-  if (parser.failed()) {
-    DCHECK(tree == nullptr);
-    DCHECK(parser.error_ != RegExpError::kNone);
-    result->error = parser.error_;
-    result->error_pos = parser.error_pos_;
-  } else {
-    DCHECK(tree != nullptr);
-    DCHECK(parser.error_ == RegExpError::kNone);
-    if (FLAG_trace_regexp_parser) {
-      StdoutStream os;
-      tree->Print(os, zone);
-      os << "\n";
-    }
-    result->tree = tree;
-    int capture_count = parser.captures_started();
-    result->simple = tree->IsAtom() && parser.simple() && capture_count == 0;
-    result->contains_anchor = parser.contains_anchor();
+  if (parser.Parse(result)) {
     result->capture_name_map = parser.CreateCaptureNameMap();
-    result->capture_count = capture_count;
+    return true;
   }
-  return !parser.failed();
+  return false;
+}
+
+bool RegExpParser::VerifyRegExpSyntax(Isolate* isolate, Zone* zone,
+                                      FlatStringReader* input,
+                                      JSRegExp::Flags flags,
+                                      const DisallowHeapAllocation&) {
+  RegExpParser parser(input, flags, isolate, zone);
+  RegExpCompileData dummy;
+  return parser.Parse(&dummy);
 }
 
 RegExpBuilder::RegExpBuilder(Zone* zone, JSRegExp::Flags flags)
