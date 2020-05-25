@@ -41,6 +41,9 @@ constexpr uint8_t kWasmFunctionTypeCode = 0x60;
 constexpr uint8_t kWasmStructTypeCode = 0x5f;
 constexpr uint8_t kWasmArrayTypeCode = 0x5e;
 
+// Binary encoding of packed types (GC proposal)
+enum PackedTypeCode : uint8_t { kPackedI8 = 0x67, kPackedI16 = 0x66 };
+
 // Binary encoding of import/export kinds.
 enum ImportExportKindCode : uint8_t {
   kExternalFunction = 0,

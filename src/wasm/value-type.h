@@ -415,6 +415,72 @@ class StoreType {
   };
 };
 
+// A PackedType represents a i8 or i16 stored in a field of a struct, or the
+// elements of an array, as per the wasm-gc proposal.
+class PackedType {
+ public:
+  enum PackedTypeValue : uint8_t { kI8, kI16, kPackedBottom };
+
+  constexpr explicit PackedType(PackedTypeValue val) : val_(val) {}
+
+  constexpr PackedTypeValue value() const { return val_; }
+
+  V8_INLINE constexpr bool is_byte() const { return val_ == kI8; }
+
+  constexpr PackedTypeCode packed_type_code() const {
+#if V8_HAS_CXX14_CONSTEXPR
+    DCHECK_NE(kPackedBottom, val_);
+#endif
+    return is_byte() ? kPackedI8 : kPackedI16;
+  }
+
+  constexpr bool operator==(PackedType other) const {
+    return val_ == other.val_;
+  }
+
+  constexpr bool operator!=(PackedType other) const {
+    return val_ != other.val_;
+  }
+
+  constexpr int element_size_bytes() const {
+#if V8_HAS_CXX14_CONSTEXPR
+    DCHECK_NE(kPackedBottom, val_);
+#endif
+    return is_byte() ? 1 : 2;
+  }
+
+  constexpr MachineType machine_type() const {
+#if V8_HAS_CXX14_CONSTEXPR
+    DCHECK_NE(kPackedBottom, val_);
+#endif
+    return is_byte() ? MachineType::Int8() : MachineType::Int16();
+  }
+
+  constexpr MachineRepresentation machine_representation() const {
+#if V8_HAS_CXX14_CONSTEXPR
+    DCHECK_NE(kPackedBottom, val_);
+#endif
+    return machine_type().representation();
+  }
+
+  constexpr char short_name() const {
+#if V8_HAS_CXX14_CONSTEXPR
+    DCHECK_NE(kPackedBottom, val_);
+#endif
+    return is_byte() ? 'b' : 'h';
+  }
+
+  constexpr const char* type_name() const {
+#if V8_HAS_CXX14_CONSTEXPR
+    DCHECK_NE(kPackedBottom, val_);
+#endif
+    return is_byte() ? "i8" : "i16";
+  }
+
+ private:
+  PackedTypeValue val_;
+};
+
 }  // namespace wasm
 }  // namespace internal
 }  // namespace v8

@@ -15,6 +15,59 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
+// A FieldType is the type of a struct field, or an array elements,
+// as per the wasm-gc proposal.
+// It can be mutable or immutable, and contains either a value type
+// or a packed i8/i16 type.
+struct FieldType {
+  constexpr FieldType(ValueType value_type, bool mutability)
+      : value_type(value_type), is_packed(false), mutability(mutability) {}
+
+  constexpr FieldType(PackedType packed_type, bool mutability)
+      : packed_type(packed_type), is_packed(true), mutability(mutability) {}
+
+  union {
+    ValueType value_type;
+    PackedType packed_type;
+  };
+  bool is_packed;
+  bool mutability;
+
+  bool operator==(const FieldType& other) const {
+    return mutability == other.mutability &&
+           ((is_packed && other.is_packed &&
+             packed_type == other.packed_type) ||
+            (!is_packed && !other.is_packed && value_type == other.value_type));
+  }
+  bool operator!=(const FieldType& other) const {
+    return mutability != other.mutability || is_packed != other.is_packed ||
+           (is_packed && other.is_packed && packed_type != other.packed_type) ||
+           value_type != other.value_type;
+  }
+
+#define DELEGATE(type, name, args...)                                  \
+  constexpr type name(args) const {                                    \
+    return is_packed ? packed_type.name(args) : value_type.name(args); \
+  }
+
+  DELEGATE(int, element_size_bytes)
+  DELEGATE(MachineRepresentation, machine_representation)
+  DELEGATE(char, short_name)
+  DELEGATE(const char*, type_name)
+#undef DELEGATE
+
+#define DELEGATE_VALUE(name, args...) \
+  constexpr bool name(args) { return !is_packed && value_type.name(args); }
+
+  DELEGATE_VALUE(IsReferenceType)
+  DELEGATE_VALUE(has_immediate)
+#undef DELEGATE_VALUE
+
+  constexpr ValueType container_type() const {
+    return is_packed ? kWasmI32 : value_type;
+  }
+};
+
 class StructType : public ZoneObject {
  public:
   StructType(uint32_t field_count, uint32_t* field_offsets,
