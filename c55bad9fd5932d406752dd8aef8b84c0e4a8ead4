@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d243f8a_95c2edf5",
+        "filename": "src/regexp/regexp-parser.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-25T07:50:42Z",
+      "side": 1,
+      "message": "Since the intent here is to avoid heap allocations I would propose using DisallowHeapAllocation scopes. We could e.g. split this method into ParseRegExp and ParseRegExpForSyntaxVerification where the latter takes a `const DisallowHeapAllocation\u0026`. Wdyt?",
+      "revId": "c55bad9fd5932d406752dd8aef8b84c0e4a8ead4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
