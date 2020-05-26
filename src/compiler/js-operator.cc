@@ -707,8 +707,9 @@ CompareOperationHint CompareOperationHintOf(const Operator* op) {
 
 #define BINARY_OP_LIST(V) V(Add)
 
+#define COMPARE_EQUAL_OP_LIST(V) V(Equal, Operator::kNoProperties)
+
 #define COMPARE_OP_LIST(V)                    \
-  V(Equal, Operator::kNoProperties)           \
   V(StrictEqual, Operator::kPure)             \
   V(LessThan, Operator::kNoProperties)        \
   V(GreaterThan, Operator::kNoProperties)     \
@@ -776,6 +777,10 @@ struct JSOperatorGlobalCache final {
       k##Name##ReceiverOrNullOrUndefinedOperator;                            \
   Name##Operator<CompareOperationHint::kAny> k##Name##AnyOperator;
   COMPARE_OP_LIST(COMPARE_OP)
+  COMPARE_EQUAL_OP_LIST(COMPARE_OP)
+  // Only abstract equality provides an additional operator for NumberOrBoolean.
+  EqualOperator<CompareOperationHint::kNumberOrBoolean>
+      kEqualNumberOrBooleanOperator;
 #undef COMPARE_OP
 };
 
@@ -831,7 +836,42 @@ BINARY_OP_LIST(BINARY_OP)
 UNARY_OP_LIST(UNARY_OP)
 #undef UNARY_OP
 
-#define COMPARE_OP(Name, ...)                                          \
+#define COMPARE_OP(Name, ...)                                           \
+  const Operator* JSOperatorBuilder::Name(CompareOperationHint hint) {  \
+    switch (hint) {                                                     \
+      case CompareOperationHint::kNone:                                 \
+        return &cache_.k##Name##NoneOperator;                           \
+      case CompareOperationHint::kSignedSmall:                          \
+        return &cache_.k##Name##SignedSmallOperator;                    \
+      case CompareOperationHint::kNumber:                               \
+        return &cache_.k##Name##NumberOperator;                         \
+      case CompareOperationHint::kNumberOrBoolean:                      \
+        /* Not supported for operations other than abstract equality */ \
+        UNIMPLEMENTED();                                                \
+      case CompareOperationHint::kNumberOrOddball:                      \
+        return &cache_.k##Name##NumberOrOddballOperator;                \
+      case CompareOperationHint::kInternalizedString:                   \
+        return &cache_.k##Name##InternalizedStringOperator;             \
+      case CompareOperationHint::kString:                               \
+        return &cache_.k##Name##StringOperator;                         \
+      case CompareOperationHint::kSymbol:                               \
+        return &cache_.k##Name##SymbolOperator;                         \
+      case CompareOperationHint::kBigInt:                               \
+        return &cache_.k##Name##BigIntOperator;                         \
+      case CompareOperationHint::kReceiver:                             \
+        return &cache_.k##Name##ReceiverOperator;                       \
+      case CompareOperationHint::kReceiverOrNullOrUndefined:            \
+        return &cache_.k##Name##ReceiverOrNullOrUndefinedOperator;      \
+      case CompareOperationHint::kAny:                                  \
+        return &cache_.k##Name##AnyOperator;                            \
+    }                                                                   \
+    UNREACHABLE();                                                      \
+    return nullptr;                                                     \
+  }
+COMPARE_OP_LIST(COMPARE_OP)
+#undef COMPARE_OP
+
+#define COMPARE_EQUAL_OP(Name, ...)                                    \
   const Operator* JSOperatorBuilder::Name(CompareOperationHint hint) { \
     switch (hint) {                                                    \
       case CompareOperationHint::kNone:                                \
@@ -840,6 +880,8 @@ UNARY_OP_LIST(UNARY_OP)
         return &cache_.k##Name##SignedSmallOperator;                   \
       case CompareOperationHint::kNumber:                              \
         return &cache_.k##Name##NumberOperator;                        \
+      case CompareOperationHint::kNumberOrBoolean:                     \
+        return &cache_.k##Name##NumberOrBooleanOperator;               \
       case CompareOperationHint::kNumberOrOddball:                     \
         return &cache_.k##Name##NumberOrOddballOperator;               \
       case CompareOperationHint::kInternalizedString:                  \
@@ -860,8 +902,8 @@ UNARY_OP_LIST(UNARY_OP)
     UNREACHABLE();                                                     \
     return nullptr;                                                    \
   }
-COMPARE_OP_LIST(COMPARE_OP)
-#undef COMPARE_OP
+COMPARE_EQUAL_OP_LIST(COMPARE_EQUAL_OP)
+#undef COMPARE_EQUAL_OP
 
 const Operator* JSOperatorBuilder::StoreDataPropertyInLiteral(
     const FeedbackSource& feedback) {
@@ -1438,6 +1480,7 @@ Handle<ScopeInfo> ScopeInfoOf(const Operator* op) {
 #undef BINARY_OP_LIST
 #undef CACHED_OP_LIST
 #undef COMPARE_OP_LIST
+#undef COMPARE_EQUAL_OP_LIST
 
 }  // namespace compiler
 }  // namespace internal
