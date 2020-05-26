@@ -3032,6 +3032,11 @@ HeapObject Heap::CreateFillerObjectAt(ReadOnlyRoots roots, Address addr,
   return filler;
 }
 
+void Heap::CreateFillerObjectFromSweeper(
+    Address addr, int size, ClearFreedMemoryMode clear_memory_mode) {
+  CreateFillerObjectAtImpl(ReadOnlyRoots(this), addr, size, clear_memory_mode);
+}
+
 HeapObject Heap::CreateFillerObjectAt(Address addr, int size,
                                       ClearRecordedSlots clear_slots_mode) {
   if (size == 0) return HeapObject();
