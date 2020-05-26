@@ -2900,9 +2900,9 @@ void SerializerForBackgroundCompilation::ProcessCompareOperation(
     FeedbackSlot slot) {
   if (slot.IsInvalid() || feedback_vector().is_null()) return;
   FeedbackSource source(function().feedback_vector(), slot);
-  ProcessedFeedback const& feedback =
-      broker()->ProcessFeedbackForCompareOperation(source);
-  if (BailoutOnUninitialized(feedback)) return;
+  // ProcessedFeedback const& feedback =
+  broker()->ProcessFeedbackForCompareOperation(source);
+  // if (BailoutOnUninitialized(feedback)) return;
   environment()->accumulator_hints() = Hints();
 }
 

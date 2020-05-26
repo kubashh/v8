@@ -233,7 +233,13 @@ FeedbackParameter const& FeedbackParameterOf(const Operator* op) {
          op->opcode() == IrOpcode::kJSInstanceOf ||
          op->opcode() == IrOpcode::kJSNegate ||
          op->opcode() == IrOpcode::kJSStoreDataPropertyInLiteral ||
-         op->opcode() == IrOpcode::kJSStoreInArrayLiteral);
+         op->opcode() == IrOpcode::kJSStoreInArrayLiteral ||
+         op->opcode() == IrOpcode::kJSEqual ||
+         op->opcode() == IrOpcode::kJSStrictEqual ||
+         op->opcode() == IrOpcode::kJSLessThan ||
+         op->opcode() == IrOpcode::kJSGreaterThan ||
+         op->opcode() == IrOpcode::kJSLessThanOrEqual ||
+         op->opcode() == IrOpcode::kJSGreaterThanOrEqual);
   return OpParameter<FeedbackParameter>(op);
 }
 
@@ -641,16 +647,6 @@ BinaryOperationHint BinaryOperationHintOf(const Operator* op) {
   return OpParameter<BinaryOperationHint>(op);
 }
 
-CompareOperationHint CompareOperationHintOf(const Operator* op) {
-  DCHECK(op->opcode() == IrOpcode::kJSEqual ||
-         op->opcode() == IrOpcode::kJSStrictEqual ||
-         op->opcode() == IrOpcode::kJSLessThan ||
-         op->opcode() == IrOpcode::kJSGreaterThan ||
-         op->opcode() == IrOpcode::kJSLessThanOrEqual ||
-         op->opcode() == IrOpcode::kJSGreaterThanOrEqual);
-  return OpParameter<CompareOperationHint>(op);
-}
-
 #define CACHED_OP_LIST(V)                                                \
   V(BitwiseOr, Operator::kNoProperties, 2, 1)                            \
   V(BitwiseXor, Operator::kNoProperties, 2, 1)                           \
@@ -751,32 +747,6 @@ struct JSOperatorGlobalCache final {
   Name##Operator<BinaryOperationHint::kAny> k##Name##AnyOperator;
   BINARY_OP_LIST(BINARY_OP)
 #undef BINARY_OP
-
-#define COMPARE_OP(Name, properties)                                         \
-  template <CompareOperationHint kHint>                                      \
-  struct Name##Operator final : public Operator1<CompareOperationHint> {     \
-    Name##Operator()                                                         \
-        : Operator1<CompareOperationHint>(                                   \
-              IrOpcode::kJS##Name, properties, "JS" #Name, 2, 1, 1, 1, 1,    \
-              Operator::ZeroIfNoThrow(properties), kHint) {}                 \
-  };                                                                         \
-  Name##Operator<CompareOperationHint::kNone> k##Name##NoneOperator;         \
-  Name##Operator<CompareOperationHint::kSignedSmall>                         \
-      k##Name##SignedSmallOperator;                                          \
-  Name##Operator<CompareOperationHint::kNumber> k##Name##NumberOperator;     \
-  Name##Operator<CompareOperationHint::kNumberOrOddball>                     \
-      k##Name##NumberOrOddballOperator;                                      \
-  Name##Operator<CompareOperationHint::kInternalizedString>                  \
-      k##Name##InternalizedStringOperator;                                   \
-  Name##Operator<CompareOperationHint::kString> k##Name##StringOperator;     \
-  Name##Operator<CompareOperationHint::kSymbol> k##Name##SymbolOperator;     \
-  Name##Operator<CompareOperationHint::kBigInt> k##Name##BigIntOperator;     \
-  Name##Operator<CompareOperationHint::kReceiver> k##Name##ReceiverOperator; \
-  Name##Operator<CompareOperationHint::kReceiverOrNullOrUndefined>           \
-      k##Name##ReceiverOrNullOrUndefinedOperator;                            \
-  Name##Operator<CompareOperationHint::kAny> k##Name##AnyOperator;
-  COMPARE_OP_LIST(COMPARE_OP)
-#undef COMPARE_OP
 };
 
 namespace {
@@ -831,34 +801,12 @@ BINARY_OP_LIST(BINARY_OP)
 UNARY_OP_LIST(UNARY_OP)
 #undef UNARY_OP
 
-#define COMPARE_OP(Name, ...)                                          \
-  const Operator* JSOperatorBuilder::Name(CompareOperationHint hint) { \
-    switch (hint) {                                                    \
-      case CompareOperationHint::kNone:                                \
-        return &cache_.k##Name##NoneOperator;                          \
-      case CompareOperationHint::kSignedSmall:                         \
-        return &cache_.k##Name##SignedSmallOperator;                   \
-      case CompareOperationHint::kNumber:                              \
-        return &cache_.k##Name##NumberOperator;                        \
-      case CompareOperationHint::kNumberOrOddball:                     \
-        return &cache_.k##Name##NumberOrOddballOperator;               \
-      case CompareOperationHint::kInternalizedString:                  \
-        return &cache_.k##Name##InternalizedStringOperator;            \
-      case CompareOperationHint::kString:                              \
-        return &cache_.k##Name##StringOperator;                        \
-      case CompareOperationHint::kSymbol:                              \
-        return &cache_.k##Name##SymbolOperator;                        \
-      case CompareOperationHint::kBigInt:                              \
-        return &cache_.k##Name##BigIntOperator;                        \
-      case CompareOperationHint::kReceiver:                            \
-        return &cache_.k##Name##ReceiverOperator;                      \
-      case CompareOperationHint::kReceiverOrNullOrUndefined:           \
-        return &cache_.k##Name##ReceiverOrNullOrUndefinedOperator;     \
-      case CompareOperationHint::kAny:                                 \
-        return &cache_.k##Name##AnyOperator;                           \
-    }                                                                  \
-    UNREACHABLE();                                                     \
-    return nullptr;                                                    \
+#define COMPARE_OP(Name, Properties)                                        \
+  const Operator* JSOperatorBuilder::Name(FeedbackSource const& feedback) { \
+    FeedbackParameter parameters(feedback);                                 \
+    return new (zone()) Operator1<FeedbackParameter>(                       \
+        IrOpcode::kJS##Name, Properties, "JS" #Name, 2, 1, 1, 1, 1,         \
+        Operator::ZeroIfNoThrow(Properties), parameters);                   \
   }
 COMPARE_OP_LIST(COMPARE_OP)
 #undef COMPARE_OP
