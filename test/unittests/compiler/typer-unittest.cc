@@ -363,7 +363,7 @@ TEST_F(TyperTest, TypeJSShiftRight) {
 }
 
 TEST_F(TyperTest, TypeJSLessThan) {
-  TestBinaryCompareOp(javascript_.LessThan(CompareOperationHint::kAny),
+  TestBinaryCompareOp(javascript_.LessThan(FeedbackSource{}),
                       std::less<double>());
 }
 
@@ -378,7 +378,7 @@ TEST_F(TyperTest, TypeSpeculativeNumberLessThan) {
 }
 
 TEST_F(TyperTest, TypeJSLessThanOrEqual) {
-  TestBinaryCompareOp(javascript_.LessThanOrEqual(CompareOperationHint::kAny),
+  TestBinaryCompareOp(javascript_.LessThanOrEqual(FeedbackSource{}),
                       std::less_equal<double>());
 }
 
@@ -394,19 +394,18 @@ TEST_F(TyperTest, TypeSpeculativeNumberLessThanOrEqual) {
 }
 
 TEST_F(TyperTest, TypeJSGreaterThan) {
-  TestBinaryCompareOp(javascript_.GreaterThan(CompareOperationHint::kAny),
+  TestBinaryCompareOp(javascript_.GreaterThan(FeedbackSource{}),
                       std::greater<double>());
 }
 
 
 TEST_F(TyperTest, TypeJSGreaterThanOrEqual) {
-  TestBinaryCompareOp(
-      javascript_.GreaterThanOrEqual(CompareOperationHint::kAny),
-      std::greater_equal<double>());
+  TestBinaryCompareOp(javascript_.GreaterThanOrEqual(FeedbackSource{}),
+                      std::greater_equal<double>());
 }
 
 TEST_F(TyperTest, TypeJSEqual) {
-  TestBinaryCompareOp(javascript_.Equal(CompareOperationHint::kAny),
+  TestBinaryCompareOp(javascript_.Equal(FeedbackSource{}),
                       std::equal_to<double>());
 }
 
@@ -422,7 +421,7 @@ TEST_F(TyperTest, TypeSpeculativeNumberEqual) {
 
 // For numbers there's no difference between strict and non-strict equality.
 TEST_F(TyperTest, TypeJSStrictEqual) {
-  TestBinaryCompareOp(javascript_.StrictEqual(CompareOperationHint::kAny),
+  TestBinaryCompareOp(javascript_.StrictEqual(FeedbackSource{}),
                       std::equal_to<double>());
 }
 
@@ -442,9 +441,9 @@ TEST_MONOTONICITY(ToString)
 #undef TEST_MONOTONICITY
 
 // JS BINOPs with CompareOperationHint
-#define TEST_MONOTONICITY(name)                                           \
-  TEST_F(TyperTest, Monotonicity_##name) {                                \
-    TestBinaryMonotonicity(javascript_.name(CompareOperationHint::kAny)); \
+#define TEST_MONOTONICITY(name)                                 \
+  TEST_F(TyperTest, Monotonicity_##name) {                      \
+    TestBinaryMonotonicity(javascript_.name(FeedbackSource{})); \
   }
 TEST_MONOTONICITY(Equal)
 TEST_MONOTONICITY(StrictEqual)

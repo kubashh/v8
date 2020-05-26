@@ -73,12 +73,7 @@ REPLACE_STUB_CALL(BitwiseXor)
 REPLACE_STUB_CALL(ShiftLeft)
 REPLACE_STUB_CALL(ShiftRight)
 REPLACE_STUB_CALL(ShiftRightLogical)
-REPLACE_STUB_CALL(LessThan)
-REPLACE_STUB_CALL(LessThanOrEqual)
-REPLACE_STUB_CALL(GreaterThan)
-REPLACE_STUB_CALL(GreaterThanOrEqual)
 REPLACE_STUB_CALL(HasProperty)
-REPLACE_STUB_CALL(Equal)
 REPLACE_STUB_CALL(ToLength)
 REPLACE_STUB_CALL(ToNumber)
 REPLACE_STUB_CALL(ToNumberConvertBigInt)
@@ -136,15 +131,6 @@ void JSGenericLowering::ReplaceWithRuntimeCall(Node* node,
   NodeProperties::ChangeOp(node, common()->Call(call_descriptor));
 }
 
-void JSGenericLowering::LowerJSStrictEqual(Node* node) {
-  // The === operator doesn't need the current context.
-  NodeProperties::ReplaceContextInput(node, jsgraph()->NoContextConstant());
-  Callable callable = Builtins::CallableFor(isolate(), Builtins::kStrictEqual);
-  node->RemoveInput(4);  // control
-  ReplaceWithStubCall(node, callable, CallDescriptor::kNoFlags,
-                      Operator::kEliminatable);
-}
-
 void JSGenericLowering::ReplaceUnaryOpWithBuiltinCall(
     Node* node, Builtins::Name builtin_without_feedback,
     Builtins::Name builtin_with_feedback) {
@@ -180,6 +166,60 @@ DEF_UNARY_LOWERING(Decrement)
 DEF_UNARY_LOWERING(Increment)
 DEF_UNARY_LOWERING(Negate)
 #undef DEF_UNARY_LOWERING
+
+void JSGenericLowering::ReplaceCompareOpWithBuiltinCall(
+    Node* node, Builtins::Name builtin_without_feedback,
+    Builtins::Name builtin_with_feedback) {
+  const FeedbackParameter& p = FeedbackParameterOf(node->op());
+  CallDescriptor::Flags flags = FrameStateFlagForCall(node);
+  if (CollectFeedbackInGenericLowering() && p.feedback().IsValid()) {
+    Callable callable = Builtins::CallableFor(isolate(), builtin_with_feedback);
+    Node* feedback_vector = jsgraph()->HeapConstant(p.feedback().vector);
+    Node* slot = jsgraph()->UintPtrConstant(p.feedback().slot.ToInt());
+    const CallInterfaceDescriptor& descriptor = callable.descriptor();
+    auto call_descriptor = Linkage::GetStubCallDescriptor(
+        zone(), descriptor, descriptor.GetStackParameterCount(), flags,
+        node->op()->properties());
+    Node* stub_code = jsgraph()->HeapConstant(callable.code());
+    node->InsertInput(zone(), 0, stub_code);
+    node->InsertInput(zone(), 3, slot);
+    node->InsertInput(zone(), 4, feedback_vector);
+    NodeProperties::ChangeOp(node, common()->Call(call_descriptor));
+  } else {
+    Callable callable =
+        Builtins::CallableFor(isolate(), builtin_without_feedback);
+    ReplaceWithStubCall(node, callable, flags);
+  }
+}
+
+#define DEF_COMPARE_LOWERING(Name)                                   \
+  void JSGenericLowering::LowerJS##Name(Node* node) {                \
+    ReplaceUnaryOpWithBuiltinCall(node, Builtins::k##Name,           \
+                                  Builtins::k##Name##_WithFeedback); \
+  }
+DEF_COMPARE_LOWERING(Equal)
+DEF_COMPARE_LOWERING(GreaterThan)
+DEF_COMPARE_LOWERING(GreaterThanOrEqual)
+DEF_COMPARE_LOWERING(LessThan)
+DEF_COMPARE_LOWERING(LessThanOrEqual)
+#undef DEF_COMPARE_LOWERING
+
+void JSGenericLowering::LowerJSStrictEqual(Node* node) {
+  /*
+  const FeedbackParameter& p = FeedbackParameterOf(node->op());
+  if (CollectFeedbackInGenericLowering() && p.feedback().IsValid()) {
+    CallDescriptor::Flags flags = FrameStateFlagForCall(node);
+    // TODO.
+  } else {
+  */
+  // The === operator doesn't need the current context.
+  NodeProperties::ReplaceContextInput(node, jsgraph()->NoContextConstant());
+  Callable callable = Builtins::CallableFor(isolate(), Builtins::kStrictEqual);
+  node->RemoveInput(4);  // control
+  ReplaceWithStubCall(node, callable, CallDescriptor::kNoFlags,
+                      Operator::kEliminatable);
+  // }
+}
 
 namespace {
 bool ShouldUseMegamorphicLoadBuiltin(FeedbackSource const& source,

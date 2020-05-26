@@ -4982,6 +4982,12 @@ ProcessedFeedback const& JSHeapBroker::ProcessFeedbackForBinaryOperation(
 
 ProcessedFeedback const& JSHeapBroker::ProcessFeedbackForCompareOperation(
     FeedbackSource const& source) {
+  if (!source.IsValid()) {
+    // Tests may pass in a dummy feedback source.
+    ProcessedFeedback const* feedback =
+        new (zone()) InsufficientFeedback(FeedbackSlotKind::kCompareOp);
+    return *feedback;
+  }
   if (HasFeedback(source)) return GetFeedback(source);
   CompareOperationHint hint = ReadFeedbackForCompareOperation(source);
   ProcessedFeedback const* feedback;
