@@ -16,6 +16,24 @@
       "revId": "c55bad9fd5932d406752dd8aef8b84c0e4a8ead4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c24ccc61_c4d149ad",
+        "filename": "src/regexp/regexp-parser.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1399096
+      },
+      "writtenOn": "2020-05-26T18:00:59Z",
+      "side": 1,
+      "message": "Sure. How does this look?",
+      "parentUuid": "6d243f8a_95c2edf5",
+      "revId": "c55bad9fd5932d406752dd8aef8b84c0e4a8ead4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
