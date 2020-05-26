@@ -270,9 +270,9 @@ V8_INLINE size_t Sweeper::FreeAndProcessFreedMemory(
         free_start, size, SpaceAccountingMode::kSpaceUnaccounted);
 
   } else {
-    Heap::CreateFillerObjectAt(ReadOnlyRoots(page->heap()), free_start,
-                               static_cast<int>(size),
-                               ClearFreedMemoryMode::kClearFreedMemory);
+    page->heap()->CreateFillerObjectFromSweeper(
+        free_start, static_cast<int>(size),
+        ClearFreedMemoryMode::kClearFreedMemory);
   }
   if (should_reduce_memory_) page->DiscardUnusedMemory(free_start, size);
 
