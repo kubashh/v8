@@ -15,7 +15,7 @@ class BasicBlockProfilerTest : public RawMachineAssemblerTester<int32_t> {
  public:
   BasicBlockProfilerTest()
       : RawMachineAssemblerTester<int32_t>(MachineType::Int32()) {
-    FLAG_turbo_profiling = true;
+    FLAG_turbo_profiling_instrument = true;
   }
 
   void ResetCounts() {

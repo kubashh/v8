@@ -32,6 +32,7 @@
 #include "src/debug/debug-frames.h"
 #include "src/debug/debug.h"
 #include "src/deoptimizer/deoptimizer.h"
+#include "src/diagnostics/basic-block-profiler.h"
 #include "src/diagnostics/compilation-statistics.h"
 #include "src/execution/frames-inl.h"
 #include "src/execution/isolate-inl.h"
@@ -3415,7 +3416,8 @@ bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
     set_event_logger(Logger::DefaultEventLoggerSentinel);
   }
 
-  if (FLAG_trace_turbo || FLAG_trace_turbo_graph || FLAG_turbo_profiling) {
+  if (FLAG_trace_turbo || FLAG_trace_turbo_graph ||
+      FLAG_turbo_profiling_instrument) {
     PrintF("Concurrent recompilation has been disabled for tracing.\n");
   } else if (OptimizingCompileDispatcher::Enabled()) {
     optimizing_compile_dispatcher_ = new OptimizingCompileDispatcher(this);
@@ -3640,6 +3642,11 @@ void Isolate::DumpAndResetStats() {
     counters()->runtime_call_stats()->Print();
     counters()->runtime_call_stats()->Reset();
   }
+  if (FLAG_turbo_profiling_log) {
+    StdoutStream out;
+    BasicBlockProfiler::Get()->Print(out, this);
+    BasicBlockProfiler::Get()->ResetCounts(this);
+  }
 }
 
 void Isolate::AbortConcurrentOptimization(BlockingBehavior behavior) {
@@ -3677,7 +3684,7 @@ bool Isolate::NeedsDetailedOptimizedCodeLineInfo() const {
 
 bool Isolate::NeedsSourcePositionsForProfiling() const {
   return FLAG_trace_deopt || FLAG_trace_turbo || FLAG_trace_turbo_graph ||
-         FLAG_turbo_profiling || FLAG_perf_prof || is_profiling() ||
+         FLAG_turbo_profiling_instrument || FLAG_perf_prof || is_profiling() ||
          debug_->is_active() || logger_->is_logging() || FLAG_trace_maps;
 }
 

@@ -106,6 +106,7 @@ void BasicBlockProfiler::ResetCounts(Isolate* isolate) {
   for (const auto& data : data_list_) {
     data->ResetCounts();
   }
+  HandleScope scope(isolate);
   Handle<ArrayList> list(isolate->heap()->basic_block_profiling_data(),
                          isolate);
   for (int i = 0; i < list->Length(); ++i) {

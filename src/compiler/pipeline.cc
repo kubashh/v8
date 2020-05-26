@@ -2616,7 +2616,7 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
   JumpOptimizationInfo jump_opt;
   bool should_optimize_jumps = isolate->serializer_enabled() &&
                                FLAG_turbo_rewrite_far_jumps &&
-                               !FLAG_turbo_profiling;
+                               !FLAG_turbo_profiling_instrument;
   PipelineData data(&zone_stats, &info, isolate, isolate->allocator(), graph,
                     jsgraph, nullptr, source_positions, &node_origins,
                     should_optimize_jumps ? &jump_opt : nullptr, options);
@@ -3047,7 +3047,7 @@ bool PipelineImpl::SelectInstructions(Linkage* linkage) {
   DCHECK_NOT_NULL(data->graph());
   DCHECK_NOT_NULL(data->schedule());
 
-  if (FLAG_turbo_profiling) {
+  if (FLAG_turbo_profiling_instrument) {
     data->info()->set_profiler_data(BasicBlockInstrumentor::Instrument(
         info(), data->graph(), data->schedule(), data->isolate()));
   }
