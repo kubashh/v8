@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "434d73a9_25d26036",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2246,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2020-05-27T20:55:42Z",
+      "side": 1,
+      "message": "Nit: Could you move the comment to above the #define for the macro? It\u0027s more intuitive to read the comment before the code rather than after.",
+      "revId": "685514e0dc26988528187ea7a4df99097d199c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
