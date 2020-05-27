@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "7355be2f_f6fbca02",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-27T17:56:35Z",
+      "side": 1,
+      "message": "\u003e Would you suggest having it turned on by default for 64bit builds (I was thinking about it, but was not sure that everybody would be happy about it)?\n\nLets discuss this offline. We usually do not maintain (larger) configurations that have no broad usage and thus test coverage.",
+      "parentUuid": "f851afc6_6994ec19",
+      "range": {
+        "startLine": 231,
+        "startChar": 2,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6c4cf272_c1e27ae1",
         "filename": "src/heap/cppgc/globals.h",
         "patchSetId": 1
