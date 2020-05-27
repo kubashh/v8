@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "911615fe_987713bf",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3420,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-05-27T14:51:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f243dc39_326caed2",
+      "range": {
+        "startLine": 3420,
+        "startChar": 6,
+        "endLine": 3420,
+        "endChar": 37
+      },
+      "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "53c6cadc_6c94af27",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 1
@@ -101,6 +125,24 @@
       "side": 1,
       "message": "One of my goals in this change is to allow precisely that option: run mksnapshot with --turbo-profiling-instrument, and run d8 with --turbo-profiling-log, and you get info about only builtins (not JS functions compiled at runtime). However, I agree that this change would add the somewhat confusing option to specify --turbo-profiling-log in situations where it can\u0027t ever print anything useful due to a lack of instrumented code. Maybe we could emit a helpful warning in that case (and in the opposite case where instrumentation is on but no logging is enabled). Or if you have other ideas about how to break up the flags to allow builtins-only operation, I\u0027m open to suggestions.",
       "parentUuid": "53c6cadc_6c94af27",
+      "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "902225d0_f7bb5380",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3645,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-05-27T14:51:33Z",
+      "side": 1,
+      "message": "Got it. Most of our other code seperates out flags for builtins vs function code for situations like this, e.g., --print-builtin-code [1]. It feels a bit more natural to me if we did it this way - e.g., specify  --turbo-profiling-builtins to both mksnapshot and the profiled run to instrument and then log the profiling - then we could print warnings on mismatches. The approach in this CL is a bit more flexible though, but I\u0027m not sure we need that extra flexibility. WDYT?\n\n[1] https://cs.chromium.org/chromium/src/v8/src/flags/flag-definitions.h?type\u003dcs\u0026q\u003dflag-definitions.h\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d1697",
+      "parentUuid": "3998105a_5788e088",
       "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
