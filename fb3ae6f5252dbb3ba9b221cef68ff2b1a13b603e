@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "813283d9_fe7c8e21",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 11300,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-27T11:52:37Z",
+      "side": 1,
+      "message": "I think there can\u0027t be any other oddballs here and we can replace the check with a CSA_ASSERT and probably also remove the kOtherOddball value.",
+      "parentUuid": "f2c01120_9de9b63f",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a0fb7db_9491452c",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 3
