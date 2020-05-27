@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "198f960e_494e61e8",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-05-27T13:57:50Z",
+      "side": 1,
+      "message": "Should we have a generational GC on 64-bit archs without caged heap?\nDoesn\u0027t seem out of the question to me to support generational GC only when caged heap is available.\nOr did you mean \"another 32-bit generational wb\"?",
+      "parentUuid": "74bbe35c_4e296bf3",
+      "range": {
+        "startLine": 231,
+        "startChar": 2,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c4cf272_c1e27ae1",
         "filename": "src/heap/cppgc/globals.h",
         "patchSetId": 1
