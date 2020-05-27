@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "863ac127_b925fbe3",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-27T10:12:24Z",
+      "side": 1,
+      "message": "Please mention what extra info is part of verbose.",
+      "range": {
+        "startLine": 138,
+        "startChar": 62,
+        "endLine": 140,
+        "endChar": 47
+      },
+      "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
