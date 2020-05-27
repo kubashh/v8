@@ -16,6 +16,24 @@
       "revId": "a7a38cbe0a150d19471f962453b49a2fbd9fb961",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a933e424_ec10f46c",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-05-27T16:01:14Z",
+      "side": 1,
+      "message": "We certainly can, but Torque doesn\u0027t know that `invalid` is a special value and that kFlagCount should actually be one less than the total number of flags. I guess we could have Torque put a kInvalid on the end of every set of flags it generates, or invent some new syntax to indicate that a bitfield should not affect the generated kFlagCount (@uncounted?), but I\u0027m worried that those ideas might cause more problems than they solve. What about just adding a comment in the tq file, like this?\n\n  invalid: bool: 1 bit;  // Must be last.",
+      "parentUuid": "ab5646a7_fdbdef35",
+      "revId": "a7a38cbe0a150d19471f962453b49a2fbd9fb961",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
