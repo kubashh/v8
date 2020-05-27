@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "284b6882_f28eafff",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-27T14:03:02Z",
+      "side": 1,
+      "message": "(Not for this CL.)\n\nThe question is more whether we should really support non-caged builds on 64bit because it looks like one of our important fast paths will depend on it *and* we will likely have no real test coverage for the other mode.",
+      "parentUuid": "198f960e_494e61e8",
+      "range": {
+        "startLine": 231,
+        "startChar": 2,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c4cf272_c1e27ae1",
         "filename": "src/heap/cppgc/globals.h",
         "patchSetId": 1
