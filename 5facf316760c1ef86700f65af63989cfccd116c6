@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c62f916a_e8be0808",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-05-27T07:06:22Z",
+      "side": 1,
+      "message": "Do we want to clear the free memory here? IIUC we didn\u0027t clear the memory when (free_list_mode \u003d\u003d REBUILD_FREE_LIST) but only in the else-branch.",
+      "revId": "5facf316760c1ef86700f65af63989cfccd116c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
