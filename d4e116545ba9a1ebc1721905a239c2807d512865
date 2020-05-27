@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "65e6c3ac_b00994dc",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-05-27T15:46:03Z",
+      "side": 1,
+      "message": "AFAIK this is how we randomize the address space. If we let the system choose, it could return the last freed page or something that is cached.",
+      "parentUuid": "4a4795e6_5bfc53ab",
+      "range": {
+        "startLine": 87,
+        "startChar": 10,
+        "endLine": 87,
+        "endChar": 14
+      },
+      "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "65ec3207_7a89b257",
         "filename": "src/heap/cppgc/heap.cc",
         "patchSetId": 1
