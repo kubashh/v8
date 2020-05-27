@@ -146,6 +146,24 @@
       "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9e122c0_6e76314d",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3645,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-05-27T16:51:04Z",
+      "side": 1,
+      "message": "Thanks for the advice! I have another idea, to avoid any need for matching flags between mksnapshot and runtime: we could always print here if there\u0027s anything to print, regardless of flags. Flags would only control whether instrumentation is added. I think the simplest set of flags would be --turbo-profiling and --turbo-profiling-verbose (which implies --turbo-profiling). If provided during mksnapshot, they would control builtins. If provided at runtime, they would control runtime-compiled functions. How does that sound?",
+      "parentUuid": "902225d0_f7bb5380",
+      "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
