@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73df2ce0_9260a433",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-05-27T17:53:27Z",
+      "side": 1,
+      "message": "mini-nit: Putting 0x70 here would make the relation to the following code more clear IMO.",
+      "range": {
+        "startLine": 2166,
+        "startChar": 47,
+        "endLine": 2166,
+        "endChar": 50
+      },
+      "revId": "8b2c4b4931e41005791c92358e27dcd585c42695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54a1ac09_1f775838",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2212,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-05-27T17:53:27Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 2212,
+        "startChar": 47,
+        "endLine": 2212,
+        "endChar": 50
+      },
+      "revId": "8b2c4b4931e41005791c92358e27dcd585c42695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
