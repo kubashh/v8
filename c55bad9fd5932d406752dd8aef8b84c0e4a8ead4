@@ -34,6 +34,24 @@
       "revId": "c55bad9fd5932d406752dd8aef8b84c0e4a8ead4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70d1a6ef_944b3eb5",
+        "filename": "src/regexp/regexp-parser.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-27T06:10:57Z",
+      "side": 1,
+      "message": "👍",
+      "parentUuid": "c24ccc61_c4d149ad",
+      "revId": "c55bad9fd5932d406752dd8aef8b84c0e4a8ead4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
