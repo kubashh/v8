@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab5646a7_fdbdef35",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-05-27T06:19:50Z",
+      "side": 1,
+      "message": "I\u0027d like this to be more robust, especially now that the flag definition is split from the kFlagCount constant. Adding/removing a flag should automatically update the count. Could we have torque auto-generate a `count` constant for all flag defs?",
+      "revId": "a7a38cbe0a150d19471f962453b49a2fbd9fb961",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
