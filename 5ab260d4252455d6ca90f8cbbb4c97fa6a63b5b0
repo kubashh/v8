@@ -22,6 +22,46 @@
       "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceaffe7c_cabfed53",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3420,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-05-27T11:29:55Z",
+      "side": 1,
+      "message": "Any reason we don\u0027t need this for FLAG_turbo_profiling_log too?",
+      "range": {
+        "startLine": 3420,
+        "startChar": 6,
+        "endLine": 3420,
+        "endChar": 37
+      },
+      "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53c6cadc_6c94af27",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3645,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-05-27T11:29:55Z",
+      "side": 1,
+      "message": "Nothing seems to set up the BasicBlockProfiler if --turbo_profiling_log is set, is there a missing implication for --turbo-profiling-instrumentation if --turbo-profiling-log is enabled?",
+      "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
