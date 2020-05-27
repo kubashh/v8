@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "f851afc6_6994ec19",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-27T16:57:22Z",
+      "side": 1,
+      "message": "\u003e Do you plan on providing another 64-bit generational wb implementation for when it\u0027s turned off?\n\nI actually wanted to avoid having multiple generational GCs implementations. That would complicate code with conditional compilation directives and I\u0027m not sure we will have good coverage with bots for all configurations.\n\n\u003e Should we have a generational GC on 64-bit archs without caged heap?\n\nI hope not. I was planning to add another option like cppgc_enable_young_generation which would depend on cppgc_enable_caged_heap.\n\n\u003e The question is more whether we should really support non-caged builds on 64bit because it looks like one of our important fast paths will depend on it *and* we will likely have no real test coverage for the other mode.\n\nWould you suggest having it turned on by default for 64bit builds (I was thinking about it, but was not sure that everybody would be happy about it)?",
+      "parentUuid": "284b6882_f28eafff",
+      "range": {
+        "startLine": 231,
+        "startChar": 2,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c4cf272_c1e27ae1",
         "filename": "src/heap/cppgc/globals.h",
         "patchSetId": 1
@@ -93,6 +117,30 @@
       "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dab15fb_92cbf99f",
+        "filename": "src/heap/cppgc/globals.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-27T16:57:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6c4cf272_c1e27ae1",
+      "range": {
+        "startLine": 47,
+        "startChar": 29,
+        "endLine": 47,
+        "endChar": 33
+      },
+      "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -167,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "85b09b20_8b62e21a",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-27T16:57:22Z",
+      "side": 1,
+      "message": "I copied over the logic from V8. I assumed randomization was needed for stronger security.",
+      "parentUuid": "65e6c3ac_b00994dc",
+      "range": {
+        "startLine": 87,
+        "startChar": 10,
+        "endLine": 87,
+        "endChar": 14
+      },
+      "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "65ec3207_7a89b257",
         "filename": "src/heap/cppgc/heap.cc",
         "patchSetId": 1
@@ -187,6 +259,30 @@
       "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aaa6326_2aa0f4dd",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-27T16:57:22Z",
+      "side": 1,
+      "message": "Ack, thanks, completely forgot it!",
+      "parentUuid": "65ec3207_7a89b257",
+      "range": {
+        "startLine": 102,
+        "startChar": 8,
+        "endLine": 102,
+        "endChar": 18
+      },
+      "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
