@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "465505c2_0fcc86d7",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 11300,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-05-27T10:55:42Z",
+      "side": 1,
+      "message": "I am not 100% sure about that. I think there could be other oddballs (what about the hole for example?) which is also expressed by CompareOperationFeedback::kOtherOddball, so I just used kOddball here, since this is sound in all cases and we do not get anything from more precise feedback. We could indeed improve this feedback slightly.",
+      "parentUuid": "301abeee_71b3f2c5",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a0fb7db_9491452c",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 3
@@ -77,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "35891975_68aefaba",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2707,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-05-27T10:55:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a0fb7db_9491452c",
+      "range": {
+        "startLine": 2707,
+        "startChar": 43,
+        "endLine": 2707,
+        "endChar": 63
+      },
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fc5cdc88_b97191b0",
         "filename": "src/compiler/js-operator.cc",
         "patchSetId": 3
@@ -91,6 +133,24 @@
       "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d695f079_60e8ba31",
+        "filename": "src/compiler/js-operator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-05-27T10:55:42Z",
+      "side": 1,
+      "message": "Changed the comment to reflect that we have this variant for both equalities. For strict equality, NumberOrBoolean is not used other than for generating the generic builtin call (like for NumberOrOddball).",
+      "parentUuid": "fc5cdc88_b97191b0",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "75737c0b_149e4350",
+        "filename": "src/compiler/js-operator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-05-27T10:55:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "007fd286_4bb83b4a",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6dd9f0f_cd900dd4",
         "filename": "src/compiler/js-typed-lowering.cc",
         "patchSetId": 3
@@ -125,6 +203,24 @@
       "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dc54fdd_429a985f",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-05-27T10:55:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6dd9f0f_cd900dd4",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -151,6 +247,30 @@
     },
     {
       "key": {
+        "uuid": "8623df10_54dbbc40",
+        "filename": "src/compiler/representation-change.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-05-27T10:55:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa650c88_304f0b75",
+      "range": {
+        "startLine": 715,
+        "startChar": 40,
+        "endLine": 715,
+        "endChar": 55
+      },
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36e7ec0f_8ce1e827",
         "filename": "test/mjsunit/compiler/abstract-equal-oddball.js",
         "patchSetId": 3
@@ -168,6 +288,24 @@
     },
     {
       "key": {
+        "uuid": "4f3c7b8a_1fc48a00",
+        "filename": "test/mjsunit/compiler/abstract-equal-oddball.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-05-27T10:55:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36e7ec0f_8ce1e827",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8e31491_08ea2c16",
         "filename": "test/mjsunit/compiler/abstract-equal-oddball.js",
         "patchSetId": 3
@@ -182,6 +320,24 @@
       "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2a146e6_48b3151f",
+        "filename": "test/mjsunit/compiler/abstract-equal-oddball.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-05-27T10:55:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8e31491_08ea2c16",
+      "revId": "fb3ae6f5252dbb3ba9b221cef68ff2b1a13b603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
