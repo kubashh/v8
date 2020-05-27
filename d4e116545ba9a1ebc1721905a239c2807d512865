@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "74bbe35c_4e296bf3",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-27T13:47:35Z",
+      "side": 1,
+      "message": "Do you plan on providing another 64-bit generational wb implementation for when it\u0027s turned off?",
+      "range": {
+        "startLine": 231,
+        "startChar": 2,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c4cf272_c1e27ae1",
+        "filename": "src/heap/cppgc/globals.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-27T13:47:35Z",
+      "side": 1,
+      "message": "There should be kKB and friends somewhere available internally.",
+      "range": {
+        "startLine": 47,
+        "startChar": 29,
+        "endLine": 47,
+        "endChar": 33
+      },
+      "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "38d861de_9cf7178e",
         "filename": "src/heap/cppgc/heap.cc",
         "patchSetId": 1
@@ -13,6 +59,30 @@
       "writtenOn": "2020-05-27T13:31:04Z",
       "side": 1,
       "message": "Why do we need the hint? Why shouldn\u0027t we provide nullptr and let the system choose the address?",
+      "range": {
+        "startLine": 87,
+        "startChar": 10,
+        "endLine": 87,
+        "endChar": 14
+      },
+      "revId": "d4e116545ba9a1ebc1721905a239c2807d512865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a4795e6_5bfc53ab",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-05-27T13:47:35Z",
+      "side": 1,
+      "message": "+1, why? :)",
+      "parentUuid": "38d861de_9cf7178e",
       "range": {
         "startLine": 87,
         "startChar": 10,
