@@ -49,7 +49,7 @@ namespace internal {
 bool CpuFeatures::SupportsOptimizer() { return true; }
 
 bool CpuFeatures::SupportsWasmSimd128() {
-  return CpuFeatures::IsSupported(VECTOR_ENHANCE_FACILITY_1);
+  return /*CpuFeatures::IsSupported(VECTOR_ENHANCE_FACILITY_1);*/ true;
 }
 
 void RelocInfo::apply(intptr_t delta) {

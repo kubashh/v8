@@ -785,9 +785,10 @@ void Simulator::EvalTableInit() {
   V(vlc, VLC, 0xE7DE)     /* type = VRR_A VECTOR LOAD COMPLEMENT  */           \
   V(vsel, VSEL, 0xE78D)   /* type = VRR_E VECTOR SELECT  */                    \
   V(vperm, VPERM, 0xE78C) /* type = VRR_E VECTOR PERMUTE  */                   \
-  V(vtm, VTM, 0xE7D8)     /* type = VRR_A VECTOR TEST UNDER MASK  */           \
-  V(vesl, VESL, 0xE730)   /* type = VRS_A VECTOR ELEMENT SHIFT LEFT  */        \
-  V(veslv, VESLV, 0xE770) /* type = VRR_C VECTOR ELEMENT SHIFT LEFT  */        \
+  V(vbperm, VBPERM, 0xE785) /* type = VRR_C VECTOR BIT PERMUTE   */            \
+  V(vtm, VTM, 0xE7D8)       /* type = VRR_A VECTOR TEST UNDER MASK  */         \
+  V(vesl, VESL, 0xE730)     /* type = VRS_A VECTOR ELEMENT SHIFT LEFT  */      \
+  V(veslv, VESLV, 0xE770)   /* type = VRR_C VECTOR ELEMENT SHIFT LEFT  */      \
   V(vesrl, VESRL,                                                              \
     0xE738) /* type = VRS_A VECTOR ELEMENT SHIFT RIGHT LOGICAL  */             \
   V(vesrlv, VESRLV,                                                            \
@@ -3699,6 +3700,42 @@ EVALUATE(VPERM) {
     }
     set_simd_register_by_lane<int8_t>(r1, i, result);
   }
+  return length;
+}
+
+EVALUATE(VBPERM) {
+  DCHECK_OPCODE(VBPERM);
+  DECODE_VRR_C_INSTRUCTION(r1, r2, r3, m6, m5, m4);
+  USE(m4);
+  USE(m5);
+  USE(m6);
+  // Set all lanes to Zero.
+  uint16_t selected_bits = 0;
+  for (int i = 0; i < kSimd128Size; i++) {
+    set_simd_register_by_lane<uint8_t>(r1, i, 0);
+    selected_bits <<= 1;
+    uint8_t selected_bit_index = get_simd_register_by_lane<uint8_t>(r3, i);
+    if (selected_bit_index < (kSimd128Size * kBitsPerByte)) {
+      int64_t selected_bit;
+      if (selected_bit_index < (kSimd128Size * kBitsPerByte) / 2) {
+        uint64_t high_bits = get_simd_register_by_lane<uint64_t>(r2, 0);
+        // if (selected_bit_index > 0) {
+        high_bits <<= (selected_bit_index);
+        //}
+        selected_bit = high_bits >> 63;
+      } else {
+        DCHECK_LE(selected_bit_index, (kSimd128Size * kBitsPerByte) - 1);
+        selected_bit_index = selected_bit_index - 64;
+        uint64_t low_bits = get_simd_register_by_lane<uint64_t>(r2, 1);
+        // if (selected_bit_index > 0) {
+        low_bits <<= (selected_bit_index);
+        //}
+        selected_bit = low_bits >> 63;
+      }
+      selected_bits |= selected_bit;
+    }
+  }
+  set_simd_register_by_lane<uint16_t>(r1, 3, selected_bits);
   return length;
 }
 
