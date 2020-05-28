@@ -1015,16 +1015,14 @@ namespace internal {
   CPP(SegmenterPrototypeSegment)                                       \
   /* ecma402  #sec-Intl.Segmenter.supportedLocalesOf */                \
   CPP(SegmenterSupportedLocalesOf)                                     \
-  /* ecma402 #sec-segment-iterator-prototype-breakType */              \
-  CPP(SegmentIteratorPrototypeBreakType)                               \
-  /* ecma402 #sec-segment-iterator-prototype-following */              \
-  CPP(SegmentIteratorPrototypeFollowing)                               \
-  /* ecma402 #sec-segment-iterator-prototype-preceding */              \
-  CPP(SegmentIteratorPrototypePreceding)                               \
-  /* ecma402 #sec-segment-iterator-prototype-index */                  \
-  CPP(SegmentIteratorPrototypeIndex)                                   \
   /* ecma402 #sec-segment-iterator-prototype-next */                   \
   CPP(SegmentIteratorPrototypeNext)                                    \
+  /* ecma402 #sec-%segmentsprototype%.containing */                    \
+  CPP(SegmentsPrototypeContaining)                                     \
+  /* ecma402 #sec-%segmentsprototype%-@@iterator */                    \
+  CPP(SegmentsPrototypeIterator)                                       \
+  /* ecma402 #sec-get-%segmentsprototype%.string */                    \
+  CPP(SegmentsPrototypeString)                                         \
   /* ES #sec-string.prototype.normalize */                             \
   CPP(StringPrototypeNormalizeIntl)                                    \
   /* ecma402 #sup-string.prototype.tolocalelowercase */                \
