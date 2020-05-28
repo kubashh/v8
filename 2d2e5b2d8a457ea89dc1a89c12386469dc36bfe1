@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05ba532b_d306449c",
+        "filename": "test/cctest/compiler/test-js-typed-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-05-28T06:13:17Z",
+      "side": 1,
+      "message": "Won\u0027t the hint now be kNone due to uninitialized feedback (rather than kAny)? For StringComparison it doesn\u0027t matter but I\u0027d hope that it matters somewhere in these tests.",
+      "revId": "2d2e5b2d8a457ea89dc1a89c12386469dc36bfe1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
