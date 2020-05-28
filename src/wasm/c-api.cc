@@ -201,8 +201,8 @@ auto seal(const typename implement<C>::type* x) -> const C* {
 // Configuration
 
 struct ConfigImpl {
-  ConfigImpl() {}
-  ~ConfigImpl() {}
+  ConfigImpl() = default;
+  ~ConfigImpl() = default;
 };
 
 template <>
@@ -375,7 +375,7 @@ ValTypeImpl* valtype_f64 = new ValTypeImpl(F64);
 ValTypeImpl* valtype_anyref = new ValTypeImpl(ANYREF);
 ValTypeImpl* valtype_funcref = new ValTypeImpl(FUNCREF);
 
-ValType::~ValType() {}
+ValType::~ValType() = default;
 
 void ValType::operator delete(void*) {}
 
@@ -417,7 +417,7 @@ struct ExternTypeImpl {
   ExternKind kind;
 
   explicit ExternTypeImpl(ExternKind kind) : kind(kind) {}
-  virtual ~ExternTypeImpl() {}
+  virtual ~ExternTypeImpl() = default;
 };
 
 template <>
@@ -456,7 +456,7 @@ struct FuncTypeImpl : ExternTypeImpl {
         params(std::move(params)),
         results(std::move(results)) {}
 
-  ~FuncTypeImpl() override {}
+  ~FuncTypeImpl() override = default;
 };
 
 template <>
@@ -464,7 +464,7 @@ struct implement<FuncType> {
   using type = FuncTypeImpl;
 };
 
-FuncType::~FuncType() {}
+FuncType::~FuncType() = default;
 
 auto FuncType::make(ownvec<ValType>&& params, ownvec<ValType>&& results)
     -> own<FuncType> {
@@ -510,7 +510,7 @@ struct GlobalTypeImpl : ExternTypeImpl {
         content(std::move(content)),
         mutability(mutability) {}
 
-  ~GlobalTypeImpl() override {}
+  ~GlobalTypeImpl() override = default;
 };
 
 template <>
@@ -518,7 +518,7 @@ struct implement<GlobalType> {
   using type = GlobalTypeImpl;
 };
 
-GlobalType::~GlobalType() {}
+GlobalType::~GlobalType() = default;
 
 auto GlobalType::make(own<ValType>&& content, Mutability mutability)
     -> own<GlobalType> {
@@ -563,7 +563,7 @@ struct TableTypeImpl : ExternTypeImpl {
         element(std::move(element)),
         limits(limits) {}
 
-  ~TableTypeImpl() override {}
+  ~TableTypeImpl() override = default;
 };
 
 template <>
@@ -571,7 +571,7 @@ struct implement<TableType> {
   using type = TableTypeImpl;
 };
 
-TableType::~TableType() {}
+TableType::~TableType() = default;
 
 auto TableType::make(own<ValType>&& element, Limits limits) -> own<TableType> {
   return element ? own<TableType>(seal<TableType>(
@@ -609,7 +609,7 @@ struct MemoryTypeImpl : ExternTypeImpl {
   explicit MemoryTypeImpl(Limits limits)
       : ExternTypeImpl(EXTERN_MEMORY), limits(limits) {}
 
-  ~MemoryTypeImpl() override {}
+  ~MemoryTypeImpl() override = default;
 };
 
 template <>
@@ -617,7 +617,7 @@ struct implement<MemoryType> {
   using type = MemoryTypeImpl;
 };
 
-MemoryType::~MemoryType() {}
+MemoryType::~MemoryType() = default;
 
 auto MemoryType::make(Limits limits) -> own<MemoryType> {
   return own<MemoryType>(
@@ -656,7 +656,7 @@ struct ImportTypeImpl {
         name(std::move(name)),
         type(std::move(type)) {}
 
-  ~ImportTypeImpl() {}
+  ~ImportTypeImpl() = default;
 };
 
 template <>
@@ -698,7 +698,7 @@ struct ExportTypeImpl {
                  own<ExternType>& type)  // NOLINT(runtime/references)
       : name(std::move(name)), type(std::move(type)) {}
 
-  ~ExportTypeImpl() {}
+  ~ExportTypeImpl() = default;
 };
 
 template <>
@@ -767,7 +767,7 @@ class RefImpl {
   }
 
  private:
-  RefImpl() {}
+  RefImpl() = default;
 
   i::Address* location() const {
     return reinterpret_cast<i::Address*>(val_.address());
@@ -813,7 +813,7 @@ struct FrameImpl {
         func_offset(func_offset),
         module_offset(module_offset) {}
 
-  ~FrameImpl() {}
+  ~FrameImpl() = default;
 
   own<Instance> instance;
   uint32_t func_index;
@@ -854,7 +854,7 @@ struct implement<Trap> {
   using type = RefImpl<Trap, i::JSReceiver>;
 };
 
-Trap::~Trap() {}
+Trap::~Trap() = default;
 
 auto Trap::copy() const -> own<Trap> { return impl(this)->copy(); }
 
@@ -941,7 +941,7 @@ struct implement<Foreign> {
   using type = RefImpl<Foreign, i::JSReceiver>;
 };
 
-Foreign::~Foreign() {}
+Foreign::~Foreign() = default;
 
 auto Foreign::copy() const -> own<Foreign> { return impl(this)->copy(); }
 
@@ -962,7 +962,7 @@ struct implement<Module> {
   using type = RefImpl<Module, i::WasmModuleObject>;
 };
 
-Module::~Module() {}
+Module::~Module() = default;
 
 auto Module::copy() const -> own<Module> { return impl(this)->copy(); }
 
@@ -1106,7 +1106,7 @@ struct implement<Extern> {
   using type = RefImpl<Extern, i::JSReceiver>;
 };
 
-Extern::~Extern() {}
+Extern::~Extern() = default;
 
 auto Extern::copy() const -> own<Extern> { return impl(this)->copy(); }
 
@@ -1177,7 +1177,7 @@ struct implement<Func> {
   using type = RefImpl<Func, i::JSFunction>;
 };
 
-Func::~Func() {}
+Func::~Func() = default;
 
 auto Func::copy() const -> own<Func> { return impl(this)->copy(); }
 
@@ -1662,7 +1662,7 @@ struct implement<Global> {
   using type = RefImpl<Global, i::WasmGlobalObject>;
 };
 
-Global::~Global() {}
+Global::~Global() = default;
 
 auto Global::copy() const -> own<Global> { return impl(this)->copy(); }
 
@@ -1754,7 +1754,7 @@ struct implement<Table> {
   using type = RefImpl<Table, i::WasmTableObject>;
 };
 
-Table::~Table() {}
+Table::~Table() = default;
 
 auto Table::copy() const -> own<Table> { return impl(this)->copy(); }
 
@@ -1873,7 +1873,7 @@ struct implement<Memory> {
   using type = RefImpl<Memory, i::WasmMemoryObject>;
 };
 
-Memory::~Memory() {}
+Memory::~Memory() = default;
 
 auto Memory::copy() const -> own<Memory> { return impl(this)->copy(); }
 
@@ -1941,7 +1941,7 @@ struct implement<Instance> {
   using type = RefImpl<Instance, i::WasmInstanceObject>;
 };
 
-Instance::~Instance() {}
+Instance::~Instance() = default;
 
 auto Instance::copy() const -> own<Instance> { return impl(this)->copy(); }
 
