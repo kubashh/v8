@@ -145,19 +145,25 @@ Handle<JSObject> JSSegmenter::ResolvedOptions(
   JSObject::AddProperty(isolate, result, factory->locale_string(), locale,
                         NONE);
   JSObject::AddProperty(isolate, result, factory->granularity_string(),
-                        segmenter_holder->GranularityAsString(), NONE);
+                        segmenter_holder->GranularityAsString(isolate), NONE);
   // 5. Return options.
   return result;
 }
 
-Handle<String> JSSegmenter::GranularityAsString() const {
-  switch (granularity()) {
+Handle<String> JSSegmenter::GranularityAsString(Isolate* isolate) const {
+  return GetGranularityString(isolate, granularity());
+}
+
+Handle<String> JSSegmenter::GetGranularityString(Isolate* isolate,
+                                                 Granularity granularity) {
+  Factory* factory = isolate->factory();
+  switch (granularity) {
     case Granularity::GRAPHEME:
-      return GetReadOnlyRoots().grapheme_string_handle();
+      return factory->grapheme_string();
     case Granularity::WORD:
-      return GetReadOnlyRoots().word_string_handle();
+      return factory->word_string();
     case Granularity::SENTENCE:
-      return GetReadOnlyRoots().sentence_string_handle();
+      return factory->sentence_string();
   }
   UNREACHABLE();
 }
