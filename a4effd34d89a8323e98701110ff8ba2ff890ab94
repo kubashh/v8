@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41bb49e3_9d756257",
+        "filename": "tricium-prod.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1003190
+      },
+      "writtenOn": "2020-05-29T15:33:27Z",
+      "side": 1,
+      "message": "Optional nit: extra line at end of file",
+      "revId": "a4effd34d89a8323e98701110ff8ba2ff890ab94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
