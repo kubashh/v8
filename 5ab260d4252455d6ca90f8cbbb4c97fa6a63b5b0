@@ -164,6 +164,24 @@
       "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b66bacd_0f9b8f85",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3645,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-05-29T10:52:09Z",
+      "side": 1,
+      "message": "(sorry for the delay, lost this reply)\n\nThis sounds reasonable to me. At least then it would be obvious if you ended up with a build with an instrumented snapshot.  Jakob, WDYT?",
+      "parentUuid": "b9e122c0_6e76314d",
+      "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
