@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cfb372d4_4dd94e4e",
+        "filename": "src/heap/cppgc/globals.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-29T07:21:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aafeb37_550091d9",
+      "range": {
+        "startLine": 19,
+        "startChar": 17,
+        "endLine": 19,
+        "endChar": 19
+      },
+      "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a135c085_635dbef7",
         "filename": "src/heap/cppgc/heap.cc",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "bcf23557_47f3cfd5",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-29T07:21:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a135c085_635dbef7",
+      "range": {
+        "startLine": 132,
+        "startChar": 2,
+        "endLine": 132,
+        "endChar": 16
+      },
+      "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1f32100_0d86d299",
         "filename": "src/heap/cppgc/heap.h",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2020-05-29T01:20:59Z",
       "side": 1,
       "message": "Since the order is crucial, I think it might be better to explicitly reset page_backend in the dtor and not rely on the compiler to preserve the order.",
+      "range": {
+        "startLine": 137,
+        "startChar": 61,
+        "endLine": 137,
+        "endChar": 67
+      },
+      "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9857980_73b0c356",
+        "filename": "src/heap/cppgc/heap.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-29T07:21:57Z",
+      "side": 1,
+      "message": "There is no way to reset page_backend other than calling dtor (which is okay). I think it\u0027s not a problem, since the order is guaranteed by the standard.",
+      "parentUuid": "d1f32100_0d86d299",
       "range": {
         "startLine": 137,
         "startChar": 61,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "13c2bef9_233af09e",
+        "filename": "src/heap/cppgc/utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-29T07:21:57Z",
+      "side": 1,
+      "message": "thanks for spotting this!",
+      "parentUuid": "9a750314_b9c18cfb",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 8
+      },
+      "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9f25e68_e2439ef1",
         "filename": "src/heap/cppgc/utils.cc",
         "patchSetId": 4
@@ -114,6 +210,30 @@
       "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ff3d030_d2ac0ae5",
+        "filename": "src/heap/cppgc/utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-29T07:21:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9f25e68_e2439ef1",
+      "range": {
+        "startLine": 48,
+        "startChar": 20,
+        "endLine": 48,
+        "endChar": 25
+      },
+      "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "69523636_5137f763",
+        "filename": "src/heap/cppgc/utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-29T07:21:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fef56d52_e2f606e3",
+      "range": {
+        "startLine": 17,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e091960_dd67ff63",
         "filename": "src/heap/cppgc/utils.h",
         "patchSetId": 4
@@ -160,6 +304,54 @@
       "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee26ae79_d3ca87f0",
+        "filename": "src/heap/cppgc/utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-29T07:21:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e091960_dd67ff63",
+      "range": {
+        "startLine": 25,
+        "startChar": 30,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9820397a_5ddee822",
+        "filename": "src/heap/cppgc/utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-29T07:21:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e091960_dd67ff63",
+      "range": {
+        "startLine": 25,
+        "startChar": 30,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
