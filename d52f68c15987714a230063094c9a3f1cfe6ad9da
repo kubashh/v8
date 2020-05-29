@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "8f0d8135_4095aaf1",
+        "filename": "src/heap/cppgc/heap.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-29T14:31:49Z",
+      "side": 1,
+      "message": "I think it\u0027s better to not mingle manual destruction with automatically generated, because other fields may require page_backend_ to be alive upon their destruction. For example, sweeper_ in the destructor waits for concurrent sweepers to finish. If page_backend_ is destroyed before, then sweepers will page fault trying to access unmapped memory.\n\nIt\u0027s generally okay if there is a dependency between members - RAII will ensure that everything is destructed in the right order.",
+      "parentUuid": "f325b3b6_56ae442e",
+      "range": {
+        "startLine": 137,
+        "startChar": 61,
+        "endLine": 137,
+        "endChar": 67
+      },
+      "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9a750314_b9c18cfb",
         "filename": "src/heap/cppgc/utils.cc",
         "patchSetId": 4
