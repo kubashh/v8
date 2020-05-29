@@ -22,6 +22,30 @@
       "revId": "1b5d85cdd6e27fb13da252e211b7ff8375521aca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79e985ea_1852077a",
+        "filename": "src/heap/cppgc/utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-05-29T10:35:25Z",
+      "side": 1,
+      "message": "I expected other stuff to go here as well, but I think we can create a special dir for that in the future",
+      "parentUuid": "18c9589e_ddae1285",
+      "range": {
+        "startLine": 5,
+        "startChar": 22,
+        "endLine": 5,
+        "endChar": 27
+      },
+      "revId": "1b5d85cdd6e27fb13da252e211b7ff8375521aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
