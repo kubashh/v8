@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "f325b3b6_56ae442e",
+        "filename": "src/heap/cppgc/heap.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-05-29T14:07:29Z",
+      "side": 1,
+      "message": "nit: page_backend is a std::unique_ptr. What I meant is that you could call reset() on it in the Heap dtor to make sure it is destroyed before the automatic destructions at the end of the dtor.",
+      "parentUuid": "e9857980_73b0c356",
+      "range": {
+        "startLine": 137,
+        "startChar": 61,
+        "endLine": 137,
+        "endChar": 67
+      },
+      "revId": "d52f68c15987714a230063094c9a3f1cfe6ad9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9a750314_b9c18cfb",
         "filename": "src/heap/cppgc/utils.cc",
         "patchSetId": 4
