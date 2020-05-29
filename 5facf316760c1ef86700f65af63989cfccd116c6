@@ -16,6 +16,24 @@
       "revId": "5facf316760c1ef86700f65af63989cfccd116c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "422e29ad_44ea16ff",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-05-29T11:58:38Z",
+      "side": 1,
+      "message": "As discussed offline let\u0027s guarding with DEBUG or FLAG_untrusted_code_mitigations.",
+      "parentUuid": "c62f916a_e8be0808",
+      "revId": "5facf316760c1ef86700f65af63989cfccd116c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
