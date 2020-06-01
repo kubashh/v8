@@ -22,6 +22,30 @@
       "revId": "4d5dd7c6d4c5e79fb6448437b4e0afe59c100618",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5eaf8fa1_4ccbf19f",
+        "filename": "tools/turbolizer/turbo-visualizer-ranges.css",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1311345
+      },
+      "writtenOn": "2020-06-01T15:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e3eace9_d541a2dc",
+      "range": {
+        "startLine": 238,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 1
+      },
+      "revId": "4d5dd7c6d4c5e79fb6448437b4e0afe59c100618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
