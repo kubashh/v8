@@ -1001,6 +1001,16 @@ std::ostream& operator<<(std::ostream& os,
        << "]";
   }
 
+  os << "],\"uses\":[";
+  first = true;
+  UsePosition* current_pos = range.first_pos();
+  while (current_pos != nullptr) {
+    if (!first) os << ",";
+    first = false;
+    os << current_pos->pos().value();
+    current_pos = current_pos->next();
+  }
+
   os << "]}";
   return os;
 }
