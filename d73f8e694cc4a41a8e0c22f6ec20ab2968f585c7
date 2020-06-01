@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e18bd340_50c24eb5",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2586,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-01T12:03:31Z",
+      "side": 1,
+      "message": "Should this be {tmp}?",
+      "range": {
+        "startLine": 2586,
+        "startChar": 4,
+        "endLine": 2586,
+        "endChar": 8
+      },
+      "revId": "d73f8e694cc4a41a8e0c22f6ec20ab2968f585c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13f1df5c_0cd55a50",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2592,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-01T12:03:31Z",
+      "side": 1,
+      "message": "This is a c-style cast which is forbidden by the style guide(https://google.github.io/styleguide/cppguide.html#Castinghttps://google.github.io/styleguide/cppguide.html#Casting).\nYou should be able to just use brace-initialization: {uint64_t}0x...",
+      "range": {
+        "startLine": 2592,
+        "startChar": 26,
+        "endLine": 2592,
+        "endChar": 36
+      },
+      "revId": "d73f8e694cc4a41a8e0c22f6ec20ab2968f585c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2676857d_1ad05ef2",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2719,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-01T12:03:31Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 2719,
+        "startChar": 4,
+        "endLine": 2719,
+        "endChar": 8
+      },
+      "revId": "d73f8e694cc4a41a8e0c22f6ec20ab2968f585c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abe36739_21b888fc",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2725,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-01T12:03:31Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 2725,
+        "startChar": 26,
+        "endLine": 2725,
+        "endChar": 36
+      },
+      "revId": "d73f8e694cc4a41a8e0c22f6ec20ab2968f585c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e12765b5_35466195",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2926,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-01T12:03:31Z",
+      "side": 1,
+      "message": "Sams as above.",
+      "range": {
+        "startLine": 2926,
+        "startChar": 4,
+        "endLine": 2926,
+        "endChar": 8
+      },
+      "revId": "d73f8e694cc4a41a8e0c22f6ec20ab2968f585c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fd472c3_8ace35ea",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2932,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-01T12:03:31Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 2932,
+        "startChar": 26,
+        "endLine": 2932,
+        "endChar": 36
+      },
+      "revId": "d73f8e694cc4a41a8e0c22f6ec20ab2968f585c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
