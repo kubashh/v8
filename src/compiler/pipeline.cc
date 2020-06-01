@@ -1123,21 +1123,34 @@ PipelineCompilationJob::Status PipelineCompilationJob::ExecuteJobImpl(
   // Ensure that the RuntimeCallStats table is only available during execution
   // and not during finalization as that might be on a different thread.
   PipelineJobScope scope(&data_, stats);
-  if (data_.broker()->is_concurrent_inlining()) {
-    if (!pipeline_.CreateGraph()) {
-      return AbortOptimization(BailoutReason::kGraphBuildingFailed);
+
+  {
+    RuntimeCallTimerScope runtimeTimer(
+        stats, RuntimeCallCounterId::kOptimizePipelineConcurrentInlining);
+    if (data_.broker()->is_concurrent_inlining()) {
+      if (!pipeline_.CreateGraph()) {
+        return AbortOptimization(BailoutReason::kGraphBuildingFailed);
+      }
     }
   }
 
-  bool success;
-  if (FLAG_turboprop) {
-    success = pipeline_.OptimizeGraphForMidTier(linkage_);
-  } else {
-    success = pipeline_.OptimizeGraph(linkage_);
+  {
+    RuntimeCallTimerScope runtimeTimer(
+        stats, RuntimeCallCounterId::kOptimizePipelineOptimizeGraph);
+    bool success;
+    if (FLAG_turboprop) {
+      success = pipeline_.OptimizeGraphForMidTier(linkage_);
+    } else {
+      success = pipeline_.OptimizeGraph(linkage_);
+    }
+    if (!success) return FAILED;
   }
-  if (!success) return FAILED;
 
-  pipeline_.AssembleCode(linkage_);
+  {
+    RuntimeCallTimerScope runtimeTimer(
+        stats, RuntimeCallCounterId::kOptimizePipelineAssembleCode);
+    pipeline_.AssembleCode(linkage_);
+  }
 
   return SUCCEEDED;
 }
