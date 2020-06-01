@@ -49,10 +49,10 @@ void SubtractFromEntry(PositionTableEntry* value,
 
 // Helper: Encode an integer.
 template <typename T>
-void EncodeInt(std::vector<byte>* bytes, T value) {
+void EncodeInt(ZoneVector<byte>* bytes, T value) {
   using unsigned_type = typename std::make_unsigned<T>::type;
   // Zig-zag encoding.
-  static const int kShift = sizeof(T) * kBitsPerByte - 1;
+  static constexpr int kShift = sizeof(T) * kBitsPerByte - 1;
   value = ((static_cast<unsigned_type>(value) << 1) ^ (value >> kShift));
   DCHECK_GE(value, 0);
   unsigned_type encoded = static_cast<unsigned_type>(value);
@@ -67,7 +67,7 @@ void EncodeInt(std::vector<byte>* bytes, T value) {
 }
 
 // Encode a PositionTableEntry.
-void EncodeEntry(std::vector<byte>* bytes, const PositionTableEntry& entry) {
+void EncodeEntry(ZoneVector<byte>* bytes, const PositionTableEntry& entry) {
   // We only accept ascending code offsets.
   DCHECK_GE(entry.code_offset, 0);
   // Since code_offset is not negative, we use sign to encode is_statement.
@@ -133,8 +133,14 @@ void CheckTableEquals(const std::vector<PositionTableEntry>& raw_entries,
 }  // namespace
 
 SourcePositionTableBuilder::SourcePositionTableBuilder(
-    SourcePositionTableBuilder::RecordingMode mode)
-    : mode_(mode), previous_() {}
+    Zone* zone, SourcePositionTableBuilder::RecordingMode mode)
+    : mode_(mode),
+      bytes_(zone),
+#ifdef ENABLE_SLOW_DCHECKS
+      raw_entries_(zone),
+#endif
+      previous_() {
+}
 
 void SourcePositionTableBuilder::AddPosition(size_t code_offset,
                                              SourcePosition source_position,
