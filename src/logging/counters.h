@@ -949,6 +949,9 @@ class RuntimeCallTimer final {
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, MemoryOptimization)          \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, MergeSplinteredRanges)       \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, OptimizeMoves)               \
+  ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, PipelineAssembleCode)        \
+  ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, PipelineConcurrentInlining)  \
+  ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, PipelineOptimizeGraph)       \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, PopulatePointerMaps)         \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, PrintGraph)                  \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, ResolveControlFlow)          \
