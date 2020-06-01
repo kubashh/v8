@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f0b79f3_1ad4713a",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-06-01T15:00:27Z",
+      "side": 1,
+      "message": "You should drop the \u0027Background\u0027 if you are making them thread specific (that should be automatically added if you are on a background thread), that\u0027s likely where your failures were coming from.",
+      "range": {
+        "startLine": 1130,
+        "startChar": 39,
+        "endLine": 1130,
+        "endChar": 49
+      },
+      "revId": "d15b36177dc8c02b3fecc49bafe4d83550a28625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
