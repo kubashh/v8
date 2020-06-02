@@ -34,6 +34,24 @@
       "revId": "a7a38cbe0a150d19471f962453b49a2fbd9fb961",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd7afd76_d63bff99",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-02T06:42:15Z",
+      "side": 1,
+      "message": "Are you saying torque-generated flags already have a way to get the count? If so, what about removing invalid from the enum value set and adding it here in C++ as \n\n STATIC_ASSERT(Flags::Count \u003c 32);\n static constexpr int kInvalidFlag \u003d 1 \u003c\u003c Flags::Count // or whatever the way to get the flag count is\n\nThen the torque definition would contain all real enum values, the count would be correct, and kInvalid would always be a bit not included in the real set. If easy to do, I propose this way for the current CL.\n\nAlternatively we could refactor JSRegExp::FlagFromChar to communicate the error case using a bool or a Maybe value and get rid of kInvalid altogether (it\u0027s only used during parsing). A follow-up would be fine for this.\n\nWdyt?",
+      "parentUuid": "a933e424_ec10f46c",
+      "revId": "a7a38cbe0a150d19471f962453b49a2fbd9fb961",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
