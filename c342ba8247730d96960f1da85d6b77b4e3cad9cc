@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1360861d_03ac52e1",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2832,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-06-02T19:18:30Z",
+      "side": 1,
+      "message": "Oops, just realized this is a bug because of another CL was sent in: https://chromium-review.googlesource.com/c/v8/v8/+/2227057 \n\n-\u003e this if has an else branch, so adding this is incorrect afaics",
+      "range": {
+        "startLine": 2832,
+        "startChar": 36,
+        "endLine": 2832,
+        "endChar": 57
+      },
+      "revId": "c342ba8247730d96960f1da85d6b77b4e3cad9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
