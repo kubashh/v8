@@ -48,8 +48,8 @@ class V8_EXPORT_PRIVATE SourcePositionTableBuilder {
     RECORD_SOURCE_POSITIONS
   };
 
-  explicit SourcePositionTableBuilder(
-      RecordingMode mode = RECORD_SOURCE_POSITIONS);
+  explicit SourcePositionTableBuilder(Zone*,
+                                      RecordingMode = RECORD_SOURCE_POSITIONS);
 
   void AddPosition(size_t code_offset, SourcePosition source_position,
                    bool is_statement);
@@ -66,9 +66,9 @@ class V8_EXPORT_PRIVATE SourcePositionTableBuilder {
   void AddEntry(const PositionTableEntry& entry);
 
   RecordingMode mode_;
-  std::vector<byte> bytes_;
+  ZoneVector<byte> bytes_;
 #ifdef ENABLE_SLOW_DCHECKS
-  std::vector<PositionTableEntry> raw_entries_;
+  ZoneVector<PositionTableEntry> raw_entries_;
 #endif
   PositionTableEntry previous_;  // Previously written entry, to compute delta.
 };
