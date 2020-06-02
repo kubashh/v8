@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0795b49_21401047",
+        "filename": "src/compiler/graph-visualizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-02T09:47:46Z",
+      "side": 1,
+      "message": "Nit:\nif (!first) {\n  ...\n  first \u003d false;\n}",
+      "revId": "41f87d0f026347df490dc68ee01d2b9306084a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41fae51d_df1503ce",
+        "filename": "src/compiler/graph-visualizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-02T09:47:46Z",
+      "side": 1,
+      "message": "for (UsePosition* current_pos \u003d range.first_pos();\n    current_pos !\u003d nullptr; current_pos \u003d current_pos-\u003enext()) {\n  ...\n}",
+      "revId": "41f87d0f026347df490dc68ee01d2b9306084a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
