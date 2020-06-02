@@ -12,9 +12,11 @@
 namespace cppgc {
 namespace internal {
 
+class HeapStatsCollector;
+
 class V8_EXPORT_PRIVATE ObjectAllocator final {
  public:
-  explicit ObjectAllocator(RawHeap* heap);
+  explicit ObjectAllocator(RawHeap* heap, HeapStatsCollector* stats_collector);
 
   inline void* AllocateObject(size_t size, GCInfoIndex gcinfo);
   inline void* AllocateObject(size_t size, GCInfoIndex gcinfo,
@@ -32,6 +34,7 @@ class V8_EXPORT_PRIVATE ObjectAllocator final {
   void* AllocateFromFreeList(NormalPageSpace*, size_t, GCInfoIndex);
 
   RawHeap* raw_heap_;
+  HeapStatsCollector* stats_collector_;
 };
 
 }  // namespace internal

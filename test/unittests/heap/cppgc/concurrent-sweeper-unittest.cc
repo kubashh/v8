@@ -13,6 +13,7 @@
 #include "src/heap/cppgc/heap-object-header-inl.h"
 #include "src/heap/cppgc/heap-page.h"
 #include "src/heap/cppgc/heap-space.h"
+#include "src/heap/cppgc/heap-stats-collector.h"
 #include "src/heap/cppgc/heap-visitor.h"
 #include "src/heap/cppgc/page-memory-inl.h"
 #include "src/heap/cppgc/raw-heap.h"
@@ -82,6 +83,8 @@ class ConcurrentSweeperTest : public testing::TestWithHeap {
   void StartSweeping() {
     Heap* heap = Heap::From(GetHeap());
     ResetLocalAllocationBuffers(heap);
+    heap->stats_collector()->NotifyMarkingStarted();
+    heap->stats_collector()->NotifyMarkingCompleted(0);
     Sweeper& sweeper = heap->sweeper();
     sweeper.Start(Sweeper::Config::kIncrementalAndConcurrent);
   }
