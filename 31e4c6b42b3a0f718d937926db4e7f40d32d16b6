@@ -142,6 +142,30 @@
       "revId": "31e4c6b42b3a0f718d937926db4e7f40d32d16b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5217a3cb_e1131052",
+        "filename": "src/execution/off-thread-isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1333583
+      },
+      "writtenOn": "2020-06-02T14:13:23Z",
+      "side": 1,
+      "message": "\u003e Not sure why only MSVC is reporting this and also why the message is lacking more of a call chain\n\nI think MSVC is not the first class compiler like clang. And I don\u0027t think it worth much to deep dig in considering it\u0027s close source. Maybe give current solution a second thought ?",
+      "parentUuid": "061b6d00_cc271feb",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 59
+      },
+      "revId": "31e4c6b42b3a0f718d937926db4e7f40d32d16b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
