@@ -9,6 +9,7 @@
 #include "src/execution/thread-id.h"
 #include "src/handles/handles.h"
 #include "src/handles/maybe-handles.h"
+#include "src/handles/off-thread-transfer-handle-storage.h"
 #include "src/heap/off-thread-factory.h"
 #include "src/heap/off-thread-heap.h"
 
