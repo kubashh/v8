@@ -42,7 +42,7 @@ class JSSegmenter : public TorqueGeneratedJSSegmenter<JSSegmenter, JSObject> {
 
   V8_EXPORT_PRIVATE static const std::set<std::string>& GetAvailableLocales();
 
-  Handle<String> GranularityAsString() const;
+  Handle<String> GranularityAsString(Isolate* isolate) const;
 
   // Segmenter accessors.
   DECL_ACCESSORS(icu_break_iterator, Managed<icu::BreakIterator>)
@@ -57,6 +57,9 @@ class JSSegmenter : public TorqueGeneratedJSSegmenter<JSSegmenter, JSObject> {
   };
   inline void set_granularity(Granularity granularity);
   inline Granularity granularity() const;
+
+  Handle<String> static GetGranularityString(Isolate* isolate,
+                                             Granularity granularity);
 
   // Bit positions in |flags|.
   DEFINE_TORQUE_GENERATED_JS_SEGMENTER_FLAGS()
