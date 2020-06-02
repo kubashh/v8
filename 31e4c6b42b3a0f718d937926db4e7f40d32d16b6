@@ -118,6 +118,30 @@
       "revId": "31e4c6b42b3a0f718d937926db4e7f40d32d16b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "061b6d00_cc271feb",
+        "filename": "src/execution/off-thread-isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1333583
+      },
+      "writtenOn": "2020-06-02T14:05:34Z",
+      "side": 1,
+      "message": "after adding  `OffThreadHeap::~OffThreadHeap() \u003d default;` to `off-thread-heap.h`\n\nError on my machine is similar to https://github.com/nodejs/node-v8/runs/729926284?check_suite_focus\u003dtrue\n\nWin10\n```\nC:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.26.28801\\include\\memory(1761,1): error C2027: use of undefined type \u0027\nv8::internal::OffThreadTransferHandleStorage\u0027 [D:\\Developer\\code\\node-v8\\tools\\v8_gypfiles\\v8_compiler.vcxproj]\n```\n\nAlso, you can fork https://github.com/nodejs/node-v8 and push to see github action windows build runs. Remember revert this https://github.com/nodejs/node-v8/commit/cb65954bdd695cf7ac9939e42f34a3c030a57107 first.",
+      "parentUuid": "4ff498d1_e6cc6805",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 59
+      },
+      "revId": "31e4c6b42b3a0f718d937926db4e7f40d32d16b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
