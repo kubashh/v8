@@ -16,6 +16,24 @@
       "revId": "2d2e5b2d8a457ea89dc1a89c12386469dc36bfe1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f83e62a0_a628e57e",
+        "filename": "test/cctest/compiler/test-js-typed-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-02T09:46:35Z",
+      "side": 1,
+      "message": "\u003e Won\u0027t the hint now be kNone due to uninitialized feedback (rather than kAny)? \n\nCorrect, just double-checked.\n\n\u003e For StringComparison it doesn\u0027t matter but I\u0027d hope that it matters somewhere in these tests.\n\nIn js-typed-lowering it does not, see https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/js-typed-lowering.cc;l\u003d41;drc\u003d8581d300388ba3d752e73289dcb702625119e59f?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F. kNone and kAny are treated equally.\n\nThe only other affected test is typer-unittest and afaict it is also not affected by feedback. Here\u0027s the relevant function: https://source.chromium.org/chromium/chromium/src/+/master:v8/test/unittests/compiler/typer-unittest.cc;l\u003d92;drc\u003d8581d300388ba3d752e73289dcb702625119e59f?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n\nMarking as resolved but feel free to reopen if there\u0027s something left to discuss.",
+      "parentUuid": "05ba532b_d306449c",
+      "revId": "2d2e5b2d8a457ea89dc1a89c12386469dc36bfe1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
