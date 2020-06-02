@@ -4092,6 +4092,8 @@ v8_source_set("cppgc_base") {
     "src/heap/cppgc/heap-page.h",
     "src/heap/cppgc/heap-space.cc",
     "src/heap/cppgc/heap-space.h",
+    "src/heap/cppgc/heap-stats-collector.cc",
+    "src/heap/cppgc/heap-stats-collector.h",
     "src/heap/cppgc/heap-visitor.h",
     "src/heap/cppgc/heap.cc",
     "src/heap/cppgc/heap.h",

@@ -25,6 +25,7 @@
 namespace cppgc {
 namespace internal {
 
+class HeapStatsCollector;
 class Stack;
 
 class V8_EXPORT_PRIVATE LivenessBrokerFactory {
@@ -109,6 +110,11 @@ class V8_EXPORT_PRIVATE Heap final : public cppgc::Heap {
   RawHeap& raw_heap() { return raw_heap_; }
   const RawHeap& raw_heap() const { return raw_heap_; }
 
+  HeapStatsCollector* stats_collector() { return stats_collector_.get(); }
+  const HeapStatsCollector* stats_collector() const {
+    return stats_collector_.get();
+  }
+
   Stack* stack() { return stack_.get(); }
 
   PageBackend* page_backend() { return page_backend_.get(); }
@@ -128,6 +134,7 @@ class V8_EXPORT_PRIVATE Heap final : public cppgc::Heap {
 
   v8::base::PageAllocator system_allocator_;
   std::unique_ptr<PageBackend> page_backend_;
+  std::unique_ptr<HeapStatsCollector> stats_collector_;
   ObjectAllocator object_allocator_;
   Sweeper sweeper_;
 

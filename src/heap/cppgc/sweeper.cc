@@ -17,6 +17,7 @@
 #include "src/heap/cppgc/heap-object-header.h"
 #include "src/heap/cppgc/heap-page.h"
 #include "src/heap/cppgc/heap-space.h"
+#include "src/heap/cppgc/heap-stats-collector.h"
 #include "src/heap/cppgc/heap-visitor.h"
 #include "src/heap/cppgc/object-start-bitmap-inl.h"
 #include "src/heap/cppgc/object-start-bitmap.h"
@@ -466,8 +467,9 @@ class PrepareForSweepVisitor final
 
 class Sweeper::SweeperImpl final {
  public:
-  explicit SweeperImpl(RawHeap* heap)
+  explicit SweeperImpl(RawHeap* heap, HeapStatsCollector* stats_collector)
       : heap_(heap),
+        stats_collector_(stats_collector),
         space_states_(heap->size()),
         platform_(cppgc::GetPlatform()),
         foreground_task_runner_(platform_->GetForegroundTaskRunner(nullptr)) {
@@ -507,6 +509,8 @@ class Sweeper::SweeperImpl final {
     SynchronizeAndFinalizeConcurrentSweeping();
 
     is_in_progress_ = false;
+
+    stats_collector_->NotifySweepingCompleted();
   }
 
  private:
@@ -599,6 +603,7 @@ class Sweeper::SweeperImpl final {
   }
 
   RawHeap* heap_;
+  HeapStatsCollector* stats_collector_;
   SpaceStates space_states_;
   v8::Platform* platform_;
   std::shared_ptr<v8::TaskRunner> foreground_task_runner_;
@@ -607,7 +612,8 @@ class Sweeper::SweeperImpl final {
   bool is_in_progress_ = false;
 };
 
-Sweeper::Sweeper(RawHeap* heap) : impl_(std::make_unique<SweeperImpl>(heap)) {}
+Sweeper::Sweeper(RawHeap* heap, HeapStatsCollector* stats_collector)
+    : impl_(std::make_unique<SweeperImpl>(heap, stats_collector)) {}
 
 Sweeper::~Sweeper() = default;
 

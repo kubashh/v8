@@ -8,6 +8,7 @@
 #include "include/cppgc/member.h"
 #include "include/cppgc/persistent.h"
 #include "src/heap/cppgc/heap-object-header-inl.h"
+#include "src/heap/cppgc/heap-stats-collector.h"
 #include "src/heap/cppgc/marking-visitor.h"
 #include "test/unittests/heap/cppgc/tests.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -26,6 +27,7 @@ class MarkerTest : public testing::TestWithHeap {
     marker.StartMarking(config);
     marker.FinishMarking(config);
     marker.ProcessWeakness();
+    Heap::From(GetHeap())->stats_collector()->NotifySweepingCompleted();
   }
 };
 
