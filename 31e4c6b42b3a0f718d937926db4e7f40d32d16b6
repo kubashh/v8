@@ -94,6 +94,30 @@
       "revId": "31e4c6b42b3a0f718d937926db4e7f40d32d16b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ff498d1_e6cc6805",
+        "filename": "src/execution/off-thread-isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-06-02T12:08:20Z",
+      "side": 1,
+      "message": "Which .cc file is failing to compile? I was just making a guess that OffThreadHeap looks like it would need to know the complete type, but I wasn\u0027t being exhaustive - I just made a suggestion for the first place where I saw a unique_ptr as a class member.\n\nDo you have the full compilation failure log? Perhaps it tells you the files that it was compiling when it gave the error.",
+      "parentUuid": "65c18bb9_77753c3f",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 59
+      },
+      "revId": "31e4c6b42b3a0f718d937926db4e7f40d32d16b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
