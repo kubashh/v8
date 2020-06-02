@@ -9,6 +9,7 @@
 #include "src/heap/cppgc/heap-object-header.h"
 #include "src/heap/cppgc/heap-page.h"
 #include "src/heap/cppgc/heap-space.h"
+#include "src/heap/cppgc/heap-stats-collector.h"
 #include "src/heap/cppgc/heap.h"
 #include "src/heap/cppgc/object-allocator-inl.h"
 #include "src/heap/cppgc/object-start-bitmap.h"
@@ -30,7 +31,9 @@ void* AllocateLargeObject(RawHeap* raw_heap, LargePageSpace* space, size_t size,
 
 }  // namespace
 
-ObjectAllocator::ObjectAllocator(RawHeap* heap) : raw_heap_(heap) {}
+ObjectAllocator::ObjectAllocator(RawHeap* heap,
+                                 HeapStatsCollector* stats_collector)
+    : raw_heap_(heap), stats_collector_(stats_collector) {}
 
 void* ObjectAllocator::OutOfLineAllocate(NormalPageSpace* space, size_t size,
                                          GCInfoIndex gcinfo) {
@@ -74,9 +77,11 @@ void* ObjectAllocator::AllocateFromFreeList(NormalPageSpace* space, size_t size,
   auto& current_lab = space->linear_allocation_buffer();
   if (current_lab.size()) {
     space->AddToFreeList(current_lab.start(), current_lab.size());
+    stats_collector_->DecreaseAllocatedObjectSize(current_lab.size());
   }
 
   current_lab.Set(static_cast<Address>(entry.address), entry.size);
+  stats_collector_->IncreaseAllocatedObjectSize(current_lab.size());
   NormalPage::From(BasePage::FromPayload(current_lab.start()))
       ->object_start_bitmap()
       .ClearBit(current_lab.start());
