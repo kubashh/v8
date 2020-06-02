@@ -224,6 +224,24 @@
       "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3025d73f_dd61df35",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3645,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-02T06:19:58Z",
+      "side": 1,
+      "message": "SGTM too, 👍 on the flag simplification.",
+      "parentUuid": "79ddffca_f3a96779",
+      "revId": "5ab260d4252455d6ca90f8cbbb4c97fa6a63b5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
