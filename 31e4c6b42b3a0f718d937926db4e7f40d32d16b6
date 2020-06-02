@@ -70,6 +70,30 @@
       "revId": "31e4c6b42b3a0f718d937926db4e7f40d32d16b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65c18bb9_77753c3f",
+        "filename": "src/execution/off-thread-isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1333583
+      },
+      "writtenOn": "2020-06-02T10:39:01Z",
+      "side": 1,
+      "message": "adding this `OffThreadHeap::~OffThreadHeap() \u003d default;` to `off-thread-heap.cc:` or `off-thread-heap.h` won\u0027t work.",
+      "parentUuid": "a4216689_2b1d5740",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 59
+      },
+      "revId": "31e4c6b42b3a0f718d937926db4e7f40d32d16b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
