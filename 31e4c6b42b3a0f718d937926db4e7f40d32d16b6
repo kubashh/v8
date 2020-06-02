@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c39e1a5e_5ac1f37f",
+        "filename": "src/execution/off-thread-isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-06-02T08:48:58Z",
+      "side": 1,
+      "message": "+leszeks@ who wrote this code\n\nI don\u0027t see why this is needed for this file. This file only references OffThreadTransferHandleStorage by pointer and doesn\u0027t dereference storage or storage_.\n\nFor https://github.com/nodejs/node-v8/issues/158#issuecomment-636909258, it\u0027s just saying the predeclaration has come from this file (see line 21), not that this fault has the error.\n\nNot sure why only MSVC is reporting this and also why the message is lacking more of a call chain, but to fix this you need to find the place that is actually trying to use the complete type. My guess is src/heap/off-thread-heap.h, which holds a std::unique_ptr. Since that class has an implicit destructor it could be generated without actually seeing the full type of OffThreadTransferHandleStorage. It\u0027s probably worth creating an explicit constructor in off-thread-heap.cc:\n\n// Required to avoid including off-thread-transfer-handle-storage.h in the header file.\nOffThreadHeap::~OffThreadHeap() \u003d default;",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 59
+      },
+      "revId": "31e4c6b42b3a0f718d937926db4e7f40d32d16b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
