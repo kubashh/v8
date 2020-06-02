@@ -625,6 +625,30 @@
   'intl402/RelativeTimeFormat/prototype/formatToParts/pl-pl-style-narrow': [FAIL],
   'intl402/RelativeTimeFormat/prototype/formatToParts/pl-pl-style-short': [FAIL],
 
+  # http://crbug/v8/6891
+  'intl402/Segmenter/iterator/following': [FAIL],
+  'intl402/Segmenter/iterator/granularity': [FAIL],
+  'intl402/Segmenter/iterator/next': [FAIL],
+  'intl402/Segmenter/iterator/position': [FAIL],
+  'intl402/Segmenter/iterator/preceding': [FAIL],
+  'intl402/Segmenter/iterator/prototype': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-grapheme': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-grapheme-following': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-grapheme-iterable': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-grapheme-next': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-grapheme-preceding': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-sentence': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-sentence-following': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-sentence-iterable': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-sentence-next': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-sentence-preceding': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-tostring': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-word': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-word-following': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-word-iterable': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-word-next': [FAIL],
+  'intl402/Segmenter/prototype/segment/segment-word-preceding': [FAIL],
+
   # https://bugs.chromium.org/p/v8/issues/detail?id=9818
   'built-ins/AsyncFunction/proto-from-ctor-realm': [FAIL],
 
