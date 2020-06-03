@@ -17866,6 +17866,24 @@ TEST(GCCallbacks) {
   isolate->RemoveGCEpilogueCallback(EpilogueCallbackAlloc);
 }
 
+namespace {
+
+void AssertOneByteConsContainsTwoByteExternal(i::Handle<i::String> maybe_cons,
+                                              i::Handle<i::String> external) {
+  // If the cons string has been short-circuited, skip the following checks.
+  // At this point, we should have a Cons string which is flat and one-byte,
+  // with a first half that is a two-byte string (although it only contains
+  // one-byte characters). This is a valid sequence of steps, and it can
+  // happen in real pages.
+  CHECK(maybe_cons->IsOneByteRepresentation());
+  i::ConsString cons = i::ConsString::cast(*maybe_cons);
+  CHECK_EQ(0, cons.second().length());
+  CHECK(cons.first() == *external);
+  CHECK(cons.first().IsTwoByteRepresentation());
+  CHECK(cons.first().IsExternalString());
+}
+
+}  // namespace
 
 THREADED_TEST(TwoByteStringInOneByteCons) {
   // See Chromium issue 47824.
@@ -17884,6 +17902,7 @@ THREADED_TEST(TwoByteStringInOneByteCons) {
   CHECK(result->IsString());
   i::Handle<i::String> string = v8::Utils::OpenHandle(String::Cast(*result));
   int length = string->length();
+  CHECK(string->IsConsString());
   CHECK(string->IsOneByteRepresentation());
 
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
@@ -17904,57 +17923,62 @@ THREADED_TEST(TwoByteStringInOneByteCons) {
 
   CHECK(flat_string->IsTwoByteRepresentation());
 
-  // If the cons string has been short-circuited, skip the following checks.
-  if (!string.is_identical_to(flat_string)) {
-    // At this point, we should have a Cons string which is flat and one-byte,
-    // with a first half that is a two-byte string (although it only contains
-    // one-byte characters). This is a valid sequence of steps, and it can
-    // happen in real pages.
-    CHECK(string->IsOneByteRepresentation());
-    i::ConsString cons = i::ConsString::cast(*string);
-    CHECK_EQ(0, cons.second().length());
-    CHECK(cons.first().IsTwoByteRepresentation());
-  }
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   // Check that some string operations work.
 
   // Atom RegExp.
   Local<Value> reresult = CompileRun("str2.match(/abel/g).length;");
   CHECK_EQ(6, reresult->Int32Value(context.local()).FromJust());
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   // Nonatom RegExp.
   reresult = CompileRun("str2.match(/abe./g).length;");
   CHECK_EQ(6, reresult->Int32Value(context.local()).FromJust());
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   reresult = CompileRun("str2.search(/bel/g);");
   CHECK_EQ(1, reresult->Int32Value(context.local()).FromJust());
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   reresult = CompileRun("str2.search(/be./g);");
   CHECK_EQ(1, reresult->Int32Value(context.local()).FromJust());
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   ExpectTrue("/bel/g.test(str2);");
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   ExpectTrue("/be./g.test(str2);");
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   reresult = CompileRun("/bel/g.exec(str2);");
   CHECK(!reresult->IsNull());
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   reresult = CompileRun("/be./g.exec(str2);");
   CHECK(!reresult->IsNull());
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   ExpectString("str2.substring(2, 10);", "elspenda");
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   ExpectString("str2.substring(2, 20);", "elspendabelabelspe");
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   ExpectString("str2.charAt(2);", "e");
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   ExpectObject("str2.indexOf('els');", indexof);
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   ExpectObject("str2.lastIndexOf('dab');", lastindexof);
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
 
   reresult = CompileRun("str2.charCodeAt(2);");
   CHECK_EQ(static_cast<int32_t>('e'),
            reresult->Int32Value(context.local()).FromJust());
+  AssertOneByteConsContainsTwoByteExternal(string, flat_string);
+
   // This avoids the GC from trying to free stack allocated resources.
   i::Handle<i::ExternalTwoByteString>::cast(flat_string)
       ->SetResource(i_isolate, nullptr);
