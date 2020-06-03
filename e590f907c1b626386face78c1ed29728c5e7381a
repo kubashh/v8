@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9044aa6c_b4114946",
+        "filename": "src/heap/cppgc/heap-stats-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T11:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b2237fe_4ec59d70",
+      "range": {
+        "startLine": 19,
+        "startChar": 24,
+        "endLine": 19,
+        "endChar": 42
+      },
+      "revId": "e590f907c1b626386face78c1ed29728c5e7381a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9640aa98_d21f2604",
         "filename": "src/heap/cppgc/heap-stats-collector.h",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "19860c50_db974da1",
+        "filename": "src/heap/cppgc/heap-stats-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T11:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9640aa98_d21f2604",
+      "range": {
+        "startLine": 54,
+        "startChar": 7,
+        "endLine": 54,
+        "endChar": 34
+      },
+      "revId": "e590f907c1b626386face78c1ed29728c5e7381a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76208e62_9350695e",
         "filename": "src/heap/cppgc/heap-stats-collector.h",
         "patchSetId": 6
@@ -59,6 +107,30 @@
       "writtenOn": "2020-06-03T10:55:56Z",
       "side": 1,
       "message": "This seems inaccurate when the current GC cycle is in progress but marking has completed.",
+      "range": {
+        "startLine": 70,
+        "startChar": 49,
+        "endLine": 71,
+        "endChar": 74
+      },
+      "revId": "e590f907c1b626386face78c1ed29728c5e7381a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec917bd3_4649938c",
+        "filename": "src/heap/cppgc/heap-stats-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T11:45:05Z",
+      "side": 1,
+      "message": "I think the implementation is correct but I updated the comment in the code. Was that your concern?",
+      "parentUuid": "76208e62_9350695e",
       "range": {
         "startLine": 70,
         "startChar": 49,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "dd76e5b7_b8e74c24",
+        "filename": "src/heap/cppgc/heap-stats-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T11:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98c8154b_80dfc8b2",
+      "range": {
+        "startLine": 85,
+        "startChar": 37,
+        "endLine": 85,
+        "endChar": 40
+      },
+      "revId": "e590f907c1b626386face78c1ed29728c5e7381a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3966293_182346fb",
         "filename": "src/heap/cppgc/heap-stats-collector.h",
         "patchSetId": 6
@@ -114,6 +210,30 @@
       "revId": "e590f907c1b626386face78c1ed29728c5e7381a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d86d3a0_180b2cd9",
+        "filename": "src/heap/cppgc/heap-stats-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T11:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3966293_182346fb",
+      "range": {
+        "startLine": 86,
+        "startChar": 10,
+        "endLine": 86,
+        "endChar": 50
+      },
+      "revId": "e590f907c1b626386face78c1ed29728c5e7381a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "6be7493c_3e750688",
+        "filename": "src/heap/cppgc/heap-stats-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T11:45:05Z",
+      "side": 1,
+      "message": "Done (implemented suggestion)",
+      "parentUuid": "5852d30f_b87e76ea",
+      "range": {
+        "startLine": 93,
+        "startChar": 7,
+        "endLine": 93,
+        "endChar": 13
+      },
+      "revId": "e590f907c1b626386face78c1ed29728c5e7381a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87173d07_d59092dd",
         "filename": "src/heap/cppgc/heap-stats-collector.h",
         "patchSetId": 6
@@ -160,6 +304,30 @@
       "revId": "e590f907c1b626386face78c1ed29728c5e7381a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4c61ea5_de0b60af",
+        "filename": "src/heap/cppgc/heap-stats-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T11:45:05Z",
+      "side": 1,
+      "message": "Yeah, implemented your suggestion above.",
+      "parentUuid": "87173d07_d59092dd",
+      "range": {
+        "startLine": 103,
+        "startChar": 9,
+        "endLine": 103,
+        "endChar": 32
+      },
+      "revId": "e590f907c1b626386face78c1ed29728c5e7381a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
