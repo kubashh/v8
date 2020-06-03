@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_HEAP_REMEMBERED_SET_INL_H_
-#define V8_HEAP_REMEMBERED_SET_INL_H_
+#ifndef V8_HEAP_REMEMBERED_SET_H_
+#define V8_HEAP_REMEMBERED_SET_H_
 
 #include <memory>
 
@@ -11,7 +11,6 @@
 #include "src/base/memory.h"
 #include "src/codegen/reloc-info.h"
 #include "src/common/globals.h"
-#include "src/common/ptr-compr-inl.h"
 #include "src/heap/heap.h"
 #include "src/heap/memory-chunk.h"
 #include "src/heap/slot-set.h"
@@ -298,42 +297,7 @@ class UpdateTypedSlotHelper {
   // The callback accepts FullMaybeObjectSlot and returns SlotCallbackResult.
   template <typename Callback>
   static SlotCallbackResult UpdateTypedSlot(Heap* heap, SlotType slot_type,
-                                            Address addr, Callback callback) {
-    switch (slot_type) {
-      case CODE_TARGET_SLOT: {
-        RelocInfo rinfo(addr, RelocInfo::CODE_TARGET, 0, Code());
-        return UpdateCodeTarget(&rinfo, callback);
-      }
-      case CODE_ENTRY_SLOT: {
-        return UpdateCodeEntry(addr, callback);
-      }
-      case COMPRESSED_EMBEDDED_OBJECT_SLOT: {
-        RelocInfo rinfo(addr, RelocInfo::COMPRESSED_EMBEDDED_OBJECT, 0, Code());
-        return UpdateEmbeddedPointer(heap, &rinfo, callback);
-      }
-      case FULL_EMBEDDED_OBJECT_SLOT: {
-        RelocInfo rinfo(addr, RelocInfo::FULL_EMBEDDED_OBJECT, 0, Code());
-        return UpdateEmbeddedPointer(heap, &rinfo, callback);
-      }
-      case COMPRESSED_OBJECT_SLOT: {
-        HeapObject old_target = HeapObject::cast(Object(DecompressTaggedAny(
-            heap->isolate(), base::Memory<Tagged_t>(addr))));
-        HeapObject new_target = old_target;
-        SlotCallbackResult result = callback(FullMaybeObjectSlot(&new_target));
-        DCHECK(!HasWeakHeapObjectTag(new_target));
-        if (new_target != old_target) {
-          base::Memory<Tagged_t>(addr) = CompressTagged(new_target.ptr());
-        }
-        return result;
-      }
-      case FULL_OBJECT_SLOT: {
-        return callback(FullMaybeObjectSlot(addr));
-      }
-      case CLEARED_SLOT:
-        break;
-    }
-    UNREACHABLE();
-  }
+                                            Address addr, Callback callback);
 
  private:
   // Updates a code entry slot using an untyped slot callback.
@@ -438,4 +402,4 @@ inline SlotType SlotTypeForRelocInfoMode(RelocInfo::Mode rmode) {
 }  // namespace internal
 }  // namespace v8
 
-#endif  // V8_HEAP_REMEMBERED_SET_INL_H_
+#endif  // V8_HEAP_REMEMBERED_SET_H_
