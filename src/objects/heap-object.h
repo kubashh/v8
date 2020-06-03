@@ -33,6 +33,11 @@ class HeapObject : public Object {
   inline void set_map(Map value);
 
   inline ObjectSlot map_slot() const;
+  inline void check_map();
+  inline void repack_map();
+
+  static inline Tagged_t unpack_map_ptr(Tagged_t raw);
+  inline Object extract_map();
 
   // The no-write-barrier version.  This is OK if the object is white and in
   // new space, or if the value is an immortal immutable object, like the maps
@@ -51,6 +56,8 @@ class HeapObject : public Object {
   // Initialize the map immediately after the object is allocated.
   // Do not use this outside Heap.
   inline void set_map_after_allocation(
+      Map value, WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
+  inline void set_map_after_allocation_no_check(
       Map value, WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
 
   // During garbage collection, the map word of a heap object does not

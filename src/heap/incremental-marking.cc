@@ -136,18 +136,23 @@ class IncrementalMarkingRootMarkingVisitor : public RootVisitor {
 
   void VisitRootPointer(Root root, const char* description,
                         FullObjectSlot p) override {
-    MarkObjectByPointer(p);
+    if (!Internals::IsMapWord((*p).ptr()))  // TODO(steveblackburn) performance!
+      MarkObjectByPointer(p);
   }
 
   void VisitRootPointers(Root root, const char* description,
                          FullObjectSlot start, FullObjectSlot end) override {
-    for (FullObjectSlot p = start; p < end; ++p) MarkObjectByPointer(p);
+    for (FullObjectSlot p = start; p < end; ++p) {
+      DCHECK(!Internals::IsMapWord((*p).ptr()));
+      MarkObjectByPointer(p);  // FIXME check
+    }
   }
 
  private:
   void MarkObjectByPointer(FullObjectSlot p) {
     Object obj = *p;
     if (!obj.IsHeapObject()) return;
+    DCHECK(!Internals::IsMapWord(obj.ptr()));
 
     heap_->incremental_marking()->WhiteToGreyAndPush(HeapObject::cast(obj));
   }

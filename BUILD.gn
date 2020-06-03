@@ -273,8 +273,9 @@ if (v8_enable_snapshot_native_code_counters == "") {
 }
 if (v8_enable_pointer_compression == "") {
   # TODO(v8:v7703): temporarily enable pointer compression on arm64 and on x64
+  # TODO(wenyuzhao): turn pointer compression off on x64, for mapword packing/unpacking support
   v8_enable_pointer_compression =
-      v8_current_cpu == "arm64" || v8_current_cpu == "x64"
+      v8_current_cpu == "arm64"# || v8_current_cpu == "x64"
 }
 if (v8_enable_fast_torque == "") {
   v8_enable_fast_torque = v8_enable_fast_mksnapshot

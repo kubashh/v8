@@ -42,6 +42,12 @@ TSlot Deserializer::Write(TSlot dest, MaybeObject value) {
 }
 
 template <typename TSlot>
+TSlot Deserializer::WriteMapWord(TSlot dest, MaybeObject value) {
+  // can't assert that value is a map because during bootstrap it may not be
+  return Write(dest, MaybeObject(Internals::PackMapWord(value.ptr())));
+}
+
+template <typename TSlot>
 TSlot Deserializer::WriteAddress(TSlot dest, Address value) {
   DCHECK(!allocator()->next_reference_is_weak());
   memcpy(dest.ToVoidPtr(), &value, kSystemPointerSize);
@@ -522,6 +528,7 @@ void Deserializer::VisitOffHeapTarget(Code host, RelocInfo* rinfo) {
 template <typename TSlot>
 TSlot Deserializer::ReadRepeatedObject(TSlot current, int repeat_count) {
   CHECK_LE(2, repeat_count);
+  // TODO(steveblackburn) Assumption: this can't / won't include map word
 
   HeapObject heap_object = ReadObject();
   DCHECK(!Heap::InYoungGeneration(heap_object));
@@ -736,6 +743,7 @@ bool Deserializer::ReadData(TSlot current, TSlot limit,
       }
 
       case kClearedWeakReference:
+        // TODO(steveblackburn) Safe because map word is never a weak reference
         current =
             Write(current, HeapObjectReference::ClearedValue(local_isolate()));
         break;
@@ -767,7 +775,10 @@ bool Deserializer::ReadData(TSlot current, TSlot limit,
         MaybeObject object =
             MaybeObject(ReadOnlyRoots(local_isolate()).at(root_index));
         DCHECK(!Heap::InYoungGeneration(object));
-        current = Write(current, object);
+        if (current_object_address == current.address())
+          current = WriteMapWord(current, object);
+        else
+          current = Write(current, object);
         break;
       }
 
@@ -782,7 +793,10 @@ bool Deserializer::ReadData(TSlot current, TSlot limit,
         }
         // Don't update current pointer here as it may be needed for write
         // barrier.
-        Write(current, hot_maybe_object);
+        if (current_object_address == current.address())
+          WriteMapWord(current, hot_maybe_object);
+        else
+          Write(current, hot_maybe_object);
         if (write_barrier_needed && Heap::InYoungGeneration(hot_object)) {
           HeapObject current_object =
               HeapObject::FromAddress(current_object_address);
@@ -887,7 +901,10 @@ TSlot Deserializer::ReadDataCase(TSlot current, Address current_object_address,
           ? HeapObjectReference::Strong(heap_object)
           : HeapObjectReference::Weak(heap_object);
   // Don't update current pointer here as it may be needed for write barrier.
-  Write(current, heap_object_ref);
+  if (current_object_address == current.address())
+    WriteMapWord(current, heap_object_ref);
+  else
+    Write(current, heap_object_ref);
   if (emit_write_barrier && write_barrier_needed) {
     DCHECK_IMPLIES(FLAG_disable_write_barriers, !write_barrier_needed);
     HeapObject host_object = HeapObject::FromAddress(current_object_address);

@@ -2191,6 +2191,7 @@ bool HeapObject::IsValidSlot(Map map, int offset) {
 }
 
 int HeapObject::SizeFromMap(Map map) const {
+  DCHECK(map.IsMap());
   int instance_size = map.instance_size();
   if (instance_size != kVariableSizeSentinel) return instance_size;
   // Only inline the most frequent cases.

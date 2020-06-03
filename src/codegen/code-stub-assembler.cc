@@ -1404,19 +1404,29 @@ TNode<Object> CodeStubAssembler::LoadFromParentFrame(int offset) {
 Node* CodeStubAssembler::LoadObjectField(SloppyTNode<HeapObject> object,
                                          int offset, MachineType type) {
   CSA_ASSERT(this, IsStrong(object));
-  return LoadFromObject(type, object, IntPtrConstant(offset - kHeapObjectTag));
+  Node* rtn =
+      LoadFromObject(type, object, IntPtrConstant(offset - kHeapObjectTag));
+  //  CSA_ASSERT(this, IsNotMapWord(rtn));    // value must not be encoded map
+  return rtn;
 }
 
 Node* CodeStubAssembler::LoadObjectField(SloppyTNode<HeapObject> object,
                                          SloppyTNode<IntPtrT> offset,
                                          MachineType type) {
   CSA_ASSERT(this, IsStrong(object));
-  return LoadFromObject(type, object,
-                        IntPtrSub(offset, IntPtrConstant(kHeapObjectTag)));
+  // FIXME(wenyuzhao): This CSA_ASSERT prevents some constant-folding
+  // optimizations CSA_ASSERT(this, IsNotMapOffset(offset));
+  Node* rtn = LoadFromObject(type, object,
+                             IntPtrSub(offset, IntPtrConstant(kHeapObjectTag)));
+  // FIXME(wenyuzhao): This CSA_ASSERT prevents some constant-folding
+  // optimizations
+  //  CSA_ASSERT(this, IsNotMapWord(rtn));    // value must not be encoded map
+  return rtn;
 }
 
 TNode<IntPtrT> CodeStubAssembler::LoadAndUntagObjectField(
     SloppyTNode<HeapObject> object, int offset) {
+  DCHECK(offset != HeapObject::kMapOffset);
   if (SmiValuesAre32Bits()) {
 #if V8_TARGET_LITTLE_ENDIAN
     offset += 4;
@@ -1430,6 +1440,7 @@ TNode<IntPtrT> CodeStubAssembler::LoadAndUntagObjectField(
 
 TNode<Int32T> CodeStubAssembler::LoadAndUntagToWord32ObjectField(
     SloppyTNode<HeapObject> object, int offset) {
+  DCHECK(offset != HeapObject::kMapOffset);
   if (SmiValuesAre32Bits()) {
 #if V8_TARGET_LITTLE_ENDIAN
     offset += 4;
@@ -1460,8 +1471,10 @@ TNode<Map> CodeStubAssembler::GetInstanceTypeMap(InstanceType instance_type) {
 TNode<Map> CodeStubAssembler::LoadMap(SloppyTNode<HeapObject> object) {
   // TODO(v8:9637): Do a proper LoadObjectField<Map> and remove UncheckedCast
   // when we can avoid making Large code objects due to TNodification.
-  return UncheckedCast<Map>(LoadObjectField(object, HeapObject::kMapOffset,
-                                            MachineType::TaggedPointer()));
+  auto r = UncheckedCast<Map>(LoadObjectField(object, HeapObject::kMapOffset,
+                                              MachineType::TaggedPointer()));
+  CSA_ASSERT(this, IsNotMapWord(r));
+  return r;
 }
 
 TNode<Uint16T> CodeStubAssembler::LoadInstanceType(
@@ -1831,6 +1844,30 @@ void CodeStubAssembler::DispatchMaybeObject(TNode<MaybeObject> maybe_object,
   Goto(if_strong);
 }
 
+TNode<BoolT> CodeStubAssembler::IsNotMapWord(SloppyTNode<Map> value) {
+  DCHECK(Is64());  // TODO(steveblackburn)
+  return WordNotEqual(WordAnd(BitcastTaggedToWord(value),
+                              IntPtrConstant(Internals::kMapWordSignature)),
+                      IntPtrConstant(Internals::kMapWordSignature));
+}
+
+TNode<BoolT> CodeStubAssembler::ContainsPackedMap(TNode<HeapObject> object) {
+  DCHECK(Is64());  // TODO(steveblackburn)
+  // LoadFromObject will unpack the value, so result of this load should be
+  // clean
+  Node* mapvalue =
+      LoadFromObject(MachineType::TaggedPointer(), object,
+                     IntPtrConstant(HeapObject::kMapOffset - kHeapObjectTag));
+  return WordNotEqual(WordAnd(BitcastTaggedToWord(mapvalue),
+                              IntPtrConstant(Internals::kMapWordSignature)),
+                      IntPtrConstant(Internals::kMapWordSignature));
+}
+
+TNode<BoolT> CodeStubAssembler::IsNotMapOffset(SloppyTNode<IntPtrT> value) {
+  return Word32NotEqual(TruncateIntPtrToInt32(value),
+                        Int32Constant(HeapObject::kMapOffset));
+}
+
 TNode<BoolT> CodeStubAssembler::IsStrong(TNode<MaybeObject> value) {
   return Word32Equal(Word32And(TruncateIntPtrToInt32(
                                    BitcastTaggedToWordForTagAndSmiBits(value)),
@@ -1950,6 +1987,7 @@ TNode<T> CodeStubAssembler::LoadArrayElement(TNode<Array> array,
   CSA_ASSERT(this, IntPtrGreaterThanOrEqual(
                        ParameterToIntPtr(index_node, parameter_mode),
                        IntPtrConstant(0)));
+  //  CSA_ASSERT(this, ContainsPackedMap(array));
   DCHECK(IsAligned(additional_offset, kTaggedSize));
   int32_t header_size = array_header_size + additional_offset - kHeapObjectTag;
   TNode<IntPtrT> offset = ElementOffsetFromIndex(index_node, HOLEY_ELEMENTS,
@@ -1959,7 +1997,10 @@ TNode<T> CodeStubAssembler::LoadArrayElement(TNode<Array> array,
   constexpr MachineType machine_type = MachineTypeOf<T>::value;
   // TODO(gsps): Remove the Load case once LoadFromObject supports poisoning
   if (needs_poisoning == LoadSensitivity::kSafe) {
-    return UncheckedCast<T>(LoadFromObject(machine_type, array, offset));
+    Node* rtn = LoadFromObject(machine_type, array, offset);
+    // FIXME(wenyuzhao): This CSA_ASSERT prevents some constant-folding optimizations
+    // CSA_ASSERT(this, IsNotMapWord(rtn));  // value must not be encoded map
+    return UncheckedCast<T>(rtn);
   } else {
     return UncheckedCast<T>(Load(machine_type, array, offset, needs_poisoning));
   }
@@ -2715,6 +2756,9 @@ void CodeStubAssembler::StoreObjectField(TNode<HeapObject> object,
                                          TNode<IntPtrT> offset,
                                          TNode<Object> value) {
   int const_offset;
+  // FIXME(wenyuzhao): This CSA_ASSERT prevents some constant-folding optimizations
+  // CSA_ASSERT(this, IsNotMapOffset(offset));  // Use StoreMap instead.
+  // CSA_ASSERT(this, IsNotMapWord(SloppyTNode<Map>::UncheckedCast(object)));    // target must not be encoded
   if (ToInt32Constant(offset, &const_offset)) {
     StoreObjectField(object, const_offset, value);
   } else {
@@ -2724,12 +2768,14 @@ void CodeStubAssembler::StoreObjectField(TNode<HeapObject> object,
 
 void CodeStubAssembler::UnsafeStoreObjectFieldNoWriteBarrier(
     TNode<HeapObject> object, int offset, TNode<Object> value) {
+  DCHECK_NE(HeapObject::kMapOffset, offset);  // Use StoreMap instead.
   OptimizedStoreFieldUnsafeNoWriteBarrier(MachineRepresentation::kTagged,
                                           object, offset, value);
 }
 
 void CodeStubAssembler::StoreMap(TNode<HeapObject> object, TNode<Map> map) {
-  OptimizedStoreMap(object, map);
+  OptimizedStoreMapWord(object, map);
+  CSA_ASSERT(this, ContainsPackedMap(object));
 }
 
 void CodeStubAssembler::StoreMapNoWriteBarrier(TNode<HeapObject> object,
@@ -2741,6 +2787,7 @@ void CodeStubAssembler::StoreMapNoWriteBarrier(TNode<HeapObject> object,
                                                TNode<Map> map) {
   OptimizedStoreFieldAssertNoWriteBarrier(MachineRepresentation::kTaggedPointer,
                                           object, HeapObject::kMapOffset, map);
+  CSA_ASSERT(this, ContainsPackedMap(UncheckedCast<HeapObject>(object)));
 }
 
 void CodeStubAssembler::StoreObjectFieldRoot(TNode<HeapObject> object,
@@ -10130,6 +10177,7 @@ void CodeStubAssembler::TrapAllocationMemento(TNode<JSObject> object,
   BIND(&map_check);
   {
     TNode<Object> memento_map = LoadObjectField(object, kMementoMapOffset);
+    memento_map = BitcastWordToTagged(WordXor(BitcastTaggedToWord(memento_map), IntPtrConstant(Internals::kXorMask)));
     Branch(TaggedEqual(memento_map, AllocationMementoMapConstant()),
            memento_found, &no_memento_found);
   }
@@ -10345,12 +10393,19 @@ void CodeStubAssembler::InitializeFieldsWithRoot(TNode<HeapObject> object,
   CSA_SLOW_ASSERT(this, TaggedIsNotSmi(object));
   start_offset = IntPtrAdd(start_offset, IntPtrConstant(-kHeapObjectTag));
   end_offset = IntPtrAdd(end_offset, IntPtrConstant(-kHeapObjectTag));
-  TNode<Object> root_value = LoadRoot(root_index);
+  Node* value;
+  if (root_index == RootIndex::kOnePointerFillerMap) {
+    value = LoadFiller(root_index);
+  } else {
+    DCHECK(root_index != RootIndex::kTwoPointerFillerMap &&
+           root_index != RootIndex::kFreeSpaceMap);
+    value = LoadRoot(root_index);
+  }
   BuildFastLoop<IntPtrT>(
       end_offset, start_offset,
       [=](TNode<IntPtrT> current) {
         StoreNoWriteBarrier(MachineRepresentation::kTagged, object, current,
-                            root_value);
+                            value);
       },
       -kTaggedSize, CodeStubAssembler::IndexAdvanceMode::kPre);
 }

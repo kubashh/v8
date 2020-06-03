@@ -195,18 +195,27 @@ void TurboAssembler::CompareRoot(Operand with, RootIndex index) {
   }
 }
 
-void TurboAssembler::LoadMap(Register destination, Register object) {
-  LoadTaggedPointerField(destination,
-                         FieldOperand(object, HeapObject::kMapOffset));
-}
-
 void TurboAssembler::LoadTaggedPointerField(Register destination,
                                             Operand field_operand) {
+  RecordComment("[ LoadTaggedPointerField");
   if (COMPRESS_POINTERS_BOOL) {
     DecompressTaggedPointer(destination, field_operand);
   } else {
     mov_tagged(destination, field_operand);
   }
+  RecordComment("]");
+}
+
+void TurboAssembler::LoadMapFromHeader(Register destination, Register object) {
+  LoadMapFromHeader(destination, FieldOperand(object, HeapObject::kMapOffset));
+}
+
+void TurboAssembler::LoadMapFromHeader(Register destination,
+                                       Operand field_operand) {
+  RecordComment("[ LoadMapFromHeader");
+  LoadTaggedPointerField(destination, field_operand);
+  xorq(destination, Immediate(Internals::kXorMask));
+  RecordComment("]");
 }
 
 void TurboAssembler::LoadAnyTaggedField(Register destination,
@@ -255,11 +264,32 @@ void TurboAssembler::StoreTaggedField(Operand dst_field_operand,
 
 void TurboAssembler::StoreTaggedField(Operand dst_field_operand,
                                       Register value) {
+  RecordComment("[ StoreTaggedField");
   if (COMPRESS_POINTERS_BOOL) {
     movl(dst_field_operand, value);
   } else {
     movq(dst_field_operand, value);
   }
+  RecordComment("]");
+}
+
+void TurboAssembler::StoreMapToHeader(Operand dst_field_operand,
+                                      Immediate value) {
+  // TODO(steveblackburn) packing of map. See Internals::PackMapWord()
+  RecordComment("[ StoreMapToHeader");
+  StoreTaggedField(dst_field_operand, value);
+  RecordComment("]");
+  UNREACHABLE();  // unimplemented
+}
+
+void TurboAssembler::StoreMapToHeader(Operand dst_field_operand,
+                                      Register value) {
+  // TODO(steveblackburn) packing of map. See Internals::PackMapWord()
+  RecordComment("[ StoreMapToHeader");
+  xorq(value, Immediate(Internals::kXorMask));
+  StoreTaggedField(dst_field_operand, value);
+  xorq(value, Immediate(Internals::kXorMask));
+  RecordComment("]");
 }
 
 void TurboAssembler::DecompressTaggedSigned(Register destination,
@@ -2068,7 +2098,7 @@ void TurboAssembler::Ret(int bytes_dropped, Register scratch) {
 
 void MacroAssembler::CmpObjectType(Register heap_object, InstanceType type,
                                    Register map) {
-  LoadMap(map, heap_object);
+  LoadMapFromHeader(map, heap_object);
   CmpInstanceType(map, type);
 }
 
@@ -2111,7 +2141,7 @@ void MacroAssembler::AssertConstructor(Register object) {
     testb(object, Immediate(kSmiTagMask));
     Check(not_equal, AbortReason::kOperandIsASmiAndNotAConstructor);
     Push(object);
-    LoadMap(object, object);
+    LoadMapFromHeader(object, object);
     testb(FieldOperand(object, Map::kBitFieldOffset),
           Immediate(Map::Bits1::IsConstructorBit::kMask));
     Pop(object);
@@ -2149,7 +2179,7 @@ void MacroAssembler::AssertGeneratorObject(Register object) {
   // Load map
   Register map = object;
   Push(object);
-  LoadMap(map, object);
+  LoadMapFromHeader(map, object);
 
   Label do_check;
   // Check if JSGeneratorObject
@@ -2175,7 +2205,11 @@ void MacroAssembler::AssertUndefinedOrAllocationSite(Register object) {
     AssertNotSmi(object);
     Cmp(object, isolate()->factory()->undefined_value());
     j(equal, &done_checking);
-    Cmp(FieldOperand(object, 0), isolate()->factory()->allocation_site_map());
+    Register map = object;
+    Push(object);
+    LoadMapFromHeader(map, object);
+    Cmp(map, isolate()->factory()->allocation_site_map());
+    Pop(object);
     Assert(equal, AbortReason::kExpectedUndefinedOrCell);
     bind(&done_checking);
   }
@@ -2624,7 +2658,7 @@ static const int kRegisterPassedArguments = 6;
 
 void MacroAssembler::LoadNativeContextSlot(int index, Register dst) {
   // Load native context.
-  LoadMap(dst, rsi);
+  LoadMapFromHeader(dst, rsi);
   LoadTaggedPointerField(
       dst,
       FieldOperand(dst, Map::kConstructorOrBackPointerOrNativeContextOffset));

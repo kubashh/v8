@@ -161,7 +161,8 @@ inline void GenerationalBarrier(HeapObject object, ObjectSlot slot,
                                 Object value) {
   if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) return;
   DCHECK(!HasWeakHeapObjectTag(value));
-  if (!value.IsHeapObject()) return;
+  if (!value.IsHeapObjectNotFiller())
+    return; // TODO(steveblackburn) performance!
   GenerationalBarrier(object, slot, HeapObject::cast(value));
 }
 
@@ -169,6 +170,8 @@ inline void GenerationalBarrier(HeapObject object, ObjectSlot slot,
                                 HeapObject value) {
   if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) return;
   DCHECK(!HasWeakHeapObjectTag(*slot));
+  if (!value.IsHeapObjectNotFiller())
+    return; // TODO(steveblackburn) performance!
   heap_internals::GenerationalBarrierInternal(object, slot.address(),
                                               HeapObject::cast(value));
 }
@@ -204,13 +207,16 @@ inline void GenerationalBarrierForCode(Code host, RelocInfo* rinfo,
 inline void MarkingBarrier(HeapObject object, ObjectSlot slot, Object value) {
   if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) return;
   DCHECK(!HasWeakHeapObjectTag(value));
-  if (!value.IsHeapObject()) return;
+  if (!value.IsHeapObjectNotFiller())
+    return; // TODO(steveblackburn) performance!
   MarkingBarrier(object, slot, HeapObject::cast(value));
 }
 
 inline void MarkingBarrier(HeapObject object, ObjectSlot slot,
                            HeapObject value) {
   if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) return;
+  if (!value.IsHeapObjectNotFiller())
+    return; // TODO(steveblackburn) performance!
   DCHECK_IMPLIES(slot.address() != kNullAddress, !HasWeakHeapObjectTag(*slot));
   heap_internals::MarkingBarrierInternal(object, slot.address(),
                                          HeapObject::cast(value));
@@ -220,6 +226,7 @@ inline void MarkingBarrier(HeapObject object, MaybeObjectSlot slot,
                            MaybeObject value) {
   if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) return;
   HeapObject value_heap_object;
+  DCHECK(!Internals::IsMapWord(value.ptr()));
   if (!value->GetHeapObject(&value_heap_object)) return;
   heap_internals::MarkingBarrierInternal(object, slot.address(),
                                          value_heap_object);

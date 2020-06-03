@@ -245,6 +245,7 @@ void SerializedHandleChecker::VisitRootPointers(Root root,
                                                 FullObjectSlot start,
                                                 FullObjectSlot end) {
   for (FullObjectSlot p = start; p < end; ++p) {
+    DCHECK(!Internals::IsMapWord(p.Relaxed_Load().ptr()));
     if (serialized_.find(*p) != serialized_.end()) continue;
     PrintF("%s handle not serialized: ",
            root == Root::kGlobalHandles ? "global" : "eternal");

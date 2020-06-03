@@ -29,9 +29,19 @@ bool FullObjectSlot::contains_value(Address raw_value) const {
   return base::AsAtomicPointer::Relaxed_Load(location()) == raw_value;
 }
 
+bool FullObjectSlot::contains_map_value(Address raw_value) const {
+  Address read_value = base::AsAtomicPointer::Relaxed_Load(location());
+  read_value = Internals::UnPackMapWord(read_value);
+  return read_value == raw_value;
+}
+
 const Object FullObjectSlot::operator*() const { return Object(*location()); }
 
 void FullObjectSlot::store(Object value) const { *location() = value.ptr(); }
+
+void FullObjectSlot::store_map(Object value) const {
+  *location() = Internals::PackMapWord(value.ptr());
+}
 
 Object FullObjectSlot::Acquire_Load() const {
   return Object(base::AsAtomicPointer::Acquire_Load(location()));

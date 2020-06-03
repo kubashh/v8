@@ -375,6 +375,7 @@ TNode<JSRegExp> ConstructorBuiltinsAssembler::EmitCreateRegExpLiteral(
         JSRegExp::kHeaderSize + JSRegExp::kInObjectFieldCount * kTaggedSize;
     TNode<HeapObject> copy = Allocate(size);
     for (int offset = 0; offset < size; offset += kTaggedSize) {
+      // TODO(steveblackburn) Note that this code silently reads/writes maps
       TNode<Object> value = LoadObjectField(boilerplate, offset);
       StoreObjectFieldNoWriteBarrier(copy, offset, value);
     }

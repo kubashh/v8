@@ -428,26 +428,31 @@ Object JSObject::InObjectPropertyAtPut(int index, Object value,
   return value;
 }
 
-void JSObject::InitializeBody(Map map, int start_offset,
-                              Object pre_allocated_value, Object filler_value) {
-  DCHECK_IMPLIES(filler_value.IsHeapObject(),
-                 !ObjectInYoungGeneration(filler_value));
-  DCHECK_IMPLIES(pre_allocated_value.IsHeapObject(),
-                 !ObjectInYoungGeneration(pre_allocated_value));
+void JSObject::InitializeBody(Map map, int start_offset, bool use_object_filler,
+                              MapWord filler_map, Object undefined_filler) {
   int size = map.instance_size();
   int offset = start_offset;
-  if (filler_value != pre_allocated_value) {
+  if (use_object_filler) {
     int end_of_pre_allocated_offset =
         size - (map.UnusedPropertyFields() * kTaggedSize);
     DCHECK_LE(kHeaderSize, end_of_pre_allocated_offset);
+    // fill start with references to the undefined value object
     while (offset < end_of_pre_allocated_offset) {
-      WRITE_FIELD(*this, offset, pre_allocated_value);
+      WRITE_FIELD(*this, offset, undefined_filler);
       offset += kTaggedSize;
     }
-  }
-  while (offset < size) {
-    WRITE_FIELD(*this, offset, filler_value);
-    offset += kTaggedSize;
+    // fill the remainder with one word filler objects (ie just a map word)
+    while (offset < size) {
+      Object fm = Object(filler_map.ptr());
+      WRITE_FIELD(*this, offset, fm);
+      offset += kTaggedSize;
+    }
+  } else {
+    while (offset < size) {
+      // fill with references to the undefined value object
+      WRITE_FIELD(*this, offset, undefined_filler);
+      offset += kTaggedSize;
+    }
   }
 }
 
@@ -909,11 +914,13 @@ void JSReceiver::initialize_properties(Isolate* isolate) {
 }
 
 DEF_GETTER(JSReceiver, HasFastProperties, bool) {
+  Map m = map(isolate);
+  DCHECK(m.IsMap());
   DCHECK(raw_properties_or_hash(isolate).IsSmi() ||
          ((raw_properties_or_hash(isolate).IsGlobalDictionary(isolate) ||
            raw_properties_or_hash(isolate).IsNameDictionary(isolate)) ==
-          map(isolate).is_dictionary_map()));
-  return !map(isolate).is_dictionary_map();
+          m.is_dictionary_map()));
+  return !m.is_dictionary_map();
 }
 
 DEF_GETTER(JSReceiver, property_dictionary, NameDictionary) {
@@ -939,6 +946,12 @@ DEF_GETTER(JSReceiver, property_array, PropertyArray) {
     return GetReadOnlyRoots(isolate).empty_property_array();
   }
   return PropertyArray::cast(prop);
+}
+
+bool JSReceiver::MapOK() {
+  const Isolate* isolate = GetIsolateForPtrCompr(*this);
+  Map m = map(isolate);
+  return m.IsMap();
 }
 
 Maybe<bool> JSReceiver::HasProperty(Handle<JSReceiver> object,

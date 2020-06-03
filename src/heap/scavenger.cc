@@ -112,14 +112,14 @@ class IterateAndScavengePromotedObjectsVisitor final : public ObjectVisitor {
   inline void VisitEphemeron(HeapObject obj, int entry, ObjectSlot key,
                              ObjectSlot value) override {
     DCHECK(Heap::IsLargeObject(obj) || obj.IsEphemeronHashTable());
-    VisitPointer(obj, value);
+    VisitPointer(obj, value);  // TODO(steveblackburn) do we need anything here?
 
     if (ObjectInYoungGeneration(*key)) {
       // We cannot check the map here, as it might be a large object.
       scavenger_->RememberPromotedEphemeron(
           EphemeronHashTable::unchecked_cast(obj), entry);
     } else {
-      VisitPointer(obj, key);
+      VisitPointer(obj, key);  // TODO(steveblackburn) do we need anything here?
     }
   }
 
@@ -132,7 +132,8 @@ class IterateAndScavengePromotedObjectsVisitor final : public ObjectVisitor {
     for (TSlot slot = start; slot < end; ++slot) {
       typename TSlot::TObject object = *slot;
       HeapObject heap_object;
-      if (object.GetHeapObject(&heap_object)) {
+      if (object.GetHeapObjectIfNotFiller(
+              &heap_object)) {  // TODO(steveblackburn) performance!
         HandleSlot(host, THeapObjectSlot(slot), heap_object);
       }
     }
@@ -708,19 +709,24 @@ void Scavenger::AddEphemeronHashTable(EphemeronHashTable table) {
 void RootScavengeVisitor::VisitRootPointer(Root root, const char* description,
                                            FullObjectSlot p) {
   DCHECK(!HasWeakHeapObjectTag(*p));
-  ScavengePointer(p);
+  if (!Internals::IsMapWord((*p).ptr())) {  // TODO(steveblackburn) performance!
+    ScavengePointer(p);
+  }
 }
 
 void RootScavengeVisitor::VisitRootPointers(Root root, const char* description,
                                             FullObjectSlot start,
                                             FullObjectSlot end) {
   // Copy all HeapObject pointers in [start, end)
-  for (FullObjectSlot p = start; p < end; ++p) ScavengePointer(p);
+  for (FullObjectSlot p = start; p < end; ++p) {
+    ScavengePointer(p);
+  }
 }
 
 void RootScavengeVisitor::ScavengePointer(FullObjectSlot p) {
   Object object = *p;
   DCHECK(!HasWeakHeapObjectTag(object));
+  DCHECK(!Internals::IsMapWord(object.ptr()));
   if (Heap::InYoungGeneration(object)) {
     scavenger_->ScavengeObject(FullHeapObjectSlot(p), HeapObject::cast(object));
   }

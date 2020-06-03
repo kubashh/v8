@@ -2586,6 +2586,8 @@ MaybeLocal<Script> ScriptCompiler::Compile(Local<Context> context,
 
   i::Handle<i::SharedFunctionInfo> result;
   has_pending_exception = !maybe_function_info.ToHandle(&result);
+  DCHECK(!internal::Internals::IsMapWord(
+      isolate->thread_local_top()->pending_message_obj_.ptr()));
   if (has_pending_exception) isolate->ReportPendingMessages();
 
   RETURN_ON_FAILED_EXECUTION(Script);

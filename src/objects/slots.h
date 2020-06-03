@@ -108,9 +108,11 @@ class FullObjectSlot : public SlotBase<FullObjectSlot, Address> {
   // Compares memory representation of a value stored in the slot with given
   // raw value.
   inline bool contains_value(Address raw_value) const;
+  inline bool contains_map_value(Address raw_value) const;
 
   inline const Object operator*() const;
   inline void store(Object value) const;
+  inline void store_map(Object value) const;
 
   inline Object Acquire_Load() const;
   inline Object Relaxed_Load() const;

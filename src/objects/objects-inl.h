@@ -87,6 +87,7 @@ IS_TYPE_FUNCTION_DEF(HashTableBase)
 IS_TYPE_FUNCTION_DEF(SmallOrderedHashTable)
 #undef IS_TYPE_FUNCTION_DEF
 
+// TODO(steveblackburn) need to deal with fillers gracefully here
 #define IS_TYPE_FUNCTION_DEF(Type, Value)                        \
   bool Object::Is##Type(Isolate* isolate) const {                \
     return Is##Type(ReadOnlyRoots(isolate));                     \
@@ -649,9 +650,18 @@ MaybeObjectSlot HeapObject::RawMaybeWeakField(int byte_offset) const {
   return MaybeObjectSlot(FIELD_ADDR(*this, byte_offset));
 }
 
-MapWord MapWord::FromMap(const Map map) { return MapWord(map.ptr()); }
+MapWord MapWord::FromMap(const Map map) {
+  DCHECK(map.is_null() || map.IsMap());
+  return FromMapNoCheck(map);
+}
 
-Map MapWord::ToMap() const { return Map::unchecked_cast(Object(value_)); }
+MapWord MapWord::FromMapNoCheck(const Map map) {
+  return MapWord(Internals::PackMapWord(map.ptr()));
+}
+
+Map MapWord::ToMap() const {
+  return Map::unchecked_cast(Object(Internals::UnPackMapWord(value_)));
+}
 
 bool MapWord::IsForwardingAddress() const { return HAS_SMI_TAG(value_); }
 
@@ -745,7 +755,21 @@ void HeapObject::set_map_no_write_barrier(Map value) {
 }
 
 void HeapObject::set_map_after_allocation(Map value, WriteBarrierMode mode) {
-  set_map_word(MapWord::FromMap(value));
+  MapWord mapword = MapWord::FromMap(value);
+  set_map_word(mapword);
+#ifndef V8_DISABLE_WRITE_BARRIERS
+  if (mode != SKIP_WRITE_BARRIER) {
+    DCHECK(!value.is_null());
+    // TODO(1600) We are passing kNullAddress as a slot because maps can never
+    // be on an evacuation candidate.
+    MarkingBarrier(*this, ObjectSlot(kNullAddress), value);
+  }
+#endif
+}
+
+void HeapObject::set_map_after_allocation_no_check(Map value,
+                                                   WriteBarrierMode mode) {
+  set_map_word(MapWord::FromMapNoCheck(value));
 #ifndef V8_DISABLE_WRITE_BARRIERS
   if (mode != SKIP_WRITE_BARRIER) {
     DCHECK(!value.is_null());
@@ -760,24 +784,34 @@ ObjectSlot HeapObject::map_slot() const {
   return ObjectSlot(MapField::address(*this));
 }
 
-DEF_GETTER(HeapObject, map_word, MapWord) {
-  return MapField::Relaxed_Load(isolate, *this);
+Object HeapObject::extract_map() {
+  ObjectSlot p = map_slot();
+  Object o(Internals::UnPackMapWord((*p).ptr()));
+  DCHECK(Map::unchecked_cast(o).IsMap());
+  return o;
 }
 
-void HeapObject::set_map_word(MapWord map_word) {
-  MapField::Relaxed_Store(*this, map_word);
+DEF_GETTER(HeapObject, map_word, MapWord) {
+  return MapField::Acquire_Load_No_Unpack(isolate, *this);
+}
+
+void HeapObject::set_map_word(MapWord map_word) {  // TODO(steveblackburn)
+  MapField::Relaxed_Store_No_Pack(*this, map_word);
 }
 
 DEF_GETTER(HeapObject, synchronized_map_word, MapWord) {
-  return MapField::Acquire_Load(isolate, *this);
+  return MapField::Acquire_Load_No_Unpack(isolate,
+                                          *this);  // TODO(steveblackburn)
 }
 
-void HeapObject::synchronized_set_map_word(MapWord map_word) {
-  MapField::Release_Store(*this, map_word);
+void HeapObject::synchronized_set_map_word(
+    MapWord map_word) {  // TODO(steveblackburn)
+  MapField::Release_Store_No_Pack(*this, map_word);
 }
 
-bool HeapObject::synchronized_compare_and_swap_map_word(MapWord old_map_word,
-                                                        MapWord new_map_word) {
+bool HeapObject::synchronized_compare_and_swap_map_word(
+    MapWord old_map_word,
+    MapWord new_map_word) {  // TODO(steveblackburn)
   Tagged_t result =
       MapField::Release_CompareAndSwap(*this, old_map_word, new_map_word);
   return result == static_cast<Tagged_t>(old_map_word.ptr());

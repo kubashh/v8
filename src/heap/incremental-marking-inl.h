@@ -59,6 +59,7 @@ void IncrementalMarking::RecordWrite(HeapObject obj, TSlot slot,
   // When writing a weak reference, treat it as strong for the purposes of the
   // marking barrier.
   HeapObject value_heap_object;
+  DCHECK(!Internals::IsMapWord(value.ptr()));
   if (IsMarking() && value.GetHeapObject(&value_heap_object)) {
     RecordWriteSlow(obj, HeapObjectSlot(slot), value_heap_object);
   }

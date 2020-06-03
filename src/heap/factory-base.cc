@@ -141,7 +141,7 @@ Handle<WeakFixedArray> FactoryBase<Impl>::NewWeakFixedArrayWithMap(
       handle(WeakFixedArray::cast(result), isolate());
   array->set_length(length);
   MemsetTagged(ObjectSlot(array->data_start()),
-               read_only_roots().undefined_value(), length);
+               read_only_roots().undefined_value(), length);  // FIXME check
 
   return array;
 }

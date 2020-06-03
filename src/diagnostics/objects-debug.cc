@@ -145,6 +145,7 @@ void TaggedIndex::TaggedIndexVerify(Isolate* isolate) {
 }
 
 void HeapObject::HeapObjectVerify(Isolate* isolate) {
+  // TODO(steveblackburn) this may be an issue, like the other in this file
   TorqueGeneratedClassVerifiers::HeapObjectVerify(*this, isolate);
 
   switch (map().instance_type()) {
@@ -536,7 +537,7 @@ void PropertyArray::PropertyArrayVerify(Isolate* isolate) {
   CHECK_LT(0, length());
   for (int i = 0; i < length(); i++) {
     Object e = get(i);
-    Object::VerifyPointer(isolate, e);
+    if (!Internals::IsMapWord(e.ptr())) Object::VerifyPointer(isolate, e);
   }
 }
 
@@ -809,7 +810,8 @@ void JSFunction::JSFunctionVerify(Isolate* isolate) {
 
 void SharedFunctionInfo::SharedFunctionInfoVerify(Isolate* isolate) {
   // TODO(leszeks): Add a TorqueGeneratedClassVerifier for OffThreadIsolate.
-  TorqueGeneratedClassVerifiers::SharedFunctionInfoVerify(*this, isolate);
+  // TODO(steveblackburn) probably need to hand-write map verification
+  // TorqueGeneratedClassVerifiers::SharedFunctionInfoVerify(*this, isolate);
   this->SharedFunctionInfoVerify(ReadOnlyRoots(isolate));
 }
 

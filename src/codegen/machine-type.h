@@ -62,14 +62,22 @@ class MachineType {
  public:
   constexpr MachineType()
       : representation_(MachineRepresentation::kNone),
-        semantic_(MachineSemantic::kNone) {}
+        semantic_(MachineSemantic::kNone),
+        in_header_(false) {}
   constexpr MachineType(MachineRepresentation representation,
                         MachineSemantic semantic)
-      : representation_(representation), semantic_(semantic) {}
+      : representation_(representation),
+        semantic_(semantic),
+        in_header_(false) {}
+  constexpr MachineType(MachineRepresentation representation,
+                        MachineSemantic semantic, bool in_header)
+      : representation_(representation),
+        semantic_(semantic),
+        in_header_(in_header) {}
 
   constexpr bool operator==(MachineType other) const {
     return representation() == other.representation() &&
-           semantic() == other.semantic();
+           semantic() == other.semantic() && in_header() == other.in_header();
   }
 
   constexpr bool operator!=(MachineType other) const {
@@ -80,6 +88,7 @@ class MachineType {
     return representation_;
   }
   constexpr MachineSemantic semantic() const { return semantic_; }
+  constexpr bool in_header() const { return in_header_; }
 
   constexpr bool IsNone() const {
     return representation() == MachineRepresentation::kNone;
@@ -169,6 +178,14 @@ class MachineType {
   constexpr static MachineType TaggedPointer() {
     return MachineType(MachineRepresentation::kTaggedPointer,
                        MachineSemantic::kAny);
+  }
+  constexpr static MachineType MapPointerInHeader() {
+    return MachineType(MachineRepresentation::kTaggedPointer,
+                       MachineSemantic::kAny, true);
+  }
+  constexpr static MachineType MapInHeader() {
+    return MachineType(MachineRepresentation::kTagged,
+                       MachineSemantic::kAny, true);
   }
   constexpr static MachineType TaggedSigned() {
     return MachineType(MachineRepresentation::kTaggedSigned,
@@ -279,6 +296,7 @@ class MachineType {
  private:
   MachineRepresentation representation_;
   MachineSemantic semantic_;
+  bool in_header_;
 };
 
 V8_INLINE size_t hash_value(MachineRepresentation rep) {
@@ -286,8 +304,9 @@ V8_INLINE size_t hash_value(MachineRepresentation rep) {
 }
 
 V8_INLINE size_t hash_value(MachineType type) {
-  return static_cast<size_t>(type.representation()) +
-         static_cast<size_t>(type.semantic()) * 16;
+  return (static_cast<size_t>(type.representation()) * 2) +
+         (static_cast<size_t>(type.semantic()) * 32) +
+         (type.in_header() ? 0 : 1);
 }
 
 V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,

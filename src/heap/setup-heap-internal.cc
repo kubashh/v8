@@ -220,7 +220,7 @@ bool Heap::CreateInitialMaps() {
   // Map::cast cannot be used due to uninitialized map field.
   Map new_meta_map = Map::unchecked_cast(obj);
   set_meta_map(new_meta_map);
-  new_meta_map.set_map_after_allocation(new_meta_map);
+  new_meta_map.set_map_after_allocation_no_check(new_meta_map);
 
   ReadOnlyRoots roots(this);
   {  // Partial map allocation

@@ -58,8 +58,9 @@ class X64OperandGenerator final : public OperandGenerator {
     if (effect_level != selector()->GetEffectLevel(input)) {
       return false;
     }
-    MachineRepresentation rep =
-        LoadRepresentationOf(input->op()).representation();
+    auto load_rep = LoadRepresentationOf(input->op());
+    if (load_rep.in_header()) return false;
+    MachineRepresentation rep = load_rep.representation();
     switch (opcode) {
       case kX64And:
       case kX64Or:
@@ -249,6 +250,7 @@ ArchOpcode GetLoadOpcode(LoadRepresentation load_rep) {
 #else
       UNREACHABLE();
 #endif
+
 #ifdef V8_COMPRESS_POINTERS
     case MachineRepresentation::kTaggedSigned:
       opcode = kX64MovqDecompressTaggedSigned;
@@ -265,7 +267,8 @@ ArchOpcode GetLoadOpcode(LoadRepresentation load_rep) {
     case MachineRepresentation::kTagged:         // Fall through.
 #endif
     case MachineRepresentation::kWord64:
-      opcode = kX64Movq;
+      opcode = load_rep.in_header() ? kX64MapFromHeader : kX64Movq;
+      // opcode = kX64Movq;
       break;
     case MachineRepresentation::kSimd128:  // Fall through.
       opcode = kX64Movdqu;
@@ -292,14 +295,16 @@ ArchOpcode GetStoreOpcode(StoreRepresentation store_rep) {
     case MachineRepresentation::kCompressedPointer:  // Fall through.
     case MachineRepresentation::kCompressed:
 #ifdef V8_COMPRESS_POINTERS
-      return kX64MovqCompressTagged;
+      return store_rep.store_to_header() ? kX64MapToHeader
+                                         : kX64MovqCompressTagged;
 #else
       UNREACHABLE();
 #endif
     case MachineRepresentation::kTaggedSigned:   // Fall through.
     case MachineRepresentation::kTaggedPointer:  // Fall through.
     case MachineRepresentation::kTagged:
-      return kX64MovqCompressTagged;
+      return store_rep.store_to_header() ? kX64MapToHeader
+                                         : kX64MovqCompressTagged;
     case MachineRepresentation::kWord64:
       return kX64Movq;
     case MachineRepresentation::kSimd128:  // Fall through.
@@ -419,7 +424,9 @@ void InstructionSelector::VisitStore(Node* node) {
     RecordWriteMode record_write_mode =
         WriteBarrierKindToRecordWriteMode(write_barrier_kind);
     InstructionOperand temps[] = {g.TempRegister(), g.TempRegister()};
-    InstructionCode code = kArchStoreWithWriteBarrier;
+    InstructionCode code = store_rep.store_to_header()
+                               ? kArchStoreMapToHeaderWithWriteBarrier
+                               : kArchStoreWithWriteBarrier;
     code |= AddressingModeField::encode(addressing_mode);
     code |= MiscField::encode(static_cast<int>(record_write_mode));
     Emit(code, 0, nullptr, arraysize(inputs), inputs, arraysize(temps), temps);

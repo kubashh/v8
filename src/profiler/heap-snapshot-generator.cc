@@ -704,6 +704,13 @@ class IndexedReferencesExtractor : public ObjectVisitor {
                      ObjectSlot end) override {
     VisitPointers(host, MaybeObjectSlot(start), MaybeObjectSlot(end));
   }
+  void VisitMapPointer(HeapObject object) override {
+    if (generator_->visited_fields_[0]) {
+      generator_->visited_fields_[0] = false;
+    } else {
+      VisitHeapObjectImpl(Map::unchecked_cast(object.extract_map()), -1);
+    }
+  }
   void VisitPointers(HeapObject host, MaybeObjectSlot start,
                      MaybeObjectSlot end) override {
     // [start,end) must be a sub-region of [parent_start_, parent_end), i.e.
@@ -738,8 +745,15 @@ class IndexedReferencesExtractor : public ObjectVisitor {
     // The last parameter {field_offset} is only used to check some well-known
     // skipped references, so passing -1 * kTaggedSize for objects embedded
     // into code is fine.
-    generator_->SetHiddenReference(parent_obj_, parent_, next_index_++,
-                                   heap_object, field_index * kTaggedSize);
+    if (Internals::IsMapWord(
+            heap_object.ptr())) {  // TODO(steveblackburn) all fields?
+      Object child = Object(Internals::UnPackMapWord(heap_object.ptr()));
+      generator_->SetHiddenReference(parent_obj_, parent_, next_index_++, child,
+                                     field_index * kTaggedSize);
+    } else {
+      generator_->SetHiddenReference(parent_obj_, parent_, next_index_++,
+                                     heap_object, field_index * kTaggedSize);
+    }
   }
 
   V8HeapExplorer* generator_;
@@ -1464,6 +1478,7 @@ class RootsReferencesExtractor : public RootVisitor {
   void VisitRootPointers(Root root, const char* description,
                          FullObjectSlot start, FullObjectSlot end) override {
     for (FullObjectSlot p = start; p < end; ++p) {
+      DCHECK(!Internals::IsMapWord(p.Relaxed_Load().ptr()));
       VisitRootPointer(root, description, p);
     }
   }
@@ -1515,6 +1530,8 @@ bool V8HeapExplorer::IterateAndExtractReferences(
 
     HeapEntry* entry = GetEntry(obj);
     ExtractReferences(entry, obj);
+
+    // FIXME check out the call below.   It 'seems' OK, but is a bit worriesome.
     SetInternalReference(entry, "map", obj.map(), HeapObject::kMapOffset);
     // Extract unvisited fields as hidden references and restore tags
     // of visited fields.
@@ -1626,6 +1643,7 @@ void V8HeapExplorer::SetHiddenReference(HeapObject parent_obj,
                                         HeapEntry* parent_entry, int index,
                                         Object child_obj, int field_offset) {
   DCHECK_EQ(parent_entry, GetEntry(parent_obj));
+  DCHECK(!Internals::IsMapWord(child_obj.ptr()));
   HeapEntry* child_entry = GetEntry(child_obj);
   if (child_entry != nullptr && IsEssentialObject(child_obj) &&
       IsEssentialHiddenReference(parent_obj, field_offset)) {
@@ -1769,6 +1787,7 @@ class GlobalObjectsEnumerator : public RootVisitor {
   void VisitRootPointers(Root root, const char* description,
                          FullObjectSlot start, FullObjectSlot end) override {
     for (FullObjectSlot p = start; p < end; ++p) {
+      DCHECK(!Internals::IsMapWord(p.Relaxed_Load().ptr()));
       if (!(*p).IsNativeContext()) continue;
       JSObject proxy = Context::cast(*p).global_proxy();
       if (!proxy.IsJSGlobalProxy()) continue;

@@ -32,11 +32,15 @@ FieldAccess AccessBuilder::ForExternalIntPtr() {
 }
 
 // static
-FieldAccess AccessBuilder::ForMap() {
-  FieldAccess access = {kTaggedBase,           HeapObject::kMapOffset,
-                        MaybeHandle<Name>(),   MaybeHandle<Map>(),
-                        Type::OtherInternal(), MachineType::TaggedPointer(),
-                        kMapWriteBarrier};
+FieldAccess
+AccessBuilder::ForMap() {  // TODO(steveblackburn) --> this should be covered in
+                           // the Graph assembler, where all loads and stores
+                           // with kMapOffset are intercepted.
+  FieldAccess access = {
+      kTaggedBase,           HeapObject::kMapOffset,
+      MaybeHandle<Name>(),   MaybeHandle<Map>(),
+      Type::OtherInternal(), MachineType::MapPointerInHeader(),
+      kMapWriteBarrier};
   return access;
 }
 

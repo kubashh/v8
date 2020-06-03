@@ -147,6 +147,7 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
   Node* LoadFromObject(
       MachineType type, Node* base, Node* offset,
       LoadSensitivity needs_poisoning = LoadSensitivity::kSafe) {
+    // TODO(steveblackburn) Need assurance that this is intercepted upstream
     CHECK_EQ(needs_poisoning, LoadSensitivity::kSafe);
     ObjectAccess access = {type, WriteBarrierKind::kNoWriteBarrier};
     Node* load = AddNode(simplified()->LoadFromObject(access), base, offset);
@@ -166,10 +167,12 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
                      Node* value, WriteBarrierKind write_barrier) {
     ObjectAccess access = {MachineType::TypeForRepresentation(rep),
                            write_barrier};
+    // TODO(steveblackburn) Need assurance that this is intercepted upstream
     AddNode(simplified()->StoreToObject(access), object, offset, value);
   }
   void OptimizedStoreField(MachineRepresentation rep, Node* object, int offset,
                            Node* value, WriteBarrierKind write_barrier) {
+    // TODO(steveblackburn) Need assurance that this is intercepted upstream
     AddNode(simplified()->StoreField(FieldAccess(
                 BaseTaggedness::kTaggedBase, offset, MaybeHandle<Name>(),
                 MaybeHandle<Map>(), Type::Any(),

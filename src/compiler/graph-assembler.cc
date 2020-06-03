@@ -5,6 +5,7 @@
 #include "src/compiler/graph-assembler.h"
 
 #include "src/codegen/code-factory.h"
+#include "src/compiler/access-builder.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/schedule.h"
 // For TNode types.
@@ -484,6 +485,16 @@ Node* JSGraphAssembler::Allocate(AllocationType allocation, Node* size) {
 Node* JSGraphAssembler::LoadField(FieldAccess const& access, Node* object) {
   Node* value = AddNode(graph()->NewNode(simplified()->LoadField(access),
                                          object, effect(), control()));
+  // TODO(steveblackburn) unpacking of map. See Internals::UnpackMapWord().
+  // if (access == AccessBuilder::ForMap()) {
+  //   if (IsAnyTagged(access.machine_type.representation())) {
+  //     value = BitcastTaggedToWord(value);
+  //   }
+  //   value = WordXor(value, IntPtrConstant(Internals::kXorMask));
+  //   if (IsAnyTagged(access.machine_type.representation())) {
+  //     value = BitcastWordToTagged(value);
+  //   }
+  // }
   return value;
 }
 

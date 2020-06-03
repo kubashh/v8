@@ -47,14 +47,18 @@ class TaggedField : public AllStatic {
   static inline T Relaxed_Load(const Isolate* isolate, HeapObject host,
                                int offset = 0);
 
+  static inline void Relaxed_Store_No_Pack(HeapObject host, T value);
   static inline void Relaxed_Store(HeapObject host, T value);
   static inline void Relaxed_Store(HeapObject host, int offset, T value);
 
   static inline T Acquire_Load(HeapObject host, int offset = 0);
+  static inline T Acquire_Load_No_Unpack(const Isolate* isolate, HeapObject host,
+                                         int offset = 0);
   static inline T Acquire_Load(const Isolate* isolate, HeapObject host,
                                int offset = 0);
 
   static inline void Release_Store(HeapObject host, T value);
+  static inline void Release_Store_No_Pack(HeapObject host, T value);
   static inline void Release_Store(HeapObject host, int offset, T value);
 
   static inline Tagged_t Release_CompareAndSwap(HeapObject host, T old,

@@ -1198,10 +1198,21 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                          std::is_convertible<TNode<T>, TNode<Object>>::value,
                          int>::type = 0>
   TNode<T> LoadReference(Reference reference) {
+    // FIXME(wenyuzhao): Figure out how can a zero offset being passed here
+    // FIXME(wenyuzhao):
+    //      This filtering logic could be put later in the pipeline after
+    //      basic optimizations (like removing such useless phis)
+    if (IsMapOffsetConstant(reference.offset)) {
+      return TNode<T>::UncheckedCast(LoadMap(reference.object));
+    }
+
     TNode<IntPtrT> offset =
         IntPtrSub(reference.offset, IntPtrConstant(kHeapObjectTag));
-    return CAST(
-        LoadFromObject(MachineTypeOf<T>::value, reference.object, offset));
+    Node* rtn =
+        LoadFromObject(MachineTypeOf<T>::value, reference.object, offset);
+    // FIXME(wenyuzhao): This CSA_ASSERT prevents some constant-folding optimizations
+    // CSA_ASSERT(this, IsNotMapWord(rtn));  // value must not be encoded map
+    return CAST(rtn);
   }
   template <class T,
             typename std::enable_if<
@@ -1211,8 +1222,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<T> LoadReference(Reference reference) {
     TNode<IntPtrT> offset =
         IntPtrSub(reference.offset, IntPtrConstant(kHeapObjectTag));
-    return UncheckedCast<T>(
-        LoadFromObject(MachineTypeOf<T>::value, reference.object, offset));
+    Node* rtn =
+        LoadFromObject(MachineTypeOf<T>::value, reference.object, offset);
+    //    CSA_ASSERT(this, IsNotMapWord(rtn));    // value must not be encoded
+    //    map
+    return UncheckedCast<T>(rtn);
   }
   template <class T, typename std::enable_if<
                          std::is_convertible<TNode<T>, TNode<Object>>::value ||
@@ -1354,6 +1368,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                            Label* if_cleared, Label* if_weak, Label* if_strong,
                            TVariable<Object>* extracted);
   // See MaybeObject for semantics of these functions.
+  TNode<BoolT> IsNotMapWord(SloppyTNode<Map> value);
+  TNode<BoolT> IsNotMapOffset(SloppyTNode<IntPtrT> value);
+  TNode<BoolT> ContainsPackedMap(TNode<HeapObject> object);
   TNode<BoolT> IsStrong(TNode<MaybeObject> value);
   TNode<HeapObject> GetHeapObjectIfStrong(TNode<MaybeObject> value,
                                           Label* if_not_strong);
@@ -1631,6 +1648,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   template <class T>
   void StoreObjectFieldNoWriteBarrier(TNode<HeapObject> object, int offset,
                                       TNode<T> value) {
+    // FIXME(wenyuzhao): This CSA_ASSERT prevents some constant-folding optimizations
+    // CSA_ASSERT(this, IsNotMapWord(SloppyTNode<Map>::UncheckedCast(object)));   // target must not be encoded
     if (CanBeTaggedPointer(MachineRepresentationOf<T>::value)) {
       OptimizedStoreFieldAssertNoWriteBarrier(MachineRepresentationOf<T>::value,
                                               object, offset, value);
@@ -1642,7 +1661,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   void UnsafeStoreObjectFieldNoWriteBarrier(TNode<HeapObject> object,
                                             int offset, TNode<Object> value);
-
   // Store the Map of an HeapObject.
   void StoreMap(TNode<HeapObject> object, TNode<Map> map);
   void StoreMapNoWriteBarrier(TNode<HeapObject> object,
@@ -3963,6 +3981,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // complaining about this method, don't make it public, add your root to
   // HEAP_(IM)MUTABLE_IMMOVABLE_OBJECT_LIST instead. If you *really* need
   // LoadRoot, use CodeAssembler::LoadRoot.
+  Node* LoadFiller(RootIndex root_index) {
+    return CodeAssembler::LoadFiller(root_index);
+  }
   TNode<Object> LoadRoot(RootIndex root_index) {
     return CodeAssembler::LoadRoot(root_index);
   }

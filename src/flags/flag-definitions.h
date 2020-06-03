@@ -1065,7 +1065,7 @@ DEFINE_BOOL(young_generation_large_objects, true,
 // assembler-ia32.cc / assembler-arm.cc / assembler-x64.cc
 DEFINE_BOOL(debug_code, DEBUG_BOOL,
             "generate extra code (assertions) for debugging")
-DEFINE_BOOL(code_comments, false,
+DEFINE_BOOL(code_comments, false,  // false,
             "emit comments in code disassembly; for more readable source "
             "positions you should add --no-concurrent_recompilation")
 DEFINE_BOOL(enable_sse3, true, "enable use of SSE3 instructions if available")

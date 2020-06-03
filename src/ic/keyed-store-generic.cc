@@ -182,11 +182,11 @@ void KeyedStoreGenericAssembler::BranchIfPrototypesMayHaveReadOnlyElements(
   TVARIABLE(Map, var_map);
   var_map = receiver_map;
   Label loop_body(this, &var_map);
-  Goto(&loop_body);
+  Goto(&loop_body); 
 
   BIND(&loop_body);
   {
-    TNode<Map> map = var_map.value();
+    TNode<Map> map = var_map.value(); 
     TNode<HeapObject> prototype = LoadMapPrototype(map);
     GotoIf(IsNull(prototype), only_fast_writable_elements);
     TNode<Map> prototype_map = LoadMap(prototype);
@@ -986,45 +986,59 @@ void KeyedStoreGenericAssembler::KeyedStoreGeneric(
 
   TryToName(key, &if_index, &var_index, &if_unique_name, &var_unique, &slow,
             &not_internalized);
+  
 
   BIND(&if_index);
   {
+  Comment("KSG A");
     Comment("integer index");
     EmitGenericElementStore(CAST(receiver), receiver_map, instance_type,
                             var_index.value(), value, context, &slow);
+// Comment("KSG A]");
   }
 
   BIND(&if_unique_name);
   {
+  Comment("KSG B");
     Comment("key is unique name");
     StoreICParameters p(context, receiver, var_unique.value(), value, {},
                         UndefinedConstant());
+   Comment("KSG B2");
     ExitPoint direct_exit(this);
+    Comment("KSG B3");
     EmitGenericPropertyStore(CAST(receiver), receiver_map, &p, &direct_exit,
                              &slow, language_mode);
   }
 
   BIND(&not_internalized);
   {
+  Comment("KSG C");
     if (FLAG_internalize_on_the_fly) {
+  Comment("KSG 2");
       TryInternalizeString(CAST(key), &if_index, &var_index, &if_unique_name,
                            &var_unique, &slow, &slow);
     } else {
+  Comment("KSG C3");
       Goto(&slow);
     }
+  //  Comment("KSG C]");
   }
 
   BIND(&slow);
   {
+  Comment("KSG D");
     if (IsKeyedStore()) {
+  Comment("KSG D2");
       Comment("KeyedStoreGeneric_slow");
       TailCallRuntime(Runtime::kSetKeyedProperty, context, receiver, key,
                       value);
     } else {
+  Comment("KSG D3");
       DCHECK(IsStoreInLiteral());
       TailCallRuntime(Runtime::kStoreDataPropertyInLiteral, context, receiver,
                       key, value);
     }
+ // Comment("KSG D]");
   }
 }
 

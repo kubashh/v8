@@ -92,6 +92,7 @@ class MemoryLowering final : public Reducer {
   Reduction ReduceLoadFromObject(Node* node);
   Reduction ReduceLoadElement(Node* node);
   Reduction ReduceLoadField(Node* node);
+  bool IsMapOffsetConstant(Node* node);
   Reduction ReduceStoreToObject(Node* node,
                                 AllocationState const* state = nullptr);
   Reduction ReduceStoreElement(Node* node,

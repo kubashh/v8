@@ -452,7 +452,8 @@ Handle<FeedbackVector> Factory::NewFeedbackVector(
   vector->set_closure_feedback_cell_array(*closure_feedback_cell_array);
 
   // TODO(leszeks): Initialize based on the feedback metadata.
-  MemsetTagged(ObjectSlot(vector->slots_start()), *undefined_value(), length);
+  MemsetTagged(ObjectSlot(vector->slots_start()), *undefined_value(),
+               length);  // FIXME check
   return vector;
 }
 
@@ -469,7 +470,7 @@ Handle<EmbedderDataArray> Factory::NewEmbedderDataArray(int length) {
     ObjectSlot start(array->slots_start());
     ObjectSlot end(array->slots_end());
     size_t slot_count = end - start;
-    MemsetTagged(start, *undefined_value(), slot_count);
+    MemsetTagged(start, *undefined_value(), slot_count);  // FIXME check
   }
   return array;
 }
@@ -1080,7 +1081,7 @@ Handle<Context> Factory::NewContext(Handle<Map> map, int size,
     ObjectSlot start = context->RawField(Context::kTodoHeaderSize);
     ObjectSlot end = context->RawField(size);
     size_t slot_count = end - start;
-    MemsetTagged(start, *undefined_value(), slot_count);
+    MemsetTagged(start, *undefined_value(), slot_count);  // FIXME check
   }
   return context;
 }
@@ -1629,7 +1630,8 @@ Handle<T> Factory::CopyArrayAndGrow(Handle<T> src, int grow_by,
   WriteBarrierMode mode = obj.GetWriteBarrierMode(no_gc);
   result->CopyElements(isolate(), 0, *src, 0, old_len, mode);
   MemsetTagged(ObjectSlot(result->data_start() + old_len),
-               ReadOnlyRoots(isolate()).undefined_value(), grow_by);
+               ReadOnlyRoots(isolate()).undefined_value(),
+               grow_by);  // FIXME check
   return result;
 }
 
@@ -1687,7 +1689,7 @@ Handle<WeakArrayList> Factory::CopyWeakArrayListAndGrow(
   WriteBarrierMode mode = result->GetWriteBarrierMode(no_gc);
   result->CopyElements(isolate(), 0, *src, 0, old_len, mode);
   MemsetTagged(ObjectSlot(result->data_start() + old_len),
-               ReadOnlyRoots(isolate()).undefined_value(),
+               ReadOnlyRoots(isolate()).undefined_value(),  // FIXME check
                new_capacity - old_len);
   return result;
 }
@@ -2297,13 +2299,9 @@ void Factory::InitializeJSObjectBody(Handle<JSObject> obj, Handle<Map> map,
   // In case of Array subclassing the |map| could already be transitioned
   // to different elements kind from the initial map on which we track slack.
   bool in_progress = map->IsInobjectSlackTrackingInProgress();
-  Object filler;
-  if (in_progress) {
-    filler = *one_pointer_filler_map();
-  } else {
-    filler = *undefined_value();
-  }
-  obj->InitializeBody(*map, start_offset, *undefined_value(), filler);
+  obj->InitializeBody(*map, start_offset, in_progress,
+                      ReadOnlyRoots(isolate()).one_pointer_filler_map_word(),
+                      *undefined_value());
   if (in_progress) {
     map->FindRootMap(isolate()).InobjectSlackTrackingStep(isolate());
   }

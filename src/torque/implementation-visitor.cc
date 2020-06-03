@@ -4457,6 +4457,7 @@ void GenerateClassFieldVerifier(const std::string& class_name,
                                 std::ostream& h_contents,
                                 std::ostream& cc_contents) {
   if (!f.generate_verify) return;
+  if (f.name_and_type.name == "map") return;
   const Type* field_type = f.name_and_type.type;
 
   // We only verify tagged types, not raw numbers or pointers. Structs

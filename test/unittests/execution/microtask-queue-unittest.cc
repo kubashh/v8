@@ -129,6 +129,7 @@ class RecordingVisitor : public RootVisitor {
   void VisitRootPointers(Root root, const char* description,
                          FullObjectSlot start, FullObjectSlot end) override {
     for (FullObjectSlot current = start; current != end; ++current) {
+      DCHECK(!Internals::IsMapWord(current.Relaxed_Load().ptr()));
       visited_.push_back(*current);
     }
   }

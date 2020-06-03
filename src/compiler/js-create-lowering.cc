@@ -1702,7 +1702,9 @@ Node* JSCreateLowering::AllocateFastLiteral(Node* effect, Node* control,
        index < boilerplate_length; ++index) {
     FieldAccess access =
         AccessBuilder::ForJSObjectInObjectProperty(boilerplate_map, index);
-    Node* value = jsgraph()->HeapConstant(factory()->one_pointer_filler_map());
+    Node* value = jsgraph()->Constant(ReadOnlyRoots(jsgraph()->isolate())
+                                          .one_pointer_filler_map_word()
+                                          .ptr());
     inobject_fields.push_back(std::make_pair(access, value));
   }
 

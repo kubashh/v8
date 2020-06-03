@@ -135,6 +135,9 @@ class V8_EXPORT_PRIVATE Deserializer : public SerializerDeserializer {
   inline TSlot Write(TSlot dest, MaybeObject value);
 
   template <typename TSlot>
+  inline TSlot WriteMapWord(TSlot dest, MaybeObject value);
+
+  template <typename TSlot>
   inline TSlot WriteAddress(TSlot dest, Address value);
 
   template <typename TSlot>

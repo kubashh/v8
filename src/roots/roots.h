@@ -533,6 +533,8 @@ class ReadOnlyRoots {
   V8_INLINE explicit ReadOnlyRoots(LocalIsolateWrapper wrapper);
   V8_INLINE explicit ReadOnlyRoots(LocalHeapWrapper wrapper);
 
+  inline MapWord one_pointer_filler_map_word();
+
 #define ROOT_ACCESSOR(Type, name, CamelName)     \
   V8_INLINE class Type name() const;             \
   V8_INLINE class Type unchecked_##name() const; \

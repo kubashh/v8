@@ -126,13 +126,24 @@ DISABLE_CFI_PERF void BodyDescriptorBase::IteratePointers(HeapObject obj,
                                                           int start_offset,
                                                           int end_offset,
                                                           ObjectVisitor* v) {
+  if (start_offset == HeapObject::kMapOffset) {
+    v->VisitMapPointer(obj);
+    start_offset += EmbedderDataSlot::kSlotDataAlignment;
+  }
   v->VisitPointers(obj, obj.RawField(start_offset), obj.RawField(end_offset));
 }
 
 template <typename ObjectVisitor>
 void BodyDescriptorBase::IteratePointer(HeapObject obj, int offset,
                                         ObjectVisitor* v) {
-  v->VisitPointer(obj, obj.RawField(offset));
+  // DCHECK(offset != HeapObject::kMapOffset);  // TODO(steveblackburn) do we need
+                                             // anything here?
+  // TODO(wenyuzhao): seems we do need something here
+  if (offset == HeapObject::kMapOffset) {
+    v->VisitMapPointer(obj);
+  } else {
+    v->VisitPointer(obj, obj.RawField(offset));
+  }
 }
 
 template <typename ObjectVisitor>
@@ -145,6 +156,8 @@ DISABLE_CFI_PERF void BodyDescriptorBase::IterateMaybeWeakPointers(
 template <typename ObjectVisitor>
 void BodyDescriptorBase::IterateMaybeWeakPointer(HeapObject obj, int offset,
                                                  ObjectVisitor* v) {
+  DCHECK(offset != HeapObject::kMapOffset);  // TODO(steveblackburn) do we need
+                                             // anything here?
   v->VisitPointer(obj, obj.RawMaybeWeakField(offset));
 }
 
@@ -1136,7 +1149,8 @@ ReturnType BodyDescriptorApply(InstanceType type, T1 p1, T2 p2, T3 p3, T4 p4) {
 
 template <typename ObjectVisitor>
 void HeapObject::IterateFast(ObjectVisitor* v) {
-  BodyDescriptorBase::IteratePointer(*this, kMapOffset, v);
+  v->VisitMapPointer(*this);
+  //  BodyDescriptorBase::IteratePointer(*this, kMapOffset, v);
   IterateBodyFast(v);
 }
 

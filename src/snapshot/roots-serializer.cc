@@ -48,6 +48,7 @@ void RootsSerializer::VisitRootPointers(Root root, const char* description,
     // - Only root list elements that have been fully serialized can be
     //   referenced using kRootArray bytecodes.
     for (FullObjectSlot current = start; current < end; ++current) {
+      DCHECK(!Internals::IsMapWord(current.Relaxed_Load().ptr()));
       SerializeRootObject(current);
       size_t root_index = current - roots_table.begin();
       root_has_been_serialized_.set(root_index);

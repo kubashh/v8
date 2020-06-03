@@ -90,20 +90,30 @@ V8_EXPORT_PRIVATE LoadTransformParameters const& LoadTransformParametersOf(
     Operator const*) V8_WARN_UNUSED_RESULT;
 
 // A Store needs a MachineType and a WriteBarrierKind in order to emit the
-// correct write barrier.
+// correct write barrier, and needs to state whether it is storing into the
+// header word, so that the value can be packed, if necessary.
 class StoreRepresentation final {
  public:
   StoreRepresentation(MachineRepresentation representation,
                       WriteBarrierKind write_barrier_kind)
       : representation_(representation),
-        write_barrier_kind_(write_barrier_kind) {}
+        write_barrier_kind_(write_barrier_kind) {
+    store_to_header_ = false;
+  }
+  StoreRepresentation(MachineRepresentation representation,
+                      WriteBarrierKind write_barrier_kind, bool store_to_header)
+      : representation_(representation),
+        write_barrier_kind_(write_barrier_kind),
+        store_to_header_(store_to_header) {}
 
   MachineRepresentation representation() const { return representation_; }
   WriteBarrierKind write_barrier_kind() const { return write_barrier_kind_; }
+  bool store_to_header() const { return store_to_header_; }
 
  private:
   MachineRepresentation representation_;
   WriteBarrierKind write_barrier_kind_;
+  bool store_to_header_;
 };
 
 V8_EXPORT_PRIVATE bool operator==(StoreRepresentation, StoreRepresentation);

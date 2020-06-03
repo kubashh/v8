@@ -59,6 +59,11 @@ bool RootsTable::IsRootHandle(Handle<T> handle, RootIndex* index) const {
   return IsRootHandleLocation(handle_location, index);
 }
 
+MapWord ReadOnlyRoots::one_pointer_filler_map_word() {
+  Object map = one_pointer_filler_map();
+  return MapWord(Internals::PackMapWord(map.ptr()));  // pack here
+}
+
 ReadOnlyRoots::ReadOnlyRoots(Heap* heap)
     : ReadOnlyRoots(Isolate::FromHeap(heap)) {}
 

@@ -401,6 +401,7 @@ bool Heap::InYoungGeneration(MaybeObject object) {
 // static
 bool Heap::InYoungGeneration(HeapObject heap_object) {
   if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) return false;
+  DCHECK(!Internals::IsMapWord(heap_object.ptr()));
   bool result = MemoryChunk::FromHeapObject(heap_object)->InYoungGeneration();
 #ifdef DEBUG
   // If in the young generation, then check we're either not in the middle of
@@ -493,8 +494,8 @@ AllocationMemento Heap::FindAllocationMemento(Map map, HeapObject object) {
   // below (memento_address == top) ensures that this is safe. Mark the word as
   // initialized to silence MemorySanitizer warnings.
   MSAN_MEMORY_IS_INITIALIZED(candidate_map_slot.address(), kTaggedSize);
-  if (!candidate_map_slot.contains_value(
-          ReadOnlyRoots(this).allocation_memento_map().ptr())) {
+  if (!candidate_map_slot.contains_map_value(
+          ReadOnlyRoots(this).allocation_memento_map().ptr())) {  // FIXME check
     return AllocationMemento();
   }
 

@@ -25,6 +25,8 @@ class InvokeScope {
   ~InvokeScope() {
     bool has_exception = isolate_->has_pending_exception();
     if (has_exception) {
+      DCHECK(!Internals::IsMapWord(
+          isolate_->thread_local_top()->pending_message_obj_.ptr()));
       isolate_->ReportPendingMessages();
     } else {
       isolate_->clear_pending_message();

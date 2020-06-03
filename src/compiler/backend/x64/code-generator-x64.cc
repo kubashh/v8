@@ -1091,6 +1091,27 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ bind(ool->exit());
       break;
     }
+    case kArchStoreMapToHeaderWithWriteBarrier: {
+      RecordWriteMode mode =
+          static_cast<RecordWriteMode>(MiscField::decode(instr->opcode()));
+      Register object = i.InputRegister(0);
+      size_t index = 0;
+      Operand operand = i.MemoryOperand(&index);
+      Register value = i.InputRegister(index);
+      Register scratch0 = i.TempRegister(0);
+      Register scratch1 = i.TempRegister(1);
+      // TODO(wenyuzhao): Remove double stores
+      __ StoreTaggedField(operand, value);
+      auto ool = new (zone())
+          OutOfLineRecordWrite(this, object, operand, value, scratch0, scratch1,
+                               mode, DetermineStubCallMode());
+      __ CheckPageFlag(object, scratch0,
+                       MemoryChunk::kPointersFromHereAreInterestingMask,
+                       not_zero, ool->entry());
+      __ bind(ool->exit());
+      __ StoreMapToHeader(operand, value);
+      break;
+    }
     case kArchWordPoisonOnSpeculation:
       DCHECK_EQ(i.OutputRegister(), i.InputRegister(0));
       __ andq(i.InputRegister(0), kSpeculationPoisonRegister);
@@ -2034,6 +2055,17 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     }
+    case kX64MapToHeader: {
+      CHECK(!instr->HasOutput());
+      size_t index = 0;
+      Operand operand = i.MemoryOperand(&index);
+      if (HasImmediateInput(instr, index)) {
+        __ StoreMapToHeader(operand, i.InputImmediate(index));
+      } else {
+        __ StoreMapToHeader(operand, i.InputRegister(index));
+      }
+      break;
+    }
     case kX64Movq:
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       if (instr->HasOutput()) {
@@ -2048,6 +2080,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         }
       }
       EmitWordLoadPoisoningIfNeeded(this, opcode, instr, i);
+      break;
+    case kX64MapFromHeader:
+      CHECK(instr->HasOutput());
+      EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
+      // __ movq(i.OutputRegister(), i.MemoryOperand());
+      __ LoadMapFromHeader(i.OutputRegister(), i.MemoryOperand());
+      EmitWordLoadPoisoningIfNeeded(this, opcode, instr, i);
+      // UNREACHABLE();
       break;
     case kX64Movss:
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());

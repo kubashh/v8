@@ -176,8 +176,14 @@ class ConcurrentMarkingVisitor final
                        ObjectSlot end) override {
       for (ObjectSlot p = start; p < end; ++p) {
         Object object = p.Relaxed_Load();
-        slot_snapshot_->add(p, object);
+        if (!Internals::IsMapWord(object.ptr())) slot_snapshot_->add(p, object);
       }
+    }
+
+    void VisitMapPointer(HeapObject object) override {
+      ObjectSlot p = object.map_slot();
+      Map map = Map::unchecked_cast(object.extract_map());
+      slot_snapshot_->add(p, map);
     }
 
     void VisitPointers(HeapObject host, MaybeObjectSlot start,
@@ -245,6 +251,7 @@ class ConcurrentMarkingVisitor final
       ObjectSlot slot = snapshot.slot(i);
       Object object = snapshot.value(i);
       DCHECK(!HasWeakHeapObjectTag(object));
+      DCHECK(!Internals::IsMapWord(object.ptr()));
       if (!object.IsHeapObject()) continue;
       HeapObject heap_object = HeapObject::cast(object);
       MarkObject(host, heap_object);
@@ -272,7 +279,7 @@ class ConcurrentMarkingVisitor final
   template <typename T, typename TBodyDescriptor>
   const SlotSnapshot& MakeSlotSnapshot(Map map, T object, int size) {
     SlotSnapshottingVisitor visitor(&slot_snapshot_);
-    visitor.VisitPointer(object, object.map_slot());
+    visitor.VisitMapPointer(object);
     TBodyDescriptor::IterateBody(map, object, size, &visitor);
     return slot_snapshot_;
   }

@@ -1867,6 +1867,7 @@ class StringTableVerifier : public ObjectVisitor {
     // Visit all HeapObject pointers in [start, end).
     for (ObjectSlot p = start; p < end; ++p) {
       DCHECK(!HasWeakHeapObjectTag(*p));
+      DCHECK(!Internals::IsMapWord(p.Relaxed_Load().ptr()));
       if ((*p).IsHeapObject()) {
         HeapObject object = HeapObject::cast(*p);
         // Check that the string is actually internalized.
@@ -2806,6 +2807,7 @@ void Heap::VisitExternalResources(v8::ExternalResourceVisitor* visitor) {
     void VisitRootPointers(Root root, const char* description,
                            FullObjectSlot start, FullObjectSlot end) override {
       for (FullObjectSlot p = start; p < end; ++p) {
+        DCHECK(!Internals::IsMapWord(p.Relaxed_Load().ptr()));
         DCHECK((*p).IsExternalString());
         visitor_->VisitExternalString(
             Utils::ToLocal(Handle<String>(String::cast(*p), isolate_)));
@@ -3000,7 +3002,7 @@ HeapObject CreateFillerObjectAtImpl(ReadOnlyRoots roots, Address addr, int size,
 
   // At this point, we may be deserializing the heap from a snapshot, and
   // none of the maps have been created yet and are nullptr.
-  DCHECK((filler.map_slot().contains_value(kNullAddress) &&
+  DCHECK((filler.map_slot().contains_value(Internals::PackMapWord(kNullAddress)) &&
           !Heap::FromWritableHeapObject(filler)->deserialization_complete()) ||
          filler.map().IsMap());
 
@@ -3113,6 +3115,7 @@ class LeftTrimmerVerifierRootVisitor : public RootVisitor {
   void VisitRootPointers(Root root, const char* description,
                          FullObjectSlot start, FullObjectSlot end) override {
     for (FullObjectSlot p = start; p < end; ++p) {
+      DCHECK(!Internals::IsMapWord(p.Relaxed_Load().ptr()));
       DCHECK_NE(*p, to_check_);
     }
   }
@@ -3227,7 +3230,8 @@ FixedArrayBase Heap::LeftTrimFixedArray(FixedArrayBase object,
   // Initialize header of the trimmed array. Since left trimming is only
   // performed on pages which are not concurrently swept creating a filler
   // object does not require synchronization.
-  RELAXED_WRITE_FIELD(object, bytes_to_trim, map);
+  RELAXED_WRITE_FIELD(object, bytes_to_trim,
+                      Object(Internals::PackMapWord(map.ptr())));
   RELAXED_WRITE_FIELD(object, bytes_to_trim + kTaggedSize,
                       Smi::FromInt(len - elements_to_trim));
 
@@ -3647,7 +3651,7 @@ class SlotCollectingVisitor final : public ObjectVisitor {
   void VisitPointers(HeapObject host, MaybeObjectSlot start,
                      MaybeObjectSlot end) final {
     for (MaybeObjectSlot p = start; p < end; ++p) {
-      slots_.push_back(p);
+      if (!Internals::IsMapWord(p.Relaxed_Load().ptr())) slots_.push_back(p);
     }
   }
 
@@ -3656,6 +3660,8 @@ class SlotCollectingVisitor final : public ObjectVisitor {
   void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) override {
     UNREACHABLE();
   }
+
+  void VisitMapPointer(HeapObject object) override {}  // do nothing
 
   int number_of_slots() { return static_cast<int>(slots_.size()); }
 
@@ -4199,7 +4205,8 @@ class VerifyReadOnlyPointersVisitor : public VerifyPointersVisitor {
 
     for (MaybeObjectSlot current = start; current < end; ++current) {
       HeapObject heap_object;
-      if ((*current)->GetHeapObject(&heap_object)) {
+      if (!Internals::IsMapWord(current.Relaxed_Load().ptr()) &&
+          (*current)->GetHeapObject(&heap_object)) {
         CHECK(ReadOnlyHeap::Contains(heap_object));
       }
     }
@@ -4266,7 +4273,8 @@ class SlotVerifyingVisitor : public ObjectVisitor {
                      ObjectSlot end) override {
 #ifdef DEBUG
     for (ObjectSlot slot = start; slot < end; ++slot) {
-      DCHECK(!HasWeakHeapObjectTag(*slot));
+      DCHECK(!Internals::IsMapWord(slot.Relaxed_Load().ptr()) ||
+             !HasWeakHeapObjectTag(*slot));
     }
 #endif  // DEBUG
     VisitPointers(host, MaybeObjectSlot(start), MaybeObjectSlot(end));
@@ -4327,16 +4335,20 @@ class OldToNewSlotVerifyingVisitor : public SlotVerifyingVisitor {
         ephemeron_remembered_set_(ephemeron_remembered_set) {}
 
   bool ShouldHaveBeenRecorded(HeapObject host, MaybeObject target) override {
-    DCHECK_IMPLIES(target->IsStrongOrWeak() && Heap::InYoungGeneration(target),
+    DCHECK_IMPLIES(target->IsStrongOrWeak() &&
+                       !Internals::IsMapWord(target.ptr()) &&
+                       Heap::InYoungGeneration(target),
                    Heap::InToPage(target));
-    return target->IsStrongOrWeak() && Heap::InYoungGeneration(target) &&
-           !Heap::InYoungGeneration(host);
+    return target->IsStrongOrWeak() && !Internals::IsMapWord(target.ptr()) &&
+           Heap::InYoungGeneration(target) && !Heap::InYoungGeneration(host);
   }
 
   void VisitEphemeron(HeapObject host, int index, ObjectSlot key,
                       ObjectSlot target) override {
+    // TODO(steveblackburn) do we need anything here?
     VisitPointer(host, target);
     if (FLAG_minor_mc) {
+      // TODO(steveblackburn) do we need anything here?
       VisitPointer(host, target);
     } else {
       // Keys are handled separately and should never appear in this set.
@@ -4516,7 +4528,9 @@ class FixStaleLeftTrimmedHandlesVisitor : public RootVisitor {
 
   void VisitRootPointers(Root root, const char* description,
                          FullObjectSlot start, FullObjectSlot end) override {
-    for (FullObjectSlot p = start; p < end; ++p) FixHandle(p);
+    for (FullObjectSlot p = start; p < end; ++p) {
+      FixHandle(p);
+    }
   }
 
  private:
@@ -4524,6 +4538,8 @@ class FixStaleLeftTrimmedHandlesVisitor : public RootVisitor {
     if (!(*p).IsHeapObject()) return;
     HeapObject current = HeapObject::cast(*p);
     const MapWord map_word = current.map_word();
+    DCHECK_IMPLIES(Internals::IsMapWord(p.Relaxed_Load().ptr()),
+                   current.IsFreeSpaceOrFiller());
     if (!map_word.IsForwardingAddress() && current.IsFreeSpaceOrFiller()) {
 #ifdef DEBUG
       // We need to find a FixedArrayBase map after walking the fillers.
@@ -5973,6 +5989,9 @@ class UnreachableObjectsFilter : public HeapObjectsFilter {
     explicit MarkingVisitor(UnreachableObjectsFilter* filter)
         : filter_(filter) {}
 
+    void VisitMapPointer(HeapObject object) override {
+      MarkHeapObject(Map::unchecked_cast(object.extract_map()));
+    }
     void VisitPointers(HeapObject host, ObjectSlot start,
                        ObjectSlot end) override {
       MarkPointers(MaybeObjectSlot(start), MaybeObjectSlot(end));
@@ -5999,6 +6018,7 @@ class UnreachableObjectsFilter : public HeapObjectsFilter {
     void TransitiveClosure() {
       while (!marking_stack_.empty()) {
         HeapObject obj = marking_stack_.back();
+        DCHECK(!Internals::IsMapWord(obj.ptr()));
         marking_stack_.pop_back();
         obj.Iterate(this);
       }
@@ -6015,7 +6035,8 @@ class UnreachableObjectsFilter : public HeapObjectsFilter {
       for (TSlot p = start; p < end; ++p) {
         typename TSlot::TObject object = *p;
         HeapObject heap_object;
-        if (object.GetHeapObject(&heap_object)) {
+        if (!Internals::IsMapWord(object.ptr()) &&
+            object.GetHeapObject(&heap_object)) {
           MarkHeapObject(heap_object);
         }
       }
@@ -6458,7 +6479,11 @@ void VerifyPointersVisitor::VerifyPointersImpl(TSlot start, TSlot end) {
   for (TSlot slot = start; slot < end; ++slot) {
     typename TSlot::TObject object = *slot;
     HeapObject heap_object;
-    if (object.GetHeapObject(&heap_object)) {
+    if (Internals::IsMapWord(object.ptr())) {
+      //   Fix this, seeing map poiner with bogus address
+      //      Object map (Internals::UnPackMapWord((*slot).ptr()));
+      //      CHECK(Map::unchecked_cast(map).IsMap());
+    } else if (object.GetHeapObject(&heap_object)) {
       VerifyHeapObjectImpl(heap_object);
     } else {
       CHECK(object.IsSmi() || object.IsCleared());

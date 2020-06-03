@@ -83,6 +83,7 @@ bool Serializer::MustBeDeferred(HeapObject object) { return false; }
 void Serializer::VisitRootPointers(Root root, const char* description,
                                    FullObjectSlot start, FullObjectSlot end) {
   for (FullObjectSlot current = start; current < end; ++current) {
+    DCHECK(!Internals::IsMapWord(current.Relaxed_Load().ptr()));
     SerializeRootObject(current);
   }
 }
@@ -329,7 +330,7 @@ void Serializer::ObjectSerializer::SerializePrologue(SnapshotSpace space,
                                     back_reference);
 
   // Serialize the map (first word of the object).
-  serializer_->SerializeObject(map);
+  serializer_->SerializeObject(map);  // TODO(steveblackburn)
 }
 
 uint32_t Serializer::ObjectSerializer::SerializeBackingStore(
@@ -660,6 +661,7 @@ void Serializer::ObjectSerializer::VisitPointers(HeapObject host,
                                                  MaybeObjectSlot end) {
   DisallowHeapAllocation no_gc;
 
+  DCHECK(host.ptr() != start.address());  // Maps need to be handled separately
   MaybeObjectSlot current = start;
   while (current < end) {
     while (current < end && (*current)->IsSmi()) {

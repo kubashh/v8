@@ -119,6 +119,31 @@ bool TaggedImpl<kRefType, StorageType>::GetHeapObjectIfStrong(
 }
 
 //
+// TaggedImpl::GetHeapObjectIfNotFiller(HeapObject* result) implementation.
+//
+
+template <HeapObjectReferenceType kRefType, typename StorageType>
+bool TaggedImpl<kRefType, StorageType>::GetHeapObjectIfNotFiller(
+    HeapObject* result) const {
+  CHECK(kIsFull);
+  if (!IsFiller()) {
+    return GetHeapObject(result);
+  }
+  return false;
+}
+
+template <HeapObjectReferenceType kRefType, typename StorageType>
+bool TaggedImpl<kRefType, StorageType>::GetHeapObjectIfNotFiller(
+    Isolate* isolate, HeapObject* result) const {
+  if (kIsFull) return GetHeapObjectIfNotFiller(result);
+  // Implementation for compressed pointers.
+  if (!IsFiller()) {
+    return GetHeapObject(isolate, result);
+  }
+  return false;
+}
+
+//
 // TaggedImpl::GetHeapObjectAssumeStrong() implementation.
 //
 
