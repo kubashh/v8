@@ -52,6 +52,24 @@
       "revId": "a7a38cbe0a150d19471f962453b49a2fbd9fb961",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "204c1a51_ec895160",
+        "filename": "src/objects/js-regexp.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-06-03T18:38:29Z",
+      "side": 1,
+      "message": "Defining kInvalidFlag as a static constexpr int means we need some ugly casts in places where we expect a value of type JSRegExp::Flag. I like the idea of just getting rid of kInvalidFlag entirely; that seems like a nice simplification, and makes clear our expectation that the invalid flag is never actually set in an instance of JSRegExp. The only thing we lose is a clever optimization in JSRegExp::FlagsFromString where we could check for duplicate and invalid flags simultaneously, but I doubt that one extra branch in that function would cause any noticeable slowdown.",
+      "parentUuid": "fd7afd76_d63bff99",
+      "revId": "a7a38cbe0a150d19471f962453b49a2fbd9fb961",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
