@@ -3342,6 +3342,8 @@ void ImplementationVisitor::GenerateBitFields(
         }
         header << "  }; \\\n";
         header << "  using Flags = base::Flags<Flag>; \\\n";
+        header << "  static constexpr int kFlagCount = "
+               << type->fields().size() << "; \\\n";
       }
 
       header << "\n";
