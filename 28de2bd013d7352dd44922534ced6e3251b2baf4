@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "947d0251_297f496d",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-03T15:19:03Z",
+      "side": 1,
+      "message": "I think what confuses me here is in what regard are these points safe?\n\nWe have too many terms called safepoints. For example, here it\u0027s locations where you might start a GC, but elsewhere it means you are guaranteed not to have a stack.\nTo me this seems confusing.",
+      "parentUuid": "15e95bd0_66c89ca6",
+      "range": {
+        "startLine": 56,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 15
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48975266_09720cd6",
         "filename": "src/heap/cppgc/stats-collector.h",
         "patchSetId": 8
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "allocated_bytes_since_end_of_marking_ can be negative as the comment states. After marking that value is 0. At this point an explicit free can put it \u003c0.\n\nThe other values are themselves always positive but always used as deltas which is why we keep int64_t arithmetic.\n\nI added a comment that should describe this better.",
       "parentUuid": "48975266_09720cd6",
+      "range": {
+        "startLine": 88,
+        "startChar": 70,
+        "endLine": 88,
+        "endChar": 78
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a5bac93_5ff93085",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-03T15:19:03Z",
+      "side": 1,
+      "message": "Ack. I thought the comment was regarding explicitly_freed_bytes_since_safepoint_ because it explicitly mentioned explicitly freeing an object.",
+      "parentUuid": "7bc6649a_df93bf88",
       "range": {
         "startLine": 88,
         "startChar": 70,
