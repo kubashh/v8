@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "525f5faa_cbda87d1",
+        "filename": "src/heap/cppgc/heap-stats-collector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-06-03T11:52:40Z",
+      "side": 1,
+      "message": "The concern was about the comment.",
+      "parentUuid": "ec917bd3_4649938c",
+      "range": {
+        "startLine": 70,
+        "startChar": 49,
+        "endLine": 71,
+        "endChar": 74
+      },
+      "revId": "e590f907c1b626386face78c1ed29728c5e7381a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98c8154b_80dfc8b2",
         "filename": "src/heap/cppgc/heap-stats-collector.h",
         "patchSetId": 6
