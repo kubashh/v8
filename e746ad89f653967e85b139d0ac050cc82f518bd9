@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "506a7cc1_77582920",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-03T13:50:43Z",
+      "side": 1,
+      "message": "Ack, makes sense. Fixed.",
+      "parentUuid": "c481d658_60b363a5",
+      "revId": "e746ad89f653967e85b139d0ac050cc82f518bd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdb315aa_3d68a015",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "e746ad89f653967e85b139d0ac050cc82f518bd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11b296ec_5eedbbb4",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-03T13:50:43Z",
+      "side": 1,
+      "message": "Oh, sure. Thanks for pointing this out. I think this was the first version of the implementation, and then I realized that I can use emplace for the others :)",
+      "parentUuid": "cdb315aa_3d68a015",
+      "range": {
+        "startLine": 778,
+        "startChar": 43,
+        "endLine": 780,
+        "endChar": 72
+      },
+      "revId": "e746ad89f653967e85b139d0ac050cc82f518bd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
