@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be57ac12_ef0e34e0",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-03T14:32:21Z",
+      "side": 1,
+      "message": "marking_visitor_-\u003emarked_bytes()",
+      "range": {
+        "startLine": 122,
+        "startChar": 52,
+        "endLine": 122,
+        "endChar": 53
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c075805c_4e67f1c4",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-03T14:32:21Z",
+      "side": 1,
+      "message": "nit: Is StatsCollector\u0026\u0026 allowed?\n(I don\u0027t think it should be needed)",
+      "range": {
+        "startLine": 48,
+        "startChar": 23,
+        "endLine": 48,
+        "endChar": 38
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e2fcff5_93462b8f",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-03T14:32:21Z",
+      "side": 1,
+      "message": "I think the term SafePoint is very vague here (I\u0027m not even sure why OutOfLineAllocation is considered a safe point). Can we give this method a more descriptive name?",
+      "range": {
+        "startLine": 56,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 15
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48975266_09720cd6",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-03T14:32:21Z",
+      "side": 1,
+      "message": "nit: I don\u0027t think these values can be negative. If you explicitly free something, you increment the explicitly_freed_bytes_since_safepoint_ counter. I don\u0027t see where we will decrement the counters.",
+      "range": {
+        "startLine": 88,
+        "startChar": 70,
+        "endLine": 88,
+        "endChar": 78
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45b989c8_03d0c0f4",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-03T14:32:21Z",
+      "side": 1,
+      "message": "Should we have an explicit NotifySweepingStarted call (Instead of it being implicit via NotifyMarkingCompleted)?\nI realize this makes StatsCollector\u0027s GarbageCollectionState more complicated but maybe it makes sense for the standalone library?",
+      "range": {
+        "startLine": 512,
+        "startChar": 22,
+        "endLine": 512,
+        "endChar": 45
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
