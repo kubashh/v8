@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbbf9132_3b457c18",
+        "filename": "src/heap/remembered-set.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-06-03T12:53:31Z",
+      "side": 1,
+      "message": "Please also include \"src/heap/paged-spaces.h\" to fix the compile error:\n[16/230] CXX obj/v8_base_without_compiler/test-include-..-src-heap-remembered-set.o\nFAILED: obj/v8_base_without_compiler/test-include-..-src-heap-remembered-set.o\n/b/s/w/ir/cache/goma/client/gomacc g++ -MMD -MF obj/v8_base_without_compiler/test-include-..-src-hea...(too long)\nIn file included from ../../check-header-includes/test-include-..-src-heap-remembered-set.cc:1:0:\n../../src/heap/remembered-set.h: In static member function \u0027static void v8::internal::RememberedSet\u003ctype\u003e::IterateMemoryChunks(v8::internal::Heap*, Callback)\u0027:\n../../src/heap/remembered-set.h:152:5: error: \u0027OldGenerationMemoryChunkIterator\u0027 was not declared in this scope\nOldGenerationMemoryChunkIterator it(heap);",
+      "revId": "ea904880abf2af13070d56e28cc356732c47d000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
