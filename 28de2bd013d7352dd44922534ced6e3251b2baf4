@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0f5e1c6f_b107b818",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T15:11:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be57ac12_ef0e34e0",
+      "range": {
+        "startLine": 122,
+        "startChar": 52,
+        "endLine": 122,
+        "endChar": 53
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c075805c_4e67f1c4",
         "filename": "src/heap/cppgc/stats-collector.h",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3204464d_40dd144b",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T15:11:30Z",
+      "side": 1,
+      "message": "No, it\u0027s not allowed. The compiler won\u0027t generate a default move ctor because the copy ctor is deleted. (We can rely on this.)",
+      "parentUuid": "c075805c_4e67f1c4",
+      "range": {
+        "startLine": 48,
+        "startChar": 23,
+        "endLine": 48,
+        "endChar": 38
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "15e95bd0_66c89ca6",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T15:11:30Z",
+      "side": 1,
+      "message": "Safepoints are locations where we can execute GC. I think the meaning matches exactly.\n\nOOL allocate is a safepoint as our free lists, sweeper, LABs, and so on are in consistent state.",
+      "parentUuid": "2e2fcff5_93462b8f",
+      "range": {
+        "startLine": 56,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 15
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48975266_09720cd6",
         "filename": "src/heap/cppgc/stats-collector.h",
         "patchSetId": 8
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "7bc6649a_df93bf88",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T15:11:30Z",
+      "side": 1,
+      "message": "allocated_bytes_since_end_of_marking_ can be negative as the comment states. After marking that value is 0. At this point an explicit free can put it \u003c0.\n\nThe other values are themselves always positive but always used as deltas which is why we keep int64_t arithmetic.\n\nI added a comment that should describe this better.",
+      "parentUuid": "48975266_09720cd6",
+      "range": {
+        "startLine": 88,
+        "startChar": 70,
+        "endLine": 88,
+        "endChar": 78
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45b989c8_03d0c0f4",
         "filename": "src/heap/cppgc/sweeper.cc",
         "patchSetId": 8
@@ -105,6 +201,30 @@
       "writtenOn": "2020-06-03T14:32:21Z",
       "side": 1,
       "message": "Should we have an explicit NotifySweepingStarted call (Instead of it being implicit via NotifyMarkingCompleted)?\nI realize this makes StatsCollector\u0027s GarbageCollectionState more complicated but maybe it makes sense for the standalone library?",
+      "range": {
+        "startLine": 512,
+        "startChar": 22,
+        "endLine": 512,
+        "endChar": 45
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50554b65_4e17928e",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T15:11:30Z",
+      "side": 1,
+      "message": "I am up for adding if we need it. Right now it does not add any value and complicates the state as we need a name for \"after marking but before sweeping\".",
+      "parentUuid": "45b989c8_03d0c0f4",
       "range": {
         "startLine": 512,
         "startChar": 22,
