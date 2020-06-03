@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "122368a2_6634614d",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-03T15:34:26Z",
+      "side": 1,
+      "message": "Safe point is a location where we may safely do GC :) I think there\u0027s multiple such safe points which all have different characteristics.\n\nWe should probably be more explicit when talking about \"safepoints without stack\" because there we make use of the property that there\u0027s no stack.\n\nI renamed this one to \"NotifySafePointForConservativeCollection\" to make clear what we can do there.",
+      "parentUuid": "947d0251_297f496d",
+      "range": {
+        "startLine": 56,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 15
+      },
+      "revId": "28de2bd013d7352dd44922534ced6e3251b2baf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48975266_09720cd6",
         "filename": "src/heap/cppgc/stats-collector.h",
         "patchSetId": 8
