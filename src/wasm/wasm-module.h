@@ -15,6 +15,7 @@
 #include "src/wasm/struct-types.h"
 #include "src/wasm/wasm-constants.h"
 #include "src/wasm/wasm-opcodes.h"
+#include "src/zone/zone-containers.h"
 
 namespace v8 {
 
@@ -330,6 +331,31 @@ struct V8_EXPORT_PRIVATE WasmModule {
   bool has_array(uint32_t index) const {
     return index < types.size() && type_kinds[index] == kWasmArrayTypeCode;
   }
+  bool is_cached_subtype(uint32_t subtype, uint32_t supertype) const {
+    return subtyping_cache->count(std::make_pair(subtype, supertype)) == 1;
+  }
+  void cache_subtype(uint32_t subtype, uint32_t supertype) const {
+    subtyping_cache->emplace(subtype, supertype);
+  }
+  void uncache_subtype(uint32_t subtype, uint32_t supertype) const {
+    subtyping_cache->erase(std::make_pair(subtype, supertype));
+  }
+  V8_INLINE bool is_cached_equivalent_type(uint32_t subtype,
+                                           uint32_t supertype) const {
+    return is_cached_subtype(subtype, supertype) &&
+           is_cached_subtype(supertype, subtype);
+  }
+  V8_INLINE void cache_type_equivalence(uint32_t subtype,
+                                        uint32_t supertype) const {
+    cache_subtype(subtype, supertype);
+    cache_subtype(supertype, subtype);
+  }
+  V8_INLINE void uncache_type_equivalence(uint32_t subtype,
+                                          uint32_t supertype) const {
+    uncache_subtype(subtype, supertype);
+    uncache_subtype(supertype, subtype);
+  }
+
   std::vector<WasmFunction> functions;
   std::vector<WasmDataSegment> data_segments;
   std::vector<WasmTable> tables;
@@ -349,6 +375,11 @@ struct V8_EXPORT_PRIVATE WasmModule {
   std::unique_ptr<AsmJsOffsetInformation> asm_js_offset_information;
 
   explicit WasmModule(std::unique_ptr<Zone> signature_zone = nullptr);
+
+ private:
+  // Cache for discovered suptyping pairs.
+  std::unique_ptr<ZoneUnorderedSet<std::pair<uint32_t, uint32_t>>>
+      subtyping_cache;
 
   DISALLOW_COPY_AND_ASSIGN(WasmModule);
 };
