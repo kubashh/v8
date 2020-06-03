@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00aea7ed_da4d8caf",
+        "filename": "src/compiler/js-type-hint-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-03T11:40:20Z",
+      "side": 1,
+      "message": "Georg, interested in your thoughts here and in typed lowering. With this change we will use the feedback slot for a unary op as if it were a binary op slot. I *think* this is okay since we treat unary-as-binary in the heap broker and elsewhere anyways.",
+      "revId": "985818645ff15726076d417591e98f5dd72ba531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
