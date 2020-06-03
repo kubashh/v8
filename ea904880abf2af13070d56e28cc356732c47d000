@@ -16,6 +16,24 @@
       "revId": "ea904880abf2af13070d56e28cc356732c47d000",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "605c5bc7_0c14f955",
+        "filename": "src/heap/remembered-set.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2020-06-03T14:24:00Z",
+      "side": 1,
+      "message": "Thank you and it\u0027s fixed.",
+      "parentUuid": "cbbf9132_3b457c18",
+      "revId": "ea904880abf2af13070d56e28cc356732c47d000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
