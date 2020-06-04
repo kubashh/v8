@@ -131,7 +131,6 @@ bool IsArraySubtype(uint32_t subtype_index, uint32_t supertype_index,
 }  // namespace
 
 // TODO(7748): Extend this with function subtyping.
-//             Keep up to date with funcref vs. anyref subtyping.
 bool IsSubtypeOfRef(ValueType subtype, ValueType supertype,
                     const WasmModule* module) {
   DCHECK(subtype != supertype && subtype.IsReferenceType() &&
@@ -163,7 +162,6 @@ bool IsSubtypeOfRef(ValueType subtype, ValueType supertype,
 }
 
 // TODO(7748): Extend this with function subtyping.
-//             Keep up to date with funcref vs. anyref subtyping.
 ValueType CommonSubType(ValueType a, ValueType b, const WasmModule* module) {
   if (a == b) return a;
   // The only sub type of any value type is {bot}.
