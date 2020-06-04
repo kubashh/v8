@@ -99,6 +99,7 @@ class LocalHeap {
 
   friend class Heap;
   friend class GlobalSafepoint;
+  friend class ParkedMutexGuard;
   friend class ParkedScope;
   friend class ConcurrentAllocator;
 };
@@ -113,6 +114,21 @@ class ParkedScope {
 
  private:
   LocalHeap* local_heap_;
+};
+
+class ParkedMutexGuard {
+  base::Mutex* guard_;
+  LocalHeap* local_heap_;
+
+ public:
+  explicit ParkedMutexGuard(LocalHeap* local_heap, base::Mutex* guard)
+      : guard_(guard), local_heap_(local_heap) {
+    local_heap_->Park();
+    guard_->Lock();
+    local_heap_->Unpark();
+  }
+
+  ~ParkedMutexGuard() { guard_->Unlock(); }
 };
 
 }  // namespace internal
