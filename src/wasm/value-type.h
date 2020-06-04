@@ -25,7 +25,7 @@ class Simd128;
 // - All reference types, except funcref, are subtypes of eqref.
 // - optref(t1) :< optref(t2) iff t1 :< t2.
 // - ref(t1) :< optref(t2) iff t1 :< t2.
-// = ref(t1) :< ref(t2) iff t1 :< t2.
+// - ref(t1) :< ref(t2) iff t1 :< t2.
 //
 // Format: kind, log2Size, code, machineType, shortName, typeName
 //
@@ -42,7 +42,7 @@ class Simd128;
   V(F32, 2, F32, Float32, 'f', "f32")                                        \
   V(F64, 3, F64, Float64, 'd', "f64")                                        \
   V(S128, 4, S128, Simd128, 's', "s128")                                     \
-  V(I8, 1, I8, Int8, 'b', "i8")                                              \
+  V(I8, 0, I8, Int8, 'b', "i8")                                              \
   V(I16, 1, I16, Int16, 'h', "i16")                                          \
   V(AnyRef, kSystemPointerSizeLog2, AnyRef, TaggedPointer, 'r', "anyref")    \
   V(FuncRef, kSystemPointerSizeLog2, FuncRef, TaggedPointer, 'a', "funcref") \
