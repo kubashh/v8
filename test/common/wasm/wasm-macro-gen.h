@@ -262,8 +262,15 @@ inline WasmOpcode LoadStoreOpcodeOf(MachineType type, bool store) {
 #define WASM_I32V_4(val) \
   static_cast<byte>(CheckI32v((val), 4), kExprI32Const), U32V_4(val)
 #define WASM_I32V_5(val) \
-  static_cast<byte>(CheckI32v((val), 5), kExprI32Const), U32V_5(val)
+  static_cast<byte>(CheckI32v((val), 5), kExprI32Const), I32V_5(val)
 
+#define I32V_5(val)                                       \
+  static_cast<byte>(((val)&MASK_7) | 0x80),               \
+      static_cast<byte>((((val) >> 7) & MASK_7) | 0x80),  \
+      static_cast<byte>((((val) >> 14) & MASK_7) | 0x80), \
+      static_cast<byte>((((val) >> 21) & MASK_7) | 0x80), \
+      static_cast<byte>(                                  \
+          (((val) >> 28) & MASK_7 | ((val) >> 31 == 0 ? 0 : 0b01110000)))
 //------------------------------------------------------------------------------
 // Int64 Const operations
 //------------------------------------------------------------------------------
@@ -429,6 +436,12 @@ inline WasmOpcode LoadStoreOpcodeOf(MachineType type, bool store) {
 #define WASM_STRUCT_GET(typeidx, fieldidx, struct_obj)                \
   struct_obj, WASM_GC_OP(kExprStructGet), static_cast<byte>(typeidx), \
       static_cast<byte>(fieldidx)
+#define WASM_STRUCT_GET_S(typeidx, fieldidx, struct_obj)               \
+  struct_obj, WASM_GC_OP(kExprStructGetS), static_cast<byte>(typeidx), \
+      static_cast<byte>(fieldidx)
+#define WASM_STRUCT_GET_U(typeidx, fieldidx, struct_obj)               \
+  struct_obj, WASM_GC_OP(kExprStructGetU), static_cast<byte>(typeidx), \
+      static_cast<byte>(fieldidx)
 #define WASM_STRUCT_SET(typeidx, fieldidx, struct_obj, value)                \
   struct_obj, value, WASM_GC_OP(kExprStructSet), static_cast<byte>(typeidx), \
       static_cast<byte>(fieldidx)
@@ -444,6 +457,10 @@ inline WasmOpcode LoadStoreOpcodeOf(MachineType type, bool store) {
   default_value, length, WASM_GC_OP(kExprArrayNew), static_cast<byte>(index)
 #define WASM_ARRAY_GET(typeidx, array, index) \
   array, index, WASM_GC_OP(kExprArrayGet), static_cast<byte>(typeidx)
+#define WASM_ARRAY_GET_U(typeidx, array, index) \
+  array, index, WASM_GC_OP(kExprArrayGetU), static_cast<byte>(typeidx)
+#define WASM_ARRAY_GET_S(typeidx, array, index) \
+  array, index, WASM_GC_OP(kExprArrayGetS), static_cast<byte>(typeidx)
 #define WASM_ARRAY_SET(typeidx, array, index, value) \
   array, index, value, WASM_GC_OP(kExprArraySet), static_cast<byte>(typeidx)
 #define WASM_ARRAY_LEN(typeidx, array) \
