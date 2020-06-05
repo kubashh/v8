@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e82f1e7c_8c4c719b",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-05T08:14:02Z",
+      "side": 1,
+      "message": "One macro seems sufficient here.",
+      "revId": "985818645ff15726076d417591e98f5dd72ba531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00aea7ed_da4d8caf",
         "filename": "src/compiler/js-type-hint-lowering.cc",
         "patchSetId": 2
@@ -13,6 +30,64 @@
       "writtenOn": "2020-06-03T11:40:20Z",
       "side": 1,
       "message": "Georg, interested in your thoughts here and in typed lowering. With this change we will use the feedback slot for a unary op as if it were a binary op slot. I *think* this is okay since we treat unary-as-binary in the heap broker and elsewhere anyways.",
+      "revId": "985818645ff15726076d417591e98f5dd72ba531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0df454b_bd153593",
+        "filename": "src/compiler/js-type-hint-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-05T08:14:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "00aea7ed_da4d8caf",
+      "revId": "985818645ff15726076d417591e98f5dd72ba531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "14c85879_61693d2f",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-05T08:14:02Z",
+      "side": 1,
+      "message": "Nit: NewFeedbackVectorForTesting",
+      "range": {
+        "startLine": 331,
+        "startChar": 23,
+        "endLine": 331,
+        "endChar": 58
+      },
+      "revId": "985818645ff15726076d417591e98f5dd72ba531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c592d46_43f98ef5",
+        "filename": "test/unittests/compiler/typer-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-05T08:14:02Z",
+      "side": 1,
+      "message": "Nit: ... without feedback\nOtherwise it\u0027s confusing to have \"JS binary ops.\" and \"JS BINOPS\".\n\nOr just remove the macro.",
       "revId": "985818645ff15726076d417591e98f5dd72ba531",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
