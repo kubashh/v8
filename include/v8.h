@@ -4513,10 +4513,9 @@ class V8_EXPORT Function : public Object {
   Local<Value> GetBoundFunction() const;
 
   /**
-   * Returns the data argument specified when creating the function callback,
-     otherwise it returns v8::Undefined.
+   * Returns the data argument specified when creating the function callback.
    */
-  Local<Value> GetData() const;
+  MaybeLocal<Value> GetData() const;
 
   ScriptOrigin GetScriptOrigin() const;
   V8_INLINE static Function* Cast(Value* obj);
