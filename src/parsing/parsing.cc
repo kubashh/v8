@@ -14,6 +14,7 @@
 #include "src/parsing/parser.h"
 #include "src/parsing/rewriter.h"
 #include "src/parsing/scanner-character-streams.h"
+#include "src/tracing/v8-provider.h"
 #include "src/zone/zone-list-inl.h"  // crbug.com/v8/8816
 
 namespace v8 {
@@ -43,6 +44,8 @@ bool ParseProgram(ParseInfo* info, Handle<Script> script,
   DCHECK(info->flags().is_toplevel());
   DCHECK_NULL(info->literal());
 
+  tracing::v8Provider.ParsingStart(isolate);
+
   VMState<PARSER> state(isolate);
 
   // Create a character stream for the parser.
@@ -58,7 +61,11 @@ bool ParseProgram(ParseInfo* info, Handle<Script> script,
   DCHECK(parser.parsing_on_main_thread_);
   parser.ParseProgram(isolate, script, info, maybe_outer_scope_info);
   MaybeReportErrorsAndStatistics(info, script, isolate, &parser, mode);
-  return info->literal() != nullptr;
+
+  auto result = info->literal();
+  tracing::v8Provider.ParsingStop(isolate);
+
+  return result != nullptr;
 }
 
 bool ParseProgram(ParseInfo* info, Handle<Script> script, Isolate* isolate,
