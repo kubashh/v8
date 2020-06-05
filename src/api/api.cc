@@ -5022,6 +5022,23 @@ Local<v8::Value> Function::GetBoundFunction() const {
   return v8::Undefined(reinterpret_cast<v8::Isolate*>(self->GetIsolate()));
 }
 
+v8::Local<v8::Value> Function::GetData() const {
+  i::Handle<i::JSReceiver> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  if(self->IsJSFunction()) {
+    i::Handle<i::JSFunction> jsf = i::Handle<i::JSFunction>::cast(self);
+    i::SharedFunctionInfo sfi = jsf->shared();
+    if(sfi.IsApiFunction()) {
+      i::FunctionTemplateInfo fti = sfi.get_api_func_data();
+      i::CallHandlerInfo chi = i::CallHandlerInfo::cast(fti.call_code());
+      i::Object o = chi.data();
+      i::Handle<i::Object> ho = i::Handle<i::Object>(o, isolate);
+      return ToApiHandle<v8::Value>(ho);
+    }
+  }
+  return v8::Undefined(reinterpret_cast<v8::Isolate*>(isolate));
+}
+
 int Name::GetIdentityHash() {
   auto self = Utils::OpenHandle(this);
   return static_cast<int>(self->Hash());

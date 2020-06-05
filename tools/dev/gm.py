@@ -120,6 +120,10 @@ v8_enable_backtrace = true
 v8_enable_disassembler = true
 v8_enable_object_print = true
 v8_enable_verify_heap = true
+v8_monolithic = true
+v8_use_external_startup_data = false
+v8_enable_pointer_compression = false
+use_custom_libcxx = false
 """.replace("{GOMA}", USE_GOMA).replace("{GOMA_DIR}", str(GOMADIR))
 
 DEBUG_ARGS_TEMPLATE = """\
