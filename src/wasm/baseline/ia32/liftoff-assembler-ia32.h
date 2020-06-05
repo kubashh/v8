@@ -490,7 +490,75 @@ void LiftoffAssembler::AtomicStore(Register dst_addr, Register offset_reg,
 void LiftoffAssembler::AtomicAdd(Register dst_addr, Register offset_reg,
                                  uint32_t offset_imm, LiftoffRegister value,
                                  LiftoffRegister result, StoreType type) {
-  bailout(kAtomics, "AtomicAdd");
+  if (type.value() == StoreType::kI64Store) {
+    bailout(kAtomics, "AtomicAdd");
+    return;
+  }
+
+  DCHECK(!cache_state()->is_used(result));
+  bool is_64_bit_op = (type.value() == StoreType::kI64Store8 ||
+                       type.value() == StoreType::kI64Store16 ||
+                       type.value() == StoreType::kI64Store32);
+
+  Register value_reg = is_64_bit_op ? value.low_gp() : value.gp();
+  Register result_reg = is_64_bit_op ? result.low_gp() : result.gp();
+
+  if (cache_state()->is_used(value)) {
+    // We cannot overwrite {value}, but the {value} register is changed in the
+    // code we generate. Therefore we copy {value} to {result} and use the
+    // {result} register in the code below.
+    mov(result_reg, value_reg);
+    value_reg = result_reg;
+  }
+
+  bool is_byte_store = type.size() == 1;
+  LiftoffRegList candidates =
+      is_byte_store ? liftoff::kByteRegs : kGpCacheRegList;
+  LiftoffRegList pinned =
+      LiftoffRegList::ForRegs(dst_addr, value_reg, offset_reg);
+
+  // Ensure that {value_reg} is a valid and otherwise unused register.
+  if (!candidates.has(value_reg) ||
+      cache_state_.is_used(LiftoffRegister(value_reg))) {
+    // If there are no unused candidate registers, but {value_reg} is a
+    // candidate, then spill other uses of {value_reg}. Otherwise spill any
+    // candidate register and use that.
+    if (!cache_state_.has_unused_register(candidates, pinned) &&
+        candidates.has(value_reg)) {
+      SpillRegister(LiftoffRegister(value_reg));
+    } else {
+      Register safe_value_reg = GetUnusedRegister(candidates, pinned).gp();
+      mov(safe_value_reg, value_reg);
+      value_reg = safe_value_reg;
+    }
+  }
+
+  Operand dst_op = Operand(dst_addr, offset_reg, times_1, offset_imm);
+  lock();
+  switch (type.value()) {
+    case StoreType::kI64Store8:
+    case StoreType::kI32Store8:
+      xadd_b(dst_op, value_reg);
+      movzx_b(result_reg, value_reg);
+      break;
+    case StoreType::kI64Store16:
+    case StoreType::kI32Store16:
+      xadd_w(dst_op, value_reg);
+      movzx_w(result_reg, value_reg);
+      break;
+    case StoreType::kI64Store32:
+    case StoreType::kI32Store:
+      xadd(dst_op, value_reg);
+      if (value_reg != result_reg) {
+        mov(result_reg, value_reg);
+      }
+      break;
+    default:
+      UNREACHABLE();
+  }
+  if (is_64_bit_op) {
+    xor_(result.high_gp(), result.high_gp());
+  }
 }
 
 void LiftoffAssembler::AtomicSub(Register dst_addr, Register offset_reg,
