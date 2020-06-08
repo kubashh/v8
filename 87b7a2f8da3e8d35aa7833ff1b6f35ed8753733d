@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "83170c98_f40fada8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-06-08T09:29:02Z",
+      "side": 1,
+      "message": "Rewrote the message to be more clear.",
+      "parentUuid": "f9cb09a3_d8acbcee",
+      "revId": "87b7a2f8da3e8d35aa7833ff1b6f35ed8753733d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3328e393_138589a7",
         "filename": "src/compiler/js-type-hint-lowering.h",
         "patchSetId": 1
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "6df6880c_a76da0dc",
+        "filename": "src/compiler/js-type-hint-lowering.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-06-08T09:29:02Z",
+      "side": 1,
+      "message": "Yes, I think so.",
+      "parentUuid": "3328e393_138589a7",
+      "revId": "87b7a2f8da3e8d35aa7833ff1b6f35ed8753733d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67b97f80_2cb6915a",
         "filename": "test/mjsunit/regress/regress-1091461.js",
         "patchSetId": 1
@@ -65,6 +101,24 @@
       "writtenOn": "2020-06-08T08:53:42Z",
       "side": 1,
       "message": "Please avoid big loops in tests.",
+      "revId": "87b7a2f8da3e8d35aa7833ff1b6f35ed8753733d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b084e5c_316445c2",
+        "filename": "test/mjsunit/regress/regress-1091461.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-06-08T09:29:02Z",
+      "side": 1,
+      "message": "My repro required OSR compilation. Is there a better way to trigger it?",
+      "parentUuid": "67b97f80_2cb6915a",
       "revId": "87b7a2f8da3e8d35aa7833ff1b6f35ed8753733d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
