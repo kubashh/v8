@@ -1826,8 +1826,11 @@ void WasmTableObject::WasmTableObjectPrint(std::ostream& os) {  // NOLINT
 
 void WasmGlobalObject::WasmGlobalObjectPrint(std::ostream& os) {  // NOLINT
   PrintHeader(os, "WasmGlobalObject");
-  os << "\n - untagged_buffer: " << Brief(untagged_buffer());
-  os << "\n - tagged_buffer: " << Brief(tagged_buffer());
+  if (type().IsReferenceType()) {
+    os << "\n - tagged_buffer: " << Brief(tagged_buffer());
+  } else {
+    os << "\n - untagged_buffer: " << Brief(untagged_buffer());
+  }
   os << "\n - offset: " << offset();
   os << "\n - flags: " << flags();
   os << "\n - type: " << type().kind();
