@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f20a192_79304435",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-06-08T11:44:11Z",
+      "side": 1,
+      "message": "What about the clusterfuzz issues with the --fuzzing flag?",
+      "range": {
+        "startLine": 12,
+        "startChar": 7,
+        "endLine": 12,
+        "endChar": 47
+      },
+      "revId": "a5339e472cc061d4557eb8acae54dbc11a34d1b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
