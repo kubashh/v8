@@ -122,6 +122,24 @@
       "revId": "87b7a2f8da3e8d35aa7833ff1b6f35ed8753733d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89584246_ad04146e",
+        "filename": "test/mjsunit/regress/regress-1091461.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-08T09:36:51Z",
+      "side": 1,
+      "message": "The bug has nothing to do with OSR, right? Please rewrite the test so that it doesn\u0027t depend on OSR.",
+      "parentUuid": "8b084e5c_316445c2",
+      "revId": "87b7a2f8da3e8d35aa7833ff1b6f35ed8753733d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
