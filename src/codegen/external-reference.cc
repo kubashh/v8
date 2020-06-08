@@ -121,6 +121,13 @@ ExternalReference ExternalReference::handle_scope_implementer_address(
   return ExternalReference(isolate->handle_scope_implementer_address());
 }
 
+#ifdef V8_HEAP_SANDBOX
+ExternalReference ExternalReference::external_pointer_table_address(
+    Isolate* isolate) {
+  return ExternalReference(isolate->external_pointer_table_address());
+}
+#endif
+
 ExternalReference ExternalReference::interpreter_dispatch_table_address(
     Isolate* isolate) {
   return ExternalReference(isolate->interpreter()->dispatch_table_address());
@@ -588,6 +595,10 @@ void* libc_memset(void* dest, int value, size_t n) {
 }
 
 FUNCTION_REFERENCE(libc_memset_function, libc_memset)
+
+void* libc_realloc(void* ptr, size_t n) { return realloc(ptr, n); }
+
+FUNCTION_REFERENCE(libc_realloc_function, libc_realloc)
 
 ExternalReference ExternalReference::printf_function() {
   return ExternalReference(Redirect(FUNCTION_ADDR(std::printf)));

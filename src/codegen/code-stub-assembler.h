@@ -1097,10 +1097,22 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       TNode<ExternalPointerT> encoded_pointer) {
     STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
     TNode<RawPtrT> value = ReinterpretCast<RawPtrT>(encoded_pointer);
+#ifdef V8_HEAP_SANDBOX
     if (V8_HEAP_SANDBOX_BOOL) {
-      value = UncheckedCast<RawPtrT>(
-          WordXor(value, UintPtrConstant(kExternalPointerSalt)));
+      TNode<ExternalReference> external_pointer_table_address =
+          ExternalConstant(
+              ExternalReference::external_pointer_table_address(isolate()));
+      TNode<RawPtrT> table = UncheckedCast<RawPtrT>(
+          Load(MachineType::Pointer(), external_pointer_table_address));
+
+      TNode<Word32T> encoded_value = ReinterpretCast<Word32T>(value);
+      TNode<Word32T> index = Word32Sar(encoded_value, Uint32Constant(1));
+      TNode<Word32T> offset = Int32Mul(index, Uint32Constant(8));
+
+      value =
+          UncheckedCast<RawPtrT>(Load(MachineType::Pointer(), table, offset));
     }
+#endif
     return value;
   }
 
@@ -1109,10 +1121,69 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<ExternalPointerT> EncodeExternalPointer(TNode<RawPtrT> pointer) {
     STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
     TNode<RawPtrT> encoded_pointer = pointer;
+#ifdef V8_HEAP_SANDBOX
     if (V8_HEAP_SANDBOX_BOOL) {
-      encoded_pointer = UncheckedCast<RawPtrT>(
-          WordXor(encoded_pointer, UintPtrConstant(kExternalPointerSalt)));
+      TVARIABLE(RawPtrT, table);
+
+      TNode<ExternalReference> external_pointer_table_address =
+          ExternalConstant(
+              ExternalReference::external_pointer_table_address(isolate()));
+      table = UncheckedCast<RawPtrT>(
+          Load(MachineType::Pointer(), external_pointer_table_address));
+      TNode<UintPtrT> table_length = UncheckedCast<UintPtrT>(
+          Load(MachineType::UintPtr(), external_pointer_table_address,
+               UintPtrConstant(8)));
+      TNode<UintPtrT> table_capacity = UncheckedCast<UintPtrT>(
+          Load(MachineType::UintPtr(), external_pointer_table_address,
+               UintPtrConstant(16)));
+
+      TNode<UintPtrT> index = table_length;
+
+      TNode<UintPtrT> new_table_length =
+          UintPtrAdd(table_length, UintPtrConstant(1));
+      StoreNoWriteBarrier(MachineRepresentation::kWord64,
+                          external_pointer_table_address, UintPtrConstant(8),
+                          new_table_length);
+
+      Label grow_table(this), insert(this);
+
+      TNode<BoolT> compare = UintPtrLessThan(index, table_capacity);
+      Branch(compare, &insert, &grow_table);
+
+      BIND(&grow_table);
+      {
+        TNode<UintPtrT> new_capacity = UintPtrAdd(
+            new_table_length, WordShr(new_table_length, UintPtrConstant(1)));
+        StoreNoWriteBarrier(MachineRepresentation::kWord64,
+                            external_pointer_table_address, UintPtrConstant(16),
+                            new_capacity);
+
+        new_capacity = WordShl(new_capacity, Int64Constant(3));
+        TNode<ExternalReference> realloc =
+            ExternalConstant(ExternalReference::libc_realloc_function());
+        TNode<RawPtrT> new_table = UncheckedCast<RawPtrT>(
+            CallCFunction(realloc, MachineType::Pointer(),
+                          std::make_pair(MachineType::Pointer(), table.value()),
+                          std::make_pair(MachineType::Uint64(), new_capacity)));
+
+        StoreNoWriteBarrier(MachineRepresentation::kWord64,
+                            external_pointer_table_address, new_table);
+        table = new_table;
+
+        Goto(&insert);
+      }
+
+      BIND(&insert);
+
+      TNode<UintPtrT> offset = WordShl(index, UintPtrConstant(3));
+      StoreNoWriteBarrier(MachineRepresentation::kWord64, table.value(), offset,
+                          pointer);
+
+      TNode<Word32T> encoded_value = ReinterpretCast<Word32T>(index);
+      encoded_value = Word32Shl(encoded_value, Uint32Constant(1));
+      encoded_pointer = ReinterpretCast<RawPtrT>(encoded_value);
     }
+#endif
     return ReinterpretCast<ExternalPointerT>(encoded_pointer);
   }
 

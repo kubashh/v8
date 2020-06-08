@@ -76,6 +76,8 @@ class EmbedderDataSlot
 
   V8_INLINE RawData load_raw(Isolate* isolate,
                              const DisallowHeapAllocation& no_gc) const;
+  V8_INLINE RawData load_raw_handle(Isolate* isolate,
+                                    const DisallowHeapAllocation& no_gc) const;
   V8_INLINE void store_raw(Isolate* isolate, RawData data,
                            const DisallowHeapAllocation& no_gc);
 

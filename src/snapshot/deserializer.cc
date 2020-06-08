@@ -298,7 +298,7 @@ HeapObject Deserializer::PostProcessNewObject(HeapObject obj,
     JSDataView data_view = JSDataView::cast(obj);
     JSArrayBuffer buffer = JSArrayBuffer::cast(data_view.buffer());
     void* backing_store = nullptr;
-    if (buffer.backing_store() != nullptr) {
+    if (buffer.GetBackingStoreRefForDeserialization() != 0) {
       // The backing store of the JSArrayBuffer has not been correctly restored
       // yet, as that may trigger GC. The backing_store field currently contains
       // a numbered reference to an already deserialized backing store.
@@ -314,7 +314,7 @@ HeapObject Deserializer::PostProcessNewObject(HeapObject obj,
     if (typed_array.is_on_heap()) {
       typed_array.SetOnHeapDataPtr(isolate(),
                                    HeapObject::cast(typed_array.base_pointer()),
-                                   typed_array.external_pointer());
+                                   typed_array.external_pointer_handle());
     } else {
       // Serializer writes backing store ref as a DataPtr() value.
       uint32_t store_index =
@@ -329,8 +329,10 @@ HeapObject Deserializer::PostProcessNewObject(HeapObject obj,
   } else if (obj.IsJSArrayBuffer()) {
     JSArrayBuffer buffer = JSArrayBuffer::cast(obj);
     // Postpone allocation of backing store to avoid triggering the GC.
-    if (buffer.backing_store() != nullptr) {
+    if (buffer.GetBackingStoreRefForDeserialization() != 0) {
       new_off_heap_array_buffers_.push_back(handle(buffer, local_isolate()));
+    } else {
+      buffer.set_backing_store(isolate(), nullptr);
     }
   } else if (obj.IsBytecodeArray()) {
     // TODO(mythria): Remove these once we store the default values for these

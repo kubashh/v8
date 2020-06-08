@@ -15,15 +15,25 @@ namespace internal {
 V8_INLINE ExternalPointer_t EncodeExternalPointer(Isolate* isolate,
                                                   Address external_pointer) {
   STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
-  if (!V8_HEAP_SANDBOX_BOOL) return external_pointer;
-  return external_pointer ^ kExternalPointerSalt;
+#ifdef V8_HEAP_SANDBOX
+  if (V8_HEAP_SANDBOX_BOOL) {
+    ExternalPointer_t idx = isolate->external_pointer_table().allocate();
+    isolate->external_pointer_table().set(idx, external_pointer);
+    return idx;
+  }
+#endif
+  return external_pointer;
 }
 
 V8_INLINE Address DecodeExternalPointer(const Isolate* isolate,
                                         ExternalPointer_t encoded_pointer) {
   STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
-  if (!V8_HEAP_SANDBOX_BOOL) return encoded_pointer;
-  return encoded_pointer ^ kExternalPointerSalt;
+#ifdef V8_HEAP_SANDBOX
+  if (V8_HEAP_SANDBOX_BOOL) {
+    return isolate->external_pointer_table().get(encoded_pointer);
+  }
+#endif
+  return encoded_pointer;
 }
 
 }  // namespace internal

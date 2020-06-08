@@ -80,7 +80,15 @@ bool EmbedderDataSlot::ToAlignedPointer(const Isolate* isolate,
   // in order to avoid undefined behavior in C++ code.
   Address raw_value = base::ReadUnalignedValue<Address>(address());
   // We currently have to treat zero as nullptr in embedder slots.
-  if (raw_value) raw_value = DecodeExternalPointer(isolate, raw_value);
+  // Also, as this function is called in cases where the slot doesn't actually
+  // store an external pointer, we have to check that the raw_value is plausibly
+  // an external pointer before passing it to DecodeExternalPointer.
+  // TODO(saelo) this is just a workaround for now, we'd need to check for more
+  // things to determine whether it could be an external pointer.
+  // embedder-tracing.cc is one place where this method is called without
+  // knowing whether this slot contains an external pointer
+  if (raw_value && HAS_SMI_TAG(raw_value))
+    raw_value = DecodeExternalPointer(isolate, raw_value);
 #else
   Address raw_value = *location();
 #endif
@@ -113,6 +121,23 @@ EmbedderDataSlot::RawData EmbedderDataSlot::load_raw(
   // We currently have to treat zero as nullptr in embedder slots.
   if (value) return DecodeExternalPointer(isolate, value);
   return value;
+#else
+  return *location();
+#endif
+}
+
+EmbedderDataSlot::RawData EmbedderDataSlot::load_raw_handle(
+    Isolate* isolate, const DisallowHeapAllocation& no_gc) const {
+  // We don't care about atomicity of access here because embedder slots
+  // are accessed this way only by serializer from the main thread when
+  // GC is not active (concurrent marker may still look at the tagged part
+  // of the embedder slot but read-only access is ok).
+#ifdef V8_COMPRESS_POINTERS
+  // TODO(ishell, v8:8875): When pointer compression is enabled 8-byte size
+  // fields (external pointers, doubles and BigInt data) are only kTaggedSize
+  // aligned so we have to use unaligned pointer friendly way of accessing them
+  // in order to avoid undefined behavior in C++ code.
+  return base::ReadUnalignedValue<Address>(address());
 #else
   return *location();
 #endif

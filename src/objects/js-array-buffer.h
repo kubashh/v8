@@ -324,6 +324,8 @@ class JSTypedArray
 
   // [external_pointer]: TODO(v8:4153)
   DECL_GETTER(external_pointer, Address)
+  DECL_GETTER(external_pointer_handle, Address)
+
   inline void set_external_pointer(Isolate* isolate, Address value);
 
   TQ_OBJECT_CONSTRUCTORS(JSTypedArray)

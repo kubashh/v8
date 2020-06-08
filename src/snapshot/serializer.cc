@@ -395,6 +395,8 @@ void Serializer::ObjectSerializer::SerializeJSArrayBuffer() {
     // Ensure deterministic output by setting extension to null during
     // serialization.
     buffer.set_extension(nullptr);
+  } else {
+    buffer.SetBackingStoreRefForSerialization(0);
   }
 
   SerializeObject();

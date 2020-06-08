@@ -201,6 +201,12 @@ DEF_GETTER(JSTypedArray, external_pointer, Address) {
   return DecodeExternalPointer(isolate, encoded_value);
 }
 
+DEF_GETTER(JSTypedArray, external_pointer_handle, Address) {
+  ExternalPointer_t encoded_value =
+      ReadField<ExternalPointer_t>(kExternalPointerOffset);
+  return encoded_value;
+}
+
 void JSTypedArray::set_external_pointer(Isolate* isolate, Address value) {
   ExternalPointer_t encoded_value = EncodeExternalPointer(isolate, value);
   WriteField<ExternalPointer_t>(kExternalPointerOffset, encoded_value);
@@ -235,9 +241,10 @@ void JSTypedArray::RemoveExternalPointerCompensationForSerialization(
   // compensation by replacing external_pointer and base_pointer fields
   // with one data_pointer field which can point to either external data
   // backing store or into on-heap backing store.
-  set_external_pointer(
-      isolate,
-      external_pointer() - ExternalPointerCompensationForOnHeapArray(isolate));
+  Address value =
+      external_pointer() - ExternalPointerCompensationForOnHeapArray(isolate);
+  ExternalPointer_t encoded_value = value;
+  WriteField<ExternalPointer_t>(kExternalPointerOffset, encoded_value);
 }
 
 void* JSTypedArray::DataPtr() {
