@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11381b80_5e14a60e",
+        "filename": "test/wasm-js/testcfg.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-06-08T20:07:32Z",
+      "side": 1,
+      "message": "I think this should be `os.path.join(self.suite.root, \"third_party\", \"testharness.js\")` to avoid trouble under Windows.",
+      "revId": "f85d65732fe82f04b4c80d40693c60d003de1d19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffe02d04_ec304cf1",
+        "filename": "test/wasm-js/third_party/testharness.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-06-08T20:07:32Z",
+      "side": 1,
+      "message": "This is not very promise-y as (1) this exception cannot be caught downstream of the promise chain and (2) the stack trace might get messed up. If an exception within a promise is not caught, the embedding environment usually fails with an error (similarly to an uncaught exception in C++). If d8 doesn\u0027t do that, that\u0027s maybe sth that should be added.",
+      "revId": "f85d65732fe82f04b4c80d40693c60d003de1d19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa83fb97_1c1452ca",
+        "filename": "test/wasm-js/third_party/testharness.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 2020,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-06-08T20:07:32Z",
+      "side": 1,
+      "message": "It\u0027s not clear from the commit message why this code was removed.",
+      "revId": "f85d65732fe82f04b4c80d40693c60d003de1d19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
