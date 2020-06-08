@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4710c7b6_847ee316",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-08T16:45:46Z",
+      "side": 1,
+      "message": "Maya: Out of curiosity, how are you invoking the function from the runtime? I guess you invoke something of void(EmbedderType*) as void(void*), right?\n\nIIRC, doing so from C++ would make UBSan complain but I guess you are fine because you invoke from JITed code?",
+      "range": {
+        "startLine": 384,
+        "startChar": 44,
+        "endLine": 384,
+        "endChar": 48
+      },
+      "revId": "faa401c1831defb3946fe755f2c3aa2908c1d62f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
