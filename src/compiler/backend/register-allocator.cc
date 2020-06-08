@@ -391,8 +391,8 @@ LiveRange::LiveRange(int relative_id, MachineRepresentation rep,
       next_(nullptr),
       current_interval_(nullptr),
       last_processed_use_(nullptr),
-      current_hint_position_(nullptr),
-      splitting_pointer_(nullptr) {
+      splitting_pointer_(nullptr),
+      current_hint_position_(nullptr) {
   DCHECK(AllocatedOperand::IsSupportedRepresentation(rep));
   bits_ = AssignedRegisterField::encode(kUnassignedRegister) |
           RepresentationField::encode(rep) |
@@ -474,6 +474,7 @@ RegisterKind LiveRange::kind() const {
 }
 
 UsePosition* LiveRange::FirstHintPosition(int* register_index) const {
+  if (!TopLevel()->current_hint_position()) return nullptr;
   for (UsePosition* pos = first_pos_; pos != nullptr; pos = pos->next()) {
     if (pos->HintRegister(register_index)) return pos;
   }

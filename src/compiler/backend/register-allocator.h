@@ -701,10 +701,11 @@ class V8_EXPORT_PRIVATE LiveRange : public NON_EXPORTED_BASE(ZoneObject) {
   mutable UseInterval* current_interval_;
   // This is used as a cache, it doesn't affect correctness.
   mutable UsePosition* last_processed_use_;
-  // This is used as a cache, it's invalid outside of BuildLiveRanges.
-  mutable UsePosition* current_hint_position_;
   // Cache the last position splintering stopped at.
   mutable UsePosition* splitting_pointer_;
+  // This is used as a cache in BuildLiveRanges, and to quickly check for the
+  // absence of hints during register allocation.
+  UsePosition* current_hint_position_;
   LiveRangeBundle* bundle_ = nullptr;
   // Next interval start, relative to the current linear scan position.
   LifetimePosition next_start_;
