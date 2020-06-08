@@ -452,6 +452,62 @@ using DebugObjectCache = std::vector<Handle<HeapObject>>;
 #define THREAD_LOCAL_TOP_ADDRESS(type, name) \
   type* name##_address() { return &thread_local_top()->name##_; }
 
+class V8_EXPORT_PRIVATE ExternalPointerTable {
+ public:
+  ExternalPointerTable()
+      : buffer_(reinterpret_cast<Address*>(malloc(1024 * 8))),
+        length_(0),
+        capacity_(1024),
+        freelist_head_(0) {}
+
+  ExternalPointer_t get(size_t index) const {
+    DCHECK(HAS_SMI_TAG(index));
+    index >>= 1;
+    DCHECK(index < length_);
+    if (index < length_) {
+      return buffer_[index];
+    }
+    return 0;
+  }
+
+  void set(size_t index, ExternalPointer_t value) {
+    DCHECK(HAS_SMI_TAG(index));
+    index >>= 1;
+    DCHECK(index < length_);
+    if (index < length_) {
+      buffer_[index] = value;
+    }
+  }
+
+  size_t allocate() {
+    size_t idx = length_++;
+    if (idx >= capacity_) {
+      size_t new_capacity = length_ + length_ / 2;
+      buffer_ = reinterpret_cast<Address*>(realloc(buffer_, new_capacity * 8));
+      CHECK(buffer_);
+      memset(&buffer_[capacity_], 0, (new_capacity - capacity_) * 8);
+      capacity_ = new_capacity;
+    }
+    return idx << 1;
+  }
+
+  void free(ExternalPointer_t index) {
+    // TODO(saelo) implement simple free list here, i.e. set
+    // buffer_[index] to freelist_head_ and set freelist_head
+    // to index
+  }
+
+  size_t size() const { return length_; }
+
+ private:
+  friend class Isolate;
+
+  Address* buffer_;
+  size_t length_;
+  size_t capacity_;
+  size_t freelist_head_;
+};
+
 // HiddenFactory exists so Isolate can privately inherit from it without making
 // Factory's members available to Isolate directly.
 class V8_EXPORT_PRIVATE HiddenFactory : private Factory {};
@@ -1521,6 +1577,20 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   bool RequiresCodeRange() const;
 
+#ifdef V8_HEAP_SANDBOX
+  ExternalPointerTable& external_pointer_table() {
+    return external_pointer_table_;
+  }
+
+  const ExternalPointerTable& external_pointer_table() const {
+    return external_pointer_table_;
+  }
+
+  Address external_pointer_table_address() {
+    return reinterpret_cast<Address>(&external_pointer_table_.buffer_);
+  }
+#endif
+
  private:
   explicit Isolate(std::unique_ptr<IsolateAllocator> isolate_allocator);
   ~Isolate();
@@ -1860,6 +1930,11 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // predefined set of data as crash keys to be used in postmortem debugging
   // in case of a crash.
   AddCrashKeyCallback add_crash_key_callback_ = nullptr;
+
+  // Handle table.
+#ifdef V8_HEAP_SANDBOX
+  ExternalPointerTable external_pointer_table_;
+#endif
 
   // Delete new/delete operators to ensure that Isolate::New() and
   // Isolate::Delete() are used for Isolate creation and deletion.

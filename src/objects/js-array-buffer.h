@@ -30,6 +30,8 @@ class JSArrayBuffer
   static constexpr size_t kMaxByteLength = kMaxSafeInteger;
 #endif
 
+  inline void allocate_external_pointer_entries(Isolate* isolate);
+
   // [byte_length]: length in bytes
   DECL_PRIMITIVE_ACCESSORS(byte_length, size_t)
 
@@ -258,6 +260,8 @@ class JSTypedArray
 
   V8_EXPORT_PRIVATE Handle<JSArrayBuffer> GetBuffer();
 
+  inline void allocate_external_pointer_entries(Isolate* isolate);
+
   // Use with care: returns raw pointer into heap.
   inline void* DataPtr();
 
@@ -324,6 +328,8 @@ class JSTypedArray
 
   // [external_pointer]: TODO(v8:4153)
   DECL_GETTER(external_pointer, Address)
+  DECL_GETTER(external_pointer_raw, Address)
+
   inline void set_external_pointer(Isolate* isolate, Address value);
 
   TQ_OBJECT_CONSTRUCTORS(JSTypedArray)
@@ -335,6 +341,8 @@ class JSDataView
   // [data_pointer]: pointer to the actual data.
   DECL_GETTER(data_pointer, void*)
   inline void set_data_pointer(Isolate* isolate, void* value);
+
+  inline void allocate_external_pointer_entries(Isolate* isolate);
 
   // Dispatched behavior.
   DECL_PRINTER(JSDataView)

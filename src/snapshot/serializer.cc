@@ -388,6 +388,7 @@ void Serializer::ObjectSerializer::SerializeJSArrayBuffer() {
   ArrayBufferExtension* extension = buffer.extension();
 
   // The embedder-allocated backing store only exists for the off-heap case.
+  uint32_t table_index = buffer.GetBackingStoreRefForDeserialization();
   if (backing_store != nullptr) {
     uint32_t ref = SerializeBackingStore(backing_store, byte_length);
     buffer.SetBackingStoreRefForSerialization(ref);
@@ -395,11 +396,13 @@ void Serializer::ObjectSerializer::SerializeJSArrayBuffer() {
     // Ensure deterministic output by setting extension to null during
     // serialization.
     buffer.set_extension(nullptr);
+  } else {
+    buffer.SetBackingStoreRefForSerialization(0);
   }
 
   SerializeObject();
 
-  buffer.set_backing_store(serializer_->isolate(), backing_store);
+  buffer.SetBackingStoreRefForSerialization(table_index);
   buffer.set_extension(extension);
 }
 
@@ -413,9 +416,10 @@ void Serializer::ObjectSerializer::SerializeExternalString() {
   if (serializer_->external_reference_encoder_.TryEncode(resource).To(
           &reference)) {
     DCHECK(reference.is_from_api());
+    uint32_t table_index = string.resource_as_uint32();
     string.set_uint32_as_resource(serializer_->isolate(), reference.index());
     SerializeObject();
-    string.set_address_as_resource(serializer_->isolate(), resource);
+    string.set_uint32_as_resource(serializer_->isolate(), table_index);
   } else {
     SerializeExternalStringAsSequentialString();
   }

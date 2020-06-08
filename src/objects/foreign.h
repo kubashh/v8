@@ -42,6 +42,8 @@ class Foreign : public TorqueGeneratedForeign<Foreign, HeapObject> {
   friend class SerializerDeserializer;
   friend class StartupSerializer;
 
+  inline void allocate_external_pointer_entries(Isolate* isolate);
+
   inline void set_foreign_address(Isolate* isolate, Address value);
 
   TQ_OBJECT_CONSTRUCTORS(Foreign)

@@ -138,6 +138,22 @@ bool Object::IsNoSharedNameSentinel() const {
   return *this == SharedFunctionInfo::kNoSharedNameSentinel;
 }
 
+ExternalPointer_t Object::ReadExternalPointerField(size_t offset) const {
+  DCHECK(IsHeapObject());
+  Isolate* isolate = GetIsolateFromWritableObject(HeapObject::cast(*this));
+  size_t index = ReadField<size_t>(offset);
+  ExternalPointer_t ptr = isolate->external_pointer_table().get(index);
+  return ptr;
+}
+
+void Object::WriteExternalPointerField(size_t offset,
+                                       ExternalPointer_t value) const {
+  DCHECK(IsHeapObject());
+  Isolate* isolate = GetIsolateFromWritableObject(HeapObject::cast(*this));
+  size_t index = ReadField<size_t>(offset);
+  isolate->external_pointer_table().set(index, value);
+}
+
 bool HeapObject::IsNullOrUndefined(Isolate* isolate) const {
   return IsNullOrUndefined(ReadOnlyRoots(isolate));
 }

@@ -307,6 +307,7 @@ Reduction MemoryLowering::ReduceLoadElement(Node* node) {
 }
 
 Node* MemoryLowering::DecodeExternalPointer(Node* node) {
+#ifdef V8_HEAP_SANDBOX
   DCHECK(V8_HEAP_SANDBOX_BOOL);
   DCHECK(node->opcode() == IrOpcode::kLoad ||
          node->opcode() == IrOpcode::kPoisonedLoad);
@@ -322,11 +323,19 @@ Node* MemoryLowering::DecodeExternalPointer(Node* node) {
   // Uncomment this to generate a breakpoint for debugging purposes.
   // __ DebugBreak();
 
-  // Decode loaded enternal pointer.
+  // Decode loaded external pointer.
   STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
-  Node* salt = __ IntPtrConstant(kExternalPointerSalt);
-  Node* decoded_ptr = __ WordXor(node_copy, salt);
+  Node* external_pointer_table_address = __ ExternalConstant(
+      ExternalReference::external_pointer_table_address(isolate()));
+  Node* table =
+      __ Load(MachineType::Pointer(), external_pointer_table_address, 0);
+  Node* index = __ Word32Sar(node_copy, __ Int32Constant(1));
+  Node* offset = __ Int32Mul(index, __ Int32Constant(8));
+  Node* decoded_ptr = __ Load(MachineType::Pointer(), table, offset);
   return decoded_ptr;
+#else
+  return node;
+#endif
 }
 
 Reduction MemoryLowering::ReduceLoadField(Node* node) {

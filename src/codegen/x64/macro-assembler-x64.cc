@@ -345,9 +345,18 @@ void TurboAssembler::SaveRegisters(RegList registers) {
 void TurboAssembler::LoadExternalPointerField(Register destination,
                                               Operand field_operand) {
   movq(destination, field_operand);
+#ifdef V8_HEAP_SANDBOX
   if (V8_HEAP_SANDBOX_BOOL) {
-    xorq(destination, Immediate(kExternalPointerSalt));
+    // TODO(saelo) can destination ever be rax?
+    pushq(rax);
+    LoadAddress(rax,
+                ExternalReference::external_pointer_table_address(isolate()));
+    movq(rax, Operand(rax, 0));
+    sarq(destination, Immediate(1));
+    movq(destination, Operand(rax, destination, times_8, 0));
+    popq(rax);
   }
+#endif
 }
 
 void TurboAssembler::RestoreRegisters(RegList registers) {
