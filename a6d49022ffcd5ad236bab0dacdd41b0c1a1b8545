@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64bc2df7_b4351654",
+        "filename": "include/cppgc/trace-trait.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-08T08:46:27Z",
+      "side": 1,
+      "message": "nit: Should we define this in terms of object start?",
+      "range": {
+        "startLine": 40,
+        "startChar": 59,
+        "endLine": 40,
+        "endChar": 69
+      },
+      "revId": "a6d49022ffcd5ad236bab0dacdd41b0c1a1b8545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c143fba_1c78388e",
+        "filename": "include/cppgc/trace-trait.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-08T08:46:27Z",
+      "side": 1,
+      "message": "processes",
+      "range": {
+        "startLine": 51,
+        "startChar": 46,
+        "endLine": 51,
+        "endChar": 53
+      },
+      "revId": "a6d49022ffcd5ad236bab0dacdd41b0c1a1b8545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c903af2_b59eb258",
+        "filename": "include/cppgc/trace-trait.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-08T08:46:27Z",
+      "side": 1,
+      "message": "duplicate",
+      "range": {
+        "startLine": 53,
+        "startChar": 54,
+        "endLine": 53,
+        "endChar": 65
+      },
+      "revId": "a6d49022ffcd5ad236bab0dacdd41b0c1a1b8545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
