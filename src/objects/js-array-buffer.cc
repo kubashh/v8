@@ -44,6 +44,7 @@ void JSArrayBuffer::Setup(SharedFlag shared,
     SetEmbedderField(i, Smi::zero());
   }
   set_extension(nullptr);
+  allocate_external_pointer_entries(GetIsolate());
   if (!backing_store) {
     set_backing_store(GetIsolate(), nullptr);
     set_byte_length(0);

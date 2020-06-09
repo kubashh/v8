@@ -43,13 +43,16 @@ class EmbedderDataSlot
 #endif
 
 #ifdef V8_COMPRESS_POINTERS
-  // The raw payload is located in the other tagged part of the full pointer.
+  // The other part of the full pointer contains the index into the external
+  // pointer table, encoded as SMI.
   static constexpr int kRawPayloadOffset = kTaggedSize - kTaggedPayloadOffset;
 #endif
   static constexpr int kRequiredPtrAlignment = kSmiTagSize;
 
   // Opaque type used for storing raw embedder data.
   using RawData = Address;
+
+  V8_INLINE void allocate_external_pointer_entry(Isolate* isolate);
 
   V8_INLINE Object load_tagged() const;
   V8_INLINE void store_smi(Smi value);
@@ -76,13 +79,15 @@ class EmbedderDataSlot
 
   V8_INLINE RawData load_raw(Isolate* isolate,
                              const DisallowHeapAllocation& no_gc) const;
+  V8_INLINE RawData load_raw_handle(Isolate* isolate,
+                                    const DisallowHeapAllocation& no_gc) const;
   V8_INLINE void store_raw(Isolate* isolate, RawData data,
                            const DisallowHeapAllocation& no_gc);
 
  private:
   // Stores given value to the embedder data slot in a concurrent-marker
   // friendly manner (tagged part of the slot is written atomically).
-  V8_INLINE void gc_safe_store(Address value);
+  V8_INLINE void gc_safe_store(Isolate* isolate, Address value);
 };
 
 }  // namespace internal

@@ -230,7 +230,7 @@ bool ContextSerializer::SerializeJSObjectWithEmbedderFields(Object obj) {
   for (int i = 0; i < embedder_fields_count; i++) {
     EmbedderDataSlot embedder_data_slot(js_obj, i);
     original_embedder_values.emplace_back(
-        embedder_data_slot.load_raw(isolate(), no_gc));
+        embedder_data_slot.load_raw_handle(isolate(), no_gc));
     Object object = embedder_data_slot.load_tagged();
     if (object.IsHeapObject()) {
       DCHECK(IsValidHeapObject(isolate()->heap(), HeapObject::cast(object)));

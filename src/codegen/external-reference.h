@@ -85,7 +85,17 @@ class StatsCounter;
     "RegExpMacroAssembler*::CheckStackGuardState()")                           \
   V(re_grow_stack, "NativeRegExpMacroAssembler::GrowStack()")                  \
   V(re_match_for_call_from_js, "IrregexpInterpreter::MatchForCallFromJs")      \
-  V(re_word_character_map, "NativeRegExpMacroAssembler::word_character_map")
+  V(re_word_character_map, "NativeRegExpMacroAssembler::word_character_map")   \
+  EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V)
+
+#ifdef V8_HEAP_SANDBOX
+#define EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V) \
+  V(external_pointer_table_address,                          \
+    "Isolate::external_pointer_table_address("               \
+    ")")
+#else
+#define EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V)
+#endif  // V8_INTL_SUPPORT
 
 #define EXTERNAL_REFERENCE_LIST(V)                                            \
   V(abort_with_reason, "abort_with_reason")                                   \
@@ -153,6 +163,7 @@ class StatsCounter;
   V(libc_memcpy_function, "libc_memcpy")                                      \
   V(libc_memmove_function, "libc_memmove")                                    \
   V(libc_memset_function, "libc_memset")                                      \
+  V(libc_realloc_function, "libc_realloc")                                    \
   V(mod_two_doubles_operation, "mod_two_doubles")                             \
   V(mutable_big_int_absolute_add_and_canonicalize_function,                   \
     "MutableBigInt_AbsoluteAddAndCanonicalize")                               \
