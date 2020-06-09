@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3af587b5_0b73490b",
+        "filename": "src/codegen/ia32/assembler-ia32.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-09T05:43:26Z",
+      "side": 1,
+      "message": "No, because it\u0027s not a full sentence, more like a title.\n\nI removed the comment now. It\u0027s ugly, and the code is self-explanatory anyways.",
+      "parentUuid": "1be4bd93_de5be78b",
+      "revId": "c28b0b0c0540f6d59ce2895b4715d45b9322b772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b6f2f9f_f496af97",
         "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "40dd8b7b_31d9682d",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-09T05:43:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b6f2f9f_f496af97",
+      "revId": "c28b0b0c0540f6d59ce2895b4715d45b9322b772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c46aae8_f490527e",
         "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
         "patchSetId": 1
@@ -50,6 +86,24 @@
       "revId": "c28b0b0c0540f6d59ce2895b4715d45b9322b772",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bf81751_71d66875",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-09T05:43:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c46aae8_f490527e",
+      "revId": "c28b0b0c0540f6d59ce2895b4715d45b9322b772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -73,6 +127,30 @@
       "revId": "c28b0b0c0540f6d59ce2895b4715d45b9322b772",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00eb816c_8837e8e8",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-09T05:43:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c14e81a_08a8ba53",
+      "range": {
+        "startLine": 522,
+        "startChar": 6,
+        "endLine": 522,
+        "endChar": 54
+      },
+      "revId": "c28b0b0c0540f6d59ce2895b4715d45b9322b772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
