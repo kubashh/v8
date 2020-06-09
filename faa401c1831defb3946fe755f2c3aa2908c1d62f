@@ -22,6 +22,30 @@
       "revId": "faa401c1831defb3946fe755f2c3aa2908c1d62f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2453afbd_376fdbd7",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-06-09T07:59:19Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s invoked as void(void*). And we don\u0027t get UBSan errors, but if that\u0027s technically undefined behaviour, I\u0027ll look into possibilities to use the actual type. That would fix the UB, right?",
+      "parentUuid": "4710c7b6_847ee316",
+      "range": {
+        "startLine": 384,
+        "startChar": 44,
+        "endLine": 384,
+        "endChar": 48
+      },
+      "revId": "faa401c1831defb3946fe755f2c3aa2908c1d62f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
