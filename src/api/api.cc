@@ -103,6 +103,7 @@
 #include "src/strings/string-hasher.h"
 #include "src/strings/unicode-inl.h"
 #include "src/tracing/trace-event.h"
+#include "src/tracing/v8-provider.h"
 #include "src/trap-handler/trap-handler.h"
 #include "src/utils/detachable-vector.h"
 #include "src/utils/version.h"
@@ -8200,6 +8201,15 @@ void Isolate::Initialize(Isolate* isolate,
     code_event_handler = i::GDBJITInterface::EventHandler;
   }
 #endif  // ENABLE_GDB_JIT_INTERFACE
+
+// TODO(billti@microsoft.com): Emit these events directly rather than via
+// code_event_handler
+#if defined(V8_TARGET_OS_WIN)
+  if (code_event_handler == nullptr) {
+    code_event_handler = v8::internal::tracing::V8Provider::CodeEventHandler;
+  }
+#endif  // defined(V8_TARGET_OS_WIN)
+
   if (code_event_handler) {
     i_isolate->InitializeLoggingAndCounters();
     i_isolate->logger()->SetCodeEventHandler(kJitCodeEventDefault,
@@ -8263,6 +8273,7 @@ void Isolate::Initialize(Isolate* isolate,
 
 Isolate* Isolate::New(const Isolate::CreateParams& params) {
   Isolate* isolate = Allocate();
+  i::tracing::v8Provider.IsolateStart(isolate);
   Initialize(isolate, params);
   return isolate;
 }
@@ -8274,6 +8285,7 @@ void Isolate::Dispose() {
     return;
   }
   i::Isolate::Delete(isolate);
+  i::tracing::v8Provider.IsolateStop(isolate);
 }
 
 void Isolate::DumpAndResetStats() {
