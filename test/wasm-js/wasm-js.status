@@ -7,7 +7,6 @@
 [ALWAYS, {
   # TODO(v8:10556): Remove sub-typing in the reference-types implementation
   'prototypes': [FAIL],
-  'instance/constructor-caching': [FAIL],
 
   # These are slow, and not useful to run for the proposals:
   'proposals/reference-types/limits': [SKIP],
