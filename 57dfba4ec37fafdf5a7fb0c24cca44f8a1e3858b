@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21c955ea_524faf3c",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1491,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-09T07:29:06Z",
+      "side": 1,
+      "message": "typo: \"identical to *the* import\"?",
+      "revId": "57dfba4ec37fafdf5a7fb0c24cca44f8a1e3858b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b37626e6_7ccfe0b0",
+        "filename": "test/mjsunit/wasm/globals-import-export-identity.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-09T07:29:06Z",
+      "side": 1,
+      "message": "I don\u0027t get what we need the first two globals for. Can we drop them?",
+      "revId": "57dfba4ec37fafdf5a7fb0c24cca44f8a1e3858b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
