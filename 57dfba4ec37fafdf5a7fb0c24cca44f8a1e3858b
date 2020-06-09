@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa16d7f5_0b5c6e8b",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1491,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-09T07:36:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21c955ea_524faf3c",
+      "revId": "57dfba4ec37fafdf5a7fb0c24cca44f8a1e3858b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b37626e6_7ccfe0b0",
         "filename": "test/mjsunit/wasm/globals-import-export-identity.js",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "57dfba4ec37fafdf5a7fb0c24cca44f8a1e3858b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "592ecf4c_ffe0e726",
+        "filename": "test/mjsunit/wasm/globals-import-export-identity.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-09T07:36:17Z",
+      "side": 1,
+      "message": "I added the other two globals so that the global index is different to the export index. I mixed them up in my first implementation, so I wanted to test it.",
+      "parentUuid": "b37626e6_7ccfe0b0",
+      "revId": "57dfba4ec37fafdf5a7fb0c24cca44f8a1e3858b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
