@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3134b76_870e49c5",
+        "filename": "src/compiler/basic-block-instrumentor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-10T08:31:42Z",
+      "side": 1,
+      "message": "Isn\u0027t common.PointerConstant(intptr_t) exactly what you need (here and above too)?",
+      "revId": "fc1cfb2e2650e56e8c58b3d0ba27f57fd72c4e17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
