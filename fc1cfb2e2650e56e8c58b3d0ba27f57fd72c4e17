@@ -16,6 +16,24 @@
       "revId": "fc1cfb2e2650e56e8c58b3d0ba27f57fd72c4e17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f53dc34_a8a073ec",
+        "filename": "src/compiler/basic-block-instrumentor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-06-10T16:26:53Z",
+      "side": 1,
+      "message": "Thanks for the quick reply! Unfortunately, that doesn\u0027t work. Here are the errors I get:\n\nIf this one is common.PointerConstant,\n\n# Fatal error in ../../src/compiler/machine-graph-verifier.cc, line 734\n# TypeError: node #225:Load[kRepWord32|kTypeUint32] uses node #224:PointerConstant[7]:kMachNone which doesn\u0027t have a kRepWord64 representation.\n#     Current block: B0\n#\n#     Specify option --csa-trap-on-node\u003dRecordWrite,225 for debugging.\n\nIf the other one above is common.PointerConstant and you run with --turbo-profiling,\n\n# Fatal error in ../../src/compiler/backend/instruction-selector.cc, line 2218\n# Unexpected operator #28:PointerConstant @ node #81",
+      "parentUuid": "c3134b76_870e49c5",
+      "revId": "fc1cfb2e2650e56e8c58b3d0ba27f57fd72c4e17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
