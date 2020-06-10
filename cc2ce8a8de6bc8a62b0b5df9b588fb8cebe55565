@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55de0e83_82033b31",
+        "filename": "test/wasm-js/report.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-06-10T13:33:13Z",
+      "side": 1,
+      "message": "nit: You\u0027re using `map` but you are not returning anything. You could either use `forEach` instead or use `reduce` and return the aggregated number of failed tests instead, i.e.\n\nconst failed_counter \u003d tests.reduce((failed_tests_so_far, x) \u003d\u003e {...; return x.status \u003d\u003d PASS ? return failed_tests_so_far : failed_tests_so_far + 1;}, 0);\n\nNot sure if that\u0027s more readable than `forEach`, but `map` is made for a different use case.",
+      "revId": "cc2ce8a8de6bc8a62b0b5df9b588fb8cebe55565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4ab9731_f7cd6121",
+        "filename": "test/wasm-js/testcfg.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-06-10T13:33:13Z",
+      "side": 1,
+      "message": "nit: os.path.join takes [1, inf) parameters, no need to nest multiple calls.",
+      "revId": "cc2ce8a8de6bc8a62b0b5df9b588fb8cebe55565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
