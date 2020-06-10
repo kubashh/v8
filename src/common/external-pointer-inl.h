@@ -12,18 +12,16 @@
 namespace v8 {
 namespace internal {
 
-V8_INLINE ExternalPointer_t EncodeExternalPointer(Isolate* isolate,
-                                                  Address external_pointer) {
-  STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
-  if (!V8_HEAP_SANDBOX_BOOL) return external_pointer;
-  return external_pointer ^ kExternalPointerSalt;
-}
-
 V8_INLINE Address DecodeExternalPointer(const Isolate* isolate,
                                         ExternalPointer_t encoded_pointer) {
   STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
-  if (!V8_HEAP_SANDBOX_BOOL) return encoded_pointer;
-  return encoded_pointer ^ kExternalPointerSalt;
+#ifdef V8_HEAP_SANDBOX
+  if (V8_HEAP_SANDBOX_BOOL) {
+    uint32_t index = static_cast<uint32_t>(encoded_pointer);
+    return isolate->external_pointer_table().get(index);
+  }
+#endif
+  return encoded_pointer;
 }
 
 }  // namespace internal

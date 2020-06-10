@@ -388,6 +388,9 @@ void Serializer::ObjectSerializer::SerializeJSArrayBuffer() {
   ArrayBufferExtension* extension = buffer.extension();
 
   // The embedder-allocated backing store only exists for the off-heap case.
+#ifdef V8_HEAP_SANDBOX
+  uint32_t table_index = buffer.GetBackingStoreRefForDeserialization();
+#endif
   if (backing_store != nullptr) {
     uint32_t ref = SerializeBackingStore(backing_store, byte_length);
     buffer.SetBackingStoreRefForSerialization(ref);
@@ -395,11 +398,17 @@ void Serializer::ObjectSerializer::SerializeJSArrayBuffer() {
     // Ensure deterministic output by setting extension to null during
     // serialization.
     buffer.set_extension(nullptr);
+  } else {
+    buffer.SetBackingStoreRefForSerialization(0);
   }
 
   SerializeObject();
 
+#ifdef V8_HEAP_SANDBOX
+  buffer.SetBackingStoreRefForSerialization(table_index);
+#else
   buffer.set_backing_store(serializer_->isolate(), backing_store);
+#endif
   buffer.set_extension(extension);
 }
 
@@ -413,9 +422,16 @@ void Serializer::ObjectSerializer::SerializeExternalString() {
   if (serializer_->external_reference_encoder_.TryEncode(resource).To(
           &reference)) {
     DCHECK(reference.is_from_api());
+#ifdef V8_HEAP_SANDBOX
+    uint32_t table_index = string.resource_as_uint32();
+#endif
     string.set_uint32_as_resource(serializer_->isolate(), reference.index());
     SerializeObject();
+#ifdef V8_HEAP_SANDBOX
+    string.set_uint32_as_resource(serializer_->isolate(), table_index);
+#else
     string.set_address_as_resource(serializer_->isolate(), resource);
+#endif
   } else {
     SerializeExternalStringAsSequentialString();
   }

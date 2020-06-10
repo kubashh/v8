@@ -470,6 +470,10 @@ Handle<EmbedderDataArray> Factory::NewEmbedderDataArray(int length) {
     ObjectSlot end(array->slots_end());
     size_t slot_count = end - start;
     MemsetTagged(start, *undefined_value(), slot_count);
+    // TODO(saelo)
+    /*for (int i = 0; i < length; i++) {
+      EmbedderDataSlot(*array, i).allocate_external_pointer_entry(isolate());
+    }*/
   }
   return array;
 }
@@ -854,6 +858,7 @@ Handle<StringClass> Factory::InternalizeExternalString(Handle<String> string) {
   Handle<Map> map = GetInternalizedStringMap(this, string).ToHandleChecked();
   Handle<StringClass> external_string(
       StringClass::cast(New(map, AllocationType::kOld)), isolate());
+  external_string->allocate_external_pointer_entries(isolate());
   external_string->set_length(cast_string->length());
   external_string->set_hash_field(cast_string->hash_field());
   external_string->SetResource(isolate(), nullptr);
@@ -988,6 +993,7 @@ MaybeHandle<String> Factory::NewExternalStringFromOneByte(
                         : uncached_external_one_byte_string_map();
   Handle<ExternalOneByteString> external_string(
       ExternalOneByteString::cast(New(map, AllocationType::kOld)), isolate());
+  external_string->allocate_external_pointer_entries(isolate());
   external_string->set_length(static_cast<int>(length));
   external_string->set_hash_field(String::kEmptyHashField);
   external_string->SetResource(isolate(), resource);
@@ -1008,6 +1014,7 @@ MaybeHandle<String> Factory::NewExternalStringFromTwoByte(
                                             : uncached_external_string_map();
   Handle<ExternalTwoByteString> external_string(
       ExternalTwoByteString::cast(New(map, AllocationType::kOld)), isolate());
+  external_string->allocate_external_pointer_entries(isolate());
   external_string->set_length(static_cast<int>(length));
   external_string->set_hash_field(String::kEmptyHashField);
   external_string->SetResource(isolate(), resource);
@@ -1092,6 +1099,7 @@ Handle<NativeContext> Factory::NewNativeContext() {
                  AllocationType::kOld));
   context->set_native_context_map(*map);
   map->set_native_context(*context);
+  context->allocate_external_pointer_entries(isolate());
   context->set_scope_info(ReadOnlyRoots(isolate()).native_scope_info());
   context->set_previous(Context::unchecked_cast(Smi::zero()));
   context->set_extension(*undefined_value());
@@ -1342,6 +1350,7 @@ Handle<Foreign> Factory::NewForeign(Address addr) {
   HeapObject result = AllocateRawWithImmortalMap(map.instance_size(),
                                                  AllocationType::kYoung, map);
   Handle<Foreign> foreign(Foreign::cast(result), isolate());
+  foreign->allocate_external_pointer_entries(isolate());
   foreign->set_foreign_address(isolate(), addr);
   return foreign;
 }
@@ -2722,6 +2731,7 @@ Handle<JSTypedArray> Factory::NewJSTypedArray(ExternalArrayType type,
   Handle<JSTypedArray> typed_array =
       Handle<JSTypedArray>::cast(NewJSArrayBufferView(
           map, empty_byte_array(), buffer, byte_offset, byte_length));
+  typed_array->allocate_external_pointer_entries(isolate());
   typed_array->set_length(length);
   typed_array->SetOffHeapDataPtr(isolate(), buffer->backing_store(),
                                  byte_offset);
@@ -2735,6 +2745,7 @@ Handle<JSDataView> Factory::NewJSDataView(Handle<JSArrayBuffer> buffer,
                   isolate());
   Handle<JSDataView> obj = Handle<JSDataView>::cast(NewJSArrayBufferView(
       map, empty_fixed_array(), buffer, byte_offset, byte_length));
+  obj->allocate_external_pointer_entries(isolate());
   obj->set_data_pointer(
       isolate(), static_cast<uint8_t*>(buffer->backing_store()) + byte_offset);
   return obj;

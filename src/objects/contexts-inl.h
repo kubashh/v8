@@ -246,17 +246,22 @@ Map Context::GetInitialJSArrayMap(ElementsKind kind) const {
 }
 
 DEF_GETTER(NativeContext, microtask_queue, MicrotaskQueue*) {
-  ExternalPointer_t encoded_value =
-      ReadField<ExternalPointer_t>(kMicrotaskQueueOffset);
   return reinterpret_cast<MicrotaskQueue*>(
-      DecodeExternalPointer(isolate, encoded_value));
+      ReadExternalPointerField(kMicrotaskQueueOffset));
+}
+
+void NativeContext::allocate_external_pointer_entries(Isolate* isolate) {
+#ifdef V8_HEAP_SANDBOX
+  WriteField<size_t>(kMicrotaskQueueOffset,
+                     isolate->external_pointer_table().allocate());
+#endif
 }
 
 void NativeContext::set_microtask_queue(Isolate* isolate,
                                         MicrotaskQueue* microtask_queue) {
-  ExternalPointer_t encoded_value = EncodeExternalPointer(
-      isolate, reinterpret_cast<Address>(microtask_queue));
-  WriteField<ExternalPointer_t>(kMicrotaskQueueOffset, encoded_value);
+  WriteExternalPointerField(
+      kMicrotaskQueueOffset,
+      reinterpret_cast<ExternalPointer_t>(microtask_queue));
 }
 
 OSROptimizedCodeCache NativeContext::GetOSROptimizedCodeCache() {

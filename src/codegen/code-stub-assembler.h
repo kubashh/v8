@@ -1091,29 +1091,105 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Works only with V8_ENABLE_FORCE_SLOW_PATH compile time flag. Nop otherwise.
   void GotoIfForceSlowPath(Label* if_true);
 
-  // Convert external pointer from on-V8-heap representation to an actual
-  // external pointer value.
-  TNode<RawPtrT> DecodeExternalPointer(
-      TNode<ExternalPointerT> encoded_pointer) {
+  // Initialize an external pointer field in an object.
+  void InitializeExternalPointerField(TNode<HeapObject> object,
+                                      TNode<IntPtrT> offset) {
     STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
-    TNode<RawPtrT> value = ReinterpretCast<RawPtrT>(encoded_pointer);
+#ifdef V8_HEAP_SANDBOX
     if (V8_HEAP_SANDBOX_BOOL) {
-      value = UncheckedCast<RawPtrT>(
-          WordXor(value, UintPtrConstant(kExternalPointerSalt)));
+      TNode<ExternalReference> external_pointer_table_address =
+          ExternalConstant(
+              ExternalReference::external_pointer_table_address(isolate()));
+      TNode<Uint32T> table_length = UncheckedCast<Uint32T>(
+          Load(MachineType::Uint32(), external_pointer_table_address,
+               UintPtrConstant(Internals::kExternalPointerTableLengthOffset)));
+      TNode<Uint32T> table_capacity = UncheckedCast<Uint32T>(Load(
+          MachineType::Uint32(), external_pointer_table_address,
+          UintPtrConstant(Internals::kExternalPointerTableCapacityOffset)));
+
+      Label grow_table(this, Label::kDeferred), finish(this);
+
+      TNode<BoolT> compare = Uint32LessThan(table_length, table_capacity);
+      Branch(compare, &finish, &grow_table);
+
+      BIND(&grow_table);
+      {
+        TNode<ExternalReference> table_grow_function = ExternalConstant(
+            ExternalReference::external_pointer_table_grow_table_function());
+        // TODO(saelo) void return type?
+        CallCFunction(table_grow_function, MachineType::Pointer(),
+                      std::make_pair(MachineType::Pointer(),
+                                     external_pointer_table_address));
+        Goto(&finish);
+      }
+      BIND(&finish);
+
+      TNode<Uint32T> new_table_length =
+          Uint32Add(table_length, Uint32Constant(1));
+      StoreNoWriteBarrier(
+          MachineRepresentation::kWord32, external_pointer_table_address,
+          UintPtrConstant(Internals::kExternalPointerTableLengthOffset),
+          new_table_length);
+
+      TNode<Uint32T> index = table_length;
+      TNode<Uint32T> handle = Word32Shl(index, Uint32Constant(1));
+      StoreToObject(MachineRepresentation::kWord64, object,
+                    IntPtrSub(offset, IntPtrConstant(kHeapObjectTag)), handle,
+                    StoreToObjectWriteBarrier::kNone);
     }
-    return value;
+#endif
   }
 
-  // Convert external pointer value to on-V8-heap representation.
-  // This should eventually become a call to a non-allocating runtime function.
-  TNode<ExternalPointerT> EncodeExternalPointer(TNode<RawPtrT> pointer) {
+  // Load an external pointer value from an object.
+  TNode<ExternalPointerT> LoadExternalPointerFromObject(
+      TNode<HeapObject> object, TNode<IntPtrT> offset) {
     STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
-    TNode<RawPtrT> encoded_pointer = pointer;
+#ifdef V8_HEAP_SANDBOX
     if (V8_HEAP_SANDBOX_BOOL) {
-      encoded_pointer = UncheckedCast<RawPtrT>(
-          WordXor(encoded_pointer, UintPtrConstant(kExternalPointerSalt)));
+      TNode<ExternalReference> external_pointer_table_address =
+          ExternalConstant(
+              ExternalReference::external_pointer_table_address(isolate()));
+      TNode<RawPtrT> table = UncheckedCast<RawPtrT>(
+          Load(MachineType::Pointer(), external_pointer_table_address,
+               UintPtrConstant(Internals::kExternalPointerTableBufferOffset)));
+
+      TNode<Word32T> handle = LoadObjectField<Uint32T>(object, offset);
+      TNode<Word32T> index = Word32Sar(handle, Uint32Constant(1));
+      TNode<Word32T> offset = Int32Mul(index, Uint32Constant(8));
+
+      return UncheckedCast<ExternalPointerT>(
+          Load(MachineType::Pointer(), table, offset));
     }
-    return ReinterpretCast<ExternalPointerT>(encoded_pointer);
+#endif
+    return LoadObjectField<ExternalPointerT>(object, offset);
+  }
+
+  // Store external object pointer to object.
+  void StoreExternalPointerToObject(TNode<HeapObject> object,
+                                    TNode<IntPtrT> offset,
+                                    TNode<ExternalPointerT> pointer) {
+    STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
+#ifdef V8_HEAP_SANDBOX
+    if (V8_HEAP_SANDBOX_BOOL) {
+      TNode<ExternalReference> external_pointer_table_address =
+          ExternalConstant(
+              ExternalReference::external_pointer_table_address(isolate()));
+      TNode<RawPtrT> table = UncheckedCast<RawPtrT>(
+          Load(MachineType::Pointer(), external_pointer_table_address,
+               UintPtrConstant(Internals::kExternalPointerTableBufferOffset)));
+
+      TNode<Word32T> handle = LoadObjectField<Uint32T>(object, offset);
+      TNode<Word32T> index = Word32Sar(handle, Uint32Constant(1));
+      TNode<Word32T> table_offset = Int32Mul(index, Uint32Constant(8));
+
+      StoreNoWriteBarrier(MachineRepresentation::kWord64, table, table_offset,
+                          pointer);
+      return;
+    }
+#endif
+    offset = IntPtrSub(offset, IntPtrConstant(kHeapObjectTag));
+    StoreToObject(MachineRepresentation::kWord64, object, offset, pointer,
+                  StoreToObjectWriteBarrier::kNone);
   }
 
   // Load value from current parent frame by given offset in bytes.
@@ -1214,6 +1290,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return UncheckedCast<T>(
         LoadFromObject(MachineTypeOf<T>::value, reference.object, offset));
   }
+  template <>
+  TNode<ExternalPointerT> LoadReference(Reference reference) {
+    return LoadExternalPointerFromObject(reference.object, reference.offset);
+  }
   template <class T, typename std::enable_if<
                          std::is_convertible<TNode<T>, TNode<Object>>::value ||
                              std::is_same<T, MaybeObject>::value,
@@ -1238,6 +1318,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
         IntPtrSub(reference.offset, IntPtrConstant(kHeapObjectTag));
     StoreToObject(MachineRepresentationOf<T>::value, reference.object, offset,
                   value, StoreToObjectWriteBarrier::kNone);
+  }
+  template <>
+  void StoreReference(Reference reference, TNode<ExternalPointerT> value) {
+    StoreExternalPointerToObject(reference.object, reference.offset, value);
   }
 
   // Load the floating point value of a HeapNumber.

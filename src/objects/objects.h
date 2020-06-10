@@ -649,6 +649,8 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
     }
   }
 
+  inline ExternalPointer_t ReadExternalPointerField(size_t offset) const;
+
   template <class T, typename std::enable_if<std::is_arithmetic<T>::value,
                                              int>::type = 0>
   inline void WriteField(size_t offset, T value) const {
@@ -665,6 +667,9 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
       base::Memory<T>(field_address(offset)) = value;
     }
   }
+
+  inline void WriteExternalPointerField(size_t offset,
+                                        ExternalPointer_t value) const;
 
  protected:
   inline Address field_address(size_t offset) const {
