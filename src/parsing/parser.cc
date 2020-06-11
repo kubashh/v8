@@ -2521,6 +2521,11 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
   // Validate function name. We can do this only after parsing the function,
   // since the function can declare itself strict.
   language_mode = scope->language_mode();
+
+  if (is_sloppy(language_mode)) {
+    scope->HoistSloppyBlockFunctions(factory());
+  }
+
   CheckFunctionName(language_mode, function_name, function_name_validity,
                     function_name_location);
 

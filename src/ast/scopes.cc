@@ -482,8 +482,6 @@ void DeclarationScope::HoistSloppyBlockFunctions(AstNodeFactory* factory) {
   DCHECK(is_sloppy(language_mode()));
   DCHECK(is_function_scope() || is_eval_scope() || is_script_scope() ||
          (is_block_scope() && outer_scope()->is_function_scope()));
-  DCHECK(HasSimpleParameters() || is_block_scope() || is_being_lazily_parsed_);
-  DCHECK_EQ(factory == nullptr, is_being_lazily_parsed_);
 
   if (sloppy_block_functions_.is_empty()) return;
 
@@ -534,7 +532,6 @@ void DeclarationScope::HoistSloppyBlockFunctions(AstNodeFactory* factory) {
     if (!should_hoist) continue;
 
     if (factory) {
-      DCHECK(!is_being_lazily_parsed_);
       int pos = sloppy_block_function->position();
       bool ok = true;
       bool was_added;
