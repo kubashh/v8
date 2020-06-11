@@ -1069,18 +1069,14 @@ Variable* Scope::DeclareVariableName(const AstRawString* name,
 
   // Declare the variable in the declaration scope.
   Variable* var = DeclareLocal(name, mode, kind, was_added);
-  if (!*was_added) {
-    if (IsLexicalVariableMode(mode) || IsLexicalVariableMode(var->mode())) {
-      if (!var->is_sloppy_block_function() ||
-          kind != SLOPPY_BLOCK_FUNCTION_VARIABLE) {
-        // Duplicate functions are allowed in the sloppy mode, but if this is
-        // not a function declaration, it's an error. This is an error PreParser
-        // hasn't previously detected.
-        return nullptr;
-      }
-      // Sloppy block function redefinition.
-    }
-    var->SetMaybeAssigned();
+  if (!*was_added &&
+      (IsLexicalVariableMode(mode) || IsLexicalVariableMode(var->mode())) &&
+      (!var->is_sloppy_block_function() ||
+       kind != SLOPPY_BLOCK_FUNCTION_VARIABLE)) {
+    // Duplicate functions are allowed in the sloppy mode, but if this is not a
+    // function declaration, it's an error. This is an error PreParser hasn't
+    // previously detected.
+    return nullptr;
   }
   var->set_is_used();
   return var;
