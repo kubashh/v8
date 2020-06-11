@@ -181,14 +181,23 @@ int TransitionArray::SearchName(Name name, int* out_insertion_index) {
 
 TransitionsAccessor::TransitionsAccessor(Isolate* isolate, Map map,
                                          DisallowHeapAllocation* no_gc)
-    : isolate_(isolate), map_(map) {
+    : isolate_(isolate), map_(map), concurrent_access_(false) {
   Initialize();
   USE(no_gc);
 }
 
-TransitionsAccessor::TransitionsAccessor(Isolate* isolate, Handle<Map> map)
-    : isolate_(isolate), map_handle_(map), map_(*map) {
+TransitionsAccessor::TransitionsAccessor(Isolate* isolate, Handle<Map> map,
+                                         bool concurrent_access)
+    : isolate_(isolate),
+      map_handle_(map),
+      map_(*map),
+      concurrent_access_(concurrent_access) {
+  if (concurrent_access_) shared_mutex_.LockShared();
   Initialize();
+}
+
+TransitionsAccessor::~TransitionsAccessor() {
+  if (concurrent_access_) shared_mutex_.UnlockShared();
 }
 
 void TransitionsAccessor::Reload() {
