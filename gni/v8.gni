@@ -6,6 +6,10 @@ import("//build/config/sanitizers/sanitizers.gni")
 import("//build/config/v8_target_cpu.gni")
 import("split_static_library.gni")
 
+if (build_with_chromium) {
+  import("//base/trace_event/features.gni")
+}
+
 declare_args() {
   # Set flags for tracking code coverage. Uses gcov with gcc and sanitizer
   # coverage with clang.
