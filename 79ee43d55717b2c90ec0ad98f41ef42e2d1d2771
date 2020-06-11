@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6342a9b_c8aed5f2",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2528,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-06-11T09:34:49Z",
+      "side": 1,
+      "message": "This introduces a new step that on each function parse so perhaps this could be a shortcut version instead.",
+      "range": {
+        "startLine": 2525,
+        "startChar": 2,
+        "endLine": 2528,
+        "endChar": 3
+      },
+      "revId": "79ee43d55717b2c90ec0ad98f41ef42e2d1d2771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
