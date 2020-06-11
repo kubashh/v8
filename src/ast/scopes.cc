@@ -1080,7 +1080,6 @@ Variable* Scope::DeclareVariableName(const AstRawString* name,
       }
       // Sloppy block function redefinition.
     }
-    var->SetMaybeAssigned();
   }
   var->set_is_used();
   return var;
