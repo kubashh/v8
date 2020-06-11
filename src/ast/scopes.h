@@ -890,12 +890,10 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
 
   void DeserializeReceiver(AstValueFactory* ast_value_factory);
 
-#ifdef DEBUG
   void set_is_being_lazily_parsed(bool is_being_lazily_parsed) {
     is_being_lazily_parsed_ = is_being_lazily_parsed;
   }
   bool is_being_lazily_parsed() const { return is_being_lazily_parsed_; }
-#endif
   void set_zone(Zone* zone) {
 #ifdef DEBUG
     needs_migration_ = true;
@@ -1211,9 +1209,7 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
   bool should_eager_compile_ : 1;
   // Set to true after we have finished lazy parsing the scope.
   bool was_lazily_parsed_ : 1;
-#if DEBUG
   bool is_being_lazily_parsed_ : 1;
-#endif
   bool is_skipped_function_ : 1;
   bool has_inferred_function_name_ : 1;
   bool has_checked_syntax_ : 1;

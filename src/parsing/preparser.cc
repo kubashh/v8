@@ -71,9 +71,7 @@ PreParserIdentifier PreParser::GetIdentifier() const {
 PreParser::PreParseResult PreParser::PreParseProgram() {
   DCHECK_NULL(scope_);
   DeclarationScope* scope = NewScriptScope(REPLMode::kNo);
-#ifdef DEBUG
   scope->set_is_being_lazily_parsed(true);
-#endif
 
   // ModuleDeclarationInstantiation for Source Text Module Records creates a
   // new Module Environment Record whose outer lexical environment record is
@@ -108,9 +106,7 @@ PreParser::PreParseResult PreParser::PreParseFunction(
     int* use_counts, ProducedPreparseData** produced_preparse_data) {
   DCHECK_EQ(FUNCTION_SCOPE, function_scope->scope_type());
   use_counts_ = use_counts;
-#ifdef DEBUG
   function_scope->set_is_being_lazily_parsed(true);
-#endif
 
   PreParserFormalParameters formals(function_scope);
 
