@@ -1,0 +1,45 @@
+Test scope 
+New debugger break
+  Scope type: module
+    moduleLet : undefined
+    moduleConst : undefined
+    exportedModuleLet : undefined
+    exportedModuleConst : undefined
+New debugger break
+  Scope type: local
+  Scope type: module
+    exportedModuleLet : undefined
+    exportedModuleConst : undefined
+New debugger break
+  Scope type: module
+    moduleLet : 3
+    moduleConst : 4
+    exportedModuleLet : 1
+    exportedModuleConst : 2
+New debugger break
+  Scope type: local
+  Scope type: module
+    exportedModuleLet : 1
+    exportedModuleConst : 2
+New debugger break
+  Scope type: module
+    exportedModuleLet : 1
+    exportedModuleConst : 2
+    moduleLet : undefined
+    moduleConst : undefined
+New debugger break
+  Scope type: local
+  Scope type: module
+    exportedModuleLet : 1
+    exportedModuleConst : 2
+New debugger break
+  Scope type: module
+    exportedModuleLet : 1
+    exportedModuleConst : 2
+    moduleLet : 5
+    moduleConst : 6
+New debugger break
+  Scope type: local
+  Scope type: module
+    exportedModuleLet : 1
+    exportedModuleConst : 2
