@@ -28,11 +28,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include <cmath>
 #include <limits>
 
-#include "src/init/v8.h"
-
+#include "src/base/cpu.h"
 #include "src/base/platform/platform.h"
 #include "src/base/utils/random-number-generator.h"
 #include "src/codegen/arm64/assembler-arm64-inl.h"
@@ -44,6 +44,7 @@
 #include "src/execution/arm64/simulator-arm64.h"
 #include "src/execution/simulator.h"
 #include "src/heap/factory.h"
+#include "src/init/v8.h"
 #include "test/cctest/cctest.h"
 #include "test/cctest/test-utils-arm64.h"
 #include "test/common/assembler-tester.h"
@@ -11139,10 +11140,22 @@ static void FjcvtzsHelper(uint64_t value, uint64_t expected,
   __ Fjcvtzs(w0, d0);
   __ Mrs(x1, NZCV);
   END();
+
+#ifdef USE_SIMULATOR
+  // Always run test when we're running on the simulator.
   RUN();
 
   CHECK_EQUAL_64(expected, x0);
   CHECK_EQUAL_32(expected_z, w1);
+#else
+  base::CPU cpu;
+  if (cpu.has_jscvt()) {
+    RUN();
+
+    CHECK_EQUAL_64(expected, x0);
+    CHECK_EQUAL_32(expected_z, w1);
+  }
+#endif  // USE_SIMULATOR
 }
 
 TEST(fjcvtzs) {
