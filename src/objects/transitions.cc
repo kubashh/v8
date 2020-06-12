@@ -35,6 +35,9 @@ bool TransitionsAccessor::HasSimpleTransitionTo(Map map) {
 
 void TransitionsAccessor::Insert(Handle<Name> name, Handle<Map> target,
                                  SimpleTransitionFlag flag) {
+  DCHECK(!concurrent_access_);
+  base::SharedMutexGuard<base::kExclusive> shared_mutex_guard(
+      isolate_->transition_array_access());
   DCHECK(!map_handle_.is_null());
   target->SetBackPointer(map_);
 
