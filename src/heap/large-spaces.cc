@@ -275,7 +275,7 @@ void LargeObjectSpace::FreeUnmarkedObjects() {
 }
 
 bool LargeObjectSpace::Contains(HeapObject object) {
-  MemoryChunk* chunk = MemoryChunk::FromHeapObject(object);
+  BasicMemoryChunk* chunk = BasicMemoryChunk::FromHeapObject(object);
 
   bool owned = (chunk->owner() == this);
 
