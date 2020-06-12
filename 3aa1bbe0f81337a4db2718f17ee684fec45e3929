@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c821ff69_7f7dbeff",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 11144,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-06-12T13:15:54Z",
+      "side": 1,
+      "message": "Suggestion (can be a followup CL): Could we use also check the simulator has this feature enabled. What do you think of moving SimulatorFeaturesFromCommandLine to base/cpu.cc and adding the features to the CPU object if we are running on a simulator based on the simulator flags? If we did this we would only need to check cpu.has_jscvt here. Could we do this for Arm too?",
+      "revId": "3aa1bbe0f81337a4db2718f17ee684fec45e3929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97720306_456459f7",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 11146,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-06-12T13:15:54Z",
+      "side": 1,
+      "message": "Could you avoid duplicating the code here and instead set a run_test boolean in the #if / #else cases and have the run outside the ifdefs?",
+      "revId": "3aa1bbe0f81337a4db2718f17ee684fec45e3929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
