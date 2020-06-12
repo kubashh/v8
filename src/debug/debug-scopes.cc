@@ -720,7 +720,6 @@ void ScopeIterator::VisitScriptScope(const Visitor& visitor) const {
 
 void ScopeIterator::VisitModuleScope(const Visitor& visitor) const {
   DCHECK(context_->IsModuleContext());
-
   Handle<ScopeInfo> scope_info(context_->scope_info(), isolate_);
   if (VisitContextLocals(visitor, scope_info, context_)) return;
 
@@ -741,8 +740,9 @@ void ScopeIterator::VisitModuleScope(const Visitor& visitor) const {
     Handle<Object> value =
         SourceTextModule::LoadVariable(isolate_, module, index);
 
-    // Reflect variables under TDZ as undeclared in scope object.
-    if (value->IsTheHole(isolate_)) continue;
+    // Reflect variables under TDZ as undefined in scope object.
+    if (value->IsTheHole(isolate_))
+      value = isolate_->factory()->undefined_value();
     if (visitor(name, value)) return;
   }
 }
@@ -757,7 +757,8 @@ bool ScopeIterator::VisitContextLocals(const Visitor& visitor,
     int context_index = scope_info->ContextHeaderLength() + i;
     Handle<Object> value(context->get(context_index), isolate_);
     // Reflect variables under TDZ as undefined in scope object.
-    if (value->IsTheHole(isolate_)) continue;
+    if (value->IsTheHole(isolate_))
+      value = isolate_->factory()->undefined_value();
     if (visitor(name, value)) return true;
   }
   return false;
@@ -839,9 +840,9 @@ bool ScopeIterator::VisitLocals(const Visitor& visitor, Mode mode) const {
           index += parameter_count;
           DCHECK_LT(index, parameters_and_registers.length());
           value = handle(parameters_and_registers.get(index), isolate_);
-          if (value->IsTheHole(isolate_)) {
+          // Reflect variables under TDZ as undefined in scope object.
+          if (value->IsTheHole(isolate_))
             value = isolate_->factory()->undefined_value();
-          }
         } else {
           value = frame_inspector_->GetExpression(index);
           if (value->IsOptimizedOut(isolate_)) {
@@ -852,7 +853,8 @@ bool ScopeIterator::VisitLocals(const Visitor& visitor, Mode mode) const {
             }
             value = isolate_->factory()->undefined_value();
           } else if (value->IsTheHole(isolate_)) {
-            // Reflect variables under TDZ as undeclared in scope object.
+            // Reflect variables under TDZ as undefined in scope object.
+            value = isolate_->factory()->undefined_value();
             continue;
           }
         }
@@ -862,8 +864,9 @@ bool ScopeIterator::VisitLocals(const Visitor& visitor, Mode mode) const {
         if (mode == Mode::STACK) continue;
         DCHECK(var->IsContextSlot());
         value = handle(context_->get(index), isolate_);
-        // Reflect variables under TDZ as undeclared in scope object.
-        if (value->IsTheHole(isolate_)) continue;
+        // Reflect variables under TDZ as undefined in scope object.
+        if (value->IsTheHole(isolate_))
+          value = isolate_->factory()->undefined_value();
         break;
 
       case VariableLocation::MODULE: {
@@ -871,8 +874,9 @@ bool ScopeIterator::VisitLocals(const Visitor& visitor, Mode mode) const {
         // if (var->IsExport()) continue;
         Handle<SourceTextModule> module(context_->module(), isolate_);
         value = SourceTextModule::LoadVariable(isolate_, module, var->index());
-        // Reflect variables under TDZ as undeclared in scope object.
-        if (value->IsTheHole(isolate_)) continue;
+        // Reflect variables under TDZ as undefined in scope object.
+        if (value->IsTheHole(isolate_))
+          value = isolate_->factory()->undefined_value();
         break;
       }
     }
