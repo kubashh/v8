@@ -34,6 +34,24 @@
       "revId": "fc1cfb2e2650e56e8c58b3d0ba27f57fd72c4e17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37a1a79d_50c65843",
+        "filename": "src/compiler/basic-block-instrumentor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-12T08:35:32Z",
+      "side": 1,
+      "message": "I don\u0027t know about these errors but I can see that there is some distinction at the type level between PointerConstant and the respective Int*Constant (that I don\u0027t fully understand). So let\u0027s go with your original change.",
+      "parentUuid": "8f53dc34_a8a073ec",
+      "revId": "fc1cfb2e2650e56e8c58b3d0ba27f57fd72c4e17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
