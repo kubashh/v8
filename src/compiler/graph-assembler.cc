@@ -711,6 +711,11 @@ Node* GraphAssembler::BitcastTaggedToWordForTagAndSmiBits(Node* value) {
                        effect(), control()));
 }
 
+Node* GraphAssembler::BitcastMaybeObjectToWord(Node* value) {
+  return AddNode(graph()->NewNode(machine()->BitcastMaybeObjectToWord(), value,
+                                  effect(), control()));
+}
+
 Node* GraphAssembler::Word32PoisonOnSpeculation(Node* value) {
   return AddNode(graph()->NewNode(machine()->Word32PoisonOnSpeculation(), value,
                                   effect(), control()));
