@@ -42,7 +42,7 @@ for (index of [import_ref, internal_ref]) {
       .exportFunc();
 }
 
-// Add fill and call functions for the anyfunc tables.
+// Add fill and call functions for the funcref tables.
 const sig_index = builder.addType(kSig_i_v);
 for (index of [import_func, internal_func]) {
   builder.addFunction(`fill${index}`, kSig_v_iai)
@@ -60,7 +60,7 @@ for (index of [import_func, internal_func]) {
 const table_ref =
     new WebAssembly.Table({element: 'externref', initial: size, maximum: maximum});
 const table_func = new WebAssembly.Table(
-    {element: 'anyfunc', initial: size, maximum: maximum});
+    {element: 'funcref', initial: size, maximum: maximum});
 
 const instance =
     builder.instantiate({imp: {table_ref: table_ref, table_func: table_func}});

@@ -64,7 +64,7 @@ let id = (() => {  // identity exported function
   let builder = new WasmModuleBuilder();
   addMain(builder);
   let module = new WebAssembly.Module(builder.toBuffer());
-  let table = new WebAssembly.Table({element: "anyfunc",
+  let table = new WebAssembly.Table({element: "funcref",
                                      initial: 1, maximum:kMaxTableSize});
   function fillTable() {
     for (let i = 0; i < table.length; i++) table.set(i, id);
@@ -95,7 +95,7 @@ let id = (() => {  // identity exported function
   let builder = new WasmModuleBuilder();
   addMain(builder);
   let module = new WebAssembly.Module(builder.toBuffer());
-  var table = new WebAssembly.Table({element: "anyfunc",
+  var table = new WebAssembly.Table({element: "funcref",
                                      initial: 0, maximum:kMaxTableSize});
   function growTableByOne() {
     table.grow(1);
@@ -136,7 +136,7 @@ let id = (() => {  // identity exported function
       [funcs.mul.index, funcs.add.index, funcs.sub.index]);
   builder.addExportOfKind("table", kExternalTable, 0);
   let module = new WebAssembly.Module(builder.toBuffer());
-  let t1 = new WebAssembly.Table({element: "anyfunc",
+  let t1 = new WebAssembly.Table({element: "funcref",
     initial: 5, maximum: 30});
 
   for (let i = 0; i < 5; i++) {
@@ -242,7 +242,7 @@ let id = (() => {  // identity exported function
 
 (function ModulesInstancesSharedTableBoundsCheck() {
   print("ModulesInstancesSharedTableBoundsCheck");
-  let table = new WebAssembly.Table({element: "anyfunc",
+  let table = new WebAssembly.Table({element: "funcref",
     initial: 1, maximum: kMaxTableSize});
 
   function CallModuleBuilder() {

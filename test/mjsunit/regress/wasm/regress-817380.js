@@ -12,7 +12,7 @@ builder1.addFunction('mul', kSig_i_ii)
     .exportFunc();
 const mul = builder1.instantiate().exports.mul;
 const table = new WebAssembly.Table({
-  element: 'anyfunc',
+  element: 'funcref',
   initial: 10,
 });
 const builder2 = new WasmModuleBuilder();

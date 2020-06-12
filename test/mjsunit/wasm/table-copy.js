@@ -22,7 +22,7 @@ function assertCall(call, ...elems) {
   print(arguments.callee.name);
   let kTableSize = 5;
 
-  let table = new WebAssembly.Table({element: "anyfunc",
+  let table = new WebAssembly.Table({element: "funcref",
                                      initial: kTableSize,
                                      maximum: kTableSize});
 

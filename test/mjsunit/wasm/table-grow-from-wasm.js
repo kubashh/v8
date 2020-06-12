@@ -206,7 +206,7 @@ testGrowInternalAnyFuncTable(9);
   const table_ref = new WebAssembly.Table(
     { element: "externref", initial: initial, maximum: maximum });
   const table_func = new WebAssembly.Table(
-    {element: "anyfunc", initial: initial, maximum: maximum});
+    {element: "funcref", initial: initial, maximum: maximum});
 
   const instance = builder.instantiate(
     {imp: {table_ref: table_ref, table_func: table_func}});

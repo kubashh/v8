@@ -14,7 +14,7 @@ load("test/mjsunit/wasm/user-properties-common.js");
     print("  iteration " + i);
 
     let m = new WebAssembly.Memory({initial: 1});
-    let t = new WebAssembly.Table({element: "anyfunc", initial: 1});
+    let t = new WebAssembly.Table({element: "funcref", initial: 1});
     m.old = memory;
     t.old = table;
 
