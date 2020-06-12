@@ -211,7 +211,7 @@ assertTrue(arr instanceof Array);
 assertEq(arr.length, 0);
 let importingModuleBinary2 = (() => {
   var text =
-      '(module (func (import "a" "b")) (memory (import "c" "d") 1) (table (import "e" "f") 1 anyfunc) (global (import "g" "⚡") i32))'
+      '(module (func (import "a" "b")) (memory (import "c" "d") 1) (table (import "e" "f") 1 funcref) (global (import "g" "⚡") i32))'
   let builder = new WasmModuleBuilder();
   builder.addImport('a', 'b', kSig_i_i);
   builder.addImportedMemory('c', 'd');
@@ -259,7 +259,7 @@ assertTrue(arr instanceof Array);
 assertEq(arr.length, 0);
 let exportingModuleBinary2 = (() => {
   var text =
-      '(module (func (export "a")) (memory (export "b") 1) (table (export "c") 1 anyfunc) (global (export "⚡") i32 (i32.const 0)))';
+      '(module (func (export "a")) (memory (export "b") 1) (table (export "c") 1 funcref) (global (export "⚡") i32 (i32.const 0)))';
   let builder = new WasmModuleBuilder();
   builder.addFunction('foo', kSig_v_v).addBody([]).exportAs('a');
   builder.addMemory(1, 1, false);
@@ -582,35 +582,35 @@ assertThrows(
 assertThrows(
     () => new Table(1), TypeError, 'WebAssembly.Module(): Argument 0 must be a table descriptor');
 assertThrows(
-    () => new Table({initial: 1, element: 1}), TypeError, /must be 'anyfunc'/);
+    () => new Table({initial: 1, element: 1}), TypeError, /must be a WebAssembly reference type/);
 assertThrows(
     () => new Table({initial: 1, element: 'any'}), TypeError,
-    /must be 'anyfunc'/);
+    /must be a WebAssembly reference type/);
 assertThrows(
-    () => new Table({initial: 1, element: {valueOf() { return 'anyfunc' }}}),
-    TypeError, /must be 'anyfunc'/);
+    () => new Table({initial: 1, element: {valueOf() { return 'funcref' }}}),
+    TypeError, /must be a WebAssembly reference type/);
 assertThrows(
     () => new Table(
-        {initial: {valueOf() { throw new Error('here') }}, element: 'anyfunc'}),
+        {initial: {valueOf() { throw new Error('here') }}, element: 'funcref'}),
     Error, 'here');
 assertThrows(
-    () => new Table({initial: -1, element: 'anyfunc'}), TypeError,
+    () => new Table({initial: -1, element: 'funcref'}), TypeError,
     /must be non-negative/);
 assertThrows(
-    () => new Table({initial: Math.pow(2, 32), element: 'anyfunc'}), TypeError,
+    () => new Table({initial: Math.pow(2, 32), element: 'funcref'}), TypeError,
     /must be in the unsigned long range/);
 assertThrows(
-    () => new Table({initial: 2, maximum: 1, element: 'anyfunc'}), RangeError,
+    () => new Table({initial: 2, maximum: 1, element: 'funcref'}), RangeError,
     /is below the lower bound/);
 assertThrows(
-    () => new Table({initial: 2, maximum: Math.pow(2, 32), element: 'anyfunc'}),
+    () => new Table({initial: 2, maximum: Math.pow(2, 32), element: 'funcref'}),
     TypeError, /must be in the unsigned long range/);
-assertTrue(new Table({initial: 1, element: 'anyfunc'}) instanceof Table);
-assertTrue(new Table({initial: 1.5, element: 'anyfunc'}) instanceof Table);
+assertTrue(new Table({initial: 1, element: 'funcref'}) instanceof Table);
+assertTrue(new Table({initial: 1.5, element: 'funcref'}) instanceof Table);
 assertTrue(
-    new Table({initial: 1, maximum: 1.5, element: 'anyfunc'}) instanceof Table);
+    new Table({initial: 1, maximum: 1.5, element: 'funcref'}) instanceof Table);
 assertThrows(
-    () => new Table({initial: 1, maximum: Math.pow(2, 32) - 1, element: 'anyfunc'}),
+    () => new Table({initial: 1, maximum: Math.pow(2, 32) - 1, element: 'funcref'}),
     RangeError, /above the upper bound/);
 
 // 'WebAssembly.Table.prototype' data property
@@ -627,7 +627,7 @@ assertEq(String(tableProto), '[object WebAssembly.Table]');
 assertEq(Object.getPrototypeOf(tableProto), Object.prototype);
 
 // 'WebAssembly.Table' instance objects
-let tbl1 = new Table({initial: 2, element: 'anyfunc'});
+let tbl1 = new Table({initial: 2, element: 'funcref'});
 assertEq(typeof tbl1, 'object');
 assertEq(String(tbl1), '[object WebAssembly.Table]');
 assertEq(Object.getPrototypeOf(tbl1), tableProto);
@@ -757,7 +757,7 @@ assertThrows(
 assertThrows(
     () => tblGrow.call(tbl1, Math.pow(2, 32)), TypeError,
     /must be in the unsigned long range/);
-var tbl = new Table({element: 'anyfunc', initial: 1, maximum: 2});
+var tbl = new Table({element: 'funcref', initial: 1, maximum: 2});
 assertEq(tbl.length, 1);
 assertThrows(
     () => tbl.grow(Infinity), TypeError, /must be convertible to a valid number/);
@@ -930,7 +930,7 @@ assertInstantiateSuccess(
   assertThrows(() => WebAssembly.Module(bytes), TypeError);
   assertThrows(() => WebAssembly.Instance(new WebAssembly.Module(bytes)),
                TypeError);
-  assertThrows(() => WebAssembly.Table({size: 10, element: 'anyfunc'}),
+  assertThrows(() => WebAssembly.Table({size: 10, element: 'funcref'}),
                TypeError);
   assertThrows(() => WebAssembly.Memory({size: 10}), TypeError);
 })();

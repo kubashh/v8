@@ -42,62 +42,62 @@ function assertTableIsValid(table, length) {
   assertThrows(() => new WebAssembly.Table({element: "any", initial: 10}), TypeError);
 
   assertThrows(() => new WebAssembly.Table(
-    {element: "anyfunc", initial: -1}), TypeError);
+    {element: "funcref", initial: -1}), TypeError);
   assertThrows(() => new WebAssembly.Table(
-    {element: "anyfunc", initial: outOfUint32RangeValue}), TypeError);
+    {element: "funcref", initial: outOfUint32RangeValue}), TypeError);
 
   assertThrows(() => new WebAssembly.Table(
-    {element: "anyfunc", initial: 10, maximum: -1}), TypeError);
+    {element: "funcref", initial: 10, maximum: -1}), TypeError);
   assertThrows(() => new WebAssembly.Table(
-    {element: "anyfunc", initial: 10, maximum: outOfUint32RangeValue}), TypeError);
+    {element: "funcref", initial: 10, maximum: outOfUint32RangeValue}), TypeError);
   assertThrows(() => new WebAssembly.Table(
-    {element: "anyfunc", initial: 10, maximum: 9}), RangeError);
+    {element: "funcref", initial: 10, maximum: 9}), RangeError);
 
   let table;
-  table = new WebAssembly.Table({element: "anyfunc", initial: 1});
+  table = new WebAssembly.Table({element: "funcref", initial: 1});
   assertTableIsValid(table, 1);
   assertEquals(null, table.get(0));
   assertEquals(undefined, table[0]);
 
-  table = new WebAssembly.Table({element: "anyfunc", initial: "2"});
+  table = new WebAssembly.Table({element: "funcref", initial: "2"});
   assertTableIsValid(table, 2);
   assertEquals(null, table.get(0));
   assertEquals(null, table.get(1));
   assertEquals(undefined, table[0]);
   assertEquals(undefined, table[1]);
 
-  table = new WebAssembly.Table({element: "anyfunc", initial: {valueOf() { return "1" }}});
+  table = new WebAssembly.Table({element: "funcref", initial: {valueOf() { return "1" }}});
   assertTableIsValid(table, 1);
   assertEquals(null, table.get(0));
   assertEquals(undefined, table[0]);
 
-  table = new WebAssembly.Table({element: "anyfunc", initial: 0, maximum: 10});
+  table = new WebAssembly.Table({element: "funcref", initial: 0, maximum: 10});
   assertTableIsValid(table, 0);
 
-  table = new WebAssembly.Table({element: "anyfunc", initial: 0,  maximum: "10"});
+  table = new WebAssembly.Table({element: "funcref", initial: 0,  maximum: "10"});
   assertTableIsValid(table, 0);
 
-  table = new WebAssembly.Table({element: "anyfunc", initial: 0, maximum: {valueOf() { return "10" }}});
+  table = new WebAssembly.Table({element: "funcref", initial: 0, maximum: {valueOf() { return "10" }}});
   assertTableIsValid(table, 0);
 
-  table = new WebAssembly.Table({element: "anyfunc", initial: 0, maximum: undefined});
+  table = new WebAssembly.Table({element: "funcref", initial: 0, maximum: undefined});
   assertTableIsValid(table, 0);
 
-  table = new WebAssembly.Table({element: "anyfunc", initial: 0, maximum: 1000000});
+  table = new WebAssembly.Table({element: "funcref", initial: 0, maximum: 1000000});
   assertTableIsValid(table, 0);
 
-  table = new WebAssembly.Table({element: "anyfunc", initial: 0, maximum: kV8MaxWasmTableSize});
+  table = new WebAssembly.Table({element: "funcref", initial: 0, maximum: kV8MaxWasmTableSize});
   assertTableIsValid(table, 0);
 
   assertThrows(
     () => new WebAssembly.Table(
-      {element: "anyfunc", initial: 0, maximum: kV8MaxWasmTableSize + 1}),
+      {element: "funcref", initial: 0, maximum: kV8MaxWasmTableSize + 1}),
     RangeError, /above the upper bound/);
 })();
 
 (function TestMaximumIsReadOnce() {
   var a = true;
-  var desc = {element: "anyfunc", initial: 10};
+  var desc = {element: "funcref", initial: 10};
   Object.defineProperty(desc, 'maximum', {get: function() {
     if (a) {
       a = false;
@@ -114,7 +114,7 @@ function assertTableIsValid(table, length) {
 
 (function TestMaximumDoesHasProperty() {
   var hasPropertyWasCalled = false;
-  var desc = {element: "anyfunc", initial: 10};
+  var desc = {element: "funcref", initial: 10};
   var proxy = new Proxy({maximum: 16}, {
     has: function(target, name) { hasPropertyWasCalled = true; }
   });
@@ -125,7 +125,7 @@ function assertTableIsValid(table, length) {
 
 (function TestLength() {
   for (let i = 0; i < 10; ++i) {
-    let table = new WebAssembly.Table({element: "anyfunc", initial: i});
+    let table = new WebAssembly.Table({element: "funcref", initial: i});
     assertEquals(i, table.length);
   }
 
@@ -133,7 +133,7 @@ function assertTableIsValid(table, length) {
 })();
 
 (function TestGet() {
-  let table = new WebAssembly.Table({element: "anyfunc", initial: 10});
+  let table = new WebAssembly.Table({element: "funcref", initial: 10});
 
   for (let i = 0; i < table.length; ++i) {
     assertEquals(null, table.get(i));
@@ -158,7 +158,7 @@ function assertTableIsValid(table, length) {
   builder.addExport("wasm", builder.addFunction("", kSig_v_v).addBody([]));
   let {wasm, host} = builder.instantiate({test: {f() {}}}).exports;
 
-  let table = new WebAssembly.Table({element: "anyfunc", initial: 10});
+  let table = new WebAssembly.Table({element: "funcref", initial: 10});
 
   for (let f of [wasm, host]) {
     for (let i = 0; i < table.length; ++i) table.set(i, null);
@@ -211,7 +211,7 @@ function assertTableIsValid(table, length) {
   builder.addExport("wasm", builder.addFunction("", kSig_v_v).addBody([]));
   let {wasm, host} = builder.instantiate({test: {f() {}}}).exports;
 
-  let table = new WebAssembly.Table({element: "anyfunc", initial: 10});
+  let table = new WebAssembly.Table({element: "funcref", initial: 10});
 
   for (let f of [wasm, host, () => {}, 5, {}, ""]) {
     for (let i = 0; i < table.length; ++i) table[i] = f;
@@ -250,7 +250,7 @@ function assertTableIsValid(table, length) {
     for (let i = 21; i < table.length; ++i) assertSame(null, table.get(i));
   }
 
-  let table = new WebAssembly.Table({element: "anyfunc", initial: 20});
+  let table = new WebAssembly.Table({element: "funcref", initial: 20});
   init(table);
   check(table);
   table.grow(0);
@@ -259,7 +259,7 @@ function assertTableIsValid(table, length) {
   check(table);
   assertThrows(() => table.grow(-10), TypeError);
 
-  table = new WebAssembly.Table({element: "anyfunc", initial: 20, maximum: 25});
+  table = new WebAssembly.Table({element: "funcref", initial: 20, maximum: 25});
   init(table);
   check(table);
   table.grow(0);
@@ -274,11 +274,11 @@ function assertTableIsValid(table, length) {
   assertThrows(() => WebAssembly.Table.prototype.grow.call([], 0), TypeError);
 
   table = new WebAssembly.Table(
-    {element: "anyfunc", initial: 0, maximum: kV8MaxWasmTableSize});
+    {element: "funcref", initial: 0, maximum: kV8MaxWasmTableSize});
   table.grow(kV8MaxWasmTableSize);
   assertThrows(() => table.grow(1), RangeError);
 
-  table = new WebAssembly.Table({element: "anyfunc", initial: 0});
+  table = new WebAssembly.Table({element: "funcref", initial: 0});
   table.grow({valueOf: () => {table.grow(2); return 1;}});
   assertEquals(3, table.length);
 })();

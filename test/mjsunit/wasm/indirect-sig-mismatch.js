@@ -125,7 +125,7 @@ function DoCalls(table, calls) {
 (function TestExecute() {
   print("TestExecute");
   let module = caller_module();
-  let table = new WebAssembly.Table({element: "anyfunc",
+  let table = new WebAssembly.Table({element: "funcref",
     initial: kTableSize, maximum: kTableSize});
   let instance = new WebAssembly.Instance(module, {imp: {table: table}});
   instance.exports.call1.sig = kSig_i_v;

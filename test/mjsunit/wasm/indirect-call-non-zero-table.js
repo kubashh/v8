@@ -103,9 +103,9 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
 
   const table_size = 10;
   const placeholder = new WebAssembly.Table(
-    { initial: table_size, maximum: table_size, element: "anyfunc" });
+    { initial: table_size, maximum: table_size, element: "funcref" });
   const table = new WebAssembly.Table(
-    { initial: table_size, maximum: table_size, element: "anyfunc" });
+    { initial: table_size, maximum: table_size, element: "funcref" });
 
   const builder = new WasmModuleBuilder();
   builder.addImportedTable("m", "placeholder", table_size, table_size);
@@ -181,12 +181,12 @@ function js_div(a, b) { return (a / b) | 0; }
   let m = new WebAssembly.Module(builder.toBuffer());
 
   let table = new WebAssembly.Table({
-    element: "anyfunc",
+    element: "funcref",
     initial: kTableSize,
     maximum: kTableSize
   });
   let placeholder = new WebAssembly.Table({
-    element: "anyfunc",
+    element: "funcref",
     initial: kTableSize,
     maximum: kTableSize
   });

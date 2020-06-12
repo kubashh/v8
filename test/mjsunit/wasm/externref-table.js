@@ -41,7 +41,7 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
   let table_ref = new WebAssembly.Table({element: "externref", initial: 3, maximum: 10});
   builder.instantiate({imp:{table: table_ref}});
 
-  let table_func = new WebAssembly.Table({ element: "anyfunc", initial: 3, maximum: 10 });
+  let table_func = new WebAssembly.Table({ element: "funcref", initial: 3, maximum: 10 });
   assertThrows(() => builder.instantiate({ imp: { table: table_func } }),
     WebAssembly.LinkError, /imported table does not match the expected type/);
 })();

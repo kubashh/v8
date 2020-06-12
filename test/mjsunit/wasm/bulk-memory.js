@@ -193,7 +193,7 @@ function getMemoryFill(mem) {
 })();
 
 (function TestLazyDataAndElementSegments() {
-  const table = new WebAssembly.Table({initial: 1, element: 'anyfunc'});
+  const table = new WebAssembly.Table({initial: 1, element: 'funcref'});
   const memory = new WebAssembly.Memory({initial: 1});
   const view = new Uint8Array(memory.buffer);
   const builder = new WasmModuleBuilder();

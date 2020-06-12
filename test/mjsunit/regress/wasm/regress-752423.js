@@ -17,7 +17,7 @@ builder.addFunction("main", kSig_i_i)
     kExprCallIndirect, 0, kTableZero])
   .exportAs("main");
 let module = new WebAssembly.Module(builder.toBuffer());
-let table = new WebAssembly.Table({element: "anyfunc",
+let table = new WebAssembly.Table({element: "funcref",
   initial: 1, maximum:1000000});
 let instance = new WebAssembly.Instance(module, {x: {table:table}});
 

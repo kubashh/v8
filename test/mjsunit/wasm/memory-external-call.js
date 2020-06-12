@@ -285,7 +285,7 @@ function assertMemoryIndependence(load_a, store_a, load_b, store_b) {
                              b.exports.load, b.exports.store);
   }
 
-  let table = new WebAssembly.Table({element: "anyfunc",
+  let table = new WebAssembly.Table({element: "funcref",
                                      initial: kTableSize,
                                      maximum: kTableSize});
 

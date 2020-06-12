@@ -14,13 +14,13 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
   builder.addFunction("get_externref_global", kSig_r_v)
     .addBody([kExprGlobalGet, g_null])
     .exportAs("get_externref_global");
-  builder.addFunction("get_anyfunc_global", kSig_a_v)
+  builder.addFunction("get_funcref_global", kSig_a_v)
     .addBody([kExprGlobalGet, g_nullfunc])
-    .exportAs("get_anyfunc_global");
+    .exportAs("get_funcref_global");
 
   const instance = builder.instantiate();
   assertEquals(null, instance.exports.get_externref_global());
-  assertEquals(null, instance.exports.get_anyfunc_global());
+  assertEquals(null, instance.exports.get_funcref_global());
 })();
 
 (function TestDefaultValueSecondGlobal() {
@@ -37,17 +37,17 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
       kExprGlobalGet, g_null.index
     ])
     .exportAs("get_externref_global");
-  builder.addFunction("get_anyfunc_global", kSig_a_a)
+  builder.addFunction("get_funcref_global", kSig_a_a)
     .addBody([
       kExprLocalGet, 0,
       kExprGlobalSet, g_setfunc.index,
       kExprGlobalGet, g_nullfunc.index
     ])
-    .exportAs("get_anyfunc_global");
+    .exportAs("get_funcref_global");
 
   const instance = builder.instantiate();
   assertEquals(null, instance.exports.get_externref_global({}));
-  assertEquals(null, instance.exports.get_anyfunc_global(
+  assertEquals(null, instance.exports.get_funcref_global(
     instance.exports.get_externref_global));
 })();
 
@@ -202,7 +202,7 @@ function dummy_func() {
 
 (function TestAnyFuncGlobalObjectDefaultValue() {
   print(arguments.callee.name);
-  let default_init = new WebAssembly.Global({ value: 'anyfunc', mutable: true });
+  let default_init = new WebAssembly.Global({ value: 'funcref', mutable: true });
   assertSame(null, default_init.value);
   assertSame(null, default_init.valueOf());
 })();
@@ -227,15 +227,15 @@ function dummy_func() {
   print(arguments.callee.name);
 
   const dummy = dummy_func();
-  const global = new WebAssembly.Global({ value: 'anyfunc' }, dummy);
+  const global = new WebAssembly.Global({ value: 'funcref' }, dummy);
   assertSame(dummy, global.value);
   assertSame(dummy, global.valueOf());
 
-  const global_null = new WebAssembly.Global({ value: 'anyfunc' }, null);
+  const global_null = new WebAssembly.Global({ value: 'funcref' }, null);
   assertSame(null, global_null.value);
   assertSame(null, global_null.valueOf());
 
-  assertThrows(() => new WebAssembly.Global({ value: 'anyfunc' }, {}), TypeError);
+  assertThrows(() => new WebAssembly.Global({ value: 'funcref' }, {}), TypeError);
 })();
 
 (function TestExternRefGlobalObjectSetValue() {
@@ -259,7 +259,7 @@ function dummy_func() {
 
 (function TestAnyFuncGlobalObjectSetValue() {
   print(arguments.callee.name);
-  let global = new WebAssembly.Global({ value: 'anyfunc', mutable: true });
+  let global = new WebAssembly.Global({ value: 'funcref', mutable: true });
 
   const dummy = dummy_func();
   global.value = dummy;
@@ -338,7 +338,7 @@ function dummy_func() {
       .addBody([kExprGlobalGet, g])
       .exportAs('main');
 
-    const global = new WebAssembly.Global({ value: 'anyfunc', mutable: 'true' }, obj);
+    const global = new WebAssembly.Global({ value: 'funcref', mutable: 'true' }, obj);
     const instance = builder.instantiate({ m: { val: global } });
     assertSame(obj, instance.exports.main());
   }
@@ -547,16 +547,16 @@ function dummy_func() {
   print(arguments.callee.name);
   let builder = new WasmModuleBuilder();
   const g_func = builder.addGlobal(kWasmAnyFunc, true);
-  const f_func = builder.addFunction('get_anyfunc_global', kSig_a_v)
+  const f_func = builder.addFunction('get_funcref_global', kSig_a_v)
                      .addBody([kExprGlobalGet, g_func.index])
-                     .exportAs('get_anyfunc_global');
+                     .exportAs('get_funcref_global');
   builder.addDeclarativeElementSegment([f_func.index]);
   g_func.function_index = f_func.index;
 
   const instance = builder.instantiate();
   assertEquals(
-      instance.exports.get_anyfunc_global,
-      instance.exports.get_anyfunc_global());
+      instance.exports.get_funcref_global,
+      instance.exports.get_funcref_global());
 })();
 
 (function TestRefFuncGlobalInitWithImport() {
