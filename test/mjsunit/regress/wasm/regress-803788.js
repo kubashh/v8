@@ -14,7 +14,7 @@ builder.addType(kSig_i_ii);
 builder.addElementSegment(0, q_base, true, [ q_fun ])
 let module = new WebAssembly.Module(builder.toBuffer());
 let table = new WebAssembly.Table({
-  element: "anyfunc",
+  element: "funcref",
   initial: 10,
 });
 let instance = new WebAssembly.Instance(module, {

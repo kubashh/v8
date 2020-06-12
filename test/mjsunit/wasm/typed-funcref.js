@@ -19,7 +19,7 @@ let foo = (() => {
 (function TableGrowWithInitializer() {
   print(arguments.callee.name);
   var table =
-      new WebAssembly.Table({element: 'anyfunc', initial: 0, maximum: 100});
+      new WebAssembly.Table({element: 'funcref', initial: 0, maximum: 100});
 
   table.grow(10);
   table.grow(10, foo);

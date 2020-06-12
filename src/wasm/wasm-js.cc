@@ -1077,13 +1077,14 @@ void WebAssemblyTable(const v8::FunctionCallbackInfo<v8::Value>& args) {
     v8::Local<v8::String> string;
     if (!value->ToString(context).ToLocal(&string)) return;
     auto enabled_features = i::wasm::WasmFeatures::FromFlags();
-    if (string->StringEquals(v8_str(isolate, "anyfunc"))) {
+    if (string->StringEquals(v8_str(isolate, "funcref"))) {
       type = i::wasm::kWasmFuncRef;
     } else if (enabled_features.has_reftypes() &&
                string->StringEquals(v8_str(isolate, "externref"))) {
       type = i::wasm::kWasmExternRef;
     } else {
-      thrower.TypeError("Descriptor property 'element' must be 'anyfunc'");
+      thrower.TypeError(
+          "Descriptor property 'element' must be a WebAssembly reference type");
       return;
     }
   }
@@ -1210,7 +1211,7 @@ bool GetValueType(Isolate* isolate, MaybeLocal<Value> maybe,
              string->StringEquals(v8_str(isolate, "externref"))) {
     *type = i::wasm::kWasmExternRef;
   } else if (enabled_features.has_reftypes() &&
-             string->StringEquals(v8_str(isolate, "anyfunc"))) {
+             string->StringEquals(v8_str(isolate, "funcref"))) {
     *type = i::wasm::kWasmFuncRef;
   } else if (enabled_features.has_eh() &&
              string->StringEquals(v8_str(isolate, "exnref"))) {
@@ -1264,8 +1265,7 @@ void WebAssemblyGlobal(const v8::FunctionCallbackInfo<v8::Value>& args) {
     if (!GetValueType(isolate, maybe, context, &type, enabled_features)) return;
     if (type == i::wasm::kWasmStmt) {
       thrower.TypeError(
-          "Descriptor property 'value' must be 'i32', 'i64', 'f32', or "
-          "'f64'");
+          "Descriptor property 'value' must be a WebAssembly type");
       return;
     }
   }

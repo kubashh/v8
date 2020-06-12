@@ -194,7 +194,7 @@ function js_div(a, b) { return (a / b) | 0; }
   // Run 5 trials at different table bases.
   for (let i = 0; i < 5; i++) {
     print(" base = " + i);
-    let table = new WebAssembly.Table({element: "anyfunc",
+    let table = new WebAssembly.Table({element: "funcref",
                                        initial: kTableSize,
                                        maximum: kTableSize});
     assertEquals(10, table.length);
@@ -240,7 +240,7 @@ function js_div(a, b) { return (a / b) | 0; }
 
   let kTableSize = 10;
   let table = new WebAssembly.Table(
-    {element: "anyfunc", initial: kTableSize, maximum: kTableSize});
+    {element: "funcref", initial: kTableSize, maximum: kTableSize});
 
   var builder = new WasmModuleBuilder();
 
@@ -372,7 +372,7 @@ function js_div(a, b) { return (a / b) | 0; }
 (function TableGrowBoundsCheck() {
   print(arguments.callee.name);
   var kMaxSize = 30, kInitSize = 5;
-  let table = new WebAssembly.Table({element: "anyfunc",
+  let table = new WebAssembly.Table({element: "funcref",
     initial: kInitSize, maximum: kMaxSize});
   var builder = new WasmModuleBuilder();
   builder.addImportedTable("x", "table", kInitSize, kMaxSize);
@@ -396,7 +396,7 @@ function js_div(a, b) { return (a / b) | 0; }
 (function CumulativeGrowTest() {
   print(arguments.callee.name);
   let table = new WebAssembly.Table({
-    element: "anyfunc", initial: 10, maximum: 30});
+    element: "funcref", initial: 10, maximum: 30});
   var builder = new WasmModuleBuilder();
   builder.addImportedTable("x", "table", 10, 30);
 
@@ -462,15 +462,15 @@ function js_div(a, b) { return (a / b) | 0; }
 
   // initial size is too large
   assertThrows(() => builder.instantiate({t: {t: new WebAssembly.Table(
-    {element: "anyfunc", initial: 3, maximum: 3})}}), WebAssembly.LinkError);
+    {element: "funcref", initial: 3, maximum: 3})}}), WebAssembly.LinkError);
 
   // maximum size is too large
   assertThrows(() => builder.instantiate({t: {t: new WebAssembly.Table(
-    {element: "anyfunc", initial: 1, maximum: 4})}}), WebAssembly.LinkError);
+    {element: "funcref", initial: 1, maximum: 4})}}), WebAssembly.LinkError);
 
   // no maximum
   assertThrows(() => builder.instantiate({t: {t: new WebAssembly.Table(
-    {element: "anyfunc", initial: 1})}}), WebAssembly.LinkError);
+    {element: "funcref", initial: 1})}}), WebAssembly.LinkError);
 })();
 
 (function TableImportLargerThanCompiled() {
@@ -478,7 +478,7 @@ function js_div(a, b) { return (a / b) | 0; }
   var kMaxSize = 30, kInitSize = 5;
   var builder = new WasmModuleBuilder();
   builder.addImportedTable("x", "table", 1, 35);
-  let table = new WebAssembly.Table({element: "anyfunc",
+  let table = new WebAssembly.Table({element: "funcref",
     initial: kInitSize, maximum: kMaxSize});
   let module = new WebAssembly.Module(builder.toBuffer());
   let instance = new WebAssembly.Instance(module, {x: {base: 1, table: table}});
@@ -501,7 +501,7 @@ function js_div(a, b) { return (a / b) | 0; }
   })();
 
   var kMaxSize = 30, kInitSize = 5;
-  let table = new WebAssembly.Table({element: "anyfunc",
+  let table = new WebAssembly.Table({element: "funcref",
     initial: kInitSize, maximum: kMaxSize});
   let instance1 = new WebAssembly.Instance(
       module1, {x: {base: 1, table: table}});
@@ -659,7 +659,7 @@ function js_div(a, b) { return (a / b) | 0; }
     builder.addImportedTable('', 'table');
 
     let module1 = new WebAssembly.Module(builder.toBuffer());
-    let table = new WebAssembly.Table({initial:2, element:'anyfunc'});
+    let table = new WebAssembly.Table({initial:2, element:'funcref'});
     let instance1 = new WebAssembly.Instance(module1, {'':{table: table}});
 
     builder = new WasmModuleBuilder();
@@ -763,7 +763,7 @@ function js_div(a, b) { return (a / b) | 0; }
     return builder.instantiate().exports.mul;
   })();
 
-  let table = new WebAssembly.Table({element: "anyfunc",
+  let table = new WebAssembly.Table({element: "funcref",
                                      initial: kTableSize,
                                      maximum: kTableSize});
 

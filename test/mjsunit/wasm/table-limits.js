@@ -12,14 +12,14 @@ const oob = 11;
 (function TestJSTableInitialAboveTheLimit() {
   print(arguments.callee.name);
   assertThrows(
-    () => new WebAssembly.Table({ initial: oob, element: "anyfunc" }),
+    () => new WebAssembly.Table({ initial: oob, element: "funcref" }),
     RangeError, /above the upper bound/);
 })();
 
 (function TestJSTableMaximumAboveTheLimit() {
   print(arguments.callee.name);
   assertThrows(
-    () => new WebAssembly.Table({ initial: 1, maximum: oob, element: "anyfunc" }),
+    () => new WebAssembly.Table({ initial: 1, maximum: oob, element: "funcref" }),
     RangeError, /above the upper bound/);
 })();
 

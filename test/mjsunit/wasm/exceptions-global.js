@@ -126,7 +126,7 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
         kExprRethrow,
       ]).exportFunc();
   let exception1 = "my fancy exception";
-  let desc = { value: 'exnref', mutable: true };
+  let desc = { value: "exnref", mutable: true };
   let mutable_global = new WebAssembly.Global(desc, exception1);
   let instance = builder.instantiate({ "m": { "exn": mutable_global }});
 

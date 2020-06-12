@@ -71,7 +71,7 @@ let kTableSize = 50;
   }
 
   var table = new WebAssembly.Table({initial: kTableSize,
-                                     maximum: kTableSize, element: "anyfunc"});
+                                     maximum: kTableSize, element: "funcref"});
   var i1 = new WebAssembly.Instance(mod1, {m: {table: table}});
 
   var i2 = new WebAssembly.Instance(mod2,
@@ -143,7 +143,7 @@ function addConstFuncUsingGlobal(builder, val) {
   }
 
   var table = new WebAssembly.Table({initial: kTableSize,
-                                     maximum: kTableSize, element: "anyfunc"});
+                                     maximum: kTableSize, element: "funcref"});
   var i1 = new WebAssembly.Instance(mod1, {m: {table: table}});
 
   var i2 = new WebAssembly.Instance(mod2,
@@ -225,7 +225,7 @@ function addConstFuncUsingMemory(builder, val) {
   }
 
   var table = new WebAssembly.Table({initial: kTableSize,
-                                     maximum: kTableSize, element: "anyfunc"});
+                                     maximum: kTableSize, element: "funcref"});
   var i1 = new WebAssembly.Instance(mod1, {m: {table: table}});
 
   var i2 = new WebAssembly.Instance(mod2,
