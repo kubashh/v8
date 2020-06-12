@@ -27,6 +27,12 @@
 
 [
 [ALWAYS, {
+  # These tests fail at the moment because we already prepared them to switch
+  # the wasm-bigint flag. Once we flip the flag, we can enable them again.
+  'wasm/ffi-error': [FAIL],
+  'wasm/type-reflection': [FAIL],
+  'wasm/globals': [FAIL],
+
   # Modules which are only meant to be imported from by other tests, not to be
   # tested standalone.
   'modules-skip*': [SKIP],
