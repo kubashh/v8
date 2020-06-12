@@ -22,6 +22,30 @@
       "revId": "2f1042edff157f18eec614b575c696322bf6bd5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cd811d1_0e9a423c",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-12T17:46:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fd3069e_4b5b8e34",
+      "range": {
+        "startLine": 30,
+        "startChar": 2,
+        "endLine": 30,
+        "endChar": 3
+      },
+      "revId": "2f1042edff157f18eec614b575c696322bf6bd5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
