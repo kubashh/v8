@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b966c1f_7e50533b",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6770,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-06-12T17:49:52Z",
+      "side": 1,
+      "message": "I assume this is right, in that we don\u0027t need a write-barrier in this case. Potentially this shortcut is an optimisation?",
+      "range": {
+        "startLine": 6768,
+        "startChar": 2,
+        "endLine": 6770,
+        "endChar": 61
+      },
+      "revId": "0c255d0b815053860acc0bb927264b389fa42370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04d88013_82b00b14",
+        "filename": "src/heap/paged-spaces.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-06-12T17:49:52Z",
+      "side": 1,
+      "message": "I\u0027m fairly certain this is correct but PTAL.",
+      "range": {
+        "startLine": 734,
+        "startChar": 10,
+        "endLine": 734,
+        "endChar": 36
+      },
+      "revId": "0c255d0b815053860acc0bb927264b389fa42370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
