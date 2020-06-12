@@ -761,7 +761,8 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
     Handle<Map> map, Handle<Name> name, MaybeHandle<JSObject> holder) const {
   // Check if the {map} has a data transition with the given {name}.
   Map transition =
-      TransitionsAccessor(isolate(), map).SearchTransition(*name, kData, NONE);
+      TransitionsAccessor(isolate(), map, broker()->is_concurrent_inlining())
+          .SearchTransition(*name, kData, NONE);
   if (transition.is_null()) {
     return PropertyAccessInfo::Invalid(zone());
   }
