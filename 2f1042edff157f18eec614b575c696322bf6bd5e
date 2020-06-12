@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4fd3069e_4b5b8e34",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-12T16:12:19Z",
+      "side": 1,
+      "message": "Please move this to the \"Open bugs\" section below, and include a bug number (e.g. 7741) in the comment.",
+      "range": {
+        "startLine": 30,
+        "startChar": 2,
+        "endLine": 30,
+        "endChar": 3
+      },
+      "revId": "2f1042edff157f18eec614b575c696322bf6bd5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
