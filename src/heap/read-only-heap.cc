@@ -191,7 +191,7 @@ bool ReadOnlyHeap::Contains(HeapObject object) {
   if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
     return third_party_heap::Heap::InReadOnlySpace(object.address());
   } else {
-    return MemoryChunk::FromHeapObject(object)->InReadOnlySpace();
+    return BasicMemoryChunk::FromHeapObject(object)->InReadOnlySpace();
   }
 }
 

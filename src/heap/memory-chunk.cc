@@ -82,14 +82,6 @@ size_t MemoryChunkLayout::AllocatableMemoryInMemoryChunk(
   return AllocatableMemoryInDataPage();
 }
 
-#ifdef THREAD_SANITIZER
-void MemoryChunk::SynchronizedHeapLoad() {
-  CHECK(reinterpret_cast<Heap*>(base::Acquire_Load(
-            reinterpret_cast<base::AtomicWord*>(&heap_))) != nullptr ||
-        InReadOnlySpace());
-}
-#endif
-
 void MemoryChunk::InitializationMemoryFence() {
   base::SeqCst_MemoryFence();
 #ifdef THREAD_SANITIZER

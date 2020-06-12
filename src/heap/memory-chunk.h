@@ -49,23 +49,6 @@ enum RememberedSetType {
 // any heap object.
 class MemoryChunk : public BasicMemoryChunk {
  public:
-  using Flags = uintptr_t;
-
-  static const Flags kPointersToHereAreInterestingMask =
-      POINTERS_TO_HERE_ARE_INTERESTING;
-
-  static const Flags kPointersFromHereAreInterestingMask =
-      POINTERS_FROM_HERE_ARE_INTERESTING;
-
-  static const Flags kEvacuationCandidateMask = EVACUATION_CANDIDATE;
-
-  static const Flags kIsInYoungGenerationMask = FROM_PAGE | TO_PAGE;
-
-  static const Flags kIsLargePageMask = LARGE_PAGE;
-
-  static const Flags kSkipEvacuationSlotsRecordingMask =
-      kEvacuationCandidateMask | kIsInYoungGenerationMask;
-
   // |kDone|: The page state when sweeping is complete or sweeping must not be
   //   performed on that page. Sweeper threads that are done with their work
   //   will set this value and not touch the page anymore.
@@ -118,7 +101,21 @@ class MemoryChunk : public BasicMemoryChunk {
   // Only works if the object is in the first kPageSize of the MemoryChunk.
   static MemoryChunk* FromHeapObject(HeapObject o) {
     DCHECK(!V8_ENABLE_THIRD_PARTY_HEAP_BOOL);
-    return reinterpret_cast<MemoryChunk*>(BaseAddress(o.ptr()));
+    MemoryChunk* chunk = reinterpret_cast<MemoryChunk*>(BaseAddress(o.ptr()));
+    // ReadOnlySpace chunks should be retrieved via
+    // BasicMemoryChunk::FromHeapObject.
+    DCHECK(!chunk->InReadOnlySpace());
+    return chunk;
+  }
+
+  static MemoryChunk* cast(BasicMemoryChunk* chunk) {
+    SLOW_DCHECK(!chunk->InReadOnlySpace());
+    return static_cast<MemoryChunk*>(chunk);
+  }
+
+  static const MemoryChunk* cast(const BasicMemoryChunk* chunk) {
+    SLOW_DCHECK(!chunk->InReadOnlySpace());
+    return static_cast<const MemoryChunk*>(chunk);
   }
 
   size_t buckets() const { return SlotSet::BucketsForSize(size()); }
@@ -145,13 +142,6 @@ class MemoryChunk : public BasicMemoryChunk {
   bool SweepingDone() {
     return concurrent_sweeping_ == ConcurrentSweepingState::kDone;
   }
-
-#ifdef THREAD_SANITIZER
-  // Perform a dummy acquire load to tell TSAN that there is no data race in
-  // mark-bit initialization. See MemoryChunk::Initialize for the corresponding
-  // release store.
-  void SynchronizedHeapLoad();
-#endif
 
   template <RememberedSetType type>
   bool ContainsSlots() {
