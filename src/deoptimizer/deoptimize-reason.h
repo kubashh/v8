@@ -58,6 +58,7 @@ namespace internal {
   V(WrongCallTarget, "wrong call target")                                      \
   V(WrongEnumIndices, "wrong enum indices")                                    \
   V(WrongFeedbackCell, "wrong feedback cell")                                  \
+  V(WrongICState, "wrong IC state")                                            \
   V(WrongInstanceType, "wrong instance type")                                  \
   V(WrongMap, "wrong map")                                                     \
   V(WrongName, "wrong name")                                                   \
