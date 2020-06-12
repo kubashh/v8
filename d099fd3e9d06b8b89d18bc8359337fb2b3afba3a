@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65dd2057_eca556fc",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-12T16:35:41Z",
+      "side": 0,
+      "message": "Nice! :-)",
+      "range": {
+        "startLine": 254,
+        "startChar": 5,
+        "endLine": 254,
+        "endChar": 9
+      },
+      "revId": "d099fd3e9d06b8b89d18bc8359337fb2b3afba3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
