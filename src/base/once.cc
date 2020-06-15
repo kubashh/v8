@@ -8,6 +8,8 @@
 #include <windows.h>
 #else
 #include <sched.h>
+#elif defined(V8_OS_STARBOARD)
+#include "starboard/thread.h"
 #endif
 
 namespace v8 {
@@ -40,6 +42,8 @@ void CallOnceImpl(OnceType* once, std::function<void()> init_func) {
            ONCE_STATE_EXECUTING_FUNCTION) {
 #ifdef _WIN32
       ::Sleep(0);
+#elif defined(V8_OS_STARBOARD)
+      SbThreadYield
 #else
       sched_yield();
 #endif
