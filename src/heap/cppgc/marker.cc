@@ -33,9 +33,6 @@ void ExitIncrementalMarkingIfNeeded(Marker::MarkingConfig config) {
   }
 }
 
-}  // namespace
-
-namespace {
 template <typename Worklist, typename Callback>
 bool DrainWorklistWithDeadline(v8::base::TimeTicks deadline, Worklist* worklist,
                                Callback callback, int task_id) {
@@ -96,9 +93,8 @@ void Marker::EnterAtomicPause(MarkingConfig config) {
   ExitIncrementalMarkingIfNeeded(config_);
   config_ = config;
 
-  // Reset LABs before trying to conservatively mark in-construction objects.
-  // This is also needed in preparation for sweeping.
-  heap().object_allocator().ResetLinearAllocationBuffers();
+  // VisitRoots also resets the LABs.
+  VisitRoots();
   if (config_.stack_state == MarkingConfig::StackState::kNoHeapPointers) {
     FlushNotFullyConstructedObjects();
   } else {

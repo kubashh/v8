@@ -81,7 +81,7 @@ void MarkingVisitor::VisitWeakRoot(const void* object, TraceDescriptor desc,
     // construction, then it should be reachable from the stack.
     return;
   }
-  // Since weak roots arev only traced at the end of marking, we can execute
+  // Since weak roots are only traced at the end of marking, we can execute
   // the callback instead of registering it.
   weak_callback(LivenessBrokerFactory::Create(), weak_root);
 }
@@ -130,6 +130,13 @@ void MarkingVisitor::DynamicallyMarkAddress(ConstAddress address) {
         {reinterpret_cast<void*>(header.Payload()),
          GlobalGCInfoTable::GCInfoFromIndex(header.GetGCInfoIndex()).trace});
   }
+}
+
+void MarkingVisitor::MarkObject(HeapObjectHeader& header) {
+  MarkHeader(
+      &header,
+      {header.Payload(),
+       GlobalGCInfoTable::GCInfoFromIndex(header.GetGCInfoIndex()).trace});
 }
 
 MutatorThreadMarkingVisitor::MutatorThreadMarkingVisitor(Marker* marker)
