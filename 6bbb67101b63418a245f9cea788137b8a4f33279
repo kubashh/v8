@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de31f819_96378093",
+        "filename": "tools/map-processor.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-15T19:45:36Z",
+      "side": 1,
+      "message": "Pull this out to variable so that you don\u0027t have to do a double lookup.",
+      "range": {
+        "startLine": 519,
+        "startChar": 5,
+        "endLine": 519,
+        "endChar": 30
+      },
+      "revId": "6bbb67101b63418a245f9cea788137b8a4f33279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63ff448f_e3e6ac1f",
+        "filename": "tools/map-processor.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-15T19:45:36Z",
+      "side": 1,
+      "message": "There seems to be a bunch of trailing spaces that we don\u0027t ideally want. You can remove these by making your editor remove them on save. Something like this maybein vscode: \n\n  \"editor.trimAutoWhitespace\": true,\n  \"files.trimTrailingWhitespace\": true,",
+      "range": {
+        "startLine": 522,
+        "startChar": 3,
+        "endLine": 522,
+        "endChar": 4
+      },
+      "revId": "6bbb67101b63418a245f9cea788137b8a4f33279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28213577_ec33c100",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-15T19:45:36Z",
+      "side": 1,
+      "message": "No need to leave the commented code here. Please remove this.",
+      "revId": "6bbb67101b63418a245f9cea788137b8a4f33279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49fd7ecc_32b41eed",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-15T19:45:36Z",
+      "side": 1,
+      "message": "Is this needed? We only ever set the description here right?",
+      "revId": "6bbb67101b63418a245f9cea788137b8a4f33279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
