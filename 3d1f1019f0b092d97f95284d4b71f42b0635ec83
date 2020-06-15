@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9854f88d_ac3e41b0",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-15T11:06:54Z",
+      "side": 1,
+      "message": "It turns out that this is incorrect. If you look at the log file, you\u0027ll see \"map-create\" event has the following format:\n\n  map-create,21265,0x0f6908280121\n\nwhere \"map-create\" is the event, 21265 is the timestamp and 0x0f6908280121 is the address.\n\nwhich means we should be parsing this as : \n  \u0027map-create\u0027: {\n     parsers: [parseInt, parseString],\n     processor: this.processMapCreate\n   }",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c135bc5_045878b6",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-15T11:06:54Z",
+      "side": 1,
+      "message": "This needs to be changed to accept only two parameters now:\n  processMapCreate(time, address)\n\nand then you can pass the time and the address (which will be used as id) to createMap:\n  let map \u003d this.createMap(time, address)",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3be3e29_882f0958",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-15T11:06:54Z",
+      "side": 1,
+      "message": "Similarly the V8Map constructor needs to accept `time` and `address` fields now.",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4f3aaf1_0df66e36",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-15T11:06:54Z",
+      "side": 1,
+      "message": "This should now accept time and string:\n  constructor(time, address)\n\nand you can use `address` as `id` for now.",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f233ec92_06586d8c",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-15T11:06:54Z",
+      "side": 1,
+      "message": "I think it might be better calculate the address here and set it in the cacheAddress, instead of in processMapDetails",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8387879c_89e148f2",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-15T11:06:54Z",
+      "side": 1,
+      "message": "Once you update the parsers to be correct, you won\u0027t need any of this logic to parse the address -- you\u0027ll directly get the parsed string value.",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
