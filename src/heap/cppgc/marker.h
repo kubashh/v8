@@ -16,7 +16,7 @@
 namespace cppgc {
 namespace internal {
 
-class Heap;
+class HeapBase;
 class HeapObjectHeader;
 class MutatorThreadMarkingVisitor;
 
@@ -59,7 +59,7 @@ class V8_EXPORT_PRIVATE Marker {
     MarkingType marking_type = MarkingType::kAtomic;
   };
 
-  explicit Marker(Heap* heap);
+  explicit Marker(HeapBase& heap);  // NOLINT(runtime/references)
   virtual ~Marker();
 
   Marker(const Marker&) = delete;
@@ -75,7 +75,7 @@ class V8_EXPORT_PRIVATE Marker {
 
   void ProcessWeakness();
 
-  Heap* heap() { return heap_; }
+  HeapBase& heap() { return heap_; }
   MarkingWorklist* marking_worklist() { return &marking_worklist_; }
   NotFullyConstructedWorklist* not_fully_constructed_worklist() {
     return &not_fully_constructed_worklist_;
@@ -104,7 +104,7 @@ class V8_EXPORT_PRIVATE Marker {
   void FlushNotFullyConstructedObjects();
   void MarkNotFullyConstructedObjects();
 
-  Heap* const heap_;
+  HeapBase& heap_;
   MarkingConfig config_ = MarkingConfig::Default();
 
   std::unique_ptr<MutatorThreadMarkingVisitor> marking_visitor_;

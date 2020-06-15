@@ -19,13 +19,14 @@ bool MarkingVisitor::IsInConstruction(const HeapObjectHeader& header) {
   return header.IsInConstruction<HeapObjectHeader::AccessMode::kNonAtomic>();
 }
 
-MarkingVisitor::MarkingVisitor(Marker* marking_handler, int task_id)
-    : marker_(marking_handler),
-      marking_worklist_(marking_handler->marking_worklist(), task_id),
-      not_fully_constructed_worklist_(
-          marking_handler->not_fully_constructed_worklist(), task_id),
-      weak_callback_worklist_(marking_handler->weak_callback_worklist(),
-                              task_id) {}
+MarkingVisitor::MarkingVisitor(
+    HeapBase& heap, Marker::MarkingWorklist* marking_worklist,
+    Marker::NotFullyConstructedWorklist* not_fully_constructed_worklist,
+    Marker::WeakCallbackWorklist* weak_callback_worklist, int task_id)
+    : heap_(heap),
+      marking_worklist_(marking_worklist, task_id),
+      not_fully_constructed_worklist_(not_fully_constructed_worklist, task_id),
+      weak_callback_worklist_(weak_callback_worklist, task_id) {}
 
 void MarkingVisitor::AccountMarkedBytes(const HeapObjectHeader& header) {
   marked_bytes_ +=
@@ -96,7 +97,7 @@ void MarkingVisitor::MarkHeader(HeapObjectHeader* header,
 bool MarkingVisitor::MarkHeaderNoTracing(HeapObjectHeader* header) {
   DCHECK(header);
   // A GC should only mark the objects that belong in its heap.
-  DCHECK_EQ(marker_->heap(), BasePage::FromPayload(header)->heap());
+  DCHECK_EQ(&heap_, BasePage::FromPayload(header)->heap());
   // Never mark free space objects. This would e.g. hint to marking a promptly
   // freed backing store.
   DCHECK(!header->IsFree());
@@ -127,8 +128,29 @@ void MarkingVisitor::DynamicallyMarkAddress(ConstAddress address) {
   }
 }
 
-void MarkingVisitor::ConservativelyMarkAddress(const BasePage* page,
-                                               ConstAddress address) {
+MutatorThreadMarkingVisitor::MutatorThreadMarkingVisitor(Marker* marker)
+    : MarkingVisitor(marker->heap(), marker->marking_worklist(),
+                     marker->not_fully_constructed_worklist(),
+                     marker->weak_callback_worklist(),
+                     Marker::kMutatorThreadId) {}
+
+StackMarkingVisitor::StackMarkingVisitor(MarkingVisitor& marking_visitor,
+                                         PageBackend& page_backend)
+    : marking_visitor_(marking_visitor), page_backend_(page_backend) {}
+
+void StackMarkingVisitor::VisitPointer(const void* address) {
+  // TODO(chromium:1056170): Add page bloom filter
+
+  const BasePage* page = reinterpret_cast<const BasePage*>(
+      page_backend_.Lookup(static_cast<ConstAddress>(address)));
+
+  if (!page) return;
+
+  ConservativelyMarkAddress(page, reinterpret_cast<ConstAddress>(address));
+}
+
+void StackMarkingVisitor::ConservativelyMarkAddress(const BasePage* page,
+                                                    ConstAddress address) {
   HeapObjectHeader* const header =
       page->TryObjectHeaderFromInnerAddress(const_cast<Address>(address));
 
@@ -136,8 +158,8 @@ void MarkingVisitor::ConservativelyMarkAddress(const BasePage* page,
 
   // Simple case for fully constructed objects. This just adds the object to the
   // regular marking worklist.
-  if (!IsInConstruction(*header)) {
-    MarkHeader(
+  if (!MarkingVisitor::IsInConstruction(*header)) {
+    marking_visitor_.MarkHeader(
         header,
         {header->Payload(),
          GlobalGCInfoTable::GCInfoFromIndex(header->GetGCInfoIndex()).trace});
@@ -157,7 +179,7 @@ void MarkingVisitor::ConservativelyMarkAddress(const BasePage* page,
   //
   // We use a simple conservative approach for these cases as they are not
   // performance critical.
-  MarkHeaderNoTracing(header);
+  marking_visitor_.MarkHeaderNoTracing(header);
   Address* payload = reinterpret_cast<Address*>(header->Payload());
   const size_t payload_size = header->GetSize();
   for (size_t i = 0; i < (payload_size / sizeof(Address)); ++i) {
@@ -170,25 +192,8 @@ void MarkingVisitor::ConservativelyMarkAddress(const BasePage* page,
 #endif
     if (maybe_ptr) VisitPointer(maybe_ptr);
   }
-  AccountMarkedBytes(*header);
+  marking_visitor_.AccountMarkedBytes(*header);
 }
-
-void MarkingVisitor::VisitPointer(const void* address) {
-  // TODO(chromium:1056170): Add page bloom filter
-
-  const BasePage* page =
-      reinterpret_cast<const BasePage*>(marker_->heap()->page_backend()->Lookup(
-          static_cast<ConstAddress>(address)));
-
-  if (!page) return;
-
-  DCHECK_EQ(marker_->heap(), page->heap());
-
-  ConservativelyMarkAddress(page, reinterpret_cast<ConstAddress>(address));
-}
-
-MutatorThreadMarkingVisitor::MutatorThreadMarkingVisitor(Marker* marker)
-    : MarkingVisitor(marker, Marker::kMutatorThreadId) {}
 
 }  // namespace internal
 }  // namespace cppgc
