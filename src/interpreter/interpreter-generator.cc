@@ -2422,6 +2422,9 @@ IGNITION_HANDLER(CloneObject, InterpreterAssembler) {
 // accumulator, creating and caching the site object on-demand as per the
 // specification.
 IGNITION_HANDLER(GetTemplateObject, InterpreterAssembler) {
+  // TODO(jgruber): Consider merging with the GetTemplateObject builtin; the
+  // current advantage of the split implementation is that the bytecode can skip
+  // most work if feedback exists.
   TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
   TNode<UintPtrT> slot = BytecodeOperandIdx(1);
 
