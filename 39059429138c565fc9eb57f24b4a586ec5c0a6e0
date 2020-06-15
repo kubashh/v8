@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12c6ad2c_1c00800c",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 6
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-15T12:19:07Z",
+      "side": 1,
+      "message": "We\u0027ll need a better story here at some point. Hooking into assertOptimized mjsunit tricks would probably help shrink this list, likewise something for TurbofanStaticAssert. As long as we\u0027re still limited to the fyi bot I\u0027ll just keep updating the skip list if we start to fail.",
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
