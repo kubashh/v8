@@ -116,7 +116,6 @@ class V8_EXPORT_PRIVATE Marker {
   virtual std::unique_ptr<MutatorThreadMarkingVisitor>
   CreateMutatorThreadMarkingVisitor();
 
- private:
   void VisitRoots();
 
   void FlushNotFullyConstructedObjects();
