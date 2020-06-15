@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60aeeb06_41331f4d",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-15T21:46:44Z",
+      "side": 1,
+      "message": "Not fully constructed objects are not necessarily still reachable from stack. I\u0027m not sure it\u0027s right to use a StackMarkingVisitor for them.",
+      "range": {
+        "startLine": 209,
+        "startChar": 24,
+        "endLine": 209,
+        "endChar": 36
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e26d2aa_199b3666",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-15T21:46:44Z",
+      "side": 1,
+      "message": "step 2 needs to be implicit only if we don\u0027t have tasks (i.e. we need to manually drain the worklists)",
+      "range": {
+        "startLine": 27,
+        "startChar": 6,
+        "endLine": 27,
+        "endChar": 32
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02074325_5d258440",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-15T21:46:44Z",
+      "side": 1,
+      "message": "I think steps 3 and 4 can be implicit when calling step 5 (similar to how it currently is with gc finalization in oilpan).\nThis will also make FinishMarkingForTesting redundant.",
+      "range": {
+        "startLine": 28,
+        "startChar": 6,
+        "endLine": 28,
+        "endChar": 22
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54b82bc4_30372965",
+        "filename": "src/heap/cppgc/marking-visitor.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-15T21:46:44Z",
+      "side": 1,
+      "message": "I don\u0027t understand why MarkingVisitor and StackMarkingVisitor need to be separate classes.\n(They\u0027re also the same class in oilpan currently)",
+      "range": {
+        "startLine": 74,
+        "startChar": 24,
+        "endLine": 74,
+        "endChar": 43
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
