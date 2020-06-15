@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ef2448f2_355d1322",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 11144,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-06-15T11:02:36Z",
+      "side": 1,
+      "message": "It feels like the CPU object should represent what is available and running. I\u0027m not super keen on all the hacks and explicit simulator checks in assembler-arm(64).cc where we do feature detection differently depending on whether we are running on a CPU or a simulator, IMO the CPU object should abstract that away and we only ever do checks on the CPU object.",
+      "parentUuid": "88d42186_27b732d7",
+      "revId": "3aa1bbe0f81337a4db2718f17ee684fec45e3929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "97720306_456459f7",
         "filename": "test/cctest/test-assembler-arm64.cc",
         "patchSetId": 1
