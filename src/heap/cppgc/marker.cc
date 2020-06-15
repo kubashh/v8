@@ -16,26 +16,6 @@ namespace cppgc {
 namespace internal {
 
 namespace {
-
-void EnterIncrementalMarkingIfNeeded(Marker::MarkingConfig config) {
-  if (config.marking_type == Marker::MarkingConfig::MarkingType::kIncremental ||
-      config.marking_type ==
-          Marker::MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
-    ProcessHeap::EnterIncrementalOrConcurrentMarking();
-  }
-}
-
-void ExitIncrementalMarkingIfNeeded(Marker::MarkingConfig config) {
-  if (config.marking_type == Marker::MarkingConfig::MarkingType::kIncremental ||
-      config.marking_type ==
-          Marker::MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
-    ProcessHeap::ExitIncrementalOrConcurrentMarking();
-  }
-}
-
-}  // namespace
-
-namespace {
 template <typename Worklist, typename Callback>
 bool DrainWorklistWithDeadline(v8::base::TimeTicks deadline, Worklist* worklist,
                                Callback callback, int task_id) {
@@ -222,6 +202,22 @@ void Marker::ClearAllWorklistsForTesting() {
   previously_not_fully_constructed_worklist_.Clear();
   write_barrier_worklist_.Clear();
   weak_callback_worklist_.Clear();
+}
+
+void Marker::EnterIncrementalMarkingIfNeeded(Marker::MarkingConfig config) {
+  if (config.marking_type == Marker::MarkingConfig::MarkingType::kIncremental ||
+      config.marking_type ==
+          Marker::MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
+    ProcessHeap::EnterIncrementalOrConcurrentMarking();
+  }
+}
+
+void Marker::ExitIncrementalMarkingIfNeeded(Marker::MarkingConfig config) {
+  if (config.marking_type == Marker::MarkingConfig::MarkingType::kIncremental ||
+      config.marking_type ==
+          Marker::MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
+    ProcessHeap::ExitIncrementalOrConcurrentMarking();
+  }
 }
 
 }  // namespace internal

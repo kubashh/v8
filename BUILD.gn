@@ -2455,6 +2455,8 @@ v8_source_set("v8_base_without_compiler") {
     "src/heap/concurrent-allocator.h",
     "src/heap/concurrent-marking.cc",
     "src/heap/concurrent-marking.h",
+    "src/heap/cppgc-js/cpp-heap.cc",
+    "src/heap/cppgc-js/cpp-heap.h",
     "src/heap/embedder-tracing.cc",
     "src/heap/embedder-tracing.h",
     "src/heap/factory-base.cc",
@@ -3571,6 +3573,7 @@ v8_source_set("v8_base_without_compiler") {
 
   defines = []
   deps = [
+    ":cppgc_base",
     ":torque_generated_definitions",
     ":v8_headers",
     ":v8_libbase",
