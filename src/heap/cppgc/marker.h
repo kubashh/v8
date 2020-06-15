@@ -113,10 +113,12 @@ class V8_EXPORT_PRIVATE Marker {
   }
 
  protected:
+  static void EnterIncrementalMarkingIfNeeded(Marker::MarkingConfig);
+  static void ExitIncrementalMarkingIfNeeded(Marker::MarkingConfig);
+
   virtual std::unique_ptr<MutatorThreadMarkingVisitor>
   CreateMutatorThreadMarkingVisitor();
 
- private:
   void VisitRoots();
 
   void FlushNotFullyConstructedObjects();
