@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f93b974a_5a7606e8",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-15T06:55:18Z",
+      "side": 1,
+      "message": "This code here is surprising. When I read it, I wondered if kLocalFuncRef is not just handled correctly by consume_value_type. I guess this code here is to handle the case where reference types are not enabled. Could you just handle this case explicitly?\n\nif (!enabled_features_.has_reftypes()) {\n  if (consume_u8\u003ckValidate\u003e(pc()) !\u003d kLocalFuncRef) {\n    error(pc_ - 1, \"invalid table type\");\n    return kWasmBottom;\n  }\n  return kWasmFuncRef;\n} else ...",
+      "range": {
+        "startLine": 1753,
+        "startChar": 4,
+        "endLine": 1755,
+        "endChar": 26
+      },
+      "revId": "d099fd3e9d06b8b89d18bc8359337fb2b3afba3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
