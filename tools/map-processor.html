@@ -503,8 +503,61 @@ define(Array.prototype, "histogram", function(mapFn) {
   return histogram;
 });
 
+// ZC <==
+function createListItem(map){
+  let mapId = map.id.toString();
+  let mapIdList = $('mapIdList');
+  let node = document.createElement("li");   
+  node.appendChild(createTextNode(mapId));                                     
+  mapIdList.appendChild(node);      
+}
+
+function createTextNode(text) {
+  return document.createTextNode(text);  
+}
+// ZC >==
+
 // =========================================================================
 // EventHandlers
+
+// ZC <==
+// TODO: Delete test function
+function isMapsAssignedSameAddress(){
+  let count = 0;
+  for (let [address, maps] of V8Map.cacheAddress) {
+    if(maps.length > 1){
+      console.log("Same address being used for multiple maps!");
+      return true;
+    }
+    count++;
+  }
+  console.log("Maps assigned to unique addresses!");
+  console.log("There are " + count + " maps assigned!");
+  return false;
+}
+
+function handleSearchBar(){
+  let searchBarInput = $('searchBarInput').value;
+  removeAllChildren($('mapIdList'));
+  if(V8Map.getMapByAddress(searchBarInput)){
+    let maps = V8Map.getMapByAddress(searchBarInput);
+    initialiseMapIdList(maps);
+  } 
+  //isMapsAssignedSameAddress();
+}
+
+function initialiseMapIdList(maps){
+  for (let map of maps) {
+    createListItem(map);
+    setDocumentState(map);
+  }
+}
+
+function setDocumentState(map){
+  document.state.map = map;
+}
+// ZC >==
+
 function handleBodyLoad() {
   let upload = $('fileReader');
   upload.onclick = (e) => $("file").click();
@@ -1252,6 +1305,15 @@ function transitionTypeToColor(type) {
     <h2>Transitions</h2>
     <section id="transitionView"></section>
     <br/>
+
+    <!---- ZC  <==  ---->
+    <h2>Search Map by Address</h2>
+    <section id="searchBar"></section>
+    <input type="text" id="searchBarInput" onkeyup="handleSearchBar()" placeholder="Search maps by address.." style="width: 200px;">
+
+    <ul id="mapIdList" title="Map Id List">
+    </ul>
+    <!---- ZC >==  ---->
 
     <h2>Selected Map</h2>
     <section id="mapDetails"></section>

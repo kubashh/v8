@@ -185,7 +185,7 @@ class MapProcessor extends LogReader {
 
   processMapCreate(time, id, string) {
     // map-create events might override existing maps if the addresses get
-    // rcycled. Hence we do not check for existing maps.
+    // recycled. Hence we do not check for existing maps.
     let map = this.createMap(id, time);
     map.description = string;
   }
@@ -193,7 +193,12 @@ class MapProcessor extends LogReader {
   processMapDetails(time, id, string) {
     //TODO(cbruni): fix initial map logging.
     let map = this.getExistingMap(id, time);
-    if (!map.description) map.description = string;
+    if (!map.description) {
+      map.description = string;
+      // ZC <==
+      map.setAddress();
+      // ZC >==
+    }
   }
 
   createMap(id, time) {
@@ -232,6 +237,9 @@ class V8Map {
     this.leftId = 0;
     this.rightId = 0;
     this.filePosition = "";
+    // ZC <==
+    this.address = -1;
+    // ZC >==
   }
 
   finalizeRootMap(id) {
@@ -332,6 +340,18 @@ class V8Map {
     return parents;
   }
 
+  // ZC <==
+  setAddress(){
+    if(this.description !== null && this.description !== ""){
+      let addressStart = this.description.indexOf("x") + 1;
+      let addressEnd = this.description.indexOf(":");
+      let address  = this.description.substring(addressStart, addressEnd);
+      this.address = address;
+      V8Map.setMapByAddress(this.address, this);
+    }
+  }
+  // ZC >==
+
   static get(id) {
     return this.cache.get(id);
   }
@@ -339,9 +359,27 @@ class V8Map {
   static set(id, map) {
     this.cache.set(id, map);
   }
+  
+  // ZC <==
+  static getMapByAddress(address){
+    return this.cacheAddress.get(address);
+  }
+  static setMapByAddress(address, map){
+    if(this.cacheAddress.has(address)){
+      this.cacheAddress[address].push(map);
+    } else {
+      this.cacheAddress.set(address, [map]);
+    }
+  }
+  // ZC >==
+
 }
 
 V8Map.cache = new Map();
+// ZC <==
+V8Map.cacheAddress = new Map();
+// ZC >==
+
 
 
 // ===========================================================================
