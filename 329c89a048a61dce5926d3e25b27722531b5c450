@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ede38185_d07c9055",
+        "filename": "test/cctest/heap/test-unified-heap.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-15T19:39:50Z",
+      "side": 1,
+      "message": "Ulan: Do you think we should add proper testing support to unittests. After all we already have TestWithIsolate there which has RunJS().\n\nWe could add something along the lines of TestWithHeapUtils that has methods to directly invoke GC etc.\n\n(Both frameworks seem to be more than just unittests.)",
+      "range": {
+        "startLine": 11,
+        "startChar": 22,
+        "endLine": 11,
+        "endChar": 28
+      },
+      "revId": "329c89a048a61dce5926d3e25b27722531b5c450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
