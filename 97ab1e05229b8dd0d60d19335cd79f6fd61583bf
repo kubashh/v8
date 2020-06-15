@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d736cfd7_1e341ebb",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-06-15T08:45:15Z",
+      "side": 1,
+      "message": "Please see comment below.",
+      "parentUuid": "f53f2a38_1c031576",
+      "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f7cb2abe_98cb47ac",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2020-06-15T08:16:19Z",
       "side": 1,
       "message": "Even though this error message sounds nicer, the original one gave more actionable information to the developer. Consider you are the developer, and you read these two error messages. After which one would you know what you should do? That being said, if you find an error message that is as actionable as the old one, but sounds as nice as the new one, I will agree with it.",
+      "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78f14f8b_87b8fa5c",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1270,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-06-15T08:45:15Z",
+      "side": 1,
+      "message": "My idea when changing this messages, and for that matter of all my current CLs, is to generalize V8 behavior regarding wasm types so it works when we introduce the new types in the upcoming ValueType upheaval. In this position, can \u0027value\u0027 only be one of those four types? If so, I should revert the change.",
+      "parentUuid": "f7cb2abe_98cb47ac",
       "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
