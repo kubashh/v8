@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "88d42186_27b732d7",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 11144,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-06-15T11:00:18Z",
+      "side": 1,
+      "message": "Are there other cases where this would be useful? I\u0027m not sure it\u0027s worth it just for the assembler tests, I don\u0027t see the harm in continuing to always run them in the simulator, since the support is there.",
+      "parentUuid": "c821ff69_7f7dbeff",
+      "revId": "3aa1bbe0f81337a4db2718f17ee684fec45e3929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "97720306_456459f7",
         "filename": "test/cctest/test-assembler-arm64.cc",
         "patchSetId": 1
