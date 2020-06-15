@@ -35,6 +35,7 @@ class MarkingVisitor : public VisitorBase {
   void FlushWorklists();
 
   void DynamicallyMarkAddress(ConstAddress);
+  void MarkObject(HeapObjectHeader&);
 
   void AccountMarkedBytes(const HeapObjectHeader&);
   size_t marked_bytes() const { return marked_bytes_; }
