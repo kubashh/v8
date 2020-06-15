@@ -130,8 +130,11 @@ void Marker::VisitRoots() {
   heap_->object_allocator().ResetLinearAllocationBuffers();
 
   heap_->GetStrongPersistentRegion().Trace(marking_visitor_.get());
-  if (config_.stack_state != MarkingConfig::StackState::kNoHeapPointers)
-    heap_->stack()->IteratePointers(marking_visitor_.get());
+  if (config_.stack_state != MarkingConfig::StackState::kNoHeapPointers) {
+    StackMarkingVisitor stack_marker(*marking_visitor_.get(),
+                                     *heap_->page_backend());
+    heap_->stack()->IteratePointers(&stack_marker);
+  }
 }
 
 std::unique_ptr<MutatorThreadMarkingVisitor>
@@ -199,7 +202,9 @@ void Marker::MarkNotFullyConstructedObjects() {
   NotFullyConstructedWorklist::View view(&not_fully_constructed_worklist_,
                                          kMutatorThreadId);
   while (view.Pop(&item)) {
-    marking_visitor_->ConservativelyMarkAddress(
+    StackMarkingVisitor stack_marker(*marking_visitor_.get(),
+                                     *heap_->page_backend());
+    stack_marker.ConservativelyMarkAddress(
         BasePage::FromPayload(item), reinterpret_cast<ConstAddress>(item));
   }
 }
