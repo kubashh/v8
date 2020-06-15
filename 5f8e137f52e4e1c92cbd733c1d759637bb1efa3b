@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "abd84f54_d843ede4",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-15T13:08:26Z",
+      "side": 1,
+      "message": "I forgot about this: Since we inject dependencies everywhere else as well it\u0027s probably cleaner to pass in the visitor on construction instead of having a virtual factory method.",
+      "range": {
+        "startLine": 97,
+        "startChar": 26,
+        "endLine": 97,
+        "endChar": 53
+      },
+      "revId": "5f8e137f52e4e1c92cbd733c1d759637bb1efa3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d1a86a0_0d88d8db",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-15T13:08:26Z",
+      "side": 1,
+      "message": "This will need to be public+virtual in a follow up.",
+      "range": {
+        "startLine": 103,
+        "startChar": 7,
+        "endLine": 103,
+        "endChar": 33
+      },
+      "revId": "5f8e137f52e4e1c92cbd733c1d759637bb1efa3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
