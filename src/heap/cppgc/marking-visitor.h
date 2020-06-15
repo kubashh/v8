@@ -8,6 +8,7 @@
 #include "include/cppgc/source-location.h"
 #include "include/cppgc/trace-trait.h"
 #include "include/v8config.h"
+#include "src/base/macros.h"
 #include "src/heap/cppgc/globals.h"
 #include "src/heap/cppgc/heap.h"
 #include "src/heap/cppgc/marker.h"
@@ -19,10 +20,13 @@ namespace internal {
 
 class BasePage;
 class HeapObjectHeader;
+class StackMarkingVisitor;
 
-class MarkingVisitor : public VisitorBase, public StackVisitor {
+class MarkingVisitor : public VisitorBase {
  public:
-  MarkingVisitor(Marker*, int);
+  MarkingVisitor(HeapBase&, Marker::MarkingWorklist*,
+                 Marker::NotFullyConstructedWorklist*,
+                 Marker::WeakCallbackWorklist*, int);
   virtual ~MarkingVisitor() = default;
 
   MarkingVisitor(const MarkingVisitor&) = delete;
@@ -31,7 +35,6 @@ class MarkingVisitor : public VisitorBase, public StackVisitor {
   void FlushWorklists();
 
   void DynamicallyMarkAddress(ConstAddress);
-  void ConservativelyMarkAddress(const BasePage*, ConstAddress);
 
   void AccountMarkedBytes(const HeapObjectHeader&);
   size_t marked_bytes() const { return marked_bytes_; }
@@ -46,24 +49,44 @@ class MarkingVisitor : public VisitorBase, public StackVisitor {
   void VisitWeakRoot(const void*, TraceDescriptor, WeakCallback,
                      const void*) override;
 
-  void VisitPointer(const void*) override;
-
  private:
   void MarkHeader(HeapObjectHeader*, TraceDescriptor);
   bool MarkHeaderNoTracing(HeapObjectHeader*);
   void RegisterWeakCallback(WeakCallback, const void*) override;
 
-  Marker* const marker_;
+  HeapBase& heap_;
   Marker::MarkingWorklist::View marking_worklist_;
   Marker::NotFullyConstructedWorklist::View not_fully_constructed_worklist_;
   Marker::WeakCallbackWorklist::View weak_callback_worklist_;
 
   size_t marked_bytes_ = 0;
+
+  friend class StackMarkingVisitor;
 };
 
 class V8_EXPORT_PRIVATE MutatorThreadMarkingVisitor : public MarkingVisitor {
  public:
   explicit MutatorThreadMarkingVisitor(Marker*);
+};
+
+class V8_EXPORT_PRIVATE StackMarkingVisitor final : public StackVisitor {
+  CPPGC_STACK_ALLOCATED();
+
+ public:
+  StackMarkingVisitor(
+      MarkingVisitor& marking_visitor,  // NOLINT(runtime/references)
+      PageBackend& page_backend);       // NOLINT(runtime/references)
+
+  StackMarkingVisitor(const StackMarkingVisitor&) = delete;
+  StackMarkingVisitor& operator=(const StackMarkingVisitor&) = delete;
+
+  void VisitPointer(const void*) final;
+
+  void ConservativelyMarkAddress(const BasePage*, ConstAddress);
+
+ private:
+  MarkingVisitor& marking_visitor_;
+  PageBackend& page_backend_;
 };
 
 }  // namespace internal

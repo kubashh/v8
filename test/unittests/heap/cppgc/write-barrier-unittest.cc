@@ -142,7 +142,7 @@ class GCed : public GarbageCollected<GCed> {
 class WriteBarrierTest : public testing::TestWithHeap {
  public:
   WriteBarrierTest() : iheap_(Heap::From(GetHeap())) {
-    GetMarkerRef() = std::make_unique<Marker>(iheap_);
+    GetMarkerRef() = std::make_unique<Marker>(*static_cast<HeapBase*>(iheap_));
     marker_ = GetMarkerRef().get();
   }
 
