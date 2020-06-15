@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "2e5e5bf9_64d21fc2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-15T12:02:35Z",
+      "side": 1,
+      "message": "Usually we add a prefix to quickly distinguish what part of V8 you\u0027re working on: [tools] Map search ...",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2046905_2e56803f",
+        "filename": "tools/map-processor.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-15T12:02:35Z",
+      "side": 1,
+      "message": "I don\u0027t know how bad the default JS formatting is.\nMaybe you can try running `git cl format --js` after you\u0027ve committed locally and compare how well it performs.",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a6154c1_9d79a395",
+        "filename": "tools/map-processor.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-15T12:02:35Z",
+      "side": 1,
+      "message": "This name might be a bit confusing. \nI\u0027m find with directly doing the document.state.map assignment in place.",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55a6b3f7_dee5dca5",
+        "filename": "tools/map-processor.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-15T12:02:35Z",
+      "side": 1,
+      "message": "please move style up in the css section.",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9854f88d_ac3e41b0",
         "filename": "tools/map-processor.js",
         "patchSetId": 1
@@ -98,6 +166,40 @@
       "writtenOn": "2020-06-15T11:06:54Z",
       "side": 1,
       "message": "Once you update the parsers to be correct, you won\u0027t need any of this logic to parse the address -- you\u0027ll directly get the parsed string value.",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3953140_27639740",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-15T12:02:35Z",
+      "side": 1,
+      "message": "This should be get(id, time) {...}",
+      "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ff8d4fa_803909d7",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-15T12:02:35Z",
+      "side": 1,
+      "message": "The cache should be \n  address \u003d\u003e [map, ...]\ninstead of the current\n  address \u003d\u003e map",
       "revId": "3d1f1019f0b092d97f95284d4b71f42b0635ec83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
