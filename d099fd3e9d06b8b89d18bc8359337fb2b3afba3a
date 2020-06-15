@@ -22,6 +22,30 @@
       "revId": "d099fd3e9d06b8b89d18bc8359337fb2b3afba3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d11ed59_791a2ad8",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-06-15T08:48:22Z",
+      "side": 1,
+      "message": "Yes, this is indeed the purpose. Wouldn\u0027t it be enough to clarify it in a comment? If so, did the comment above not clarify it properly?",
+      "parentUuid": "f93b974a_5a7606e8",
+      "range": {
+        "startLine": 1753,
+        "startChar": 4,
+        "endLine": 1755,
+        "endChar": 26
+      },
+      "revId": "d099fd3e9d06b8b89d18bc8359337fb2b3afba3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
