@@ -47,7 +47,7 @@ inline void SeqCst_MemoryFence() {
   __atomic_thread_fence(std::memory_order_seq_cst);
 #else
   std::atomic_thread_fence(std::memory_order_seq_cst);
-#endif
+#endif  //  defined(__GLIBCXX__)
 }
 
 inline Atomic16 Relaxed_CompareAndSwap(volatile Atomic16* ptr,
