@@ -24,9 +24,9 @@ class MarkerTest : public testing::TestWithHeap {
 
   void DoMarking(MarkingConfig config) {
     auto* heap = Heap::From(GetHeap());
-    Marker marker(heap);
+    Marker marker(heap->AsBase());
     marker.StartMarking(config);
-    marker.FinishMarking(config);
+    marker.FinishMarkingForTesting(config);
     marker.ProcessWeakness();
     // Pretend do finish sweeping as StatsCollector verifies that Notify*
     // methods are called in the right order.
@@ -213,7 +213,7 @@ class GCedWithCallback : public GarbageCollected<GCedWithCallback> {
 }  // namespace
 
 TEST_F(MarkerTest, InConstructionObjectIsEventuallyMarkedEmptyStack) {
-  Marker marker(Heap::From(GetHeap()));
+  Marker marker(Heap::From(GetHeap())->AsBase());
   marker.StartMarking({MarkingConfig::StackState::kMayContainHeapPointers});
   GCedWithCallback* object = MakeGarbageCollected<GCedWithCallback>(
       GetAllocationHandle(), [&marker](GCedWithCallback* obj) {
@@ -221,19 +221,19 @@ TEST_F(MarkerTest, InConstructionObjectIsEventuallyMarkedEmptyStack) {
         marker.GetMarkingVisitorForTesting()->Trace(member);
       });
   EXPECT_FALSE(HeapObjectHeader::FromPayload(object).IsMarked());
-  marker.FinishMarking({MarkingConfig::StackState::kNoHeapPointers});
+  marker.FinishMarkingForTesting({MarkingConfig::StackState::kNoHeapPointers});
   EXPECT_TRUE(HeapObjectHeader::FromPayload(object).IsMarked());
 }
 
 TEST_F(MarkerTest, InConstructionObjectIsEventuallyMarkedNonEmptyStack) {
-  Marker marker(Heap::From(GetHeap()));
+  Marker marker(Heap::From(GetHeap())->AsBase());
   marker.StartMarking({MarkingConfig::StackState::kMayContainHeapPointers});
   MakeGarbageCollected<GCedWithCallback>(
       GetAllocationHandle(), [&marker](GCedWithCallback* obj) {
         Member<GCedWithCallback> member(obj);
         marker.GetMarkingVisitorForTesting()->Trace(member);
         EXPECT_FALSE(HeapObjectHeader::FromPayload(obj).IsMarked());
-        marker.FinishMarking(
+        marker.FinishMarkingForTesting(
             {MarkingConfig::StackState::kMayContainHeapPointers});
         EXPECT_TRUE(HeapObjectHeader::FromPayload(obj).IsMarked());
       });
