@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "00437532_c344ec08",
+        "filename": "test/wasm-js/report.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-16T06:32:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55de0e83_82033b31",
+      "revId": "cc2ce8a8de6bc8a62b0b5df9b588fb8cebe55565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4ab9731_f7cd6121",
         "filename": "test/wasm-js/testcfg.py",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "cc2ce8a8de6bc8a62b0b5df9b588fb8cebe55565",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb34bc60_314989fd",
+        "filename": "test/wasm-js/testcfg.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-16T06:32:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4ab9731_f7cd6121",
+      "revId": "cc2ce8a8de6bc8a62b0b5df9b588fb8cebe55565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
