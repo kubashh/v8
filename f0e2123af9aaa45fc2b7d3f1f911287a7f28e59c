@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "ff298499_04002ba0",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-16T14:47:44Z",
+      "side": 1,
+      "message": "Why wouldn\u0027t it work for incremental marking? If you support tasks, StartMarking should schedule a task and marking will run incrementally until you call FinishMarking.\n\nAtomicMarker will be obsolete for chrome and unified heap, but not necessarily for the standalone library usecase.",
+      "parentUuid": "bfa8f8f2_2f5361a3",
+      "range": {
+        "startLine": 28,
+        "startChar": 6,
+        "endLine": 28,
+        "endChar": 22
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54b82bc4_30372965",
         "filename": "src/heap/cppgc/marking-visitor.h",
         "patchSetId": 11
@@ -226,6 +250,30 @@
       "side": 1,
       "message": "tl;dr: Redid the visitor trace abstraction.\n\nBlink\u0027s version is far from ideal. It has always bothered me that we cannot get an abstraction for conservative tracing without marking. E.g., it is still not possible to have marking verification for in-construction object and heap snapshots for in-construction objects in Blink.\n\nI initially split into StackMarkingVisitor and MarkingVisitor to get closer into a direction where we split concerns. The split was not what we needed though.\n\nWith the proper TraceConservativelyIfNeeded() method the split now becomes obsolete.",
       "parentUuid": "54b82bc4_30372965",
+      "range": {
+        "startLine": 74,
+        "startChar": 24,
+        "endLine": 74,
+        "endChar": 43
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "503c721a_538b85b7",
+        "filename": "src/heap/cppgc/marking-visitor.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-16T14:47:44Z",
+      "side": 1,
+      "message": "This is not relevant to this CL, but couldn\u0027t we use the object_start_bitmap to get the object start and relevant TraceDescriptor for in-construction objects and use that for marking verification?",
+      "parentUuid": "e6268793_09574487",
       "range": {
         "startLine": 74,
         "startChar": 24,

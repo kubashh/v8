@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15a0fe21_2b87c128",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-16T14:47:44Z",
+      "side": 1,
+      "message": "This seems odd since |item| is not used.\nAlso not fully constructed objects might not be reachable from stack anymore.",
+      "range": {
+        "startLine": 221,
+        "startChar": 20,
+        "endLine": 221,
+        "endChar": 35
+      },
+      "revId": "4c759a9c9db56f66fe10ee02005cf9a807f5396c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
