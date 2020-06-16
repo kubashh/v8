@@ -56,7 +56,7 @@ bool DrainWorklistWithDeadline(v8::base::TimeTicks deadline, Worklist* worklist,
 
 constexpr int Marker::kMutatorThreadId;
 
-Marker::Marker(Heap* heap)
+Marker::Marker(HeapBase& heap)
     : heap_(heap), marking_visitor_(CreateMutatorThreadMarkingVisitor()) {}
 
 Marker::~Marker() {
@@ -82,33 +82,40 @@ Marker::~Marker() {
 }
 
 void Marker::StartMarking(MarkingConfig config) {
-  heap()->stats_collector()->NotifyMarkingStarted();
+  heap().stats_collector()->NotifyMarkingStarted();
 
   config_ = config;
   VisitRoots();
   EnterIncrementalMarkingIfNeeded(config);
 }
 
-void Marker::FinishMarking(MarkingConfig config) {
+void Marker::EnterAtomicPause(MarkingConfig config) {
   ExitIncrementalMarkingIfNeeded(config_);
   config_ = config;
 
   // Reset LABs before trying to conservatively mark in-construction objects.
   // This is also needed in preparation for sweeping.
-  heap_->object_allocator().ResetLinearAllocationBuffers();
+  heap().object_allocator().ResetLinearAllocationBuffers();
   if (config_.stack_state == MarkingConfig::StackState::kNoHeapPointers) {
     FlushNotFullyConstructedObjects();
   } else {
     MarkNotFullyConstructedObjects();
   }
-  AdvanceMarkingWithDeadline(v8::base::TimeDelta::Max());
+}
 
-  heap()->stats_collector()->NotifyMarkingCompleted(
+void Marker::LeaveAtomicPause() {
+  heap().stats_collector()->NotifyMarkingCompleted(
       marking_visitor_->marked_bytes());
 }
 
+void Marker::FinishMarkingForTesting(MarkingConfig config) {
+  EnterAtomicPause(config);
+  AdvanceMarkingWithDeadline(v8::base::TimeDelta::Max());
+  LeaveAtomicPause();
+}
+
 void Marker::ProcessWeakness() {
-  heap_->GetWeakPersistentRegion().Trace(marking_visitor_.get());
+  heap().GetWeakPersistentRegion().Trace(marking_visitor_.get());
 
   // Call weak callbacks on objects that may now be pointing to dead objects.
   WeakCallbackItem item;
@@ -124,11 +131,12 @@ void Marker::ProcessWeakness() {
 void Marker::VisitRoots() {
   // Reset LABs before scanning roots. LABs are cleared to allow
   // ObjectStartBitmap handling without considering LABs.
-  heap_->object_allocator().ResetLinearAllocationBuffers();
+  heap().object_allocator().ResetLinearAllocationBuffers();
 
-  heap_->GetStrongPersistentRegion().Trace(marking_visitor_.get());
-  if (config_.stack_state != MarkingConfig::StackState::kNoHeapPointers)
-    heap_->stack()->IteratePointers(marking_visitor_.get());
+  heap().GetStrongPersistentRegion().Trace(marking_visitor_.get());
+  if (config_.stack_state != MarkingConfig::StackState::kNoHeapPointers) {
+    heap().stack()->IteratePointers(marking_visitor_.get());
+  }
 }
 
 std::unique_ptr<MutatorThreadMarkingVisitor>
@@ -196,8 +204,7 @@ void Marker::MarkNotFullyConstructedObjects() {
   NotFullyConstructedWorklist::View view(&not_fully_constructed_worklist_,
                                          kMutatorThreadId);
   while (view.Pop(&item)) {
-    marking_visitor_->ConservativelyMarkAddress(
-        BasePage::FromPayload(item), reinterpret_cast<ConstAddress>(item));
+    heap().stack()->IteratePointers(marking_visitor_.get());
   }
 }
 
