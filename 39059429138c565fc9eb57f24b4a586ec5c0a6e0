@@ -127,6 +127,24 @@
     },
     {
       "key": {
+        "uuid": "182205f4_d175b4d8",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2425,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-06-16T10:10:09Z",
+      "side": 1,
+      "message": "I\u0027m fine with this being a builtin, it\u0027s probably not too common a bytecode so I don\u0027t think the call overhead would cost us too much.",
+      "parentUuid": "ef0780dc_a47de4c1",
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "12c6ad2c_1c00800c",
         "filename": "test/mjsunit/mjsunit.status",
         "patchSetId": 6
