@@ -46,6 +46,30 @@
       "revId": "4c759a9c9db56f66fe10ee02005cf9a807f5396c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91f9552a_9604167c",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-16T16:00:16Z",
+      "side": 1,
+      "message": "Whoops, wanted to revert to old behavior. Will fix in a moment.",
+      "parentUuid": "9ecc8a2b_e5b82be3",
+      "range": {
+        "startLine": 221,
+        "startChar": 20,
+        "endLine": 221,
+        "endChar": 35
+      },
+      "revId": "4c759a9c9db56f66fe10ee02005cf9a807f5396c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
