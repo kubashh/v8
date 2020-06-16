@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "beb403d8_fcaf43e3",
+        "filename": "tools/map-processor.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-16T10:33:00Z",
+      "side": 1,
+      "message": "Can we show an error here when the map is not found? With something like this: https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid",
+      "revId": "d51e6a2a3ae6f29dd1aa0b7d7cef867f47822d78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77edd74a_2360585e",
+        "filename": "tools/map-processor.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 1273,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-16T10:33:00Z",
+      "side": 1,
+      "message": "Should this be \"search\" as per https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/search ?",
+      "range": {
+        "startLine": 1273,
+        "startChar": 17,
+        "endLine": 1273,
+        "endChar": 21
+      },
+      "revId": "d51e6a2a3ae6f29dd1aa0b7d7cef867f47822d78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5374cf3e_127a8e65",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-06-16T10:33:00Z",
+      "side": 1,
+      "message": "If `id` isn\u0027t in the cache, maps becomes `undefined` which causes a `length` lookup on undefined to throw.",
+      "range": {
+        "startLine": 337,
+        "startChar": 29,
+        "endLine": 337,
+        "endChar": 35
+      },
+      "revId": "d51e6a2a3ae6f29dd1aa0b7d7cef867f47822d78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
