@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5a85307_dfc89f77",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T16:49:24Z",
+      "side": 1,
+      "message": "Perhaps an \n#else\nvoid Isolate::PrintStack(..) { /* do nothing */}\n\nhere ?",
+      "range": {
+        "startLine": 1261,
+        "startChar": 0,
+        "endLine": 1262,
+        "endChar": 6
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d87cdace_e2d9c205",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T16:49:24Z",
+      "side": 1,
+      "message": "this shouldn\u0027t propagate into the header, it\u0027s better to address this in the implementation",
+      "range": {
+        "startLine": 727,
+        "startChar": 1,
+        "endLine": 727,
+        "endChar": 29
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "103ecfa6_6529febf",
+        "filename": "src/libsampler/sampler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T16:49:24Z",
+      "side": 1,
+      "message": "We should be using Starboard platform definition here, rather than __APPLE__ ?",
+      "range": {
+        "startLine": 487,
+        "startChar": 39,
+        "endLine": 487,
+        "endChar": 58
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db3079db_18f2e2a4",
+        "filename": "src/logging/log-utils.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T16:49:24Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be cleaner to move this #ifdef into src/logging/log-utils.h ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bc77891_6caaadd4",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T16:49:24Z",
+      "side": 1,
+      "message": "That\u0027s a fairly common include, perhaps it\u0027s better to have that come in through one of the already included V8 logging headers ? Do we even need it in this file ?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 0
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ab61310_6d09c493",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T16:49:24Z",
+      "side": 1,
+      "message": "Does V8 have an equivalent macro to use instead of SB_NOTREACHED ?",
+      "range": {
+        "startLine": 35,
+        "startChar": 1,
+        "endLine": 35,
+        "endChar": 18
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d56a51e_52812aee",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-base.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T16:49:24Z",
+      "side": 1,
+      "message": "Why does this default to kMac ?",
+      "range": {
+        "startLine": 140,
+        "startChar": 2,
+        "endLine": 147,
+        "endChar": 3
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "564a9115_c63a7610",
+        "filename": "src/trap-handler/handler-shared.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T16:49:24Z",
+      "side": 1,
+      "message": "I think these should be bracketed by #if V8_DONT_USE_WASM rather than STARBOARD excludes ?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 6
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
