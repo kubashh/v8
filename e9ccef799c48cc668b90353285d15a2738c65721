@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a8d48d8_a8e487d2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T18:03:40Z",
+      "side": 1,
+      "message": "a \"poem\" is a very confusing term, and doesn\u0027t make a whole lot of immediate sense outside of people directly working on starboard. The whole term isn\u0027t even documented somewhere. So i think we should use something else here.",
+      "range": {
+        "startLine": 7,
+        "startChar": 19,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "e9ccef799c48cc668b90353285d15a2738c65721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11e1b657_005fad5a",
+        "filename": "src/base/hashmap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T18:03:40Z",
+      "side": 1,
+      "message": "I think we\u0027d want to reduce this to something like \n\n#if defined(V8_STARBOARD_COMMON_INCLUDES)\n#include V8_STARBOARD_COMMON_INCLUDES\n#endif\n\nto avoid churn in the future, as we evolve and clean up Starboard on our end",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 0
+      },
+      "revId": "e9ccef799c48cc668b90353285d15a2738c65721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "990a34da_fe4045aa",
+        "filename": "src/base/hashmap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T18:03:40Z",
+      "side": 1,
+      "message": "Not needed",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 5
+      },
+      "revId": "e9ccef799c48cc668b90353285d15a2738c65721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e76f8448_0d900f74",
+        "filename": "src/base/logging.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T18:03:40Z",
+      "side": 1,
+      "message": "To minimize the #ifdef variations introduced, this should probably follow the same pattern of\n\n#if defined(V8_STARBOARD_COMMON_INCLUDES)\n#include V8_STARBOARD_COMMON_INCLUDES\n#endif",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 0
+      },
+      "revId": "e9ccef799c48cc668b90353285d15a2738c65721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22449245_dab8afeb",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T18:03:40Z",
+      "side": 1,
+      "message": "Memcpy isn\u0027t needed, see b/149243810",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 45
+      },
+      "revId": "e9ccef799c48cc668b90353285d15a2738c65721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
