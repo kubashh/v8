@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3e1972e7_10c16da7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-06-16T15:02:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ee72b7a_d317cada",
+      "revId": "374825ebc5cdebed7f5a1ff142c20f37636b23f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5378d8b9_1e99d662",
         "filename": "src/diagnostics/objects-printer.cc",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "43205169_fd88b46b",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-06-16T15:02:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5378d8b9_1e99d662",
+      "revId": "374825ebc5cdebed7f5a1ff142c20f37636b23f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57efc044_ed9329a7",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2020-06-15T15:04:14Z",
       "side": 1,
       "message": "Please use \"VectorOf(type.type_name())\" to avoid the roundtrip via null-terminated string and strlen.",
+      "revId": "374825ebc5cdebed7f5a1ff142c20f37636b23f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1401a44_207f88a5",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-06-16T15:02:28Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand this. A const char* is expected, but VectorOf returns a Vector.",
+      "parentUuid": "57efc044_ed9329a7",
       "revId": "374825ebc5cdebed7f5a1ff142c20f37636b23f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
