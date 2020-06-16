@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "56120dee_d30f557a",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-06-16T13:25:14Z",
+      "side": 1,
+      "message": "sgtm",
+      "parentUuid": "c98b6512_723a8ee4",
+      "range": {
+        "startLine": 71,
+        "startChar": 62,
+        "endLine": 71,
+        "endChar": 63
+      },
+      "revId": "ec6933148a9de5a410791535696ba30eb8ade54c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0819c7ac_cf5fdfb0",
         "filename": "src/heap/cppgc/marking-visitor.h",
         "patchSetId": 12
