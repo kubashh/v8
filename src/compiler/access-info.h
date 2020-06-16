@@ -28,6 +28,7 @@ class CompilationDependencies;
 class CompilationDependency;
 class ElementAccessFeedback;
 class JSHeapBroker;
+class NamedAccessFeedback;
 class TypeCache;
 struct ConstFieldInfo;
 
@@ -82,6 +83,15 @@ class PropertyAccessInfo final {
       MaybeHandle<Map> field_map = MaybeHandle<Map>(),
       MaybeHandle<JSObject> holder = MaybeHandle<JSObject>(),
       MaybeHandle<Map> transition_map = MaybeHandle<Map>());
+  static PropertyAccessInfo DataField(
+      Zone* zone, ZoneVector<Handle<Map>> receiver_maps,
+      ZoneVector<CompilationDependency const*>&& unrecorded_dependencies,
+      FieldIndex field_index, Representation field_representation,
+      Type field_type, Handle<Map> field_owner_map,
+      MaybeHandle<Map> field_map = MaybeHandle<Map>(),
+      MaybeHandle<JSObject> holder = MaybeHandle<JSObject>(),
+      MaybeHandle<Map> transition_map = MaybeHandle<Map>());
+
   static PropertyAccessInfo DataConstant(
       Zone* zone, Handle<Map> receiver_map,
       ZoneVector<CompilationDependency const*>&& unrecorded_dependencies,
@@ -174,6 +184,9 @@ class AccessInfoFactory final {
   PropertyAccessInfo ComputePropertyAccessInfo(Handle<Map> map,
                                                Handle<Name> name,
                                                AccessMode access_mode) const;
+
+  PropertyAccessInfo ComputePropertyAccessInfo(
+      NamedAccessFeedback const& feedback) const;
 
   // Convenience wrapper around {ComputePropertyAccessInfo} for multiple maps.
   void ComputePropertyAccessInfos(

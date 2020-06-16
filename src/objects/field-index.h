@@ -73,7 +73,6 @@ class FieldIndex final {
   }
   bool operator!=(FieldIndex const& other) const { return !(*this == other); }
 
- private:
   FieldIndex(bool is_inobject, int offset, Encoding encoding,
              int inobject_properties, int first_inobject_property_offset) {
     DCHECK(IsAligned(first_inobject_property_offset, kTaggedSize));
@@ -85,6 +84,7 @@ class FieldIndex final {
                  InObjectPropertyBits::encode(inobject_properties);
   }
 
+ private:
   static Encoding FieldEncoding(Representation representation) {
     switch (representation.kind()) {
       case Representation::kNone:

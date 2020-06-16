@@ -157,15 +157,42 @@ class ElementAccessFeedback : public ProcessedFeedback {
 
 class NamedAccessFeedback : public ProcessedFeedback {
  public:
+  enum FeedbackKind {
+    kMonomorphicWithDynamicCheck,
+    kPolymorphicWithDynamicCheck,
+    kOther
+  };
+
+  // TODO(mythria): Add NamedAccessMinimorphicFeedback to hold minimorphic
+  // feedback without maps_.
   NamedAccessFeedback(NameRef const& name, ZoneVector<Handle<Map>> const& maps,
-                      FeedbackSlotKind slot_kind);
+                      FeedbackSlotKind slot_kind, FeedbackKind feedback_kind,
+                      int slot, Handle<Object> handler,
+                      FeedbackVectorRef feedback_vector);
 
   NameRef const& name() const { return name_; }
   ZoneVector<Handle<Map>> const& maps() const { return maps_; }
+  bool is_monomorphic() const {
+    return feedback_kind_ == kMonomorphicWithDynamicCheck;
+  }
+  bool is_polymorphic() const {
+    return feedback_kind_ == kPolymorphicWithDynamicCheck;
+  }
+  bool is_minimorphic() const {
+    return feedback_kind_ == kPolymorphicWithDynamicCheck ||
+           feedback_kind_ == kMonomorphicWithDynamicCheck;
+  }
+  int slot_id() const { return slot_id_; }
+  Handle<Object> handler() const { return handler_; }
+  FeedbackVectorRef const& feedback_vector() const { return feedback_vector_; }
 
  private:
   NameRef const name_;
   ZoneVector<Handle<Map>> const maps_;
+  FeedbackVectorRef feedback_vector_;
+  FeedbackKind feedback_kind_;
+  int slot_id_;
+  Handle<Object> handler_;
 };
 
 class CallFeedback : public ProcessedFeedback {

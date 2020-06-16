@@ -91,6 +91,19 @@ PropertyAccessInfo PropertyAccessInfo::DataField(
 }
 
 // static
+PropertyAccessInfo PropertyAccessInfo::DataField(
+    Zone* zone, ZoneVector<Handle<Map>> receiver_maps,
+    ZoneVector<CompilationDependency const*>&& dependencies,
+    FieldIndex field_index, Representation field_representation,
+    Type field_type, Handle<Map> field_owner_map, MaybeHandle<Map> field_map,
+    MaybeHandle<JSObject> holder, MaybeHandle<Map> transition_map) {
+  return PropertyAccessInfo(kDataField, holder, transition_map, field_index,
+                            field_representation, field_type, field_owner_map,
+                            field_map, std::move(receiver_maps),
+                            std::move(dependencies));
+}
+
+// static
 PropertyAccessInfo PropertyAccessInfo::DataConstant(
     Zone* zone, Handle<Map> receiver_map,
     ZoneVector<CompilationDependency const*>&& dependencies,
@@ -479,6 +492,33 @@ PropertyAccessInfo AccessInfoFactory::ComputeAccessorDescriptorAccessInfo(
   }
   return PropertyAccessInfo::AccessorConstant(zone(), receiver_map, accessor,
                                               holder);
+}
+
+PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
+    NamedAccessFeedback const& feedback) const {
+  ZoneVector<CompilationDependency const*> dependencies(zone());
+  DCHECK(feedback.handler()->IsSmi());
+  int handler = Smi::cast(*feedback.handler()).value();
+  bool is_inobject = LoadHandler::IsInobjectBits::decode(handler);
+  bool is_double = LoadHandler::IsDoubleBits::decode(handler);
+  int offset = LoadHandler::FieldIndexBits::decode(handler) * kTaggedSize;
+  // TODO(mythria): this is a hack. Find a better way to do this. We don't have
+  // first_inobject_property_offset and we don't need that. Find a cleaner way
+  // to do this.
+  FieldIndex field_index(
+      is_inobject, offset,
+      is_double ? FieldIndex::Encoding::kDouble : FieldIndex::Encoding::kTagged,
+      0, 0);
+  Representation field_rep =
+      is_double ? Representation::Double() : Representation::Tagged();
+  Type field_type = is_double ? Type::Number() : Type::Any();
+  // TODO(mythria): for now pass all receiver maps. Hack till we implement
+  // DynamicMap Checks.
+  ZoneVector<Handle<Map>> receiver_maps = feedback.maps();
+  return PropertyAccessInfo::DataField(
+      zone(), receiver_maps, std::move(dependencies), field_index, field_rep,
+      field_type, Handle<Map>(), MaybeHandle<Map>(), MaybeHandle<JSObject>(),
+      MaybeHandle<Map>());
 }
 
 PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
