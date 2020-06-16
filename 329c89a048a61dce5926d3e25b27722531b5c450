@@ -22,6 +22,30 @@
       "revId": "329c89a048a61dce5926d3e25b27722531b5c450",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1be8e6f2_bf81644f",
+        "filename": "test/cctest/heap/test-unified-heap.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-06-16T07:55:24Z",
+      "side": 1,
+      "message": "I\u0027d be fine with either option as long as we are consistent. By now unittests are as powerful as cctests and can run JS as you said.",
+      "parentUuid": "ede38185_d07c9055",
+      "range": {
+        "startLine": 11,
+        "startChar": 22,
+        "endLine": 11,
+        "endChar": 28
+      },
+      "revId": "329c89a048a61dce5926d3e25b27722531b5c450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
