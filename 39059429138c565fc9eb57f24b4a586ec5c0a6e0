@@ -224,6 +224,24 @@
     },
     {
       "key": {
+        "uuid": "ed5e0df2_775da58e",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-16T11:42:20Z",
+      "side": 1,
+      "message": "I suspect that having TF\u0027d code update the isolate on each context creation  does no harm but is unnecessary since we do it when calling into the runtime.",
+      "parentUuid": "595c6e82_3e43d961",
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ef0780dc_a47de4c1",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 6
