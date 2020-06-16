@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "0c28fa24_db427f0a",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-16T11:31:32Z",
+      "side": 1,
+      "message": "Looking at the next CL in your chain, I understand why you split FinishMarking to multiple methods.\n\nWhat I recommend is:\n1) Rename FinishMarking to FinishAtomicPause.\n2) FinishMarkingForTesting (now renamed to simply to FinishMarking) will call EnterAtomicPause, AdvanceMarkingWithDeadline, FinishAtomicPause.\n3) EnterAtomicPause, AdvanceMarkingWithDeadline, FinishAtomicPause will be protected methods.\n\nThat way you we still have a simple api for the standalone library and the UnifiedHeapMarker can expose the relevant steps to v8.",
+      "parentUuid": "02074325_5d258440",
+      "range": {
+        "startLine": 28,
+        "startChar": 6,
+        "endLine": 28,
+        "endChar": 22
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54b82bc4_30372965",
         "filename": "src/heap/cppgc/marking-visitor.h",
         "patchSetId": 11
