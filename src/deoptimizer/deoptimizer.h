@@ -661,7 +661,7 @@ class RegisterValues {
   Float64 double_registers_[DoubleRegister::kNumRegisters];
 };
 
-class FrameDescription {
+class FrameDescription : public Malloced {
  public:
   explicit FrameDescription(uint32_t frame_size, int parameter_count = 0);
 
