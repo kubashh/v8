@@ -46,6 +46,30 @@
       "revId": "cf96ca6745e66e23479592ce42231508e2a7535f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "958a9f17_117ed4e5",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-16T16:50:50Z",
+      "side": 1,
+      "message": "While encapsulating implementation details is definitely appreciated, the users \u003d\u003d heap/ OWNERS here so that\u0027s probably okay.",
+      "parentUuid": "bde974b2_1de9476a",
+      "range": {
+        "startLine": 85,
+        "startChar": 7,
+        "endLine": 85,
+        "endChar": 23
+      },
+      "revId": "cf96ca6745e66e23479592ce42231508e2a7535f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
