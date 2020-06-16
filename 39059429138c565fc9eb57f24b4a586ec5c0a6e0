@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "772d4ebc_5e612c55",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4578,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-16T12:20:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "992239de_251fee16",
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c599a668_5cbc4c5f",
         "filename": "src/compiler/js-generic-lowering.cc",
         "patchSetId": 6
@@ -225,6 +243,24 @@
     },
     {
       "key": {
+        "uuid": "9d48691f_e6d164a8",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-16T12:20:12Z",
+      "side": 1,
+      "message": ".. here https://crrev.com/c/2247649",
+      "parentUuid": "8cd918c8_2236c2eb",
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59a4f659_91d55ace",
         "filename": "src/compiler/js-generic-lowering.cc",
         "patchSetId": 6
@@ -275,6 +311,24 @@
       "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57c6dd8a_31d9e757",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-16T12:20:12Z",
+      "side": 1,
+      "message": "Ack, makes sense. Happens here in CEntry: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/codegen/x64/macro-assembler-x64.cc;l\u003d2506;drc\u003dmaster?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F",
+      "parentUuid": "ed5e0df2_775da58e",
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
