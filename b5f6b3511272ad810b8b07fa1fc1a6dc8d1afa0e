@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eccd4913_69f459b4",
+        "filename": "src/heap/cppgc-js/cpp-heap.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-06-16T17:46:35Z",
+      "side": 1,
+      "message": "nit: maybe redundant",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 10
+      },
+      "revId": "b5f6b3511272ad810b8b07fa1fc1a6dc8d1afa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
