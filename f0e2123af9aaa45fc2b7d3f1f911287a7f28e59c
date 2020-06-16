@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "daa9b099_1eac3689",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-16T15:05:43Z",
+      "side": 1,
+      "message": "Added \"[Optional, depending on environment.]\"",
+      "parentUuid": "a5e7c6c1_91bb9cba",
+      "range": {
+        "startLine": 27,
+        "startChar": 6,
+        "endLine": 27,
+        "endChar": 32
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02074325_5d258440",
         "filename": "src/heap/cppgc/marker.h",
         "patchSetId": 11
