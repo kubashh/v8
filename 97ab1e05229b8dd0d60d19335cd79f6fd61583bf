@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d0784066_c585f482",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-16T12:47:09Z",
+      "side": 1,
+      "message": "nit: trailing full stop please. (And maybe s/over/instead of/?)",
+      "range": {
+        "startLine": 1080,
+        "startChar": 46,
+        "endLine": 1080,
+        "endChar": 47
+      },
+      "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f53f2a38_1c031576",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 7
@@ -49,6 +72,47 @@
       "side": 1,
       "message": "Same question as below: is it possible to make a table of a GC type?",
       "parentUuid": "d736cfd7_1e341ebb",
+      "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bad363e8_475b4d97",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-16T12:47:09Z",
+      "side": 1,
+      "message": "Yes. Per the \"reference types\" proposal, `elemtype ::\u003d \u003creftype\u003e`, so that includes the new GC ref types.",
+      "parentUuid": "78859665_d65219d6",
+      "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21566476_815cf48b",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-16T12:47:09Z",
+      "side": 1,
+      "message": "again",
+      "range": {
+        "startLine": 1214,
+        "startChar": 51,
+        "endLine": 1214,
+        "endChar": 52
+      },
       "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -105,6 +169,24 @@
       "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f01d74bf_78ce65d4",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1270,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-16T12:47:09Z",
+      "side": 1,
+      "message": "You can definitely make a global with an RTT (and, in fact, the expectation is that this will be a common use case). I\u0027m not sure whether you can make one with a struct or array; last I checked the proposal contained no definitive statement either way, though of course I may have missed it.",
+      "parentUuid": "d4bf8571_e77c71d6",
+      "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
