@@ -2,6 +2,114 @@
   "comments": [
     {
       "key": {
+        "uuid": "a6a0aba7_0f07b561",
+        "filename": "src/builtins/internal.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-16T09:46:41Z",
+      "side": 1,
+      "message": "Can we call this file tagged-templates.tq or something like that?",
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "992239de_251fee16",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4578,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-16T09:46:41Z",
+      "side": 1,
+      "message": "I\u0027d prefer if those cases for which we have a ReduceFoo function only call that function in the switch here. Can you move the check into ReducePromiseConstructor?",
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c599a668_5cbc4c5f",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-16T09:46:41Z",
+      "side": 1,
+      "message": "Please update the comment.",
+      "range": {
+        "startLine": 339,
+        "startChar": 42,
+        "endLine": 340,
+        "endChar": 30
+      },
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31c41fb7_b4042c0b",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-16T09:46:41Z",
+      "side": 1,
+      "message": "Nit, here and below: Constant(shared)",
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "687a43bf_e09c4989",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-16T09:46:41Z",
+      "side": 1,
+      "message": "This input seems to be unused in general, we should remove it.",
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59a4f659_91d55ace",
+        "filename": "src/compiler/js-generic-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-16T09:46:41Z",
+      "side": 1,
+      "message": "These runtime functions do more than allocate: they also update the context on the isolate. I\u0027m not sure we want to do that.",
+      "revId": "39059429138c565fc9eb57f24b4a586ec5c0a6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ef0780dc_a47de4c1",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 6
