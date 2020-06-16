@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "46697979_05a90217",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-16T15:08:24Z",
+      "side": 1,
+      "message": "It was done in PS3 and is reverted in PS4.",
+      "parentUuid": "3e1972e7_10c16da7",
+      "revId": "374825ebc5cdebed7f5a1ff142c20f37636b23f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5378d8b9_1e99d662",
         "filename": "src/diagnostics/objects-printer.cc",
         "patchSetId": 1
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "9687b803_e0d6130d",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-16T15:08:24Z",
+      "side": 1,
+      "message": "I don\u0027t see this done in PS4.",
+      "parentUuid": "43205169_fd88b46b",
+      "revId": "374825ebc5cdebed7f5a1ff142c20f37636b23f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57efc044_ed9329a7",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 1
@@ -101,6 +137,24 @@
       "side": 1,
       "message": "I\u0027m not sure I understand this. A const char* is expected, but VectorOf returns a Vector.",
       "parentUuid": "57efc044_ed9329a7",
+      "revId": "374825ebc5cdebed7f5a1ff142c20f37636b23f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5090471_09c9f411",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-16T15:08:24Z",
+      "side": 1,
+      "message": "There are two version of {InternalizeUtf8String}. The one you are calling is doing {CStrVector} on the argument, and then calling the other variant which expects a vector. I suggest using the vector method directly.\nSee https://source.chromium.org/chromium/chromium/src/+/master:v8/src/heap/factory.h;l\u003d189;drc\u003d18c73676c1db2868efa5a927046fa9caa0a70c6d",
+      "parentUuid": "d1401a44_207f88a5",
       "revId": "374825ebc5cdebed7f5a1ff142c20f37636b23f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
