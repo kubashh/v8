@@ -16,10 +16,18 @@
 namespace cppgc {
 namespace internal {
 
-class Heap;
+class HeapBase;
 class HeapObjectHeader;
 class MutatorThreadMarkingVisitor;
 
+// Marking algorithm. Example for a valid call sequence creating the marking
+// phase:
+// 1. StartMarking()
+// Optionally, when marking incrementally and/or concurrently.
+// 2. AdvanceMarkingWithDeadline()
+// 3. EnterAtomicPause()
+// 4. AdvanceMarkingWithDeadline()
+// 5. LeaveAtomicPause()
 class V8_EXPORT_PRIVATE Marker {
   static constexpr int kNumConcurrentMarkers = 0;
   static constexpr int kNumMarkers = 1 + kNumConcurrentMarkers;
@@ -59,7 +67,7 @@ class V8_EXPORT_PRIVATE Marker {
     MarkingType marking_type = MarkingType::kAtomic;
   };
 
-  explicit Marker(Heap* heap);
+  explicit Marker(HeapBase& heap);  // NOLINT(runtime/references)
   virtual ~Marker();
 
   Marker(const Marker&) = delete;
@@ -68,14 +76,29 @@ class V8_EXPORT_PRIVATE Marker {
   // Initialize marking according to the given config. This method will
   // trigger incremental/concurrent marking if needed.
   void StartMarking(MarkingConfig config);
-  // Finalize marking. This method stops incremental/concurrent marking
-  // if exists and performs atomic pause marking. FinishMarking may
-  // update the MarkingConfig, e.g. if the stack state has changed.
-  void FinishMarking(MarkingConfig config);
+
+  // Signals entering the atomic marking pause. The method
+  // - stops incremental/concurrent marking;
+  // - flushes back any in-construction worklists if needed;
+  // - Updates the MarkingConfig if the stack state has changed;
+  void EnterAtomicPause(MarkingConfig config);
+
+  // Makes marking progress.
+  virtual bool AdvanceMarkingWithDeadline(v8::base::TimeDelta);
+
+  // Signals leaving the atomic marking pause. This method expects no more
+  // objects to be marked and merely updates marking states if needed.
+  void LeaveAtomicPause();
+
+  // Combines:
+  // - EnterAtomicPause()
+  // - AdvanceMarkingWithDeadline()
+  // - LeaveAtomicPause()
+  void FinishMarkingForTesting(MarkingConfig config);
 
   void ProcessWeakness();
 
-  Heap* heap() { return heap_; }
+  HeapBase& heap() { return heap_; }
   MarkingWorklist* marking_worklist() { return &marking_worklist_; }
   NotFullyConstructedWorklist* not_fully_constructed_worklist() {
     return &not_fully_constructed_worklist_;
@@ -100,11 +123,10 @@ class V8_EXPORT_PRIVATE Marker {
  private:
   void VisitRoots();
 
-  bool AdvanceMarkingWithDeadline(v8::base::TimeDelta);
   void FlushNotFullyConstructedObjects();
   void MarkNotFullyConstructedObjects();
 
-  Heap* const heap_;
+  HeapBase& heap_;
   MarkingConfig config_ = MarkingConfig::Default();
 
   std::unique_ptr<MutatorThreadMarkingVisitor> marking_visitor_;

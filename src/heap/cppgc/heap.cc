@@ -69,11 +69,13 @@ void Heap::CollectGarbage(Config config) {
   epoch_++;
 
   // "Marking".
-  marker_ = std::make_unique<Marker>(this);
+  marker_ = std::make_unique<Marker>(AsBase());
   const Marker::MarkingConfig marking_config{config.stack_state,
                                              config.marking_type};
   marker_->StartMarking(marking_config);
-  marker_->FinishMarking(marking_config);
+  marker_->EnterAtomicPause(marking_config);
+  marker_->AdvanceMarkingWithDeadline(v8::base::TimeDelta::Max());
+  marker_->LeaveAtomicPause();
   // "Sweeping and finalization".
   {
     // Pre finalizers are forbidden from allocating objects
