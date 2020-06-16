@@ -5,12 +5,13 @@
 #include "src/base/logging.h"
 
 #include <cctype>
-#include <cstdarg>
-#include <cstdio>
-#include <cstdlib>
 
 #include "src/base/debug/stack_trace.h"
 #include "src/base/platform/platform.h"
+
+#if defined(V8_PLATFORM_DEFINES)
+#include "V8_PLATFORM_DEFINES"
+#endif
 
 namespace v8 {
 namespace base {
