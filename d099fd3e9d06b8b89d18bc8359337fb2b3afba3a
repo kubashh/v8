@@ -46,6 +46,30 @@
       "revId": "d099fd3e9d06b8b89d18bc8359337fb2b3afba3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd0842df_9ea37ef5",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-16T11:00:18Z",
+      "side": 1,
+      "message": "The usual logic is \"if this feature is enabled, then do this special handling\". Also, the usual behavior we do is to consume bytes, and not at first reading the byte, and depending on its value consuming it later one way or another.\n\nYour solution should work, but it seems inconsistent with what exists otherwise. That\u0027s why the code was surprising to me, and why also the comment did not help. If there is a good reason to do it this way and not a more consistent way, that it\u0027s okay for me. But at the moment I don\u0027t see a reason.",
+      "parentUuid": "8d11ed59_791a2ad8",
+      "range": {
+        "startLine": 1753,
+        "startChar": 4,
+        "endLine": 1755,
+        "endChar": 26
+      },
+      "revId": "d099fd3e9d06b8b89d18bc8359337fb2b3afba3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
