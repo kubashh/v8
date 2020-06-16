@@ -22,6 +22,29 @@
       "revId": "ec6933148a9de5a410791535696ba30eb8ade54c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0819c7ac_cf5fdfb0",
+        "filename": "src/heap/cppgc/marking-visitor.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-16T11:35:23Z",
+      "side": 1,
+      "message": "I understand this as a wrapper so we don\u0027t try to obtain a TraceDescriptor from v8 code.\nDoes this serve another purpose?",
+      "range": {
+        "startLine": 38,
+        "startChar": 7,
+        "endLine": 38,
+        "endChar": 17
+      },
+      "revId": "ec6933148a9de5a410791535696ba30eb8ade54c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

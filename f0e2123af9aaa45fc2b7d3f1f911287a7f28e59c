@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f22336ce_239c102e",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-16T11:35:23Z",
+      "side": 0,
+      "message": "Is this on purpose?",
+      "range": {
+        "startLine": 119,
+        "startChar": 1,
+        "endLine": 119,
+        "endChar": 8
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
