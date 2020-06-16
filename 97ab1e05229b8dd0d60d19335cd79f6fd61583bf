@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "78859665_d65219d6",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-16T09:29:49Z",
+      "side": 1,
+      "message": "Same question as below: is it possible to make a table of a GC type?",
+      "parentUuid": "d736cfd7_1e341ebb",
+      "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f7cb2abe_98cb47ac",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 7
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "My idea when changing this messages, and for that matter of all my current CLs, is to generalize V8 behavior regarding wasm types so it works when we introduce the new types in the upcoming ValueType upheaval. In this position, can \u0027value\u0027 only be one of those four types? If so, I should revert the change.",
       "parentUuid": "f7cb2abe_98cb47ac",
+      "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4bf8571_e77c71d6",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1270,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-16T09:29:49Z",
+      "side": 1,
+      "message": "Hmm, it could be that the value here could also be externref and anyfunc. However, I don\u0027t know how a GC type could be used here. Can you create a global with a GC type?",
+      "parentUuid": "78f14f8b_87b8fa5c",
       "revId": "97ab1e05229b8dd0d60d19335cd79f6fd61583bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
