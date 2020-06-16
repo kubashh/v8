@@ -724,8 +724,10 @@ class Isolate final : private HiddenFactory {
   void PrintCurrentStackTrace(FILE* out);
   void PrintStack(StringStream* accumulator,
                   PrintStackMode mode = kPrintStackVerbose);
+#if !defined(V8_OS_STARBOARD)
   V8_EXPORT_PRIVATE void PrintStack(FILE* out,
                                     PrintStackMode mode = kPrintStackVerbose);
+#endif
   Handle<String> StackTraceString();
   // Stores a stack trace in a stack-allocated temporary buffer which will
   // end up in the minidump for debugging purposes.
