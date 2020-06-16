@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f9fddc11_2cc10960",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6770,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-06-16T10:35:47Z",
+      "side": 1,
+      "message": "I think this works because we do not GC while initializing the read-only space and read-only space objects are never young.\n\nI am not sure that this optimization is worthwhile though because the production case will use the deserializer to create the read-only space without invoking this write-barrier. So we would be introducing coupling between the write-barrier and initialization of RO space without production performance gains.",
+      "parentUuid": "1b966c1f_7e50533b",
+      "range": {
+        "startLine": 6768,
+        "startChar": 2,
+        "endLine": 6770,
+        "endChar": 61
+      },
+      "revId": "0c255d0b815053860acc0bb927264b389fa42370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04d88013_82b00b14",
         "filename": "src/heap/paged-spaces.cc",
         "patchSetId": 4
