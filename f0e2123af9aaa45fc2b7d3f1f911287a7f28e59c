@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "cb6fa9a5_8ee33514",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-16T14:43:46Z",
+      "side": 1,
+      "message": "Actually, the API should work for incremental marking as well. I will ping after changing.",
+      "parentUuid": "bfa8f8f2_2f5361a3",
+      "range": {
+        "startLine": 28,
+        "startChar": 6,
+        "endLine": 28,
+        "endChar": 22
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54b82bc4_30372965",
         "filename": "src/heap/cppgc/marking-visitor.h",
         "patchSetId": 11
