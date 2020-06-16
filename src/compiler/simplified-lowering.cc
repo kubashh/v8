@@ -3606,6 +3606,14 @@ class RepresentationSelector {
             node, UseInfo::CheckedHeapObjectAsTaggedPointer(p.feedback()),
             MachineRepresentation::kNone);
       }
+      case IrOpcode::kDynamicCheckMaps: {
+        // TODO(gsathya): What is this doing?
+        DynamicCheckMapsParameters const& p =
+            DynamicCheckMapsParametersOf(node->op());
+        return VisitUnop<T>(
+            node, UseInfo::CheckedHeapObjectAsTaggedPointer(p.feedback()),
+            MachineRepresentation::kNone);
+      }
       case IrOpcode::kTransitionElementsKind: {
         return VisitUnop<T>(
             node, UseInfo::CheckedHeapObjectAsTaggedPointer(FeedbackSource()),

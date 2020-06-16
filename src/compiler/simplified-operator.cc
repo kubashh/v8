@@ -286,6 +286,30 @@ CheckMapsParameters const& CheckMapsParametersOf(Operator const* op) {
   return OpParameter<CheckMapsParameters>(op);
 }
 
+bool operator==(DynamicCheckMapsParameters const& lhs,
+                DynamicCheckMapsParameters const& rhs) {
+  return lhs.handler().address() == rhs.handler().address() &&
+         lhs.feedback() == rhs.feedback();
+}
+
+// TODO(gsathya): Is this correct? Can we hash based on the address of the
+// handler?
+size_t hash_value(DynamicCheckMapsParameters const& p) {
+  FeedbackSource::Hash feedback_hash;
+  return base::hash_combine(p.handler().address(), feedback_hash(p.feedback()));
+}
+
+std::ostream& operator<<(std::ostream& os,
+                         DynamicCheckMapsParameters const& p) {
+  return os << p.handler() << ", " << p.feedback();
+}
+
+DynamicCheckMapsParameters const& DynamicCheckMapsParametersOf(
+    Operator const* op) {
+  DCHECK_EQ(IrOpcode::kDynamicCheckMaps, op->opcode());
+  return OpParameter<DynamicCheckMapsParameters>(op);
+}
+
 ZoneHandleSet<Map> const& CompareMapsParametersOf(Operator const* op) {
   DCHECK_EQ(IrOpcode::kCompareMaps, op->opcode());
   return OpParameter<ZoneHandleSet<Map>>(op);
@@ -1451,6 +1475,17 @@ const Operator* SimplifiedOperatorBuilder::CheckMaps(
       "CheckMaps",                                     // name
       1, 1, 1, 0, 1, 0,                                // counts
       parameters);                                     // parameter
+}
+
+const Operator* SimplifiedOperatorBuilder::DynamicCheckMaps(
+    Handle<Object> handler, const FeedbackSource& feedback) {
+  DynamicCheckMapsParameters const parameters(handler, feedback);
+  return new (zone()) Operator1<DynamicCheckMapsParameters>(  // --
+      IrOpcode::kDynamicCheckMaps,                            // opcode
+      Operator::kNoThrow | Operator::kNoWrite,                // flags
+      "DynamicCheckMaps",                                     // name
+      1, 1, 1, 0, 1, 0,                                       // counts
+      parameters);                                            // parameter
 }
 
 const Operator* SimplifiedOperatorBuilder::MapGuard(ZoneHandleSet<Map> maps) {

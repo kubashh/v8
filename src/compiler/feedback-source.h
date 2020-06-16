@@ -13,6 +13,9 @@ namespace internal {
 namespace compiler {
 
 struct FeedbackSource {
+  // TODO(gsathya): Set this using the FeedbackSource constructor
+  enum ICState { kMonomorphic, kPolymorphic };
+
   FeedbackSource() { DCHECK(!IsValid()); }
   V8_EXPORT_PRIVATE FeedbackSource(Handle<FeedbackVector> vector_,
                                    FeedbackSlot slot_);
@@ -24,6 +27,7 @@ struct FeedbackSource {
 
   Handle<FeedbackVector> vector;
   FeedbackSlot slot;
+  ICState state;
 
   struct Hash {
     size_t operator()(FeedbackSource const& source) const {
