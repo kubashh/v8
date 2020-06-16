@@ -369,6 +369,9 @@ dd {
   z-index: 100;
   display: none;
 }
+#searchBar {
+  width: 200px;
+}
 </style>
 <script src="./splaytree.js"></script>
 <script src="./codemap.js"></script>
@@ -503,8 +506,19 @@ define(Array.prototype, "histogram", function(mapFn) {
   return histogram;
 });
 
+
 // =========================================================================
 // EventHandlers
+function handleSearchBar(){
+  let searchBarInput = $('searchBarInput').value;
+  let selectedMap = V8Map.get(searchBarInput);
+  removeAllChildren($('mapIdList'));
+  if(selectedMap){
+    let map = selectedMap;
+    document.state.map = map;
+  }
+}
+
 function handleBodyLoad() {
   let upload = $('fileReader');
   upload.onclick = (e) => $("file").click();
@@ -1252,6 +1266,15 @@ function transitionTypeToColor(type) {
     <h2>Transitions</h2>
     <section id="transitionView"></section>
     <br/>
+
+
+    <h2>Search Map by Address</h2>
+    <section id="searchBar"></section>
+    <input type="text" id="searchBarInput" onkeyup="handleSearchBar()" placeholder="Search maps by address..">
+
+    <ul id="mapIdList" title="Map Id List">
+    </ul>
+
 
     <h2>Selected Map</h2>
     <section id="mapDetails"></section>
