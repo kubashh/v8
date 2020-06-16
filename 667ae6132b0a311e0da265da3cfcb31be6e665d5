@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36224c1b_b94b0362",
+        "filename": "tools/ic-explorer.html",
+        "patchSetId": 5
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-16T14:44:59Z",
+      "side": 1,
+      "message": "Let\u0027s put these changes in a separate CL.\nMakes it easier for debugging.",
+      "revId": "667ae6132b0a311e0da265da3cfcb31be6e665d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c7a199a_b289df6f",
+        "filename": "tools/map-processor.html",
+        "patchSetId": 5
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-16T14:44:59Z",
+      "side": 1,
+      "message": "nit: please remove commented out lines",
+      "revId": "667ae6132b0a311e0da265da3cfcb31be6e665d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d622349b_e33e1c0a",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-16T14:44:59Z",
+      "side": 1,
+      "message": "Please add a line to the CL description that you changed id from int to a string.",
+      "revId": "667ae6132b0a311e0da265da3cfcb31be6e665d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "151dfd80_b4a2b25e",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-16T14:44:59Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to do parseInt here.\nCould you debug this and figure out what the actual \"0\" value is? (I presume this should not happen anymore)",
+      "revId": "667ae6132b0a311e0da265da3cfcb31be6e665d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

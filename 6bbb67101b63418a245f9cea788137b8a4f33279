@@ -48,6 +48,23 @@
     },
     {
       "key": {
+        "uuid": "13985d75_1cd9648d",
+        "filename": "tools/map-processor.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-16T14:44:59Z",
+      "side": 1,
+      "message": "nit: type\u003d\"search\"",
+      "revId": "6bbb67101b63418a245f9cea788137b8a4f33279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "28213577_ec33c100",
         "filename": "tools/map-processor.js",
         "patchSetId": 2
@@ -65,6 +82,23 @@
     },
     {
       "key": {
+        "uuid": "6134256f_16e16daf",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-16T14:44:59Z",
+      "side": 1,
+      "message": "nit: please remove this line",
+      "revId": "6bbb67101b63418a245f9cea788137b8a4f33279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49fd7ecc_32b41eed",
         "filename": "tools/map-processor.js",
         "patchSetId": 2
@@ -76,6 +110,23 @@
       "writtenOn": "2020-06-15T19:45:36Z",
       "side": 1,
       "message": "Is this needed? We only ever set the description here right?",
+      "revId": "6bbb67101b63418a245f9cea788137b8a4f33279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76b4598c_383437c0",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-06-16T14:44:59Z",
+      "side": 1,
+      "message": "nit: use let instead of var",
       "revId": "6bbb67101b63418a245f9cea788137b8a4f33279",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
