@@ -94,6 +94,30 @@
       "revId": "cf96ca6745e66e23479592ce42231508e2a7535f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7131dfeb_46d79e08",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-16T17:05:14Z",
+      "side": 1,
+      "message": "Even with a mirror, the idea for a stand-alone library is to focus on a GC for users. Having extensible framework would be ideal but seems far away.",
+      "parentUuid": "6aff5739_07fb9b88",
+      "range": {
+        "startLine": 85,
+        "startChar": 7,
+        "endLine": 85,
+        "endChar": 23
+      },
+      "revId": "cf96ca6745e66e23479592ce42231508e2a7535f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
