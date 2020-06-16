@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a825f903_d7a5e7c4",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-16T13:58:16Z",
+      "side": 1,
+      "message": "Done: Using marking_visitor_ again.",
+      "parentUuid": "60aeeb06_41331f4d",
+      "range": {
+        "startLine": 209,
+        "startChar": 24,
+        "endLine": 209,
+        "endChar": 36
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e26d2aa_199b3666",
         "filename": "src/heap/cppgc/marker.h",
         "patchSetId": 11
@@ -36,6 +60,30 @@
       "writtenOn": "2020-06-15T21:46:44Z",
       "side": 1,
       "message": "step 2 needs to be implicit only if we don\u0027t have tasks (i.e. we need to manually drain the worklists)",
+      "range": {
+        "startLine": 27,
+        "startChar": 6,
+        "endLine": 27,
+        "endChar": 32
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99676256_44952c46",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-16T13:58:16Z",
+      "side": 1,
+      "message": "I don\u0027t understand: It\u0027s an optional step which we will have when marking incrementally or concurrently. The statement does not say anything about tasks.",
+      "parentUuid": "4e26d2aa_199b3666",
       "range": {
         "startLine": 27,
         "startChar": 6,
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "bfa8f8f2_2f5361a3",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-16T13:58:16Z",
+      "side": 1,
+      "message": "\u003e 1) Rename FinishMarking to FinishAtomicPause.\n\nGood point. I did a rename to LeaveAtomicPause, so we have Enter/Leave pairs.\n\n\u003e That way you we still have a simple api for the standalone library and the UnifiedHeapMarker can expose the relevant steps to v8.\n\nThat API does not work as soon as we have incremental marking. Also, for just atomic marking we can have a MarkTransitiveClosure() call that combines StartMarking + FinishMarking.\n\nI kept the methods public to allow combining them freely.\n\nAlternatively, we can make everything protected and have\n- AtomicMarker\n- TestingMarker\n\nand only expose what we need there. AtomicMarker will soon be obsolete though which is why I didn\u0027t use this approach.",
+      "parentUuid": "0c28fa24_db427f0a",
+      "range": {
+        "startLine": 28,
+        "startChar": 6,
+        "endLine": 28,
+        "endChar": 22
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54b82bc4_30372965",
         "filename": "src/heap/cppgc/marking-visitor.h",
         "patchSetId": 11
@@ -115,6 +187,30 @@
       "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6268793_09574487",
+        "filename": "src/heap/cppgc/marking-visitor.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-16T13:58:16Z",
+      "side": 1,
+      "message": "tl;dr: Redid the visitor trace abstraction.\n\nBlink\u0027s version is far from ideal. It has always bothered me that we cannot get an abstraction for conservative tracing without marking. E.g., it is still not possible to have marking verification for in-construction object and heap snapshots for in-construction objects in Blink.\n\nI initially split into StackMarkingVisitor and MarkingVisitor to get closer into a direction where we split concerns. The split was not what we needed though.\n\nWith the proper TraceConservativelyIfNeeded() method the split now becomes obsolete.",
+      "parentUuid": "54b82bc4_30372965",
+      "range": {
+        "startLine": 74,
+        "startChar": 24,
+        "endLine": 74,
+        "endChar": 43
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
