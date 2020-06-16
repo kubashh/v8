@@ -146,6 +146,7 @@ v8_source_set("cctest_sources") {
     "heap/test-memory-measurement.cc",
     "heap/test-page-promotion.cc",
     "heap/test-spaces.cc",
+    "heap/test-unified-heap.cc",
     "heap/test-unmapper.cc",
     "heap/test-weak-references.cc",
     "interpreter/bytecode-expectations-printer.cc",
@@ -394,6 +395,7 @@ v8_source_set("cctest_sources") {
   }
 
   configs = [
+    "../..:cppgc_base_config",
     "../..:external_config",
     "../..:internal_config_base",
     "../..:v8_tracing_config",

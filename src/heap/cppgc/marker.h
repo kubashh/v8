@@ -121,7 +121,6 @@ class V8_EXPORT_PRIVATE Marker {
   // objects to be marked and merely updates marking states if needed.
   void LeaveAtomicPause();
 
- private:
   void VisitRoots();
 
   void FlushNotFullyConstructedObjects();
