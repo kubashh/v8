@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "73fe1c77_24390ab5",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 11144,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2020-06-16T13:00:39Z",
+      "side": 1,
+      "message": "Looks like CpuFeatures already combines the simulator and cpu object checks, and is what we use in the code generator too. What do you think of this last change?",
+      "parentUuid": "ef2448f2_355d1322",
+      "revId": "3aa1bbe0f81337a4db2718f17ee684fec45e3929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "97720306_456459f7",
         "filename": "test/cctest/test-assembler-arm64.cc",
         "patchSetId": 1
