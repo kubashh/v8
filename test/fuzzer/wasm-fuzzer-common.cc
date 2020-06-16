@@ -232,7 +232,8 @@ void GenerateTestCase(Isolate* isolate, ModuleWireBytes wire_bytes,
         ValueType type = decls.type_list[pos];
         while (pos + count < locals && decls.type_list[pos + count] == type)
           ++count;
-        os << ".addLocals({" << type.type_name() << "_count: " << count << "})";
+        os << ".addLocals({" << type.type_name().c_str() << "_count: " << count
+           << "})";
       }
       os << "\n";
     }
