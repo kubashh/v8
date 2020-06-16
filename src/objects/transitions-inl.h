@@ -181,13 +181,17 @@ int TransitionArray::SearchName(Name name, int* out_insertion_index) {
 
 TransitionsAccessor::TransitionsAccessor(Isolate* isolate, Map map,
                                          DisallowHeapAllocation* no_gc)
-    : isolate_(isolate), map_(map) {
+    : isolate_(isolate), map_(map), concurrent_access_(false) {
   Initialize();
   USE(no_gc);
 }
 
-TransitionsAccessor::TransitionsAccessor(Isolate* isolate, Handle<Map> map)
-    : isolate_(isolate), map_handle_(map), map_(*map) {
+TransitionsAccessor::TransitionsAccessor(Isolate* isolate, Handle<Map> map,
+                                         bool concurrent_access)
+    : isolate_(isolate),
+      map_handle_(map),
+      map_(*map),
+      concurrent_access_(concurrent_access) {
   Initialize();
 }
 
@@ -198,7 +202,11 @@ void TransitionsAccessor::Reload() {
 }
 
 void TransitionsAccessor::Initialize() {
+  // TODO(solanes): This lock acquire/release shouldn't be needed if
+  // raw_transitions has synchronized access.
+  if (concurrent_access_) isolate_->transition_array_access()->LockShared();
   raw_transitions_ = map_.raw_transitions(isolate_);
+  if (concurrent_access_) isolate_->transition_array_access()->UnlockShared();
   HeapObject heap_object;
   if (raw_transitions_->IsSmi() || raw_transitions_->IsCleared()) {
     encoding_ = kUninitialized;
