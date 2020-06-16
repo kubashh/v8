@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69bda9d9_487c66d3",
+        "filename": "test/wasm-js/report.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-06-16T08:12:32Z",
+      "side": 1,
+      "message": "We should try to find a nicer solution than this, but that can be done in a follow-up CL. At least it\u0027s now done at the end of the test runs and does not shadow failing following tests.",
+      "revId": "9791d9da46ce64e0f87c8ae3a3cdf847bfe51749",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
