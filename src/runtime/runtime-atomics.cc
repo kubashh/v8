@@ -24,7 +24,51 @@ namespace internal {
 
 namespace {
 
-#if V8_CC_GNU
+#if defined(V8_OS_STARBOARD)
+
+template <typename T>
+inline T ExchangeSeqCst(T* p, T value) {
+  CHECK(false);
+  return 0;
+}
+
+template <typename T>
+inline T CompareExchangeSeqCst(T* p, T oldval, T newval) {
+  CHECK(false);
+  return 0;
+}
+
+template <typename T>
+inline T AddSeqCst(T* p, T value) {
+  CHECK(false);
+  return 0;
+}
+
+template <typename T>
+inline T SubSeqCst(T* p, T value) {
+  CHECK(false);
+  return 0;
+}
+
+template <typename T>
+inline T AndSeqCst(T* p, T value) {
+  CHECK(false);
+  return 0;
+}
+
+template <typename T>
+inline T OrSeqCst(T* p, T value) {
+  CHECK(false);
+  return 0;
+}
+
+template <typename T>
+inline T XorSeqCst(T* p, T value) {
+  CHECK(false);
+  return 0;
+}
+
+#elif V8_CC_GNU
 
 // GCC/Clang helpfully warn us that using 64-bit atomics on 32-bit platforms
 // can be slow. Good to know, but we don't have a choice.
@@ -173,7 +217,7 @@ inline void StoreSeqCst(T* p, T value) {
 
 #error Unsupported platform!
 
-#endif
+#endif  // V8_OS_STARBOARD
 
 template <typename T>
 T FromObject(Handle<Object> number);

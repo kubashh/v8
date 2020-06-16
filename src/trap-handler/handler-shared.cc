@@ -38,6 +38,10 @@ std::atomic_size_t gRecoveredTrapCount = {0};
 
 std::atomic_flag MetadataLock::spinlock_ = ATOMIC_FLAG_INIT;
 
+#if defined(STARBOARD)
+MetadataLock::MetadataLock() { SB_NOTREACHED(); }
+MetadataLock::~MetadataLock() { SB_NOTREACHED(); }
+#else
 MetadataLock::MetadataLock() {
   if (g_thread_in_wasm_code) {
     abort();
@@ -54,6 +58,7 @@ MetadataLock::~MetadataLock() {
 
   spinlock_.clear(std::memory_order::memory_order_release);
 }
+#endif
 
 }  // namespace trap_handler
 }  // namespace internal
