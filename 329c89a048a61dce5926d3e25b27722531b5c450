@@ -46,6 +46,30 @@
       "revId": "329c89a048a61dce5926d3e25b27722531b5c450",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81678637_d2c84733",
+        "filename": "test/cctest/heap/test-unified-heap.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-16T16:43:06Z",
+      "side": 1,
+      "message": "Moved to unittests after offline discussion.",
+      "parentUuid": "1be8e6f2_bf81644f",
+      "range": {
+        "startLine": 11,
+        "startChar": 22,
+        "endLine": 11,
+        "endChar": 28
+      },
+      "revId": "329c89a048a61dce5926d3e25b27722531b5c450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
