@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "a5e7c6c1_91bb9cba",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-16T14:52:53Z",
+      "side": 1,
+      "message": "(downgraded to nit)\nWhat I meant is that I wanted it to be clear to users that if they have tasks they don\u0027t *need* step 2 and can skip it.\nI\u0027m mostly thinking about the standalone library usecase.",
+      "parentUuid": "99676256_44952c46",
+      "range": {
+        "startLine": 27,
+        "startChar": 6,
+        "endLine": 27,
+        "endChar": 32
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "02074325_5d258440",
         "filename": "src/heap/cppgc/marker.h",
         "patchSetId": 11
@@ -227,6 +251,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "cb6fa9a5_8ee33514",
+      "range": {
+        "startLine": 28,
+        "startChar": 6,
+        "endLine": 28,
+        "endChar": 22
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "56bc8454_709a841d",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-06-16T14:52:53Z",
+      "side": 1,
+      "message": "Thanks",
+      "parentUuid": "7b571831_eb82bc75",
       "range": {
         "startLine": 28,
         "startChar": 6,
