@@ -22,6 +22,30 @@
       "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b00a761_fedd0482",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-06-16T11:58:38Z",
+      "side": 0,
+      "message": "Yes, it\u0027s to allow any other Marker implementations to extend what\u0027s needed. E.g. the UnifiedHeapMarker needs access to \"marking_visitor_\". It\u0027s still protected access which seems like an okay tradeoff.",
+      "parentUuid": "f22336ce_239c102e",
+      "range": {
+        "startLine": 119,
+        "startChar": 1,
+        "endLine": 119,
+        "endChar": 8
+      },
+      "revId": "f0e2123af9aaa45fc2b7d3f1f911287a7f28e59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
