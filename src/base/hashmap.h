@@ -15,13 +15,23 @@
 #include "src/base/hashmap-entry.h"
 #include "src/base/logging.h"
 
+#if V8_OS_STARBOARD
+#include "starboard/common/string.h"
+#include "starboard/memory.h"
+#endif
+
 namespace v8 {
 namespace base {
 
 class DefaultAllocationPolicy {
  public:
+#if defined(V8_OS_STARBOARD)
+  V8_INLINE void* New(size_t size) { return SbMemoryAllocate(size); }
+  V8_INLINE static void Delete(void* p) { SbMemoryDeallocate(p); }
+#else
   V8_INLINE void* New(size_t size) { return malloc(size); }
   V8_INLINE static void Delete(void* p) { free(p); }
+#endif
 };
 
 template <typename Key, typename Value, class MatchFun, class AllocationPolicy>
@@ -146,7 +156,11 @@ TemplateHashMapImpl<Key, Value, MatchFun, AllocationPolicy>::
       occupancy_(original->occupancy_),
       match_(original->match_) {
   map_ = reinterpret_cast<Entry*>(allocator.New(capacity_ * sizeof(Entry)));
+#if defined(V8_OS_STARBOARD)
+  SbMemoryCopy(map_, original->map_, capacity_ * sizeof(Entry));
+#else
   memcpy(map_, original->map_, capacity_ * sizeof(Entry));
+#endif
 }
 
 template <typename Key, typename Value, typename MatchFun,
