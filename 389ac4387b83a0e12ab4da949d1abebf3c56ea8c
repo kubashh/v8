@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62d7ad7e_349cb207",
+        "filename": "src/base/atomicops_internals_portable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T15:59:21Z",
+      "side": 1,
+      "message": "I think we should be able to get rid of all atomic #ifdefs, there is no OS dependency and we don\u0027t need to delegate to Starboard for those at all. This applies here and to all the rest of the atomics",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 5
+      },
+      "revId": "389ac4387b83a0e12ab4da949d1abebf3c56ea8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59573256_6142495d",
+        "filename": "src/base/cpu.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T15:59:21Z",
+      "side": 1,
+      "message": "We don\u0027t to MIPS, so this can be removed",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "389ac4387b83a0e12ab4da949d1abebf3c56ea8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f674e743_f0ed0af5",
+        "filename": "src/base/cpu.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T15:59:21Z",
+      "side": 1,
+      "message": "This should not be necessary, these are standard headers and we require standard-compliant C++14 compiler",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 20
+      },
+      "revId": "389ac4387b83a0e12ab4da949d1abebf3c56ea8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1af8904_db69e842",
+        "filename": "src/base/platform/mutex.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-16T15:59:21Z",
+      "side": 1,
+      "message": "cerrno is standard, this should not be needed",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "389ac4387b83a0e12ab4da949d1abebf3c56ea8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
