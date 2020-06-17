@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2b6b8e37_123ee35b",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-17T03:55:26Z",
+      "side": 1,
+      "message": "I found a better way to avoid stdout/stderr and also enable stack trace printing using SbLog if  anything goes through this path:https://lbshell-internal-review.git.corp.google.com/c/cobalt_src/+/162761/2/v8/src/poems.h\n\nI did this to avoid compiler error of multiple matching function when using nullptr with PrintStack because there is another function that takes PrintStack(SomeClass*...).",
+      "parentUuid": "d5a85307_dfc89f77",
+      "range": {
+        "startLine": 1261,
+        "startChar": 0,
+        "endLine": 1262,
+        "endChar": 6
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d87cdace_e2d9c205",
         "filename": "src/execution/isolate.h",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c83c90b4_90d4e5ef",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-17T03:55:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d87cdace_e2d9c205",
+      "range": {
+        "startLine": 727,
+        "startChar": 1,
+        "endLine": 727,
+        "endChar": 29
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "103ecfa6_6529febf",
         "filename": "src/libsampler/sampler.cc",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2020-06-16T16:49:24Z",
       "side": 1,
       "message": "We should be using Starboard platform definition here, rather than __APPLE__ ?",
+      "range": {
+        "startLine": 487,
+        "startChar": 39,
+        "endLine": 487,
+        "endChar": 58
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62ef3ba8_f617ec5d",
+        "filename": "src/libsampler/sampler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-17T03:55:26Z",
+      "side": 1,
+      "message": "I didn\u0027t find any starboard definition that I can use because Starboard wants Cobalt to think that every platform is just \"Starboard\". But the issue here is that V8 has to treat tvOS devices differently.\nI can try removing this and see what happens. But this might get tricky if it\u0027s absolutely necessary.",
+      "parentUuid": "103ecfa6_6529febf",
       "range": {
         "startLine": 487,
         "startChar": 39,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "8ae9d4a4_6ce9d7c3",
+        "filename": "src/logging/log-utils.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-17T03:55:26Z",
+      "side": 1,
+      "message": "It looks like we can remove this include.",
+      "parentUuid": "db3079db_18f2e2a4",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7bc77891_6caaadd4",
         "filename": "src/runtime/runtime-atomics.cc",
         "patchSetId": 1
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "cbe2a00b_a12775f4",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-17T03:55:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bc77891_6caaadd4",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 0
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ab61310_6d09c493",
         "filename": "src/runtime/runtime-atomics.cc",
         "patchSetId": 1
@@ -128,6 +248,30 @@
       "writtenOn": "2020-06-16T16:49:24Z",
       "side": 1,
       "message": "Does V8 have an equivalent macro to use instead of SB_NOTREACHED ?",
+      "range": {
+        "startLine": 35,
+        "startChar": 1,
+        "endLine": 35,
+        "endChar": 18
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd29fde0_05241479",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-17T03:55:26Z",
+      "side": 1,
+      "message": "I can find some occurrences of CHECK(false) in V8.",
+      "parentUuid": "2ab61310_6d09c493",
       "range": {
         "startLine": 35,
         "startChar": 1,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "8de4d04b_8bd50d47",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-base.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-17T03:55:26Z",
+      "side": 1,
+      "message": "It\u0027s a bit tricky here. This file is used to generate embedded builtins on the host build.\n1. For all Cobalt builds, the embedded_target_os is \"kStarboard\". So if we want to use Mac writer for tvOS, we need something like this block here.\n2. But we also have PS and NX platform that use MSVC for host build but the target OS is Linux-like. So if we just do embedded_target_os \u003d DefaultEmbeddedTargetOs() for Starboard builds, we will end up using Win writer for PS and crash at runtime.",
+      "parentUuid": "2d56a51e_52812aee",
+      "range": {
+        "startLine": 140,
+        "startChar": 2,
+        "endLine": 147,
+        "endChar": 3
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "564a9115_c63a7610",
         "filename": "src/trap-handler/handler-shared.cc",
         "patchSetId": 1
@@ -174,6 +342,30 @@
       "writtenOn": "2020-06-16T16:49:24Z",
       "side": 1,
       "message": "I think these should be bracketed by #if V8_DONT_USE_WASM rather than STARBOARD excludes ?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 6
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1be8933_ed1016f3",
+        "filename": "src/trap-handler/handler-shared.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-17T03:55:26Z",
+      "side": 1,
+      "message": "I\u0027ll address WAsm in another CL.",
+      "parentUuid": "564a9115_c63a7610",
       "range": {
         "startLine": 26,
         "startChar": 0,
