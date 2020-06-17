@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "47baa6a7_fa1898fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-17T04:01:01Z",
+      "side": 1,
+      "message": "How about PLATFORM_CUSTOM_DEFINES?",
+      "parentUuid": "0a8d48d8_a8e487d2",
+      "range": {
+        "startLine": 7,
+        "startChar": 19,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "e9ccef799c48cc668b90353285d15a2738c65721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "11e1b657_005fad5a",
         "filename": "src/base/hashmap.h",
         "patchSetId": 1
@@ -82,6 +106,30 @@
       "writtenOn": "2020-06-16T18:03:40Z",
       "side": 1,
       "message": "To minimize the #ifdef variations introduced, this should probably follow the same pattern of\n\n#if defined(V8_STARBOARD_COMMON_INCLUDES)\n#include V8_STARBOARD_COMMON_INCLUDES\n#endif",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 0
+      },
+      "revId": "e9ccef799c48cc668b90353285d15a2738c65721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dacd57af_ebc31a74",
+        "filename": "src/base/logging.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-17T04:01:01Z",
+      "side": 1,
+      "message": "I think we could suggest a macro like PLATFORM_POEMS or PLATFORM_DEFINES that\u0027s more general so that these code can be used by other V8 embedders besides Cobalt. For example, Android team might want to replace stdout with some other FILE*, so that they can define PLATFORM_DEFIENS/PLATFORM_POEMS with their own poem-like header.",
+      "parentUuid": "e76f8448_0d900f74",
       "range": {
         "startLine": 12,
         "startChar": 0,
