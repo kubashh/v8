@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "f1839682_0db642bd",
+        "filename": "src/libsampler/sampler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-17T10:51:02Z",
+      "side": 1,
+      "message": "An alternative would be to detect host os in gyp files and define V8_OS_IOS if we can tell the compiler is from Apple or we are building for tvOS.",
+      "parentUuid": "62ef3ba8_f617ec5d",
+      "range": {
+        "startLine": 487,
+        "startChar": 39,
+        "endLine": 487,
+        "endChar": 58
+      },
+      "revId": "c3363838a8f77ff642fa2ace3ecf8176137116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db3079db_18f2e2a4",
         "filename": "src/logging/log-utils.cc",
         "patchSetId": 1
