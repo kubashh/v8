@@ -83,6 +83,29 @@ const char* GetModifier(KeyedAccessStoreMode mode) {
   UNREACHABLE();
 }
 
+bool IsReadOnlyLengthDescriptor(Isolate* isolate, Handle<Map> jsarray_map) {
+  DCHECK(!jsarray_map->is_dictionary_map());
+  Handle<Name> length_string = isolate->factory()->length_string();
+  DescriptorArray descriptors = jsarray_map->instance_descriptors();
+  // TODO(jkummerow): We could skip the search and hardcode number == 0.
+  InternalIndex number = descriptors.Search(*length_string, *jsarray_map);
+  DCHECK(number.is_found());
+  return descriptors.GetDetails(number).IsReadOnly();
+}
+
+ElementsKind GetElementsKind(Handle<Map> map, Isolate* isolate) {
+  if (map->instance_type() == JS_ARRAY_TYPE &&
+      IsFastElementsKind(map->elements_kind()) &&
+      map->prototype().IsJSArray() &&
+      isolate->IsAnyInitialArrayPrototype(
+          handle(JSArray::cast(map->prototype()), isolate)) &&
+      Protectors::IsNoElementsIntact(isolate) && map->is_extensible() &&
+      !map->is_dictionary_map() && !IsReadOnlyLengthDescriptor(isolate, map)) {
+    return map->elements_kind();
+  }
+  return ElementsKind::NO_ELEMENTS;
+}
+
 }  // namespace
 
 void IC::TraceIC(const char* type, Handle<Object> name) {
@@ -822,7 +845,8 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
       if (Accessors::IsJSObjectFieldAccessor(isolate(), map, lookup->name(),
                                              &index)) {
         TRACE_HANDLER_STATS(isolate(), LoadIC_LoadFieldDH);
-        return LoadHandler::LoadField(isolate(), index);
+        return LoadHandler::LoadField(isolate(), index,
+                                      GetElementsKind(map, isolate()));
       }
       if (holder->IsJSModuleNamespace()) {
         Handle<ObjectHashTable> exports(
@@ -952,7 +976,8 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
       } else {
         DCHECK_EQ(kField, lookup->property_details().location());
         FieldIndex field = lookup->GetFieldIndex();
-        smi_handler = LoadHandler::LoadField(isolate(), field);
+        smi_handler = LoadHandler::LoadField(isolate(), field,
+                                             GetElementsKind(map, isolate()));
         TRACE_HANDLER_STATS(isolate(), LoadIC_LoadFieldDH);
         if (receiver_is_holder) return smi_handler;
         TRACE_HANDLER_STATS(isolate(), LoadIC_LoadFieldFromPrototypeDH);
@@ -978,7 +1003,8 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
               value->IsSmi() ? MaybeObjectHandle(*value, isolate())
                              : MaybeObjectHandle::Weak(*value, isolate());
 
-          smi_handler = LoadHandler::LoadConstantFromPrototype(isolate());
+          smi_handler = LoadHandler::LoadConstantFromPrototype(
+              isolate(), GetElementsKind(map, isolate()));
           TRACE_HANDLER_STATS(isolate(), LoadIC_LoadConstantFromPrototypeDH);
           return LoadHandler::LoadFromPrototype(isolate(), map, holder,
                                                 smi_handler, weak_value);

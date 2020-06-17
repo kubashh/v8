@@ -1478,8 +1478,9 @@ const Operator* SimplifiedOperatorBuilder::CheckMaps(
 }
 
 const Operator* SimplifiedOperatorBuilder::DynamicCheckMaps(
-    Handle<Object> handler, const FeedbackSource& feedback) {
-  DynamicCheckMapsParameters const parameters(handler, feedback);
+    Handle<Object> handler, ElementsKind elements_kind,
+    const FeedbackSource& feedback) {
+  DynamicCheckMapsParameters const parameters(handler, elements_kind, feedback);
   return new (zone()) Operator1<DynamicCheckMapsParameters>(  // --
       IrOpcode::kDynamicCheckMaps,                            // opcode
       Operator::kNoThrow | Operator::kNoWrite,                // flags

@@ -426,15 +426,17 @@ CheckMapsParameters const& CheckMapsParametersOf(Operator const*)
 // then speculation on that CallIC slot will be disabled.
 class DynamicCheckMapsParameters final {
  public:
-  DynamicCheckMapsParameters(Handle<Object> handler,
+  DynamicCheckMapsParameters(Handle<Object> handler, ElementsKind elements_kind,
                              const FeedbackSource& feedback)
-      : handler_(handler), feedback_(feedback) {}
+      : handler_(handler), elements_kind_(elements_kind), feedback_(feedback) {}
 
   Handle<Object> handler() const { return handler_; }
+  ElementsKind elements_kind() const { return elements_kind_; }
   FeedbackSource const& feedback() const { return feedback_; }
 
  private:
   Handle<Object> const handler_;
+  ElementsKind const elements_kind_;
   FeedbackSource const feedback_;
 };
 
@@ -834,6 +836,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckMaps(CheckMapsFlags, ZoneHandleSet<Map>,
                             const FeedbackSource& = FeedbackSource());
   const Operator* DynamicCheckMaps(Handle<Object> handler,
+                                   ElementsKind elements_kind,
                                    const FeedbackSource& feedback);
   const Operator* CheckNotTaggedHole();
   const Operator* CheckNumber(const FeedbackSource& feedback);
