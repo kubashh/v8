@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b7526da_7564c717",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5227,
+      "author": {
+        "id": 1412532
+      },
+      "writtenOn": "2020-06-17T14:10:38Z",
+      "side": 1,
+      "message": "This should most likely happen in Deserializer::PostProcessNewObject instead",
+      "revId": "fb9ff6cc01b277ee3ff1981ed2013b740273eea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
