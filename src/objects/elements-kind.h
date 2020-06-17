@@ -350,6 +350,27 @@ inline bool IsTransitionableFastElementsKind(ElementsKind from_kind) {
 
 inline bool ElementsKindEqual(ElementsKind a, ElementsKind b) { return a == b; }
 
+enum class CompactElementsKind : uint8_t {
+  PACKED_SMI_ELEMENTS = PACKED_SMI_ELEMENTS,
+  HOLEY_SMI_ELEMENTS = HOLEY_SMI_ELEMENTS,
+
+  PACKED_ELEMENTS = PACKED_ELEMENTS,
+  HOLEY_ELEMENTS = HOLEY_ELEMENTS,
+
+  PACKED_DOUBLE_ELEMENTS = PACKED_DOUBLE_ELEMENTS,
+  HOLEY_DOUBLE_ELEMENTS = HOLEY_DOUBLE_ELEMENTS,
+
+  UKNOWN
+};
+
+inline CompactElementsKind ToCompactElementsKind(ElementsKind kind) {
+  if (base::IsInRange(kind, PACKED_ELEMENTS, HOLEY_DOUBLE_ELEMENTS)) {
+    return static_cast<CompactElementsKind>(kind);
+  }
+
+  return CompactElementsKind::UKNOWN;
+}
+
 }  // namespace internal
 }  // namespace v8
 
