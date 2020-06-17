@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "cbb0c568_b5c71d3a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6770,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-06-17T08:58:32Z",
+      "side": 1,
+      "message": "Ok cool. I have removed this. The MemoryChunk::FromHeapObject will DCHECK anyway if the assumption is wrong.",
+      "parentUuid": "f9fddc11_2cc10960",
+      "range": {
+        "startLine": 6768,
+        "startChar": 2,
+        "endLine": 6770,
+        "endChar": 61
+      },
+      "revId": "0c255d0b815053860acc0bb927264b389fa42370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04d88013_82b00b14",
         "filename": "src/heap/paged-spaces.cc",
         "patchSetId": 4
