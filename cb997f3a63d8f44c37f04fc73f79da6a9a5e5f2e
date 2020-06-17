@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96198fe8_2e2e6460",
+        "filename": "include/v8config.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-17T16:26:11Z",
+      "side": 0,
+      "message": "Nit: unnecessary change, lets try and keep the patch as clean as possible",
+      "revId": "cb997f3a63d8f44c37f04fc73f79da6a9a5e5f2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
