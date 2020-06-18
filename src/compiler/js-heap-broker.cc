@@ -2397,6 +2397,7 @@ JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
       feedback_(zone()),
       bytecode_analyses_(zone()),
       property_access_infos_(zone()),
+      minimorphic_property_access_infos_(zone()),
       typed_array_string_tags_(zone()),
       serialized_functions_(zone()) {
   // Note that this initialization of {refs_} with the minimal initial capacity
@@ -4620,8 +4621,17 @@ bool ElementAccessFeedback::HasOnlyStringMaps(JSHeapBroker* broker) const {
 
 NamedAccessFeedback::NamedAccessFeedback(NameRef const& name,
                                          ZoneVector<Handle<Map>> const& maps,
-                                         FeedbackSlotKind slot_kind)
-    : ProcessedFeedback(kNamedAccess, slot_kind), name_(name), maps_(maps) {
+                                         FeedbackSlotKind slot_kind,
+                                         FeedbackKind feedback_kind, int slot,
+                                         Handle<Object> handler,
+                                         FeedbackVectorRef feedback_vector)
+    : ProcessedFeedback(kNamedAccess, slot_kind),
+      name_(name),
+      maps_(maps),
+      feedback_vector_(feedback_vector),
+      feedback_kind_(feedback_kind),
+      slot_id_(slot),
+      handler_(handler) {
   DCHECK(IsLoadICKind(slot_kind) || IsStoreICKind(slot_kind) ||
          IsStoreOwnICKind(slot_kind) || IsKeyedLoadICKind(slot_kind) ||
          IsKeyedHasICKind(slot_kind) || IsKeyedStoreICKind(slot_kind) ||
@@ -4685,6 +4695,43 @@ void FilterRelevantReceiverMaps(Isolate* isolate, MapHandles* maps) {
   // Remove everything between the last valid map and the end of the vector.
   maps->erase(out, end);
 }
+
+std::pair<NamedAccessFeedback::FeedbackKind, int> GetMinimorphicHandler(
+    FeedbackNexus const& nexus) {
+  auto kind = NamedAccessFeedback::FeedbackKind::kOther;
+  if (!IsLoadICKind(nexus.kind()))
+    return std::pair<NamedAccessFeedback::FeedbackKind, int>(kind, -1);
+
+  std::vector<MapAndHandler> maps_and_handlers;
+  nexus.ExtractMapsAndHandlers(&maps_and_handlers);
+
+  int initial_handler = -1;
+  for (MapAndHandler map_and_handler : maps_and_handlers) {
+    auto handler = map_and_handler.second;
+    DCHECK(!handler->IsCleared());
+    // TODO(mythria): Do we need any further checks here??
+    // TODO(mythria): extend this to DataHandlers too
+    if (!handler.object()->IsSmi())
+      return std::pair<NamedAccessFeedback::FeedbackKind, int>(kind, -1);
+    if (LoadHandler::GetHandlerKind(handler.object()->ToSmi()) !=
+        LoadHandler::Kind::kField) {
+      return std::pair<NamedAccessFeedback::FeedbackKind, int>(kind, -1);
+    }
+    int smi_handler = handler.object()->ToSmi().value();
+    if (initial_handler == -1) initial_handler = smi_handler;
+    if (initial_handler != smi_handler)
+      return std::pair<NamedAccessFeedback::FeedbackKind, int>(kind, -1);
+  }
+  if (initial_handler != -1) {
+    if (nexus.ic_state() == InlineCacheState::MONOMORPHIC) {
+      kind = NamedAccessFeedback::FeedbackKind::kMonomorphicWithDynamicCheck;
+    } else {
+      kind = NamedAccessFeedback::FeedbackKind::kPolymorphicWithDynamicCheck;
+    }
+  }
+  return std::pair<NamedAccessFeedback::FeedbackKind, int>(kind,
+                                                           initial_handler);
+}
 }  // namespace
 
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
@@ -4709,8 +4756,12 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
   if (name.has_value()) {
     // We rely on this invariant in JSGenericLowering.
     DCHECK_IMPLIES(maps.empty(), nexus.ic_state() == MEGAMORPHIC);
+    auto handler_pair = GetMinimorphicHandler(nexus);
+    Handle<Object> handler(Smi::FromInt(handler_pair.second), isolate());
     return *new (zone()) NamedAccessFeedback(
-        *name, ZoneVector<Handle<Map>>(maps.begin(), maps.end(), zone()), kind);
+        *name, ZoneVector<Handle<Map>>(maps.begin(), maps.end(), zone()), kind,
+        handler_pair.first, source.index(), handler,
+        FeedbackVectorRef(this, source.vector));
   } else if (nexus.GetKeyType() == ELEMENT && !maps.empty()) {
     return ProcessFeedbackMapsForElementAccess(
         maps, KeyedAccessMode::FromNexus(nexus), kind);
@@ -5165,6 +5216,29 @@ PropertyAccessInfo JSHeapBroker::GetPropertyAccessInfo(
                     << access_mode << " of property " << name << " on map "
                     << map);
     property_access_infos_.insert({target, access_info});
+  }
+  return access_info;
+}
+
+PropertyAccessInfo JSHeapBroker::GetPropertyAccessInfo(
+    NamedAccessFeedback const& feedback, CompilationDependencies* dependencies,
+    SerializationPolicy policy) {
+  auto it = minimorphic_property_access_infos_.find(feedback.slot_id());
+  if (it != minimorphic_property_access_infos_.end()) return it->second;
+
+  if (policy == SerializationPolicy::kAssumeSerialized) {
+    TRACE_BROKER_MISSING(this,
+                         "PropertyAccessInfo for slot " << feedback.slot_id());
+    return PropertyAccessInfo::Invalid(zone());
+  }
+
+  AccessInfoFactory factory(this, dependencies, zone());
+  PropertyAccessInfo access_info = factory.ComputePropertyAccessInfo(feedback);
+  if (is_concurrent_inlining_) {
+    TRACE(this,
+          "Storing minimorphic PropertyAccessInfo for " << feedback.slot_id());
+    minimorphic_property_access_infos_.insert(
+        {feedback.slot_id(), access_info});
   }
   return access_info;
 }
