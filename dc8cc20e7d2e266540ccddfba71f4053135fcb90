@@ -69,6 +69,30 @@
       "revId": "dc8cc20e7d2e266540ccddfba71f4053135fcb90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86e2cb26_e0b16ada",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-18T03:04:18Z",
+      "side": 1,
+      "message": "Not deprecated\n\nhttps://chromium.googlesource.com/v8/v8.git/+/refs/heads/master/src/utils/allocation.h\n\nI would suggest consolidating all of our alloc/free abstractions here",
+      "parentUuid": "c61bae1d_2a66c9cb",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 24,
+        "endChar": 6
+      },
+      "revId": "dc8cc20e7d2e266540ccddfba71f4053135fcb90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

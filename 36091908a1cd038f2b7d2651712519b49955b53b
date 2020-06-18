@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ea6bf3d_a9da1f16",
+        "filename": "src/base/platform/starboard_platform_defines.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-18T03:04:18Z",
+      "side": 1,
+      "message": "Are these being used from some place at all ?",
+      "range": {
+        "startLine": 31,
+        "startChar": 13,
+        "endLine": 31,
+        "endChar": 39
+      },
+      "revId": "36091908a1cd038f2b7d2651712519b49955b53b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90ad4741_085b63d1",
+        "filename": "src/base/platform/starboard_platform_defines.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-18T03:04:18Z",
+      "side": 1,
+      "message": "If we do macros for those anyway, then is there much point routing anything through utils/allocation. ?",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 38
+      },
+      "revId": "36091908a1cd038f2b7d2651712519b49955b53b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6117f93f_53c630ae",
+        "filename": "src/base/platform/starboard_platform_headers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1389900
+      },
+      "writtenOn": "2020-06-18T03:04:18Z",
+      "side": 1,
+      "message": "typo here",
+      "range": {
+        "startLine": 18,
+        "startChar": 2,
+        "endLine": 18,
+        "endChar": 28
+      },
+      "revId": "36091908a1cd038f2b7d2651712519b49955b53b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
