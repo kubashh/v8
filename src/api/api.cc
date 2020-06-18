@@ -10971,6 +10971,16 @@ CFunction::CFunction(const void* address, const CFunctionInfo* type_info)
 
 namespace internal {
 
+Address InternalDecodeExternalPointer(const Isolate* isolate,
+                                      ExternalPointer_t encoded_pointer) {
+#ifdef V8_HEAP_SANDBOX
+  uint32_t index = static_cast<uint32_t>(encoded_pointer);
+  return isolate->external_pointer_table().get(index);
+#else
+  return encoded_pointer;
+#endif
+}
+
 const size_t HandleScopeImplementer::kEnteredContextsOffset =
     offsetof(HandleScopeImplementer, entered_contexts_);
 const size_t HandleScopeImplementer::kIsMicrotaskContextOffset =
