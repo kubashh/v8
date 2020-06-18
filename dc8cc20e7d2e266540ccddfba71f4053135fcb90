@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4bbca2e9_86841f7e",
+        "filename": "src/base/logging.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-18T05:31:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3cd2317_150e9918",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 6
+      },
+      "revId": "dc8cc20e7d2e266540ccddfba71f4053135fcb90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4ed46f5_1817f33f",
         "filename": "src/base/small-vector.h",
         "patchSetId": 5
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Not deprecated\n\nhttps://chromium.googlesource.com/v8/v8.git/+/refs/heads/master/src/utils/allocation.h\n\nI would suggest consolidating all of our alloc/free abstractions here",
       "parentUuid": "c61bae1d_2a66c9cb",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 24,
+        "endChar": 6
+      },
+      "revId": "dc8cc20e7d2e266540ccddfba71f4053135fcb90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "120efd54_5a987949",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-18T05:31:46Z",
+      "side": 1,
+      "message": "malloc/free in headers are actually really rare: https://source.corp.google.com/search?q\u003ddefine%5C%20malloc%20file:v8\u0026sq\u003dpackage:%5Ecobalt$\u0026ct\u003dos\n\nAnd utils/allocation.h belongs to the \"internal\" namespace, meaning that it can\u0027t be used on base/small-vector.h, leaving the only use case of AllocationPolicy to be deoptimizer.h.\n\nI feel like if we introduce AllocationPolicy::Malloc to allocation.h, it will become either a complicated policy(use Malloc only in headers) or an expensive policy(use Malloc everywhere, including source files). In comparison, replacing malloc/free in headers ourselves is much cheaper.",
+      "parentUuid": "86e2cb26_e0b16ada",
       "range": {
         "startLine": 21,
         "startChar": 1,
