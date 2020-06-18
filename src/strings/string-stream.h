@@ -157,8 +157,7 @@ class StringStream final {
 
   template <typename... Args>
   void Add(Vector<const char> format, Args... args) {
-    FmtElm elems[]{args...};
-    Add(format, ArrayVector(elems));
+    Add(format, VectorOf({args...}));
   }
 
   // Getting the message out.

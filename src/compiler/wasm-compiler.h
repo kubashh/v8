@@ -248,8 +248,7 @@ class WasmGraphBuilder {
   Node* Return(Vector<Node*> nodes);
   template <typename... Nodes>
   Node* Return(Node* fst, Nodes*... more) {
-    Node* arr[] = {fst, more...};
-    return Return(ArrayVector(arr));
+    return Return(VectorOf({fst, more...}));
   }
 
   Node* TraceFunctionEntry(wasm::WasmCodePosition position);
