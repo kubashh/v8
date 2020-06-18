@@ -42,6 +42,8 @@ class JSUnaryOpNode final : public NodeWrapper {
 
   static constexpr int ValueIndex() { return 0; }
   static constexpr int FeedbackVectorIndex() { return 1; }
+
+  FeedbackSource GetFeedbackSource(JSHeapBroker* broker) const;
 };
 
 using JSBitwiseNotNode = JSUnaryOpNode;
@@ -381,9 +383,8 @@ std::ostream& operator<<(std::ostream&, StoreNamedOwnParameters const&);
 
 const StoreNamedOwnParameters& StoreNamedOwnParametersOf(const Operator* op);
 
-// Defines the feedback, i.e., vector and index, for storing a data property in
-// an object literal. This is used as a parameter by JSCreateEmptyLiteralArray
-// and JSStoreDataPropertyInLiteral operators.
+// Defines the feedback, i.e., vector and index for operations that may use or
+// collect feedback.
 class FeedbackParameter final {
  public:
   explicit FeedbackParameter(FeedbackSource const& feedback)
@@ -397,12 +398,11 @@ class FeedbackParameter final {
 
 bool operator==(FeedbackParameter const&, FeedbackParameter const&);
 bool operator!=(FeedbackParameter const&, FeedbackParameter const&);
-
 size_t hash_value(FeedbackParameter const&);
-
 std::ostream& operator<<(std::ostream&, FeedbackParameter const&);
-
 const FeedbackParameter& FeedbackParameterOf(const Operator* op);
+
+FeedbackSlot FeedbackSlotOf(const Operator* op);
 
 // Defines the property of an object for a named access. This is
 // used as a parameter by the JSLoadNamed and JSStoreNamed operators.
@@ -817,10 +817,10 @@ class V8_EXPORT_PRIVATE JSOperatorBuilder final
   const Operator* Modulus(FeedbackSource const& feedback);
   const Operator* Exponentiate(FeedbackSource const& feedback);
 
-  const Operator* BitwiseNot(FeedbackSource const& feedback);
-  const Operator* Decrement(FeedbackSource const& feedback);
-  const Operator* Increment(FeedbackSource const& feedback);
-  const Operator* Negate(FeedbackSource const& feedback);
+  const Operator* BitwiseNot(FeedbackSlot slot);
+  const Operator* Decrement(FeedbackSlot slot);
+  const Operator* Increment(FeedbackSlot slot);
+  const Operator* Negate(FeedbackSlot slot);
 
   const Operator* ToLength();
   const Operator* ToName();

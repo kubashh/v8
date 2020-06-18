@@ -127,10 +127,10 @@ void JSGenericLowering::ReplaceUnaryOpWithBuiltinCall(
          node->opcode() == IrOpcode::kJSDecrement ||
          node->opcode() == IrOpcode::kJSIncrement ||
          node->opcode() == IrOpcode::kJSNegate);
-  const FeedbackParameter& p = FeedbackParameterOf(node->op());
-  if (CollectFeedbackInGenericLowering() && p.feedback().IsValid()) {
+  FeedbackSlot slot = FeedbackSlotOf(node->op());
+  if (CollectFeedbackInGenericLowering() && slot.IsValid()) {
     Callable callable = Builtins::CallableFor(isolate(), builtin_with_feedback);
-    Node* slot = jsgraph()->UintPtrConstant(p.feedback().slot.ToInt());
+    Node* slot_node = jsgraph()->UintPtrConstant(slot.ToInt());
     const CallInterfaceDescriptor& descriptor = callable.descriptor();
     CallDescriptor::Flags flags = FrameStateFlagForCall(node);
     auto call_descriptor = Linkage::GetStubCallDescriptor(
@@ -141,7 +141,7 @@ void JSGenericLowering::ReplaceUnaryOpWithBuiltinCall(
     STATIC_ASSERT(JSUnaryOpNode::FeedbackVectorIndex() == 1);
     DCHECK_EQ(node->op()->ValueInputCount(), 2);
     node->InsertInput(zone(), 0, stub_code);
-    node->InsertInput(zone(), 2, slot);
+    node->InsertInput(zone(), 2, slot_node);
     NodeProperties::ChangeOp(node, common()->Call(call_descriptor));
   } else {
     node->RemoveInput(JSUnaryOpNode::FeedbackVectorIndex());

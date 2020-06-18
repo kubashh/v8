@@ -497,6 +497,7 @@ class FeedbackSlot {
 
   static FeedbackSlot Invalid() { return FeedbackSlot(); }
   bool IsInvalid() const { return id_ == kInvalidSlot; }
+  bool IsValid() const { return !IsInvalid(); }
 
   bool operator==(FeedbackSlot that) const { return this->id_ == that.id_; }
   bool operator!=(FeedbackSlot that) const { return !(*this == that); }

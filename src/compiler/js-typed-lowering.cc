@@ -452,12 +452,14 @@ JSTypedLowering::JSTypedLowering(Editor* editor, JSGraph* jsgraph,
 Reduction JSTypedLowering::ReduceJSBitwiseNot(Node* node) {
   Node* input = NodeProperties::GetValueInput(node, 0);
   Type input_type = NodeProperties::GetType(input);
+  // TODO(jgruber): Enable this once binary ops also take vector as an input.
+  if (broker()->is_native_context_independent()) return NoChange();
   if (input_type.Is(Type::PlainPrimitive())) {
     // JSBitwiseNot(x) => NumberBitwiseXor(ToInt32(x), -1)
-    const FeedbackParameter& p = FeedbackParameterOf(node->op());
+    FeedbackSource feedback = JSUnaryOpNode{node}.GetFeedbackSource(broker());
     node->RemoveInput(JSBitwiseNotNode::FeedbackVectorIndex());
     node->InsertInput(graph()->zone(), 1, jsgraph()->SmiConstant(-1));
-    NodeProperties::ChangeOp(node, javascript()->BitwiseXor(p.feedback()));
+    NodeProperties::ChangeOp(node, javascript()->BitwiseXor(feedback));
     JSBinopReduction r(this, node);
     r.ConvertInputsToNumber();
     r.ConvertInputsToUI32(kSigned, kSigned);
@@ -469,12 +471,14 @@ Reduction JSTypedLowering::ReduceJSBitwiseNot(Node* node) {
 Reduction JSTypedLowering::ReduceJSDecrement(Node* node) {
   Node* input = NodeProperties::GetValueInput(node, 0);
   Type input_type = NodeProperties::GetType(input);
+  // TODO(jgruber): Enable this once binary ops also take vector as an input.
+  if (broker()->is_native_context_independent()) return NoChange();
   if (input_type.Is(Type::PlainPrimitive())) {
     // JSDecrement(x) => NumberSubtract(ToNumber(x), 1)
-    const FeedbackParameter& p = FeedbackParameterOf(node->op());
+    FeedbackSource feedback = JSUnaryOpNode{node}.GetFeedbackSource(broker());
     node->RemoveInput(JSDecrementNode::FeedbackVectorIndex());
     node->InsertInput(graph()->zone(), 1, jsgraph()->OneConstant());
-    NodeProperties::ChangeOp(node, javascript()->Subtract(p.feedback()));
+    NodeProperties::ChangeOp(node, javascript()->Subtract(feedback));
     JSBinopReduction r(this, node);
     r.ConvertInputsToNumber();
     DCHECK_EQ(simplified()->NumberSubtract(), r.NumberOp());
@@ -486,12 +490,14 @@ Reduction JSTypedLowering::ReduceJSDecrement(Node* node) {
 Reduction JSTypedLowering::ReduceJSIncrement(Node* node) {
   Node* input = NodeProperties::GetValueInput(node, 0);
   Type input_type = NodeProperties::GetType(input);
+  // TODO(jgruber): Enable this once binary ops also take vector as an input.
+  if (broker()->is_native_context_independent()) return NoChange();
   if (input_type.Is(Type::PlainPrimitive())) {
     // JSIncrement(x) => NumberAdd(ToNumber(x), 1)
-    const FeedbackParameter& p = FeedbackParameterOf(node->op());
+    FeedbackSource feedback = JSUnaryOpNode{node}.GetFeedbackSource(broker());
     node->RemoveInput(JSIncrementNode::FeedbackVectorIndex());
     node->InsertInput(graph()->zone(), 1, jsgraph()->OneConstant());
-    NodeProperties::ChangeOp(node, javascript()->Add(p.feedback()));
+    NodeProperties::ChangeOp(node, javascript()->Add(feedback));
     JSBinopReduction r(this, node);
     r.ConvertInputsToNumber();
     DCHECK_EQ(simplified()->NumberAdd(), r.NumberOp());
@@ -503,12 +509,14 @@ Reduction JSTypedLowering::ReduceJSIncrement(Node* node) {
 Reduction JSTypedLowering::ReduceJSNegate(Node* node) {
   Node* input = NodeProperties::GetValueInput(node, 0);
   Type input_type = NodeProperties::GetType(input);
+  // TODO(jgruber): Enable this once binary ops also take vector as an input.
+  if (broker()->is_native_context_independent()) return NoChange();
   if (input_type.Is(Type::PlainPrimitive())) {
     // JSNegate(x) => NumberMultiply(ToNumber(x), -1)
-    const FeedbackParameter& p = FeedbackParameterOf(node->op());
+    FeedbackSource feedback = JSUnaryOpNode{node}.GetFeedbackSource(broker());
     node->RemoveInput(JSNegateNode::FeedbackVectorIndex());
     node->InsertInput(graph()->zone(), 1, jsgraph()->SmiConstant(-1));
-    NodeProperties::ChangeOp(node, javascript()->Multiply(p.feedback()));
+    NodeProperties::ChangeOp(node, javascript()->Multiply(feedback));
     JSBinopReduction r(this, node);
     r.ConvertInputsToNumber();
     return r.ChangeToPureOperator(r.NumberOp(), Type::Number());

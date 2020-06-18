@@ -7,6 +7,7 @@
 #include "src/compiler/common-operator.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/js-operator.h"
+#include "src/compiler/node-matchers.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/simplified-operator.h"
 #include "src/heap/factory-inl.h"
@@ -90,10 +91,11 @@ Reduction JSHeapCopyReducer::Reduce(Node* node) {
     case IrOpcode::kJSDecrement:
     case IrOpcode::kJSIncrement:
     case IrOpcode::kJSNegate: {
-      FeedbackParameter const& p = FeedbackParameterOf(node->op());
-      if (p.feedback().IsValid()) {
+      if (broker()->is_native_context_independent()) break;
+      FeedbackSource feedback = JSUnaryOpNode{node}.GetFeedbackSource(broker());
+      if (feedback.IsValid()) {
         // Unary ops are treated as binary ops with respect to feedback.
-        broker()->ProcessFeedbackForBinaryOperation(p.feedback());
+        broker()->ProcessFeedbackForBinaryOperation(feedback);
       }
       break;
     }

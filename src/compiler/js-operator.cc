@@ -7,6 +7,8 @@
 #include <limits>
 
 #include "src/base/lazy-instance.h"
+#include "src/compiler/js-heap-broker.h"
+#include "src/compiler/node-matchers.h"
 #include "src/compiler/operator.h"
 #include "src/handles/handles-inl.h"
 #include "src/objects/objects-inl.h"
@@ -15,6 +17,14 @@
 namespace v8 {
 namespace internal {
 namespace compiler {
+
+FeedbackSource JSUnaryOpNode::GetFeedbackSource(JSHeapBroker* broker) const {
+  DCHECK(!broker->is_native_context_independent());
+  FeedbackSlot slot = FeedbackSlotOf(node()->op());
+  HeapObjectMatcher m(node()->InputAt(FeedbackVectorIndex()));
+  FeedbackVectorRef vector = m.Ref(broker).AsFeedbackVector();
+  return {vector, slot};
+}
 
 std::ostream& operator<<(std::ostream& os, CallFrequency const& f) {
   if (f.IsUnknown()) return os << "unknown";
@@ -255,8 +265,7 @@ std::ostream& operator<<(std::ostream& os, FeedbackParameter const& p) {
 FeedbackParameter const& FeedbackParameterOf(const Operator* op) {
 #define V(Name, ...) op->opcode() == IrOpcode::kJS##Name ||
   // clang-format off
-  DCHECK(UNARY_OP_LIST(V)
-         BINARY_OP_LIST(V)
+  DCHECK(BINARY_OP_LIST(V)
          COMPARE_OP_LIST(V)
          op->opcode() == IrOpcode::kJSCreateEmptyLiteralArray ||
          op->opcode() == IrOpcode::kJSInstanceOf ||
@@ -265,6 +274,15 @@ FeedbackParameter const& FeedbackParameterOf(const Operator* op) {
   // clang-format on
 #undef V
   return OpParameter<FeedbackParameter>(op);
+}
+
+FeedbackSlot FeedbackSlotOf(const Operator* op) {
+#define V(Name, ...) op->opcode() == IrOpcode::kJS##Name ||
+  // clang-format off
+  DCHECK(UNARY_OP_LIST(V) false);
+  // clang-format on
+#undef V
+  return OpParameter<FeedbackSlot>(op);
 }
 
 bool operator==(NamedAccess const& lhs, NamedAccess const& rhs) {
@@ -733,11 +751,10 @@ CACHED_OP_LIST(CACHED_OP)
 #undef CACHED_OP
 
 #define UNARY_OP(Name)                                                        \
-  const Operator* JSOperatorBuilder::Name(FeedbackSource const& feedback) {   \
-    FeedbackParameter parameters(feedback);                                   \
-    return new (zone()) Operator1<FeedbackParameter>(                         \
-        IrOpcode::kJS##Name, Operator::kNoProperties, "JS" #Name, 2, 1, 1, 1, \
-        1, 2, parameters);                                                    \
+  const Operator* JSOperatorBuilder::Name(FeedbackSlot slot) {                \
+    return new (zone())                                                       \
+        Operator1<FeedbackSlot>(IrOpcode::kJS##Name, Operator::kNoProperties, \
+                                "JS" #Name, 2, 1, 1, 1, 1, 2, slot);          \
   }
 UNARY_OP_LIST(UNARY_OP)
 #undef UNARY_OP
