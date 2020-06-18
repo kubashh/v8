@@ -6,8 +6,8 @@
 
 load("test/mjsunit/wasm/wasm-module-builder.js");
 
-const kSequenceLength = 8192;
-const kNumberOfWorkers = 4;
+const kSequenceLength = 16;
+const kNumberOfWorkers = 2;
 const kBitMask = kNumberOfWorkers - 1;
 const kSequenceStartAddress = 32;
 
@@ -137,6 +137,7 @@ function generateSequence(typedarray, start, count) {
     for (let i = start; i < end; i++) {
         typedarray[i] = Math.floor(Math.random() * 256);
     }
+    %DebugPrint(typedarray);
 }
 
 function spawnWorker(module, memory, address, sequence) {
@@ -144,11 +145,21 @@ function spawnWorker(module, memory, address, sequence) {
     for (let i = 0; i < kNumberOfWorkers; i++) {
         let worker = new Worker(
             `onmessage = function(msg) {
+                print("Worker onmessage / js got called");
+                print(msg.address);
+                print(msg.sequence);
+                print(msg.sequenceLength);
+                print(msg.workerId);
+                print(msg.bitMask);
+                %DebugPrint(msg.memory.buffer);
                 this.instance = new WebAssembly.Instance(msg.module,
                     {m: {imported_mem: msg.memory}});
+                print("Worker onmessage / js going to call worker");
                 instance.exports.worker(msg.address, msg.sequence, msg.sequenceLength, msg.workerId,
                     msg.bitMask);
+                print("Worker onmessage / js doing postmessage");
                 postMessage({workerId: msg.workerId});
+                print("Worker onmessage / js returning");
             }`,
             {type: 'string'}
         );
@@ -167,8 +178,11 @@ function spawnWorker(module, memory, address, sequence) {
 }
 
 function waitForWorkers(workers) {
+    print("waitForWorkers");
     for (let worker of workers) {
+        print("doing getmessage");
         worker.getMessage();
+        print("doing terminate");
         worker.terminate();
     }
 }

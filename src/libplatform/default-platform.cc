@@ -130,6 +130,7 @@ void DefaultPlatform::SetTimeFunctionForTesting(
 
 bool DefaultPlatform::PumpMessageLoop(v8::Isolate* isolate,
                                       MessageLoopBehavior wait_for_work) {
+  fprintf(stderr, "DefaultPlatform::PumpMessageLoop\n");
   bool failed_result = wait_for_work == MessageLoopBehavior::kWaitForWork;
   std::shared_ptr<DefaultForegroundTaskRunner> task_runner;
   {
@@ -140,10 +141,15 @@ bool DefaultPlatform::PumpMessageLoop(v8::Isolate* isolate,
   }
 
   std::unique_ptr<Task> task = task_runner->PopTaskFromQueue(wait_for_work);
-  if (!task) return failed_result;
+  if (!task) {
+    fprintf(stderr, "DefaultPlatform::PumpMessageLoop returning failed\n");
+    return failed_result;
+  }
 
+  fprintf(stderr, "DefaultPlatform::PumpMessageLoop running task\n");
   DefaultForegroundTaskRunner::RunTaskScope scope(task_runner);
   task->Run();
+  fprintf(stderr, "DefaultPlatform::PumpMessageLoop running task done\n");
   return true;
 }
 
@@ -245,6 +251,15 @@ Platform::StackTracePrinter DefaultPlatform::GetStackTracePrinter() {
 
 v8::PageAllocator* DefaultPlatform::GetPageAllocator() {
   return page_allocator_.get();
+}
+
+void DefaultPlatform::DeleteForegroundTaskRunner(Isolate* isolate) {
+  base::MutexGuard guard(&lock_);
+  auto it = foreground_task_runner_map_.find(isolate);
+  if (it != foreground_task_runner_map_.end()) {
+    it->second->Terminate();
+    foreground_task_runner_map_.erase(it);
+  }
 }
 
 }  // namespace platform

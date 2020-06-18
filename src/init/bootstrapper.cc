@@ -4126,6 +4126,12 @@ EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(
 
 #undef EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE
 
+void Genesis::InitializeGlobal_harmony_atomics_waitasync() {
+  if (!FLAG_harmony_atomics_waitasync) return;
+  SimpleInstallFunction(isolate(), isolate()->atomics_object(), "waitAsync",
+                        Builtins::kAtomicsWaitAsync, 4, true);
+}
+
 void Genesis::InitializeGlobal_harmony_sharedarraybuffer() {
   if (!FLAG_harmony_sharedarraybuffer) return;
 
@@ -4734,6 +4740,10 @@ bool Genesis::InstallABunchOfRandomThings() {
       Map::EnsureDescriptorSlack(isolate(), map, 1);
       map->AppendDescriptor(isolate(), &d);
     }
+  }
+  {
+    Handle<ArrayList> wait_async_promises = ArrayList::New(isolate(), 0);
+    native_context()->set_wait_async_promises(*wait_async_promises);
   }
 
   return true;

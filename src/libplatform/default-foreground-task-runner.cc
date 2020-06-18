@@ -27,6 +27,7 @@ DefaultForegroundTaskRunner::DefaultForegroundTaskRunner(
     : idle_task_support_(idle_task_support), time_function_(time_function) {}
 
 void DefaultForegroundTaskRunner::Terminate() {
+  fprintf(stderr, "Terminating task runner %zu %zu %zu\n", task_queue_.size(), delayed_task_queue_.size(), idle_task_queue_.size());
   base::MutexGuard guard(&lock_);
   terminated_ = true;
 
@@ -60,6 +61,7 @@ void DefaultForegroundTaskRunner::PostDelayedTask(std::unique_ptr<Task> task,
   if (terminated_) return;
   double deadline = MonotonicallyIncreasingTime() + delay_in_seconds;
   delayed_task_queue_.push(std::make_pair(deadline, std::move(task)));
+  event_loop_control_.NotifyOne();
 }
 
 void DefaultForegroundTaskRunner::PostIdleTask(std::unique_ptr<IdleTask> task) {
@@ -84,6 +86,7 @@ bool DefaultForegroundTaskRunner::NonNestableTasksEnabled() const {
 }
 
 bool DefaultForegroundTaskRunner::HasPoppableTaskInQueue() const {
+  fprintf(stderr, "DFTR::HasPoppableTaskInQueue\n");
   if (nesting_depth_ == 0) return !task_queue_.empty();
   for (auto it = task_queue_.cbegin(); it != task_queue_.cend(); it++) {
     if (it->first == kNestable) return true;
@@ -91,20 +94,33 @@ bool DefaultForegroundTaskRunner::HasPoppableTaskInQueue() const {
   return false;
 }
 
-std::unique_ptr<Task> DefaultForegroundTaskRunner::PopTaskFromQueue(
-    MessageLoopBehavior wait_for_work) {
-  base::MutexGuard guard(&lock_);
+void DefaultForegroundTaskRunner::MoveDelayedTasks(
+    const base::MutexGuard& guard) {
   // Move delayed tasks that hit their deadline to the main queue.
   std::unique_ptr<Task> task = PopTaskFromDelayedQueueLocked(guard);
   while (task) {
     PostTaskLocked(std::move(task), kNestable, guard);
     task = PopTaskFromDelayedQueueLocked(guard);
   }
+}
+
+std::unique_ptr<Task> DefaultForegroundTaskRunner::PopTaskFromQueue(
+    MessageLoopBehavior wait_for_work) {
+  fprintf(stderr, "DFTR::PopTaskFromQueue\n");
+
+  base::MutexGuard guard(&lock_);
+  MoveDelayedTasks(guard);
 
   while (!HasPoppableTaskInQueue()) {
-    if (wait_for_work == MessageLoopBehavior::kDoNotWait) return {};
+    fprintf(stderr, "DFTR::PopTaskFromQueue no poppable task - returnging? %d\n", wait_for_work == MessageLoopBehavior::kDoNotWait);
+    if (wait_for_work == MessageLoopBehavior::kDoNotWait) {
+      fprintf(stderr, "DFTR::PopTaskFromQueue returns\n");
+      return {};
+    }
     WaitForTaskLocked(guard);
+    MoveDelayedTasks(guard);
   }
+  fprintf(stderr, "DFTR::PopTaskFromQueue iterating\n");
 
   auto it = task_queue_.begin();
   for (; it != task_queue_.end(); it++) {
@@ -113,9 +129,10 @@ std::unique_ptr<Task> DefaultForegroundTaskRunner::PopTaskFromQueue(
     if (nesting_depth_ == 0 || it->first == kNestable) break;
   }
   DCHECK(it != task_queue_.end());
-  task = std::move(it->second);
+  std::unique_ptr<Task> task = std::move(it->second);
   task_queue_.erase(it);
 
+  fprintf(stderr, "DFTR::PopTaskFromQueue returns\n");
   return task;
 }
 
@@ -150,7 +167,20 @@ std::unique_ptr<IdleTask> DefaultForegroundTaskRunner::PopTaskFromIdleQueue() {
 }
 
 void DefaultForegroundTaskRunner::WaitForTaskLocked(const base::MutexGuard&) {
-  event_loop_control_.Wait(&lock_);
+  if (!delayed_task_queue_.empty()) {
+    double now = MonotonicallyIncreasingTime();
+    const DelayedEntry& deadline_and_task = delayed_task_queue_.top();
+    double time_until_task = deadline_and_task.first - now;
+    if (time_until_task > 0) {
+      bool woken_up = event_loop_control_.WaitFor(
+          &lock_,
+          base::TimeDelta::FromMicroseconds(
+              time_until_task * base::TimeConstants::kMicrosecondsPerSecond));
+      USE(woken_up);
+    }
+  } else {
+    event_loop_control_.Wait(&lock_);
+  }
 }
 
 }  // namespace platform
