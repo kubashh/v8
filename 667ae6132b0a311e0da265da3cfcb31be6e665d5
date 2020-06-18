@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a0fc3749_83cb5b83",
+        "filename": "tools/ic-explorer.html",
+        "patchSetId": 5
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1429549
+      },
+      "writtenOn": "2020-06-18T10:26:00Z",
+      "side": 1,
+      "message": "How can I put those into seperate CL? 😊",
+      "parentUuid": "36224c1b_b94b0362",
+      "revId": "667ae6132b0a311e0da265da3cfcb31be6e665d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c7a199a_b289df6f",
         "filename": "tools/map-processor.html",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "667ae6132b0a311e0da265da3cfcb31be6e665d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b59c25d_1daed1ed",
+        "filename": "tools/map-processor.html",
+        "patchSetId": 5
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1429549
+      },
+      "writtenOn": "2020-06-18T10:26:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c7a199a_b289df6f",
+      "revId": "667ae6132b0a311e0da265da3cfcb31be6e665d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "e691443d_49a996e1",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1429549
+      },
+      "writtenOn": "2020-06-18T10:26:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d622349b_e33e1c0a",
+      "revId": "667ae6132b0a311e0da265da3cfcb31be6e665d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "151dfd80_b4a2b25e",
         "filename": "tools/map-processor.js",
         "patchSetId": 5
@@ -64,6 +118,24 @@
       "writtenOn": "2020-06-16T14:44:59Z",
       "side": 1,
       "message": "I don\u0027t think we need to do parseInt here.\nCould you debug this and figure out what the actual \"0\" value is? (I presume this should not happen anymore)",
+      "revId": "667ae6132b0a311e0da265da3cfcb31be6e665d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed0ed9cd_6ee59989",
+        "filename": "tools/map-processor.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1429549
+      },
+      "writtenOn": "2020-06-18T10:26:00Z",
+      "side": 1,
+      "message": "getExistingMap called with ID 0x000000000000\n\nWe were already getting error “Skipping potential parent loop between maps”\nSometimes I get “invalid time order” and “Depth has already been initialized” errors from the console 😕",
+      "parentUuid": "151dfd80_b4a2b25e",
       "revId": "667ae6132b0a311e0da265da3cfcb31be6e665d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
