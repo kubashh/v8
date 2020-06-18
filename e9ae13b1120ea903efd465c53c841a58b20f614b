@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f2f2ffe6_5cc4a2b9",
+        "filename": "src/base/atomicops_internals_portable.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-18T00:44:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f28b1036_43153f55",
+      "range": {
+        "startLine": 50,
+        "startChar": 6,
+        "endLine": 50,
+        "endChar": 32
+      },
+      "revId": "e9ae13b1120ea903efd465c53c841a58b20f614b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c559a8e_245ae1ce",
         "filename": "src/base/platform/condition-variable.cc",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a2197137_20cd2b7f",
+        "filename": "src/base/platform/condition-variable.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-18T00:44:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c559a8e_245ae1ce",
+      "range": {
+        "startLine": 195,
+        "startChar": 2,
+        "endLine": 197,
+        "endChar": 0
+      },
+      "revId": "e9ae13b1120ea903efd465c53c841a58b20f614b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00123d39_a1373280",
         "filename": "src/base/platform/platform-starboard.cc",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2020-06-17T16:26:11Z",
       "side": 1,
       "message": "I guess we have to work out what copyright headers should go into V8 code. Probably V8 default, rather than Cobalt",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 0
+      },
+      "revId": "e9ae13b1120ea903efd465c53c841a58b20f614b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54976bae_f3649748",
+        "filename": "src/base/platform/platform-starboard.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-18T00:44:31Z",
+      "side": 1,
+      "message": "I\u0027ll put this question in the doc",
+      "parentUuid": "00123d39_a1373280",
       "range": {
         "startLine": 1,
         "startChar": 0,
