@@ -2841,27 +2841,23 @@ SpeculationMode BytecodeGraphBuilder::GetSpeculationMode(int slot_id) const {
 }
 
 void BytecodeGraphBuilder::VisitBitwiseNot() {
-  FeedbackSource feedback = CreateFeedbackSource(
-      bytecode_iterator().GetSlotOperand(kUnaryOperationHintIndex));
-  BuildUnaryOp(javascript()->BitwiseNot(feedback));
+  BuildUnaryOp(javascript()->BitwiseNot(
+      bytecode_iterator().GetSlotOperand(kUnaryOperationHintIndex)));
 }
 
 void BytecodeGraphBuilder::VisitDec() {
-  FeedbackSource feedback = CreateFeedbackSource(
-      bytecode_iterator().GetSlotOperand(kUnaryOperationHintIndex));
-  BuildUnaryOp(javascript()->Decrement(feedback));
+  BuildUnaryOp(javascript()->Decrement(
+      bytecode_iterator().GetSlotOperand(kUnaryOperationHintIndex)));
 }
 
 void BytecodeGraphBuilder::VisitInc() {
-  FeedbackSource feedback = CreateFeedbackSource(
-      bytecode_iterator().GetSlotOperand(kUnaryOperationHintIndex));
-  BuildUnaryOp(javascript()->Increment(feedback));
+  BuildUnaryOp(javascript()->Increment(
+      bytecode_iterator().GetSlotOperand(kUnaryOperationHintIndex)));
 }
 
 void BytecodeGraphBuilder::VisitNegate() {
-  FeedbackSource feedback = CreateFeedbackSource(
-      bytecode_iterator().GetSlotOperand(kUnaryOperationHintIndex));
-  BuildUnaryOp(javascript()->Negate(feedback));
+  BuildUnaryOp(javascript()->Negate(
+      bytecode_iterator().GetSlotOperand(kUnaryOperationHintIndex)));
 }
 
 void BytecodeGraphBuilder::VisitAdd() {

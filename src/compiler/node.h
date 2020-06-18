@@ -310,6 +310,9 @@ class NodeWrapper {
   operator Node*() const { return node_; }
   Node* operator->() const { return node_; }
 
+ protected:
+  Node* node() const { return node_; }
+
  private:
   Node* node_;
 };
