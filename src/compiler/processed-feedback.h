@@ -168,6 +168,7 @@ class NamedAccessFeedback : public ProcessedFeedback {
   NamedAccessFeedback(NameRef const& name, ZoneVector<Handle<Map>> const& maps,
                       FeedbackSlotKind slot_kind, FeedbackKind feedback_kind,
                       int slot, Handle<Object> handler,
+                      ElementsKind elements_kind,
                       FeedbackVectorRef feedback_vector);
 
   NameRef const& name() const { return name_; }
@@ -183,6 +184,7 @@ class NamedAccessFeedback : public ProcessedFeedback {
            feedback_kind_ == kMonomorphicWithDynamicCheck;
   }
   int slot_id() const { return slot_id_; }
+  ElementsKind elements_kind() const { return elements_kind_; }
   Handle<Object> handler() const { return handler_; }
   FeedbackVectorRef const& feedback_vector() const { return feedback_vector_; }
 
@@ -193,6 +195,7 @@ class NamedAccessFeedback : public ProcessedFeedback {
   FeedbackKind feedback_kind_;
   int slot_id_;
   Handle<Object> handler_;
+  ElementsKind elements_kind_;
 };
 
 class CallFeedback : public ProcessedFeedback {

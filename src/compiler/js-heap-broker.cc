@@ -4624,6 +4624,7 @@ NamedAccessFeedback::NamedAccessFeedback(NameRef const& name,
                                          FeedbackSlotKind slot_kind,
                                          FeedbackKind feedback_kind, int slot,
                                          Handle<Object> handler,
+                                         ElementsKind elements_kind,
                                          FeedbackVectorRef feedback_vector)
     : ProcessedFeedback(kNamedAccess, slot_kind),
       name_(name),
@@ -4631,7 +4632,8 @@ NamedAccessFeedback::NamedAccessFeedback(NameRef const& name,
       feedback_vector_(feedback_vector),
       feedback_kind_(feedback_kind),
       slot_id_(slot),
-      handler_(handler) {
+      handler_(handler),
+      elements_kind_(elements_kind) {
   DCHECK(IsLoadICKind(slot_kind) || IsStoreICKind(slot_kind) ||
          IsStoreOwnICKind(slot_kind) || IsKeyedLoadICKind(slot_kind) ||
          IsKeyedHasICKind(slot_kind) || IsKeyedStoreICKind(slot_kind) ||
@@ -4757,10 +4759,16 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
     // We rely on this invariant in JSGenericLowering.
     DCHECK_IMPLIES(maps.empty(), nexus.ic_state() == MEGAMORPHIC);
     auto handler_pair = GetMinimorphicHandler(nexus);
+    ElementsKind elements_kind = ElementsKind::NO_ELEMENTS;
+    if (handler_pair.first != NamedAccessFeedback::FeedbackKind::kOther) {
+      DCHECK_NE(handler_pair.second, -1);
+      elements_kind = ToElementsKind(
+          LoadHandler::CompactElementsKindBits::decode(handler_pair.second));
+    }
     Handle<Object> handler(Smi::FromInt(handler_pair.second), isolate());
     return *new (zone()) NamedAccessFeedback(
         *name, ZoneVector<Handle<Map>>(maps.begin(), maps.end(), zone()), kind,
-        handler_pair.first, source.index(), handler,
+        handler_pair.first, source.index(), handler, elements_kind,
         FeedbackVectorRef(this, source.vector));
   } else if (nexus.GetKeyType() == ELEMENT && !maps.empty()) {
     return ProcessFeedbackMapsForElementAccess(

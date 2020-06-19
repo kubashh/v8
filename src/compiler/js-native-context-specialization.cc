@@ -1134,7 +1134,8 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
                                   ? FeedbackSource::kMonomorphic
                                   : FeedbackSource::kPolymorphic;
       effect = graph()->NewNode(
-          simplified()->DynamicCheckMaps(feedback.handler(), feedback_source),
+          simplified()->DynamicCheckMaps(
+              feedback.handler(), feedback.elements_kind(), feedback_source),
           receiver, effect, control);
     } else if (!access_builder.TryBuildStringCheck(
                    broker(), access_info.receiver_maps(), &receiver, &effect,
