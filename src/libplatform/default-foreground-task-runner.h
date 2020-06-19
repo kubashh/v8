@@ -37,6 +37,7 @@ class V8_PLATFORM_EXPORT DefaultForegroundTaskRunner
 
   void Terminate();
 
+  void MoveDelayedTasks(const base::MutexGuard& guard);
   std::unique_ptr<Task> PopTaskFromQueue(MessageLoopBehavior wait_for_work);
 
   std::unique_ptr<IdleTask> PopTaskFromIdleQueue();

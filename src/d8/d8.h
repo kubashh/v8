@@ -163,10 +163,11 @@ class Worker {
   explicit Worker(const char* script);
   ~Worker();
 
-  // Post a message to the worker's incoming message queue. The worker will
-  // take ownership of the SerializationData.
-  // This function should only be called by the thread that created the Worker.
-  void PostMessage(std::unique_ptr<SerializationData> data);
+  // Post a message to the worker. The worker will take ownership of the
+  // SerializationData. This function should only be called by the thread that
+  // created the Worker.
+  static void PostMessage(std::shared_ptr<Worker> worker,
+                          std::unique_ptr<SerializationData> data);
   // Synchronously retrieve messages from the worker's outgoing message queue.
   // If there is no message in the queue, block until a message is available.
   // If there are no messages in the queue and the worker is no longer running,
@@ -176,15 +177,20 @@ class Worker {
   // Terminate the worker's event loop. Messages from the worker that have been
   // queued can still be read via GetMessage().
   // This function can be called by any thread.
-  void Terminate();
+  static void Terminate(std::shared_ptr<Worker> worker);
   // Terminate and join the thread.
   // This function can be called by any thread.
-  void WaitForThread();
+  static void WaitForThread(std::shared_ptr<Worker> worker);
 
   // Start running the given worker in another thread.
   static bool StartWorkerThread(std::shared_ptr<Worker> worker);
 
  private:
+  friend class ProcessMessageTask;
+
+  void ProcessMessage(std::unique_ptr<SerializationData> data);
+  void ProcessMessages();
+
   class WorkerThread : public base::Thread {
    public:
     explicit WorkerThread(std::shared_ptr<Worker> worker)
@@ -200,13 +206,21 @@ class Worker {
   void ExecuteInThread();
   static void PostMessageOut(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  base::Semaphore in_semaphore_;
   base::Semaphore out_semaphore_;
-  SerializationDataQueue in_queue_;
   SerializationDataQueue out_queue_;
   base::Thread* thread_;
   char* script_;
   base::Atomic32 running_;
+  // For signalling that the worker has stared.
+  base::Semaphore started_semaphore_;
+  std::shared_ptr<TaskRunner> task_runner_;
+  // Protects reading from task_runner_. (The TaskRunner itself doesn't need
+  // locking, but reading from the Worker's data member does.)
+  base::Mutex worker_mutex_;
+
+  // Only accessed by the worker thread.
+  Isolate* isolate_ = nullptr;
+  v8::Persistent<v8::Context> context_;
 };
 
 class PerIsolateData {
