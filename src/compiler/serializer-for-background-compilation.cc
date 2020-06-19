@@ -479,6 +479,9 @@ class SerializerForBackgroundCompilation {
       AccessMode access_mode, base::Optional<JSObjectRef> concrete_receiver,
       Hints* result_hints);
 
+  PropertyAccessInfo ProcessMinimorphicFeedbackForNamedPropertyAccess(
+      NamedAccessFeedback const& feedback);
+
   void ProcessCreateContext(interpreter::BytecodeArrayIterator* iterator,
                             int scopeinfo_operand_index);
 
@@ -3038,6 +3041,22 @@ SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
   return access_info;
 }
 
+PropertyAccessInfo SerializerForBackgroundCompilation::
+    ProcessMinimorphicFeedbackForNamedPropertyAccess(
+        NamedAccessFeedback const& feedback) {
+  // TODO(mythria): This is just to serialize MapRefs. Once we use DynamicChecks
+  // this should be removed.
+  for (Handle<Map> map : feedback.maps()) {
+    MapRef map_ref(broker(), map);
+    USE(map_ref);
+  }
+
+  PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
+      feedback, dependencies(), SerializationPolicy::kSerializeIfNeeded);
+  DCHECK(access_info.IsDataField());
+  return access_info;
+}
+
 void SerializerForBackgroundCompilation::VisitLdaKeyedProperty(
     BytecodeArrayIterator* iterator) {
   Hints const& key = environment()->accumulator_hints();
@@ -3109,6 +3128,11 @@ void SerializerForBackgroundCompilation::ProcessNamedPropertyAccess(
 void SerializerForBackgroundCompilation::ProcessNamedAccess(
     Hints* receiver, NamedAccessFeedback const& feedback,
     AccessMode access_mode, Hints* result_hints) {
+  if (feedback.is_minimorphic()) {
+    ProcessMinimorphicFeedbackForNamedPropertyAccess(feedback);
+    return;
+  }
+
   for (Handle<Map> map : feedback.maps()) {
     MapRef map_ref(broker(), map);
     TRACE_BROKER(broker(), "Propagating feedback map "
@@ -3123,6 +3147,8 @@ void SerializerForBackgroundCompilation::ProcessNamedAccess(
                                      access_mode, base::nullopt, result_hints);
   }
 
+  // TODO(mythria): What are receiver constants should we disallow these with
+  // minimprphic?
   for (Handle<Object> hint : receiver->constants()) {
     ObjectRef object(broker(), hint);
     if (access_mode == AccessMode::kLoad && object.IsJSObject()) {
