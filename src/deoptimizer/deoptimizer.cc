@@ -2277,6 +2277,11 @@ DeoptimizedFrameInfo::DeoptimizedFrameInfo(TranslatedState* state,
   CHECK(stack_it == frame_it->end());
 }
 
+DeoptimizeReason Deoptimizer::GetDeoptReason() const {
+  DeoptInfo info = Deoptimizer::GetDeoptInfo(compiled_code_, from_);
+  return info.deopt_reason;
+}
+
 Deoptimizer::DeoptInfo Deoptimizer::GetDeoptInfo(Code code, Address pc) {
   CHECK(code.InstructionStart() <= pc && pc <= code.InstructionEnd());
   SourcePosition last_position = SourcePosition::Unknown();
