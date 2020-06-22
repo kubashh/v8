@@ -442,7 +442,7 @@ class ConcurrentSweepTask final : public v8::JobTask,
 };
 
 // This visitor:
-// - resets linear allocation buffers and clears free lists for all spaces;
+// - clears free lists for all spaces;
 // - moves all Heap pages to local Sweeper's state (SpaceStates).
 class PrepareForSweepVisitor final
     : public HeapVisitor<PrepareForSweepVisitor> {

@@ -14,6 +14,7 @@
 #include "src/heap/cppgc/object-allocator.h"
 #include "src/heap/cppgc/raw-heap.h"
 #include "src/heap/cppgc/sweeper.h"
+#include "src/heap/cppgc/unmarker.h"
 
 #if defined(CPPGC_CAGED_HEAP)
 #include "src/heap/cppgc/caged-heap.h"
@@ -91,6 +92,8 @@ class V8_EXPORT_PRIVATE HeapBase {
 
   Sweeper& sweeper() { return sweeper_; }
 
+  Unmarker& unmarker() { return unmarker_; }
+
   PersistentRegion& GetStrongPersistentRegion() {
     return strong_persistent_region_;
   }
@@ -124,6 +127,7 @@ class V8_EXPORT_PRIVATE HeapBase {
   std::unique_ptr<Stack> stack_;
   std::unique_ptr<PreFinalizerHandler> prefinalizer_handler_;
   std::unique_ptr<Marker> marker_;
+  Unmarker unmarker_;
 
   ObjectAllocator object_allocator_;
   Sweeper sweeper_;

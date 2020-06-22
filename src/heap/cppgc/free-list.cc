@@ -72,14 +72,19 @@ void FreeList::Add(FreeList::Block block) {
     // operating overwrites the memory completely, and we can thus avoid
     // zeroing it out.
     ASAN_UNPOISON_MEMORY_REGION(block.address, sizeof(HeapObjectHeader));
-    new (block.address) HeapObjectHeader(size, kFreeListGCInfoIndex);
+    static_cast<std::atomic<HeapObjectHeader>*>(block.address)
+        ->store(HeapObjectHeader(size, kFreeListGCInfoIndex),
+                std::memory_order_relaxed);
     return;
   }
 
   // Make sure the freelist header is writable. SET_MEMORY_ACCESSIBLE is not
   // needed as we write the whole payload of Entry.
   ASAN_UNPOISON_MEMORY_REGION(block.address, sizeof(Entry));
-  Entry* entry = new (block.address) Entry(size);
+  static_cast<std::atomic<HeapObjectHeader>*>(block.address)
+      ->store(HeapObjectHeader(size, kFreeListGCInfoIndex),
+              std::memory_order_relaxed);
+  auto* entry = static_cast<Entry*>(block.address);
   const size_t index = BucketIndexForSize(static_cast<uint32_t>(size));
   entry->Link(&free_list_heads_[index]);
   biggest_free_list_index_ = std::max(biggest_free_list_index_, index);

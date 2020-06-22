@@ -163,6 +163,11 @@ TEST_F(PageTest, HeapObjectHeaderOnBasePageIndexing) {
   size_t size = 0;
   size_t num = 0;
   for (const HeapObjectHeader& header : *page) {
+    if (NormalPage::PayloadSize() - size == kLeftSpace) {
+      // This is the last free list entry, break;
+      EXPECT_EQ(kFreeListGCInfoIndex, header.GetGCInfoIndex());
+      break;
+    }
     EXPECT_EQ(reinterpret_cast<Address>(persistents[num].Get()),
               header.Payload());
     size += header.GetSize();

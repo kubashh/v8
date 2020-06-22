@@ -4211,6 +4211,13 @@ v8_source_set("cppgc_base") {
     ]
   }
 
+  if (cppgc_enable_young_generation) {
+    sources += [
+      "src/heap/cppgc/unmarker.cc",
+      "src/heap/cppgc/unmarker.h",
+    ]
+  }
+
   if (is_clang || !is_win) {
     if (current_cpu == "x64") {
       sources += [ "src/heap/cppgc/asm/x64/push_registers_asm.cc" ]

@@ -52,19 +52,6 @@ namespace internal {
 
 namespace {
 
-class Unmarker final : private HeapVisitor<Unmarker> {
-  friend class HeapVisitor<Unmarker>;
-
- public:
-  explicit Unmarker(RawHeap* heap) { Traverse(heap); }
-
- private:
-  bool VisitHeapObjectHeader(HeapObjectHeader* header) {
-    if (header->IsMarked()) header->Unmark();
-    return true;
-  }
-};
-
 void CheckConfig(Heap::Config config) {
   CHECK_WITH_MSG(
       (config.collection_type != Heap::Config::CollectionType::kMinor) ||
@@ -100,8 +87,10 @@ void Heap::CollectGarbage(Config config) {
   epoch_++;
 
 #if defined(CPPGC_YOUNG_GENERATION)
-  if (config.collection_type == Config::CollectionType::kMajor)
-    Unmarker unmarker(&raw_heap());
+  if (config.collection_type == Config::CollectionType::kMajor) {
+    unmarker_.Start(Unmarker::Config::kConcurrent);
+    unmarker_.Finish();
+  }
 #endif
 
   // "Marking".

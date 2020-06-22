@@ -66,6 +66,7 @@ HeapBase::HeapBase(std::shared_ptr<cppgc::Platform> platform,
       stats_collector_(std::make_unique<StatsCollector>()),
       stack_(std::make_unique<Stack>(v8::base::Stack::GetStackStart())),
       prefinalizer_handler_(std::make_unique<PreFinalizerHandler>()),
+      unmarker_(this, platform_.get()),
       object_allocator_(&raw_heap_, page_backend_.get(),
                         stats_collector_.get()),
       sweeper_(&raw_heap_, platform_.get(), stats_collector_.get()) {

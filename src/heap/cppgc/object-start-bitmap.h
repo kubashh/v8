@@ -26,6 +26,8 @@ class HeapObjectHeader;
 // - kAllocationGranularity
 class V8_EXPORT_PRIVATE ObjectStartBitmap {
  public:
+  enum class AccessMode : uint8_t { kAtomic, kNonAtomic };
+
   // Granularity of addresses added to the bitmap.
   static constexpr size_t Granularity() { return kAllocationGranularity; }
 
@@ -39,11 +41,15 @@ class V8_EXPORT_PRIVATE ObjectStartBitmap {
   // Finds an object header based on a
   // address_maybe_pointing_to_the_middle_of_object. Will search for an object
   // start in decreasing address order.
+  template <AccessMode = AccessMode::kAtomic>
   inline HeapObjectHeader* FindHeader(
       ConstAddress address_maybe_pointing_to_the_middle_of_object) const;
 
+  template <AccessMode = AccessMode::kAtomic>
   inline void SetBit(ConstAddress);
+  template <AccessMode = AccessMode::kAtomic>
   inline void ClearBit(ConstAddress);
+  template <AccessMode = AccessMode::kAtomic>
   inline bool CheckBit(ConstAddress) const;
 
   // Iterates all object starts recorded in the bitmap.
@@ -51,7 +57,7 @@ class V8_EXPORT_PRIVATE ObjectStartBitmap {
   // The callback is of type
   //   void(Address)
   // and is passed the object start address as parameter.
-  template <typename Callback>
+  template <AccessMode = AccessMode::kAtomic, typename Callback>
   inline void Iterate(Callback) const;
 
   // Clear the object start bitmap.
@@ -65,6 +71,11 @@ class V8_EXPORT_PRIVATE ObjectStartBitmap {
       (kBitsPerCell * kAllocationGranularity);
   static constexpr size_t kReservedForBitmap =
       ((kBitmapSize + kAllocationMask) & ~kAllocationMask);
+
+  template <AccessMode = AccessMode::kNonAtomic>
+  void store(size_t cell_index, uint8_t value);
+  template <AccessMode = AccessMode::kNonAtomic>
+  uint8_t load(size_t cell_index) const;
 
   inline void ObjectStartIndexAndBit(ConstAddress, size_t*, size_t*) const;
 

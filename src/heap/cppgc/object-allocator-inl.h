@@ -5,7 +5,7 @@
 #ifndef V8_HEAP_CPPGC_OBJECT_ALLOCATOR_INL_H_
 #define V8_HEAP_CPPGC_OBJECT_ALLOCATOR_INL_H_
 
-#include <new>
+#include <atomic>
 
 #include "src/base/logging.h"
 #include "src/heap/cppgc/heap-object-header-inl.h"
@@ -52,6 +52,8 @@ RawHeap::RegularSpaceType ObjectAllocator::GetInitialSpaceIndexForSize(
 
 void* ObjectAllocator::AllocateObjectOnSpace(NormalPageSpace* space,
                                              size_t size, GCInfoIndex gcinfo) {
+  static_assert(__atomic_always_lock_free(sizeof(HeapObjectHeader), nullptr),
+                "HeapObjectHeader must stay lock free. Change after C++17");
   DCHECK_LT(0u, gcinfo);
 
   NormalPageSpace::LinearAllocationBuffer& current_lab =
@@ -61,14 +63,15 @@ void* ObjectAllocator::AllocateObjectOnSpace(NormalPageSpace* space,
   }
 
   void* raw = current_lab.Allocate(size);
-  SET_MEMORY_ACCESIBLE(raw, size);
-  auto* header = new (raw) HeapObjectHeader(size, gcinfo);
-
-  NormalPage::From(BasePage::FromPayload(header))
+  static_cast<std::atomic<HeapObjectHeader>*>(raw)->store(
+      HeapObjectHeader(size, gcinfo), std::memory_order_relaxed);
+  SET_MEMORY_ACCESIBLE(static_cast<Address>(raw) + sizeof(HeapObjectHeader),
+                       size - sizeof(HeapObjectHeader));
+  NormalPage::From(BasePage::FromPayload(raw))
       ->object_start_bitmap()
-      .SetBit(reinterpret_cast<ConstAddress>(header));
+      .SetBit(reinterpret_cast<ConstAddress>(raw));
 
-  return header->Payload();
+  return static_cast<HeapObjectHeader*>(raw)->Payload();
 }
 }  // namespace internal
 }  // namespace cppgc

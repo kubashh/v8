@@ -9,7 +9,6 @@
 
 #include "src/base/macros.h"
 #include "src/heap/cppgc/globals.h"
-#include "src/heap/cppgc/heap-object-header.h"
 
 namespace cppgc {
 namespace internal {
