@@ -53,13 +53,27 @@ double DefaultForegroundTaskRunner::MonotonicallyIncreasingTime() {
   return time_function_();
 }
 
-void DefaultForegroundTaskRunner::PostDelayedTask(std::unique_ptr<Task> task,
-                                                  double delay_in_seconds) {
+void DefaultForegroundTaskRunner::PostDelayedTaskLocked(
+    std::unique_ptr<Task> task, double delay_in_seconds,
+    Nestability nestability, const base::MutexGuard&) {
   DCHECK_GE(delay_in_seconds, 0.0);
-  base::MutexGuard guard(&lock_);
   if (terminated_) return;
   double deadline = MonotonicallyIncreasingTime() + delay_in_seconds;
-  delayed_task_queue_.push(std::make_pair(deadline, std::move(task)));
+  delayed_task_queue_.push(
+      std::make_tuple(deadline, nestability, std::move(task)));
+  event_loop_control_.NotifyOne();
+}
+
+void DefaultForegroundTaskRunner::PostDelayedTask(std::unique_ptr<Task> task,
+                                                  double delay_in_seconds) {
+  base::MutexGuard guard(&lock_);
+  PostDelayedTaskLocked(std::move(task), delay_in_seconds, kNestable, guard);
+}
+
+void DefaultForegroundTaskRunner::PostNonNestableDelayedTask(
+    std::unique_ptr<Task> task, double delay_in_seconds) {
+  base::MutexGuard guard(&lock_);
+  PostDelayedTaskLocked(std::move(task), delay_in_seconds, kNonNestable, guard);
 }
 
 void DefaultForegroundTaskRunner::PostIdleTask(std::unique_ptr<IdleTask> task) {
@@ -91,19 +105,25 @@ bool DefaultForegroundTaskRunner::HasPoppableTaskInQueue() const {
   return false;
 }
 
-std::unique_ptr<Task> DefaultForegroundTaskRunner::PopTaskFromQueue(
-    MessageLoopBehavior wait_for_work) {
-  base::MutexGuard guard(&lock_);
+void DefaultForegroundTaskRunner::MoveDelayedTasks(
+    const base::MutexGuard& guard) {
   // Move delayed tasks that hit their deadline to the main queue.
   std::unique_ptr<Task> task = PopTaskFromDelayedQueueLocked(guard);
   while (task) {
     PostTaskLocked(std::move(task), kNestable, guard);
     task = PopTaskFromDelayedQueueLocked(guard);
   }
+}
+
+std::unique_ptr<Task> DefaultForegroundTaskRunner::PopTaskFromQueue(
+    MessageLoopBehavior wait_for_work) {
+  base::MutexGuard guard(&lock_);
+  MoveDelayedTasks(guard);
 
   while (!HasPoppableTaskInQueue()) {
     if (wait_for_work == MessageLoopBehavior::kDoNotWait) return {};
     WaitForTaskLocked(guard);
+    MoveDelayedTasks(guard);
   }
 
   auto it = task_queue_.begin();
@@ -113,7 +133,7 @@ std::unique_ptr<Task> DefaultForegroundTaskRunner::PopTaskFromQueue(
     if (nesting_depth_ == 0 || it->first == kNestable) break;
   }
   DCHECK(it != task_queue_.end());
-  task = std::move(it->second);
+  std::unique_ptr<Task> task = std::move(it->second);
   task_queue_.erase(it);
 
   return task;
@@ -126,7 +146,7 @@ DefaultForegroundTaskRunner::PopTaskFromDelayedQueueLocked(
 
   double now = MonotonicallyIncreasingTime();
   const DelayedEntry& deadline_and_task = delayed_task_queue_.top();
-  if (deadline_and_task.first > now) return {};
+  if (std::get<0>(deadline_and_task) > now) return {};
   // The const_cast here is necessary because there does not exist a clean way
   // to get a unique_ptr out of the priority queue. We provide the priority
   // queue with a custom comparison operator to make sure that the priority
@@ -134,7 +154,7 @@ DefaultForegroundTaskRunner::PopTaskFromDelayedQueueLocked(
   // the unique_ptr in the priority queue here. Note that the DelayedEntry is
   // removed from the priority_queue immediately afterwards.
   std::unique_ptr<Task> result =
-      std::move(const_cast<DelayedEntry&>(deadline_and_task).second);
+      std::move(std::get<2>(const_cast<DelayedEntry&>(deadline_and_task)));
   delayed_task_queue_.pop();
   return result;
 }
@@ -150,7 +170,20 @@ std::unique_ptr<IdleTask> DefaultForegroundTaskRunner::PopTaskFromIdleQueue() {
 }
 
 void DefaultForegroundTaskRunner::WaitForTaskLocked(const base::MutexGuard&) {
-  event_loop_control_.Wait(&lock_);
+  if (!delayed_task_queue_.empty()) {
+    double now = MonotonicallyIncreasingTime();
+    const DelayedEntry& deadline_and_task = delayed_task_queue_.top();
+    double time_until_task = std::get<0>(deadline_and_task) - now;
+    if (time_until_task > 0) {
+      bool woken_up = event_loop_control_.WaitFor(
+          &lock_,
+          base::TimeDelta::FromMicroseconds(
+              time_until_task * base::TimeConstants::kMicrosecondsPerSecond));
+      USE(woken_up);
+    }
+  } else {
+    event_loop_control_.Wait(&lock_);
+  }
 }
 
 }  // namespace platform

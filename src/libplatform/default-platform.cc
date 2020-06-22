@@ -247,5 +247,14 @@ v8::PageAllocator* DefaultPlatform::GetPageAllocator() {
   return page_allocator_.get();
 }
 
+void DefaultPlatform::DeleteForegroundTaskRunner(Isolate* isolate) {
+  base::MutexGuard guard(&lock_);
+  auto it = foreground_task_runner_map_.find(isolate);
+  if (it != foreground_task_runner_map_.end()) {
+    it->second->Terminate();
+    foreground_task_runner_map_.erase(it);
+  }
+}
+
 }  // namespace platform
 }  // namespace v8
