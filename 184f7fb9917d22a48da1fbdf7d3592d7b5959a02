@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab591206_e1aae301",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-22T16:04:40Z",
+      "side": 1,
+      "message": "simple_transition is different than null iff encoding is kWeakRef.\nThis was implicit in the code before, this change just makes it clearer",
+      "range": {
+        "startLine": 100,
+        "startChar": 8,
+        "endLine": 103,
+        "endChar": 0
+      },
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e55c2be_6b1cd16e",
+        "filename": "src/objects/transitions.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-22T16:04:40Z",
+      "side": 1,
+      "message": "Willing to bikeshed name.",
+      "range": {
+        "startLine": 160,
+        "startChar": 7,
+        "endLine": 160,
+        "endChar": 25
+      },
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
