@@ -40,7 +40,8 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
  public:
   inline TransitionsAccessor(Isolate* isolate, Map map,
                              DisallowHeapAllocation* no_gc);
-  inline TransitionsAccessor(Isolate* isolate, Handle<Map> map);
+  inline TransitionsAccessor(Isolate* isolate, Handle<Map> map,
+                             bool concurrent_access = false);
   // Insert a new transition into |map|'s transition array, extending it
   // as necessary.
   // Requires the constructor that takes a Handle<Map> to have been used.
@@ -153,6 +154,12 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
 
   static inline Map GetTargetFromRaw(MaybeObject raw);
 
+  // Insert a new transition into {map}'s transition array, extending it
+  // as necessary. {new_array} is a newly allocated array, with the current
+  // properties of {map} and one slack space.
+  void InsertWithNewArray(Handle<TransitionArray> new_array, Handle<Name> name,
+                          Handle<Map> target, SimpleTransitionFlag flag);
+
   void MarkNeedsReload() {
 #if DEBUG
     needs_reload_ = true;
@@ -182,6 +189,7 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
   Map map_;
   MaybeObject raw_transitions_;
   Encoding encoding_;
+  bool concurrent_access_;
 #if DEBUG
   bool needs_reload_;
 #endif
