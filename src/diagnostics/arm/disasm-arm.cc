@@ -2278,6 +2278,13 @@ void Decoder::DecodeSpecialCondition(Instruction* instr) {
           bool dp_op = instr->Bit(6) == 0;
           int rounding_mode = instr->Bits(9, 7);
           switch (rounding_mode) {
+            case 0:
+              if (dp_op) {
+                Format(instr, "vrintn.f32 'Dd, 'Dm");
+              } else {
+                Format(instr, "vrintn.f32 'Qd, 'Qm");
+              }
+              break;
             case 3:
               if (dp_op) {
                 Format(instr, "vrintz.f32 'Dd, 'Dm");
