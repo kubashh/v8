@@ -2042,10 +2042,8 @@ TNode<IntPtrT> CodeStubAssembler::LoadPropertyArrayLength(
 
 TNode<RawPtrT> CodeStubAssembler::LoadJSTypedArrayDataPtr(
     TNode<JSTypedArray> typed_array) {
-  // Data pointer = DecodeExternalPointer(external_pointer) +
-  //                static_cast<Tagged_t>(base_pointer).
   TNode<RawPtrT> external_pointer =
-      DecodeExternalPointer(LoadJSTypedArrayExternalPointer(typed_array));
+      ReinterpretCast<RawPtrT>(LoadJSTypedArrayExternalPointer(typed_array));
 
   TNode<IntPtrT> base_pointer;
   if (COMPRESS_POINTERS_BOOL) {
@@ -6707,7 +6705,7 @@ TNode<RawPtrT> ToDirectStringAssembler::TryToSequential(
 
     TNode<String> string = var_string_.value();
     TNode<RawPtrT> result =
-        DecodeExternalPointer(LoadExternalStringResourceData(CAST(string)));
+        ReinterpretCast<RawPtrT>(LoadExternalStringResourceData(CAST(string)));
     if (ptr_kind == PTR_TO_STRING) {
       result = RawPtrSub(result, IntPtrConstant(SeqOneByteString::kHeaderSize -
                                                 kHeapObjectTag));
@@ -12512,7 +12510,7 @@ void CodeStubAssembler::ThrowIfArrayBufferViewBufferIsDetached(
 
 TNode<RawPtrT> CodeStubAssembler::LoadJSArrayBufferBackingStorePtr(
     TNode<JSArrayBuffer> array_buffer) {
-  return DecodeExternalPointer(LoadJSArrayBufferBackingStore(array_buffer));
+  return ReinterpretCast<RawPtrT>(LoadJSArrayBufferBackingStore(array_buffer));
 }
 
 TNode<JSArrayBuffer> CodeStubAssembler::LoadJSArrayBufferViewBuffer(

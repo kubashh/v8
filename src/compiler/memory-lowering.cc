@@ -306,7 +306,9 @@ Reduction MemoryLowering::ReduceLoadElement(Node* node) {
   return Changed(node);
 }
 
+// TODO(saelo) this should probably become LoadExternalPointer instead?
 Node* MemoryLowering::DecodeExternalPointer(Node* node) {
+#ifdef V8_HEAP_SANDBOX
   DCHECK(V8_HEAP_SANDBOX_BOOL);
   DCHECK(node->opcode() == IrOpcode::kLoad ||
          node->opcode() == IrOpcode::kPoisonedLoad);
@@ -322,11 +324,21 @@ Node* MemoryLowering::DecodeExternalPointer(Node* node) {
   // Uncomment this to generate a breakpoint for debugging purposes.
   // __ DebugBreak();
 
-  // Decode loaded enternal pointer.
+  // Decode loaded external pointer.
   STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
-  Node* salt = __ IntPtrConstant(kExternalPointerSalt);
-  Node* decoded_ptr = __ WordXor(node_copy, salt);
+  Node* external_pointer_table_address = __ ExternalConstant(
+      ExternalReference::external_pointer_table_address(isolate()));
+  Node* table = __ Load(MachineType::Pointer(), external_pointer_table_address,
+                        Internals::kExternalPointerTableBufferOffset);
+  // TODO(saelo) left shift by two instead?
+  Node* index = __ Word32Sar(node_copy, __ Int32Constant(1));
+  // TODO(saelo) bounds check if table is not caged
+  Node* offset = __ Int32Mul(index, __ Int32Constant(8));
+  Node* decoded_ptr = __ Load(MachineType::Pointer(), table, offset);
   return decoded_ptr;
+#else
+  return node;
+#endif
 }
 
 Reduction MemoryLowering::ReduceLoadField(Node* node) {
@@ -335,6 +347,12 @@ Reduction MemoryLowering::ReduceLoadField(Node* node) {
   Node* offset = __ IntPtrConstant(access.offset - access.tag());
   node->InsertInput(graph_zone(), 1, offset);
   MachineType type = access.machine_type;
+  if (V8_HEAP_SANDBOX_BOOL &&
+      access.type.Is(Type::SandboxedExternalPointer())) {
+    // External pointer table indices are 32bit numbers
+    // TODO(saelo) is this guaranteed to zero-extend the high 32 bits?
+    type = MachineType::Uint32();
+  }
   if (NeedsPoisoning(access.load_sensitivity)) {
     NodeProperties::ChangeOp(node, machine()->PoisonedLoad(type));
   } else {

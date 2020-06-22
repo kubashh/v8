@@ -27,6 +27,15 @@ EmbedderDataSlot::EmbedderDataSlot(JSObject object, int embedder_field_index)
     : SlotBase(FIELD_ADDR(
           object, object.GetEmbedderFieldOffset(embedder_field_index))) {}
 
+void EmbedderDataSlot::allocate_external_pointer_entry(Isolate* isolate) {
+#ifdef V8_HEAP_SANDBOX
+  uint32_t index = isolate->external_pointer_table().allocate();
+  DCHECK(HAS_SMI_TAG(index));
+  ObjectSlot(address() + kRawPayloadOffset).Relaxed_Store(Smi(index));
+  ObjectSlot(address() + kTaggedPayloadOffset).Relaxed_Store(Smi::zero());
+#endif
+}
+
 Object EmbedderDataSlot::load_tagged() const {
   return ObjectSlot(address() + kTaggedPayloadOffset).Relaxed_Load();
 }
@@ -61,7 +70,8 @@ void EmbedderDataSlot::store_tagged(JSObject object, int embedder_field_index,
       .Relaxed_Store(value);
   WRITE_BARRIER(object, slot_offset + kTaggedPayloadOffset, value);
 #ifdef V8_COMPRESS_POINTERS
-  // See gc_safe_store() for the reasons behind two stores.
+  // See gc_safe_store() for the reasons behind two stores and why the second is
+  // only done if !V8_HEAP_SANDBOX_BOOL
   ObjectSlot(FIELD_ADDR(object, slot_offset + kRawPayloadOffset))
       .Relaxed_Store(Smi::zero());
 #endif
@@ -73,28 +83,65 @@ bool EmbedderDataSlot::ToAlignedPointer(const Isolate* isolate,
   // are accessed this way only from the main thread via API during "mutator"
   // phase which is propely synched with GC (concurrent marker may still look
   // at the tagged part of the embedder slot but read-only access is ok).
+  Address raw_value;
 #ifdef V8_COMPRESS_POINTERS
   // TODO(ishell, v8:8875): When pointer compression is enabled 8-byte size
   // fields (external pointers, doubles and BigInt data) are only kTaggedSize
   // aligned so we have to use unaligned pointer friendly way of accessing them
   // in order to avoid undefined behavior in C++ code.
-  Address raw_value = base::ReadUnalignedValue<Address>(address());
-  // We currently have to treat zero as nullptr in embedder slots.
-  if (raw_value) raw_value = DecodeExternalPointer(isolate, raw_value);
+#ifdef V8_HEAP_SANDBOX
+  uint32_t index =
+      base::ReadUnalignedValue<uint32_t>(address() + kRawPayloadOffset);
+  raw_value = isolate->external_pointer_table().get(index);
 #else
-  Address raw_value = *location();
-#endif
+  raw_value = base::ReadUnalignedValue<Address>(address());
+#endif  // V8_HEAP_SANDBOX
+#else
+  raw_value = *location();
+#endif  // V8_COMPRESS_POINTERS
+  *out_pointer = reinterpret_cast<void*>(raw_value);
+  return HAS_SMI_TAG(raw_value);
+}
+
+bool EmbedderDataSlot::ToAlignedPointerSafe(const Isolate* isolate,
+                                            void** out_pointer) const {
+  Address raw_value;
+#ifdef V8_COMPRESS_POINTERS
+#ifdef V8_HEAP_SANDBOX
+  uint32_t index =
+      base::ReadUnalignedValue<uint32_t>(address() + kRawPayloadOffset);
+  if (isolate->external_pointer_table().is_valid_index(index)) {
+    raw_value = isolate->external_pointer_table().get(index);
+  } else {
+    raw_value = base::ReadUnalignedValue<Address>(address());
+  }
+#else
+  raw_value = base::ReadUnalignedValue<Address>(address());
+#endif  // V8_HEAP_SANDBOX
+#else
+  raw_value = *location();
+#endif  // V8_COMPRESS_POINTERS
   *out_pointer = reinterpret_cast<void*>(raw_value);
   return HAS_SMI_TAG(raw_value);
 }
 
 bool EmbedderDataSlot::store_aligned_pointer(Isolate* isolate, void* ptr) {
   Address value = reinterpret_cast<Address>(ptr);
+  // TODO(saelo) could now drop this requirements and rename this method etc?
   if (!HAS_SMI_TAG(value)) return false;
-  // We currently have to treat zero as nullptr in embedder slots.
-  if (value) value = EncodeExternalPointer(isolate, value);
-  DCHECK(HAS_SMI_TAG(value));
-  gc_safe_store(value);
+#ifdef V8_HEAP_SANDBOX
+  if (V8_HEAP_SANDBOX_BOOL) {
+    allocate_external_pointer_entry(isolate);
+    // Raw payload contains the table index now
+    uint32_t index =
+        base::ReadUnalignedValue<uint32_t>(address() + kRawPayloadOffset);
+    // Smi index = ObjectSlot(address() + kRawPayloadOffset).Relaxed_Load();
+    DCHECK(HAS_SMI_TAG(index));
+    isolate->external_pointer_table().set(index, value);
+    return true;
+  }
+#endif
+  gc_safe_store(isolate, value);
   return true;
 }
 
@@ -109,10 +156,7 @@ EmbedderDataSlot::RawData EmbedderDataSlot::load_raw(
   // fields (external pointers, doubles and BigInt data) are only kTaggedSize
   // aligned so we have to use unaligned pointer friendly way of accessing them
   // in order to avoid undefined behavior in C++ code.
-  Address value = base::ReadUnalignedValue<Address>(address());
-  // We currently have to treat zero as nullptr in embedder slots.
-  if (value) return DecodeExternalPointer(isolate, value);
-  return value;
+  return base::ReadUnalignedValue<EmbedderDataSlot::RawData>(address());
 #else
   return *location();
 #endif
@@ -121,16 +165,15 @@ EmbedderDataSlot::RawData EmbedderDataSlot::load_raw(
 void EmbedderDataSlot::store_raw(Isolate* isolate,
                                  EmbedderDataSlot::RawData data,
                                  const DisallowHeapAllocation& no_gc) {
-  // We currently have to treat zero as nullptr in embedder slots.
-  if (data) data = EncodeExternalPointer(isolate, data);
-  gc_safe_store(data);
+  gc_safe_store(isolate, data);
 }
 
-void EmbedderDataSlot::gc_safe_store(Address value) {
+void EmbedderDataSlot::gc_safe_store(Isolate* isolate, Address value) {
 #ifdef V8_COMPRESS_POINTERS
   STATIC_ASSERT(kSmiShiftSize == 0);
   STATIC_ASSERT(SmiValuesAre31Bits());
   STATIC_ASSERT(kTaggedSize == kInt32Size);
+
   // We have to do two 32-bit stores here because
   // 1) tagged part modifications must be atomic to be properly synchronized
   //    with the concurrent marker.
