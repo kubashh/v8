@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca607989_d4b1d617",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-06-22T09:24:11Z",
+      "side": 1,
+      "message": "It does, even in the current system, flag implications are processed only after all flags are read.",
+      "range": {
+        "startLine": 10,
+        "startChar": 14,
+        "endLine": 12,
+        "endChar": 20
+      },
+      "revId": "fbac9a4a46996adf6748dfb87c859702b02e15f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
