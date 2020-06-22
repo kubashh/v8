@@ -306,6 +306,32 @@ HRESULT Extension::Initialize() {
   RETURN_IF_FAIL(sp_compiler_node_data_model_->SetKey(
       L"node_id", sp_node_id_property_model.Get(), nullptr));
 
+  /* v8::internal::compiler::Type */
+  // Create an instance of the DataModel parent class for
+  // v8::internal::compiler::Type type.
+  auto compiler_type_data_model{WRL::Make<V8LocalDataModel>()};
+  RETURN_IF_FAIL(sp_data_model_manager->CreateDataModelObject(
+      compiler_type_data_model.Get(), &sp_compiler_type_data_model_));
+
+  // Register that parent model for v8::internal::compiler::Node.
+  const wchar_t* compiler_type_class_name = L"v8::internal::compiler::Type";
+  WRL::ComPtr<IDebugHostTypeSignature> compiler_type_class_signature;
+  RETURN_IF_FAIL(sp_debug_host_symbols->CreateTypeSignature(
+      compiler_type_class_name, nullptr, &compiler_type_class_signature));
+  RETURN_IF_FAIL(sp_data_model_manager->RegisterModelForTypeSignature(
+      compiler_type_class_signature.Get(), sp_compiler_type_data_model_.Get()));
+  registered_types_.push_back({compiler_type_class_signature.Get(),
+                               sp_compiler_type_data_model_.Get()});
+
+  // Add the 'bitset_name' property to the parent model.
+  auto bitset_name_property{WRL::Make<V8InternalCompilerBitsetNameProperty>()};
+  WRL::ComPtr<IModelObject> sp_bitset_name_property_model;
+  RETURN_IF_FAIL(CreateProperty(sp_data_model_manager.Get(),
+                                bitset_name_property.Get(),
+                                &sp_bitset_name_property_model));
+  RETURN_IF_FAIL(sp_compiler_type_data_model_->SetKey(
+      L"bitset_name", sp_bitset_name_property_model.Get(), nullptr));
+
   return S_OK;
 }
 

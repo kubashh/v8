@@ -79,6 +79,7 @@ class Extension {
   WRL::ComPtr<IModelObject> sp_object_data_model_;
   WRL::ComPtr<IModelObject> sp_local_data_model_;
   WRL::ComPtr<IModelObject> sp_compiler_node_data_model_;
+  WRL::ComPtr<IModelObject> sp_compiler_type_data_model_;
   WRL::ComPtr<IModelObject> sp_indexed_field_model_;
 
   WRL::ComPtr<IDebugHostModule> sp_v8_module_;
