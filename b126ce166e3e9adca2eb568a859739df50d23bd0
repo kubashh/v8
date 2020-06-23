@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c6a65f4_287c8b96",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-23T07:21:24Z",
+      "side": 1,
+      "message": "Do you think we could just have all calls to TryAllocateWasmMemory in the same loop?\nI had something as follows in mind:\n\n    int tries \u003d 3;\n    auto delta \u003d (max - min) / (tries + 1);\n    int sizes[] \u003d {max, max - delta, max - 2 * delta, max - 3 * delta, min};\n    for (int i \u003d 0; i \u003c arraysize(sizes); i++) {\n        auto backing_store \u003d TryAllocateWasmMemory(isolate, initial_pages, sizes[i], shared);\n        if (backing_store || sizes[i] \u003d\u003d min) {\n          return backing_store ;\n        }\n    }",
+      "revId": "b126ce166e3e9adca2eb568a859739df50d23bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
