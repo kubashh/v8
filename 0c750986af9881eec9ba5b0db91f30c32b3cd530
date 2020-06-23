@@ -22,6 +22,30 @@
       "revId": "0c750986af9881eec9ba5b0db91f30c32b3cd530",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "872ebe06_178feb20",
+        "filename": "src/base/platform/starboard-platform-defines.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-06-23T10:54:29Z",
+      "side": 1,
+      "message": "That\u0027s right, currently our version of this file(`v8/src/poems.h`) is only added to cc files as the last include to avoid pollution in system headers.\nAnd BTW and from V8 team\u0027s comment in the doc, it looks like they\u0027d much prefer wrappers over defines to reduce Starboard/embedder existence in every source file.",
+      "parentUuid": "93dec073_6590e127",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 37
+      },
+      "revId": "0c750986af9881eec9ba5b0db91f30c32b3cd530",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
