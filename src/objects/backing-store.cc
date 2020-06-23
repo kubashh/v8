@@ -428,8 +428,21 @@ std::unique_ptr<BackingStore> BackingStore::AllocateWasmMemory(
 
   auto backing_store =
       TryAllocateWasmMemory(isolate, initial_pages, maximum_pages, shared);
-  if (!backing_store && maximum_pages > initial_pages) {
-    // If reserving {maximum_pages} failed, try with maximum = initial.
+  if (maximum_pages == initial_pages) {
+    // If initial pages, and maximum are equal, nothing more to do return early.
+    return backing_store;
+  }
+  // Retry with smaller maximum pages at each retry.
+  const int kAllocationTries = 3;
+  auto delta = (maximum_pages - initial_pages) / (kAllocationTries + 1);
+  auto heuristic_max = maximum_pages;
+  for (int i = 0; i < kAllocationTries && !backing_store; i++) {
+    heuristic_max -= delta;
+    backing_store =
+        TryAllocateWasmMemory(isolate, initial_pages, heuristic_max, shared);
+  }
+  // If retries failed, allocate initial
+  if (!backing_store) {
     backing_store =
         TryAllocateWasmMemory(isolate, initial_pages, initial_pages, shared);
   }
