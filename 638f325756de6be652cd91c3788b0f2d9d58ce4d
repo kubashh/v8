@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1d1266db_82ef6d4a",
+        "filename": "tools/debug_helper/compiler-types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-06-23T18:56:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bd44afa_dc039c31",
+      "revId": "638f325756de6be652cd91c3788b0f2d9d58ce4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2390f7b_ee8349eb",
         "filename": "tools/debug_helper/debug-helper.h",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "f098dfd0_55e8b871",
+        "filename": "tools/debug_helper/debug-helper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-06-23T18:56:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2390f7b_ee8349eb",
+      "revId": "638f325756de6be652cd91c3788b0f2d9d58ce4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2bef24d3_75318545",
         "filename": "tools/v8windbg/src/v8windbg-extension.cc",
         "patchSetId": 1
@@ -50,6 +86,24 @@
       "revId": "638f325756de6be652cd91c3788b0f2d9d58ce4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b8c7f17_dd2c0a05",
+        "filename": "tools/v8windbg/src/v8windbg-extension.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-06-23T18:56:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bef24d3_75318545",
+      "revId": "638f325756de6be652cd91c3788b0f2d9d58ce4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -73,6 +127,30 @@
       "revId": "638f325756de6be652cd91c3788b0f2d9d58ce4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bd05402_e0d59579",
+        "filename": "tools/v8windbg/src/v8windbg-extension.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-06-23T18:56:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4d1d099_280affea",
+      "range": {
+        "startLine": 316,
+        "startChar": 60,
+        "endLine": 316,
+        "endChar": 64
+      },
+      "revId": "638f325756de6be652cd91c3788b0f2d9d58ce4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
