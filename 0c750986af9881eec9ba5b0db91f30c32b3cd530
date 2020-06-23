@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93dec073_6590e127",
+        "filename": "src/base/platform/starboard-platform-defines.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1243531
+      },
+      "writtenOn": "2020-06-23T09:08:09Z",
+      "side": 1,
+      "message": "I think this approach is a little dangerous because some file or system header may end up #including \u003cmalloc.h\u003e which may have an inline definition. It would be better for V8 to explicitly use a wrapper which is intended to be defined by the platform.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 37
+      },
+      "revId": "0c750986af9881eec9ba5b0db91f30c32b3cd530",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
