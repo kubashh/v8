@@ -37,6 +37,7 @@ class V8_PLATFORM_EXPORT DefaultForegroundTaskRunner
 
   void Terminate();
 
+  void MoveDelayedTasks(const base::MutexGuard& guard);
   std::unique_ptr<Task> PopTaskFromQueue(MessageLoopBehavior wait_for_work);
 
   std::unique_ptr<IdleTask> PopTaskFromIdleQueue();
@@ -54,6 +55,8 @@ class V8_PLATFORM_EXPORT DefaultForegroundTaskRunner
   bool IdleTasksEnabled() override;
 
   void PostNonNestableTask(std::unique_ptr<Task> task) override;
+  void PostNonNestableDelayedTask(std::unique_ptr<Task> task,
+                                  double delay_in_seconds) override;
   bool NonNestableTasksEnabled() const override;
 
  private:
@@ -64,6 +67,13 @@ class V8_PLATFORM_EXPORT DefaultForegroundTaskRunner
   // holding the lock.
   void PostTaskLocked(std::unique_ptr<Task> task, Nestability nestability,
                       const base::MutexGuard&);
+
+  // The same as PostDelayedTask or PostNonNestableDelayedTask, but the lock is
+  // already held by the caller. The {guard} parameter should make sure that the
+  // caller is holding the lock.
+  void PostDelayedTaskLocked(std::unique_ptr<Task> task,
+                             double delay_in_seconds, Nestability nestability,
+                             const base::MutexGuard&);
 
   // A caller of this function has to hold {lock_}. The {guard} parameter should
   // make sure that the caller is holding the lock.
@@ -86,14 +96,14 @@ class V8_PLATFORM_EXPORT DefaultForegroundTaskRunner
   std::queue<std::unique_ptr<IdleTask>> idle_task_queue_;
 
   // Some helper constructs for the {delayed_task_queue_}.
-  using DelayedEntry = std::pair<double, std::unique_ptr<Task>>;
+  using DelayedEntry = std::tuple<double, Nestability, std::unique_ptr<Task>>;
   // Define a comparison operator for the delayed_task_queue_ to make sure
   // that the unique_ptr in the DelayedEntry is not accessed in the priority
   // queue. This is necessary because we have to reset the unique_ptr when we
   // remove a DelayedEntry from the priority queue.
   struct DelayedEntryCompare {
     bool operator()(const DelayedEntry& left, const DelayedEntry& right) const {
-      return left.first > right.first;
+      return std::get<0>(left) > std::get<0>(right);
     }
   };
   std::priority_queue<DelayedEntry, std::vector<DelayedEntry>,

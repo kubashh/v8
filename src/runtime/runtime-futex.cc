@@ -22,6 +22,28 @@ namespace internal {
 
 RUNTIME_FUNCTION(Runtime_AtomicsNumWaitersForTesting) {
   HandleScope scope(isolate);
+
+  if (args.length() == 2) {
+    CONVERT_ARG_HANDLE_CHECKED(JSTypedArray, sta, 0);
+    CONVERT_SIZE_ARG_CHECKED(index, 1);
+
+    CHECK(!sta->WasDetached());
+    CHECK(sta->GetBuffer()->is_shared());
+    CHECK_LT(index, sta->length());
+    CHECK_EQ(sta->type(), kExternalInt32Array);
+
+    Handle<JSArrayBuffer> array_buffer = sta->GetBuffer();
+    size_t addr = (index << 2) + sta->byte_offset();
+
+    return FutexEmulation::NumWaitersForTesting(array_buffer, addr);
+  } else {
+    DCHECK_EQ(0, args.length());
+    return FutexEmulation::NumWaitersForTesting();
+  }
+}
+
+RUNTIME_FUNCTION(Runtime_AtomicsNumUnresolvedAsyncPromisesForTesting) {
+  HandleScope scope(isolate);
   DCHECK_EQ(2, args.length());
   CONVERT_ARG_HANDLE_CHECKED(JSTypedArray, sta, 0);
   CONVERT_SIZE_ARG_CHECKED(index, 1);
@@ -33,7 +55,8 @@ RUNTIME_FUNCTION(Runtime_AtomicsNumWaitersForTesting) {
   Handle<JSArrayBuffer> array_buffer = sta->GetBuffer();
   size_t addr = (index << 2) + sta->byte_offset();
 
-  return FutexEmulation::NumWaitersForTesting(array_buffer, addr);
+  return FutexEmulation::NumUnresolvedAsyncPromisesForTesting(array_buffer,
+                                                              addr);
 }
 
 RUNTIME_FUNCTION(Runtime_SetAllowAtomicsWait) {
