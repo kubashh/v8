@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bd44afa_dc039c31",
+        "filename": "tools/debug_helper/compiler-types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-06-23T14:21:49Z",
+      "side": 1,
+      "message": "I\u0027d appreciate a comment mentioning that this line is duplicating the logic from Type::IsBitset.",
+      "revId": "638f325756de6be652cd91c3788b0f2d9d58ce4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2390f7b_ee8349eb",
+        "filename": "tools/debug_helper/debug-helper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-06-23T14:21:49Z",
+      "side": 1,
+      "message": "...or null if the payload is not a bitset.",
+      "revId": "638f325756de6be652cd91c3788b0f2d9d58ce4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bef24d3_75318545",
+        "filename": "tools/v8windbg/src/v8windbg-extension.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-06-23T14:21:49Z",
+      "side": 1,
+      "message": "Since this series of steps is nearly identical to the ones above for Node, could you please make a helper function?",
+      "revId": "638f325756de6be652cd91c3788b0f2d9d58ce4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4d1d099_280affea",
+        "filename": "tools/v8windbg/src/v8windbg-extension.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-06-23T14:21:49Z",
+      "side": 1,
+      "message": "Type",
+      "range": {
+        "startLine": 316,
+        "startChar": 60,
+        "endLine": 316,
+        "endChar": 64
+      },
+      "revId": "638f325756de6be652cd91c3788b0f2d9d58ce4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
