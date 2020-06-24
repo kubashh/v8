@@ -388,7 +388,17 @@ def main():
   # bail out early if different.
   if not options.skip_sanity_checks:
     first_config_output = first_cmd.run(SANITY_CHECKS)
+
+    # Early bailout if first run was a timeout.
+    if timeout_bailout(first_config_output, 1):
+      return RETURN_PASS
+
     second_config_output = second_cmd.run(SANITY_CHECKS)
+
+    # Bailout if second run was a timeout.
+    if timeout_bailout(second_config_output, 2):
+      return RETURN_PASS
+
     difference, _ = suppress.diff(first_config_output, second_config_output)
     if difference:
       # Special source key for sanity checks so that clusterfuzz dedupes all
