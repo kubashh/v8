@@ -54,6 +54,21 @@ V8_INLINE constexpr bool is_generic_heap_type(HeapType ht) {
   return ht >= kHeapFunc;
 }
 
+V8_INLINE const std::string heap_name(HeapType type) {
+  switch (type) {
+    case kHeapFunc:
+      return std::string("func");
+    case kHeapExtern:
+      return std::string("extern");
+    case kHeapEq:
+      return std::string("eq");
+    case kHeapExn:
+      return std::string("exn");
+    default:
+      return std::to_string(static_cast<uint32_t>(type));
+  }
+}
+
 class ValueType {
  public:
   enum Kind : uint8_t {
@@ -243,19 +258,19 @@ class ValueType {
     std::ostringstream buf;
     switch (kind()) {
       case kRef:
-        buf << "(ref " << heap_name() << ")";
+        buf << "(ref " << heap_name(heap_type()) << ")";
         break;
       case kOptRef:
         if (is_generic_heap_type(heap_type())) {
           // We prefer the shorthand to be backwards-compatible with previous
           // proposals.
-          buf << heap_name() << "ref";
+          buf << heap_name(heap_type()) << "ref";
         } else {
-          buf << "(ref null " << heap_name() << ")";
+          buf << "(ref null " << heap_name(heap_type()) << ")";
         }
         break;
       case kRtt:
-        buf << "(rtt " << depth() << " " << heap_name() + ")";
+        buf << "(rtt " << depth() << " " << heap_name(heap_type()) + ")";
         break;
       default:
         buf << kind_name();
@@ -279,21 +294,6 @@ class ValueType {
     };
 
     return kTypeName[kind()];
-  }
-
-  const std::string heap_name() const {
-    switch (heap_type()) {
-      case kHeapFunc:
-        return std::string("func");
-      case kHeapExtern:
-        return std::string("extern");
-      case kHeapEq:
-        return std::string("eq");
-      case kHeapExn:
-        return std::string("exn");
-      default:
-        return std::to_string(static_cast<uint32_t>(heap_type()));
-    }
   }
 
   uint32_t bit_field_;
