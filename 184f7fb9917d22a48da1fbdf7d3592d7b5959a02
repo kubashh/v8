@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "457c261d_b0129b4b",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-24T08:29:49Z",
+      "side": 1,
+      "message": "We know that for kUninitialized and kMigrationTarget since the array is empty. We do not know that for kWeakRef though. It could be a PROPERTY_TRANSITION (i.e not a SIMPLE one) which could be found. Then, we could special case for the first two (kWeakRef needs to check).\n\nHowever, we still need to search to fill in the correct insertion_index, which fills in index without overhead. Also, avoiding special casing helps reading from already super special cased method(s).",
+      "parentUuid": "41d70206_9d5a3782",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab591206_e1aae301",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 15
