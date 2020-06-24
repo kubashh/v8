@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a87d963_9be0de77",
+        "filename": "src/objects/transitions.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-24T13:13:02Z",
+      "side": 1,
+      "message": "expected",
+      "range": {
+        "startLine": 162,
+        "startChar": 41,
+        "endLine": 162,
+        "endChar": 51
+      },
+      "revId": "5532382f5acb1e32459e77510cf7fdf7fca825a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
