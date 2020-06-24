@@ -72,6 +72,8 @@ class ConcurrentAllocationThread final : public v8::base::Thread {
 };
 
 UNINITIALIZED_TEST(ConcurrentAllocationInOldSpace) {
+  if (!FLAG_local_heaps) return;
+
   FLAG_max_old_space_size = 32;
   FLAG_concurrent_allocation = true;
   FLAG_local_heaps = true;
@@ -148,6 +150,8 @@ class ConcurrentBlackAllocationThread final : public v8::base::Thread {
 };
 
 UNINITIALIZED_TEST(ConcurrentBlackAllocation) {
+  if (!FLAG_local_heaps) return;
+
   FLAG_concurrent_allocation = true;
   FLAG_local_heaps = true;
 
