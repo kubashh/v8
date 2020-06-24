@@ -77,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "6ee1e8f2_80dc6b87",
+        "filename": "src/objects/transitions.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-24T11:03:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbdb49c2_dbf23565",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e55c2be_6b1cd16e",
         "filename": "src/objects/transitions.h",
         "patchSetId": 15
@@ -111,6 +129,24 @@
       "writtenOn": "2020-06-24T08:59:25Z",
       "side": 1,
       "message": "From reading this description the role of new_array is not clear to me. Similarly the role of that array being \"newly allocated\" (what does that actually mean)?",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f00c4e3b_c4fafcb9",
+        "filename": "src/objects/transitions.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-24T11:03:36Z",
+      "side": 1,
+      "message": "Updated comment, WDYT?",
+      "parentUuid": "0b4be376_a881fde8",
       "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
