@@ -686,15 +686,23 @@ class WasmGraphBuildingInterface {
   void ArrayGet(FullDecoder* decoder, const Value& array_obj,
                 const ArrayIndexImmediate<validate>& imm, const Value& index,
                 bool is_signed, Value* result) {
+    using CheckForNull = compiler::WasmGraphBuilder::CheckForNull;
+    CheckForNull null_check = array_obj.type.kind() == ValueType::kRef
+                                  ? CheckForNull::kWithoutNullCheck
+                                  : CheckForNull::kWithNullCheck;
     result->node = BUILD(ArrayGet, array_obj.node, imm.array_type, index.node,
-                         is_signed, decoder->position());
+                         null_check, is_signed, decoder->position());
   }
 
   void ArraySet(FullDecoder* decoder, const Value& array_obj,
                 const ArrayIndexImmediate<validate>& imm, const Value& index,
                 const Value& value) {
+    using CheckForNull = compiler::WasmGraphBuilder::CheckForNull;
+    CheckForNull null_check = array_obj.type.kind() == ValueType::kRef
+                                  ? CheckForNull::kWithoutNullCheck
+                                  : CheckForNull::kWithNullCheck;
     BUILD(ArraySet, array_obj.node, imm.array_type, index.node, value.node,
-          decoder->position());
+          null_check, decoder->position());
   }
 
   void ArrayLen(FullDecoder* decoder, const Value& array_obj, Value* result) {
