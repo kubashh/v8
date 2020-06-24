@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e492eb95_d5d8d986",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-06-24T14:32:30Z",
+      "side": 1,
+      "message": "The commit message suggests that the macro automatically adds a V8_LIKELY annotation here, but it seems to be missing at the moment.",
+      "revId": "c3ab233fe3bd229f8daf4a2bb0ca090f804fb477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
