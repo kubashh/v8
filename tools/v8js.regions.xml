@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+For use in Windows Performance Analyzer with traces from the V8.js ETW provider
+See https://docs.microsoft.com/en-us/windows-hardware/test/wpt/creating-a-regions-of-interest-file
+-->
+<InstrumentationManifest>
+  <Instrumentation>
+    <Regions>
+      <RegionRoot Guid="{6B8183E8-EF9D-4EC6-A0D9-968999F3913B}" Name="V8js" FriendlyName="Root">
+        <Region Guid="{A4BA890D-5192-4CFC-BE88-0106F1AFB7AB}" Name="V8js-Isolate" FriendlyName="V8 isolate">
+          <Start>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="105" Version="0" />
+          </Start>
+          <Stop>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="106" Version="0" />
+          </Stop>
+          <Match>
+            <Event PID="true">
+			  <Payload FieldName="isolate" />
+			</Event>
+          </Match>
+        </Region>
+        <Region Guid="{A991CABF-CA8F-4457-80C1-D2B5089E36D2}" Name="V8js-SnapshotInit" FriendlyName="V8 snapshot init">
+          <Start>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="107" Version="0" />
+          </Start>
+          <Stop>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="108" Version="0" />
+          </Stop>
+          <Match>
+            <Event PID="true">
+			  <Payload FieldName="isolate" />
+			</Event>
+          </Match>
+        </Region>
+        <Region Guid="{AC99D1AA-6CFF-495E-B83D-7F34FCE844E7}" Name="V8js-Parsing" FriendlyName="V8 parsing">
+          <Start>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="109" Version="0" />
+          </Start>
+          <Stop>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="110" Version="0" />
+          </Stop>
+          <Match>
+            <Event PID="true" TID="true">
+			  <Payload FieldName="isolate" />
+			</Event>
+          </Match>
+        </Region>
+        <Region Guid="{04D18D7D-76F6-4E30-B31C-619A4291A5E8}" Name="V8js-UnoptimizedCode" FriendlyName="V8 unopt codegen">
+          <Start>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="111" Version="0" />
+          </Start>
+          <Stop>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="112" Version="0" />
+          </Stop>
+          <Match>
+            <Event PID="true" TID="true">
+			  <Payload FieldName="isolate" />
+			</Event>
+          </Match>
+        </Region>
+        <Region Guid="{FDC74C67-ACFF-4E00-BC0A-5214DE93B32A}" Name="V8js-JitExecute" FriendlyName="V8 Jit execute">
+          <Start>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="113" Version="0" />
+          </Start>
+          <Stop>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="114" Version="0" />
+          </Stop>
+          <Match>
+            <Event PID="true" TID="true" />
+          </Match>
+        </Region>
+        <Region Guid="{C992CF30-731F-4B6C-8488-6DB96753BF5A}" Name="V8js-JitFinalize" FriendlyName="V8 Jit finalize">
+          <Start>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="115" Version="0" />
+          </Start>
+          <Stop>
+            <Event Provider="{57277741-3638-4A4B-BDBA-0AC6E45DA56C}" Id="116" Version="0" />
+          </Stop>
+          <Match>
+            <Event PID="true" TID="true" />
+          </Match>
+        </Region>
+      </RegionRoot>
+    </Regions>
+  </Instrumentation>
+</InstrumentationManifest>

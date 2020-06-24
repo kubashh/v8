@@ -50,6 +50,7 @@
 #include "src/parsing/pending-compilation-error-handler.h"
 #include "src/parsing/scanner-character-streams.h"
 #include "src/snapshot/code-serializer.h"
+#include "src/tracing/v8-provider.h"
 #include "src/utils/ostreams.h"
 #include "src/zone/zone-list-inl.h"  // crbug.com/v8/8816
 
@@ -249,21 +250,27 @@ CompilationJob::Status OptimizedCompilationJob::PrepareJob(Isolate* isolate) {
 
 CompilationJob::Status OptimizedCompilationJob::ExecuteJob(
     RuntimeCallStats* stats) {
+  tracing::v8Provider.JitExecuteStart();
   DisallowHeapAccess no_heap_access;
   // Delegate to the underlying implementation.
   DCHECK_EQ(state(), State::kReadyToExecute);
   ScopedTimer t(&time_taken_to_execute_);
-  return UpdateState(ExecuteJobImpl(stats), State::kReadyToFinalize);
+  auto result = UpdateState(ExecuteJobImpl(stats), State::kReadyToFinalize);
+  tracing::v8Provider.JitExecuteStop();
+  return result;
 }
 
 CompilationJob::Status OptimizedCompilationJob::FinalizeJob(Isolate* isolate) {
+  tracing::v8Provider.JitFinalizeStart();
   DCHECK_EQ(ThreadId::Current(), isolate->thread_id());
   DisallowJavascriptExecution no_js(isolate);
 
   // Delegate to the underlying implementation.
   DCHECK_EQ(state(), State::kReadyToFinalize);
   ScopedTimer t(&time_taken_to_finalize_);
-  return UpdateState(FinalizeJobImpl(isolate), State::kSucceeded);
+  auto result = UpdateState(FinalizeJobImpl(isolate), State::kSucceeded);
+  tracing::v8Provider.JitFinalizeStop();
+  return result;
 }
 
 CompilationJob::Status OptimizedCompilationJob::RetryOptimization(
@@ -616,6 +623,7 @@ bool IterativelyExecuteAndFinalizeUnoptimizedCompilationJobs(
     AccountingAllocator* allocator, IsCompiledScope* is_compiled_scope,
     FinalizeUnoptimizedCompilationDataList*
         finalize_unoptimized_compilation_data_list) {
+  tracing::v8Provider.GenerateUnoptimizedCodeStart(isolate);
   DeclarationScope::AllocateScopeInfos(parse_info, isolate);
 
   std::vector<FunctionLiteral*> functions_to_compile;
@@ -631,12 +639,16 @@ bool IterativelyExecuteAndFinalizeUnoptimizedCompilationJobs(
     std::unique_ptr<UnoptimizedCompilationJob> job =
         ExecuteSingleUnoptimizedCompilationJob(parse_info, literal, allocator,
                                                &functions_to_compile);
-    if (!job) return false;
+    if (!job) {
+      tracing::v8Provider.GenerateUnoptimizedCodeStop(isolate);
+      return false;
+    }
 
     if (FinalizeSingleUnoptimizedCompilationJob(
             job.get(), shared_info, isolate,
             finalize_unoptimized_compilation_data_list) !=
         CompilationJob::SUCCEEDED) {
+      tracing::v8Provider.GenerateUnoptimizedCodeStop(isolate);
       return false;
     }
 
@@ -652,6 +664,7 @@ bool IterativelyExecuteAndFinalizeUnoptimizedCompilationJobs(
     parse_info->pending_error_handler()->PrepareWarnings(isolate);
   }
 
+  tracing::v8Provider.GenerateUnoptimizedCodeStop(isolate);
   return true;
 }
 
