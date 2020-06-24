@@ -18,6 +18,7 @@
 #include "src/snapshot/snapshot-utils.h"
 #include "src/snapshot/startup-deserializer.h"
 #include "src/snapshot/startup-serializer.h"
+#include "src/tracing/v8-provider.h"
 #include "src/utils/memcopy.h"
 #include "src/utils/version.h"
 
@@ -141,6 +142,7 @@ bool Snapshot::VersionIsValid(const v8::StartupData* data) {
 
 bool Snapshot::Initialize(Isolate* isolate) {
   if (!isolate->snapshot_available()) return false;
+  tracing::v8Provider.SnapshotInitStart(isolate);
   RuntimeCallTimerScope rcs_timer(isolate,
                                   RuntimeCallCounterId::kDeserializeIsolate);
   base::ElapsedTimer timer;
@@ -166,6 +168,7 @@ bool Snapshot::Initialize(Isolate* isolate) {
     int bytes = startup_data.length();
     PrintF("[Deserializing isolate (%d bytes) took %0.3f ms]\n", bytes, ms);
   }
+  tracing::v8Provider.SnapshotInitStop(isolate);
   return success;
 }
 

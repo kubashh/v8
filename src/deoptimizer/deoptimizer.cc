@@ -25,7 +25,9 @@
 #include "src/objects/debug-objects-inl.h"
 #include "src/objects/heap-number-inl.h"
 #include "src/objects/smi.h"
+#include "src/strings/string-stream.h"
 #include "src/tracing/trace-event.h"
+#include "src/tracing/v8-provider.h"
 #include "torque-generated/exported-class-definitions-tq.h"
 
 // Has to be the last include (doesn't have include guards)
@@ -524,6 +526,69 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction function,
     HandleScope scope(isolate_);
     PROFILE(isolate_, CodeDeoptEvent(handle(compiled_code_, isolate_), kind,
                                      from_, fp_to_sp_delta_));
+
+    // TODO(billti@microsoft.com): Hacked together from a bunch of other places.
+    // There must be a simpler way to collate the necessary data!?
+    if (tracing::v8Provider.IsEnabled(tracing::kDeoptEvent)) {
+      DeoptInfo deopt_info = GetDeoptInfo(compiled_code_, from_);
+      DeoptimizationData deopt_data =
+          DeoptimizationData::cast(compiled_code_.deoptimization_data());
+
+      std::string src_name = "<unknown>";
+      std::string fn_name = "<unknown>";
+      int line = 0;
+      int column = 0;
+      if (deopt_info.position.IsKnown()) {
+        auto debug_name = function_.shared().DebugName();
+        if (debug_name.IsString()) {
+          fn_name = debug_name.ToCString().get();
+        }
+      }
+      std::string deopt_reason{
+          DeoptimizeReasonToString(deopt_info.deopt_reason)};
+      std::string deopt_kind =
+          deopt_kind_ == DeoptimizeKind::kSoft
+              ? "Soft"
+              : (deopt_kind_ == DeoptimizeKind::kLazy ? "Lazy" : "Eager");
+
+      Script::PositionInfo pos;
+      if (!deopt_info.position.isInlined()) {
+        SharedFunctionInfo function(
+            SharedFunctionInfo::cast(deopt_data.SharedFunctionInfo()));
+        if (function.script().IsScript()) {
+          Script script = Script::cast(function.script());
+          Object source_name = script.name();
+          if (source_name.IsString())
+            src_name.assign(String::cast(source_name).ToCString().get());
+          script.GetPositionInfo(deopt_info.position.ScriptOffset(), &pos,
+                                 Script::WITH_OFFSET);
+          line = pos.line + 1;
+          column = pos.column + 1;
+        }
+      } else {
+        InliningPosition inl = deopt_data.InliningPositions().get(
+            deopt_info.position.InliningId());
+        if (inl.inlined_function_id != -1) {
+          SharedFunctionInfo sfi =
+              deopt_data.GetInlinedFunction(inl.inlined_function_id);
+          if (sfi.script().IsScript()) {
+            Script script = Script::cast(sfi.script());
+            Object source_name = script.name();
+            if (source_name.IsString())
+              src_name.assign(String::cast(source_name).ToCString().get());
+            script.GetPositionInfo(deopt_info.position.ScriptOffset(), &pos,
+                                   Script::WITH_OFFSET);
+            line = pos.line + 1;
+            column = pos.column + 1;
+            fn_name = std::string {sfi.DebugName().ToCString().get()} +
+                      " <inlined in " + fn_name + ">";
+          }
+        }
+      }
+
+      tracing::v8Provider.Deopt(deopt_reason, deopt_kind, src_name, fn_name,
+                                line, column);
+    }
   }
   unsigned size = ComputeInputFrameSize();
   const int parameter_count =
