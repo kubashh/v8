@@ -70,7 +70,7 @@ class Command(object):
 
     self.files = _startup_files(options)
 
-  def run(self, testcase, verbose=False):
+  def run(self, testcase, verbose=False, timeout=TIMEOUT):
     """Run the executable with a specific testcase."""
     args = [self.executable] + self.flags + self.files + [testcase]
     if verbose:
@@ -82,7 +82,7 @@ class Command(object):
     return Execute(
         args,
         cwd=os.path.dirname(os.path.abspath(testcase)),
-        timeout=TIMEOUT,
+        timeout=timeout,
     )
 
   @property

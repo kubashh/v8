@@ -93,6 +93,7 @@ RETURN_FAIL = 2
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 SANITY_CHECKS = os.path.join(BASE_PATH, 'v8_sanity_checks.js')
+SANITY_CHECK_TIMEOUT_SEC = 1
 
 SUPPORTED_ARCHS = ['ia32', 'x64', 'arm', 'arm64']
 
@@ -387,8 +388,20 @@ def main():
   # Sanity checks. Run both configurations with the sanity-checks file only and
   # bail out early if different.
   if not options.skip_sanity_checks:
-    first_config_output = first_cmd.run(SANITY_CHECKS)
-    second_config_output = second_cmd.run(SANITY_CHECKS)
+    first_config_output = first_cmd.run(
+        SANITY_CHECKS, timeout=SANITY_CHECK_TIMEOUT_SEC)
+
+    # Early bailout if first run was a timeout.
+    if timeout_bailout(first_config_output, 1):
+      return RETURN_PASS
+
+    second_config_output = second_cmd.run(
+        SANITY_CHECKS, timeout=SANITY_CHECK_TIMEOUT_SEC)
+
+    # Bailout if second run was a timeout.
+    if timeout_bailout(second_config_output, 2):
+      return RETURN_PASS
+
     difference, _ = suppress.diff(first_config_output, second_config_output)
     if difference:
       # Special source key for sanity checks so that clusterfuzz dedupes all
