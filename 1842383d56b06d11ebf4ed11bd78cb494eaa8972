@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b0d4e2a_c399ec1e",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-06-24T07:45:58Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to check for \"is_nullable()\"?",
+      "range": {
+        "startLine": 701,
+        "startChar": 45,
+        "endLine": 701,
+        "endChar": 70
+      },
+      "revId": "1842383d56b06d11ebf4ed11bd78cb494eaa8972",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
