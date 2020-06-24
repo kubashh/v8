@@ -31,6 +31,7 @@ namespace {
 // == x64 windows ============================================================
 #define STACK_SHADOW_WORDS 4
 #define PARAM_REGISTERS rcx, rdx, r8, r9
+#define PARAM_FP_REGISTERS xmm0, xmm1, xmm2, xmm3
 #define CALLEE_SAVE_REGISTERS                                             \
   rbx.bit() | rdi.bit() | rsi.bit() | r12.bit() | r13.bit() | r14.bit() | \
       r15.bit()
@@ -42,6 +43,7 @@ namespace {
 #else  // V8_TARGET_OS_WIN
 // == x64 other ==============================================================
 #define PARAM_REGISTERS rdi, rsi, rdx, rcx, r8, r9
+#define PARAM_FP_REGISTERS xmm0, xmm1, xmm2, xmm3, xmm4, xmm5, xmm6, xmm7
 #define CALLEE_SAVE_REGISTERS \
   rbx.bit() | r12.bit() | r13.bit() | r14.bit() | r15.bit()
 #endif  // V8_TARGET_OS_WIN
@@ -51,6 +53,7 @@ namespace {
 // == arm ====================================================================
 // ===========================================================================
 #define PARAM_REGISTERS r0, r1, r2, r3
+#define PARAM_FP_REGISTERS d1, d2, d3, d4, d5, d6, d7
 #define CALLEE_SAVE_REGISTERS \
   r4.bit() | r5.bit() | r6.bit() | r7.bit() | r8.bit() | r9.bit() | r10.bit()
 #define CALLEE_SAVE_FP_REGISTERS                                  \
@@ -64,6 +67,7 @@ namespace {
 // == arm64 ====================================================================
 // ===========================================================================
 #define PARAM_REGISTERS x0, x1, x2, x3, x4, x5, x6, x7
+#define PARAM_FP_REGISTERS d1, d2, d3, d4, d5, d6, d7
 #define CALLEE_SAVE_REGISTERS                                     \
   (1 << x19.code()) | (1 << x20.code()) | (1 << x21.code()) |     \
       (1 << x22.code()) | (1 << x23.code()) | (1 << x24.code()) | \
@@ -81,6 +85,7 @@ namespace {
 // ===========================================================================
 #define STACK_SHADOW_WORDS 4
 #define PARAM_REGISTERS a0, a1, a2, a3
+#define PARAM_FP_REGISTERS f1, f2, f3, f4, f5
 #define CALLEE_SAVE_REGISTERS                                                  \
   s0.bit() | s1.bit() | s2.bit() | s3.bit() | s4.bit() | s5.bit() | s6.bit() | \
       s7.bit()
@@ -92,6 +97,7 @@ namespace {
 // == mips64 =================================================================
 // ===========================================================================
 #define PARAM_REGISTERS a0, a1, a2, a3, a4, a5, a6, a7
+#define PARAM_FP_REGISTERS f1, f2, f3, f4, f5
 #define CALLEE_SAVE_REGISTERS                                                  \
   s0.bit() | s1.bit() | s2.bit() | s3.bit() | s4.bit() | s5.bit() | s6.bit() | \
       s7.bit()
@@ -108,6 +114,8 @@ namespace {
 #define STACK_SHADOW_WORDS 14
 #endif
 #define PARAM_REGISTERS r3, r4, r5, r6, r7, r8, r9, r10
+#define PARAM_FP_REGISTERS \
+  d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13
 #define CALLEE_SAVE_REGISTERS                                                 \
   r14.bit() | r15.bit() | r16.bit() | r17.bit() | r18.bit() | r19.bit() |     \
       r20.bit() | r21.bit() | r22.bit() | r23.bit() | r24.bit() | r25.bit() | \
@@ -123,6 +131,7 @@ namespace {
 // ===========================================================================
 #define STACK_SHADOW_WORDS 20
 #define PARAM_REGISTERS r2, r3, r4, r5, r6
+#define PARAM_FP_REGISTERS d1, d2, d3, d4, d5
 #define CALLEE_SAVE_REGISTERS \
   r6.bit() | r7.bit() | r8.bit() | r9.bit() | r10.bit() | ip.bit() | r13.bit()
 #define CALLEE_SAVE_FP_REGISTERS                                        \
@@ -146,7 +155,8 @@ CallDescriptor* Linkage::GetSimplifiedCDescriptor(Zone* zone,
 
   LocationSignature::Builder locations(zone, msig->return_count(),
                                        msig->parameter_count());
-  // Check the types of the signature.
+
+#ifdef V8_TARGET_ARCH_IA32
   // Currently no floating point parameters or returns are allowed because
   // on ia32, the FP top of stack is involved.
   for (size_t i = 0; i < msig->return_count(); i++) {
@@ -159,6 +169,7 @@ CallDescriptor* Linkage::GetSimplifiedCDescriptor(Zone* zone,
     CHECK_NE(MachineRepresentation::kFloat32, rep);
     CHECK_NE(MachineRepresentation::kFloat64, rep);
   }
+#endif  // V8_TARGET_ARCH_IA32
 
 #ifdef UNSUPPORTED_C_LINKAGE
   // This method should not be called on unknown architectures.
@@ -167,15 +178,23 @@ CallDescriptor* Linkage::GetSimplifiedCDescriptor(Zone* zone,
 #endif
 
   // Add return location(s).
-  CHECK_GE(2, locations.return_count_);
-
-  if (locations.return_count_ > 0) {
-    locations.AddReturn(LinkageLocation::ForRegister(kReturnRegister0.code(),
-                                                     msig->GetReturn(0)));
-  }
-  if (locations.return_count_ > 1) {
-    locations.AddReturn(LinkageLocation::ForRegister(kReturnRegister1.code(),
-                                                     msig->GetReturn(1)));
+  static constexpr Register return_registers[] = {kReturnRegister0,
+                                                  kReturnRegister1};
+  size_t num_fp_returns = 0;
+  size_t num_returns = 0;
+  for (size_t i = 0; i < locations.return_count_; i += 1) {
+    MachineType type = msig->GetReturn(i);
+    if (IsFloatingPoint(type.representation())) {
+      DCHECK_LT(num_fp_returns, 1);  // Only 1 FP return is supported.
+      locations.AddReturn(
+          LinkageLocation::ForRegister(kFPReturnRegister0.code(), type));
+      num_fp_returns += 1;
+    } else {
+      DCHECK_LT(num_returns, arraysize(return_registers));
+      locations.AddReturn(LinkageLocation::ForRegister(
+          return_registers[num_returns].code(), type));
+      num_returns += 1;
+    }
   }
 
   const int parameter_count = static_cast<int>(msig->parameter_count());
@@ -188,20 +207,45 @@ CallDescriptor* Linkage::GetSimplifiedCDescriptor(Zone* zone,
   const int kParamRegisterCount = 0;
 #endif
 
+#ifdef PARAM_FP_REGISTERS
+  const DoubleRegister kFPParamRegisters[] = {PARAM_FP_REGISTERS};
+  const size_t kFPParamRegisterCount = arraysize(kFPParamRegisters);
+#else
+  const DoubleRegister* kFPParamRegisters = nullptr;
+  const size_t kFPParamRegisterCount = 0;
+#endif
+
 #ifdef STACK_SHADOW_WORDS
   int stack_offset = STACK_SHADOW_WORDS;
 #else
   int stack_offset = 0;
 #endif
+
   // Add register and/or stack parameter(s).
+  size_t num_fp_params = 0;
+  size_t num_params = 0;
   for (int i = 0; i < parameter_count; i++) {
-    if (i < kParamRegisterCount) {
-      locations.AddParam(LinkageLocation::ForRegister(kParamRegisters[i].code(),
-                                                      msig->GetParam(i)));
+    MachineType type = msig->GetParam(i);
+    if (IsFloatingPoint(type.representation())) {
+      if (num_fp_params < kFPParamRegisterCount) {
+        locations.AddParam(LinkageLocation::ForRegister(
+            kFPParamRegisters[num_fp_params].code(), type));
+        num_fp_params += 1;
+      } else {
+        locations.AddParam(
+            LinkageLocation::ForCallerFrameSlot(-1 - stack_offset, type));
+        stack_offset++;
+      }
     } else {
-      locations.AddParam(LinkageLocation::ForCallerFrameSlot(
-          -1 - stack_offset, msig->GetParam(i)));
-      stack_offset++;
+      if (num_params < kParamRegisterCount) {
+        locations.AddParam(LinkageLocation::ForRegister(
+            kParamRegisters[num_params].code(), type));
+        num_params += 1;
+      } else {
+        locations.AddParam(
+            LinkageLocation::ForCallerFrameSlot(-1 - stack_offset, type));
+        stack_offset++;
+      }
     }
   }
 
