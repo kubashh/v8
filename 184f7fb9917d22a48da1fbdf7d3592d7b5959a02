@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "41d70206_9d5a3782",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-06-24T07:46:12Z",
+      "side": 1,
+      "message": "Don\u0027t we already know from the context that index will be kNotFound?",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab591206_e1aae301",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 15
