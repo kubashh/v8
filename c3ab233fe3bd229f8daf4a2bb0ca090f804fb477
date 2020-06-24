@@ -16,6 +16,24 @@
       "revId": "c3ab233fe3bd229f8daf4a2bb0ca090f804fb477",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "befbc5e5_1de23d84",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-24T14:34:48Z",
+      "side": 1,
+      "message": "This is added in another CL, which I planned to land first, but the order actually does not matter:\nhttps://crrev.com/c/2263153",
+      "parentUuid": "e492eb95_d5d8d986",
+      "revId": "c3ab233fe3bd229f8daf4a2bb0ca090f804fb477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
