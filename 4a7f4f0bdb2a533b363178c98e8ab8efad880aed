@@ -142,6 +142,30 @@
       "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "926829be_ce6b9afc",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T10:07:46Z",
+      "side": 1,
+      "message": "\u003e We should read the prototype only once, and from that we should read the map only once\n\nThat was what the previous CL was doing (https://chromium-review.googlesource.com/c/v8/v8/+/2210233) and we said it was unsafe because the prototype might transition.\n\n\u003e I don\u0027t understand the example\n\nMy point is that this chain \"map-\u003eprototype().synchronized_map().IsJSObjectMap()\" is not atomic. It could happen that \"map-\u003eprototype()\" happens, then the prototype transitions, and then we do \".synchronized_map().IsJSObjectMap()\". We are still in the same place as before.",
+      "parentUuid": "f8818c95_087b2adc",
+      "range": {
+        "startLine": 567,
+        "startChar": 26,
+        "endLine": 567,
+        "endChar": 36
+      },
+      "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
