@@ -145,6 +145,24 @@
     },
     {
       "key": {
+        "uuid": "343f1050_e8f4063a",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-06-25T15:30:28Z",
+      "side": 1,
+      "message": "But there is no search? Either it\u0027s 0 or it\u0027s not present. I\u0027m quite confused.\n\nYes you can rely on it. SIMPLE_PROPERTY_TRANSITION only works because the target transition\u0027s last added property is the thing you transition to.",
+      "parentUuid": "b8778b56_69478317",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab591206_e1aae301",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 15
