@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63e51ad2_7e45b604",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T13:14:08Z",
+      "side": 1,
+      "message": "This should be fine, right? We are not reading the prototype\u0027s map here",
+      "range": {
+        "startLine": 582,
+        "startChar": 17,
+        "endLine": 582,
+        "endChar": 40
+      },
+      "revId": "85700bcaaad363889d2e4b03bd8a8f5433f033df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
