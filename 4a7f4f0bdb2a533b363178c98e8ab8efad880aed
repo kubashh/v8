@@ -70,6 +70,30 @@
       "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8818c95_087b2adc",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-25T09:56:31Z",
+      "side": 1,
+      "message": "I don\u0027t understand the example, it doesn\u0027t type-check. We should read the prototype only once, and from that we should read the map only once.\n\n\u003e It could happen that BG thread does map-\u003eprototype(), goes to sleep due to scheduling, main thread changes the prototype,\n\nWe concluded earlier that the prototype is immutable, right? It can only change by replacing the entire map. In that case we continue working with the old map and probably abort optimization at the end when we notice the inconsistency.",
+      "parentUuid": "0d64a791_5c522fc3",
+      "range": {
+        "startLine": 567,
+        "startChar": 26,
+        "endLine": 567,
+        "endChar": 36
+      },
+      "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
