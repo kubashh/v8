@@ -238,6 +238,30 @@
       "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75a442dd_bf9ad64c",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-06-25T10:28:18Z",
+      "side": 1,
+      "message": "To clarify the data race I had in mind.\n\nMain thread does: 1) allocate a new map 2) write instance type to the new map 3) transition the prototype to the new map\n\nBackground thread does: A) Load the map from the prototype B) load the instance type from the map.\n\n(A) and (3) should form an acquire-release (or consume-release) pair to ensure that (B) loads (2).\nOtherwise, (B) could in theory load an \"undefined\" value and TSAN should warn about it, but I guess it doesn\u0027t currently because instance_type is an atomic, so TSAN just ignores it.",
+      "parentUuid": "24972ecc_8707ed7c",
+      "range": {
+        "startLine": 567,
+        "startChar": 26,
+        "endLine": 567,
+        "endChar": 36
+      },
+      "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
