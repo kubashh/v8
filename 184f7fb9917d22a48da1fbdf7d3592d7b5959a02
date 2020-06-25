@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5a413f2c_d67eb589",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-06-25T09:22:04Z",
+      "side": 1,
+      "message": "I see. It would be nice if this were done outside of InsertWithNewArray though. Why did we create a new array if we were going to overwrite a value anyway...?",
+      "parentUuid": "457c261d_b0129b4b",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab591206_e1aae301",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 15

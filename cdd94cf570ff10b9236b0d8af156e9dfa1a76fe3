@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1babaeea_4ec8cd90",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-06-25T09:22:04Z",
+      "side": 1,
+      "message": "What about adding similar code to line 108 above here so we can avoid searching in InsertWithNewArray? Perhaps we should also rename TransitionsAccessor::Insert to TransitionsAccessor::Set?",
+      "revId": "cdd94cf570ff10b9236b0d8af156e9dfa1a76fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
