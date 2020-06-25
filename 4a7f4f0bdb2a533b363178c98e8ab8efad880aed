@@ -262,6 +262,30 @@
       "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6601b28_870389d6",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T10:53:12Z",
+      "side": 1,
+      "message": "Ok, so we have two things:\n1) we would like that every time we read map\u0027s prototype\u0027s map to read the same one. I agree.\n2) we have a data race (Ulan\u0027s example) unless we add some more synchronization\n\nRegarding the example:\n\u003e Main thread does: 1) allocate a new map 2) write instance type to the new map 3) transition the prototype to the new map\n\u003e \n\u003e Background thread does: A) Load the map from the prototype B) load the instance type from the map.\n\nIs the point that we are okay with these two orders:\n * 1, 2, 3, A, B\n * A, B, 1, 2, 3\nbut we are not okay with\n * 1, 3, A, B, 2\n? Is this what we want to safeguard against?",
+      "parentUuid": "75a442dd_bf9ad64c",
+      "range": {
+        "startLine": 567,
+        "startChar": 26,
+        "endLine": 567,
+        "endChar": 36
+      },
+      "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
