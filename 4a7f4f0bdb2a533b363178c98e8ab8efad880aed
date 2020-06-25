@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "975def15_dad9c4e4",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T09:43:40Z",
+      "side": 1,
+      "message": "Is the issue that IsJSObject will load a map? i.e it would be equivalent to\n  if (!map-\u003eprototype().synchronized_map().IsJSObjectMap()) {\nor similar?",
+      "range": {
+        "startLine": 567,
+        "startChar": 26,
+        "endLine": 567,
+        "endChar": 36
+      },
+      "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
