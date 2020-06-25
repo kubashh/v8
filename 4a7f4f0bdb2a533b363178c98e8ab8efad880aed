@@ -214,6 +214,30 @@
       "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24972ecc_8707ed7c",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-25T10:21:51Z",
+      "side": 1,
+      "message": "Santiago: In the previous CL, we read the map multiple times, namely because each map_prototype.IsFoo() read it.",
+      "parentUuid": "d9264833_795cd3bb",
+      "range": {
+        "startLine": 567,
+        "startChar": 26,
+        "endLine": 567,
+        "endChar": 36
+      },
+      "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
