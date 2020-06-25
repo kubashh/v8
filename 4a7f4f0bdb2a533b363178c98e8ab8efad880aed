@@ -310,6 +310,30 @@
       "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "631fc43b_60667fa0",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T13:13:12Z",
+      "side": 1,
+      "message": "Ack, submitting a new patchset with this in mind.",
+      "parentUuid": "28b27aec_7e379b51",
+      "range": {
+        "startLine": 567,
+        "startChar": 26,
+        "endLine": 567,
+        "endChar": 36
+      },
+      "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
