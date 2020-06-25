@@ -16,6 +16,24 @@
       "revId": "cdd94cf570ff10b9236b0d8af156e9dfa1a76fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "637a89a2_a21e5f33",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T10:37:44Z",
+      "side": 1,
+      "message": "If you are talking about the case where we are going to be replacing the target in the existing index, I replied to the other comment with suggestions.\n\nIf you are talking about the case where we add a new transition, we would have to perform the search to know whether to insert in index 0 or 1.",
+      "parentUuid": "1babaeea_4ec8cd90",
+      "revId": "cdd94cf570ff10b9236b0d8af156e9dfa1a76fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

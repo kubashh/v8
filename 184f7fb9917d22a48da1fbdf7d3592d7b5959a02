@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "c7cc0c0b_aefa5c59",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T10:37:44Z",
+      "side": 1,
+      "message": "Not sure. Maybe for performance reasons it was done to search only once in the array? Although, creating an array also has performance cost.\n\nMaybe for code complexity reasons? To keep it simpler?\n\nIn any case, how would you prefer we proceed? I see two options:\n1) we leave at as is and we create an array even though we might not have needed it\n2) add an else case in line 113 that searches the array and if it finds the property, replaces the target and does not create a new one. Then, in InsertWithNewArray we can CHECK_EQ(index, kNotFound)\n\nOrthogonal to this, there are two cases in which we know that the array is empty and the new transition will be inserted in index 0:\nA) kUninitialized and kMigrationTarget (in line 98)\nB) kWeakRef line 128\nFor A and B we could:\n1) have a second method that would set the number of descriptors, target, etc; or\n2) add a parameter \"bool no_transitions\" which will skip the search and insert in index 0. We can safeguard by adding DCHECK_IMPLIES(no_transitions, new_array-\u003enumber_of_transitions() \u003d\u003d 0);",
+      "parentUuid": "5a413f2c_d67eb589",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab591206_e1aae301",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 15
