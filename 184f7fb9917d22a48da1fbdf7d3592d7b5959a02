@@ -163,6 +163,24 @@
     },
     {
       "key": {
+        "uuid": "bbec41d3_104d9fa1",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-06-25T15:32:02Z",
+      "side": 1,
+      "message": "Oh you mean the order so we can set it? I suppose you could simply move that to the only place where you insert 2 elements and use the \"search\" to decide in which order to insert the 2 elements. I\u0027d prefer not to have shared code that isn\u0027t actually shared.",
+      "parentUuid": "343f1050_e8f4063a",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab591206_e1aae301",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 15
