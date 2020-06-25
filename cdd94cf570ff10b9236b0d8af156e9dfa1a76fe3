@@ -70,6 +70,24 @@
       "revId": "cdd94cf570ff10b9236b0d8af156e9dfa1a76fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cf4e5da_0fe0fd85",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-06-25T14:39:42Z",
+      "side": 1,
+      "message": "The or is a double || with the condition below: we only copy over the value that we previously had if it\u0027s not the same as the new value (if it isn\u0027t absent and it\u0027s different in any of the 2 ways).\n\nIf the incoming value isn\u0027t a SIMPLE_PROPERTY_TRANSITION, we *know* that the existing value isn\u0027t the same. We only create the kWeakRef case if it previously was a SIMPLE_PROPERTY_TRANSITION. SIMPLE_PROPERTY_TRANSITION means the transition is a named property transition.\n\nWhat I suggested is sufficient to do the entire check whether the previous value will survive; in which case we\u0027ll need to grow. Otherwise we don\u0027t need to grow and can overwrite and bail out.",
+      "parentUuid": "db1eb6ee_234a3320",
+      "revId": "cdd94cf570ff10b9236b0d8af156e9dfa1a76fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

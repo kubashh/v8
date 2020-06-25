@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "e68db10b_5cb83978",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-06-25T14:39:42Z",
+      "side": 1,
+      "message": "There are only 2 cases: \n1) we know the previous transition didn\u0027t exist or is definitely dropped\n2) the previous transition was a simple named property transition\n\nin the second case there are 2 cases:\n1) the incoming value is a SIMPLE_PROPERTY_TRANSITION what matches the key/attributes of the existing transition. If so we can reuse the same case as original code line 44\n2) the incoming value is different from the existing transition somehow (either SIMPLE_PROPERTY_TRANSITION with different key or attributes, or not a SIMPLE_PROPERTY_TRANSITION in which case I guess the key is guaranteed to be different); in which case we need a new transition array that\u0027s big enough for both the original and the new entry.\n\nWe don\u0027t need to \"search\" to verify any of this, we just need to compare name+details for 2.1 vs 2.2.",
+      "parentUuid": "918b1e2b_0192a528",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab591206_e1aae301",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 15
