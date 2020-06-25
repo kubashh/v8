@@ -312,10 +312,6 @@ assert(v8_current_cpu != "x86" || !v8_untrusted_code_mitigations,
 assert(v8_current_cpu == "arm64" || !v8_control_flow_integrity,
        "Control-flow integrity is only supported on arm64")
 
-assert(
-    !v8_enable_pointer_compression || !v8_enable_shared_ro_heap,
-    "Pointer compression is not supported with shared read-only heap enabled")
-
 assert(!v8_enable_heap_sandbox || v8_enable_pointer_compression,
        "V8 Heap Sandbox requires pointer compression")
 

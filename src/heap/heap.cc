@@ -5322,7 +5322,10 @@ void Heap::SetUpFromReadOnlyHeap(ReadOnlyHeap* ro_heap) {
 
 void Heap::ReplaceReadOnlySpace(SharedReadOnlySpace* space) {
   CHECK(V8_SHARED_RO_HEAP_BOOL);
-  delete read_only_space_;
+  if (read_only_space_) {
+    read_only_space_->TearDown(memory_allocator());
+    delete read_only_space_;
+  }
 
   read_only_space_ = space;
 }
@@ -5624,7 +5627,7 @@ void Heap::TearDown() {
 
   tracer_.reset();
 
-  isolate()->read_only_heap()->OnHeapTearDown();
+  isolate()->read_only_heap()->OnHeapTearDown(this);
   read_only_space_ = nullptr;
   for (int i = FIRST_MUTABLE_SPACE; i <= LAST_MUTABLE_SPACE; i++) {
     delete space_[i];

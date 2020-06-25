@@ -52,20 +52,36 @@ class ReadOnlyArtifacts {
   }
 
   std::vector<ReadOnlyPage*>& pages() { return pages_; }
+
+  // Creates a ReadOnlyHeap for a specific Isolate. This will be populated with
+  // a SharedReadOnlySpace object that points to the Isolate's heap.
+  static std::unique_ptr<ReadOnlyHeap> CreateReadOnlyHeapForIsolate(
+      std::shared_ptr<ReadOnlyArtifacts> artifacts, Isolate* isolate);
+
+#ifdef V8_COMPRESS_POINTERS
+  void MakeSharedCopy(const std::vector<ReadOnlyPage*>& pages);
+
+  uint32_t OffsetForPage(size_t index) const { return page_offsets_[index]; }
+
+#else
   void TransferPages(std::vector<ReadOnlyPage*>&& pages) {
     pages_ = std::move(pages);
   }
+#endif
 
   const AllocationStats& accounting_stats() const { return stats_; }
 
   void set_read_only_heap(std::unique_ptr<ReadOnlyHeap> read_only_heap);
-  ReadOnlyHeap* read_only_heap() { return read_only_heap_.get(); }
+  ReadOnlyHeap* read_only_heap() const { return read_only_heap_.get(); }
 
  private:
   std::vector<ReadOnlyPage*> pages_;
   AllocationStats stats_;
   std::unique_ptr<SharedReadOnlySpace> shared_read_only_space_;
   std::unique_ptr<ReadOnlyHeap> read_only_heap_;
+#ifdef V8_COMPRESS_POINTERS
+  std::vector<uint32_t> page_offsets_;
+#endif
 };
 
 // -----------------------------------------------------------------------------
@@ -80,6 +96,13 @@ class ReadOnlySpace : public BaseSpace {
       std::shared_ptr<ReadOnlyArtifacts> artifacts);
 
   V8_EXPORT_PRIVATE ~ReadOnlySpace() override;
+
+  // With pointer compression, a ReadOnlySpace will contain shared pages which
+  // cannot be torn down with a MemoryAllocator stored in the VirtualMemory
+  // reservation of the ReadOnlyPages.
+  // Since the destructor cannot take arguments, the space should be torn down
+  // first before destruction.
+  void TearDown(MemoryAllocator* memory_allocator);
 
   bool IsDetached() const { return heap_ == nullptr; }
 
@@ -130,6 +153,8 @@ class ReadOnlySpace : public BaseSpace {
   Address FirstPageAddress() const { return pages_.front()->address(); }
 
  protected:
+  friend class ReadOnlyArtifacts;
+
   void SetPermissionsForPages(MemoryAllocator* memory_allocator,
                               PageAllocator::Permission access);
 
@@ -170,6 +195,7 @@ class ReadOnlySpace : public BaseSpace {
 class SharedReadOnlySpace : public ReadOnlySpace {
  public:
   SharedReadOnlySpace(Heap* heap, std::shared_ptr<ReadOnlyArtifacts> artifacts);
+  SharedReadOnlySpace(const SharedReadOnlySpace&) = delete;
   ~SharedReadOnlySpace() override;
 };
 

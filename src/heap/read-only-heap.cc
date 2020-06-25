@@ -69,7 +69,15 @@ void ReadOnlyHeap::SetUp(Isolate* isolate, ReadOnlyDeserializer* des) {
       shared_ro_heap_->DeseralizeIntoIsolate(isolate, des);
       read_only_heap_created = true;
     } else {
-      isolate->SetUpFromReadOnlyArtifacts(artifacts);
+#ifdef V8_COMPRESS_POINTERS
+      auto ro_heap_unique =
+          ReadOnlyArtifacts::CreateReadOnlyHeapForIsolate(artifacts, isolate);
+      ReadOnlyHeap* ro_heap = ro_heap_unique.release();
+#else
+      auto ro_heap = artifacts->read_only_heap();
+#endif  // V8_COMPRESS_POINTERS
+
+      isolate->SetUpFromReadOnlyArtifacts(artifacts, ro_heap);
     }
   } else {
     // This path should only be taken in mksnapshot, should only be run once
@@ -132,7 +140,7 @@ ReadOnlyHeap* ReadOnlyHeap::CreateAndAttachToIsolate(
   std::unique_ptr<ReadOnlyHeap> ro_heap(
       new ReadOnlyHeap(new ReadOnlySpace(isolate->heap())));
   artifacts->set_read_only_heap(std::move(ro_heap));
-  isolate->SetUpFromReadOnlyArtifacts(artifacts);
+  isolate->SetUpFromReadOnlyArtifacts(artifacts, artifacts->read_only_heap());
   return artifacts->read_only_heap();
 }
 
@@ -157,8 +165,9 @@ void ReadOnlyHeap::InitFromIsolate(Isolate* isolate) {
   init_complete_ = true;
 }
 
-void ReadOnlyHeap::OnHeapTearDown() {
-#ifndef V8_SHARED_RO_HEAP
+void ReadOnlyHeap::OnHeapTearDown(Heap* heap) {
+#if !defined(V8_SHARED_RO_HEAP) || defined(V8_COMPRESS_POINTERS)
+  read_only_space_->TearDown(heap->memory_allocator());
   delete read_only_space_;
 #endif
 }

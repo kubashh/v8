@@ -528,7 +528,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // for legacy API reasons.
   static void Delete(Isolate* isolate);
 
-  void SetUpFromReadOnlyArtifacts(std::shared_ptr<ReadOnlyArtifacts> artifacts);
+  void SetUpFromReadOnlyArtifacts(std::shared_ptr<ReadOnlyArtifacts> artifacts,
+                                  ReadOnlyHeap* ro_heap);
 
   // Returns allocation mode of this isolate.
   V8_INLINE IsolateAllocationMode isolate_allocation_mode();

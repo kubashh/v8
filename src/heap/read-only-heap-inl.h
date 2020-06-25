@@ -16,12 +16,17 @@ namespace internal {
 // static
 ReadOnlyRoots ReadOnlyHeap::GetReadOnlyRoots(HeapObject object) {
 #ifdef V8_SHARED_RO_HEAP
+#ifdef V8_COMPRESS_POINTERS
+  // TODO: We can do better here by extracting the base to get the Isolate
+  // pointer, but for now this is good enough.
+#else
   // This fails if we are creating heap objects and the roots haven't yet been
   // copied into the read-only heap or it has been cleared for testing.
   if (shared_ro_heap_ != nullptr && shared_ro_heap_->init_complete_) {
     return ReadOnlyRoots(shared_ro_heap_->read_only_roots_);
   }
-#endif
+#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_SHARED_RO_HEAP
   return ReadOnlyRoots(GetHeapFromWritableObject(object));
 }
 

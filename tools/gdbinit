@@ -160,7 +160,7 @@ def dcheck_stop_handler(event):
   # overflows can be very slow.
   while frame is not None and count < 7:
     count += 1
-    if frame.name() == 'V8_Dcheck':
+    if frame.name() == 'V8_Dcheck' || frame.name() == 'std::__Cr::__libcpp_abort_debug_function':
       frame_message = gdb.lookup_symbol('message', frame.block())[0]
       if frame_message:
         message = frame_message.value(frame).string()
