@@ -88,6 +88,24 @@
       "revId": "cdd94cf570ff10b9236b0d8af156e9dfa1a76fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87ecab46_777fac43",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T15:20:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4cf4e5da_0fe0fd85",
+      "revId": "cdd94cf570ff10b9236b0d8af156e9dfa1a76fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

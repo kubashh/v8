@@ -127,6 +127,24 @@
     },
     {
       "key": {
+        "uuid": "b8778b56_69478317",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T15:20:04Z",
+      "side": 1,
+      "message": "What searching does is search for the insertion_index to insert, i.e compares the new name+details and returns the insertion_index. I don\u0027t see the benefit of inlining the comparison and not calling search for 2.2. We would be duplicating the logic of Search.\n\n\u003e or not a SIMPLE_PROPERTY_TRANSITION in which case I guess the key is guaranteed to be different\n\nCan we rely on this for our logic?",
+      "parentUuid": "e68db10b_5cb83978",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab591206_e1aae301",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 15
