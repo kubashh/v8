@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "54661bb6_b8129d75",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-06-25T11:31:20Z",
+      "side": 1,
+      "message": "Replied in the other comment. I guess the old code was simply a little sloppier so it was easier to write.",
+      "parentUuid": "c7cc0c0b_aefa5c59",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab591206_e1aae301",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 15

@@ -34,6 +34,24 @@
       "revId": "cdd94cf570ff10b9236b0d8af156e9dfa1a76fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1eab09db_b637b84f",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-06-25T11:31:20Z",
+      "side": 1,
+      "message": "What I\u0027m suggesting here is the equivalent of your option 2 from the other comment; I\u0027d just move it down a little to the case !GetSimpleTransition().is_null() since that\u0027s the only case were we have an existing transition already.\n\nNote that we don\u0027t really need to do a search, we can reuse the check from line 108 as I mentioned. Basically you can extend the check at line 122 to also check whether GetSimpleTransitionKey(simple_transition) !\u003d *name || GetTargetDetails(*name, *target).attributes() !\u003d GetSimpleTransitionDetails(...).attributes()",
+      "parentUuid": "637a89a2_a21e5f33",
+      "revId": "cdd94cf570ff10b9236b0d8af156e9dfa1a76fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
