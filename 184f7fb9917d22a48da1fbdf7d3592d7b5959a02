@@ -181,6 +181,24 @@
     },
     {
       "key": {
+        "uuid": "fc74b5c8_c81784ed",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T16:12:28Z",
+      "side": 1,
+      "message": "Yeah, we insert the first one and then use search to get the correct index for the second transition.",
+      "parentUuid": "bbec41d3_104d9fa1",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab591206_e1aae301",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 15
@@ -262,6 +280,30 @@
     },
     {
       "key": {
+        "uuid": "b887d6c8_71813aea",
+        "filename": "src/objects/transitions.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T16:12:28Z",
+      "side": 1,
+      "message": "Not needed anymore.",
+      "parentUuid": "1e55c2be_6b1cd16e",
+      "range": {
+        "startLine": 160,
+        "startChar": 7,
+        "endLine": 160,
+        "endChar": 25
+      },
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b4be376_a881fde8",
         "filename": "src/objects/transitions.h",
         "patchSetId": 15
@@ -294,6 +336,24 @@
       "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f163989_5d5e12fa",
+        "filename": "src/objects/transitions.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T16:12:28Z",
+      "side": 1,
+      "message": "Marking as resolved",
+      "parentUuid": "f00c4e3b_c4fafcb9",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
