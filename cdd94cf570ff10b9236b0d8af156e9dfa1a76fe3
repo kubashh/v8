@@ -52,6 +52,24 @@
       "revId": "cdd94cf570ff10b9236b0d8af156e9dfa1a76fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db1eb6ee_234a3320",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T12:44:18Z",
+      "side": 1,
+      "message": "We can reuse parts of the check in 108 but we can\u0027t reuse as-is. That check know that the flag is SIMPLE_PROPERTY_TRANSITION. However, at this point we do not know this. For example, it could be SPECIAL_TRANSITION and in that case we only care about the name and not the details. If it\u0027s not special transition we have to match name AND details (not OR as you pointed in your comment).\n\nAnd even then this does not avoid searching for cases where we have a transition and we are adding a second one. TransitionArray is *not* append only so we need to know whether we should insert the new one in index 0, or index 1.\n\nThe only way I see us avoid \"searching\" is to change it to \"comparison\" of the elements (which is what the search does inside anyway). For this, we could use a mix of CompareName and CompareDetails.",
+      "parentUuid": "1eab09db_b637b84f",
+      "revId": "cdd94cf570ff10b9236b0d8af156e9dfa1a76fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

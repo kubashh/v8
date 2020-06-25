@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "918b1e2b_0192a528",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-25T12:44:18Z",
+      "side": 1,
+      "message": "Let\u0027s recap, there are different topics that we are talking about:\n1) Avoid allocating array if not needed. This would be extending the check in 104 to consider all flags.\n2) Avoid searching if we know the array has 0 elements. This is for kUninitialized, kMigrationTarget, and one particular case of kWeakRef.\n3) Propose an alternative to search, which would be to use a compare since we know that we have only one element in the array.\n\nTopic 1) might have performance improvements since the allocation wasn\u0027t needed after all; 2) would be a possible special case improvement with the only drawback of making our code bigger; 3) would be a mix of CompareName and CompareDetails",
+      "parentUuid": "54661bb6_b8129d75",
+      "revId": "184f7fb9917d22a48da1fbdf7d3592d7b5959a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab591206_e1aae301",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 15
