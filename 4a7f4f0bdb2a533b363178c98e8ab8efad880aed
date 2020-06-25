@@ -286,6 +286,30 @@
       "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28b27aec_7e379b51",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-06-25T11:29:29Z",
+      "side": 1,
+      "message": "That\u0027s one of the possible orders that we need to guard against. Without acquire/consume load of A, the compiler is also allowed to reorder A and B even though there is data dependency. For example, the compiler could speculate the address of B and the confirm that after loading A.\n\nConsume load was intended to solve that, but today all compilers emit the same sequence for consume and acquire, so acquire is generally preferred.\n\n(I personally find it easier to reason about acquire/release pairs that justify other loads and stores, rather than preventing reordering.)",
+      "parentUuid": "c6601b28_870389d6",
+      "range": {
+        "startLine": 567,
+        "startChar": 26,
+        "endLine": 567,
+        "endChar": 36
+      },
+      "revId": "4a7f4f0bdb2a533b363178c98e8ab8efad880aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
