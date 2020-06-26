@@ -436,7 +436,8 @@
 // Helper macro to define no_sanitize attributes only with clang.
 #if defined(__clang__) && defined(__has_attribute)
 #if __has_attribute(no_sanitize)
-#define V8_CLANG_NO_SANITIZE(what) __attribute__((no_sanitize(what)))
+#define V8_CLANG_NO_SANITIZE(what) __attribute__((no_sanitize(what))) \
+    __declspec(guard(nocf))
 #endif
 #endif
 #if !defined(V8_CLANG_NO_SANITIZE)
