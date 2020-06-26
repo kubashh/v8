@@ -43,13 +43,16 @@ class EmbedderDataSlot
 #endif
 
 #ifdef V8_COMPRESS_POINTERS
-  // The raw payload is located in the other tagged part of the full pointer.
+  // The other part of the full pointer contains the index into the external
+  // pointer table, encoded as SMI.
   static constexpr int kRawPayloadOffset = kTaggedSize - kTaggedPayloadOffset;
 #endif
   static constexpr int kRequiredPtrAlignment = kSmiTagSize;
 
   // Opaque type used for storing raw embedder data.
   using RawData = Address;
+
+  V8_INLINE void allocate_external_pointer_entry(Isolate* isolate);
 
   V8_INLINE Object load_tagged() const;
   V8_INLINE void store_smi(Smi value);
@@ -66,8 +69,18 @@ class EmbedderDataSlot
   // the pointer-like value. Note, that some Smis could still look like an
   // aligned pointers.
   // Returns true on success.
+  // Calling this method when the slot does not contain an aligned pointer is
+  // undefined behaviour and may result in crashes.
   V8_INLINE bool ToAlignedPointer(const Isolate* isolate,
                                   void** out_result) const;
+
+  // Call this function if you are not sure whether the slot contains an
+  // external pointer or not. In case the slot contains an aligned pointer, this
+  // method is guaranteed to suceed. In case it stores an internal value, this
+  // call may still succeed and return an arbitrary value, however, it is
+  // guaranteed not to crash.
+  V8_INLINE bool ToAlignedPointerSafe(const Isolate* isolate,
+                                      void** out_result) const;
 
   // Returns true if the pointer was successfully stored or false it the pointer
   // was improperly aligned.
@@ -82,7 +95,7 @@ class EmbedderDataSlot
  private:
   // Stores given value to the embedder data slot in a concurrent-marker
   // friendly manner (tagged part of the slot is written atomically).
-  V8_INLINE void gc_safe_store(Address value);
+  V8_INLINE void gc_safe_store(Isolate* isolate, Address value);
 };
 
 }  // namespace internal

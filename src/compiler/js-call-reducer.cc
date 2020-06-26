@@ -919,7 +919,10 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
                                  int wrapper_object_index) {
     const int offset =
         Internals::kJSObjectHeaderSize +
-        (Internals::kEmbedderDataSlotSize * wrapper_object_index);
+        (Internals::kEmbedderDataSlotSize * wrapper_object_index) +
+        // External pointer table index is only stored in the 2nd 32bits
+        // if the heap sandbox is enabled.
+        (V8_HEAP_SANDBOX_BOOL ? EmbedderDataSlot::kRawPayloadOffset : 0);
 
     FieldAccess access(
         kTaggedBase, offset, MaybeHandle<Name>(), MaybeHandle<Map>(),
