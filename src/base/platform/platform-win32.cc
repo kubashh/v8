@@ -761,10 +761,9 @@ DWORD GetProtectionFromMemoryPermission(OS::MemoryPermission access) {
     case OS::MemoryPermission::kReadWriteExecute:
       if (IsWindows10OrGreater())
         return PAGE_EXECUTE_READWRITE | PAGE_TARGETS_INVALID;
-      return PAGE_EXECUTE_READWRITE;
+      else
+        return PAGE_EXECUTE_READWRITE;
     case OS::MemoryPermission::kReadExecute:
-      if (IsWindows10OrGreater())
-        return PAGE_EXECUTE_READ | PAGE_TARGETS_INVALID;
       return PAGE_EXECUTE_READ;
   }
   UNREACHABLE();
