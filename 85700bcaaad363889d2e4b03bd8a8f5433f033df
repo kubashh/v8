@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5305da34_3545691f",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-26T08:01:15Z",
+      "side": 1,
+      "message": "Nit:\nHandle\u003cMap\u003e map_prototype_map(map-\u003eprototype().synchronized_map(), isolate());",
+      "revId": "85700bcaaad363889d2e4b03bd8a8f5433f033df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63e51ad2_7e45b604",
         "filename": "src/compiler/access-info.cc",
         "patchSetId": 3
@@ -37,6 +54,30 @@
       "side": 1,
       "message": "I agree.",
       "parentUuid": "63e51ad2_7e45b604",
+      "range": {
+        "startLine": 582,
+        "startChar": 17,
+        "endLine": 582,
+        "endChar": 40
+      },
+      "revId": "85700bcaaad363889d2e4b03bd8a8f5433f033df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dd43a941_ae5d304f",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-26T08:01:15Z",
+      "side": 1,
+      "message": "Right, although it\u0027s a bit subtle and could easily lead to issues when someone c\u0026p this and changes Null to something else. We could at least use the IsNull() version without isolate argument to make it more explicit.",
+      "parentUuid": "0f606a07_45c0bc62",
       "range": {
         "startLine": 582,
         "startChar": 17,
