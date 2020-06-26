@@ -16,6 +16,24 @@
       "revId": "a249819243ae5695531aa52bdb4052c501714497",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "586cb52d_47f1ac07",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-26T11:59:10Z",
+      "side": 1,
+      "message": "Yes, it\u0027s needed for MSVC. Otherwise the expression \"1 \u003c\u003c -1\" would appear on the right-hand side of the ternary operator, and even though it\u0027s not used, MSVC complains about this.",
+      "parentUuid": "3a067cb2_85d51093",
+      "revId": "a249819243ae5695531aa52bdb4052c501714497",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
