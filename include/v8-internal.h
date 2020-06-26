@@ -26,6 +26,8 @@ class Isolate;
 typedef uintptr_t Address;
 static const Address kNullAddress = 0;
 
+using ExternalPointer_t = Address;
+
 /**
  * Configuration of tagging scheme.
  */
@@ -118,7 +120,6 @@ constexpr bool HeapSandboxIsEnabled() {
 #endif
 }
 
-using ExternalPointer_t = Address;
 
 #ifdef V8_31BIT_SMIS_ON_64BIT_ARCH
 using PlatformSmiTagging = SmiTagging<kApiInt32Size>;
@@ -139,6 +140,10 @@ V8_INLINE static constexpr internal::Address IntToSmi(int value) {
   return (static_cast<Address>(value) << (kSmiTagSize + kSmiShiftSize)) |
          kSmiTag;
 }
+
+// Converts encoded external pointer to address.
+V8_EXPORT Address DecodeExternalPointerImpl(const Isolate* isolate,
+                                            ExternalPointer_t pointer);
 
 // {obj} must be the raw tagged pointer representation of a HeapObject
 // that's guaranteed to never be in ReadOnlySpace.
@@ -192,6 +197,12 @@ class Internals {
       kIsolateFastCCallCallerPcOffset + kApiSystemPointerSize;
   static const int kIsolateRootsOffset =
       kIsolateStackGuardOffset + 7 * kApiSystemPointerSize;
+
+  static const int kExternalPointerTableBufferOffset = 0;
+  static const int kExternalPointerTableLengthOffset =
+      kExternalPointerTableBufferOffset + kApiSystemPointerSize;
+  static const int kExternalPointerTableCapacityOffset =
+      kExternalPointerTableLengthOffset + kApiInt32Size;
 
   static const int kUndefinedValueRootIndex = 4;
   static const int kTheHoleValueRootIndex = 5;
@@ -358,6 +369,15 @@ class Internals {
 #endif
   }
 
+  V8_INLINE static Address DecodeExternalPointer(
+      const Isolate* isolate, ExternalPointer_t encoded_pointer) {
+#ifdef V8_HEAP_SANDBOX
+    return internal::DecodeExternalPointerImpl(isolate, encoded_pointer);
+#else
+    return encoded_pointer;
+#endif
+  }
+
   V8_INLINE static internal::Address ReadExternalPointerField(
       internal::Isolate* isolate, internal::Address heap_object_ptr,
       int offset) {
@@ -374,10 +394,6 @@ class Internals {
   static constexpr size_t kPtrComprHeapReservationSize = size_t{1} << 32;
   static constexpr size_t kPtrComprIsolateRootAlignment = size_t{1} << 32;
 
-  // See v8:10391 for details about V8 heap sandbox.
-  static constexpr uint32_t kExternalPointerSalt =
-      0x7fffffff & ~static_cast<uint32_t>(kHeapObjectTagMask);
-
   V8_INLINE static internal::Address GetRootFromOnHeapAddress(
       internal::Address addr) {
     return addr & -static_cast<intptr_t>(kPtrComprIsolateRootAlignment);
@@ -389,14 +405,6 @@ class Internals {
     return root + static_cast<internal::Address>(static_cast<uintptr_t>(value));
   }
 
-  V8_INLINE static Address DecodeExternalPointer(
-      const Isolate* isolate, ExternalPointer_t encoded_pointer) {
-#ifndef V8_HEAP_SANDBOX
-    return encoded_pointer;
-#else
-    return encoded_pointer ^ kExternalPointerSalt;
-#endif
-  }
 #endif  // V8_COMPRESS_POINTERS
 };
 
