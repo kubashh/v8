@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a067cb2_85d51093",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-06-26T11:57:44Z",
+      "side": 1,
+      "message": "Is the {std::max} necessary? We already checked that log2Size !\u003d -1.",
+      "revId": "a249819243ae5695531aa52bdb4052c501714497",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
