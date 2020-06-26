@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68fb988a_ff36feb4",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-06-26T12:00:48Z",
+      "side": 1,
+      "message": "Let\u0027s keep DecodeExternalPointer name here in other places.",
+      "revId": "2e291215a3ade8220609ec54891334921dec1015",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38a9cdbb_029b11d8",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-06-26T12:00:48Z",
+      "side": 1,
+      "message": "No, but I added the zero-extending instruction to Decode implementation.",
+      "revId": "2e291215a3ade8220609ec54891334921dec1015",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

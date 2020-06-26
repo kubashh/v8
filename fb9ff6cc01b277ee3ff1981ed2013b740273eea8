@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7db73d8c_80fdf720",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-06-26T12:00:48Z",
+      "side": 1,
+      "message": "I think void return types are not be supported (just return Address) but you are free to not use the result. So you did right here.",
+      "revId": "fb9ff6cc01b277ee3ff1981ed2013b740273eea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0b7526da_7564c717",
         "filename": "src/init/bootstrapper.cc",
         "patchSetId": 3
