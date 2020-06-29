@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36e7e6a7_aab25d1d",
+        "filename": "tools/clusterfuzz/v8_foozzie_test.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-06-29T18:43:48Z",
+      "side": 0,
+      "message": "This makes no sense any longer. We now also allow to have different configs _and_ different architectures in the table.",
+      "range": {
+        "startLine": 52,
+        "startChar": 3,
+        "endLine": 55,
+        "endChar": 53
+      },
+      "revId": "88fa13b564453ebc9f376e729f09e7ece51394b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
