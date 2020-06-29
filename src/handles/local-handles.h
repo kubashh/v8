@@ -35,7 +35,7 @@ class LocalHandles {
 class LocalHandleScope {
  public:
   explicit inline LocalHandleScope(LocalHeap* local_heap);
-  inline ~LocalHandleScope();
+  ~LocalHandleScope();
 
   V8_INLINE static Address* GetHandle(LocalHeap* local_heap, Address value);
 

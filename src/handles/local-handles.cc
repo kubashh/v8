@@ -6,11 +6,33 @@
 
 #include "src/api/api.h"
 #include "src/handles/handles.h"
+#include "src/sanitizer/msan.h"
 
 namespace v8 {
 namespace internal {
 
 LocalHandles::LocalHandles() { scope_.Initialize(); }
+
+LocalHandleScope::~LocalHandleScope() {
+  LocalHandles* handles = local_heap_->handles();
+  Address* old_limit = handles->scope_.limit;
+
+  handles->scope_.next = prev_next_;
+  handles->scope_.limit = prev_limit_;
+  handles->scope_.level--;
+
+  if (old_limit != handles->scope_.limit) {
+    handles->RemoveBlocks();
+    old_limit = handles->scope_.limit;
+  }
+
+  // TODO(dinfuehr): Zap handles
+
+  MSAN_ALLOCATED_UNINITIALIZED_MEMORY(
+      handles->scope_.next,
+      static_cast<size_t>(reinterpret_cast<Address>(old_limit) -
+                          reinterpret_cast<Address>(handles->scope_.next)));
+}
 
 void LocalHandles::Iterate(RootVisitor* visitor) {
   for (int i = 0; i < static_cast<int>(blocks_.size()) - 1; i++) {

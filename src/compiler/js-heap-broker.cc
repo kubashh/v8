@@ -19,6 +19,7 @@
 #include "src/compiler/graph-reducer.h"
 #include "src/compiler/per-isolate-compiler-cache.h"
 #include "src/execution/protectors-inl.h"
+#include "src/handles/local-handles-inl.h"
 #include "src/init/bootstrapper.h"
 #include "src/objects/allocation-site-inl.h"
 #include "src/objects/api-callbacks.h"
@@ -1608,12 +1609,8 @@ class BytecodeArrayData : public FixedArrayBaseData {
       constant_pool_.push_back(broker->GetOrCreateData(constant_pool->get(i)));
     }
 
-    Handle<ByteArray> source_position_table(
+    source_positions_ = Handle<ByteArray>(
         bytecode_array->SourcePositionTableIfCollected(), broker->isolate());
-    source_positions_.reserve(source_position_table->length());
-    for (int i = 0; i < source_position_table->length(); i++) {
-      source_positions_.push_back(source_position_table->get(i));
-    }
 
     Handle<ByteArray> handlers(bytecode_array->handler_table(),
                                broker->isolate());
@@ -1626,10 +1623,14 @@ class BytecodeArrayData : public FixedArrayBaseData {
   }
 
   const byte* source_positions_address() const {
-    return source_positions_.data();
+    AllowHandleDereference handle_dereference;
+    return source_positions_->GetDataStartAddress();
   }
 
-  size_t source_positions_size() const { return source_positions_.size(); }
+  size_t source_positions_size() const {
+    AllowHandleDereference handle_dereference;
+    return source_positions_->length();
+  }
 
   Address handler_table_address() const {
     CHECK(is_serialized_for_compilation_);
@@ -1649,7 +1650,6 @@ class BytecodeArrayData : public FixedArrayBaseData {
         incoming_new_target_or_generator_register_(
             object->incoming_new_target_or_generator_register()),
         bytecodes_(broker->zone()),
-        source_positions_(broker->zone()),
         handler_table_(broker->zone()),
         constant_pool_(broker->zone()) {}
 
@@ -1660,7 +1660,7 @@ class BytecodeArrayData : public FixedArrayBaseData {
 
   bool is_serialized_for_compilation_ = false;
   ZoneVector<uint8_t> bytecodes_;
-  ZoneVector<uint8_t> source_positions_;
+  Handle<ByteArray> source_positions_;
   ZoneVector<uint8_t> handler_table_;
   ZoneVector<ObjectData*> constant_pool_;
 };
@@ -2396,6 +2396,8 @@ JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
       tracing_enabled_(tracing_enabled),
       is_concurrent_inlining_(is_concurrent_inlining),
       is_native_context_independent_(is_native_context_independent),
+      local_heap_(isolate_->heap()),
+      local_handle_scope_(&local_heap_),
       feedback_(zone()),
       bytecode_analyses_(zone()),
       property_access_infos_(zone()),
