@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ed1069d1_060c7fea",
+        "filename": "src/compiler/js-create-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-06-29T13:53:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "459fcfb5_cb6d0467",
+      "revId": "185f0c0a0f589b9196e5c602d0c8e38a6a6aae17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ba445ac_0d90c5b6",
         "filename": "src/compiler/js-create-lowering.cc",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2020-06-29T13:42:27Z",
       "side": 1,
       "message": "Shouldn\u0027t you be looking at the map from line 299?",
+      "revId": "185f0c0a0f589b9196e5c602d0c8e38a6a6aae17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66b7e359_a23eb3bd",
+        "filename": "src/compiler/js-create-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-06-29T13:53:58Z",
+      "side": 1,
+      "message": "Yeah, this is confusing, but if you follow AllocateAliasedArguments into AllocateArguments it is factory-\u003efixed_array_map() that is passed to AllocationBuilder::AllocateArray, so I merely used the same logic as AllocateArray. Now that I think about it, can factory()-\u003efixed_array_map() ever return a map with instance_type() other than FIXED_ARRAY_TYPE?",
+      "parentUuid": "7ba445ac_0d90c5b6",
       "revId": "185f0c0a0f589b9196e5c602d0c8e38a6a6aae17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
