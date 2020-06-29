@@ -208,11 +208,11 @@ class ExecutionArgumentsConfig(object):
         'default: bundled in the directory of this script',
         default=DEFAULT_D8)
 
-  def make_options(self, options):
+  def make_options(self, options, default_config=None):
     def get(name):
       return getattr(options, '%s_%s' % (self.label, name))
 
-    config = get('config')
+    config = default_config or get('config')
     assert config in CONFIGS
 
     d8 = get('d8')
@@ -270,6 +270,8 @@ def parse_args():
 
   options.first = first_config_arguments.make_options(options)
   options.second = second_config_arguments.make_options(options)
+  options.default = second_config_arguments.make_options(
+      options, DEFAULT_CONFIG)
 
   # Ensure we make a valid comparison.
   if (options.first.d8 == options.second.d8 and
@@ -367,24 +369,53 @@ def cluster_failures(source, known_failures=None):
   return long_key[:ORIGINAL_SOURCE_HASH_LENGTH]
 
 
-def run_sanity_checks(suppress, first_config, second_config):
+def run_sanity_checks(suppress, execution_configs):
   """Run some fixed smoke tests in all configs to ensure nothing
   is fundamentally wrong, in order to prevent bug flooding.
   """
-  first_config_output = first_config.command.run(
+  run_sanity_check = lambda config: config.command.run(
       SANITY_CHECKS, timeout=SANITY_CHECK_TIMEOUT_SEC)
+  outputs = map(run_sanity_check, execution_configs)
 
-  second_config_output = second_config.command.run(
-      SANITY_CHECKS, timeout=SANITY_CHECK_TIMEOUT_SEC)
+  for index in range(1, len(execution_configs)):
+    difference, _ = suppress.diff(outputs[0], outputs[index])
+    if difference:
+      # Special source key for sanity checks so that clusterfuzz dedupes all
+      # cases on this in case it's hit.
+      source_key = 'sanity check failed'
+      raise FailException(format_difference(
+          source_key, execution_configs[0], execution_configs[index],
+          outputs[0], outputs[index], difference))
 
-  difference, _ = suppress.diff(first_config_output, second_config_output)
-  if difference:
-    # Special source key for sanity checks so that clusterfuzz dedupes all
-    # cases on this in case it's hit.
-    source_key = 'sanity check failed'
-    raise FailException(format_difference(
-        source_key, first_config, second_config,
-        first_config_output, second_config_output, difference))
+
+def run_comparisons(suppress, execution_configs, test_case):
+  run_test_case = lambda config: config.command.run(
+      test_case, timeout=TEST_TIMEOUT_SEC, verbose=True)
+  base_config = execution_configs[0]
+  base_output = run_test_case(base_config)
+  outputs = [base_output]
+
+  for comp_config in execution_configs[1:]:
+    comp_output = run_test_case(comp_config)
+    outputs.append(comp_output)
+    difference, source = suppress.diff(base_output, comp_output)
+
+    if difference:
+      # Only bail out due to suppressed output if there was a difference. If a
+      # suppression doesn't show up anymore in the statistics, we might want to
+      # remove it.
+      fail_bailout(base_output, suppress.ignore_by_output)
+      fail_bailout(comp_output, suppress.ignore_by_output)
+
+      source_key = cluster_failures(source)
+      raise FailException(format_difference(
+          source_key, base_config, comp_config,
+          base_output, comp_output, difference, source))
+
+  # Show if a crash has happened in one of the runs and no difference was
+  # detected.
+  if any(output.HasCrashed() for output in outputs):
+    raise PassException('# V8 correctness - C-R-A-S-H')
 
 
 def main():
@@ -400,44 +431,23 @@ def main():
   content_bailout(get_meta_data(content), suppress.ignore_by_metadata)
   content_bailout(content, suppress.ignore_by_content)
 
-  first_config = ExecutionConfig(options, 'first')
-  second_config = ExecutionConfig(options, 'second')
+  execution_configs = [
+    ExecutionConfig(options, 'first'),
+    ExecutionConfig(options, 'default'),
+    ExecutionConfig(options, 'second'),
+  ]
 
-  # Sanity checks. Run both configurations with the sanity-checks file only and
+  # Sanity checks. Run all configurations with the sanity-checks file only and
   # bail out early if different.
   if not options.skip_sanity_checks:
-    run_sanity_checks(suppress, first_config, second_config)
+    run_sanity_checks(suppress, execution_configs)
 
-  first_config_output = first_config.command.run(
-      options.testcase, timeout=TEST_TIMEOUT_SEC, verbose=True)
+  run_comparisons(suppress, execution_configs, options.testcase)
 
-  second_config_output = second_config.command.run(
-      options.testcase, timeout=TEST_TIMEOUT_SEC, verbose=True)
-
-  difference, source = suppress.diff(first_config_output, second_config_output)
-
-  if difference:
-    # Only bail out due to suppressed output if there was a difference. If a
-    # suppression doesn't show up anymore in the statistics, we might want to
-    # remove it.
-    fail_bailout(first_config_output, suppress.ignore_by_output)
-    fail_bailout(second_config_output, suppress.ignore_by_output)
-
-    source_key = cluster_failures(source)
-    raise FailException(format_difference(
-        source_key, first_config, second_config,
-        first_config_output, second_config_output, difference, source))
-
-  # Show if a crash has happened in one of the runs and no difference was
-  # detected.
-  if first_config_output.HasCrashed() or second_config_output.HasCrashed():
-    print('# V8 correctness - C-R-A-S-H')
-  else:
-    # TODO(machenbach): Figure out if we could also return a bug in case
-    # there's no difference, but one of the line suppressions has matched -
-    # and without the match there would be a difference.
-    print('# V8 correctness - pass')
-
+  # TODO(machenbach): Figure out if we could also return a bug in case
+  # there's no difference, but one of the line suppressions has matched -
+  # and without the match there would be a difference.
+  print('# V8 correctness - pass')
   return RETURN_PASS
 
 
