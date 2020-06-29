@@ -450,6 +450,7 @@ class Deoptimizer : public Malloced {
 
   Handle<JSFunction> function() const;
   Handle<Code> compiled_code() const;
+  DeoptimizeReason GetDeoptReason() const;
   DeoptimizeKind deopt_kind() const { return deopt_kind_; }
 
   // Number of created JS frames. Not all created frames are necessarily JS.
