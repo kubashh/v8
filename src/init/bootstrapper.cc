@@ -5223,6 +5223,9 @@ Genesis::Genesis(
     }
   }
 
+  // TODO(v8:10391, saelo): this is certainly the wrong place to call this.
+  native_context()->AllocateExternalPointerEntries(isolate);
+
   native_context()->set_microtask_queue(
       isolate, microtask_queue ? static_cast<MicrotaskQueue*>(microtask_queue)
                                : isolate->default_microtask_queue());
