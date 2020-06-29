@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b9687309_6bf8580a",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-29T16:00:39Z",
+      "side": 1,
+      "message": "Ack. I will update it in a new patchset.",
+      "parentUuid": "241da415_cc4b4632",
+      "revId": "ed98d99c178cb2e13ab951808aa370ea7153dac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79833b99_3f9c2f9d",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 19
@@ -54,6 +72,30 @@
       "side": 1,
       "message": "I guess using Search here is indeed cleaner. Won\u0027t SearchSpecial always result in 1 (and hence won\u0027t fall into if (insertion_index \u003d\u003d 0))? So it could be:\n\nint insertion_index \u003d 1;\nif (flag !\u003d SPECIAL_TRANSITION) {\n  int index \u003d result-\u003eSearch(...\u0026insertion_index);\n  DCHECK_EQ(index, kNotFound);\n}\nresult-\u003eSet(insertion_index ^ 1, GetSimpleTransition...);\nresult-\u003eSet(insertion_index, *name, HeapObjectReference::Weak(*target));",
       "parentUuid": "79833b99_3f9c2f9d",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 0
+      },
+      "revId": "ed98d99c178cb2e13ab951808aa370ea7153dac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bc35162_f7b9bc92",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-06-29T16:00:39Z",
+      "side": 1,
+      "message": "\u003e Won\u0027t SearchSpecial always result in 1?\n\nI don\u0027t see why that would be the case: SearchSpecial searches for the insertion_index only considering the name. On the other hand, \"Search\" also takes into account the kind and attributes.\n\nThen, both searches could return either 0 or 1.",
+      "parentUuid": "e071be01_9bdf259a",
       "range": {
         "startLine": 91,
         "startChar": 0,
