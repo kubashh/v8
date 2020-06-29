@@ -4,6 +4,7 @@
 
 gclient_gn_args_file = 'v8/build/config/gclient_args.gni'
 gclient_gn_args = [
+  'mac_xcode_version',
 ]
 
 vars = {
@@ -31,6 +32,8 @@ vars = {
   'download_gcmole': False,
   'download_jsfunfuzz': False,
   'check_v8_header_includes': False,
+
+  'mac_xcode_version': 'default',
 
   # GN CIPD package version.
   'gn_version': 'git_revision:7d7e8deea36d126397bda2cf924682504271f0e1',
