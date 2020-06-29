@@ -7,8 +7,6 @@
 
 #include "src/handles/local-handles.h"
 
-#include "src/sanitizer/msan.h"
-
 namespace v8 {
 namespace internal {
 
@@ -32,27 +30,6 @@ LocalHandleScope::LocalHandleScope(LocalHeap* local_heap) {
   prev_next_ = handles->scope_.next;
   prev_limit_ = handles->scope_.limit;
   handles->scope_.level++;
-}
-
-LocalHandleScope::~LocalHandleScope() {
-  LocalHandles* handles = local_heap_->handles();
-  Address* old_limit = handles->scope_.limit;
-
-  handles->scope_.next = prev_next_;
-  handles->scope_.limit = prev_limit_;
-  handles->scope_.level--;
-
-  if (old_limit != handles->scope_.limit) {
-    handles->RemoveBlocks();
-    old_limit = handles->scope_.limit;
-  }
-
-  // TODO(dinfuehr): Zap handles
-
-  MSAN_ALLOCATED_UNINITIALIZED_MEMORY(
-      handles->scope_.next,
-      static_cast<size_t>(reinterpret_cast<Address>(old_limit) -
-                          reinterpret_cast<Address>(handles->scope_.next)));
 }
 
 }  // namespace internal

@@ -10,6 +10,7 @@
 #include "src/base/macros.h"
 #include "src/handles/handles.h"
 #include "src/heap/local-heap.h"
+#include "src/sanitizer/msan.h"
 
 namespace v8 {
 namespace internal {
@@ -35,7 +36,26 @@ class LocalHandles {
 class LocalHandleScope {
  public:
   explicit inline LocalHandleScope(LocalHeap* local_heap);
-  inline ~LocalHandleScope();
+  inline ~LocalHandleScope() {
+    LocalHandles* handles = local_heap_->handles();
+    Address* old_limit = handles->scope_.limit;
+
+    handles->scope_.next = prev_next_;
+    handles->scope_.limit = prev_limit_;
+    handles->scope_.level--;
+
+    if (old_limit != handles->scope_.limit) {
+      handles->RemoveBlocks();
+      old_limit = handles->scope_.limit;
+    }
+
+    // TODO(dinfuehr): Zap handles
+
+    MSAN_ALLOCATED_UNINITIALIZED_MEMORY(
+        handles->scope_.next,
+        static_cast<size_t>(reinterpret_cast<Address>(old_limit) -
+                            reinterpret_cast<Address>(handles->scope_.next)));
+  }
 
   V8_INLINE static Address* GetHandle(LocalHeap* local_heap, Address value);
 
