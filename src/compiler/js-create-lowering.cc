@@ -280,6 +280,16 @@ Reduction JSCreateLowering::ReduceJSCreateArguments(Node* node) {
         return NoChange();
       }
       FrameStateInfo args_state_info = FrameStateInfoOf(args_state->op());
+      int length = args_state_info.parameter_count() - 1;  // Minus receiver.
+      // Check that the allocated array will not exceed
+      // kMaxRegularHeapObjectSize.
+      {
+        MapRef map(broker(), factory()->fixed_array_map());
+        const int alloc_size = (map.instance_type() == FIXED_ARRAY_TYPE)
+                                   ? FixedArray::SizeFor(length)
+                                   : FixedDoubleArray::SizeFor(length);
+        if (alloc_size > kMaxRegularHeapObjectSize) return NoChange();
+      }
       // Prepare element backing store to be used by arguments object.
       bool has_aliased_arguments = false;
       Node* const elements = AllocateAliasedArguments(
@@ -291,7 +301,6 @@ Reduction JSCreateLowering::ReduceJSCreateArguments(Node* node) {
                                 : native_context().sloppy_arguments_map());
       // Actually allocate and initialize the arguments object.
       AllocationBuilder a(jsgraph(), effect, control);
-      int length = args_state_info.parameter_count() - 1;  // Minus receiver.
       STATIC_ASSERT(JSSloppyArgumentsObject::kSize == 5 * kTaggedSize);
       a.Allocate(JSSloppyArgumentsObject::kSize);
       a.Store(AccessBuilder::ForMap(), arguments_map);
