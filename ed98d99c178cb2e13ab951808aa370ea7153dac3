@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "241da415_cc4b4632",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-06-29T15:46:46Z",
+      "side": 1,
+      "message": "If you return above it seems cleaner to have a new line that starts with \"if\" rather than else if.",
+      "revId": "ed98d99c178cb2e13ab951808aa370ea7153dac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79833b99_3f9c2f9d",
         "filename": "src/objects/transitions.cc",
         "patchSetId": 19
@@ -13,6 +30,30 @@
       "writtenOn": "2020-06-25T16:12:28Z",
       "side": 1,
       "message": "This is the version that does the comparison here. Alternative using search:\n\n      result-\u003eSet(0, GetSimpleTransitionKey(simple_transition),\n                    HeapObjectReference::Weak(simple_transition));\n      int insertion_index;\n      int index;\n      if (flag \u003d\u003d SPECIAL_TRANSITION) {\n        index \u003d result-\u003eSearchSpecial(Symbol::cast(*name), \u0026insertion_index);\n      } else {\n        PropertyDetails details \u003d GetTargetDetails(*name, *target);\n        index \u003d result-\u003eSearch(details.kind(), *name, details.attributes(),\n                                  \u0026insertion_index);\n      }\n\n    DCHECK_EQ(index, kNotFound);\n\n    if (insertion_index \u003d\u003d 0) {\n      result-\u003eSet(1, GetSimpleTransitionKey(simple_transition),\n                    HeapObjectReference::Weak(simple_transition));\n    }\n    result-\u003eSetKey(insertion_index, *name);\n    result-\u003eSetRawTarget(insertion_index, HeapObjectReference::Weak(*target));\n\n\nPROS: less prone to errors if search changes; also shorter\nCONS: we are doing one extra insertion in the case the new transition should have been placed in index 0",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 0
+      },
+      "revId": "ed98d99c178cb2e13ab951808aa370ea7153dac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e071be01_9bdf259a",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-06-29T15:46:46Z",
+      "side": 1,
+      "message": "I guess using Search here is indeed cleaner. Won\u0027t SearchSpecial always result in 1 (and hence won\u0027t fall into if (insertion_index \u003d\u003d 0))? So it could be:\n\nint insertion_index \u003d 1;\nif (flag !\u003d SPECIAL_TRANSITION) {\n  int index \u003d result-\u003eSearch(...\u0026insertion_index);\n  DCHECK_EQ(index, kNotFound);\n}\nresult-\u003eSet(insertion_index ^ 1, GetSimpleTransition...);\nresult-\u003eSet(insertion_index, *name, HeapObjectReference::Weak(*target));",
+      "parentUuid": "79833b99_3f9c2f9d",
       "range": {
         "startLine": 91,
         "startChar": 0,
