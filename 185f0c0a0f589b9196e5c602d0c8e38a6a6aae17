@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "459fcfb5_cb6d0467",
+        "filename": "src/compiler/js-create-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-06-29T13:46:44Z",
+      "side": 1,
+      "message": "Actually this is not about new vs old, this is about (new or old) vs large object space. So I\u0027d say something like: Check that the object is not \"large\".",
+      "parentUuid": "72396f8e_16993a10",
+      "revId": "185f0c0a0f589b9196e5c602d0c8e38a6a6aae17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ba445ac_0d90c5b6",
         "filename": "src/compiler/js-create-lowering.cc",
         "patchSetId": 2
