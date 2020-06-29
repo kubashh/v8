@@ -1608,12 +1608,8 @@ class BytecodeArrayData : public FixedArrayBaseData {
       constant_pool_.push_back(broker->GetOrCreateData(constant_pool->get(i)));
     }
 
-    Handle<ByteArray> source_position_table(
+    source_positions_ = Handle<ByteArray>(
         bytecode_array->SourcePositionTableIfCollected(), broker->isolate());
-    source_positions_.reserve(source_position_table->length());
-    for (int i = 0; i < source_position_table->length(); i++) {
-      source_positions_.push_back(source_position_table->get(i));
-    }
 
     Handle<ByteArray> handlers(bytecode_array->handler_table(),
                                broker->isolate());
@@ -1626,10 +1622,10 @@ class BytecodeArrayData : public FixedArrayBaseData {
   }
 
   const byte* source_positions_address() const {
-    return source_positions_.data();
+    return source_positions_->GetDataStartAddress();
   }
 
-  size_t source_positions_size() const { return source_positions_.size(); }
+  size_t source_positions_size() const { return source_positions_->length(); }
 
   Address handler_table_address() const {
     CHECK(is_serialized_for_compilation_);
@@ -1649,7 +1645,6 @@ class BytecodeArrayData : public FixedArrayBaseData {
         incoming_new_target_or_generator_register_(
             object->incoming_new_target_or_generator_register()),
         bytecodes_(broker->zone()),
-        source_positions_(broker->zone()),
         handler_table_(broker->zone()),
         constant_pool_(broker->zone()) {}
 
@@ -1660,7 +1655,7 @@ class BytecodeArrayData : public FixedArrayBaseData {
 
   bool is_serialized_for_compilation_ = false;
   ZoneVector<uint8_t> bytecodes_;
-  ZoneVector<uint8_t> source_positions_;
+  Handle<ByteArray> source_positions_;
   ZoneVector<uint8_t> handler_table_;
   ZoneVector<ObjectData*> constant_pool_;
 };
