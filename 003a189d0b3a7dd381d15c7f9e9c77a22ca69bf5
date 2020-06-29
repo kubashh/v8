@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e4abea9_86c6ad75",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 3403,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-06-29T19:31:24Z",
+      "side": 1,
+      "message": "fly-by nit: indentation",
+      "range": {
+        "startLine": 3403,
+        "startChar": 2,
+        "endLine": 3403,
+        "endChar": 12
+      },
+      "revId": "003a189d0b3a7dd381d15c7f9e9c77a22ca69bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
