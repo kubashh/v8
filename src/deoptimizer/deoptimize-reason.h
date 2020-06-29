@@ -53,13 +53,17 @@ namespace internal {
   V(OutOfBounds, "out of bounds")                                              \
   V(Overflow, "overflow")                                                      \
   V(Smi, "Smi")                                                                \
+  V(TransitionedToMegamorphicIC, "IC transitioned to megamorphic")             \
   V(Unknown, "(unknown)")                                                      \
   V(ValueMismatch, "value mismatch")                                           \
   V(WrongCallTarget, "wrong call target")                                      \
   V(WrongEnumIndices, "wrong enum indices")                                    \
   V(WrongFeedbackCell, "wrong feedback cell")                                  \
+  V(WrongICState, "wrong IC state")                                            \
   V(WrongInstanceType, "wrong instance type")                                  \
   V(WrongMap, "wrong map")                                                     \
+  V(MissingMap, "missing map")                                                 \
+  V(WrongHandler, "wrong handler")                                             \
   V(WrongName, "wrong name")                                                   \
   V(WrongValue, "wrong value")                                                 \
   V(NoInitialElement, "no initial element")
