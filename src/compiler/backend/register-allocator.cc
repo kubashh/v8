@@ -3081,15 +3081,48 @@ LifetimePosition RegisterAllocator::FindOptimalSpillingPos(
           (range->TopLevel()->Start() == loop_start &&
            range->TopLevel()->SpillAtLoopHeaderNotBeneficial()))
         return pos;
-      auto& loop_header_state =
-          data()->GetSpillState(loop_header->rpo_number());
-      for (LiveRange* live_at_header : loop_header_state) {
-        if (live_at_header->TopLevel() != range->TopLevel() ||
-            !live_at_header->Covers(loop_start) || live_at_header->spilled()) {
-          continue;
+
+      // Find the LiveRange corresponding to this value at loop_start.
+      LiveRange* range_at_loop_start = nullptr;
+      if (range->TopLevel()->Start() == loop_start) {
+        // The value is defined at the beginning of the block (presumably a phi
+        // value).
+        range_at_loop_start = range->TopLevel();
+      } else {
+        // Each predecessor's ending state should contain the value. However,
+        // predecessors with higher RPO numbers haven't been visited yet.
+        for (RpoNumber predecessor : block->predecessors()) {
+          if (predecessor >= block->rpo_number()) continue;
+          auto& loop_header_state = data()->GetSpillState(predecessor);
+          for (LiveRange* live_at_header : loop_header_state) {
+            if (live_at_header->TopLevel() != range->TopLevel()) continue;
+            range_at_loop_start = live_at_header;
+            break;
+          }
+          break;
         }
-        LiveRange* check_use = live_at_header;
-        for (; check_use != nullptr && check_use->Start() < pos;
+
+        // If there was a split precisely at loop_start, move to the next range
+        // (and skip any empty ranges).
+        while (range_at_loop_start != nullptr &&
+               (range_at_loop_start->IsEmpty() ||
+                range_at_loop_start->End() <= loop_start)) {
+          range_at_loop_start = range_at_loop_start->next();
+          DCHECK_NE(range_at_loop_start, nullptr);
+        }
+      }
+
+      // If we couldn't find the range based on a predecessor block's spill
+      // state, which can happen in the case of constants, search for it within
+      // the top-level range.
+      if (range_at_loop_start == nullptr) {
+        range_at_loop_start = range->TopLevel()->GetChildCovers(loop_start);
+      }
+
+      if (range_at_loop_start != nullptr && !range_at_loop_start->spilled() &&
+          range_at_loop_start->Covers(loop_start)) {
+        for (LiveRange* check_use = range_at_loop_start;
+             check_use != nullptr && check_use->Start() < pos;
              check_use = check_use->next()) {
           // If we find a use for which spilling is detrimental, don't spill
           // at the loop header
@@ -3102,9 +3135,8 @@ LifetimePosition RegisterAllocator::FindOptimalSpillingPos(
           }
         }
         // No register beneficial use inside the loop before the pos.
-        *begin_spill_out = live_at_header;
+        *begin_spill_out = range_at_loop_start;
         pos = loop_start;
-        break;
       }
 
       // Try hoisting out to an outer loop.
