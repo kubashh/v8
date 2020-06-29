@@ -208,11 +208,11 @@ class ExecutionArgumentsConfig(object):
         'default: bundled in the directory of this script',
         default=DEFAULT_D8)
 
-  def make_options(self, options):
+  def make_options(self, options, default_config=None):
     def get(name):
       return getattr(options, '%s_%s' % (self.label, name))
 
-    config = get('config')
+    config = default_config or get('config')
     assert config in CONFIGS
 
     d8 = get('d8')
@@ -270,6 +270,8 @@ def parse_args():
 
   options.first = first_config_arguments.make_options(options)
   options.second = second_config_arguments.make_options(options)
+  options.default = second_config_arguments.make_options(
+      options, DEFAULT_CONFIG)
 
   # Ensure we make a valid comparison.
   if (options.first.d8 == options.second.d8 and
@@ -415,6 +417,37 @@ def run_comparisons(suppress, first_config, second_config, test_case, timeout,
       raise FailException(FAILURE_HEADER_TEMPLATE % dict(
           configs='', source_key='', suppression='unexpected crash'))
 
+"""
+def run_comparisons(suppress, execution_configs, test_case):
+  run_test_case = lambda config: config.command.run(
+      test_case, timeout=TEST_TIMEOUT_SEC, verbose=True)
+  base_config = execution_configs[0]
+  base_output = run_test_case(base_config)
+  outputs = [base_output]
+
+  for comp_config in execution_configs[1:]:
+    comp_output = run_test_case(comp_config)
+    outputs.append(comp_output)
+    difference, source = suppress.diff(base_output, comp_output)
+
+    if difference:
+      # Only bail out due to suppressed output if there was a difference. If a
+      # suppression doesn't show up anymore in the statistics, we might want to
+      # remove it.
+      fail_bailout(base_output, suppress.ignore_by_output)
+      fail_bailout(comp_output, suppress.ignore_by_output)
+
+      source_key = cluster_failures(source)
+      raise FailException(format_difference(
+          source_key, base_config, comp_config,
+          base_output, comp_output, difference, source))
+
+  # Show if a crash has happened in one of the runs and no difference was
+  # detected.
+  if any(output.HasCrashed() for output in outputs):
+    raise PassException('# V8 correctness - C-R-A-S-H')
+"""
+
 
 def main():
   options = parse_args()
@@ -429,14 +462,17 @@ def main():
   content_bailout(get_meta_data(content), suppress.ignore_by_metadata)
   content_bailout(content, suppress.ignore_by_content)
 
-  first_config = ExecutionConfig(options, 'first')
-  second_config = ExecutionConfig(options, 'second')
+  execution_configs = [
+    ExecutionConfig(options, 'first'),
+    ExecutionConfig(options, 'default'),
+    ExecutionConfig(options, 'second'),
+  ]
 
   # First, run some fixed smoke tests in all configs to ensure nothing
   # is fundamentally wrong, in order to prevent bug flooding.
   if not options.skip_sanity_checks:
     run_comparisons(
-        suppress, first_config, second_config,
+        suppress, execution_configs,
         test_case=SANITY_CHECKS,
         timeout=SANITY_CHECK_TIMEOUT_SEC,
         verbose=False,
@@ -450,7 +486,7 @@ def main():
 
   # Second, run all configs against the fuzz test case.
   run_comparisons(
-      suppress, first_config, second_config,
+      suppress, execution_configs,
       test_case=options.testcase,
       timeout=TEST_TIMEOUT_SEC,
   )

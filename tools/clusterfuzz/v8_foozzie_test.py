@@ -238,9 +238,10 @@ other weird stuff
     check('123', '45', True, True, '12', '45')
 
 
-def cut_verbose_output(stdout):
-  # This removes first lines containing d8 commands.
-  return '\n'.join(stdout.split('\n')[4:])
+def cut_verbose_output(stdout, n_comp):
+  # This removes the first lines containing d8 commands of `n_comp` comparison
+  # runs.
+  return '\n'.join(stdout.split('\n')[n_comp * 2:])
 
 
 def run_foozzie(second_d8_dir, *extra_flags, **kwargs):
@@ -274,7 +275,8 @@ class SystemTest(unittest.TestCase):
   """
   def testSyntaxErrorDiffPass(self):
     stdout = run_foozzie('build1', '--skip-sanity-checks')
-    self.assertEqual('# V8 correctness - pass\n', cut_verbose_output(stdout))
+    self.assertEqual('# V8 correctness - pass\n',
+                     cut_verbose_output(stdout, 3))
     # Default comparison includes suppressions.
     self.assertIn('v8_suppressions.js', stdout)
     # Default comparison doesn't include any specific mock files.
@@ -291,7 +293,7 @@ class SystemTest(unittest.TestCase):
                   '--second-config-extra-flags=--flag3')
     e = ctx.exception
     self.assertEqual(v8_foozzie.RETURN_FAIL, e.returncode)
-    self.assertEqual(expected_output, cut_verbose_output(e.output))
+    self.assertEqual(expected_output, cut_verbose_output(e.output, 2))
 
   def testSanityCheck(self):
     with open(os.path.join(TEST_DATA, 'sanity_check_output.txt')) as f:
