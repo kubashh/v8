@@ -35,7 +35,14 @@ bool operator!=(FeedbackSource const& lhs, FeedbackSource const& rhs) {
 
 std::ostream& operator<<(std::ostream& os, const FeedbackSource& p) {
   if (p.IsValid()) {
-    return os << "FeedbackSource(" << p.slot << ")";
+    os << "FeedbackSource(" << p.slot << ")";
+    if (p.state == FeedbackSource::kMonomorphic) {
+      os << ": "
+         << "Monomorphic";
+    } else if (p.state == FeedbackSource::kPolymorphic) {
+      os << ": "
+         << "Polymorphic";
+    }
   }
   return os << "FeedbackSource(INVALID)";
 }
