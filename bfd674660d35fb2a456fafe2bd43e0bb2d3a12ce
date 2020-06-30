@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "858bd852_a1291047",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-06-30T13:58:38Z",
+      "side": 1,
+      "message": "I introduced HeapType::Repr (code conflicts with code() which returns the binary format code) and renamed a few things. Does it look better now?",
+      "parentUuid": "682ce494_2ff4a6bd",
+      "range": {
+        "startLine": 56,
+        "startChar": 18,
+        "endLine": 56,
+        "endChar": 32
+      },
+      "revId": "bfd674660d35fb2a456fafe2bd43e0bb2d3a12ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f496e901_16c05f37",
         "filename": "src/wasm/value-type.h",
         "patchSetId": 6
