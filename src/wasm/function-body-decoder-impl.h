@@ -2000,7 +2000,16 @@ class WasmFullDecoder : public WasmDecoder<validate> {
 #ifdef DEBUG
   class TraceLine {
    public:
-    explicit TraceLine(WasmFullDecoder* decoder) : decoder_(decoder) {}
+    explicit TraceLine(WasmFullDecoder* decoder) : decoder_(decoder) {
+      WasmOpcode opcode = static_cast<WasmOpcode>(*decoder->pc());
+      if (!WasmOpcodes::IsPrefixOpcode(opcode)) AppendOpcode(opcode);
+    }
+
+    void AppendOpcode(WasmOpcode opcode) {
+      DCHECK(!WasmOpcodes::IsPrefixOpcode(opcode));
+      Append(TRACE_INST_FORMAT, decoder_->startrel(decoder_->pc_),
+             WasmOpcodes::OpcodeName(opcode));
+    }
 
     ~TraceLine() {
       if (!FLAG_trace_wasm_decoder) return;
@@ -2100,6 +2109,8 @@ class WasmFullDecoder : public WasmDecoder<validate> {
    public:
     explicit TraceLine(WasmFullDecoder*) {}
 
+    void AppendOpcode(WasmOpcode) {}
+
     PRINTF_FORMAT(2, 3)
     void Append(const char* format, ...) {}
   };
@@ -2115,10 +2126,6 @@ class WasmFullDecoder : public WasmDecoder<validate> {
   template <WasmOpcode opcode>
   int DecodeOp() {
     TraceLine trace_msg(this);
-    if (!WasmOpcodes::IsPrefixOpcode(opcode)) {
-      trace_msg.Append(TRACE_INST_FORMAT, startrel(this->pc_),
-                       WasmOpcodes::OpcodeName(opcode));
-    }
 
     // TODO(clemensb): Break this up into individual functions.
     switch (opcode) {
@@ -2773,8 +2780,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
         } else if (full_opcode >= kExprMemoryInit) {
           CHECK_PROTOTYPE_OPCODE(bulk_memory);
         }
-        trace_msg.Append(TRACE_INST_FORMAT, startrel(this->pc_),
-                         WasmOpcodes::OpcodeName(full_opcode));
+        trace_msg.AppendOpcode(full_opcode);
         return DecodeNumericOpcode(full_opcode);
       }
       case kSimdPrefix: {
@@ -2783,8 +2789,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
         WasmOpcode full_opcode = this->template read_prefixed_opcode<validate>(
             this->pc_, &opcode_length);
         if (!VALIDATE(this->ok())) return 0;
-        trace_msg.Append(TRACE_INST_FORMAT, startrel(this->pc_),
-                         WasmOpcodes::OpcodeName(full_opcode));
+        trace_msg.AppendOpcode(full_opcode);
         return DecodeSimdOpcode(full_opcode, 1 + opcode_length);
       }
       case kAtomicPrefix: {
@@ -2793,8 +2798,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             this->template read_u8<validate>(this->pc_ + 1, "atomic index");
         WasmOpcode full_opcode =
             static_cast<WasmOpcode>(opcode << 8 | atomic_index);
-        trace_msg.Append(TRACE_INST_FORMAT, startrel(this->pc_),
-                         WasmOpcodes::OpcodeName(full_opcode));
+        trace_msg.AppendOpcode(full_opcode);
         return DecodeAtomicOpcode(full_opcode);
       }
       case kGCPrefix: {
@@ -2803,8 +2807,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             this->template read_u8<validate>(this->pc_ + 1, "gc index");
         WasmOpcode full_opcode =
             static_cast<WasmOpcode>(opcode << 8 | gc_index);
-        trace_msg.Append(TRACE_INST_FORMAT, startrel(this->pc_),
-                         WasmOpcodes::OpcodeName(full_opcode));
+        trace_msg.AppendOpcode(full_opcode);
         return DecodeGCOpcode(full_opcode);
       }
 // Note that prototype opcodes are not handled in the fastpath
