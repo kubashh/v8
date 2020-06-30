@@ -31,6 +31,21 @@ class ReadOnlyPage : public BasicMemoryChunk {
 
   size_t ShrinkToHighWaterMark();
 
+  // Returns the address for a given offset to the this page.
+  Address OffsetToAddress(size_t offset) {
+    Address address_in_page = address() + offset;
+#if defined(V8_SHARED_RO_HEAP) && defined(V8_COMPRESS_POINTERS)
+    // Pointer compression with share ReadOnlyPages means that the area_start
+    // and area_end cannot be defined since they are stored within the pages
+    // which can be mapped at multiple memory addresses.
+    DCHECK_LT(offset, size());
+#else
+    DCHECK_GE(address_in_page, area_start());
+    DCHECK_LT(address_in_page, area_end());
+#endif
+    return address_in_page;
+  }
+
  private:
   friend class ReadOnlySpace;
 };
@@ -52,20 +67,38 @@ class ReadOnlyArtifacts {
   }
 
   std::vector<ReadOnlyPage*>& pages() { return pages_; }
+
+#ifdef V8_SHARED_RO_HEAP
+#ifdef V8_COMPRESS_POINTERS
+  // Creates a ReadOnlyHeap for a specific Isolate. This will be populated with
+  // a SharedReadOnlySpace object that points to the Isolate's heap.
+  static std::unique_ptr<ReadOnlyHeap> CreateReadOnlyHeapForIsolate(
+      std::shared_ptr<ReadOnlyArtifacts> artifacts, Isolate* isolate);
+
+  void MakeSharedCopy(const std::vector<ReadOnlyPage*>& pages);
+
+  uint32_t OffsetForPage(size_t index) const { return page_offsets_[index]; }
+
+#else
   void TransferPages(std::vector<ReadOnlyPage*>&& pages) {
     pages_ = std::move(pages);
   }
+#endif
+#endif  // #ifdef V8_SHARED_RO_HEAP
 
   const AllocationStats& accounting_stats() const { return stats_; }
 
   void set_read_only_heap(std::unique_ptr<ReadOnlyHeap> read_only_heap);
-  ReadOnlyHeap* read_only_heap() { return read_only_heap_.get(); }
+  ReadOnlyHeap* read_only_heap() const { return read_only_heap_.get(); }
 
  private:
   std::vector<ReadOnlyPage*> pages_;
   AllocationStats stats_;
   std::unique_ptr<SharedReadOnlySpace> shared_read_only_space_;
   std::unique_ptr<ReadOnlyHeap> read_only_heap_;
+#ifdef V8_COMPRESS_POINTERS
+  std::vector<uint32_t> page_offsets_;
+#endif
 };
 
 // -----------------------------------------------------------------------------
@@ -74,12 +107,21 @@ class ReadOnlySpace : public BaseSpace {
  public:
   V8_EXPORT_PRIVATE explicit ReadOnlySpace(Heap* heap);
 
+#ifdef V8_SHARED_RO_HEAP
   // Detach the pages and them to artifacts for using in creating a
   // SharedReadOnlySpace.
   void DetachPagesAndAddToArtifacts(
       std::shared_ptr<ReadOnlyArtifacts> artifacts);
+#endif  // V8_SHARED_RO_HEAP
 
   V8_EXPORT_PRIVATE ~ReadOnlySpace() override;
+
+  // With pointer compression, a ReadOnlySpace will contain shared pages which
+  // cannot be torn down with a MemoryAllocator stored in the VirtualMemory
+  // reservation of the ReadOnlyPages.
+  // Since the destructor cannot take arguments, the space should be torn down
+  // first before destruction.
+  V8_EXPORT_PRIVATE void TearDown(MemoryAllocator* memory_allocator);
 
   bool IsDetached() const { return heap_ == nullptr; }
 
@@ -123,13 +165,15 @@ class ReadOnlySpace : public BaseSpace {
 #endif  // VERIFY_HEAP
 
   // Return size of allocatable area on a page in this space.
-  int AreaSize() { return static_cast<int>(area_size_); }
+  int AreaSize() const { return static_cast<int>(area_size_); }
 
   ReadOnlyPage* InitializePage(BasicMemoryChunk* chunk);
 
   Address FirstPageAddress() const { return pages_.front()->address(); }
 
  protected:
+  friend class ReadOnlyArtifacts;
+
   void SetPermissionsForPages(MemoryAllocator* memory_allocator,
                               PageAllocator::Permission access);
 
@@ -169,7 +213,9 @@ class ReadOnlySpace : public BaseSpace {
 
 class SharedReadOnlySpace : public ReadOnlySpace {
  public:
-  SharedReadOnlySpace(Heap* heap, std::shared_ptr<ReadOnlyArtifacts> artifacts);
+  SharedReadOnlySpace(Heap* heap, std::shared_ptr<ReadOnlyArtifacts> artifacts,
+                      Address new_base_address);
+  SharedReadOnlySpace(const SharedReadOnlySpace&) = delete;
   ~SharedReadOnlySpace() override;
 };
 

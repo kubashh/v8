@@ -4,10 +4,18 @@
 
 #include "src/heap/read-only-spaces.h"
 
+#if defined(V8_SHARED_RO_HEAP) && defined (V8_COMPRESS_POINTERS)
+// TODO: check for linux?
+#include <sys/mman.h>
+#endif
+
+#include <memory>
+
 #include "include/v8-internal.h"
-#include "src/base/lsan.h"
 #include "src/common/globals.h"
+#include "src/common/ptr-compr-inl.h"
 #include "src/execution/isolate.h"
+#include "src/heap/allocation-stats.h"
 #include "src/heap/basic-memory-chunk.h"
 #include "src/heap/combined-heap.h"
 #include "src/heap/heap-inl.h"
@@ -32,24 +40,39 @@ ReadOnlySpace::ReadOnlySpace(Heap* heap)
       area_size_(MemoryChunkLayout::AllocatableMemoryInMemoryChunk(RO_SPACE)) {}
 
 ReadOnlySpace::~ReadOnlySpace() {
-  Unseal();
+  // Do we actually have to unseal to delete the pages?
+  // Unseal();
+  // TearDown(heap()->memory_allocator());
+}
+
+void ReadOnlySpace::TearDown(MemoryAllocator* memory_allocator) {
   for (ReadOnlyPage* chunk : pages_) {
-    heap()->memory_allocator()->FreeReadOnlyPage(chunk);
+    memory_allocator->FreeReadOnlyPage(chunk, false);
   }
   pages_.resize(0);
   accounting_stats_.Clear();
 }
 
 ReadOnlyArtifacts::~ReadOnlyArtifacts() {
+#ifdef V8_SHARED_RO_HEAP
   v8::PageAllocator* page_allocator = GetPlatformPageAllocator();
+
+  // This particular SharedReadOnlySpace should not destroy its own pages.
+  shared_read_only_space_->pages_.resize(0);
 
   for (ReadOnlyPage* chunk : pages_) {
     void* chunk_address = reinterpret_cast<void*>(chunk->address());
+    // TODO(delphick): If we released marking_bitmap_ without nulling it, then
+    // it wouldn't be necessary to make the pages writable.
     page_allocator->SetPermissions(chunk_address, chunk->size(),
                                    PageAllocator::kReadWrite);
     size_t size = RoundUp(chunk->size(), page_allocator->AllocatePageSize());
+    chunk->ReleaseMarkingBitmap();
     CHECK(page_allocator->FreePages(chunk_address, size));
   }
+#else
+  DCHECK_NULL(shared_read_only_space_);
+#endif  // V8_SHARED_RO_HEAP
 }
 
 void ReadOnlyArtifacts::set_read_only_heap(
@@ -57,39 +80,164 @@ void ReadOnlyArtifacts::set_read_only_heap(
   read_only_heap_ = std::move(read_only_heap);
 }
 
+#ifdef V8_SHARED_RO_HEAP
+#ifdef V8_COMPRESS_POINTERS
+void ReadOnlyArtifacts::MakeSharedCopy(
+    const std::vector<ReadOnlyPage*>& pages) {
+  DCHECK(pages_.empty());
+  DCHECK(!pages.empty());
+  v8::PageAllocator* page_allocator = GetPlatformPageAllocator();
+
+  for (const ReadOnlyPage* page : pages) {
+    size_t size = RoundUp(page->size(), page_allocator->AllocatePageSize());
+    // 1. Allocate some new memory for a copy of the page using
+    void* address = mmap(nullptr, size, PROT_READ | PROT_WRITE,
+                         MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    // TODO store the in-heap offset for the page?
+    std::memcpy(address, page, page->size());
+    ReadOnlyPage* new_page = reinterpret_cast<ReadOnlyPage*>(address);
+
+    pages_.push_back(new_page);
+    page_offsets_.push_back(CompressTagged(page->address()));
+
+    stats_.DecreaseAllocatedBytes(page->allocated_bytes(), page);
+    stats_.IncreaseAllocatedBytes(page->allocated_bytes(), new_page);
+  }
+}
+
+// static
+std::unique_ptr<ReadOnlyHeap> ReadOnlyArtifacts::CreateReadOnlyHeapForIsolate(
+    std::shared_ptr<ReadOnlyArtifacts> artifacts, Isolate* isolate) {
+  auto shared_read_only_space = std::make_unique<SharedReadOnlySpace>(
+      isolate->heap(), artifacts, GetIsolateRoot(isolate));
+  auto read_only_heap =
+      ReadOnlyHeap::CreateReadOnlyHeap(shared_read_only_space.release());
+  auto original_cache = artifacts->read_only_heap()->read_only_object_cache_;
+  auto& cache = read_only_heap->read_only_object_cache_;
+  Address new_base_address = GetIsolateRoot(isolate);
+  for (Object original_object : original_cache) {
+    Address original_address = original_object.ptr();
+    Address new_address = new_base_address + CompressTagged(original_address);
+    Object new_object = Object(new_address);
+    cache.push_back(new_object);
+  }
+  for (size_t i = 0; i < ReadOnlyHeap::kEntriesCount; ++i) {
+    read_only_heap->read_only_roots_[i] =
+        CompressTagged(artifacts->read_only_heap_->read_only_roots_[i]) +
+        new_base_address;
+  }
+  return read_only_heap;
+}
+#endif  // V8_COMPRESS_POINTERS
+#endif  // V8_SHARED_RO_HEAP
+
 SharedReadOnlySpace::~SharedReadOnlySpace() {
-  // Clear the chunk list before the space is deleted, so that the inherited
-  // destructors don't try to destroy the BasicMemoryChunks themselves.
+  // With pointer-compression, we need to unmap the memory since there is a
+  // separate mapping in each Isolate. Whereas without pointer compression...
+#ifndef V8_COMPRESS_POINTERS
+  // Clear the memory chunk list before the space is deleted, so that the
+  // inherited destructors don't try to destroy the MemoryChunks themselves.
   pages_.resize(0);
+#endif  // V8_COMPRESS_POINTERS
 }
 
 SharedReadOnlySpace::SharedReadOnlySpace(
-    Heap* heap, std::shared_ptr<ReadOnlyArtifacts> artifacts)
+    Heap* heap, std::shared_ptr<ReadOnlyArtifacts> artifacts,
+    Address new_base_address)
     : ReadOnlySpace(heap) {
-  pages_ = artifacts->pages();
-  is_marked_read_only_ = true;
+  CHECK(V8_SHARED_RO_HEAP_BOOL);
+
+#ifdef V8_SHARED_RO_HEAP
+#ifdef V8_COMPRESS_POINTERS
+  const std::vector<ReadOnlyPage*>& pages = artifacts->pages();
+  DCHECK(!pages.empty());
+  auto* memory_allocator = heap->memory_allocator();
+  auto* page_allocator = static_cast<base::BoundedPageAllocator*>(
+      heap->memory_allocator()->page_allocator(NOT_EXECUTABLE));
   accounting_stats_ = artifacts->accounting_stats();
+  if (new_base_address != 0) {
+    // The previous ReadOnlyPages have now been reclaimed. So now we have to get
+    // them back again so that it thinks it still owns them.
+    for (size_t i = 0; i < pages.size(); ++i) {
+      const ReadOnlyPage* page = pages[i];
+      const Tagged_t offset = artifacts->OffsetForPage(i);
+      Address new_address = new_base_address + offset;
+      size_t size = RoundUp(page->size(), page_allocator->AllocatePageSize());
+      bool success = page_allocator->AllocatePagesAt(new_address, size,
+                                                     PageAllocator::kRead);
+      CHECK(success);
+      ReadOnlyPage* p = static_cast<ReadOnlyPage*>(mremap(
+          const_cast<void*>(reinterpret_cast<const void*>(page)), 0, size,
+          MREMAP_FIXED | MREMAP_MAYMOVE, reinterpret_cast<void*>(new_address)));
+
+      // Re-jig the allocation stats to account for the new memory address.
+      size_t page_size = page->allocated_bytes();
+      accounting_stats_.DecreaseAllocatedBytes(page_size, page);
+      accounting_stats_.IncreaseAllocatedBytes(page_size, p);
+
+      memory_allocator->RegisterReadOnlyMemory(p);
+      CHECK_NE(p, (void*)-1);
+      pages_.push_back(p);
+    }
+  } else {
+    for (ReadOnlyPage* page : pages) {
+      pages_.push_back(page);
+      accounting_stats_.IncreaseAllocatedBytes(page->allocated_bytes(), page);
+    }
+  }
+#else
+  accounting_stats_ = artifacts->accounting_stats();
+  pages_ = artifacts->pages();
+#endif  // V8_COMPRESS_POINTERS
+
+  is_marked_read_only_ = true;
   top_ = kNullAddress;
   limit_ = kNullAddress;
+#else
+  // SharedReadOnlyHeap should only be constructed when RO_SPACE is shared.
+  UNREACHABLE();
+#endif  // V8_SHARED_RO_HEAP
 }
 
+#ifdef V8_SHARED_RO_HEAP
 void ReadOnlySpace::DetachPagesAndAddToArtifacts(
     std::shared_ptr<ReadOnlyArtifacts> artifacts) {
   Heap* heap = ReadOnlySpace::heap();
   Seal(SealMode::kDetachFromHeapAndForget);
   artifacts->set_accounting_stats(accounting_stats_);
+#ifdef V8_COMPRESS_POINTERS
+  artifacts->MakeSharedCopy(pages_);
+#else
   artifacts->TransferPages(std::move(pages_));
+#endif  // V8_COMPRESS_POINTERS
+  heap->ReplaceReadOnlySpace(nullptr);
+
+  // The previous line will have destroyed the "this" object, so it's not safe
+  // to access any members from this point onwards.
   artifacts->set_shared_read_only_space(
-      std::make_unique<SharedReadOnlySpace>(heap, artifacts));
+      std::make_unique<SharedReadOnlySpace>(heap, artifacts, 0));
+
+#ifdef V8_COMPRESS_POINTERS
+  heap->ReplaceReadOnlySpace(new SharedReadOnlySpace(
+      heap, artifacts, GetIsolateRoot(heap->isolate())));
+  DCHECK_NE(heap->read_only_space(), artifacts->shared_read_only_space());
+#else
   heap->ReplaceReadOnlySpace(artifacts->shared_read_only_space());
+#endif  // V8_COMPRESS_POINTERS
 }
+#endif  // V8_SHARED_RO_HEAP
 
 void ReadOnlyPage::MakeHeaderRelocatable() {
-  // Detached read-only space needs to have a valid marking bitmap. Instruct
-  // Lsan to ignore it if required.
-  LSAN_IGNORE_OBJECT(marking_bitmap_);
+#if V8_COMPRESS_POINTERS
+  // The pages must be relocatable at this point and area_start and area_end are
+  // only used to calculate the area_size for capacity calculations so offset
+  // them from kNullAddress.
+  area_end_ -= area_start_;
+  area_start_ = kNullAddress;
+#endif  // V8_COMPRESS_POINTERS
   heap_ = nullptr;
   owner_ = nullptr;
+  reservation_.Reset();
 }
 
 void ReadOnlySpace::SetPermissionsForPages(MemoryAllocator* memory_allocator,
@@ -151,10 +299,16 @@ void ReadOnlySpace::Seal(SealMode ro_mode) {
   auto* memory_allocator = heap()->memory_allocator();
 
   if (ro_mode == SealMode::kDetachFromHeapAndForget) {
+#ifndef V8_COMPRESS_POINTERS
+    // For now at least the ReadOnlySpace object is shared without pointer
+    // compression, so it cannot link to a Heap object.
     DetachFromHeap();
-    for (BasicMemoryChunk* chunk : pages_) {
-      memory_allocator->UnregisterMemory(chunk);
-      static_cast<ReadOnlyPage*>(chunk)->MakeHeaderRelocatable();
+#endif  // V8_COMPRESS_POINTERS
+    for (ReadOnlyPage* p : pages_) {
+#ifndef V8_COMPRESS_POINTERS
+      memory_allocator->UnregisterMemory(p);
+#endif  // V8_COMPRESS_POINTERS
+      p->MakeHeaderRelocatable();
     }
   }
 
