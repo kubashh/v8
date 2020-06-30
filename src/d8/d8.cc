@@ -3369,6 +3369,9 @@ bool Shell::SetOptions(int argc, char* argv[]) {
   }
 
   v8::V8::SetFlagsFromCommandLine(&argc, argv, true);
+  if (i::FLAG_help) {
+    exit(0);
+  }
   options.mock_arraybuffer_allocator = i::FLAG_mock_arraybuffer_allocator;
   options.mock_arraybuffer_allocator_limit =
       i::FLAG_mock_arraybuffer_allocator_limit;

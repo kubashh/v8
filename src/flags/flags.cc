@@ -483,7 +483,6 @@ int FlagList::SetFlagsFromCommandLine(int* argc, char** argv,
 
   if (FLAG_help) {
     PrintHelp();
-    exit(0);
   }
 
   if (remove_flags) {
