@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25527122_d92cdb4c",
+        "filename": "src/compiler/c-linkage.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-30T08:53:15Z",
+      "side": 1,
+      "message": "Please refactor this into a common helper function used here and by Linkage::GetStubCallDescriptor.",
+      "revId": "304dbf5366ec6e0b7bf0f8255883b4ccc012ed94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a87a43f8_2ac58826",
+        "filename": "src/compiler/c-linkage.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-30T08:53:15Z",
+      "side": 1,
+      "message": "nit: i++?",
+      "revId": "304dbf5366ec6e0b7bf0f8255883b4ccc012ed94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13942bb3_9bba12dc",
+        "filename": "src/compiler/c-linkage.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-30T08:53:15Z",
+      "side": 1,
+      "message": "++, same below.",
+      "revId": "304dbf5366ec6e0b7bf0f8255883b4ccc012ed94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d20cad9b_0cb84d0d",
+        "filename": "src/compiler/c-linkage.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-30T08:53:15Z",
+      "side": 1,
+      "message": "consistency nit: FP_PARAM_REGISTERS and kFpParamRegisters.",
+      "revId": "304dbf5366ec6e0b7bf0f8255883b4ccc012ed94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cffefa01_5c217fb2",
+        "filename": "src/compiler/c-linkage.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-30T08:53:15Z",
+      "side": 1,
+      "message": "The case in which we run out fp registers before normal registers, and vice versa, seems interesting. Please add tests for that.",
+      "revId": "304dbf5366ec6e0b7bf0f8255883b4ccc012ed94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "808dbd6a_8528f2a2",
+        "filename": "src/compiler/c-linkage.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-06-30T08:53:15Z",
+      "side": 1,
+      "message": "Is it possible to nicely combine the else branches here and below? In fact you could merge the two branches entirely by just passing the correct num_{,fp_}params, k{,FP]ParamRegisterCount, k{,FP]ParamRegisters.",
+      "revId": "304dbf5366ec6e0b7bf0f8255883b4ccc012ed94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
