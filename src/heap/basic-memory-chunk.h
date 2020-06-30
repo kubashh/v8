@@ -116,14 +116,6 @@ class BasicMemoryChunk {
   // Returns the offset of a given address to this page.
   inline size_t Offset(Address a) { return static_cast<size_t>(a - address()); }
 
-  // Returns the address for a given offset to the this page.
-  Address OffsetToAddress(size_t offset) {
-    Address address_in_page = address() + offset;
-    DCHECK_GE(address_in_page, area_start());
-    DCHECK_LT(address_in_page, area_end());
-    return address_in_page;
-  }
-
   // Some callers rely on the fact that this can operate on both
   // tagged and aligned object addresses.
   inline uint32_t AddressToMarkbitIndex(Address addr) const {
