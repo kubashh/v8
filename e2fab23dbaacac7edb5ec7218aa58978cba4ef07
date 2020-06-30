@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "b6ffc5a0_c661afd4",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-30T15:13:27Z",
+      "side": 1,
+      "message": "I think this would do the wrong thing in a module where e.g. 112 is a valid type index. It would be LEB-encoded as {0x0, 0xF0}, so this code would erroneously take the kLocalFuncRef branch below. I think you have to check for heap_index \u003c 0 before relying on this truncation. You could change the mask to 0xFF, but then you\u0027d miss out on inefficiently coded sentinels (which I think are legal?): funcref may be {0x70} or {0x7F, 0xF0} or {0x7F, 0xFF, 0xF0} etc.\n\nAlso, for consistency with `uint8_t code`, let\u0027s use `uint8_t{0x7F}`.",
+      "range": {
+        "startLine": 149,
+        "startChar": 58,
+        "endLine": 149,
+        "endChar": 62
+      },
+      "revId": "e2fab23dbaacac7edb5ec7218aa58978cba4ef07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4655c371_85cb9dc3",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-30T15:13:27Z",
+      "side": 1,
+      "message": "We don\u0027t support RTTs for generic types yet; I suspect our fuzzers will run into UNREACHABLE() code down the line. Please add:\n\n  // TODO(7748): Support RTTs for generic types.\n  if (heap \u003e\u003d HeapType::kFirstSentinel) {\n    decoder-\u003eerror(pc, \"UNIMPLEMENTED\");\n    return kWasmBottom;\n  }",
+      "range": {
+        "startLine": 265,
+        "startChar": 6,
+        "endLine": 265,
+        "endChar": 41
+      },
+      "revId": "e2fab23dbaacac7edb5ec7218aa58978cba4ef07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8cf0af6_e0208828",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-30T15:13:27Z",
+      "side": 1,
+      "message": "Do we need a bounds check before this cast, or is it guaranteed that this will never cut off any non-zero bits?",
+      "range": {
+        "startLine": 414,
+        "startChar": 6,
+        "endLine": 414,
+        "endChar": 52
+      },
+      "revId": "e2fab23dbaacac7edb5ec7218aa58978cba4ef07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "905763a1_294cdb90",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-30T15:13:27Z",
+      "side": 1,
+      "message": "nit: let\u0027s spell it out: Representation.",
+      "range": {
+        "startLine": 48,
+        "startChar": 7,
+        "endLine": 48,
+        "endChar": 11
+      },
+      "revId": "e2fab23dbaacac7edb5ec7218aa58978cba4ef07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "974fbcb5_4360a1dd",
         "filename": "src/wasm/value-type.h",
         "patchSetId": 10
@@ -30,6 +122,75 @@
       "writtenOn": "2020-06-30T14:23:41Z",
       "side": 1,
       "message": "nit: constexpr",
+      "revId": "e2fab23dbaacac7edb5ec7218aa58978cba4ef07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ad1857b_7f60f21b",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-30T15:13:27Z",
+      "side": 1,
+      "message": "nit: representation_from_code",
+      "range": {
+        "startLine": 63,
+        "startChar": 14,
+        "endLine": 63,
+        "endChar": 33
+      },
+      "revId": "e2fab23dbaacac7edb5ec7218aa58978cba4ef07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1feccf67_7d64335b",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-30T15:13:27Z",
+      "side": 1,
+      "message": "nit: representation",
+      "range": {
+        "startLine": 93,
+        "startChar": 21,
+        "endLine": 93,
+        "endChar": 25
+      },
+      "revId": "e2fab23dbaacac7edb5ec7218aa58978cba4ef07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "210233d7_929b5905",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-30T15:13:27Z",
+      "side": 1,
+      "message": "nit: representation_",
+      "range": {
+        "startLine": 142,
+        "startChar": 7,
+        "endLine": 142,
+        "endChar": 12
+      },
       "revId": "e2fab23dbaacac7edb5ec7218aa58978cba4ef07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
