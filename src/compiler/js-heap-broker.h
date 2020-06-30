@@ -14,6 +14,9 @@
 #include "src/compiler/refs-map.h"
 #include "src/compiler/serializer-hints.h"
 #include "src/handles/handles.h"
+#include "src/handles/local-handles.h"
+#include "src/handles/persistent-handles.h"
+#include "src/heap/local-heap.h"
 #include "src/interpreter/bytecode-array-accessor.h"
 #include "src/objects/feedback-vector.h"
 #include "src/objects/function-kind.h"
@@ -252,6 +255,8 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   bool const tracing_enabled_;
   bool const is_concurrent_inlining_;
   bool const is_native_context_independent_;
+  LocalHeap local_heap_;
+  LocalHandleScope local_handle_scope_;
   unsigned trace_indentation_ = 0;
   PerIsolateCompilerCache* compiler_cache_ = nullptr;
   ZoneUnorderedMap<FeedbackSource, ProcessedFeedback const*,
