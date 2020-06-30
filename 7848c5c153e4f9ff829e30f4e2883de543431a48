@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47131aa8_a6dc0301",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-30T09:44:14Z",
+      "side": 1,
+      "message": "Uhh, macros within macros which take other macros as parameter?\nThis style was used a lot in the past, and in one of our last retrospectives we (the whole v8 team) decided to move away from macros, i.e. try to avoid them where possible, or only use them for trivial stuff.\nThe main problem I see here is that compile errors get pretty useless and debugging gets really hard, because you can\u0027t step through the code within the macros.\n\nI think these macros can be avoided by having a few simple helper functions, like\nbool IsSimpleHeapTypeCode(int64_t); // or uint8_t?\nWasmFeature GetFeatureForHeapType(ValueTypeCode);\nconst char* GetFeatureName(WasmFeature);\n\nCan you try to refactor accordingly?",
+      "revId": "7848c5c153e4f9ff829e30f4e2883de543431a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
