@@ -16,6 +16,24 @@
       "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e094332b_bdeb2eda",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3094,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-06-30T16:59:19Z",
+      "side": 1,
+      "message": "\u003e range covering loop start should also cover the direct predecessor, but not necessarily others\n\nSorry, I don\u0027t think I understand some necessary background information. Do we have a guarantee that the block immediately preceding a loop header block in the RPO is a predecessor of that block?\n\n\u003e If pos is within loop header block, shall we simply check whether this range covers loop start?\n\nI tried this and it doesn\u0027t find the covering range in every case. A range might already have been split within the loop header block. Here is an example in-progress register allocation:\n\n  [-B89--][-B90----------][-B91--------------][-B][-B][-B][-B95--][-B]\n    |r11\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d|unassigned\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\nBlock B91 is a loop header. This particular value was originally assigned to r11 at its definition in block B89, but its live range is already split because of a fixed register assignment (there is a call in B91). So the current range (the unassigned part) is not the range covering the loop start (the r11 part).\n\n\u003e Or would it be simpler to just search from range-\u003eTopLevel()?\n\nAbsolutely! I\u0027m not sure if it might also be slower though. I\u0027d be happy to replace all of this with a single call to range-\u003eTopLevel()-\u003eGetChildCovers(loop_start) if everybody thinks it\u0027s okay to; I was assuming that GetChildCovers is too slow here, based on the simple fact that we weren\u0027t already using it 😊. Sigurd, what do you recommend?",
+      "parentUuid": "cf0b4a81_6e2309e2",
+      "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
