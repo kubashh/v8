@@ -16,7 +16,7 @@ namespace compiler {
 
 namespace {
 
-void CreateSplinter(TopLevelLiveRange* range, RegisterAllocationData* data,
+void CreateSplinter(TopLevelLiveRange* range, RegisterAllocatorData* data,
                     LifetimePosition first_cut, LifetimePosition last_cut,
                     bool trace_alloc) {
   DCHECK(!range->IsSplinter());
@@ -68,7 +68,7 @@ void SetSlotUse(TopLevelLiveRange* range) {
   }
 }
 
-void SplinterLiveRange(TopLevelLiveRange* range, RegisterAllocationData* data) {
+void SplinterLiveRange(TopLevelLiveRange* range, RegisterAllocatorData* data) {
   const InstructionSequence* code = data->code();
   UseInterval* interval = range->first_interval();
 

@@ -3,7 +3,10 @@
 // found in the LICENSE file.
 
 #include "test/unittests/compiler/backend/instruction-sequence-unittest.h"
+
 #include "src/base/utils/random-number-generator.h"
+#include "src/common/globals.h"
+#include "src/compiler/backend/instruction.h"
 #include "src/compiler/pipeline.h"
 #include "test/unittests/test-utils.h"
 #include "testing/gmock/include/gmock/gmock.h"
@@ -119,11 +122,11 @@ Instruction* InstructionSequenceTest::EndBlock(BlockCompletion completion) {
     case kBlockEnd:
       break;
     case kFallThrough:
-      result = EmitJump();
+      result = EmitJump(completion.op_);
       break;
     case kJump:
       CHECK(!block_returns_);
-      result = EmitJump();
+      result = EmitJump(completion.op_);
       break;
     case kBranch:
       CHECK(!block_returns_);
@@ -295,8 +298,8 @@ Instruction* InstructionSequenceTest::EmitFallThrough() {
   return AddInstruction(instruction);
 }
 
-Instruction* InstructionSequenceTest::EmitJump() {
-  InstructionOperand inputs[1]{ConvertInputOp(Imm())};
+Instruction* InstructionSequenceTest::EmitJump(TestOperand input_op) {
+  InstructionOperand inputs[1]{ConvertInputOp(input_op)};
   auto instruction = NewInstruction(kArchJmp, 0, nullptr, 1, inputs);
   return AddInstruction(instruction);
 }
@@ -425,6 +428,7 @@ InstructionBlock* InstructionSequenceTest::NewBlock(bool deferred) {
   Rpo rpo = Rpo::FromInt(static_cast<int>(instruction_blocks_.size()));
   Rpo loop_header = Rpo::Invalid();
   Rpo loop_end = Rpo::Invalid();
+  Rpo dominator = Rpo::Invalid();
   if (!loop_blocks_.empty()) {
     auto& loop_data = loop_blocks_.back();
     // This is a loop header.
@@ -441,8 +445,8 @@ InstructionBlock* InstructionSequenceTest::NewBlock(bool deferred) {
     }
   }
   // Construct instruction block.
-  auto instruction_block = new (zone())
-      InstructionBlock(zone(), rpo, loop_header, loop_end, deferred, false);
+  auto instruction_block = new (zone()) InstructionBlock(
+      zone(), rpo, loop_header, loop_end, dominator, deferred, false);
   instruction_blocks_.push_back(instruction_block);
   current_block_ = instruction_block;
   sequence()->StartBlock(rpo);
@@ -477,6 +481,45 @@ void InstructionSequenceTest::WireBlocks() {
         break;
     }
     ++offset;
+  }
+
+  // Calculate and set dominators for blocks.
+  CalculateDominators();
+}
+
+void InstructionSequenceTest::CalculateDominators() {
+  CHECK_GT(instruction_blocks_.size(), 0);
+  ZoneVector<int> dominator_depth(instruction_blocks_.size(), -1, zone());
+
+  CHECK_EQ(instruction_blocks_[0]->rpo_number(), RpoNumber::FromInt(0));
+  dominator_depth[0] = 0;
+  instruction_blocks_[0]->set_dominator(RpoNumber::FromInt(0));
+
+  for (size_t i = 1; i < instruction_blocks_.size(); i++) {
+    InstructionBlock* block = instruction_blocks_[i];
+    auto pred = block->predecessors().begin();
+    auto end = block->predecessors().end();
+    DCHECK(pred != end);  // All blocks except start have predecessors.
+    RpoNumber dominator = *pred;
+    // For multiple predecessors, walk up the dominator tree until a common
+    // dominator is found. Visitation order guarantees that all predecessors
+    // except for backwards edges have been visited.
+    for (++pred; pred != end; ++pred) {
+      // Don't examine backwards edges.
+      if (dominator_depth[pred->ToInt()] < 0) continue;
+
+      RpoNumber other = *pred;
+      while (dominator != other) {
+        if (dominator_depth[dominator.ToInt()] <
+            dominator_depth[other.ToInt()]) {
+          other = instruction_blocks_[other.ToInt()]->dominator();
+        } else {
+          dominator = instruction_blocks_[dominator.ToInt()]->dominator();
+        }
+      }
+    }
+    block->set_dominator(dominator);
+    dominator_depth[i] = dominator_depth[dominator.ToInt()] + 1;
   }
 }
 
