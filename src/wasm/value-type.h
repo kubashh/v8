@@ -86,18 +86,21 @@ class HeapType {
     }
   }
 
-  constexpr uint32_t code() {
+  constexpr int32_t code() {
+    // kLocal* constants represent the first byte of the LEB128 encoding. To get
+    // the code as an int32, we have to sign-extend the byte constant, including
+    // its most-significant bit (which is 0).
     switch (type_) {
       case kFunc:
-        return kLocalFuncRef;
+        return -1 & kLocalFuncRef;
       case kExn:
-        return kLocalExnRef;
+        return -1 & kLocalExnRef;
       case kExtern:
-        return kLocalExternRef;
+        return -1 & kLocalExternRef;
       case kEq:
-        return kLocalEqRef;
+        return -1 & kLocalEqRef;
       default:
-        return type_;
+        return static_cast<int32_t>(type_);
     }
   }
 
