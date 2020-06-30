@@ -49,6 +49,24 @@ class HeapType {
   static const uint32_t kExtern = kFunc + 1;      // shorthand: e
   static const uint32_t kEq = kFunc + 2;          // shorthand: q
   static const uint32_t kExn = kFunc + 3;         // shorthand: x
+  // This code is used to represent failures in the parsing of heap types and
+  // does not correspond to a wasm heap type.
+  static const uint32_t kBottom = kFunc + 4;
+
+  static uint32_t heap_from_code(uint8_t code) {
+    switch (code) {
+      case ValueTypeCode::kLocalFuncRef:
+        return kFunc;
+      case ValueTypeCode::kLocalExternRef:
+        return kExtern;
+      case ValueTypeCode::kLocalEqRef:
+        return kEq;
+      case ValueTypeCode::kLocalExnRef:
+        return kExn;
+      default:
+        return kBottom;
+    }
+  }
 
   explicit constexpr HeapType(uint32_t type) : type_(type) {
     CONSTEXPR_DCHECK(is_valid());
@@ -89,18 +107,21 @@ class HeapType {
     }
   }
 
-  constexpr uint32_t code() {
+  constexpr int32_t code() {
+    // kLocal* codes represent the first byte of the LEB128 encoding. To get the
+    // int32 represented by a code, we need to sign-extend it from 7 to 32 bits.
+    int32_t mask = 0xFFFFFF80;
     switch (type_) {
       case kFunc:
-        return kLocalFuncRef;
+        return mask | kLocalFuncRef;
       case kExn:
-        return kLocalExnRef;
+        return mask | kLocalExnRef;
       case kExtern:
-        return kLocalExternRef;
+        return mask | kLocalExternRef;
       case kEq:
-        return kLocalEqRef;
+        return mask | kLocalEqRef;
       default:
-        return type_;
+        return static_cast<int32_t>(type_);
     }
   }
 
@@ -109,7 +130,7 @@ class HeapType {
   uint32_t type_;
   constexpr bool is_valid() const {
     STATIC_ASSERT(kFunc <= kExn && kExtern <= kExn && kEq <= kExn);
-    return type_ <= kExn;
+    return type_ <= kBottom;
   }
 };
 enum Nullability : bool { kNonNullable, kNullable };
