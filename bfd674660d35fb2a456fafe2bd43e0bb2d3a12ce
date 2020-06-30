@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "682ce494_2ff4a6bd",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-30T12:54:41Z",
+      "side": 1,
+      "message": "The HeapType class current stores a type_. This can be one of kFunc, kExtern, ..., or a value between 0 and kV8MaxWasmTypes, right?\nWhat if we introduce an enum for that, so we have a C++ type to reference to that. Something like\nenum HeapTypeCode { kFunc \u003d kV8MaxWasmTypes, kExtern, kEq, ...}.\n(note that this enum an also store all values in [0, kV8MaxWasmTypes) then).\n\nAnd then in HeapType:\n  HeapTypeCode code_;\n\nThen the {code()} method could return a HeapTypeCode. And this method here would be \"HeapTypeCode HeapCodeFromValueCode(uint8_t value_code)\".\n\nDoes that make sense?",
+      "parentUuid": "02f9a948_303db457",
+      "range": {
+        "startLine": 56,
+        "startChar": 18,
+        "endLine": 56,
+        "endChar": 32
+      },
+      "revId": "bfd674660d35fb2a456fafe2bd43e0bb2d3a12ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f496e901_16c05f37",
         "filename": "src/wasm/value-type.h",
         "patchSetId": 6
