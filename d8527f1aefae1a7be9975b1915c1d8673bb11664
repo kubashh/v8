@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "786f3dd3_fef4beb1",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-30T17:56:07Z",
+      "side": 1,
+      "message": "I think we should add kLocalI31Ref to this list.",
+      "range": {
+        "startLine": 156,
+        "startChar": 11,
+        "endLine": 156,
+        "endChar": 26
+      },
+      "revId": "d8527f1aefae1a7be9975b1915c1d8673bb11664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1b04e2a_4781dbfe",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-06-30T17:56:07Z",
+      "side": 1,
+      "message": "AFAICS we get this check for free as part of read_heap_type (called right below), so we can drop it here?",
+      "range": {
+        "startLine": 232,
+        "startChar": 6,
+        "endLine": 238,
+        "endChar": 7
+      },
+      "revId": "d8527f1aefae1a7be9975b1915c1d8673bb11664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
