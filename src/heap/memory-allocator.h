@@ -198,7 +198,9 @@ class MemoryAllocator {
   template <MemoryAllocator::FreeMode mode = kFull>
   EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
   void Free(MemoryChunk* chunk);
-  void FreeReadOnlyPage(ReadOnlyPage* chunk);
+  // If delete_shared is true, then shared artifacts for each page are also
+  // deleted (e.g. marking bitmap).
+  void FreeReadOnlyPage(ReadOnlyPage* chunk, bool delete_shared);
 
   // Returns allocated spaces in bytes.
   size_t Size() const { return size_; }
@@ -303,6 +305,9 @@ class MemoryAllocator {
   void UnregisterMemory(MemoryChunk* chunk);
   void UnregisterMemory(BasicMemoryChunk* chunk,
                         Executability executable = NOT_EXECUTABLE);
+  void UnregisterSharedMemory(BasicMemoryChunk* chunk);
+
+  void RegisterReadOnlyMemory(ReadOnlyPage* page);
 
  private:
   void InitializeCodePageAllocator(v8::PageAllocator* page_allocator,

@@ -792,6 +792,23 @@ TEST(NoMemoryForNewPage) {
   CHECK_NULL(page);
 }
 
+namespace {
+// ReadOnlySpace cannot be torn down by a destructor because the destructor
+// cannot take an argument. Since these tests create ReadOnlySpaces not attached
+// to the Heap directly, they need to be destroyed to ensure the
+// MemoryAllocator's stats are all 0 at exit.
+class ReadOnlySpaceScope {
+ public:
+  explicit ReadOnlySpaceScope(ReadOnlySpace* ro_space) : ro_space_(ro_space) {}
+  ~ReadOnlySpaceScope() {
+    ro_space_->TearDown(CcTest::heap()->memory_allocator());
+  }
+
+ private:
+  ReadOnlySpace* ro_space_;
+};
+}  // namespace
+
 TEST(ReadOnlySpaceMetrics_OnePage) {
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();
@@ -800,6 +817,7 @@ TEST(ReadOnlySpaceMetrics_OnePage) {
   // check the allocated object size is as expected.
 
   ReadOnlySpace faked_space(heap);
+  ReadOnlySpaceScope scope(&faked_space);
 
   // Initially no memory.
   CHECK_EQ(faked_space.Size(), 0);
@@ -836,6 +854,7 @@ TEST(ReadOnlySpaceMetrics_AlignedAllocations) {
   // check the allocated object size is as expected.
 
   ReadOnlySpace faked_space(heap);
+  ReadOnlySpaceScope scope(&faked_space);
 
   // Initially no memory.
   CHECK_EQ(faked_space.Size(), 0);
@@ -889,6 +908,7 @@ TEST(ReadOnlySpaceMetrics_TwoPages) {
   // check the allocated object size is as expected.
 
   ReadOnlySpace faked_space(heap);
+  ReadOnlySpaceScope scope(&faked_space);
 
   // Initially no memory.
   CHECK_EQ(faked_space.Size(), 0);
