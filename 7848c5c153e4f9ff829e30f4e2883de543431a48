@@ -16,6 +16,24 @@
       "revId": "7848c5c153e4f9ff829e30f4e2883de543431a48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33d6a518_a93d9ba8",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-06-30T10:14:57Z",
+      "side": 1,
+      "message": "Those things can be factored out for sure, what is harder is that I do not want to return an error value from a function, only to have to check later and translate it to the \u0027local\u0027 error value.",
+      "parentUuid": "47131aa8_a6dc0301",
+      "revId": "7848c5c153e4f9ff829e30f4e2883de543431a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
