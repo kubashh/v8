@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf0b4a81_6e2309e2",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3094,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-06-30T09:57:42Z",
+      "side": 1,
+      "message": "We will spill all ranges before the optimal spilling pos later, hence range covering loop start should also cover the direct predecessor, but not necessary others. If pos is within loop header block, shall we simply check whether this range covers loop start? Or would it be simpler to just search from range-\u003eTopLevel()?",
+      "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
