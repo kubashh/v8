@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "974fbcb5_4360a1dd",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-30T14:23:41Z",
+      "side": 1,
+      "message": "nit: constexpr instead of const.",
+      "revId": "e2fab23dbaacac7edb5ec7218aa58978cba4ef07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c544a7fe_8b892632",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-06-30T14:23:41Z",
+      "side": 1,
+      "message": "nit: constexpr",
+      "revId": "e2fab23dbaacac7edb5ec7218aa58978cba4ef07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
