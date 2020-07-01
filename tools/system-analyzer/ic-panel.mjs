@@ -14,7 +14,11 @@ defineCustomElement('ic-panel', (templateText) =>
         'change', e => this.updateTable(e));
     this.filterICBtnSelect.addEventListener(
         'click', e => this.handleICFilter(e));
+    this.$('#filterICTimeBtn').addEventListener(
+      'click', e => this.handleICTimeFilter(e));
     this._noOfItems = 100;
+    this._startTime = 0;
+    this._endTime = 0;
   }
 
   $(id) {
@@ -49,12 +53,19 @@ defineCustomElement('ic-panel', (templateText) =>
     return this.querySelectorAll("span");
   }
 
-  updateTable(event) {
+  updateTable(event, eventType = 'default') {
+    if(eventType === 'default'){
+      this._startTime = 0;
+      this._endTime = entries[entries.length-1].time;
+      console.log("end time in: " + this._endTime);
+    }
     let select = this.groupKeySelect;
     let key = select.options[select.selectedIndex].text;
     let tableBody = this.tableBodySelect;
     this.removeAllChildren(tableBody);
+    this.processTimelineIC(entries);
     let groups = Group.groupBy(entries, key, true);
+    console.log(groups);
     this.display(groups, tableBody);
   }
 
@@ -127,6 +138,7 @@ defineCustomElement('ic-panel', (templateText) =>
     parent.appendChild(fragment);
   }
 
+
   displayDrilldown(entry, previousSibling) {
     let tr = document.createElement('tr');
     tr.className = "entry-details";
@@ -183,14 +195,26 @@ defineCustomElement('ic-panel', (templateText) =>
     }
   }
 
+  //TODO(ZC): Emit event if the address has a valid V8-Map state
+  sendMapClickedEvent(entry){
+    let dataModel = Object.create(null);
+    let selectedMap = V8Map.get("0x" + entry.map);
+    if(selectedMap){
+      dataModel.isValidMap = true;
+      dataModel.map = selectedMap;
+    } else {
+      dataModel.isValidMap = false;
+    }
+    this.dispatchEvent(new CustomEvent(
+      'click', {bubbles: true, composed: true, detail: dataModel}));
+  }
+
   //TODO(zc): Function processing the timestamps of ICEvents
   // Processes the IC Events which have V8Map's in the map-processor
   processICEventTime(){
     let ICTimeToEvent = new Map();
-    // save the occurance time of V8Maps
     let eventTimes = []
-    console.log("Num of stats: " + entries.length);
-    // fetch V8 Maps from the IC Events
+    console.log("Num of entries: " + entries.length);
     entries.forEach(element => {
       let v8Map = V8Map.get("0x" + element.map);
       if(!v8Map){
@@ -214,4 +238,32 @@ defineCustomElement('ic-panel', (templateText) =>
     this.noOfItems = noOfItemsInput;
     this.updateTable(e);
   }
+
+  // TODO(zc) for test delete later
+  handleICTimeFilter(e){
+    this._startTime = parseInt(this.$('#filter-time-start').value);
+    this._endTime = parseInt(this.$('#filter-time-end').value);
+    console.log("start: ", this._startTime, "end: ", this._endTime);
+    this.updateTable(e, 'time');
+  }
+
+  // process IC events and display in a Timeline view
+  //TODO(zc): new functionality
+  processTimelineIC(entries){
+    let parent = this.$('#details')
+    let marginLeft = 0;
+    for (let index = 0; index < entries.length; index++) {
+      const entry = entries[index];
+      let div = document.createElement("div");
+      div.className = 'TL-cell';
+      div.style = "width:150px; margin-left:0px;";
+      let entryDetails = "type: " + entry.type + " category: " + entry.category + ' (' + entry.oldState + '->' + entry.newState + ') ' +
+      ' (map: 0x' + entry.map.toString(16) + ')' + " key: " + entry.key;
+      //console.log(entry);
+      div.innerHTML = entryDetails;
+      marginLeft += 100;
+      parent.append(div);
+    }
+  }
+
 });
