@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d5c4a3d_47bb56f9",
+        "filename": "src/compiler/js-operator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-01T11:24:13Z",
+      "side": 1,
+      "message": "Note this is a drive-by change. Arity now accurately reflects that there\u0027s 1 arg. Before this CL it inaccurately said \u00270 args\u0027, and all use-sites had to work around that.\n\nSee also the previous disagreement between \u00272\u0027 here and \u00273\u0027 in line 792.",
+      "revId": "c145336570c692c82c95e4a333974d7cb2ec7210",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
