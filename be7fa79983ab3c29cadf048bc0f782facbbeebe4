@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "21eac851_13170d10",
+        "filename": "tools/system-analyzer/ic-panel-template.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-01T09:19:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9148ae08_ad561d74",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9358d206_927b2d34",
         "filename": "tools/system-analyzer/ic-panel.mjs",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3acf0ac6_4dca9d89",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-01T09:19:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9358d206_927b2d34",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "4073946a_0cd3f40f",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-01T09:19:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f344b69_c3e30d1d",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4390b4a0_8fb7769c",
         "filename": "tools/system-analyzer/ic-panel.mjs",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb3fdcff_09cb5de5",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-01T09:19:33Z",
+      "side": 1,
+      "message": "Thanks 😊",
+      "parentUuid": "4390b4a0_8fb7769c",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "ff646da6_51e7e388",
+        "filename": "tools/system-analyzer/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-01T09:19:33Z",
+      "side": 1,
+      "message": "Do you know how can I do it now? 😮",
+      "parentUuid": "9b1da9a5_d97bc19d",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e5e9947_350e5b47",
         "filename": "tools/system-analyzer/ic-processor.js",
         "patchSetId": 1
@@ -101,6 +191,24 @@
       "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b75aaaf5_5093480c",
+        "filename": "tools/system-analyzer/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-01T09:19:33Z",
+      "side": 1,
+      "message": "Sorry had some version issues when managing both personal and corporate accounts 😞",
+      "parentUuid": "6e5e9947_350e5b47",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
