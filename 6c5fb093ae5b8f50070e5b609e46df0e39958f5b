@@ -34,6 +34,24 @@
       "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3ffaeb5_a666de52",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3094,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-07-01T08:58:43Z",
+      "side": 1,
+      "message": "\u003e I was assuming that GetChildCovers is too slow here, based on the simple fact that we weren\u0027t already using it\nIndeed, I wrote this with performance in mind because the spill state appears to stay small in general compared to the live range chains, but I did not measure the performance impact since both approaches were simple enough.\nBut now that this approach is getting more complex I would be willing to try the \"GetChildCovers\" approach instead, and check that this does not introduce noticeable regressions.",
+      "parentUuid": "e094332b_bdeb2eda",
+      "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
