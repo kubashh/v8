@@ -22,7 +22,8 @@ class TyperTest : public TypedGraphTest {
  public:
   TyperTest()
       : TypedGraphTest(3),
-        broker_(isolate(), zone()),
+        persistent_handles_(isolate()->NewPersistentHandles()),
+        broker_(isolate(), zone(), std::move(persistent_handles_)),
         operation_typer_(&broker_, zone()),
         types_(zone(), isolate(), random_number_generator()),
         javascript_(zone()),
@@ -56,6 +57,7 @@ class TyperTest : public TypedGraphTest {
 
   const int kRepetitions = 50;
 
+  std::unique_ptr<PersistentHandles> persistent_handles_;
   JSHeapBroker broker_;
   OperationTyper operation_typer_;
   Types types_;

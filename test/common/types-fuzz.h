@@ -41,7 +41,10 @@ namespace compiler {
 class Types {
  public:
   Types(Zone* zone, Isolate* isolate, v8::base::RandomNumberGenerator* rng)
-      : zone_(zone), js_heap_broker_(isolate, zone), rng_(rng) {
+      : zone_(zone),
+        persistent_handles_(isolate->NewPersistentHandles()),
+        js_heap_broker_(isolate, zone, std::move(persistent_handles_)),
+        rng_(rng) {
 #define DECLARE_TYPE(name, value) \
   name = Type::name();            \
   types.push_back(name);
@@ -208,6 +211,7 @@ class Types {
 
  private:
   Zone* zone_;
+  std::unique_ptr<PersistentHandles> persistent_handles_;
   JSHeapBroker js_heap_broker_;
   v8::base::RandomNumberGenerator* rng_;
 };

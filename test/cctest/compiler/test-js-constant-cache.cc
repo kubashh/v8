@@ -38,7 +38,8 @@ class JSConstantCacheTester : public HandleAndZoneScope,
         JSGraph(main_isolate(), &main_graph_, &main_common_, &main_javascript_,
                 nullptr, &main_machine_),
         canonical_(main_isolate()),
-        broker_(main_isolate(), main_zone()) {
+        persistent_handles_(main_isolate()->NewPersistentHandles()),
+        broker_(main_isolate(), main_zone(), std::move(persistent_handles_)) {
     main_graph_.SetStart(main_graph_.NewNode(common()->Start(0)));
     main_graph_.SetEnd(
         main_graph_.NewNode(common()->End(1), main_graph_.start()));
@@ -54,6 +55,7 @@ class JSConstantCacheTester : public HandleAndZoneScope,
 
  private:
   CanonicalHandleScope canonical_;
+  std::unique_ptr<PersistentHandles> persistent_handles_;
   JSHeapBroker broker_;
 };
 
