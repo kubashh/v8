@@ -5355,7 +5355,8 @@ Node* WasmGraphBuilder::RttSub(wasm::HeapType type, Node* parent_rtt) {
   }
   return CALL_BUILTIN(
       WasmAllocateRtt,
-      graph()->NewNode(mcgraph()->common()->NumberConstant(type.type())),
+      graph()->NewNode(
+          mcgraph()->common()->NumberConstant(type.representation())),
       parent_rtt,
       LOAD_INSTANCE_FIELD(NativeContext, MachineType::TaggedPointer()));
 }
@@ -5758,7 +5759,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     switch (type.kind()) {
       case wasm::ValueType::kRef:
       case wasm::ValueType::kOptRef: {
-        switch (type.heap()) {
+        switch (type.heap_representation()) {
           case wasm::HeapType::kExtern:
           case wasm::HeapType::kExn:
             return input;
