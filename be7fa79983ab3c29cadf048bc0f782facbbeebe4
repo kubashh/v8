@@ -177,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "aa4deb61_1087d01a",
+        "filename": "tools/system-analyzer/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-01T09:35:39Z",
+      "side": 1,
+      "message": "you just add the the changed log.cc file to your branch and upload it to this cls.\n\nYou also have to change the original src/ic-processor",
+      "parentUuid": "ff646da6_51e7e388",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e5e9947_350e5b47",
         "filename": "tools/system-analyzer/ic-processor.js",
         "patchSetId": 1
