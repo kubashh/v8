@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "669034c5_1b51cb6c",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3094,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-01T16:23:29Z",
+      "side": 1,
+      "message": "Sounds good, thanks everyone! Updated to use GetChildCovers.",
+      "parentUuid": "951c79d2_8fd1c1fd",
+      "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6987844d_72e09a51",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 1
@@ -111,6 +129,30 @@
       "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af688457_cf4e3fca",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3111,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-01T16:23:29Z",
+      "side": 1,
+      "message": "Right; I believe this to be guaranteed because LiveRanges are contiguous (even if they might have gaps between the use intervals contained within), and we know that the value is live until at least `pos`. However, this check is not useful; no bad behavior would result if it failed. Marking as resolved because a subsequent patchset removed this code. Thanks!",
+      "parentUuid": "6987844d_72e09a51",
+      "range": {
+        "startLine": 3111,
+        "startChar": 10,
+        "endLine": 3111,
+        "endChar": 50
+      },
+      "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
