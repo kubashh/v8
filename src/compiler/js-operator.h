@@ -232,21 +232,19 @@ class CallParameters final {
                  FeedbackSource const& feedback,
                  ConvertReceiverMode convert_mode,
                  SpeculationMode speculation_mode,
-                 CallFeedbackRelation feedback_relation, bool has_vector)
+                 CallFeedbackRelation feedback_relation)
       : bit_field_(ArityField::encode(arity) |
                    CallFeedbackRelationField::encode(feedback_relation) |
                    SpeculationModeField::encode(speculation_mode) |
                    ConvertReceiverModeField::encode(convert_mode)),
         frequency_(frequency),
-        feedback_(feedback),
-        has_vector_(has_vector) {
+        feedback_(feedback) {
     // CallFeedbackRelation is ignored if the feedback slot is invalid.
     DCHECK_IMPLIES(speculation_mode == SpeculationMode::kAllowSpeculation,
                    feedback.IsValid());
     DCHECK_IMPLIES(!feedback.IsValid(),
                    feedback_relation == CallFeedbackRelation::kUnrelated);
-    DCHECK_GE(arity,
-              has_vector_ ? kTargetAndReceiverAndVector : kTargetAndReceiver);
+    DCHECK_GE(arity, kTargetAndReceiverAndVector);
     DCHECK(is_int32(arity));
   }
 
@@ -254,8 +252,7 @@ class CallParameters final {
   // without extra args in CallParameters.
   size_t arity() const { return ArityField::decode(bit_field_); }
   int arity_without_implicit_args() const {
-    return static_cast<int>(arity() - (has_vector_ ? kTargetAndReceiverAndVector
-                                                   : kTargetAndReceiver));
+    return static_cast<int>(arity() - kTargetAndReceiverAndVector);
   }
 
   CallFrequency const& frequency() const { return frequency_; }
@@ -294,8 +291,6 @@ class CallParameters final {
   uint32_t const bit_field_;
   CallFrequency const frequency_;
   FeedbackSource const feedback_;
-  // TODO(jgruber): Remove once Call variants all have a feedback vector input.
-  bool has_vector_;
 };
 
 size_t hash_value(CallParameters const&);
@@ -1222,10 +1217,11 @@ class JSStorePropertyNode final : public JSNodeWrapperBase {
 #undef INPUTS
 };
 
-class JSCallNode final : public JSNodeWrapperBase {
+template <int kOpcode>
+class JSCallNodeBase final : public JSNodeWrapperBase {
  public:
-  explicit constexpr JSCallNode(Node* node) : JSNodeWrapperBase(node) {
-    CONSTEXPR_DCHECK(node->opcode() == IrOpcode::kJSCall);
+  explicit constexpr JSCallNodeBase(Node* node) : JSNodeWrapperBase(node) {
+    CONSTEXPR_DCHECK(node->opcode() == kOpcode);
   }
 
   const CallParameters& Parameters() const {
@@ -1245,6 +1241,9 @@ class JSCallNode final : public JSNodeWrapperBase {
   static constexpr int kExtraInputCount =
       kTargetInputCount + kReceiverInputCount + kFeedbackVectorInputCount;
 
+  // Just for static asserts for spots that rely on node layout.
+  static constexpr bool kFeedbackVectorIsLastInput = true;
+
   // This is the arity fed into CallArguments.
   static constexpr int ArityForArgc(int parameters) {
     return parameters + kExtraInputCount;
@@ -1257,25 +1256,41 @@ class JSCallNode final : public JSNodeWrapperBase {
     return TNode<Object>::UncheckedCast(
         NodeProperties::GetValueInput(node(), ArgumentIndex(i)));
   }
+  int LastArgumentIndex() const {
+    DCHECK_GT(ArgumentCount(), 0);
+    return ArgumentIndex(ArgumentCount() - 1);
+  }
+  TNode<Object> LastArgument() const {
+    DCHECK_GT(ArgumentCount(), 0);
+    return Argument(ArgumentCount() - 1);
+  }
   TNode<Object> ArgumentOr(int i, Node* default_value) const {
     return i < ArgumentCount() ? Argument(i)
                                : TNode<Object>::UncheckedCast(default_value);
   }
   TNode<Object> ArgumentOrUndefined(int i, JSGraph* jsgraph) const;
   int ArgumentCount() const {
-    DCHECK_GE(node()->op()->ValueInputCount(), kExtraInputCount);
-    return node()->op()->ValueInputCount() - kExtraInputCount;
+    // Note: The count reported by this function remains static even if the node
+    // is currently being modified.
+    return Parameters().arity_without_implicit_args();
   }
 
+  static int FeedbackVectorIndexForArgc(int argc) {
+    STATIC_ASSERT(kFeedbackVectorIsLastInput);
+    return ArgumentIndex(argc - 1) + 1;
+  }
   int FeedbackVectorIndex() const {
-    DCHECK_GE(node()->op()->ValueInputCount(), 1);
-    return node()->op()->ValueInputCount() - 1;
+    return FeedbackVectorIndexForArgc(ArgumentCount());
   }
   TNode<HeapObject> feedback_vector() const {
     return TNode<HeapObject>::UncheckedCast(
         NodeProperties::GetValueInput(node(), FeedbackVectorIndex()));
   }
 };
+
+using JSCallNode = JSCallNodeBase<IrOpcode::kJSCall>;
+using JSCallWithSpreadNode = JSCallNodeBase<IrOpcode::kJSCallWithSpread>;
+using JSCallWithArrayLikeNode = JSCallNodeBase<IrOpcode::kJSCallWithArrayLike>;
 
 #undef DEFINE_INPUT_ACCESSORS
 
