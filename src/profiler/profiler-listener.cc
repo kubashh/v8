@@ -274,7 +274,10 @@ void ProfilerListener::CodeDisableOptEvent(Handle<AbstractCode> code,
 }
 
 void ProfilerListener::CodeDeoptEvent(Handle<Code> code, DeoptimizeKind kind,
-                                      Address pc, int fp_to_sp_delta) {
+                                      Address pc, int fp_to_sp_delta,
+                                      bool reuse_code) {
+  // TODO(mythria): Pass reuse_code to profview and update profview to show
+  // these bailouts differently.
   CodeEventsContainer evt_rec(CodeEventRecord::CODE_DEOPT);
   CodeDeoptEventRecord* rec = &evt_rec.CodeDeoptEventRecord_;
   Deoptimizer::DeoptInfo info = Deoptimizer::GetDeoptInfo(*code, pc);

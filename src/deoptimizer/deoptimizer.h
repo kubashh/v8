@@ -455,6 +455,8 @@ class Deoptimizer : public Malloced {
   // Number of created JS frames. Not all created frames are necessarily JS.
   int jsframe_count() const { return jsframe_count_; }
 
+  bool should_reuse_code() const;
+
   static Deoptimizer* New(Address raw_function, DeoptimizeKind kind,
                           unsigned bailout_id, Address from, int fp_to_sp_delta,
                           Isolate* isolate);
