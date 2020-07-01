@@ -380,7 +380,7 @@ TEST(WasmLetInstruction) {
   uint32_t let_field_index = 0;
   tester.DefineFunction(
       "let_test_1", tester.sigs.i_v(), {},
-      {WASM_LET_1_I(WASM_REF_TYPE(type_index),
+      {WASM_LET_1_I(WASM_SEQ(kLocalRef, type_index),
                     WASM_STRUCT_NEW(type_index, WASM_I32V(42), WASM_I32V(52)),
                     WASM_STRUCT_GET(type_index, let_field_index,
                                     WASM_GET_LOCAL(let_local_index))),
@@ -390,7 +390,7 @@ TEST(WasmLetInstruction) {
   tester.DefineFunction(
       "let_test_2", tester.sigs.i_v(), {},
       {WASM_LET_2_I(kLocalI32, WASM_I32_ADD(WASM_I32V(42), WASM_I32V(-32)),
-                    WASM_REF_TYPE(type_index),
+                    WASM_SEQ(kLocalRef, type_index),
                     WASM_STRUCT_NEW(type_index, WASM_I32V(42), WASM_I32V(52)),
                     WASM_I32_MUL(WASM_STRUCT_GET(type_index, let_2_field_index,
                                                  WASM_GET_LOCAL(1)),
