@@ -145,6 +145,10 @@ class V8_EXPORT_PRIVATE PagedSpace
       int size_in_bytes, AllocationAlignment alignment,
       AllocationOrigin origin = AllocationOrigin::kRuntime);
 
+  V8_WARN_UNUSED_RESULT AllocationResult
+  AllocateRawSlow(int size_in_bytes, AllocationAlignment alignment,
+                  AllocationOrigin origin);
+
   // Allocate the requested number of bytes in the space from a background
   // thread.
   V8_WARN_UNUSED_RESULT base::Optional<std::pair<Address, size_t>>
