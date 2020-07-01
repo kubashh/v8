@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f0c7b832_01546386",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-07-01T06:09:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "786f3dd3_fef4beb1",
+      "range": {
+        "startLine": 156,
+        "startChar": 11,
+        "endLine": 156,
+        "endChar": 26
+      },
+      "revId": "d8527f1aefae1a7be9975b1915c1d8673bb11664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a1b04e2a_4781dbfe",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 13
@@ -45,6 +69,30 @@
       "revId": "d8527f1aefae1a7be9975b1915c1d8673bb11664",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9abb8d5c_4c79836b",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-07-01T06:09:04Z",
+      "side": 1,
+      "message": "Well not exactly, if the heap type is e.g. kFunc we only check for reftypes.",
+      "parentUuid": "a1b04e2a_4781dbfe",
+      "range": {
+        "startLine": 232,
+        "startChar": 6,
+        "endLine": 238,
+        "endChar": 7
+      },
+      "revId": "d8527f1aefae1a7be9975b1915c1d8673bb11664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
