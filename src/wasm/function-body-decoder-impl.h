@@ -2123,712 +2123,937 @@ class WasmFullDecoder : public WasmDecoder<validate> {
     return decoder->DecodeOp<opcode>();
   }
 
+  // Generic base implementation, only handling asm.js opcodes. All other
+  // operations are handled via template specializations below.
   template <WasmOpcode opcode>
   int DecodeOp() {
     TraceLine trace_msg(this);
+    // Deal with special asmjs opcodes.
+    if (!VALIDATE(is_asmjs_module(this->module_))) {
+      this->error("Invalid opcode");
+      return 0;
+    }
+    const FunctionSig* sig = WasmOpcodes::AsmjsSignature(opcode);
+    DCHECK_NOT_NULL(sig);
+    return BuildSimpleOperator(opcode, sig);
+  }
 
-    // TODO(clemensb): Break this up into individual functions.
-    switch (opcode) {
-#define BUILD_SIMPLE_OPCODE(op, _, sig) \
-  case kExpr##op:                       \
-    return BuildSimpleOperator_##sig(opcode);
-      FOREACH_SIMPLE_OPCODE(BUILD_SIMPLE_OPCODE)
+#define BUILD_SIMPLE_OPCODE(op, _, sig)          \
+  template <>                                    \
+  int DecodeOp<kExpr##op>() {                    \
+    TraceLine trace_msg(this);                   \
+    return BuildSimpleOperator_##sig(kExpr##op); \
+  }
+  FOREACH_SIMPLE_OPCODE(BUILD_SIMPLE_OPCODE)
 #undef BUILD_SIMPLE_OPCODE
-      case kExprNop:
-        return 1;
-      case kExprBlock: {
-        BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        ArgVector args = PopArgs(imm.sig);
-        Control* block = PushControl(kControlBlock);
-        SetBlockType(block, imm, args.begin());
-        CALL_INTERFACE_IF_REACHABLE(Block, block);
-        PushMergeValues(block, &block->start_merge);
-        return 1 + imm.length;
-      }
-      case kExprRethrow: {
-        CHECK_PROTOTYPE_OPCODE(eh);
-        Value exception = Pop(0, kWasmExnRef);
-        CALL_INTERFACE_IF_REACHABLE(Rethrow, exception);
-        EndControl();
-        return 1;
-      }
-      case kExprThrow: {
-        CHECK_PROTOTYPE_OPCODE(eh);
-        ExceptionIndexImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        ArgVector args = PopArgs(imm.exception->ToFunctionSig());
-        CALL_INTERFACE_IF_REACHABLE(Throw, imm, VectorOf(args));
-        EndControl();
-        return 1 + imm.length;
-      }
-      case kExprTry: {
-        CHECK_PROTOTYPE_OPCODE(eh);
-        BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        ArgVector args = PopArgs(imm.sig);
-        Control* try_block = PushControl(kControlTry);
-        SetBlockType(try_block, imm, args.begin());
-        CALL_INTERFACE_IF_REACHABLE(Try, try_block);
-        PushMergeValues(try_block, &try_block->start_merge);
-        return 1 + imm.length;
-      }
-      case kExprCatch: {
-        CHECK_PROTOTYPE_OPCODE(eh);
-        if (!VALIDATE(!control_.empty())) {
-          this->error("catch does not match any try");
-          return 0;
+
+  template <>
+  int DecodeOp<kExprNop>() {
+    TraceLine trace_msg(this);
+    return 1;
+  }
+
+  template <>
+  int DecodeOp<kExprBlock>() {
+    TraceLine trace_msg(this);
+    BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    ArgVector args = PopArgs(imm.sig);
+    Control* block = PushControl(kControlBlock);
+    SetBlockType(block, imm, args.begin());
+    CALL_INTERFACE_IF_REACHABLE(Block, block);
+    PushMergeValues(block, &block->start_merge);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprRethrow>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(eh);
+    Value exception = Pop(0, kWasmExnRef);
+    CALL_INTERFACE_IF_REACHABLE(Rethrow, exception);
+    EndControl();
+    return 1;
+  }
+
+  template <>
+  int DecodeOp<kExprThrow>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(eh);
+    ExceptionIndexImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    ArgVector args = PopArgs(imm.exception->ToFunctionSig());
+    CALL_INTERFACE_IF_REACHABLE(Throw, imm, VectorOf(args));
+    EndControl();
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprTry>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(eh);
+    BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    ArgVector args = PopArgs(imm.sig);
+    Control* try_block = PushControl(kControlTry);
+    SetBlockType(try_block, imm, args.begin());
+    CALL_INTERFACE_IF_REACHABLE(Try, try_block);
+    PushMergeValues(try_block, &try_block->start_merge);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprCatch>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(eh);
+    if (!VALIDATE(!control_.empty())) {
+      this->error("catch does not match any try");
+      return 0;
+    }
+    Control* c = &control_.back();
+    if (!VALIDATE(c->is_try())) {
+      this->error("catch does not match any try");
+      return 0;
+    }
+    if (!VALIDATE(c->is_incomplete_try())) {
+      this->error("catch already present for try");
+      return 0;
+    }
+    c->kind = kControlTryCatch;
+    FallThruTo(c);
+    stack_.erase(stack_.begin() + c->stack_depth, stack_.end());
+    c->reachability = control_at(1)->innerReachability();
+    current_code_reachable_ = this->ok() && c->reachable();
+    Value* exception = Push(kWasmExnRef);
+    CALL_INTERFACE_IF_PARENT_REACHABLE(Catch, c, exception);
+    return 1;
+  }
+
+  template <>
+  int DecodeOp<kExprBrOnExn>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(eh);
+    BranchOnExceptionImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc() + 1, imm, control_.size())) return 0;
+    Control* c = control_at(imm.depth.depth);
+    Value exception = Pop(0, kWasmExnRef);
+    const WasmExceptionSig* sig = imm.index.exception->sig;
+    size_t value_count = sig->parameter_count();
+    // TODO(wasm): This operand stack mutation is an ugly hack to make
+    // both type checking here as well as environment merging in the
+    // graph builder interface work out of the box. We should introduce
+    // special handling for both and do minimal/no stack mutation here.
+    for (size_t i = 0; i < value_count; ++i) Push(sig->GetParam(i));
+    Vector<Value> values(stack_.data() + c->stack_depth, value_count);
+    TypeCheckBranchResult check_result = TypeCheckBranch(c, true);
+    if (this->failed()) return 0;
+    if (V8_LIKELY(check_result == kReachableBranch)) {
+      CALL_INTERFACE(BrOnException, exception, imm.index, imm.depth.depth,
+                     values);
+      c->br_merge()->reached = true;
+    } else if (check_result == kInvalidStack) {
+      return 0;
+    }
+    for (size_t i = 0; i < value_count; ++i) Pop();
+    Value* pexception = Push(kWasmExnRef);
+    *pexception = exception;
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprBrOnNull>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(typed_funcref);
+    BranchDepthImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm, control_.size())) return 0;
+    Value ref_object = Pop();
+    if (this->failed()) return 0;
+    Control* c = control_at(imm.depth);
+    TypeCheckBranchResult check_result = TypeCheckBranch(c, true);
+    if (V8_LIKELY(check_result == kReachableBranch)) {
+      switch (ref_object.type.kind()) {
+        case ValueType::kRef: {
+          Value* result = Push(ref_object.type);
+          CALL_INTERFACE(PassThrough, ref_object, result);
+          break;
         }
-        Control* c = &control_.back();
-        if (!VALIDATE(c->is_try())) {
-          this->error("catch does not match any try");
-          return 0;
-        }
-        if (!VALIDATE(c->is_incomplete_try())) {
-          this->error("catch already present for try");
-          return 0;
-        }
-        c->kind = kControlTryCatch;
-        FallThruTo(c);
-        stack_.erase(stack_.begin() + c->stack_depth, stack_.end());
-        c->reachability = control_at(1)->innerReachability();
-        current_code_reachable_ = this->ok() && c->reachable();
-        Value* exception = Push(kWasmExnRef);
-        CALL_INTERFACE_IF_PARENT_REACHABLE(Catch, c, exception);
-        return 1;
-      }
-      case kExprBrOnExn: {
-        CHECK_PROTOTYPE_OPCODE(eh);
-        BranchOnExceptionImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc() + 1, imm, control_.size())) return 0;
-        Control* c = control_at(imm.depth.depth);
-        Value exception = Pop(0, kWasmExnRef);
-        const WasmExceptionSig* sig = imm.index.exception->sig;
-        size_t value_count = sig->parameter_count();
-        // TODO(wasm): This operand stack mutation is an ugly hack to make
-        // both type checking here as well as environment merging in the
-        // graph builder interface work out of the box. We should introduce
-        // special handling for both and do minimal/no stack mutation here.
-        for (size_t i = 0; i < value_count; ++i) Push(sig->GetParam(i));
-        Vector<Value> values(stack_.data() + c->stack_depth, value_count);
-        TypeCheckBranchResult check_result = TypeCheckBranch(c, true);
-        if (this->failed()) return 0;
-        if (V8_LIKELY(check_result == kReachableBranch)) {
-          CALL_INTERFACE(BrOnException, exception, imm.index, imm.depth.depth,
-                         values);
+        case ValueType::kOptRef: {
+          // We need to Push the result value after calling BrOnNull on
+          // the interface. Therefore we must sync the ref_object and
+          // result nodes afterwards (in PassThrough).
+          CALL_INTERFACE(BrOnNull, ref_object, imm.depth);
+          Value* result =
+              Push(ValueType::Ref(ref_object.type.heap_type(), kNonNullable));
+          CALL_INTERFACE(PassThrough, ref_object, result);
           c->br_merge()->reached = true;
-        } else if (check_result == kInvalidStack) {
+          break;
+        }
+        default:
+          this->error(this->pc_, "invalid agrument type to ref.as_non_null");
           return 0;
-        }
-        for (size_t i = 0; i < value_count; ++i) Pop();
-        Value* pexception = Push(kWasmExnRef);
-        *pexception = exception;
-        return 1 + imm.length;
-      }
-      case kExprBrOnNull: {
-        CHECK_PROTOTYPE_OPCODE(typed_funcref);
-        BranchDepthImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm, control_.size())) return 0;
-        Value ref_object = Pop();
-        if (this->failed()) return 0;
-        Control* c = control_at(imm.depth);
-        TypeCheckBranchResult check_result = TypeCheckBranch(c, true);
-        if (V8_LIKELY(check_result == kReachableBranch)) {
-          switch (ref_object.type.kind()) {
-            case ValueType::kRef: {
-              Value* result = Push(ref_object.type);
-              CALL_INTERFACE(PassThrough, ref_object, result);
-              break;
-            }
-            case ValueType::kOptRef: {
-              // We need to Push the result value after calling BrOnNull on
-              // the interface. Therefore we must sync the ref_object and
-              // result nodes afterwards (in PassThrough).
-              CALL_INTERFACE(BrOnNull, ref_object, imm.depth);
-              Value* result = Push(
-                  ValueType::Ref(ref_object.type.heap_type(), kNonNullable));
-              CALL_INTERFACE(PassThrough, ref_object, result);
-              c->br_merge()->reached = true;
-              break;
-            }
-            default:
-              this->error(this->pc_,
-                          "invalid agrument type to ref.as_non_null");
-              return 0;
-          }
-        }
-        return 1 + imm.length;
-      }
-      case kExprLet: {
-        CHECK_PROTOTYPE_OPCODE(typed_funcref);
-        BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        uint32_t old_local_count = this->num_locals();
-        // Temporarily add the let-defined values
-        // to the beginning of the function locals.
-        uint32_t locals_length;
-        if (!this->DecodeLocals(this->pc() + 1 + imm.length, &locals_length,
-                                0)) {
-          return 0;
-        }
-        uint32_t num_added_locals = this->num_locals() - old_local_count;
-        ArgVector let_local_values =
-            PopArgs(static_cast<uint32_t>(imm.in_arity()),
-                    VectorOf(this->local_types_.data(), num_added_locals));
-        ArgVector args = PopArgs(imm.sig);
-        Control* let_block = PushControl(kControlLet, num_added_locals);
-        SetBlockType(let_block, imm, args.begin());
-        CALL_INTERFACE_IF_REACHABLE(Block, let_block);
-        PushMergeValues(let_block, &let_block->start_merge);
-        CALL_INTERFACE_IF_REACHABLE(AllocateLocals, VectorOf(let_local_values));
-        return 1 + imm.length + locals_length;
-      }
-      case kExprLoop: {
-        BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        ArgVector args = PopArgs(imm.sig);
-        Control* block = PushControl(kControlLoop);
-        SetBlockType(&control_.back(), imm, args.begin());
-        CALL_INTERFACE_IF_REACHABLE(Loop, block);
-        PushMergeValues(block, &block->start_merge);
-        return 1 + imm.length;
-      }
-      case kExprIf: {
-        BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        Value cond = Pop(0, kWasmI32);
-        ArgVector args = PopArgs(imm.sig);
-        if (!VALIDATE(this->ok())) return 0;
-        Control* if_block = PushControl(kControlIf);
-        SetBlockType(if_block, imm, args.begin());
-        CALL_INTERFACE_IF_REACHABLE(If, cond, if_block);
-        PushMergeValues(if_block, &if_block->start_merge);
-        return 1 + imm.length;
-      }
-      case kExprElse: {
-        if (!VALIDATE(!control_.empty())) {
-          this->error("else does not match any if");
-          return 0;
-        }
-        Control* c = &control_.back();
-        if (!VALIDATE(c->is_if())) {
-          this->error(this->pc_, "else does not match an if");
-          return 0;
-        }
-        if (!VALIDATE(c->is_onearmed_if())) {
-          this->error(this->pc_, "else already present for if");
-          return 0;
-        }
-        if (!TypeCheckFallThru()) return 0;
-        c->kind = kControlIfElse;
-        CALL_INTERFACE_IF_PARENT_REACHABLE(Else, c);
-        if (c->reachable()) c->end_merge.reached = true;
-        PushMergeValues(c, &c->start_merge);
-        c->reachability = control_at(1)->innerReachability();
-        current_code_reachable_ = this->ok() && c->reachable();
-        return 1;
-      }
-      case kExprEnd: {
-        if (!VALIDATE(!control_.empty())) {
-          this->error("end does not match any if, try, or block");
-          return 0;
-        }
-        Control* c = &control_.back();
-        if (!VALIDATE(!c->is_incomplete_try())) {
-          this->error(this->pc_, "missing catch or catch-all in try");
-          return 0;
-        }
-        if (c->is_onearmed_if()) {
-          if (!VALIDATE(c->end_merge.arity == c->start_merge.arity)) {
-            this->error(c->pc,
-                        "start-arity and end-arity of one-armed if must match");
-            return 0;
-          }
-          if (!TypeCheckOneArmedIf(c)) return 0;
-        }
-        if (c->is_let()) {
-          this->local_types_.erase(
-              this->local_types_.begin(),
-              this->local_types_.begin() + c->locals_count);
-          CALL_INTERFACE_IF_REACHABLE(DeallocateLocals, c->locals_count);
-        }
-        if (!TypeCheckFallThru()) return 0;
-
-        if (control_.size() == 1) {
-          // If at the last (implicit) control, check we are at end.
-          if (!VALIDATE(this->pc_ + 1 == this->end_)) {
-            this->error(this->pc_ + 1, "trailing code after function end");
-            return 0;
-          }
-          // The result of the block is the return value.
-          trace_msg.Append("\n" TRACE_INST_FORMAT, startrel(this->pc_),
-                           "(implicit) return");
-          DoReturn();
-          control_.clear();
-          return 1;
-        }
-        PopControl(c);
-        return 1;
-      }
-      case kExprSelect: {
-        Value cond = Pop(2, kWasmI32);
-        Value fval = Pop();
-        Value tval = Pop(0, fval.type);
-        ValueType type = tval.type == kWasmBottom ? fval.type : tval.type;
-        if (!VALIDATE(!type.is_reference_type())) {
-          this->error(
-              "select without type is only valid for value type inputs");
-          return 0;
-        }
-        Value* result = Push(type);
-        CALL_INTERFACE_IF_REACHABLE(Select, cond, fval, tval, result);
-        return 1;
-      }
-      case kExprSelectWithType: {
-        CHECK_PROTOTYPE_OPCODE(reftypes);
-        SelectTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
-        if (this->failed()) return 0;
-        Value cond = Pop(2, kWasmI32);
-        Value fval = Pop(1, imm.type);
-        Value tval = Pop(0, imm.type);
-        Value* result = Push(imm.type);
-        CALL_INTERFACE_IF_REACHABLE(Select, cond, fval, tval, result);
-        return 1 + imm.length;
-      }
-      case kExprBr: {
-        BranchDepthImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm, control_.size())) return 0;
-        Control* c = control_at(imm.depth);
-        TypeCheckBranchResult check_result = TypeCheckBranch(c, false);
-        if (V8_LIKELY(check_result == kReachableBranch)) {
-          if (imm.depth == control_.size() - 1) {
-            DoReturn();
-          } else {
-            CALL_INTERFACE(Br, c);
-            c->br_merge()->reached = true;
-          }
-        } else if (check_result == kInvalidStack) {
-          return 0;
-        }
-        EndControl();
-        return 1 + imm.length;
-      }
-      case kExprBrIf: {
-        BranchDepthImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm, control_.size())) return 0;
-        Value cond = Pop(0, kWasmI32);
-        if (this->failed()) return 0;
-        Control* c = control_at(imm.depth);
-        TypeCheckBranchResult check_result = TypeCheckBranch(c, true);
-        if (V8_LIKELY(check_result == kReachableBranch)) {
-          CALL_INTERFACE(BrIf, cond, imm.depth);
-          c->br_merge()->reached = true;
-        } else if (check_result == kInvalidStack) {
-          return 0;
-        }
-        return 1 + imm.length;
-      }
-      case kExprBrTable: {
-        BranchTableImmediate<validate> imm(this, this->pc_ + 1);
-        BranchTableIterator<validate> iterator(this, imm);
-        Value key = Pop(0, kWasmI32);
-        if (this->failed()) return 0;
-        if (!this->Validate(this->pc_ + 1, imm, control_.size())) return 0;
-
-        // Cache the branch targets during the iteration, so that we can set
-        // all branch targets as reachable after the {CALL_INTERFACE} call.
-        std::vector<bool> br_targets(control_.size());
-
-        // The result types of the br_table instruction. We have to check the
-        // stack against these types. Only needed during validation.
-        std::vector<ValueType> result_types;
-
-        while (iterator.has_next()) {
-          const uint32_t index = iterator.cur_index();
-          const byte* pos = iterator.pc();
-          uint32_t target = iterator.next();
-          if (!VALIDATE(ValidateBrTableTarget(target, pos, index))) return 0;
-          // Avoid redundant branch target checks.
-          if (br_targets[target]) continue;
-          br_targets[target] = true;
-
-          if (validate) {
-            if (index == 0) {
-              // With the first branch target, initialize the result types.
-              result_types = InitializeBrTableResultTypes(target);
-            } else if (!UpdateBrTableResultTypes(&result_types, target, pos,
-                                                 index)) {
-              return 0;
-            }
-          }
-        }
-
-        if (!VALIDATE(TypeCheckBrTable(result_types))) return 0;
-
-        DCHECK(this->ok());
-
-        if (current_code_reachable_) {
-          CALL_INTERFACE(BrTable, imm, key);
-
-          for (int i = 0, e = control_depth(); i < e; ++i) {
-            if (!br_targets[i]) continue;
-            control_at(i)->br_merge()->reached = true;
-          }
-        }
-
-        EndControl();
-        return 1 + iterator.length();
-      }
-      case kExprReturn: {
-        if (V8_LIKELY(current_code_reachable_)) {
-          if (!VALIDATE(TypeCheckReturn())) return 0;
-          DoReturn();
-        } else {
-          // We pop all return values from the stack to check their type.
-          // Since we deal with unreachable code, we do not have to keep the
-          // values.
-          int num_returns = static_cast<int>(this->sig_->return_count());
-          for (int i = num_returns - 1; i >= 0; --i) {
-            Pop(i, this->sig_->GetReturn(i));
-          }
-        }
-
-        EndControl();
-        return 1;
-      }
-      case kExprUnreachable: {
-        CALL_INTERFACE_IF_REACHABLE(Unreachable);
-        EndControl();
-        return 1;
-      }
-      case kExprI32Const: {
-        ImmI32Immediate<validate> imm(this, this->pc_ + 1);
-        Value* value = Push(kWasmI32);
-        CALL_INTERFACE_IF_REACHABLE(I32Const, value, imm.value);
-        return 1 + imm.length;
-      }
-      case kExprI64Const: {
-        ImmI64Immediate<validate> imm(this, this->pc_ + 1);
-        Value* value = Push(kWasmI64);
-        CALL_INTERFACE_IF_REACHABLE(I64Const, value, imm.value);
-        return 1 + imm.length;
-      }
-      case kExprF32Const: {
-        ImmF32Immediate<validate> imm(this, this->pc_ + 1);
-        Value* value = Push(kWasmF32);
-        CALL_INTERFACE_IF_REACHABLE(F32Const, value, imm.value);
-        return 1 + imm.length;
-      }
-      case kExprF64Const: {
-        ImmF64Immediate<validate> imm(this, this->pc_ + 1);
-        Value* value = Push(kWasmF64);
-        CALL_INTERFACE_IF_REACHABLE(F64Const, value, imm.value);
-        return 1 + imm.length;
-      }
-      case kExprRefNull: {
-        CHECK_PROTOTYPE_OPCODE(reftypes);
-        HeapTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        Value* value = Push(ValueType::Ref(imm.type, kNullable));
-        CALL_INTERFACE_IF_REACHABLE(RefNull, value);
-        return 1 + imm.length;
-      }
-      case kExprRefIsNull: {
-        CHECK_PROTOTYPE_OPCODE(reftypes);
-        Value value = Pop();
-        Value* result = Push(kWasmI32);
-        switch (value.type.kind()) {
-          case ValueType::kOptRef:
-            CALL_INTERFACE_IF_REACHABLE(UnOp, opcode, value, result);
-            return 1;
-          case ValueType::kRef:
-            // For non-nullable references, the result is always false.
-            CALL_INTERFACE_IF_REACHABLE(I32Const, result, 0);
-            return 1;
-          default:
-            if (validate) {
-              this->errorf(this->pc_,
-                           "invalid argument type to ref.is_null. Expected "
-                           "reference type, got %s",
-                           value.type.type_name().c_str());
-              return 0;
-            }
-            UNREACHABLE();
-        }
-      }
-      case kExprRefFunc: {
-        CHECK_PROTOTYPE_OPCODE(reftypes);
-        FunctionIndexImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        Value* value = Push(ValueType::Ref(HeapType::kFunc, kNonNullable));
-        CALL_INTERFACE_IF_REACHABLE(RefFunc, imm.index, value);
-        return 1 + imm.length;
-      }
-      case kExprRefAsNonNull: {
-        CHECK_PROTOTYPE_OPCODE(typed_funcref);
-        Value value = Pop();
-        switch (value.type.kind()) {
-          case ValueType::kRef: {
-            Value* result = Push(value.type);
-            CALL_INTERFACE_IF_REACHABLE(PassThrough, value, result);
-            return 1;
-          }
-          case ValueType::kOptRef: {
-            Value* result =
-                Push(ValueType::Ref(value.type.heap_type(), kNonNullable));
-            CALL_INTERFACE_IF_REACHABLE(RefAsNonNull, value, result);
-            return 1;
-          }
-          default:
-            if (validate) {
-              this->errorf(this->pc_,
-                           "invalid agrument type to ref.as_non_null: Expected "
-                           "reference type, got %s",
-                           value.type.type_name().c_str());
-            }
-            return 0;
-        }
-      }
-      case kExprLocalGet: {
-        LocalIndexImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        Value* value = Push(this->local_type(imm.index));
-        CALL_INTERFACE_IF_REACHABLE(LocalGet, value, imm);
-        return 1 + imm.length;
-      }
-      case kExprLocalSet: {
-        LocalIndexImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        Value value = Pop(0, this->local_type(imm.index));
-        CALL_INTERFACE_IF_REACHABLE(LocalSet, value, imm);
-        return 1 + imm.length;
-      }
-      case kExprLocalTee: {
-        LocalIndexImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        Value value = Pop(0, this->local_type(imm.index));
-        Value* result = Push(value.type);
-        CALL_INTERFACE_IF_REACHABLE(LocalTee, value, result, imm);
-        return 1 + imm.length;
-      }
-      case kExprDrop: {
-        Value value = Pop();
-        CALL_INTERFACE_IF_REACHABLE(Drop, value);
-        return 1;
-      }
-      case kExprGlobalGet: {
-        GlobalIndexImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        Value* result = Push(imm.type);
-        CALL_INTERFACE_IF_REACHABLE(GlobalGet, result, imm);
-        return 1 + imm.length;
-      }
-      case kExprGlobalSet: {
-        GlobalIndexImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        if (!VALIDATE(imm.global->mutability)) {
-          this->errorf(this->pc_, "immutable global #%u cannot be assigned",
-                       imm.index);
-          return 0;
-        }
-        Value value = Pop(0, imm.type);
-        CALL_INTERFACE_IF_REACHABLE(GlobalSet, value, imm);
-        return 1 + imm.length;
-      }
-      case kExprTableGet: {
-        CHECK_PROTOTYPE_OPCODE(reftypes);
-        TableIndexImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        Value index = Pop(0, kWasmI32);
-        Value* result = Push(this->module_->tables[imm.index].type);
-        CALL_INTERFACE_IF_REACHABLE(TableGet, index, result, imm);
-        return 1 + imm.length;
-      }
-      case kExprTableSet: {
-        CHECK_PROTOTYPE_OPCODE(reftypes);
-        TableIndexImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        Value value = Pop(1, this->module_->tables[imm.index].type);
-        Value index = Pop(0, kWasmI32);
-        CALL_INTERFACE_IF_REACHABLE(TableSet, index, value, imm);
-        return 1 + imm.length;
-      }
-
-      case kExprI32LoadMem8S:
-        return DecodeLoadMem(LoadType::kI32Load8S);
-      case kExprI32LoadMem8U:
-        return DecodeLoadMem(LoadType::kI32Load8U);
-      case kExprI32LoadMem16S:
-        return DecodeLoadMem(LoadType::kI32Load16S);
-      case kExprI32LoadMem16U:
-        return DecodeLoadMem(LoadType::kI32Load16U);
-      case kExprI32LoadMem:
-        return DecodeLoadMem(LoadType::kI32Load);
-      case kExprI64LoadMem8S:
-        return DecodeLoadMem(LoadType::kI64Load8S);
-      case kExprI64LoadMem8U:
-        return DecodeLoadMem(LoadType::kI64Load8U);
-      case kExprI64LoadMem16S:
-        return DecodeLoadMem(LoadType::kI64Load16S);
-      case kExprI64LoadMem16U:
-        return DecodeLoadMem(LoadType::kI64Load16U);
-      case kExprI64LoadMem32S:
-        return DecodeLoadMem(LoadType::kI64Load32S);
-      case kExprI64LoadMem32U:
-        return DecodeLoadMem(LoadType::kI64Load32U);
-      case kExprI64LoadMem:
-        return DecodeLoadMem(LoadType::kI64Load);
-      case kExprF32LoadMem:
-        return DecodeLoadMem(LoadType::kF32Load);
-      case kExprF64LoadMem:
-        return DecodeLoadMem(LoadType::kF64Load);
-      case kExprI32StoreMem8:
-        return DecodeStoreMem(StoreType::kI32Store8);
-      case kExprI32StoreMem16:
-        return DecodeStoreMem(StoreType::kI32Store16);
-      case kExprI32StoreMem:
-        return DecodeStoreMem(StoreType::kI32Store);
-      case kExprI64StoreMem8:
-        return DecodeStoreMem(StoreType::kI64Store8);
-      case kExprI64StoreMem16:
-        return DecodeStoreMem(StoreType::kI64Store16);
-      case kExprI64StoreMem32:
-        return DecodeStoreMem(StoreType::kI64Store32);
-      case kExprI64StoreMem:
-        return DecodeStoreMem(StoreType::kI64Store);
-      case kExprF32StoreMem:
-        return DecodeStoreMem(StoreType::kF32Store);
-      case kExprF64StoreMem:
-        return DecodeStoreMem(StoreType::kF64Store);
-      case kExprMemoryGrow: {
-        if (!CheckHasMemory()) return 0;
-        MemoryIndexImmediate<validate> imm(this, this->pc_ + 1);
-        if (!VALIDATE(this->module_->origin == kWasmOrigin)) {
-          this->error("grow_memory is not supported for asmjs modules");
-          return 0;
-        }
-        Value value = Pop(0, kWasmI32);
-        Value* result = Push(kWasmI32);
-        CALL_INTERFACE_IF_REACHABLE(MemoryGrow, value, result);
-        return 1 + imm.length;
-      }
-      case kExprMemorySize: {
-        if (!CheckHasMemory()) return 0;
-        MemoryIndexImmediate<validate> imm(this, this->pc_ + 1);
-        Value* result = Push(kWasmI32);
-        CALL_INTERFACE_IF_REACHABLE(CurrentMemoryPages, result);
-        return 1 + imm.length;
-      }
-      case kExprCallFunction: {
-        CallFunctionImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        ArgVector args = PopArgs(imm.sig);
-        Value* returns = PushReturns(imm.sig);
-        CALL_INTERFACE_IF_REACHABLE(CallDirect, imm, args.begin(), returns);
-        return 1 + imm.length;
-      }
-      case kExprCallIndirect: {
-        CallIndirectImmediate<validate> imm(this->enabled_, this,
-                                            this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        Value index = Pop(0, kWasmI32);
-        ArgVector args = PopArgs(imm.sig);
-        Value* returns = PushReturns(imm.sig);
-        CALL_INTERFACE_IF_REACHABLE(CallIndirect, index, imm, args.begin(),
-                                    returns);
-        return 1 + imm.length;
-      }
-      case kExprReturnCall: {
-        CHECK_PROTOTYPE_OPCODE(return_call);
-        CallFunctionImmediate<validate> imm(this, this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        if (!VALIDATE(this->CanReturnCall(imm.sig))) {
-          this->errorf(this->pc_, "%s: %s", WasmOpcodes::OpcodeName(opcode),
-                       "tail call return types mismatch");
-          return 0;
-        }
-        ArgVector args = PopArgs(imm.sig);
-        CALL_INTERFACE_IF_REACHABLE(ReturnCall, imm, args.begin());
-        EndControl();
-        return 1 + imm.length;
-      }
-      case kExprReturnCallIndirect: {
-        CHECK_PROTOTYPE_OPCODE(return_call);
-        CallIndirectImmediate<validate> imm(this->enabled_, this,
-                                            this->pc_ + 1);
-        if (!this->Validate(this->pc_ + 1, imm)) return 0;
-        if (!VALIDATE(this->CanReturnCall(imm.sig))) {
-          this->errorf(this->pc_, "%s: %s", WasmOpcodes::OpcodeName(opcode),
-                       "tail call return types mismatch");
-          return 0;
-        }
-        Value index = Pop(0, kWasmI32);
-        ArgVector args = PopArgs(imm.sig);
-        CALL_INTERFACE_IF_REACHABLE(ReturnCallIndirect, index, imm,
-                                    args.begin());
-        EndControl();
-        return 1 + imm.length;
-      }
-      case kNumericPrefix: {
-        byte numeric_index =
-            this->template read_u8<validate>(this->pc_ + 1, "numeric index");
-        WasmOpcode full_opcode =
-            static_cast<WasmOpcode>(opcode << 8 | numeric_index);
-        if (full_opcode == kExprTableGrow || full_opcode == kExprTableSize ||
-            full_opcode == kExprTableFill) {
-          CHECK_PROTOTYPE_OPCODE(reftypes);
-        } else if (full_opcode >= kExprMemoryInit) {
-          CHECK_PROTOTYPE_OPCODE(bulk_memory);
-        }
-        trace_msg.AppendOpcode(full_opcode);
-        return DecodeNumericOpcode(full_opcode);
-      }
-      case kSimdPrefix: {
-        CHECK_PROTOTYPE_OPCODE(simd);
-        uint32_t opcode_length = 0;
-        WasmOpcode full_opcode = this->template read_prefixed_opcode<validate>(
-            this->pc_, &opcode_length);
-        if (!VALIDATE(this->ok())) return 0;
-        trace_msg.AppendOpcode(full_opcode);
-        return DecodeSimdOpcode(full_opcode, 1 + opcode_length);
-      }
-      case kAtomicPrefix: {
-        CHECK_PROTOTYPE_OPCODE(threads);
-        byte atomic_index =
-            this->template read_u8<validate>(this->pc_ + 1, "atomic index");
-        WasmOpcode full_opcode =
-            static_cast<WasmOpcode>(opcode << 8 | atomic_index);
-        trace_msg.AppendOpcode(full_opcode);
-        return DecodeAtomicOpcode(full_opcode);
-      }
-      case kGCPrefix: {
-        CHECK_PROTOTYPE_OPCODE(gc);
-        byte gc_index =
-            this->template read_u8<validate>(this->pc_ + 1, "gc index");
-        WasmOpcode full_opcode =
-            static_cast<WasmOpcode>(opcode << 8 | gc_index);
-        trace_msg.AppendOpcode(full_opcode);
-        return DecodeGCOpcode(full_opcode);
-      }
-// Note that prototype opcodes are not handled in the fastpath
-// above this switch, to avoid checking a feature flag.
-#define SIMPLE_PROTOTYPE_CASE(name, opc, sig) \
-  case kExpr##name: /* fallthrough */
-        FOREACH_SIMPLE_PROTOTYPE_OPCODE(SIMPLE_PROTOTYPE_CASE)
-#undef SIMPLE_PROTOTYPE_CASE
-        return BuildSimplePrototypeOperator(opcode);
-      default: {
-        // Deal with special asmjs opcodes.
-        if (!VALIDATE(is_asmjs_module(this->module_))) {
-          this->error("Invalid opcode");
-          return 0;
-        }
-        const FunctionSig* sig = WasmOpcodes::AsmjsSignature(opcode);
-        DCHECK_NOT_NULL(sig);
-        return BuildSimpleOperator(opcode, sig);
       }
     }
+    return 1 + imm.length;
   }
+
+  template <>
+  int DecodeOp<kExprLet>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(typed_funcref);
+    BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    uint32_t old_local_count = this->num_locals();
+    // Temporarily add the let-defined values
+    // to the beginning of the function locals.
+    uint32_t locals_length;
+    if (!this->DecodeLocals(this->pc() + 1 + imm.length, &locals_length, 0)) {
+      return 0;
+    }
+    uint32_t num_added_locals = this->num_locals() - old_local_count;
+    ArgVector let_local_values =
+        PopArgs(static_cast<uint32_t>(imm.in_arity()),
+                VectorOf(this->local_types_.data(), num_added_locals));
+    ArgVector args = PopArgs(imm.sig);
+    Control* let_block = PushControl(kControlLet, num_added_locals);
+    SetBlockType(let_block, imm, args.begin());
+    CALL_INTERFACE_IF_REACHABLE(Block, let_block);
+    PushMergeValues(let_block, &let_block->start_merge);
+    CALL_INTERFACE_IF_REACHABLE(AllocateLocals, VectorOf(let_local_values));
+    return 1 + imm.length + locals_length;
+  }
+
+  template <>
+  int DecodeOp<kExprLoop>() {
+    TraceLine trace_msg(this);
+    BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    ArgVector args = PopArgs(imm.sig);
+    Control* block = PushControl(kControlLoop);
+    SetBlockType(&control_.back(), imm, args.begin());
+    CALL_INTERFACE_IF_REACHABLE(Loop, block);
+    PushMergeValues(block, &block->start_merge);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprIf>() {
+    TraceLine trace_msg(this);
+    BlockTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    Value cond = Pop(0, kWasmI32);
+    ArgVector args = PopArgs(imm.sig);
+    if (!VALIDATE(this->ok())) return 0;
+    Control* if_block = PushControl(kControlIf);
+    SetBlockType(if_block, imm, args.begin());
+    CALL_INTERFACE_IF_REACHABLE(If, cond, if_block);
+    PushMergeValues(if_block, &if_block->start_merge);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprElse>() {
+    TraceLine trace_msg(this);
+    if (!VALIDATE(!control_.empty())) {
+      this->error("else does not match any if");
+      return 0;
+    }
+    Control* c = &control_.back();
+    if (!VALIDATE(c->is_if())) {
+      this->error(this->pc_, "else does not match an if");
+      return 0;
+    }
+    if (!VALIDATE(c->is_onearmed_if())) {
+      this->error(this->pc_, "else already present for if");
+      return 0;
+    }
+    if (!TypeCheckFallThru()) return 0;
+    c->kind = kControlIfElse;
+    CALL_INTERFACE_IF_PARENT_REACHABLE(Else, c);
+    if (c->reachable()) c->end_merge.reached = true;
+    PushMergeValues(c, &c->start_merge);
+    c->reachability = control_at(1)->innerReachability();
+    current_code_reachable_ = this->ok() && c->reachable();
+    return 1;
+  }
+
+  template <>
+  int DecodeOp<kExprEnd>() {
+    TraceLine trace_msg(this);
+    if (!VALIDATE(!control_.empty())) {
+      this->error("end does not match any if, try, or block");
+      return 0;
+    }
+    Control* c = &control_.back();
+    if (!VALIDATE(!c->is_incomplete_try())) {
+      this->error(this->pc_, "missing catch or catch-all in try");
+      return 0;
+    }
+    if (c->is_onearmed_if()) {
+      if (!VALIDATE(c->end_merge.arity == c->start_merge.arity)) {
+        this->error(c->pc,
+                    "start-arity and end-arity of one-armed if must match");
+        return 0;
+      }
+      if (!TypeCheckOneArmedIf(c)) return 0;
+    }
+    if (c->is_let()) {
+      this->local_types_.erase(this->local_types_.begin(),
+                               this->local_types_.begin() + c->locals_count);
+      CALL_INTERFACE_IF_REACHABLE(DeallocateLocals, c->locals_count);
+    }
+    if (!TypeCheckFallThru()) return 0;
+
+    if (control_.size() == 1) {
+      // If at the last (implicit) control, check we are at end.
+      if (!VALIDATE(this->pc_ + 1 == this->end_)) {
+        this->error(this->pc_ + 1, "trailing code after function end");
+        return 0;
+      }
+      // The result of the block is the return value.
+      trace_msg.Append("\n" TRACE_INST_FORMAT, startrel(this->pc_),
+                       "(implicit) return");
+      DoReturn();
+      control_.clear();
+      return 1;
+    }
+    PopControl(c);
+    return 1;
+  }
+
+  template <>
+  int DecodeOp<kExprSelect>() {
+    TraceLine trace_msg(this);
+    Value cond = Pop(2, kWasmI32);
+    Value fval = Pop();
+    Value tval = Pop(0, fval.type);
+    ValueType type = tval.type == kWasmBottom ? fval.type : tval.type;
+    if (!VALIDATE(!type.is_reference_type())) {
+      this->error("select without type is only valid for value type inputs");
+      return 0;
+    }
+    Value* result = Push(type);
+    CALL_INTERFACE_IF_REACHABLE(Select, cond, fval, tval, result);
+    return 1;
+  }
+
+  template <>
+  int DecodeOp<kExprSelectWithType>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(reftypes);
+    SelectTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
+    if (this->failed()) return 0;
+    Value cond = Pop(2, kWasmI32);
+    Value fval = Pop(1, imm.type);
+    Value tval = Pop(0, imm.type);
+    Value* result = Push(imm.type);
+    CALL_INTERFACE_IF_REACHABLE(Select, cond, fval, tval, result);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprBr>() {
+    TraceLine trace_msg(this);
+    BranchDepthImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm, control_.size())) return 0;
+    Control* c = control_at(imm.depth);
+    TypeCheckBranchResult check_result = TypeCheckBranch(c, false);
+    if (V8_LIKELY(check_result == kReachableBranch)) {
+      if (imm.depth == control_.size() - 1) {
+        DoReturn();
+      } else {
+        CALL_INTERFACE(Br, c);
+        c->br_merge()->reached = true;
+      }
+    } else if (check_result == kInvalidStack) {
+      return 0;
+    }
+    EndControl();
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprBrIf>() {
+    TraceLine trace_msg(this);
+    BranchDepthImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm, control_.size())) return 0;
+    Value cond = Pop(0, kWasmI32);
+    if (this->failed()) return 0;
+    Control* c = control_at(imm.depth);
+    TypeCheckBranchResult check_result = TypeCheckBranch(c, true);
+    if (V8_LIKELY(check_result == kReachableBranch)) {
+      CALL_INTERFACE(BrIf, cond, imm.depth);
+      c->br_merge()->reached = true;
+    } else if (check_result == kInvalidStack) {
+      return 0;
+    }
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprBrTable>() {
+    TraceLine trace_msg(this);
+    BranchTableImmediate<validate> imm(this, this->pc_ + 1);
+    BranchTableIterator<validate> iterator(this, imm);
+    Value key = Pop(0, kWasmI32);
+    if (this->failed()) return 0;
+    if (!this->Validate(this->pc_ + 1, imm, control_.size())) return 0;
+
+    // Cache the branch targets during the iteration, so that we can set
+    // all branch targets as reachable after the {CALL_INTERFACE} call.
+    std::vector<bool> br_targets(control_.size());
+
+    // The result types of the br_table instruction. We have to check the
+    // stack against these types. Only needed during validation.
+    std::vector<ValueType> result_types;
+
+    while (iterator.has_next()) {
+      const uint32_t index = iterator.cur_index();
+      const byte* pos = iterator.pc();
+      uint32_t target = iterator.next();
+      if (!VALIDATE(ValidateBrTableTarget(target, pos, index))) return 0;
+      // Avoid redundant branch target checks.
+      if (br_targets[target]) continue;
+      br_targets[target] = true;
+
+      if (validate) {
+        if (index == 0) {
+          // With the first branch target, initialize the result types.
+          result_types = InitializeBrTableResultTypes(target);
+        } else if (!UpdateBrTableResultTypes(&result_types, target, pos,
+                                             index)) {
+          return 0;
+        }
+      }
+    }
+
+    if (!VALIDATE(TypeCheckBrTable(result_types))) return 0;
+
+    DCHECK(this->ok());
+
+    if (current_code_reachable_) {
+      CALL_INTERFACE(BrTable, imm, key);
+
+      for (int i = 0, e = control_depth(); i < e; ++i) {
+        if (!br_targets[i]) continue;
+        control_at(i)->br_merge()->reached = true;
+      }
+    }
+
+    EndControl();
+    return 1 + iterator.length();
+  }
+
+  template <>
+  int DecodeOp<kExprReturn>() {
+    TraceLine trace_msg(this);
+    if (V8_LIKELY(current_code_reachable_)) {
+      if (!VALIDATE(TypeCheckReturn())) return 0;
+      DoReturn();
+    } else {
+      // We pop all return values from the stack to check their type.
+      // Since we deal with unreachable code, we do not have to keep the
+      // values.
+      int num_returns = static_cast<int>(this->sig_->return_count());
+      for (int i = num_returns - 1; i >= 0; --i) {
+        Pop(i, this->sig_->GetReturn(i));
+      }
+    }
+
+    EndControl();
+    return 1;
+  }
+
+  template <>
+  int DecodeOp<kExprUnreachable>() {
+    TraceLine trace_msg(this);
+    CALL_INTERFACE_IF_REACHABLE(Unreachable);
+    EndControl();
+    return 1;
+  }
+
+  template <>
+  int DecodeOp<kExprI32Const>() {
+    TraceLine trace_msg(this);
+    ImmI32Immediate<validate> imm(this, this->pc_ + 1);
+    Value* value = Push(kWasmI32);
+    CALL_INTERFACE_IF_REACHABLE(I32Const, value, imm.value);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprI64Const>() {
+    TraceLine trace_msg(this);
+    ImmI64Immediate<validate> imm(this, this->pc_ + 1);
+    Value* value = Push(kWasmI64);
+    CALL_INTERFACE_IF_REACHABLE(I64Const, value, imm.value);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprF32Const>() {
+    TraceLine trace_msg(this);
+    ImmF32Immediate<validate> imm(this, this->pc_ + 1);
+    Value* value = Push(kWasmF32);
+    CALL_INTERFACE_IF_REACHABLE(F32Const, value, imm.value);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprF64Const>() {
+    TraceLine trace_msg(this);
+    ImmF64Immediate<validate> imm(this, this->pc_ + 1);
+    Value* value = Push(kWasmF64);
+    CALL_INTERFACE_IF_REACHABLE(F64Const, value, imm.value);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprRefNull>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(reftypes);
+    HeapTypeImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    Value* value = Push(ValueType::Ref(imm.type, kNullable));
+    CALL_INTERFACE_IF_REACHABLE(RefNull, value);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprRefIsNull>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(reftypes);
+    Value value = Pop();
+    Value* result = Push(kWasmI32);
+    switch (value.type.kind()) {
+      case ValueType::kOptRef:
+        CALL_INTERFACE_IF_REACHABLE(UnOp, kExprRefIsNull, value, result);
+        return 1;
+      case ValueType::kRef:
+        // For non-nullable references, the result is always false.
+        CALL_INTERFACE_IF_REACHABLE(I32Const, result, 0);
+        return 1;
+      default:
+        if (validate) {
+          this->errorf(this->pc_,
+                       "invalid argument type to ref.is_null. Expected "
+                       "reference type, got %s",
+                       value.type.type_name().c_str());
+          return 0;
+        }
+        UNREACHABLE();
+    }
+  }
+
+  template <>
+  int DecodeOp<kExprRefFunc>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(reftypes);
+    FunctionIndexImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    Value* value = Push(ValueType::Ref(HeapType::kFunc, kNonNullable));
+    CALL_INTERFACE_IF_REACHABLE(RefFunc, imm.index, value);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprRefAsNonNull>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(typed_funcref);
+    Value value = Pop();
+    switch (value.type.kind()) {
+      case ValueType::kRef: {
+        Value* result = Push(value.type);
+        CALL_INTERFACE_IF_REACHABLE(PassThrough, value, result);
+        return 1;
+      }
+      case ValueType::kOptRef: {
+        Value* result =
+            Push(ValueType::Ref(value.type.heap_type(), kNonNullable));
+        CALL_INTERFACE_IF_REACHABLE(RefAsNonNull, value, result);
+        return 1;
+      }
+      default:
+        if (validate) {
+          this->errorf(this->pc_,
+                       "invalid agrument type to ref.as_non_null: Expected "
+                       "reference type, got %s",
+                       value.type.type_name().c_str());
+        }
+        return 0;
+    }
+  }
+
+  template <>
+  int DecodeOp<kExprLocalGet>() {
+    TraceLine trace_msg(this);
+    LocalIndexImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    Value* value = Push(this->local_type(imm.index));
+    CALL_INTERFACE_IF_REACHABLE(LocalGet, value, imm);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprLocalSet>() {
+    TraceLine trace_msg(this);
+    LocalIndexImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    Value value = Pop(0, this->local_type(imm.index));
+    CALL_INTERFACE_IF_REACHABLE(LocalSet, value, imm);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprLocalTee>() {
+    TraceLine trace_msg(this);
+    LocalIndexImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    Value value = Pop(0, this->local_type(imm.index));
+    Value* result = Push(value.type);
+    CALL_INTERFACE_IF_REACHABLE(LocalTee, value, result, imm);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprDrop>() {
+    TraceLine trace_msg(this);
+    Value value = Pop();
+    CALL_INTERFACE_IF_REACHABLE(Drop, value);
+    return 1;
+  }
+
+  template <>
+  int DecodeOp<kExprGlobalGet>() {
+    TraceLine trace_msg(this);
+    GlobalIndexImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    Value* result = Push(imm.type);
+    CALL_INTERFACE_IF_REACHABLE(GlobalGet, result, imm);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprGlobalSet>() {
+    TraceLine trace_msg(this);
+    GlobalIndexImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    if (!VALIDATE(imm.global->mutability)) {
+      this->errorf(this->pc_, "immutable global #%u cannot be assigned",
+                   imm.index);
+      return 0;
+    }
+    Value value = Pop(0, imm.type);
+    CALL_INTERFACE_IF_REACHABLE(GlobalSet, value, imm);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprTableGet>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(reftypes);
+    TableIndexImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    Value index = Pop(0, kWasmI32);
+    Value* result = Push(this->module_->tables[imm.index].type);
+    CALL_INTERFACE_IF_REACHABLE(TableGet, index, result, imm);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprTableSet>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(reftypes);
+    TableIndexImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    Value value = Pop(1, this->module_->tables[imm.index].type);
+    Value index = Pop(0, kWasmI32);
+    CALL_INTERFACE_IF_REACHABLE(TableSet, index, value, imm);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprI32LoadMem8S>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI32Load8S);
+  }
+
+  template <>
+  int DecodeOp<kExprI32LoadMem8U>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI32Load8U);
+  }
+
+  template <>
+  int DecodeOp<kExprI32LoadMem16S>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI32Load16S);
+  }
+
+  template <>
+  int DecodeOp<kExprI32LoadMem16U>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI32Load16U);
+  }
+
+  template <>
+  int DecodeOp<kExprI32LoadMem>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI32Load);
+  }
+
+  template <>
+  int DecodeOp<kExprI64LoadMem8S>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI64Load8S);
+  }
+
+  template <>
+  int DecodeOp<kExprI64LoadMem8U>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI64Load8U);
+  }
+
+  template <>
+  int DecodeOp<kExprI64LoadMem16S>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI64Load16S);
+  }
+
+  template <>
+  int DecodeOp<kExprI64LoadMem16U>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI64Load16U);
+  }
+
+  template <>
+  int DecodeOp<kExprI64LoadMem32S>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI64Load32S);
+  }
+
+  template <>
+  int DecodeOp<kExprI64LoadMem32U>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI64Load32U);
+  }
+
+  template <>
+  int DecodeOp<kExprI64LoadMem>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kI64Load);
+  }
+
+  template <>
+  int DecodeOp<kExprF32LoadMem>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kF32Load);
+  }
+
+  template <>
+  int DecodeOp<kExprF64LoadMem>() {
+    TraceLine trace_msg(this);
+    return DecodeLoadMem(LoadType::kF64Load);
+  }
+
+  template <>
+  int DecodeOp<kExprI32StoreMem8>() {
+    TraceLine trace_msg(this);
+    return DecodeStoreMem(StoreType::kI32Store8);
+  }
+
+  template <>
+  int DecodeOp<kExprI32StoreMem16>() {
+    TraceLine trace_msg(this);
+    return DecodeStoreMem(StoreType::kI32Store16);
+  }
+
+  template <>
+  int DecodeOp<kExprI32StoreMem>() {
+    TraceLine trace_msg(this);
+    return DecodeStoreMem(StoreType::kI32Store);
+  }
+
+  template <>
+  int DecodeOp<kExprI64StoreMem8>() {
+    TraceLine trace_msg(this);
+    return DecodeStoreMem(StoreType::kI64Store8);
+  }
+
+  template <>
+  int DecodeOp<kExprI64StoreMem16>() {
+    TraceLine trace_msg(this);
+    return DecodeStoreMem(StoreType::kI64Store16);
+  }
+
+  template <>
+  int DecodeOp<kExprI64StoreMem32>() {
+    TraceLine trace_msg(this);
+    return DecodeStoreMem(StoreType::kI64Store32);
+  }
+
+  template <>
+  int DecodeOp<kExprI64StoreMem>() {
+    TraceLine trace_msg(this);
+    return DecodeStoreMem(StoreType::kI64Store);
+  }
+
+  template <>
+  int DecodeOp<kExprF32StoreMem>() {
+    TraceLine trace_msg(this);
+    return DecodeStoreMem(StoreType::kF32Store);
+  }
+
+  template <>
+  int DecodeOp<kExprF64StoreMem>() {
+    TraceLine trace_msg(this);
+    return DecodeStoreMem(StoreType::kF64Store);
+  }
+
+  template <>
+  int DecodeOp<kExprMemoryGrow>() {
+    TraceLine trace_msg(this);
+    if (!CheckHasMemory()) return 0;
+    MemoryIndexImmediate<validate> imm(this, this->pc_ + 1);
+    if (!VALIDATE(this->module_->origin == kWasmOrigin)) {
+      this->error("grow_memory is not supported for asmjs modules");
+      return 0;
+    }
+    Value value = Pop(0, kWasmI32);
+    Value* result = Push(kWasmI32);
+    CALL_INTERFACE_IF_REACHABLE(MemoryGrow, value, result);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprMemorySize>() {
+    TraceLine trace_msg(this);
+    if (!CheckHasMemory()) return 0;
+    MemoryIndexImmediate<validate> imm(this, this->pc_ + 1);
+    Value* result = Push(kWasmI32);
+    CALL_INTERFACE_IF_REACHABLE(CurrentMemoryPages, result);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprCallFunction>() {
+    TraceLine trace_msg(this);
+    CallFunctionImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    ArgVector args = PopArgs(imm.sig);
+    Value* returns = PushReturns(imm.sig);
+    CALL_INTERFACE_IF_REACHABLE(CallDirect, imm, args.begin(), returns);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprCallIndirect>() {
+    TraceLine trace_msg(this);
+    CallIndirectImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    Value index = Pop(0, kWasmI32);
+    ArgVector args = PopArgs(imm.sig);
+    Value* returns = PushReturns(imm.sig);
+    CALL_INTERFACE_IF_REACHABLE(CallIndirect, index, imm, args.begin(),
+                                returns);
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprReturnCall>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(return_call);
+    CallFunctionImmediate<validate> imm(this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    if (!VALIDATE(this->CanReturnCall(imm.sig))) {
+      this->errorf(this->pc_, "%s: %s",
+                   WasmOpcodes::OpcodeName(kExprReturnCall),
+                   "tail call return types mismatch");
+      return 0;
+    }
+    ArgVector args = PopArgs(imm.sig);
+    CALL_INTERFACE_IF_REACHABLE(ReturnCall, imm, args.begin());
+    EndControl();
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kExprReturnCallIndirect>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(return_call);
+    CallIndirectImmediate<validate> imm(this->enabled_, this, this->pc_ + 1);
+    if (!this->Validate(this->pc_ + 1, imm)) return 0;
+    if (!VALIDATE(this->CanReturnCall(imm.sig))) {
+      this->errorf(this->pc_, "%s: %s",
+                   WasmOpcodes::OpcodeName(kExprReturnCallIndirect),
+                   "tail call return types mismatch");
+      return 0;
+    }
+    Value index = Pop(0, kWasmI32);
+    ArgVector args = PopArgs(imm.sig);
+    CALL_INTERFACE_IF_REACHABLE(ReturnCallIndirect, index, imm, args.begin());
+    EndControl();
+    return 1 + imm.length;
+  }
+
+  template <>
+  int DecodeOp<kNumericPrefix>() {
+    TraceLine trace_msg(this);
+    byte numeric_index =
+        this->template read_u8<validate>(this->pc_ + 1, "numeric index");
+    WasmOpcode full_opcode =
+        static_cast<WasmOpcode>(kNumericPrefix << 8 | numeric_index);
+    if (full_opcode == kExprTableGrow || full_opcode == kExprTableSize ||
+        full_opcode == kExprTableFill) {
+      CHECK_PROTOTYPE_OPCODE(reftypes);
+    } else if (full_opcode >= kExprMemoryInit) {
+      CHECK_PROTOTYPE_OPCODE(bulk_memory);
+    }
+    trace_msg.AppendOpcode(full_opcode);
+    return DecodeNumericOpcode(full_opcode);
+  }
+
+  template <>
+  int DecodeOp<kSimdPrefix>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(simd);
+    uint32_t opcode_length = 0;
+    WasmOpcode full_opcode = this->template read_prefixed_opcode<validate>(
+        this->pc_, &opcode_length);
+    if (!VALIDATE(this->ok())) return 0;
+    trace_msg.AppendOpcode(full_opcode);
+    return DecodeSimdOpcode(full_opcode, 1 + opcode_length);
+  }
+
+  template <>
+  int DecodeOp<kAtomicPrefix>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(threads);
+    byte atomic_index =
+        this->template read_u8<validate>(this->pc_ + 1, "atomic index");
+    WasmOpcode full_opcode =
+        static_cast<WasmOpcode>(kAtomicPrefix << 8 | atomic_index);
+    trace_msg.AppendOpcode(full_opcode);
+    return DecodeAtomicOpcode(full_opcode);
+  }
+
+  template <>
+  int DecodeOp<kGCPrefix>() {
+    TraceLine trace_msg(this);
+    CHECK_PROTOTYPE_OPCODE(gc);
+    byte gc_index = this->template read_u8<validate>(this->pc_ + 1, "gc index");
+    WasmOpcode full_opcode = static_cast<WasmOpcode>(kGCPrefix << 8 | gc_index);
+    trace_msg.AppendOpcode(full_opcode);
+    return DecodeGCOpcode(full_opcode);
+  }
+
+#define DECODE_SIMPLE_PROTOTYPE_OP(name, opc, sig)    \
+  template <>                                         \
+  int DecodeOp<kExpr##name>() {                       \
+    TraceLine trace_msg(this);                        \
+    return BuildSimplePrototypeOperator(kExpr##name); \
+  }
+  FOREACH_SIMPLE_PROTOTYPE_OPCODE(DECODE_SIMPLE_PROTOTYPE_OP)
+#undef DECODE_SIMPLE_PROTOTYPE_OP
 
   using OpcodeHandler = int (*)(WasmFullDecoder*);
 
