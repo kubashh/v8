@@ -63,7 +63,8 @@ class ConstantFoldingReducerTest : public TypedGraphTest {
  public:
   ConstantFoldingReducerTest()
       : TypedGraphTest(3),
-        broker_(isolate(), zone()),
+        persistent_handles_(isolate()->NewPersistentHandles()),
+        broker_(isolate(), zone(), std::move(persistent_handles_)),
         simplified_(zone()),
         deps_(&broker_, zone()) {}
   ~ConstantFoldingReducerTest() override = default;
@@ -90,6 +91,7 @@ class ConstantFoldingReducerTest : public TypedGraphTest {
   JSHeapBroker* broker() { return &broker_; }
 
  private:
+  std::unique_ptr<PersistentHandles> persistent_handles_;
   JSHeapBroker broker_;
   SimplifiedOperatorBuilder simplified_;
   CompilationDependencies deps_;

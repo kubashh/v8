@@ -18,7 +18,8 @@ GraphTest::GraphTest(int num_parameters)
     : canonical_(isolate()),
       common_(zone()),
       graph_(zone()),
-      broker_(isolate(), zone()),
+      persistent_handles_(isolate()->NewPersistentHandles()),
+      broker_(isolate(), zone(), std::move(persistent_handles_)),
       source_positions_(&graph_),
       node_origins_(&graph_) {
   graph()->SetStart(graph()->NewNode(common()->Start(num_parameters)));

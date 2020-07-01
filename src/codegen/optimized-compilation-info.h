@@ -14,6 +14,7 @@
 #include "src/diagnostics/basic-block-profiler.h"
 #include "src/execution/frames.h"
 #include "src/handles/handles.h"
+#include "src/handles/persistent-handles.h"
 #include "src/objects/objects.h"
 #include "src/utils/utils.h"
 #include "src/utils/vector.h"
@@ -220,6 +221,10 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
     profiler_data_ = profiler_data;
   }
 
+  std::unique_ptr<PersistentHandles> persistent_handles() {
+    return std::move(ph_);
+  }
+
  private:
   OptimizedCompilationInfo(Code::Kind code_kind, Zone* zone);
   void ConfigureFlags();
@@ -277,6 +282,8 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
   std::unique_ptr<char[]> trace_turbo_filename_;
 
   TickCounter tick_counter_;
+
+  std::unique_ptr<PersistentHandles> ph_;
 
   DISALLOW_COPY_AND_ASSIGN(OptimizedCompilationInfo);
 };

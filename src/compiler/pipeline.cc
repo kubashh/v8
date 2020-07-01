@@ -152,7 +152,8 @@ class PipelineData {
         codegen_zone_(codegen_zone_scope_.zone()),
         broker_(new JSHeapBroker(
             isolate_, info_->zone(), info_->trace_heap_broker(),
-            is_concurrent_inlining, info->native_context_independent())),
+            is_concurrent_inlining, info->native_context_independent(),
+            info->persistent_handles())),
         register_allocation_zone_scope_(zone_stats_,
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),

@@ -70,6 +70,7 @@ class GraphTest : public TestWithNativeContextAndZone {
   CanonicalHandleScope canonical_;
   CommonOperatorBuilder common_;
   Graph graph_;
+  std::unique_ptr<PersistentHandles> persistent_handles_;
   JSHeapBroker broker_;
   SourcePositionTable source_positions_;
   NodeOriginTable node_origins_;

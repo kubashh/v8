@@ -25,12 +25,14 @@ namespace simplified_operator_reducer_unittest {
 class SimplifiedOperatorReducerTest : public GraphTest {
  public:
   explicit SimplifiedOperatorReducerTest(int num_parameters = 1)
-      : GraphTest(num_parameters), simplified_(zone()) {}
+      : GraphTest(num_parameters),
+        simplified_(zone()),
+        persistent_handles_(isolate()->NewPersistentHandles()) {}
   ~SimplifiedOperatorReducerTest() override = default;
 
  protected:
   Reduction Reduce(Node* node) {
-    JSHeapBroker broker(isolate(), zone());
+    JSHeapBroker broker(isolate(), zone(), std::move(persistent_handles_));
     MachineOperatorBuilder machine(zone());
     JSOperatorBuilder javascript(zone());
     JSGraph jsgraph(isolate(), graph(), common(), &javascript, simplified(),
@@ -44,6 +46,7 @@ class SimplifiedOperatorReducerTest : public GraphTest {
 
  private:
   SimplifiedOperatorBuilder simplified_;
+  std::unique_ptr<PersistentHandles> persistent_handles_;
 };
 
 

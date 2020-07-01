@@ -27,7 +27,8 @@ class JSTypedLoweringTester : public HandleAndZoneScope {
   explicit JSTypedLoweringTester(int num_parameters = 0)
       : isolate(main_isolate()),
         canonical(isolate),
-        js_heap_broker(isolate, main_zone()),
+        persistent_handles_(isolate->NewPersistentHandles()),
+        js_heap_broker(isolate, main_zone(), std::move(persistent_handles_)),
         binop(nullptr),
         unop(nullptr),
         javascript(main_zone()),
@@ -45,6 +46,7 @@ class JSTypedLoweringTester : public HandleAndZoneScope {
   Isolate* isolate;
   TickCounter tick_counter;
   CanonicalHandleScope canonical;
+  std::unique_ptr<PersistentHandles> persistent_handles_;
   JSHeapBroker js_heap_broker;
   const Operator* binop;
   const Operator* unop;
