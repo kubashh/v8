@@ -5,6 +5,7 @@
 #ifndef V8_HEAP_PAGED_SPACES_INL_H_
 #define V8_HEAP_PAGED_SPACES_INL_H_
 
+#include "src/common/globals.h"
 #include "src/heap/incremental-marking.h"
 #include "src/heap/paged-spaces.h"
 #include "src/objects/code-inl.h"
@@ -99,6 +100,7 @@ bool PagedSpace::EnsureLinearAllocationArea(int size_in_bytes,
 HeapObject PagedSpace::AllocateLinearly(int size_in_bytes) {
   Address current_top = allocation_info_.top();
   Address new_top = current_top + size_in_bytes;
+  if (new_top > allocation_info_.limit()) return HeapObject();
   DCHECK_LE(new_top, allocation_info_.limit());
   allocation_info_.set_top(new_top);
   return HeapObject::FromAddress(current_top);
@@ -182,6 +184,20 @@ AllocationResult PagedSpace::AllocateRaw(int size_in_bytes,
       top_on_previous_step_ ? top() - top_on_previous_step_ : 0;
 
   DCHECK_IMPLIES(!SupportsInlineAllocation(), bytes_since_last == 0);
+
+  HeapObject fast_heap_obj;
+
+  if (alignment != kWordAligned) {
+    int allocation_size = size_in_bytes;
+    fast_heap_obj = TryAllocateLinearlyAligned(&allocation_size, alignment);
+  } else {
+    fast_heap_obj = AllocateLinearly(size_in_bytes);
+  }
+
+  if (!fast_heap_obj.is_null()) {
+    return AllocationResult(fast_heap_obj);
+  }
+
 #ifdef V8_HOST_ARCH_32_BIT
   AllocationResult result =
       alignment != kWordAligned
