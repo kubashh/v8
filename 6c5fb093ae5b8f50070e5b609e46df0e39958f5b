@@ -70,6 +70,47 @@
       "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "951c79d2_8fd1c1fd",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3094,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-07-01T14:51:08Z",
+      "side": 1,
+      "message": "As far as performance is concerned, I\u0027m with Thibaud here, it is best to measure.\n\nYou are right Yolanda, as there is no such guarantee. A diamond structure in the CFG, where both middle nodes are loops is an example.\n\nIf I remember correctly, we make an effort to keep loop bodies somewhat consecutive in the RPO (see ComputeAndInsertSpecialRPO).",
+      "parentUuid": "009c4b4c_1d7e3735",
+      "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6987844d_72e09a51",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3111,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2020-07-01T14:51:08Z",
+      "side": 1,
+      "message": "Is this saying that if we enter the loop at least once, range_at_loop_start will not be nullptr?",
+      "range": {
+        "startLine": 3111,
+        "startChar": 10,
+        "endLine": 3111,
+        "endChar": 50
+      },
+      "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
