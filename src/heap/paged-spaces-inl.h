@@ -5,6 +5,7 @@
 #ifndef V8_HEAP_PAGED_SPACES_INL_H_
 #define V8_HEAP_PAGED_SPACES_INL_H_
 
+#include "src/common/globals.h"
 #include "src/heap/incremental-marking.h"
 #include "src/heap/paged-spaces.h"
 #include "src/objects/code-inl.h"
@@ -99,6 +100,7 @@ bool PagedSpace::EnsureLinearAllocationArea(int size_in_bytes,
 HeapObject PagedSpace::AllocateLinearly(int size_in_bytes) {
   Address current_top = allocation_info_.top();
   Address new_top = current_top + size_in_bytes;
+  if (new_top > allocation_info_.limit()) return HeapObject();
   DCHECK_LE(new_top, allocation_info_.limit());
   allocation_info_.set_top(new_top);
   return HeapObject::FromAddress(current_top);
@@ -178,28 +180,27 @@ AllocationResult PagedSpace::AllocateRaw(int size_in_bytes,
               Page::FromAllocationAreaAddress(top_on_previous_step_ - 1));
     top_on_previous_step_ = top();
   }
+
+#if DEBUG
   size_t bytes_since_last =
       top_on_previous_step_ ? top() - top_on_previous_step_ : 0;
-
   DCHECK_IMPLIES(!SupportsInlineAllocation(), bytes_since_last == 0);
-#ifdef V8_HOST_ARCH_32_BIT
-  AllocationResult result =
-      alignment != kWordAligned
-          ? AllocateRawAligned(size_in_bytes, alignment, origin)
-          : AllocateRawUnaligned(size_in_bytes, origin);
-#else
-  AllocationResult result = AllocateRawUnaligned(size_in_bytes, origin);
 #endif
+
   HeapObject heap_obj;
-  if (!result.IsRetry() && result.To(&heap_obj) && !is_local_space()) {
-    AllocationStep(static_cast<int>(size_in_bytes + bytes_since_last),
-                   heap_obj.address(), size_in_bytes);
-    StartNextInlineAllocationStep();
-    DCHECK_IMPLIES(
-        heap()->incremental_marking()->black_allocation(),
-        heap()->incremental_marking()->marking_state()->IsBlack(heap_obj));
+
+  if (alignment != kWordAligned) {
+    int allocation_size = size_in_bytes;
+    heap_obj = TryAllocateLinearlyAligned(&allocation_size, alignment);
+  } else {
+    heap_obj = AllocateLinearly(size_in_bytes);
   }
-  return result;
+
+  if (!heap_obj.is_null()) {
+    return AllocationResult(heap_obj);
+  } else {
+    return AllocateRawSlow(size_in_bytes, alignment, origin);
+  }
 }
 
 }  // namespace internal

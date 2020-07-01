@@ -1004,6 +1004,31 @@ bool PagedSpace::SweepAndRetryAllocation(int required_freed_bytes,
   return false;
 }
 
+AllocationResult PagedSpace::AllocateRawSlow(int size_in_bytes,
+                                             AllocationAlignment alignment,
+                                             AllocationOrigin origin) {
+#ifdef V8_HOST_ARCH_32_BIT
+  AllocationResult result =
+      alignment != kWordAligned
+          ? AllocateRawAligned(size_in_bytes, alignment, origin)
+          : AllocateRawUnaligned(size_in_bytes, origin);
+#else
+  AllocationResult result = AllocateRawUnaligned(size_in_bytes, origin);
+#endif
+  HeapObject heap_obj;
+  if (!result.IsRetry() && result.To(&heap_obj) && !is_local_space()) {
+    size_t bytes_since_last =
+        top_on_previous_step_ ? top() - top_on_previous_step_ : 0;
+    AllocationStep(static_cast<int>(size_in_bytes + bytes_since_last),
+                   heap_obj.address(), size_in_bytes);
+    StartNextInlineAllocationStep();
+    DCHECK_IMPLIES(
+        heap()->incremental_marking()->black_allocation(),
+        heap()->incremental_marking()->marking_state()->IsBlack(heap_obj));
+  }
+  return result;
+}
+
 // -----------------------------------------------------------------------------
 // MapSpace implementation
 
