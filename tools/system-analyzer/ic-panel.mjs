@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+'use strict';
 import {Group, properties} from './ic-model.js';
 
 defineCustomElement('ic-panel', (templateText) =>
@@ -14,7 +15,11 @@ defineCustomElement('ic-panel', (templateText) =>
         'change', e => this.updateTable(e));
     this.filterICBtnSelect.addEventListener(
         'click', e => this.handleICFilter(e));
+    this.$('#filterICTimeBtn').addEventListener(
+      'click', e => this.handleICTimeFilter(e));
     this._noOfItems = 100;
+    this._startTime = 0;
+    this._endTime = 0;
   }
 
   $(id) {
@@ -49,12 +54,18 @@ defineCustomElement('ic-panel', (templateText) =>
     return this.querySelectorAll("span");
   }
 
-  updateTable(event) {
+  updateTable(event, eventType = 'default') {
+    if(eventType === 'default'){
+      this._startTime = 0;
+      this._endTime = entries[entries.length-1].time;
+      console.log("end time in: " + this._endTime);
+    }
     let select = this.groupKeySelect;
     let key = select.options[select.selectedIndex].text;
     let tableBody = this.tableBodySelect;
     this.removeAllChildren(tableBody);
     let groups = Group.groupBy(entries, key, true);
+    console.log(groups);
     this.display(groups, tableBody);
   }
 
@@ -109,6 +120,7 @@ defineCustomElement('ic-panel', (templateText) =>
     for (let i = 0; i < max; i++) {
       let entry = entries[i];
       let tr = document.createElement("tr");
+      // check entry has a valid state in map-processor
       tr.entry = entry;
       let details = this.td(tr,'<span>&#8505;</a>', 'details');
       details.onclick = _ => this.toggleDetails(details);
@@ -126,6 +138,7 @@ defineCustomElement('ic-panel', (templateText) =>
     }
     parent.appendChild(fragment);
   }
+
 
   displayDrilldown(entry, previousSibling) {
     let tr = document.createElement('tr');
@@ -183,14 +196,26 @@ defineCustomElement('ic-panel', (templateText) =>
     }
   }
 
+  //TODO(ZC): Emit event if the address has a valid V8-Map state
+  sendMapClickedEvent(entry){
+    let dataModel = Object.create(null);
+    let selectedMap = V8Map.get("0x" + entry.map);
+    if(selectedMap){
+      dataModel.isValidMap = true;
+      dataModel.map = selectedMap;
+    } else {
+      dataModel.isValidMap = false;
+    }
+    this.dispatchEvent(new CustomEvent(
+      'click', {bubbles: true, composed: true, detail: dataModel}));
+  }
+
   //TODO(zc): Function processing the timestamps of ICEvents
   // Processes the IC Events which have V8Map's in the map-processor
   processICEventTime(){
     let ICTimeToEvent = new Map();
-    // save the occurance time of V8Maps
     let eventTimes = []
-    console.log("Num of stats: " + entries.length);
-    // fetch V8 Maps from the IC Events
+    console.log("Num of entries: " + entries.length);
     entries.forEach(element => {
       let v8Map = V8Map.get("0x" + element.map);
       if(!v8Map){
@@ -213,5 +238,13 @@ defineCustomElement('ic-panel', (templateText) =>
     let noOfItemsInput = parseInt(this.$('#filter-input').value);
     this.noOfItems = noOfItemsInput;
     this.updateTable(e);
+  }
+
+  handleICTimeFilter(e){
+    this._startTime = parseInt(this.$('#filter-time-start').value);
+    this._endTime = parseInt(this.$('#filter-time-end').value);
+    console.log("start: " + this._startTime);
+    console.log("end: " + this._endTime);
+    this.updateTable(e, 'time');
   }
 });
