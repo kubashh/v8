@@ -129,6 +129,30 @@
       "revId": "ed98d99c178cb2e13ab951808aa370ea7153dac3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d496989e_9de16519",
+        "filename": "src/objects/transitions.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-01T15:57:18Z",
+      "side": 1,
+      "message": "Sounds good. Done.",
+      "parentUuid": "76bb1520_d6cfde59",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 0
+      },
+      "revId": "ed98d99c178cb2e13ab951808aa370ea7153dac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
