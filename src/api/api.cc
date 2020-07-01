@@ -5026,12 +5026,12 @@ MaybeLocal<Value> Function::GetData() const {
   i::Handle<i::JSReceiver> self = Utils::OpenHandle(this);
   i::Isolate* isolate = self->GetIsolate();
   if (!self->IsJSFunction()) return MaybeLocal<Value>();
-  i::Handle<i::JSFunction> jsf = i::Handle<i::JSFunction>::cast(self);
-  i::SharedFunctionInfo sfi = jsf->shared();
+  i::Handle<i::JSFunction> func = i::Handle<i::JSFunction>::cast(self);
+  i::SharedFunctionInfo sfi = func->shared();
   if (!sfi.IsApiFunction()) return MaybeLocal<Value>();
-  i::FunctionTemplateInfo fti = sfi.get_api_func_data();
-  i::CallHandlerInfo chi = i::CallHandlerInfo::cast(fti.call_code());
-  return Utils::ToLocal(i::Handle<i::Object>(chi.data(), isolate));
+  i::FunctionTemplateInfo info = sfi.get_api_func_data();
+  i::CallHandlerInfo handler_info = i::CallHandlerInfo::cast(info.call_code());
+  return Utils::ToLocal(i::Handle<i::Object>(handler_info.data(), isolate));
 }
 
 int Name::GetIdentityHash() {
