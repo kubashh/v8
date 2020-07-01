@@ -221,7 +221,6 @@ int main(int argc, char** argv) {
   if (result > 0 || (argc > 3) || i::FLAG_help) {
     ::printf("Usage: %s --startup_src=... --startup_blob=... [extras]\n",
              argv[0]);
-    i::FlagList::PrintHelp();
     return !i::FLAG_help;
   }
 
