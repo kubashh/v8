@@ -52,6 +52,24 @@
       "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "009c4b4c_1d7e3735",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3094,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-07-01T13:12:54Z",
+      "side": 1,
+      "message": "\u003e Do we have a guarantee that the block immediately preceding a loop header block in the RPO is a predecessor of that block?\nSorry, there\u0027s no such a garantee. I should mean \"the block immediately preceding a loop header\", not necessary a \"direct predecessor\" actually. :)",
+      "parentUuid": "f3ffaeb5_a666de52",
+      "revId": "6c5fb093ae5b8f50070e5b609e46df0e39958f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
