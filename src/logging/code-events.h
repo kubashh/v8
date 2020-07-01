@@ -99,7 +99,8 @@ class CodeEventListener {
   virtual void CodeDisableOptEvent(Handle<AbstractCode> code,
                                    Handle<SharedFunctionInfo> shared) = 0;
   virtual void CodeDeoptEvent(Handle<Code> code, DeoptimizeKind kind,
-                              Address pc, int fp_to_sp_delta) = 0;
+                              Address pc, int fp_to_sp_delta,
+                              bool reuse_code) = 0;
 
   virtual bool is_listening_to_code_events() { return false; }
 };
@@ -215,9 +216,9 @@ class CodeEventDispatcher : public CodeEventListener {
     });
   }
   void CodeDeoptEvent(Handle<Code> code, DeoptimizeKind kind, Address pc,
-                      int fp_to_sp_delta) override {
+                      int fp_to_sp_delta, bool reuse_code) override {
     DispatchEventToListeners([=](CodeEventListener* listener) {
-      listener->CodeDeoptEvent(code, kind, pc, fp_to_sp_delta);
+      listener->CodeDeoptEvent(code, kind, pc, fp_to_sp_delta, reuse_code);
     });
   }
 

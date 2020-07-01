@@ -1378,11 +1378,12 @@ void Logger::CodeDisableOptEvent(Handle<AbstractCode> code,
 }
 
 void Logger::CodeDeoptEvent(Handle<Code> code, DeoptimizeKind kind, Address pc,
-                            int fp_to_sp_delta) {
+                            int fp_to_sp_delta, bool reuse_code) {
   if (!log_->IsEnabled()) return;
   Deoptimizer::DeoptInfo info = Deoptimizer::GetDeoptInfo(*code, pc);
   Log::MessageBuilder msg(log_.get());
-  msg << "code-deopt" << kNext << timer_.Elapsed().InMicroseconds() << kNext
+  const char* deopt_str = reuse_code ? "code-bailout" : "code-deopt";
+  msg << deopt_str << kNext << timer_.Elapsed().InMicroseconds() << kNext
       << code->CodeSize() << kNext
       << reinterpret_cast<void*>(code->InstructionStart());
 
