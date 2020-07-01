@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9148ae08_ad561d74",
+        "filename": "tools/system-analyzer/ic-panel-template.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-01T08:11:23Z",
+      "side": 1,
+      "message": "I would not add an UI input for this.\nIf this is just for intermediate testing, this is ok I guess.",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9358d206_927b2d34",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-01T08:11:23Z",
+      "side": 1,
+      "message": "you don\u0027t need \u0027use strict\u0027 for modules, that\u0027s the default.",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f344b69_c3e30d1d",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-01T08:11:23Z",
+      "side": 1,
+      "message": "nit: Add // TODO here",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4390b4a0_8fb7769c",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-01T08:11:23Z",
+      "side": 1,
+      "message": "nit: you log multiple items console.log(\"start:\", this._startTime, \"end:\", this._endTime);",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b1da9a5_d97bc19d",
+        "filename": "tools/system-analyzer/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-01T08:11:23Z",
+      "side": 1,
+      "message": "You should land this change together with the log.cc changes.",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e5e9947_350e5b47",
+        "filename": "tools/system-analyzer/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-01T08:11:23Z",
+      "side": 1,
+      "message": "Why this change? Proper classes are definitely nicer.",
+      "revId": "be7fa79983ab3c29cadf048bc0f782facbbeebe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
