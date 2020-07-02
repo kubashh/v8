@@ -369,6 +369,19 @@ class PageAllocator {
                               Permission permissions) = 0;
 
   /**
+   * Allocates shared memory pages. Not all PageAllocators need support this and
+   * so this method need not be overridden.
+   */
+  virtual void* AllocateSharedPages(size_t length, Permission permission) {
+    return nullptr;
+  }
+  /**
+   * If not overridden and changed to return true, V8 will not attempt to call
+   * AllocateSharedPages.
+   */
+  virtual bool CanAllocateSharedPages() { return false; }
+
+  /**
    * Frees memory in a range that was allocated by a call to AllocatePages.
    */
   virtual bool FreePages(void* address, size_t length) = 0;

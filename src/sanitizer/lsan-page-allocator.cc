@@ -32,6 +32,20 @@ void* LsanPageAllocator::AllocatePages(void* hint, size_t size,
   return result;
 }
 
+void* LsanPageAllocator::AllocateSharedPages(size_t size, Permission access) {
+  void* result = page_allocator_->AllocateSharedPages(size, access);
+#if defined(LEAK_SANITIZER)
+  if (result != nullptr) {
+    __lsan_register_root_region(result, size);
+  }
+#endif
+  return result;
+}
+
+bool LsanPageAllocator::CanAllocateSharedPages() {
+  return page_allocator_->CanAllocateSharedPages();
+}
+
 bool LsanPageAllocator::FreePages(void* address, size_t size) {
   bool result = page_allocator_->FreePages(address, size);
 #if defined(LEAK_SANITIZER)
