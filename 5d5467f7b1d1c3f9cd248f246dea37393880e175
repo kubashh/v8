@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0eef77e_b8b7ba50",
+        "filename": "src/heap/paged-spaces-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-02T09:07:09Z",
+      "side": 1,
+      "message": "Let\u0027s use AllocationResult as an indication of partial function. (I know that TryAllocateLinearlyAligned doesn\u0027t follow this pattern, but that seems like an oversight).",
+      "range": {
+        "startLine": 103,
+        "startChar": 48,
+        "endLine": 103,
+        "endChar": 62
+      },
+      "revId": "5d5467f7b1d1c3f9cd248f246dea37393880e175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9700fb41_c655279f",
+        "filename": "src/heap/paged-spaces-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-02T09:07:09Z",
+      "side": 1,
+      "message": "This should move to AllocateRawSlow",
+      "range": {
+        "startLine": 174,
+        "startChar": 2,
+        "endLine": 189,
+        "endChar": 0
+      },
+      "revId": "5d5467f7b1d1c3f9cd248f246dea37393880e175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
