@@ -42,6 +42,23 @@ void* PageAllocator::AllocatePages(void* hint, size_t size, size_t alignment,
                             static_cast<base::OS::MemoryPermission>(access));
 }
 
+void* PageAllocator::AllocateSharedPages(size_t size, Permission access) {
+#ifdef V8_OS_LINUX
+  return base::OS::AllocateShared(
+      size, static_cast<base::OS::MemoryPermission>(access));
+#else
+  return nullptr;
+#endif
+}
+
+bool PageAllocator::CanAllocateSharedPages() {
+#ifdef V8_OS_LINUX
+  return true;
+#else
+  return false;
+#endif
+}
+
 bool PageAllocator::FreePages(void* address, size_t size) {
   return base::OS::Free(address, size);
 }
