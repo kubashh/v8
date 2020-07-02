@@ -20,6 +20,36 @@ function Exchange(a, b) { return b; }
 let maxSize = 10;
 let memory = new WebAssembly.Memory({initial: 1, maximum: maxSize, shared: true});
 
+function CmpExchgLoop(opcode, alignment) {
+  print("TestI64AtomicCompareExchangeLoop" + alignment);
+  let builder = new WasmModuleBuilder();
+  builder.addImportedMemory("m", "imported_mem", 0, 2, "shared");
+  builder.addFunction("main", makeSig([kWasmI32], []))
+      .addLocals({i64_count: 2})
+      .addBody([
+        kExprLoop, kWasmStmt,
+          kExprLocalGet, 0,
+          kExprLocalGet, 1,
+          kExprLocalGet, 2,
+          kAtomicPrefix, opcode, alignment, 0,
+          kExprLocalGet, 1,
+          kExprI64Ne,
+          kExprBrIf, 0,
+          kExprEnd
+      ])
+      .exportFunc();
+  let mem = new WebAssembly.Memory({initial: 2, maximum: 2, shared: true});
+  let module = new WebAssembly.Module(builder.toBuffer());
+  let instance = new WebAssembly.Instance(module, {m: {imported_mem: mem}});
+}
+
+(function TestAtomicCompareExchgLoop() {
+  CmpExchgLoop(kExprI64AtomicCompareExchange, 3);
+  CmpExchgLoop(kExprI64AtomicCompareExchange32U, 2);
+  CmpExchgLoop(kExprI64AtomicCompareExchange16U, 1);
+  CmpExchgLoop(kExprI64AtomicCompareExchange8U, 0);
+})();
+
 function GetAtomicBinOpFunction(wasmExpression, alignment, offset) {
   let builder = new WasmModuleBuilder();
   builder.addImportedMemory("m", "imported_mem", 0, maxSize, "shared");
@@ -432,32 +462,32 @@ function TestStore(func, buffer, value, size) {
       WebAssembly.CompileError);
 })();
 
-function CmpExchgLoop(opcode, alignment) {
-  print("TestI64AtomicCompareExchangeLoop" + alignment);
-  let builder = new WasmModuleBuilder();
-  builder.addImportedMemory("m", "imported_mem", 0, 2, "shared");
-  builder.addFunction("main", makeSig([kWasmI32], []))
-      .addLocals({i64_count: 2})
-      .addBody([
-        kExprLoop, kWasmStmt,
-          kExprLocalGet, 0,
-          kExprLocalGet, 1,
-          kExprLocalGet, 2,
-          kAtomicPrefix, opcode, alignment, 0,
-          kExprLocalGet, 1,
-          kExprI64Ne,
-          kExprBrIf, 0,
-          kExprEnd
-      ])
-      .exportFunc();
-  let mem = new WebAssembly.Memory({initial: 2, maximum: 2, shared: true});
-  let module = new WebAssembly.Module(builder.toBuffer());
-  let instance = new WebAssembly.Instance(module, {m: {imported_mem: mem}});
-}
+// function CmpExchgLoop(opcode, alignment) {
+//   print("TestI64AtomicCompareExchangeLoop" + alignment);
+//   let builder = new WasmModuleBuilder();
+//   builder.addImportedMemory("m", "imported_mem", 0, 2, "shared");
+//   builder.addFunction("main", makeSig([kWasmI32], []))
+//       .addLocals({i64_count: 2})
+//       .addBody([
+//         kExprLoop, kWasmStmt,
+//           kExprLocalGet, 0,
+//           kExprLocalGet, 1,
+//           kExprLocalGet, 2,
+//           kAtomicPrefix, opcode, alignment, 0,
+//           kExprLocalGet, 1,
+//           kExprI64Ne,
+//           kExprBrIf, 0,
+//           kExprEnd
+//       ])
+//       .exportFunc();
+//   let mem = new WebAssembly.Memory({initial: 2, maximum: 2, shared: true});
+//   let module = new WebAssembly.Module(builder.toBuffer());
+//   let instance = new WebAssembly.Instance(module, {m: {imported_mem: mem}});
+// }
 
-(function TestAtomicCompareExchgLoop() {
-  CmpExchgLoop(kExprI64AtomicCompareExchange, 3);
-  CmpExchgLoop(kExprI64AtomicCompareExchange32U, 2);
-  CmpExchgLoop(kExprI64AtomicCompareExchange16U, 1);
-  CmpExchgLoop(kExprI64AtomicCompareExchange8U, 0);
-})();
+// (function TestAtomicCompareExchgLoop() {
+//   CmpExchgLoop(kExprI64AtomicCompareExchange, 3);
+//   CmpExchgLoop(kExprI64AtomicCompareExchange32U, 2);
+//   CmpExchgLoop(kExprI64AtomicCompareExchange16U, 1);
+//   CmpExchgLoop(kExprI64AtomicCompareExchange8U, 0);
+// })();

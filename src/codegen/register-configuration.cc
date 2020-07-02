@@ -81,16 +81,35 @@ static const int* get_allocatable_double_codes() {
 #endif
 }
 
+static int get_simplified_aliasing_midpoint() {
+  int num_double_regs = get_num_allocatable_double_registers();
+  const int* double_reg_codes = get_allocatable_double_codes();
+  int mid_point = num_double_regs / 2;
+  while (double_reg_codes[mid_point] * 2 >
+         RegisterConfiguration::kMaxFPRegisters) {
+    mid_point--;
+  }
+  return mid_point;
+}
+
 class ArchDefaultRegisterConfiguration : public RegisterConfiguration {
  public:
   ArchDefaultRegisterConfiguration()
-      : RegisterConfiguration(
-            Register::kNumRegisters, DoubleRegister::kNumRegisters,
-            kMaxAllocatableGeneralRegisterCount,
-            get_num_allocatable_double_registers(), kAllocatableGeneralCodes,
+      : ArchDefaultRegisterConfiguration(
+            get_num_allocatable_double_registers(),
             get_allocatable_double_codes(),
             kSimpleFPAliasing ? AliasingKind::OVERLAP : AliasingKind::COMBINE) {
   }
+
+ protected:
+  ArchDefaultRegisterConfiguration(int num_allocatable_double_registers,
+                                   const int* allocatable_double_code,
+                                   AliasingKind aliasing_kind)
+      : RegisterConfiguration(
+            Register::kNumRegisters, DoubleRegister::kNumRegisters,
+            kMaxAllocatableGeneralRegisterCount,
+            num_allocatable_double_registers, kAllocatableGeneralCodes,
+            allocatable_double_code, aliasing_kind) {}
 };
 
 DEFINE_LAZY_LEAKY_OBJECT_GETTER(ArchDefaultRegisterConfiguration,
@@ -100,13 +119,21 @@ DEFINE_LAZY_LEAKY_OBJECT_GETTER(ArchDefaultRegisterConfiguration,
 class ArchDefaultPoisoningRegisterConfiguration : public RegisterConfiguration {
  public:
   ArchDefaultPoisoningRegisterConfiguration()
+      : ArchDefaultPoisoningRegisterConfiguration(
+            get_num_allocatable_double_registers(),
+            get_allocatable_double_codes(),
+            kSimpleFPAliasing ? AliasingKind::OVERLAP : AliasingKind::COMBINE) {
+  }
+
+ protected:
+  ArchDefaultPoisoningRegisterConfiguration(
+      int num_allocatable_double_registers, const int* allocatable_double_code,
+      AliasingKind aliasing_kind)
       : RegisterConfiguration(
             Register::kNumRegisters, DoubleRegister::kNumRegisters,
             kMaxAllocatableGeneralRegisterCount - 1,
-            get_num_allocatable_double_registers(),
-            InitializeGeneralRegisterCodes(), get_allocatable_double_codes(),
-            kSimpleFPAliasing ? AliasingKind::OVERLAP : AliasingKind::COMBINE) {
-  }
+            num_allocatable_double_registers, InitializeGeneralRegisterCodes(),
+            allocatable_double_code, aliasing_kind) {}
 
  private:
   static const int* InitializeGeneralRegisterCodes() {
@@ -131,6 +158,100 @@ int ArchDefaultPoisoningRegisterConfiguration::allocatable_general_codes_
 
 DEFINE_LAZY_LEAKY_OBJECT_GETTER(ArchDefaultPoisoningRegisterConfiguration,
                                 GetDefaultPoisoningRegisterConfiguration)
+
+// Allocatable registers with the masking register and simplified floating point
+// aliasing to avoid AliasingKind::COMBINE complexity.
+template <class Base>
+class SimpleFpRegisterConfiguration : public Base {
+ public:
+  SimpleFpRegisterConfiguration()
+      : Base(GetDoubleRegisterCount(), GetDoubleRegisterCodes(),
+             kSimpleFPAliasing ? Base::AliasingKind::OVERLAP
+                               : Base::AliasingKind::SIMPLIFY) {}
+
+ private:
+  static bool double_code_for_simd128_register(int index, int double_reg_count,
+                                               const int* double_reg_codes) {
+    DCHECK_LT(index, double_reg_count);
+    int code = double_reg_codes[index];
+    // Only even register codes match a simd128 register.
+    if (code % 2 != 0) return false;
+
+    // Return true if the next allocatable register is an adjacent code.
+    return index + 1 < double_reg_count &&
+           double_reg_codes[index + 1] == code + 1;
+  }
+
+  static void InitializeDoubleRegisterCodes() {
+    if (num_allocatable_double_codes_ != 0) return;
+
+    int double_reg_count = get_num_allocatable_double_registers();
+    const int* double_reg_codes = get_allocatable_double_codes();
+    int float_to_simd_boundary = get_simplified_aliasing_midpoint();
+    DCHECK_LT(float_to_simd_boundary, double_reg_count);
+
+    for (int i = 0; i < float_to_simd_boundary; ++i) {
+      // For codes below the float_to_simd_boundary, add each code (each of
+      // which will map to a signle float register).
+      int code = double_reg_codes[i];
+      DCHECK_LT(code * 2, Base::kMaxFPRegisters);
+      allocatable_double_codes_[num_allocatable_double_codes_++] = code;
+    }
+
+    for (int i = float_to_simd_boundary; i < double_reg_count; ++i) {
+      // For codes above the float_to_simd_boundary, add every even code that
+      // has an allocatable adjacent code (each of which will map to a
+      // simd_128 register).
+      int code = double_reg_codes[i];
+      if (double_code_for_simd128_register(i, double_reg_count,
+                                           double_reg_codes)) {
+        allocatable_double_codes_[num_allocatable_double_codes_++] = code;
+      }
+    }
+  }
+
+  static const int* GetDoubleRegisterCodes() {
+    InitializeDoubleRegisterCodes();
+    return allocatable_double_codes_;
+  }
+
+  static int GetDoubleRegisterCount() {
+    InitializeDoubleRegisterCodes();
+    return num_allocatable_double_codes_;
+  }
+
+  static int allocatable_double_codes_[kMaxAllocatableDoubleRegisterCount];
+  static int num_allocatable_double_codes_;
+};
+
+template <class Base>
+int SimpleFpRegisterConfiguration<
+    Base>::allocatable_double_codes_[kMaxAllocatableDoubleRegisterCount];
+template <class Base>
+int SimpleFpRegisterConfiguration<Base>::num_allocatable_double_codes_ = 0;
+
+class ArchDefaultSimpleFpRegisterConfiguration
+    : public SimpleFpRegisterConfiguration<ArchDefaultRegisterConfiguration> {
+ public:
+  ArchDefaultSimpleFpRegisterConfiguration()
+      : SimpleFpRegisterConfiguration<ArchDefaultRegisterConfiguration>() {}
+};
+
+DEFINE_LAZY_LEAKY_OBJECT_GETTER(ArchDefaultSimpleFpRegisterConfiguration,
+                                GetDefaultSimpleFpRegisterConfiguration)
+
+class ArchDefaultPoisoningSimpleFpRegisterConfiguration
+    : public SimpleFpRegisterConfiguration<
+          ArchDefaultPoisoningRegisterConfiguration> {
+ public:
+  ArchDefaultPoisoningSimpleFpRegisterConfiguration()
+      : SimpleFpRegisterConfiguration<
+            ArchDefaultPoisoningRegisterConfiguration>() {}
+};
+
+DEFINE_LAZY_LEAKY_OBJECT_GETTER(
+    ArchDefaultPoisoningSimpleFpRegisterConfiguration,
+    GetDefaultPoisoningSimpleFpRegisterConfiguration)
 
 // RestrictedRegisterConfiguration uses the subset of allocatable general
 // registers the architecture support, which results into generating assembly
@@ -180,6 +301,14 @@ const RegisterConfiguration* RegisterConfiguration::Default() {
 
 const RegisterConfiguration* RegisterConfiguration::Poisoning() {
   return GetDefaultPoisoningRegisterConfiguration();
+}
+
+const RegisterConfiguration* RegisterConfiguration::SimpleFp() {
+  return GetDefaultSimpleFpRegisterConfiguration();
+}
+
+const RegisterConfiguration* RegisterConfiguration::PoisoningSimpleFp() {
+  return GetDefaultPoisoningSimpleFpRegisterConfiguration();
 }
 
 const RegisterConfiguration* RegisterConfiguration::RestrictGeneralRegisters(
@@ -259,6 +388,29 @@ RegisterConfiguration::RegisterConfiguration(
       }
       last_simd128_code = next_simd128_code;
     }
+  } else if (fp_aliasing_kind_ == SIMPLIFY) {
+    int float_to_simd_boundary = get_simplified_aliasing_midpoint();
+    DCHECK_LT(float_to_simd_boundary, num_allocatable_double_registers_);
+    num_float_registers_ = num_double_registers_ * 2 <= kMaxFPRegisters
+                               ? num_double_registers_ * 2
+                               : kMaxFPRegisters;
+    num_allocatable_float_registers_ = 0;
+    for (int i = 0; i < float_to_simd_boundary; ++i) {
+      int float_code = allocatable_double_codes_[i] * 2;
+      DCHECK_LT(float_code, kMaxFPRegisters);
+      allocatable_float_codes_[num_allocatable_float_registers_++] = float_code;
+      allocatable_float_codes_mask_ |= (0x1 << float_code);
+    }
+
+    num_simd128_registers_ = num_double_registers_ / 2;
+    num_allocatable_simd128_registers_ = 0;
+    for (int i = float_to_simd_boundary; i < num_allocatable_double_registers_;
+         ++i) {
+      int simd128_code = allocatable_double_codes_[i] / 2;
+      allocatable_simd128_codes_[num_allocatable_simd128_registers_++] =
+          simd128_code;
+      allocatable_simd128_codes_mask_ |= (0x1 << simd128_code);
+    }
   } else {
     DCHECK(fp_aliasing_kind_ == OVERLAP);
     num_float_registers_ = num_simd128_registers_ = num_double_registers_;
@@ -278,6 +430,11 @@ STATIC_ASSERT(static_cast<int>(MachineRepresentation::kSimd128) ==
               static_cast<int>(MachineRepresentation::kFloat64) + 1);
 STATIC_ASSERT(static_cast<int>(MachineRepresentation::kFloat64) ==
               static_cast<int>(MachineRepresentation::kFloat32) + 1);
+
+int RegisterConfiguration::GetFloatToSimd128TransitionIndex() const {
+  DCHECK(fp_aliasing_kind_ == SIMPLIFY);
+  return get_simplified_aliasing_midpoint();
+}
 
 int RegisterConfiguration::GetAliases(MachineRepresentation rep, int index,
                                       MachineRepresentation other_rep,

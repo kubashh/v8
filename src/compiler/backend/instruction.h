@@ -42,6 +42,7 @@ class V8_EXPORT_PRIVATE InstructionOperand {
     UNALLOCATED,
     CONSTANT,
     IMMEDIATE,
+    PENDING,
     // Location operand kinds.
     ALLOCATED,
     FIRST_LOCATION_OPERAND_KIND = ALLOCATED
@@ -67,6 +68,10 @@ class V8_EXPORT_PRIVATE InstructionOperand {
   // embedded directly in instructions, e.g. small integers and on some
   // platforms Objects.
   INSTRUCTION_OPERAND_PREDICATE(Immediate, IMMEDIATE)
+  // PendingOperands are pending allocation during register allocation and
+  // shouldn't be seen elsewhere. They chain together multiple operators that
+  // will be replaced together with the same value when finalized..
+  INSTRUCTION_OPERAND_PREDICATE(Pending, PENDING)
   // AllocatedOperands are registers or stack slots that are assigned by the
   // register allocator and are always associated with a virtual register.
   INSTRUCTION_OPERAND_PREDICATE(Allocated, ALLOCATED)
@@ -100,6 +105,7 @@ class V8_EXPORT_PRIVATE InstructionOperand {
   }
 
   bool Equals(const InstructionOperand& that) const {
+    if (IsPending()) return false;
     return this->value_ == that.value_;
   }
 
@@ -108,6 +114,7 @@ class V8_EXPORT_PRIVATE InstructionOperand {
   }
 
   bool EqualsCanonicalized(const InstructionOperand& that) const {
+    if (IsPending()) return false;
     return this->GetCanonicalizedValue() == that.GetCanonicalizedValue();
   }
 
@@ -298,8 +305,8 @@ class UnallocatedOperand final : public InstructionOperand {
 
   // [lifetime]: Only for non-FIXED_SLOT.
   bool IsUsedAtStart() const {
-    DCHECK(basic_policy() == EXTENDED_POLICY);
-    return LifetimeField::decode(value_) == USED_AT_START;
+    return basic_policy() == EXTENDED_POLICY &&
+           LifetimeField::decode(value_) == USED_AT_START;
   }
 
   INSTRUCTION_OPERAND_CASTS(UnallocatedOperand, UNALLOCATED)
@@ -403,6 +410,45 @@ class ImmediateOperand : public InstructionOperand {
   STATIC_ASSERT(KindField::kSize == 3);
   using TypeField = base::BitField64<ImmediateType, 3, 1>;
   using ValueField = base::BitField64<int32_t, 32, 32>;
+};
+
+class PendingOperand : public InstructionOperand {
+ public:
+  PendingOperand() : InstructionOperand(PENDING) {}
+  explicit PendingOperand(PendingOperand* next_operand) : PendingOperand() {
+    set_next(next_operand);
+  }
+
+  void set_next(PendingOperand* next) {
+    DCHECK_NULL(this->next());
+    uintptr_t shifted_value =
+        reinterpret_cast<uintptr_t>(next) >> kPointerShift;
+    DCHECK_EQ(reinterpret_cast<uintptr_t>(next),
+              shifted_value << kPointerShift);
+    value_ |= NextOperandField::encode(static_cast<uint64_t>(shifted_value));
+  }
+
+  PendingOperand* next() const {
+    uintptr_t shifted_value =
+        static_cast<uint64_t>(NextOperandField::decode(value_));
+    return reinterpret_cast<PendingOperand*>(shifted_value << kPointerShift);
+  }
+
+  static PendingOperand* New(Zone* zone, PendingOperand* previous_operand) {
+    return InstructionOperand::New(zone, PendingOperand(previous_operand));
+  }
+
+  INSTRUCTION_OPERAND_CASTS(PendingOperand, PENDING)
+
+ private:
+#ifdef V8_TARGET_ARCH_64_BIT
+  static const uint64_t kPointerShift = 3;
+#else
+  static const uint64_t kPointerShift = 2;
+#endif
+
+  STATIC_ASSERT(KindField::kSize == 3);
+  using NextOperandField = base::BitField64<uint64_t, 3, 61>;
 };
 
 class LocationOperand : public InstructionOperand {
@@ -899,7 +945,7 @@ class V8_EXPORT_PRIVATE Instruction final {
   // indexes.
   InstructionBlock* block() const { return block_; }
   void set_block(InstructionBlock* block) {
-    DCHECK_NOT_NULL(block);
+    // DCHECK_NOT_NULL(block);
     block_ = block;
   }
 
@@ -975,6 +1021,10 @@ class RpoNumber final {
 };
 
 std::ostream& operator<<(std::ostream&, const RpoNumber&);
+
+V8_INLINE size_t hash_value(RpoNumber value) {
+  return static_cast<size_t>(value.ToInt());
+}
 
 class V8_EXPORT_PRIVATE Constant final {
  public:
@@ -1338,7 +1388,8 @@ class V8_EXPORT_PRIVATE InstructionBlock final
     : public NON_EXPORTED_BASE(ZoneObject) {
  public:
   InstructionBlock(Zone* zone, RpoNumber rpo_number, RpoNumber loop_header,
-                   RpoNumber loop_end, bool deferred, bool handler);
+                   RpoNumber loop_end, RpoNumber dominator, bool deferred,
+                   bool handler);
 
   // Instruction indexes (used by the register allocator).
   int first_instruction_index() const {
@@ -1387,6 +1438,9 @@ class V8_EXPORT_PRIVATE InstructionBlock final
   const Successors& successors() const { return successors_; }
   size_t SuccessorCount() const { return successors_.size(); }
 
+  RpoNumber dominator() const { return dominator_; }
+  void set_dominator(RpoNumber dominator) { dominator_ = dominator; }
+
   using PhiInstructions = ZoneVector<PhiInstruction*>;
   const PhiInstructions& phis() const { return phis_; }
   PhiInstruction* PhiAt(size_t i) const { return phis_[i]; }
@@ -1415,6 +1469,7 @@ class V8_EXPORT_PRIVATE InstructionBlock final
   const RpoNumber rpo_number_;
   const RpoNumber loop_header_;
   const RpoNumber loop_end_;
+  RpoNumber dominator_;
   int32_t code_start_;   // start index of arch-specific code.
   int32_t code_end_ = -1;     // end index of arch-specific code.
   const bool deferred_;       // Block contains deferred code.

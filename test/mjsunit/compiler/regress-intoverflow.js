@@ -58,10 +58,11 @@ assertEquals(-4294967296, testAdd(-0x40000000, -0x40000000));
 function testSub(a, b) {
   a *= 2;
   b *= 2;
-  if (b == 2) {print(a); print(b);}
-  if (a < 1 && b < 3) {
+  if (a < 1) {print(a); /*print(b);*/}
+  if (a < 1) {
     return a - b;
   }
+  return " BOOO"
 }
 
 %PrepareFunctionForOptimization(testSub);

@@ -22,7 +22,10 @@ class V8_EXPORT_PRIVATE RegisterConfiguration {
     // Registers alias a single register of every other size (e.g. Intel).
     OVERLAP,
     // Registers alias two registers of the next smaller size (e.g. ARM).
-    COMBINE
+    COMBINE,
+    // Simplify a COMBINE style aliasing into two OVERLAP sizes with a boundary
+    // between registers that can be used as float and simd128.
+    SIMPLIFY
   };
 
   // Architecture independent maxes.
@@ -36,6 +39,14 @@ class V8_EXPORT_PRIVATE RegisterConfiguration {
 
   // Register configuration with reserved masking register.
   static const RegisterConfiguration* Poisoning();
+
+  // Register configuration with simplified floating point register file to
+  // avoid AliasingKind::COMBINE complexity.
+  static const RegisterConfiguration* SimpleFp();
+
+  // Register configuration with reserved masking register and simplified
+  // floating point register file to avoid AliasingKind::COMBINE complexity.
+  static const RegisterConfiguration* PoisoningSimpleFp();
 
   static const RegisterConfiguration* RestrictGeneralRegisters(
       RegList registers);
@@ -126,6 +137,11 @@ class V8_EXPORT_PRIVATE RegisterConfiguration {
   // kFloat64, or kSimd128 reps.
   bool AreAliases(MachineRepresentation rep, int index,
                   MachineRepresentation other_rep, int other_index) const;
+
+  // Aliasing calculations for floating point registers, when fp_aliasing_kind()
+  // is SIMPLIFY. Returns the index at which double register aliases transitions
+  // from aliasing with kFloat32 registers to aliasing with kSimd128 registers.
+  int GetFloatToSimd128TransitionIndex() const;
 
   virtual ~RegisterConfiguration() = default;
 
