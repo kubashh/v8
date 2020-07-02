@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c843203_8b76b090",
+        "filename": "tools/system-analyzer/ic-panel-template.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-02T17:19:05Z",
+      "side": 1,
+      "message": "Please use readable names: .TL- \u003d\u003e .timeline-",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29bd5a17_073dff02",
+        "filename": "tools/system-analyzer/ic-panel-template.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-02T17:19:05Z",
+      "side": 1,
+      "message": "nit: 2 spaces instead of tabs for indentation.",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "333c309a_75ff7111",
+        "filename": "tools/system-analyzer/ic-panel-template.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-02T17:19:05Z",
+      "side": 1,
+      "message": "as above, let\u0027s keep this for now, but I would not invest too much time into the separate timline but rather one that is shared among all different tools",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98d67596_77b1946a",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-02T17:19:05Z",
+      "side": 1,
+      "message": "You don\u0027t need this part, just initialize this._endTime to the entries length when you set the entries\n\nOption a) use -1 as initial value for this._endTime and set it to the last entry time.\n\nOption b) turn entries into a CustomElement property (currently it\u0027s a global) and set initial this._endTime accordingly",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcdf83a2_2609a93a",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-02T17:19:05Z",
+      "side": 1,
+      "message": "nit: the display* methods that create html nodes should maybe called render* method? (not feeling strongly about this)",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7a28f17_2c33ff54",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-02T17:19:05Z",
+      "side": 1,
+      "message": "Just directly use selectedMap as details and used undefined to figure out whether it\u0027s been set or not\n\n      this.dispatchEvent(new CustomEvent(\n      \u0027click\u0027, {bubbles: true, composed: true, detail: selectedMap}));",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1357cd62_8d389782",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-02T17:19:05Z",
+      "side": 1,
+      "message": "missing sanity checks here:\n\n- _startTime \u003e 0 \u0026\u0026 _startTime \u003c entries[entries.length-1].time\n- _startTime \u003c _endTime",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8feae5a2_dd61eeb4",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-02T17:19:05Z",
+      "side": 1,
+      "message": "This should all go into a single timeline component so you don\u0027t have to duplicate the logic for every separate panel.\n\nFor now this is fine.",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9ce23a9_e310b9e6",
+        "filename": "tools/system-analyzer/ic-processor.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-02T17:19:05Z",
+      "side": 1,
+      "message": "please also fix the old tools/ic-processor and add the log.cc changes to the same CL",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
