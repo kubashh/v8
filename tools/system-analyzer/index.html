@@ -161,7 +161,8 @@ function loadFileIC(file) {
     icProcessor.processString(this.result);
     entries = icProcessor.entries;
     $("ic-panel").countSelect.innerHTML = entries.length;
-    $("ic-panel").updateTable(entries);
+    $('#ic-panel').receiveData(entries);
+    //$("ic-panel").updateTable();
   }
   reader.readAsText(file);
   $("ic-panel").initGroupKeySelect();
