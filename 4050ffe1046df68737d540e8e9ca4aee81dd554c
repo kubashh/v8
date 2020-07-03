@@ -124,6 +124,40 @@
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f893715f_16e032c4",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-03T16:10:09Z",
+      "side": 1,
+      "message": "Please add a short summary of what this thread does.",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2178422_5a7d82da",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-03T16:10:09Z",
+      "side": 1,
+      "message": "Please remove the debug code here and below.",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
