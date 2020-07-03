@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c08f3b27_d79f3117",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-03T12:14:49Z",
+      "side": 1,
+      "message": "Thanks! Some more comments. Depending on if Al\u0027s CL lands first or this one, we need to update the lines about fyi.\n\nAl, could you also review this CL?",
+      "revId": "f00faa050dad79f8e3b2da0ec9439853ad54e510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c1fb79a_36dd3893",
+        "filename": "docs/branch-covarage.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-03T12:14:49Z",
+      "side": 1,
+      "message": "nit: the following",
+      "range": {
+        "startLine": 6,
+        "startChar": 58,
+        "endLine": 6,
+        "endChar": 63
+      },
+      "revId": "f00faa050dad79f8e3b2da0ec9439853ad54e510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55ed60aa_92aada5e",
+        "filename": "docs/branch-covarage.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-03T12:14:49Z",
+      "side": 1,
+      "message": "nit: Is it not also covering ports? How about just \"any failures\" and rather a link to the notification config file?",
+      "range": {
+        "startLine": 20,
+        "startChar": 57,
+        "endLine": 20,
+        "endChar": 199
+      },
+      "revId": "f00faa050dad79f8e3b2da0ec9439853ad54e510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16905b6a_3b580509",
+        "filename": "docs/branch-covarage.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-03T12:14:49Z",
+      "side": 1,
+      "message": "nit: Since those are undocumented in public docus, maybe summarize what to do exactly (e.g. which fields are updated in which cfg nodes?).",
+      "range": {
+        "startLine": 25,
+        "startChar": 15,
+        "endLine": 25,
+        "endChar": 45
+      },
+      "revId": "f00faa050dad79f8e3b2da0ec9439853ad54e510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3832e5b3_5b8a999d",
+        "filename": "docs/branch-covarage.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-03T12:14:49Z",
+      "side": 1,
+      "message": "nit: addition",
+      "range": {
+        "startLine": 31,
+        "startChar": 26,
+        "endLine": 31,
+        "endChar": 33
+      },
+      "revId": "f00faa050dad79f8e3b2da0ec9439853ad54e510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceebfa8a_0a8ea3b1",
+        "filename": "docs/branch-covarage.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-03T12:14:49Z",
+      "side": 1,
+      "message": "nit: builder",
+      "range": {
+        "startLine": 31,
+        "startChar": 19,
+        "endLine": 31,
+        "endChar": 25
+      },
+      "revId": "f00faa050dad79f8e3b2da0ec9439853ad54e510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c2435b2_704b7202",
+        "filename": "docs/branch-covarage.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-03T12:14:49Z",
+      "side": 1,
+      "message": "nit: I suggest in each line below to add a link to the file where the changes need to be made. I.e. link to luci-milo.cfg etc.",
+      "range": {
+        "startLine": 31,
+        "startChar": 64,
+        "endLine": 31,
+        "endChar": 75
+      },
+      "revId": "f00faa050dad79f8e3b2da0ec9439853ad54e510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20b29a1a_4a2bb766",
+        "filename": "docs/branch-covarage.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-03T12:14:49Z",
+      "side": 1,
+      "message": "nit: additionally",
+      "range": {
+        "startLine": 35,
+        "startChar": 3,
+        "endLine": 35,
+        "endChar": 13
+      },
+      "revId": "f00faa050dad79f8e3b2da0ec9439853ad54e510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d3f6405_6278a0b5",
+        "filename": "docs/branch-covarage.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-03T12:14:49Z",
+      "side": 1,
+      "message": "nit: backmerge or back-merge or merge back",
+      "range": {
+        "startLine": 36,
+        "startChar": 3,
+        "endLine": 36,
+        "endChar": 13
+      },
+      "revId": "f00faa050dad79f8e3b2da0ec9439853ad54e510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "503160d0_41a703c8",
+        "filename": "docs/branch-covarage.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-03T12:14:49Z",
+      "side": 1,
+      "message": "nit: add comma",
+      "range": {
+        "startLine": 41,
+        "startChar": 204,
+        "endLine": 41,
+        "endChar": 208
+      },
+      "revId": "f00faa050dad79f8e3b2da0ec9439853ad54e510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
