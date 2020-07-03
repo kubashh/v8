@@ -173,7 +173,7 @@ Handle<String> AstConsString::Allocate(LocalIsolate* isolate) const {
   // AstRawStrings are internalized before AstConsStrings are allocated, so
   // AstRawString::string() will just work.
   Handle<String> tmp = segment_.string->string();
-  for (AstConsString::Segment* current = segment_.next; current != nullptr;
+  for (AstConsStringSegment* current = segment_.next; current != nullptr;
        current = current->next) {
     tmp = isolate->factory()
               ->NewConsString(current->string->string(), tmp,
@@ -199,7 +199,7 @@ Handle<String> AstConsString::AllocateFlat(LocalIsolate* isolate) const {
 
   int result_length = 0;
   bool is_one_byte = true;
-  for (const AstConsString::Segment* current = &segment_; current != nullptr;
+  for (const AstConsStringSegment* current = &segment_; current != nullptr;
        current = current->next) {
     result_length += current->string->length();
     is_one_byte = is_one_byte && current->string->is_one_byte();
@@ -212,7 +212,7 @@ Handle<String> AstConsString::AllocateFlat(LocalIsolate* isolate) const {
             .ToHandleChecked();
     DisallowHeapAllocation no_gc;
     uint8_t* dest = result->GetChars(no_gc) + result_length;
-    for (const AstConsString::Segment* current = &segment_; current != nullptr;
+    for (const AstConsStringSegment* current = &segment_; current != nullptr;
          current = current->next) {
       int length = current->string->length();
       dest -= length;
@@ -228,7 +228,7 @@ Handle<String> AstConsString::AllocateFlat(LocalIsolate* isolate) const {
           .ToHandleChecked();
   DisallowHeapAllocation no_gc;
   uint16_t* dest = result->GetChars(no_gc) + result_length;
-  for (const AstConsString::Segment* current = &segment_; current != nullptr;
+  for (const AstConsStringSegment* current = &segment_; current != nullptr;
        current = current->next) {
     int length = current->string->length();
     dest -= length;
@@ -256,7 +256,7 @@ std::forward_list<const AstRawString*> AstConsString::ToRawStrings() const {
   }
 
   result.emplace_front(segment_.string);
-  for (AstConsString::Segment* current = segment_.next; current != nullptr;
+  for (AstConsStringSegment* current = segment_.next; current != nullptr;
        current = current->next) {
     result.emplace_front(current->string);
   }
@@ -268,21 +268,21 @@ AstStringConstants::AstStringConstants(Isolate* isolate, uint64_t hash_seed)
       string_table_(AstRawString::Compare),
       hash_seed_(hash_seed) {
   DCHECK_EQ(ThreadId::Current(), isolate->thread_id());
-#define F(name, str)                                                       \
-  {                                                                        \
-    const char* data = str;                                                \
-    Vector<const uint8_t> literal(reinterpret_cast<const uint8_t*>(data),  \
-                                  static_cast<int>(strlen(data)));         \
-    uint32_t hash_field = StringHasher::HashSequentialString<uint8_t>(     \
-        literal.begin(), literal.length(), hash_seed_);                    \
-    name##_string_ = new (&zone_) AstRawString(true, literal, hash_field); \
-    /* The Handle returned by the factory is located on the roots */       \
-    /* array, not on the temporary HandleScope, so this is safe.  */       \
-    name##_string_->set_string(isolate->factory()->name##_string());       \
-    base::HashMap::Entry* entry =                                          \
-        string_table_.InsertNew(name##_string_, name##_string_->Hash());   \
-    DCHECK_NULL(entry->value);                                             \
-    entry->value = reinterpret_cast<void*>(1);                             \
+#define F(name, str)                                                      \
+  {                                                                       \
+    const char* data = str;                                               \
+    Vector<const uint8_t> literal(reinterpret_cast<const uint8_t*>(data), \
+                                  static_cast<int>(strlen(data)));        \
+    uint32_t hash_field = StringHasher::HashSequentialString<uint8_t>(    \
+        literal.begin(), literal.length(), hash_seed_);                   \
+    name##_string_ = zone_.New<AstRawString>(true, literal, hash_field);  \
+    /* The Handle returned by the factory is located on the roots */      \
+    /* array, not on the temporary HandleScope, so this is safe.  */      \
+    name##_string_->set_string(isolate->factory()->name##_string());      \
+    base::HashMap::Entry* entry =                                         \
+        string_table_.InsertNew(name##_string_, name##_string_->Hash());  \
+    DCHECK_NULL(entry->value);                                            \
+    entry->value = reinterpret_cast<void*>(1);                            \
   }
   AST_STRING_CONSTANTS(F)
 #undef F
@@ -333,7 +333,7 @@ const AstRawString* AstValueFactory::CloneFromOtherFactory(
 }
 
 AstConsString* AstValueFactory::NewConsString() {
-  return new (zone()) AstConsString;
+  return zone()->New<AstConsString>();
 }
 
 AstConsString* AstValueFactory::NewConsString(const AstRawString* str) {
@@ -379,7 +379,7 @@ AstRawString* AstValueFactory::GetString(uint32_t hash_field, bool is_one_byte,
     int length = literal_bytes.length();
     byte* new_literal_bytes = zone()->NewArray<byte>(length);
     memcpy(new_literal_bytes, literal_bytes.begin(), length);
-    AstRawString* new_string = new (zone()) AstRawString(
+    AstRawString* new_string = zone()->New<AstRawString>(
         is_one_byte, Vector<const byte>(new_literal_bytes, length), hash_field);
     CHECK_NOT_NULL(new_string);
     AddString(new_string);

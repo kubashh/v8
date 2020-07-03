@@ -569,8 +569,8 @@ class MachO {
 class ELF {
  public:
   explicit ELF(Zone* zone) : sections_(zone) {
-    sections_.push_back(new (zone) ELFSection("", ELFSection::TYPE_NULL, 0));
-    sections_.push_back(new (zone) ELFStringTable(".shstrtab"));
+    sections_.push_back(zone->New<ELFSection>("", ELFSection::TYPE_NULL, 0));
+    sections_.push_back(zone->New<ELFStringTable>(".shstrtab"));
   }
 
   void Write(Writer* w) {
@@ -973,8 +973,8 @@ class CodeDescription {
 #if defined(__ELF)
 static void CreateSymbolsTable(CodeDescription* desc, Zone* zone, ELF* elf,
                                size_t text_section_index) {
-  ELFSymbolTable* symtab = new (zone) ELFSymbolTable(".symtab", zone);
-  ELFStringTable* strtab = new (zone) ELFStringTable(".strtab");
+  ELFSymbolTable* symtab = zone->New<ELFSymbolTable>(".symtab", zone);
+  ELFStringTable* strtab = zone->New<ELFStringTable>(".strtab");
 
   // Symbol table should be followed by the linked string table.
   elf->AddSection(symtab);
@@ -1691,12 +1691,12 @@ bool UnwindInfoSection::WriteBodyInternal(Writer* w) {
 static void CreateDWARFSections(CodeDescription* desc, Zone* zone,
                                 DebugObject* obj) {
   if (desc->IsLineInfoAvailable()) {
-    obj->AddSection(new (zone) DebugInfoSection(desc));
-    obj->AddSection(new (zone) DebugAbbrevSection(desc));
-    obj->AddSection(new (zone) DebugLineSection(desc));
+    obj->AddSection(zone->New<DebugInfoSection>(desc));
+    obj->AddSection(zone->New<DebugAbbrevSection>(desc));
+    obj->AddSection(zone->New<DebugLineSection>(desc));
   }
 #if V8_TARGET_ARCH_X64
-  obj->AddSection(new (zone) UnwindInfoSection(desc));
+  obj->AddSection(zone->New<UnwindInfoSection>(desc));
 #endif
 }
 
@@ -1788,7 +1788,7 @@ static JITCodeEntry* CreateELFObject(CodeDescription* desc, Isolate* isolate) {
   MachO mach_o(&zone);
   Writer w(&mach_o);
 
-  mach_o.AddSection(new (&zone) MachOTextSection(
+  mach_o.AddSection(zone.New<MachOTextSection>(
       kCodeAlignment, desc->CodeStart(), desc->CodeSize()));
 
   CreateDWARFSections(desc, &zone, &mach_o);
@@ -1799,7 +1799,7 @@ static JITCodeEntry* CreateELFObject(CodeDescription* desc, Isolate* isolate) {
   ELF elf(&zone);
   Writer w(&elf);
 
-  size_t text_section_index = elf.AddSection(new (&zone) FullHeaderELFSection(
+  size_t text_section_index = elf.AddSection(zone.New<FullHeaderELFSection>(
       ".text", ELFSection::TYPE_NOBITS, kCodeAlignment, desc->CodeStart(), 0,
       desc->CodeSize(), ELFSection::FLAG_ALLOC | ELFSection::FLAG_EXEC));
 
