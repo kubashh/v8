@@ -213,6 +213,9 @@ class Logger : public CodeEventListener {
                            Handle<SharedFunctionInfo> shared) override;
   void CodeDeoptEvent(Handle<Code> code, DeoptimizeKind kind, Address pc,
                       int fp_to_sp_delta) override;
+  void CodeDependencyChangeEvent(Handle<Code> code,
+                                 Handle<SharedFunctionInfo> sfi,
+                                 const char* reason) override;
 
   // Emits a code line info record event.
   void CodeLinePosInfoRecordEvent(Address code_start,
@@ -398,6 +401,9 @@ class V8_EXPORT_PRIVATE CodeEventLogger : public CodeEventListener {
   void CodeMovingGCEvent() override {}
   void CodeDeoptEvent(Handle<Code> code, DeoptimizeKind kind, Address pc,
                       int fp_to_sp_delta) override {}
+  void CodeDependencyChangeEvent(Handle<Code> code,
+                                 Handle<SharedFunctionInfo> sfi,
+                                 const char* reason) override {}
 
  protected:
   Isolate* isolate_;
@@ -458,6 +464,9 @@ class ExternalCodeEventListener : public CodeEventListener {
   void CodeMovingGCEvent() override {}
   void CodeDeoptEvent(Handle<Code> code, DeoptimizeKind kind, Address pc,
                       int fp_to_sp_delta) override {}
+  void CodeDependencyChangeEvent(Handle<Code> code,
+                                 Handle<SharedFunctionInfo> sfi,
+                                 const char* reason) override {}
 
   void StartListening(v8::CodeEventHandler* code_event_handler);
   void StopListening();

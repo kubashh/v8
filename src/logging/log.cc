@@ -1404,6 +1404,39 @@ void Logger::CodeDeoptEvent(Handle<Code> code, DeoptimizeKind kind, Address pc,
   msg.WriteToLogFile();
 }
 
+void Logger::CodeDependencyChangeEvent(Handle<Code> code,
+                                       Handle<SharedFunctionInfo> sfi,
+                                       const char* reason) {
+  if (!log_->IsEnabled()) return;
+  Log::MessageBuilder msg(log_.get());
+  msg << "code-dependency-change" << kNext << timer_.Elapsed().InMicroseconds()
+      << kNext << code->CodeSize() << kNext
+      << reinterpret_cast<void*>(code->InstructionStart());
+
+  std::ostringstream func_location;
+  if (sfi->script().IsScript()) {
+    Script script = Script::cast(sfi->script());
+    if (script.name().IsString()) {
+      func_location << String::cast(script.name())
+                           .ToCString(DISALLOW_NULLS, ROBUST_STRING_TRAVERSAL)
+                           .get();
+      func_location << ":"
+                    << Script::GetLineNumber(handle(script, isolate_),
+                                             sfi->StartPosition()) +
+                           1;
+      func_location << ":"
+                    << Script::GetColumnNumber(handle(script, isolate_),
+                                               sfi->StartPosition()) +
+                           1;
+    } else {
+      func_location << "unknown";
+    }
+  }
+
+  msg << kNext << func_location.str().c_str() << kNext << reason;
+  msg.WriteToLogFile();
+}
+
 namespace {
 
 void CodeLinePosEvent(
