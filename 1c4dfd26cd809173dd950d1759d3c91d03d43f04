@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bca58b85_34faef86",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-03T10:00:27Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 223,
+        "startChar": 56,
+        "endLine": 223,
+        "endChar": 59
+      },
+      "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0e89e7f9_5235e77c",
         "filename": "src/flags/flags.cc",
         "patchSetId": 9
@@ -36,6 +59,46 @@
         "endLine": 231,
         "endChar": 54
       },
+      "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a2bead1_8b1bef09",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-03T10:00:27Z",
+      "side": 1,
+      "message": "I don\u0027t see what this is needed for. Can you add a comment?",
+      "range": {
+        "startLine": 785,
+        "startChar": 47,
+        "endLine": 785,
+        "endChar": 73
+      },
+      "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42d3b114_db4f8558",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-03T10:00:27Z",
+      "side": 1,
+      "message": "An early exit would make this more readable IMO:\nif (!premise) return false;",
       "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
