@@ -16,6 +16,40 @@
       "revId": "59eed9092e1bbf132f450b037e44156c3a2a9831",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ad65d8d6_e6758fea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-03T16:03:10Z",
+      "side": 1,
+      "message": "LGTM with a suggestion.",
+      "revId": "59eed9092e1bbf132f450b037e44156c3a2a9831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "af322051_d0ee71f6",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-03T16:03:10Z",
+      "side": 1,
+      "message": "How about just doing:\n  Deoptimizer::DeoptInfo info \u003d Deoptimizer::GetDeoptInfo(*code, code-\u003eInstructionStart());\n\nthen printing the same information as above (we could even wrap it in a helper function to avoid duplicating the code)?",
+      "revId": "59eed9092e1bbf132f450b037e44156c3a2a9831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
