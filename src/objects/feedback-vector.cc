@@ -953,6 +953,11 @@ void FeedbackNexus::ConfigurePolymorphic(
     DCHECK(IC::IsHandler(*handler));
     array->Set(current * 2 + 1, *handler);
   }
+
+  // Use a release store to flush all writes to the array. It will be
+  // examined on the background compilation thread.
+  array->synchronized_set_length(array->length());
+
   if (name.is_null()) {
     SetFeedback(*array);
     SetFeedbackExtra(*FeedbackVector::UninitializedSentinel(GetIsolate()),
@@ -961,6 +966,48 @@ void FeedbackNexus::ConfigurePolymorphic(
     SetFeedback(*name);
     SetFeedbackExtra(*array);
   }
+}
+
+// This function is based on a SINGLE READ of a single slot in the vector.
+// If it finds an array, then the array is immutable, so maps can be
+// harvested from it. No Handlers are inspected/returned.
+InlineCacheState FeedbackNexus::TryGatherLoadIC(LocalHeap* local_heap,
+                                                MapHandles* maps) const {
+  Isolate* isolate = GetIsolate();
+  MaybeObject feedback = GetFeedback();
+  DCHECK(IsLoadICKind(kind()));
+  if (feedback == MaybeObject::FromObject(
+                      *FeedbackVector::UninitializedSentinel(isolate))) {
+    return UNINITIALIZED;
+  }
+  if (feedback ==
+      MaybeObject::FromObject(*FeedbackVector::MegamorphicSentinel(isolate))) {
+    return MEGAMORPHIC;
+  }
+  HeapObject heap_object;
+  if (feedback->GetHeapObjectIfStrong(&heap_object)) {
+    WeakFixedArray array = WeakFixedArray::cast(heap_object);
+    const int increment = 2;
+    // If we use an acquire load on the length field, we'll see initialized
+    // map fields.
+    const int length = array.synchronized_length();
+    for (int i = 0; i < length; i += increment) {
+      DCHECK(array.Get(i)->IsWeakOrCleared());
+      if (array.Get(i)->GetHeapObjectIfWeak(&heap_object)) {
+        Map map = Map::cast(heap_object);
+        maps->push_back(handle(map, local_heap));
+      }
+    }
+    return POLYMORPHIC;
+  } else if (feedback->GetHeapObjectIfWeak(&heap_object)) {
+    Map map = Map::cast(heap_object);
+    maps->push_back(handle(map, local_heap));
+    return MONOMORPHIC;
+  }
+
+  // Final case, we are monomorphic but feedback is cleared.
+  CHECK(feedback->IsWeak() && feedback->IsCleared());
+  return MONOMORPHIC;
 }
 
 int FeedbackNexus::ExtractMaps(MapHandles* maps) const {

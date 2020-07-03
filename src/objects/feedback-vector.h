@@ -655,6 +655,8 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   // For map-based ICs (load, keyed-load, store, keyed-store).
   Map GetFirstMap() const;
 
+  InlineCacheState TryGatherLoadIC(LocalHeap* local_heap,
+                                   MapHandles* maps) const;
   int ExtractMaps(MapHandles* maps) const;
   int ExtractMapsAndHandlers(std::vector<MapAndHandler>* maps_and_handlers,
                              bool try_update_deprecated = false) const;
