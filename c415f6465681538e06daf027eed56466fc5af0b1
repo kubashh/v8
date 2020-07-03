@@ -16,6 +16,24 @@
       "revId": "c415f6465681538e06daf027eed56466fc5af0b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60a51b52_ebbd00c1",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-03T12:13:50Z",
+      "side": 1,
+      "message": "no longer applies",
+      "parentUuid": "c0a76fef_25472af2",
+      "revId": "c415f6465681538e06daf027eed56466fc5af0b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

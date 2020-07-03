@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8a03dea4_77963d25",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-03T12:13:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bca58b85_34faef86",
+      "range": {
+        "startLine": 223,
+        "startChar": 56,
+        "endLine": 223,
+        "endChar": 59
+      },
+      "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e89e7f9_5235e77c",
         "filename": "src/flags/flags.cc",
         "patchSetId": 9
@@ -39,6 +63,24 @@
       "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eab00b93_4c89c0e7",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-03T12:13:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e89e7f9_5235e77c",
+      "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "5daed113_06a6cdb5",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-03T12:13:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6783ca42_8721e9f2",
+      "range": {
+        "startLine": 231,
+        "startChar": 7,
+        "endLine": 231,
+        "endChar": 54
+      },
+      "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a2bead1_8b1bef09",
         "filename": "src/flags/flags.cc",
         "patchSetId": 9
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "a72c609e_6f1c2d97",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-03T12:13:50Z",
+      "side": 1,
+      "message": "This was to prevent template parameter inference from looking at this argument. I found an easier to read solution now, at the cost of slightly deeper error messages.",
+      "parentUuid": "8a2bead1_8b1bef09",
+      "range": {
+        "startLine": 785,
+        "startChar": 47,
+        "endLine": 785,
+        "endChar": 73
+      },
+      "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42d3b114_db4f8558",
         "filename": "src/flags/flags.cc",
         "patchSetId": 9
@@ -102,6 +192,24 @@
       "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c53a7936_c74f1cb7",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-03T12:13:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42d3b114_db4f8558",
+      "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
