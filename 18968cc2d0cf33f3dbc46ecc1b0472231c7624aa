@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "66cfbc05_74353e6a",
+        "filename": "tools/system-analyzer/ic-panel-template.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T10:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c843203_8b76b090",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "29bd5a17_073dff02",
         "filename": "tools/system-analyzer/ic-panel-template.html",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "436b0593_39e5f1dd",
+        "filename": "tools/system-analyzer/ic-panel-template.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T10:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29bd5a17_073dff02",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ea411429_cf12aea8",
+        "filename": "tools/system-analyzer/ic-panel-template.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T10:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "333c309a_75ff7111",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98d67596_77b1946a",
         "filename": "tools/system-analyzer/ic-panel.mjs",
         "patchSetId": 4
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "f6976a5f_7430cc9a",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T10:54:49Z",
+      "side": 1,
+      "message": "Liked the Option b) 😉",
+      "parentUuid": "98d67596_77b1946a",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fcdf83a2_2609a93a",
         "filename": "tools/system-analyzer/ic-panel.mjs",
         "patchSetId": 4
@@ -81,6 +153,24 @@
       "writtenOn": "2020-07-02T17:19:05Z",
       "side": 1,
       "message": "nit: the display* methods that create html nodes should maybe called render* method? (not feeling strongly about this)",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4196223_7fccde7c",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T10:54:49Z",
+      "side": 1,
+      "message": "Maybe templating libraries way of using render* as method can be a better fit. \n\nconst markup \u003d \u0027\u003cdiv\u003eSome HTML to render.\u003c/div\u003e\u0027;\nconst template \u003d html`\n  Look out, potentially unsafe HTML ahead:\n  ${unsafeHTML(markup)}\n`;",
+      "parentUuid": "fcdf83a2_2609a93a",
       "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "460a2e5a_4cd2bb15",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T10:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7a28f17_2c33ff54",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1357cd62_8d389782",
         "filename": "tools/system-analyzer/ic-panel.mjs",
         "patchSetId": 4
@@ -118,6 +226,24 @@
       "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5cef0e3_b31bc9a2",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T10:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1357cd62_8d389782",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "57d9d0ee_ff02e5a3",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T10:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8feae5a2_dd61eeb4",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9ce23a9_e310b9e6",
         "filename": "tools/system-analyzer/ic-processor.js",
         "patchSetId": 4
@@ -152,6 +296,24 @@
       "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fe4824b_d460146e",
+        "filename": "tools/system-analyzer/ic-processor.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T10:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9ce23a9_e310b9e6",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
