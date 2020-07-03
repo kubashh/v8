@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a0a18e8_88218098",
+        "filename": "src/heap/cppgc/marking-visitor.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-03T20:40:52Z",
+      "side": 0,
+      "message": "I think we will need to reintroduce this when implementing concurrent marking, bur we can remove it for now.",
+      "range": {
+        "startLine": 51,
+        "startChar": 24,
+        "endLine": 51,
+        "endChar": 51
+      },
+      "revId": "2e895c13769981d4b292731259e9f8e7a4c681af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
