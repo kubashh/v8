@@ -130,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "14eb6612_4df54c71",
+        "filename": "docs/branch-covarage.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-03T13:03:27Z",
+      "side": 1,
+      "message": "Yes, ports should be added. I think sheriffs will get notified on all failures (at least after Al lands the change removing the fyi builders). Then it\u0027s pointless to enumerate all builders.",
+      "parentUuid": "9c4698ca_38c9e45e",
+      "range": {
+        "startLine": 20,
+        "startChar": 57,
+        "endLine": 20,
+        "endChar": 199
+      },
+      "revId": "f00faa050dad79f8e3b2da0ec9439853ad54e510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "16905b6a_3b580509",
         "filename": "docs/branch-covarage.md",
         "patchSetId": 5
