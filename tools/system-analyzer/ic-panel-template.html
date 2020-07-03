@@ -55,6 +55,72 @@ found in the LICENSE file. -->
 #legend {
 	padding-right: 20px;
 }
+
+.TL {
+  font: 14px/1.4 sans-serif;
+  position: relative;
+  height: 200px; /* set as desired */
+  overflow: scroll;
+  background: #ddd;
+	color:black;
+}
+.TL-scroll {
+  width: max-content;
+  min-width: 100%;
+}
+.TL-row {
+  display: flex;
+  flex-flow: row nowrap;
+  border-bottom: 1px solid #aaa;
+  flex: none;
+  min-width: 100%;
+}
+.TL-row--top {
+  background: #eee;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+.TL-row--top .TL-rowCells {
+  background-image:
+    repeating-linear-gradient(90deg, #aaa, #aaa 1px, transparent 1px, transparent 100px),
+    repeating-linear-gradient(90deg, #aaa, #aaa 1px, transparent 1px, transparent 10px);
+  background-repeat: no-repeat, no-repeat;
+  background-position: 0 6px, 0 14px;
+}
+.TL-rowName {
+  position: sticky;
+  flex: 0 0 120px;
+  z-index: 2;
+  left: 0;
+  width: 200px;
+  padding: 10px;
+  background: #eee;
+}
+.TL-rowRuler {
+  z-index: 1;
+  width: 1px;
+  background: #f0a;
+  /* IMPORTANT use translateX to move the rulers! */
+  transform: translateX(50px); /* This will most probably be handled by JS */
+}
+.TL-rowCells {
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-flow: row nowrap;
+}
+.TL-cell {
+  padding: 10px 0;
+  background: #0cf;
+  border-right: 1px solid #eee;
+  text-align: center;
+}
+#details{
+  height: 150px;
+}
+
+
 </style>
 
 
@@ -83,15 +149,48 @@ found in the LICENSE file. -->
 		Group-Key:
 		<select id="group-key"></select>
 		</p>
-		Filter number of items
+		<p>
+		Filter by Time
 		<br></br>
-		<input type="search" id="filter-input" placeholder="Number of items"></input>
-		<button id="filterICBtn">Filter</button>
+		<input type="search" id="filter-time-start" placeholder="start"></input> : <input type="search" id="filter-time-end" placeholder="end"></input>
+		<button id="filterICTimeBtn">Filter</button>
 		<p>
 			<table id="table" width="100%">
 				<tbody id="table-body">
 				</tbody>
 			</table>
 		</p>
+		<div class="TL">
+
+			<div class="TL-scroll">
+
+				<div class="TL-row TL-row--top">
+					<div class="TL-rowName"></div>
+					<div class="TL-rowRuler"></div>
+					<div class="TL-rowCells"></div>
+				</div>
+
+				<div class="TL-row">
+					<div class="TL-rowName">IC Event</div>
+					<div class="TL-rowRuler"></div>
+					<div class="TL-rowCells" id="time">
+						<div class="TL-cell" style="width:100px; margin-left:0px;">100</div>
+						<div class="TL-cell" style="width:120px; margin-left:40px;">120</div>
+						<div class="TL-cell" style="width:190px; margin-left:400px;">190</div>
+					</div>
+				</div>
+
+				<div class="TL-row">
+					<div class="TL-rowName">Details</div>
+					<div class="TL-rowRuler"></div>
+					<div class="TL-rowCells" id="details">
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+
 	</section>
 </div>
