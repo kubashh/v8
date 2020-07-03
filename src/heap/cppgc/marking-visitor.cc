@@ -60,8 +60,5 @@ void ConservativeMarkingVisitor::VisitPointer(const void* address) {
   TraceConservativelyIfNeeded(address);
 }
 
-MutatorThreadMarkingVisitor::MutatorThreadMarkingVisitor(Marker* marker)
-    : MarkingVisitor(marker->heap(), marker->marking_state()) {}
-
 }  // namespace internal
 }  // namespace cppgc
