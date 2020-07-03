@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "331f2f63_e84ac14a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-03T14:23:05Z",
+      "side": 1,
+      "message": "PTAL. I will send it to compiler and devtools teams once I address your feedback.\n\nThanks,\nMythri",
+      "revId": "59eed9092e1bbf132f450b037e44156c3a2a9831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
