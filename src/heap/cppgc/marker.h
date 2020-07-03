@@ -8,7 +8,6 @@
 #include <memory>
 
 #include "include/cppgc/heap.h"
-#include "include/cppgc/trace-trait.h"
 #include "include/cppgc/visitor.h"
 #include "src/base/macros.h"
 #include "src/base/platform/time.h"
