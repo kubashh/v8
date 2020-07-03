@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09f723a6_c6c37d30",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-03T15:59:15Z",
+      "side": 1,
+      "message": "Let\u0027s also mention that this is safe to run from a background thread. (And maybe move the comment to the header because it\u0027s really something you want to know as a client).",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a904d20_b1c78e94",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-03T15:59:15Z",
+      "side": 1,
+      "message": "Why the \"Try\" prefix? It always gives you all there is.",
+      "range": {
+        "startLine": 974,
+        "startChar": 32,
+        "endLine": 974,
+        "endChar": 47
+      },
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d10021ff_24c29333",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-03T15:59:15Z",
+      "side": 1,
+      "message": "Maybe also put a DisallowHeapAllocation scope here.",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e14c77e6_0411fa64",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-03T15:59:15Z",
+      "side": 1,
+      "message": "Please add a CHECK that length % 2 \u003d\u003d 0.",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfff6d4a_8b0dda54",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-03T15:59:15Z",
+      "side": 1,
+      "message": "Do I understand correctly that these two loads of the i\u0027th element are guaranteed to produce the same value because the first {length} array elements are constant?",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6a25114_dda23102",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-03T15:59:15Z",
+      "side": 1,
+      "message": "Please split into two CHECKs.",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01cd0117_2995d009",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-03T15:59:15Z",
+      "side": 1,
+      "message": "Is there any hope that we can remove some old code in favour of this implementation?",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
