@@ -28,6 +28,7 @@ class ReadOnlyArtifacts;
 class ReadOnlyDeserializer;
 class ReadOnlyPage;
 class ReadOnlySpace;
+class SharedReadOnlySpace;
 
 // This class transparently manages read-only space, roots and cache creation
 // and destruction.
@@ -52,7 +53,7 @@ class ReadOnlyHeap final {
   void OnCreateHeapObjectsComplete(Isolate* isolate);
   // Indicates that the current isolate no longer requires the read-only heap
   // and it may be safely disposed of.
-  void OnHeapTearDown();
+  void OnHeapTearDown(Heap* heap);
   // If the read-only heap is shared, then populate |statistics| with its stats,
   // otherwise the read-only heap stats are set to 0.
   static void PopulateReadOnlySpaceStatistics(
@@ -78,6 +79,13 @@ class ReadOnlyHeap final {
   ReadOnlySpace* read_only_space() const { return read_only_space_; }
 
  private:
+  friend class ReadOnlyArtifacts;
+
+  static std::unique_ptr<ReadOnlyHeap> CreateReadOnlyHeap(
+      ReadOnlySpace* space) {
+    return std::unique_ptr<ReadOnlyHeap>(new ReadOnlyHeap(space));
+  }
+
   // Creates a new read-only heap and attaches it to the provided isolate.
   static ReadOnlyHeap* CreateAndAttachToIsolate(
       Isolate* isolate, std::shared_ptr<ReadOnlyArtifacts> artifacts);
@@ -90,13 +98,20 @@ class ReadOnlyHeap final {
   // (unless sharing is disabled).
   void InitFromIsolate(Isolate* isolate);
 
+  void InitializeChecksum(ReadOnlyDeserializer* des);
+  void VerifyChecksum(ReadOnlyDeserializer* des, bool read_only_heap_created);
+
   bool init_complete_ = false;
   ReadOnlySpace* read_only_space_ = nullptr;
   std::vector<Object> read_only_object_cache_;
 
 #ifdef V8_SHARED_RO_HEAP
+  void CopyRootsToIsolateRoots(Isolate* isolate);
+  static bool IsSharedMemoryAvailable();
+  void CopyAndRemapReadOnlyRoots(Address* dst, Address dst_base);
 #ifdef DEBUG
-  // The checksum of the blob the read-only heap was deserialized from, if any.
+  // The checksum of the blob the read-only heap was deserialized from, if
+  // any.
   base::Optional<uint32_t> read_only_blob_checksum_;
 #endif  // DEBUG
 
@@ -106,6 +121,8 @@ class ReadOnlyHeap final {
 #endif  // V8_SHARED_RO_HEAP
 
   explicit ReadOnlyHeap(ReadOnlySpace* ro_space) : read_only_space_(ro_space) {}
+  ReadOnlyHeap(ReadOnlyHeap* ro_heap, ReadOnlySpace* ro_space);
+
   DISALLOW_COPY_AND_ASSIGN(ReadOnlyHeap);
 };
 

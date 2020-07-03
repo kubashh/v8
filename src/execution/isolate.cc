@@ -2830,14 +2830,13 @@ void Isolate::Delete(Isolate* isolate) {
 }
 
 void Isolate::SetUpFromReadOnlyArtifacts(
-    std::shared_ptr<ReadOnlyArtifacts> artifacts) {
-  artifacts_ = artifacts;
+    std::shared_ptr<ReadOnlyArtifacts> artifacts, ReadOnlyHeap* ro_heap) {
   DCHECK_NOT_NULL(artifacts);
-  ReadOnlyHeap* ro_heap = artifacts->read_only_heap();
+  artifacts_ = artifacts;
   DCHECK_NOT_NULL(ro_heap);
   DCHECK_IMPLIES(read_only_heap_ != nullptr, read_only_heap_ == ro_heap);
   read_only_heap_ = ro_heap;
-  heap_.SetUpFromReadOnlyHeap(ro_heap);
+  heap_.SetUpFromReadOnlyHeap(read_only_heap_);
 }
 
 v8::PageAllocator* Isolate::page_allocator() {
@@ -3111,6 +3110,11 @@ Isolate::~Isolate() {
                  default_microtask_queue_ == default_microtask_queue_->next());
   delete default_microtask_queue_;
   default_microtask_queue_ = nullptr;
+
+  if (V8_SHARED_RO_HEAP_BOOL && COMPRESS_POINTERS_BOOL) {
+    delete read_only_heap_;
+    read_only_heap_ = nullptr;
+  }
 }
 
 void Isolate::InitializeThreadLocal() {

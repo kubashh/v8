@@ -4,12 +4,13 @@
 
 #include "src/heap/read-only-heap.h"
 
+#include <cstddef>
 #include <cstring>
 
 #include "include/v8.h"
 #include "src/base/lazy-instance.h"
-#include "src/base/lsan.h"
 #include "src/base/platform/mutex.h"
+#include "src/common/ptr-compr-inl.h"
 #include "src/heap/basic-memory-chunk.h"
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/heap/memory-chunk.h"
@@ -35,9 +36,13 @@ base::LazyMutex read_only_heap_creation_mutex_ = LAZY_MUTEX_INITIALIZER;
 base::LazyInstance<std::weak_ptr<ReadOnlyArtifacts>>::type
     read_only_artifacts_ = LAZY_INSTANCE_INITIALIZER;
 
+bool shared_memory_allocation_supported_ = false;
+
 std::shared_ptr<ReadOnlyArtifacts> InitializeSharedReadOnlyArtifacts() {
   auto artifacts = std::make_shared<ReadOnlyArtifacts>();
   *read_only_artifacts_.Pointer() = artifacts;
+  shared_memory_allocation_supported_ =
+      V8::GetCurrentPlatform()->GetPageAllocator()->CanAllocateSharedPages();
   return artifacts;
 }
 }  // namespace
@@ -47,45 +52,23 @@ std::shared_ptr<ReadOnlyArtifacts> InitializeSharedReadOnlyArtifacts() {
 // since an already set up Isolate will hold a shared_ptr to
 // read_only_artifacts_.
 ReadOnlyHeap* ReadOnlyHeap::shared_ro_heap_ = nullptr;
+
+bool ReadOnlyHeap::IsSharedMemoryAvailable() {
+  DCHECK_GT(read_only_artifacts_.Pointer()->use_count(), 0);
+  return shared_memory_allocation_supported_;
+}
 #endif
 
-// static
-void ReadOnlyHeap::SetUp(Isolate* isolate, ReadOnlyDeserializer* des) {
-  DCHECK_NOT_NULL(isolate);
-#ifdef V8_SHARED_RO_HEAP
+void ReadOnlyHeap::InitializeChecksum(ReadOnlyDeserializer* des) {
+#if defined(DEBUG) && defined(V8_SHARED_RO_HEAP)
+  read_only_blob_checksum_ = des->GetChecksum();
+#endif  // DEBUG && V8_SHARED_RO_HEAP
+}
 
-  bool read_only_heap_created = false;
-
-  if (des != nullptr) {
-    base::MutexGuard guard(read_only_heap_creation_mutex_.Pointer());
-    std::shared_ptr<ReadOnlyArtifacts> artifacts =
-        read_only_artifacts_.Get().lock();
-    if (!artifacts) {
-      artifacts = InitializeSharedReadOnlyArtifacts();
-      shared_ro_heap_ = CreateAndAttachToIsolate(isolate, artifacts);
-#ifdef DEBUG
-      shared_ro_heap_->read_only_blob_checksum_ = des->GetChecksum();
-#endif  // DEBUG
-      shared_ro_heap_->DeseralizeIntoIsolate(isolate, des);
-      read_only_heap_created = true;
-    } else {
-      isolate->SetUpFromReadOnlyArtifacts(artifacts);
-    }
-  } else {
-    // This path should only be taken in mksnapshot, should only be run once
-    // before tearing down the Isolate that holds this ReadOnlyArtifacts and is
-    // not thread-safe.
-    std::shared_ptr<ReadOnlyArtifacts> artifacts =
-        read_only_artifacts_.Get().lock();
-    CHECK(!artifacts);
-    artifacts = InitializeSharedReadOnlyArtifacts();
-    shared_ro_heap_ = CreateAndAttachToIsolate(isolate, artifacts);
-    read_only_heap_created = true;
-  }
-
-#ifdef DEBUG
-  const base::Optional<uint32_t> last_checksum =
-      shared_ro_heap_->read_only_blob_checksum_;
+void ReadOnlyHeap::VerifyChecksum(ReadOnlyDeserializer* des,
+                                  bool read_only_heap_created) {
+#if defined(DEBUG) && defined(V8_SHARED_RO_HEAP)
+  const base::Optional<uint32_t> last_checksum = read_only_blob_checksum_;
   if (last_checksum) {
     // The read-only heap was set up from a snapshot. Make sure it's the always
     // the same snapshot.
@@ -98,14 +81,73 @@ void ReadOnlyHeap::SetUp(Isolate* isolate, ReadOnlyDeserializer* des) {
     // once, during this call.
     CHECK(read_only_heap_created);
   }
-#endif  // DEBUG
-  USE(read_only_heap_created);
+#endif  // DEBUG && V8_SHARED_RO_HEAP
+}
+
+#ifdef V8_SHARED_RO_HEAP
+void ReadOnlyHeap::CopyRootsToIsolateRoots(Isolate* isolate) {
+#ifdef V8_COMPRESS_POINTERS
+  auto isolate_ro_roots =
+      isolate->roots_table().read_only_roots_begin().location();
+  CopyAndRemapReadOnlyRoots(isolate_ro_roots,
+                            GetIsolateRoot(GetIsolateRoot(isolate)));
+  DCHECK_EQ(*isolate->roots_table().read_only_roots_begin().location(),
+            isolate->read_only_heap()->read_only_roots_[0]);
+#else
+  void* const isolate_ro_roots =
+      isolate->roots_table().read_only_roots_begin().location();
+  std::memcpy(isolate_ro_roots, read_only_roots_,
+              kEntriesCount * sizeof(Address));
+#endif  // V8_COMPRESS_POINTERS
+}
+
+void ReadOnlyHeap::CopyAndRemapReadOnlyRoots(Address* dst, Address dst_base) {
+  Address src_base = GetIsolateRoot(read_only_roots_[0]);
+  for (size_t i = 0; i < ReadOnlyHeap::kEntriesCount; ++i) {
+    dst[i] = read_only_roots_[i] - src_base + dst_base;
+  }
+}
+#endif  // V8_SHARED_RO_HEAP
+
+// static
+void ReadOnlyHeap::SetUp(Isolate* isolate, ReadOnlyDeserializer* des) {
+  DCHECK_NOT_NULL(isolate);
+#ifdef V8_SHARED_RO_HEAP
 
   if (des != nullptr) {
-    void* const isolate_ro_roots = reinterpret_cast<void*>(
-        isolate->roots_table().read_only_roots_begin().address());
-    std::memcpy(isolate_ro_roots, shared_ro_heap_->read_only_roots_,
-                kEntriesCount * sizeof(Address));
+    bool read_only_heap_created = false;
+    base::MutexGuard guard(read_only_heap_creation_mutex_.Pointer());
+    std::shared_ptr<ReadOnlyArtifacts> artifacts =
+        read_only_artifacts_.Get().lock();
+    if (!artifacts) {
+      artifacts = InitializeSharedReadOnlyArtifacts();
+      shared_ro_heap_ = CreateAndAttachToIsolate(isolate, artifacts);
+      shared_ro_heap_->DeseralizeIntoIsolate(isolate, des);
+      read_only_heap_created = true;
+    } else {
+#ifdef V8_COMPRESS_POINTERS
+      auto ro_heap_unique =
+          ReadOnlyArtifacts::CreateReadOnlyHeapForIsolate(artifacts, isolate);
+      ReadOnlyHeap* ro_heap = ro_heap_unique.release();
+#else
+      auto ro_heap = artifacts->read_only_heap();
+#endif  // V8_COMPRESS_POINTERS
+
+      isolate->SetUpFromReadOnlyArtifacts(artifacts, ro_heap);
+    }
+    shared_ro_heap_->VerifyChecksum(des, read_only_heap_created);
+
+    shared_ro_heap_->CopyRootsToIsolateRoots(isolate);
+  } else {
+    // This path should only be taken in mksnapshot, should only be run once
+    // before tearing down the Isolate that holds this ReadOnlyArtifacts and is
+    // not thread-safe.
+    std::shared_ptr<ReadOnlyArtifacts> artifacts =
+        read_only_artifacts_.Get().lock();
+    CHECK(!artifacts);
+    artifacts = InitializeSharedReadOnlyArtifacts();
+    shared_ro_heap_ = CreateAndAttachToIsolate(isolate, artifacts);
+    shared_ro_heap_->VerifyChecksum(des, true);
   }
 #else
   auto artifacts = std::make_shared<ReadOnlyArtifacts>();
@@ -117,6 +159,7 @@ void ReadOnlyHeap::SetUp(Isolate* isolate, ReadOnlyDeserializer* des) {
 void ReadOnlyHeap::DeseralizeIntoIsolate(Isolate* isolate,
                                          ReadOnlyDeserializer* des) {
   DCHECK_NOT_NULL(des);
+  InitializeChecksum(des);
   des->DeserializeInto(isolate);
   InitFromIsolate(isolate);
 }
@@ -126,13 +169,22 @@ void ReadOnlyHeap::OnCreateHeapObjectsComplete(Isolate* isolate) {
   InitFromIsolate(isolate);
 }
 
+ReadOnlyHeap::ReadOnlyHeap(ReadOnlyHeap* ro_heap, ReadOnlySpace* ro_space)
+    : read_only_space_(ro_space),
+      read_only_object_cache_(ro_heap->read_only_object_cache_) {
+#if defined(V8_SHARED_RO_HEAP) && defined(V8_COMPRESS_POINTERS)
+  ro_heap->CopyAndRemapReadOnlyRoots(
+      read_only_roots_, GetIsolateRoot(ro_space->FirstPageAddress()));
+#endif  // V8_SHARED_RO_HEAP && V8_COMPRESS_POINTERS
+}
+
 // static
 ReadOnlyHeap* ReadOnlyHeap::CreateAndAttachToIsolate(
     Isolate* isolate, std::shared_ptr<ReadOnlyArtifacts> artifacts) {
   std::unique_ptr<ReadOnlyHeap> ro_heap(
       new ReadOnlyHeap(new ReadOnlySpace(isolate->heap())));
   artifacts->set_read_only_heap(std::move(ro_heap));
-  isolate->SetUpFromReadOnlyArtifacts(artifacts);
+  isolate->SetUpFromReadOnlyArtifacts(artifacts, artifacts->read_only_heap());
   return artifacts->read_only_heap();
 }
 
@@ -140,25 +192,47 @@ void ReadOnlyHeap::InitFromIsolate(Isolate* isolate) {
   DCHECK(!init_complete_);
   read_only_space_->ShrinkPages();
 #ifdef V8_SHARED_RO_HEAP
-  std::shared_ptr<ReadOnlyArtifacts> artifacts(*read_only_artifacts_.Pointer());
-  read_only_space()->DetachPagesAndAddToArtifacts(artifacts);
-  read_only_space_ = artifacts->shared_read_only_space();
-
   void* const isolate_ro_roots = reinterpret_cast<void*>(
       isolate->roots_table().read_only_roots_begin().address());
   std::memcpy(read_only_roots_, isolate_ro_roots,
               kEntriesCount * sizeof(Address));
-  // N.B. Since pages are manually allocated with mmap, Lsan doesn't track their
-  // pointers. Seal explicitly ignores the necessary objects.
-  LSAN_IGNORE_OBJECT(this);
+  std::shared_ptr<ReadOnlyArtifacts> artifacts(*read_only_artifacts_.Pointer());
+
+  read_only_space()->DetachPagesAndAddToArtifacts(artifacts);
+  read_only_space_ = artifacts->shared_read_only_space();
+
+#ifdef V8_COMPRESS_POINTERS
+  std::unique_ptr<ReadOnlyHeap> read_only_heap(
+      new ReadOnlyHeap(this, isolate->heap()->read_only_space()));
+  isolate->set_read_only_heap(read_only_heap.release());
+
+  DCHECK_EQ(*isolate->roots_table().read_only_roots_begin().location(),
+            isolate->read_only_heap()->read_only_roots_[0]);
+
+  // Confirm the canonical versions are not accidentally inserted into a real
+  // Isolate (which might destroy them) and the Heaps and Spaces are correctly
+  // associated.
+  DCHECK_NE(artifacts->shared_read_only_space(),
+            isolate->heap()->read_only_space());
+  DCHECK_NE(artifacts->read_only_heap(), isolate->read_only_heap());
+  DCHECK_EQ(artifacts->read_only_heap()->read_only_space(),
+            artifacts->shared_read_only_space());
+  DCHECK_EQ(isolate->read_only_heap()->read_only_space(),
+            isolate->heap()->read_only_space());
+#endif  // V8_COMPRESS_POINTERS
+
 #else
   read_only_space_->Seal(ReadOnlySpace::SealMode::kDoNotDetachFromHeap);
 #endif
   init_complete_ = true;
 }
 
-void ReadOnlyHeap::OnHeapTearDown() {
-#ifndef V8_SHARED_RO_HEAP
+void ReadOnlyHeap::OnHeapTearDown(Heap* heap) {
+  // When the ReadOnlyHeap and ReadOnlySpace are shared between Isolates, then
+  // there's no need to tear them down as they have already been detached from
+  // the originating Heap.
+#if !defined(V8_SHARED_RO_HEAP) || defined(V8_COMPRESS_POINTERS)
+  read_only_space_->TearDown(heap->memory_allocator());
   delete read_only_space_;
 #endif
 }
@@ -220,7 +294,9 @@ ReadOnlyHeapObjectIterator::ReadOnlyHeapObjectIterator(ReadOnlySpace* ro_space)
                         : ro_space->pages().begin()),
       current_addr_(V8_ENABLE_THIRD_PARTY_HEAP_BOOL
                         ? Address()
-                        : (*current_page_)->area_start()) {}
+                        : (*current_page_)->address() +
+                              MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(
+                                  RO_SPACE)) {}
 
 HeapObject ReadOnlyHeapObjectIterator::Next() {
   if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
@@ -233,15 +309,19 @@ HeapObject ReadOnlyHeapObjectIterator::Next() {
 
   BasicMemoryChunk* current_page = *current_page_;
   for (;;) {
-    DCHECK_LE(current_addr_, current_page->area_end());
-    if (current_addr_ == current_page->area_end()) {
+    Address end = current_page->address() + current_page->area_size() +
+                  MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(RO_SPACE);
+    DCHECK_LE(current_addr_, end);
+    if (current_addr_ == end) {
       // Progress to the next page.
       ++current_page_;
       if (current_page_ == ro_space_->pages().end()) {
         return HeapObject();
       }
       current_page = *current_page_;
-      current_addr_ = current_page->area_start();
+      current_addr_ =
+          current_page->address() +
+          MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(RO_SPACE);
     }
 
     if (current_addr_ == ro_space_->top() &&
