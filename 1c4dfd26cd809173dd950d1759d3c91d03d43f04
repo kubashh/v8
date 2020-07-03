@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e89e7f9_5235e77c",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-03T10:00:24Z",
+      "side": 1,
+      "message": "This can be static again.",
+      "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6783ca42_8721e9f2",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-03T10:00:24Z",
+      "side": 1,
+      "message": "I don\u0027t understand this sentence, and I\u0027m a bit confused by the selective checks of change_flag below.",
+      "range": {
+        "startLine": 231,
+        "startChar": 7,
+        "endLine": 231,
+        "endChar": 54
+      },
+      "revId": "1c4dfd26cd809173dd950d1759d3c91d03d43f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
