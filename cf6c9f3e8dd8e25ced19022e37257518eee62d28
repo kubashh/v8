@@ -19,6 +19,63 @@
     },
     {
       "key": {
+        "uuid": "5b4b75df_72fc42b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-03T15:51:06Z",
+      "side": 1,
+      "message": "LGTM, thanks.",
+      "revId": "cf6c9f3e8dd8e25ced19022e37257518eee62d28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "927fba05_a6b5ca6f",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-03T15:51:06Z",
+      "side": 1,
+      "message": "Maybe we should make this print something like:\n\" [bailout (kind %s): begin \"\nto avoid DEOPT here at all. Maybe use \"kind\" instead of DEOPT for both bailout and deoptimizing?",
+      "revId": "cf6c9f3e8dd8e25ced19022e37257518eee62d28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c96ab1c7_1a83861f",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-03T15:51:06Z",
+      "side": 1,
+      "message": "Maybe just wrap this in a helper function, e.g., deopt_type_message() or similar?",
+      "range": {
+        "startLine": 863,
+        "startChar": 8,
+        "endLine": 863,
+        "endChar": 57
+      },
+      "revId": "cf6c9f3e8dd8e25ced19022e37257518eee62d28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "067741bc_55068932",
         "filename": "src/profiler/profiler-listener.cc",
         "patchSetId": 4
@@ -33,6 +90,24 @@
       "revId": "cf6c9f3e8dd8e25ced19022e37257518eee62d28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a56f7fab_32ef936c",
+        "filename": "src/profiler/profiler-listener.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-03T15:51:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "067741bc_55068932",
+      "revId": "cf6c9f3e8dd8e25ced19022e37257518eee62d28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
