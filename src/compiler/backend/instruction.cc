@@ -169,6 +169,8 @@ std::ostream& operator<<(std::ostream& os, const InstructionOperand& op) {
           return os << "[immediate:" << imm.indexed_value() << "]";
       }
     }
+    case InstructionOperand::PENDING:
+      return os << "[pending: " << PendingOperand::cast(op).next() << "]";
     case InstructionOperand::ALLOCATED: {
       LocationOperand allocated = LocationOperand::cast(op);
       if (op.IsStackSlot()) {
@@ -577,7 +579,8 @@ void PhiInstruction::RenameInput(size_t offset, int virtual_register) {
 
 InstructionBlock::InstructionBlock(Zone* zone, RpoNumber rpo_number,
                                    RpoNumber loop_header, RpoNumber loop_end,
-                                   bool deferred, bool handler)
+                                   RpoNumber dominator, bool deferred,
+                                   bool handler)
     : successors_(zone),
       predecessors_(zone),
       phis_(zone),
@@ -585,6 +588,7 @@ InstructionBlock::InstructionBlock(Zone* zone, RpoNumber rpo_number,
       rpo_number_(rpo_number),
       loop_header_(loop_header),
       loop_end_(loop_end),
+      dominator_(dominator),
       deferred_(deferred),
       handler_(handler) {}
 
@@ -611,10 +615,10 @@ static InstructionBlock* InstructionBlockFor(Zone* zone,
                                              const BasicBlock* block) {
   bool is_handler =
       !block->empty() && block->front()->opcode() == IrOpcode::kIfException;
-  InstructionBlock* instr_block = new (zone)
-      InstructionBlock(zone, GetRpo(block), GetRpo(block->loop_header()),
-                       GetLoopEndRpo(block), block->deferred(), is_handler);
-  // Map successors and precessors
+  InstructionBlock* instr_block = new (zone) InstructionBlock(
+      zone, GetRpo(block), GetRpo(block->loop_header()), GetLoopEndRpo(block),
+      GetRpo(block->dominator()), block->deferred(), is_handler);
+  // Map successors and precessors and dominator
   instr_block->successors().reserve(block->SuccessorCount());
   for (BasicBlock* successor : block->successors()) {
     instr_block->successors().push_back(GetRpo(successor));
