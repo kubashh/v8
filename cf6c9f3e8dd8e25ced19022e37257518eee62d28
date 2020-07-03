@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35964261_3cbef6b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-03T14:21:24Z",
+      "side": 1,
+      "message": "Ross, PTAL. I wanted to get your feedback before I send it out to compiler and devtools team. ",
+      "revId": "cf6c9f3e8dd8e25ced19022e37257518eee62d28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "067741bc_55068932",
+        "filename": "src/profiler/profiler-listener.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-03T14:21:24Z",
+      "side": 1,
+      "message": "When reuse_code is true it is just a bailout. So, I guess we don\u0027t need to report them as deopts here?",
+      "revId": "cf6c9f3e8dd8e25ced19022e37257518eee62d28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
