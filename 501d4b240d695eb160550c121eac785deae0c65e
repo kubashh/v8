@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2cbcd1a7_5a801a3b",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T13:23:45Z",
+      "side": 1,
+      "message": "\"Is entries the filtered list, while fileEntries is the original list of all entries\" \n\nYes, I can make it more efficient by without using x2 memory with just start end end indicies of the filter I guess",
+      "parentUuid": "2a2c69b4_19e54409",
+      "range": {
+        "startLine": 68,
+        "startChar": 6,
+        "endLine": 68,
+        "endChar": 17
+      },
+      "revId": "501d4b240d695eb160550c121eac785deae0c65e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9eaa3882_bea2ce64",
         "filename": "tools/system-analyzer/ic-panel.mjs",
         "patchSetId": 6
@@ -39,6 +63,24 @@
       "revId": "501d4b240d695eb160550c121eac785deae0c65e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3f4fbdb_b0a7ae7a",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T13:23:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9eaa3882_bea2ce64",
+      "revId": "501d4b240d695eb160550c121eac785deae0c65e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "501d4b240d695eb160550c121eac785deae0c65e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9dfb9ab_b821aa7a",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T13:23:45Z",
+      "side": 1,
+      "message": "Recommend displaying everything?",
+      "parentUuid": "6be747b9_cdf3d232",
+      "range": {
+        "startLine": 151,
+        "startChar": 23,
+        "endLine": 151,
+        "endChar": 26
+      },
+      "revId": "501d4b240d695eb160550c121eac785deae0c65e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +171,30 @@
     },
     {
       "key": {
+        "uuid": "ec9ac9f9_63082df5",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T13:23:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc60fa87_88525ac3",
+      "range": {
+        "startLine": 238,
+        "startChar": 7,
+        "endLine": 238,
+        "endChar": 12
+      },
+      "revId": "501d4b240d695eb160550c121eac785deae0c65e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c237b429_7e76d8ad",
         "filename": "tools/system-analyzer/ic-panel.mjs",
         "patchSetId": 6
@@ -125,6 +215,30 @@
       "revId": "501d4b240d695eb160550c121eac785deae0c65e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab3bbdae_156cf229",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-03T13:23:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c237b429_7e76d8ad",
+      "range": {
+        "startLine": 268,
+        "startChar": 4,
+        "endLine": 273,
+        "endChar": 3
+      },
+      "revId": "501d4b240d695eb160550c121eac785deae0c65e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
