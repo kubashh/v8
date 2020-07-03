@@ -6,6 +6,7 @@
 #define V8_UTILS_BIT_VECTOR_H_
 
 #include "src/base/bits.h"
+#include "src/common/globals.h"
 #include "src/utils/allocation.h"
 #include "src/zone/zone.h"
 
@@ -226,6 +227,21 @@ class V8_EXPORT_PRIVATE BitVector : public ZoneObject {
     }
   }
 
+  bool UniqueFrom(const BitVector& other) const {
+    DCHECK(other.length() == length());
+    if (is_inline()) {
+      DCHECK(other.is_inline());
+      return !(data_.inline_ & other.data_.inline_);
+    } else {
+      for (int i = 0; i < data_length_; i++) {
+        if (data_.ptr_[i] & other.data_.ptr_[i]) {
+          return false;
+        }
+      }
+      return true;
+    }
+  }
+
   void Subtract(const BitVector& other) {
     DCHECK(other.length() == length());
     if (is_inline()) {
@@ -242,9 +258,7 @@ class V8_EXPORT_PRIVATE BitVector : public ZoneObject {
     if (is_inline()) {
       data_.inline_ = 0;
     } else {
-      for (int i = 0; i < data_length_; i++) {
-        data_.ptr_[i] = 0;
-      }
+      memset(data_.ptr_, 0, kUIntptrSize * data_length_);
     }
   }
 
@@ -280,6 +294,8 @@ class V8_EXPORT_PRIVATE BitVector : public ZoneObject {
   void Print();
 #endif
 
+  MOVE_ONLY_NO_DEFAULT_CONSTRUCTOR(BitVector);
+
  private:
   int length_;
   int data_length_;
@@ -307,8 +323,6 @@ class V8_EXPORT_PRIVATE BitVector : public ZoneObject {
       }
     }
   }
-
-  DISALLOW_COPY_AND_ASSIGN(BitVector);
 };
 
 class GrowableBitVector {
