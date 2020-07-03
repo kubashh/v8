@@ -1015,6 +1015,7 @@ AllocationResult PagedSpace::AllocateRawSlow(int size_in_bytes,
     DCHECK_EQ(Page::FromAllocationAreaAddress(top()),
               Page::FromAllocationAreaAddress(top_on_previous_step_ - 1));
     top_on_previous_step_ = top();
+    CHECK(false);
   }
 
   size_t bytes_since_last =
