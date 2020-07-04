@@ -382,28 +382,29 @@ int Sweeper::RawSweep(
   // Iterate over the page using the live objects and free the memory before
   // the given live object.
   Address free_start = p->area_start();
-  for (auto object_and_size :
-       LiveObjectRange<kBlackObjects>(p, marking_state_->bitmap(p))) {
-    HeapObject const object = object_and_size.first;
-    if (code_object_registry)
-      code_object_registry->RegisterAlreadyExistingCodeObject(object.address());
-    DCHECK(marking_state_->IsBlack(object));
-    Address free_end = object.address();
-    if (free_end != free_start) {
-      max_freed_bytes =
-          Max(max_freed_bytes,
-              FreeAndProcessFreedMemory(free_start, free_end, p, space,
-                                        non_empty_typed_slots, free_list_mode,
-                                        free_space_mode));
-      CleanupRememberedSetEntriesForFreedMemory(
-          free_start, free_end, p, non_empty_typed_slots, &free_ranges_map,
-          &old_to_new_cleanup);
-    }
-    Map map = object.synchronized_map();
-    int size = object.SizeFromMap(map);
-    live_bytes += size;
-    free_start = free_end + size;
-  }
+  LiveObjectVisitor::IterateLiveObjects(
+      p, marking_state_->bitmap(p),
+      [this, &p, space, code_object_registry, &free_start, &max_freed_bytes,
+       &live_bytes, non_empty_typed_slots, free_list_mode, free_space_mode,
+       &free_ranges_map, &old_to_new_cleanup](HeapObject object, int size) {
+        if (code_object_registry)
+          code_object_registry->RegisterAlreadyExistingCodeObject(
+              object.address());
+        DCHECK(marking_state_->IsBlack(object));
+        Address free_end = object.address();
+        if (free_end != free_start) {
+          max_freed_bytes =
+              Max(max_freed_bytes,
+                  FreeAndProcessFreedMemory(free_start, free_end, p, space,
+                                            non_empty_typed_slots,
+                                            free_list_mode, free_space_mode));
+          CleanupRememberedSetEntriesForFreedMemory(
+              free_start, free_end, p, non_empty_typed_slots, &free_ranges_map,
+              &old_to_new_cleanup);
+        }
+        live_bytes += size;
+        free_start = free_end + size;
+      });
 
   // If there is free memory after the last live object also free that.
   Address free_end = p->area_end();

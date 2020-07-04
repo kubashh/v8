@@ -179,6 +179,10 @@ class LiveObjectVisitor : AllStatic {
 
   template <typename MarkingState>
   static void RecomputeLiveBytes(MemoryChunk* chunk, MarkingState* state);
+
+  template <typename Callback>
+  static inline void IterateLiveObjects(MemoryChunk* chunk, Bitmap* bitmap,
+                                        Callback callback);
 };
 
 enum PageEvacuationMode { NEW_TO_NEW, NEW_TO_OLD };

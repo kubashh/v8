@@ -287,6 +287,53 @@ typename LiveObjectRange<mode>::iterator LiveObjectRange<mode>::end() {
   return iterator(chunk_, bitmap_, end_);
 }
 
+template <typename Callback>
+inline void LiveObjectVisitor::IterateLiveObjects(MemoryChunk* chunk,
+                                                  Bitmap* bitmap,
+                                                  Callback callback) {
+  Address cell_base = chunk->address();
+  uint32_t* cell = bitmap->cells();
+  uint32_t* end = cell +
+                  Bitmap::IndexToCell(chunk->AddressToMarkbitIndex(
+                      chunk->area_end() - kTaggedSize)) +
+                  1;
+  uint32_t cell_value = *cell;
+  Map one_word_filler_map =
+      ReadOnlyRoots(chunk->heap()).one_pointer_filler_map();
+  Map two_word_filler_map =
+      ReadOnlyRoots(chunk->heap()).two_pointer_filler_map();
+  Map free_space_map = ReadOnlyRoots(chunk->heap()).free_space_map();
+  while (true) {
+    if (cell_value) {
+      uint32_t start_bit_index = base::bits::CountTrailingZeros(cell_value);
+      Address object_addr = cell_base + (start_bit_index << kTaggedSizeLog2);
+      HeapObject object = HeapObject::FromAddress(object_addr);
+      Object map_object = ObjectSlot(object_addr).Acquire_Load();
+      CHECK(map_object.IsMap());
+      Map map = Map::cast(map_object);
+      int size = object.SizeFromMap(map);
+      CHECK_LE(object_addr + size, chunk->area_end());
+      if (map != one_word_filler_map && map != two_word_filler_map &&
+          map != free_space_map) {
+        callback(object, size);
+      }
+      uint32_t end_bit_index = start_bit_index + (size >> kTaggedSizeLog2) - 1;
+      uint32_t advance_cell = Bitmap::IndexToCell(end_bit_index);
+      cell += advance_cell;
+      DCHECK_LT(cell, end);
+      cell_value = *cell;
+      cell_base += advance_cell << (Bitmap::kBitsPerCellLog2 + kTaggedSizeLog2);
+      uint32_t end_bit_mask = 1u << Bitmap::IndexInCell(end_bit_index);
+      cell_value &= ~(end_bit_mask + end_bit_mask - 1);
+    } else {
+      ++cell;
+      if (cell == end) break;
+      cell_value = *cell;
+      cell_base += Bitmap::kBitsPerCell * kTaggedSize;
+    }
+  }
+}
+
 Isolate* MarkCompactCollectorBase::isolate() { return heap()->isolate(); }
 
 }  // namespace internal
