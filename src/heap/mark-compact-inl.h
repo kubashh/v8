@@ -134,22 +134,26 @@ void MainMarkingVisitor<MarkingState>::MarkDescriptorArrayFromWriteBarrier(
 }
 
 template <LiveObjectIterationMode mode>
-LiveObjectRange<mode>::iterator::iterator(MemoryChunk* chunk, Bitmap* bitmap,
-                                          Address start)
+LiveObjectRange<mode>::iterator::iterator(MemoryChunk* chunk, Bitmap* bitmap)
     : chunk_(chunk),
       one_word_filler_map_(
           ReadOnlyRoots(chunk->heap()).one_pointer_filler_map()),
       two_word_filler_map_(
           ReadOnlyRoots(chunk->heap()).two_pointer_filler_map()),
       free_space_map_(ReadOnlyRoots(chunk->heap()).free_space_map()),
-      it_(chunk, bitmap) {
+      it_(chunk, bitmap) {}
+
+template <LiveObjectIterationMode mode>
+LiveObjectRange<mode>::iterator::iterator(MemoryChunk* chunk, Bitmap* bitmap,
+                                          Address start)
+    : iterator(chunk, bitmap) {
   it_.Advance(Bitmap::IndexToCell(
       Bitmap::CellAlignIndex(chunk_->AddressToMarkbitIndex(start))));
-  if (!it_.Done()) {
-    cell_base_ = it_.CurrentCellBase();
-    current_cell_ = *it_.CurrentCell();
+  cell_base_ = it_.CurrentCellBase();
+  current_cell_ = *it_.CurrentCell();
+  do {
     AdvanceToNextValidObject();
-  }
+  } while (!it_.Done() && current_object_.address() < start);
 }
 
 template <LiveObjectIterationMode mode>
@@ -274,6 +278,7 @@ void LiveObjectRange<mode>::iterator::AdvanceToNextValidObject() {
       return;
     }
   }
+  CHECK_EQ(current_cell_, 0);
   current_object_ = HeapObject();
 }
 
@@ -284,7 +289,7 @@ typename LiveObjectRange<mode>::iterator LiveObjectRange<mode>::begin() {
 
 template <LiveObjectIterationMode mode>
 typename LiveObjectRange<mode>::iterator LiveObjectRange<mode>::end() {
-  return iterator(chunk_, bitmap_, end_);
+  return iterator(chunk_, bitmap_);
 }
 
 Isolate* MarkCompactCollectorBase::isolate() { return heap()->isolate(); }
