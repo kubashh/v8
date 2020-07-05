@@ -32,17 +32,17 @@ class YoungGenerationMarkingVisitor;
 class MarkBitCellIterator {
  public:
   MarkBitCellIterator(MemoryChunk* chunk, Bitmap* bitmap) : chunk_(chunk) {
-    last_cell_index_ =
-        Bitmap::IndexToCell(chunk_->AddressToMarkbitIndex(chunk_->area_end()));
+    size_t last_object_address = chunk_->area_end() - kTaggedSize;
+    cell_index_end_ = Bitmap::IndexToCell(
+                          chunk_->AddressToMarkbitIndex(last_object_address)) +
+                      1;
     cell_base_ = chunk_->address();
     cell_index_ =
         Bitmap::IndexToCell(chunk_->AddressToMarkbitIndex(cell_base_));
     cells_ = bitmap->cells();
   }
 
-  inline bool Done() { return cell_index_ >= last_cell_index_; }
-
-  inline bool HasNext() { return cell_index_ < last_cell_index_ - 1; }
+  inline bool Done() { return cell_index_ >= cell_index_end_; }
 
   inline MarkBit::CellType* CurrentCell() {
     DCHECK_EQ(cell_index_, Bitmap::IndexToCell(Bitmap::CellAlignIndex(
@@ -58,13 +58,13 @@ class MarkBitCellIterator {
 
   V8_WARN_UNUSED_RESULT inline bool Advance() {
     cell_base_ += Bitmap::kBitsPerCell * kTaggedSize;
-    return ++cell_index_ != last_cell_index_;
+    return ++cell_index_ != cell_index_end_;
   }
 
   inline bool Advance(unsigned int new_cell_index) {
     if (new_cell_index != cell_index_) {
       DCHECK_GT(new_cell_index, cell_index_);
-      DCHECK_LE(new_cell_index, last_cell_index_);
+      DCHECK_LE(new_cell_index, cell_index_end_);
       unsigned int diff = new_cell_index - cell_index_;
       cell_index_ = new_cell_index;
       cell_base_ += diff * (Bitmap::kBitsPerCell * kTaggedSize);
@@ -73,18 +73,10 @@ class MarkBitCellIterator {
     return false;
   }
 
-  // Return the next mark bit cell. If there is no next it returns 0;
-  inline MarkBit::CellType PeekNext() {
-    if (HasNext()) {
-      return cells_[cell_index_ + 1];
-    }
-    return 0;
-  }
-
  private:
   MemoryChunk* chunk_;
   MarkBit::CellType* cells_;
-  unsigned int last_cell_index_;
+  unsigned int cell_index_end_;
   unsigned int cell_index_;
   Address cell_base_;
 };
@@ -102,6 +94,7 @@ class LiveObjectRange {
     using iterator_category = std::forward_iterator_tag;
 
     inline iterator(MemoryChunk* chunk, Bitmap* bitmap, Address start);
+    inline iterator(MemoryChunk* chunk, Bitmap* bitmap);
 
     inline iterator& operator++();
     inline iterator operator++(int);

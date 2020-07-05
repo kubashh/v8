@@ -4997,7 +4997,8 @@ TEST(Regress388880) {
                          OMIT_TRANSITION)
           .ToHandleChecked();
 
-  size_t desired_offset = Page::kPageSize - map1->instance_size();
+  size_t desired_offset =
+      MemoryChunkLayout::ObjectEndOffsetInDataPage() - map1->instance_size();
 
   // Allocate padding objects in old pointer space so, that object allocated
   // afterwards would end at the end of the page.
