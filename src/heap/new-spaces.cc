@@ -375,6 +375,7 @@ SemiSpaceObjectIterator::SemiSpaceObjectIterator(NewSpace* space) {
 void SemiSpaceObjectIterator::Initialize(Address start, Address end) {
   SemiSpace::AssertValidRange(start, end);
   current_ = start;
+  area_end_ = MemoryChunk::FromAddress(current_)->area_end();
   limit_ = end;
 }
 
@@ -573,6 +574,7 @@ void NewSpace::Verify(Isolate* isolate) {
   // There should be objects packed in from the low address up to the
   // allocation pointer.
   Address current = to_space_.first_page()->area_start();
+  Address area_end = to_space_.first_page()->area_end();
   CHECK_EQ(current, to_space_.space_start());
 
   size_t external_space_bytes[kNumTypes];
@@ -581,7 +583,7 @@ void NewSpace::Verify(Isolate* isolate) {
   }
 
   while (current != top()) {
-    if (!Page::IsAlignedToPageSize(current)) {
+    if (current != area_end) {
       // The allocation pointer should not be in the middle of an object.
       CHECK(!Page::FromAllocationAreaAddress(current)->ContainsLimit(top()) ||
             current < top());
@@ -624,6 +626,7 @@ void NewSpace::Verify(Isolate* isolate) {
       // At end of page, switch to next page.
       Page* page = Page::FromAllocationAreaAddress(current)->next_page();
       current = page->area_start();
+      area_end = page->area_end();
     }
   }
 
