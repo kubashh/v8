@@ -171,8 +171,7 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
   JavaScriptFrame* top_frame = top_it.frame();
   isolate->set_context(Context::cast(top_frame->context()));
 
-  int count = optimized_code->deoptimization_count();
-  if (type == DeoptimizeKind::kSoft && count < FLAG_reuse_opt_code_count) {
+  if (deoptimizer->should_reuse_code()) {
     optimized_code->increment_deoptimization_count();
     return ReadOnlyRoots(isolate).undefined_value();
   }
