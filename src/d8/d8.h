@@ -292,45 +292,67 @@ class ShellOptions {
 
   ~ShellOptions() { delete[] isolate_sources; }
 
-  bool send_idle_notification = false;
-  bool invoke_weak_callbacks = false;
-  bool omit_quit = false;
-  bool wait_for_wasm = true;
-  bool stress_opt = false;
-  int stress_runs = 1;
-  bool stress_snapshot = false;
-  bool interactive_shell = false;
-  bool test_shell = false;
-  bool expected_to_throw = false;
-  bool ignore_unhandled_promises = false;
-  bool mock_arraybuffer_allocator = false;
-  size_t mock_arraybuffer_allocator_limit = 0;
-  bool multi_mapped_mock_allocator = false;
-  bool enable_inspector = false;
+  template <class T>
+  class Option {
+   public:
+    Option(const char* name, T value) : name_(name), value_(value) {}
+
+    operator T() const { return value_; }  // NOLINT
+    T operator*() const { return value_; }
+    Option& operator=(T value);
+    void Overwrite(T value) { value_ = value; }
+
+   private:
+    const char* name_;
+    T value_;
+    bool specified_ = false;
+  };
+
+  Option<bool> send_idle_notification = {"send-idle-notification", false};
+  Option<bool> invoke_weak_callbacks = {"invoke-weak-callbacks", false};
+  Option<bool> omit_quit = {"omit-quit", false};
+  Option<bool> wait_for_wasm = {"wait-for-wasm", true};
+  Option<bool> stress_opt = {"stress-opt", false};
+  Option<int> stress_runs = {"stress-runs", 1};
+  Option<bool> stress_snapshot = {"stress-snapshot", false};
+  Option<bool> interactive_shell = {"shell", false};
+  Option<bool> test_shell = {"test", false};
+  Option<bool> expected_to_throw = {"throws", false};
+  Option<bool> ignore_unhandled_promises = {"ignore-unhandled-promises", false};
+  Option<bool> mock_arraybuffer_allocator = {"mock-arraybuffer-allocator",
+                                             false};
+  Option<size_t> mock_arraybuffer_allocator_limit = {
+      "mock-arraybuffer-allocator-limit", 0};
+  Option<bool> multi_mapped_mock_allocator = {"multi-mapped-mock-allocator",
+                                              false};
+  Option<bool> enable_inspector = {"enable-inspector", false};
   int num_isolates = 1;
-  v8::ScriptCompiler::CompileOptions compile_options =
-      v8::ScriptCompiler::kNoCompileOptions;
-  CodeCacheOptions code_cache_options = CodeCacheOptions::kNoProduceCache;
-  bool streaming_compile = false;
-  SourceGroup* isolate_sources = nullptr;
-  const char* icu_data_file = nullptr;
-  const char* icu_locale = nullptr;
-  const char* snapshot_blob = nullptr;
-  bool trace_enabled = false;
-  const char* trace_path = nullptr;
-  const char* trace_config = nullptr;
-  const char* lcov_file = nullptr;
-  bool disable_in_process_stack_traces = false;
-  int read_from_tcp_port = -1;
-  bool enable_os_system = false;
-  bool quiet_load = false;
-  int thread_pool_size = 0;
-  bool stress_delay_tasks = false;
+  Option<v8::ScriptCompiler::CompileOptions> compile_options = {
+      "cache", v8::ScriptCompiler::kNoCompileOptions};
+  Option<CodeCacheOptions> code_cache_options = {
+      "cache", CodeCacheOptions::kNoProduceCache};
+  Option<bool> streaming_compile = {"streaming-compile", false};
+  Option<SourceGroup*> isolate_sources = {"isolate-sources", nullptr};
+  Option<const char*> icu_data_file = {"icu-data-file", nullptr};
+  Option<const char*> icu_locale = {"icu-locale", nullptr};
+  Option<const char*> snapshot_blob = {"snapshot_blob", nullptr};
+  Option<bool> trace_enabled = {"trace-enabled", false};
+  Option<const char*> trace_path = {"trace-path", nullptr};
+  Option<const char*> trace_config = {"trace-config", nullptr};
+  Option<const char*> lcov_file = {"lcov", nullptr};
+  Option<bool> disable_in_process_stack_traces = {
+      "disable-in-process-stack-traces", false};
+  Option<int> read_from_tcp_port = {"read-from-tcp-port", -1};
+  Option<bool> enable_os_system = {"enable-os-system", false};
+  Option<bool> quiet_load = {"quiet-load", false};
+  Option<int> thread_pool_size = {"thread-pool-size", 0};
+  Option<bool> stress_delay_tasks = {"stress-delay-tasks", false};
   std::vector<const char*> arguments;
-  bool include_arguments = true;
-  bool cpu_profiler = false;
-  bool cpu_profiler_print = false;
-  bool fuzzy_module_file_extensions = true;
+  Option<bool> include_arguments = {"arguments", true};
+  Option<bool> cpu_profiler = {"cpu-profiler", false};
+  Option<bool> cpu_profiler_print = {"cpu-profiler-print", false};
+  Option<bool> fuzzy_module_file_extensions = {"fuzzy-module-file-extensions",
+                                               true};
 };
 
 class Shell : public i::AllStatic {
