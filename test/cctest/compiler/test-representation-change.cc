@@ -27,7 +27,8 @@ class RepresentationChangerTester : public HandleAndZoneScope,
         javascript_(main_zone()),
         jsgraph_(main_isolate(), main_graph_, &main_common_, &javascript_,
                  &main_simplified_, &main_machine_),
-        broker_{main_isolate(), main_zone()},
+        persistent_handles_(main_isolate()->NewPersistentHandles()),
+        broker_(main_isolate(), main_zone(), std::move(persistent_handles_)),
         changer_(&jsgraph_, &broker_) {
     Node* s = graph()->NewNode(common()->Start(num_parameters));
     graph()->SetStart(s);
@@ -35,6 +36,7 @@ class RepresentationChangerTester : public HandleAndZoneScope,
 
   JSOperatorBuilder javascript_;
   JSGraph jsgraph_;
+  std::unique_ptr<PersistentHandles> persistent_handles_;
   JSHeapBroker broker_;
   RepresentationChanger changer_;
 

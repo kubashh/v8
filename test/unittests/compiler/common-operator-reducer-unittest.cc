@@ -22,14 +22,17 @@ namespace common_operator_reducer_unittest {
 class CommonOperatorReducerTest : public GraphTest {
  public:
   explicit CommonOperatorReducerTest(int num_parameters = 1)
-      : GraphTest(num_parameters), machine_(zone()), simplified_(zone()) {}
+      : GraphTest(num_parameters),
+        machine_(zone()),
+        simplified_(zone()),
+        persistent_handles_(isolate()->NewPersistentHandles()) {}
   ~CommonOperatorReducerTest() override = default;
 
  protected:
   Reduction Reduce(
       AdvancedReducer::Editor* editor, Node* node,
       MachineOperatorBuilder::Flags flags = MachineOperatorBuilder::kNoFlags) {
-    JSHeapBroker broker(isolate(), zone());
+    JSHeapBroker broker(isolate(), zone(), std::move(persistent_handles_));
     MachineOperatorBuilder machine(zone(), MachineType::PointerRepresentation(),
                                    flags);
     CommonOperatorReducer reducer(editor, graph(), &broker, common(), &machine,
@@ -49,6 +52,7 @@ class CommonOperatorReducerTest : public GraphTest {
  private:
   MachineOperatorBuilder machine_;
   SimplifiedOperatorBuilder simplified_;
+  std::unique_ptr<PersistentHandles> persistent_handles_;
 };
 
 
