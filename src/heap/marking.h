@@ -98,10 +98,8 @@ class V8_EXPORT_PRIVATE Bitmap {
   static const uint32_t kBytesPerCell = kBitsPerCell / kBitsPerByte;
   static const uint32_t kBytesPerCellLog2 = kBitsPerCellLog2 - kBitsPerByteLog2;
 
-  // The length is the number of bits in this bitmap. (+1) accounts for
-  // the case where the markbits are queried for a one-word filler at the
-  // end of the page.
-  static const size_t kLength = ((1 << kPageSizeBits) >> kTaggedSizeLog2) + 1;
+  // The length is the number of bits in this bitmap.
+  static const size_t kLength = ((1 << kPageSizeBits) >> kTaggedSizeLog2);
   // The size of the bitmap in bytes is CellsCount() * kBytesPerCell.
   static const size_t kSize;
 

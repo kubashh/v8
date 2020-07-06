@@ -822,10 +822,11 @@ TEST(ReadOnlySpaceMetrics_OnePage) {
   CHECK_EQ(faked_space.CommittedPhysicalMemory(),
            allocator->GetCommitPageSize());
 
-  // Capacity will be one OS page minus the page header.
+  size_t reserved_bytes =
+      Page::kPageSize -
+      MemoryChunkLayout::AllocatableMemoryInMemoryChunk(RO_SPACE);
   CHECK_EQ(faked_space.Capacity(),
-           allocator->GetCommitPageSize() -
-               MemoryChunkLayout::ObjectStartOffsetInDataPage());
+           allocator->GetCommitPageSize() - reserved_bytes);
 }
 
 TEST(ReadOnlySpaceMetrics_AlignedAllocations) {
@@ -875,10 +876,11 @@ TEST(ReadOnlySpaceMetrics_AlignedAllocations) {
   CHECK_EQ(faked_space.CommittedPhysicalMemory(),
            3 * allocator->GetCommitPageSize());
 
-  // Capacity will be 3 OS pages minus the page header.
+  size_t reserved_bytes =
+      Page::kPageSize -
+      MemoryChunkLayout::AllocatableMemoryInMemoryChunk(RO_SPACE);
   CHECK_EQ(faked_space.Capacity(),
-           3 * allocator->GetCommitPageSize() -
-               MemoryChunkLayout::ObjectStartOffsetInDataPage());
+           3 * allocator->GetCommitPageSize() - reserved_bytes);
 }
 
 TEST(ReadOnlySpaceMetrics_TwoPages) {
@@ -900,8 +902,10 @@ TEST(ReadOnlySpaceMetrics_TwoPages) {
 
   // Allocate an object that's too big to have more than one on a page.
 
-  int object_size = static_cast<int>(
-      MemoryChunkLayout::AllocatableMemoryInMemoryChunk(RO_SPACE) / 2 + 16);
+  int object_size = RoundUp(
+      static_cast<int>(
+          MemoryChunkLayout::AllocatableMemoryInMemoryChunk(RO_SPACE) / 2 + 16),
+      kTaggedSize);
   CHECK_GT(object_size * 2,
            MemoryChunkLayout::AllocatableMemoryInMemoryChunk(RO_SPACE));
   faked_space.AllocateRaw(object_size, kWordAligned);
@@ -923,12 +927,13 @@ TEST(ReadOnlySpaceMetrics_TwoPages) {
   CHECK_EQ(faked_space.CommittedPhysicalMemory(),
            2 * committed_memory_per_page);
 
-  // Capacity will be the space up to the amount of committed memory minus the
-  // page headers.
+  size_t reserved_bytes =
+      Page::kPageSize -
+      MemoryChunkLayout::AllocatableMemoryInMemoryChunk(RO_SPACE);
   size_t capacity_per_page =
       RoundUp(MemoryChunkLayout::ObjectStartOffsetInDataPage() + object_size,
               allocator->GetCommitPageSize()) -
-      MemoryChunkLayout::ObjectStartOffsetInDataPage();
+      reserved_bytes;
   CHECK_EQ(faked_space.Capacity(), 2 * capacity_per_page);
 }
 

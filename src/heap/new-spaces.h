@@ -219,6 +219,7 @@ class SemiSpaceObjectIterator : public ObjectIterator {
 
   // The current iteration point.
   Address current_;
+  Address area_end_;
   // The end of iteration.
   Address limit_;
 };
