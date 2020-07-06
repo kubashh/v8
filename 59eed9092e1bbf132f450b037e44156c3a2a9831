@@ -50,6 +50,24 @@
       "revId": "59eed9092e1bbf132f450b037e44156c3a2a9831",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da7a0d6f_b0361ad8",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T13:54:51Z",
+      "side": 1,
+      "message": "Printing the same info is good idea. I added a helper function too. I don\u0027t call GetDeoptInfo but instead just create a SourcePosition to the start of the function. The DeoptInfo doesn\u0027t work well for dependency-change. It has DeoptReason from an enum that doesn\u0027t have the dependency-change reasons. Also for dependency-change deopts we can\u0027t really lookup DeoptInfo from the reloc_infos.",
+      "parentUuid": "af322051_d0ee71f6",
+      "revId": "59eed9092e1bbf132f450b037e44156c3a2a9831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

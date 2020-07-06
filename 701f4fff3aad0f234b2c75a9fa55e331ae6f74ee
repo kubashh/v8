@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "802af929_4567b3db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T13:54:51Z",
+      "side": 1,
+      "message": "Thanks Ross!\nGeorg, PTAL.",
+      "revId": "701f4fff3aad0f234b2c75a9fa55e331ae6f74ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
