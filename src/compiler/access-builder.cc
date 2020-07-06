@@ -531,6 +531,18 @@ FieldAccess AccessBuilder::ForFixedArrayLength() {
 }
 
 // static
+FieldAccess AccessBuilder::ForWeakFixedArrayLength() {
+  FieldAccess access = {kTaggedBase,
+                        WeakFixedArray::kLengthOffset,
+                        MaybeHandle<Name>(),
+                        MaybeHandle<Map>(),
+                        TypeCache::Get()->kFixedArrayLengthType,
+                        MachineType::TaggedSigned(),
+                        kNoWriteBarrier};
+  return access;
+}
+
+// static
 FieldAccess AccessBuilder::ForSloppyArgumentsElementsContext() {
   FieldAccess access = {
       kTaggedBase,         SloppyArgumentsElements::kContextOffset,
@@ -839,6 +851,16 @@ FieldAccess AccessBuilder::ForFixedArraySlot(
 }
 
 // static
+FieldAccess AccessBuilder::ForFeedbackVectorSlot(size_t index) {
+  int offset = FeedbackVector::OffsetOfElementAt(static_cast<int>(index));
+  FieldAccess access = {kTaggedBase,      offset,
+                        Handle<Name>(),   MaybeHandle<Map>(),
+                        Type::Any(),      MachineType::AnyTagged(),
+                        kFullWriteBarrier};
+  return access;
+}
+
+// static
 FieldAccess AccessBuilder::ForCellValue() {
   FieldAccess access = {kTaggedBase,       Cell::kValueOffset,
                         Handle<Name>(),    MaybeHandle<Map>(),
@@ -884,6 +906,14 @@ FieldAccess AccessBuilder::ForContextSlotKnownPointer(size_t index) {
 ElementAccess AccessBuilder::ForFixedArrayElement() {
   ElementAccess access = {kTaggedBase, FixedArray::kHeaderSize, Type::Any(),
                           MachineType::AnyTagged(), kFullWriteBarrier};
+  return access;
+}
+
+// static
+ElementAccess AccessBuilder::ForWeakFixedArrayElement() {
+  ElementAccess const access = {kTaggedBase, WeakFixedArray::kHeaderSize,
+                                Type::Any(), MachineType::TaggedPointer(),
+                                kFullWriteBarrier};
   return access;
 }
 
