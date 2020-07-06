@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f0841594_6a949f9e",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-06T14:22:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e732155f_1bfead3e",
+      "range": {
+        "startLine": 859,
+        "startChar": 27,
+        "endLine": 859,
+        "endChar": 80
+      },
+      "revId": "752be4e487f4a9cf09b47fcc92582a37fd743bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70d630d6_4b97884b",
         "filename": "src/compiler/access-builder.cc",
         "patchSetId": 6
@@ -39,6 +63,24 @@
       "revId": "752be4e487f4a9cf09b47fcc92582a37fd743bd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cad5c539_04ddb3e1",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-06T14:22:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70d630d6_4b97884b",
+      "revId": "752be4e487f4a9cf09b47fcc92582a37fd743bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "f759ac9f_7c15e806",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1916,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-06T14:22:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bad57c92_ff5887bd",
+      "range": {
+        "startLine": 1915,
+        "startChar": 6,
+        "endLine": 1916,
+        "endChar": 42
+      },
+      "revId": "752be4e487f4a9cf09b47fcc92582a37fd743bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f140fd27_6f65b7bf",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 6
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "16274c21_4183a153",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1919,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-06T14:22:27Z",
+      "side": 1,
+      "message": "ACK - will update this in a follow up CL.",
+      "parentUuid": "f140fd27_6f65b7bf",
+      "range": {
+        "startLine": 1918,
+        "startChar": 6,
+        "endLine": 1919,
+        "endChar": 15
+      },
+      "revId": "752be4e487f4a9cf09b47fcc92582a37fd743bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d244a2c_c937b17b",
         "filename": "src/compiler/simplified-lowering.cc",
         "patchSetId": 6
@@ -99,6 +189,30 @@
       "writtenOn": "2020-07-06T12:46:40Z",
       "side": 1,
       "message": "This ensures that the input is a HeapObject, in other words, that we\u0027ll insert a check to make sure it\u0027s not a Smi if necessary.",
+      "range": {
+        "startLine": 3610,
+        "startChar": 8,
+        "endLine": 3610,
+        "endChar": 45
+      },
+      "revId": "752be4e487f4a9cf09b47fcc92582a37fd743bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f318a5d8_7498d525",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3610,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-06T14:22:27Z",
+      "side": 1,
+      "message": "But this can never be a Smi as we have verified this at compile time. Do we still need this? Maybe this shouldn\u0027t be a parameter in that case? \n\nDo I need to add a check that `p.handler()` is AnyTagged?",
+      "parentUuid": "1d244a2c_c937b17b",
       "range": {
         "startLine": 3610,
         "startChar": 8,
@@ -131,6 +245,30 @@
       "revId": "752be4e487f4a9cf09b47fcc92582a37fd743bd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19f465ec_0d849ff2",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-06T14:22:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7c122d1_c500a7dc",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 296,
+        "endChar": 11
+      },
+      "revId": "752be4e487f4a9cf09b47fcc92582a37fd743bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
