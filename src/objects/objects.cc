@@ -8378,6 +8378,12 @@ void JSFinalizationRegistry::RemoveCellFromUnregisterTokenMap(
     InternalIndex entry = key_map.FindEntry(isolate, key);
     DCHECK(entry.is_found());
 
+    // The WeakCell is already popped from the cleared_cells list and is no
+    // longer reachable from the FinalizationRegistry and no longer
+    // unregisterable. Since the unregister token slot is a custom weak pointer,
+    // make it undefined to avoid tripping the marking verifier.
+    weak_cell.set_unregister_token(ReadOnlyRoots(isolate).undefined_value());
+
     if (weak_cell.key_list_next().IsUndefined(isolate)) {
       // weak_cell is the only one associated with its key; remove the key
       // from the hash table.
