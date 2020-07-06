@@ -16,6 +16,24 @@
       "revId": "d0f1bd835077c1c6b03b35a20f12743b75829fa0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08b01866_cbebbeae",
+        "filename": "src/compiler/js-operator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-06T06:11:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c0bc92d_ff08204e",
+      "revId": "d0f1bd835077c1c6b03b35a20f12743b75829fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
