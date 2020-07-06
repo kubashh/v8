@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8557dde_9ee8b53e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-06T22:59:30Z",
+      "side": 1,
+      "message": "Ulan, is this an actual security bug or is it the heap verifier being conservative about custom weak slots?",
+      "revId": "b61040f727e715416b7f521b54d7dd335f3af992",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
