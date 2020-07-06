@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6d13ba32_5c041603",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-06T12:32:53Z",
+      "side": 1,
+      "message": "This does not do the job. Remember that a release write prevents stores from above the write to be moved down below. But it is very well possible for stores further down to be moved/scheduled to before this line. \n\nConcretely, this means that SetFeedback(*array) may be moved further up, e.g. to line 948, so another thread may see this new array with the correct size, but some of the fields still not correctly initialized.\n\nThe operation that needs to have release semantics here is the SetFeedback, such that all setup of the array is forced to happen before the array is published to the world.\n\nWe also need to think about how to synchronize the FeedbackExtra field.",
+      "parentUuid": "d7e82978_2728eca5",
+      "range": {
+        "startLine": 957,
+        "startChar": 0,
+        "endLine": 959,
+        "endChar": 50
+      },
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09f723a6_c6c37d30",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 4
@@ -76,6 +100,29 @@
       "writtenOn": "2020-07-03T15:59:15Z",
       "side": 1,
       "message": "Maybe also put a DisallowHeapAllocation scope here.",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de00f6d1_4f088f84",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-06T12:32:53Z",
+      "side": 1,
+      "message": "See above: The array length is not what we need to synchronize on. I think GetFeedback() and/or GetHeapObjectIfStrong need to be the synchronization points here (but I need to have a more detailed look).",
+      "range": {
+        "startLine": 993,
+        "startChar": 4,
+        "endLine": 993,
+        "endChar": 51
+      },
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -167,6 +214,29 @@
     },
     {
       "key": {
+        "uuid": "6c23070a_c7498dad",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-06T12:32:53Z",
+      "side": 1,
+      "message": "nit: You might want to give it a more descriptive name, e.g. \"VectorExplorationThread\"?",
+      "range": {
+        "startLine": 27,
+        "startChar": 47,
+        "endLine": 27,
+        "endChar": 68
+      },
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c2178422_5a7d82da",
         "filename": "test/cctest/test-concurrent-vector.cc",
         "patchSetId": 4
@@ -195,6 +265,30 @@
       "writtenOn": "2020-07-06T10:28:55Z",
       "side": 1,
       "message": "Why do we want the sleeps?",
+      "range": {
+        "startLine": 47,
+        "startChar": 6,
+        "endLine": 47,
+        "endChar": 61
+      },
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94efbd4a_0f1901cf",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-06T12:32:53Z",
+      "side": 1,
+      "message": "Could Sleep trigger a context switch, preventing some ooo-execution that would be possible otherwise? (Probably, it can\u0027t, but I learned to be paranoid about everything when it comes to concurrency).",
+      "parentUuid": "ef685ca9_1f93bbad",
       "range": {
         "startLine": 47,
         "startChar": 6,
