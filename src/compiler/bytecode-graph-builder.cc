@@ -524,6 +524,8 @@ class BytecodeGraphBuilder::Environment : public ZoneObject {
                           const BytecodeLivenessState* liveness);
 
  private:
+  friend Zone;
+
   explicit Environment(const Environment* copy);
 
   bool StateValuesRequireUpdate(Node** state_values, Node** values, int count);
@@ -717,7 +719,7 @@ void BytecodeGraphBuilder::Environment::RecordAfterState(
 }
 
 BytecodeGraphBuilder::Environment* BytecodeGraphBuilder::Environment::Copy() {
-  return new (zone()) Environment(this);
+  return zone()->New<Environment>(this);
 }
 
 void BytecodeGraphBuilder::Environment::Merge(

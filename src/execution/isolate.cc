@@ -89,6 +89,7 @@
 #include "src/wasm/wasm-engine.h"
 #include "src/wasm/wasm-objects.h"
 #include "src/zone/accounting-allocator.h"
+#include "src/zone/type-stats.h"
 #ifdef V8_INTL_SUPPORT
 #include "unicode/uobject.h"
 #endif  // V8_INTL_SUPPORT
@@ -2668,7 +2669,18 @@ void Isolate::ThreadDataTable::RemoveAllThreads() {
 
 class TracingAccountingAllocator : public AccountingAllocator {
  public:
-  explicit TracingAccountingAllocator(Isolate* isolate) : isolate_(isolate) {}
+  explicit TracingAccountingAllocator(Isolate* isolate) : isolate_(isolate) {
+#ifdef V8_ENABLE_PRECISE_ZONE_STATS
+    type_stats_ = std::make_unique<TypeStats>();
+#endif
+  }
+  ~TracingAccountingAllocator() override {
+#ifdef V8_ENABLE_PRECISE_ZONE_STATS
+    if (FLAG_trace_zone_stats) {
+      type_stats_->Dump();
+    }
+#endif
+  }
 
  protected:
   void TraceAllocateSegmentImpl(v8::internal::Segment* segment) override {
@@ -2684,6 +2696,9 @@ class TracingAccountingAllocator : public AccountingAllocator {
 
   void TraceZoneDestructionImpl(const Zone* zone) override {
     base::MutexGuard lock(&mutex_);
+#ifdef V8_ENABLE_PRECISE_ZONE_STATS
+    type_stats_->MergeWith(*zone->type_stats());
+#endif
     UpdateMemoryTrafficAndReportMemoryUsage(zone->segment_bytes_allocated());
     active_zones_.erase(zone);
     nesting_depth_--;
@@ -2767,6 +2782,9 @@ class TracingAccountingAllocator : public AccountingAllocator {
 
   base::Mutex mutex_;
   std::unordered_set<const Zone*> active_zones_;
+#ifdef V8_ENABLE_PRECISE_ZONE_STATS
+  std::unique_ptr<TypeStats> type_stats_;
+#endif
   std::ostringstream buffer_;
   // This value is increased on both allocations and deallocations.
   size_t memory_traffic_since_last_report_ = 0;
