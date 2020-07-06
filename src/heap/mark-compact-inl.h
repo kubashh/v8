@@ -145,11 +145,11 @@ LiveObjectRange<mode>::iterator::iterator(MemoryChunk* chunk, Bitmap* bitmap,
       it_(chunk, bitmap) {
   it_.Advance(Bitmap::IndexToCell(
       Bitmap::CellAlignIndex(chunk_->AddressToMarkbitIndex(start))));
-  if (!it_.Done()) {
-    cell_base_ = it_.CurrentCellBase();
-    current_cell_ = *it_.CurrentCell();
+  cell_base_ = it_.CurrentCellBase();
+  current_cell_ = *it_.CurrentCell();
+  do {
     AdvanceToNextValidObject();
-  }
+  } while (!it_.Done() && current_object_.address() < start);
 }
 
 template <LiveObjectIterationMode mode>
@@ -169,6 +169,7 @@ operator++(int) {
 
 template <LiveObjectIterationMode mode>
 void LiveObjectRange<mode>::iterator::AdvanceToNextValidObject() {
+  // Address area_end = chunk_->area_end();
   while (!it_.Done()) {
     HeapObject object;
     int size = 0;
@@ -176,22 +177,15 @@ void LiveObjectRange<mode>::iterator::AdvanceToNextValidObject() {
       uint32_t trailing_zeros = base::bits::CountTrailingZeros(current_cell_);
       Address addr = cell_base_ + trailing_zeros * kTaggedSize;
 
-      // Clear the first bit of the found object..
+      // Clear the first bit of the found object.
       current_cell_ &= ~(1u << trailing_zeros);
 
       uint32_t second_bit_index = 0;
       if (trailing_zeros >= Bitmap::kBitIndexMask) {
         second_bit_index = 0x1;
-        // The overlapping case; there has to exist a cell after the current
-        // cell.
-        // However, if there is a black area at the end of the page, and the
-        // last word is a one word filler, we are not allowed to advance. In
-        // that case we can return immediately.
-        if (!it_.Advance()) {
-          DCHECK(HeapObject::FromAddress(addr).map() == one_word_filler_map_);
-          current_object_ = HeapObject();
-          return;
-        }
+        bool not_done = it_.Advance();
+        DCHECK(not_done);
+        USE(not_done);
         cell_base_ = it_.CurrentCellBase();
         current_cell_ = *it_.CurrentCell();
       } else {
@@ -274,6 +268,7 @@ void LiveObjectRange<mode>::iterator::AdvanceToNextValidObject() {
       return;
     }
   }
+  DCHECK_EQ(0, current_cell_);
   current_object_ = HeapObject();
 }
 
@@ -284,7 +279,7 @@ typename LiveObjectRange<mode>::iterator LiveObjectRange<mode>::begin() {
 
 template <LiveObjectIterationMode mode>
 typename LiveObjectRange<mode>::iterator LiveObjectRange<mode>::end() {
-  return iterator(chunk_, bitmap_, end_);
+  return iterator();
 }
 
 Isolate* MarkCompactCollectorBase::isolate() { return heap()->isolate(); }

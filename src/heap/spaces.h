@@ -252,11 +252,6 @@ class Page : public MemoryChunk {
     return Page::FromAddress(address1) == Page::FromAddress(address2);
   }
 
-  // Checks whether an address is page aligned.
-  static bool IsAlignedToPageSize(Address addr) {
-    return (addr & kPageAlignmentMask) == 0;
-  }
-
   static Page* ConvertNewToOld(Page* old_page);
 
   inline void MarkNeverAllocateForTesting();
