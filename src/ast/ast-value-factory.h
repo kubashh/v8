@@ -83,6 +83,7 @@ class AstRawString final : public ZoneObject {
   friend class AstRawStringInternalizationKey;
   friend class AstStringConstants;
   friend class AstValueFactory;
+  friend Zone;
 
   // Members accessed only by the AstValueFactory & related classes:
   static bool Compare(void* a, void* b);
@@ -126,6 +127,18 @@ class AstRawString final : public ZoneObject {
 #endif
 };
 
+// A linked list of AstRawStrings of the contents of this AstConsString.
+// This list has several properties:
+//
+//   * For empty strings the string pointer is null,
+//   * Appended raw strings are added to the head of the list, so they are in
+//     reverse order
+class AstConsStringSegment {
+ public:
+  const AstRawString* string;
+  AstConsStringSegment* next;
+};
+
 class AstConsString final : public ZoneObject {
  public:
   AstConsString* AddString(Zone* zone, const AstRawString* s) {
@@ -133,8 +146,7 @@ class AstConsString final : public ZoneObject {
     if (!IsEmpty()) {
       // We're putting the new string to the head of the list, meaning
       // the string segments will be in reverse order.
-      Segment* tmp = new (zone->New(sizeof(Segment))) Segment;
-      *tmp = segment_;
+      AstConsStringSegment* tmp = zone->New<AstConsStringSegment>(segment_);
       segment_.next = tmp;
     }
     segment_.string = s;
@@ -163,6 +175,7 @@ class AstConsString final : public ZoneObject {
 
  private:
   friend class AstValueFactory;
+  friend Zone;
 
   AstConsString() : string_(), segment_({nullptr, nullptr}) {}
 
@@ -171,18 +184,7 @@ class AstConsString final : public ZoneObject {
   Handle<String> Allocate(LocalIsolate* isolate) const;
 
   Handle<String> string_;
-
-  // A linked list of AstRawStrings of the contents of this AstConsString.
-  // This list has several properties:
-  //
-  //   * For empty strings the string pointer is null,
-  //   * Appended raw strings are added to the head of the list, so they are in
-  //     reverse order
-  struct Segment {
-    const AstRawString* string;
-    AstConsString::Segment* next;
-  };
-  Segment segment_;
+  AstConsStringSegment segment_;
 };
 
 enum class AstSymbol : uint8_t { kHomeObjectSymbol };

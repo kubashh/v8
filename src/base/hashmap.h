@@ -20,7 +20,10 @@ namespace base {
 
 class DefaultAllocationPolicy {
  public:
-  V8_INLINE void* New(size_t size) { return malloc(size); }
+  template <typename TypeTag>
+  V8_INLINE void* New(size_t size) {
+    return malloc(size);
+  }
   V8_INLINE static void Delete(void* p) { free(p); }
 };
 
@@ -145,7 +148,8 @@ TemplateHashMapImpl<Key, Value, MatchFun, AllocationPolicy>::
     : capacity_(original->capacity_),
       occupancy_(original->occupancy_),
       match_(original->match_) {
-  map_ = reinterpret_cast<Entry*>(allocator.New(capacity_ * sizeof(Entry)));
+  map_ = reinterpret_cast<Entry*>(
+      allocator.template New<Entry[]>(capacity_ * sizeof(Entry)));
   memcpy(map_, original->map_, capacity_ * sizeof(Entry));
 }
 
@@ -334,7 +338,8 @@ template <typename Key, typename Value, typename MatchFun,
 void TemplateHashMapImpl<Key, Value, MatchFun, AllocationPolicy>::Initialize(
     uint32_t capacity, AllocationPolicy allocator) {
   DCHECK(base::bits::IsPowerOfTwo(capacity));
-  map_ = reinterpret_cast<Entry*>(allocator.New(capacity * sizeof(Entry)));
+  map_ = reinterpret_cast<Entry*>(
+      allocator.template New<Entry[]>(capacity * sizeof(Entry)));
   if (map_ == nullptr) {
     FATAL("Out of memory: HashMap::Initialize");
     return;
