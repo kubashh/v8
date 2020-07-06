@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc24bcee_ffded1d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T20:44:19Z",
+      "side": 1,
+      "message": "Thanks Sathya! mostly lgtm. I added a few suggestions and I think we need to fix \"UpdateFeedback\" instructions as mentioned in my comment in simplified-operator.h",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "20a37a1d_5130b97f",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1889,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T20:44:19Z",
+      "side": 1,
+      "message": "Maybe use WrongMapWhenMonomorphic / MissingMapWhenMonomorphic here? Even simply using MissingMap would work too.",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6464aa37_32f7af3e",
+        "filename": "src/compiler/feedback-source.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T20:44:19Z",
+      "side": 1,
+      "message": "Do we want to have ICState in FeedbackSource or Feedback? I am not quite sure but to me it feels like ICState is \"Feedback\". Since this is only needed for DynamicMapChecks maybe we can add ICState as a parameter in the DynamicMapChecks and omit ICState in FeedbackSource?\n\nTobias, WDYT?",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a5edbe6_4e915bb0",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T20:44:19Z",
+      "side": 1,
+      "message": "Also, update comment here. For dynamic map checks feedback isn\u0027t an optional parameter right?",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58aa555b_69c7b375",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T20:44:19Z",
+      "side": 1,
+      "message": "TurboFan uses a valid feedback as an indication to generate \"UpdateFeedback\" instructions: https://cs.chromium.org/chromium/src/v8/src/compiler/backend/code-generator.cc?type\u003dcs\u0026g\u003d0\u0026l\u003d1144\n\nThese instructions are expected only for CallIC. So, passing a valid feedback here generates incorrect deoptimization data. I am not sure what\u0027s the best way to fix it. Maybe we should add an explicit variable to check if we need to generate UpdateFeedback instructions and not rely on a valid feedback?",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab0ac41e_374e3dcc",
+        "filename": "src/deoptimizer/deoptimize-reason.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T20:44:19Z",
+      "side": 1,
+      "message": "Maybe this could be MissingMapForMonomorphic or something similar?",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cc097fa_6e53d4df",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T20:44:19Z",
+      "side": 1,
+      "message": "Maybe we can drop check for type here. reason \u003d\u003d MissinMap or WrongICState implies that type is eager. We could add a DCHECK(type \u003d\u003d DeoptimizeKind::kEager) inside the if.",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

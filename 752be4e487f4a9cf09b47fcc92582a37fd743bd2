@@ -225,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "f88a0e15_85c60f4d",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3610,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T20:44:19Z",
+      "side": 1,
+      "message": "IIUC, this is checking the incoming receiver map is a HeapObject. I think this adds a deopt if incoming receiver map is an SMI. So I guess we would still need it.",
+      "parentUuid": "f318a5d8_7498d525",
+      "range": {
+        "startLine": 3610,
+        "startChar": 8,
+        "endLine": 3610,
+        "endChar": 45
+      },
+      "revId": "752be4e487f4a9cf09b47fcc92582a37fd743bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f7c122d1_c500a7dc",
         "filename": "src/compiler/simplified-operator.cc",
         "patchSetId": 6
