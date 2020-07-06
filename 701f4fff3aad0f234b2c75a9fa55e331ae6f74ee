@@ -16,6 +16,40 @@
       "revId": "701f4fff3aad0f234b2c75a9fa55e331ae6f74ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "19f8ba29_a4eaca51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T13:59:26Z",
+      "side": 1,
+      "message": "Peter, PTAL at src/profiler. \n\nThanks,\nMythri",
+      "revId": "701f4fff3aad0f234b2c75a9fa55e331ae6f74ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4586c377_469e4440",
+        "filename": "src/profiler/profiler-listener.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T13:59:26Z",
+      "side": 1,
+      "message": "Peter, I added this as a new event instead of as a CodeDeoptEvent since it doesn\u0027t actually Deopt, but just marks it for a deoptimization. We also thought it isn\u0027t important to expose this at this point. V8 cares about these, but not sure others do since it isn\u0027t actually a deopt. For now, these events do nothing for the profiler.",
+      "revId": "701f4fff3aad0f234b2c75a9fa55e331ae6f74ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
