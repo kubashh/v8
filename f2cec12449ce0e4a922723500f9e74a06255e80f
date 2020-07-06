@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2da54c7_17e0b653",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-06T10:50:02Z",
+      "side": 1,
+      "message": "Gerog, PTAL.\n\nThanks Ross!\n\n",
+      "revId": "f2cec12449ce0e4a922723500f9e74a06255e80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
