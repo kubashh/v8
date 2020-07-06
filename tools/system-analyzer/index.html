@@ -28,6 +28,7 @@ found in the LICENSE file. -->
   <script src="./map-processor.js"></script>
   <script src="./ic-processor.js"></script>
   <script src="./map-model.js"></script>
+
   <style>
   body {
     font-family: 'Roboto', sans-serif;
@@ -135,6 +136,18 @@ function handleKeyDown(event) {
   }
 }
 
+// receive IC Entries
+function updateDocumentEntries(){
+  console.assert(stateGlobal.icEntries, { errorMsg: "The IC events not read yet!" });
+  try {
+    document.state.icEntries = stateGlobal.icEntries;
+  } catch (error) {
+    console.log(error);
+    console.log("cannot assign entries to the state!");
+  }
+}
+
+
 // Update application state
 function updateDocumentState(){
     document.state = stateGlobal.state;
@@ -142,7 +155,7 @@ function updateDocumentState(){
       document.state.timeline = stateGlobal.timeline;
     } catch (error) {
       console.log(error);
-      console.log("cannot assign timeline to state!");
+      console.log("cannot assign timeline to the state!");
     }
 }
 
@@ -159,14 +172,15 @@ function loadFileIC(file) {
   reader.onload = function(evt) {
     let icProcessor = new CustomIcProcessor();
     icProcessor.processString(this.result);
-    entries = icProcessor.entries;
+    let entries = icProcessor.entries;
     $("ic-panel").countSelect.innerHTML = entries.length;
-    $("ic-panel").updateTable(entries);
+    $('#ic-panel').receiveData(entries);
+    stateGlobal.icEntries = entries;
+    //$("ic-panel").updateTable();
   }
   reader.readAsText(file);
   $("ic-panel").initGroupKeySelect();
 }
-
 
 function $(id) { return document.querySelector(id); }
 
@@ -177,19 +191,26 @@ let stateGlobal = Object.create(null);
 function globalDataUpload(e) {
   stateGlobal.timeline = e.detail;
   if(!e.detail) return;
-  // instantiate the app logic
   stateGlobal.fileData = e.detail;
   stateGlobal.state = new State();
   stateGlobal.timeline = handleLoadTextMapProcessor(stateGlobal.fileData.chunk);
   updateDocumentState();
-  // process the IC explorer
   loadFileIC(stateGlobal.fileData.file);
 }
+
 
 function globalSearchBarEvent(e) {
   if(!e.detail.isValidMap) return;
   document.state.map = e.detail.map;
 }
+
+function globalEntryUpload(e) {
+  if(!e.detail) return;
+  console.log("ic Entry upload");
+  stateGlobal.icEntries = e.detail.icEntries;
+  updateDocumentEntries();
+}
+
 </script>
 </head>
 <body>
@@ -203,9 +224,9 @@ function globalSearchBarEvent(e) {
     <div class="stats-panel">
       <section id="stats"><h2>Stats</h2></section>
     </div>
-    <timeline-panel id="timeline-panel" onchange="globalDataChanged(event)"></timeline-panel>
+    <timeline-panel id="timeline-panel"></timeline-panel>
     <map-panel id="map-panel" onclick="globalSearchBarEvent(event)"></map-panel>
-    <ic-panel id="ic-panel" onchange="globalDataChanged(event)"></ic-panel>
+    <ic-panel id="ic-panel" onchange="globalEntryUpload(event)"></ic-panel>
   </div>
 
   <div id="instructions">

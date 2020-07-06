@@ -31,146 +31,148 @@ function parseState(s) {
 }
 
 
-function IcProcessor() {
-  var propertyICParser = [parseInt, parseInt, parseInt, parseString,
-      parseString, parseInt, parseString, parseString, parseString];
-  LogReader.call(this, {
+class IcProcessor extends LogReader {
+  constructor() {
+    super();
+    // TODO(zc): Needs modification after addition of the IC event with time
+    let propertyICParser = [
+      parseInt, parseInt, parseInt, parseInt, parseString, parseString,
+      parseInt, parseString, parseString, parseString
+    ];
+    LogReader.call(this, {
       'code-creation': {
-          parsers: [parseString, parseInt, parseInt, parseInt, parseInt,
-              parseString, parseVarArgs],
-          processor: this.processCodeCreation },
-      'code-move': { parsers: [parseInt, parseInt],
-          processor: this.processCodeMove },
-      'code-delete': { parsers: [parseInt],
-          processor: this.processCodeDelete },
-      'sfi-move': { parsers: [parseInt, parseInt],
-          processor: this.processFunctionMove },
+        parsers: [
+          parseString, parseInt, parseInt, parseInt, parseInt, parseString,
+          parseVarArgs
+        ],
+        processor: this.processCodeCreation
+      },
+      'code-move':
+          {parsers: [parseInt, parseInt], processor: this.processCodeMove},
+      'code-delete': {parsers: [parseInt], processor: this.processCodeDelete},
+      'sfi-move':
+          {parsers: [parseInt, parseInt], processor: this.processFunctionMove},
       'LoadGlobalIC': {
-        parsers : propertyICParser,
-        processor: this.processPropertyIC.bind(this, "LoadGlobalIC") },
+        parsers: propertyICParser,
+        processor: this.processPropertyIC.bind(this, 'LoadGlobalIC')
+      },
       'StoreGlobalIC': {
-        parsers : propertyICParser,
-        processor: this.processPropertyIC.bind(this, "StoreGlobalIC") },
+        parsers: propertyICParser,
+        processor: this.processPropertyIC.bind(this, 'StoreGlobalIC')
+      },
       'LoadIC': {
-        parsers : propertyICParser,
-        processor: this.processPropertyIC.bind(this, "LoadIC") },
+        parsers: propertyICParser,
+        processor: this.processPropertyIC.bind(this, 'LoadIC')
+      },
       'StoreIC': {
-        parsers : propertyICParser,
-        processor: this.processPropertyIC.bind(this, "StoreIC") },
+        parsers: propertyICParser,
+        processor: this.processPropertyIC.bind(this, 'StoreIC')
+      },
       'KeyedLoadIC': {
-        parsers : propertyICParser,
-        processor: this.processPropertyIC.bind(this, "KeyedLoadIC") },
+        parsers: propertyICParser,
+        processor: this.processPropertyIC.bind(this, 'KeyedLoadIC')
+      },
       'KeyedStoreIC': {
-        parsers : propertyICParser,
-        processor: this.processPropertyIC.bind(this, "KeyedStoreIC") },
+        parsers: propertyICParser,
+        processor: this.processPropertyIC.bind(this, 'KeyedStoreIC')
+      },
       'StoreInArrayLiteralIC': {
-        parsers : propertyICParser,
-        processor: this.processPropertyIC.bind(this, "StoreInArrayLiteralIC") },
-      });
-  this.profile_ = new Profile();
+        parsers: propertyICParser,
+        processor: this.processPropertyIC.bind(this, 'StoreInArrayLiteralIC')
+      },
+    });
+    this.profile_ = new Profile();
 
-  this.LoadGlobalIC = 0;
-  this.StoreGlobalIC = 0;
-  this.LoadIC = 0;
-  this.StoreIC = 0;
-  this.KeyedLoadIC = 0;
-  this.KeyedStoreIC = 0;
-  this.StoreInArrayLiteralIC = 0;
-}
-inherits(IcProcessor, LogReader);
+    this.LoadGlobalIC = 0;
+    this.StoreGlobalIC = 0;
+    this.LoadIC = 0;
+    this.StoreIC = 0;
+    this.KeyedLoadIC = 0;
+    this.KeyedStoreIC = 0;
+    this.StoreInArrayLiteralIC = 0;
+  }
+  /**
+   * @override
+   */
+  printError(str) {
+    print(str);
+  }
+  processString(string) {
+    let end = string.length;
+    let current = 0;
+    let next = 0;
+    let line;
+    let i = 0;
+    let entry;
+    while (current < end) {
+      next = string.indexOf('\n', current);
+      if (next === -1) break;
+      i++;
+      line = string.substring(current, next);
+      current = next + 1;
+      this.processLogLine(line);
+    }
+  }
+  processLogFile(fileName) {
+    this.collectEntries = true;
+    this.lastLogFileName_ = fileName;
+    let line;
+    while (line = readline()) {
+      this.processLogLine(line);
+    }
+    print();
+    print('=====================');
+    print('LoadGlobal: ' + this.LoadGlobalIC);
+    print('StoreGlobal: ' + this.StoreGlobalIC);
+    print('Load: ' + this.LoadIC);
+    print('Store: ' + this.StoreIC);
+    print('KeyedLoad: ' + this.KeyedLoadIC);
+    print('KeyedStore: ' + this.KeyedStoreIC);
+    print('StoreInArrayLiteral: ' + this.StoreInArrayLiteralIC);
+  }
+  addEntry(entry) {
+    this.entries.push(entry);
+  }
+  processCodeCreation(type, kind, timestamp, start, size, name, maybe_func) {
+    if (maybe_func.length) {
+      let funcAddr = parseInt(maybe_func[0]);
+      let state = parseState(maybe_func[1]);
+      this.profile_.addFuncCode(
+          type, name, timestamp, start, size, funcAddr, state);
+    } else {
+      this.profile_.addCode(type, name, timestamp, start, size);
+    }
+  }
+  processCodeMove(from, to) {
+    this.profile_.moveCode(from, to);
+  }
+  processCodeDelete(start) {
+    this.profile_.deleteCode(start);
+  }
+  processFunctionMove(from, to) {
+    this.profile_.moveFunc(from, to);
+  }
+  formatName(entry) {
+    if (!entry) return '<unknown>';
+    let name = entry.func.getName();
+    let re = /(.*):[0-9]+:[0-9]+$/;
+    let array = re.exec(name);
+    if (!array) return name;
+    return entry.getState() + array[1];
+  }
 
-/**
- * @override
- */
-IcProcessor.prototype.printError = function(str) {
-  print(str);
-};
-
-IcProcessor.prototype.processString = function(string) {
-  var end = string.length;
-  var current = 0;
-  var next = 0;
-  var line;
-  var i = 0;
-  var entry;
-  while (current < end) {
-    next = string.indexOf("\n", current);
-    if (next === -1) break;
-    i++;
-    line = string.substring(current, next);
-    current = next + 1;
-    this.processLogLine(line);
+  processPropertyIC(
+      type, pc, time, line, column, old_state, new_state, map, name, modifier,
+      slow_reason) {
+    this[type]++;
+    let entry = this.profile_.findEntry(pc);
+    print(
+        type + ' (' + old_state + '->' + new_state + modifier + ') at ' +
+        this.formatName(entry) + ':' + line + ':' + column + ' ' + name +
+        ' (map 0x' + map.toString(16) + ')' +
+        (slow_reason ? ' ' + slow_reason : '') + 'time: ' + time);
   }
 }
-
-IcProcessor.prototype.processLogFile = function(fileName) {
-  this.collectEntries = true
-  this.lastLogFileName_ = fileName;
-  var line;
-  while (line = readline()) {
-    this.processLogLine(line);
-  }
-  print();
-  print("=====================");
-  print("LoadGlobal: " + this.LoadGlobalIC);
-  print("StoreGlobal: " + this.StoreGlobalIC);
-  print("Load: " + this.LoadIC);
-  print("Store: " + this.StoreIC);
-  print("KeyedLoad: " + this.KeyedLoadIC);
-  print("KeyedStore: " + this.KeyedStoreIC);
-  print("StoreInArrayLiteral: " + this.StoreInArrayLiteralIC);
-};
-
-IcProcessor.prototype.addEntry = function(entry) {
-  this.entries.push(entry);
-}
-
-IcProcessor.prototype.processCodeCreation = function(
-    type, kind, timestamp, start, size, name, maybe_func) {
-  if (maybe_func.length) {
-    var funcAddr = parseInt(maybe_func[0]);
-    var state = parseState(maybe_func[1]);
-    this.profile_.addFuncCode(type, name, timestamp, start, size, funcAddr, state);
-  } else {
-    this.profile_.addCode(type, name, timestamp, start, size);
-  }
-};
-
-
-IcProcessor.prototype.processCodeMove = function(from, to) {
-  this.profile_.moveCode(from, to);
-};
-
-
-IcProcessor.prototype.processCodeDelete = function(start) {
-  this.profile_.deleteCode(start);
-};
-
-
-IcProcessor.prototype.processFunctionMove = function(from, to) {
-  this.profile_.moveFunc(from, to);
-};
-
-IcProcessor.prototype.formatName = function(entry) {
-  if (!entry) return "<unknown>"
-  var name = entry.func.getName();
-  var re = /(.*):[0-9]+:[0-9]+$/;
-  var array = re.exec(name);
-  if (!array) return name;
-  return entry.getState() + array[1];
-}
-
-IcProcessor.prototype.processPropertyIC = function (
-    type, pc, line, column, old_state, new_state, map, name, modifier,
-    slow_reason) {
-  this[type]++;
-  var entry = this.profile_.findEntry(pc);
-  print(type + " (" + old_state + "->" + new_state + modifier + ") at " +
-        this.formatName(entry) + ":" + line + ":" + column + " " + name +
-        " (map 0x" + map.toString(16) + ")" +
-        (slow_reason ? " " + slow_reason : ""));
-}
-
 
 class ArgumentsProcessor extends BaseArgumentsProcessor {
   getArgsDispatch() {
