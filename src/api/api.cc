@@ -3802,6 +3802,7 @@ void v8::ArrayBufferView::CheckCast(Value* that) {
 }
 
 constexpr size_t v8::TypedArray::kMaxLength;
+statis_assert(v8::TypedArray::kMaxLength != 0, "Bad kMaxLength value");
 
 void v8::TypedArray::CheckCast(Value* that) {
   i::Handle<i::Object> obj = Utils::OpenHandle(that);
