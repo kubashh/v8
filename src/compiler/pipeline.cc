@@ -152,7 +152,8 @@ class PipelineData {
         codegen_zone_(codegen_zone_scope_.zone()),
         broker_(new JSHeapBroker(
             isolate_, info_->zone(), info_->trace_heap_broker(),
-            is_concurrent_inlining, info->native_context_independent())),
+            is_concurrent_inlining, info->native_context_independent(),
+            info->persistent_handles())),
         register_allocation_zone_scope_(zone_stats_,
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
@@ -1125,8 +1126,11 @@ PipelineCompilationJob::Status PipelineCompilationJob::ExecuteJobImpl(
   // Ensure that the RuntimeCallStats table is only available during execution
   // and not during finalization as that might be on a different thread.
   PipelineJobScope scope(&data_, stats);
-  if (data_.broker()->is_concurrent_inlining()) {
+  const bool concurrent_inlining = data_.broker()->is_concurrent_inlining();
+  if (concurrent_inlining) {
+    data_.broker()->InitializeLocalHeap();
     if (!pipeline_.CreateGraph()) {
+      data_.broker()->TearDownLocalHeap();
       return AbortOptimization(BailoutReason::kGraphBuildingFailed);
     }
   }
@@ -1137,10 +1141,14 @@ PipelineCompilationJob::Status PipelineCompilationJob::ExecuteJobImpl(
   } else {
     success = pipeline_.OptimizeGraph(linkage_);
   }
-  if (!success) return FAILED;
+  if (!success) {
+    if (concurrent_inlining) data_.broker()->TearDownLocalHeap();
+    return FAILED;
+  }
 
   pipeline_.AssembleCode(linkage_);
 
+  if (concurrent_inlining) data_.broker()->TearDownLocalHeap();
   return SUCCEEDED;
 }
 
