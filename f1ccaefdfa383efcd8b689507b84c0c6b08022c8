@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8e60a78_77c5a502",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-07T10:49:58Z",
+      "side": 1,
+      "message": "Thanks Georg! I addressed your comments. I added a comment about CodeDependencyChange method in the CodeEventListener class. Is there a better name for this? I couldn\u0027t come up with a good one. ",
+      "revId": "f1ccaefdfa383efcd8b689507b84c0c6b08022c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
