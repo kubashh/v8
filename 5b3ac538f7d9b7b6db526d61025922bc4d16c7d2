@@ -16,6 +16,144 @@
       "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6e632171_bdd4ef1f",
+        "filename": "src/builtins/finalization-registry.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-07T13:48:40Z",
+      "side": 1,
+      "message": "I see this GetDerivedMap-of-UnsafeCast-to-JSReceiver pattern in 2 other places in Torque files. How do we know newTarget is a JSReceiver?",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 71
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1af6dd62_45b75c28",
+        "filename": "src/builtins/finalization-registry.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-07T13:48:40Z",
+      "side": 1,
+      "message": "Comment seems to belong one line below.",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 63
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da3ed4b8_e3f55bfe",
+        "filename": "src/builtins/weak-refs.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-07T13:48:40Z",
+      "side": 1,
+      "message": "nit: \u0027weakref\u0027 to be consistent with other namespaces like string, array, typed_array, etc.",
+      "range": {
+        "startLine": 5,
+        "startChar": 10,
+        "endLine": 5,
+        "endChar": 18
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b9743d0_1548d6c3",
+        "filename": "src/builtins/weak-refs.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-07T13:48:40Z",
+      "side": 1,
+      "message": "Why not just use \u0027target\u0027 below?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c4cab49_9f713a4a",
+        "filename": "src/builtins/weak-refs.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-07T13:48:40Z",
+      "side": 1,
+      "message": "Is it safe?",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 75
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9c5b233_460fe218",
+        "filename": "src/builtins/weak-refs.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-07T13:48:40Z",
+      "side": 1,
+      "message": "Why not return \u0027target\u0027 here and avoid loading the constant? (and also eliminate the return above)",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 0
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
