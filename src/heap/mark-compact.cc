@@ -2540,6 +2540,7 @@ void MarkCompactCollector::ClearJSWeakRefs() {
             matched_cell.set_unregister_token(undefined);
           },
           gc_notify_updated_slot);
+      weak_cell.set_unregister_token(undefined);
     } else {
       // The unregister_token is alive.
       ObjectSlot slot = weak_cell.RawField(WeakCell::kUnregisterTokenOffset);
