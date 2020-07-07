@@ -19,6 +19,7 @@ namespace v8 {
 namespace internal {
 
 #define ADD_EXT_REF_NAME(name, desc) desc,
+#define ADD_EXT_REF_STACK_ACCESS_NAME(_, __, ___, desc) desc
 #define ADD_BUILTIN_NAME(Name, ...) "Builtin_" #Name,
 #define ADD_RUNTIME_FUNCTION(name, ...) "Runtime::" #name,
 #define ADD_ISOLATE_ADDR(Name, name) "Isolate::" #name "_address",
@@ -112,7 +113,7 @@ void ExternalReferenceTable::Add(Address address, int* index) {
 void ExternalReferenceTable::AddReferences(Isolate* isolate, int* index) {
   CHECK_EQ(kSpecialReferenceCount, *index);
 
-#define ADD_EXTERNAL_REFERENCE(name, desc) \
+#define ADD_EXTERNAL_REFERENCE(name, ...) \
   Add(ExternalReference::name().address(), index);
   EXTERNAL_REFERENCE_LIST(ADD_EXTERNAL_REFERENCE)
 #undef ADD_EXTERNAL_REFERENCE
