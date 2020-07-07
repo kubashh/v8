@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45e1c23d_7561a2eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-07T07:36:59Z",
+      "side": 1,
+      "message": "Good catch Shu! Could you please cc me on the bug? Otherwise, I cannot access it.\n\nWeak slots with unreachable targets should be cleared in ClearJSWeakRefs. We handled key_map, but missed the unregister_token slot. I think that the bug.\n\nSo the fix would be to clear the unregister_token slot in MarkCompactCollector::ClearJSWeakRefs after calling finalization_registry.RemoveUnregisterToken\nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/heap/mark-compact.cc;l\u003d2542;drc\u003d770e12aa6488b6a8a88e977ae67e9338950dc4e3?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n\nI would prefer that fix because it keeps weak slot clearing logic independent from higher-level WeakCell and FinalizationRegistry logic.\n\n",
+      "revId": "87dc94ed6678691b2a461503df568b7bda072e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
