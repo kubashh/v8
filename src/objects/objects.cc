@@ -8403,5 +8403,13 @@ void JSFinalizationRegistry::RemoveCellFromUnregisterTokenMap(
   }
 }
 
+void JSWeakRef::AddToKeptObjects(Isolate* isolate, Address raw_object) {
+  HandleScope scope(isolate);
+  Handle<JSReceiver> object(JSReceiver::cast(Object(raw_object)), isolate);
+  // KeepDuringJob might allocate and cause a GC, but it won't clear
+  // `object` since we hold a Handle to its target.
+  isolate->heap()->KeepDuringJob(object);
+}
+
 }  // namespace internal
 }  // namespace v8
