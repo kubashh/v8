@@ -19,6 +19,69 @@
     },
     {
       "key": {
+        "uuid": "c03a1f09_5dfee9c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-07T11:42:57Z",
+      "side": 1,
+      "message": "lgtm, good luck :) ",
+      "revId": "b95d5032c669a3e736f399a1b96c4495cd98f3fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e6ade4e_3cc918af",
+        "filename": "src/heap/mark-compact-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-07T11:42:57Z",
+      "side": 1,
+      "message": "Can we have a comment above that this assumes that the last cell is never marked?",
+      "range": {
+        "startLine": 185,
+        "startChar": 13,
+        "endLine": 185,
+        "endChar": 21
+      },
+      "revId": "b95d5032c669a3e736f399a1b96c4495cd98f3fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3fe08b4_54625404",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-07T11:42:57Z",
+      "side": 1,
+      "message": "nit: Comment that kTaggedSize is to account for a one-word filler which is the smallest possible object?",
+      "range": {
+        "startLine": 37,
+        "startChar": 11,
+        "endLine": 37,
+        "endChar": 30
+      },
+      "revId": "b95d5032c669a3e736f399a1b96c4495cd98f3fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dee7967f_d6394c58",
         "filename": "src/heap/mark-compact.h",
         "patchSetId": 8
@@ -30,6 +93,30 @@
       "writtenOn": "2020-07-07T11:17:40Z",
       "side": 1,
       "message": "This constructor is for the end() iterator.",
+      "range": {
+        "startLine": 98,
+        "startChar": 11,
+        "endLine": 98,
+        "endChar": 19
+      },
+      "revId": "b95d5032c669a3e736f399a1b96c4495cd98f3fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "915515e8_7ae8f769",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-07T11:42:57Z",
+      "side": 1,
+      "message": "Comment above? :)",
+      "parentUuid": "dee7967f_d6394c58",
       "range": {
         "startLine": 98,
         "startChar": 11,

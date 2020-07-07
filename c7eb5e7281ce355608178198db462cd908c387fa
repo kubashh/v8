@@ -25,6 +25,47 @@
     },
     {
       "key": {
+        "uuid": "541a7e1d_80dc208a",
+        "filename": "src/heap/mark-compact-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-07T11:42:57Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "c0781f6a_ac4f4d61",
+      "range": {
+        "startLine": 151,
+        "startChar": 3,
+        "endLine": 151,
+        "endChar": 31
+      },
+      "revId": "c7eb5e7281ce355608178198db462cd908c387fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "205de7ad_00553908",
+        "filename": "src/heap/mark-compact-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-07T11:42:57Z",
+      "side": 0,
+      "message": "Maybe: DCHECK_IMPLIES(it_.Done(), *this \u003d\u003d end())",
+      "revId": "c7eb5e7281ce355608178198db462cd908c387fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f26bc5a6_c578dab4",
         "filename": "src/heap/mark-compact-inl.h",
         "patchSetId": 8
@@ -36,6 +77,30 @@
       "writtenOn": "2020-07-07T11:17:40Z",
       "side": 0,
       "message": "This no longer holds because we guarantee that area_end has the corresponding mark-bit and that bit is always cleared.",
+      "range": {
+        "startLine": 188,
+        "startChar": 41,
+        "endLine": 188,
+        "endChar": 73
+      },
+      "revId": "c7eb5e7281ce355608178198db462cd908c387fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10f25de7_cad67af4",
+        "filename": "src/heap/mark-compact-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-07T11:42:57Z",
+      "side": 0,
+      "message": "\\o/",
+      "parentUuid": "f26bc5a6_c578dab4",
       "range": {
         "startLine": 188,
         "startChar": 41,
@@ -71,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "80e51fb2_be4b4052",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-07T11:42:57Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "f469637e_78c334fb",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 20
+      },
+      "revId": "c7eb5e7281ce355608178198db462cd908c387fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b1f3afe_37558894",
         "filename": "src/heap/memory-allocator.cc",
         "patchSetId": 8
@@ -91,6 +180,30 @@
       "revId": "c7eb5e7281ce355608178198db462cd908c387fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e58450b_889471cf",
+        "filename": "src/heap/memory-allocator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-07T11:42:57Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "7b1f3afe_37558894",
+      "range": {
+        "startLine": 692,
+        "startChar": 35,
+        "endLine": 692,
+        "endChar": 39
+      },
+      "revId": "c7eb5e7281ce355608178198db462cd908c387fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "7d2f27fb_ea271ace",
+        "filename": "src/heap/new-spaces-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-07T11:42:57Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "5f3927b9_9f48133b",
+      "range": {
+        "startLine": 66,
+        "startChar": 14,
+        "endLine": 66,
+        "endChar": 33
+      },
+      "revId": "c7eb5e7281ce355608178198db462cd908c387fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de4e7760_5410feaa",
         "filename": "src/heap/new-spaces.cc",
         "patchSetId": 8
@@ -137,6 +274,30 @@
       "revId": "c7eb5e7281ce355608178198db462cd908c387fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c563216e_a485f03d",
+        "filename": "src/heap/new-spaces.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-07T11:42:57Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "de4e7760_5410feaa",
+      "range": {
+        "startLine": 584,
+        "startChar": 15,
+        "endLine": 584,
+        "endChar": 34
+      },
+      "revId": "c7eb5e7281ce355608178198db462cd908c387fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
