@@ -78,6 +78,42 @@ FinalizationRegistryCleanupLoop(implicit context: Context)(
 }
 
 transitioning javascript builtin
+FinalizationRegistryConstructor(
+    js-implicit context: NativeContext, receiver: JSAny,
+    newTarget: JSAny)(cleanupCallback: JSAny): JSFinalizationRegistry {
+  // 1. If NewTarget is undefined, throw a TypeError exception.
+  if (newTarget == Undefined) {
+    ThrowTypeError(
+        MessageTemplate::kConstructorNotFunction, 'FinalizationRegistry');
+  }
+  // 2. If IsCallable(cleanupCallback) is false, throw a TypeError exception.
+  const cleanupCallback = Cast<Callable>(cleanupCallback) otherwise
+  ThrowTypeError(MessageTemplate::kWeakRefsCleanupMustBeCallable);
+  // 3. Let finalizationRegistry be ? OrdinaryCreateFromConstructor(NewTarget,
+  // "%FinalizationRegistryPrototype%", « [[Realm]], [[CleanupCallback]],
+  // [[Cells]] »).
+  const fun = UnsafeCast<JSFunction>(
+      context.elements
+          [NativeContextSlot::JS_FINALIZATION_REGISTRY_FUNCTION_INDEX]);
+  const map = UnsafeCast<Map>(fun.prototype_or_initial_map);
+  const finalizationRegistry = UnsafeCast<JSFinalizationRegistry>(
+      AllocateFastOrSlowJSObjectFromMap(map));
+  // 4. Let fn be the active function object.
+  // 5. Set finalizationRegistry.[[Realm]] to fn.[[Realm]].
+  finalizationRegistry.native_context = context;
+  // 6. Set finalizationRegistry.[[CleanupCallback]] to cleanupCallback.
+  finalizationRegistry.cleanup = cleanupCallback;
+  // 7. Set finalizationRegistry.[[Cells]] to be an empty List.
+  finalizationRegistry.flags =
+      SmiTag(FinalizationRegistryFlags{scheduled_for_cleanup: false});
+  finalizationRegistry.active_cells = Undefined;
+  finalizationRegistry.cleared_cells = Undefined;
+  finalizationRegistry.key_map = Undefined;
+  // 8. Return finalizationRegistry.
+  return finalizationRegistry;
+}
+
+transitioning javascript builtin
 FinalizationRegistryPrototypeCleanupSome(
     js-implicit context: NativeContext, receiver: JSAny)(...arguments): JSAny {
   // 1. Let finalizationRegistry be the this value.

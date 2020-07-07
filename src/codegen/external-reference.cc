@@ -934,6 +934,8 @@ FUNCTION_REFERENCE(
     js_finalization_registry_remove_cell_from_unregister_token_map,
     JSFinalizationRegistry::RemoveCellFromUnregisterTokenMap)
 
+FUNCTION_REFERENCE(js_weak_ref_add_to_kept_objects, JSWeakRef::AddToKeptObjects)
+
 bool operator==(ExternalReference lhs, ExternalReference rhs) {
   return lhs.address() == rhs.address();
 }
