@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0da6b2f_8339ee9f",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-07T06:03:24Z",
+      "side": 1,
+      "message": "Isn\u0027t the name already available here?",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "226073d4_3a18cdb7",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4678,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-07T06:03:24Z",
+      "side": 1,
+      "message": "It feel like this name should be passed to address_of functions instead of setting an isolate-wide variable.",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4eae41a_3a867983",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3326,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-07T06:03:24Z",
+      "side": 1,
+      "message": "Since we\u0027re here again, please update this comment to explain what these counters are used for, what is mapped to what, etc.",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54a5ac70_65e9ac4e",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3327,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-07T06:03:24Z",
+      "side": 1,
+      "message": "Let\u0027s lazy-initialize this on the first use, that will avoid the static initializer and the unneeded allocation when the flag is disabled.",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "397aeba5_cc8b69ee",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4582,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-07T06:03:24Z",
+      "side": 1,
+      "message": "So IMO this should take the function_name as an argument, and lazy-initialize the map. Also could it be const?",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fb74dd6_5a34f9da",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4586,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-07T06:03:24Z",
+      "side": 1,
+      "message": "Apparently it is safe to return the address of std::map values (https://stackoverflow.com/questions/12215358/its-safe-to-return-address-of-a-stdmap-value). Please mention that detail in a comment.",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
