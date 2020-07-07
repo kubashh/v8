@@ -3324,8 +3324,10 @@ void Isolate::InitializeCodeRanges() {
 namespace {
 
 // Some global counters.
-uint64_t load_from_stack_count = 0;
-uint64_t store_to_stack_count = 0;
+auto& stack_access_count_map =
+    *new std::map<std::string, std::pair<uint64_t, uint64_t>>{};
+// uint64_t store_to_stack_count = 0;
+const char* current_function_name = nullptr;
 
 }  // namespace
 
@@ -3665,10 +3667,24 @@ std::unique_ptr<PersistentHandles> Isolate::NewPersistentHandles() {
 void Isolate::DumpAndResetStats() {
   if (FLAG_trace_turbo_stack_accesses) {
     StdoutStream os;
-    os << "=== Load from stack counter: " << load_from_stack_count << std::endl;
-    os << "=== Store to stack counter: " << store_to_stack_count << std::endl;
-    load_from_stack_count = 0;
-    store_to_stack_count = 0;
+    uint64_t total_loads = 0;
+    uint64_t total_stores = 0;
+    os << "=== Stack access counters === " << std::endl;
+    os << "Number of optimized/wasm functions: "
+       << stack_access_count_map.size() << std::endl;
+    for (auto it = stack_access_count_map.cbegin();
+         it != stack_access_count_map.cend(); it++) {
+      std::string function_name((*it).first);
+      std::pair<uint64_t, uint64_t> per_func_count = (*it).second;
+      os << "Name: " << function_name << ", Loads: " << per_func_count.first
+         << ", Stores: " << per_func_count.second << std::endl;
+      total_loads += per_func_count.first;
+      total_stores += per_func_count.second;
+    }
+    os << "Total Loads: " << total_loads << ", Total Stores: " << total_stores
+       << std::endl;
+    stack_access_count_map = {};
+    current_function_name = nullptr;
   }
   if (turbo_statistics() != nullptr) {
     DCHECK(FLAG_turbo_stats || FLAG_turbo_stats_nvp);
@@ -4564,12 +4580,23 @@ void Isolate::RemoveCodeMemoryChunk(MemoryChunk* chunk) {
 
 // static
 Address Isolate::load_from_stack_count_address() {
-  return reinterpret_cast<Address>(&load_from_stack_count);
+  if (!current_function_name) return {};
+  std::string function_name(current_function_name);
+  return reinterpret_cast<Address>(
+      &stack_access_count_map[function_name].first);
 }
 
 // static
 Address Isolate::store_to_stack_count_address() {
-  return reinterpret_cast<Address>(&store_to_stack_count);
+  if (!current_function_name) return {};
+  std::string function_name(current_function_name);
+  return reinterpret_cast<Address>(
+      &stack_access_count_map[function_name].second);
+}
+
+// static
+void Isolate::set_current_function_name(const char* function_name) {
+  current_function_name = function_name;
 }
 
 }  // namespace internal
