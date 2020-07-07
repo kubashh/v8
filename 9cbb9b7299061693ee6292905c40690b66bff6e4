@@ -34,6 +34,24 @@
       "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "051bb401_a717108b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-07-07T16:07:09Z",
+      "side": 1,
+      "message": "Not sure how fantastic of a benchmark this is but there don\u0027t appear to be any perf regression from these changes:\n\n$ v8 ./test.js\nconsole.timeEnd: construct, 306.565000\nconsole.timeEnd: construct, 392.078000\nconsole.timeEnd: construct, 545.397000\nconsole.timeEnd: construct, 559.969000\nconsole.timeEnd: construct, 724.751000\nconsole.timeEnd: deref, 23.640000\nconsole.timeEnd: deref, 24.527000\nconsole.timeEnd: deref, 23.357000\nconsole.timeEnd: deref, 24.710000\nconsole.timeEnd: deref, 23.944000\n\n$ ./out.gn/x64.release/d8 ./test.js\nconsole.timeEnd: construct, 272.006000\nconsole.timeEnd: construct, 359.226000\nconsole.timeEnd: construct, 509.458000\nconsole.timeEnd: construct, 517.248000\nconsole.timeEnd: construct, 682.567000\nconsole.timeEnd: deref, 22.989000\nconsole.timeEnd: deref, 24.365000\nconsole.timeEnd: deref, 23.949000\nconsole.timeEnd: deref, 23.787000\nconsole.timeEnd: deref, 23.976000\n\ntest.js:\n\n  \u0027use strict\u0027;\n\n  function testCons() {\n    console.time(\u0027construct\u0027);\n    for (let i \u003d 0; i \u003c 1000000; i +\u003d 1) {\n      new WeakRef({});\n    }\n    console.timeEnd(\u0027construct\u0027);\n  }\n\n\n  function testDeref() {\n    console.time(\u0027deref\u0027);\n    const r \u003d new WeakRef({});\n    for (let i \u003d 0; i \u003c 1000000; i +\u003d 1) {\n      r.deref();\n    }\n    console.timeEnd(\u0027deref\u0027);\n  }\n\n  function megaTest(f) {\n    for (let i \u003d 0; i \u003c 5; i +\u003d 1) {\n      f();\n    }\n  }\n\n  megaTest(testCons);\n  megaTest(testDeref);",
+      "parentUuid": "17cc64a2_839cdd11",
+      "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
