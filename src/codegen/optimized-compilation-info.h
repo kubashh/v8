@@ -220,6 +220,8 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
     profiler_data_ = profiler_data;
   }
 
+  const char* function_name = nullptr;
+
  private:
   OptimizedCompilationInfo(Code::Kind code_kind, Zone* zone);
   void ConfigureFlags();
