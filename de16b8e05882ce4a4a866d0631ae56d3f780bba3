@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0c7f2a34_bb4372ad",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-07T20:00:41Z",
+      "side": 1,
+      "message": "this has limited use and apply for optimized function: https://chromium-review.googlesource.com/c/v8/v8/+/2283913/4/src/codegen/optimized-compilation-info.h#105",
+      "parentUuid": "b0da6b2f_8339ee9f",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "226073d4_3a18cdb7",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42865700_8ecc04e7",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4678,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-07T20:00:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "226073d4_3a18cdb7",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "dbbaed28_1ea5887a",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3326,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-07T20:00:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4eae41a_3a867983",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "54a5ac70_65e9ac4e",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7880bbc_40e6efb5",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3327,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-07T20:00:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54a5ac70_65e9ac4e",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "6ba40e16_8fe2d9fb",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4582,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-07T20:00:41Z",
+      "side": 1,
+      "message": "can\u0027t be both const and static",
+      "parentUuid": "397aeba5_cc8b69ee",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6fb74dd6_5a34f9da",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 4
@@ -101,6 +191,24 @@
       "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cf38dca_cab74922",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4586,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-07T20:00:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fb74dd6_5a34f9da",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
