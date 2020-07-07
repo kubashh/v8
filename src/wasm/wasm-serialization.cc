@@ -253,7 +253,7 @@ class ExternalReferenceList {
 #undef COUNT_EXTERNAL_REFERENCE
 
   Address external_reference_by_tag_[kNumExternalReferences] = {
-#define EXT_REF_ADDR(name, desc) ExternalReference::name().address(),
+#define EXT_REF_ADDR(name, ...) ExternalReference::name().address(),
       EXTERNAL_REFERENCE_LIST(EXT_REF_ADDR)
 #undef EXT_REF_ADDR
 #define RUNTIME_ADDR(name, ...) \
