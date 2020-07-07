@@ -53,6 +53,40 @@
     },
     {
       "key": {
+        "uuid": "b13a0989_41842013",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-07T08:39:41Z",
+      "side": 1,
+      "message": "Nice, thanks!\n\nIt\u0027s a little confusing that \"dependency change\" can mean two things: 1) an assumption recorded via DependentCode gets invalidated, or 2) a weakly embedded object dies (I think this must be a Map or JSObject). Maybe we can at least add a comment about that somewhere.",
+      "revId": "701f4fff3aad0f234b2c75a9fa55e331ae6f74ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "146313eb_dbe9a2cb",
+        "filename": "src/logging/log.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-07T08:39:41Z",
+      "side": 1,
+      "message": "nit: sorted",
+      "revId": "701f4fff3aad0f234b2c75a9fa55e331ae6f74ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4586c377_469e4440",
         "filename": "src/profiler/profiler-listener.h",
         "patchSetId": 3
