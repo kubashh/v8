@@ -63,11 +63,12 @@ bool NewSpace::FromSpaceContains(Object o) const {
 
 HeapObject SemiSpaceObjectIterator::Next() {
   while (current_ != limit_) {
-    if (Page::IsAlignedToPageSize(current_)) {
+    if (current_ == area_end_) {
       Page* page = Page::FromAllocationAreaAddress(current_);
       page = page->next_page();
       DCHECK(page);
       current_ = page->area_start();
+      area_end_ = page->area_end();
       if (current_ == limit_) return HeapObject();
     }
     HeapObject object = HeapObject::FromAddress(current_);

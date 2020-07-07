@@ -689,7 +689,9 @@ MemoryChunk* MemoryAllocator::AllocatePagePooled(SpaceType* owner) {
   const Address area_start =
       start +
       MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(owner->identity());
-  const Address area_end = start + size;
+  const Address area_end =
+      start +
+      MemoryChunkLayout::ObjectEndOffsetInMemoryChunk(owner->identity());
   // Pooled pages are always regular data pages.
   DCHECK_NE(CODE_SPACE, owner->identity());
   VirtualMemory reservation(data_page_allocator(), start, size);

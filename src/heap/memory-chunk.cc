@@ -60,6 +60,13 @@ intptr_t MemoryChunkLayout::ObjectStartOffsetInDataPage() {
   return RoundUp(MemoryChunk::kHeaderSize, kTaggedSize);
 }
 
+intptr_t MemoryChunkLayout::ObjectEndOffsetInDataPage() {
+  // Make the last word on the page non-allocatable. Otherwise, if the last
+  // word is a one-word-filler object, then its second mark-bit wouldn't be
+  // backed in the marking bitmap, which covers only kPageSize.
+  return MemoryChunk::kPageSize - kTaggedSize;
+}
+
 size_t MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(
     AllocationSpace space) {
   if (space == CODE_SPACE) {
@@ -68,8 +75,15 @@ size_t MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(
   return ObjectStartOffsetInDataPage();
 }
 
+size_t MemoryChunkLayout::ObjectEndOffsetInMemoryChunk(AllocationSpace space) {
+  if (space == CODE_SPACE) {
+    return ObjectEndOffsetInCodePage();
+  }
+  return ObjectEndOffsetInDataPage();
+}
+
 size_t MemoryChunkLayout::AllocatableMemoryInDataPage() {
-  size_t memory = MemoryChunk::kPageSize - ObjectStartOffsetInDataPage();
+  size_t memory = ObjectEndOffsetInDataPage() - ObjectStartOffsetInDataPage();
   DCHECK_LE(kMaxRegularHeapObjectSize, memory);
   return memory;
 }

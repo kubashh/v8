@@ -4997,7 +4997,8 @@ TEST(Regress388880) {
                          OMIT_TRANSITION)
           .ToHandleChecked();
 
-  size_t desired_offset = Page::kPageSize - map1->instance_size();
+  size_t desired_offset =
+      MemoryChunkLayout::ObjectEndOffsetInDataPage() - map1->instance_size();
 
   // Allocate padding objects in old pointer space so, that object allocated
   // afterwards would end at the end of the page.
@@ -7056,12 +7057,12 @@ TEST(Regress978156) {
   HandleScope handle_scope(CcTest::i_isolate());
   Heap* heap = CcTest::i_isolate()->heap();
 
-  // 1. Ensure that the new space is empty.
-  CcTest::CollectGarbage(NEW_SPACE);
-  CcTest::CollectGarbage(NEW_SPACE);
-  // 2. Fill the first page of the new space with FixedArrays.
+  // 1. Start incremental marking with black allocation.
+  SimulateIncrementalMarking(heap, false);
+  // 2. Fill a page with fixed arrays.
+  SimulateFullSpace(heap->old_space());
   std::vector<Handle<FixedArray>> arrays;
-  i::heap::FillCurrentPage(heap->new_space(), &arrays);
+  arrays = FillOldSpacePageWithFixedArrays(heap, 0);
   // 3. Trim the last array by one word thus creating a one-word filler.
   Handle<FixedArray> last = arrays.back();
   CHECK_GT(last->length(), 0);
@@ -7071,17 +7072,10 @@ TEST(Regress978156) {
       MemoryChunk::FromHeapObject(*last)->area_end() - kTaggedSize);
   HeapObject::FromAddress(last->address() + last->Size());
   CHECK(filler.IsFiller());
-  // 5. Start incremental marking.
-  i::IncrementalMarking* marking = heap->incremental_marking();
-  if (marking->IsStopped()) {
-    SafepointScope scope(heap);
-    marking->Start(i::GarbageCollectionReason::kTesting);
-  }
-  IncrementalMarking::MarkingState* marking_state = marking->marking_state();
-  // 6. Mark the filler black to access its two markbits. This triggers
-  // an out-of-bounds access of the marking bitmap in a bad case.
-  marking_state->WhiteToGrey(filler);
-  marking_state->GreyToBlack(filler);
+  // 6. Check the color of the filler. This triggers an out-of-bounds marking
+  // bitmap access.
+  CHECK(!heap->incremental_marking()->marking_state()->IsBlack(filler));
+  CHECK(heap->incremental_marking()->marking_state()->IsBlack(*last));
 }
 
 HEAP_TEST(GCDuringOffThreadMergeWithTransferHandle) {
