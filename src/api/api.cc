@@ -8445,12 +8445,13 @@ void Isolate::GetHeapStatistics(HeapStatistics* heap_statistics) {
   heap_statistics->total_global_handles_size_ = heap->TotalGlobalHandlesSize();
   heap_statistics->used_global_handles_size_ = heap->UsedGlobalHandlesSize();
 
-#ifndef V8_SHARED_RO_HEAP
-  i::ReadOnlySpace* ro_space = heap->read_only_space();
-  heap_statistics->total_heap_size_ += ro_space->CommittedMemory();
-  heap_statistics->total_physical_size_ += ro_space->CommittedPhysicalMemory();
-  heap_statistics->used_heap_size_ += ro_space->Size();
-#endif  // V8_SHARED_RO_HEAP
+  if (!V8_SHARED_RO_HEAP_BOOL) {
+    i::ReadOnlySpace* ro_space = heap->read_only_space();
+    heap_statistics->total_heap_size_ += ro_space->CommittedMemory();
+    heap_statistics->total_physical_size_ +=
+        ro_space->CommittedPhysicalMemory();
+    heap_statistics->used_heap_size_ += ro_space->Size();
+  }
 
   heap_statistics->total_heap_size_executable_ =
       heap->CommittedMemoryExecutable();
