@@ -3803,6 +3803,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       TNode<JSFinalizationRegistry> finalization_registry,
       TNode<WeakCell> weak_cell);
 
+  void AddToKeptObjects(TNode<Object> object);
+
  private:
   friend class CodeStubArguments;
 

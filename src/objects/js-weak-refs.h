@@ -112,6 +112,9 @@ class JSWeakRef : public TorqueGeneratedJSWeakRef<JSWeakRef, JSObject> {
 
   class BodyDescriptor;
 
+  V8_EXPORT_PRIVATE static void AddToKeptObjects(Isolate* isolate,
+                                                 Address raw_object);
+
   TQ_OBJECT_CONSTRUCTORS(JSWeakRef)
 };
 
