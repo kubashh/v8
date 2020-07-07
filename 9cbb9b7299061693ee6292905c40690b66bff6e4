@@ -16,6 +16,24 @@
       "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "17cc64a2_839cdd11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-07-07T15:49:31Z",
+      "side": 1,
+      "message": "I don\u0027t know of any weakref benchmarks in tree, but I can try to microbenchmark WeakRef() and WeakRef.prototype.deref() using the latest d8 build and my local d8 build.",
+      "parentUuid": "e16f56ea_ee2a3432",
+      "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
