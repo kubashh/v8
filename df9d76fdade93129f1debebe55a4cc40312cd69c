@@ -16,6 +16,108 @@
       "revId": "df9d76fdade93129f1debebe55a4cc40312cd69c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a9893a2_55cc6a50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-07T22:04:51Z",
+      "side": 1,
+      "message": "Very cool, thanks!",
+      "revId": "df9d76fdade93129f1debebe55a4cc40312cd69c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ce85bce_0fbc6ac2",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3128,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-07T22:04:51Z",
+      "side": 1,
+      "message": "I\u0027m concerned about the ownership of this string. The new member variable `function_name` is a raw pointer. The OptimizedCompilationInfo instance at data-\u003einfo() is not owned by the PipelineData instance `data`, and could outlive `data`. I don\u0027t know the contract for the debug_name() member function, but I\u0027d generally guess that a raw pointer returned by a member function is valid only as long as the object on the left of the `-\u003e` is alive. So we\u0027re getting a pointer from `data` which is only valid as long as `data` is alive, and storing it on a longer-lived object at `data-\u003einfo()`, which could set us up for a use-after-free bug.\n\nI don\u0027t mean to say that there is a use-after-free bug; I\u0027m pretty sure all of the accesses happen while `data` is still alive. But we shouldn\u0027t be holding raw pointers in a way that even allows the possibility of use-after-free.",
+      "revId": "df9d76fdade93129f1debebe55a4cc40312cd69c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa2c484e_74ae1d96",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-07T22:04:51Z",
+      "side": 1,
+      "message": "nit: could we capitalize this like a class name (MapOfLoadsAndStoresPerFunction)?",
+      "revId": "df9d76fdade93129f1debebe55a4cc40312cd69c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11fe38ba_9180e536",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3331,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-07T22:04:51Z",
+      "side": 1,
+      "message": "A while back, Tobias told me that one of the sanitizers would complain if we allocate something with `new` and never delete it. I think that base::LeakyObject is the officially blessed way to do this, but I could be mistaken.",
+      "revId": "df9d76fdade93129f1debebe55a4cc40312cd69c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ad73e59_7591b121",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4586,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-07T22:04:51Z",
+      "side": 1,
+      "message": "I guess this means that all functions with the same name get grouped together, but I think that\u0027s okay because we wouldn\u0027t be able to tell them apart in the output anyway.",
+      "revId": "df9d76fdade93129f1debebe55a4cc40312cd69c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a507a529_a9bb8786",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4587,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-07T22:04:51Z",
+      "side": 1,
+      "message": "Does this mean that we would write a null access into the instruction stream and crash sometime later? Can we just crash immediately instead, like `CHECK_NE(function_name, nullptr);`?",
+      "revId": "df9d76fdade93129f1debebe55a4cc40312cd69c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

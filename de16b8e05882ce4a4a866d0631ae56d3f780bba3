@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "74f627f7_e6a6f572",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-07T22:04:51Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t understand. In what cases is debug_name_ insufficient? Could we just ensure setting it in those cases, rather than introducing a new member variable?",
+      "parentUuid": "0c7f2a34_bb4372ad",
+      "revId": "de16b8e05882ce4a4a866d0631ae56d3f780bba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "226073d4_3a18cdb7",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 4
