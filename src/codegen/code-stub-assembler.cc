@@ -13104,6 +13104,17 @@ void CodeStubAssembler::RemoveFinalizationRegistryCellFromUnregisterTokenMap(
                 std::make_pair(MachineType::AnyTagged(), weak_cell));
 }
 
+void CodeStubAssembler::AddToKeptObjects(TNode<Object> object) {
+  const TNode<ExternalReference> add_to_kept_objects =
+      ExternalConstant(ExternalReference::js_weak_ref_add_to_kept_objects());
+  const TNode<ExternalReference> isolate_ptr =
+      ExternalConstant(ExternalReference::isolate_address(isolate()));
+
+  CallCFunction(add_to_kept_objects, MachineType::Pointer(),
+                std::make_pair(MachineType::Pointer(), isolate_ptr),
+                std::make_pair(MachineType::AnyTagged(), object));
+}
+
 PrototypeCheckAssembler::PrototypeCheckAssembler(
     compiler::CodeAssemblerState* state, Flags flags,
     TNode<NativeContext> native_context, TNode<Map> initial_prototype_map,
