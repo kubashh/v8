@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c29f03b7_6f51acfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-07T03:35:42Z",
+      "side": 1,
+      "message": "This CL is extension of https://chromium-review.googlesource.com/c/v8/v8/+/2269362 to have counter per optimized/wasm functions. PTAL, thanks 😊",
+      "revId": "96d9099213b9543206d445ce4a3bbd52737bca8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
