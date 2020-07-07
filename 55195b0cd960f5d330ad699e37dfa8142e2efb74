@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28850675_becef28b",
+        "filename": "tools/ic-explorer.html",
+        "patchSetId": 10
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-07T07:46:03Z",
+      "side": 1,
+      "message": "👍 for all the reformatting!",
+      "revId": "55195b0cd960f5d330ad699e37dfa8142e2efb74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2fbed60_3a0c2d3e",
+        "filename": "tools/ic-processor.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-07T07:46:03Z",
+      "side": 1,
+      "message": "I guess it works, and in the future we will have this properly fixed once everything is ported to new ES6 classes.\n\nFor now, could you revert the changes in this file and just fix the added time?",
+      "revId": "55195b0cd960f5d330ad699e37dfa8142e2efb74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e300678_ad445564",
+        "filename": "tools/ic-processor.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-07T07:46:03Z",
+      "side": 1,
+      "message": "I think this comment is no longer needed.",
+      "revId": "55195b0cd960f5d330ad699e37dfa8142e2efb74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
