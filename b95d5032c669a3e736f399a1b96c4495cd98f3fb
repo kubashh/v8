@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32613d72_dcf34aa9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-07T11:17:40Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "b95d5032c669a3e736f399a1b96c4495cd98f3fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dee7967f_d6394c58",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-07T11:17:40Z",
+      "side": 1,
+      "message": "This constructor is for the end() iterator.",
+      "range": {
+        "startLine": 98,
+        "startChar": 11,
+        "endLine": 98,
+        "endChar": 19
+      },
+      "revId": "b95d5032c669a3e736f399a1b96c4495cd98f3fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
