@@ -3124,6 +3124,10 @@ bool PipelineImpl::SelectInstructions(Linkage* linkage) {
 
   data->DeleteGraphZone();
 
+  if (FLAG_trace_turbo_stack_accesses) {
+    data->info()->function_name = data->debug_name();
+  }
+
   data->BeginPhaseKind("V8.TFRegisterAllocation");
 
   bool run_verifier = FLAG_turbo_verify_allocation;

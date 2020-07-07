@@ -1528,6 +1528,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   bool RequiresCodeRange() const;
 
+  static void set_current_function_name(const char*);
   static Address load_from_stack_count_address();
   static Address store_to_stack_count_address();
 
