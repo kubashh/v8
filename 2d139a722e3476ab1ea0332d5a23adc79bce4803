@@ -87,6 +87,24 @@
     },
     {
       "key": {
+        "uuid": "14a64edb_200f1fe6",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-07T16:21:54Z",
+      "side": 1,
+      "message": "On a second thought, I am also OK to fix these in a followup cl, given we aren\u0027t enabling this yet.",
+      "parentUuid": "58aa555b_69c7b375",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab0ac41e_374e3dcc",
         "filename": "src/deoptimizer/deoptimize-reason.h",
         "patchSetId": 10
