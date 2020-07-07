@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e16f56ea_ee2a3432",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-07T15:23:47Z",
+      "side": 1,
+      "message": "Thanks, the runtime version looks good. Do you know what the perf impact of this change is? I suppose we have weak ref benchmarks somewhere(?)",
+      "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
