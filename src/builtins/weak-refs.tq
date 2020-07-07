@@ -1,0 +1,55 @@
+// Copyright 2020 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+namespace weakrefs {
+
+extern macro AddToKeptObjects(JSAny);
+
+transitioning javascript builtin
+WeakRefConstructor(
+    js-implicit context: NativeContext, receiver: JSAny, newTarget: JSAny,
+    target: JSFunction)(targetAny: JSAny): JSWeakRef {
+  const funcTarget = target;
+  // 1. If NewTarget is undefined, throw a TypeError exception.
+  if (newTarget == Undefined) {
+    ThrowTypeError(MessageTemplate::kConstructorNotFunction, 'WeakRef');
+  }
+  // 2. If Type(target) is not Object, throw a TypeError exception.
+  const target = Cast<JSReceiver>(targetAny) otherwise
+  ThrowTypeError(
+      MessageTemplate::kWeakRefsWeakRefConstructorTargetMustBeObject);
+  // 3. Let weakRef be ? OrdinaryCreateFromConstructor(NewTarget,
+  // "%WeakRefPrototype%", « [[WeakRefTarget]] »).
+  const map = GetDerivedMap(funcTarget, UnsafeCast<JSReceiver>(newTarget));
+  const weakRef = UnsafeCast<JSWeakRef>(AllocateFastOrSlowJSObjectFromMap(map));
+  // 4. Perfom ! AddToKeptObjects(target).
+  AddToKeptObjects(target);
+  // 5. Set weakRef.[[WeakRefTarget]] to target.
+  weakRef.target = target;
+  // 6. Return weakRef.
+  return weakRef;
+}
+
+transitioning javascript builtin
+WeakRefDeref(js-implicit context: NativeContext, receiver: JSAny)(): JSAny {
+  // 1. Let weakRef be the this value.
+  // 2. Perform ? RequireInternalSlot(weakRef, [[WeakRefTarget]]).
+  const weakRef = Cast<JSWeakRef>(receiver) otherwise
+  ThrowTypeError(
+      MessageTemplate::kIncompatibleMethodReceiver, 'WeakRef.prototype.deref',
+      receiver);
+  // 3. Let target be the value of weakRef.[[WeakRefTarget]].
+  const target = weakRef.target;
+  // 4. If target is not empty,
+  if (target != Undefined) {
+    // a. Perform ! AddToKeptObjects(target).
+    AddToKeptObjects(target);
+    // b. Return target.
+    return target;
+  }
+  // 5. return undefined.
+  return Undefined;
+}
+
+}  // namespace weakrefs

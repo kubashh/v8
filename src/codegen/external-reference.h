@@ -232,6 +232,7 @@ class StatsCounter;
     "atomic_pair_compare_exchange_function")                                   \
   V(js_finalization_registry_remove_cell_from_unregister_token_map,            \
     "JSFinalizationRegistry::RemoveCellFromUnregisterTokenMap")                \
+  V(js_weak_ref_add_to_kept_objects, "JSWeakRef::AddToKeptObjects")            \
   EXTERNAL_REFERENCE_LIST_INTL(V)
 
 #ifdef V8_INTL_SUPPORT
