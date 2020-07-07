@@ -4673,14 +4673,17 @@ void CodeGenerator::PrepareForDeoptimizationExits(int deopt_count) {}
 void CodeGenerator::IncrementStackAccessCounter(
     InstructionOperand* source, InstructionOperand* destination) {
   DCHECK(FLAG_trace_turbo_stack_accesses);
+  if (info()->IsNotOptimizedFunctionOrWasmFunction()) return;
   auto IncrementCounter = [&](ExternalReference counter) {
     __ incl(__ ExternalReferenceAsOperand(counter));
   };
   if (source->IsAnyStackSlot()) {
-    IncrementCounter(ExternalReference::address_of_load_from_stack_count());
+    IncrementCounter(ExternalReference::address_of_load_from_stack_count(
+        info()->GetFunctionNameForStackAccessTracing()));
   }
   if (destination->IsAnyStackSlot()) {
-    IncrementCounter(ExternalReference::address_of_store_to_stack_count());
+    IncrementCounter(ExternalReference::address_of_store_to_stack_count(
+        info()->GetFunctionNameForStackAccessTracing()));
   }
 }
 

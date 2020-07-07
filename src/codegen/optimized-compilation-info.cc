@@ -179,6 +179,18 @@ std::unique_ptr<char[]> OptimizedCompilationInfo::GetDebugName() const {
   return name;
 }
 
+Vector<const char>
+OptimizedCompilationInfo::GetFunctionNameForStackAccessTracing() const {
+  DCHECK(!debug_name_.empty());
+  return debug_name_;
+}
+
+void OptimizedCompilationInfo::SetFunctionNameForStackAccessTracing(
+    const char* function_name) {
+  DCHECK_NOT_NULL(function_name);
+  debug_name_ = CStrVector(function_name);
+}
+
 StackFrame::Type OptimizedCompilationInfo::GetOutputStackFrameType() const {
   switch (code_kind()) {
     case Code::STUB:
