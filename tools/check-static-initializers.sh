@@ -32,7 +32,8 @@
 # Allow:
 # _GLOBAL__sub_I_d8.cc
 # _GLOBAL__sub_I_iostream.cpp
-expected_static_init_count=2
+# _GLOBAL__sub_I_isolate.cc
+expected_static_init_count=3
 
 v8_root=$(readlink -f $(dirname $BASH_SOURCE)/../)
 
