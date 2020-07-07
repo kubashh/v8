@@ -98,8 +98,6 @@ class StatsCounter;
     "FLAG_mock_arraybuffer_allocator")                                         \
   V(address_of_one_half, "LDoubleConstant::one_half")                          \
   V(address_of_runtime_stats_flag, "TracingFlags::runtime_stats")              \
-  V(address_of_load_from_stack_count, "load_from_stack_count")                 \
-  V(address_of_store_to_stack_count, "store_to_stack_count")                   \
   V(address_of_the_hole_nan, "the_hole_nan")                                   \
   V(address_of_uint32_bias, "uint32_bias")                                     \
   V(bytecode_size_table_address, "Bytecodes::bytecode_size_table_address")     \
@@ -242,6 +240,12 @@ class StatsCounter;
 #define EXTERNAL_REFERENCE_LIST_INTL(V)
 #endif  // V8_INTL_SUPPORT
 
+#define EXTERNAL_REFERENCE_STACK_ACCESS_LIST(V)                   \
+  V(address_of_load_from_stack_count, const char*, function_name, \
+    "load_from_stack_count")                                      \
+  V(address_of_store_to_stack_count, const char*, function_name,  \
+    "store_to_stack_count")
+
 // An ExternalReference represents a C++ address used in the generated
 // code. All references to C++ functions and variables must be encapsulated
 // in an ExternalReference instance. This is done in order to track the
@@ -321,6 +325,11 @@ class ExternalReference {
 #define DECL_EXTERNAL_REFERENCE(name, desc) \
   static V8_EXPORT_PRIVATE ExternalReference name(Isolate* isolate);
   EXTERNAL_REFERENCE_LIST_WITH_ISOLATE(DECL_EXTERNAL_REFERENCE)
+#undef DECL_EXTERNAL_REFERENCE
+
+#define DECL_EXTERNAL_REFERENCE(name, type, arg, desc) \
+  V8_EXPORT_PRIVATE static ExternalReference name(type arg = nullptr);
+  EXTERNAL_REFERENCE_STACK_ACCESS_LIST(DECL_EXTERNAL_REFERENCE)
 #undef DECL_EXTERNAL_REFERENCE
 
   V8_EXPORT_PRIVATE V8_NOINLINE static ExternalReference
