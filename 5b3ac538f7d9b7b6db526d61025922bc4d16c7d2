@@ -154,6 +154,40 @@
       "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1a422f9_45fdd965",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 13107,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-07T13:50:14Z",
+      "side": 1,
+      "message": "suggestion: CallJSWeakRefAddToKeptObjects, especially with this generic placement in code-stub-assembler.h",
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84781fb6_66c975b4",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8409,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-07T13:50:14Z",
+      "side": 1,
+      "message": "In that case, this function shouldn\u0027t be called via CallCFunction. CallCFunction targets should have:\n\n  DisallowHeapAllocation no_gc;\n  DisallowHandleAllocation no_handles;\n  DisallowJavascriptExecution no_js(isolate);",
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
