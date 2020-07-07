@@ -6,6 +6,7 @@
 #define V8_BASE_BOUNDED_PAGE_ALLOCATOR_H_
 
 #include "include/v8-platform.h"
+#include "src/base/logging.h"
 #include "src/base/platform/mutex.h"
 #include "src/base/region-allocator.h"
 
@@ -55,6 +56,24 @@ class V8_BASE_EXPORT BoundedPageAllocator : public v8::PageAllocator {
 
   void* AllocatePages(void* hint, size_t size, size_t alignment,
                       Permission access) override;
+
+  bool CanAllocateSharedPages() override {
+    return page_allocator_->CanAllocateSharedPages();
+  }
+
+  void* AllocateSharedPages(size_t length, Permission permission) override {
+    // TODO(delphick): It's possible we might want to allocate shared memory
+    // within the bounded address space, but for now we always allocate this
+    // memory outside.
+    UNREACHABLE();
+  }
+
+  void* RemapSharedPages(void* old_address, void* new_address,
+                         size_t size) override {
+    DCHECK(region_allocator_.contains(reinterpret_cast<Address>(new_address),
+                                      size));
+    return page_allocator_->RemapSharedPages(old_address, new_address, size);
+  }
 
   // Allocates pages at given address, returns true on success.
   bool AllocatePagesAt(Address address, size_t size, Permission access);
