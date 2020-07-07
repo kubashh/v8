@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "8988d419_1f661e7e",
+        "filename": "src/builtins/finalization-registry.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-07-07T14:10:44Z",
+      "side": 1,
+      "message": "NewTarget is not undefined which means it must be a constructor which means it can be upcasted to JSReceiver.\n\nI took GetDerivedMap/AllocateFastOrSlowJSObjectFromMap from JSObject::New:\n\n  Handle\u003cMap\u003e initial_map;\n  ASSIGN_RETURN_ON_EXCEPTION(\n      isolate, initial_map,\n      JSFunction::GetDerivedMap(isolate, constructor, new_target), JSObject);\n  Handle\u003cJSObject\u003e result \u003d isolate-\u003efactory()-\u003eNewFastOrSlowJSObjectFromMap(\n      initial_map, NameDictionary::kInitialCapacity, AllocationType::kYoung,\n      site);",
+      "parentUuid": "6e632171_bdd4ef1f",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 71
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1af6dd62_45b75c28",
         "filename": "src/builtins/finalization-registry.tq",
         "patchSetId": 3
@@ -62,6 +86,30 @@
       "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58213d0f_222e8aab",
+        "filename": "src/builtins/finalization-registry.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-07-07T14:10:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1af6dd62_45b75c28",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 63
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "6ea70d58_2ebdc2c1",
+        "filename": "src/builtins/weak-refs.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-07-07T14:10:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da3ed4b8_e3f55bfe",
+      "range": {
+        "startLine": 5,
+        "startChar": 10,
+        "endLine": 5,
+        "endChar": 18
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b9743d0_1548d6c3",
         "filename": "src/builtins/weak-refs.tq",
         "patchSetId": 3
@@ -99,6 +171,30 @@
       "writtenOn": "2020-07-07T13:48:40Z",
       "side": 1,
       "message": "Why not just use \u0027target\u0027 below?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20f64bed_a8258835",
+        "filename": "src/builtins/weak-refs.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-07-07T14:10:44Z",
+      "side": 1,
+      "message": "`target` is the name of the argument passed to the constructor.",
+      "parentUuid": "5b9743d0_1548d6c3",
       "range": {
         "startLine": 13,
         "startChar": 0,
@@ -134,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "c358b1b7_80cdd7cb",
+        "filename": "src/builtins/weak-refs.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-07-07T14:10:44Z",
+      "side": 1,
+      "message": "If you mean the cast to JSReceiver, it should be yes, because Undefined is discriminated above.",
+      "parentUuid": "8c4cab49_9f713a4a",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 75
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f9c5b233_460fe218",
         "filename": "src/builtins/weak-refs.tq",
         "patchSetId": 3
@@ -154,6 +274,30 @@
       "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d2bf169_25eea759",
+        "filename": "src/builtins/weak-refs.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-07-07T14:10:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9c5b233_460fe218",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 0
+      },
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -185,6 +329,24 @@
       "writtenOn": "2020-07-07T13:50:14Z",
       "side": 1,
       "message": "In that case, this function shouldn\u0027t be called via CallCFunction. CallCFunction targets should have:\n\n  DisallowHeapAllocation no_gc;\n  DisallowHandleAllocation no_handles;\n  DisallowJavascriptExecution no_js(isolate);",
+      "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d89cf32_00ff00d3",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8409,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2020-07-07T14:10:44Z",
+      "side": 1,
+      "message": "What would be the appropriate way to call Heap::KeepDuringJob from torque?",
+      "parentUuid": "84781fb6_66c975b4",
       "revId": "5b3ac538f7d9b7b6db526d61025922bc4d16c7d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
