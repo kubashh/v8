@@ -52,6 +52,108 @@
       "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0cc142e0_30d3bd94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-07T21:34:03Z",
+      "side": 1,
+      "message": "lgtm with nits addressed.\n\nThanks for porting this to Torque! Just musing: it\u0027s too bad we need a runtime for KeepDuringJob, maybe there\u0027s a clever thing we can do there around GC so we can have it as a fast call...",
+      "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "406ce3d4_0306cb94",
+        "filename": "src/builtins/weak-ref.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-07T21:34:03Z",
+      "side": 1,
+      "message": "The convention is runtime functions are in their own toplevel `namespace runtime`.",
+      "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e20172d_e6f1c717",
+        "filename": "src/builtins/weak-ref.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-07T21:34:03Z",
+      "side": 1,
+      "message": "Given JS constructors already have a `newTarget` and a `target`, `targetAny` may be confusing to read. Maybe `weakRefTargetAny`?",
+      "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "128a790e_1a81ae45",
+        "filename": "src/builtins/weak-ref.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-07T21:34:03Z",
+      "side": 1,
+      "message": "Ditto as above. weakRefTarget maybe?",
+      "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaabeb35_88cb78bb",
+        "filename": "src/builtins/weak-ref.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-07T21:34:03Z",
+      "side": 1,
+      "message": "It\u0027d be good to keep the comment from the C++ version that says that AddToKeptObjects might GC, but since `target` is on stack, it won\u0027t be collected.",
+      "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "591e335f_def0dc2e",
+        "filename": "src/runtime/runtime-weak-refs.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-07T21:34:03Z",
+      "side": 1,
+      "message": "Ah, you kept it here. I think it\u0027d be clearer to move the comment to the place I suggested.",
+      "revId": "9cbb9b7299061693ee6292905c40690b66bff6e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
