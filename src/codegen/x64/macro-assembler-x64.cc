@@ -344,10 +344,19 @@ void TurboAssembler::SaveRegisters(RegList registers) {
 
 void TurboAssembler::LoadExternalPointerField(Register destination,
                                               Operand field_operand) {
+#ifdef V8_HEAP_SANDBOX
+  LoadAddress(kScratchRegister,
+              ExternalReference::external_pointer_table_address(isolate()));
+  movq(kScratchRegister,
+       Operand(kScratchRegister, Internals::kExternalPointerTableBufferOffset));
+  movl(destination, field_operand);
+  sarq(destination, Immediate(1));
+  // TODO(v8:10391, saelo): just make this times_4 and remove the right shift
+  // above
+  movq(destination, Operand(kScratchRegister, destination, times_8, 0));
+#else
   movq(destination, field_operand);
-  if (V8_HEAP_SANDBOX_BOOL) {
-    xorq(destination, Immediate(kExternalPointerSalt));
-  }
+#endif  // V8_HEAP_SANDBOX
 }
 
 void TurboAssembler::RestoreRegisters(RegList registers) {
