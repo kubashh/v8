@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "92e7da6e_ce70fba4",
+        "filename": "src/base/hashmap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-07T05:49:40Z",
+      "side": 1,
+      "message": "Good point! \nI\u0027d actually go one step further and drop all our AllocationPolicy classes in favour of already existing std::allocator\u003cT\u003e and i::ZoneAllocator\u003cT\u003e. Such a change will also require storing the allocator instance in this hash map and in ZoneList\u003cT\u003e but I think it might worth it.",
+      "parentUuid": "edeb0d33_c98766e8",
+      "range": {
+        "startLine": 152,
+        "startChar": 6,
+        "endLine": 152,
+        "endChar": 66
+      },
+      "revId": "bd120a3b33f6697e9cfb0e548f887f1184f46743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "68549ef3_1334dc81",
         "filename": "src/zone/zone.h",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "bd120a3b33f6697e9cfb0e548f887f1184f46743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c39cf5e_eae10f10",
+        "filename": "src/zone/zone.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-07T05:49:40Z",
+      "side": 1,
+      "message": "With this CL not anymore.",
+      "parentUuid": "68549ef3_1334dc81",
+      "range": {
+        "startLine": 189,
+        "startChar": 6,
+        "endLine": 189,
+        "endChar": 16
+      },
+      "revId": "bd120a3b33f6697e9cfb0e548f887f1184f46743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
