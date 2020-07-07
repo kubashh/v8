@@ -245,7 +245,8 @@ class ExternalReferenceList {
 
 #define COUNT_EXTERNAL_REFERENCE(name, ...) +1
   static constexpr uint32_t kNumExternalReferencesList =
-      EXTERNAL_REFERENCE_LIST(COUNT_EXTERNAL_REFERENCE);
+      EXTERNAL_REFERENCE_LIST(COUNT_EXTERNAL_REFERENCE)
+          EXTERNAL_REFERENCE_STACK_ACCESS_LIST(COUNT_EXTERNAL_REFERENCE);
   static constexpr uint32_t kNumExternalReferencesIntrinsics =
       FOR_EACH_INTRINSIC(COUNT_EXTERNAL_REFERENCE);
   static constexpr uint32_t kNumExternalReferences =
@@ -253,12 +254,13 @@ class ExternalReferenceList {
 #undef COUNT_EXTERNAL_REFERENCE
 
   Address external_reference_by_tag_[kNumExternalReferences] = {
-#define EXT_REF_ADDR(name, desc) ExternalReference::name().address(),
+#define EXT_REF_ADDR(name, ...) ExternalReference::name().address(),
       EXTERNAL_REFERENCE_LIST(EXT_REF_ADDR)
+          EXTERNAL_REFERENCE_STACK_ACCESS_LIST(EXT_REF_ADDR)
 #undef EXT_REF_ADDR
 #define RUNTIME_ADDR(name, ...) \
   ExternalReference::Create(Runtime::k##name).address(),
-          FOR_EACH_INTRINSIC(RUNTIME_ADDR)
+              FOR_EACH_INTRINSIC(RUNTIME_ADDR)
 #undef RUNTIME_ADDR
   };
   uint32_t tags_ordered_by_address_[kNumExternalReferences];
