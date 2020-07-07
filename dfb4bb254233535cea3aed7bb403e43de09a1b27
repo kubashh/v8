@@ -16,6 +16,24 @@
       "revId": "dfb4bb254233535cea3aed7bb403e43de09a1b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eab5cb84_61191b7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-07T16:20:01Z",
+      "side": 1,
+      "message": "Just to summarize from an offline conversation. DeoptimizeKind is used at multiple places and may not be worth expanding it for printing.",
+      "parentUuid": "69beb3dd_935801bc",
+      "revId": "dfb4bb254233535cea3aed7bb403e43de09a1b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
