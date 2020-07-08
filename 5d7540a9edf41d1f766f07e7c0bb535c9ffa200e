@@ -39,6 +39,30 @@
       "revId": "5d7540a9edf41d1f766f07e7c0bb535c9ffa200e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cab39717_6055d389",
+        "filename": "src/heap/cppgc/object-start-bitmap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-08T17:47:31Z",
+      "side": 1,
+      "message": "lol, thanks\n(too bad this isn\u0027t covered by the CQ)",
+      "parentUuid": "cd07b042_2b9f799f",
+      "range": {
+        "startLine": 227,
+        "startChar": 16,
+        "endLine": 227,
+        "endChar": 27
+      },
+      "revId": "5d7540a9edf41d1f766f07e7c0bb535c9ffa200e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
