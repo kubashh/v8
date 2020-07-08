@@ -201,7 +201,7 @@ class View {
     this.backgroundCanvas = document.createElement('canvas');
     this.transitionView =
         new TransitionView(state, this.mapPanel_.transitionViewSelect);
-    this.statsView = new StatsView(state, this.statPanel_);
+    this.statsView = new StatsView(state, this.statPanel_.statsSelect);
     this.isLocked = false;
   }
   get chunks() {
