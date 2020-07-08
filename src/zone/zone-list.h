@@ -17,12 +17,18 @@ namespace internal {
 template <typename T>
 class Vector;
 
-// ZoneLists are growable lists with constant-time access to the
-// elements. The list itself and all its elements are allocated in the
-// Zone. ZoneLists cannot be deleted individually; you can delete all
-// objects in the Zone by calling Zone::DeleteAll().
+// ZoneLists are growable lists with constant-time access to the elements.
+// The list itself and all its elements are supposed to be allocated in zone
+// memory. Unlike ZoneVector container, the ZoneList instance has minimal
+// possible size which makes it a good candidate for embedding into other
+// often-allocated zone objects.
+//
+// Note, ZoneLists' elements cannot be deleted individually and the destructor
+// intentionally does not free the backing store. Because of the latter, the
+// ZoneList must not be used outsize of zone memory. Consider using ZoneVector
+// or other containers instead.
 template <typename T>
-class ZoneList final {
+class ZoneList final : public ZoneObject {
  public:
   // Construct a new ZoneList with the given capacity; the length is
   // always zero. The capacity must be non-negative.
@@ -38,14 +44,10 @@ class ZoneList final {
     AddAll(other, zone);
   }
 
-  V8_INLINE ~ZoneList() { DeleteData(data_); }
-
-  // Please the MSVC compiler.  We should never have to execute this.
-  V8_INLINE void operator delete(void* p, ZoneAllocationPolicy allocator) {
-    UNREACHABLE();
-  }
-
-  void* operator new(size_t size, Zone* zone) { return zone->New(size); }
+  // The ZoneList objects are usually allocated as a fields in other
+  // zone-allocated objects for which destructors are not called anyway, so
+  // we are not going to clear the memory here as well.
+  ~ZoneList() = default;
 
   // Returns a reference to the element at index i. This reference is not safe
   // to use after operations that can change the list's backing store
@@ -78,9 +80,9 @@ class ZoneList final {
 
   V8_INLINE void Initialize(int capacity, Zone* zone) {
     DCHECK_GE(capacity, 0);
-    data_ = (capacity > 0) ? NewData(capacity, ZoneAllocationPolicy(zone))
-                           : nullptr;
+    if (data_) zone->DeleteArray<T>(data_, capacity_);
     capacity_ = capacity;
+    data_ = (capacity_ > 0) ? zone->NewArray<T>(capacity_) : nullptr;
     length_ = 0;
   }
 
@@ -115,7 +117,16 @@ class ZoneList final {
   // Clears the list by freeing the storage memory. If you want to keep the
   // memory, use Rewind(0) instead. Be aware, that even if T is a
   // pointer type, clearing the list doesn't delete the entries.
-  V8_INLINE void Clear();
+  V8_INLINE void Clear(Zone* zone);
+
+  // Clears the list but unlike Clear(), it doesn't free the storage memory.
+  // It's useful when the whole zone containing the backing store will be
+  // released but the list will be used further.
+  V8_INLINE void DropAndClear() {
+    data_ = nullptr;
+    capacity_ = 0;
+    length_ = 0;
+  }
 
   // Drops all but the first 'pos' elements from the list.
   V8_INLINE void Rewind(int pos);
@@ -137,29 +148,21 @@ class ZoneList final {
   template <typename CompareFunction>
   void StableSort(CompareFunction cmp, size_t start, size_t length);
 
-  void operator delete(void* pointer) { UNREACHABLE(); }
-  void operator delete(void* pointer, Zone* zone) { UNREACHABLE(); }
-
  private:
-  T* data_;
-  int capacity_;
-  int length_;
-
-  V8_INLINE T* NewData(int n, ZoneAllocationPolicy allocator) {
-    return static_cast<T*>(allocator.New(n * sizeof(T)));
-  }
-  V8_INLINE void DeleteData(T* data) { ZoneAllocationPolicy::Delete(data); }
+  T* data_ = nullptr;
+  int capacity_ = 0;
+  int length_ = 0;
 
   // Increase the capacity of a full list, and add an element.
   // List must be full already.
-  void ResizeAdd(const T& element, ZoneAllocationPolicy allocator);
+  void ResizeAdd(const T& element, Zone* zone);
 
   // Inlined implementation of ResizeAdd, shared by inlined and
   // non-inlined versions of ResizeAdd.
-  void ResizeAddInternal(const T& element, ZoneAllocationPolicy allocator);
+  void ResizeAddInternal(const T& element, Zone* zone);
 
   // Resize the list.
-  void Resize(int new_capacity, ZoneAllocationPolicy allocator);
+  void Resize(int new_capacity, Zone* zone);
 
   DISALLOW_COPY_AND_ASSIGN(ZoneList);
 };
