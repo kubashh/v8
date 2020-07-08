@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3e8d4c_525196b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-07-08T08:42:23Z",
+      "side": 1,
+      "message": "This does actually share memory on Android and Linux but is a little clunky so I\u0027d appreciate any insights you two have (and if you think anyone else should take a look)\n\nThanks!\nDan",
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9acb773_dea460fa",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-07-08T08:42:23Z",
+      "side": 1,
+      "message": "I think Windows needs a HANDLE to access shared memory so we might need to return some kind of opaque structure instead of void* and provide a method to get the address from that.\n\nAlternatively we could require that the PlatformAllocator for Windows keeps\ntrack of that internally in which case the interface can stay as it is.",
+      "range": {
+        "startLine": 371,
+        "startChar": 0,
+        "endLine": 377,
+        "endChar": 3
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
