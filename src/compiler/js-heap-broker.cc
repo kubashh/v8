@@ -1608,12 +1608,8 @@ class BytecodeArrayData : public FixedArrayBaseData {
       constant_pool_.push_back(broker->GetOrCreateData(constant_pool->get(i)));
     }
 
-    Handle<ByteArray> source_position_table(
-        bytecode_array->SourcePositionTableIfCollected(), broker->isolate());
-    source_positions_.reserve(source_position_table->length());
-    for (int i = 0; i < source_position_table->length(); i++) {
-      source_positions_.push_back(source_position_table->get(i));
-    }
+    source_positions_ = Handle<ByteArray>::cast(broker->NewPersistentHandle(
+        bytecode_array->SourcePositionTableIfCollected().ptr()));
 
     Handle<ByteArray> handlers(bytecode_array->handler_table(),
                                broker->isolate());
@@ -1626,10 +1622,10 @@ class BytecodeArrayData : public FixedArrayBaseData {
   }
 
   const byte* source_positions_address() const {
-    return source_positions_.data();
+    return source_positions_->GetDataStartAddress();
   }
 
-  size_t source_positions_size() const { return source_positions_.size(); }
+  int source_positions_size() const { return source_positions_->length(); }
 
   Address handler_table_address() const {
     CHECK(is_serialized_for_compilation_);
@@ -1649,7 +1645,6 @@ class BytecodeArrayData : public FixedArrayBaseData {
         incoming_new_target_or_generator_register_(
             object->incoming_new_target_or_generator_register()),
         bytecodes_(broker->zone()),
-        source_positions_(broker->zone()),
         handler_table_(broker->zone()),
         constant_pool_(broker->zone()) {}
 
@@ -1660,7 +1655,7 @@ class BytecodeArrayData : public FixedArrayBaseData {
 
   bool is_serialized_for_compilation_ = false;
   ZoneVector<uint8_t> bytecodes_;
-  ZoneVector<uint8_t> source_positions_;
+  Handle<ByteArray> source_positions_;
   ZoneVector<uint8_t> handler_table_;
   ZoneVector<ObjectData*> constant_pool_;
 };
@@ -2384,9 +2379,10 @@ base::Optional<ObjectRef> ContextRef::get(int index,
   return base::nullopt;
 }
 
-JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
-                           bool tracing_enabled, bool is_concurrent_inlining,
-                           bool is_native_context_independent)
+JSHeapBroker::JSHeapBroker(
+    Isolate* isolate, Zone* broker_zone, bool tracing_enabled,
+    bool is_concurrent_inlining, bool is_native_context_independent,
+    std::unique_ptr<PersistentHandles> persistent_handles)
     : isolate_(isolate),
       zone_(broker_zone),
       refs_(new (zone())
@@ -2396,6 +2392,7 @@ JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
       tracing_enabled_(tracing_enabled),
       is_concurrent_inlining_(is_concurrent_inlining),
       is_native_context_independent_(is_native_context_independent),
+      ph_(std::move(persistent_handles)),
       feedback_(zone()),
       bytecode_analyses_(zone()),
       property_access_infos_(zone()),
@@ -2409,6 +2406,13 @@ JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
   TRACE(this, "Constructing heap broker");
 }
 
+JSHeapBroker::~JSHeapBroker() {
+  if (local_heap_ != nullptr) {
+    DCHECK_EQ(mode_, kSerialized);
+    TearDownLocalHeap();
+  }
+}
+
 std::string JSHeapBroker::Trace() const {
   std::ostringstream oss;
   oss << "[" << this << "] ";
@@ -2416,10 +2420,26 @@ std::string JSHeapBroker::Trace() const {
   return oss.str();
 }
 
+void JSHeapBroker::InitializeLocalHeap() {
+  DCHECK(is_concurrent_inlining());
+  DCHECK_NULL(local_heap_);
+  local_heap_ = new LocalHeap(isolate_->heap(), std::move(ph_));
+}
+
+void JSHeapBroker::TearDownLocalHeap() {
+  DCHECK(is_concurrent_inlining());
+  DCHECK(!ph_);
+  DCHECK_NOT_NULL(local_heap_);
+  ph_ = local_heap_->DetachPersistentHandles();
+  delete local_heap_;
+  local_heap_ = nullptr;
+}
+
 void JSHeapBroker::StopSerializing() {
   CHECK_EQ(mode_, kSerializing);
   TRACE(this, "Stopping serialization");
   mode_ = kSerialized;
+  if (is_concurrent_inlining()) InitializeLocalHeap();
 }
 
 #ifdef DEBUG
@@ -2508,6 +2528,7 @@ void JSHeapBroker::Retire() {
   CHECK_EQ(mode_, kSerialized);
   TRACE(this, "Retiring");
   mode_ = kRetired;
+  if (is_concurrent_inlining()) TearDownLocalHeap();
 
 #ifdef DEBUG
   PrintRefsAnalysis();
@@ -3254,7 +3275,7 @@ int BytecodeArrayRef::source_positions_size() const {
                                                       broker()->mode());
     return object()->SourcePositionTableIfCollected().length();
   }
-  return static_cast<int>(data()->AsBytecodeArray()->source_positions_size());
+  return data()->AsBytecodeArray()->source_positions_size();
 }
 
 Address BytecodeArrayRef::handler_table_address() const {
