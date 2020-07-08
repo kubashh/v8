@@ -467,41 +467,39 @@ class LiftoffCompiler {
 
   // Returns the number of inputs processed (1 or 2).
   uint32_t ProcessParameter(ValueType type, uint32_t input_idx) {
-    const int num_lowered_params = 1 + needs_gp_reg_pair(type);
-    ValueType lowered_type = needs_gp_reg_pair(type) ? kWasmI32 : type;
-    RegClass rc = reg_class_for(lowered_type);
-    // Initialize to anything, will be set in the loop and used afterwards.
-    LiftoffRegister reg = kGpCacheRegList.GetFirstRegSet();
-    LiftoffRegList pinned;
-    for (int pair_idx = 0; pair_idx < num_lowered_params; ++pair_idx) {
-      compiler::LinkageLocation param_loc =
-          descriptor_->GetInputLocation(input_idx + pair_idx);
-      // Initialize to anything, will be set in both arms of the if.
-      LiftoffRegister in_reg = kGpCacheRegList.GetFirstRegSet();
-      if (param_loc.IsRegister()) {
-        DCHECK(!param_loc.IsAnyRegister());
-        in_reg = LiftoffRegister::from_external_code(rc, type,
-                                                     param_loc.AsRegister());
-      } else if (param_loc.IsCallerFrameSlot()) {
-        in_reg = __ GetUnusedRegister(rc, pinned);
-        __ LoadCallerFrameSlot(in_reg, -param_loc.AsCallerFrameSlot(),
-                               lowered_type);
+    const bool needs_pair = needs_gp_reg_pair(type);
+    if (needs_pair) type = kWasmI32;
+    const RegClass rc = reg_class_for(type);
+
+    auto LoadToReg = [this, type, rc](compiler::LinkageLocation location,
+                                      LiftoffRegList pinned) {
+      if (location.IsRegister()) {
+        DCHECK(!location.IsAnyRegister());
+        return LiftoffRegister::from_external_code(rc, type,
+                                                   location.AsRegister());
       }
-      // Arm relies on register pairs to be ordered. Since unordered pairs in
-      // the parameters are rare enough, we just do this for all architectures.
-      // TODO(clemensb): Figure out a more consistent way to handle this, or
-      // remove the requirement for ordered register pairs in arm.
-      if (pair_idx == 1 && in_reg.gp().code() < reg.gp().code()) {
-        __ ParallelRegisterMove(
-            {{in_reg, reg, kWasmI32}, {reg, in_reg, kWasmI32}});
-        std::swap(reg, in_reg);
-      }
-      reg = pair_idx == 0 ? in_reg
-                          : LiftoffRegister::ForPair(reg.gp(), in_reg.gp());
-      pinned.set(reg);
+      DCHECK(location.IsCallerFrameSlot());
+      LiftoffRegister reg = __ GetUnusedRegister(rc, pinned);
+      __ LoadCallerFrameSlot(reg, -location.AsCallerFrameSlot(), type);
+      return reg;
+    };
+
+    LiftoffRegister reg =
+        LoadToReg(descriptor_->GetInputLocation(input_idx), {});
+    if (!needs_pair) {
+      __ PushRegister(type, reg);
+      return 1;
     }
-    __ PushRegister(type, reg);
-    return num_lowered_params;
+
+    LiftoffRegister reg2 =
+        LoadToReg(descriptor_->GetInputLocation(input_idx + 1),
+                  LiftoffRegList::ForRegs(reg));
+    if (reg.gp().code() > reg2.gp().code()) {
+      __ ParallelRegisterMove({{reg, reg2, kWasmI32}, {reg2, reg, kWasmI32}});
+      std::swap(reg, reg2);
+    }
+    __ PushRegister(type, LiftoffRegister::ForPair(reg.gp(), reg2.gp()));
+    return 2;
   }
 
   void StackCheck(WasmCodePosition position) {
