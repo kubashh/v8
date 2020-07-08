@@ -1275,9 +1275,31 @@ Maybe<Intl::NumberFormatDigitOptions> Intl::SetNumberFormatDigitOptions(
 
     // 15. Else If mnfd is not undefined or mxfd is not undefined, then
     if (!mnfd_obj->IsUndefined(isolate) || !mxfd_obj->IsUndefined(isolate)) {
+      int mnfd_actual_default = mnfd_default;
+      double mxfd_dbl;
+      Handle<String> mxfd_str = factory->maximumFractionDigits_string();
+
+      if (!mxfd_obj->IsUndefined(isolate)) {
+        Handle<Object> mxfd_num;
+        ASSIGN_RETURN_ON_EXCEPTION_VALUE(isolate, mxfd_num,
+                                         Object::ToNumber(isolate, mxfd_obj),
+                                         Nothing<NumberFormatDigitOptions>());
+        if (mxfd_num->IsNaN()) {
+          THROW_NEW_ERROR_RETURN_VALUE(
+              isolate,
+              NewRangeError(MessageTemplate::kPropertyValueOutOfRange,
+                            mxfd_str),
+              Nothing<NumberFormatDigitOptions>());
+        }
+        mxfd_dbl = mxfd_num->Number();
+        int mxfd_int = FastD2I(floor(mxfd_dbl));
+        mnfd_actual_default = std::min(std::max(mxfd_int, 0), mnfd_default);
+      }
+
       // 15. b. Let mnfd be ? DefaultNumberOption(mnfd, 0, 20, mnfdDefault).
       Handle<String> mnfd_str = factory->minimumFractionDigits_string();
-      if (!DefaultNumberOption(isolate, mnfd_obj, 0, 20, mnfd_default, mnfd_str)
+      if (!DefaultNumberOption(isolate, mnfd_obj, 0, 20, mnfd_actual_default,
+                               mnfd_str)
                .To(&mnfd)) {
         return Nothing<NumberFormatDigitOptions>();
       }
@@ -1285,14 +1307,19 @@ Maybe<Intl::NumberFormatDigitOptions> Intl::SetNumberFormatDigitOptions(
       // 15. c. Let mxfdActualDefault be max( mnfd, mxfdDefault ).
       int mxfd_actual_default = std::max(mnfd, mxfd_default);
 
-      // 15. d. Let mxfd be ? DefaultNumberOption(mxfd, mnfd, 20,
-      // mxfdActualDefault).
-      Handle<String> mxfd_str = factory->maximumFractionDigits_string();
-      if (!DefaultNumberOption(isolate, mxfd_obj, mnfd, 20, mxfd_actual_default,
-                               mxfd_str)
-               .To(&mxfd)) {
-        return Nothing<NumberFormatDigitOptions>();
+      if (mxfd_obj->IsUndefined()) {
+        mxfd = mxfd_actual_default;
+      } else {
+        if (mxfd_dbl < mnfd || mxfd_dbl > 20) {
+          THROW_NEW_ERROR_RETURN_VALUE(
+              isolate,
+              NewRangeError(MessageTemplate::kPropertyValueOutOfRange,
+                            mxfd_str),
+              Nothing<NumberFormatDigitOptions>());
+        }
+        mxfd = FastD2I(floor(mxfd_dbl));
       }
+
       // 15. e. Set intlObj.[[MinimumFractionDigits]] to mnfd.
       digit_options.minimum_fraction_digits = mnfd;
 
