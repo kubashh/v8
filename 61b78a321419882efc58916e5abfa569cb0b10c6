@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "598f79a9_e7f28bb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-08T14:17:36Z",
+      "side": 1,
+      "message": "This CL aims to add a Stat Panel to the System Analyzer. 😊",
+      "revId": "61b78a321419882efc58916e5abfa569cb0b10c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
