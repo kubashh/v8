@@ -658,6 +658,9 @@ struct Simd128Immediate {
       value[i] = decoder->read_u8<validate>(pc + i, "value");
     }
   }
+
+  const uint8_t* begin() const { return value; }
+  const uint8_t* end() const { return value + kSimd128Size; }
 };
 
 template <Decoder::ValidateFlag validate>
