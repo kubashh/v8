@@ -29,7 +29,7 @@ class CommonOperatorReducerTest : public GraphTest {
   Reduction Reduce(
       AdvancedReducer::Editor* editor, Node* node,
       MachineOperatorBuilder::Flags flags = MachineOperatorBuilder::kNoFlags) {
-    JSHeapBroker broker(isolate(), zone());
+    JSHeapBroker broker(isolate(), zone(), isolate()->NewPersistentHandles());
     MachineOperatorBuilder machine(zone(), MachineType::PointerRepresentation(),
                                    flags);
     CommonOperatorReducer reducer(editor, graph(), &broker, common(), &machine,
@@ -49,6 +49,7 @@ class CommonOperatorReducerTest : public GraphTest {
  private:
   MachineOperatorBuilder machine_;
   SimplifiedOperatorBuilder simplified_;
+  std::unique_ptr<PersistentHandles> persistent_handles_;
 };
 
 
