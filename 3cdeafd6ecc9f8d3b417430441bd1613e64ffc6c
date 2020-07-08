@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7290c66_8469d870",
+        "filename": "src/heap/cppgc/object-start-bitmap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-08T14:38:30Z",
+      "side": 1,
+      "message": "I\u0027m a bit concerned about this internal knowledge here, which makes ObjectStartBitmap aware of marking. Can we generalize it a bit by saying (somewhere in the top-level comment) that even though atomic access can be provided, calling SetBit() or ClearBit() operations from multiple threads is not thread safe (or that only a single concurrent modifier is allowed)?",
+      "revId": "3cdeafd6ecc9f8d3b417430441bd1613e64ffc6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
