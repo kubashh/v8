@@ -67,7 +67,10 @@ char* StrNDup(const char* str, int n);
 // and free. Used as the default policy for lists.
 class FreeStoreAllocationPolicy {
  public:
-  V8_INLINE void* New(size_t size) { return Malloced::operator new(size); }
+  template <typename TypeTag>
+  V8_INLINE void* New(size_t size) {
+    return Malloced::operator new(size);
+  }
   V8_INLINE static void Delete(void* p) { Malloced::operator delete(p); }
 };
 

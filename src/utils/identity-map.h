@@ -181,7 +181,8 @@ class IdentityMap : public IdentityMapBase {
 
  protected:
   void** NewPointerArray(size_t length) override {
-    return static_cast<void**>(allocator_.New(sizeof(void*) * length));
+    return static_cast<void**>(
+        allocator_.template New<void*[]>(sizeof(void*) * length));
   }
   void DeleteArray(void* array) override { allocator_.Delete(array); }
 
