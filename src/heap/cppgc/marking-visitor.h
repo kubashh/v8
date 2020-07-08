@@ -5,9 +5,9 @@
 #ifndef V8_HEAP_CPPGC_MARKING_VISITOR_H_
 #define V8_HEAP_CPPGC_MARKING_VISITOR_H_
 
-#include "include/cppgc/trace-trait.h"
 #include "src/base/macros.h"
 #include "src/heap/base/stack.h"
+#include "src/heap/cppgc/trace-trait.h"
 #include "src/heap/cppgc/visitor.h"
 
 namespace cppgc {

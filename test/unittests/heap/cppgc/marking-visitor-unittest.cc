@@ -39,8 +39,6 @@ class GCed : public GarbageCollected<GCed> {
 
 class Mixin : public GarbageCollectedMixin {};
 class GCedWithMixin : public GarbageCollected<GCedWithMixin>, public Mixin {
-  USING_GARBAGE_COLLECTED_MIXIN();
-
  public:
   void Trace(cppgc::Visitor*) const override {}
 };
@@ -198,8 +196,6 @@ class MixinWithInConstructionCallback : public GarbageCollectedMixin {
 class GCedWithMixinWithInConstructionCallback
     : public GarbageCollected<GCedWithMixinWithInConstructionCallback>,
       public MixinWithInConstructionCallback {
-  USING_GARBAGE_COLLECTED_MIXIN();
-
  public:
   template <typename Callback>
   explicit GCedWithMixinWithInConstructionCallback(Callback callback)
