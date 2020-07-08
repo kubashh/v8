@@ -39,6 +39,30 @@
       "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93be5a05_1a90f956",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-07-08T12:46:01Z",
+      "side": 1,
+      "message": "In fact, I should probably be building my chrome implementation around:\nhttps://source.chromium.org/chromium/chromium/src/+/master:base/memory/platform_shared_memory_region.h;l\u003d83;drc\u003dcd906b81b2b72f0ad83f0b6c0f0bf1f22c0981e0?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n\nwhich might us sharing on all platforms",
+      "parentUuid": "b9acb773_dea460fa",
+      "range": {
+        "startLine": 371,
+        "startChar": 0,
+        "endLine": 377,
+        "endChar": 3
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
