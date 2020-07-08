@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7081fe50_5f7ea107",
+        "filename": "src/codegen/external-reference.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-08T07:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c49a43b_d62e7da4",
+      "revId": "3f3b7d90a7bacaac6fc45ba62a886db7948f932a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba923238_6a9638d5",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 10
@@ -30,6 +48,24 @@
       "writtenOn": "2020-07-08T05:54:52Z",
       "side": 1,
       "message": "Still not sure I understand this. \n\nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/pipeline.cc;l\u003d140;drc\u003df30b53bdaec40ebb0c7f5c037cea66f9283ff7ac?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n\nPipelineData::debug_name_ is initialized by info_-\u003eGetDebugName(). Couldn\u0027t you just call that from the code generator? (I guess you\u0027d want to store it there, e.g. in a debug_name_ member, to avoid repeated allocations. On the other hand, each call to the _address functions already allocates an std::string.)\n\nAlso, another point: afaict stack accesses from inlined functions will be attributed to the inlining function. Is that okay? You could consider passing --no-turbo-inlining when measuring.",
+      "revId": "3f3b7d90a7bacaac6fc45ba62a886db7948f932a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69e1346a_bd55c782",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3128,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-08T07:30:22Z",
+      "side": 1,
+      "message": "GetDebugName tried to read from handles and it would crash if I call that in code generator (I\u0027m not totally understand the reason. My guess from talking shortly with Seth is that \"the compiler isn\u0027t allowed to read from Handles because they might have gotten changed on the main thread\"?).\n\nAnyway, GetDebugName doesn\u0027t set debug_name_ in OptimizedCompilationInfo so that the reason for this. GetDebugName also marked as const so I can not set debug_name_ inside that function 😞\n\nThanks for the knowledge on turbo-inlining 😊\n\nWhat is your suggestion here?",
+      "parentUuid": "ba923238_6a9638d5",
       "revId": "3f3b7d90a7bacaac6fc45ba62a886db7948f932a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ce836a4a_15d57816",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-08T07:30:22Z",
+      "side": 1,
+      "message": "Although we was motivated by Wasm at first, we are interested in both JS and Wasm.  Basically, this would help register allocation analysis in general.",
+      "parentUuid": "81eba87a_ce30ed3c",
+      "revId": "3f3b7d90a7bacaac6fc45ba62a886db7948f932a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5d4abe0_3fd72e19",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 10
@@ -67,6 +121,24 @@
       "revId": "3f3b7d90a7bacaac6fc45ba62a886db7948f932a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72f7f4d2_8de5b138",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3674,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-08T07:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5d4abe0_3fd72e19",
+      "revId": "3f3b7d90a7bacaac6fc45ba62a886db7948f932a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
