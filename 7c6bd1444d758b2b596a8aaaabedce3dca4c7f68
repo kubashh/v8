@@ -63,6 +63,30 @@
       "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06126783_0fec4f2e",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-07-08T16:56:07Z",
+      "side": 1,
+      "message": "Quick update: I misunderstood what PlatformSharedMemoryRegion does. It looks to be there to share memory between processes. It doesn\u0027t have the facility to Map to a particular memory address despite having a function called MapAt. What that appears to do is map a slice of the shared memory region. Should probably be called MapRange.\n\nI suspect it could be changed to allow mapping to specific memory addresses, but currently it doesn\u0027t do that.\n\nI can use it to allocate the shared memory in the first place (to store the canonical pages), but currently I would have to implement the remapping myself (which I only know how to on Linux).",
+      "parentUuid": "93be5a05_1a90f956",
+      "range": {
+        "startLine": 371,
+        "startChar": 0,
+        "endLine": 377,
+        "endChar": 3
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
