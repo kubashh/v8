@@ -31,7 +31,15 @@ class PersistentHandles {
 
   void Iterate(RootVisitor* visitor);
 
-  V8_EXPORT_PRIVATE Handle<Object> NewHandle(Address value);
+  template <typename T>
+  inline Handle<T> NewHandle(T value);
+
+  template <typename T>
+  inline Handle<T> NewHandle(Handle<T> value);
+
+#ifdef DEBUG
+  bool Contains(Address* location);
+#endif
 
 #ifdef DEBUG
   bool Contains(Address* location);
