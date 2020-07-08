@@ -34,6 +34,24 @@
       "revId": "3cdeafd6ecc9f8d3b417430441bd1613e64ffc6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b8fa733_172b3133",
+        "filename": "src/heap/cppgc/object-start-bitmap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-08T15:03:50Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "86c8b888_128f24d1",
+      "revId": "3cdeafd6ecc9f8d3b417430441bd1613e64ffc6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
