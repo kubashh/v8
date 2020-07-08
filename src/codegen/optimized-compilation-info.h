@@ -220,6 +220,9 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
     profiler_data_ = profiler_data;
   }
 
+  Vector<const char> GetFunctionNameForStackAccessTracing() const;
+  void SetFunctionNameForStackAccessTracing(const char* function_name);
+
  private:
   OptimizedCompilationInfo(Code::Kind code_kind, Zone* zone);
   void ConfigureFlags();
