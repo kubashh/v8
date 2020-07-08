@@ -1304,4 +1304,12 @@ macro TestGeneratedCastOperators(implicit context: Context)() {
       elements, Convert<Smi>(0), jsf);
   assert(Is<JSArgumentsObject>(fastArgs));
 }
+
+@export
+macro TestAllocateInOldSpace() {
+  const obj = new (OldSpace) ExportedSubClassBase{a: Undefined, b: Null};
+  assert(Is<ExportedSubClassBase>(obj));
+  assert(obj.a == Undefined);
+  assert(obj.b == Null);
+}
 }

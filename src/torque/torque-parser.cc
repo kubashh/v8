@@ -381,9 +381,14 @@ base::Optional<ParseResult> MakeMethodCall(ParseResultIterator* child_results) {
 
 base::Optional<ParseResult> MakeNewExpression(
     ParseResultIterator* child_results) {
+  auto flags = child_results->NextAs<base::Optional<std::string>>();
+  bool old_space = flags && flags == "OldSpace";
+
   auto type = child_results->NextAs<TypeExpression*>();
   auto initializers = child_results->NextAs<std::vector<NameAndExpression>>();
-  Expression* result = MakeNode<NewExpression>(type, std::move(initializers));
+
+  Expression* result =
+      MakeNode<NewExpression>(type, std::move(initializers), old_space);
   return ParseResult{result};
 }
 
@@ -2230,6 +2235,16 @@ struct TorqueGrammar : Grammar {
       MakeIntrinsicCallExpression)};
 
   // Result: Expression*
+  Symbol newExpression = {Rule({Token("new"),
+                                Optional<std::string>(Sequence({
+                                    Token("("),
+                                    OneOf({"NewSpace", "OldSpace"}),
+                                    Token(")"),
+                                })),
+                                &simpleType, &initializerList},
+                               MakeNewExpression)};
+
+  // Result: Expression*
   Symbol primaryExpression = {
       Rule({&callExpression}),
       Rule({&callMethodExpression}),
@@ -2243,7 +2258,7 @@ struct TorqueGrammar : Grammar {
       Rule({&decimalLiteral}, MakeNumberLiteralExpression),
       Rule({&stringLiteral}, MakeStringLiteralExpression),
       Rule({&simpleType, &initializerList}, MakeStructExpression),
-      Rule({Token("new"), &simpleType, &initializerList}, MakeNewExpression),
+      Rule({&newExpression}),
       Rule({Token("("), expression, Token(")")})};
 
   // Result: Expression*
