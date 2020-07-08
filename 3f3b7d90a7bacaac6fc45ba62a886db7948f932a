@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c49a43b_d62e7da4",
+        "filename": "src/codegen/external-reference.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-08T05:54:52Z",
+      "side": 1,
+      "message": "Please just declare these manually below instead of the macro list approach. You could put it after runtime_function_table_address_for_unittests.",
+      "revId": "3f3b7d90a7bacaac6fc45ba62a886db7948f932a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba923238_6a9638d5",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3128,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-08T05:54:52Z",
+      "side": 1,
+      "message": "Still not sure I understand this. \n\nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/pipeline.cc;l\u003d140;drc\u003df30b53bdaec40ebb0c7f5c037cea66f9283ff7ac?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n\nPipelineData::debug_name_ is initialized by info_-\u003eGetDebugName(). Couldn\u0027t you just call that from the code generator? (I guess you\u0027d want to store it there, e.g. in a debug_name_ member, to avoid repeated allocations. On the other hand, each call to the _address functions already allocates an std::string.)\n\nAlso, another point: afaict stack accesses from inlined functions will be attributed to the inlining function. Is that okay? You could consider passing --no-turbo-inlining when measuring.",
+      "revId": "3f3b7d90a7bacaac6fc45ba62a886db7948f932a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81eba87a_ce30ed3c",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-08T05:54:52Z",
+      "side": 1,
+      "message": "A general question, are you interested mostly in JS stack accesses or also explicitly wasm? If only JS, we could avoid leaking this global counter map, and instead put it on the isolate.",
+      "revId": "3f3b7d90a7bacaac6fc45ba62a886db7948f932a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5d4abe0_3fd72e19",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3674,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-08T05:54:52Z",
+      "side": 1,
+      "message": "nit: \"No stack accesses in optimized/wasm functions found.\" or similar",
+      "revId": "3f3b7d90a7bacaac6fc45ba62a886db7948f932a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

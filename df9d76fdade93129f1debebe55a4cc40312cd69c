@@ -159,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "a698251b_33fd647a",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3331,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-08T05:54:52Z",
+      "side": 1,
+      "message": "Sorry, don\u0027t know, haven\u0027t used LeakyObject myself.\n\nThis is only an issue a fuzzers with leak sanitizers enabled decide to pass --trace-turbo-stack-accesses, right?",
+      "parentUuid": "16353af3_7b7791bc",
+      "revId": "df9d76fdade93129f1debebe55a4cc40312cd69c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ad73e59_7591b121",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 6
