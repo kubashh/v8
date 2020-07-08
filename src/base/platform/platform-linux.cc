@@ -144,5 +144,16 @@ void OS::SignalCodeMovingGC() {
 
 void OS::AdjustSchedulingParams() {}
 
+void* OS::RemapShared(void* old_address, void* new_address, size_t size) {
+  void* result =
+      mremap(old_address, 0, size, MREMAP_FIXED | MREMAP_MAYMOVE, new_address);
+
+  if (result == MAP_FAILED) {
+    return nullptr;
+  }
+  DCHECK(result == new_address);
+  return result;
+}
+
 }  // namespace base
 }  // namespace v8
