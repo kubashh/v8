@@ -28,6 +28,7 @@ class ReadOnlyArtifacts;
 class ReadOnlyDeserializer;
 class ReadOnlyPage;
 class ReadOnlySpace;
+class SharedReadOnlySpace;
 
 // This class transparently manages read-only space, roots and cache creation
 // and destruction.
@@ -52,7 +53,7 @@ class ReadOnlyHeap final {
   void OnCreateHeapObjectsComplete(Isolate* isolate);
   // Indicates that the current isolate no longer requires the read-only heap
   // and it may be safely disposed of.
-  void OnHeapTearDown();
+  void OnHeapTearDown(Heap* heap);
   // If the read-only heap is shared, then populate |statistics| with its stats,
   // otherwise the read-only heap stats are set to 0.
   static void PopulateReadOnlySpaceStatistics(
@@ -77,7 +78,16 @@ class ReadOnlyHeap final {
 
   ReadOnlySpace* read_only_space() const { return read_only_space_; }
 
+  // Returns whether the ReadOnlySpace will actually be shared taking into
+  // account whether shared memory is available with pointer compression.
+  static bool IsReadOnlySpaceShared() {
+    return V8_SHARED_RO_HEAP_BOOL &&
+           (!COMPRESS_POINTERS_BOOL || IsSharedMemoryAvailable());
+  }
+
  private:
+  friend class ReadOnlyArtifacts;
+
   // Creates a new read-only heap and attaches it to the provided isolate.
   static ReadOnlyHeap* CreateAndAttachToIsolate(
       Isolate* isolate, std::shared_ptr<ReadOnlyArtifacts> artifacts);
@@ -94,18 +104,26 @@ class ReadOnlyHeap final {
   ReadOnlySpace* read_only_space_ = nullptr;
   std::vector<Object> read_only_object_cache_;
 
-#ifdef V8_SHARED_RO_HEAP
-#ifdef DEBUG
-  // The checksum of the blob the read-only heap was deserialized from, if any.
-  base::Optional<uint32_t> read_only_blob_checksum_;
-#endif  // DEBUG
+  // Returns whether shared memory can be allocated and then remapped to
+  // additional addresses.
+  static bool IsSharedMemoryAvailable();
 
+  void CopyRootsToIsolateRoots(Isolate* isolate);
+  void CopyAndRemapReadOnlyRoots(Address* dst, Address dst_base);
+  void InitializeReadOnlyRoots(std::shared_ptr<ReadOnlyArtifacts> artifacts,
+                               Address new_base);
+
+#ifdef V8_SHARED_RO_HEAP
   Address read_only_roots_[kEntriesCount];
 
+#ifndef V8_COMPRESS_POINTERS
   V8_EXPORT_PRIVATE static ReadOnlyHeap* shared_ro_heap_;
+#endif  // V8_COMPRESS_POINTERS
 #endif  // V8_SHARED_RO_HEAP
 
   explicit ReadOnlyHeap(ReadOnlySpace* ro_space) : read_only_space_(ro_space) {}
+  ReadOnlyHeap(ReadOnlyHeap* ro_heap, ReadOnlySpace* ro_space);
+
   DISALLOW_COPY_AND_ASSIGN(ReadOnlyHeap);
 };
 

@@ -20,6 +20,7 @@
 namespace v8 {
 namespace internal {
 
+class ReadOnlyDeserializer;
 class MemoryAllocator;
 class ReadOnlyHeap;
 
@@ -67,20 +68,53 @@ class ReadOnlyArtifacts {
   }
 
   std::vector<ReadOnlyPage*>& pages() { return pages_; }
+
+  // Creates a ReadOnlyHeap for a specific Isolate. This will be populated with
+  // a SharedReadOnlySpace object that points to the Isolate's heap. Should only
+  // be used when the read-only heap memory is shared with or without pointer
+  // compression.
+  static ReadOnlyHeap* GetReadOnlyHeapForIsolate(
+      std::shared_ptr<ReadOnlyArtifacts> artifacts, Isolate* isolate);
+
+  uint32_t OffsetForPage(size_t index) const {
+#ifdef V8_COMPRESS_POINTERS
+    return page_offsets_[index];
+#else
+    UNREACHABLE();
+#endif
+  }
+
+#ifdef V8_SHARED_RO_HEAP
+#ifdef V8_COMPRESS_POINTERS
+  void MakeSharedCopy(const std::vector<ReadOnlyPage*>& pages);
+#else
   void TransferPages(std::vector<ReadOnlyPage*>&& pages) {
     pages_ = std::move(pages);
   }
+#endif
+#endif  // #ifdef V8_SHARED_RO_HEAP
 
   const AllocationStats& accounting_stats() const { return stats_; }
 
   void set_read_only_heap(std::unique_ptr<ReadOnlyHeap> read_only_heap);
-  ReadOnlyHeap* read_only_heap() { return read_only_heap_.get(); }
+  ReadOnlyHeap* read_only_heap() const { return read_only_heap_.get(); }
+
+  void InitializeChecksum(ReadOnlyDeserializer* des);
+  void VerifyChecksum(ReadOnlyDeserializer* des, bool read_only_heap_created);
 
  private:
   std::vector<ReadOnlyPage*> pages_;
   AllocationStats stats_;
   std::unique_ptr<SharedReadOnlySpace> shared_read_only_space_;
   std::unique_ptr<ReadOnlyHeap> read_only_heap_;
+#ifdef V8_COMPRESS_POINTERS
+  std::vector<uint32_t> page_offsets_;
+#endif
+#ifdef DEBUG
+  // The checksum of the blob the read-only heap was deserialized from, if
+  // any.
+  base::Optional<uint32_t> read_only_blob_checksum_;
+#endif  // DEBUG
 };
 
 // -----------------------------------------------------------------------------
@@ -88,13 +122,29 @@ class ReadOnlyArtifacts {
 class ReadOnlySpace : public BaseSpace {
  public:
   V8_EXPORT_PRIVATE explicit ReadOnlySpace(Heap* heap);
+  V8_EXPORT_PRIVATE ~ReadOnlySpace() override;
 
+#ifdef V8_SHARED_RO_HEAP
   // Detach the pages and them to artifacts for using in creating a
   // SharedReadOnlySpace.
   void DetachPagesAndAddToArtifacts(
       std::shared_ptr<ReadOnlyArtifacts> artifacts);
+#endif  // V8_SHARED_RO_HEAP
 
-  V8_EXPORT_PRIVATE ~ReadOnlySpace() override;
+  enum ArtifactDeletionPolicy { kDeleteIfNotShared, kForceDeleteArtifacts };
+
+  // With pointer compression, a ReadOnlySpace will contain shared pages which
+  // cannot be torn down with a MemoryAllocator stored in the VirtualMemory
+  // reservation of the ReadOnlyPages.
+  // Since the destructor cannot take arguments, the space should be torn down
+  // first before destruction.
+  // |deletion_policy| is for tests that create a ReadOnlySpace that's not
+  // attached to a Heap and so is not torn down in the normal way. In such a
+  // case, it's necessary to force the deletion of marking bit sets to prevent
+  // memory leaks.
+  V8_EXPORT_PRIVATE void TearDown(
+      MemoryAllocator* memory_allocator,
+      ArtifactDeletionPolicy deletion_policy = kDeleteIfNotShared);
 
   bool IsDetached() const { return heap_ == nullptr; }
 
@@ -145,6 +195,8 @@ class ReadOnlySpace : public BaseSpace {
   Address FirstPageAddress() const { return pages_.front()->address(); }
 
  protected:
+  friend class ReadOnlyArtifacts;
+
   void SetPermissionsForPages(MemoryAllocator* memory_allocator,
                               PageAllocator::Permission access);
 
@@ -184,7 +236,10 @@ class ReadOnlySpace : public BaseSpace {
 
 class SharedReadOnlySpace : public ReadOnlySpace {
  public:
+  SharedReadOnlySpace(Heap* heap, std::shared_ptr<ReadOnlyArtifacts> artifacts,
+                      Address new_base_address);
   SharedReadOnlySpace(Heap* heap, std::shared_ptr<ReadOnlyArtifacts> artifacts);
+  SharedReadOnlySpace(const SharedReadOnlySpace&) = delete;
   ~SharedReadOnlySpace() override;
 };
 

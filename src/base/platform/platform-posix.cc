@@ -131,8 +131,9 @@ int GetProtectionFromMemoryPermission(OS::MemoryPermission access) {
   UNREACHABLE();
 }
 
-int GetFlagsForMemoryPermission(OS::MemoryPermission access) {
-  int flags = MAP_PRIVATE | MAP_ANONYMOUS;
+int GetFlagsForMemoryPermission(OS::MemoryPermission access, bool shared) {
+  int flags = MAP_ANONYMOUS;
+  flags |= shared ? MAP_SHARED : MAP_PRIVATE;
   if (access == OS::MemoryPermission::kNoAccess) {
 #if !V8_OS_AIX && !V8_OS_FREEBSD && !V8_OS_QNX
     flags |= MAP_NORESERVE;
@@ -144,9 +145,10 @@ int GetFlagsForMemoryPermission(OS::MemoryPermission access) {
   return flags;
 }
 
-void* Allocate(void* hint, size_t size, OS::MemoryPermission access) {
+void* Allocate(void* hint, size_t size, OS::MemoryPermission access,
+               bool shared) {
   int prot = GetProtectionFromMemoryPermission(access);
-  int flags = GetFlagsForMemoryPermission(access);
+  int flags = GetFlagsForMemoryPermission(access, shared);
   void* result = mmap(hint, size, prot, flags, kMmapFd, kMmapFdOffset);
   if (result == MAP_FAILED) return nullptr;
   return result;
@@ -338,7 +340,7 @@ void* OS::Allocate(void* hint, size_t size, size_t alignment,
   // Add the maximum misalignment so we are guaranteed an aligned base address.
   size_t request_size = size + (alignment - page_size);
   request_size = RoundUp(request_size, OS::AllocatePageSize());
-  void* result = base::Allocate(hint, request_size, access);
+  void* result = base::Allocate(hint, request_size, access, false);
   if (result == nullptr) return nullptr;
 
   // Unmap memory allocated before the aligned base address.
@@ -361,6 +363,12 @@ void* OS::Allocate(void* hint, size_t size, size_t alignment,
 
   DCHECK_EQ(size, request_size);
   return static_cast<void*>(aligned_base);
+}
+
+// static
+void* OS::AllocateShared(size_t size, MemoryPermission access) {
+  DCHECK_EQ(0, size % AllocatePageSize());
+  return base::Allocate(nullptr, size, access, true);
 }
 
 // static
