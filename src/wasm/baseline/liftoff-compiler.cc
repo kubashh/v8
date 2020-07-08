@@ -492,9 +492,8 @@ class LiftoffCompiler {
       // TODO(clemensb): Figure out a more consistent way to handle this, or
       // remove the requirement for ordered register pairs in arm.
       if (pair_idx == 1 && in_reg.gp().code() < reg.gp().code()) {
-        LiftoffAssembler::ParallelRegisterMoveTuple reg_moves[]{
-            {in_reg, reg, kWasmI32}, {reg, in_reg, kWasmI32}};
-        __ ParallelRegisterMove(ArrayVector(reg_moves));
+        __ ParallelRegisterMove(
+            {{in_reg, reg, kWasmI32}, {reg, in_reg, kWasmI32}});
         std::swap(reg, in_reg);
       }
       reg = pair_idx == 0 ? in_reg
@@ -3214,11 +3213,9 @@ class LiftoffCompiler {
     WasmAtomicNotifyDescriptor descriptor;
     DCHECK_EQ(0, descriptor.GetStackParameterCount());
     DCHECK_EQ(2, descriptor.GetRegisterParameterCount());
-    LiftoffAssembler::ParallelRegisterMoveTuple reg_moves[]{
-        {LiftoffRegister(descriptor.GetRegisterParameter(0)),
-         LiftoffRegister(index), kWasmI32},
-        {LiftoffRegister(descriptor.GetRegisterParameter(1)), count, kWasmI32}};
-    __ ParallelRegisterMove(ArrayVector(reg_moves));
+    __ ParallelRegisterMove(
+        {{descriptor.GetRegisterParameter(0), index, kWasmI32},
+         {descriptor.GetRegisterParameter(1), count, kWasmI32}});
 
     __ CallRuntimeStub(WasmCode::kWasmAtomicNotify);
     RegisterDebugSideTableEntry(DebugSideTableBuilder::kDidSpill);
