@@ -487,6 +487,16 @@ class LiftoffCompiler {
         __ LoadCallerFrameSlot(in_reg, -param_loc.AsCallerFrameSlot(),
                                lowered_type);
       }
+      // Arm relies on register pairs to be ordered. Since unordered pairs in
+      // the parameters are rare enough, we just do this for all architectures.
+      // TODO(clemensb): Figure out a more consistent way to handle this, or
+      // remove the requirement for ordered register pairs in arm.
+      if (pair_idx == 1 && in_reg.gp().code() < reg.gp().code()) {
+        LiftoffAssembler::ParallelRegisterMoveTuple reg_moves[]{
+            {in_reg, reg, kWasmI32}, {reg, in_reg, kWasmI32}};
+        __ ParallelRegisterMove(ArrayVector(reg_moves));
+        std::swap(reg, in_reg);
+      }
       reg = pair_idx == 0 ? in_reg
                           : LiftoffRegister::ForPair(reg.gp(), in_reg.gp());
       pinned.set(reg);
