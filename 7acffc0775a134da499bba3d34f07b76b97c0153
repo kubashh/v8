@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b09f1e0c_d6c81e63",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-08T18:40:33Z",
+      "side": 1,
+      "message": "This doesn\u0027t technically belong here, the stats view is purely for Maps. So you should import it in map-panel.mjs and add the custom element in the map-panel template itself.",
+      "revId": "7acffc0775a134da499bba3d34f07b76b97c0153",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84ca008e_f6b64485",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-08T18:40:33Z",
+      "side": 1,
+      "message": "This whole code here should go into the stats panel itself.",
+      "revId": "7acffc0775a134da499bba3d34f07b76b97c0153",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
