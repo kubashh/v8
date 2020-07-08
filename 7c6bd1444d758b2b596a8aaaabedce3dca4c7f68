@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "73374735_13d19938",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "It\u0027s awesome that you got it working for Linux and Android. Congrats!\n\nSorry for the many comments. It took me a while to understand the change. There are still some unclear parts. We could do a VC to reduces the communication latency if you\u0027d like to.\n",
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9acb773_dea460fa",
         "filename": "include/v8-platform.h",
         "patchSetId": 17
@@ -83,6 +100,352 @@
         "startChar": 0,
         "endLine": 377,
         "endChar": 3
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64d13749_bddf469f",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "For improved type-safety and flexibility we could do something like this:\n\nclass SharedPages {\n public:\n   virtual bool NewMapping(void* address);\n   virtual ~SharedPages();\n   void* address() { return address_; }\n   size_t length() { return length_; }\n private:\n   void* address_;\n   size_t length_;\n};\n\nstd::unique_ptr\u003cSharedPages\u003e AllocateSharedPages(size_t length, Permission permission);\n\nA slight modification would be to provide the source page from where to copy data, then we don\u0027t need address_ and length_ fields:\n\nclass SharedPages {\n public:\n   virtual bool NewMapping(void* address);\n   virtual ~SharedPages();\n};\n\nstd::unique_ptr\u003cSharedPages\u003e AllocateSharedPages(void* source, size_t length, Permission permission);\n\nCould you please extract the platform changes into a separate CL? That would help with reviewing / landing.",
+      "parentUuid": "06126783_0fec4f2e",
+      "range": {
+        "startLine": 371,
+        "startChar": 0,
+        "endLine": 377,
+        "endChar": 3
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b589e9b8_0ad7aac1",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "Nit: please use enum for readability.",
+      "range": {
+        "startLine": 149,
+        "startChar": 15,
+        "endLine": 149,
+        "endChar": 19
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5a98fa7_0f60ef93",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 5327,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "Is this needed only for tests? If so, I would prefer making tests more complex, but removing the need to call TearDown explicitly.",
+      "range": {
+        "startLine": 5327,
+        "startChar": 31,
+        "endLine": 5327,
+        "endChar": 49
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07d21189_0706e2b4",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "Nit: \"Relocate\" seems to be more descriptive of this rebasing operation",
+      "range": {
+        "startLine": 61,
+        "startChar": 12,
+        "endLine": 61,
+        "endChar": 17
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6930222e_c904837e",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "Is calling twice typo?",
+      "range": {
+        "startLine": 80,
+        "startChar": 28,
+        "endLine": 80,
+        "endChar": 57
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05993206_649d362f",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "I think this could be moved inside SetUpFromReadOnlyArtifacts (modulo artifacts \u003d\u003d nullptr case )",
+      "range": {
+        "startLine": 130,
+        "startChar": 12,
+        "endLine": 130,
+        "endChar": 57
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a84617d8_0cf34eb4",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "The previous version with CreateAndAttachToIsolate was easier to follow and it matched other cases when we don\u0027t have the artifacts. Why did it change?\n\nIn the new version the name of the function contradicts with the nullptr passed as artifacts.",
+      "range": {
+        "startLine": 149,
+        "startChar": 40,
+        "endLine": 149,
+        "endChar": 47
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24e86588_fa45ce78",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "Nit: isolate_root would be more descriptive IMO",
+      "range": {
+        "startLine": 205,
+        "startChar": 12,
+        "endLine": 205,
+        "endChar": 28
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "968d66cb_35655a74",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "What does it mean when new_base_address \u003d\u003d 0?",
+      "range": {
+        "startLine": 218,
+        "startChar": 6,
+        "endLine": 218,
+        "endChar": 27
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ffa26e2_e0f61058",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "Can we use kNoAccess here to avoid committing the pages?",
+      "range": {
+        "startLine": 227,
+        "startChar": 69,
+        "endLine": 227,
+        "endChar": 73
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e9ad194_7ffe4ff2",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "Nit: please use a more descriptive name.",
+      "range": {
+        "startLine": 231,
+        "startChar": 20,
+        "endLine": 231,
+        "endChar": 22
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a5db95d_ddc44af8",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "I was confused here until I saw that the accounting stats are copied from the artifact.\n\nSince we incrementing allocated_bytes, we could as well increment capacity and avoid copying the artifact stats.",
+      "range": {
+        "startLine": 238,
+        "startChar": 5,
+        "endLine": 238,
+        "endChar": 64
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57aa1383_4f28e02b",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "Instead of this small function, how about extracting AllocatePage \u0026 RemapSharePage into a function of MemoryAllocator? E.g. MemoryAllocator::RemapReadOnlyPage(ReadOnlyPage source, Address destination);",
+      "range": {
+        "startLine": 241,
+        "startChar": 24,
+        "endLine": 241,
+        "endChar": 46
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45b5679b_358010ee",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "Instead of doing this surgery of detaching and fixing up, is it possible to detach the RO space and RO heap completely from the isolate and the call Isolate::SetUpFromReadOnlyArtifacts(artifacts, ro_heap)?",
+      "range": {
+        "startLine": 269,
+        "startChar": 1,
+        "endLine": 272,
+        "endChar": 51
+      },
+      "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84ff3d9c_e953dd81",
+        "filename": "test/cctest/heap/test-spaces.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-08T20:19:27Z",
+      "side": 1,
+      "message": "Instead of taking ro_space as a parameter, it could create and own ro_space and provide a getter for it. That would be more symmetric.",
+      "range": {
+        "startLine": 802,
+        "startChar": 30,
+        "endLine": 802,
+        "endChar": 53
       },
       "revId": "7c6bd1444d758b2b596a8aaaabedce3dca4c7f68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
