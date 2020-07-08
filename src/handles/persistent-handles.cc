@@ -69,13 +69,6 @@ void PersistentHandles::AddBlock() {
 #endif
 }
 
-Handle<Object> PersistentHandles::NewHandle(Address value) {
-#ifdef DEBUG
-  if (owner_) DCHECK(!owner_->IsParked());
-#endif
-  return Handle<Object>(GetHandle(value));
-}
-
 Address* PersistentHandles::GetHandle(Address value) {
   if (block_next_ == block_limit_) {
     AddBlock();
