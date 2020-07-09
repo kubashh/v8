@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ae22dfd_e7369fec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1292588
+      },
+      "writtenOn": "2020-07-09T15:29:21Z",
+      "side": 1,
+      "message": "Now that I\u0027ve pushed both the test and code updates, I\u0027m putting this up for review and starting CQ dry run. We can review and merge once it is approved by the committee.",
+      "revId": "b257c61d2527306176c3749b090c7b11e386ddfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
