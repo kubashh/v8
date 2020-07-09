@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "040848ca_ebc9db88",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T10:36:37Z",
+      "side": 1,
+      "message": "map-model.js doesn\u0027t access any code in the stats-panel no? (if it does we should remove it from map-model.js).",
+      "parentUuid": "fde0ca46_07a39a59",
+      "revId": "7acffc0775a134da499bba3d34f07b76b97c0153",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "84ca008e_f6b64485",
         "filename": "tools/system-analyzer/map-model.js",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Can introduce lot of bugs to break down it right now. It has timeline, state dependencies as well.",
       "parentUuid": "84ca008e_f6b64485",
+      "revId": "7acffc0775a134da499bba3d34f07b76b97c0153",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44e3a17a_536a2d0b",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T10:36:37Z",
+      "side": 1,
+      "message": "If you implement the stats-panel as separate html-element you should move the code.\nWe still have the old tools working exactly for this reason (on top of that v8.dev/tools hosts older versions as well)",
+      "parentUuid": "46f2497f_74d6b8c0",
       "revId": "7acffc0775a134da499bba3d34f07b76b97c0153",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
