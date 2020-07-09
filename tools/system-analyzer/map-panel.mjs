@@ -40,6 +40,13 @@ defineCustomElement('map-panel', (templateText) =>
   get tooltipContentsSelect() {
     return this.$('#tooltipContents');
   }
+  get tooltipContentsSelect() {
+    return this.$('#tooltipContents');
+  }
+
+  get statsPanelSelect() {
+    return this.$('#stats-panel');
+  }
 
   handleTransitionViewChange(e){
     this.tooltipSelect.style.left = e.pageX + "px";
