@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "9c5995de_5dade24b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-09T13:30:34Z",
+      "side": 1,
+      "message": "Not finished yet but I am able to propagate events. great to get some thoughts",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38a86dbc_bccfa4ab",
         "filename": "tools/system-analyzer/index.html",
         "patchSetId": 3
@@ -50,6 +67,24 @@
       "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25303cdf_261a1860",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-09T13:30:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7963067_6e862345",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -115,6 +150,24 @@
       "writtenOn": "2020-07-09T07:51:09Z",
       "side": 1,
       "message": "TODO: emit showMaps event here, with the filtered maps as content.",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57e4f4b7_81610c35",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-09T13:30:34Z",
+      "side": 1,
+      "message": "Can you check whether I am able to target correctly filtered maps in stats panel 😊",
+      "parentUuid": "2f354046_69a840e6",
       "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
