@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0384561e_d1517e76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-09T08:16:10Z",
+      "side": 1,
+      "message": "Sorry, missed this before. LGTM, with one little suggestion (your call, I am also OK with the current version if you prefer that).",
+      "revId": "0ccc5e05683c9e5bbd1881491f17e9762cd080fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8f34a069_b3c5d4a5",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-09T08:16:10Z",
+      "side": 1,
+      "message": "minor suggestion: It might be a tad more idiomatic to use \"std::begin(value)\" and \"std::end(value)\". You could even inline this into callers, to make it more clear what we are actually iterating.",
+      "revId": "0ccc5e05683c9e5bbd1881491f17e9762cd080fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
