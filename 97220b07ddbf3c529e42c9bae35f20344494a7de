@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4ca5728_cc86732f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-09T08:12:30Z",
+      "side": 1,
+      "message": "Thanks a lot!",
+      "revId": "97220b07ddbf3c529e42c9bae35f20344494a7de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1b043972_49da08dc",
+        "filename": "src/builtins/torque-internal.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-09T08:12:30Z",
+      "side": 1,
+      "message": "I\u0027d suggest to just add another function to code-stub-assembler.h: AllocatePretenuredAllowLOS. This would keep the code here easier to read.",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 63
+      },
+      "revId": "97220b07ddbf3c529e42c9bae35f20344494a7de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cee11f03_9c1cc14a",
+        "filename": "src/torque/torque-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2241,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-09T08:12:30Z",
+      "side": 1,
+      "message": "The semantics is not really old space vs. new space, it\u0027s pretenured vs. normal allocation, which can also end up in old space, at least when young_generation_large_objects is disabled. So I\u0027d suggest to have an optional flag (Pretenured) instaed.",
+      "range": {
+        "startLine": 2241,
+        "startChar": 44,
+        "endLine": 2241,
+        "endChar": 64
+      },
+      "revId": "97220b07ddbf3c529e42c9bae35f20344494a7de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db75821c_22de7013",
+        "filename": "test/torque/test-torque.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-09T08:12:30Z",
+      "side": 1,
+      "message": "Unfortunately, for these tests to be run, it\u0027s also necessary to add something to test/cctest/torque/test-torque.cc.",
+      "range": {
+        "startLine": 1319,
+        "startChar": 6,
+        "endLine": 1319,
+        "endChar": 28
+      },
+      "revId": "97220b07ddbf3c529e42c9bae35f20344494a7de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
