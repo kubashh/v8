@@ -33,6 +33,24 @@
       "revId": "0ccc5e05683c9e5bbd1881491f17e9762cd080fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7179cb32_2e26b127",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-07-09T22:02:19Z",
+      "side": 1,
+      "message": "Good idea, inlined it to callers as well.",
+      "parentUuid": "8f34a069_b3c5d4a5",
+      "revId": "0ccc5e05683c9e5bbd1881491f17e9762cd080fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
