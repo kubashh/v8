@@ -40,6 +40,23 @@ defineCustomElement('map-panel', (templateText) =>
   get tooltipContentsSelect() {
     return this.$('#tooltipContents');
   }
+  get tooltipContentsSelect() {
+    return this.$('#tooltipContents');
+  }
+
+  get statsPanelSelect() {
+    return this.$('#stats-panel');
+  }
+
+  // send a timeline to the stats-panel
+  get timeline() {
+    return this.statsPanelSelect.timeline;
+  }
+  set timeline(value) {
+    console.assert(value !== undefined, "timeline undefined!");
+    this.statsPanelSelect.timeline = value;
+  }
+
 
   handleTransitionViewChange(e){
     this.tooltipSelect.style.left = e.pageX + "px";
@@ -67,4 +84,15 @@ defineCustomElement('map-panel', (templateText) =>
     this.dispatchEvent(new CustomEvent(
       'click', {bubbles: true, composed: true, detail: dataModel}));
   }
+
+  showMaps(e) {
+    console.log(e);
+    console.log(typeof(e));
+    console.log("showMaps triggered from the StatsPanel");
+    /*
+    this.dispatchEvent(new CustomEvent(
+      'change', {bubbles: true, composed: true, detail: dataModel}));
+    */
+  }
+
 });

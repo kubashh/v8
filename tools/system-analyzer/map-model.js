@@ -7,12 +7,12 @@
 // const kChunkWidth = 10;
 
 class State {
-  constructor(mapPanelId, statPanelId, timelinePanelId) {
+  constructor(mapPanelId, timelinePanelId) {
     this._nofChunks = 400;
     this._map = undefined;
     this._timeline = undefined;
     this._chunks = undefined;
-    this._view = new View(this, mapPanelId, statPanelId, timelinePanelId);
+    this._view = new View(this, mapPanelId, timelinePanelId);
     this._navigation = new Navigation(this, this.view);
   }
   get timeline() {
@@ -192,16 +192,15 @@ class Navigation {
 }
 
 class View {
-  constructor(state, mapPanelId, statPanelId, timelinePanelId) {
+  constructor(state, mapPanelId, timelinePanelId) {
     this.mapPanel_ = $(mapPanelId);
-    this.statPanel_ = $(statPanelId);
     this.timelinePanel_ = $(timelinePanelId);
     this.state = state;
     setInterval(this.updateOverviewWindow(timelinePanelId), 50);
     this.backgroundCanvas = document.createElement('canvas');
     this.transitionView =
         new TransitionView(state, this.mapPanel_.transitionViewSelect);
-    this.statsView = new StatsView(state, this.statPanel_);
+    this.statsView = new StatsView(state, this.mapPanel_.statsPanelSelect.statsSelect);
     this.isLocked = false;
   }
   get chunks() {
@@ -216,6 +215,10 @@ class View {
 
   updateStats() {
     this.statsView.update();
+    //TODO(zc) Debug following
+    this.mapPanel_.timeline = this.state.timeline;
+    console.log("get the timeline: ", this.mapPanel_.timeline);
+    this.mapPanel_.statsPanelSelect.update();
   }
 
   updateMapDetails() {
