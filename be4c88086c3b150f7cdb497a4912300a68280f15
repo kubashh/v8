@@ -16,6 +16,23 @@
       "revId": "be4c88086c3b150f7cdb497a4912300a68280f15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7ef05bc_2b1600e6",
+        "filename": "src/zone/zone-list.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-07-09T15:12:01Z",
+      "side": 1,
+      "message": "Please verify that this is necessary. If not, use a DCHECK instead.",
+      "revId": "be4c88086c3b150f7cdb497a4912300a68280f15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
