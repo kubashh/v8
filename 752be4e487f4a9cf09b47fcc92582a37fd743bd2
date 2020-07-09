@@ -249,6 +249,30 @@
     },
     {
       "key": {
+        "uuid": "2ce26086_db61dafc",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3610,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-09T21:23:07Z",
+      "side": 1,
+      "message": "This is just for representation selection to select the right representations and add the necessary checks.  p.handler() is not a node in the graph, so there is no need to check or convert anything here. I\u0027d think that keeping it in line with CheckMaps makes sense.",
+      "parentUuid": "f88a0e15_85c60f4d",
+      "range": {
+        "startLine": 3610,
+        "startChar": 8,
+        "endLine": 3610,
+        "endChar": 45
+      },
+      "revId": "752be4e487f4a9cf09b47fcc92582a37fd743bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f7c122d1_c500a7dc",
         "filename": "src/compiler/simplified-operator.cc",
         "patchSetId": 6

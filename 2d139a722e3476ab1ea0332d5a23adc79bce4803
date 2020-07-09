@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "7b81d7e5_808a61c7",
+        "filename": "src/compiler/feedback-source.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-09T21:23:07Z",
+      "side": 1,
+      "message": "I also think putting this into DynamicMapChecks makes more sense, especially because not every FeedbackSource should be either monomorphic or polymorphic.",
+      "parentUuid": "6464aa37_32f7af3e",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a5edbe6_4e915bb0",
         "filename": "src/compiler/simplified-operator.h",
         "patchSetId": 10
