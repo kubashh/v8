@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "38a86dbc_bccfa4ab",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T08:02:38Z",
+      "side": 1,
+      "message": "not needed here, you only need to include it in map-panel.mjs",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7963067_6e862345",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T08:02:38Z",
+      "side": 1,
+      "message": "let\u0027s remove these console.logs",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d196f22f_f4ba4616",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T08:02:38Z",
+      "side": 1,
+      "message": "this should happen in the MapPanel itself.",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "953745c2_8463e8fd",
         "filename": "tools/system-analyzer/map-model.js",
         "patchSetId": 3
@@ -47,6 +98,74 @@
       "writtenOn": "2020-07-09T07:51:09Z",
       "side": 1,
       "message": "TODO: emit showMaps event here, with the filtered maps as content.",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ab635ea_a8483315",
+        "filename": "tools/system-analyzer/map-panel-template.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T08:02:38Z",
+      "side": 1,
+      "message": "We use ES^ Javascript modules, so you can use\n  import ./stats-panel.mjs\n\ndirectly in map-panel.mjs I think",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39dd8a19_069099ee",
+        "filename": "tools/system-analyzer/map-panel.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T08:02:38Z",
+      "side": 1,
+      "message": "Can you note this somewhere and rename all the getters in a later CL? statsPanelSelect \u003d\u003e statsPanel",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaadef69_0a68d29f",
+        "filename": "tools/system-analyzer/stats-panel-template.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T08:02:38Z",
+      "side": 1,
+      "message": "cleanup note: create a shared CSS file to include common rules, so we don\u0027t have to redefine the same styles in every component (for a separate CL)",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a79f98b7_5a3752a2",
+        "filename": "tools/system-analyzer/stats-panel-template.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T08:02:38Z",
+      "side": 1,
+      "message": "You will only need the section here, both outer divs could be removed.\n\nYou will have to adjust the CSS accordingly.",
       "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
