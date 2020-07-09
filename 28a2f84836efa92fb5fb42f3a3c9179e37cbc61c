@@ -16,6 +16,24 @@
       "revId": "28a2f84836efa92fb5fb42f3a3c9179e37cbc61c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90805256_40614c51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-09T06:58:39Z",
+      "side": 1,
+      "message": "ParseResultHolder is essentially a hand-baked std::any. The error means that the sub-parser produced a value of a different type than what was expected by NextAs\u003cT\u003e().",
+      "parentUuid": "424b6b75_0b37b7ad",
+      "revId": "28a2f84836efa92fb5fb42f3a3c9179e37cbc61c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
