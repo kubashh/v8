@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "293fe073_e032023b",
+        "filename": "src/heap/cppgc/object-start-bitmap.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-09T10:07:55Z",
+      "side": 1,
+      "message": "I think V8 doesn\u0027t have ARCH_CPU_ARMEL. If you fix that the v8_linux_arm_rel_ng bot should fail.",
+      "range": {
+        "startLine": 225,
+        "startChar": 12,
+        "endLine": 225,
+        "endChar": 26
+      },
+      "revId": "c7e3f03df16001748643d58264b0c445ea7032ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
