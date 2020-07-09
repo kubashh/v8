@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b405eed6_5683726d",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-09T11:47:19Z",
+      "side": 1,
+      "message": "We are creating all of our persistent handles in the main thread. If this changes (i.e if we start creating persistent handles in the background thread), this would need to be updated to:\n\nif (local_heap_ !\u003d nullptr) {\n  return local_heap_-\u003eNewHandle(value);\n} else {\n  return ph_-\u003eNewHandle(value);\n}",
+      "range": {
+        "startLine": 214,
+        "startChar": 11,
+        "endLine": 214,
+        "endChar": 33
+      },
+      "revId": "4c3c4f8a33eb6fd343bf53d8fd7826d8c54cd2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
