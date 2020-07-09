@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "651b1df4_6d4434b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-09T17:37:25Z",
+      "side": 1,
+      "message": "Abandoning the CL in favor of https://chromium-review.googlesource.com/c/v8/v8/+/2289979 for now.",
+      "revId": "b95d5032c669a3e736f399a1b96c4495cd98f3fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e6ade4e_3cc918af",
         "filename": "src/heap/mark-compact-inl.h",
         "patchSetId": 8
