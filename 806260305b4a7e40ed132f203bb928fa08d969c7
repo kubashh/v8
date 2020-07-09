@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "953745c2_8463e8fd",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T07:51:09Z",
+      "side": 1,
+      "message": "timeline should be passed into the stats element from the outside.",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07ce956e_54785c40",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T07:51:09Z",
+      "side": 1,
+      "message": "TODO: emit showMaps event here, with node.maps as content",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f354046_69a840e6",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-09T07:51:09Z",
+      "side": 1,
+      "message": "TODO: emit showMaps event here, with the filtered maps as content.",
+      "revId": "806260305b4a7e40ed132f203bb928fa08d969c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
