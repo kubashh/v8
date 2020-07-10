@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02830f78_4a540443",
+        "filename": "test/unittests/heap/cppgc/marking-visitor-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-10T10:11:14Z",
+      "side": 0,
+      "message": "These 2 tests violate DCHECK_IMPLIES(header.IsInConstruction(), header.IsMarked()); in marking-state.h",
+      "range": {
+        "startLine": 284,
+        "startChar": 27,
+        "endLine": 284,
+        "endChar": 63
+      },
+      "revId": "911a13ebdd1d73742bb5dfa81a33ae0017af2079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
