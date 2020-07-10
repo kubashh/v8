@@ -68,6 +68,24 @@
       "revId": "7aaebfcadf3d1154a1175eccc50e021b8ea0a330",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8f17fb1_0bb9baef",
+        "filename": "include/cppgc/trace-trait.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-10T11:37:13Z",
+      "side": 1,
+      "message": "I don\u0027t see why technically it cannot just be a V8_EXTERN free function.\n \nI personally liked the name though, so if it\u0027s going to be a free function it should *not* just be GetTraceDescriptor().",
+      "parentUuid": "d394e192_d27c4041",
+      "revId": "7aaebfcadf3d1154a1175eccc50e021b8ea0a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
