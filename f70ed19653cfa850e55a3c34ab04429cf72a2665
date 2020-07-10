@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01a57438_68371a6e",
+        "filename": "src/heap/cppgc/marking-state.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-10T09:12:27Z",
+      "side": 0,
+      "message": "DCHECK_IMPLIES(header-\u003eInConstruction(), header-\u003eIsMarked());",
+      "range": {
+        "startLine": 148,
+        "startChar": 2,
+        "endLine": 148,
+        "endChar": 3
+      },
+      "revId": "f70ed19653cfa850e55a3c34ab04429cf72a2665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

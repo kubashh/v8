@@ -22,6 +22,30 @@
       "revId": "e0c8dc23ba5705021a5c2dcbd359b82abc524fbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d8378ed_a2c8cf18",
+        "filename": "src/heap/cppgc/trace-trait.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-10T09:12:27Z",
+      "side": 1,
+      "message": "The inlining won\u0027t work for anything but tests because we can only use include/* from actual user code.\n\nWe can start off with a regular .cc file implementation.\n\nIf that is too slow, we can also have a VisitDynamic() dispatch on the regular visitor for the strong references (I guess the overhead of a call is okay for weak ones).",
+      "parentUuid": "2e6770fa_7eb12ef4",
+      "range": {
+        "startLine": 5,
+        "startChar": 8,
+        "endLine": 5,
+        "endChar": 36
+      },
+      "revId": "e0c8dc23ba5705021a5c2dcbd359b82abc524fbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
