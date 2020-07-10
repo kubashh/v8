@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "94f1e705_bf220fbe",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 15
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-10T17:00:48Z",
+      "side": 1,
+      "message": "Can I use document.state for that depreciating stateGlobal. Or do you recommend something else 😊",
+      "parentUuid": "39e1da65_07303b06",
+      "revId": "9f8a4da470f3773a005e20ca32a7cfa434474e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30bb3ecc_aac902f4",
         "filename": "tools/system-analyzer/index.html",
         "patchSetId": 15
@@ -64,6 +82,30 @@
       "writtenOn": "2020-07-10T16:04:26Z",
       "side": 1,
       "message": "This should be selectedIcEntries instead.\nWhy don\u0027t you set this directly on document.state?\nI don\u0027t fully understand why you have to call updateDocumentEntries() here when all state should be in a single object that updates the UI when you set properties on it.",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 26
+      },
+      "revId": "9f8a4da470f3773a005e20ca32a7cfa434474e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd173874_33432638",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 15
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-10T17:00:48Z",
+      "side": 1,
+      "message": "I can address these in this CL? Do you recommend me to do so?",
+      "parentUuid": "30bb3ecc_aac902f4",
       "range": {
         "startLine": 173,
         "startChar": 0,
@@ -113,6 +155,24 @@
       "revId": "9f8a4da470f3773a005e20ca32a7cfa434474e7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cc3a352_a079523c",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-10T17:00:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3f9670b_9d8e2054",
+      "revId": "9f8a4da470f3773a005e20ca32a7cfa434474e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
