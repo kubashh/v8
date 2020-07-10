@@ -14,6 +14,16 @@ class State {
     this._chunks = undefined;
     this._view = new View(this, mapPanelId, timelinePanelId);
     this._navigation = new Navigation(this, this.view);
+    this._icEntries = undefined;
+  }
+  set icEntries(value) {
+    this._icEntries = value;
+    if (this._icEntries) {
+      this.view.updateTimelineIC();
+    }
+  }
+  get icEntries() {
+    return this._icEntries;
   }
   get timeline() {
     return this._timeline
@@ -201,6 +211,7 @@ class View {
     this.transitionView =
         new TransitionView(state, this.mapPanel_.transitionViewSelect);
     this.isLocked = false;
+    this._icEntries = undefined;
   }
   get chunks() {
     return this.state.chunks
@@ -226,6 +237,27 @@ class View {
     this.mapPanel_.mapDetailsSelect.innerText = details;
     this.transitionView.showMap(this.map);
   }
+  //TODO(zc) Show IC events on canvas
+  updateTimelineIC() {
+    let canvas = $('timeline-panel').timelineCanvasSelect;
+    let ctx = canvas.getContext('2d');
+    let start = this.timeline.startTime;
+    let end = this.timeline.endTime;
+    let duration = end - start;
+    let eventPosX;
+    const timeToPixel = this.chunks.length * kChunkWidth / duration;
+    ctx.lineWidth = 0.5;
+    ctx.strokeStyle ='coral';
+    ctx.beginPath();
+    let entries = this.state.icEntries;
+    for (const entry of entries) {
+      eventPosX = ((entry.time - start) * timeToPixel);
+      //console.log(" updateTimelineIC entry time: ", entry.time, "pos x: ", ((entry.time - start) * timeToPixel));
+      ctx.moveTo(eventPosX, canvas.height);
+      ctx.lineTo(eventPosX, canvas.height - 160);
+    }
+    ctx.stroke();
+   }
 
   updateTimeline() {
     let chunksNode = this.timelinePanel_.timelineChunksSelect;
@@ -237,6 +269,7 @@ class View {
     let duration = end - start;
     const timeToPixel = chunks.length * kChunkWidth / duration;
     let addTimestamp = (time, name) => {
+      //console.log("UpdateTimeline time: ", time, " name: ", name);
       let timeNode = div('timestamp');
       timeNode.innerText = name;
       timeNode.style.left = ((time - start) * timeToPixel) + 'px';
@@ -369,7 +402,8 @@ class View {
     canvas.height = height;
     canvas.width = window.innerWidth;
     let ctx = canvas.getContext('2d');
-
+    //console.log("canvas height: ", canvas.height);
+    //console.log("canvas width: ", canvas.width);
     let chunks = this.state.timeline.chunkSizes(canvas.width * kFactor);
     let max = chunks.max();
 
@@ -380,6 +414,7 @@ class View {
     ctx.moveTo(0, height);
     for (let i = 0; i < chunks.length; i++) {
       ctx.lineTo(i / kFactor, height - chunks[i] / max * height);
+      //console.log(" drawOverview posX: ", i / kFactor, "posY: ", height - chunks[i] / max * height);
     }
     ctx.lineTo(chunks.length, height);
     ctx.stroke();
@@ -397,6 +432,8 @@ class View {
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, kChunkHeight);
     if (!this.state.map) return;
+    //TODO(zc) Redraw the IC events on canvas
+    this.updateTimelineIC();
     this.drawEdges(ctx);
   }
 
