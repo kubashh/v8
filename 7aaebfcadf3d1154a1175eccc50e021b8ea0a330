@@ -104,6 +104,24 @@
       "revId": "7aaebfcadf3d1154a1175eccc50e021b8ea0a330",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6eee7b0_f5a3aef1",
+        "filename": "include/cppgc/trace-trait.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-10T11:59:11Z",
+      "side": 1,
+      "message": "Decided offline to leave as is.",
+      "parentUuid": "96dbeda7_7efbbd7f",
+      "revId": "7aaebfcadf3d1154a1175eccc50e021b8ea0a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
