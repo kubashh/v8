@@ -16,6 +16,40 @@
       "revId": "7aaebfcadf3d1154a1175eccc50e021b8ea0a330",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "08f562cb_aae83fb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-10T11:19:12Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "7aaebfcadf3d1154a1175eccc50e021b8ea0a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e764f5da_afc6aa92",
+        "filename": "include/cppgc/trace-trait.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-10T11:19:12Z",
+      "side": 1,
+      "message": "nit: can this be a free function?",
+      "revId": "7aaebfcadf3d1154a1175eccc50e021b8ea0a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
