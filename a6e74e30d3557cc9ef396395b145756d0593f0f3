@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "076ad910_f459edf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-10T08:30:37Z",
+      "side": 1,
+      "message": "PTAL. I think the new code is more readable, let me know if you disagree.",
+      "revId": "a6e74e30d3557cc9ef396395b145756d0593f0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
