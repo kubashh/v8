@@ -67,6 +67,11 @@ found in the LICENSE file. -->
 #legend {
   padding-right: 20px;
 }
+
+#timeline-canvas {
+	background-color: white;
+}
+
 </style>
 
 
@@ -90,20 +95,31 @@ found in the LICENSE file. -->
 
     <p>Trace Count: <span id="count">0</span></p>
 
-    <h3>Result</h3>
-    <p>
-    Group-Key:
-    <select id="group-key"></select>
-    </p>
-    Filter number of items
-    <br></br>
-    <input type="search" id="filter-input" placeholder="Number of items"></input>
-    <button id="filterICBtn">Filter</button>
-    <p>
-      <table id="table" width="100%">
-        <tbody id="table-body">
-        </tbody>
-      </table>
-    </p>
-  </section>
+		<h2>Result</h2>
+		<p>
+		Group-Key:
+		<select id="group-key"></select>
+		</p>
+		<p>
+		Filter by Time
+		<br></br>
+		<input type="search" id="filter-time-start" placeholder="start"></input> : <input type="search" id="filter-time-end" placeholder="end"></input>
+		<button id="filterICTimeBtn">Filter</button>
+		<p>
+			<table id="table" width="100%">
+				<tbody id="table-body">
+				</tbody>
+			</table>
+		</p>
+		<div id="timeline">
+			<div>
+			<canvas id="timeline-canvas"/>
+			</div>
+			<table>
+				<tr id="timeline-legend">
+				</tr>
+			</table>
+		</div>
+
+	</section>
 </div>

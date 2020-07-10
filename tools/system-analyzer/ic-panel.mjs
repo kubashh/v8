@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import {Group, properties} from './ic-model.js';
+import {TimelineView} from './timeline-model.js';
 
 defineCustomElement('ic-panel', (templateText) =>
  class ICPanel extends HTMLElement {
@@ -12,11 +13,14 @@ defineCustomElement('ic-panel', (templateText) =>
     shadowRoot.innerHTML = templateText;
     this.groupKeySelect.addEventListener(
         'change', e => this.updateTable(e));
-    this.filterICBtnSelect.addEventListener(
-        'click', e => this.handleICFilter(e));
+    this.$('#filterICTimeBtn').addEventListener(
+      'click', e => this.handleICTimeFilter(e));
     this._noOfItems = 100;
+    this._startTime = 0;
+    this._endTime = 0;
   }
 
+  // DOM item selector
   $(id) {
     return this.shadowRoot.querySelector(id);
   }
@@ -27,10 +31,6 @@ defineCustomElement('ic-panel', (templateText) =>
 
   get groupKeySelect() {
     return this.$('#group-key');
-  }
-
-  get filterICBtnSelect() {
-    return this.$('#filterICBtn');
   }
 
   get tableSelect() {
@@ -49,13 +49,49 @@ defineCustomElement('ic-panel', (templateText) =>
     return this.querySelectorAll("span");
   }
 
-  updateTable(event) {
+  // init
+  receiveData(entries) {
+    this.fileEntries = entries;
+    this.entries = entries;
+    this.updateTable();
+  }
+
+  // file entries
+  set fileEntries(value){
+    this._fileEntries = value;
+  }
+
+  get fileEntries(){
+    return this._fileEntries;
+  }
+
+  set entries(value){
+    this._entries = value;
+  }
+
+  get entries(){
+    return this._entries;
+  }
+
+   filterEntriesByTime() {
+    this.entries =  this.fileEntries.filter(e => e.time >= this._startTime && e.time <= this._endTime);
+  }
+
+   updateTable(event) {
+    let dataModel = Object.create(null);
     let select = this.groupKeySelect;
     let key = select.options[select.selectedIndex].text;
     let tableBody = this.tableBodySelect;
     this.removeAllChildren(tableBody);
-    let groups = Group.groupBy(entries, key, true);
+    //TODO(zc) send events to the timeline panel
+    this.processTimelineIC(this.entries);
+    let groups = Group.groupBy(this.entries, key, true);
+    console.log(groups);
     this.display(groups, tableBody);
+    //TODO(zc) dispatch event that the IC events processed
+    dataModel.icEntries = this.entries;
+    this.dispatchEvent(new CustomEvent(
+      'change', {bubbles: true, composed: true, detail: dataModel}));
   }
 
   escapeHtml(unsafe) {
@@ -102,10 +138,10 @@ defineCustomElement('ic-panel', (templateText) =>
     return this._noOfItems;
   }
 
-
   display(entries, parent) {
     let fragment = document.createDocumentFragment();
-    let max = Math.min(this.noOfItems, entries.length)
+    //let max = Math.min(100, entries.length);
+    let max = entries.length;
     for (let i = 0; i < max; i++) {
       let entry = entries[i];
       let tr = document.createElement("tr");
@@ -126,6 +162,7 @@ defineCustomElement('ic-panel', (templateText) =>
     }
     parent.appendChild(fragment);
   }
+
 
   displayDrilldown(entry, previousSibling) {
     let tr = document.createElement('tr');
@@ -183,35 +220,33 @@ defineCustomElement('ic-panel', (templateText) =>
     }
   }
 
-  //TODO(zc): Function processing the timestamps of ICEvents
-  // Processes the IC Events which have V8Map's in the map-processor
-  processICEventTime(){
-    let ICTimeToEvent = new Map();
-    // save the occurance time of V8Maps
-    let eventTimes = []
-    console.log("Num of stats: " + entries.length);
-    // fetch V8 Maps from the IC Events
-    entries.forEach(element => {
-      let v8Map = V8Map.get("0x" + element.map);
-      if(!v8Map){
-        ICTimeToEvent.set(-1, element);
-      } else {
-        ICTimeToEvent.set(v8Map.time, element);
-        eventTimes.push(v8Map.time);
-      }
-    });
-    eventTimes.sort();
-    // save the IC events which have Map states
-    let eventsList = [];
-    for(let i = 0;  i < eventTimes.length; i++){
-      eventsList.push(ICTimeToEvent.get(eventTimes[i]));
+  //TODO(ZC): Emit event if the address has a valid V8-Map state
+  sendMapClickedEvent(entry){
+    let dataModel = Object.create(null);
+    let selectedMap = V8Map.get("0x" + entry.map);
+    if(selectedMap){
+      dataModel.map = selectedMap;
     }
-    return eventList;
+    this.dispatchEvent(new CustomEvent(
+      'map-click', {bubbles: true, composed: true, detail: dataModel}));
   }
 
-  handleICFilter(e){
-    let noOfItemsInput = parseInt(this.$('#filter-input').value);
-    this.noOfItems = noOfItemsInput;
+  handleICTimeFilter(e) {
+    this._startTime = parseInt(this.$('#filter-time-start').value);
+    console.assert(this._startTime >= 0, { errorMsg: "start time must be a non-negative integer!" });
+    this._endTime = parseInt(this.$('#filter-time-end').value);
+    console.assert(this._endTime <= this._fileEntries[this._fileEntries.length - 1].time,
+      { errorMsg: "end time must be smaller or equal to the the time of the last event!" });
+    console.assert(this._startTime < this._endTime,
+      { errorMsg: "end time must be smaller than the start time!" });
+    this.filterEntriesByTime();
     this.updateTable(e);
   }
+
+  // process IC events and display in a Timeline view
+  //TODO(zc): new functionality
+   processTimelineIC(entries) {
+    let comp = new TimelineView(this.fileEntries, this.$("#timeline"), this.$("#timeline-canvas"), this.$("#timeline-legend"));
+  }
+
 });
