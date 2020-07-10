@@ -22,6 +22,30 @@
       "revId": "f70ed19653cfa850e55a3c34ab04429cf72a2665",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6f93dd0_7d2794b7",
+        "filename": "src/heap/cppgc/marking-state.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-10T09:58:51Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "01a57438_68371a6e",
+      "range": {
+        "startLine": 148,
+        "startChar": 2,
+        "endLine": 148,
+        "endChar": 3
+      },
+      "revId": "f70ed19653cfa850e55a3c34ab04429cf72a2665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
