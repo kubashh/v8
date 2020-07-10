@@ -10,7 +10,6 @@
 
 #include <array>
 
-#include "include/cppgc/internal/process-heap.h"
 #include "src/base/atomic-utils.h"
 #include "src/base/bits.h"
 #include "src/base/macros.h"
@@ -26,9 +25,6 @@ namespace internal {
 // Depends on internals such as:
 // - kBlinkPageSize
 // - kAllocationGranularity
-//
-// ObjectStartBitmap supports concurrent reads from multiple threads but
-// only a single mutator thread can write to it.
 class V8_EXPORT_PRIVATE ObjectStartBitmap {
  public:
   // Granularity of addresses added to the bitmap.
@@ -124,7 +120,8 @@ template <HeapObjectHeader::AccessMode mode>
 void ObjectStartBitmap::SetBit(ConstAddress header_address) {
   size_t cell_index, object_bit;
   ObjectStartIndexAndBit(header_address, &cell_index, &object_bit);
-  // Only a single mutator thread can write to the bitmap, so no need for CAS.
+  // Only the mutator thread writes to the bitmap during concurrent marking,
+  // so no need for CAS here.
   store<mode>(cell_index,
               static_cast<uint8_t>(load(cell_index) | (1 << object_bit)));
 }
@@ -222,13 +219,12 @@ PlatformAwareObjectStartBitmap::PlatformAwareObjectStartBitmap(Address offset)
 // static
 template <HeapObjectHeader::AccessMode mode>
 bool PlatformAwareObjectStartBitmap::ShouldForceNonAtomic() {
-#if defined(V8_TARGET_ARCH_ARM)
+#if defined(ARCH_CPU_ARMEL)
   // Use non-atomic accesses on ARMv7 when marking is not active.
   if (mode == HeapObjectHeader::AccessMode::kAtomic) {
-    if (V8_LIKELY(!ProcessHeap::IsAnyIncrementalOrConcurrentMarking()))
-      return true;
+    if (LIKELY(!ThreadState::Current()->IsAnyIncrementalMarking())) return true;
   }
-#endif  // defined(V8_TARGET_ARCH_ARM)
+#endif  // defined(ARCH_CPU_ARMEL)
   return false;
 }
 
