@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8f3024d_121c7d2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-10T10:01:07Z",
+      "side": 1,
+      "message": "Thanks, looks good!",
+      "revId": "0529730633d6c049d463773cb9de4c7d43503b41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f81b5730_d2253153",
+        "filename": "src/torque/torque-parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2243,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-10T10:01:07Z",
+      "side": 1,
+      "message": "How about\n\n CheckIf(Sequence({Token(\"(\"), Token(\"Pretenured\"), Token(\")\")})\n\nthen you get to use NextAs\u003cbool\u003e() to get a bool value directly.",
+      "range": {
+        "startLine": 2239,
+        "startChar": 32,
+        "endLine": 2243,
+        "endChar": 35
+      },
+      "revId": "0529730633d6c049d463773cb9de4c7d43503b41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
