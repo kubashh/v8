@@ -86,6 +86,24 @@
       "revId": "7aaebfcadf3d1154a1175eccc50e021b8ea0a330",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96dbeda7_7efbbd7f",
+        "filename": "include/cppgc/trace-trait.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-10T11:51:07Z",
+      "side": 1,
+      "message": "// include/cppgc/trace-trait.h:\nnamespace internal {\nV8_EXPORT TraceDescriptor GetTraceDescriptorImpl(const void*);\n}\n\n// src/heap/cppgc/trace-trait.cc:\nTraceDescriptor GetTraceDescriptorImpl(const void*) {\n ...\n}\n\nThis was just a minor suggestion though, feel free to leave it as is. I personally like to avoid redundancy, if possible (and since it\u0027s not Java... :))",
+      "parentUuid": "d8f17fb1_0bb9baef",
+      "revId": "7aaebfcadf3d1154a1175eccc50e021b8ea0a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
