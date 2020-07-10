@@ -47,6 +47,14 @@ struct TraceDescriptor {
   TraceCallback callback;
 };
 
+namespace internal {
+
+struct TraceTraitFromInnerAddressImpl {
+  static TraceDescriptor GetTraceDescriptor(const void* address);
+};
+
+}  // namespace internal
+
 /**
  * Trait specifying how the garbage collector processes an object of type T.
  *
@@ -91,7 +99,7 @@ struct TraceTraitImpl<T, false> {
 template <typename T>
 struct TraceTraitImpl<T, true> {
   static TraceDescriptor GetTraceDescriptor(const void* self) {
-    return static_cast<const T*>(self)->GetTraceDescriptor();
+    return internal::TraceTraitFromInnerAddressImpl::GetTraceDescriptor(self);
   }
 };
 
