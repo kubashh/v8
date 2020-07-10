@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e26585b_17429ad6",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 15
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T16:04:26Z",
+      "side": 1,
+      "message": "I think, this is the wrong place to send this event.\n\nI imagine all state being managed by the top-level State object.\n\nIf you want to change the global state, you send an event at the point you want to modify the model (in this case when you change filter the events).\n\nIn the top-level intercept all onSelect/onChange events and update the properties on the State object.\n\nThe setters on the global State will then trigger updating the different UI components.\n\nSo the onChange / onSelect events should not be sent when you update/redraw the UI.\n\n\nSo the IC panel, can receive several properties: \n- entries: the original full list of entries\n- selectedEntries: a subset of entries that are selected\n- timeStart: start time of viewable entries \n- timeEnd: end time of viewable entries",
+      "revId": "9f8a4da470f3773a005e20ca32a7cfa434474e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f532ca24_07f87f6d",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 15
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T16:04:26Z",
+      "side": 1,
+      "message": "please put this code also in a separate CL.\nJust address handling the new time property in this CL",
+      "revId": "9f8a4da470f3773a005e20ca32a7cfa434474e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39e1da65_07303b06",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 15
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T16:04:26Z",
+      "side": 1,
+      "message": "This is confusing.\nYou have stateGlobal and you have document.state, there should just be one state object (please clean this up in a separate CL).",
+      "revId": "9f8a4da470f3773a005e20ca32a7cfa434474e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30bb3ecc_aac902f4",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 15
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T16:04:26Z",
+      "side": 1,
+      "message": "This should be selectedIcEntries instead.\nWhy don\u0027t you set this directly on document.state?\nI don\u0027t fully understand why you have to call updateDocumentEntries() here when all state should be in a single object that updates the UI when you set properties on it.",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 26
+      },
+      "revId": "9f8a4da470f3773a005e20ca32a7cfa434474e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cab003d9_6980f3ae",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T16:04:26Z",
+      "side": 1,
+      "message": "Todo for future CL: This needs some cleanup\n- properly indicate and separate the sate for the different components\n- each timeline based component should have a timeline here (Maps, Ic... and so forth)\n- Update the corresponding views when you set properties here",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 3
+      },
+      "revId": "9f8a4da470f3773a005e20ca32a7cfa434474e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3f9670b_9d8e2054",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T16:04:26Z",
+      "side": 1,
+      "message": "I don\u0027t think we need this here.",
+      "revId": "9f8a4da470f3773a005e20ca32a7cfa434474e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
