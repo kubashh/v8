@@ -16,6 +16,40 @@
       "revId": "426b93eb03c930fc87857aab3866e6b7741ff9de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1128954b_a153fda8",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:11:14Z",
+      "side": 1,
+      "message": "This should happen in the mapPanel when you set the timeline I think.\nThis way everything is contained within the map-panel itself.",
+      "revId": "426b93eb03c930fc87857aab3866e6b7741ff9de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b11e6e43_09832233",
+        "filename": "tools/system-analyzer/map-panel-template.html",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:11:14Z",
+      "side": 1,
+      "message": "not needed, you imported the module already in map-panel.mjs",
+      "revId": "426b93eb03c930fc87857aab3866e6b7741ff9de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
