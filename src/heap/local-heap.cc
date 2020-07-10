@@ -52,18 +52,28 @@ LocalHeap::~LocalHeap() {
   current_local_heap = nullptr;
 }
 
-Handle<Object> LocalHeap::NewPersistentHandle(Address value) {
+void LocalHeap::EnsurePersistentHandles() {
   if (!persistent_handles_) {
     persistent_handles_.reset(
         heap_->isolate()->NewPersistentHandles().release());
   }
-  return persistent_handles_->NewHandle(value);
 }
 
 std::unique_ptr<PersistentHandles> LocalHeap::DetachPersistentHandles() {
   if (persistent_handles_) persistent_handles_->Detach();
   return std::move(persistent_handles_);
 }
+
+#ifdef DEBUG
+bool LocalHeap::ContainsPersistentHandle(Address* location) {
+  return persistent_handles_ ? persistent_handles_->Contains(location) : false;
+}
+
+bool LocalHeap::IsHandleDereferenceAllowed() {
+  DCHECK_EQ(LocalHeap::Current(), this);
+  return state_ == ThreadState::Running;
+}
+#endif
 
 bool LocalHeap::IsParked() {
   base::MutexGuard guard(&state_mutex_);

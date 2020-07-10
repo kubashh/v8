@@ -44,7 +44,7 @@ class WasmGCTester {
   }
 
   uint32_t AddGlobal(ValueType type, bool mutability, WasmInitExpr init) {
-    return builder_.AddGlobal(type, mutability, init);
+    return builder_.AddGlobal(type, mutability, std::move(init));
   }
 
   uint32_t DefineFunction(FunctionSig* sig,
@@ -220,8 +220,10 @@ TEST(WasmRefAsNonNull) {
   ValueType kOptRefType = optref(type_index);
   FunctionSig sig_q_v(1, 0, kRefTypes);
 
-  uint32_t global_index = tester.AddGlobal(
-      kOptRefType, true, WasmInitExpr(WasmInitExpr::kRefNullConst));
+  uint32_t global_index =
+      tester.AddGlobal(kOptRefType, true,
+                       WasmInitExpr::RefNullConst(
+                           static_cast<HeapType::Representation>(type_index)));
   uint32_t field_index = 0;
   const uint32_t kFunc = tester.DefineFunction(
       tester.sigs.i_v(), {},
@@ -562,6 +564,8 @@ TEST(BasicRTT) {
   ValueType kRttSubtypes[] = {
       ValueType::Rtt(static_cast<HeapType>(subtype_index), 2)};
   FunctionSig sig_t2_v(1, 0, kRttSubtypes);
+  ValueType kRttTypesDeeper[] = {ValueType::Rtt(type_index, 2)};
+  FunctionSig sig_t3_v(1, 0, kRttTypesDeeper);
   ValueType kRefTypes[] = {ref(type_index)};
   FunctionSig sig_q_v(1, 0, kRefTypes);
 
@@ -570,6 +574,9 @@ TEST(BasicRTT) {
   const uint32_t kRttSub = tester.DefineFunction(
       &sig_t2_v, {},
       {WASM_RTT_CANON(type_index), WASM_RTT_SUB(subtype_index), kExprEnd});
+  const uint32_t kRttSubGeneric = tester.DefineFunction(
+      &sig_t3_v, {},
+      {WASM_RTT_CANON(kLocalEqRef), WASM_RTT_SUB(type_index), kExprEnd});
   const uint32_t kStructWithRtt = tester.DefineFunction(
       &sig_q_v, {},
       {WASM_STRUCT_NEW_WITH_RTT(type_index, WASM_I32V(42),
@@ -626,6 +633,15 @@ TEST(BasicRTT) {
   CHECK_EQ(reinterpret_cast<Address>(
                tester.instance()->module()->struct_type(subtype_index)),
            submap->wasm_type_info().foreign_address());
+  Handle<Object> subref_result_canonicalized =
+      tester.GetResultObject(kRttSub).ToHandleChecked();
+  CHECK(subref_result.is_identical_to(subref_result_canonicalized));
+
+  Handle<Object> sub_generic_1 =
+      tester.GetResultObject(kRttSubGeneric).ToHandleChecked();
+  Handle<Object> sub_generic_2 =
+      tester.GetResultObject(kRttSubGeneric).ToHandleChecked();
+  CHECK(sub_generic_1.is_identical_to(sub_generic_2));
 
   Handle<Object> s = tester.GetResultObject(kStructWithRtt).ToHandleChecked();
   CHECK(s->IsWasmStruct());

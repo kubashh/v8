@@ -37,12 +37,12 @@ byte* raw_buffer_ptr(MaybeHandle<JSArrayBuffer> buffer, int offset) {
 
 uint32_t EvalUint32InitExpr(Handle<WasmInstanceObject> instance,
                             const WasmInitExpr& expr) {
-  switch (expr.kind) {
+  switch (expr.kind()) {
     case WasmInitExpr::kI32Const:
-      return expr.val.i32_const;
-    case WasmInitExpr::kGlobalIndex: {
+      return expr.immediate().i32_const;
+    case WasmInitExpr::kGlobalGet: {
       uint32_t offset =
-          instance->module()->globals[expr.val.global_index].offset;
+          instance->module()->globals[expr.immediate().index].offset;
       auto raw_addr = reinterpret_cast<Address>(
                           instance->untagged_globals_buffer().backing_store()) +
                       offset;
@@ -92,13 +92,13 @@ class CompileImportWrapperTask final : public CancelableTask {
 Handle<Map> CreateStructMap(Isolate* isolate, const WasmModule* module,
                             int struct_index, Handle<Map> rtt_parent) {
   const wasm::StructType* type = module->struct_type(struct_index);
-  int inobject_properties = 0;
+  const int inobject_properties = 0;
   DCHECK_LE(type->total_fields_size(), kMaxInt - WasmStruct::kHeaderSize);
-  int instance_size =
+  const int instance_size =
       WasmStruct::kHeaderSize + static_cast<int>(type->total_fields_size());
-  InstanceType instance_type = WASM_STRUCT_TYPE;
+  const InstanceType instance_type = WASM_STRUCT_TYPE;
   // TODO(jkummerow): If NO_ELEMENTS were supported, we could use that here.
-  ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND;
+  const ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND;
   Handle<WasmTypeInfo> type_info = isolate->factory()->NewWasmTypeInfo(
       reinterpret_cast<Address>(type), rtt_parent);
   Handle<Map> map = isolate->factory()->NewMap(
@@ -110,12 +110,26 @@ Handle<Map> CreateStructMap(Isolate* isolate, const WasmModule* module,
 Handle<Map> CreateArrayMap(Isolate* isolate, const WasmModule* module,
                            int array_index, Handle<Map> rtt_parent) {
   const wasm::ArrayType* type = module->array_type(array_index);
-  int inobject_properties = 0;
-  int instance_size = kVariableSizeSentinel;
-  InstanceType instance_type = WASM_ARRAY_TYPE;
-  ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND;
+  const int inobject_properties = 0;
+  const int instance_size = kVariableSizeSentinel;
+  const InstanceType instance_type = WASM_ARRAY_TYPE;
+  const ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND;
   Handle<WasmTypeInfo> type_info = isolate->factory()->NewWasmTypeInfo(
       reinterpret_cast<Address>(type), rtt_parent);
+  Handle<Map> map = isolate->factory()->NewMap(
+      instance_type, instance_size, elements_kind, inobject_properties);
+  map->set_wasm_type_info(*type_info);
+  return map;
+}
+
+Handle<Map> CreateGenericRtt(Isolate* isolate, const WasmModule* module,
+                             Handle<Map> rtt_parent) {
+  const int inobject_properties = 0;
+  const int instance_size = 0;
+  const InstanceType instance_type = WASM_STRUCT_TYPE;  // Fake; good enough.
+  const ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND;
+  Handle<WasmTypeInfo> type_info =
+      isolate->factory()->NewWasmTypeInfo(0, rtt_parent);
   Handle<Map> map = isolate->factory()->NewMap(
       instance_type, instance_size, elements_kind, inobject_properties);
   map->set_wasm_type_info(*type_info);
@@ -1390,27 +1404,27 @@ T* InstanceBuilder::GetRawGlobalPtr(const WasmGlobal& global) {
 
 // Process initialization of globals.
 void InstanceBuilder::InitGlobals(Handle<WasmInstanceObject> instance) {
-  for (auto global : module_->globals) {
+  for (const WasmGlobal& global : module_->globals) {
     if (global.mutability && global.imported) {
       continue;
     }
 
-    switch (global.init.kind) {
+    switch (global.init.kind()) {
       case WasmInitExpr::kI32Const:
         WriteLittleEndianValue<int32_t>(GetRawGlobalPtr<int32_t>(global),
-                                        global.init.val.i32_const);
+                                        global.init.immediate().i32_const);
         break;
       case WasmInitExpr::kI64Const:
         WriteLittleEndianValue<int64_t>(GetRawGlobalPtr<int64_t>(global),
-                                        global.init.val.i64_const);
+                                        global.init.immediate().i64_const);
         break;
       case WasmInitExpr::kF32Const:
         WriteLittleEndianValue<float>(GetRawGlobalPtr<float>(global),
-                                      global.init.val.f32_const);
+                                      global.init.immediate().f32_const);
         break;
       case WasmInitExpr::kF64Const:
         WriteLittleEndianValue<double>(GetRawGlobalPtr<double>(global),
-                                       global.init.val.f64_const);
+                                       global.init.immediate().f64_const);
         break;
       case WasmInitExpr::kRefNullConst:
         DCHECK(enabled_.has_reftypes() || enabled_.has_eh());
@@ -1423,15 +1437,15 @@ void InstanceBuilder::InitGlobals(Handle<WasmInstanceObject> instance) {
       case WasmInitExpr::kRefFuncConst: {
         DCHECK(enabled_.has_reftypes());
         auto function = WasmInstanceObject::GetOrCreateWasmExternalFunction(
-            isolate_, instance, global.init.val.function_index);
+            isolate_, instance, global.init.immediate().index);
         tagged_globals_->set(global.offset, *function);
         break;
       }
-      case WasmInitExpr::kGlobalIndex: {
+      case WasmInitExpr::kGlobalGet: {
         // Initialize with another global.
         uint32_t new_offset = global.offset;
         uint32_t old_offset =
-            module_->globals[global.init.val.global_index].offset;
+            module_->globals[global.init.immediate().index].offset;
         TRACE("init [globals+%u] = [globals+%d]\n", global.offset, old_offset);
         if (global.type.is_reference_type()) {
           DCHECK(enabled_.has_reftypes() || enabled_.has_eh());
@@ -1712,7 +1726,7 @@ bool LoadElemSegmentImpl(Isolate* isolate, Handle<WasmInstanceObject> instance,
 
     // For ExternRef tables, we have to generate the WasmExternalFunction
     // eagerly. Later we cannot know if an entry is a placeholder or not.
-    if (table_object->type().is_reference_to(HeapType::kFunc)) {
+    if (table_object->type().is_reference_to(HeapType::kExtern)) {
       Handle<WasmExternalFunction> wasm_external_function =
           WasmInstanceObject::GetOrCreateWasmExternalFunction(isolate, instance,
                                                               func_index);

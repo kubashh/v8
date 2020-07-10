@@ -371,15 +371,6 @@ class LiftoffAssembler : public TurboAssembler {
       LiftoffRegList candidates = kGpCacheRegList;
       Register low = pinned.set(GetUnusedRegister(candidates, pinned)).gp();
       Register high = GetUnusedRegister(candidates, pinned).gp();
-      if (low.code() > high.code()) {
-        // Establish the invariant that the register of the low word always has
-        // a lower code than the register of the high word. This guarantees that
-        // if a register pair of an input is reused for the result, the low
-        // word and high word registers are not swapped, i.e. the low word
-        // register of the result is not the high word register of the input,
-        // and vice versa.
-        std::swap(low, high);
-      }
       return LiftoffRegister::ForPair(low, high);
     } else if (kNeedS128RegPair && rc == kFpRegPair) {
       // kFpRegPair specific logic here because we need adjacent registers, not
@@ -827,6 +818,7 @@ class LiftoffAssembler : public TurboAssembler {
                             LiftoffRegister rhs);
   inline void emit_f64x2_le(LiftoffRegister dst, LiftoffRegister lhs,
                             LiftoffRegister rhs);
+  inline void emit_s128_const(LiftoffRegister dst, const uint8_t imms[16]);
   inline void emit_s128_not(LiftoffRegister dst, LiftoffRegister src);
   inline void emit_s128_and(LiftoffRegister dst, LiftoffRegister lhs,
                             LiftoffRegister rhs);

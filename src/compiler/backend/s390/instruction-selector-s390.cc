@@ -2834,6 +2834,7 @@ SIMD_VISIT_PMIN_MAX(F32x4Pmax)
 
 void InstructionSelector::VisitS8x16Shuffle(Node* node) {
   uint8_t shuffle[kSimd128Size];
+  uint8_t* shuffle_p = &shuffle[0];
   bool is_swizzle;
   CanonicalizeShuffle(node, shuffle, &is_swizzle);
   S390OperandGenerator g(this);
@@ -2851,22 +2852,14 @@ void InstructionSelector::VisitS8x16Shuffle(Node* node) {
                                ? max_index - current_index
                                : total_lane_count - current_index + max_index);
   }
-  Emit(kS390_S8x16Shuffle, g.DefineAsRegister(node), g.UseRegister(input0),
-       g.UseRegister(input1),
-       // Pack4Lanes reverses the bytes, therefore we will need to pass it in
-       // reverse
-       g.UseImmediate(Pack4Lanes(shuffle_remapped + 12)),
-       g.UseImmediate(Pack4Lanes(shuffle_remapped + 8)),
-       g.UseImmediate(Pack4Lanes(shuffle_remapped + 4)),
-       g.UseImmediate(Pack4Lanes(shuffle_remapped)));
-#else
+  shuffle_p = &shuffle_remapped[0];
+#endif
   Emit(kS390_S8x16Shuffle, g.DefineAsRegister(node),
        g.UseUniqueRegister(input0), g.UseUniqueRegister(input1),
-       g.UseImmediate(Pack4Lanes(shuffle)),
-       g.UseImmediate(Pack4Lanes(shuffle + 4)),
-       g.UseImmediate(Pack4Lanes(shuffle + 8)),
-       g.UseImmediate(Pack4Lanes(shuffle + 12)));
-#endif
+       g.UseImmediate(Pack4Lanes(shuffle_p)),
+       g.UseImmediate(Pack4Lanes(shuffle_p + 4)),
+       g.UseImmediate(Pack4Lanes(shuffle_p + 8)),
+       g.UseImmediate(Pack4Lanes(shuffle_p + 12)));
 }
 
 void InstructionSelector::VisitS8x16Swizzle(Node* node) {
@@ -2878,15 +2871,17 @@ void InstructionSelector::VisitS8x16Swizzle(Node* node) {
 
 void InstructionSelector::VisitS128Const(Node* node) {
   S390OperandGenerator g(this);
-  static const int kUint32Immediates = 4;
-  uint32_t val[kUint32Immediates];
-  STATIC_ASSERT(sizeof(val) == kSimd128Size);
+  uint32_t val[kSimd128Size / sizeof(uint32_t)];
   memcpy(val, S128ImmediateParameterOf(node->op()).data(), kSimd128Size);
-  // If all bytes are zeros, avoid emitting code for generic constants
-  bool all_zeros = !(val[0] && val[1] && val[2] && val[3]);
+  // If all bytes are zeros, avoid emitting code for generic constants.
+  bool all_zeros = !(val[0] || val[1] || val[2] || val[3]);
+  bool all_ones = val[0] == UINT32_MAX && val[1] == UINT32_MAX &&
+                  val[2] == UINT32_MAX && val[3] == UINT32_MAX;
   InstructionOperand dst = g.DefineAsRegister(node);
   if (all_zeros) {
     Emit(kS390_S128Zero, dst);
+  } else if (all_ones) {
+    Emit(kS390_S128AllOnes, dst);
   } else {
     // We have to use Pack4Lanes to reverse the bytes (lanes) on BE,
     // Which in this case is ineffective on LE.
