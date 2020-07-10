@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "512bf4b7_83c83083",
+        "filename": "tools/system-analyzer/ic-panel-template.html",
+        "patchSetId": 14
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T15:43:35Z",
+      "side": 1,
+      "message": "tabs \u003d\u003e spaces",
+      "revId": "8526d1aaadae10e790e73fae10c099aef9f5acd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26024861_5cc9d5c4",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 14
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T15:43:35Z",
+      "side": 1,
+      "message": "I would rename things here a bit:\n entries: all entries, as given by the log processor\n fileEntries: confusing name, has nothing to do with files. Rename to filteredEntries",
+      "revId": "8526d1aaadae10e790e73fae10c099aef9f5acd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f5962a4_b35aa98a",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 14
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T15:43:35Z",
+      "side": 1,
+      "message": "remove console.log",
+      "revId": "8526d1aaadae10e790e73fae10c099aef9f5acd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88b95345_744cc8ff",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 14
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T15:43:35Z",
+      "side": 1,
+      "message": "remove commented-out code.",
+      "revId": "8526d1aaadae10e790e73fae10c099aef9f5acd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fc0e25c_bb18e9e5",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 14
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T15:43:35Z",
+      "side": 1,
+      "message": "You still have to limit to max some number here since it will make the tool a bit difficult to use if you have many entries in a single category.\n\nFor instance you might get several hundred keys for ics.\nI guess the proper way to fix this would be to have a \"more\"-button at the bottom of each list so you can show more elements on demand.",
+      "revId": "8526d1aaadae10e790e73fae10c099aef9f5acd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d9c8bb3_b5114828",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 14
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T15:43:35Z",
+      "side": 1,
+      "message": "This code is unused.",
+      "revId": "8526d1aaadae10e790e73fae10c099aef9f5acd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba72cb3b_c51e2ea7",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 14
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T15:43:35Z",
+      "side": 1,
+      "message": "Just do \n\n  $(\u0027#ic-panel\u0027).entries \u003d entries\ndirectly and handle the updating of the view in the setter in the ic-panel.",
+      "revId": "8526d1aaadae10e790e73fae10c099aef9f5acd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95864c7e_48fcc79e",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 14
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T15:43:35Z",
+      "side": 1,
+      "message": "This name is confusing, you\u0027re not uploading anything here I think.\n\nRename: globalEntryUpload \u003d\u003e handleSelectIcEvents(event) ...",
+      "revId": "8526d1aaadae10e790e73fae10c099aef9f5acd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffca8dfe_6dda7499",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 14
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T15:43:35Z",
+      "side": 1,
+      "message": "You should always have details.\n\nIn general, avoid writing defensive code that silently continues.\nYou can easily hide many bugs this way. It\u0027s best to just throw.",
+      "revId": "8526d1aaadae10e790e73fae10c099aef9f5acd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
