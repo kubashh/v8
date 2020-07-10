@@ -50,6 +50,24 @@
       "revId": "7aaebfcadf3d1154a1175eccc50e021b8ea0a330",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d394e192_d27c4041",
+        "filename": "include/cppgc/trace-trait.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-10T11:33:46Z",
+      "side": 1,
+      "message": "I don\u0027t think we can have the impl in the .cc file and make it a free function.\nSince the impl requires access to header not on the api, I don\u0027t think it would work.",
+      "parentUuid": "e764f5da_afc6aa92",
+      "revId": "7aaebfcadf3d1154a1175eccc50e021b8ea0a330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
