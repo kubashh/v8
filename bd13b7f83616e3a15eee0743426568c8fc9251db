@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b6e09d6_0fe96033",
+        "filename": "tools/system-analyzer/ic-panel-template.html",
+        "patchSetId": 13
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:19:03Z",
+      "side": 1,
+      "message": "There should be no timeline in the ic-panel itself.",
+      "revId": "bd13b7f83616e3a15eee0743426568c8fc9251db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22147f70_ba3040a5",
+        "filename": "tools/system-analyzer/ic-processor.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:19:03Z",
+      "side": 1,
+      "message": "You just fixed this no?",
+      "revId": "bd13b7f83616e3a15eee0743426568c8fc9251db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "865fd368_559312e6",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:19:03Z",
+      "side": 1,
+      "message": "updateTimelineIC \u003d\u003e updateICPanel()",
+      "revId": "bd13b7f83616e3a15eee0743426568c8fc9251db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38d83df3_4bef7a11",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:19:03Z",
+      "side": 1,
+      "message": "Let\u0027s remove the timeline code completely from this CL and just deal with filtering by time.",
+      "revId": "bd13b7f83616e3a15eee0743426568c8fc9251db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b839025_9b7689d1",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:19:03Z",
+      "side": 1,
+      "message": "remove all commented out code please.",
+      "revId": "bd13b7f83616e3a15eee0743426568c8fc9251db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e4bcb9f_978d6f2a",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:19:03Z",
+      "side": 1,
+      "message": "Remove this for now.",
+      "revId": "bd13b7f83616e3a15eee0743426568c8fc9251db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ec4165a_0007a59d",
+        "filename": "tools/system-analyzer/timeline-model.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:19:03Z",
+      "side": 1,
+      "message": "Please don\u0027t land this here, lets do small CLs with single changes.",
+      "revId": "bd13b7f83616e3a15eee0743426568c8fc9251db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3968b0ad_30b4c0b7",
+        "filename": "tools/system-analyzer/timeline-panel-template.html",
+        "patchSetId": 13
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:19:03Z",
+      "side": 1,
+      "message": "please move changes in this file to separate CL.",
+      "revId": "bd13b7f83616e3a15eee0743426568c8fc9251db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bee9eada_aa9a6424",
+        "filename": "tools/system-analyzer/timeline-panel.mjs",
+        "patchSetId": 13
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:19:03Z",
+      "side": 1,
+      "message": "please move to separate CL.",
+      "revId": "bd13b7f83616e3a15eee0743426568c8fc9251db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acb2f324_4aed4552",
+        "filename": "tools/system-analyzer/timeline-panel.mjs",
+        "patchSetId": 13
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-10T08:19:03Z",
+      "side": 1,
+      "message": "please move changes in this file to separate CL.",
+      "revId": "bd13b7f83616e3a15eee0743426568c8fc9251db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
