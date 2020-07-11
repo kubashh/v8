@@ -917,10 +917,6 @@ namespace internal {
   CPP(IsTraceCategoryEnabled)                                                  \
   CPP(Trace)                                                                   \
                                                                                \
-  /* Weak refs */                                                              \
-  CPP(FinalizationRegistryRegister)                                            \
-  CPP(FinalizationRegistryUnregister)                                          \
-                                                                               \
   /* Async modules */                                                          \
   TFJ(AsyncModuleEvaluate, kDontAdaptArgumentsSentinel)                        \
                                                                                \

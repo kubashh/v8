@@ -60,6 +60,8 @@ extern enum NativeContextSlot extends intptr constexpr 'Context::Field' {
 
   BOUND_FUNCTION_WITH_CONSTRUCTOR_MAP_INDEX,
   BOUND_FUNCTION_WITHOUT_CONSTRUCTOR_MAP_INDEX,
+
+  WEAK_CELL_MAP_INDEX,
   ...
 }
 
