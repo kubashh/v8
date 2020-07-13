@@ -15,6 +15,11 @@ namespace internal {
 bool MarkingBarrier::MarkValue(HeapObject host, HeapObject value) {
   DCHECK(is_activated_);
   DCHECK(!marking_state_.IsImpossible(value));
+  if (marking_state_.IsImpossible(host)) {
+    PrintF("%zx\n", host.ptr());
+    host.map().Print();
+    host.Print();
+  }
   DCHECK(!marking_state_.IsImpossible(host));
   if (!V8_CONCURRENT_MARKING_BOOL && marking_state_.IsBlack(host)) {
     // The value will be marked and the slot will be recorded when the marker
