@@ -17,6 +17,7 @@
 #include "src/codegen/register-configuration.h"
 #include "src/compiler/add-type-assertions-reducer.h"
 #include "src/compiler/backend/code-generator.h"
+#include "src/compiler/backend/fast-register-allocator.h"
 #include "src/compiler/backend/frame-elider.h"
 #include "src/compiler/backend/instruction-selector.h"
 #include "src/compiler/backend/instruction.h"
@@ -352,6 +353,9 @@ class PipelineData {
   RegisterAllocatorData* register_allocator_data() const {
     return RegisterAllocatorData::cast(register_allocation_data_);
   }
+  FastRegisterAllocatorData* fast_register_allocator_data() const {
+    return FastRegisterAllocatorData::cast(register_allocation_data_);
+  }
 
   std::string const& source_position_output() const {
     return source_position_output_;
@@ -490,6 +494,15 @@ class PipelineData {
         register_allocation_zone()->New<RegisterAllocatorData>(
             config, register_allocation_zone(), frame(), sequence(), flags,
             &info()->tick_counter(), debug_name());
+  }
+
+  void InitializeFastRegisterAllocatorData(const RegisterConfiguration* config,
+                                           CallDescriptor* call_descriptor) {
+    DCHECK_NULL(register_allocation_data_);
+    register_allocation_data_ = new (register_allocation_zone())
+        FastRegisterAllocatorData(config, register_allocation_zone(), frame(),
+                                  sequence(), &info()->tick_counter(),
+                                  debug_name());
   }
 
   void InitializeOsrHelper() {
@@ -2239,6 +2252,15 @@ struct ResolveControlFlowPhase {
   }
 };
 
+struct FastRegisterAllocatorPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(FastRegisterAllocator)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    FastRegisterAllocator allocator(data->fast_register_allocator_data());
+    allocator.DefineOutputs();
+  }
+};
+
 struct OptimizeMovesPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(OptimizeMoves)
 
@@ -3493,8 +3515,41 @@ void PipelineImpl::AllocateRegisters(const RegisterConfiguration* config,
 void PipelineImpl::AllocateRegistersForMidTier(
     const RegisterConfiguration* config, CallDescriptor* call_descriptor,
     bool run_verifier) {
-  // TODO(rmcilroy): Implement fast register allocator.
-  UNREACHABLE();
+  PipelineData* data = data_;
+  // Don't track usage for this zone in compiler stats.
+  std::unique_ptr<Zone> verifier_zone;
+  RegisterAllocatorVerifier* verifier = nullptr;
+  if (run_verifier) {
+    verifier_zone.reset(
+        new Zone(data->allocator(), kRegisterAllocatorVerifierZoneName));
+    verifier = new (verifier_zone.get()) RegisterAllocatorVerifier(
+        verifier_zone.get(), config, data->sequence(), data->frame());
+  }
+
+#ifdef DEBUG
+  data->sequence()->ValidateEdgeSplitForm();
+  data->sequence()->ValidateDeferredBlockEntryPaths();
+  data->sequence()->ValidateDeferredBlockExitPaths();
+#endif
+
+  if (info()->is_osr()) data->osr_helper()->SetupFrame(data->frame());
+  data->InitializeFastRegisterAllocatorData(config, call_descriptor);
+
+  TraceSequence(info(), data, "before register allocation");
+
+  Run<FastRegisterAllocatorPhase>();
+
+  // TODO(rmcilroy): Run spill slot allocation and reference map population
+  // phases
+
+  TraceSequence(info(), data, "after register allocation");
+
+  if (verifier != nullptr) {
+    verifier->VerifyAssignment("End of regalloc pipeline.");
+    verifier->VerifyGapMoves();
+  }
+
+  data->DeleteRegisterAllocationZone();
 }
 
 OptimizedCompilationInfo* PipelineImpl::info() const { return data_->info(); }
