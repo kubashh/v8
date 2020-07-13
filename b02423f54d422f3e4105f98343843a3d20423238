@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "bef5d683_8161e9b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-07-13T15:44:02Z",
+      "side": 1,
+      "message": "src/heap, src/handles LGTM!",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "966d2471_b6b05e4f",
         "filename": "src/compiler/js-heap-broker.h",
         "patchSetId": 13
@@ -39,6 +56,23 @@
       "revId": "b02423f54d422f3e4105f98343843a3d20423238",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc543141_c296df8c",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-07-13T15:44:02Z",
+      "side": 1,
+      "message": "It might be nice to make this std::unique_ptr\u003cLocalHeap\u003e as well?",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
