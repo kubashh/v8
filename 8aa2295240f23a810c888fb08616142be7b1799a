@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7d521c7_5d7de5a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-07-13T23:02:35Z",
+      "side": 1,
+      "message": "1 comment on the codegen, it needs to be uint instead of int. If you can wait for https://crrev.com/c/2293044 to land, you can use a new helper method to simplify it a bit. Otherwise okay to submit too (after the fix for uint). Thanks!",
+      "revId": "8aa2295240f23a810c888fb08616142be7b1799a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad7815d_32491ea5",
+        "filename": "src/compiler/backend/mips64/code-generator-mips64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2092,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-07-13T23:02:35Z",
+      "side": 1,
+      "message": "Please change this to i.InputUint32(0), there is an outstanding patch that changes this for all arch as well, see https://crrev.com/c/2293044.\nIf you like, you can wait for that change to land, then you can use a new helper method to call\n`uint64_t imm1 \u003d combine(i.InputUint32(1), i.InputUint32(0));`\ne.g. in arm https://chromium-review.googlesource.com/c/v8/v8/+/2293044/4/src/compiler/backend/arm/code-generator-arm.cc",
+      "range": {
+        "startLine": 2092,
+        "startChar": 12,
+        "endLine": 2092,
+        "endChar": 22
+      },
+      "revId": "8aa2295240f23a810c888fb08616142be7b1799a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
