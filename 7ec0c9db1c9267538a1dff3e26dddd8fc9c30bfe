@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7aff576_fb65dad7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-13T13:51:51Z",
+      "side": 1,
+      "message": "Thanks! lgtm with a comment.",
+      "revId": "7ec0c9db1c9267538a1dff3e26dddd8fc9c30bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "223e7bf7_71f224a6",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-13T13:51:51Z",
+      "side": 1,
+      "message": "nit: please keep the explicit architecture list here in an #elif clause and a #error in the final #else just to avoid future pain if we ever add another arch.",
+      "revId": "7ec0c9db1c9267538a1dff3e26dddd8fc9c30bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
