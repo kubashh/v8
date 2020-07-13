@@ -154,6 +154,23 @@
       "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c8cce9f_e10ba581",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-13T14:00:06Z",
+      "side": 1,
+      "message": "I just realized this doesn\u0027t work. We don\u0027t record DeoptReason always [1]. We only do it on --trace-deopt or other tracing flags. We should either start recording deopt reason always or introduce another type (like kEagerWithReuse). Maybe there are other better approaches too.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/backend/code-generator.cc;l\u003d168",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
