@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6361e8f_f06381a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-13T13:07:27Z",
+      "side": 1,
+      "message": "Dominik PTAL at src/handles\nGeorg PTAL at the rest",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "966d2471_b6b05e4f",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-13T13:07:27Z",
+      "side": 1,
+      "message": "At the moment, we are creating all of our persistent handles in the main thread. If we start creating persistent handles in the background thread, this would need to be updated to:\n\nif (local_heap_ !\u003d nullptr) {\n  return local_heap_-\u003eNewPersistentHandle(obj);\n} else {\n  return ph_-\u003eNewHandle(obj);\n}",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 31
+      },
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf3a1092_f6b97ee1",
+        "filename": "src/handles/persistent-handles-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-13T13:07:27Z",
+      "side": 0,
+      "message": "Methods merged into persistent-handles.h\nWe wanted to use them in js-heap-broker.h. An alternative would be to make a js-heap-broker-inl.h, but it seemed like overkill for these small methods.",
+      "range": {
+        "startLine": 14,
+        "startChar": 29,
+        "endLine": 14,
+        "endChar": 38
+      },
+      "revId": "9a11ada5fc3c3cfa13ae50b88ff2953cf99ac1b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
