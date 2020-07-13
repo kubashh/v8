@@ -33,6 +33,24 @@
       "revId": "7ec0c9db1c9267538a1dff3e26dddd8fc9c30bfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd92d3a1_f5b1fa2f",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-07-13T14:18:40Z",
+      "side": 1,
+      "message": "Thanks you, would you please give it another review.",
+      "parentUuid": "223e7bf7_71f224a6",
+      "revId": "7ec0c9db1c9267538a1dff3e26dddd8fc9c30bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
