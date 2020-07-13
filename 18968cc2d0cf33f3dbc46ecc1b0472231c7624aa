@@ -177,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "6c868980_41468b60",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:55:05Z",
+      "side": 1,
+      "message": "Maybe, but it doesn\u0027t solve the naming \"problem\" 😊\nI\u0027m fine with update* or render* since they both indicate that something changes, while display* for me (yes I wrote the original code 😋 ) means just displaying something existing.",
+      "parentUuid": "e4196223_7fccde7c",
+      "revId": "18968cc2d0cf33f3dbc46ecc1b0472231c7624aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c7a28f17_2c33ff54",
         "filename": "tools/system-analyzer/ic-panel.mjs",
         "patchSetId": 4

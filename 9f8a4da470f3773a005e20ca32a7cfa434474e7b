@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "a775a8ad_6ec57f1e",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 15
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:55:05Z",
+      "side": 1,
+      "message": "I\u0027m fine with document.state.",
+      "parentUuid": "94f1e705_bf220fbe",
+      "revId": "9f8a4da470f3773a005e20ca32a7cfa434474e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30bb3ecc_aac902f4",
         "filename": "tools/system-analyzer/index.html",
         "patchSetId": 15
