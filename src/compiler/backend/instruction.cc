@@ -169,6 +169,8 @@ std::ostream& operator<<(std::ostream& os, const InstructionOperand& op) {
           return os << "[immediate:" << imm.indexed_value() << "]";
       }
     }
+    case InstructionOperand::PENDING:
+      return os << "[pending: " << PendingOperand::cast(op).next() << "]";
     case InstructionOperand::ALLOCATED: {
       LocationOperand allocated = LocationOperand::cast(op);
       if (op.IsStackSlot()) {
@@ -296,6 +298,9 @@ Instruction::Instruction(InstructionCode opcode)
       block_(nullptr) {
   parallel_moves_[0] = nullptr;
   parallel_moves_[1] = nullptr;
+
+  // PendingOperands are required to be 8 byte aligned.
+  STATIC_ASSERT(offsetof(Instruction, operands_) % 8 == 0);
 }
 
 Instruction::Instruction(InstructionCode opcode, size_t output_count,
