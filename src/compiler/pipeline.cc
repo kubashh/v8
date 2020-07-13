@@ -152,7 +152,8 @@ class PipelineData {
         codegen_zone_(codegen_zone_scope_.zone()),
         broker_(new JSHeapBroker(
             isolate_, info_->zone(), info_->trace_heap_broker(),
-            is_concurrent_inlining, info->native_context_independent())),
+            is_concurrent_inlining, info->native_context_independent(),
+            info->persistent_handles())),
         register_allocation_zone_scope_(zone_stats_,
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
@@ -898,6 +899,19 @@ class PipelineRunScope {
   RuntimeCallTimerScope runtime_call_timer_scope;
 };
 
+// LocalHeapScope encapsulates the liveness of the brokers's LocalHeap.
+class LocalHeapScope {
+ public:
+  explicit LocalHeapScope(JSHeapBroker* broker) : broker_(broker) {
+    broker_->InitializeLocalHeap();
+  }
+
+  ~LocalHeapScope() { broker_->TearDownLocalHeap(); }
+
+ private:
+  JSHeapBroker* broker_;
+};
+
 PipelineStatistics* CreatePipelineStatistics(Handle<Script> script,
                                              OptimizedCompilationInfo* info,
                                              Isolate* isolate,
@@ -1126,6 +1140,7 @@ PipelineCompilationJob::Status PipelineCompilationJob::ExecuteJobImpl(
   // Ensure that the RuntimeCallStats table is only available during execution
   // and not during finalization as that might be on a different thread.
   PipelineJobScope scope(&data_, stats);
+  LocalHeapScope local_heap_scope(data_.broker());
   if (data_.broker()->is_concurrent_inlining()) {
     if (!pipeline_.CreateGraph()) {
       return AbortOptimization(BailoutReason::kGraphBuildingFailed);
@@ -2832,6 +2847,7 @@ MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
   Deoptimizer::EnsureCodeForDeoptimizationEntries(isolate);
 
   pipeline.Serialize();
+  LocalHeapScope local_heap_scope(data.broker());
   if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
   if (!pipeline.OptimizeGraph(&linkage)) return MaybeHandle<Code>();
   pipeline.AssembleCode(&linkage);
