@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "24481b6a_eff8b903",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-13T16:15:00Z",
+      "side": 1,
+      "message": "Since this is not merely a getter, let\u0027s call it DetachPersistentHandles or similar.",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "966d2471_b6b05e4f",
         "filename": "src/compiler/js-heap-broker.h",
         "patchSetId": 13
@@ -47,6 +64,30 @@
       "writtenOn": "2020-07-13T13:07:27Z",
       "side": 1,
       "message": "At the moment, we are creating all of our persistent handles in the main thread. If we start creating persistent handles in the background thread, this would need to be updated to:\n\nif (local_heap_ !\u003d nullptr) {\n  return local_heap_-\u003eNewPersistentHandle(obj);\n} else {\n  return ph_-\u003eNewHandle(obj);\n}",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 31
+      },
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d60d3bfc_5124924f",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-13T16:15:00Z",
+      "side": 1,
+      "message": "They seem to be equivalent given that PersistentHandles object already exists.",
+      "parentUuid": "966d2471_b6b05e4f",
       "range": {
         "startLine": 215,
         "startChar": 4,
@@ -106,6 +147,40 @@
       "side": 1,
       "message": "Another alternative is having \"base::Optional\u003cLocalHeap\u003e\" which would get rid of the raw pointer. We would use emplace/reset instead of new/delete",
       "parentUuid": "9a84e393_45cdd918",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a47067f_c00a89e7",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-13T16:15:00Z",
+      "side": 1,
+      "message": "So the PersistentHandles container is owned\nfirst by OptimizedCompilationInfo,\nthen by JSHeapBroker,\nthen by LocalHeap,\nthen again by JSHeapBroker,\nwhich gets destroyed when PipelineData gets destroyed when e.g. PipelineCompilationJob gets destroyed. Maybe complex enough to warrant a comment somewhere.",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cae9ddb_ae36bc42",
+        "filename": "src/handles/persistent-handles.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-13T16:15:00Z",
+      "side": 1,
+      "message": "I\u0027m confused about this. We won\u0027t be parked in general when we want to use this function, right?",
       "revId": "b02423f54d422f3e4105f98343843a3d20423238",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
