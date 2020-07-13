@@ -142,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "4edd766d_f08b7f0f",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-13T17:12:13Z",
+      "side": 1,
+      "message": "Yes you\u0027re right, ignore my comment.",
+      "parentUuid": "a5ac6b8b_82316f38",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 31
+      },
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fc543141_c296df8c",
         "filename": "src/compiler/js-heap-broker.h",
         "patchSetId": 13
@@ -224,6 +248,24 @@
       "side": 1,
       "message": "That is correct, with the added extra complexity that the PersistentHandles container goes from main thread to background thread, and back to main thread.\n\nWhere do you think we should add this? Maybe on OptimizedCompilationInfo since it is the one that is responsible for creating this member?",
       "parentUuid": "2a47067f_c00a89e7",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d6ecc85_64cf8767",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-13T17:12:13Z",
+      "side": 1,
+      "message": "Fine with me.",
+      "parentUuid": "8224ec90_2fcad903",
       "revId": "b02423f54d422f3e4105f98343843a3d20423238",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
