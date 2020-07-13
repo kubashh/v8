@@ -91,6 +91,24 @@
       "revId": "b02423f54d422f3e4105f98343843a3d20423238",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37c79634_27a57728",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-13T15:54:35Z",
+      "side": 1,
+      "message": "Another alternative is having \"base::Optional\u003cLocalHeap\u003e\" which would get rid of the raw pointer. We would use emplace/reset instead of new/delete",
+      "parentUuid": "9a84e393_45cdd918",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
