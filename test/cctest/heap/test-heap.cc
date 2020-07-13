@@ -3214,7 +3214,7 @@ static void CheckVectorIC(Handle<JSFunction> f, int slot_index,
       Handle<FeedbackVector>(f->feedback_vector(), f->GetIsolate());
   FeedbackVectorHelper helper(vector);
   FeedbackSlot slot = helper.slot(slot_index);
-  FeedbackNexus nexus(vector, slot);
+  FeedbackNexus nexus(vector, slot, f->GetIsolate());
   CHECK(nexus.ic_state() == desired_state);
 }
 

@@ -323,51 +323,116 @@ int FeedbackMetadataIterator::entry_size() const {
   return FeedbackMetadata::GetSlotSize(kind());
 }
 
-MaybeObject FeedbackNexus::GetFeedback() const {
-  MaybeObject feedback = vector().Get(slot());
+template <class T>
+MaybeObject FeedbackNexusImpl<T>::GetFeedback() const {
+  MaybeObject feedback;
+  if (vector_handle_.is_null()) {
+    feedback = vector().Get(slot());
+  } else {
+    if (!feedback_value_.is_null()) {
+      feedback = *feedback_value_;
+    } else {
+      feedback = HeapObjectReference::ClearedValue(GetIsolate());
+    }
+  }
   FeedbackVector::AssertNoLegacyTypes(feedback);
   return feedback;
 }
 
-MaybeObject FeedbackNexus::GetFeedbackExtra() const {
+template <class T>
+MaybeObject FeedbackNexusImpl<T>::GetFeedbackExtra() const {
 #ifdef DEBUG
   FeedbackSlotKind kind = vector().GetKind(slot());
   DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind));
 #endif
   int extra_index = vector().GetIndex(slot()) + 1;
-  return vector().get(extra_index);
+  if (vector_handle_.is_null()) {
+    return vector().get(extra_index);
+  }
+  MaybeObject feedback_extra;
+  if (!feedback_extra_value_.is_null()) {
+    feedback_extra = *feedback_extra_value_;
+  } else {
+    feedback_extra = HeapObjectReference::ClearedValue(GetIsolate());
+  }
+  return feedback_extra;
 }
 
-void FeedbackNexus::SetFeedback(Object feedback, WriteBarrierMode mode) {
+template <class T>
+void FeedbackNexusImpl<T>::SetFeedback(Object feedback, WriteBarrierMode mode) {
   SetFeedback(MaybeObject::FromObject(feedback));
+
+  Reload();
 }
 
-void FeedbackNexus::SetFeedback(MaybeObject feedback, WriteBarrierMode mode) {
+template <class T>
+void FeedbackNexusImpl<T>::SetFeedback(MaybeObject feedback,
+                                       WriteBarrierMode mode) {
   FeedbackVector::AssertNoLegacyTypes(feedback);
   vector().Set(slot(), feedback, mode);
+
+  Reload();
 }
 
-void FeedbackNexus::SetFeedbackExtra(Object feedback_extra,
-                                     WriteBarrierMode mode) {
+template <class T>
+void FeedbackNexusImpl<T>::SetFeedback(Object feedback, WriteBarrierMode mode,
+                                       Object feedback_extra,
+                                       WriteBarrierMode mode_extra) {
+  vector().Set(slot(), feedback, mode);
 #ifdef DEBUG
-  FeedbackSlotKind kind = vector().GetKind(slot());
-  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind));
+  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind()));
   FeedbackVector::AssertNoLegacyTypes(MaybeObject::FromObject(feedback_extra));
 #endif
   int index = vector().GetIndex(slot()) + 1;
-  vector().set(index, MaybeObject::FromObject(feedback_extra), mode);
+  vector().set(index, MaybeObject::FromObject(feedback_extra), mode_extra);
+
+  Reload();
 }
 
-void FeedbackNexus::SetFeedbackExtra(MaybeObject feedback_extra,
-                                     WriteBarrierMode mode) {
+template <class T>
+void FeedbackNexusImpl<T>::SetFeedback(Object feedback, WriteBarrierMode mode,
+                                       MaybeObject feedback_extra,
+                                       WriteBarrierMode mode_extra) {
+  SetFeedback(MaybeObject::FromObject(feedback), mode, feedback_extra,
+              mode_extra);
+}
+
+template <class T>
+void FeedbackNexusImpl<T>::SetFeedback(MaybeObject feedback,
+                                       WriteBarrierMode mode,
+                                       Object feedback_extra,
+                                       WriteBarrierMode mode_extra) {
+  SetFeedback(feedback, mode, MaybeObject::FromObject(feedback_extra),
+              mode_extra);
+}
+
+template <class T>
+void FeedbackNexusImpl<T>::SetFeedback(MaybeObject feedback,
+                                       WriteBarrierMode mode,
+                                       MaybeObject feedback_extra,
+                                       WriteBarrierMode mode_extra) {
+  FeedbackVector::AssertNoLegacyTypes(feedback);
+  vector().Set(slot(), feedback, mode);
+
 #ifdef DEBUG
   FeedbackVector::AssertNoLegacyTypes(feedback_extra);
 #endif
   int index = vector().GetIndex(slot()) + 1;
-  vector().set(index, feedback_extra, mode);
+  vector().set(index, feedback_extra, mode_extra);
+  Reload();
 }
 
-Isolate* FeedbackNexus::GetIsolate() const { return vector().GetIsolate(); }
+template <class T>
+bool FeedbackNexusImpl<T>::vector_needs_update() const {
+  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind()));
+  // TODO(mvstanton): This is a bizarre request.
+  return GetFeedbackExtra().ToSmi().value() != ELEMENT;
+}
+
+template <class T>
+Isolate* FeedbackNexusImpl<T>::GetIsolate() const {
+  return vector().GetIsolate();
+}
 }  // namespace internal
 }  // namespace v8
 

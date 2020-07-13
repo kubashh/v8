@@ -964,7 +964,8 @@ void FeedbackVector::FeedbackSlotPrint(std::ostream& os,
   nexus.Print(os);
 }
 
-void FeedbackNexus::Print(std::ostream& os) {  // NOLINT
+template <class T>
+void FeedbackNexusImpl<T>::Print(std::ostream& os) {  // NOLINT
   switch (kind()) {
     case FeedbackSlotKind::kCall:
     case FeedbackSlotKind::kCloneObject:

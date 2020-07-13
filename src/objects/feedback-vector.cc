@@ -453,30 +453,50 @@ void FeedbackVector::AssertNoLegacyTypes(MaybeObject object) {
 #endif
 }
 
-Handle<WeakFixedArray> FeedbackNexus::CreateArrayOfSize(int length) {
+template <class T>
+FeedbackNexusImpl<T>::FeedbackNexusImpl(Handle<FeedbackVector> vector,
+                                        FeedbackSlot slot,
+                                        T* isolate_or_local_heap)
+    : vector_handle_(vector), slot_(slot), g_(isolate_or_local_heap) {
+  if (!vector.is_null()) {
+    // If we are using handles, then we read and cache the slot values in
+    // handles of their own.
+    kind_ = vector->GetKind(slot);
+    int slot_count = FeedbackMetadata::GetSlotSize(kind_);
+    feedback_value_ = MaybeObjectHandle(Smi::FromInt(0), g_);
+    if (slot_count == 2) {
+      feedback_extra_value_ = MaybeObjectHandle(Smi::FromInt(0), g_);
+    }
+    Reload();
+  } else {
+    kind_ = FeedbackSlotKind::kInvalid;
+  }
+}
+
+template <class T>
+Handle<WeakFixedArray> FeedbackNexusImpl<T>::CreateArrayOfSize(int length) {
   Isolate* isolate = GetIsolate();
   Handle<WeakFixedArray> array = isolate->factory()->NewWeakFixedArray(length);
   return array;
 }
 
-void FeedbackNexus::ConfigureUninitialized() {
+template <class T>
+void FeedbackNexusImpl<T>::ConfigureUninitialized() {
   Isolate* isolate = GetIsolate();
   switch (kind()) {
     case FeedbackSlotKind::kStoreGlobalSloppy:
     case FeedbackSlotKind::kStoreGlobalStrict:
     case FeedbackSlotKind::kLoadGlobalNotInsideTypeof:
     case FeedbackSlotKind::kLoadGlobalInsideTypeof: {
-      SetFeedback(HeapObjectReference::ClearedValue(isolate),
-                  SKIP_WRITE_BARRIER);
-      SetFeedbackExtra(*FeedbackVector::UninitializedSentinel(isolate),
-                       SKIP_WRITE_BARRIER);
+      SetFeedback(
+          HeapObjectReference::ClearedValue(isolate), SKIP_WRITE_BARRIER,
+          *FeedbackVector::UninitializedSentinel(isolate), SKIP_WRITE_BARRIER);
       break;
     }
     case FeedbackSlotKind::kCloneObject:
     case FeedbackSlotKind::kCall: {
       SetFeedback(*FeedbackVector::UninitializedSentinel(isolate),
-                  SKIP_WRITE_BARRIER);
-      SetFeedbackExtra(Smi::zero(), SKIP_WRITE_BARRIER);
+                  SKIP_WRITE_BARRIER, Smi::zero(), SKIP_WRITE_BARRIER);
       break;
     }
     case FeedbackSlotKind::kInstanceOf: {
@@ -494,10 +514,9 @@ void FeedbackNexus::ConfigureUninitialized() {
     case FeedbackSlotKind::kLoadKeyed:
     case FeedbackSlotKind::kHasKeyed:
     case FeedbackSlotKind::kStoreDataPropertyInLiteral: {
-      SetFeedback(*FeedbackVector::UninitializedSentinel(isolate),
-                  SKIP_WRITE_BARRIER);
-      SetFeedbackExtra(*FeedbackVector::UninitializedSentinel(isolate),
-                       SKIP_WRITE_BARRIER);
+      SetFeedback(
+          *FeedbackVector::UninitializedSentinel(isolate), SKIP_WRITE_BARRIER,
+          *FeedbackVector::UninitializedSentinel(isolate), SKIP_WRITE_BARRIER);
       break;
     }
     default:
@@ -505,7 +524,8 @@ void FeedbackNexus::ConfigureUninitialized() {
   }
 }
 
-bool FeedbackNexus::Clear() {
+template <class T>
+bool FeedbackNexusImpl<T>::Clear() {
   bool feedback_updated = false;
 
   switch (kind()) {
@@ -554,21 +574,23 @@ bool FeedbackNexus::Clear() {
   return feedback_updated;
 }
 
-bool FeedbackNexus::ConfigureMegamorphic() {
+template <class T>
+bool FeedbackNexusImpl<T>::ConfigureMegamorphic() {
   DisallowHeapAllocation no_gc;
   Isolate* isolate = GetIsolate();
   MaybeObject sentinel =
       MaybeObject::FromObject(*FeedbackVector::MegamorphicSentinel(isolate));
   if (GetFeedback() != sentinel) {
-    SetFeedback(sentinel, SKIP_WRITE_BARRIER);
-    SetFeedbackExtra(HeapObjectReference::ClearedValue(isolate));
+    SetFeedback(sentinel, SKIP_WRITE_BARRIER,
+                HeapObjectReference::ClearedValue(isolate));
     return true;
   }
 
   return false;
 }
 
-bool FeedbackNexus::ConfigureMegamorphic(IcCheckType property_type) {
+template <class T>
+bool FeedbackNexusImpl<T>::ConfigureMegamorphic(IcCheckType property_type) {
   DisallowHeapAllocation no_gc;
   Isolate* isolate = GetIsolate();
   bool changed = false;
@@ -580,21 +602,23 @@ bool FeedbackNexus::ConfigureMegamorphic(IcCheckType property_type) {
   }
 
   Smi extra = Smi::FromInt(static_cast<int>(property_type));
-  if (changed || GetFeedbackExtra() != MaybeObject::FromSmi(extra)) {
-    SetFeedbackExtra(extra, SKIP_WRITE_BARRIER);
-    changed = true;
+  changed = changed || GetFeedbackExtra() != MaybeObject::FromSmi(extra);
+  if (changed) {
+    SetFeedback(sentinel, SKIP_WRITE_BARRIER, extra, SKIP_WRITE_BARRIER);
   }
   return changed;
 }
 
-Map FeedbackNexus::GetFirstMap() const {
+template <class T>
+Map FeedbackNexusImpl<T>::GetFirstMap() const {
   MapHandles maps;
   ExtractMaps(&maps);
   if (!maps.empty()) return *maps.at(0);
   return Map();
 }
 
-InlineCacheState FeedbackNexus::ic_state() const {
+template <class T>
+InlineCacheState FeedbackNexusImpl<T>::ic_state() const {
   Isolate* isolate = GetIsolate();
   MaybeObject feedback = GetFeedback();
 
@@ -762,17 +786,20 @@ InlineCacheState FeedbackNexus::ic_state() const {
   return UNINITIALIZED;
 }
 
-void FeedbackNexus::ConfigurePropertyCellMode(Handle<PropertyCell> cell) {
+template <class T>
+void FeedbackNexusImpl<T>::ConfigurePropertyCellMode(
+    Handle<PropertyCell> cell) {
   DCHECK(IsGlobalICKind(kind()));
   Isolate* isolate = GetIsolate();
-  SetFeedback(HeapObjectReference::Weak(*cell));
-  SetFeedbackExtra(*FeedbackVector::UninitializedSentinel(isolate),
-                   SKIP_WRITE_BARRIER);
+  SetFeedback(HeapObjectReference::Weak(*cell), UPDATE_WRITE_BARRIER,
+              *FeedbackVector::UninitializedSentinel(isolate),
+              SKIP_WRITE_BARRIER);
 }
 
-bool FeedbackNexus::ConfigureLexicalVarMode(int script_context_index,
-                                            int context_slot_index,
-                                            bool immutable) {
+template <class T>
+bool FeedbackNexusImpl<T>::ConfigureLexicalVarMode(int script_context_index,
+                                                   int context_slot_index,
+                                                   bool immutable) {
   DCHECK(IsGlobalICKind(kind()));
   DCHECK_LE(0, script_context_index);
   DCHECK_LE(0, context_slot_index);
@@ -785,22 +812,25 @@ bool FeedbackNexus::ConfigureLexicalVarMode(int script_context_index,
                SlotIndexBits::encode(context_slot_index) |
                ImmutabilityBit::encode(immutable);
 
-  SetFeedback(Smi::From31BitPattern(config));
   Isolate* isolate = GetIsolate();
-  SetFeedbackExtra(*FeedbackVector::UninitializedSentinel(isolate),
-                   SKIP_WRITE_BARRIER);
+  SetFeedback(Smi::From31BitPattern(config), SKIP_WRITE_BARRIER,
+              *FeedbackVector::UninitializedSentinel(isolate),
+              SKIP_WRITE_BARRIER);
   return true;
 }
 
-void FeedbackNexus::ConfigureHandlerMode(const MaybeObjectHandle& handler) {
+template <class T>
+void FeedbackNexusImpl<T>::ConfigureHandlerMode(
+    const MaybeObjectHandle& handler) {
   DCHECK(IsGlobalICKind(kind()));
   DCHECK(IC::IsHandler(*handler));
-  SetFeedback(HeapObjectReference::ClearedValue(GetIsolate()));
-  SetFeedbackExtra(*handler);
+  SetFeedback(HeapObjectReference::ClearedValue(GetIsolate()),
+              UPDATE_WRITE_BARRIER, *handler, UPDATE_WRITE_BARRIER);
 }
 
-void FeedbackNexus::ConfigureCloneObject(Handle<Map> source_map,
-                                         Handle<Map> result_map) {
+template <class T>
+void FeedbackNexusImpl<T>::ConfigureCloneObject(Handle<Map> source_map,
+                                                Handle<Map> result_map) {
   Isolate* isolate = GetIsolate();
   Handle<HeapObject> feedback;
   {
@@ -814,14 +844,14 @@ void FeedbackNexus::ConfigureCloneObject(Handle<Map> source_map,
   switch (ic_state()) {
     case UNINITIALIZED:
       // Cache the first map seen which meets the fast case requirements.
-      SetFeedback(HeapObjectReference::Weak(*source_map));
-      SetFeedbackExtra(*result_map);
+      SetFeedback(HeapObjectReference::Weak(*source_map), UPDATE_WRITE_BARRIER,
+                  *result_map);
       break;
     case MONOMORPHIC:
       if (feedback.is_null() || feedback.is_identical_to(source_map) ||
           Map::cast(*feedback).is_deprecated()) {
-        SetFeedback(HeapObjectReference::Weak(*source_map));
-        SetFeedbackExtra(*result_map);
+        SetFeedback(HeapObjectReference::Weak(*source_map),
+                    UPDATE_WRITE_BARRIER, *result_map);
       } else {
         // Transition to POLYMORPHIC.
         Handle<WeakFixedArray> array =
@@ -830,8 +860,8 @@ void FeedbackNexus::ConfigureCloneObject(Handle<Map> source_map,
         array->Set(1, GetFeedbackExtra());
         array->Set(2, HeapObjectReference::Weak(*source_map));
         array->Set(3, MaybeObject::FromObject(*result_map));
-        SetFeedback(*array);
-        SetFeedbackExtra(HeapObjectReference::ClearedValue(isolate));
+        SetFeedback(*array, UPDATE_WRITE_BARRIER,
+                    HeapObjectReference::ClearedValue(isolate));
       }
       break;
     case POLYMORPHIC: {
@@ -854,8 +884,8 @@ void FeedbackNexus::ConfigureCloneObject(Handle<Map> source_map,
           // Transition to MEGAMORPHIC.
           MaybeObject sentinel = MaybeObject::FromObject(
               *FeedbackVector::MegamorphicSentinel(isolate));
-          SetFeedback(sentinel, SKIP_WRITE_BARRIER);
-          SetFeedbackExtra(HeapObjectReference::ClearedValue(isolate));
+          SetFeedback(sentinel, SKIP_WRITE_BARRIER,
+                      HeapObjectReference::ClearedValue(isolate));
           break;
         }
 
@@ -879,36 +909,43 @@ void FeedbackNexus::ConfigureCloneObject(Handle<Map> source_map,
   }
 }
 
-int FeedbackNexus::GetCallCount() {
+template <class T>
+int FeedbackNexusImpl<T>::GetCallCount() {
   DCHECK(IsCallICKind(kind()));
 
-  Object call_count = GetFeedbackExtra()->cast<Object>();
+  Object call_count = GetFeedbackExtra()->template cast<Object>();
   CHECK(call_count.IsSmi());
   uint32_t value = static_cast<uint32_t>(Smi::ToInt(call_count));
   return CallCountField::decode(value);
 }
 
-void FeedbackNexus::SetSpeculationMode(SpeculationMode mode) {
+template <class T>
+void FeedbackNexusImpl<T>::SetSpeculationMode(SpeculationMode mode) {
   DCHECK(IsCallICKind(kind()));
 
-  Object call_count = GetFeedbackExtra()->cast<Object>();
+  Object call_count = GetFeedbackExtra()->template cast<Object>();
   CHECK(call_count.IsSmi());
   uint32_t count = static_cast<uint32_t>(Smi::ToInt(call_count));
   uint32_t value = CallCountField::encode(CallCountField::decode(count));
   int result = static_cast<int>(value | SpeculationModeField::encode(mode));
-  SetFeedbackExtra(Smi::FromInt(result), SKIP_WRITE_BARRIER);
+  MaybeObject feedback = GetFeedback();
+  // We can skip the write barrier for {feedback} because it's not changing.
+  SetFeedback(feedback, SKIP_WRITE_BARRIER, Smi::FromInt(result),
+              SKIP_WRITE_BARRIER);
 }
 
-SpeculationMode FeedbackNexus::GetSpeculationMode() {
+template <class T>
+SpeculationMode FeedbackNexusImpl<T>::GetSpeculationMode() {
   DCHECK(IsCallICKind(kind()));
 
-  Object call_count = GetFeedbackExtra()->cast<Object>();
+  Object call_count = GetFeedbackExtra()->template cast<Object>();
   CHECK(call_count.IsSmi());
   uint32_t value = static_cast<uint32_t>(Smi::ToInt(call_count));
   return SpeculationModeField::decode(value);
 }
 
-float FeedbackNexus::ComputeCallFrequency() {
+template <class T>
+float FeedbackNexusImpl<T>::ComputeCallFrequency() {
   DCHECK(IsCallICKind(kind()));
 
   double const invocation_count = vector().invocation_count();
@@ -919,28 +956,29 @@ float FeedbackNexus::ComputeCallFrequency() {
   return static_cast<float>(call_count / invocation_count);
 }
 
-void FeedbackNexus::ConfigureMonomorphic(Handle<Name> name,
-                                         Handle<Map> receiver_map,
-                                         const MaybeObjectHandle& handler) {
+template <class T>
+void FeedbackNexusImpl<T>::ConfigureMonomorphic(
+    Handle<Name> name, Handle<Map> receiver_map,
+    const MaybeObjectHandle& handler) {
   DCHECK(handler.is_null() || IC::IsHandler(*handler));
   if (kind() == FeedbackSlotKind::kStoreDataPropertyInLiteral) {
-    SetFeedback(HeapObjectReference::Weak(*receiver_map));
-    SetFeedbackExtra(*name);
+    SetFeedback(HeapObjectReference::Weak(*receiver_map), UPDATE_WRITE_BARRIER,
+                *name);
   } else {
     if (name.is_null()) {
-      SetFeedback(HeapObjectReference::Weak(*receiver_map));
-      SetFeedbackExtra(*handler);
+      SetFeedback(HeapObjectReference::Weak(*receiver_map),
+                  UPDATE_WRITE_BARRIER, *handler);
     } else {
       Handle<WeakFixedArray> array = CreateArrayOfSize(2);
-      SetFeedback(*name);
       array->Set(0, HeapObjectReference::Weak(*receiver_map));
       array->Set(1, *handler);
-      SetFeedbackExtra(*array);
+      SetFeedback(*name, UPDATE_WRITE_BARRIER, *array);
     }
   }
 }
 
-void FeedbackNexus::ConfigurePolymorphic(
+template <class T>
+void FeedbackNexusImpl<T>::ConfigurePolymorphic(
     Handle<Name> name, std::vector<MapAndHandler> const& maps_and_handlers) {
   int receiver_count = static_cast<int>(maps_and_handlers.size());
   DCHECK_GT(receiver_count, 1);
@@ -953,24 +991,52 @@ void FeedbackNexus::ConfigurePolymorphic(
     DCHECK(IC::IsHandler(*handler));
     array->Set(current * 2 + 1, *handler);
   }
+
+  // Use a release store to flush all writes to the array. It will be
+  // examined on the background compilation thread.
+  array->synchronized_set_length(array->length());
+
   if (name.is_null()) {
-    SetFeedback(*array);
-    SetFeedbackExtra(*FeedbackVector::UninitializedSentinel(GetIsolate()),
-                     SKIP_WRITE_BARRIER);
+    SetFeedback(*array, UPDATE_WRITE_BARRIER,
+                *FeedbackVector::UninitializedSentinel(GetIsolate()),
+                SKIP_WRITE_BARRIER);
   } else {
-    SetFeedback(*name);
-    SetFeedbackExtra(*array);
+    SetFeedback(*name, UPDATE_WRITE_BARRIER, *array);
   }
 }
 
-int FeedbackNexus::ExtractMaps(MapHandles* maps) const {
+template <class T>
+void FeedbackNexusImpl<T>::Reload() {
+  // Nothing to do if we don't have handles.
+  if (vector_handle_.is_null()) return;
+
+  const int index = vector().GetIndex(slot());
+  MaybeObject tmp = vector().get(index);
+  if (tmp.IsCleared()) {
+    feedback_value_ = MaybeObjectHandle();
+  } else {
+    feedback_value_ = MaybeObjectHandle(tmp, g_);
+  }
+  int slot_count = FeedbackMetadata::GetSlotSize(kind_);
+  if (slot_count == 1) return;
+
+  const int extra_index = vector().GetIndex(slot()) + 1;
+  tmp = vector().get(extra_index);
+  if (tmp.IsCleared()) {
+    feedback_extra_value_ = MaybeObjectHandle();
+  } else {
+    feedback_extra_value_ = MaybeObjectHandle(tmp, g_);
+  }
+}
+
+template <class T>
+int FeedbackNexusImpl<T>::ExtractMaps(MapHandles* maps) const {
   DCHECK(IsLoadICKind(kind()) || IsStoreICKind(kind()) ||
          IsKeyedLoadICKind(kind()) || IsKeyedStoreICKind(kind()) ||
          IsStoreOwnICKind(kind()) || IsStoreDataPropertyInLiteralKind(kind()) ||
          IsStoreInArrayLiteralICKind(kind()) || IsKeyedHasICKind(kind()));
 
   DisallowHeapAllocation no_gc;
-  Isolate* isolate = GetIsolate();
   MaybeObject feedback = GetFeedback();
   bool is_named_feedback = IsPropertyNameFeedback(feedback);
   HeapObject heap_object;
@@ -991,23 +1057,32 @@ int FeedbackNexus::ExtractMaps(MapHandles* maps) const {
       DCHECK(array.Get(i)->IsWeakOrCleared());
       if (array.Get(i)->GetHeapObjectIfWeak(&heap_object)) {
         Map map = Map::cast(heap_object);
-        maps->push_back(handle(map, isolate));
+        maps->push_back(handle(map, g_));
         found++;
       }
     }
     return found;
   } else if (feedback->GetHeapObjectIfWeak(&heap_object)) {
     Map map = Map::cast(heap_object);
-    maps->push_back(handle(map, isolate));
+    maps->push_back(handle(map, g_));
     return 1;
   }
 
   return 0;
 }
 
-int FeedbackNexus::ExtractMapsAndHandlers(
+template <class T>
+int FeedbackNexusImpl<T>::ExtractMapsAndHandlers(
+    std::vector<std::pair<Handle<Map>, MaybeObjectHandle>>* maps_and_handlers)
+    const {
+  return ExtractMapsAndHandlers(
+      maps_and_handlers, [](Handle<Map> map) { return MaybeHandle<Map>(); });
+}
+
+template <class T>
+int FeedbackNexusImpl<T>::ExtractMapsAndHandlers(
     std::vector<std::pair<Handle<Map>, MaybeObjectHandle>>* maps_and_handlers,
-    bool try_update_deprecated) const {
+    const TryUpdateHandler& map_handler) const {
   DCHECK(IsLoadICKind(kind()) ||
          IsStoreICKind(kind()) | IsKeyedLoadICKind(kind()) ||
          IsKeyedStoreICKind(kind()) || IsStoreOwnICKind(kind()) ||
@@ -1015,7 +1090,6 @@ int FeedbackNexus::ExtractMapsAndHandlers(
          IsStoreInArrayLiteralICKind(kind()) || IsKeyedHasICKind(kind()));
 
   DisallowHeapAllocation no_gc;
-  Isolate* isolate = GetIsolate();
   MaybeObject feedback = GetFeedback();
   bool is_named_feedback = IsPropertyNameFeedback(feedback);
   HeapObject heap_object;
@@ -1039,13 +1113,11 @@ int FeedbackNexus::ExtractMapsAndHandlers(
         MaybeObject handler = array.Get(i + 1);
         if (!handler->IsCleared()) {
           DCHECK(IC::IsHandler(handler));
-          Handle<Map> map(Map::cast(heap_object), isolate);
-          if (try_update_deprecated &&
-              !Map::TryUpdate(isolate, map).ToHandle(&map)) {
+          Handle<Map> map(Map::cast(heap_object), g_);
+          if (!map_handler(map).ToHandle(&map)) {
             continue;
           }
-          maps_and_handlers->push_back(
-              MapAndHandler(map, handle(handler, isolate)));
+          maps_and_handlers->push_back(MapAndHandler(map, handle(handler, g_)));
           found++;
         }
       }
@@ -1055,13 +1127,11 @@ int FeedbackNexus::ExtractMapsAndHandlers(
     MaybeObject handler = GetFeedbackExtra();
     if (!handler->IsCleared()) {
       DCHECK(IC::IsHandler(handler));
-      Handle<Map> map = handle(Map::cast(heap_object), isolate);
-      if (try_update_deprecated &&
-          !Map::TryUpdate(isolate, map).ToHandle(&map)) {
+      Handle<Map> map = handle(Map::cast(heap_object), g_);
+      if (!map_handler(map).ToHandle(&map)) {
         return 0;
       }
-      maps_and_handlers->push_back(
-          MapAndHandler(map, handle(handler, isolate)));
+      maps_and_handlers->push_back(MapAndHandler(map, handle(handler, g_)));
       return 1;
     }
   }
@@ -1069,14 +1139,15 @@ int FeedbackNexus::ExtractMapsAndHandlers(
   return 0;
 }
 
-MaybeObjectHandle FeedbackNexus::FindHandlerForMap(Handle<Map> map) const {
+template <class T>
+MaybeObjectHandle FeedbackNexusImpl<T>::FindHandlerForMap(
+    Handle<Map> map) const {
   DCHECK(IsLoadICKind(kind()) || IsStoreICKind(kind()) ||
          IsKeyedLoadICKind(kind()) || IsKeyedStoreICKind(kind()) ||
          IsStoreOwnICKind(kind()) || IsStoreDataPropertyInLiteralKind(kind()) ||
          IsKeyedHasICKind(kind()));
 
   MaybeObject feedback = GetFeedback();
-  Isolate* isolate = GetIsolate();
   bool is_named_feedback = IsPropertyNameFeedback(feedback);
   HeapObject heap_object;
   if ((feedback->GetHeapObjectIfStrong(&heap_object) &&
@@ -1098,7 +1169,7 @@ MaybeObjectHandle FeedbackNexus::FindHandlerForMap(Handle<Map> map) const {
         if (array_map == *map && !array.Get(i + increment - 1)->IsCleared()) {
           MaybeObject handler = array.Get(i + increment - 1);
           DCHECK(IC::IsHandler(handler));
-          return handle(handler, isolate);
+          return handle(handler, g_);
         }
       }
     }
@@ -1107,14 +1178,15 @@ MaybeObjectHandle FeedbackNexus::FindHandlerForMap(Handle<Map> map) const {
     if (cell_map == *map && !GetFeedbackExtra()->IsCleared()) {
       MaybeObject handler = GetFeedbackExtra();
       DCHECK(IC::IsHandler(handler));
-      return handle(handler, isolate);
+      return handle(handler, g_);
     }
   }
 
   return MaybeObjectHandle();
 }
 
-Name FeedbackNexus::GetName() const {
+template <class T>
+Name FeedbackNexusImpl<T>::GetName() const {
   if (IsKeyedStoreICKind(kind()) || IsKeyedLoadICKind(kind()) ||
       IsKeyedHasICKind(kind())) {
     MaybeObject feedback = GetFeedback();
@@ -1131,7 +1203,8 @@ Name FeedbackNexus::GetName() const {
   return Name();
 }
 
-KeyedAccessLoadMode FeedbackNexus::GetKeyedAccessLoadMode() const {
+template <class T>
+KeyedAccessLoadMode FeedbackNexusImpl<T>::GetKeyedAccessLoadMode() const {
   DCHECK(IsKeyedLoadICKind(kind()) || IsKeyedHasICKind(kind()));
 
   if (GetKeyType() == PROPERTY) return STANDARD_LOAD;
@@ -1197,7 +1270,8 @@ KeyedAccessStoreMode KeyedAccessStoreModeForBuiltin(int builtin_index) {
 
 }  // namespace
 
-KeyedAccessStoreMode FeedbackNexus::GetKeyedAccessStoreMode() const {
+template <class T>
+KeyedAccessStoreMode FeedbackNexusImpl<T>::GetKeyedAccessStoreMode() const {
   DCHECK(IsKeyedStoreICKind(kind()) || IsStoreInArrayLiteralICKind(kind()) ||
          IsStoreDataPropertyInLiteralKind(kind()));
   KeyedAccessStoreMode mode = STANDARD_STORE;
@@ -1251,7 +1325,8 @@ KeyedAccessStoreMode FeedbackNexus::GetKeyedAccessStoreMode() const {
   return mode;
 }
 
-IcCheckType FeedbackNexus::GetKeyType() const {
+template <class T>
+IcCheckType FeedbackNexusImpl<T>::GetKeyType() const {
   DCHECK(IsKeyedStoreICKind(kind()) || IsKeyedLoadICKind(kind()) ||
          IsStoreInArrayLiteralICKind(kind()) || IsKeyedHasICKind(kind()) ||
          IsStoreDataPropertyInLiteralKind(kind()));
@@ -1259,38 +1334,41 @@ IcCheckType FeedbackNexus::GetKeyType() const {
   if (feedback == MaybeObject::FromObject(
                       *FeedbackVector::MegamorphicSentinel(GetIsolate()))) {
     return static_cast<IcCheckType>(
-        Smi::ToInt(GetFeedbackExtra()->cast<Object>()));
+        Smi::ToInt(GetFeedbackExtra()->template cast<Object>()));
   }
   MaybeObject maybe_name =
       IsStoreDataPropertyInLiteralKind(kind()) ? GetFeedbackExtra() : feedback;
   return IsPropertyNameFeedback(maybe_name) ? PROPERTY : ELEMENT;
 }
 
-BinaryOperationHint FeedbackNexus::GetBinaryOperationFeedback() const {
+template <class T>
+BinaryOperationHint FeedbackNexusImpl<T>::GetBinaryOperationFeedback() const {
   DCHECK_EQ(kind(), FeedbackSlotKind::kBinaryOp);
   int feedback = GetFeedback().ToSmi().value();
   return BinaryOperationHintFromFeedback(feedback);
 }
 
-CompareOperationHint FeedbackNexus::GetCompareOperationFeedback() const {
+template <class T>
+CompareOperationHint FeedbackNexusImpl<T>::GetCompareOperationFeedback() const {
   DCHECK_EQ(kind(), FeedbackSlotKind::kCompareOp);
   int feedback = GetFeedback().ToSmi().value();
   return CompareOperationHintFromFeedback(feedback);
 }
 
-ForInHint FeedbackNexus::GetForInFeedback() const {
+template <class T>
+ForInHint FeedbackNexusImpl<T>::GetForInFeedback() const {
   DCHECK_EQ(kind(), FeedbackSlotKind::kForIn);
   int feedback = GetFeedback().ToSmi().value();
   return ForInHintFromFeedback(feedback);
 }
 
-MaybeHandle<JSObject> FeedbackNexus::GetConstructorFeedback() const {
+template <class T>
+MaybeHandle<JSObject> FeedbackNexusImpl<T>::GetConstructorFeedback() const {
   DCHECK_EQ(kind(), FeedbackSlotKind::kInstanceOf);
-  Isolate* isolate = GetIsolate();
   MaybeObject feedback = GetFeedback();
   HeapObject heap_object;
   if (feedback->GetHeapObjectIfWeak(&heap_object)) {
-    return handle(JSObject::cast(heap_object), isolate);
+    return handle(JSObject::cast(heap_object), g_);
   }
   return MaybeHandle<JSObject>();
 }
@@ -1308,7 +1386,8 @@ bool InList(Handle<ArrayList> types, Handle<String> type) {
 }
 }  // anonymous namespace
 
-void FeedbackNexus::Collect(Handle<String> type, int position) {
+template <class T>
+void FeedbackNexusImpl<T>::Collect(Handle<String> type, int position) {
   DCHECK(IsTypeProfileKind(kind()));
   DCHECK_GE(position, 0);
   Isolate* isolate = GetIsolate();
@@ -1348,7 +1427,8 @@ void FeedbackNexus::Collect(Handle<String> type, int position) {
   SetFeedback(*types);
 }
 
-std::vector<int> FeedbackNexus::GetSourcePositions() const {
+template <class T>
+std::vector<int> FeedbackNexusImpl<T>::GetSourcePositions() const {
   DCHECK(IsTypeProfileKind(kind()));
   std::vector<int> source_positions;
   Isolate* isolate = GetIsolate();
@@ -1376,7 +1456,8 @@ std::vector<int> FeedbackNexus::GetSourcePositions() const {
   return source_positions;
 }
 
-std::vector<Handle<String>> FeedbackNexus::GetTypesForSourcePositions(
+template <class T>
+std::vector<Handle<String>> FeedbackNexusImpl<T>::GetTypesForSourcePositions(
     uint32_t position) const {
   DCHECK(IsTypeProfileKind(kind()));
   Isolate* isolate = GetIsolate();
@@ -1436,7 +1517,8 @@ Handle<JSObject> ConvertToJSObject(Isolate* isolate,
 }
 }  // namespace
 
-JSObject FeedbackNexus::GetTypeProfile() const {
+template <class T>
+JSObject FeedbackNexusImpl<T>::GetTypeProfile() const {
   DCHECK(IsTypeProfileKind(kind()));
   Isolate* isolate = GetIsolate();
 
@@ -1453,10 +1535,13 @@ JSObject FeedbackNexus::GetTypeProfile() const {
                                    isolate));
 }
 
-void FeedbackNexus::ResetTypeProfile() {
+template <class T>
+void FeedbackNexusImpl<T>::ResetTypeProfile() {
   DCHECK(IsTypeProfileKind(kind()));
   SetFeedback(*FeedbackVector::UninitializedSentinel(GetIsolate()));
 }
 
+template class FeedbackNexusImpl<Isolate>;
+template class FeedbackNexusImpl<LocalHeap>;
 }  // namespace internal
 }  // namespace v8

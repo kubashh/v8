@@ -4657,14 +4657,15 @@ FeedbackSlotKind JSHeapBroker::GetFeedbackSlotKind(
     ProcessedFeedback const& processed = GetFeedback(source);
     return processed.slot_kind();
   }
-  FeedbackNexus nexus(source.vector, source.slot);
+  FeedbackNexus nexus(source.vector, source.slot, isolate());
   return nexus.kind();
 }
 
 bool JSHeapBroker::FeedbackIsInsufficient(FeedbackSource const& source) const {
   return is_concurrent_inlining_
              ? GetFeedback(source).IsInsufficient()
-             : FeedbackNexus(source.vector, source.slot).IsUninitialized();
+             : FeedbackNexus(source.vector, source.slot, isolate())
+                   .IsUninitialized();
 }
 
 namespace {
@@ -4692,7 +4693,7 @@ void FilterRelevantReceiverMaps(Isolate* isolate, MapHandles* maps) {
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
     FeedbackSource const& source, AccessMode mode,
     base::Optional<NameRef> static_name) {
-  FeedbackNexus nexus(source.vector, source.slot);
+  FeedbackNexus nexus(source.vector, source.slot, isolate());
   FeedbackSlotKind kind = nexus.kind();
   if (nexus.IsUninitialized()) return *new (zone()) InsufficientFeedback(kind);
 
@@ -4728,7 +4729,7 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
 
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForGlobalAccess(
     FeedbackSource const& source) {
-  FeedbackNexus nexus(source.vector, source.slot);
+  FeedbackNexus nexus(source.vector, source.slot, isolate());
   DCHECK(nexus.kind() == FeedbackSlotKind::kLoadGlobalInsideTypeof ||
          nexus.kind() == FeedbackSlotKind::kLoadGlobalNotInsideTypeof ||
          nexus.kind() == FeedbackSlotKind::kStoreGlobalSloppy ||
@@ -4779,23 +4780,25 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForGlobalAccess(
 
 BinaryOperationHint JSHeapBroker::ReadFeedbackForBinaryOperation(
     FeedbackSource const& source) const {
-  return FeedbackNexus(source.vector, source.slot).GetBinaryOperationFeedback();
+  return FeedbackNexus(source.vector, source.slot, isolate())
+      .GetBinaryOperationFeedback();
 }
 
 CompareOperationHint JSHeapBroker::ReadFeedbackForCompareOperation(
     FeedbackSource const& source) const {
-  return FeedbackNexus(source.vector, source.slot)
+  return FeedbackNexus(source.vector, source.slot, isolate())
       .GetCompareOperationFeedback();
 }
 
 ForInHint JSHeapBroker::ReadFeedbackForForIn(
     FeedbackSource const& source) const {
-  return FeedbackNexus(source.vector, source.slot).GetForInFeedback();
+  return FeedbackNexus(source.vector, source.slot, isolate())
+      .GetForInFeedback();
 }
 
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForInstanceOf(
     FeedbackSource const& source) {
-  FeedbackNexus nexus(source.vector, source.slot);
+  FeedbackNexus nexus(source.vector, source.slot, isolate());
   if (nexus.IsUninitialized())
     return *new (zone()) InsufficientFeedback(nexus.kind());
 
@@ -4812,7 +4815,7 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForInstanceOf(
 
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForArrayOrObjectLiteral(
     FeedbackSource const& source) {
-  FeedbackNexus nexus(source.vector, source.slot);
+  FeedbackNexus nexus(source.vector, source.slot, isolate());
   HeapObject object;
   if (nexus.IsUninitialized() || !nexus.GetFeedback()->GetHeapObject(&object)) {
     return *new (zone()) InsufficientFeedback(nexus.kind());
@@ -4828,7 +4831,7 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForArrayOrObjectLiteral(
 
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForRegExpLiteral(
     FeedbackSource const& source) {
-  FeedbackNexus nexus(source.vector, source.slot);
+  FeedbackNexus nexus(source.vector, source.slot, isolate());
   HeapObject object;
   if (nexus.IsUninitialized() || !nexus.GetFeedback()->GetHeapObject(&object)) {
     return *new (zone()) InsufficientFeedback(nexus.kind());
@@ -4841,7 +4844,7 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForRegExpLiteral(
 
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForTemplateObject(
     FeedbackSource const& source) {
-  FeedbackNexus nexus(source.vector, source.slot);
+  FeedbackNexus nexus(source.vector, source.slot, isolate());
   HeapObject object;
   if (nexus.IsUninitialized() || !nexus.GetFeedback()->GetHeapObject(&object)) {
     return *new (zone()) InsufficientFeedback(nexus.kind());
@@ -4853,7 +4856,7 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForTemplateObject(
 
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForCall(
     FeedbackSource const& source) {
-  FeedbackNexus nexus(source.vector, source.slot);
+  FeedbackNexus nexus(source.vector, source.slot, isolate());
   if (nexus.IsUninitialized())
     return *new (zone()) InsufficientFeedback(nexus.kind());
 
