@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64249a96_dc769a10",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 20
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 0,
+      "message": "Please remove in next CL",
+      "revId": "05298900ff18dca16285aace1de0d49d2c5f8ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

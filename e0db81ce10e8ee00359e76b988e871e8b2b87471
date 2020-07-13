@@ -1,0 +1,271 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b44d7bc9_c572f30d",
+        "filename": "tools/system-analyzer/ic-panel-template.html",
+        "patchSetId": 20
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL. Revert all changes in this file.",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48b31173_3575bcf1",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 20
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "Let\u0027s keep this CL simple, just the time change, nothing else.",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc58ea63_25c07326",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 20
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3977567b_7dece7c6",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 20
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6604395_d9b94647",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 20
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a59e1b9_07f832c1",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 20
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc9e26b3_e56253d3",
+        "filename": "tools/system-analyzer/ic-panel.mjs",
+        "patchSetId": 20
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a67ef8c0_1c133e1d",
+        "filename": "tools/system-analyzer/ic-processor.js",
+        "patchSetId": 20
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "this is done now.",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fc61115_293a00e1",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 20
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b822c40_97b937f6",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 20
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 37
+      },
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3177134_d4d51e28",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 20
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 1
+      },
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f2e43fa_2d166d1d",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 20
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49dea000_fd5e5014",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 20
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91ae6304_718220a0",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 20
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39dc85dc_92d57cbb",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 20
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-13T08:41:34Z",
+      "side": 1,
+      "message": "please move to separate CL",
+      "revId": "e0db81ce10e8ee00359e76b988e871e8b2b87471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
