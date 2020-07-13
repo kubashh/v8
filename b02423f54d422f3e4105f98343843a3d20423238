@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "3f0f3a55_4ba9a109",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-13T16:53:04Z",
+      "side": 1,
+      "message": "Done. Will update the name when I upload a new patchset.",
+      "parentUuid": "24481b6a_eff8b903",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "966d2471_b6b05e4f",
         "filename": "src/compiler/js-heap-broker.h",
         "patchSetId": 13
@@ -88,6 +106,30 @@
       "side": 1,
       "message": "They seem to be equivalent given that PersistentHandles object already exists.",
       "parentUuid": "966d2471_b6b05e4f",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 31
+      },
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5ac6b8b_82316f38",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-13T16:53:04Z",
+      "side": 1,
+      "message": "Wouldn\u0027t the ph_ be invalidated iff local_heap_ !\u003d nullptr?\nWe do a std::move of the persistent handles container when we create the LocalHeap. Then, if we want to create PersistentHandles in the background thread (when the LocalHeap is active) we have to do it through the LocalHeap.\n\nThe \"local_heap_ !\u003d nullptr\" case is irrelevant to this particular change, but it will be used in follow-ups when we start passing Handles from the background to the main thread.",
+      "parentUuid": "d60d3bfc_5124924f",
       "range": {
         "startLine": 215,
         "startChar": 4,
@@ -170,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "8224ec90_2fcad903",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-13T16:53:04Z",
+      "side": 1,
+      "message": "That is correct, with the added extra complexity that the PersistentHandles container goes from main thread to background thread, and back to main thread.\n\nWhere do you think we should add this? Maybe on OptimizedCompilationInfo since it is the one that is responsible for creating this member?",
+      "parentUuid": "2a47067f_c00a89e7",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2cae9ddb_ae36bc42",
         "filename": "src/handles/persistent-handles.h",
         "patchSetId": 13
@@ -199,6 +259,24 @@
       "side": 1,
       "message": "You\u0027re right, it should be called CheckOwnerIsNotParked (my bad).",
       "parentUuid": "2cae9ddb_ae36bc42",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3684491_1b31c674",
+        "filename": "src/handles/persistent-handles.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-13T16:53:04Z",
+      "side": 1,
+      "message": "I can change this as a drive-by on this commit if you want Ulan.",
+      "parentUuid": "1d28a301_161d32dd",
       "revId": "b02423f54d422f3e4105f98343843a3d20423238",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
