@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "8863e743_f01646c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-13T15:36:19Z",
+      "side": 1,
+      "message": "Sorry Sathya, I keep adding comments. As I am adding tests I am finding new things.",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20a37a1d_5130b97f",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 10
@@ -30,6 +47,24 @@
       "writtenOn": "2020-07-06T20:44:19Z",
       "side": 1,
       "message": "Maybe use WrongMapWhenMonomorphic / MissingMapWhenMonomorphic here? Even simply using MissingMap would work too.",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ab9cc9c_fbc9400d",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1889,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-13T15:36:19Z",
+      "side": 1,
+      "message": "I think this should be:\nif (feedback.state \u003d\u003d FeedbackSource::kMonomorphic) {\n  __ DeoptimizeIfNot(DeoptimizeReason::kWrongICState, ...)\n} else {\n  __ DeoptimizeIfNot(DeoptimizeReason::kTransitionedToMonomorphic, ...)\n}\n\nWe can transition from Poly -\u003e Mono and if we don\u0027t discard the code here, we will be in a deopt loop since we don\u0027t expect a monomorphic state here. So kTransitionedToMonomorphic should discard the code here.",
+      "parentUuid": "20a37a1d_5130b97f",
       "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
