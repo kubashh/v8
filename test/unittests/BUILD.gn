@@ -73,7 +73,6 @@ v8_source_set("cppgc_unittests_sources") {
     "heap/cppgc/tests.cc",
     "heap/cppgc/tests.h",
     "heap/cppgc/visitor-unittest.cc",
-    "heap/cppgc/worklist-unittest.cc",
     "heap/cppgc/write-barrier-unittest.cc",
   ]
 
@@ -85,6 +84,24 @@ v8_source_set("cppgc_unittests_sources") {
 
   deps = [
     "../..:cppgc_for_testing",
+    "//testing/gmock",
+    "//testing/gtest",
+  ]
+
+  public_deps = [ ":v8_cppgc_unittests_shared" ]
+}
+
+v8_source_set("v8_cppgc_unittests_shared") {
+  testonly = true
+
+  sources = [ "heap/base/worklist-unittest.cc" ]
+
+  configs = [
+    "../..:external_config",
+    "../..:internal_config_base",
+  ]
+
+  deps = [
     "//testing/gmock",
     "//testing/gtest",
   ]
@@ -253,7 +270,6 @@ v8_source_set("unittests_sources") {
     "heap/spaces-unittest.cc",
     "heap/unified-heap-unittest.cc",
     "heap/unmapper-unittest.cc",
-    "heap/worklist-unittest.cc",
     "interpreter/bytecode-array-builder-unittest.cc",
     "interpreter/bytecode-array-iterator-unittest.cc",
     "interpreter/bytecode-array-random-iterator-unittest.cc",
@@ -398,6 +414,8 @@ v8_source_set("unittests_sources") {
     "//testing/gmock",
     "//testing/gtest",
   ]
+
+  public_deps = [ ":v8_cppgc_unittests_shared" ]
 
   if (is_win) {
     # This warning is benignly triggered by the U16 and U32 macros in

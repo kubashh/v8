@@ -6,12 +6,12 @@
 #define V8_HEAP_MARKING_VISITOR_H_
 
 #include "src/common/globals.h"
+#include "src/heap/base/worklist.h"
 #include "src/heap/marking-worklist.h"
 #include "src/heap/marking.h"
 #include "src/heap/memory-chunk.h"
 #include "src/heap/objects-visiting.h"
 #include "src/heap/spaces.h"
-#include "src/heap/worklist.h"
 #include "src/objects/heap-object.h"   // For Worklist<HeapObject, ...>
 #include "src/objects/js-weak-refs.h"  // For Worklist<WeakCell, ...>
 
@@ -23,10 +23,13 @@ struct Ephemeron {
   HeapObject value;
 };
 
-using EphemeronWorklist = Worklist<Ephemeron, 64>;
+using EphemeronWorklist = ::heap::base::Worklist<Ephemeron, 64>;
 
 // Weak objects encountered during marking.
 struct WeakObjects {
+  template <typename T, int U>
+  using Worklist = ::heap::base::Worklist<T, U>;
+
   Worklist<TransitionArray, 64> transition_arrays;
 
   // Keep track of all EphemeronHashTables in the heap to process

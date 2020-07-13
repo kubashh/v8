@@ -36,7 +36,6 @@
 #include "src/heap/safepoint.h"
 #include "src/heap/spaces-inl.h"
 #include "src/heap/sweeper.h"
-#include "src/heap/worklist.h"
 #include "src/ic/stub-cache.h"
 #include "src/init/v8.h"
 #include "src/objects/embedder-data-array-inl.h"

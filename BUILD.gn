@@ -2594,7 +2594,6 @@ v8_source_set("v8_base_without_compiler") {
     "src/heap/stress-scavenge-observer.h",
     "src/heap/sweeper.cc",
     "src/heap/sweeper.h",
-    "src/heap/worklist.h",
     "src/ic/call-optimization.cc",
     "src/ic/call-optimization.h",
     "src/ic/handler-configuration-inl.h",
@@ -4136,6 +4135,7 @@ v8_source_set("v8_cppgc_shared") {
   sources = [
     "src/heap/base/stack.cc",
     "src/heap/base/stack.h",
+    "src/heap/base/worklist.h",
   ]
 
   if (is_clang || !is_win) {
@@ -4258,7 +4258,6 @@ v8_source_set("cppgc_base") {
     "src/heap/cppgc/virtual-memory.cc",
     "src/heap/cppgc/virtual-memory.h",
     "src/heap/cppgc/visitor.cc",
-    "src/heap/cppgc/worklist.h",
     "src/heap/cppgc/write-barrier.cc",
   ]
 

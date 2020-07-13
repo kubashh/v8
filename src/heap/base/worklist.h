@@ -1,21 +1,20 @@
-// Copyright 2017 the V8 project authors. All rights reserved.
+// Copyright 2020 the V8 project authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_HEAP_WORKLIST_H_
-#define V8_HEAP_WORKLIST_H_
+#ifndef V8_HEAP_BASE_WORKLIST_H_
+#define V8_HEAP_BASE_WORKLIST_H_
 
 #include <cstddef>
 #include <utility>
 
 #include "src/base/atomic-utils.h"
 #include "src/base/logging.h"
-#include "src/base/macros.h"
 #include "src/base/platform/mutex.h"
 #include "testing/gtest/include/gtest/gtest_prod.h"  // nogncheck
 
-namespace v8 {
-namespace internal {
+namespace heap {
+namespace base {
 
 // A concurrent worklist based on segments. Each tasks gets private
 // push and pop segments. Empty pop segments are swapped with their
@@ -24,12 +23,18 @@ namespace internal {
 //
 // Work stealing is best effort, i.e., there is no way to inform other tasks
 // of the need of items.
-template <typename EntryType, int SEGMENT_SIZE>
+template <typename EntryType_, int SEGMENT_SIZE, int max_num_tasks = 8>
 class Worklist {
+  using WorklistType = Worklist<EntryType_, SEGMENT_SIZE, max_num_tasks>;
+
  public:
+  using EntryType = EntryType_;
+  static constexpr int kMaxNumTasks = max_num_tasks;
+  static constexpr size_t kSegmentCapacity = SEGMENT_SIZE;
+
   class View {
    public:
-    View(Worklist<EntryType, SEGMENT_SIZE>* worklist, int task_id)
+    View(WorklistType* worklist, int task_id)
         : worklist_(worklist), task_id_(task_id) {}
 
     // Pushes an entry onto the worklist.
@@ -39,32 +44,34 @@ class Worklist {
     bool Pop(EntryType* entry) { return worklist_->Pop(task_id_, entry); }
 
     // Returns true if the local portion of the worklist is empty.
-    bool IsLocalEmpty() { return worklist_->IsLocalEmpty(task_id_); }
+    bool IsLocalEmpty() const { return worklist_->IsLocalEmpty(task_id_); }
 
     // Returns true if the worklist is empty. Can only be used from the main
     // thread without concurrent access.
-    bool IsEmpty() { return worklist_->IsEmpty(); }
+    bool IsEmpty() const { return worklist_->IsEmpty(); }
 
-    bool IsGlobalPoolEmpty() { return worklist_->IsGlobalPoolEmpty(); }
+    bool IsGlobalPoolEmpty() const { return worklist_->IsGlobalPoolEmpty(); }
 
-    size_t LocalPushSegmentSize() {
-      return worklist_->LocalPushSegmentSize(task_id_);
+    // Returns true if the local portion and the global pool are empty (i.e.
+    // whether the current view cannot pop anymore).
+    bool IsLocalViewEmpty() const {
+      return worklist_->IsLocalViewEmpty(task_id_);
     }
 
     void FlushToGlobal() { worklist_->FlushToGlobal(task_id_); }
 
-   private:
-    Worklist<EntryType, SEGMENT_SIZE>* worklist_;
-    int task_id_;
-  };
+    void* operator new(size_t, void* location) = delete;
+    void* operator new(size_t) = delete;
 
-  static const int kMaxNumTasks = 8;
-  static const size_t kSegmentCapacity = SEGMENT_SIZE;
+   private:
+    WorklistType* const worklist_;
+    const int task_id_;
+  };
 
   Worklist() : Worklist(kMaxNumTasks) {}
 
   explicit Worklist(int num_tasks) : num_tasks_(num_tasks) {
-    DCHECK_LE(num_tasks, kMaxNumTasks);
+    DCHECK_LE(num_tasks_, kMaxNumTasks);
     for (int i = 0; i < num_tasks_; i++) {
       private_push_segment(i) = NewSegment();
       private_pop_segment(i) = NewSegment();
@@ -120,30 +127,34 @@ class Worklist {
     return true;
   }
 
-  size_t LocalPushSegmentSize(int task_id) {
+  size_t LocalPushSegmentSize(int task_id) const {
     return private_push_segment(task_id)->Size();
   }
 
-  bool IsLocalEmpty(int task_id) {
+  bool IsLocalEmpty(int task_id) const {
     return private_pop_segment(task_id)->IsEmpty() &&
            private_push_segment(task_id)->IsEmpty();
   }
 
-  bool IsGlobalPoolEmpty() { return global_pool_.IsEmpty(); }
+  bool IsGlobalPoolEmpty() const { return global_pool_.IsEmpty(); }
 
-  bool IsEmpty() {
+  bool IsEmpty() const {
     if (!AreLocalsEmpty()) return false;
-    return global_pool_.IsEmpty();
+    return IsGlobalPoolEmpty();
   }
 
-  bool AreLocalsEmpty() {
+  bool AreLocalsEmpty() const {
     for (int i = 0; i < num_tasks_; i++) {
       if (!IsLocalEmpty(i)) return false;
     }
     return true;
   }
 
-  size_t LocalSize(int task_id) {
+  bool IsLocalViewEmpty(int task_id) const {
+    return IsLocalEmpty(task_id) && IsGlobalPoolEmpty();
+  }
+
+  size_t LocalSize(int task_id) const {
     return private_pop_segment(task_id)->Size() +
            private_push_segment(task_id)->Size();
   }
@@ -208,16 +219,16 @@ class Worklist {
   }
 
  private:
-  FRIEND_TEST(WorkListTest, SegmentCreate);
-  FRIEND_TEST(WorkListTest, SegmentPush);
-  FRIEND_TEST(WorkListTest, SegmentPushPop);
-  FRIEND_TEST(WorkListTest, SegmentIsEmpty);
-  FRIEND_TEST(WorkListTest, SegmentIsFull);
-  FRIEND_TEST(WorkListTest, SegmentClear);
-  FRIEND_TEST(WorkListTest, SegmentFullPushFails);
-  FRIEND_TEST(WorkListTest, SegmentEmptyPopFails);
-  FRIEND_TEST(WorkListTest, SegmentUpdateFalse);
-  FRIEND_TEST(WorkListTest, SegmentUpdate);
+  FRIEND_TEST(WorklistTest, SegmentCreate);
+  FRIEND_TEST(WorklistTest, SegmentPush);
+  FRIEND_TEST(WorklistTest, SegmentPushPop);
+  FRIEND_TEST(WorklistTest, SegmentIsEmpty);
+  FRIEND_TEST(WorklistTest, SegmentIsFull);
+  FRIEND_TEST(WorklistTest, SegmentClear);
+  FRIEND_TEST(WorklistTest, SegmentFullPushFails);
+  FRIEND_TEST(WorklistTest, SegmentEmptyPopFails);
+  FRIEND_TEST(WorklistTest, SegmentUpdateFalse);
+  FRIEND_TEST(WorklistTest, SegmentUpdate);
 
   class Segment {
    public:
@@ -290,15 +301,15 @@ class Worklist {
     }
 
     V8_INLINE void Push(Segment* segment) {
-      base::MutexGuard guard(&lock_);
+      v8::base::MutexGuard guard(&lock_);
       segment->set_next(top_);
       set_top(segment);
       size_.fetch_add(1, std::memory_order_relaxed);
     }
 
     V8_INLINE bool Pop(Segment** segment) {
-      base::MutexGuard guard(&lock_);
-      if (top_ != nullptr) {
+      v8::base::MutexGuard guard(&lock_);
+      if (top_) {
         DCHECK_LT(0U, size_);
         size_.fetch_sub(1, std::memory_order_relaxed);
         *segment = top_;
@@ -308,8 +319,9 @@ class Worklist {
       return false;
     }
 
-    V8_INLINE bool IsEmpty() {
-      return base::AsAtomicPointer::Relaxed_Load(&top_) == nullptr;
+    V8_INLINE bool IsEmpty() const {
+      return v8::base::AsAtomicPtr(&top_)->load(std::memory_order_relaxed) ==
+             nullptr;
     }
 
     V8_INLINE size_t Size() const {
@@ -320,10 +332,10 @@ class Worklist {
     }
 
     void Clear() {
-      base::MutexGuard guard(&lock_);
+      v8::base::MutexGuard guard(&lock_);
       size_.store(0, std::memory_order_relaxed);
       Segment* current = top_;
-      while (current != nullptr) {
+      while (current) {
         Segment* tmp = current;
         current = current->next();
         delete tmp;
@@ -334,16 +346,15 @@ class Worklist {
     // See Worklist::Update.
     template <typename Callback>
     void Update(Callback callback) {
-      base::MutexGuard guard(&lock_);
+      v8::base::MutexGuard guard(&lock_);
       Segment* prev = nullptr;
       Segment* current = top_;
-      size_t num_deleted = 0;
-      while (current != nullptr) {
+      while (current) {
         current->Update(callback);
         if (current->IsEmpty()) {
           DCHECK_LT(0U, size_);
-          ++num_deleted;
-          if (prev == nullptr) {
+          size_.fetch_sub(1, std::memory_order_relaxed);
+          if (!prev) {
             top_ = current->next();
           } else {
             prev->set_next(current->next());
@@ -356,15 +367,13 @@ class Worklist {
           current = current->next();
         }
       }
-      size_.fetch_sub(num_deleted, std::memory_order_relaxed);
     }
 
     // See Worklist::Iterate.
     template <typename Callback>
     void Iterate(Callback callback) {
-      base::MutexGuard guard(&lock_);
-      for (Segment* current = top_; current != nullptr;
-           current = current->next()) {
+      v8::base::MutexGuard guard(&lock_);
+      for (Segment* current = top_; current; current = current->next()) {
         current->Iterate(callback);
       }
     }
@@ -373,7 +382,7 @@ class Worklist {
       Segment* top = nullptr;
       size_t other_size = 0;
       {
-        base::MutexGuard guard(&other->lock_);
+        v8::base::MutexGuard guard(&other->lock_);
         if (!other->top_) return;
         top = other->top_;
         other_size = other->size_.load(std::memory_order_relaxed);
@@ -387,19 +396,22 @@ class Worklist {
       while (end->next()) end = end->next();
 
       {
-        base::MutexGuard guard(&lock_);
+        v8::base::MutexGuard guard(&lock_);
         size_.fetch_add(other_size, std::memory_order_relaxed);
         end->set_next(top_);
         set_top(top);
       }
     }
 
+    void* operator new(size_t, void* location) = delete;
+    void* operator new(size_t) = delete;
+
    private:
     void set_top(Segment* segment) {
-      base::AsAtomicPointer::Relaxed_Store(&top_, segment);
+      v8::base::AsAtomicPtr(&top_)->store(segment, std::memory_order_relaxed);
     }
 
-    base::Mutex lock_;
+    v8::base::Mutex lock_;
     Segment* top_;
     std::atomic<size_t> size_{0};
   };
@@ -408,7 +420,15 @@ class Worklist {
     return private_segments_[task_id].private_push_segment;
   }
 
+  V8_INLINE Segment* const& private_push_segment(int task_id) const {
+    return private_segments_[task_id].private_push_segment;
+  }
+
   V8_INLINE Segment*& private_pop_segment(int task_id) {
+    return private_segments_[task_id].private_pop_segment;
+  }
+
+  V8_INLINE Segment* const& private_pop_segment(int task_id) const {
     return private_segments_[task_id].private_pop_segment;
   }
 
@@ -447,7 +467,7 @@ class Worklist {
   int num_tasks_;
 };
 
-}  // namespace internal
-}  // namespace v8
+}  // namespace base
+}  // namespace heap
 
-#endif  // V8_HEAP_WORKLIST_H_
+#endif  // V8_HEAP_BASE_WORKLIST_H_

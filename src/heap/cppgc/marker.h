@@ -15,7 +15,6 @@
 #include "src/heap/cppgc/marking-state.h"
 #include "src/heap/cppgc/marking-visitor.h"
 #include "src/heap/cppgc/marking-worklists.h"
-#include "src/heap/cppgc/worklist.h"
 
 namespace cppgc {
 namespace internal {

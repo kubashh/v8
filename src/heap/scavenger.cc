@@ -254,7 +254,7 @@ void ScavengerCollector::CollectGarbage() {
   const bool is_logging = isolate_->LogObjectRelocation();
   const int num_scavenge_tasks = NumberOfScavengeTasks();
   OneshotBarrier barrier(base::TimeDelta::FromMilliseconds(kMaxWaitTimeMs));
-  Worklist<MemoryChunk*, 64> empty_chunks;
+  ::heap::base::Worklist<MemoryChunk*, 64> empty_chunks;
   Scavenger::CopiedList copied_list(num_scavenge_tasks);
   Scavenger::PromotionList promotion_list(num_scavenge_tasks);
   EphemeronTableList ephemeron_table_list(num_scavenge_tasks);
@@ -492,7 +492,7 @@ int ScavengerCollector::NumberOfScavengeTasks() {
 }
 
 Scavenger::Scavenger(ScavengerCollector* collector, Heap* heap, bool is_logging,
-                     Worklist<MemoryChunk*, 64>* empty_chunks,
+                     ::heap::base::Worklist<MemoryChunk*, 64>* empty_chunks,
                      CopiedList* copied_list, PromotionList* promotion_list,
                      EphemeronTableList* ephemeron_table_list, int task_id)
     : collector_(collector),

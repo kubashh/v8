@@ -6,10 +6,10 @@
 #define V8_HEAP_SCAVENGER_H_
 
 #include "src/base/platform/condition-variable.h"
+#include "src/heap/base/worklist.h"
 #include "src/heap/local-allocator.h"
 #include "src/heap/objects-visiting.h"
 #include "src/heap/slot-set.h"
-#include "src/heap/worklist.h"
 
 namespace v8 {
 namespace internal {
@@ -31,7 +31,7 @@ using SurvivingNewLargeObjectMapEntry = std::pair<HeapObject, Map>;
 
 constexpr int kEphemeronTableListSegmentSize = 128;
 using EphemeronTableList =
-    Worklist<EphemeronHashTable, kEphemeronTableListSegmentSize>;
+    ::heap::base::Worklist<EphemeronHashTable, kEphemeronTableListSegmentSize>;
 
 class ScavengerCollector {
  public:
@@ -112,9 +112,11 @@ class Scavenger {
     static const int kLargeObjectPromotionListSegmentSize = 4;
 
     using RegularObjectPromotionList =
-        Worklist<ObjectAndSize, kRegularObjectPromotionListSegmentSize>;
+        ::heap::base::Worklist<ObjectAndSize,
+                               kRegularObjectPromotionListSegmentSize>;
     using LargeObjectPromotionList =
-        Worklist<PromotionListEntry, kLargeObjectPromotionListSegmentSize>;
+        ::heap::base::Worklist<PromotionListEntry,
+                               kLargeObjectPromotionListSegmentSize>;
 
     RegularObjectPromotionList regular_object_promotion_list_;
     LargeObjectPromotionList large_object_promotion_list_;
@@ -122,10 +124,11 @@ class Scavenger {
 
   static const int kCopiedListSegmentSize = 256;
 
-  using CopiedList = Worklist<ObjectAndSize, kCopiedListSegmentSize>;
+  using CopiedList =
+      ::heap::base::Worklist<ObjectAndSize, kCopiedListSegmentSize>;
   Scavenger(ScavengerCollector* collector, Heap* heap, bool is_logging,
-            Worklist<MemoryChunk*, 64>* empty_chunks, CopiedList* copied_list,
-            PromotionList* promotion_list,
+            ::heap::base::Worklist<MemoryChunk*, 64>* empty_chunks,
+            CopiedList* copied_list, PromotionList* promotion_list,
             EphemeronTableList* ephemeron_table_list, int task_id);
 
   // Entry point for scavenging an old generation page. For scavenging single
@@ -214,7 +217,7 @@ class Scavenger {
 
   ScavengerCollector* const collector_;
   Heap* const heap_;
-  Worklist<MemoryChunk*, 64>::View empty_chunks_;
+  ::heap::base::Worklist<MemoryChunk*, 64>::View empty_chunks_;
   PromotionList::View promotion_list_;
   CopiedList::View copied_list_;
   EphemeronTableList::View ephemeron_table_list_;

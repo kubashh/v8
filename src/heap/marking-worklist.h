@@ -8,15 +8,15 @@
 #include <unordered_map>
 #include <vector>
 
+#include "src/heap/base/worklist.h"
 #include "src/heap/marking.h"
-#include "src/heap/worklist.h"
 #include "src/objects/heap-object.h"
 
 namespace v8 {
 namespace internal {
 
-using MarkingWorklist = Worklist<HeapObject, 64>;
-using EmbedderTracingWorklist = Worklist<HeapObject, 16>;
+using MarkingWorklist = ::heap::base::Worklist<HeapObject, 64>;
+using EmbedderTracingWorklist = ::heap::base::Worklist<HeapObject, 16>;
 
 // The index of the main thread task used by concurrent/parallel GC.
 const int kMainThreadTask = 0;
