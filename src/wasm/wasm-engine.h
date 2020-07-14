@@ -243,12 +243,6 @@ class V8_EXPORT_PRIVATE WasmEngine {
   void AddIsolate(Isolate* isolate);
   void RemoveIsolate(Isolate* isolate);
 
-  template <typename T, typename... Args>
-  std::unique_ptr<T> NewBackgroundCompileTask(Args&&... args) {
-    return std::make_unique<T>(&background_compile_task_manager_,
-                               std::forward<Args>(args)...);
-  }
-
   // Trigger code logging for the given code objects in all Isolates which have
   // access to the NativeModule containing this code. This method can be called
   // from background threads.
@@ -338,6 +332,19 @@ class V8_EXPORT_PRIVATE WasmEngine {
                                    const std::shared_ptr<NativeModule>&,
                                    Vector<const char> source_url = {});
 
+  void RegisterBackgroundCompileTask() {
+    base::MutexGuard guard(&mutex_);
+    ++running_bg_compilations_;
+    DCHECK_LT(0, running_bg_compilations_);
+  }
+
+  void RemoveBackgroundCompileTask() {
+    base::MutexGuard guard(&mutex_);
+    DCHECK_LT(0, running_bg_compilations_);
+    --running_bg_compilations_;
+    if (running_bg_compilations_ == 0) bg_compilation_done_.NotifyAll();
+  }
+
   // Call on process start and exit.
   static void InitializeOncePerProcess();
   static void GlobalTearDown();
@@ -372,10 +379,6 @@ class V8_EXPORT_PRIVATE WasmEngine {
   WasmCodeManager code_manager_;
   AccountingAllocator allocator_;
 
-  // Task manager managing all background compile jobs. Before shut down of the
-  // engine, they must all be finished because they access the allocator.
-  CancelableTaskManager background_compile_task_manager_;
-
 #ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
   // Implements a GDB-remote stub for WebAssembly debugging.
   std::unique_ptr<gdb_server::GdbServer> gdb_server_;
@@ -402,6 +405,16 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // Set of native modules managed by this engine.
   std::unordered_map<NativeModule*, std::unique_ptr<NativeModuleInfo>>
       native_modules_;
+
+  // Number of currently running background compilations (see explanation on
+  // {bg_compilation_done_}).
+  size_t running_bg_compilations_ = 0;
+
+  // {bg_compilation_done_} is triggered whenever {running_bg_compilations_}
+  // hits zero. This is only needed during tier down of the isolate to ensure
+  // that no thread will access the allocator, tracing controler or other
+  // otherwise thread-safe structures.
+  base::ConditionVariable bg_compilation_done_;
 
   // Size of code that became dead since the last GC. If this exceeds a certain
   // threshold, a new GC is triggered.

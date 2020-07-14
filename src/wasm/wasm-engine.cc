@@ -401,8 +401,26 @@ WasmEngine::~WasmEngine() {
   gdb_server_.reset();
 #endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 
-  // Synchronize on all background compile tasks.
-  background_compile_task_manager_.CancelAndWait();
+  {
+    // Collect the live modules into a vector first, to avoid them dying (and
+    // being removed from the {native_modules_}) set while we iterate.
+    std::vector<std::shared_ptr<NativeModule>> live_modules;
+    base::MutexGuard guard(&mutex_);
+    for (auto& entry : native_modules_) {
+      if (auto shared_ptr = entry.second->weak_ptr.lock()) {
+        live_modules.emplace_back(std::move(shared_ptr));
+      }
+    }
+
+    for (auto& native_module : live_modules) {
+      native_module->compilation_state()->CancelCompilation();
+    }
+
+    while (running_bg_compilations_ > 0) {
+      bg_compilation_done_.Wait(&mutex_);
+    }
+  }
+
   // All AsyncCompileJobs have been canceled.
   DCHECK(async_compile_jobs_.empty());
   // All Isolates have been deregistered.

@@ -65,7 +65,8 @@ WasmCode* CompileImportWrapper(
 // also lazy.
 bool CompileLazy(Isolate*, NativeModule*, int func_index);
 
-int GetMaxBackgroundTasks();
+// Get the maximum concurrency for parallel compilation.
+int GetMaxCompileConcurrency();
 
 template <typename Key, typename Hash>
 class WrapperQueue {
