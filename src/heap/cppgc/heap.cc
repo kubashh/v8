@@ -100,7 +100,7 @@ void Heap::CollectGarbage(Config config) {
 #endif
 
   // "Marking".
-  marker_ = std::make_unique<Marker>(AsBase());
+  marker_ = std::make_unique<Marker>(AsBase(), platform_.get());
   const Marker::MarkingConfig marking_config{
       config.collection_type, config.stack_state, config.marking_type};
   marker_->StartMarking(marking_config);
