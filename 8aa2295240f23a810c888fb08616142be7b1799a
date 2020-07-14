@@ -80,6 +80,30 @@
       "revId": "8aa2295240f23a810c888fb08616142be7b1799a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "23aab30f_33db275a",
+        "filename": "src/compiler/backend/mips64/code-generator-mips64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2092,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-07-14T20:04:28Z",
+      "side": 1,
+      "message": "That change has been merged, you can use make_uint64 from base/macros.h now, thanks!",
+      "parentUuid": "edfd87b6_f3209a63",
+      "range": {
+        "startLine": 2092,
+        "startChar": 12,
+        "endLine": 2092,
+        "endChar": 22
+      },
+      "revId": "8aa2295240f23a810c888fb08616142be7b1799a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
