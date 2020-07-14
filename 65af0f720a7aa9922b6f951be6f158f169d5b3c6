@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e8e0eae_9586307e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-14T04:10:21Z",
+      "side": 1,
+      "message": "The time filtering UI as a separate CL. 😊",
+      "revId": "65af0f720a7aa9922b6f951be6f158f169d5b3c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
