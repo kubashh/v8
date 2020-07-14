@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2767e4b2_c0041cc1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-07-14T17:55:14Z",
+      "side": 1,
+      "message": "Andreas: PTAL. It\u0027s smaller than it looks, as I had to move some code around (see comments). Test coverage will be provided by my next CL (which flushed out the fact that this logic was missing).\n\nManos: FYI.",
+      "revId": "caa4c47726ed3324e1995286d12def7bbf454fb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a3a62737_f9fc25d6",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-07-14T17:55:14Z",
+      "side": 1,
+      "message": "This entire added block was moved from runtime-wasm.cc, with only trivial changes to the \"AllocateSubRtt\" function signature (it\u0027s not a runtime function any more).",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 9
+      },
+      "revId": "caa4c47726ed3324e1995286d12def7bbf454fb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c6d70e1_d398f2ca",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-07-14T17:55:14Z",
+      "side": 1,
+      "message": "This added block was moved up from below, because of this comment, and unchanged aside from adding this comment.",
+      "range": {
+        "startLine": 566,
+        "startChar": 5,
+        "endLine": 566,
+        "endChar": 78
+      },
+      "revId": "caa4c47726ed3324e1995286d12def7bbf454fb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
