@@ -145,13 +145,13 @@ class V8_EXPORT_PRIVATE MarkingWorklists {
   MarkingWorklists(int task_id, MarkingWorklistsHolder* holder);
 
   void Push(HeapObject object) {
-    bool success = active_->Push(task_id_, object);
+    bool success = active_->GetView(task_id_).Push(object);
     USE(success);
     DCHECK(success);
   }
 
   bool Pop(HeapObject* object) {
-    if (active_->Pop(task_id_, object)) return true;
+    if (active_->GetView(task_id_).Pop(object)) return true;
     if (!is_per_context_mode_) return false;
     // The active worklist is empty. Find any other non-empty worklist and
     // switch the active worklist to it.
@@ -159,21 +159,23 @@ class V8_EXPORT_PRIVATE MarkingWorklists {
   }
 
   void PushOnHold(HeapObject object) {
-    bool success = on_hold_->Push(task_id_, object);
+    bool success = on_hold_->GetView(task_id_).Push(object);
     USE(success);
     DCHECK(success);
   }
 
-  bool PopOnHold(HeapObject* object) { return on_hold_->Pop(task_id_, object); }
+  bool PopOnHold(HeapObject* object) {
+    return on_hold_->GetView(task_id_).Pop(object);
+  }
 
   void PushEmbedder(HeapObject object) {
-    bool success = embedder_->Push(task_id_, object);
+    bool success = embedder_->GetView(task_id_).Push(object);
     USE(success);
     DCHECK(success);
   }
 
   bool PopEmbedder(HeapObject* object) {
-    return embedder_->Pop(task_id_, object);
+    return embedder_->GetView(task_id_).Pop(object);
   }
 
   void FlushToGlobal();

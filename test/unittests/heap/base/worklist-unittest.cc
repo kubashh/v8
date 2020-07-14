@@ -212,7 +212,7 @@ TEST(WorklistTest, FlushToGlobalPushSegment) {
   SomeObject* objectA = nullptr;
   objectA = reinterpret_cast<SomeObject*>(&objectA);
   EXPECT_TRUE(worklist_view0.Push(objectA));
-  worklist.FlushToGlobal(0);
+  worklist.GetView(0).FlushToGlobal();
   EXPECT_EQ(1U, worklist.GlobalPoolSize());
   EXPECT_TRUE(worklist_view1.Pop(&object));
 }
@@ -227,7 +227,7 @@ TEST(WorklistTest, FlushToGlobalPopSegment) {
   EXPECT_TRUE(worklist_view0.Push(objectA));
   EXPECT_TRUE(worklist_view0.Push(objectA));
   EXPECT_TRUE(worklist_view0.Pop(&object));
-  worklist.FlushToGlobal(0);
+  worklist.GetView(0).FlushToGlobal();
   EXPECT_EQ(1U, worklist.GlobalPoolSize());
   EXPECT_TRUE(worklist_view1.Pop(&object));
 }

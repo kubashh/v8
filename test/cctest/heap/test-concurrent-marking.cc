@@ -19,9 +19,9 @@ namespace heap {
 
 void PublishSegment(MarkingWorklist* worklist, HeapObject object) {
   for (size_t i = 0; i <= MarkingWorklist::kSegmentCapacity; i++) {
-    worklist->Push(0, object);
+    worklist->GetView(0).Push(object);
   }
-  CHECK(worklist->Pop(0, &object));
+  CHECK(worklist->GetView(0).Pop(&object));
 }
 
 TEST(ConcurrentMarking) {

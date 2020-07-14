@@ -395,7 +395,7 @@ void ScavengerCollector::CollectGarbage() {
     TRACE_GC(heap_->tracer(), GCTracer::Scope::SCAVENGER_FREE_REMEMBERED_SET);
     MemoryChunk* chunk;
 
-    while (empty_chunks.Pop(kMainThreadId, &chunk)) {
+    while (empty_chunks.GetView(kMainThreadId).Pop(&chunk)) {
       RememberedSet<OLD_TO_NEW>::CheckPossiblyEmptyBuckets(chunk);
     }
 

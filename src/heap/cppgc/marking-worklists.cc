@@ -19,13 +19,14 @@ void MarkingWorklists::ClearForTesting() {
 }
 
 void MarkingWorklists::FlushNotFullyConstructedObjects() {
-  if (!not_fully_constructed_worklist_.IsLocalViewEmpty(kMutatorThreadId)) {
-    not_fully_constructed_worklist_.FlushToGlobal(kMutatorThreadId);
+  NotFullyConstructedWorklist::View view(&not_fully_constructed_worklist_,
+                                         kMutatorThreadId);
+  if (!view.IsLocalViewEmpty()) {
+    view.FlushToGlobal();
     previously_not_fully_constructed_worklist_.MergeGlobalPool(
         &not_fully_constructed_worklist_);
   }
-  DCHECK(not_fully_constructed_worklist_.IsLocalViewEmpty(
-      MarkingWorklists::kMutatorThreadId));
+  DCHECK(view.IsLocalViewEmpty());
 }
 
 }  // namespace internal

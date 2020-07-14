@@ -30,11 +30,11 @@ struct WeakObjects {
   template <typename T, int U>
   using Worklist = ::heap::base::Worklist<T, U>;
 
-  Worklist<TransitionArray, 64> transition_arrays;
+  Worklist<TransitionArray, 64> transition_arrays_worklist;
 
   // Keep track of all EphemeronHashTables in the heap to process
   // them in the atomic pause.
-  Worklist<EphemeronHashTable, 64> ephemeron_hash_tables;
+  Worklist<EphemeronHashTable, 64> ephemeron_hash_tables_worklist;
 
   // Keep track of all ephemerons for concurrent marking tasks. Only store
   // ephemerons in these Worklists if both key and value are unreachable at the
@@ -45,25 +45,63 @@ struct WeakObjects {
   //
   // current_ephemerons is used as draining worklist in the current fixpoint
   // iteration.
-  EphemeronWorklist current_ephemerons;
+  EphemeronWorklist current_ephemerons_worklist;
 
   // Stores ephemerons to visit in the next fixpoint iteration.
-  EphemeronWorklist next_ephemerons;
+  EphemeronWorklist next_ephemerons_worklist;
 
   // When draining the marking worklist new discovered ephemerons are pushed
   // into this worklist.
-  EphemeronWorklist discovered_ephemerons;
+  EphemeronWorklist discovered_ephemerons_worklist;
 
   // TODO(marja): For old space, we only need the slot, not the host
   // object. Optimize this by adding a different storage for old space.
-  Worklist<std::pair<HeapObject, HeapObjectSlot>, 64> weak_references;
-  Worklist<std::pair<HeapObject, Code>, 64> weak_objects_in_code;
+  Worklist<std::pair<HeapObject, HeapObjectSlot>, 64> weak_references_worklist;
+  Worklist<std::pair<HeapObject, Code>, 64> weak_objects_in_code_worklist;
 
-  Worklist<JSWeakRef, 64> js_weak_refs;
-  Worklist<WeakCell, 64> weak_cells;
+  Worklist<JSWeakRef, 64> js_weak_refs_worklist;
+  Worklist<WeakCell, 64> weak_cells_worklist;
 
-  Worklist<SharedFunctionInfo, 64> bytecode_flushing_candidates;
-  Worklist<JSFunction, 64> flushed_js_functions;
+  Worklist<SharedFunctionInfo, 64> bytecode_flushing_candidates_worklist;
+  Worklist<JSFunction, 64> flushed_js_functions_worklist;
+
+  Worklist<TransitionArray, 64>::View transition_arrays_view(int task_id) {
+    return transition_arrays_worklist.GetView(task_id);
+  }
+  Worklist<EphemeronHashTable, 64>::View ephemeron_hash_tables_view(
+      int task_id) {
+    return ephemeron_hash_tables_worklist.GetView(task_id);
+  }
+  EphemeronWorklist::View current_ephemerons_view(int task_id) {
+    return current_ephemerons_worklist.GetView(task_id);
+  }
+  EphemeronWorklist::View next_ephemerons_view(int task_id) {
+    return next_ephemerons_worklist.GetView(task_id);
+  }
+  EphemeronWorklist::View discovered_ephemerons_view(int task_id) {
+    return discovered_ephemerons_worklist.GetView(task_id);
+  }
+  Worklist<std::pair<HeapObject, HeapObjectSlot>, 64>::View
+  weak_references_view(int task_id) {
+    return weak_references_worklist.GetView(task_id);
+  }
+  Worklist<std::pair<HeapObject, Code>, 64>::View weak_objects_in_code_view(
+      int task_id) {
+    return weak_objects_in_code_worklist.GetView(task_id);
+  }
+  Worklist<JSWeakRef, 64>::View js_weak_refs_view(int task_id) {
+    return js_weak_refs_worklist.GetView(task_id);
+  }
+  Worklist<WeakCell, 64>::View weak_cells_view(int task_id) {
+    return weak_cells_worklist.GetView(task_id);
+  }
+  Worklist<SharedFunctionInfo, 64>::View bytecode_flushing_candidates_view(
+      int task_id) {
+    return bytecode_flushing_candidates_worklist.GetView(task_id);
+  }
+  Worklist<JSFunction, 64>::View flushed_js_functions_view(int task_id) {
+    return flushed_js_functions_worklist.GetView(task_id);
+  }
 };
 
 struct EphemeronMarking {

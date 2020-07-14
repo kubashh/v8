@@ -48,12 +48,13 @@ bool Scavenger::PromotionList::View::ShouldEagerlyProcessPromotionList() {
 
 void Scavenger::PromotionList::PushRegularObject(int task_id, HeapObject object,
                                                  int size) {
-  regular_object_promotion_list_.Push(task_id, ObjectAndSize(object, size));
+  regular_object_promotion_list_.GetView(task_id).Push(
+      ObjectAndSize(object, size));
 }
 
 void Scavenger::PromotionList::PushLargeObject(int task_id, HeapObject object,
                                                Map map, int size) {
-  large_object_promotion_list_.Push(task_id, {object, map, size});
+  large_object_promotion_list_.GetView(task_id).Push({object, map, size});
 }
 
 bool Scavenger::PromotionList::IsEmpty() {
@@ -69,13 +70,13 @@ size_t Scavenger::PromotionList::LocalPushSegmentSize(int task_id) {
 bool Scavenger::PromotionList::Pop(int task_id,
                                    struct PromotionListEntry* entry) {
   ObjectAndSize regular_object;
-  if (regular_object_promotion_list_.Pop(task_id, &regular_object)) {
+  if (regular_object_promotion_list_.GetView(task_id).Pop(&regular_object)) {
     entry->heap_object = regular_object.first;
     entry->size = regular_object.second;
     entry->map = entry->heap_object.map();
     return true;
   }
-  return large_object_promotion_list_.Pop(task_id, entry);
+  return large_object_promotion_list_.GetView(task_id).Pop(entry);
 }
 
 bool Scavenger::PromotionList::IsGlobalPoolEmpty() {

@@ -43,7 +43,7 @@ void MarkCompactCollector::MarkRootObject(Root root, HeapObject obj) {
 void MinorMarkCompactCollector::MarkRootObject(HeapObject obj) {
   if (Heap::InYoungGeneration(obj) &&
       non_atomic_marking_state_.WhiteToGrey(obj)) {
-    worklist_->Push(kMainThreadTask, obj);
+    worklist_->GetView(kMainThreadTask).Push(obj);
   }
 }
 
@@ -84,7 +84,7 @@ void MarkCompactCollector::RecordSlot(MemoryChunk* source_page,
 }
 
 void MarkCompactCollector::AddTransitionArray(TransitionArray array) {
-  weak_objects_.transition_arrays.Push(kMainThreadTask, array);
+  weak_objects_.transition_arrays_view(kMainThreadTask).Push(array);
 }
 
 template <typename MarkingState>

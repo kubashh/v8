@@ -149,7 +149,7 @@ class ConcurrentMarkingVisitor final
       }
 
     } else if (marking_state_.IsWhite(value)) {
-      weak_objects_->next_ephemerons.Push(task_id_, Ephemeron{key, value});
+      weak_objects_->next_ephemerons_view(task_id_).Push(Ephemeron{key, value});
     }
     return false;
   }
@@ -409,7 +409,7 @@ void ConcurrentMarking::Run(int task_id, TaskState* task_state) {
     {
       Ephemeron ephemeron;
 
-      while (weak_objects_->current_ephemerons.Pop(task_id, &ephemeron)) {
+      while (weak_objects_->current_ephemerons_view(task_id).Pop(&ephemeron)) {
         if (visitor.ProcessEphemeron(ephemeron.key, ephemeron.value)) {
           ephemeron_marked = true;
         }
@@ -465,7 +465,8 @@ void ConcurrentMarking::Run(int task_id, TaskState* task_state) {
     if (done) {
       Ephemeron ephemeron;
 
-      while (weak_objects_->discovered_ephemerons.Pop(task_id, &ephemeron)) {
+      while (
+          weak_objects_->discovered_ephemerons_view(task_id).Pop(&ephemeron)) {
         if (visitor.ProcessEphemeron(ephemeron.key, ephemeron.value)) {
           ephemeron_marked = true;
         }
@@ -473,17 +474,17 @@ void ConcurrentMarking::Run(int task_id, TaskState* task_state) {
     }
 
     marking_worklists.FlushToGlobal();
-    weak_objects_->transition_arrays.FlushToGlobal(task_id);
-    weak_objects_->ephemeron_hash_tables.FlushToGlobal(task_id);
-    weak_objects_->current_ephemerons.FlushToGlobal(task_id);
-    weak_objects_->next_ephemerons.FlushToGlobal(task_id);
-    weak_objects_->discovered_ephemerons.FlushToGlobal(task_id);
-    weak_objects_->weak_references.FlushToGlobal(task_id);
-    weak_objects_->js_weak_refs.FlushToGlobal(task_id);
-    weak_objects_->weak_cells.FlushToGlobal(task_id);
-    weak_objects_->weak_objects_in_code.FlushToGlobal(task_id);
-    weak_objects_->bytecode_flushing_candidates.FlushToGlobal(task_id);
-    weak_objects_->flushed_js_functions.FlushToGlobal(task_id);
+    weak_objects_->transition_arrays_view(task_id).FlushToGlobal();
+    weak_objects_->ephemeron_hash_tables_view(task_id).FlushToGlobal();
+    weak_objects_->current_ephemerons_view(task_id).FlushToGlobal();
+    weak_objects_->next_ephemerons_view(task_id).FlushToGlobal();
+    weak_objects_->discovered_ephemerons_view(task_id).FlushToGlobal();
+    weak_objects_->weak_references_view(task_id).FlushToGlobal();
+    weak_objects_->js_weak_refs_view(task_id).FlushToGlobal();
+    weak_objects_->weak_cells_view(task_id).FlushToGlobal();
+    weak_objects_->weak_objects_in_code_view(task_id).FlushToGlobal();
+    weak_objects_->bytecode_flushing_candidates_view(task_id).FlushToGlobal();
+    weak_objects_->flushed_js_functions_view(task_id).FlushToGlobal();
     base::AsAtomicWord::Relaxed_Store<size_t>(&task_state->marked_bytes, 0);
     total_marked_bytes_ += marked_bytes;
 
@@ -565,8 +566,8 @@ void ConcurrentMarking::RescheduleTasksIfNeeded() {
     }
   }
   if (!marking_worklists_holder_->shared()->IsGlobalPoolEmpty() ||
-      !weak_objects_->current_ephemerons.IsGlobalPoolEmpty() ||
-      !weak_objects_->discovered_ephemerons.IsGlobalPoolEmpty()) {
+      !weak_objects_->current_ephemerons_worklist.IsGlobalPoolEmpty() ||
+      !weak_objects_->discovered_ephemerons_worklist.IsGlobalPoolEmpty()) {
     ScheduleTasks();
   }
 }

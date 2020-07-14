@@ -237,8 +237,9 @@ bool MarkerBase::AdvanceMarkingWithDeadline(v8::base::TimeDelta duration) {
             },
             MarkingWorklists::kMutatorThreadId))
       return false;
-  } while (!marking_worklists_.marking_worklist()->IsLocalViewEmpty(
-      MarkingWorklists::kMutatorThreadId));
+  } while (!marking_worklists_.marking_worklist()
+                ->GetView(MarkingWorklists::kMutatorThreadId)
+                .IsLocalViewEmpty());
 
   return true;
 }

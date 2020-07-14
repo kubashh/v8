@@ -88,6 +88,8 @@ class Worklist {
     }
   }
 
+  View GetView(int task_id) { return View(this, task_id); }
+
   // Swaps content with the given worklist. Local buffers need to
   // be empty, not thread safe.
   void Swap(Worklist<EntryType, SEGMENT_SIZE>& other) {
@@ -95,36 +97,6 @@ class Worklist {
     CHECK(other.AreLocalsEmpty());
 
     global_pool_.Swap(other.global_pool_);
-  }
-
-  bool Push(int task_id, EntryType entry) {
-    DCHECK_LT(task_id, num_tasks_);
-    DCHECK_NOT_NULL(private_push_segment(task_id));
-    if (!private_push_segment(task_id)->Push(entry)) {
-      PublishPushSegmentToGlobal(task_id);
-      bool success = private_push_segment(task_id)->Push(entry);
-      USE(success);
-      DCHECK(success);
-    }
-    return true;
-  }
-
-  bool Pop(int task_id, EntryType* entry) {
-    DCHECK_LT(task_id, num_tasks_);
-    DCHECK_NOT_NULL(private_pop_segment(task_id));
-    if (!private_pop_segment(task_id)->Pop(entry)) {
-      if (!private_push_segment(task_id)->IsEmpty()) {
-        Segment* tmp = private_pop_segment(task_id);
-        private_pop_segment(task_id) = private_push_segment(task_id);
-        private_push_segment(task_id) = tmp;
-      } else if (!StealPopSegmentFromGlobal(task_id)) {
-        return false;
-      }
-      bool success = private_pop_segment(task_id)->Pop(entry);
-      USE(success);
-      DCHECK(success);
-    }
-    return true;
   }
 
   size_t LocalPushSegmentSize(int task_id) const {
@@ -148,15 +120,6 @@ class Worklist {
       if (!IsLocalEmpty(i)) return false;
     }
     return true;
-  }
-
-  bool IsLocalViewEmpty(int task_id) const {
-    return IsLocalEmpty(task_id) && IsGlobalPoolEmpty();
-  }
-
-  size_t LocalSize(int task_id) const {
-    return private_pop_segment(task_id)->Size() +
-           private_push_segment(task_id)->Size();
   }
 
   // Thread-safe but may return an outdated result.
@@ -207,11 +170,6 @@ class Worklist {
   template <typename Callback>
   void IterateGlobalPool(Callback callback) {
     global_pool_.Iterate(callback);
-  }
-
-  void FlushToGlobal(int task_id) {
-    PublishPushSegmentToGlobal(task_id);
-    PublishPopSegmentToGlobal(task_id);
   }
 
   void MergeGlobalPool(Worklist* other) {
@@ -415,6 +373,50 @@ class Worklist {
     Segment* top_;
     std::atomic<size_t> size_{0};
   };
+
+  bool Push(int task_id, EntryType entry) {
+    DCHECK_LT(task_id, num_tasks_);
+    DCHECK_NOT_NULL(private_push_segment(task_id));
+    if (!private_push_segment(task_id)->Push(entry)) {
+      PublishPushSegmentToGlobal(task_id);
+      bool success = private_push_segment(task_id)->Push(entry);
+      USE(success);
+      DCHECK(success);
+    }
+    return true;
+  }
+
+  bool Pop(int task_id, EntryType* entry) {
+    DCHECK_LT(task_id, num_tasks_);
+    DCHECK_NOT_NULL(private_pop_segment(task_id));
+    if (!private_pop_segment(task_id)->Pop(entry)) {
+      if (!private_push_segment(task_id)->IsEmpty()) {
+        Segment* tmp = private_pop_segment(task_id);
+        private_pop_segment(task_id) = private_push_segment(task_id);
+        private_push_segment(task_id) = tmp;
+      } else if (!StealPopSegmentFromGlobal(task_id)) {
+        return false;
+      }
+      bool success = private_pop_segment(task_id)->Pop(entry);
+      USE(success);
+      DCHECK(success);
+    }
+    return true;
+  }
+
+  bool IsLocalViewEmpty(int task_id) const {
+    return IsLocalEmpty(task_id) && IsGlobalPoolEmpty();
+  }
+
+  size_t LocalSize(int task_id) const {
+    return private_pop_segment(task_id)->Size() +
+           private_push_segment(task_id)->Size();
+  }
+
+  void FlushToGlobal(int task_id) {
+    PublishPushSegmentToGlobal(task_id);
+    PublishPopSegmentToGlobal(task_id);
+  }
 
   V8_INLINE Segment*& private_push_segment(int task_id) {
     return private_segments_[task_id].private_push_segment;

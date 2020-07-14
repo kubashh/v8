@@ -104,12 +104,12 @@ MarkingWorklists::MarkingWorklists(int task_id, MarkingWorklistsHolder* holder)
 }
 
 void MarkingWorklists::FlushToGlobal() {
-  shared_->FlushToGlobal(task_id_);
-  on_hold_->FlushToGlobal(task_id_);
-  embedder_->FlushToGlobal(task_id_);
+  shared_->GetView(task_id_).FlushToGlobal();
+  on_hold_->GetView(task_id_).FlushToGlobal();
+  embedder_->GetView(task_id_).FlushToGlobal();
   if (is_per_context_mode_) {
     for (auto& cw : context_worklists_) {
-      cw.worklist->FlushToGlobal(task_id_);
+      cw.worklist->GetView(task_id_).FlushToGlobal();
     }
   }
 }
@@ -143,11 +143,11 @@ bool MarkingWorklists::IsEmbedderEmpty() {
 
 void MarkingWorklists::ShareWorkIfGlobalPoolIsEmpty() {
   if (!shared_->IsLocalEmpty(task_id_) && shared_->IsGlobalPoolEmpty()) {
-    shared_->FlushToGlobal(task_id_);
+    shared_->GetView(task_id_).FlushToGlobal();
   }
   if (is_per_context_mode_ && shared_ != active_) {
     if (!active_->IsLocalEmpty(task_id_) && active_->IsGlobalPoolEmpty()) {
-      active_->FlushToGlobal(task_id_);
+      active_->GetView(task_id_).FlushToGlobal();
     }
   }
 }
@@ -164,12 +164,12 @@ bool MarkingWorklists::PopContext(HeapObject* object) {
     if (!cw.worklist->IsLocalEmpty(task_id_)) {
       active_ = cw.worklist;
       active_context_ = cw.context;
-      return active_->Pop(task_id_, object);
+      return active_->GetView(task_id_).Pop(object);
     }
   }
   // All local segments are empty. Check global segments.
   for (auto& cw : context_worklists_) {
-    if (cw.worklist->Pop(task_id_, object)) {
+    if (cw.worklist->GetView(task_id_).Pop(object)) {
       active_ = cw.worklist;
       active_context_ = cw.context;
       return true;
