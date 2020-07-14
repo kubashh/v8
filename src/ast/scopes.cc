@@ -37,12 +37,16 @@ namespace internal {
 VariableMap::VariableMap(Zone* zone)
     : ZoneHashMap(8, ZoneAllocationPolicy(zone)) {}
 
+VariableMap::VariableMap(const VariableMap& other, Zone* zone)
+    : ZoneHashMap(other, ZoneAllocationPolicy(zone)) {}
+
 Variable* VariableMap::Declare(Zone* zone, Scope* scope,
                                const AstRawString* name, VariableMode mode,
                                VariableKind kind,
                                InitializationFlag initialization_flag,
                                MaybeAssignedFlag maybe_assigned_flag,
                                IsStaticFlag is_static_flag, bool* was_added) {
+  DCHECK_EQ(zone, allocator().zone());
   // AstRawStrings are unambiguous, i.e., the same string is always represented
   // by the same AstRawString*.
   // FIXME(marja): fix the type of Lookup.
@@ -1523,12 +1527,13 @@ void DeclarationScope::ResetAfterPreparsing(AstValueFactory* ast_value_factory,
   function_ = nullptr;
 
   DCHECK_NE(zone_, ast_value_factory->zone());
+  variables_.Invalidate();
   zone_->ReleaseMemory();
 
   if (aborted) {
     // Prepare scope for use in the outer zone.
     zone_ = ast_value_factory->zone();
-    variables_.Reset(ZoneAllocationPolicy(zone_));
+    variables_ = VariableMap(zone_);
     if (!IsArrowFunction(function_kind_)) {
       has_simple_parameters_ = true;
       DeclareDefaultFunctionVariables(ast_value_factory);
@@ -1536,7 +1541,6 @@ void DeclarationScope::ResetAfterPreparsing(AstValueFactory* ast_value_factory,
   } else {
     // Make sure this scope isn't used for allocation anymore.
     zone_ = nullptr;
-    variables_.Invalidate();
   }
 
 #ifdef DEBUG

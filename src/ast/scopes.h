@@ -41,6 +41,15 @@ using UnresolvedList =
 class VariableMap : public ZoneHashMap {
  public:
   explicit VariableMap(Zone* zone);
+  VariableMap(const VariableMap& other, Zone* zone);
+
+  VariableMap(VariableMap&& other) V8_NOEXCEPT : ZoneHashMap(std::move(other)) {
+  }
+
+  VariableMap& operator=(VariableMap&& other) V8_NOEXCEPT {
+    static_cast<ZoneHashMap&>(*this) = std::move(other);
+    return *this;
+  }
 
   Variable* Declare(Zone* zone, Scope* scope, const AstRawString* name,
                     VariableMode mode, VariableKind kind,
@@ -903,7 +912,11 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
 #ifdef DEBUG
     needs_migration_ = true;
 #endif
+    DCHECK_EQ(zone_, variables_.allocator().zone());
     zone_ = zone;
+    // Migrate variables_' backing store to new zone.
+    variables_ = VariableMap(variables_, zone_);
+    DCHECK_EQ(zone_, variables_.allocator().zone());
   }
 
   // ---------------------------------------------------------------------------
