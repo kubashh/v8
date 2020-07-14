@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff61e2d5_7425a480",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-07-14T11:43:15Z",
+      "side": 1,
+      "message": "Superseded by https://chromium-review.googlesource.com/c/v8/v8/+/2295606.",
+      "revId": "17013c063a156e4112a4858e0cd275cdf653fb9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
