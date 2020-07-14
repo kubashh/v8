@@ -1230,8 +1230,8 @@ KeyType TryConvertKey(Handle<Object> key, Isolate* isolate, intptr_t* index_out,
   }
   if (key->IsString()) {
     key = isolate->factory()->InternalizeString(Handle<String>::cast(key));
-    uint32_t maybe_array_index;
-    if (String::cast(*key).AsArrayIndex(&maybe_array_index)) {
+    size_t maybe_array_index;
+    if (String::cast(*key).AsIntegerIndex(&maybe_array_index)) {
       if (maybe_array_index <= INT_MAX) {
         *index_out = static_cast<intptr_t>(maybe_array_index);
         return kIntPtr;
