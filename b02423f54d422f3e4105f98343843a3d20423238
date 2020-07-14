@@ -237,6 +237,24 @@
     },
     {
       "key": {
+        "uuid": "5e10eaa4_dd61ce87",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-14T10:02:45Z",
+      "side": 1,
+      "message": "Changed it to base::Optional\u003cLocalHeap\u003e.",
+      "parentUuid": "bda7cc04_06c0d20f",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a47067f_c00a89e7",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 13
@@ -287,6 +305,24 @@
       "revId": "b02423f54d422f3e4105f98343843a3d20423238",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8199995_552d4b61",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-14T10:02:45Z",
+      "side": 1,
+      "message": "Done. Added a similar comment in the design doc too",
+      "parentUuid": "0d6ecc85_64cf8767",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -358,6 +394,24 @@
       "revId": "b02423f54d422f3e4105f98343843a3d20423238",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f418389f_6e07923d",
+        "filename": "src/handles/persistent-handles.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-14T10:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87b1f3cd_d55f144f",
+      "revId": "b02423f54d422f3e4105f98343843a3d20423238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
