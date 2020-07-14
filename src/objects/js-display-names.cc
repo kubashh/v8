@@ -36,6 +36,7 @@ namespace {
 //
 // ecma402/#sec-properties-of-intl-displaynames-instances
 enum class Type {
+  kUndefined,
   kLanguage,
   kRegion,
   kScript,
@@ -498,17 +499,10 @@ MaybeHandle<JSDisplayNames> JSDisplayNames::New(Isolate* isolate,
   std::vector<std::string> requested_locales =
       maybe_requested_locales.FromJust();
 
-  // 4. If options is undefined, then
-  if (input_options->IsUndefined(isolate)) {
-    // 4. a. Let options be ObjectCreate(null).
-    options = factory->NewJSObjectWithNullProto();
-    // 5. Else
-  } else {
-    // 5. a. Let options be ? ToObject(options).
-    ASSIGN_RETURN_ON_EXCEPTION(isolate, options,
-                               Object::ToObject(isolate, input_options),
-                               JSDisplayNames);
-  }
+  // 5. a. Let options be ? ToObject(options).
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, options,
+                             Object::ToObject(isolate, input_options),
+                             JSDisplayNames);
 
   // Note: No need to create a record. It's not observable.
   // 6. Let opt be a new Record.
@@ -606,7 +600,7 @@ MaybeHandle<JSDisplayNames> JSDisplayNames::New(Isolate* isolate,
                     Type::kDayPeriod,
                     Type::kDateTimeField,
                 },
-                Type::kLanguage)
+                Type::kUndefined)
           : Intl::GetStringOption<Type>(
                 isolate, options, "type", "Intl.DisplayNames",
                 {"language", "region", "script", "currency"},
@@ -616,9 +610,15 @@ MaybeHandle<JSDisplayNames> JSDisplayNames::New(Isolate* isolate,
                     Type::kScript,
                     Type::kCurrency,
                 },
-                Type::kLanguage);
+                Type::kUndefined);
   MAYBE_RETURN(maybe_type, MaybeHandle<JSDisplayNames>());
   Type type_enum = maybe_type.FromJust();
+
+  // If type is undefined, throw a TypeError exception.
+  if (type_enum == Type::kUndefined) {
+    THROW_NEW_ERROR(isolate, NewTypeError(MessageTemplate::kInvalidArgument),
+                    JSDisplayNames);
+  }
 
   // 17. Set displayNames.[[Type]] to type.
 
