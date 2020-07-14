@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c4d867f_0af1e170",
+        "filename": "tools/system-analyzer/index.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-14T09:47:51Z",
+      "side": 1,
+      "message": "this is a bit confusing, try to stay consistent.\n\nWe have:\n\n- entries: all entries coming from the log file\n- selectedEntries: entries that have been actively selected\n- filteredEntries: entries that are filtered based on a criteria\n\nMaybe the last two categories can be folded into one.",
+      "revId": "c4a88450915cfff8037840b53890665b0b82eb34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06d6c927_5ea615ce",
+        "filename": "tools/system-analyzer/map-model.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-14T09:47:51Z",
+      "side": 1,
+      "message": "nit: an empty array seems more appropriate",
+      "revId": "c4a88450915cfff8037840b53890665b0b82eb34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
