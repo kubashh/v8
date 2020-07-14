@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41a609ce_c602f443",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-14T10:04:04Z",
+      "side": 1,
+      "message": "Hi Clemens, ptal. The motivation for this is that the handler table for builtin Code objects will likely change soon.",
+      "revId": "db524cf1bbeed2322a7fbcf8fba2066d00666ee9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
