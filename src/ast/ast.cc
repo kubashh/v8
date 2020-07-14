@@ -954,8 +954,7 @@ CaseClause::CaseClause(Zone* zone, Expression* label,
 
 bool Literal::IsPropertyName() const {
   if (type() != kString) return false;
-  uint32_t index;
-  return !string_->AsArrayIndex(&index);
+  return !string_->IsIntegerIndex();
 }
 
 bool Literal::ToUint32(uint32_t* value) const {
