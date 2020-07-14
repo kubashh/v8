@@ -62,6 +62,9 @@ class MidTierRegisterAllocationData final : public RegisterAllocationData {
     return reference_map_instructions_;
   }
 
+  // Returns a bitvector representing the virtual registers that were spilled.
+  BitVector& spilled_virtual_registers() { return spilled_virtual_registers_; }
+
   // This zone is for data structures only needed during register allocation
   // phases.
   Zone* allocation_zone() const { return allocation_zone_; }
@@ -85,6 +88,7 @@ class MidTierRegisterAllocationData final : public RegisterAllocationData {
 
   ZoneVector<VirtualRegisterData> virtual_register_data_;
   ZoneVector<int> reference_map_instructions_;
+  BitVector spilled_virtual_registers_;
 
   TickCounter* const tick_counter_;
 
@@ -111,6 +115,7 @@ class FastRegisterAllocator final {
 
   // Allocate registers operations.
   void AllocateRegisters(const InstructionBlock* block);
+  void UpdateSpillRangesForLoops();
 
   bool IsFixedRegisterPolicy(const UnallocatedOperand* operand);
   void ReserveFixedRegisters(int instr_index);
@@ -141,6 +146,39 @@ class FastRegisterAllocator final {
   std::unique_ptr<SinglePassRegisterAllocator> double_reg_allocator_;
 
   DISALLOW_COPY_AND_ASSIGN(FastRegisterAllocator);
+};
+
+// Spill slot allocator for fast register allocation.
+class FastSpillSlotAllocator final {
+ public:
+  explicit FastSpillSlotAllocator(MidTierRegisterAllocationData* data);
+
+  // Phase 3: assign spilled operands to specific spill slots.
+  void AllocateSpillSlots();
+
+ private:
+  class SpillSlot;
+
+  void Allocate(VirtualRegisterData* virtual_register);
+
+  void AdvanceTo(int instr_index);
+  SpillSlot* GetFreeSpillSlot(int byte_width);
+
+  MidTierRegisterAllocationData* data() const { return data_; }
+  InstructionSequence* code() const { return data()->code(); }
+  Frame* frame() const { return data()->frame(); }
+  Zone* zone() const { return data()->allocation_zone(); }
+
+  struct OrderByLastUse {
+    bool operator()(const SpillSlot* a, const SpillSlot* b) const;
+  };
+
+  MidTierRegisterAllocationData* data_;
+  ZonePriorityQueue<SpillSlot*, OrderByLastUse> allocated_slots_;
+  ZoneLinkedList<SpillSlot*> free_slots_;
+  int position_;
+
+  DISALLOW_COPY_AND_ASSIGN(FastSpillSlotAllocator);
 };
 
 }  // namespace compiler
