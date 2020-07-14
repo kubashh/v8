@@ -1881,6 +1881,8 @@ v8_compiler_sources = [
   "src/compiler/backend/code-generator-impl.h",
   "src/compiler/backend/code-generator.cc",
   "src/compiler/backend/code-generator.h",
+  "src/compiler/backend/fast-register-allocator.cc",
+  "src/compiler/backend/fast-register-allocator.h",
   "src/compiler/backend/frame-elider.cc",
   "src/compiler/backend/frame-elider.h",
   "src/compiler/backend/gap-resolver.cc",
