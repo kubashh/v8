@@ -206,6 +206,24 @@
       "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "144abc9c_66af4a45",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-14T13:42:36Z",
+      "side": 1,
+      "message": "Georg, this is what I mentioned during our call. Once you are done with high-level review we can discuss what\u0027s best way to do this. For now: I am using a kind of hack here: https://chromium-review.googlesource.com/c/v8/v8/+/2297460",
+      "parentUuid": "7c8cce9f_e10ba581",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
