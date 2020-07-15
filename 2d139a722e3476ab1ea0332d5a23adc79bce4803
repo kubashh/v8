@@ -36,6 +36,103 @@
     },
     {
       "key": {
+        "uuid": "afc8b566_54d14f97",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-15T08:38:15Z",
+      "side": 1,
+      "message": "Please either define a kWeakFixedArrayLengthType using WeakFixedArray::kMaxLength or have a static assert here that the two kMaxLength values are equal.",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b2b57e0_5940f26e",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-15T08:38:15Z",
+      "side": 1,
+      "message": "Please make this int, you\u0027re unnecessarily casting back and forth.",
+      "range": {
+        "startLine": 854,
+        "startChar": 49,
+        "endLine": 854,
+        "endChar": 61
+      },
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b09907d_b4458171",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-15T08:38:15Z",
+      "side": 1,
+      "message": "Since WeakFixedArrays can also contain Smis, please use MachineType::AnyTagged.",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a8907f0_1267fa98",
+        "filename": "src/compiler/access-builder.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-15T08:38:15Z",
+      "side": 1,
+      "message": "WeakFixedArray",
+      "range": {
+        "startLine": 291,
+        "startChar": 24,
+        "endLine": 291,
+        "endChar": 34
+      },
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d1e9315_bbbb1bcb",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-15T08:38:15Z",
+      "side": 1,
+      "message": "How about \"BuildIsStrongReference\" to match the other one.",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "20a37a1d_5130b97f",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 10
@@ -106,6 +203,24 @@
     },
     {
       "key": {
+        "uuid": "ce8c18fe_5004782b",
+        "filename": "src/compiler/feedback-source.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-15T08:38:15Z",
+      "side": 1,
+      "message": "Agreed. Also we don\u0027t necessarily know or want to read the state when we create a FeedbackSource.",
+      "parentUuid": "7b81d7e5_808a61c7",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a5edbe6_4e915bb0",
         "filename": "src/compiler/simplified-operator.h",
         "patchSetId": 10
@@ -117,6 +232,23 @@
       "writtenOn": "2020-07-06T20:44:19Z",
       "side": 1,
       "message": "Also, update comment here. For dynamic map checks feedback isn\u0027t an optional parameter right?",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6462559f_d033c3af",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-15T08:38:15Z",
+      "side": 1,
+      "message": "You\u0027re not passing the FeedbackSource to the Deoptimize* code in EffectControlLinearizer, so this comment is not true. (I think that\u0027s probably what you want, so just remove the comment.)",
       "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -221,6 +353,24 @@
       "side": 1,
       "message": "Georg, this is what I mentioned during our call. Once you are done with high-level review we can discuss what\u0027s best way to do this. For now: I am using a kind of hack here: https://chromium-review.googlesource.com/c/v8/v8/+/2297460",
       "parentUuid": "7c8cce9f_e10ba581",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49c0be78_af697d8d",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-15T08:38:15Z",
+      "side": 1,
+      "message": "I think a new kind makes most sense. Would that be the same new kind as for the other CL where we discussed this option a while ago?",
+      "parentUuid": "144abc9c_66af4a45",
       "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
