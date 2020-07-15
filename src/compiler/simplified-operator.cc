@@ -1901,7 +1901,7 @@ const Operator* SimplifiedOperatorBuilder::FastApiCall(
        FastApiCallNode::kFastTargetInputCount) +        // fast call
       static_cast<int>(descriptor->ParameterCount()) +  // slow call
       FastApiCallNode::kEffectAndControlInputCount;
-  return new (zone_) Operator1<FastApiCallParameters>(
+  return zone()->New<Operator1<FastApiCallParameters>>(
       IrOpcode::kFastApiCall, Operator::kNoThrow, "FastApiCall",
       value_input_count, 1, 1, 1, 1, 0,
       FastApiCallParameters(signature, feedback, descriptor));
