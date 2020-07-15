@@ -59,6 +59,24 @@
     },
     {
       "key": {
+        "uuid": "34e08fca_c2ec754c",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-07-15T11:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3404c9b8_4dbec93c",
+      "revId": "caa4c47726ed3324e1995286d12def7bbf454fb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c6d70e1_d398f2ca",
         "filename": "src/wasm/module-instantiate.cc",
         "patchSetId": 1
@@ -96,6 +114,24 @@
       "revId": "caa4c47726ed3324e1995286d12def7bbf454fb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5778d01_677f8736",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-07-15T11:25:20Z",
+      "side": 1,
+      "message": "Done (merged it with the group of cases at the top).",
+      "parentUuid": "69ed017d_0d1dbbf6",
+      "revId": "caa4c47726ed3324e1995286d12def7bbf454fb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
