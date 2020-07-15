@@ -205,29 +205,6 @@ TEST(DefaultJobTest, FinishBeforeJoin) {
   EXPECT_EQ(0U, job_raw->max_concurrency);
 }
 
-// Verify that destroying a DefaultJobHandle triggers a DCHECK if neither Join()
-// or Cancel() was called.
-TEST(DefaultJobTest, LeakHandle) {
-  class JobTest : public JobTask {
-   public:
-    ~JobTest() override = default;
-
-    void Run(JobDelegate* delegate) override {}
-
-    size_t GetMaxConcurrency() const override { return 0; }
-  };
-
-  DefaultPlatform platform(0);
-  auto job = std::make_unique<JobTest>();
-  auto state = std::make_shared<DefaultJobState>(&platform, std::move(job),
-                                                 TaskPriority::kUserVisible, 1);
-  auto handle = std::make_unique<DefaultJobHandle>(std::move(state));
-#ifdef DEBUG
-  EXPECT_DEATH_IF_SUPPORTED({ handle.reset(); }, "");
-#endif  // DEBUG
-  handle->Join();
-}
-
 }  // namespace default_job_unittest
 }  // namespace platform
 }  // namespace v8

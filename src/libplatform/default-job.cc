@@ -135,7 +135,7 @@ DefaultJobHandle::DefaultJobHandle(std::shared_ptr<DefaultJobState> state)
   state_->NotifyConcurrencyIncrease();
 }
 
-DefaultJobHandle::~DefaultJobHandle() { DCHECK_EQ(nullptr, state_); }
+DefaultJobHandle::~DefaultJobHandle() = default;
 
 void DefaultJobHandle::Join() {
   state_->Join();

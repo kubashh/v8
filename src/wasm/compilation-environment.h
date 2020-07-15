@@ -104,7 +104,7 @@ class CompilationState {
 
   ~CompilationState();
 
-  void AbortCompilation();
+  void CancelCompilation();
 
   void SetError();
 
