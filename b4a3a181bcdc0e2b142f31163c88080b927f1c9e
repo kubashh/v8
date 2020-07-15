@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "cbf95b6c_7b41c71e",
+        "filename": "test/cctest/test-concurrent-transition-array.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-15T15:33:23Z",
+      "side": 1,
+      "message": "Done, and replicated this change in the test above too.",
+      "parentUuid": "e9c442bd_97333e21",
+      "revId": "b4a3a181bcdc0e2b142f31163c88080b927f1c9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b2e78843_ef8ad711",
         "filename": "test/cctest/test-concurrent-transition-array.cc",
         "patchSetId": 3
@@ -67,6 +85,24 @@
       "revId": "b4a3a181bcdc0e2b142f31163c88080b927f1c9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eff9485a_5d637770",
+        "filename": "test/cctest/test-concurrent-transition-array.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-15T15:33:23Z",
+      "side": 1,
+      "message": "Done, and replicated this change in the test above too.",
+      "parentUuid": "b2e78843_ef8ad711",
+      "revId": "b4a3a181bcdc0e2b142f31163c88080b927f1c9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
