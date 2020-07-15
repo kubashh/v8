@@ -35,7 +35,7 @@ bool operator!=(FeedbackSource const& lhs, FeedbackSource const& rhs) {
 
 std::ostream& operator<<(std::ostream& os, const FeedbackSource& p) {
   if (p.IsValid()) {
-    return os << "FeedbackSource(" << p.slot << ")";
+    os << "FeedbackSource(" << p.slot << ")";
   }
   return os << "FeedbackSource(INVALID)";
 }
