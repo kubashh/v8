@@ -482,6 +482,24 @@
     },
     {
       "key": {
+        "uuid": "45401605_97a15357",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-15T15:38:39Z",
+      "side": 1,
+      "message": "Not really. Since we only expect the \"UpdateFeedback\" for CallICs. We do have a DCHECK here which would fail: https://cs.chromium.org/chromium/src/v8/src/objects/feedback-vector.cc?q\u003dfeedback-vector.cc\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d892.",
+      "parentUuid": "db620857_553475fb",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab0ac41e_374e3dcc",
         "filename": "src/deoptimizer/deoptimize-reason.h",
         "patchSetId": 10
@@ -620,6 +638,24 @@
       "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b8ff72ae_1b4f48ab",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-15T15:38:39Z",
+      "side": 1,
+      "message": "I would prefer if we omit these changes from this cl instead of a TODO. These aren\u0027t correct and it is also not clear about what we want to do yet. If we want to add a new deopt type then these changes won\u0027t be useful anyway.\n\n\u003e\u003e Would that be the same new kind as for the other CL where we discussed this option a while ago?\nUnfortunately no. These are eager deoptimizations and the earlier ones were soft deoptimizations. Also thinking about the option we discussed earlier, if we reuse optimized code on a soft deopt or not depends on the reuse count. So, we can\u0027t mark them as the ones reusing code when generating the optimized code. I am not sure adding a new type would help the other use case much.",
+      "parentUuid": "8ebf4a4e_d922c762",
+      "revId": "2d139a722e3476ab1ea0332d5a23adc79bce4803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
