@@ -119,6 +119,8 @@ class FastRegisterAllocator final {
 
   // Allocate registers operations.
   void AllocateRegisters(const InstructionBlock* block);
+  void AllocatePhis(const InstructionBlock* block);
+  void AllocatePhiGapMoves(const InstructionBlock* block);
   void UpdateSpillRangesForLoops();
 
   bool IsFixedRegisterPolicy(const UnallocatedOperand* operand);
