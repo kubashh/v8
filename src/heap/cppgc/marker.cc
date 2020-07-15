@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "include/cppgc/internal/process-heap.h"
+#include "include/cppgc/platform.h"
 #include "src/heap/cppgc/heap-object-header.h"
 #include "src/heap/cppgc/heap-page.h"
 #include "src/heap/cppgc/heap-visitor.h"
@@ -25,28 +26,32 @@ namespace internal {
 
 namespace {
 
-void EnterIncrementalMarkingIfNeeded(Marker::MarkingConfig config,
+bool EnterIncrementalMarkingIfNeeded(Marker::MarkingConfig config,
                                      HeapBase& heap) {
   if (config.marking_type == Marker::MarkingConfig::MarkingType::kIncremental ||
       config.marking_type ==
           Marker::MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
     ProcessHeap::EnterIncrementalOrConcurrentMarking();
-  }
 #if defined(CPPGC_CAGED_HEAP)
-  heap.caged_heap().local_data().is_marking_in_progress = true;
+    heap.caged_heap().local_data().is_marking_in_progress = true;
 #endif
+    return true;
+  }
+  return false;
 }
 
-void ExitIncrementalMarkingIfNeeded(Marker::MarkingConfig config,
+bool ExitIncrementalMarkingIfNeeded(Marker::MarkingConfig config,
                                     HeapBase& heap) {
   if (config.marking_type == Marker::MarkingConfig::MarkingType::kIncremental ||
       config.marking_type ==
           Marker::MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
     ProcessHeap::ExitIncrementalOrConcurrentMarking();
-  }
 #if defined(CPPGC_CAGED_HEAP)
-  heap.caged_heap().local_data().is_marking_in_progress = false;
+    heap.caged_heap().local_data().is_marking_in_progress = false;
 #endif
+    return true;
+  }
+  return false;
 }
 
 // Visit remembered set that was recorded in the generational barrier.
@@ -100,8 +105,40 @@ bool DrainWorklistWithDeadline(v8::base::TimeTicks deadline, Worklist* worklist,
 
 }  // namespace
 
-MarkerBase::MarkerBase(HeapBase& heap)
+MarkerBase::IncrementalMarkingTask::IncrementalMarkingTask(MarkerBase* marker)
+    : marker_(marker), handle_(Handle::NonEmptyTag{}) {}
+
+// static
+MarkerBase::IncrementalMarkingTask::Handle
+MarkerBase::IncrementalMarkingTask::Post(MarkerBase* marker,
+                                         v8::TaskRunner* runner) {
+  auto task = std::make_unique<IncrementalMarkingTask>(marker);
+  auto handle = task->handle_;
+  runner->PostIdleTask(std::move(task));
+  return handle;
+}
+
+void MarkerBase::IncrementalMarkingTask::Run(double deadline_in_seconds) {
+  if (handle_.IsCanceled()) return;
+
+  // Idle tasks are guaranteed to have no heap pointers on stack.
+  const bool mark_complete = marker_->IncrementalMarkingStep(
+      MarkingConfig::StackState::kNoHeapPointers,
+      v8::base::TimeDelta::FromSecondsD(
+          deadline_in_seconds -
+          marker_->platform_->MonotonicallyIncreasingTime()));
+
+  if (mark_complete) {
+    marker_->FinalizeIncrementalMarking();
+  } else {
+    marker_->ScheduleIncrementalMarking();
+  }
+}
+
+MarkerBase::MarkerBase(HeapBase& heap, cppgc::Platform* platform)
     : heap_(heap),
+      platform_(platform),
+      foreground_task_runner_(platform_->GetForegroundTaskRunner()),
       mutator_marking_state_(
           heap, marking_worklists_.marking_worklist(),
           marking_worklists_.not_fully_constructed_worklist(),
@@ -135,12 +172,17 @@ void MarkerBase::StartMarking(MarkingConfig config) {
   heap().stats_collector()->NotifyMarkingStarted();
 
   config_ = config;
-  VisitRoots();
-  EnterIncrementalMarkingIfNeeded(config, heap());
+  if (EnterIncrementalMarkingIfNeeded(config, heap())) {
+    // Performing incremental or concurrent marking.
+    VisitRoots();
+    ScheduleIncrementalMarking();
+  }
 }
 
 void MarkerBase::EnterAtomicPause(MarkingConfig config) {
-  ExitIncrementalMarkingIfNeeded(config_, heap());
+  if (ExitIncrementalMarkingIfNeeded(config_, heap())) {
+    if (incremental_marking_handle_) incremental_marking_handle_.Cancel();
+  }
   config_ = config;
 
   // VisitRoots also resets the LABs.
@@ -192,6 +234,33 @@ void MarkerBase::VisitRoots() {
   if (config_.collection_type == MarkingConfig::CollectionType::kMinor) {
     VisitRememberedSlots(heap(), mutator_marking_state_);
   }
+}
+
+void MarkerBase::ScheduleIncrementalMarking() {
+  if (!platform_ || !foreground_task_runner_) return;
+  DCHECK(!incremental_marking_handle_);
+  incremental_marking_handle_ =
+      IncrementalMarkingTask::Post(this, foreground_task_runner_.get());
+}
+
+void MarkerBase::FinalizeIncrementalMarking() {
+  DCHECK(config_.marking_type != MarkingConfig::MarkingType::kAtomic);
+  FinishMarking(config_);
+}
+
+bool MarkerBase::IncrementalMarkingStepForTesting(
+    MarkingConfig::StackState stack_state, v8::base::TimeDelta deadline) {
+  return IncrementalMarkingStep(stack_state, deadline);
+}
+
+bool MarkerBase::IncrementalMarkingStep(MarkingConfig::StackState stack_state,
+                                        v8::base::TimeDelta deadline) {
+  if (stack_state == MarkingConfig::StackState::kNoHeapPointers) {
+    marking_worklists_.FlushNotFullyConstructedObjects();
+  }
+  config_.stack_state = stack_state;
+
+  return AdvanceMarkingWithDeadline(deadline);
 }
 
 bool MarkerBase::AdvanceMarkingWithDeadline(v8::base::TimeDelta duration) {
@@ -257,8 +326,8 @@ void MarkerBase::ClearAllWorklistsForTesting() {
   marking_worklists_.ClearForTesting();
 }
 
-Marker::Marker(HeapBase& heap)
-    : MarkerBase(heap),
+Marker::Marker(HeapBase& heap, cppgc::Platform* platform)
+    : MarkerBase(heap, platform),
       marking_visitor_(heap, mutator_marking_state_),
       conservative_marking_visitor_(heap, mutator_marking_state_,
                                     marking_visitor_) {}
