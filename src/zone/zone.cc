@@ -5,10 +5,12 @@
 #include "src/zone/zone.h"
 
 #include <cstring>
+#include <memory>
 
 #include "src/init/v8.h"
 #include "src/sanitizer/asan.h"
 #include "src/utils/utils.h"
+#include "src/zone/type-stats.h"
 
 namespace v8 {
 namespace internal {
@@ -29,6 +31,7 @@ constexpr size_t kASanRedzoneBytes = 0;
 
 Zone::Zone(AccountingAllocator* allocator, const char* name)
     : allocation_size_(0),
+      allocation_size_for_tracing_(0),
       segment_bytes_allocated_(0),
       position_(0),
       limit_(0),
@@ -37,6 +40,9 @@ Zone::Zone(AccountingAllocator* allocator, const char* name)
       name_(name),
       sealed_(false) {
   allocator_->TraceZoneCreation(this);
+#ifdef V8_ENABLE_PRECISE_ZONE_STATS
+  type_stats_ = std::make_unique<TypeStats>();
+#endif
 }
 
 Zone::~Zone() {
@@ -104,6 +110,7 @@ void Zone::DeleteAll() {
 
   position_ = limit_ = 0;
   allocation_size_ = 0;
+  allocation_size_for_tracing_ = 0;
 }
 
 Address Zone::NewExpand(size_t size) {
