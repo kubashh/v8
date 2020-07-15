@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bcd60c2_1d3d520c",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-15T18:02:34Z",
+      "side": 1,
+      "message": "We don\u0027t visit the stack in the beginning of incremental marking (only in the atomic pause). This seems to break it, if config contains non-empty stack (like in one of the tests in the CL).",
+      "revId": "bf65f575677fef9347b4eade44342eb9817f3b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16455745_26c57983",
+        "filename": "src/heap/cppgc/marker.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-15T18:02:34Z",
+      "side": 1,
+      "message": "nit: not needed now",
+      "range": {
+        "startLine": 144,
+        "startChar": 2,
+        "endLine": 144,
+        "endChar": 10
+      },
+      "revId": "bf65f575677fef9347b4eade44342eb9817f3b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
