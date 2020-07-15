@@ -33,6 +33,24 @@
       "revId": "fafad9a7cd56095dff8250702a4c94f460fbc9e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d82f3cd_27cc4b80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-15T07:33:57Z",
+      "side": 1,
+      "message": "Is it same as the color bug?",
+      "parentUuid": "7e74de56_d979cec0",
+      "revId": "fafad9a7cd56095dff8250702a4c94f460fbc9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
