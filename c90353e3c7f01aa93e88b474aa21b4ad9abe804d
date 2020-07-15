@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7616f63_23a1bf98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-15T06:06:13Z",
+      "side": 1,
+      "message": "Hi Jakob, just noticed the FYI bot started failing due to this CL https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8874796840256889360/+/steps/Mjsunit_-_stress_snapshot/0/logs/regress-crbug-1104608/0",
+      "revId": "c90353e3c7f01aa93e88b474aa21b4ad9abe804d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
