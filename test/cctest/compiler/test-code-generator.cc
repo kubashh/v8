@@ -917,6 +917,7 @@ class TestEnvironment : public HandleAndZoneScope {
 
   static InstructionBlock* NewBlock(Zone* zone, RpoNumber rpo) {
     return zone->New<InstructionBlock>(zone, rpo, RpoNumber::Invalid(),
+                                       RpoNumber::Invalid(),
                                        RpoNumber::Invalid(), false, false);
   }
 
