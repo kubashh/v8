@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a20dcbe_16c6bcc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-15T04:54:55Z",
+      "side": 1,
+      "message": "Connect colors to variables to facilitate easy color theme change 😊",
+      "revId": "fafad9a7cd56095dff8250702a4c94f460fbc9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
