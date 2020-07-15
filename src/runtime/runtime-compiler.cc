@@ -169,6 +169,7 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
   // code object from deoptimizer.
   Handle<Code> optimized_code = deoptimizer->compiled_code();
   DeoptimizeKind type = deoptimizer->deopt_kind();
+  DeoptimizeReason reason = deoptimizer->GetDeoptReason();
   bool should_reuse_code = deoptimizer->should_reuse_code();
 
   // TODO(turbofan): We currently need the native context to materialize
@@ -183,6 +184,13 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
   JavaScriptFrameIterator top_it(isolate);
   JavaScriptFrame* top_frame = top_it.frame();
   isolate->set_context(Context::cast(top_frame->context()));
+
+  // TODO(gsathya): Instead of using the reason, create a new kind of
+  // deopt.
+  if (reason == DeoptimizeReason::kMissingMap) {
+    DCHECK(type == DeoptimizeKind::kEager);
+    return ReadOnlyRoots(isolate).undefined_value();
+  }
 
   if (should_reuse_code) {
     optimized_code->increment_deoptimization_count();
