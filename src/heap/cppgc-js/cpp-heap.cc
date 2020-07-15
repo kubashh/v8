@@ -65,7 +65,8 @@ class CppgcPlatformAdapter final : public cppgc::Platform {
 
 class UnifiedHeapMarker final : public cppgc::internal::MarkerBase {
  public:
-  explicit UnifiedHeapMarker(Heap& v8_heap, cppgc::internal::HeapBase& heap);
+  explicit UnifiedHeapMarker(Heap& v8_heap, cppgc::internal::HeapBase& heap,
+                             cppgc::Platform* platform);
 
   ~UnifiedHeapMarker() final = default;
 
@@ -87,8 +88,9 @@ class UnifiedHeapMarker final : public cppgc::internal::MarkerBase {
 };
 
 UnifiedHeapMarker::UnifiedHeapMarker(Heap& v8_heap,
-                                     cppgc::internal::HeapBase& heap)
-    : cppgc::internal::MarkerBase(heap),
+                                     cppgc::internal::HeapBase& heap,
+                                     cppgc::Platform* platform)
+    : cppgc::internal::MarkerBase(heap, platform),
       unified_heap_mutator_marking_state_(v8_heap),
       marking_visitor_(heap, mutator_marking_state_,
                        unified_heap_mutator_marking_state_),
@@ -121,7 +123,8 @@ void CppHeap::RegisterV8References(
 }
 
 void CppHeap::TracePrologue(TraceFlags flags) {
-  marker_.reset(new UnifiedHeapMarker(*isolate_.heap(), AsBase()));
+  marker_ = std::make_unique<UnifiedHeapMarker>(*isolate_.heap(), AsBase(),
+                                                platform_.get());
   const UnifiedHeapMarker::MarkingConfig marking_config{
       UnifiedHeapMarker::MarkingConfig::CollectionType::kMajor,
       cppgc::Heap::StackState::kNoHeapPointers,
