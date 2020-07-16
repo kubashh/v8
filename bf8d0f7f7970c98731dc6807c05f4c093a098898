@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "07fee4b8_d8384db5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-16T08:15:31Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 15,
+        "startChar": 30,
+        "endLine": 15,
+        "endChar": 36
+      },
+      "revId": "bf8d0f7f7970c98731dc6807c05f4c093a098898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2b2aab6c_8c522fd4",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 19
@@ -16,6 +39,80 @@
       "revId": "bf8d0f7f7970c98731dc6807c05f4c093a098898",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "09d64a92_2392ec33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-16T08:15:31Z",
+      "side": 1,
+      "message": "Some nits and minor comments, otherwise still LGTM.",
+      "revId": "bf8d0f7f7970c98731dc6807c05f4c093a098898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3304918b_411cc95f",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 3217,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-16T08:15:31Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be defined in the header, because it\u0027s a template class method?",
+      "revId": "bf8d0f7f7970c98731dc6807c05f4c093a098898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc29714e_5fe70a4b",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 4116,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-16T08:15:31Z",
+      "side": 1,
+      "message": "Wouldn\u0027t a {get()} method be more clear?",
+      "revId": "bf8d0f7f7970c98731dc6807c05f4c093a098898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c9c1ef4_a7143351",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-16T08:15:31Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 236,
+        "startChar": 75,
+        "endLine": 236,
+        "endChar": 79
+      },
+      "revId": "bf8d0f7f7970c98731dc6807c05f4c093a098898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
