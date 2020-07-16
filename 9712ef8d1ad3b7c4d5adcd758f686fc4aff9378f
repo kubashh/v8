@@ -139,6 +139,24 @@
     },
     {
       "key": {
+        "uuid": "ae21e698_e2e5d7a2",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-16T09:23:57Z",
+      "side": 1,
+      "message": "As I wrote in https://chromium-review.googlesource.com/c/v8/v8/+/2241518/10/src/compiler/simplified-operator.h#426, since you\u0027re passing an empty FeedbackSource to DeoptimizeIf* the UpdateFeedback stuff won\u0027t happen.",
+      "parentUuid": "5f012c93_68adb809",
+      "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "659fb719_b748d55f",
         "filename": "src/compiler/simplified-operator.h",
         "patchSetId": 12
