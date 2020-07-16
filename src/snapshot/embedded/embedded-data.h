@@ -31,8 +31,10 @@ class InstructionStream final : public AllStatic {
   // Note that this only applies when building the snapshot, e.g. for
   // mksnapshot. Otherwise, off-heap code is embedded directly into the binary.
   static void CreateOffHeapInstructionStream(Isolate* isolate, uint8_t** data,
-                                             uint32_t* size);
-  static void FreeOffHeapInstructionStream(uint8_t* data, uint32_t size);
+                                             uint32_t* size,
+                                             uint8_t** metadata);
+  static void FreeOffHeapInstructionStream(uint8_t* data, uint32_t size,
+                                           uint8_t* metadata);
 };
 
 class EmbeddedData final {
@@ -41,18 +43,26 @@ class EmbeddedData final {
 
   static EmbeddedData FromBlob() {
     return EmbeddedData(Isolate::CurrentEmbeddedBlob(),
-                        Isolate::CurrentEmbeddedBlobSize());
+                        Isolate::CurrentEmbeddedBlobSize(),
+                        Isolate::CurrentEmbeddedBlobMetadata());
   }
 
   static EmbeddedData FromBlob(Isolate* isolate) {
-    return EmbeddedData(isolate->embedded_blob(),
-                        isolate->embedded_blob_size());
+    return EmbeddedData(isolate->embedded_blob(), isolate->embedded_blob_size(),
+                        isolate->embedded_blob_metadata());
   }
 
   const uint8_t* data() const { return data_; }
   uint32_t size() const { return size_; }
+  const uint8_t* metadata() const { return metadata_; }
+  static constexpr uint32_t metadata_size() {
+    return MetadataOffset() + MetadataSize();
+  }
 
-  void Dispose() { delete[] data_; }
+  void Dispose() {
+    delete[] data_;
+    delete[] metadata_;
+  }
 
   Address InstructionStartOfBuiltin(int i) const;
   uint32_t InstructionSizeOfBuiltin(int i) const;
@@ -76,11 +86,12 @@ class EmbeddedData final {
 
   size_t CreateEmbeddedBlobHash() const;
   size_t EmbeddedBlobHash() const {
-    return *reinterpret_cast<const size_t*>(data_ + EmbeddedBlobHashOffset());
+    return *reinterpret_cast<const size_t*>(metadata_ +
+                                            EmbeddedBlobHashOffset());
   }
 
   size_t IsolateHash() const {
-    return *reinterpret_cast<const size_t*>(data_ + IsolateHashOffset());
+    return *reinterpret_cast<const size_t*>(metadata_ + IsolateHashOffset());
   }
 
   struct Metadata {
@@ -94,11 +105,14 @@ class EmbeddedData final {
 
   // The layout of the blob is as follows:
   //
+  // metadata:
   // [0] hash of the remaining blob
   // [1] hash of embedded-blob-relevant heap objects
   // [2] metadata of instruction stream 0
   // ... metadata
-  // ... instruction streams
+  //
+  // data:
+  // [0] instruction streams
 
   static constexpr uint32_t kTableSize = Builtins::builtin_count;
   static constexpr uint32_t EmbeddedBlobHashOffset() { return 0; }
@@ -113,18 +127,18 @@ class EmbeddedData final {
   static constexpr uint32_t MetadataSize() {
     return sizeof(struct Metadata) * kTableSize;
   }
-  static constexpr uint32_t RawDataOffset() {
-    return PadAndAlign(MetadataOffset() + MetadataSize());
-  }
+  static constexpr uint32_t RawDataOffset() { return 0; }
 
  private:
-  EmbeddedData(const uint8_t* data, uint32_t size) : data_(data), size_(size) {
+  EmbeddedData(const uint8_t* data, uint32_t size, const uint8_t* metadata)
+      : data_(data), size_(size), metadata_(metadata) {
     DCHECK_NOT_NULL(data);
     DCHECK_LT(0, size);
   }
 
   const Metadata* Metadata() const {
-    return reinterpret_cast<const struct Metadata*>(data_ + MetadataOffset());
+    return reinterpret_cast<const struct Metadata*>(metadata_ +
+                                                    MetadataOffset());
   }
   const uint8_t* RawData() const { return data_ + RawDataOffset(); }
 
@@ -136,8 +150,12 @@ class EmbeddedData final {
 
   void PrintStatistics() const;
 
+  // This points to code for builtins. The contents are potentially unreadable.
   const uint8_t* data_;
   uint32_t size_;
+
+  // This is metadata for the code.
+  const uint8_t* metadata_;
 };
 
 }  // namespace internal

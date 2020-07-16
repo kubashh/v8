@@ -51,7 +51,8 @@ Code InstructionStream::TryLookupCode(Isolate* isolate, Address address) {
 // static
 void InstructionStream::CreateOffHeapInstructionStream(Isolate* isolate,
                                                        uint8_t** data,
-                                                       uint32_t* size) {
+                                                       uint32_t* size,
+                                                       uint8_t** metadata) {
   // Create the embedded blob from scratch using the current Isolate's heap.
   EmbeddedData d = EmbeddedData::FromIsolate(isolate);
 
@@ -83,19 +84,36 @@ void InstructionStream::CreateOffHeapInstructionStream(Isolate* isolate,
   CHECK(SetPermissions(page_allocator, allocated_bytes, allocation_size,
                        PageAllocator::kReadExecute));
 
+  void* const requested_allocation_metadata_address =
+      AlignedAddress(isolate->heap()->GetRandomMmapAddr(), alignment);
+  const uint32_t allocated_metadata_size =
+      RoundUp(d.metadata_size(), alignment);
+  uint8_t* allocated_metadata_bytes = static_cast<uint8_t*>(AllocatePages(
+      page_allocator, requested_allocation_metadata_address,
+      allocated_metadata_size, alignment, PageAllocator::kReadWrite));
+  CHECK_NOT_NULL(allocated_metadata_bytes);
+
+  std::memcpy(allocated_metadata_bytes, d.metadata(), d.metadata_size());
+  CHECK(SetPermissions(page_allocator, allocated_metadata_bytes,
+                       allocated_metadata_size, PageAllocator::kRead));
+
   *data = allocated_bytes;
   *size = d.size();
+  *metadata = allocated_metadata_bytes;
 
   d.Dispose();
 }
 
 // static
 void InstructionStream::FreeOffHeapInstructionStream(uint8_t* data,
-                                                     uint32_t size) {
+                                                     uint32_t size,
+                                                     uint8_t* metadata) {
   v8::PageAllocator* page_allocator = v8::internal::GetPlatformPageAllocator();
   const uint32_t page_size =
       static_cast<uint32_t>(page_allocator->AllocatePageSize());
   CHECK(FreePages(page_allocator, data, RoundUp(size, page_size)));
+  CHECK(FreePages(page_allocator, metadata,
+                  RoundUp(EmbeddedData::metadata_size(), page_size)));
 }
 
 namespace {
@@ -228,6 +246,7 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
   const uint32_t blob_size = RawDataOffset() + raw_data_size;
   uint8_t* const blob = new uint8_t[blob_size];
   uint8_t* const raw_data_start = blob + RawDataOffset();
+  uint8_t* const blob_metadata = new uint8_t[metadata_size()];
 
   // Initially zap the entire blob, effectively padding the alignment area
   // between two builtins with int3's (on x64/ia32).
@@ -237,12 +256,13 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
   {
     STATIC_ASSERT(IsolateHashSize() == kSizetSize);
     const size_t hash = isolate->HashIsolateForEmbeddedBlob();
-    std::memcpy(blob + IsolateHashOffset(), &hash, IsolateHashSize());
+    std::memcpy(blob_metadata + IsolateHashOffset(), &hash, IsolateHashSize());
   }
 
   // Write the metadata tables.
   DCHECK_EQ(MetadataSize(), sizeof(metadata[0]) * metadata.size());
-  std::memcpy(blob + MetadataOffset(), metadata.data(), MetadataSize());
+  std::memcpy(blob_metadata + MetadataOffset(), metadata.data(),
+              MetadataSize());
 
   // Write the raw data section.
   for (int i = 0; i < Builtins::builtin_count; i++) {
@@ -256,7 +276,7 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
                 code.raw_instruction_size());
   }
 
-  EmbeddedData d(blob, blob_size);
+  EmbeddedData d(blob, blob_size, blob_metadata);
 
   // Fix up call targets that point to other embedded builtins.
   FinalizeEmbeddedCodeTargets(isolate, &d);
@@ -265,7 +285,8 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
   {
     STATIC_ASSERT(EmbeddedBlobHashSize() == kSizetSize);
     const size_t hash = d.CreateEmbeddedBlobHash();
-    std::memcpy(blob + EmbeddedBlobHashOffset(), &hash, EmbeddedBlobHashSize());
+    std::memcpy(blob_metadata + EmbeddedBlobHashOffset(), &hash,
+                EmbeddedBlobHashSize());
 
     DCHECK_EQ(hash, d.CreateEmbeddedBlobHash());
     DCHECK_EQ(hash, d.EmbeddedBlobHash());
@@ -308,9 +329,10 @@ size_t EmbeddedData::CreateEmbeddedBlobHash() const {
   STATIC_ASSERT(EmbeddedBlobHashOffset() == 0);
   STATIC_ASSERT(EmbeddedBlobHashSize() == kSizetSize);
   // Hash the entire blob except the hash field itself.
-  Vector<const byte> payload(data_ + EmbeddedBlobHashSize(),
-                             size_ - EmbeddedBlobHashSize());
-  return Checksum(payload);
+  Vector<const byte> payload1(metadata_ + EmbeddedBlobHashSize(),
+                              metadata_size() - EmbeddedBlobHashSize());
+  Vector<const byte> payload2(data_, size_);
+  return Checksum(payload1, payload2);
 }
 
 void EmbeddedData::PrintStatistics() const {

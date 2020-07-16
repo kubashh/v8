@@ -1374,12 +1374,14 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   static const uint8_t* CurrentEmbeddedBlob();
   static uint32_t CurrentEmbeddedBlobSize();
+  static const uint8_t* CurrentEmbeddedBlobMetadata();
   static bool CurrentEmbeddedBlobIsBinaryEmbedded();
 
   // These always return the same result as static methods above, but don't
   // access the global atomic variable (and thus *might be* slightly faster).
   const uint8_t* embedded_blob() const;
   uint32_t embedded_blob_size() const;
+  const uint8_t* embedded_blob_metadata() const;
 
   void set_array_buffer_allocator(v8::ArrayBuffer::Allocator* allocator) {
     array_buffer_allocator_ = allocator;
@@ -1811,11 +1813,13 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   void CreateAndSetEmbeddedBlob();
   void TearDownEmbeddedBlob();
 
-  void SetEmbeddedBlob(const uint8_t* blob, uint32_t blob_size);
+  void SetEmbeddedBlob(const uint8_t* blob, uint32_t blob_size,
+                       const uint8_t* blob_metadata);
   void ClearEmbeddedBlob();
 
   const uint8_t* embedded_blob_ = nullptr;
   uint32_t embedded_blob_size_ = 0;
+  const uint8_t* embedded_blob_metadata_ = nullptr;
 
   v8::ArrayBuffer::Allocator* array_buffer_allocator_ = nullptr;
   std::shared_ptr<v8::ArrayBuffer::Allocator> array_buffer_allocator_shared_;
