@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f43cc576_9229de22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-16T07:13:32Z",
+      "side": 1,
+      "message": "Looking great, thanks! Main comments are to add metadata_size and to update all current references to {data,size} (and similar) to {code, code_size}.",
+      "revId": "f63a76ea39b59b20f067b9ef4e49c62b0d93df16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "99d3c7ba_e8b99e1c",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1820,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-16T07:13:32Z",
+      "side": 1,
+      "message": "nit: please rename to embedded_blob_code_, likewise in all related spots.",
+      "revId": "f63a76ea39b59b20f067b9ef4e49c62b0d93df16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f80856e6_d566116b",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1822,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-16T07:13:32Z",
+      "side": 1,
+      "message": "As discussed offline let\u0027s also add the metadata size.",
+      "revId": "f63a76ea39b59b20f067b9ef4e49c62b0d93df16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b175a884_56b4e344",
+        "filename": "src/snapshot/embedded/embedded-data.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-16T07:13:32Z",
+      "side": 1,
+      "message": "Please also update in this file to refer to code, code_size.",
+      "revId": "f63a76ea39b59b20f067b9ef4e49c62b0d93df16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "433000fa_8f294f65",
+        "filename": "src/snapshot/embedded/embedded-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-16T07:13:32Z",
+      "side": 1,
+      "message": "nit: rename to code_ and code_size_",
+      "revId": "f63a76ea39b59b20f067b9ef4e49c62b0d93df16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62a778c2_5a59d419",
+        "filename": "src/snapshot/embedded/embedded-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-16T07:13:32Z",
+      "side": 1,
+      "message": "This will reference metadata_size_ right?",
+      "revId": "f63a76ea39b59b20f067b9ef4e49c62b0d93df16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ff36d80_e7fc1abe",
+        "filename": "src/snapshot/embedded/embedded-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-16T07:13:32Z",
+      "side": 1,
+      "message": "code",
+      "revId": "f63a76ea39b59b20f067b9ef4e49c62b0d93df16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc32b37b_6f864d91",
+        "filename": "src/snapshot/embedded/embedded-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-16T07:13:32Z",
+      "side": 1,
+      "message": "nit: as above, to clarify this is an array:\n\n [0] instruction stream 0\n ... instruction streams",
+      "revId": "f63a76ea39b59b20f067b9ef4e49c62b0d93df16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02709f9a_1137a321",
+        "filename": "src/snapshot/embedded/embedded-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-16T07:13:32Z",
+      "side": 1,
+      "message": "\u0027on platforms that disallow reads from the .text section.\u0027",
+      "revId": "f63a76ea39b59b20f067b9ef4e49c62b0d93df16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "573dffda_9ec972cc",
+        "filename": "src/snapshot/snapshot-utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-16T07:13:32Z",
+      "side": 1,
+      "message": "If this is now unused please remove it.",
+      "revId": "f63a76ea39b59b20f067b9ef4e49c62b0d93df16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
