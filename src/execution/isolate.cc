@@ -89,6 +89,7 @@
 #include "src/wasm/wasm-engine.h"
 #include "src/wasm/wasm-objects.h"
 #include "src/zone/accounting-allocator.h"
+#include "src/zone/type-stats.h"
 #ifdef V8_INTL_SUPPORT
 #include "unicode/uobject.h"
 #endif  // V8_INTL_SUPPORT
@@ -2668,7 +2669,12 @@ void Isolate::ThreadDataTable::RemoveAllThreads() {
 
 class TracingAccountingAllocator : public AccountingAllocator {
  public:
-  explicit TracingAccountingAllocator(Isolate* isolate) : isolate_(isolate) {}
+  explicit TracingAccountingAllocator(Isolate* isolate) : isolate_(isolate) {
+#ifdef V8_ENABLE_PRECISE_ZONE_STATS
+    type_stats_ = std::make_unique<TypeStats>();
+#endif
+  }
+  ~TracingAccountingAllocator() = default;
 
  protected:
   void TraceAllocateSegmentImpl(v8::internal::Segment* segment) override {
@@ -2684,13 +2690,30 @@ class TracingAccountingAllocator : public AccountingAllocator {
 
   void TraceZoneDestructionImpl(const Zone* zone) override {
     base::MutexGuard lock(&mutex_);
+#ifdef V8_ENABLE_PRECISE_ZONE_STATS
+    if (FLAG_trace_zone_type_stats) {
+      type_stats_->MergeWith(*zone->type_stats());
+    }
+#endif
     UpdateMemoryTrafficAndReportMemoryUsage(zone->segment_bytes_allocated());
     active_zones_.erase(zone);
     nesting_depth_--;
+
+#ifdef V8_ENABLE_PRECISE_ZONE_STATS
+    if (FLAG_trace_zone_type_stats && active_zones_.empty()) {
+      DumpPerTypeStats();
+    }
+#endif
   }
 
  private:
   void UpdateMemoryTrafficAndReportMemoryUsage(size_t memory_traffic_delta) {
+    if (!FLAG_trace_zone_stats &&
+        !(TracingFlags::zone_stats.load(std::memory_order_relaxed) &
+          v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
+      return;
+    }
+
     memory_traffic_since_last_report_ += memory_traffic_delta;
     if (memory_traffic_since_last_report_ < FLAG_zone_stats_tolerance) return;
     memory_traffic_since_last_report_ = 0;
@@ -2762,11 +2785,33 @@ class TracingAccountingAllocator : public AccountingAllocator {
         << "\"used\": " << total_zone_allocation_size << "}";
   }
 
+#ifdef V8_ENABLE_PRECISE_ZONE_STATS
+  void DumpPerTypeStats() {
+    type_stats_->Dump();
+
+    if (V8_UNLIKELY(TracingFlags::zone_stats.load(std::memory_order_relaxed) &
+                    v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
+      std::ostringstream buffer;
+      buffer << "{"
+             << "\"isolate\": \"" << reinterpret_cast<void*>(isolate_) << "\", "
+             << "types: ";
+      type_stats_->DumpJSON(buffer);
+      buffer << "}";
+      TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("v8.zone_stats"),
+                           "V8.Zone_Stats", TRACE_EVENT_SCOPE_THREAD,
+                           "type-stats", TRACE_STR_COPY(buffer.str().c_str()));
+    }
+  }
+#endif
+
   Isolate* const isolate_;
   std::atomic<size_t> nesting_depth_{0};
 
   base::Mutex mutex_;
   std::unordered_set<const Zone*> active_zones_;
+#ifdef V8_ENABLE_PRECISE_ZONE_STATS
+  std::unique_ptr<TypeStats> type_stats_;
+#endif
   std::ostringstream buffer_;
   // This value is increased on both allocations and deallocations.
   size_t memory_traffic_since_last_report_ = 0;
