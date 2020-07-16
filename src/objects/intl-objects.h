@@ -142,6 +142,28 @@ class Intl {
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSArray> GetCanonicalLocales(
       Isolate* isolate, Handle<Object> locales);
 
+  // ecma-402 #sec-intl.getsupportedcalendars
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSArray> GetSupportedCalendars(
+      Isolate* isolate);
+
+  // ecma-402 #sec-intl.getsupportedcurrencies
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSArray> GetSupportedCurrencies(
+      Isolate* isolate);
+
+  // ecma-402 #sec-intl.getsupportednumberingsystems
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSArray>
+  GetSupportedNumberingSystems(Isolate* isolate);
+
+  // ecma-402 #sec-intl.getsupportedtimezones
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSArray> GetSupportedTimeZones(
+      Isolate* isolate);
+
+  // ecma-402 #sec-intl.getsupportedunits
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSArray> GetSupportedUnits(
+      Isolate* isolate);
+
+  static std::vector<std::string> GetSupportedUnits();
+
   // For locale sensitive functions
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> StringLocaleConvertCase(
       Isolate* isolate, Handle<String> s, bool is_upper,
