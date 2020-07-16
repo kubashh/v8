@@ -10,14 +10,18 @@
 
 extern "C" const uint8_t* v8_Default_embedded_blob_;
 extern "C" uint32_t v8_Default_embedded_blob_size_;
+extern "C" const uint8_t* v8_Default_embedded_blob_metadata_;
 
 const uint8_t* v8_Default_embedded_blob_ = nullptr;
 uint32_t v8_Default_embedded_blob_size_ = 0;
+const uint8_t* v8_Default_embedded_blob_metadata_ = nullptr;
 
 #ifdef V8_MULTI_SNAPSHOTS
 extern "C" const uint8_t* v8_Trusted_embedded_blob_;
 extern "C" uint32_t v8_Trusted_embedded_blob_size_;
+extern "C" const uint8_t* v8_Trusted_embedded_blob_metadata_;
 
 const uint8_t* v8_Trusted_embedded_blob_ = nullptr;
 uint32_t v8_Trusted_embedded_blob_size_ = 0;
+const uint8_t* v8_Trusted_embedded_blob_metadata_ = nullptr;
 #endif

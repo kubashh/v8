@@ -83,6 +83,17 @@ void EmbeddedFileWriter::WriteFileEpilogue(PlatformEmbeddedFileWriterBase* w,
     w->DeclarePointerToSymbol(embedded_blob_symbol.begin(),
                               EmbeddedBlobDataSymbol().c_str());
     w->Newline();
+
+    i::EmbeddedVector<char, kTemporaryStringLength>
+        embedded_blob_metadata_symbol;
+    i::SNPrintF(embedded_blob_metadata_symbol, "v8_%s_embedded_blob_metadata_",
+                embedded_variant_);
+
+    w->Comment("Pointer to the beginning of the embedded blob metadata.");
+    w->AlignToDataAlignment();
+    w->DeclarePointerToSymbol(embedded_blob_metadata_symbol.begin(),
+                              EmbeddedBlobMetadataDataSymbol().c_str());
+    w->Newline();
   }
 
   {
