@@ -15,6 +15,7 @@
 #include "src/heap/cppgc/marking-state.h"
 #include "src/heap/cppgc/marking-visitor.h"
 #include "src/heap/cppgc/marking-worklists.h"
+#include "src/heap/cppgc/task-handle.h"
 #include "src/heap/cppgc/worklist.h"
 
 namespace cppgc {
@@ -49,7 +50,7 @@ class V8_EXPORT_PRIVATE MarkerBase {
 
     CollectionType collection_type = CollectionType::kMajor;
     StackState stack_state = StackState::kMayContainHeapPointers;
-    MarkingType marking_type = MarkingType::kAtomic;
+    MarkingType marking_type = MarkingType::kIncremental;
   };
 
   virtual ~MarkerBase();
@@ -92,19 +93,47 @@ class V8_EXPORT_PRIVATE MarkerBase {
   cppgc::Visitor& VisitorForTesting() { return visitor(); }
   void ClearAllWorklistsForTesting();
 
+  bool IncrementalMarkingStepForTesting(MarkingConfig::StackState,
+                                        v8::base::TimeDelta);
+
  protected:
-  explicit MarkerBase(HeapBase& heap);
+  class IncrementalMarkingTask : public v8::IdleTask {
+   public:
+    using Handle = SingleThreadedHandle;
+
+    explicit IncrementalMarkingTask(MarkerBase* marker);
+
+    static Handle Post(MarkerBase* marker, v8::TaskRunner* runner);
+
+   private:
+    void Run(double deadline_in_seconds) override;
+
+    MarkerBase* marker_;
+    // TODO(chromium:1056170): Change to CancelableTask.
+    Handle handle_;
+  };
+
+  MarkerBase(HeapBase&, cppgc::Platform*);
 
   virtual cppgc::Visitor& visitor() = 0;
   virtual ConservativeTracingVisitor& conservative_visitor() = 0;
   virtual heap::base::StackVisitor& stack_visitor() = 0;
 
-  void VisitRoots();
+  void VisitRoots(MarkingConfig::StackState);
 
   void MarkNotFullyConstructedObjects();
 
+  void ScheduleIncrementalMarking();
+  void FinalizeIncrementalMarking();
+
+  bool IncrementalMarkingStep(MarkingConfig::StackState, v8::base::TimeDelta);
+
   HeapBase& heap_;
   MarkingConfig config_ = MarkingConfig::Default();
+
+  cppgc::Platform* platform_;
+  std::shared_ptr<v8::TaskRunner> foreground_task_runner_;
+  IncrementalMarkingTask::Handle incremental_marking_handle_;
 
   MarkingWorklists marking_worklists_;
   MarkingState mutator_marking_state_;
@@ -112,7 +141,7 @@ class V8_EXPORT_PRIVATE MarkerBase {
 
 class V8_EXPORT_PRIVATE Marker final : public MarkerBase {
  public:
-  explicit Marker(HeapBase&);
+  Marker(HeapBase&, cppgc::Platform*);
 
  protected:
   cppgc::Visitor& visitor() final { return marking_visitor_; }
