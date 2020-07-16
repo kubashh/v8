@@ -1275,9 +1275,19 @@ Maybe<Intl::NumberFormatDigitOptions> Intl::SetNumberFormatDigitOptions(
 
     // 15. Else If mnfd is not undefined or mxfd is not undefined, then
     if (!mnfd_obj->IsUndefined(isolate) || !mxfd_obj->IsUndefined(isolate)) {
-      // 15. b. Let mnfd be ? DefaultNumberOption(mnfd, 0, 20, mnfdDefault).
+      Handle<String> mxfd_str = factory->maximumFractionDigits_string();
       Handle<String> mnfd_str = factory->minimumFractionDigits_string();
-      if (!DefaultNumberOption(isolate, mnfd_obj, 0, 20, mnfd_default, mnfd_str)
+
+      if (!DefaultNumberOption(isolate, mxfd_obj, 0, 20, 20, mxfd_str)
+               .To(&mxfd)) {
+        return Nothing<NumberFormatDigitOptions>();
+      }
+
+      int mnfd_actual_default = std::min(mxfd, mnfd_default);
+
+      // 15. b. Let mnfd be ? DefaultNumberOption(mnfd, 0, 20, mnfdDefault).
+      if (!DefaultNumberOption(isolate, mnfd_obj, 0, 20, mnfd_actual_default,
+                               mnfd_str)
                .To(&mnfd)) {
         return Nothing<NumberFormatDigitOptions>();
       }
@@ -1285,14 +1295,12 @@ Maybe<Intl::NumberFormatDigitOptions> Intl::SetNumberFormatDigitOptions(
       // 15. c. Let mxfdActualDefault be max( mnfd, mxfdDefault ).
       int mxfd_actual_default = std::max(mnfd, mxfd_default);
 
-      // 15. d. Let mxfd be ? DefaultNumberOption(mxfd, mnfd, 20,
-      // mxfdActualDefault).
-      Handle<String> mxfd_str = factory->maximumFractionDigits_string();
-      if (!DefaultNumberOption(isolate, mxfd_obj, mnfd, 20, mxfd_actual_default,
+      if (!DefaultNumberOption(isolate, mxfd_obj, 0, 20, mxfd_actual_default,
                                mxfd_str)
                .To(&mxfd)) {
         return Nothing<NumberFormatDigitOptions>();
       }
+
       // 15. e. Set intlObj.[[MinimumFractionDigits]] to mnfd.
       digit_options.minimum_fraction_digits = mnfd;
 
