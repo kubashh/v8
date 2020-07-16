@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "8196889a_5c7e6fa0",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-16T14:39:35Z",
+      "side": 1,
+      "message": "Switched to kMayContainHeapPointers for now.\nFollowup CL will revise it.",
+      "parentUuid": "08760dcb_dd1b7f40",
+      "range": {
+        "startLine": 124,
+        "startChar": 5,
+        "endLine": 124,
+        "endChar": 65
+      },
+      "revId": "bf65f575677fef9347b4eade44342eb9817f3b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8bcd60c2_1d3d520c",
         "filename": "src/heap/cppgc/marker.cc",
         "patchSetId": 4
