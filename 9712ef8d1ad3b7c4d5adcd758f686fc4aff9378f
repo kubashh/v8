@@ -121,6 +121,24 @@
     },
     {
       "key": {
+        "uuid": "5f012c93_68adb809",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-16T09:18:43Z",
+      "side": 1,
+      "message": "TurboFan uses a valid feedback as an indication to generate \"UpdateFeedback\" instructions: https://cs.chromium.org/chromium/src/v8/src/compiler/backend/code-generator.cc?type\u003dcs\u0026g\u003d0\u0026l\u003d1160\n\nThese are expected only for CallIC and are used to turn off speculative optimizations. https://cs.chromium.org/chromium/src/v8/src/objects/feedback-vector.cc?q\u003dfeedback-vector.cc\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d891.\n\nAFAIU, CheckMaps corresponding to CallICs have feedback set and the CheckMaps corresponding to others don\u0027t have feedback. For dynamic map checks when we always have a valid feedback. This could generate \"UpdateFeedback\" instructions which ins\u0027t expected for LoadNamedProperty. So, this isn\u0027t just extra deopt data. We shouldn\u0027t be generating these instructions. One way of fixing this is to flag if these instructions need to be generated explicitly rather than relying on valid feedback or maybe check if the feedback kind is CallIC before generating these instructions.",
+      "parentUuid": "2ddbd957_d85302f7",
+      "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "659fb719_b748d55f",
         "filename": "src/compiler/simplified-operator.h",
         "patchSetId": 12
