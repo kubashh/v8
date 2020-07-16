@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "817ddc07_269cb3a0",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-16T11:11:21Z",
+      "side": 1,
+      "message": "I don\u0027t think this holds. We have PostNonNestableTask that guarantees that, but PostIdleTask has no such guarantees and the embedder can invoke it with a stack.",
+      "range": {
+        "startLine": 124,
+        "startChar": 5,
+        "endLine": 124,
+        "endChar": 65
+      },
+      "revId": "bf65f575677fef9347b4eade44342eb9817f3b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8bcd60c2_1d3d520c",
         "filename": "src/heap/cppgc/marker.cc",
         "patchSetId": 4
@@ -13,6 +36,29 @@
       "writtenOn": "2020-07-15T18:02:34Z",
       "side": 1,
       "message": "We don\u0027t visit the stack in the beginning of incremental marking (only in the atomic pause). This seems to break it, if config contains non-empty stack (like in one of the tests in the CL).",
+      "revId": "bf65f575677fef9347b4eade44342eb9817f3b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57e4b34a_ec3498d6",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-16T11:11:21Z",
+      "side": 1,
+      "message": "Why do we need this and cannot use IncrementalMarkingStep in tests?",
+      "range": {
+        "startLine": 251,
+        "startChar": 17,
+        "endLine": 251,
+        "endChar": 49
+      },
       "revId": "bf65f575677fef9347b4eade44342eb9817f3b83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
