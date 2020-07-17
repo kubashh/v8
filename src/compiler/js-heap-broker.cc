@@ -2404,6 +2404,7 @@ JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
       feedback_(zone()),
       bytecode_analyses_(zone()),
       property_access_infos_(zone()),
+      minimorphic_property_access_infos_(zone()),
       typed_array_string_tags_(zone()),
       serialized_functions_(zone()) {
   // Note that this initialization of {refs_} with the minimal initial capacity
@@ -4627,8 +4628,16 @@ bool ElementAccessFeedback::HasOnlyStringMaps(JSHeapBroker* broker) const {
 
 NamedAccessFeedback::NamedAccessFeedback(NameRef const& name,
                                          ZoneVector<Handle<Map>> const& maps,
-                                         FeedbackSlotKind slot_kind)
-    : ProcessedFeedback(kNamedAccess, slot_kind), name_(name), maps_(maps) {
+                                         FeedbackSlotKind slot_kind,
+                                         FeedbackKind feedback_kind,
+                                         FeedbackSource const& feedback_source,
+                                         Handle<Object> handler)
+    : ProcessedFeedback(kNamedAccess, slot_kind),
+      name_(name),
+      maps_(maps),
+      feedback_kind_(feedback_kind),
+      feedback_source_(feedback_source),
+      handler_(handler) {
   DCHECK(IsLoadICKind(slot_kind) || IsStoreICKind(slot_kind) ||
          IsStoreOwnICKind(slot_kind) || IsKeyedLoadICKind(slot_kind) ||
          IsKeyedHasICKind(slot_kind) || IsKeyedStoreICKind(slot_kind) ||
@@ -4692,6 +4701,40 @@ void FilterRelevantReceiverMaps(Isolate* isolate, MapHandles* maps) {
   // Remove everything between the last valid map and the end of the vector.
   maps->erase(out, end);
 }
+
+std::pair<NamedAccessFeedback::FeedbackKind, Smi> TryGetMinimorphicHandler(
+    FeedbackNexus const& nexus) {
+  auto invalid = std::pair<NamedAccessFeedback::FeedbackKind, Smi>(
+      NamedAccessFeedback::FeedbackKind::kOther, Smi::FromInt(-1));
+  if (!FLAG_dynamic_map_checks || !IsLoadICKind(nexus.kind())) return invalid;
+
+  std::vector<MapAndHandler> maps_and_handlers;
+  nexus.ExtractMapsAndHandlers(&maps_and_handlers);
+
+  Smi initial_handler = Smi::FromInt(-1);
+  for (MapAndHandler map_and_handler : maps_and_handlers) {
+    auto handler = map_and_handler.second;
+    DCHECK(!handler->IsCleared());
+    // TODO(mythria): extend this to DataHandlers too
+    if (!handler.object()->IsSmi()) return invalid;
+    if (LoadHandler::GetHandlerKind(handler.object()->ToSmi()) !=
+        LoadHandler::Kind::kField) {
+      return invalid;
+    }
+    if (initial_handler.value() == -1) {
+      initial_handler = handler.object()->ToSmi();
+    }
+    if (initial_handler != handler.object()->ToSmi()) return invalid;
+  }
+  if (initial_handler.value() == -1) return invalid;
+
+  auto state =
+      (nexus.ic_state() == InlineCacheState::MONOMORPHIC)
+          ? NamedAccessFeedback::FeedbackKind::kMonomorphicWithDynamicCheck
+          : NamedAccessFeedback::FeedbackKind::kPolymorphicWithDynamicCheck;
+  return std::pair<NamedAccessFeedback::FeedbackKind, Smi>(state,
+                                                           initial_handler);
+}
 }  // namespace
 
 bool JSHeapBroker::CanUseFeedback(const FeedbackNexus& nexus) const {
@@ -4727,8 +4770,11 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
   if (name.has_value()) {
     // We rely on this invariant in JSGenericLowering.
     DCHECK_IMPLIES(maps.empty(), nexus.ic_state() == MEGAMORPHIC);
+    auto handler_pair = TryGetMinimorphicHandler(nexus);
+    Handle<Object> handler(handler_pair.second, isolate());
     return *zone()->New<NamedAccessFeedback>(
-        *name, ZoneVector<Handle<Map>>(maps.begin(), maps.end(), zone()), kind);
+        *name, ZoneVector<Handle<Map>>(maps.begin(), maps.end(), zone()), kind,
+        handler_pair.first, source, handler);
   } else if (nexus.GetKeyType() == ELEMENT && !maps.empty()) {
     return ProcessFeedbackMapsForElementAccess(
         maps, KeyedAccessMode::FromNexus(nexus), kind);
@@ -5172,6 +5218,30 @@ PropertyAccessInfo JSHeapBroker::GetPropertyAccessInfo(
                     << access_mode << " of property " << name << " on map "
                     << map);
     property_access_infos_.insert({target, access_info});
+  }
+  return access_info;
+}
+
+PropertyAccessInfo JSHeapBroker::GetPropertyAccessInfo(
+    NamedAccessFeedback const& feedback, CompilationDependencies* dependencies,
+    SerializationPolicy policy) {
+  auto it = minimorphic_property_access_infos_.find(
+      feedback.feedback_source().index());
+  if (it != minimorphic_property_access_infos_.end()) return it->second;
+
+  if (policy == SerializationPolicy::kAssumeSerialized) {
+    TRACE_BROKER_MISSING(this, "PropertyAccessInfo for slot "
+                                   << feedback.feedback_source().index());
+    return PropertyAccessInfo::Invalid(zone());
+  }
+
+  AccessInfoFactory factory(this, dependencies, zone());
+  PropertyAccessInfo access_info = factory.ComputePropertyAccessInfo(feedback);
+  if (is_concurrent_inlining_) {
+    TRACE(this, "Storing minimorphic PropertyAccessInfo for "
+                    << feedback.feedback_source().index());
+    minimorphic_property_access_infos_.insert(
+        {feedback.feedback_source().index(), access_info});
   }
   return access_info;
 }

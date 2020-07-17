@@ -440,6 +440,7 @@ class Deoptimizer : public Malloced {
   };
 
   static DeoptInfo GetDeoptInfo(Code code, Address from);
+  DeoptimizeReason GetDeoptReason() const;
 
   static int ComputeSourcePositionFromBytecodeArray(SharedFunctionInfo shared,
                                                     BailoutId node_id);
