@@ -169,6 +169,7 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
   // code object from deoptimizer.
   Handle<Code> optimized_code = deoptimizer->compiled_code();
   DeoptimizeKind type = deoptimizer->deopt_kind();
+  DeoptimizeReason reason = deoptimizer->GetDeoptReason();
   bool should_reuse_code = deoptimizer->should_reuse_code();
 
   // TODO(turbofan): We currently need the native context to materialize
