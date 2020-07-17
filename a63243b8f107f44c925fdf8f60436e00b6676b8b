@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b631fe7_03faaaf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-17T10:01:53Z",
+      "side": 1,
+      "message": "Thanks a lot Sathya. I just have one more suggestion. Otherwise lgtm from my side.",
+      "revId": "a63243b8f107f44c925fdf8f60436e00b6676b8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

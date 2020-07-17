@@ -404,6 +404,24 @@
       "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "43e399d2_649876c5",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-17T10:01:53Z",
+      "side": 1,
+      "message": "I defer the decision to Georg, but as I mentioned earlier I prefer if we just drop these and also GetDeoptReason from deoptimizer.cc. These won\u0027t be required once we move to a new deopt type",
+      "parentUuid": "4d1f5954_3904b1a7",
+      "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
