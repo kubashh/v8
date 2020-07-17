@@ -507,8 +507,8 @@ DEFINE_BOOL(trace_migration, false, "trace object migration")
 DEFINE_BOOL(trace_generalization, false, "trace map generalization")
 
 // Flags for TurboProp.
-DEFINE_BOOL(turboprop, false, "enable experimental turboprop mid-tier compiler")
-DEFINE_BOOL(turboprop_fast_reg_alloc, false,
+DEFINE_BOOL(turboprop, true, "enable experimental turboprop mid-tier compiler")
+DEFINE_BOOL(turboprop_fast_reg_alloc, true,
             "enable experimental fast register allocator for mid-tier compiler")
 DEFINE_NEG_IMPLICATION(turboprop, turbo_inlining)
 DEFINE_IMPLICATION(turboprop, concurrent_inlining)
@@ -673,6 +673,8 @@ DEFINE_BOOL(
 DEFINE_BOOL(turbo_fast_api_calls, false, "enable fast API calls from TurboFan")
 DEFINE_INT(reuse_opt_code_count, 0,
            "don't discard optimized code for the specified number of deopts.")
+DEFINE_BOOL(dynamic_map_checks, true,
+            "use dynamic map checks when all handlers in an IC are the same")
 
 // Native context independent (NCI) code.
 DEFINE_BOOL(turbo_nci, false,

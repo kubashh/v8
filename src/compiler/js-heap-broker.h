@@ -191,6 +191,11 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
       CompilationDependencies* dependencies = nullptr,
       SerializationPolicy policy = SerializationPolicy::kAssumeSerialized);
 
+  PropertyAccessInfo GetPropertyAccessInfo(
+      NamedAccessFeedback const& feedback,
+      CompilationDependencies* dependencies = nullptr,
+      SerializationPolicy policy = SerializationPolicy::kAssumeSerialized);
+
   StringRef GetTypedArrayStringTag(ElementsKind kind);
 
   bool ShouldBeSerializedForCompilation(const SharedFunctionInfoRef& shared,
@@ -264,6 +269,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   ZoneUnorderedMap<PropertyAccessTarget, PropertyAccessInfo,
                    PropertyAccessTarget::Hash, PropertyAccessTarget::Equal>
       property_access_infos_;
+  ZoneUnorderedMap<int, PropertyAccessInfo> minimorphic_property_access_infos_;
 
   ZoneVector<ObjectData*> typed_array_string_tags_;
 
