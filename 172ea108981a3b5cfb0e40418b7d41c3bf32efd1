@@ -16,6 +16,120 @@
       "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c21057e0_476f5da8",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1895,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-17T14:26:00Z",
+      "side": 1,
+      "message": "The deopt here includes the case where the feedback is monomorphic but has a different map, right?",
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a6e52e0_b38913fb",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1900,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-17T14:26:00Z",
+      "side": 1,
+      "message": "Maybe I\u0027m misunderstanding but doesn\u0027t this contradict the comment in line 1871 that we can\u0027t go back to monomorphic?\n\nEven if it were true that we can\u0027t get from polymorphic to monomorphic, couldn\u0027t it happen that the whole bytecode and feedback gets flushed away but the optimized code lives on and eventually sees monomorphic again?",
+      "range": {
+        "startLine": 1900,
+        "startChar": 43,
+        "endLine": 1900,
+        "endChar": 71
+      },
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94a8f2b9_588df49e",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-17T14:26:00Z",
+      "side": 1,
+      "message": "Please move that to where it\u0027s used and make it constexpr.",
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "995af372_b468e752",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1915,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-17T14:26:00Z",
+      "side": 1,
+      "message": "Just to make sure: is the array guaranteed to be non-empty?\n\nIs this subtraction of 1 a precaution? If each entry covers two slots then I don\u0027t see why the subtraction is needed.",
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e07eeb27_c52904fd",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1916,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-17T14:26:00Z",
+      "side": 1,
+      "message": "You\u0027re using Int32 operations for the index, so this should be Word32 representation.",
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed672179_de98814e",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-17T14:26:00Z",
+      "side": 1,
+      "message": "Maybe call this kHandlerOffsetInEntry.",
+      "range": {
+        "startLine": 1933,
+        "startChar": 46,
+        "endLine": 1933,
+        "endChar": 47
+      },
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
