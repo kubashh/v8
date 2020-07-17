@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "65294b60_a51c976a",
+        "filename": "src/compiler/feedback-source.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T07:25:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a17db7a_24517626",
+      "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f680c2e_078c03a9",
         "filename": "src/compiler/graph-assembler.cc",
         "patchSetId": 12
@@ -50,6 +68,24 @@
       "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48438d5e_282f43ed",
+        "filename": "src/compiler/graph-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T07:25:45Z",
+      "side": 1,
+      "message": "The existing implementation is incorrect, this CL fixes it.",
+      "parentUuid": "2f680c2e_078c03a9",
+      "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "ec925344_9a17c00f",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T07:25:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "568ea36c_fdb005e9",
+      "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a02b5df_f7e7f677",
         "filename": "src/compiler/simplified-operator.cc",
         "patchSetId": 12
@@ -87,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "ba28d502_76a0c25d",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T07:25:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a02b5df_f7e7f677",
+      "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6093f6d_e4420d13",
         "filename": "src/compiler/simplified-operator.cc",
         "patchSetId": 12
@@ -101,6 +173,24 @@
       "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bf1758d_dbc4513b",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T07:25:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6093f6d_e4420d13",
+      "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -211,6 +301,24 @@
     },
     {
       "key": {
+        "uuid": "a00edfb8_d2cab6b8",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T07:25:45Z",
+      "side": 1,
+      "message": "Aha, thanks! I updated that to use an empty FeedbackSource() and removed the todo",
+      "parentUuid": "26bc4efa_ec9112f2",
+      "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "659fb719_b748d55f",
         "filename": "src/compiler/simplified-operator.h",
         "patchSetId": 12
@@ -228,6 +336,24 @@
     },
     {
       "key": {
+        "uuid": "1f95c016_4fd02a3a",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T07:25:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "659fb719_b748d55f",
+      "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d75a52fb_a7a633d2",
         "filename": "src/runtime/runtime-compiler.cc",
         "patchSetId": 12
@@ -239,6 +365,24 @@
       "writtenOn": "2020-07-15T15:42:10Z",
       "side": 1,
       "message": "I thought the reason does normally not get recorded.",
+      "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d1f5954_3904b1a7",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T07:25:45Z",
+      "side": 1,
+      "message": "Yeah, you\u0027re right (as Mythri pointed as well). We need to create a new kind of deopt instead (like a bailout) that we can check against here instead of a deopt reason (as my TODO states). I\u0027d like to do that in a follow on patch if that\u0027s ok as this isn\u0027t used anywhere yet.",
+      "parentUuid": "d75a52fb_a7a633d2",
       "revId": "9712ef8d1ad3b7c4d5adcd758f686fc4aff9378f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
