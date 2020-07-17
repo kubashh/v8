@@ -917,7 +917,6 @@ namespace internal {
   CPP(Trace)                                                                   \
                                                                                \
   /* Weak refs */                                                              \
-  CPP(FinalizationRegistryRegister)                                            \
   CPP(FinalizationRegistryUnregister)                                          \
                                                                                \
   /* Async modules */                                                          \
