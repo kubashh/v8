@@ -26,6 +26,32 @@ RUNTIME_FUNCTION(Runtime_ShrinkFinalizationRegistryUnregisterTokenMap) {
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
+RUNTIME_FUNCTION(Runtime_JSFinalizationRegistryRegister) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(4, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSFinalizationRegistry, finalization_registry, 0);
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, target, 1);
+  CONVERT_ARG_HANDLE_CHECKED(Object, held_value, 2);
+  CONVERT_ARG_HANDLE_CHECKED(Object, unregister_token, 3);
+
+  JSFinalizationRegistry::Register(finalization_registry, target, held_value,
+                                   unregister_token, isolate);
+
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+RUNTIME_FUNCTION(Runtime_JSFinalizationRegistryUnregister) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(2, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSFinalizationRegistry, finalization_registry, 0);
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, unregister_token, 1);
+
+  bool success = JSFinalizationRegistry::Unregister(finalization_registry,
+                                                    unregister_token, isolate);
+
+  return *isolate->factory()->ToBoolean(success);
+}
+
 RUNTIME_FUNCTION(Runtime_JSWeakRefAddToKeptObjects) {
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
