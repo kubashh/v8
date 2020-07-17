@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5da9f68e_bcc06f22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-17T20:12:07Z",
+      "side": 1,
+      "message": "In general I find it a little less readable, but the no-unregister token fast path in .register seems a decent reason, so let\u0027s do it for .register.\n\nOTOH .unregister should stay as C++. AFAICT putting it in Torque is just a mystification of what ends up being a C++ call anyway.",
+      "revId": "800a65b36fc1e8e49a2897c85382eeee31ccb19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01be193c_de87277c",
+        "filename": "src/builtins/finalization-registry.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-17T20:12:07Z",
+      "side": 1,
+      "message": "A comment about why calling the runtime function is needed when there is an unregister token and why it isn\u0027t needed when there isn\u0027t an unregister token would be good.",
+      "revId": "800a65b36fc1e8e49a2897c85382eeee31ccb19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f03ce5f_79f2b47d",
+        "filename": "src/builtins/finalization-registry.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-17T20:12:07Z",
+      "side": 1,
+      "message": "Nit: I\u0027d reorder the cases from top to bottom as Undefined, JSReceiver, then JSAny.",
+      "revId": "800a65b36fc1e8e49a2897c85382eeee31ccb19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "046e7745_6c1f15a4",
+        "filename": "src/builtins/finalization-registry.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-17T20:12:07Z",
+      "side": 1,
+      "message": "I\u0027d like to avoid duplication of the WeakCell allocation and linked list logic both in the C++ JSFinalizationRegistry::Register method and here, in Torque.\n\nJSFinalizationRegistry::Register should probably be renamed to something like RegisterWithUnregisterToken, changed to take a pre-allocated WeakCell, and be narrowed in scope to only dealing with inserting into the token map and the key_list.",
+      "revId": "800a65b36fc1e8e49a2897c85382eeee31ccb19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4305c5b6_9e387e6d",
+        "filename": "src/builtins/finalization-registry.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-07-17T20:12:07Z",
+      "side": 1,
+      "message": "There doesn\u0027t seem to be any benefit in converting Unregister to Torque, since the bulk of its work is still in the C++ runtime call. There\u0027s no fast path where we can avoid the C++ boundary, so I think I\u0027d just keep the unregister method as is in C++.",
+      "revId": "800a65b36fc1e8e49a2897c85382eeee31ccb19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
