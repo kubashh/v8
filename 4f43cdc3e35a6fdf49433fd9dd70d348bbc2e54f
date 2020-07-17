@@ -16,6 +16,23 @@
       "revId": "4f43cdc3e35a6fdf49433fd9dd70d348bbc2e54f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b8425d3b_e422e96e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2020-07-17T17:52:54Z",
+      "side": 1,
+      "message": "lgtm for the API, would be good to get signoff from someone Node knowledgeable (Victor, perhaps, since he\u0027s CCed on the bug?).",
+      "revId": "4f43cdc3e35a6fdf49433fd9dd70d348bbc2e54f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
