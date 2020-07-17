@@ -2127,6 +2127,11 @@ class LiftoffCompiler {
       return;
     }
 
+    if (transform == LoadTransformationKind::kZeroExtend) {
+      unsupported(decoder, kSimd, "prototyping s128 load zero extend");
+      return;
+    }
+
     LiftoffRegList pinned;
     Register index = pinned.set(__ PopToRegister()).gp();
     // For load splats, LoadType is the size of the load, and for load
