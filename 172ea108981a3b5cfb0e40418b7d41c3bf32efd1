@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79f5a9b4_2796ec60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-17T11:30:58Z",
+      "side": 1,
+      "message": "Thanks Sathya! lgtm. ",
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
