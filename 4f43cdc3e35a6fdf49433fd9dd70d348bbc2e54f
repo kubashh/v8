@@ -33,6 +33,24 @@
       "revId": "4f43cdc3e35a6fdf49433fd9dd70d348bbc2e54f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "559b0010_6e3f7ff5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-17T17:56:30Z",
+      "side": 1,
+      "message": "FYI: I have a (very small) CL locally which makes the node platform use this new API. After that, I can land the follow-up CL which currently fails on node: https://chromium-review.googlesource.com/c/v8/v8/+/2301933",
+      "parentUuid": "b8425d3b_e422e96e",
+      "revId": "4f43cdc3e35a6fdf49433fd9dd70d348bbc2e54f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
