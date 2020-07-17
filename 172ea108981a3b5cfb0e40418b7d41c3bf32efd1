@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "260320c5_7a0fb04f",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1895,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T19:09:58Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "c21057e0_476f5da8",
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a6e52e0_b38913fb",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 18
@@ -59,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "8330a652_ba4e068c",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1900,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T19:09:58Z",
+      "side": 1,
+      "message": "\u003e Maybe I\u0027m misunderstanding but doesn\u0027t this contradict the comment in line 1871 that we can\u0027t go back to monomorphic?\n\nYou\u0027re right, that comment was incorrect. I\u0027ve updated it.\n\n\n\u003e Even if it were true that we can\u0027t get from polymorphic to monomorphic, couldn\u0027t it happen that the whole bytecode and feedback gets flushed away but the optimized code lives on and eventually sees monomorphic again?\n\nPossibly, but we will deopt in that case.",
+      "parentUuid": "3a6e52e0_b38913fb",
+      "range": {
+        "startLine": 1900,
+        "startChar": 43,
+        "endLine": 1900,
+        "endChar": 71
+      },
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94a8f2b9_588df49e",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 18
@@ -73,6 +115,24 @@
       "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "629e2a90_52b284da",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T19:09:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94a8f2b9_588df49e",
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +153,24 @@
     },
     {
       "key": {
+        "uuid": "025d81a4_8bf30cde",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1915,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T19:09:58Z",
+      "side": 1,
+      "message": "I\u0027m super confused about this too :/ I think this was a mistake. Removed.",
+      "parentUuid": "995af372_b468e752",
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e07eeb27_c52904fd",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 18
@@ -107,6 +185,24 @@
       "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64761a51_8e21a8b8",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1916,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T19:09:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e07eeb27_c52904fd",
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -130,6 +226,30 @@
       "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb354377_73ca773e",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-17T19:09:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed672179_de98814e",
+      "range": {
+        "startLine": 1933,
+        "startChar": 46,
+        "endLine": 1933,
+        "endChar": 47
+      },
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
