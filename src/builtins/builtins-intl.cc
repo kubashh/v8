@@ -578,6 +578,38 @@ BUILTIN(IntlGetCanonicalLocales) {
                            Intl::GetCanonicalLocales(isolate, locales));
 }
 
+BUILTIN(IntlGetSupportedCalendars) {
+  HandleScope scope(isolate);
+
+  RETURN_RESULT_OR_FAILURE(isolate, Intl::GetSupportedCalendars(isolate));
+}
+
+BUILTIN(IntlGetSupportedCurrencies) {
+  HandleScope scope(isolate);
+
+  RETURN_RESULT_OR_FAILURE(isolate, Intl::GetSupportedCurrencies(isolate));
+}
+
+BUILTIN(IntlGetSupportedNumberingSystems) {
+  HandleScope scope(isolate);
+
+  RETURN_RESULT_OR_FAILURE(isolate,
+                           Intl::GetSupportedNumberingSystems(isolate));
+}
+
+BUILTIN(IntlGetSupportedTimeZones) {
+  HandleScope scope(isolate);
+  Handle<Object> options = args.atOrUndefined(isolate, 1);
+
+  RETURN_RESULT_OR_FAILURE(isolate, Intl::GetSupportedTimeZones(isolate, options));
+}
+
+BUILTIN(IntlGetSupportedUnits) {
+  HandleScope scope(isolate);
+
+  RETURN_RESULT_OR_FAILURE(isolate, Intl::GetSupportedUnits(isolate));
+}
+
 BUILTIN(ListFormatConstructor) {
   HandleScope scope(isolate);
 

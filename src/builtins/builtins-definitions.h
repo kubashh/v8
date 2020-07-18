@@ -971,6 +971,16 @@ namespace internal {
   CPP(DisplayNamesSupportedLocalesOf)                                  \
   /* ecma402 #sec-intl.getcanonicallocales */                          \
   CPP(IntlGetCanonicalLocales)                                         \
+  /* ecma402 #sec-intl.getsupportedcalendars */                        \
+  CPP(IntlGetSupportedCalendars)                                       \
+  /* ecma402 #sec-intl.getsupportedcurrencies */                       \
+  CPP(IntlGetSupportedCurrencies)                                      \
+  /* ecma402 #sec-intl.getsupportednumberingsystems */                 \
+  CPP(IntlGetSupportedNumberingSystems)                                \
+  /* ecma402 #sec-intl.getsupportedtimezones */                        \
+  CPP(IntlGetSupportedTimeZones)                                       \
+  /* ecma402 #sec-intl.getsupportedunits */                            \
+  CPP(IntlGetSupportedUnits)                                           \
   /* ecma402 #sec-intl-listformat-constructor */                       \
   CPP(ListFormatConstructor)                                           \
   /* ecma402 #sec-intl-list-format.prototype.format */                 \

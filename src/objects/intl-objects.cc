@@ -41,6 +41,7 @@
 #include "unicode/numfmt.h"
 #include "unicode/numsys.h"
 #include "unicode/timezone.h"
+#include "unicode/ucurr.h"
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
 #include "unicode/uvernum.h"  // U_ICU_VERSION_MAJOR_NUM
@@ -1643,6 +1644,181 @@ MaybeHandle<JSArray> Intl::GetCanonicalLocales(Isolate* isolate,
   return CreateArrayFromList(isolate, maybe_ll.FromJust(), attr);
 }
 
+std::string Intl::CanonicalizeCalendar(const std::string& calendar) {
+  // Maps ICU calendar names to LDML/BCP47 types for key 'ca'.
+  // See typeMap section in third_party/icu/source/data/misc/keyTypeData.txt
+  // and
+  // http://www.unicode.org/repos/cldr/tags/latest/common/bcp47/calendar.xml
+  if (calendar == "gregorian") return "gregory";
+  if (calendar == "ethiopic-amete-alem") return "ethioaa";
+  return calendar;
+}
+
+// ecma-402 #sec-intl.getsupportedcalendars
+MaybeHandle<JSArray> Intl::GetSupportedCalendars(Isolate* isolate) {
+  Factory* factory = isolate->factory();
+  // Let array be ! ArrayCreate(0).
+  Handle<JSArray> array = factory->NewJSArray(0);
+
+  UErrorCode status = U_ZERO_ERROR;
+  icu::Locale locale("und");
+  std::unique_ptr<icu::StringEnumeration> enumeration(
+      icu::Calendar::getKeywordValuesForLocale("calendar", locale, false,
+                                               status));
+  if (U_FAILURE(status)) {
+    return array;
+  }
+
+  // 3. Let n be 0.
+  uint32_t n = 0;
+  int32_t length;
+  PropertyAttributes attr = static_cast<PropertyAttributes>(NONE);
+  for (const char* item = enumeration->next(&length, status);
+       U_SUCCESS(status) && item != nullptr;
+       item = enumeration->next(&length, status)) {
+    std::string calendar_str = Intl::CanonicalizeCalendar(item);
+    JSObject::AddDataElement(
+        array, n++, factory->NewStringFromAsciiChecked(calendar_str.c_str()),
+        attr);
+  }
+  // Return array.
+  return array;
+}
+
+// ecma-402 #sec-intl.getsupportedcurrencies
+MaybeHandle<JSArray> Intl::GetSupportedCurrencies(Isolate* isolate) {
+  Factory* factory = isolate->factory();
+  // Let array be ! ArrayCreate(0).
+  Handle<JSArray> array = factory->NewJSArray(0);
+
+  UErrorCode status = U_ZERO_ERROR;
+  UEnumeration* ids =
+      ucurr_openISOCurrencies(UCURR_COMMON | UCURR_NON_DEPRECATED, &status);
+  int32_t n, count = uenum_count(ids, &status);
+
+  PropertyAttributes attr = static_cast<PropertyAttributes>(NONE);
+  for (n = 0; U_SUCCESS(status) && (n < count); ++n) {
+    int32_t len;
+    const char* next = uenum_next(ids, &len, &status);
+    JSObject::AddDataElement(array, n, factory->NewStringFromAsciiChecked(next),
+                             attr);
+  }
+
+  uenum_close(ids);
+  // Return array.
+  return array;
+}
+
+// ecma-402 #sec-intl.getsupportednumberingsystems
+MaybeHandle<JSArray> Intl::GetSupportedNumberingSystems(Isolate* isolate) {
+  Factory* factory = isolate->factory();
+  // Let array be ! ArrayCreate(0).
+  Handle<JSArray> array = factory->NewJSArray(0);
+
+  UErrorCode status = U_ZERO_ERROR;
+  std::unique_ptr<icu::StringEnumeration> enumeration(
+      icu::NumberingSystem::getAvailableNames(status));
+  if (U_FAILURE(status)) {
+    return array;
+  }
+
+  // 3. Let n be 0.
+  uint32_t n = 0;
+
+  int32_t length;
+  PropertyAttributes attr = static_cast<PropertyAttributes>(NONE);
+  for (const char* item = enumeration->next(&length, status);
+       U_SUCCESS(status) && item != nullptr;
+       item = enumeration->next(&length, status)) {
+    std::unique_ptr<icu::NumberingSystem> numbering_system(
+        icu::NumberingSystem::createInstanceByName(item, status));
+    // Filter out those cannot be created.
+    if (U_FAILURE(status)) {
+      status = U_ZERO_ERROR;
+      continue;
+    }
+    // Skip algorithmic one since chrome filter out the resource.
+    if (numbering_system->isAlgorithmic()) {
+      continue;
+    }
+    JSObject::AddDataElement(array, n++,
+                             factory->NewStringFromAsciiChecked(item), attr);
+  }
+  // Return array.
+  return array;
+}
+
+// ecma-402 #sec-intl.getsupportedtimezones
+MaybeHandle<JSArray> Intl::GetSupportedTimeZones(Isolate* isolate, Handle<Object> options_in) {
+  Factory* factory = isolate->factory();
+  Handle<JSReceiver> options;
+
+  // If options is undefined, then
+  if (options_in->IsUndefined(isolate)) {
+    // a. Let options be ObjectCreate(null).
+    options = isolate->factory()->NewJSObjectWithNullProto();
+    // Else
+  } else {
+    // a. Let options be ? ToObject(options).
+    ASSIGN_RETURN_ON_EXCEPTION(isolate, options,
+                               Object::ToObject(isolate, options_in),
+                               JSArray);
+  }
+
+  // Let region be ? GetOption(options, "region", "string", undefined,
+  // undefined).
+  const std::vector<const char*> empty_values = {};
+  std::unique_ptr<char[]> region_str = nullptr;
+  Maybe<bool> maybe_region =
+      Intl::GetStringOption(isolate, options, "region", empty_values,
+                            "getSupportedTimeZones", &region_str);
+  MAYBE_RETURN(maybe_region, MaybeHandle<JSArray>());
+  // 8. If region is not undefined, then
+
+  // Let array be ! ArrayCreate(0).
+  Handle<JSArray> array = factory->NewJSArray(0);
+
+  UErrorCode status = U_ZERO_ERROR;
+  std::unique_ptr<icu::StringEnumeration> enumeration(
+      icu::TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL_LOCATION, region_str.get(),
+                                                 nullptr, status));
+  if (U_FAILURE(status)) {
+    return array;
+  }
+
+  // 3. Let n be 0.
+  uint32_t n = 0;
+  int32_t length;
+  PropertyAttributes attr = static_cast<PropertyAttributes>(NONE);
+  for (const char* item = enumeration->next(&length, status);
+       U_SUCCESS(status) && item != nullptr;
+       item = enumeration->next(&length, status)) {
+    JSObject::AddDataElement(array, n++,
+                             factory->NewStringFromAsciiChecked(item), attr);
+  }
+  // Return array.
+  return array;
+}
+
+// ecma-402 #sec-intl.getsupportedunits
+MaybeHandle<JSArray> Intl::GetSupportedUnits(Isolate* isolate) {
+  Factory* factory = isolate->factory();
+  // Let array be ! ArrayCreate(0).
+  Handle<JSArray> array = factory->NewJSArray(0);
+  std::vector<std::string> units = Intl::GetSupportedUnits();
+
+  // 3. Let n be 0.
+  uint32_t n = 0;
+  PropertyAttributes attr = static_cast<PropertyAttributes>(NONE);
+  for (auto it = units.begin(); it != units.end(); ++it) {
+    JSObject::AddDataElement(
+        array, n++, factory->NewStringFromAsciiChecked(it->c_str()), attr);
+  }
+
+  // Return array.
+  return array;
+}
+
 // ECMA 402 Intl.*.supportedLocalesOf
 MaybeHandle<JSObject> Intl::SupportedLocalesOf(
     Isolate* isolate, const char* method,
@@ -2197,6 +2373,25 @@ MaybeHandle<String> Intl::FormattedToString(
   return Intl::ToString(isolate, result);
 }
 
+std::vector<std::string> Intl::GetSupportedUnits() {
+  // See the list in ecma402 #sec-issanctionedsimpleunitidentifier
+  return std::vector<std::string>(
+      {"acre",       "bit",        "byte",
+       "celsius",    "centimeter", "day",
+       "degree",     "fahrenheit", "fluid-ounce",
+       "foot",       "gallon",     "gigabit",
+       "gigabyte",   "gram",       "hectare",
+       "hour",       "inch",       "kilobit",
+       "kilobyte",   "kilogram",   "kilometer",
+       "liter",      "megabit",    "megabyte",
+       "meter",      "mile",       "mile-scandinavian",
+       "millimeter", "milliliter", "millisecond",
+       "minute",     "month",      "ounce",
+       "percent",    "petabyte",   "pound",
+       "second",     "stone",      "terabit",
+       "terabyte",   "week",       "yard",
+       "year"});
+}
 
 }  // namespace internal
 }  // namespace v8
