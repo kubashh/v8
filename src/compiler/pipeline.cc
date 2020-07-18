@@ -499,10 +499,10 @@ class PipelineData {
   void InitializeMidTierRegisterAllocationData(
       const RegisterConfiguration* config, CallDescriptor* call_descriptor) {
     DCHECK_NULL(register_allocation_data_);
-    register_allocation_data_ = new (register_allocation_zone())
-        MidTierRegisterAllocationData(config, register_allocation_zone(),
-                                      frame(), sequence(),
-                                      &info()->tick_counter(), debug_name());
+    register_allocation_data_ =
+        register_allocation_zone()->New<MidTierRegisterAllocationData>(
+            config, register_allocation_zone(), frame(), sequence(),
+            &info()->tick_counter(), debug_name());
   }
 
   void InitializeOsrHelper() {
@@ -3545,7 +3545,7 @@ void PipelineImpl::AllocateRegistersForMidTier(
   if (run_verifier) {
     verifier_zone.reset(
         new Zone(data->allocator(), kRegisterAllocatorVerifierZoneName));
-    verifier = new (verifier_zone.get()) RegisterAllocatorVerifier(
+    verifier = verifier_zone->New<RegisterAllocatorVerifier>(
         verifier_zone.get(), config, data->sequence(), data->frame());
   }
 
