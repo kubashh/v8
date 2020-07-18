@@ -2759,7 +2759,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
 
     SimpleInstallFunction(isolate(), intl, "getCanonicalLocales",
                           Builtins::kIntlGetCanonicalLocales, 1, false);
-
     {  // -- D a t e T i m e F o r m a t
       Handle<JSFunction> date_time_format_constructor = InstallFunction(
           isolate_, intl, "DateTimeFormat", JS_DATE_TIME_FORMAT_TYPE,
@@ -4282,6 +4281,26 @@ void Genesis::InitializeGlobal_harmony_string_replaceall() {
 }
 
 #ifdef V8_INTL_SUPPORT
+
+void Genesis::InitializeGlobal_harmony_intl_enumeration() {
+  if (!FLAG_harmony_intl_enumeration) return;
+  Handle<JSObject> intl = Handle<JSObject>::cast(
+      JSReceiver::GetProperty(
+          isolate(),
+          Handle<JSReceiver>(native_context()->global_object(), isolate()),
+          factory()->InternalizeUtf8String("Intl"))
+          .ToHandleChecked());
+  SimpleInstallFunction(isolate(), intl, "getSupportedCalendars",
+                        Builtins::kIntlGetSupportedCalendars, 0, false);
+  SimpleInstallFunction(isolate(), intl, "getSupportedCurrencies",
+                        Builtins::kIntlGetSupportedCurrencies, 0, false);
+  SimpleInstallFunction(isolate(), intl, "getSupportedNumberingSystems",
+                        Builtins::kIntlGetSupportedNumberingSystems, 0, false);
+  SimpleInstallFunction(isolate(), intl, "getSupportedTimeZones",
+                        Builtins::kIntlGetSupportedTimeZones, 1, false);
+  SimpleInstallFunction(isolate(), intl, "getSupportedUnits",
+                        Builtins::kIntlGetSupportedUnits, 0, false);
+}
 
 void Genesis::InitializeGlobal_harmony_intl_segmenter() {
   if (!FLAG_harmony_intl_segmenter) return;
