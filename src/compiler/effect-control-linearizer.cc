@@ -73,6 +73,7 @@ class EffectControlLinearizer {
   Node* LowerPoisonIndex(Node* node);
   Node* LowerCheckInternalizedString(Node* node, Node* frame_state);
   void LowerCheckMaps(Node* node, Node* frame_state);
+  void LowerDynamicCheckMaps(Node* node, Node* frame_state);
   Node* LowerCompareMaps(Node* node);
   Node* LowerCheckNumber(Node* node, Node* frame_state);
   Node* LowerCheckClosure(Node* node, Node* frame_state);
@@ -259,7 +260,9 @@ class EffectControlLinearizer {
   Node* ChangeSmiToInt64(Node* value);
   Node* ObjectIsSmi(Node* value);
   Node* LoadFromSeqString(Node* receiver, Node* position, Node* is_one_byte);
-
+  Node* TruncateWordToInt32(Node* value);
+  Node* BuildIsStrongReference(Node* value);
+  Node* MakeWeak(Node* value);
   Node* SmiMaxValueConstant();
   Node* SmiShiftBitsConstant();
   void TransitionElementsTo(Node* node, Node* array, ElementsKind from,
@@ -920,6 +923,9 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       break;
     case IrOpcode::kCheckMaps:
       LowerCheckMaps(node, frame_state);
+      break;
+    case IrOpcode::kDynamicCheckMaps:
+      LowerDynamicCheckMaps(node, frame_state);
       break;
     case IrOpcode::kCompareMaps:
       result = LowerCompareMaps(node);
@@ -1838,6 +1844,100 @@ void EffectControlLinearizer::LowerCheckMaps(Node* node, Node* frame_state) {
     __ Goto(&done);
     __ Bind(&done);
   }
+}
+
+void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
+                                                    Node* frame_state) {
+  DynamicCheckMapsParameters const& p =
+      DynamicCheckMapsParametersOf(node->op());
+  Node* value = node->InputAt(0);
+
+  FeedbackSource const& feedback = p.feedback();
+  Node* vector = __ HeapConstant(feedback.vector);
+  Node* feedback_slot = __ LoadField(
+      AccessBuilder::ForFeedbackVectorSlot(feedback.index()), vector);
+  Node* value_map = __ LoadField(AccessBuilder::ForMap(), value);
+  value_map = MakeWeak(value_map);
+  Node* handler = p.handler()->IsSmi()
+                      ? __ SmiConstant(Smi::ToInt(*p.handler()))
+                      : __ HeapConstant(Handle<HeapObject>::cast(p.handler()));
+
+  auto done = __ MakeLabel();
+  auto maybe_poly = __ MakeLabel();
+  // Emit monomorphic check only if current state is monomorphic,
+  // otherwise it's not necessary as we can never go back to
+  // monomorphic state.
+  if (p.state() == DynamicCheckMapsParameters::kMonomorphic) {
+    Node* mono_check = __ TaggedEqual(feedback_slot, value_map);
+    __ GotoIfNot(mono_check, &maybe_poly);
+
+    Node* feedback_slot_handler = __ LoadField(
+        AccessBuilder::ForFeedbackVectorSlot(feedback.index() + 1), vector);
+    mono_check = __ TaggedEqual(handler, feedback_slot_handler);
+    __ DeoptimizeIfNot(DeoptimizeReason::kWrongHandler, FeedbackSource(),
+                       mono_check, frame_state,
+                       IsSafetyCheck::kCriticalSafetyCheck);
+
+    __ Goto(&done);
+  } else {
+    DCHECK(p.state() == DynamicCheckMapsParameters::kPolymorphic);
+    __ Goto(&maybe_poly);
+  }
+
+  __ Bind(&maybe_poly);
+  {
+    Node* poly_check = BuildIsStrongReference(feedback_slot);
+    if (p.state() == DynamicCheckMapsParameters::kMonomorphic) {
+      __ DeoptimizeIfNot(DeoptimizeReason::kMissingMap, FeedbackSource(),
+                         poly_check, frame_state,
+                         IsSafetyCheck::kCriticalSafetyCheck);
+
+    } else {
+      __ DeoptimizeIfNot(DeoptimizeReason::kTransitionedToMonomorphicIC,
+                         FeedbackSource(), poly_check, frame_state,
+                         IsSafetyCheck::kCriticalSafetyCheck);
+    }
+    Node* feedback_slot_map =
+        __ LoadField(AccessBuilder::ForMap(), feedback_slot);
+    Node* is_weak_fixed_array_check =
+        __ TaggedEqual(feedback_slot_map, __ WeakFixedArrayMapConstant());
+    __ DeoptimizeIfNot(DeoptimizeReason::kTransitionedToMegamorphicIC,
+                       FeedbackSource(), is_weak_fixed_array_check, frame_state,
+                       IsSafetyCheck::kCriticalSafetyCheck);
+
+    int kEntrySize = 2;
+    Node* weak_undefined_constant = MakeWeak(__ UndefinedConstant());
+    for (int i = 0; i < FLAG_max_polymorphic_map_count; i++) {
+      auto next_map = __ MakeLabel();
+      Node* maybe_map = __ LoadField(
+          AccessBuilder::ForWeakFixedArraySlot(i * kEntrySize), feedback_slot);
+      Node* loop_done = __ TaggedEqual(maybe_map, weak_undefined_constant);
+      __ DeoptimizeIf(DeoptimizeReason::kMissingMap, FeedbackSource(),
+                      loop_done, frame_state,
+                      IsSafetyCheck::kCriticalSafetyCheck);
+      Node* map_check = __ TaggedEqual(maybe_map, value_map);
+      if (i == FLAG_max_polymorphic_map_count - 1) {
+        __ DeoptimizeIfNot(DeoptimizeReason::kAllMapChecksFailed,
+                           FeedbackSource(), map_check, frame_state);
+      } else {
+        __ GotoIfNot(map_check, &next_map);
+      }
+      Node* maybe_handler =
+          __ LoadField(AccessBuilder::ForWeakFixedArraySlot(i * kEntrySize + 1),
+                       feedback_slot);
+      Node* handler_check = __ TaggedEqual(maybe_handler, handler);
+      __ DeoptimizeIfNot(DeoptimizeReason::kWrongHandler, FeedbackSource(),
+                         handler_check, frame_state,
+                         IsSafetyCheck::kCriticalSafetyCheck);
+
+      __ Goto(&done);
+      if (i < FLAG_max_polymorphic_map_count - 1) {
+        __ Bind(&next_map);
+      }
+    }
+  }
+
+  __ Bind(&done);
 }
 
 Node* EffectControlLinearizer::LowerCompareMaps(Node* node) {
@@ -6054,6 +6154,26 @@ Node* EffectControlLinearizer::LowerDateNow(Node* node) {
   return __ Call(call_descriptor, __ CEntryStubConstant(1),
                  __ ExternalConstant(ExternalReference::Create(id)),
                  __ Int32Constant(0), __ NoContextConstant());
+}
+
+Node* EffectControlLinearizer::TruncateWordToInt32(Node* value) {
+  if (machine()->Is64()) {
+    return __ TruncateInt64ToInt32(value);
+  }
+  return value;
+}
+
+Node* EffectControlLinearizer::BuildIsStrongReference(Node* value) {
+  return __ Word32Equal(
+      __ Word32And(
+          TruncateWordToInt32(__ BitcastTaggedToWordForTagAndSmiBits(value)),
+          __ Int32Constant(kHeapObjectTagMask)),
+      __ Int32Constant(kHeapObjectTag));
+}
+
+Node* EffectControlLinearizer::MakeWeak(Node* value) {
+  return __ BitcastWordToTagged(__ WordOr(
+      __ BitcastTaggedToWord(value), __ IntPtrConstant(kWeakHeapObjectTag)));
 }
 
 #undef __

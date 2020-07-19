@@ -531,6 +531,18 @@ FieldAccess AccessBuilder::ForFixedArrayLength() {
 }
 
 // static
+FieldAccess AccessBuilder::ForWeakFixedArrayLength() {
+  FieldAccess access = {kTaggedBase,
+                        WeakFixedArray::kLengthOffset,
+                        MaybeHandle<Name>(),
+                        MaybeHandle<Map>(),
+                        TypeCache::Get()->kWeakFixedArrayLengthType,
+                        MachineType::TaggedSigned(),
+                        kNoWriteBarrier};
+  return access;
+}
+
+// static
 FieldAccess AccessBuilder::ForSloppyArgumentsElementsContext() {
   FieldAccess access = {
       kTaggedBase,         SloppyArgumentsElements::kContextOffset,
@@ -849,6 +861,25 @@ FieldAccess AccessBuilder::ForFixedArraySlot(
 }
 
 // static
+FieldAccess AccessBuilder::ForFeedbackVectorSlot(int index) {
+  int offset = FeedbackVector::OffsetOfElementAt(index);
+  FieldAccess access = {kTaggedBase,      offset,
+                        Handle<Name>(),   MaybeHandle<Map>(),
+                        Type::Any(),      MachineType::AnyTagged(),
+                        kFullWriteBarrier};
+  return access;
+}
+
+// static
+FieldAccess AccessBuilder::ForWeakFixedArraySlot(size_t index) {
+  int offset = WeakFixedArray::OffsetOfElementAt(static_cast<int>(index));
+  FieldAccess access = {kTaggedBase,      offset,
+                        Handle<Name>(),   MaybeHandle<Map>(),
+                        Type::Any(),      MachineType::AnyTagged(),
+                        kFullWriteBarrier};
+  return access;
+}
+// static
 FieldAccess AccessBuilder::ForCellValue() {
   FieldAccess access = {kTaggedBase,       Cell::kValueOffset,
                         Handle<Name>(),    MaybeHandle<Map>(),
@@ -894,6 +925,14 @@ FieldAccess AccessBuilder::ForContextSlotKnownPointer(size_t index) {
 ElementAccess AccessBuilder::ForFixedArrayElement() {
   ElementAccess access = {kTaggedBase, FixedArray::kHeaderSize, Type::Any(),
                           MachineType::AnyTagged(), kFullWriteBarrier};
+  return access;
+}
+
+// static
+ElementAccess AccessBuilder::ForWeakFixedArrayElement() {
+  ElementAccess const access = {kTaggedBase, WeakFixedArray::kHeaderSize,
+                                Type::Any(), MachineType::AnyTagged(),
+                                kFullWriteBarrier};
   return access;
 }
 

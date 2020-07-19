@@ -5,6 +5,7 @@
 #ifndef V8_COMPILER_PROCESSED_FEEDBACK_H_
 #define V8_COMPILER_PROCESSED_FEEDBACK_H_
 
+#include "src/compiler/feedback-source.h"
 #include "src/compiler/heap-refs.h"
 
 namespace v8 {
@@ -157,15 +158,41 @@ class ElementAccessFeedback : public ProcessedFeedback {
 
 class NamedAccessFeedback : public ProcessedFeedback {
  public:
+  enum FeedbackKind {
+    kMonomorphicWithDynamicCheck,
+    kPolymorphicWithDynamicCheck,
+    kOther
+  };
+
   NamedAccessFeedback(NameRef const& name, ZoneVector<Handle<Map>> const& maps,
-                      FeedbackSlotKind slot_kind);
+                      FeedbackSlotKind slot_kind, FeedbackKind feedback_kind,
+                      FeedbackSource const& feedback_source,
+                      Handle<Object> handler);
 
   NameRef const& name() const { return name_; }
-  ZoneVector<Handle<Map>> const& maps() const { return maps_; }
+  ZoneVector<Handle<Map>> const& maps() const {
+    DCHECK(!is_minimorphic());
+    return maps_;
+  }
+  bool is_monomorphic() const {
+    return feedback_kind_ == kMonomorphicWithDynamicCheck;
+  }
+  bool is_polymorphic() const {
+    return feedback_kind_ == kPolymorphicWithDynamicCheck;
+  }
+  bool is_minimorphic() const {
+    return feedback_kind_ == kPolymorphicWithDynamicCheck ||
+           feedback_kind_ == kMonomorphicWithDynamicCheck;
+  }
+  Handle<Object> handler() const { return handler_; }
+  FeedbackSource const& feedback_source() const { return feedback_source_; }
 
  private:
   NameRef const name_;
   ZoneVector<Handle<Map>> const maps_;
+  FeedbackKind feedback_kind_;
+  FeedbackSource feedback_source_;
+  Handle<Object> handler_;
 };
 
 class CallFeedback : public ProcessedFeedback {
