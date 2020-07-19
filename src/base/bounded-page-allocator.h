@@ -6,6 +6,7 @@
 #define V8_BASE_BOUNDED_PAGE_ALLOCATOR_H_
 
 #include "include/v8-platform.h"
+#include "src/base/logging.h"
 #include "src/base/platform/mutex.h"
 #include "src/base/region-allocator.h"
 
