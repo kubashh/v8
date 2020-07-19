@@ -28,6 +28,7 @@ class CompilationDependencies;
 class CompilationDependency;
 class ElementAccessFeedback;
 class JSHeapBroker;
+class NamedAccessFeedback;
 class TypeCache;
 struct ConstFieldInfo;
 
@@ -66,6 +67,7 @@ class PropertyAccessInfo final {
     kInvalid,
     kNotFound,
     kDataField,
+    kDataFieldFromHandler,
     kDataConstant,
     kAccessorConstant,
     kModuleExport,
@@ -82,6 +84,10 @@ class PropertyAccessInfo final {
       MaybeHandle<Map> field_map = MaybeHandle<Map>(),
       MaybeHandle<JSObject> holder = MaybeHandle<JSObject>(),
       MaybeHandle<Map> transition_map = MaybeHandle<Map>());
+  static PropertyAccessInfo DataFieldFromHandler(
+      Zone* zone, ZoneVector<CompilationDependency const*>&& dependencies,
+      int offset, bool is_inobject, Representation field_representation,
+      Type field_type);
   static PropertyAccessInfo DataConstant(
       Zone* zone, Handle<Map> receiver_map,
       ZoneVector<CompilationDependency const*>&& unrecorded_dependencies,
@@ -106,6 +112,9 @@ class PropertyAccessInfo final {
   bool IsInvalid() const { return kind() == kInvalid; }
   bool IsNotFound() const { return kind() == kNotFound; }
   bool IsDataField() const { return kind() == kDataField; }
+  bool IsDataFieldFromHandler() const {
+    return kind() == kDataFieldFromHandler;
+  }
   bool IsDataConstant() const { return kind() == kDataConstant; }
   bool IsAccessorConstant() const { return kind() == kAccessorConstant; }
   bool IsModuleExport() const { return kind() == kModuleExport; }
@@ -123,13 +132,18 @@ class PropertyAccessInfo final {
   }
   MaybeHandle<Map> transition_map() const { return transition_map_; }
   Handle<Object> constant() const { return constant_; }
-  FieldIndex field_index() const { return field_index_; }
+  FieldIndex field_index() const {
+    DCHECK(kind() != kDataFieldFromHandler);
+    return field_index_;
+  }
   Type field_type() const { return field_type_; }
   Representation field_representation() const { return field_representation_; }
   MaybeHandle<Map> field_map() const { return field_map_; }
   ZoneVector<Handle<Map>> const& receiver_maps() const {
     return receiver_maps_;
   }
+  int offset() const { return offset_; }
+  int is_inobject() const { return is_inobject_; }
 
  private:
   explicit PropertyAccessInfo(Zone* zone);
@@ -143,7 +157,8 @@ class PropertyAccessInfo final {
                      Representation field_representation, Type field_type,
                      Handle<Map> field_owner_map, MaybeHandle<Map> field_map,
                      ZoneVector<Handle<Map>>&& receiver_maps,
-                     ZoneVector<CompilationDependency const*>&& dependencies);
+                     ZoneVector<CompilationDependency const*>&& dependencies,
+                     bool is_inboject, int offset);
 
   Kind kind_;
   ZoneVector<Handle<Map>> receiver_maps_;
@@ -156,6 +171,8 @@ class PropertyAccessInfo final {
   Type field_type_;
   MaybeHandle<Map> field_owner_map_;
   MaybeHandle<Map> field_map_;
+  bool is_inobject_;
+  int offset_;
 };
 
 
@@ -174,6 +191,9 @@ class AccessInfoFactory final {
   PropertyAccessInfo ComputePropertyAccessInfo(Handle<Map> map,
                                                Handle<Name> name,
                                                AccessMode access_mode) const;
+
+  PropertyAccessInfo ComputePropertyAccessInfo(
+      NamedAccessFeedback const& feedback) const;
 
   // Convenience wrapper around {ComputePropertyAccessInfo} for multiple maps.
   void ComputePropertyAccessInfos(

@@ -186,18 +186,20 @@ Node* PropertyAccessBuilder::TryBuildLoadConstantDataField(
 Node* PropertyAccessBuilder::BuildLoadDataField(
     NameRef const& name, PropertyAccessInfo const& access_info, Node* receiver,
     Node** effect, Node** control) {
-  DCHECK(access_info.IsDataField() || access_info.IsDataConstant());
+  DCHECK(access_info.IsDataField() || access_info.IsDataConstant() ||
+         access_info.IsDataFieldFromHandler());
   if (Node* value =
           TryBuildLoadConstantDataField(name, access_info, receiver)) {
     return value;
   }
 
-  FieldIndex const field_index = access_info.field_index();
+  bool is_inobject = access_info.is_inobject();
+  int offset = access_info.offset();
   Type const field_type = access_info.field_type();
   MachineRepresentation const field_representation =
       ConvertRepresentation(access_info.field_representation());
   Node* storage = ResolveHolder(access_info, receiver);
-  if (!field_index.is_inobject()) {
+  if (!is_inobject) {
     storage = *effect = graph()->NewNode(
         simplified()->LoadField(
             AccessBuilder::ForJSObjectPropertiesOrHashKnownPointer()),
@@ -205,7 +207,7 @@ Node* PropertyAccessBuilder::BuildLoadDataField(
   }
   FieldAccess field_access = {
       kTaggedBase,
-      field_index.offset(),
+      offset,
       name.object(),
       MaybeHandle<Map>(),
       field_type,
@@ -214,9 +216,9 @@ Node* PropertyAccessBuilder::BuildLoadDataField(
       LoadSensitivity::kCritical,
       access_info.GetConstFieldInfo()};
   if (field_representation == MachineRepresentation::kFloat64) {
-    if (!field_index.is_inobject() || !FLAG_unbox_double_fields) {
+    if (!is_inobject || !FLAG_unbox_double_fields) {
       FieldAccess const storage_access = {kTaggedBase,
-                                          field_index.offset(),
+                                          offset,
                                           name.object(),
                                           MaybeHandle<Map>(),
                                           Type::OtherInternal(),
