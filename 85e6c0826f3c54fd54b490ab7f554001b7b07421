@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f4f4c5f_2201d817",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-20T13:31:23Z",
+      "side": 1,
+      "message": "ptal, any suggestions on how to write a test for this? (I could find existing tests for V8HeapProfilerAgentImpl.\n\nI did check that the collectGarbage button works in DevTools. ",
+      "revId": "85e6c0826f3c54fd54b490ab7f554001b7b07421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
