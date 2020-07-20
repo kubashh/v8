@@ -1013,6 +1013,14 @@ bool CompileLazy(Isolate* isolate, NativeModule* native_module,
   return true;
 }
 
+void TierUp(Isolate* isolate, NativeModule* native_module, int func_index) {
+  CompilationStateImpl* compilation_state =
+      Impl(native_module->compilation_state());
+  WasmCompilationUnit tiering_unit{func_index, ExecutionTier::kTurbofan,
+                                   kNoDebugging};
+  compilation_state->AddTopTierCompilationUnit(tiering_unit);
+}
+
 namespace {
 
 void RecordStats(const Code code, Counters* counters) {
