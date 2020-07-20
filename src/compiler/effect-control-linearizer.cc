@@ -4,6 +4,7 @@
 
 #include "src/compiler/effect-control-linearizer.h"
 
+#include "include/v8-fast-api-calls.h"
 #include "src/base/bits.h"
 #include "src/codegen/code-factory.h"
 #include "src/codegen/machine-type.h"
@@ -73,6 +74,7 @@ class EffectControlLinearizer {
   Node* LowerPoisonIndex(Node* node);
   Node* LowerCheckInternalizedString(Node* node, Node* frame_state);
   void LowerCheckMaps(Node* node, Node* frame_state);
+  void LowerDynamicCheckMaps(Node* node, Node* frame_state);
   Node* LowerCompareMaps(Node* node);
   Node* LowerCheckNumber(Node* node, Node* frame_state);
   Node* LowerCheckClosure(Node* node, Node* frame_state);
@@ -185,6 +187,7 @@ class EffectControlLinearizer {
   void LowerTransitionElementsKind(Node* node);
   Node* LowerLoadFieldByIndex(Node* node);
   Node* LowerLoadMessage(Node* node);
+  Node* LowerFastApiCall(Node* node);
   Node* LowerLoadTypedElement(Node* node);
   Node* LowerLoadDataViewElement(Node* node);
   Node* LowerLoadStackArgument(Node* node);
@@ -259,7 +262,9 @@ class EffectControlLinearizer {
   Node* ChangeSmiToInt64(Node* value);
   Node* ObjectIsSmi(Node* value);
   Node* LoadFromSeqString(Node* receiver, Node* position, Node* is_one_byte);
-
+  Node* TruncateWordToInt32(Node* value);
+  Node* BuildIsStrongReference(Node* value);
+  Node* MakeWeak(Node* value);
   Node* SmiMaxValueConstant();
   Node* SmiShiftBitsConstant();
   void TransitionElementsTo(Node* node, Node* array, ElementsKind from,
@@ -921,6 +926,9 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
     case IrOpcode::kCheckMaps:
       LowerCheckMaps(node, frame_state);
       break;
+    case IrOpcode::kDynamicCheckMaps:
+      LowerDynamicCheckMaps(node, frame_state);
+      break;
     case IrOpcode::kCompareMaps:
       result = LowerCompareMaps(node);
       break;
@@ -1245,6 +1253,9 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       break;
     case IrOpcode::kStoreMessage:
       LowerStoreMessage(node);
+      break;
+    case IrOpcode::kFastApiCall:
+      result = LowerFastApiCall(node);
       break;
     case IrOpcode::kLoadFieldByIndex:
       result = LowerLoadFieldByIndex(node);
@@ -1838,6 +1849,102 @@ void EffectControlLinearizer::LowerCheckMaps(Node* node, Node* frame_state) {
     __ Goto(&done);
     __ Bind(&done);
   }
+}
+
+void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
+                                                    Node* frame_state) {
+  DynamicCheckMapsParameters const& p =
+      DynamicCheckMapsParametersOf(node->op());
+  Node* value = node->InputAt(0);
+
+  FeedbackSource const& feedback = p.feedback();
+  Node* vector = __ HeapConstant(feedback.vector);
+  Node* feedback_slot = __ LoadField(
+      AccessBuilder::ForFeedbackVectorSlot(feedback.index()), vector);
+  Node* value_map = __ LoadField(AccessBuilder::ForMap(), value);
+  value_map = MakeWeak(value_map);
+  Node* handler = p.handler()->IsSmi()
+                      ? __ SmiConstant(Smi::ToInt(*p.handler()))
+                      : __ HeapConstant(Handle<HeapObject>::cast(p.handler()));
+
+  auto done = __ MakeLabel();
+  auto maybe_poly = __ MakeLabel();
+
+  int kEntrySize = 2;
+
+  // Emit monomorphic checks only if current state is monomorphic. In
+  // case the current state is polymorphic, and if we ever go back to
+  // monomorphic start, we will deopt and reoptimize the code.
+  if (p.state() == DynamicCheckMapsParameters::kMonomorphic) {
+    Node* mono_check = __ TaggedEqual(feedback_slot, value_map);
+    __ GotoIfNot(mono_check, &maybe_poly);
+
+    Node* feedback_slot_handler = __ LoadField(
+        AccessBuilder::ForFeedbackVectorSlot(feedback.index() + 1), vector);
+    mono_check = __ TaggedEqual(handler, feedback_slot_handler);
+    __ DeoptimizeIfNot(DeoptimizeReason::kWrongHandler, FeedbackSource(),
+                       mono_check, frame_state,
+                       IsSafetyCheck::kCriticalSafetyCheck);
+
+    __ Goto(&done);
+  } else {
+    DCHECK(p.state() == DynamicCheckMapsParameters::kPolymorphic);
+    __ Goto(&maybe_poly);
+  }
+
+  __ Bind(&maybe_poly);
+  {
+    Node* poly_check = BuildIsStrongReference(feedback_slot);
+    if (p.state() == DynamicCheckMapsParameters::kMonomorphic) {
+      __ DeoptimizeIfNot(DeoptimizeReason::kMissingMap, FeedbackSource(),
+                         poly_check, frame_state,
+                         IsSafetyCheck::kCriticalSafetyCheck);
+
+    } else {
+      __ DeoptimizeIfNot(DeoptimizeReason::kTransitionedToMonomorphicIC,
+                         FeedbackSource(), poly_check, frame_state,
+                         IsSafetyCheck::kCriticalSafetyCheck);
+    }
+    Node* feedback_slot_map =
+        __ LoadField(AccessBuilder::ForMap(), feedback_slot);
+    Node* is_weak_fixed_array_check =
+        __ TaggedEqual(feedback_slot_map, __ WeakFixedArrayMapConstant());
+    __ DeoptimizeIfNot(DeoptimizeReason::kTransitionedToMegamorphicIC,
+                       FeedbackSource(), is_weak_fixed_array_check, frame_state,
+                       IsSafetyCheck::kCriticalSafetyCheck);
+
+    Node* weak_undefined_constant = MakeWeak(__ UndefinedConstant());
+    for (int i = 0; i < FLAG_max_polymorphic_map_count; i++) {
+      auto next_map = __ MakeLabel();
+      Node* maybe_map = __ LoadField(
+          AccessBuilder::ForWeakFixedArraySlot(i * kEntrySize), feedback_slot);
+      Node* loop_done = __ TaggedEqual(maybe_map, weak_undefined_constant);
+      __ DeoptimizeIf(DeoptimizeReason::kMissingMap, FeedbackSource(),
+                      loop_done, frame_state,
+                      IsSafetyCheck::kCriticalSafetyCheck);
+      Node* map_check = __ TaggedEqual(maybe_map, value_map);
+      if (i == FLAG_max_polymorphic_map_count - 1) {
+        __ DeoptimizeIfNot(DeoptimizeReason::kAllMapChecksFailed,
+                           FeedbackSource(), map_check, frame_state);
+      } else {
+        __ GotoIfNot(map_check, &next_map);
+      }
+      Node* maybe_handler =
+          __ LoadField(AccessBuilder::ForWeakFixedArraySlot(i * kEntrySize + 1),
+                       feedback_slot);
+      Node* handler_check = __ TaggedEqual(maybe_handler, handler);
+      __ DeoptimizeIfNot(DeoptimizeReason::kWrongHandler, FeedbackSource(),
+                         handler_check, frame_state,
+                         IsSafetyCheck::kCriticalSafetyCheck);
+
+      __ Goto(&done);
+      if (i < FLAG_max_polymorphic_map_count - 1) {
+        __ Bind(&next_map);
+      }
+    }
+  }
+
+  __ Bind(&done);
 }
 
 Node* EffectControlLinearizer::LowerCompareMaps(Node* node) {
@@ -3648,19 +3755,32 @@ Node* EffectControlLinearizer::LowerNewSmiOrObjectElements(Node* node) {
 }
 
 Node* EffectControlLinearizer::LowerNewArgumentsElements(Node* node) {
-  Node* frame = NodeProperties::GetValueInput(node, 0);
-  Node* length = NodeProperties::GetValueInput(node, 1);
-  int mapped_count = NewArgumentsElementsMappedCountOf(node->op());
-
-  Callable const callable =
-      Builtins::CallableFor(isolate(), Builtins::kNewArgumentsElements);
+  const NewArgumentsElementsParameters& parameters =
+      NewArgumentsElementsParametersOf(node->op());
+  CreateArgumentsType type = parameters.arguments_type();
   Operator::Properties const properties = node->op()->properties();
   CallDescriptor::Flags const flags = CallDescriptor::kNoFlags;
+  Node* frame = NodeProperties::GetValueInput(node, 0);
+  Node* arguments_count = NodeProperties::GetValueInput(node, 1);
+  Builtins::Name builtin_name;
+  switch (type) {
+    case CreateArgumentsType::kMappedArguments:
+      builtin_name = Builtins::kNewSloppyArgumentsElements;
+      break;
+    case CreateArgumentsType::kUnmappedArguments:
+      builtin_name = Builtins::kNewStrictArgumentsElements;
+      break;
+    case CreateArgumentsType::kRestParameter:
+      builtin_name = Builtins::kNewRestArgumentsElements;
+      break;
+  }
+  Callable const callable = Builtins::CallableFor(isolate(), builtin_name);
   auto call_descriptor = Linkage::GetStubCallDescriptor(
       graph()->zone(), callable.descriptor(),
       callable.descriptor().GetStackParameterCount(), flags, properties);
   return __ Call(call_descriptor, __ HeapConstant(callable.code()), frame,
-                 length, __ SmiConstant(mapped_count), __ NoContextConstant());
+                 __ IntPtrConstant(parameters.formal_parameter_count()),
+                 arguments_count);
 }
 
 Node* EffectControlLinearizer::LowerNewConsString(Node* node) {
@@ -4796,6 +4916,121 @@ void EffectControlLinearizer::LowerStoreMessage(Node* node) {
   Node* object = node->InputAt(1);
   Node* object_pattern = __ BitcastTaggedToWord(object);
   __ StoreField(AccessBuilder::ForExternalIntPtr(), offset, object_pattern);
+}
+
+// TODO(mslekova): Avoid code duplication with simplified lowering.
+static MachineType MachineTypeFor(CTypeInfo::Type type) {
+  switch (type) {
+    case CTypeInfo::Type::kVoid:
+      return MachineType::AnyTagged();
+    case CTypeInfo::Type::kBool:
+      return MachineType::Bool();
+    case CTypeInfo::Type::kInt32:
+      return MachineType::Int32();
+    case CTypeInfo::Type::kUint32:
+      return MachineType::Uint32();
+    case CTypeInfo::Type::kInt64:
+      return MachineType::Int64();
+    case CTypeInfo::Type::kUint64:
+      return MachineType::Uint64();
+    case CTypeInfo::Type::kFloat32:
+      return MachineType::Float32();
+    case CTypeInfo::Type::kFloat64:
+      return MachineType::Float64();
+    case CTypeInfo::Type::kUnwrappedApiObject:
+      return MachineType::Pointer();
+  }
+}
+
+Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
+  FastApiCallNode n(node);
+  FastApiCallParameters const& params = n.Parameters();
+  const CFunctionInfo* c_signature = params.signature();
+  const int c_arg_count = c_signature->ArgumentCount();
+  CallDescriptor* js_call_descriptor = params.descriptor();
+  int js_arg_count = static_cast<int>(js_call_descriptor->ParameterCount());
+  const int value_input_count = node->op()->ValueInputCount();
+  CHECK_EQ(FastApiCallNode::ArityForArgc(c_arg_count, js_arg_count),
+           value_input_count);
+
+  // Add the { has_error } output parameter.
+  int kAlign = 4;
+  int kSize = 4;
+  Node* has_error = __ StackSlot(kSize, kAlign);
+  // Generate the store to `has_error`.
+  __ Store(StoreRepresentation(MachineRepresentation::kWord32, kNoWriteBarrier),
+           has_error, 0, jsgraph()->ZeroConstant());
+
+  MachineSignature::Builder builder(
+      graph()->zone(), 1, c_arg_count + FastApiCallNode::kHasErrorInputCount);
+  MachineType return_type = MachineTypeFor(c_signature->ReturnInfo().GetType());
+  builder.AddReturn(return_type);
+  for (int i = 0; i < c_arg_count; ++i) {
+    MachineType machine_type =
+        MachineTypeFor(c_signature->ArgumentInfo(i).GetType());
+    builder.AddParam(machine_type);
+  }
+  builder.AddParam(MachineType::Pointer());  // has_error
+
+  CallDescriptor* call_descriptor = Linkage::GetSimplifiedCDescriptor(
+      graph()->zone(), builder.Build(), CallDescriptor::kNoFlags);
+
+  call_descriptor->SetCFunctionInfo(c_signature);
+
+  Node** const inputs = graph()->zone()->NewArray<Node*>(
+      c_arg_count + FastApiCallNode::kFastCallExtraInputCount);
+  for (int i = 0; i < c_arg_count + FastApiCallNode::kFastTargetInputCount;
+       ++i) {
+    inputs[i] = NodeProperties::GetValueInput(node, i);
+  }
+  inputs[c_arg_count + 1] = has_error;
+  inputs[c_arg_count + 2] = __ effect();
+  inputs[c_arg_count + 3] = __ control();
+
+  __ Call(call_descriptor,
+          c_arg_count + FastApiCallNode::kFastCallExtraInputCount, inputs);
+
+  // Generate the load from `has_error`.
+  Node* load = __ Load(MachineType::Int32(), has_error, 0);
+
+  TNode<Boolean> cond =
+      TNode<Boolean>::UncheckedCast(__ Word32Equal(load, __ Int32Constant(0)));
+  // Hint to true.
+  auto if_success = __ MakeLabel();
+  auto if_error = __ MakeDeferredLabel();
+  auto merge = __ MakeLabel(MachineRepresentation::kTagged);
+  __ Branch(cond, &if_success, &if_error);
+
+  // Generate fast call.
+  __ Bind(&if_success);
+  Node* then_result = [&]() { return __ UndefinedConstant(); }();
+  __ Goto(&merge, then_result);
+
+  // Generate direct slow call.
+  __ Bind(&if_error);
+  Node* else_result = [&]() {
+    Node** const slow_inputs = graph()->zone()->NewArray<Node*>(
+        n.SlowCallArgumentCount() +
+        FastApiCallNode::kEffectAndControlInputCount);
+
+    int fast_call_params = c_arg_count + FastApiCallNode::kFastTargetInputCount;
+    CHECK_EQ(value_input_count - fast_call_params, n.SlowCallArgumentCount());
+    int index = 0;
+    for (; index < n.SlowCallArgumentCount(); ++index) {
+      slow_inputs[index] = n.SlowCallArgument(index);
+    }
+
+    slow_inputs[index] = __ effect();
+    slow_inputs[index + 1] = __ control();
+    Node* slow_call = __ Call(
+        params.descriptor(),
+        index + FastApiCallNode::kEffectAndControlInputCount, slow_inputs);
+    return slow_call;
+  }();
+  __ Goto(&merge, else_result);
+
+  __ Bind(&merge);
+  return merge.PhiAt(0);
 }
 
 Node* EffectControlLinearizer::LowerLoadFieldByIndex(Node* node) {
@@ -6054,6 +6289,26 @@ Node* EffectControlLinearizer::LowerDateNow(Node* node) {
   return __ Call(call_descriptor, __ CEntryStubConstant(1),
                  __ ExternalConstant(ExternalReference::Create(id)),
                  __ Int32Constant(0), __ NoContextConstant());
+}
+
+Node* EffectControlLinearizer::TruncateWordToInt32(Node* value) {
+  if (machine()->Is64()) {
+    return __ TruncateInt64ToInt32(value);
+  }
+  return value;
+}
+
+Node* EffectControlLinearizer::BuildIsStrongReference(Node* value) {
+  return __ Word32Equal(
+      __ Word32And(
+          TruncateWordToInt32(__ BitcastTaggedToWordForTagAndSmiBits(value)),
+          __ Int32Constant(kHeapObjectTagMask)),
+      __ Int32Constant(kHeapObjectTag));
+}
+
+Node* EffectControlLinearizer::MakeWeak(Node* value) {
+  return __ BitcastWordToTagged(__ WordOr(
+      __ BitcastTaggedToWord(value), __ IntPtrConstant(kWeakHeapObjectTag)));
 }
 
 #undef __

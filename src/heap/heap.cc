@@ -4,6 +4,7 @@
 
 #include "src/heap/heap.h"
 
+#include <atomic>
 #include <cinttypes>
 #include <iomanip>
 #include <memory>
@@ -449,7 +450,7 @@ GarbageCollector Heap::SelectGarbageCollector(AllocationSpace space,
 }
 
 void Heap::SetGCState(HeapState state) {
-  gc_state_ = state;
+  gc_state_.store(state, std::memory_order_relaxed);
 }
 
 void Heap::PrintShortHeapStatistics() {
@@ -832,7 +833,7 @@ void Heap::GarbageCollectionPrologue() {
   UpdateMaximumCommitted();
 
 #ifdef DEBUG
-  DCHECK(!AllowHeapAllocation::IsAllowed() && gc_state_ == NOT_IN_GC);
+  DCHECK(!AllowHeapAllocation::IsAllowed() && gc_state() == NOT_IN_GC);
 
   if (FLAG_gc_verbose) Print();
 #endif  // DEBUG
@@ -5471,7 +5472,7 @@ void Heap::NotifyOldGenerationExpansion(AllocationSpace space,
 }
 
 void Heap::SetEmbedderHeapTracer(EmbedderHeapTracer* tracer) {
-  DCHECK_EQ(gc_state_, HeapState::NOT_IN_GC);
+  DCHECK_EQ(gc_state(), HeapState::NOT_IN_GC);
   local_embedder_heap_tracer()->SetRemoteTracer(tracer);
 }
 
@@ -5528,7 +5529,7 @@ void Heap::StartTearDown() {
 }
 
 void Heap::TearDown() {
-  DCHECK_EQ(gc_state_, TEAR_DOWN);
+  DCHECK_EQ(gc_state(), TEAR_DOWN);
 
   // It's too late for Heap::Verify() here, as parts of the Isolate are
   // already gone by the time this is called.
@@ -6531,18 +6532,6 @@ void Heap::CreateObjectStats() {
   if (!dead_object_stats_) {
     dead_object_stats_.reset(new ObjectStats(this));
   }
-}
-
-void AllocationObserver::AllocationStep(int bytes_allocated,
-                                        Address soon_object, size_t size) {
-  DCHECK_GE(bytes_allocated, 0);
-  bytes_to_next_step_ -= bytes_allocated;
-  if (bytes_to_next_step_ <= 0) {
-    Step(static_cast<int>(step_size_ - bytes_to_next_step_), soon_object, size);
-    step_size_ = GetNextStepSize();
-    bytes_to_next_step_ = step_size_;
-  }
-  DCHECK_GE(bytes_to_next_step_, 0);
 }
 
 Map Heap::GcSafeMapOfCodeSpaceObject(HeapObject object) {

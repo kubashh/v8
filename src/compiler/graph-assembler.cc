@@ -706,9 +706,13 @@ Node* GraphAssembler::BitcastTaggedToWord(Node* value) {
 }
 
 Node* GraphAssembler::BitcastTaggedToWordForTagAndSmiBits(Node* value) {
-  return AddNode(
-      graph()->NewNode(machine()->BitcastTaggedToWordForTagAndSmiBits(), value,
-                       effect(), control()));
+  return AddNode(graph()->NewNode(
+      machine()->BitcastTaggedToWordForTagAndSmiBits(), value));
+}
+
+Node* GraphAssembler::BitcastMaybeObjectToWord(Node* value) {
+  return AddNode(graph()->NewNode(machine()->BitcastMaybeObjectToWord(), value,
+                                  effect(), control()));
 }
 
 Node* GraphAssembler::Word32PoisonOnSpeculation(Node* value) {
@@ -734,6 +738,17 @@ Node* GraphAssembler::DeoptimizeIfNot(DeoptimizeReason reason,
       common()->DeoptimizeUnless(DeoptimizeKind::kEager, reason, feedback,
                                  is_safety_check),
       condition, frame_state, effect(), control()));
+}
+
+TNode<Object> GraphAssembler::Call(const CallDescriptor* call_descriptor,
+                                   int inputs_size, Node** inputs) {
+  return Call(common()->Call(call_descriptor), inputs_size, inputs);
+}
+
+TNode<Object> GraphAssembler::Call(const Operator* op, int inputs_size,
+                                   Node** inputs) {
+  DCHECK_EQ(IrOpcode::kCall, op->opcode());
+  return AddNode<Object>(graph()->NewNode(op, inputs_size, inputs));
 }
 
 void GraphAssembler::BranchWithCriticalSafetyCheck(

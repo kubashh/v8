@@ -374,7 +374,7 @@ void VirtualRegisterData::EnsureSpillRange(
   if (HasSpillRange()) return;
 
   Zone* zone = data->allocation_zone();
-  SpillRange* spill_range = new (zone) SpillRange(output_instr_index_, data);
+  SpillRange* spill_range = zone->New<SpillRange>(output_instr_index_, data);
   if (is_phi()) {
     // For phis, add the instruction before it was defined (since the Phi is
     // live from the first instruction in the block) and the  gap move
@@ -491,8 +491,11 @@ class RegisterState final : public ZoneObject {
  public:
   static RegisterState* New(RegisterKind kind, int num_allocatable_registers,
                             Zone* zone) {
-    return new (zone) RegisterState(kind, num_allocatable_registers, zone);
+    return zone->New<RegisterState>(kind, num_allocatable_registers, zone);
   }
+
+  RegisterState(RegisterKind kind, int num_allocatable_registers, Zone* zone);
+  RegisterState(const RegisterState& other) V8_NOEXCEPT;
 
   bool IsAllocated(RegisterIndex reg);
   int VirtualRegisterForRegister(RegisterIndex reg);
@@ -609,9 +612,6 @@ class RegisterState final : public ZoneObject {
     int virtual_register_;
     PendingOperand* pending_uses_;
   };
-
-  RegisterState(RegisterKind kind, int num_allocatable_registers, Zone* zone);
-  RegisterState(const RegisterState& other) V8_NOEXCEPT;
 
   void ResetDataFor(RegisterIndex reg);
 
@@ -839,7 +839,7 @@ bool RegisterState::HasRegisterData(RegisterIndex reg) {
 
 void RegisterState::EnsureRegisterData(RegisterIndex reg) {
   if (!HasRegisterData(reg)) {
-    register_data_[reg.ToInt()] = new (zone()) RegisterState::Register();
+    register_data_[reg.ToInt()] = zone()->New<RegisterState::Register>();
   }
 }
 
@@ -868,7 +868,7 @@ RegisterState* RegisterState::Clone() {
       reg_data(reg).AddSharedUse();
     }
   }
-  return new (zone_) RegisterState(*this);
+  return zone_->New<RegisterState>(*this);
 }
 
 // A SinglePassRegisterAllocator is a fast register allocator that does a single
@@ -1082,7 +1082,7 @@ SinglePassRegisterAllocator::SinglePassRegisterAllocator(
       reg_code_to_index_(GetRegisterCount(data->config(), kind),
                          data->allocation_zone()),
       index_to_reg_code_(GetAllocatableRegisterCodes(data->config(), kind)),
-      assigned_registers_(new (data->code_zone()) BitVector(
+      assigned_registers_(data->code_zone()->New<BitVector>(
           GetRegisterCount(data->config(), kind), data->code_zone())),
       data_(data),
       in_use_at_instr_start_bits_(0),
@@ -2311,7 +2311,7 @@ void FastSpillSlotAllocator::Allocate(VirtualRegisterData* virtual_register) {
   if (slot == nullptr) {
     // Otherwise allocate a new slot.
     int stack_slot_ = frame()->AllocateSpillSlot(byte_width);
-    slot = new (zone()) SpillSlot(stack_slot_, byte_width);
+    slot = zone()->New<SpillSlot>(stack_slot_, byte_width);
   }
 
   // Extend the range of the slot to include this spill range, and allocate the

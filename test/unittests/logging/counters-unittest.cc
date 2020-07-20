@@ -648,6 +648,7 @@ static void CustomCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
 
 TEST_F(RuntimeCallStatsTest, CallbackFunction) {
   FLAG_allow_natives_syntax = true;
+  FLAG_incremental_marking = false;
 
   RuntimeCallCounter* callback_counter =
       stats()->GetCounter(RuntimeCallCounterId::kFunctionCallback);

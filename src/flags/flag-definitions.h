@@ -223,7 +223,8 @@ DEFINE_IMPLICATION(harmony_weak_refs_with_cleanup_some, harmony_weak_refs)
   V(harmony_regexp_sequence, "RegExp Unicode sequence properties")             \
   V(harmony_weak_refs_with_cleanup_some,                                       \
     "harmony weak references with FinalizationRegistry.prototype.cleanupSome") \
-  V(harmony_regexp_match_indices, "harmony regexp match indices")
+  V(harmony_regexp_match_indices, "harmony regexp match indices")              \
+  V(harmony_atomics_waitasync, "harmony Atomics.waitAsync")
 
 #ifdef V8_INTL_SUPPORT
 #define HARMONY_INPROGRESS(V)                       \
@@ -512,6 +513,8 @@ DEFINE_BOOL(turboprop_fast_reg_alloc, false,
             "enable experimental fast register allocator for mid-tier compiler")
 DEFINE_NEG_IMPLICATION(turboprop, turbo_inlining)
 DEFINE_IMPLICATION(turboprop, concurrent_inlining)
+DEFINE_IMPLICATION(turboprop, turboprop_fast_reg_alloc)
+DEFINE_IMPLICATION(turboprop, dynamic_map_checks)
 DEFINE_VALUE_IMPLICATION(turboprop, interrupt_budget, 15 * KB)
 DEFINE_VALUE_IMPLICATION(turboprop, reuse_opt_code_count, 2)
 
@@ -673,6 +676,8 @@ DEFINE_BOOL(
 DEFINE_BOOL(turbo_fast_api_calls, false, "enable fast API calls from TurboFan")
 DEFINE_INT(reuse_opt_code_count, 0,
            "don't discard optimized code for the specified number of deopts.")
+DEFINE_BOOL(dynamic_map_checks, false,
+            "use dynamic map checks when all handlers in an IC are the same")
 
 // Native context independent (NCI) code.
 DEFINE_BOOL(turbo_nci, false,
@@ -954,6 +959,7 @@ DEFINE_BOOL(concurrent_array_buffer_sweeping, true,
             "concurrently sweep array buffers")
 DEFINE_BOOL(concurrent_allocation, false, "concurrently allocate in old space")
 DEFINE_BOOL(local_heaps, false, "allow heap access from background tasks")
+DEFINE_IMPLICATION(concurrent_inlining, local_heaps)
 DEFINE_NEG_NEG_IMPLICATION(array_buffer_extension, local_heaps)
 DEFINE_BOOL(stress_concurrent_allocation, false,
             "start background threads that allocate memory")
@@ -1314,7 +1320,7 @@ DEFINE_INT(sim_stack_alignment, 8,
            "Stack alingment in bytes in simulator (4 or 8, 8 is default)")
 #endif
 DEFINE_INT(sim_stack_size, 2 * MB / KB,
-           "Stack size of the ARM64, MIPS64 and PPC64 simulator "
+           "Stack size of the ARM64, MIPS, MIPS64 and PPC64 simulator "
            "in kBytes (default is 2 MB)")
 DEFINE_BOOL(log_colour, ENABLE_LOG_COLOUR,
             "When logging, try to use coloured output.")

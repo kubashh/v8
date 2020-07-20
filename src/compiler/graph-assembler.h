@@ -90,6 +90,7 @@ class BasicBlock;
   V(Word64Equal)                          \
   V(Word64Or)                             \
   V(WordAnd)                              \
+  V(WordOr)                               \
   V(WordEqual)                            \
   V(WordSar)                              \
   V(WordSarShiftOutZeros)                 \
@@ -117,6 +118,7 @@ class BasicBlock;
   V(False, Boolean)                             \
   V(FixedArrayMap, Map)                         \
   V(FixedDoubleArrayMap, Map)                   \
+  V(WeakFixedArrayMap, Map)                     \
   V(HeapNumberMap, Map)                         \
   V(MinusOne, Number)                           \
   V(NaN, Number)                                \
@@ -269,6 +271,7 @@ class V8_EXPORT_PRIVATE GraphAssembler {
   Node* BitcastWordToTaggedSigned(Node* value);
   Node* BitcastTaggedToWord(Node* value);
   Node* BitcastTaggedToWordForTagAndSmiBits(Node* value);
+  Node* BitcastMaybeObjectToWord(Node* value);
 
   Node* TypeGuard(Type type, Node* value);
   Node* Checkpoint(FrameState frame_state);
@@ -297,10 +300,14 @@ class V8_EXPORT_PRIVATE GraphAssembler {
       DeoptimizeReason reason, FeedbackSource const& feedback, Node* condition,
       Node* frame_state,
       IsSafetyCheck is_safety_check = IsSafetyCheck::kSafetyCheck);
+  TNode<Object> Call(const CallDescriptor* call_descriptor, int inputs_size,
+                     Node** inputs);
+  TNode<Object> Call(const Operator* op, int inputs_size, Node** inputs);
   template <typename... Args>
-  Node* Call(const CallDescriptor* call_descriptor, Args... args);
+  TNode<Object> Call(const CallDescriptor* call_descriptor, Node* first_arg,
+                     Args... args);
   template <typename... Args>
-  Node* Call(const Operator* op, Args... args);
+  TNode<Object> Call(const Operator* op, Node* first_arg, Args... args);
 
   // Basic control operations.
   template <size_t VarCount>
@@ -720,19 +727,19 @@ void GraphAssembler::GotoIfNot(Node* condition,
 }
 
 template <typename... Args>
-Node* GraphAssembler::Call(const CallDescriptor* call_descriptor,
-                           Args... args) {
+TNode<Object> GraphAssembler::Call(const CallDescriptor* call_descriptor,
+                                   Node* first_arg, Args... args) {
   const Operator* op = common()->Call(call_descriptor);
-  return Call(op, args...);
+  return Call(op, first_arg, args...);
 }
 
 template <typename... Args>
-Node* GraphAssembler::Call(const Operator* op, Args... args) {
-  DCHECK_EQ(IrOpcode::kCall, op->opcode());
-  Node* args_array[] = {args..., effect(), control()};
-  int size = static_cast<int>(sizeof...(args)) + op->EffectInputCount() +
+TNode<Object> GraphAssembler::Call(const Operator* op, Node* first_arg,
+                                   Args... args) {
+  Node* args_array[] = {first_arg, args..., effect(), control()};
+  int size = static_cast<int>(1 + sizeof...(args)) + op->EffectInputCount() +
              op->ControlInputCount();
-  return AddNode(graph()->NewNode(op, size, args_array));
+  return Call(op, size, args_array);
 }
 
 class V8_EXPORT_PRIVATE JSGraphAssembler : public GraphAssembler {
