@@ -84,10 +84,22 @@ PropertyAccessInfo PropertyAccessInfo::DataField(
     FieldIndex field_index, Representation field_representation,
     Type field_type, Handle<Map> field_owner_map, MaybeHandle<Map> field_map,
     MaybeHandle<JSObject> holder, MaybeHandle<Map> transition_map) {
-  return PropertyAccessInfo(kDataField, holder, transition_map, field_index,
-                            field_representation, field_type, field_owner_map,
-                            field_map, {{receiver_map}, zone},
-                            std::move(dependencies));
+  return PropertyAccessInfo(
+      kDataField, holder, transition_map, field_index, field_representation,
+      field_type, field_owner_map, field_map, {{receiver_map}, zone},
+      std::move(dependencies), field_index.is_inobject(), field_index.offset());
+}
+
+// static
+PropertyAccessInfo PropertyAccessInfo::DataFieldFromHandler(
+    Zone* zone, ZoneVector<CompilationDependency const*>&& dependencies,
+    int offset, bool is_inobject, Representation field_representation,
+    Type field_type) {
+  return PropertyAccessInfo(kDataFieldFromHandler, MaybeHandle<JSObject>(),
+                            MaybeHandle<Map>(), FieldIndex(),
+                            field_representation, field_type, Handle<Map>(),
+                            MaybeHandle<Map>(), {{}, zone},
+                            std::move(dependencies), is_inobject, offset);
 }
 
 // static
@@ -97,10 +109,10 @@ PropertyAccessInfo PropertyAccessInfo::DataConstant(
     FieldIndex field_index, Representation field_representation,
     Type field_type, Handle<Map> field_owner_map, MaybeHandle<Map> field_map,
     MaybeHandle<JSObject> holder, MaybeHandle<Map> transition_map) {
-  return PropertyAccessInfo(kDataConstant, holder, transition_map, field_index,
-                            field_representation, field_type, field_owner_map,
-                            field_map, {{receiver_map}, zone},
-                            std::move(dependencies));
+  return PropertyAccessInfo(
+      kDataConstant, holder, transition_map, field_index, field_representation,
+      field_type, field_owner_map, field_map, {{receiver_map}, zone},
+      std::move(dependencies), field_index.is_inobject(), field_index.offset());
 }
 
 // static
@@ -160,7 +172,8 @@ PropertyAccessInfo::PropertyAccessInfo(
     FieldIndex field_index, Representation field_representation,
     Type field_type, Handle<Map> field_owner_map, MaybeHandle<Map> field_map,
     ZoneVector<Handle<Map>>&& receiver_maps,
-    ZoneVector<CompilationDependency const*>&& unrecorded_dependencies)
+    ZoneVector<CompilationDependency const*>&& unrecorded_dependencies,
+    bool is_inobject, int offset)
     : kind_(kind),
       receiver_maps_(receiver_maps),
       unrecorded_dependencies_(std::move(unrecorded_dependencies)),
@@ -170,7 +183,9 @@ PropertyAccessInfo::PropertyAccessInfo(
       field_representation_(field_representation),
       field_type_(field_type),
       field_owner_map_(field_owner_map),
-      field_map_(field_map) {
+      field_map_(field_map),
+      is_inobject_(is_inobject),
+      offset_(offset) {
   DCHECK_IMPLIES(!transition_map.is_null(),
                  field_owner_map.address() == transition_map.address());
 }
@@ -261,6 +276,9 @@ bool PropertyAccessInfo::Merge(PropertyAccessInfo const* that,
       return true;
     }
     case kModuleExport:
+      return false;
+
+    case kDataFieldFromHandler:
       return false;
   }
 }
@@ -478,6 +496,22 @@ PropertyAccessInfo AccessInfoFactory::ComputeAccessorDescriptorAccessInfo(
   }
   return PropertyAccessInfo::AccessorConstant(zone(), receiver_map, accessor,
                                               holder);
+}
+
+PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
+    NamedAccessFeedback const& feedback) const {
+  ZoneVector<CompilationDependency const*> dependencies(zone());
+  DCHECK(feedback.handler()->IsSmi());
+  int handler = Smi::cast(*feedback.handler()).value();
+  bool is_inobject = LoadHandler::IsInobjectBits::decode(handler);
+  bool is_double = LoadHandler::IsDoubleBits::decode(handler);
+  int offset = LoadHandler::FieldIndexBits::decode(handler) * kTaggedSize;
+  Representation field_rep =
+      is_double ? Representation::Double() : Representation::Tagged();
+  Type field_type = is_double ? Type::Number() : Type::Any();
+  return PropertyAccessInfo::DataFieldFromHandler(
+      zone(), std::move(dependencies), offset, is_inobject, field_rep,
+      field_type);
 }
 
 PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(

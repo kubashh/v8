@@ -512,8 +512,19 @@ DEFINE_BOOL(turboprop_fast_reg_alloc, false,
             "enable experimental fast register allocator for mid-tier compiler")
 DEFINE_NEG_IMPLICATION(turboprop, turbo_inlining)
 DEFINE_IMPLICATION(turboprop, concurrent_inlining)
+DEFINE_IMPLICATION(turboprop, turboprop_fast_reg_alloc)
+DEFINE_IMPLICATION(turboprop, dynamic_map_checks)
 DEFINE_VALUE_IMPLICATION(turboprop, interrupt_budget, 15 * KB)
 DEFINE_VALUE_IMPLICATION(turboprop, reuse_opt_code_count, 2)
+
+DEFINE_BOOL(fortest, false, "testing")
+DEFINE_IMPLICATION(fortest, turboprop)
+DEFINE_NEG_IMPLICATION(fortest, turbo_inlining)
+DEFINE_IMPLICATION(fortest, concurrent_inlining)
+DEFINE_IMPLICATION(fortest, turboprop_fast_reg_alloc)
+DEFINE_IMPLICATION(fortest, dynamic_map_checks)
+DEFINE_VALUE_IMPLICATION(fortest, interrupt_budget, 15 * KB)
+DEFINE_VALUE_IMPLICATION(fortest, reuse_opt_code_count, 2)
 
 // Flags for concurrent recompilation.
 DEFINE_BOOL(concurrent_recompilation, true,
@@ -673,6 +684,8 @@ DEFINE_BOOL(
 DEFINE_BOOL(turbo_fast_api_calls, false, "enable fast API calls from TurboFan")
 DEFINE_INT(reuse_opt_code_count, 0,
            "don't discard optimized code for the specified number of deopts.")
+DEFINE_BOOL(dynamic_map_checks, false,
+            "use dynamic map checks when all handlers in an IC are the same")
 
 // Native context independent (NCI) code.
 DEFINE_BOOL(turbo_nci, false,
