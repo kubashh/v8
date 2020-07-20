@@ -16,6 +16,46 @@
       "revId": "d6d17a81245fb7f69f1c90a7052823e6074b4687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "70fe115b_55b902a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-07-20T16:58:17Z",
+      "side": 1,
+      "message": "LGTM with a comment.",
+      "revId": "d6d17a81245fb7f69f1c90a7052823e6074b4687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9a1629b_d4f28e07",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-07-20T16:58:17Z",
+      "side": 1,
+      "message": "struct_type_index",
+      "range": {
+        "startLine": 3659,
+        "startChar": 57,
+        "endLine": 3659,
+        "endChar": 73
+      },
+      "revId": "d6d17a81245fb7f69f1c90a7052823e6074b4687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
