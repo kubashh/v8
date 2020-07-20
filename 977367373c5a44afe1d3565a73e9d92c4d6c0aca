@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6d89012_724ed54c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-07-20T15:13:54Z",
+      "side": 1,
+      "message": "ahaas, ptal at the test modifications\n\nothers, i\u0027m going to tbr",
+      "revId": "977367373c5a44afe1d3565a73e9d92c4d6c0aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
