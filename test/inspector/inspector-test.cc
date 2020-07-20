@@ -200,6 +200,8 @@ class SendMessageToBackendTask : public TaskRunner::Task {
   void Run(IsolateData* data) override {
     v8_inspector::StringView message_view(message_.data(), message_.size());
     data->SendMessage(session_id_, message_view);
+    v8::platform::PumpMessageLoop(v8::internal::V8::GetCurrentPlatform(),
+                                  data->isolate());
   }
 
   int session_id_;
