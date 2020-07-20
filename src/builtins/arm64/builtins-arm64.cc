@@ -2562,8 +2562,21 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
   // Push varargs.
   {
     Register dst = x13;
-    __ Add(args_fp, args_fp, 2 * kSystemPointerSize);
+#ifdef V8_REVERSE_JSARGS
+    // Point to the fist argument to copy from (skipping receiver).
+    __ Add(args_fp, args_fp,
+           CommonFrameConstants::kFixedFrameSizeAboveFp + kSystemPointerSize);
+    __ lsl(start_index, start_index, kSystemPointerSizeLog2);
+    __ Add(args_fp, args_fp, start_index);
+    // Point to the position to copy to.
+    __ Add(x10, argc, 1);
+    __ SlotAddress(dst, x10);
+    // Update total number of arguments.
+    __ Add(argc, argc, len);
+#else
+    __ Add(args_fp, args_fp, CommonFrameConstants::kFixedFrameSizeAboveFp);
     __ SlotAddress(dst, 0);
+#endif
     __ CopyDoubleWords(dst, args_fp, len);
   }
   __ B(&stack_done);
