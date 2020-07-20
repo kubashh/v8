@@ -33,6 +33,23 @@
       "revId": "46c8adec986fdb039549747cb80f45bea1efe3ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3bcf02dc_98e03ef2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-20T11:57:30Z",
+      "side": 1,
+      "message": "Test looks okay. I think it would be good to also search for name2/map2 on the other thread and make sure this works as intended.\n\nI\u0027m still having a look at the synchronization in the TransitionArray that is actually tested.",
+      "revId": "46c8adec986fdb039549747cb80f45bea1efe3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
