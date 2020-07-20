@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f71f13a4_b5afe1f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-20T09:41:07Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcfaa11d_9e3a314a",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 3123,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-20T09:41:07Z",
+      "side": 1,
+      "message": "Could it be a virtual predicate on ReadOnlyHeap? E.g. IsOwnedByIsolate",
+      "range": {
+        "startLine": 3123,
+        "startChar": 6,
+        "endLine": 3123,
+        "endChar": 70
+      },
+      "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c76c439e_65c7cad0",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-20T09:41:07Z",
+      "side": 1,
+      "message": "Could this move to PointerCompressedReadOnlyArtifacts::ReinstallReadOnlySpace?",
+      "range": {
+        "startLine": 176,
+        "startChar": 4,
+        "endLine": 176,
+        "endChar": 33
+      },
+      "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05d9cea9_e1d42b54",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-20T09:41:07Z",
+      "side": 1,
+      "message": "Not used anymore?",
+      "range": {
+        "startLine": 274,
+        "startChar": 29,
+        "endLine": 274,
+        "endChar": 51
+      },
+      "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5d63fbe_313aaebd",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-20T09:41:07Z",
+      "side": 1,
+      "message": "Please add a comment explaining this. Could this be part of ro_mode?",
+      "range": {
+        "startLine": 358,
+        "startChar": 6,
+        "endLine": 358,
+        "endChar": 36
+      },
+      "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a5333d8_26dacf8e",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-20T09:41:07Z",
+      "side": 1,
+      "message": "When can this be false?",
+      "range": {
+        "startLine": 361,
+        "startChar": 10,
+        "endLine": 361,
+        "endChar": 47
+      },
+      "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
