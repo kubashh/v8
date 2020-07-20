@@ -11,6 +11,7 @@ namespace v8 {
 namespace internal {
 
 #define DEOPTIMIZE_REASON_LIST(V)                                              \
+  V(AllMapChecksFailed, "all polymorphic map checks failed")                   \
   V(ArrayBufferWasDetached, "array buffer was detached")                       \
   V(BigIntTooBig, "BigInt too big")                                            \
   V(CowArrayElementsChanged, "copy-on-write array's elements changed")         \
@@ -53,6 +54,8 @@ namespace internal {
   V(OutOfBounds, "out of bounds")                                              \
   V(Overflow, "overflow")                                                      \
   V(Smi, "Smi")                                                                \
+  V(TransitionedToMonomorphicIC, "IC transitioned to monomorphic")             \
+  V(TransitionedToMegamorphicIC, "IC transitioned to megamorphic")             \
   V(Unknown, "(unknown)")                                                      \
   V(ValueMismatch, "value mismatch")                                           \
   V(WrongCallTarget, "wrong call target")                                      \
@@ -60,6 +63,8 @@ namespace internal {
   V(WrongFeedbackCell, "wrong feedback cell")                                  \
   V(WrongInstanceType, "wrong instance type")                                  \
   V(WrongMap, "wrong map")                                                     \
+  V(MissingMap, "missing map")                                                 \
+  V(WrongHandler, "wrong handler")                                             \
   V(WrongName, "wrong name")                                                   \
   V(WrongValue, "wrong value")                                                 \
   V(NoInitialElement, "no initial element")

@@ -90,6 +90,7 @@ class BasicBlock;
   V(Word64Equal)                          \
   V(Word64Or)                             \
   V(WordAnd)                              \
+  V(WordOr)                               \
   V(WordEqual)                            \
   V(WordSar)                              \
   V(WordSarShiftOutZeros)                 \
@@ -117,6 +118,7 @@ class BasicBlock;
   V(False, Boolean)                             \
   V(FixedArrayMap, Map)                         \
   V(FixedDoubleArrayMap, Map)                   \
+  V(WeakFixedArrayMap, Map)                     \
   V(HeapNumberMap, Map)                         \
   V(MinusOne, Number)                           \
   V(NaN, Number)                                \
@@ -269,6 +271,7 @@ class V8_EXPORT_PRIVATE GraphAssembler {
   Node* BitcastWordToTaggedSigned(Node* value);
   Node* BitcastTaggedToWord(Node* value);
   Node* BitcastTaggedToWordForTagAndSmiBits(Node* value);
+  Node* BitcastMaybeObjectToWord(Node* value);
 
   Node* TypeGuard(Type type, Node* value);
   Node* Checkpoint(FrameState frame_state);
