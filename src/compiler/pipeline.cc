@@ -1947,7 +1947,7 @@ struct ScheduledMachineLoweringPhase {
 
     // TODO(rmcilroy) Avoid having to rebuild rpo_order on schedule each time.
     Scheduler::ComputeSpecialRPO(temp_zone, data->schedule());
-    if (FLAG_turbo_verify) Scheduler::GenerateDominatorTree(data->schedule());
+    Scheduler::GenerateDominatorTree(data->schedule());
     TraceScheduleAndVerify(data->info(), data, data->schedule(),
                            "machine lowered schedule");
   }
@@ -2287,6 +2287,16 @@ struct FastSpillSlotAllocatorPhase {
     FastSpillSlotAllocator spill_allocator(
         data->mid_tier_register_allocator_data());
     spill_allocator.AllocateSpillSlots();
+  }
+};
+
+struct FastPopulateReferenceMapsPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(FastPopulateReferenceMaps)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    FastReferenceMapPopulator populator(
+        data->mid_tier_register_allocator_data());
+    populator.PopulateReferenceMaps();
   }
 };
 
@@ -3568,6 +3578,7 @@ void PipelineImpl::AllocateRegistersForMidTier(
 
   Run<FastRegisterAllocatorPhase>();
   Run<FastSpillSlotAllocatorPhase>();
+  Run<FastPopulateReferenceMapsPhase>();
 
   // TODO(rmcilroy): Run spill slot allocation and reference map population
   // phases
