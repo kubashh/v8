@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "ba14c3e9_d492df4d",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 3123,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-07-20T12:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcfaa11d_9e3a314a",
+      "range": {
+        "startLine": 3123,
+        "startChar": 6,
+        "endLine": 3123,
+        "endChar": 70
+      },
+      "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c76c439e_65c7cad0",
         "filename": "src/heap/read-only-heap.cc",
         "patchSetId": 21
@@ -62,6 +86,30 @@
       "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2a544cb_8b191ce9",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-07-20T12:55:49Z",
+      "side": 1,
+      "message": "Done. Created new method VerifyHeapAndSpaceRelationships which also confirms the appropriate relationships for the non-PC case.",
+      "parentUuid": "c76c439e_65c7cad0",
+      "range": {
+        "startLine": 176,
+        "startChar": 4,
+        "endLine": 176,
+        "endChar": 33
+      },
+      "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "a7b40a23_600d9983",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-07-20T12:55:49Z",
+      "side": 1,
+      "message": "Ah yes. Not needed since you inlined the marking bits.",
+      "parentUuid": "05d9cea9_e1d42b54",
+      "range": {
+        "startLine": 274,
+        "startChar": 29,
+        "endLine": 274,
+        "endChar": 51
+      },
+      "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5d63fbe_313aaebd",
         "filename": "src/heap/read-only-spaces.cc",
         "patchSetId": 21
@@ -111,6 +183,30 @@
     },
     {
       "key": {
+        "uuid": "bd7f57e6_925ff29f",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-07-20T12:55:49Z",
+      "side": 1,
+      "message": "Done. Added a comment at the place that calls Seal",
+      "parentUuid": "c5d63fbe_313aaebd",
+      "range": {
+        "startLine": 358,
+        "startChar": 6,
+        "endLine": 358,
+        "endChar": 36
+      },
+      "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a5333d8_26dacf8e",
         "filename": "src/heap/read-only-spaces.cc",
         "patchSetId": 21
@@ -131,6 +227,30 @@
       "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acfa4d26_3a12ced8",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2020-07-20T12:55:49Z",
+      "side": 1,
+      "message": "When V8_ENABLE_SHARED_RO_SPACE is false or (COMPRESS_POINTERS_BOOL is true but the PageAllocator has CanAllocatedSharedPages \u003d\u003d false).\n\nE.g. So when this change lands, in V8 it will be true for Linux/Android (with PC+sharing). For chromium it will be false for all platforms with PC+sharing.",
+      "parentUuid": "5a5333d8_26dacf8e",
+      "range": {
+        "startLine": 361,
+        "startChar": 10,
+        "endLine": 361,
+        "endChar": 47
+      },
+      "revId": "9fdd7ceba44ea10f6598ee97c4779566aead5c51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
