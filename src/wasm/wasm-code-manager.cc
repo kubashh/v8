@@ -799,6 +799,8 @@ NativeModule::NativeModule(WasmEngine* engine, const WasmFeatures& enabled,
   if (module_->num_declared_functions > 0) {
     code_table_ =
         std::make_unique<WasmCode*[]>(module_->num_declared_functions);
+    number_function_calls_ =
+        std::make_unique<uint32_t[]>(module_->num_declared_functions);
   }
   code_allocator_.Init(this);
 }
@@ -1076,7 +1078,6 @@ WasmCode::Kind GetCodeKind(const WasmCompilationResult& result) {
 WasmCode* NativeModule::PublishCodeLocked(std::unique_ptr<WasmCode> code) {
   // The caller must hold the {allocation_mutex_}, thus we fail to lock it here.
   DCHECK(!allocation_mutex_.TryLock());
-
   if (!code->IsAnonymous() &&
       code->index() >= module_->num_imported_functions) {
     DCHECK_LT(code->index(), num_functions());
