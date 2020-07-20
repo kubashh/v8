@@ -16,6 +16,70 @@
       "revId": "85e6c0826f3c54fd54b490ab7f554001b7b07421",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b38e4fc5_b8f05a11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-07-20T14:13:21Z",
+      "side": 1,
+      "message": "What about writing an inspector test under v8/test/inspector/? You\u0027ll need a way to check that the GC happened from JS to verify.\n\nYou can call \n    await Protocol.HeapProfiler.collectGarbage()",
+      "parentUuid": "1f4f4c5f_2201d817",
+      "revId": "85e6c0826f3c54fd54b490ab7f554001b7b07421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf2dca76_e2e8a0f8",
+        "filename": "src/inspector/v8-heap-profiler-agent-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-07-20T14:13:21Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like canceled is ever set - is it needed?",
+      "range": {
+        "startLine": 189,
+        "startChar": 20,
+        "endLine": 189,
+        "endChar": 30
+      },
+      "revId": "85e6c0826f3c54fd54b490ab7f554001b7b07421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8d4f25e_1449d212",
+        "filename": "src/inspector/v8-heap-profiler-agent-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-07-20T14:13:21Z",
+      "side": 1,
+      "message": "So each task gets a shared ptr to the AsyncGC, and the V8HeapProfilerAgentImpl keeps one too. This is done because the task might outlive V8HeapProfilerAgentImpl? If that\u0027s true then we might call the pending callbacks after V8HeapProfilerAgentImpl is destroyed, is that intentional?",
+      "range": {
+        "startLine": 209,
+        "startChar": 66,
+        "endLine": 209,
+        "endChar": 76
+      },
+      "revId": "85e6c0826f3c54fd54b490ab7f554001b7b07421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
