@@ -101,6 +101,30 @@
     },
     {
       "key": {
+        "uuid": "6b067080_7de6bdd2",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1900,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-07-20T08:06:47Z",
+      "side": 1,
+      "message": "I don\u0027t think we flush bytecode when we have optimized code corresponding to it. Though even without bytecode flushing it is possible to move from poly -\u003e mono (for ex: when maps get deprecated). As Sathya says, it is still safe since we deopt.",
+      "parentUuid": "8330a652_ba4e068c",
+      "range": {
+        "startLine": 1900,
+        "startChar": 43,
+        "endLine": 1900,
+        "endChar": 71
+      },
+      "revId": "172ea108981a3b5cfb0e40418b7d41c3bf32efd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94a8f2b9_588df49e",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 18
