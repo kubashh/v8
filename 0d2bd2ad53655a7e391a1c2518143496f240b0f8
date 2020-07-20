@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "7cd16452_4de7483e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-07-20T14:26:14Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "0d2bd2ad53655a7e391a1c2518143496f240b0f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "283fcb1e_26e10d6b",
         "filename": "test/mjsunit/mjsunit.js",
         "patchSetId": 3
