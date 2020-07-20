@@ -2280,6 +2280,16 @@ struct FastRegisterAllocatorPhase {
   }
 };
 
+struct FastSpillSlotAllocatorPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(FastSpillSlotAllocator)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    FastSpillSlotAllocator spill_allocator(
+        data->mid_tier_register_allocator_data());
+    spill_allocator.AllocateSpillSlots();
+  }
+};
+
 struct OptimizeMovesPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(OptimizeMoves)
 
@@ -3557,6 +3567,7 @@ void PipelineImpl::AllocateRegistersForMidTier(
   TraceSequence(info(), data, "before register allocation");
 
   Run<FastRegisterAllocatorPhase>();
+  Run<FastSpillSlotAllocatorPhase>();
 
   // TODO(rmcilroy): Run spill slot allocation and reference map population
   // phases
