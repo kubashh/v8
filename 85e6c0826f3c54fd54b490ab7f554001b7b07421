@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "492c9b49_c8ea61a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-20T15:58:31Z",
+      "side": 1,
+      "message": "Thanks, done. I had to adjust inpsector_test to also pump the message loop of the default platform.",
+      "parentUuid": "b38e4fc5_b8f05a11",
+      "revId": "85e6c0826f3c54fd54b490ab7f554001b7b07421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf2dca76_e2e8a0f8",
         "filename": "src/inspector/v8-heap-profiler-agent-impl.cc",
         "patchSetId": 1
@@ -60,6 +78,30 @@
     },
     {
       "key": {
+        "uuid": "8dd7e6d0_52a2915e",
+        "filename": "src/inspector/v8-heap-profiler-agent-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-20T15:58:31Z",
+      "side": 1,
+      "message": "Good catch, forgot to set it in the destructor of V8HeapProfilerAgentImpl.",
+      "parentUuid": "cf2dca76_e2e8a0f8",
+      "range": {
+        "startLine": 189,
+        "startChar": 20,
+        "endLine": 189,
+        "endChar": 30
+      },
+      "revId": "85e6c0826f3c54fd54b490ab7f554001b7b07421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8d4f25e_1449d212",
         "filename": "src/inspector/v8-heap-profiler-agent-impl.cc",
         "patchSetId": 1
@@ -80,6 +122,30 @@
       "revId": "85e6c0826f3c54fd54b490ab7f554001b7b07421",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0be05d8_ca5f620e",
+        "filename": "src/inspector/v8-heap-profiler-agent-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-20T15:58:31Z",
+      "side": 1,
+      "message": "Fixed the in the last PS: the list of pending callbacks is cleared in the destructor of V8HeapProfilerAgentImpl",
+      "parentUuid": "d8d4f25e_1449d212",
+      "range": {
+        "startLine": 209,
+        "startChar": 66,
+        "endLine": 209,
+        "endChar": 76
+      },
+      "revId": "85e6c0826f3c54fd54b490ab7f554001b7b07421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
