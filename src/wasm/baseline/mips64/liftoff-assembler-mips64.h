@@ -654,7 +654,7 @@ void LiftoffAssembler::FillStackSlotsWithZero(int start, int size) {
 
     Label loop;
     bind(&loop);
-    Sd(zero_reg, MemOperand(a0, kSystemPointerSize));
+    Sd(zero_reg, MemOperand(a0));
     daddiu(a0, a0, kSystemPointerSize);
     BranchShort(&loop, ne, a0, Operand(a1));
 
@@ -1673,6 +1673,17 @@ void LiftoffAssembler::emit_f64x2_lt(LiftoffRegister dst, LiftoffRegister lhs,
 void LiftoffAssembler::emit_f64x2_le(LiftoffRegister dst, LiftoffRegister lhs,
                                      LiftoffRegister rhs) {
   fcle_d(dst.fp().toW(), lhs.fp().toW(), rhs.fp().toW());
+}
+
+void LiftoffAssembler::emit_s128_const(LiftoffRegister dst,
+                                       const uint8_t imms[16]) {
+  MSARegister dst_msa = dst.fp().toW();
+  uint64_t vals[2];
+  memcpy(vals, imms, sizeof(vals));
+  li(kScratchReg, vals[0]);
+  insert_d(dst_msa, 0, kScratchReg);
+  li(kScratchReg, vals[1]);
+  insert_d(dst_msa, 1, kScratchReg);
 }
 
 void LiftoffAssembler::emit_s128_not(LiftoffRegister dst, LiftoffRegister src) {

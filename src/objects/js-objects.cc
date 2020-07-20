@@ -1552,6 +1552,8 @@ Maybe<bool> GetPropertyDescriptorWithInterceptor(LookupIterator* it,
   } else {
     result = args.CallNamedDescriptor(interceptor, it->name());
   }
+  // An exception was thrown in the interceptor. Propagate.
+  RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<bool>());
   if (!result.is_null()) {
     // Request successfully intercepted, try to set the property
     // descriptor.
@@ -5045,13 +5047,13 @@ void JSFunction::InitializeFeedbackCell(Handle<JSFunction> function,
     return;
   }
 
-  bool needs_feedback_vector = !FLAG_lazy_feedback_allocation;
-  // We need feedback vector for certain log events, collecting type profile
-  // and more precise code coverage.
-  if (FLAG_log_function_events) needs_feedback_vector = true;
-  if (!isolate->is_best_effort_code_coverage()) needs_feedback_vector = true;
-  if (isolate->is_collecting_type_profile()) needs_feedback_vector = true;
-  if (FLAG_always_opt) needs_feedback_vector = true;
+  const bool needs_feedback_vector =
+      !FLAG_lazy_feedback_allocation || FLAG_always_opt ||
+      function->shared().may_have_cached_code() ||
+      // We also need a feedback vector for certain log events, collecting type
+      // profile and more precise code coverage.
+      FLAG_log_function_events || !isolate->is_best_effort_code_coverage() ||
+      isolate->is_collecting_type_profile();
 
   if (needs_feedback_vector) {
     EnsureFeedbackVector(function, is_compiled_scope);

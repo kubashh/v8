@@ -148,11 +148,10 @@ class V8_EXPORT_PRIVATE PagedSpace
   // Allocate the requested number of bytes in the space from a background
   // thread.
   V8_WARN_UNUSED_RESULT base::Optional<std::pair<Address, size_t>>
-  SlowGetLinearAllocationAreaBackground(LocalHeap* local_heap,
-                                        size_t min_size_in_bytes,
-                                        size_t max_size_in_bytes,
-                                        AllocationAlignment alignment,
-                                        AllocationOrigin origin);
+  RawRefillLabBackground(LocalHeap* local_heap, size_t min_size_in_bytes,
+                         size_t max_size_in_bytes,
+                         AllocationAlignment alignment,
+                         AllocationOrigin origin);
 
   size_t Free(Address start, size_t size_in_bytes, SpaceAccountingMode mode) {
     if (size_in_bytes == 0) return 0;
@@ -353,8 +352,7 @@ class V8_EXPORT_PRIVATE PagedSpace
   // Sets up a linear allocation area that fits the given number of bytes.
   // Returns false if there is not enough space and the caller has to retry
   // after collecting garbage.
-  inline bool EnsureLinearAllocationArea(int size_in_bytes,
-                                         AllocationOrigin origin);
+  inline bool EnsureLabMain(int size_in_bytes, AllocationOrigin origin);
   // Allocates an object from the linear allocation area. Assumes that the
   // linear allocation area is large enought to fit the object.
   inline AllocationResult AllocateLinearly(int size_in_bytes);
@@ -365,31 +363,24 @@ class V8_EXPORT_PRIVATE PagedSpace
   inline AllocationResult TryAllocateLinearlyAligned(
       int* size_in_bytes, AllocationAlignment alignment);
 
-  V8_WARN_UNUSED_RESULT bool RefillLinearAllocationAreaFromFreeList(
+  V8_WARN_UNUSED_RESULT bool TryAllocationFromFreeListMain(
       size_t size_in_bytes, AllocationOrigin origin);
 
-  // If sweeping is still in progress try to sweep unswept pages. If that is
-  // not successful, wait for the sweeper threads and retry free-list
-  // allocation. Returns false if there is not enough space and the caller
-  // has to retry after collecting garbage.
-  V8_WARN_UNUSED_RESULT bool EnsureSweptAndRetryAllocation(
-      int size_in_bytes, AllocationOrigin origin);
+  V8_WARN_UNUSED_RESULT bool ContributeToSweepingMain(int required_freed_bytes,
+                                                      int max_pages,
+                                                      int size_in_bytes,
+                                                      AllocationOrigin origin);
 
-  V8_WARN_UNUSED_RESULT bool SweepAndRetryAllocation(int required_freed_bytes,
-                                                     int max_pages,
-                                                     int size_in_bytes,
-                                                     AllocationOrigin origin);
-
-  // Slow path of AllocateRaw. This function is space-dependent. Returns false
-  // if there is not enough space and the caller has to retry after
+  // Refills LAB for EnsureLabMain. This function is space-dependent. Returns
+  // false if there is not enough space and the caller has to retry after
   // collecting garbage.
-  V8_WARN_UNUSED_RESULT virtual bool SlowRefillLinearAllocationArea(
-      int size_in_bytes, AllocationOrigin origin);
+  V8_WARN_UNUSED_RESULT virtual bool RefillLabMain(int size_in_bytes,
+                                                   AllocationOrigin origin);
 
-  // Implementation of SlowAllocateRaw. Returns false if there is not enough
-  // space and the caller has to retry after collecting garbage.
-  V8_WARN_UNUSED_RESULT bool RawSlowRefillLinearAllocationArea(
-      int size_in_bytes, AllocationOrigin origin);
+  // Actual implementation of refilling LAB. Returns false if there is not
+  // enough space and the caller has to retry after collecting garbage.
+  V8_WARN_UNUSED_RESULT bool RawRefillLabMain(int size_in_bytes,
+                                              AllocationOrigin origin);
 
   V8_WARN_UNUSED_RESULT base::Optional<std::pair<Address, size_t>>
   TryAllocationFromFreeListBackground(LocalHeap* local_heap,
@@ -449,8 +440,8 @@ class V8_EXPORT_PRIVATE CompactionSpace : public LocalSpace {
   }
 
  protected:
-  V8_WARN_UNUSED_RESULT bool SlowRefillLinearAllocationArea(
-      int size_in_bytes, AllocationOrigin origin) override;
+  V8_WARN_UNUSED_RESULT bool RefillLabMain(int size_in_bytes,
+                                           AllocationOrigin origin) override;
 };
 
 // A collection of |CompactionSpace|s used by a single compaction task.
@@ -554,8 +545,8 @@ class V8_EXPORT_PRIVATE OffThreadSpace : public LocalSpace {
   }
 
  protected:
-  V8_WARN_UNUSED_RESULT bool SlowRefillLinearAllocationArea(
-      int size_in_bytes, AllocationOrigin origin) override;
+  V8_WARN_UNUSED_RESULT bool RefillLabMain(int size_in_bytes,
+                                           AllocationOrigin origin) override;
 
   void RefillFreeList() override;
 };

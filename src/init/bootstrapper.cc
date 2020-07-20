@@ -55,6 +55,7 @@
 #include "src/objects/js-segmenter.h"
 #endif  // V8_INTL_SUPPORT
 #include "src/objects/js-weak-refs.h"
+#include "src/objects/ordered-hash-table.h"
 #include "src/objects/property-cell.h"
 #include "src/objects/slots-inl.h"
 #include "src/objects/templates.h"
@@ -914,6 +915,8 @@ void Genesis::CreateAsyncIteratorMaps(Handle<JSFunction> empty) {
   InstallFunctionAtSymbol(
       isolate(), async_iterator_prototype, factory()->async_iterator_symbol(),
       "[Symbol.asyncIterator]", Builtins::kReturnReceiver, 0, true);
+  native_context()->set_initial_async_iterator_prototype(
+      *async_iterator_prototype);
 
   // %AsyncFromSyncIteratorPrototype%
   // proposal-async-iteration/#sec-%asyncfromsynciteratorprototype%-object
@@ -4129,6 +4132,12 @@ EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(
 
 #undef EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE
 
+void Genesis::InitializeGlobal_harmony_atomics_waitasync() {
+  if (!FLAG_harmony_atomics_waitasync) return;
+  SimpleInstallFunction(isolate(), isolate()->atomics_object(), "waitAsync",
+                        Builtins::kAtomicsWaitAsync, 4, true);
+}
+
 void Genesis::InitializeGlobal_harmony_sharedarraybuffer() {
   if (!FLAG_harmony_sharedarraybuffer) return;
 
@@ -4735,6 +4744,11 @@ bool Genesis::InstallABunchOfRandomThings() {
       Map::EnsureDescriptorSlack(isolate(), map, 1);
       map->AppendDescriptor(isolate(), &d);
     }
+  }
+  {
+    Handle<OrderedHashSet> promises =
+        OrderedHashSet::Allocate(isolate(), 0).ToHandleChecked();
+    native_context()->set_atomics_waitasync_promises(*promises);
   }
 
   return true;

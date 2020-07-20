@@ -10,13 +10,10 @@ found in the LICENSE file. -->
   <title>Indicium</title>
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <!-- <link rel="icon" type="image/png" href="/images/favicon.png"/> -->
-  <!-- <script type="module" src="index.js"></script> -->
-  <script src="helper.js"></script>
-
-  <script type="module" src="log-file-reader.mjs"></script>
-  <script type="module" src="map-panel.mjs"></script>
-  <script type="module" src="timeline-panel.mjs"></script>
-  <script type="module" src="ic-panel.mjs"></script>
+  <script type="module" src="index.mjs"></script>
+  <script type="module" src="index.mjs"></script>
+  <link rel="stylesheet" type="text/css" href="./index.css">
+  <script type="module" src="helper.mjs"></script>
 
   <script src="../splaytree.js"></script>
   <script src="../codemap.js"></script>
@@ -27,168 +24,40 @@ found in the LICENSE file. -->
   <script src="../logreader.js"></script>
   <script src="../arguments.js"></script>
   <script src="../SourceMap.js"></script>
-  <script src="./map-processor.js"></script>
-  <script src="./ic-processor.js"></script>
-  <script src="./map-model.js"></script>
-<style>
-body {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: white;
-  margin-left: 5%;
-  margin-right: 5%;
-  background-color: #000000;
-  letter-spacing: 0.5px;
-}
-.colorbox {
-  width: 10px;
-  height: 10px;
-  border: 1px black solid;
-}
-#instructions {
-  padding: 10px 10px  60px 10px ;
-  margin: auto;
-  background-color: #121212;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-}
-kbd {
-  background-color: #BB86FC;
-  color:black;
+  <style>
+  #instructions {
+    padding: 10px 10px  60px 10px ;
+    margin: auto;
+  }
+  kbd {
+  background-color: var(--primary-color);
+  color: var(--on-primary-color);
   border-radius: 3px;
-  border: 1px solid black;
+  border: 1px solid var(--on-primary-color);
   display: inline-block;
   font-size: .9em;
   font-weight: bold;
   padding: 0px 4px 2px 4px;
   white-space: nowrap;
 }
-dl {
-  display: grid;
-  grid-template-columns: min-content auto;
-  grid-gap: 10px;
-}
-dt {
-  text-align: right;
-  white-space: nowrap;
-}
-dd {
-  margin: 0;
-}
 </style>
-<script>
-'use strict';
+<script type="module" >
+import {App} from  './index.mjs';
 
-// Event handlers
-document.onkeydown = handleKeyDown;
-function handleKeyDown(event) {
-  stateGlobal.navigation = document.state.navigation;
-  let nav = document.state.navigation;
-  switch(event.key) {
-    case "ArrowUp":
-      event.preventDefault();
-      if (event.shiftKey) {
-        nav.selectPrevEdge();
-      } else {
-        nav.moveInChunk(-1);
-      }
-      return false;
-    case "ArrowDown":
-      event.preventDefault();
-      if (event.shiftKey) {
-        nav.selectNextEdge();
-      } else {
-        nav.moveInChunk(1);
-      }
-      return false;
-    case "ArrowLeft":
-      nav.moveInChunks(false);
-      break;
-    case "ArrowRight":
-      nav.moveInChunks(true);
-      break;
-    case "+":
-      nav.increaseTimelineResolution();
-      break;
-    case "-":
-      nav.decreaseTimelineResolution();
-      break;
-  }
-}
-
-// Update application state
-function updateDocumentState(){
-    document.state = stateGlobal.state;
-    try {
-      document.state.timeline = stateGlobal.timeline;
-    } catch (error) {
-      console.log(error);
-      console.log("cannot assign timeline to state!");
-    }
-}
-
-// Map event log processing
-function handleLoadTextMapProcessor(text) {
-    let mapProcessor = new MapProcessor();
-    return mapProcessor.processString(text);
-}
-
-// IC event file reading and log processing
-
-function loadFileIC(file) {
-  let reader = new FileReader();
-  reader.onload = function(evt) {
-    let icProcessor = new CustomIcProcessor();
-    icProcessor.processString(this.result);
-    entries = icProcessor.entries;
-    $("ic-panel").countSelect.innerHTML = entries.length;
-    $("ic-panel").updateTable(entries);
-  }
-  reader.readAsText(file);
-  $("ic-panel").initGroupKeySelect();
-}
-
-
-function $(id) { return document.querySelector(id); }
-
-// holds the state of the application
-let stateGlobal = Object.create(null);
-
-// call when a new file uploaded
-function globalDataUpload(e) {
-  stateGlobal.timeline = e.detail;
-  if(!e.detail) return;
-  $('#container').style.display = 'block';
-  // instantiate the app logic
-  stateGlobal.fileData = e.detail;
-  stateGlobal.state = new State('#map-panel','#timeline-panel');
-  stateGlobal.timeline = handleLoadTextMapProcessor(stateGlobal.fileData.chunk);
-  updateDocumentState();
-  // process the IC explorer
-  loadFileIC(stateGlobal.fileData.file);
-}
-
-function globalSearchBarEvent(e) {
-  if(!e.detail.isValidMap) return;
-  document.state.map = e.detail.map;
-}
-
-function showMaps(e) {
-  // show maps on the view
-  document.state.view.transitionView.showMaps(e.detail);
-}
+globalThis.app = new App("#map-panel", "#timeline-panel", "#ic-panel");
 </script>
 </head>
 <body>
   <div id="content">
     <section id="file-reader">
       <br></br>
-      <log-file-reader id="log-file-reader" onchange="globalDataUpload(event)"></log-file-reader>
+      <log-file-reader id="log-file-reader" onchange="app.handleDataUpload(event)"></log-file-reader>
       <br></br>
     </section>
     <div id="container" style="display: none;">
       <timeline-panel id="timeline-panel"></timeline-panel>
-      <map-panel id="map-panel" onclick="globalSearchBarEvent(event)" onchange="showMaps(event)"></map-panel>
-      <ic-panel id="ic-panel"></ic-panel>
+      <map-panel id="map-panel" onclick="app.handleMapAddressSearch(event)" onchange="app.handleShowMaps(event)"></map-panel>
+      <ic-panel id="ic-panel" onchange="app.handleSelectIc(event)"></ic-panel>
     </div>
   </div>
 

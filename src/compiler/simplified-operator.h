@@ -9,8 +9,11 @@
 
 #include "src/base/compiler-specific.h"
 #include "src/codegen/machine-type.h"
+#include "src/codegen/tnode.h"
 #include "src/common/globals.h"
 #include "src/compiler/feedback-source.h"
+#include "src/compiler/node-properties.h"
+#include "src/compiler/node.h"
 #include "src/compiler/operator.h"
 #include "src/compiler/types.h"
 #include "src/compiler/write-barrier-kind.h"
@@ -22,6 +25,8 @@
 #include "src/zone/zone-handle-set.h"
 
 namespace v8 {
+class CFunctionInfo;
+
 namespace internal {
 
 // Forward declarations.
@@ -33,6 +38,7 @@ namespace compiler {
 // Forward declarations.
 class Operator;
 struct SimplifiedOperatorGlobalCache;
+class CallDescriptor;
 
 enum BaseTaggedness : uint8_t { kUntaggedBase, kTaggedBase };
 
@@ -421,6 +427,35 @@ std::ostream& operator<<(std::ostream&, CheckMapsParameters const&);
 CheckMapsParameters const& CheckMapsParametersOf(Operator const*)
     V8_WARN_UNUSED_RESULT;
 
+// A descriptor for dynamic map checks.
+class DynamicCheckMapsParameters final {
+ public:
+  enum ICState { kMonomorphic, kPolymorphic };
+
+  DynamicCheckMapsParameters(Handle<Object> handler,
+                             const FeedbackSource& feedback, ICState state)
+      : handler_(handler), feedback_(feedback), state_(state) {}
+
+  Handle<Object> handler() const { return handler_; }
+  FeedbackSource const& feedback() const { return feedback_; }
+  ICState const& state() const { return state_; }
+
+ private:
+  Handle<Object> const handler_;
+  FeedbackSource const feedback_;
+  ICState const state_;
+};
+
+bool operator==(DynamicCheckMapsParameters const&,
+                DynamicCheckMapsParameters const&);
+
+size_t hash_value(DynamicCheckMapsParameters const&);
+
+std::ostream& operator<<(std::ostream&, DynamicCheckMapsParameters const&);
+
+DynamicCheckMapsParameters const& DynamicCheckMapsParametersOf(Operator const*)
+    V8_WARN_UNUSED_RESULT;
+
 ZoneHandleSet<Map> const& MapGuardMapsOf(Operator const*) V8_WARN_UNUSED_RESULT;
 
 // Parameters for CompareMaps operator.
@@ -589,20 +624,45 @@ AbortReason AbortReasonOf(const Operator* op) V8_WARN_UNUSED_RESULT;
 
 DeoptimizeReason DeoptimizeReasonOf(const Operator* op) V8_WARN_UNUSED_RESULT;
 
-int NewArgumentsElementsMappedCountOf(const Operator* op) V8_WARN_UNUSED_RESULT;
+class NewArgumentsElementsParameters {
+ public:
+  NewArgumentsElementsParameters(CreateArgumentsType type,
+                                 int formal_parameter_count)
+      : type_(type), formal_parameter_count_(formal_parameter_count) {}
+
+  CreateArgumentsType arguments_type() const { return type_; }
+  int formal_parameter_count() const { return formal_parameter_count_; }
+
+ private:
+  CreateArgumentsType type_;
+  int formal_parameter_count_;
+};
+
+bool operator==(const NewArgumentsElementsParameters&,
+                const NewArgumentsElementsParameters&);
+
+inline size_t hash_value(const NewArgumentsElementsParameters&);
+
+std::ostream& operator<<(std::ostream&, const NewArgumentsElementsParameters&);
+
+const NewArgumentsElementsParameters& NewArgumentsElementsParametersOf(
+    const Operator*) V8_WARN_UNUSED_RESULT;
 
 class FastApiCallParameters {
  public:
   explicit FastApiCallParameters(const CFunctionInfo* signature,
-                                 FeedbackSource const& feedback)
-      : signature_(signature), feedback_(feedback) {}
+                                 FeedbackSource const& feedback,
+                                 CallDescriptor* descriptor)
+      : signature_(signature), feedback_(feedback), descriptor_(descriptor) {}
 
   const CFunctionInfo* signature() const { return signature_; }
   FeedbackSource const& feedback() const { return feedback_; }
+  CallDescriptor* descriptor() const { return descriptor_; }
 
  private:
   const CFunctionInfo* signature_;
   const FeedbackSource feedback_;
+  CallDescriptor* descriptor_;
 };
 
 FastApiCallParameters const& FastApiCallParametersOf(const Operator* op)
@@ -806,6 +866,9 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckInternalizedString();
   const Operator* CheckMaps(CheckMapsFlags, ZoneHandleSet<Map>,
                             const FeedbackSource& = FeedbackSource());
+  const Operator* DynamicCheckMaps(
+      Handle<Object> handler, const FeedbackSource& feedback,
+      DynamicCheckMapsParameters::ICState ic_state);
   const Operator* CheckNotTaggedHole();
   const Operator* CheckNumber(const FeedbackSource& feedback);
   const Operator* CheckReceiver();
@@ -882,8 +945,9 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* NewDoubleElements(AllocationType);
   const Operator* NewSmiOrObjectElements(AllocationType);
 
-  // new-arguments-elements arguments-frame, arguments-length
-  const Operator* NewArgumentsElements(int mapped_count);
+  // new-arguments-elements frame, arguments count
+  const Operator* NewArgumentsElements(CreateArgumentsType type,
+                                       int formal_parameter_count);
 
   // new-cons-string length, first, second
   const Operator* NewConsString();
@@ -959,9 +1023,10 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
 
   const Operator* DateNow();
 
-  // Stores the signature and feedback of a fast C call
+  // Represents the inputs necessary to construct a fast and a slow API call.
   const Operator* FastApiCall(const CFunctionInfo* signature,
-                              FeedbackSource const& feedback);
+                              FeedbackSource const& feedback,
+                              CallDescriptor* descriptor);
 
  private:
   Zone* zone() const { return zone_; }
@@ -971,6 +1036,86 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
 
   DISALLOW_COPY_AND_ASSIGN(SimplifiedOperatorBuilder);
 };
+
+#define DEFINE_INPUT_ACCESSORS(Name, name, TheIndex, Type) \
+  static constexpr int Name##Index() { return TheIndex; }  \
+  TNode<Type> name() const {                               \
+    return TNode<Type>::UncheckedCast(                     \
+        NodeProperties::GetValueInput(node(), TheIndex));  \
+  }
+
+class FastApiCallNode final : public NodeWrapper {
+ public:
+  explicit constexpr FastApiCallNode(Node* node) : NodeWrapper(node) {
+    CONSTEXPR_DCHECK(node->opcode() == IrOpcode::kFastApiCall);
+  }
+
+  const FastApiCallParameters& Parameters() const {
+    return FastApiCallParametersOf(node()->op());
+  }
+
+#define INPUTS(V)              \
+  V(Target, target, 0, Object) \
+  V(Receiver, receiver, 1, Object)
+  INPUTS(DEFINE_INPUT_ACCESSORS)
+#undef INPUTS
+
+  // Besides actual arguments, FastApiCall nodes also take:
+  static constexpr int kFastTargetInputCount = 1;
+  static constexpr int kSlowTargetInputCount = 1;
+  static constexpr int kFastReceiverInputCount = 1;
+  static constexpr int kSlowReceiverInputCount = 1;
+  static constexpr int kExtraInputCount =
+      kFastTargetInputCount + kFastReceiverInputCount;
+
+  static constexpr int kHasErrorInputCount = 1;
+  static constexpr int kArityInputCount = 1;
+  static constexpr int kNewTargetInputCount = 1;
+  static constexpr int kHolderInputCount = 1;
+  static constexpr int kContextAndFrameStateInputCount = 2;
+  static constexpr int kEffectAndControlInputCount = 2;
+  static constexpr int kFastCallExtraInputCount =
+      kFastTargetInputCount + kHasErrorInputCount + kEffectAndControlInputCount;
+  static constexpr int kSlowCallExtraInputCount =
+      kSlowTargetInputCount + kArityInputCount + kNewTargetInputCount +
+      kSlowReceiverInputCount + kHolderInputCount +
+      kContextAndFrameStateInputCount + kEffectAndControlInputCount;
+
+  // This is the arity fed into FastApiCallArguments.
+  static constexpr int ArityForArgc(int c_arg_count, int js_arg_count) {
+    return c_arg_count + kFastTargetInputCount + js_arg_count +
+           kEffectAndControlInputCount;
+  }
+
+  int FastCallArgumentCount() const;
+  int SlowCallArgumentCount() const;
+
+  constexpr int FirstFastCallArgumentIndex() const {
+    return ReceiverIndex() + 1;
+  }
+  constexpr int FastCallArgumentIndex(int i) const {
+    return FirstFastCallArgumentIndex() + i;
+  }
+  TNode<Object> FastCallArgument(int i) const {
+    DCHECK_LT(i, FastCallArgumentCount());
+    return TNode<Object>::UncheckedCast(
+        NodeProperties::GetValueInput(node(), FastCallArgumentIndex(i)));
+  }
+
+  int FirstSlowCallArgumentIndex() const {
+    return FastCallArgumentCount() + FastApiCallNode::kFastTargetInputCount;
+  }
+  int SlowCallArgumentIndex(int i) const {
+    return FirstSlowCallArgumentIndex() + i;
+  }
+  TNode<Object> SlowCallArgument(int i) const {
+    DCHECK_LT(i, SlowCallArgumentCount());
+    return TNode<Object>::UncheckedCast(
+        NodeProperties::GetValueInput(node(), SlowCallArgumentIndex(i)));
+  }
+};
+
+#undef DEFINE_INPUT_ACCESSORS
 
 }  // namespace compiler
 }  // namespace internal

@@ -6,7 +6,6 @@
 #include "src/base/platform/semaphore.h"
 #include "src/handles/handles-inl.h"
 #include "src/handles/local-handles-inl.h"
-#include "src/handles/persistent-handles-inl.h"
 #include "src/handles/persistent-handles.h"
 #include "src/heap/heap.h"
 #include "src/heap/local-heap-inl.h"
@@ -21,11 +20,11 @@ static constexpr int kNumHandles = kHandleBlockSize * 2 + kHandleBlockSize / 2;
 
 namespace {
 
-class PersistentHandlesThread final : public v8::base::Thread {
+class ConcurrentSearchThread final : public v8::base::Thread {
  public:
-  PersistentHandlesThread(Heap* heap, std::vector<Handle<JSObject>> handles,
-                          std::unique_ptr<PersistentHandles> ph,
-                          Handle<Name> name, base::Semaphore* sema_started)
+  ConcurrentSearchThread(Heap* heap, std::vector<Handle<JSObject>> handles,
+                         std::unique_ptr<PersistentHandles> ph,
+                         Handle<Name> name, base::Semaphore* sema_started)
       : v8::base::Thread(base::Thread::Options("ThreadWithLocalHeap")),
         heap_(heap),
         handles_(std::move(handles)),
@@ -101,7 +100,7 @@ TEST(LinearSearchFlatObject) {
   base::Semaphore sema_started(0);
 
   // Pass persistent handles to background thread.
-  std::unique_ptr<PersistentHandlesThread> thread(new PersistentHandlesThread(
+  std::unique_ptr<ConcurrentSearchThread> thread(new ConcurrentSearchThread(
       isolate->heap(), std::move(handles), std::move(ph), persistent_name,
       &sema_started));
   CHECK(thread->Start());
@@ -165,7 +164,7 @@ TEST(LinearSearchFlatObject_ManyElements) {
   base::Semaphore sema_started(0);
 
   // Pass persistent handles to background thread.
-  std::unique_ptr<PersistentHandlesThread> thread(new PersistentHandlesThread(
+  std::unique_ptr<ConcurrentSearchThread> thread(new ConcurrentSearchThread(
       isolate->heap(), std::move(handles), std::move(ph), persistent_name,
       &sema_started));
   CHECK(thread->Start());

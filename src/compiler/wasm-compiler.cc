@@ -5272,16 +5272,7 @@ Node* ArrayLength(GraphAssembler* gasm, Node* array) {
 Node* WasmGraphBuilder::StructNew(uint32_t struct_index,
                                   const wasm::StructType* type,
                                   Vector<Node*> fields) {
-  // This logic is duplicated from module-instantiate.cc.
-  // TODO(jkummerow): Find a nicer solution.
-  int map_index = 0;
-  const std::vector<uint8_t>& type_kinds = env_->module->type_kinds;
-  for (uint32_t i = 0; i < struct_index; i++) {
-    if (type_kinds[i] == wasm::kWasmStructTypeCode ||
-        type_kinds[i] == wasm::kWasmArrayTypeCode) {
-      map_index++;
-    }
-  }
+  int map_index = wasm::GetCanonicalRttIndex(env_->module, struct_index);
   Node* s = CALL_BUILTIN(
       WasmAllocateStruct,
       graph()->NewNode(mcgraph()->common()->NumberConstant(map_index)),
@@ -5307,17 +5298,7 @@ Node* WasmGraphBuilder::StructNewWithRtt(uint32_t struct_index,
 Node* WasmGraphBuilder::ArrayNew(uint32_t array_index,
                                  const wasm::ArrayType* type, Node* length,
                                  Node* initial_value) {
-  // This logic is duplicated from module-instantiate.cc.
-  // TODO(jkummerow): Find a nicer solution.
-  int map_index = 0;
-  const std::vector<uint8_t>& type_kinds = env_->module->type_kinds;
-  for (uint32_t i = 0; i < array_index; i++) {
-    if (type_kinds[i] == wasm::kWasmStructTypeCode ||
-        type_kinds[i] == wasm::kWasmArrayTypeCode) {
-      map_index++;
-    }
-  }
-
+  int map_index = GetCanonicalRttIndex(env_->module, array_index);
   wasm::ValueType element_type = type->element_type();
   Node* a = CALL_BUILTIN(
       WasmAllocateArray,
@@ -5377,19 +5358,10 @@ Node* WasmGraphBuilder::RttCanon(wasm::HeapType type) {
         UNREACHABLE();
     }
   }
-  // This logic is duplicated from module-instantiate.cc.
-  // TODO(jkummerow): Find a nicer solution.
-  int map_index = 0;
-  const std::vector<uint8_t>& type_kinds = env_->module->type_kinds;
-  for (uint32_t i = 0; i < type.ref_index(); i++) {
-    if (type_kinds[i] == wasm::kWasmStructTypeCode ||
-        type_kinds[i] == wasm::kWasmArrayTypeCode) {
-      map_index++;
-    }
-  }
+  int map_index = wasm::GetCanonicalRttIndex(env_->module, type.ref_index());
   Node* maps_list =
       LOAD_INSTANCE_FIELD(ManagedObjectMaps, MachineType::TaggedPointer());
-  return LOAD_FIXED_ARRAY_SLOT_PTR(maps_list, type.ref_index());
+  return LOAD_FIXED_ARRAY_SLOT_PTR(maps_list, map_index);
 }
 
 Node* WasmGraphBuilder::RttSub(wasm::HeapType type, Node* parent_rtt) {
@@ -5401,13 +5373,48 @@ Node* WasmGraphBuilder::RttSub(wasm::HeapType type, Node* parent_rtt) {
       LOAD_INSTANCE_FIELD(NativeContext, MachineType::TaggedPointer()));
 }
 
+Node* IsI31(GraphAssembler* gasm, Node* object) {
+  if (COMPRESS_POINTERS_BOOL) {
+    return gasm->Word32Equal(
+        gasm->Word32And(object, gasm->Int32Constant(kSmiTagMask)),
+        gasm->Int32Constant(kSmiTag));
+  } else {
+    return gasm->WordEqual(
+        gasm->WordAnd(object, gasm->IntPtrConstant(kSmiTagMask)),
+        gasm->IntPtrConstant(kSmiTag));
+  }
+}
+
+void AssertFalse(GraphAssembler* gasm, Node* condition) {
+#if DEBUG
+  if (FLAG_debug_code) {
+    auto ok = gasm->MakeLabel();
+    gasm->GotoIfNot(condition, &ok);
+    gasm->Unreachable();
+    gasm->Goto(&ok);
+    gasm->Bind(&ok);
+  }
+#endif
+}
+
 Node* WasmGraphBuilder::RefTest(Node* object, Node* rtt,
-                                CheckForNull null_check) {
-  // TODO(7748): Check if {object} is an i31ref.
+                                CheckForNull null_check, CheckForI31 i31_check,
+                                RttIsI31 rtt_is_i31) {
   auto done = gasm_->MakeLabel(MachineRepresentation::kWord32);
+  bool need_done_label = false;
+  if (i31_check == kWithI31Check) {
+    if (rtt_is_i31 == kRttIsI31) {
+      return IsI31(gasm_.get(), object);
+    }
+    gasm_->GotoIf(IsI31(gasm_.get(), object), &done, gasm_->Int32Constant(0));
+    need_done_label = true;
+  } else {
+    AssertFalse(gasm_.get(), IsI31(gasm_.get(), object));
+  }
   if (null_check == kWithNullCheck) {
     gasm_->GotoIf(gasm_->WordEqual(object, RefNull()), &done,
                   gasm_->Int32Constant(0));
+    need_done_label = true;
   }
 
   Node* map = gasm_->Load(MachineType::TaggedPointer(), object,
@@ -5417,7 +5424,7 @@ Node* WasmGraphBuilder::RefTest(Node* object, Node* rtt,
       WasmIsRttSubtype, map, rtt,
       LOAD_INSTANCE_FIELD(NativeContext, MachineType::TaggedPointer())));
 
-  if (null_check == kWithNullCheck) {
+  if (need_done_label) {
     gasm_->Goto(&done, subtype_check);
     gasm_->Bind(&done);
     subtype_check = done.PhiAt(0);
@@ -5426,9 +5433,19 @@ Node* WasmGraphBuilder::RefTest(Node* object, Node* rtt,
 }
 
 Node* WasmGraphBuilder::RefCast(Node* object, Node* rtt,
-                                CheckForNull null_check,
+                                CheckForNull null_check, CheckForI31 i31_check,
+                                RttIsI31 rtt_is_i31,
                                 wasm::WasmCodePosition position) {
-  // TODO(7748): Check if {object} is an i31ref.
+  if (i31_check == kWithI31Check) {
+    if (rtt_is_i31 == kRttIsI31) {
+      TrapIfFalse(wasm::kTrapIllegalCast, IsI31(gasm_.get(), object), position);
+      return object;
+    } else {
+      TrapIfTrue(wasm::kTrapIllegalCast, IsI31(gasm_.get(), object), position);
+    }
+  } else {
+    AssertFalse(gasm_.get(), IsI31(gasm_.get(), object));
+  }
   if (null_check == kWithNullCheck) {
     TrapIfTrue(wasm::kTrapIllegalCast, gasm_->WordEqual(object, RefNull()),
                position);

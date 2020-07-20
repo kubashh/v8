@@ -479,6 +479,9 @@ class SerializerForBackgroundCompilation {
       AccessMode access_mode, base::Optional<JSObjectRef> concrete_receiver,
       Hints* result_hints);
 
+  PropertyAccessInfo ProcessMinimorphicFeedbackForNamedPropertyAccess(
+      NamedAccessFeedback const& feedback);
+
   void ProcessCreateContext(interpreter::BytecodeArrayIterator* iterator,
                             int scopeinfo_operand_index);
 
@@ -1473,6 +1476,20 @@ void SerializerForBackgroundCompilation::VisitInvokeIntrinsic(
     case Runtime::kCopyDataProperties: {
       ObjectRef(broker(), broker()->isolate()->builtins()->builtin_handle(
                               Builtins::kCopyDataProperties));
+      break;
+    }
+    case Runtime::kInlineGetImportMetaObject: {
+      Hints const& context_hints = environment()->current_context_hints();
+      for (auto x : context_hints.constants()) {
+        ContextRef(broker(), x)
+            .GetModule(SerializationPolicy::kSerializeIfNeeded)
+            .Serialize();
+      }
+      for (auto x : context_hints.virtual_contexts()) {
+        ContextRef(broker(), x.context)
+            .GetModule(SerializationPolicy::kSerializeIfNeeded)
+            .Serialize();
+      }
       break;
     }
     default: {
@@ -3038,6 +3055,15 @@ SerializerForBackgroundCompilation::ProcessMapForNamedPropertyAccess(
   return access_info;
 }
 
+PropertyAccessInfo SerializerForBackgroundCompilation::
+    ProcessMinimorphicFeedbackForNamedPropertyAccess(
+        NamedAccessFeedback const& feedback) {
+  PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
+      feedback, dependencies(), SerializationPolicy::kSerializeIfNeeded);
+  DCHECK(access_info.IsDataFieldFromHandler());
+  return access_info;
+}
+
 void SerializerForBackgroundCompilation::VisitLdaKeyedProperty(
     BytecodeArrayIterator* iterator) {
   Hints const& key = environment()->accumulator_hints();
@@ -3109,6 +3135,11 @@ void SerializerForBackgroundCompilation::ProcessNamedPropertyAccess(
 void SerializerForBackgroundCompilation::ProcessNamedAccess(
     Hints* receiver, NamedAccessFeedback const& feedback,
     AccessMode access_mode, Hints* result_hints) {
+  if (feedback.is_minimorphic()) {
+    ProcessMinimorphicFeedbackForNamedPropertyAccess(feedback);
+    return;
+  }
+
   for (Handle<Map> map : feedback.maps()) {
     MapRef map_ref(broker(), map);
     TRACE_BROKER(broker(), "Propagating feedback map "

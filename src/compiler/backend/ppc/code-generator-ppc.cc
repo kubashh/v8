@@ -3057,6 +3057,104 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
 #undef SIMD_ALL_TRUE
+    case kPPC_I32x4SConvertF32x4: {
+      Simd128Register src = i.InputSimd128Register(0);
+      // NaN to 0
+      __ vor(kScratchDoubleReg, src, src);
+      __ xvcmpeqsp(kScratchDoubleReg, kScratchDoubleReg, kScratchDoubleReg);
+      __ vand(kScratchDoubleReg, src, kScratchDoubleReg);
+      __ xvcvspsxws(i.OutputSimd128Register(), kScratchDoubleReg);
+      break;
+    }
+    case kPPC_I32x4UConvertF32x4: {
+      __ xvcvspuxws(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      break;
+    }
+    case kPPC_F32x4SConvertI32x4: {
+      __ xvcvsxwsp(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      break;
+    }
+    case kPPC_F32x4UConvertI32x4: {
+      __ xvcvuxwsp(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      break;
+    }
+    case kPPC_I32x4SConvertI16x8Low: {
+      __ vupklsh(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      break;
+    }
+    case kPPC_I32x4SConvertI16x8High: {
+      __ vupkhsh(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      break;
+    }
+    case kPPC_I32x4UConvertI16x8Low: {
+      __ vupklsh(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      // Zero extend.
+      __ mov(ip, Operand(0xFFFF));
+      __ mtvsrd(kScratchDoubleReg, ip);
+      __ vspltw(kScratchDoubleReg, kScratchDoubleReg, Operand(1));
+      __ vand(i.OutputSimd128Register(), kScratchDoubleReg,
+              i.OutputSimd128Register());
+      break;
+    }
+    case kPPC_I32x4UConvertI16x8High: {
+      __ vupkhsh(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      // Zero extend.
+      __ mov(ip, Operand(0xFFFF));
+      __ mtvsrd(kScratchDoubleReg, ip);
+      __ vspltw(kScratchDoubleReg, kScratchDoubleReg, Operand(1));
+      __ vand(i.OutputSimd128Register(), kScratchDoubleReg,
+              i.OutputSimd128Register());
+      break;
+    }
+
+    case kPPC_I16x8SConvertI8x16Low: {
+      __ vupklsb(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      break;
+    }
+    case kPPC_I16x8SConvertI8x16High: {
+      __ vupkhsb(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      break;
+    }
+    case kPPC_I16x8UConvertI8x16Low: {
+      __ vupklsb(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      // Zero extend.
+      __ li(ip, Operand(0xFF));
+      __ mtvsrd(kScratchDoubleReg, ip);
+      __ vsplth(kScratchDoubleReg, kScratchDoubleReg, Operand(3));
+      __ vand(i.OutputSimd128Register(), kScratchDoubleReg,
+              i.OutputSimd128Register());
+      break;
+    }
+    case kPPC_I16x8UConvertI8x16High: {
+      __ vupkhsb(i.OutputSimd128Register(), i.InputSimd128Register(0));
+      // Zero extend.
+      __ li(ip, Operand(0xFF));
+      __ mtvsrd(kScratchDoubleReg, ip);
+      __ vsplth(kScratchDoubleReg, kScratchDoubleReg, Operand(3));
+      __ vand(i.OutputSimd128Register(), kScratchDoubleReg,
+              i.OutputSimd128Register());
+      break;
+    }
+    case kPPC_I16x8SConvertI32x4: {
+      __ vpkswss(i.OutputSimd128Register(), i.InputSimd128Register(0),
+                 i.InputSimd128Register(1));
+      break;
+    }
+    case kPPC_I16x8UConvertI32x4: {
+      __ vpkswus(i.OutputSimd128Register(), i.InputSimd128Register(0),
+                 i.InputSimd128Register(1));
+      break;
+    }
+    case kPPC_I8x16SConvertI16x8: {
+      __ vpkshss(i.OutputSimd128Register(), i.InputSimd128Register(0),
+                 i.InputSimd128Register(1));
+      break;
+    }
+    case kPPC_I8x16UConvertI16x8: {
+      __ vpkshus(i.OutputSimd128Register(), i.InputSimd128Register(0),
+                 i.InputSimd128Register(1));
+      break;
+    }
     case kPPC_StoreCompressTagged: {
       ASSEMBLE_STORE_INTEGER(StoreTaggedField, StoreTaggedFieldX);
       break;

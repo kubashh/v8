@@ -217,6 +217,7 @@
   V(JSStoreMessage)                    \
   V(JSLoadModule)                      \
   V(JSStoreModule)                     \
+  V(JSGetImportMeta)                   \
   V(JSGeneratorStore)                  \
   V(JSGeneratorRestoreContinuation)    \
   V(JSGeneratorRestoreContext)         \
@@ -407,6 +408,7 @@
   V(CheckBounds)                        \
   V(CheckIf)                            \
   V(CheckMaps)                          \
+  V(DynamicCheckMaps)                   \
   V(CheckNumber)                        \
   V(CheckInternalizedString)            \
   V(CheckReceiver)                      \

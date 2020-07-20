@@ -923,9 +923,7 @@ void StandardFrame::IterateCompiledFrame(RootVisitor* v) const {
   bool has_tagged_params = false;
   uint32_t tagged_parameter_slots = 0;
   if (wasm_code != nullptr) {
-    SafepointTable table(wasm_code->instruction_start(),
-                         wasm_code->safepoint_table_offset(),
-                         wasm_code->stack_slots());
+    SafepointTable table(wasm_code);
     safepoint_entry = table.FindEntry(inner_pointer);
     stack_slots = wasm_code->stack_slots();
     has_tagged_params = wasm_code->kind() != wasm::WasmCode::kFunction &&
@@ -1927,8 +1925,7 @@ int WasmFrame::LookupExceptionHandlerInTable() {
   wasm::WasmCode* code =
       isolate()->wasm_engine()->code_manager()->LookupCode(pc());
   if (!code->IsAnonymous() && code->handler_table_size() > 0) {
-    HandlerTable table(code->handler_table(), code->handler_table_size(),
-                       HandlerTable::kReturnAddressBasedEncoding);
+    HandlerTable table(code);
     int pc_offset = static_cast<int>(pc() - code->instruction_start());
     return table.LookupReturn(pc_offset);
   }
