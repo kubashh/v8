@@ -56,6 +56,30 @@
       "revId": "33c216c15df26f25cc0fcc915338be6bee52e493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22297e38_7e5d798e",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2030,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-07-20T13:31:12Z",
+      "side": 1,
+      "message": "As discussed, an error is already signalled inside consume_init_expr.",
+      "parentUuid": "baf4e943_2f0c62e4",
+      "range": {
+        "startLine": 2030,
+        "startChar": 11,
+        "endLine": 2030,
+        "endChar": 26
+      },
+      "revId": "33c216c15df26f25cc0fcc915338be6bee52e493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
