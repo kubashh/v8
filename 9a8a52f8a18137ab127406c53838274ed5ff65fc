@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c47d33d_33505828",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-20T14:17:26Z",
+      "side": 1,
+      "message": "Making ownership changes with \"No-Presubmit\" looks dangerous. I think the only flag that this CL should have is \"No-Try: true\".",
+      "revId": "9a8a52f8a18137ab127406c53838274ed5ff65fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
