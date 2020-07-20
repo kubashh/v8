@@ -330,7 +330,8 @@ class LiftoffCompiler {
                   CompilationEnv* env, Zone* compilation_zone,
                   std::unique_ptr<AssemblerBuffer> buffer,
                   DebugSideTableBuilder* debug_sidetable_builder,
-                  ForDebugging for_debugging, Vector<int> breakpoints = {},
+                  ForDebugging for_debugging, int func_index,
+                  Vector<int> breakpoints = {},
                   Vector<int> extra_source_pos = {})
       : asm_(std::move(buffer)),
         descriptor_(
@@ -338,6 +339,7 @@ class LiftoffCompiler {
         env_(env),
         debug_sidetable_builder_(debug_sidetable_builder),
         for_debugging_(for_debugging),
+        func_index_(func_index),
         out_of_line_code_(compilation_zone),
         source_position_table_builder_(compilation_zone),
         protected_instructions_(compilation_zone),
@@ -528,6 +530,13 @@ class LiftoffCompiler {
     return false;
   }
 
+  void TierUpFunction(FullDecoder* decoder) {
+    source_position_table_builder_.AddPosition(
+        __ pc_offset(), SourcePosition(decoder->position()), false);
+    __ CallRuntimeStub(WasmCode::kWasmTierUp);
+    safepoint_table_builder_.DefineSafepoint(&asm_, Safepoint::kNoLazyDeopt);
+  }
+
   void TraceFunctionEntry(FullDecoder* decoder) {
     DEBUG_CODE_COMMENT("trace function entry");
     __ SpillAllRegisters();
@@ -610,6 +619,44 @@ class LiftoffCompiler {
     // The function-prologue stack check is associated with position 0, which
     // is never a position of any instruction in the function.
     StackCheck(0);
+
+    if (FLAG_wasm_dynamic_tiering) {
+      __ SpillAllRegisters();
+      DEBUG_CODE_COMMENT("Dynamic tiering");
+      LiftoffRegList pinned;
+
+      // Get a register to hold the number of calls.
+      LiftoffRegister number_of_calls =
+          pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+
+      // Get the number of calls array address.
+      LiftoffRegister array_address =
+          pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+      LOAD_INSTANCE_FIELD(array_address.gp(), NumberFunctionCalls,
+                          kSystemPointerSize);
+
+      // Compute the correct offset in the array.
+      LiftoffRegister index = pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+      __ LoadConstant(index, WasmValue(static_cast<intptr_t>(
+                                 kInt32Size * declared_function_index(
+                                                  env_->module, func_index_))));
+      __ emit_ptrsize_add(array_address.gp(), array_address.gp(), index.gp());
+
+      // Get the number of calls and update it.
+      __ Load(number_of_calls, array_address.gp(), no_reg, 0,
+              LoadType::kI32Load, {});
+      __ emit_i32_addi(number_of_calls.gp(), number_of_calls.gp(), 1);
+      __ Store(array_address.gp(), no_reg, 0, number_of_calls,
+               StoreType::kI32Store, pinned);
+
+      // Emit the runtime call if necessary.
+      Label no_tierup;
+      __ emit_i32_addi(number_of_calls.gp(), number_of_calls.gp(), -5);
+      // Unary "unequal" means "different from zero".
+      __ emit_cond_jump(kUnequal, &no_tierup, kWasmI32, number_of_calls.gp());
+      TierUpFunction(decoder);
+      __ bind(&no_tierup);
+    }
 
     if (FLAG_trace_wasm) TraceFunctionEntry(decoder);
 
@@ -3731,6 +3778,7 @@ class LiftoffCompiler {
   DebugSideTableBuilder* const debug_sidetable_builder_;
   const ForDebugging for_debugging_;
   LiftoffBailoutReason bailout_reason_ = kSuccess;
+  int func_index_;
   ZoneVector<OutOfLineCode> out_of_line_code_;
   SourcePositionTableBuilder source_position_table_builder_;
   ZoneVector<trap_handler::ProtectedInstructionData> protected_instructions_;
@@ -3808,7 +3856,7 @@ WasmCompilationResult ExecuteLiftoffCompilation(
   WasmFullDecoder<Decoder::kValidate, LiftoffCompiler> decoder(
       &zone, env->module, env->enabled_features, detected, func_body,
       call_descriptor, env, &zone, instruction_buffer->CreateView(),
-      debug_sidetable_builder.get(), for_debugging, breakpoints,
+      debug_sidetable_builder.get(), for_debugging, func_index, breakpoints,
       extra_source_pos);
   decoder.Decode();
   liftoff_compile_time_scope.reset();
@@ -3854,7 +3902,7 @@ WasmCompilationResult ExecuteLiftoffCompilation(
 
 std::unique_ptr<DebugSideTable> GenerateLiftoffDebugSideTable(
     AccountingAllocator* allocator, CompilationEnv* env,
-    const FunctionBody& func_body) {
+    const FunctionBody& func_body, int func_index) {
   Zone zone(allocator, "LiftoffDebugSideTableZone");
   auto call_descriptor = compiler::GetWasmCallDescriptor(&zone, func_body.sig);
   DebugSideTableBuilder debug_sidetable_builder;
@@ -3863,7 +3911,7 @@ std::unique_ptr<DebugSideTable> GenerateLiftoffDebugSideTable(
       &zone, env->module, env->enabled_features, &detected, func_body,
       call_descriptor, env, &zone,
       NewAssemblerBuffer(AssemblerBase::kDefaultBufferSize),
-      &debug_sidetable_builder, kForDebugging);
+      &debug_sidetable_builder, kForDebugging, func_index);
   decoder.Decode();
   DCHECK(decoder.ok());
   DCHECK(!decoder.interface().did_bailout());
