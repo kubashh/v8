@@ -1073,46 +1073,57 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
   Node* frame_state = NodeProperties::GetFrameStateInput(node);
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
+  bool is_minimorphic = false;
 
-  // Either infer maps from the graph or use the feedback.
   ZoneVector<Handle<Map>> receiver_maps(zone());
-  if (!InferReceiverMaps(receiver, effect, &receiver_maps)) {
-    receiver_maps = feedback.maps();
-  }
-  RemoveImpossibleReceiverMaps(receiver, &receiver_maps);
-
-  // Check if we have an access o.x or o.x=v where o is the target native
-  // contexts' global proxy, and turn that into a direct access to the
-  // corresponding global object instead.
-  if (receiver_maps.size() == 1) {
-    MapRef receiver_map(broker(), receiver_maps[0]);
-    if (receiver_map.equals(
-            broker()->target_native_context().global_proxy_object().map()) &&
-        !broker()->target_native_context().global_object().IsDetached()) {
-      return ReduceGlobalAccess(node, receiver, value, feedback.name(),
-                                access_mode, key);
-    }
-  }
-
   ZoneVector<PropertyAccessInfo> access_infos(zone());
-  {
-    ZoneVector<PropertyAccessInfo> access_infos_for_feedback(zone());
-    for (Handle<Map> map_handle : receiver_maps) {
-      MapRef map(broker(), map_handle);
-      if (map.is_deprecated()) continue;
-      PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
-          map, feedback.name(), access_mode, dependencies(),
-          should_disallow_heap_access()
-              ? SerializationPolicy::kAssumeSerialized
-              : SerializationPolicy::kSerializeIfNeeded);
-      access_infos_for_feedback.push_back(access_info);
+  if (feedback.is_minimorphic()) {
+    PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
+        feedback, dependencies(),
+        should_disallow_heap_access()
+            ? SerializationPolicy::kAssumeSerialized
+            : SerializationPolicy::kSerializeIfNeeded);
+    access_infos.push_back(access_info);
+    is_minimorphic = true;
+  } else {
+    // Either infer maps from the graph or use the feedback.
+    if (!InferReceiverMaps(receiver, effect, &receiver_maps)) {
+      receiver_maps = feedback.maps();
+    }
+    RemoveImpossibleReceiverMaps(receiver, &receiver_maps);
+
+    // Check if we have an access o.x or o.x=v where o is the target native
+    // contexts' global proxy, and turn that into a direct access to the
+    // corresponding global object instead.
+    if (receiver_maps.size() == 1) {
+      MapRef receiver_map(broker(), receiver_maps[0]);
+      if (receiver_map.equals(
+              broker()->target_native_context().global_proxy_object().map()) &&
+          !broker()->target_native_context().global_object().IsDetached()) {
+        return ReduceGlobalAccess(node, receiver, value, feedback.name(),
+                                  access_mode, key);
+      }
     }
 
-    AccessInfoFactory access_info_factory(broker(), dependencies(),
-                                          graph()->zone());
-    if (!access_info_factory.FinalizePropertyAccessInfos(
-            access_infos_for_feedback, access_mode, &access_infos)) {
-      return NoChange();
+    {
+      ZoneVector<PropertyAccessInfo> access_infos_for_feedback(zone());
+      for (Handle<Map> map_handle : receiver_maps) {
+        MapRef map(broker(), map_handle);
+        if (map.is_deprecated()) continue;
+        PropertyAccessInfo access_info = broker()->GetPropertyAccessInfo(
+            map, feedback.name(), access_mode, dependencies(),
+            should_disallow_heap_access()
+                ? SerializationPolicy::kAssumeSerialized
+                : SerializationPolicy::kSerializeIfNeeded);
+        access_infos_for_feedback.push_back(access_info);
+      }
+
+      AccessInfoFactory access_info_factory(broker(), dependencies(),
+                                            graph()->zone());
+      if (!access_info_factory.FinalizePropertyAccessInfos(
+              access_infos_for_feedback, access_mode, &access_infos)) {
+        return NoChange();
+      }
     }
   }
 
@@ -1131,8 +1142,24 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
 
   PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
 
-  // Check for the monomorphic cases.
-  if (access_infos.size() == 1) {
+  if (is_minimorphic) {
+    DCHECK_EQ(access_infos.size(), 1);
+    PropertyAccessInfo access_info = access_infos.front();
+    effect = graph()->NewNode(
+        simplified()->DynamicCheckMaps(
+            feedback.handler(), feedback.feedback_source(),
+            feedback.is_monomorphic()
+                ? DynamicCheckMapsParameters::ICState::kMonomorphic
+                : DynamicCheckMapsParameters::ICState::kPolymorphic),
+        receiver, effect, control);
+
+    ValueEffectControl continuation = BuildPropertyAccess(
+        receiver, value, context, frame_state, effect, control, feedback.name(),
+        if_exceptions, access_info, access_mode);
+    value = continuation.value();
+    effect = continuation.effect();
+    control = continuation.control();
+  } else if (access_infos.size() == 1) {
     PropertyAccessInfo access_info = access_infos.front();
     // Try to build string check or number check if possible.
     // Otherwise build a map check.
@@ -2219,7 +2246,8 @@ JSNativeContextSpecialization::BuildPropertyLoad(
   } else if (access_info.IsStringLength()) {
     value = graph()->NewNode(simplified()->StringLength(), receiver);
   } else {
-    DCHECK(access_info.IsDataField() || access_info.IsDataConstant());
+    DCHECK(access_info.IsDataField() || access_info.IsDataConstant() ||
+           access_info.IsDataFieldFromHandler());
     PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
     value = access_builder.BuildLoadDataField(name, access_info, receiver,
                                               &effect, &control);
