@@ -944,7 +944,24 @@ void FeedbackNexus::ConfigurePolymorphic(
     Handle<Name> name, std::vector<MapAndHandler> const& maps_and_handlers) {
   int receiver_count = static_cast<int>(maps_and_handlers.size());
   DCHECK_GT(receiver_count, 1);
-  Handle<WeakFixedArray> array = CreateArrayOfSize(receiver_count * 2);
+  Handle<WeakFixedArray> array;
+  if (name.is_null()) {
+    int size = receiver_count * 2;
+
+    // The last index marks the end of array with a sentinel, if we don't
+    // fill it up completely so that generated doesn't read out of
+    // bounds.
+    if (receiver_count < FLAG_max_polymorphic_map_count) {
+      array = CreateArrayOfSize(size + 1);
+      array->Set(size, HeapObjectReference::Weak(
+                           ReadOnlyRoots(GetIsolate()).undefined_value()));
+    } else {
+      CHECK_EQ(receiver_count, FLAG_max_polymorphic_map_count);
+      array = CreateArrayOfSize(size);
+    }
+  } else {
+    array = CreateArrayOfSize(receiver_count * 2);
+  }
 
   for (int current = 0; current < receiver_count; ++current) {
     Handle<Map> map = maps_and_handlers[current].first;
@@ -990,6 +1007,7 @@ int FeedbackNexus::ExtractMaps(MapHandles* maps) const {
     for (int i = 0; i < array.length(); i += increment) {
       DCHECK(array.Get(i)->IsWeakOrCleared());
       if (array.Get(i)->GetHeapObjectIfWeak(&heap_object)) {
+        if (heap_object.IsUndefined(isolate)) break;
         Map map = Map::cast(heap_object);
         maps->push_back(handle(map, isolate));
         found++;
@@ -1036,6 +1054,7 @@ int FeedbackNexus::ExtractMapsAndHandlers(
     for (int i = 0; i < array.length(); i += increment) {
       DCHECK(array.Get(i)->IsWeakOrCleared());
       if (array.Get(i)->GetHeapObjectIfWeak(&heap_object)) {
+        if (heap_object.IsUndefined(isolate)) break;
         MaybeObject handler = array.Get(i + 1);
         if (!handler->IsCleared()) {
           DCHECK(IC::IsHandler(handler));
@@ -1094,6 +1113,7 @@ MaybeObjectHandle FeedbackNexus::FindHandlerForMap(Handle<Map> map) const {
     for (int i = 0; i < array.length(); i += increment) {
       DCHECK(array.Get(i)->IsWeakOrCleared());
       if (array.Get(i)->GetHeapObjectIfWeak(&heap_object)) {
+        if (heap_object.IsUndefined(isolate)) break;
         Map array_map = Map::cast(heap_object);
         if (array_map == *map && !array.Get(i + increment - 1)->IsCleared()) {
           MaybeObject handler = array.Get(i + increment - 1);

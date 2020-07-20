@@ -11,6 +11,7 @@ namespace v8 {
 namespace internal {
 
 #define DEOPTIMIZE_REASON_LIST(V)                                              \
+  V(AllMapChecksFailed, "all polymorphic map checks failed")                   \
   V(ArrayBufferWasDetached, "array buffer was detached")                       \
   V(BigIntTooBig, "BigInt too big")                                            \
   V(CowArrayElementsChanged, "copy-on-write array's elements changed")         \
