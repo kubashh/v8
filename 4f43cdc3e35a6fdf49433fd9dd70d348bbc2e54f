@@ -68,6 +68,24 @@
       "revId": "4f43cdc3e35a6fdf49433fd9dd70d348bbc2e54f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c368a9f_ba42f31f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-20T08:30:55Z",
+      "side": 1,
+      "message": "Yes, node does not implement PostJob, so it returns nullptr. I think long-term we should remove the default (nullptr) implementation, and force embedder to implement PostJob. But that can only happen after the next branch cut. It\u0027s already on my TODO list for end of August.",
+      "parentUuid": "545a8b54_5df1bbaa",
+      "revId": "4f43cdc3e35a6fdf49433fd9dd70d348bbc2e54f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
