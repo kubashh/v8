@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56507792_0afcede1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-20T10:03:56Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "0d2bd2ad53655a7e391a1c2518143496f240b0f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "283fcb1e_26e10d6b",
+        "filename": "test/mjsunit/mjsunit.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-20T10:03:56Z",
+      "side": 1,
+      "message": "I guess these could all be const, which might be even more robust. I\u0027ll do that in another CL.",
+      "revId": "0d2bd2ad53655a7e391a1c2518143496f240b0f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
