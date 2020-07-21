@@ -1,0 +1,64 @@
+// Copyright 2020 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+namespace runtime {
+extern runtime BigIntToNumber(implicit context: Context)(BigInt): Number;
+}
+
+extern builtin FastNewObject(Context, JSFunction, JSReceiver): JSObject;
+
+namespace constructor {
+
+// ES #sec-number-constructor
+transitioning javascript builtin
+NumberConstructor(
+    js-implicit context: NativeContext, receiver: JSAny, newTarget: JSAny,
+    target: JSFunction)(...arguments): JSAny {
+  try {
+    // 1. If no arguments were passed to this function invocation, let n be +0.
+    if (arguments.length == 0) goto NLoaded(0);
+
+    const value = arguments[0];
+    // 2. Else,
+    //    a. Let prim be ? ToNumeric(value).
+    //    b. If Type(prim) is BigInt, let n be the Number value for prim.
+    //    c. Otherwise, let n be prim.
+    typeswitch (value) {
+      case (n: Number): {
+        goto NLoaded(n);
+      }
+      case (b: BigInt): {
+        goto NLoaded(runtime::BigIntToNumber(b));
+      }
+      case (o: JSAnyNotNumeric): {
+        goto NLoaded(conversion::NonNumberToNumber(o));
+      }
+    }
+  } label NLoaded(n: Number) {
+    // 3. If NewTarget is undefined, return n.
+    if (newTarget == Undefined) return n;
+
+    // 4. Let O be ? OrdinaryCreateFromConstructor(NewTarget,
+    //    "%NumberPrototype%", « [[NumberData]] »).
+    // 5. Set O.[[NumberData]] to n.
+    // 6. Return O.
+
+    // We are not using the normal target parameter and loading the value
+    // from the current frame here in order to reduce register pressure on the
+    // fast path.
+    const target: JSFunction = LoadTargetFromFrame();
+    const result = UnsafeCast<JSPrimitiveWrapper>(
+        FastNewObject(context, target, UnsafeCast<JSReceiver>(newTarget)));
+    result.value = n;
+    return result;
+  }
+}
+
+transitioning javascript builtin
+GenericLazyDeoptContinuation(js-implicit context: NativeContext)(result: JSAny):
+    JSAny {
+  return result;
+}
+
+}  // namespace constructor
