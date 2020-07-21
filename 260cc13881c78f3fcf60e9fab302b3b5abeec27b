@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae041cd_5dc746cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T12:25:06Z",
+      "side": 1,
+      "message": "Thanks, LGTM with a few last remarks. Please also wait for Thibaud\u0027s review.",
+      "revId": "260cc13881c78f3fcf60e9fab302b3b5abeec27b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "daf6d96c_0ebf72d7",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T12:25:06Z",
+      "side": 1,
+      "message": "I think this also should be renamed, to make clear that it returns a pointer to the array, and not \"number of function calls\", which would be an integer.\nI don\u0027t know a good concise name, so maybe we just need to make it longer (\"num_liftoff_function_calls_array\")?",
+      "range": {
+        "startLine": 645,
+        "startChar": 12,
+        "endLine": 645,
+        "endChar": 33
+      },
+      "revId": "260cc13881c78f3fcf60e9fab302b3b5abeec27b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae3da6a7_77e3aa0a",
+        "filename": "test/mjsunit/wasm/wasm-dynamic-tiering.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T12:25:06Z",
+      "side": 1,
+      "message": "I think it would be better to move this below the busy wait loop below, to ensure that this function *still* is Liftoff, even after the other function tiered up.\nOtherwise it could easily happen that it is Liftoff here, but will be tiered up together with the other function later.",
+      "revId": "260cc13881c78f3fcf60e9fab302b3b5abeec27b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
