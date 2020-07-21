@@ -15,6 +15,7 @@
 #include "src/heap/memory-chunk.h"
 #include "src/heap/read-only-spaces.h"
 #include "src/logging/log.h"
+#include "src/utils/allocation.h"
 
 namespace v8 {
 namespace internal {
@@ -536,6 +537,14 @@ void MemoryAllocator::PartialFreeMemory(BasicMemoryChunk* chunk,
   size_ -= released_bytes;
 }
 
+void MemoryAllocator::UnregisterSharedMemory(BasicMemoryChunk* chunk) {
+  VirtualMemory* reservation = chunk->reserved_memory();
+  const size_t size =
+      reservation->IsReserved() ? reservation->size() : chunk->size();
+  DCHECK_GE(size_, static_cast<size_t>(size));
+  size_ -= size;
+}
+
 void MemoryAllocator::UnregisterMemory(BasicMemoryChunk* chunk,
                                        Executability executable) {
   DCHECK(!chunk->IsFlagSet(MemoryChunk::UNREGISTERED));
@@ -543,6 +552,7 @@ void MemoryAllocator::UnregisterMemory(BasicMemoryChunk* chunk,
   const size_t size =
       reservation->IsReserved() ? reservation->size() : chunk->size();
   DCHECK_GE(size_, static_cast<size_t>(size));
+
   size_ -= size;
   if (executable == EXECUTABLE) {
     DCHECK_GE(size_executable_, size);
@@ -559,15 +569,31 @@ void MemoryAllocator::UnregisterMemory(MemoryChunk* chunk) {
 void MemoryAllocator::FreeReadOnlyPage(ReadOnlyPage* chunk) {
   DCHECK(!chunk->IsFlagSet(MemoryChunk::PRE_FREED));
   LOG(isolate_, DeleteEvent("MemoryChunk", chunk));
-  UnregisterMemory(chunk);
-  chunk->SetFlag(MemoryChunk::PRE_FREED);
-
+  // Since the memory is read-only don't call UnregisterMemory which tries to
+  // set flags in the chunk. Instead just manually decrease the allocated memory
+  // count.
   VirtualMemory* reservation = chunk->reserved_memory();
+  const size_t size =
+      reservation->IsReserved() ? reservation->size() : chunk->size();
+
+  size_ -= size;
+
+  v8::PageAllocator* allocator = page_allocator(NOT_EXECUTABLE);
+
   if (reservation->IsReserved()) {
-    reservation->Free();
+    // Can't call reservation->Free() because it would try to mutate the
+    // reservation in the ReadOnlyPage.
+    base::AddressRegion region = reservation->region();
+
+    // FreePages expects size to be aligned to allocation granularity however
+    // ReleasePages may leave size at only commit granularity. Align it here.
+    CHECK(FreePages(allocator, reinterpret_cast<void*>(region.begin()),
+                    RoundUp(region.size(), allocator->AllocatePageSize())));
+
   } else {
     // Only read-only pages can have non-initialized reservation object.
-    FreeMemory(page_allocator(NOT_EXECUTABLE), chunk->address(), chunk->size());
+    FreeMemory(allocator, chunk->address(),
+               RoundUp(size, allocator->AllocatePageSize()));
   }
 }
 
@@ -669,6 +695,13 @@ ReadOnlyPage* MemoryAllocator::AllocateReadOnlyPage(size_t size,
   }
   if (chunk == nullptr) return nullptr;
   return owner->InitializePage(chunk);
+}
+
+std::unique_ptr<::v8::PageAllocator::SharedMemoryMapping>
+MemoryAllocator::RemapSharedPage(
+    ::v8::PageAllocator::SharedMemory* shared_memory, Address new_address) {
+  return shared_memory->RemapTo(data_page_allocator(),
+                                reinterpret_cast<void*>(new_address));
 }
 
 LargePage* MemoryAllocator::AllocateLargePage(size_t size,
