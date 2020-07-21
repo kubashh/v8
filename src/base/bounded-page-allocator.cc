@@ -4,6 +4,8 @@
 
 #include "src/base/bounded-page-allocator.h"
 
+#include "src/base/macros.h"
+
 namespace v8 {
 namespace base {
 
