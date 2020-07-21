@@ -263,10 +263,7 @@ DEFINE_IMPLICATION(harmony_weak_refs_with_cleanup_some, harmony_weak_refs)
   V(harmony_logical_assignment, "harmony logical assignment")
 
 #ifdef V8_INTL_SUPPORT
-#define HARMONY_SHIPPING(V)                           \
-  HARMONY_SHIPPING_BASE(V)                            \
-  V(harmony_intl_dateformat_fractional_second_digits, \
-    "Add fractionalSecondDigits option to DateTimeFormat")
+#define HARMONY_SHIPPING(V) HARMONY_SHIPPING_BASE(V)
 #else
 #define HARMONY_SHIPPING(V) HARMONY_SHIPPING_BASE(V)
 #endif
