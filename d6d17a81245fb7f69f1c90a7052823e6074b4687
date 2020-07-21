@@ -56,6 +56,30 @@
       "revId": "d6d17a81245fb7f69f1c90a7052823e6074b4687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2820ee2_59278bc3",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-07-21T09:05:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9a1629b_d4f28e07",
+      "range": {
+        "startLine": 3659,
+        "startChar": 57,
+        "endLine": 3659,
+        "endChar": 73
+      },
+      "revId": "d6d17a81245fb7f69f1c90a7052823e6074b4687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
