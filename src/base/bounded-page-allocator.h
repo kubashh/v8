@@ -6,6 +6,7 @@
 #define V8_BASE_BOUNDED_PAGE_ALLOCATOR_H_
 
 #include "include/v8-platform.h"
+#include "src/base/logging.h"
 #include "src/base/platform/mutex.h"
 #include "src/base/region-allocator.h"
 
@@ -55,6 +56,10 @@ class V8_BASE_EXPORT BoundedPageAllocator : public v8::PageAllocator {
 
   void* AllocatePages(void* hint, size_t size, size_t alignment,
                       Permission access) override;
+
+  // Allocates pages at given address, returns true on success.
+  bool AllocatePagesAtAndDetach(void* address, size_t size,
+                                Permission access) override;
 
   // Allocates pages at given address, returns true on success.
   bool AllocatePagesAt(Address address, size_t size, Permission access);

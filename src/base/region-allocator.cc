@@ -18,7 +18,7 @@ constexpr int kMaxRandomizationAttempts = 3;
 
 RegionAllocator::RegionAllocator(Address memory_region_begin,
                                  size_t memory_region_size, size_t page_size)
-    : whole_region_(memory_region_begin, memory_region_size, false),
+    : whole_region_(memory_region_begin, memory_region_size, Region::kFree),
       region_size_in_pages_(size() / page_size),
       max_load_for_randomization_(
           static_cast<size_t>(size() * kMaxLoadFactorForRandomization)),
@@ -47,7 +47,7 @@ RegionAllocator::AllRegionsSet::iterator RegionAllocator::FindRegion(
     Address address) {
   if (!whole_region_.contains(address)) return all_regions_.end();
 
-  Region key(address, 0, false);
+  Region key(address, 0, Region::kFree);
   AllRegionsSet::iterator iter = all_regions_.upper_bound(&key);
   // Regions in |all_regions_| are compared by end() values and key's end()
   // points exactly to the address we are querying, so the upper_bound will
@@ -63,7 +63,7 @@ void RegionAllocator::FreeListAddRegion(Region* region) {
 }
 
 RegionAllocator::Region* RegionAllocator::FreeListFindRegion(size_t size) {
-  Region key(0, size, false);
+  Region key(0, size, Region::kFree);
   auto iter = free_regions_.lower_bound(&key);
   return iter == free_regions_.end() ? nullptr : *iter;
 }
@@ -85,9 +85,11 @@ RegionAllocator::Region* RegionAllocator::Split(Region* region,
   DCHECK_GT(region->size(), new_size);
 
   // Create new region and put it to the lists after the |region|.
+  DCHECK(!region->is_excluded());
   bool used = region->is_used();
   Region* new_region =
-      new Region(region->begin() + new_size, region->size() - new_size, used);
+      new Region(region->begin() + new_size, region->size() - new_size,
+                 used ? Region::kUsed : Region::kFree);
   if (!used) {
     // Remove region from the free list before updating it's size.
     FreeListRemoveRegion(region);
@@ -194,6 +196,19 @@ bool RegionAllocator::AllocateRegionAt(Address requested_address, size_t size) {
   return true;
 }
 
+bool RegionAllocator::DetachRegionAt(Address requested_address, size_t size) {
+  if (!AllocateRegionAt(requested_address, size)) return false;
+  Region* region;
+  {
+    AllRegionsSet::iterator region_iter = FindRegion(requested_address);
+    DCHECK(region_iter != all_regions_.end());
+    region = *region_iter;
+  }
+  FreeListRemoveRegion(region);
+  region->set_excluded();
+  return true;
+}
+
 size_t RegionAllocator::TrimRegion(Address address, size_t new_size) {
   DCHECK(IsAligned(new_size, page_size_));
 
@@ -271,7 +286,7 @@ bool RegionAllocator::IsFree(Address address, size_t size) {
 void RegionAllocator::Region::Print(std::ostream& os) const {
   std::ios::fmtflags flags = os.flags(std::ios::hex | std::ios::showbase);
   os << "[" << begin() << ", " << end() << "), size: " << size();
-  os << ", " << (is_used() ? "used" : "free");
+  os << ", " << (is_excluded() ? "excluded" : (is_used() ? "used" : "free"));
   os.flags(flags);
 }
 
