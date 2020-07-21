@@ -16,6 +16,24 @@
       "revId": "f181dff3f5178050cf31076b5377c10691878865",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4f5684c_b9a1bf61",
+        "filename": "test/mjsunit/wasm/wasm-dynamic-tiering.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T17:29:52Z",
+      "side": 1,
+      "message": "Yes, this is because Liftoff is not supported. Please skip the test on ppc/s390 or wherever it\u0027s failing. Thanks!",
+      "parentUuid": "c34cbfb1_5be763ac",
+      "revId": "f181dff3f5178050cf31076b5377c10691878865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
