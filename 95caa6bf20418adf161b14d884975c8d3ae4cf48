@@ -16,6 +16,40 @@
       "revId": "95caa6bf20418adf161b14d884975c8d3ae4cf48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ecc011d_7df371fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-21T11:04:19Z",
+      "side": 1,
+      "message": "LGTM, thanks",
+      "revId": "95caa6bf20418adf161b14d884975c8d3ae4cf48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a7948817_172b064e",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-21T11:04:19Z",
+      "side": 1,
+      "message": "How about a\n  STATIC_ASSERT(alignof(InstructionOperand) \u003e\u003d (1 \u003c\u003c kPointerShift))",
+      "revId": "95caa6bf20418adf161b14d884975c8d3ae4cf48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
