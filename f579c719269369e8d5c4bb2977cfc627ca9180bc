@@ -174,6 +174,24 @@
       "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "293bfbb8_96aedd9e",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6087,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-21T14:00:23Z",
+      "side": 1,
+      "message": "Sorry, I meant false negatives in the string lookup (i.e. misses) which then have to fall into the locked slow path. Relaxing the acq-rel load-store would mean that threads might miss other threads resizing the string table.",
+      "parentUuid": "40f08556_7f9d8d40",
+      "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
