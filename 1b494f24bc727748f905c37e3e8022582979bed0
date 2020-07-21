@@ -1,0 +1,242 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1e104a6_2ba9c897",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "It\u0027s v8:10728",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f021922_8736f124",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "Nice, looks mostly good to land!\n\nLeft a few minor comment.",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "43c1c2fb_1b346b6c",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "Can we call it \"WasmTriggerTierUp\" (also the runtime function)?",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68a86b00_fc8d1d50",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "A source position should not be needed for the runtime call.",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff9d7259_6cab7da4",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "Please place a TODO to try to avoid spilling everything unconditionally. Assign it to yourself, even though you might not be the one actually fixing it in the end.",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70fa03e0_7ad21d8e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "nit: most other code comments are not capitalized, so let\u0027s follow that style.",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "586f47cc_8e7a437e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "You can make the code shorter by just passing the offset into the array as the immediate for the Load and Store call below.",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c4f7a6d_f9f6ac53",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "Please add a constant for the -5 (or better for 5), like:\nconstexpr int kTierUpLimit \u003d 5;\n__ emit_i32_addi(..., -kTierUpLimit);",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "138ef71e_267a3965",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3781,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "This field can be const.",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6b6fdac_fa8bf36e",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "This should also be called \"TriggerTierUp\".",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbf95d96_1536571e",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "This only counts Liftoff function calls, so the comment should mention that. I think we should also put it in the name, maybe just \"num_liftoff_function_calls_\".",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b15e5e9_44a81da6",
+        "filename": "test/mjsunit/wasm/wasm-dynamic-tiering.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "Please split this in two lines. Just repeat the \"// Flags: \" comment two times.",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cac284e0_57c68fff",
+        "filename": "test/mjsunit/wasm/wasm-dynamic-tiering.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "The delta is unused, please remove it.",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f866997f_92c42620",
+        "filename": "test/mjsunit/wasm/wasm-dynamic-tiering.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-21T09:35:11Z",
+      "side": 1,
+      "message": "I think we can this test more specific by just adding exactly two functions, exporting them both, then calling both functions four times, checking that they are not tiered up yet, then calling one of them one more time, and checking that this one function now gets tiered up while the other one stays in Liftoff.",
+      "revId": "1b494f24bc727748f905c37e3e8022582979bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
