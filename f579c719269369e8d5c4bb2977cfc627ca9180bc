@@ -138,6 +138,24 @@
       "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "046e74af_a065af1a",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6087,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-21T13:56:12Z",
+      "side": 1,
+      "message": "This is less \"just-in-case\", and more \"less false negatives\" -- which really just makes it a tradeoff of read vs write performance I guess.\n\nTSAN bots passed btw.",
+      "parentUuid": "b0f057c3_d1d6ecce",
+      "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
