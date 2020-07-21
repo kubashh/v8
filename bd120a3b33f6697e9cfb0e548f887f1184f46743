@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "f600255b_7ef3beae",
+        "filename": "src/base/hashmap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-21T16:58:23Z",
+      "side": 1,
+      "message": "This has been addressed in another CL.",
+      "parentUuid": "92e7da6e_ce70fba4",
+      "range": {
+        "startLine": 152,
+        "startChar": 6,
+        "endLine": 152,
+        "endChar": 66
+      },
+      "revId": "bd120a3b33f6697e9cfb0e548f887f1184f46743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68549ef3_1334dc81",
         "filename": "src/zone/zone.h",
         "patchSetId": 3
