@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "dcaf15bb_c9bc338b",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5920,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-21T15:10:36Z",
+      "side": 1,
+      "message": "Oops, copy \u0026 paste error.",
+      "parentUuid": "9290d17d_423c79b8",
+      "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0cab5ef1_94cb33f3",
         "filename": "src/objects/objects.cc",
         "patchSetId": 2
@@ -210,6 +228,24 @@
       "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e565457e_067161f1",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6087,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-21T15:10:36Z",
+      "side": 1,
+      "message": "I see, thanks!",
+      "parentUuid": "22842d38_633b0c8b",
+      "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
