@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "4827d863_64301a41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-21T12:54:29Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9290d17d_423c79b8",
         "filename": "src/objects/objects.cc",
         "patchSetId": 2
@@ -100,6 +117,24 @@
       "side": 1,
       "message": "Yeah, very funky! Given that we are accessing this root value in such a non-trivial way, maybe we should not have handle-returning-getter at all, just to avoid surprises.\nAlthough we are reading behind the lock, I have a gut feeling that TSAN may complain about release stores followed by normal reads. Please run TSAN try job too.",
       "parentUuid": "94bb7ba3_1c85667e",
+      "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0f057c3_d1d6ecce",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6087,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-21T12:54:29Z",
+      "side": 1,
+      "message": "The release store happens also under the mutex, so it should be okay.\n\nI would avoid \"just-in-case\" acquire/release annotations if they do not help with the synchronization.\n\n+1 to running TSAN try-job anyway.",
+      "parentUuid": "fa2b7375_c5e4194a",
       "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
