@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bec35b6_df89cbd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-21T14:13:33Z",
+      "side": 1,
+      "message": "overall lgtm, some nits.",
+      "revId": "080dd98a0d326b30164b2161bc5b58a6c1c72e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b08847d_48641d0b",
+        "filename": "BUILD.gn",
+        "patchSetId": 15
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-21T14:13:33Z",
+      "side": 1,
+      "message": "why not just set it if this flag is set to true?",
+      "range": {
+        "startLine": 258,
+        "startChar": 1,
+        "endLine": 258,
+        "endChar": 28
+      },
+      "revId": "080dd98a0d326b30164b2161bc5b58a6c1c72e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfbb0f74_e5dbeb48",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2674,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-21T14:13:33Z",
+      "side": 1,
+      "message": "would it make sense to make this a default field initializer?",
+      "range": {
+        "startLine": 2674,
+        "startChar": 15,
+        "endLine": 2674,
+        "endChar": 48
+      },
+      "revId": "080dd98a0d326b30164b2161bc5b58a6c1c72e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21dac187_0f519cb0",
+        "filename": "src/zone/type-stats.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-21T14:13:33Z",
+      "side": 1,
+      "message": "If you did want to implement this without RTTI, I believe the __FUNCTION__ macro is a string representing the current function, which includes the templated type name.\n\nSee: https://blog.molecular-matters.com/2015/12/11/getting-the-type-of-a-template-argument-as-string-without-rtti/",
+      "range": {
+        "startLine": 28,
+        "startChar": 29,
+        "endLine": 28,
+        "endChar": 61
+      },
+      "revId": "080dd98a0d326b30164b2161bc5b58a6c1c72e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7088492_12c7490b",
+        "filename": "src/zone/zone.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-21T14:13:33Z",
+      "side": 1,
+      "message": "as above",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 36,
+        "endChar": 46
+      },
+      "revId": "080dd98a0d326b30164b2161bc5b58a6c1c72e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
