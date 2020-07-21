@@ -85,6 +85,24 @@
       "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa2b7375_c5e4194a",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6087,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-21T10:19:52Z",
+      "side": 1,
+      "message": "Yeah, very funky! Given that we are accessing this root value in such a non-trivial way, maybe we should not have handle-returning-getter at all, just to avoid surprises.\nAlthough we are reading behind the lock, I have a gut feeling that TSAN may complain about release stores followed by normal reads. Please run TSAN try job too.",
+      "parentUuid": "94bb7ba3_1c85667e",
+      "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
