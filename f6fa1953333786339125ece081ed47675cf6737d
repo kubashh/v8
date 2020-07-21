@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5344721_d4380029",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-07-21T13:15:14Z",
+      "side": 1,
+      "message": "LGTM with minor comments/questions. I think the test should also be disabled for the \"isolates\" variant. I would expect it to fail because native modules are shared across isolates, let me add a try job for it.",
+      "revId": "f6fa1953333786339125ece081ed47675cf6737d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "33e04c1a_d778a90a",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-07-21T13:15:14Z",
+      "side": 1,
+      "message": "nit: the style guide recommends moving declarations as close as possible to their first use, which generally makes the code easier to follow.",
+      "revId": "f6fa1953333786339125ece081ed47675cf6737d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca2c90ea_34e9d496",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-07-21T13:15:14Z",
+      "side": 1,
+      "message": "Don\u0027t we need to pass the pinned set here?",
+      "revId": "f6fa1953333786339125ece081ed47675cf6737d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b1c597e_a5519106",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-07-21T13:15:14Z",
+      "side": 1,
+      "message": "Wouldn\u0027t a byte array be enough, since the limit is very low?",
+      "revId": "f6fa1953333786339125ece081ed47675cf6737d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
