@@ -67,6 +67,24 @@
       "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94bb7ba3_1c85667e",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6087,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-21T10:08:43Z",
+      "side": 1,
+      "message": "this access is actually a bit funky, since it provides a Handle\u003cStringTable\u003e, not a StringTable. It actually returns a Handle whose backing is that entry in the roots array; and only on Handle deref does it read the string table from that location. So, to make the access \"synchronized\" we\u0027d need a SynchronizedHandle, not just a synchronized accessor.\n\nHowever, in this case it doesn\u0027t matter, since the writes to the string table root entry are guarded by the mutex, so un-synchronized accesses inside the lock are fine. The only interesting part is that the store has to be Release, so that other reads _outside_ the lock can read it.\n\nTechnically, since false-negatives are ok, none of these accesses actually need acq-rel semantics, it just seemed like the right thing to do. Maybe it\u0027s not?",
+      "parentUuid": "0cab5ef1_94cb33f3",
+      "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
