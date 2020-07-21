@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "9075371d_3bb3a379",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1424499
+      },
+      "writtenOn": "2020-07-21T12:43:38Z",
+      "side": 1,
+      "message": "I also changed the accessor name in the instance to reflect this.",
+      "parentUuid": "daf6d96c_0ebf72d7",
+      "range": {
+        "startLine": 645,
+        "startChar": 12,
+        "endLine": 645,
+        "endChar": 33
+      },
+      "revId": "260cc13881c78f3fcf60e9fab302b3b5abeec27b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae3da6a7_77e3aa0a",
         "filename": "test/mjsunit/wasm/wasm-dynamic-tiering.js",
         "patchSetId": 9
@@ -56,6 +80,24 @@
       "revId": "260cc13881c78f3fcf60e9fab302b3b5abeec27b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e2c30c7_0d41301e",
+        "filename": "test/mjsunit/wasm/wasm-dynamic-tiering.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1424499
+      },
+      "writtenOn": "2020-07-21T12:43:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae3da6a7_77e3aa0a",
+      "revId": "260cc13881c78f3fcf60e9fab302b3b5abeec27b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
