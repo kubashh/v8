@@ -68,6 +68,24 @@
       "revId": "46c8adec986fdb039549747cb80f45bea1efe3ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f47237a2_c2dea1a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-21T08:42:56Z",
+      "side": 1,
+      "message": "Sure, you could either search for it and accept either non-existance or the correct map or, what I would do, just search in a loop until you get a result for name2 and verify its map2. Such a test would help identify cases where a transition can end up in the map that is not fully initialized.",
+      "parentUuid": "fb1b8c99_f211ab4f",
+      "revId": "46c8adec986fdb039549747cb80f45bea1efe3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
