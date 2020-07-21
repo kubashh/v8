@@ -156,6 +156,24 @@
       "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40f08556_7f9d8d40",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6087,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-21T13:58:23Z",
+      "side": 1,
+      "message": "TSAN understands mutexes. I don\u0027t think there would be any false negatives here.",
+      "parentUuid": "046e74af_a065af1a",
+      "revId": "f579c719269369e8d5c4bb2977cfc627ca9180bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
