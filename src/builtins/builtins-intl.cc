@@ -28,10 +28,10 @@
 #include "src/objects/js-relative-time-format-inl.h"
 #include "src/objects/js-segment-iterator-inl.h"
 #include "src/objects/js-segmenter-inl.h"
+#include "src/objects/js-segments-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/property-descriptor.h"
 #include "src/objects/smi.h"
-
 #include "unicode/brkiter.h"
 
 namespace v8 {
@@ -968,29 +968,6 @@ BUILTIN(CollatorInternalCompare) {
   return *Intl::CompareStrings(isolate, *icu_collator, string_x, string_y);
 }
 
-// ecma402 #sec-segment-iterator-prototype-breakType
-BUILTIN(SegmentIteratorPrototypeBreakType) {
-  const char* const method = "get %SegmentIteratorPrototype%.breakType";
-  HandleScope scope(isolate);
-
-  CHECK_RECEIVER(JSSegmentIterator, segment_iterator, method);
-  return *segment_iterator->BreakType();
-}
-
-// ecma402 #sec-segment-iterator-prototype-following
-BUILTIN(SegmentIteratorPrototypeFollowing) {
-  const char* const method = "%SegmentIteratorPrototype%.following";
-  HandleScope scope(isolate);
-  CHECK_RECEIVER(JSSegmentIterator, segment_iterator, method);
-
-  Handle<Object> from = args.atOrUndefined(isolate, 1);
-
-  Maybe<bool> success =
-      JSSegmentIterator::Following(isolate, segment_iterator, from);
-  MAYBE_RETURN(success, ReadOnlyRoots(isolate).exception());
-  return *isolate->factory()->ToBoolean(success.FromJust());
-}
-
 // ecma402 #sec-segment-iterator-prototype-next
 BUILTIN(SegmentIteratorPrototypeNext) {
   const char* const method = "%SegmentIteratorPrototype%.next";
@@ -999,29 +976,6 @@ BUILTIN(SegmentIteratorPrototypeNext) {
 
   RETURN_RESULT_OR_FAILURE(isolate,
                            JSSegmentIterator::Next(isolate, segment_iterator));
-}
-
-// ecma402 #sec-segment-iterator-prototype-preceding
-BUILTIN(SegmentIteratorPrototypePreceding) {
-  const char* const method = "%SegmentIteratorPrototype%.preceding";
-  HandleScope scope(isolate);
-  CHECK_RECEIVER(JSSegmentIterator, segment_iterator, method);
-
-  Handle<Object> from = args.atOrUndefined(isolate, 1);
-
-  Maybe<bool> success =
-      JSSegmentIterator::Preceding(isolate, segment_iterator, from);
-  MAYBE_RETURN(success, ReadOnlyRoots(isolate).exception());
-  return *isolate->factory()->ToBoolean(success.FromJust());
-}
-
-// ecma402 #sec-segment-iterator-prototype-index
-BUILTIN(SegmentIteratorPrototypeIndex) {
-  const char* const method = "get %SegmentIteratorPrototype%.index";
-  HandleScope scope(isolate);
-
-  CHECK_RECEIVER(JSSegmentIterator, segment_iterator, method);
-  return *JSSegmentIterator::Index(isolate, segment_iterator);
 }
 
 BUILTIN(SegmenterConstructor) {
@@ -1057,16 +1011,50 @@ BUILTIN(SegmenterPrototypeSegment) {
                  "Intl.Segmenter.prototype.segment");
   Handle<Object> input_text = args.atOrUndefined(isolate, 1);
   // 3. Let string be ? ToString(string).
-  Handle<String> text;
-  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, text,
+  Handle<String> string;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, string,
                                      Object::ToString(isolate, input_text));
 
   // 4. Return ? CreateSegmentIterator(segment, string).
   RETURN_RESULT_OR_FAILURE(
       isolate,
-      JSSegmentIterator::Create(
+      JSSegments::CreateSegmentsObject(
           isolate, segmenter_holder->icu_break_iterator().raw()->clone(),
-          segmenter_holder->granularity(), text));
+          string, segmenter_holder->granularity()));
+}
+
+// ecma402 #sec-segment-iterator-prototype-next
+BUILTIN(SegmentsPrototypeContaining) {
+  const char* const method = "%SegmentIsPrototype%.containing";
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSSegments, segments, method);
+  Handle<Object> index = args.atOrUndefined(isolate, 1);
+
+  // 6. Let n be ? ToInteger(index).
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, index,
+                                     Object::ToInteger(isolate, index));
+  double const n = index->Number();
+
+  RETURN_RESULT_OR_FAILURE(
+      isolate, JSSegments::Containing(isolate, segments, static_cast<int>(n)));
+}
+
+// ecma402 #sec-%segmentsprototype%-@@iterator
+BUILTIN(SegmentsPrototypeIterator) {
+  const char* const method = "%SegmentIsPrototype%[@@iterator]";
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSSegments, segments, method);
+  RETURN_RESULT_OR_FAILURE(
+      isolate, JSSegments::CreateSegmentIterator(isolate, segments));
+}
+
+// ecma402 #sec-get-%segmentsprototype%.string
+BUILTIN(SegmentsPrototypeString) {
+  const char* const method = "%SegmentIsPrototype%.string";
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSSegments, segments, method);
+
+  RETURN_RESULT_OR_FAILURE(isolate, JSSegments::GetString(isolate, segments));
 }
 
 BUILTIN(V8BreakIteratorConstructor) {
