@@ -140,6 +140,24 @@
     },
     {
       "key": {
+        "uuid": "4679a684_f825738b",
+        "filename": "src/snapshot/embedded/embedded-data.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-22T08:58:52Z",
+      "side": 1,
+      "message": "Please use metadata_size() - for instructions, we print padding and real instructions separately because code alignment is fairly large and padding is fairly significant. For metadata, we really don\u0027t care, and the manual calculation is bound to go out of date.",
+      "parentUuid": "d82ad3e6_8c1d8f05",
+      "revId": "fdd7ecdef5ef9abf10611b40c1ac3bcbc1a18fbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3027319d_95a59286",
         "filename": "src/snapshot/embedded/embedded-data.h",
         "patchSetId": 5

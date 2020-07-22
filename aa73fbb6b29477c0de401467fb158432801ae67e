@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24793977_9b4fedb2",
+        "filename": "src/runtime/runtime-debug.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-22T08:58:52Z",
+      "side": 1,
+      "message": "Since there are other minor comments, one more request here: please change this to just\n\n PrintF(\"Embedded blob is %d bytes\\n\", \n        static_cast\u003cint\u003e(d.code_size() + d.metadata_size()));\n\nI don\u0027t know where the weird pattern of 1. var decl, 2. var init, 3. var use came from.",
+      "revId": "aa73fbb6b29477c0de401467fb158432801ae67e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cc72e6f_06c1d6a9",
+        "filename": "src/snapshot/embedded/embedded-data.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-22T08:58:52Z",
+      "side": 1,
+      "message": "MetadataTableOffset",
+      "revId": "aa73fbb6b29477c0de401467fb158432801ae67e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
