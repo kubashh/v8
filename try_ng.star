@@ -134,6 +134,11 @@ v8_try_ng_pair(
     properties = {"build_config": "Release", "$build/goma": {"server_host": "goma.chromium.org", "rpc_extra_params": "?prod"}},
 )
 v8_try_ng_pair(
+    name = "v8_linux64_reverse_jsargs_dbg",
+    dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
+    properties = {"build_config": "Debug", "$build/goma": {"server_host": "goma.chromium.org", "rpc_extra_params": "?prod"}},
+)
+v8_try_ng_pair(
     name = "v8_linux64_tsan_isolates_rel",
     dimensions = {"os": "Ubuntu-16.04", "cpu": "x86-64"},
     properties = {"build_config": "Release", "$build/goma": {"server_host": "goma.chromium.org", "rpc_extra_params": "?prod"}},
