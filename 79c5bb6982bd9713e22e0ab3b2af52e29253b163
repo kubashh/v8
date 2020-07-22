@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92261416_d3b58cd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-07-22T11:29:14Z",
+      "side": 1,
+      "message": "LGTM. \n\nI\u0027ve reworded the commit description to make it clear that you\u0027re only removing the flag, not the feature itself.",
+      "revId": "79c5bb6982bd9713e22e0ab3b2af52e29253b163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
