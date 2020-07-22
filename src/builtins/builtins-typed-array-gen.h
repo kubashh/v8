@@ -80,6 +80,7 @@ class TypedArrayBuiltinsAssembler : public CodeStubAssembler {
   void DispatchTypedArrayByElementsKind(
       TNode<Word32T> elements_kind, const TypedArraySwitchCase& case_function);
 
+  void AllocateJSTypedArrayExternalPointerEntry(TNode<JSTypedArray> holder);
   void SetJSTypedArrayOnHeapDataPtr(TNode<JSTypedArray> holder,
                                     TNode<ByteArray> base,
                                     TNode<UintPtrT> offset);
