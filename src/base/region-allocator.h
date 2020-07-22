@@ -45,6 +45,8 @@ class V8_BASE_EXPORT RegionAllocator final {
   // certain regions as used or for randomizing regions displacement.
   bool AllocateRegionAt(Address requested_address, size_t size);
 
+  bool DetachRegionAt(Address requested_address, size_t size);
+
   // Frees region at given |address|, returns the size of the region.
   // There must be a used region starting at given address otherwise nothing
   // will be freed and 0 will be returned.
@@ -87,16 +89,32 @@ class V8_BASE_EXPORT RegionAllocator final {
  private:
   class Region : public AddressRegion {
    public:
-    Region(Address address, size_t size, bool is_used)
-        : AddressRegion(address, size), is_used_(is_used) {}
+    enum RegionState {
+      // Indicates the region can be allocated from.
+      kFree,
+      // Indicates the region has been carved out of the wider area and is not
+      // allocatable
+      kExcluded,
+      kUsed,
+    };
+    Region(Address address, size_t size, RegionState state)
+        : AddressRegion(address, size), state_(state) {}
 
-    bool is_used() const { return is_used_; }
-    void set_is_used(bool used) { is_used_ = used; }
+    bool is_used() const { return state_ == kUsed; }
+    bool is_excluded() const { return state_ == kExcluded; }
+    void set_is_used(bool used) {
+      DCHECK(state_ != kExcluded);
+      state_ = used ? kUsed : kFree;
+    }
+    void set_excluded() {
+      DCHECK(state_ == kUsed);
+      state_ = kExcluded;
+    }
 
     void Print(std::ostream& os) const;
 
    private:
-    bool is_used_;
+    RegionState state_;
   };
 
   // The whole region.
