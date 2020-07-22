@@ -1,0 +1,185 @@
+// Copyright 2020 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include "src/ast/ast.h"
+
+namespace runtime {
+extern runtime CreateArrayLiteral(
+    Context, FeedbackVector, TaggedIndex, ArrayBoilerplateDescription,
+    Smi): HeapObject;
+extern runtime CreateObjectLiteral(
+    Context, FeedbackVector, TaggedIndex, ObjectBoilerplateDescription,
+    Smi): HeapObject;
+}
+
+namespace constructor {
+
+extern builtin FastNewObject(Context, JSFunction, JSReceiver): JSObject;
+
+extern enum AllocationSiteMode constexpr 'AllocationSiteMode' {
+  DONT_TRACK_ALLOCATION_SITE,
+  TRACK_ALLOCATION_SITE
+}
+
+const kIsShallowAndDisableMementos: constexpr int31
+    generates 'AggregateLiteral::Flags::kIsShallowAndDisableMementos';
+const kEvalScope: constexpr ScopeType generates 'ScopeType::EVAL_SCOPE';
+const kFunctionScope:
+    constexpr ScopeType generates 'ScopeType::FUNCTION_SCOPE';
+
+extern macro ConstructorBuiltinsAssembler::EmitFastNewFunctionContext(
+    ScopeInfo, uint32, Context, constexpr ScopeType): Context;
+extern macro ConstructorBuiltinsAssembler::EmitCreateRegExpLiteral(
+    HeapObject, TaggedIndex, Object, Smi, Context): JSRegExp;
+extern macro ConstructorBuiltinsAssembler::EmitCreateShallowArrayLiteral(
+    FeedbackVector, TaggedIndex, Context,
+    constexpr AllocationSiteMode): HeapObject labels CallRuntime;
+extern macro ConstructorBuiltinsAssembler::EmitCreateEmptyArrayLiteral(
+    FeedbackVector, TaggedIndex, Context): HeapObject;
+extern macro ConstructorBuiltinsAssembler::EmitCreateShallowObjectLiteral(
+    FeedbackVector, TaggedIndex): HeapObject labels CallRuntime;
+extern macro ConstructorBuiltinsAssembler::EmitCreateEmptyObjectLiteral(
+    Context): JSObject;
+
+builtin FastNewFunctionContextEval(implicit context: Context)(
+    scopeInfo: ScopeInfo, slots: uint32): Context {
+  return EmitFastNewFunctionContext(scopeInfo, slots, context, kEvalScope);
+}
+
+builtin FastNewFunctionContextFunction(implicit context: Context)(
+    scopeInfo: ScopeInfo, slots: uint32): Context {
+  return EmitFastNewFunctionContext(scopeInfo, slots, context, kFunctionScope);
+}
+
+/*
+TF_BUILTIN(, ConstructorBuiltinsAssembler) {
+  TNode<ScopeInfo> scope_info = CAST(Parameter(Descriptor::kScopeInfo));
+  TNode<Uint32T> slots = UncheckedCast<Uint32T>(Parameter(Descriptor::kSlots));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  Return(EmitFastNewFunctionContext(scope_info, slots, context,
+                                    ScopeType::EVAL_SCOPE));
+}
+  TNode<Context> EmitFastNewFunctionContext(TNode<ScopeInfo> scope_info,
+                                            TNode<Uint32T> slots,
+                                            TNode<Context> context,
+                                            ScopeType scope_type);
+
+TF_BUILTIN(, ConstructorBuiltinsAssembler) {
+  TNode<ScopeInfo> scope_info = CAST(Parameter(Descriptor::kScopeInfo));
+  TNode<Uint32T> slots = UncheckedCast<Uint32T>(Parameter(Descriptor::kSlots));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  Return(EmitFastNewFunctionContext(scope_info, slots, context,
+                                    ScopeType::FUNCTION_SCOPE));
+}
+*/
+
+builtin CreateRegExpLiteral(implicit context: Context)(
+    maybeFeedbackVector: HeapObject, slot: TaggedIndex, pattern: Object,
+    flags: Smi): JSRegExp {
+  return EmitCreateRegExpLiteral(
+      maybeFeedbackVector, slot, pattern, flags, context);
+}
+
+builtin CreateShallowArrayLiteral(implicit context: Context)(
+    feedbackVector: FeedbackVector, slot: TaggedIndex,
+    constantElements: ArrayBoilerplateDescription): HeapObject {
+  try {
+    return EmitCreateShallowArrayLiteral(
+        feedbackVector, slot, context,
+        AllocationSiteMode::DONT_TRACK_ALLOCATION_SITE)
+        otherwise CallRuntime;
+  } label CallRuntime deferred {
+    Comment('call runtime');
+    tail runtime::CreateArrayLiteral(
+        context, feedbackVector, slot, constantElements,
+        SmiConstant(kIsShallowAndDisableMementos));
+  }
+}
+
+builtin CreateEmptyArrayLiteral(implicit context: Context)(
+    feedbackVector: FeedbackVector, slot: TaggedIndex): HeapObject {
+  return EmitCreateEmptyArrayLiteral(feedbackVector, slot, context);
+}
+
+builtin CreateShallowObjectLiteral(implicit context: Context)(
+    feedbackVector: FeedbackVector, slot: TaggedIndex,
+    desc: ObjectBoilerplateDescription, flags: Smi): HeapObject {
+  try {
+    return EmitCreateShallowObjectLiteral(feedbackVector, slot)
+        otherwise CallRuntime;
+  } label CallRuntime {
+    tail runtime::CreateObjectLiteral(
+        context, feedbackVector, slot, desc, flags);
+  }
+}
+
+// ES #sec-object-constructor
+transitioning javascript builtin
+ObjectConstructor(
+    js-implicit context: NativeContext, receiver: JSAny, newTarget: JSAny,
+    target: JSFunction)(...arguments): JSAny {
+  const argc: intptr = arguments.length;
+  try {
+    if (newTarget == Undefined) goto NotSubclass;
+    if (newTarget == target) goto NotSubclass;
+    goto Subclass;
+  } label NotSubclass {
+    if (argc <= 0) goto NewObject;
+    const value = arguments[0];
+    if (value == Null) goto NewObject;
+    if (value == Undefined) goto NewObject;
+    return ToObject(context, value);
+  } label NewObject deferred {
+    return EmitCreateEmptyObjectLiteral(context);
+  } label Subclass deferred {
+    return FastNewObject(context, target, UnsafeCast<JSReceiver>(newTarget));
+  }
+}
+
+builtin CreateEmptyLiteralObject(implicit context: Context)(): JSAny {
+  return EmitCreateEmptyObjectLiteral(context);
+}
+
+// ES #sec-number-constructor
+transitioning javascript builtin
+NumberConstructor(
+    js-implicit context: NativeContext, receiver: JSAny, newTarget: JSAny,
+    target: JSFunction)(...arguments): JSAny {
+  try {
+    // 1. If no arguments were passed to this function invocation, let n be +0.
+    if (arguments.length == 0) goto Number(0);
+
+    const value = arguments[0];
+    // 2. Else,
+    //    a. Let prim be ? ToNumeric(value).
+    //    b. If Type(prim) is BigInt, let n be the Number value for prim.
+    //    c. Otherwise, let n be prim.
+    const n: Number = ToNumber(value, BigIntHandling::kConvertToNumber);
+    goto Number(n);
+  } label Number(n: Number) {
+    // 3. If NewTarget is undefined, return n.
+    if (newTarget == Undefined) return n;
+
+    // 4. Let O be ? OrdinaryCreateFromConstructor(NewTarget,
+    //    "%NumberPrototype%", « [[NumberData]] »).
+    // 5. Set O.[[NumberData]] to n.
+    // 6. Return O.
+
+    // We ignore the normal target parameter and load the value from the
+    // current frame here in order to reduce register pressure on the fast path.
+    const target: JSFunction = LoadTargetFromFrame();
+    const result = UnsafeCast<JSPrimitiveWrapper>(
+        FastNewObject(context, target, UnsafeCast<JSReceiver>(newTarget)));
+    result.value = n;
+    return result;
+  }
+}
+
+javascript builtin
+GenericLazyDeoptContinuation(js-implicit context: NativeContext)(result: JSAny):
+    JSAny {
+  return result;
+}
+
+}  // namespace constructor
