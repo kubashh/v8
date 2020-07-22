@@ -987,9 +987,17 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
 
   TNode<RawPtrT> UnwrapApiObject(TNode<JSObject> node) {
     CHECK_GE(isolate()->embedder_wrapper_object_index(), 0);
-    const int offset = Internals::kJSObjectHeaderSize +
-                       (Internals::kEmbedderDataSlotSize *
-                        isolate()->embedder_wrapper_object_index());
+    const int offset =
+        Internals::kJSObjectHeaderSize +
+        (Internals::kEmbedderDataSlotSize *
+         isolate()->embedder_wrapper_object_index()) +
+#ifdef V8_COMPRESS_POINTERS
+        // External pointer table index is only stored in the 2nd 32bits
+        // if the heap sandbox is enabled.
+        (V8_HEAP_SANDBOX_BOOL ? EmbedderDataSlot::kRawPayloadOffset : 0);
+#else
+        0;
+#endif
 
     FieldAccess access(
         kTaggedBase, offset, MaybeHandle<Name>(), MaybeHandle<Map>(),

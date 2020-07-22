@@ -11388,6 +11388,9 @@ void* Object::GetAlignedPointerFromInternalField(int index) {
                 instance_type == I::kJSApiObjectType ||
                 instance_type == I::kJSSpecialApiObjectType)) {
     int offset = I::kJSObjectHeaderSize + (I::kEmbedderDataSlotSize * index);
+#ifdef V8_HEAP_SANDBOX
+    offset += I::kEmbedderDataSlotRawPayloadOffset;
+#endif
     internal::Isolate* isolate = I::GetIsolateForHeapSandbox(obj);
     A value = I::ReadExternalPointerField(isolate, obj, offset);
     return reinterpret_cast<void*>(value);
@@ -12026,6 +12029,9 @@ void* Context::GetAlignedPointerFromEmbedderData(int index) {
       I::ReadTaggedPointerField(ctx, I::kNativeContextEmbedderDataOffset);
   int value_offset =
       I::kEmbedderDataArrayHeaderSize + (I::kEmbedderDataSlotSize * index);
+#ifdef V8_HEAP_SANDBOX
+  value_offset += I::kEmbedderDataSlotRawPayloadOffset;
+#endif
   internal::Isolate* isolate = I::GetIsolateForHeapSandbox(ctx);
   return reinterpret_cast<void*>(
       I::ReadExternalPointerField(isolate, embedder_data, value_offset));
