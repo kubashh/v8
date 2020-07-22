@@ -87,6 +87,24 @@
     },
     {
       "key": {
+        "uuid": "fc33fa93_84be809e",
+        "filename": "src/runtime/runtime-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1243531
+      },
+      "writtenOn": "2020-07-22T08:43:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81da0ff1_84595de4",
+      "revId": "fdd7ecdef5ef9abf10611b40c1ac3bcbc1a18fbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0ebf14b_8897538e",
         "filename": "src/snapshot/embedded/embedded-data.cc",
         "patchSetId": 5
@@ -98,6 +116,24 @@
       "writtenOn": "2020-07-21T09:45:53Z",
       "side": 1,
       "message": "This is metadata_size() right?",
+      "revId": "fdd7ecdef5ef9abf10611b40c1ac3bcbc1a18fbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d82ad3e6_8c1d8f05",
+        "filename": "src/snapshot/embedded/embedded-data.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1243531
+      },
+      "writtenOn": "2020-07-22T08:43:57Z",
+      "side": 1,
+      "message": "Yes, it is. However, just as this function manually calculates instruction_size (i.e. code_size()), it seemed reasonable to let this continue calculating metadata_size() manually. This allows for the possibility of padding in the metadata -- not sure if we need to consider that for the future.",
+      "parentUuid": "f0ebf14b_8897538e",
       "revId": "fdd7ecdef5ef9abf10611b40c1ac3bcbc1a18fbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -118,6 +154,24 @@
       "revId": "fdd7ecdef5ef9abf10611b40c1ac3bcbc1a18fbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b0e7c49_e9564b8f",
+        "filename": "src/snapshot/embedded/embedded-data.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1243531
+      },
+      "writtenOn": "2020-07-22T08:43:57Z",
+      "side": 1,
+      "message": "Good point. Done.",
+      "parentUuid": "3027319d_95a59286",
+      "revId": "fdd7ecdef5ef9abf10611b40c1ac3bcbc1a18fbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
