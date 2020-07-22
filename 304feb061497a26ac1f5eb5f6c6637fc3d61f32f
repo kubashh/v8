@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb958416_3cc3b36e",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-22T22:23:34Z",
+      "side": 1,
+      "message": "workaround for Torque formatting problem when generates expression is very long.",
+      "range": {
+        "startLine": 1110,
+        "startChar": 0,
+        "endLine": 1110,
+        "endChar": 65
+      },
+      "revId": "304feb061497a26ac1f5eb5f6c6637fc3d61f32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe17d058_db7e127a",
+        "filename": "src/builtins/builtins-constructor-gen.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-22T22:23:34Z",
+      "side": 1,
+      "message": "workaround since Torque wants labels at the end.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 27
+      },
+      "revId": "304feb061497a26ac1f5eb5f6c6637fc3d61f32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "710524e5_0fbb3e16",
+        "filename": "src/torque/declaration-visitor.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-22T22:23:34Z",
+      "side": 1,
+      "message": "This allows runtime functions to take TaggedIndex.",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 74
+      },
+      "revId": "304feb061497a26ac1f5eb5f6c6637fc3d61f32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
