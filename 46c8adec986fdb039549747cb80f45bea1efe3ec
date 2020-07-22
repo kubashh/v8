@@ -104,6 +104,24 @@
       "revId": "46c8adec986fdb039549747cb80f45bea1efe3ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff84d1ce_847d4f25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-22T07:12:44Z",
+      "side": 1,
+      "message": "You\u0027re right. The compiler will probably not loop searching for a name until it finds an entry.",
+      "parentUuid": "8b1e9773_bea34d83",
+      "revId": "46c8adec986fdb039549747cb80f45bea1efe3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
