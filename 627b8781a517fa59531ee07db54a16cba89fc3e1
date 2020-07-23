@@ -22,6 +22,30 @@
       "revId": "627b8781a517fa59531ee07db54a16cba89fc3e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71d5fffa_f5be72d6",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-23T17:33:15Z",
+      "side": 0,
+      "message": "Hmm, it looks like that descriptor defines some custom registers and each platform overrides them. Can I remove all of those or does the code gen depend on that? It\u0027s strange that the trybots didn\u0027t have any failures if so.",
+      "parentUuid": "2a11dc66_09957cf0",
+      "range": {
+        "startLine": 97,
+        "startChar": 34,
+        "endLine": 97,
+        "endChar": 56
+      },
+      "revId": "627b8781a517fa59531ee07db54a16cba89fc3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
