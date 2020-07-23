@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f62b146_276b4c44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-23T10:19:47Z",
+      "side": 1,
+      "message": "ptal I rebased on top of an inspector-test fix and added the test file that was missing in the previous PS.",
+      "revId": "bb9b4435087da750efb0f4eabd8b7c18f417bacd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
