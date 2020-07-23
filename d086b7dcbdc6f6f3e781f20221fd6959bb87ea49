@@ -16,6 +16,24 @@
       "revId": "d086b7dcbdc6f6f3e781f20221fd6959bb87ea49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "87c53836_33873f99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-23T10:06:02Z",
+      "side": 1,
+      "message": "I am currently wondering why we alway use V8_TARGET_ARCH_* for something that is only executed on the host :) \n\nIf we do host arch detection we can assume page sizes, fix GetRandomMmapAddr and even have DCHECKs asserting our assumptions.\n\n(All of this code is a mess and before we had OWNERS in place it was a dumping ground for quickfixes.)",
+      "parentUuid": "79759a49_8c94314a",
+      "revId": "d086b7dcbdc6f6f3e781f20221fd6959bb87ea49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
