@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79759a49_8c94314a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-23T06:35:37Z",
+      "side": 1,
+      "message": "Adding mlippautz since I\u0027m not a base owner.\n\nNico, ptal at the comment on your initial CL - I think we should change our approach and remove the DCHECK. It was initially introduced in https://chromium-review.googlesource.com/c/v8/v8/+/1701127 for the iPhone. I\u0027d suggest reverting your initial fix and replacing the section by something like:\n\n #if V8_TARGET_OS_IOS \u0026\u0026 V8_TARGET_ARCH_ARM64\n  raw_addr \u003d RoundDown(raw_addr, 1 \u003c\u003c 14);  // iOS uses 16 KiB memory pages.\n\nmlippautz wdyt? This will still apply the wrong raw_addr transformation in GetRandomMmapAddr during mksnapshot in cross-builds, but tbh I don\u0027t think we care much.",
+      "revId": "d086b7dcbdc6f6f3e781f20221fd6959bb87ea49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
