@@ -679,6 +679,10 @@ void WasmEngine::TierUpAllModulesPerIsolate(Isolate* isolate) {
     }
   }
   for (auto& native_module : native_modules_to_recompile) {
+    // Remove all breakpoints set by this isolate.
+    if (native_module->HasDebugInfo()) {
+      native_module->GetDebugInfo()->RemoveIsolate(isolate);
+    }
     native_module->RecompileForTiering();
   }
 }
