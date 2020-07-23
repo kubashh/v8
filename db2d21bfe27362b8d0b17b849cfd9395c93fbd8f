@@ -16,6 +16,92 @@
       "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fcd7a8d3_7903f10b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-23T12:24:49Z",
+      "side": 1,
+      "message": "First round of high level comments",
+      "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d5e32bbe_32580d6c",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-23T12:24:49Z",
+      "side": 1,
+      "message": "Not a huge fan of the CollectGarbage call that can deal with every scenario. I would rewrite this (adjusting function parameters as needed) as follows:\n- CollectGarbage(): This call finalizes any existing marking that is already running. It always invokes the atomic pause.\n- StartIncrementalMarking(): Starts incremental marking if not already running.\n\nAssuming that we keep the CollectGarbage() call that can do everything, I would avoid the conditional StartMarking() but rather have\n  marker_-\u003eStartMarking()\n  if (config... \u003d\u003d incremental)\n    return;\n\nand\n  void MarkerBase::StartMarking(...) {\n    if (already marking) return;\n    // Ensure marking is started properly wrt. marking config.\n  }\n\nThis would mean the following post conditions for MarkerBase::StartMarking():\n- Incremental: Marking is always on and prepared for incremental\n- Atomic: Marking is always on and prepared for atomic (which means stack has been scanned)\n\n(I found it really hard to interpret StartMarking() \u003d\u003d false \u003d\u003e incremental marking was started successfully.)",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 36
+      },
+      "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b27b15a5_d307ff95",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-23T12:24:49Z",
+      "side": 1,
+      "message": "I think this can be avoided, see below.",
+      "range": {
+        "startLine": 131,
+        "startChar": 11,
+        "endLine": 131,
+        "endChar": 56
+      },
+      "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1552c79b_557fe7d9",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-23T12:24:49Z",
+      "side": 1,
+      "message": "Finalization tasks can only be posted for the stand-alone library. I would model that differently in having a task that knows that it doesn\u0027t have HeapBase but rather Heap, so that we can avoid the empty virtual call on the base class.\n\nI see two options:\n1. Split the task in a step and finalization task\n2. Keep the task but only use it for the stand-alone library. Unified heap would be marked through V8 and doesn\u0027t need separate scheduling.\n\n2. is probably okay as we anyways want to avoid the ping-pong between tasks for unified heap.",
+      "range": {
+        "startLine": 130,
+        "startChar": 20,
+        "endLine": 130,
+        "endChar": 65
+      },
+      "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
