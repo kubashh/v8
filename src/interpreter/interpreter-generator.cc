@@ -2266,8 +2266,8 @@ IGNITION_HANDLER(CreateArrayLiteral, InterpreterAssembler) {
   {
     ConstructorBuiltinsAssembler constructor_assembler(state());
     TNode<JSArray> result = constructor_assembler.EmitCreateShallowArrayLiteral(
-        CAST(feedback_vector), slot, context, &call_runtime,
-        TRACK_ALLOCATION_SITE);
+        CAST(feedback_vector), slot, context, TRACK_ALLOCATION_SITE,
+        &call_runtime);
     SetAccumulator(result);
     Dispatch();
   }
