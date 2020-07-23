@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "433f84fb_d87cb94e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-23T11:47:40Z",
+      "side": 1,
+      "message": "I revised this CL from last week.\nIt had issues around finalizing marking and GCs.\nShould be fixed now.",
+      "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
