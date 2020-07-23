@@ -89,6 +89,7 @@ Heap::~Heap() {
 
 void Heap::CollectGarbage(Config config) {
   CheckConfig(config);
+  config_ = config;
 
   if (in_no_gc_scope()) return;
 
@@ -99,13 +100,17 @@ void Heap::CollectGarbage(Config config) {
     Unmarker unmarker(&raw_heap());
 #endif
 
-  // "Marking".
-  marker_ = std::make_unique<Marker>(AsBase());
   const Marker::MarkingConfig marking_config{
       config.collection_type, config.stack_state, config.marking_type};
-  marker_->StartMarking(marking_config);
-  marker_->FinishMarking(marking_config);
-  // "Sweeping and finalization".
+  marker_ = std::make_unique<Marker>(AsBase(), platform_.get(), marking_config);
+  if (marker_->StartMarking())
+    ForceFinalizeGarabageColllection(config.stack_state);
+}
+
+void Heap::ForceFinalizeGarabageColllection(Config::StackState stack_state) {
+  config_.stack_state = stack_state;
+  if (!marker_) return;
+  marker_->FinishMarking(stack_state);
   {
     // Pre finalizers are forbidden from allocating objects.
     ObjectAllocator::NoAllocationScope no_allocation_scope_(object_allocator_);
@@ -115,12 +120,17 @@ void Heap::CollectGarbage(Config config) {
   marker_.reset();
   // TODO(chromium:1056170): replace build flag with dedicated flag.
 #if DEBUG
-  VerifyMarking(config.stack_state);
+  VerifyMarking(stack_state);
 #endif
   {
     NoGCScope no_gc(*this);
-    sweeper_.Start(config.sweeping_type);
+    sweeper_.Start(config_.sweeping_type);
   }
+}
+
+void Heap::ForceGarbageCollectionFinalizationIfSupported(
+    Config::StackState stack_state) {
+  ForceFinalizeGarabageColllection(stack_state);
 }
 
 }  // namespace internal
