@@ -22,6 +22,12 @@ class LocalHandles {
 
   void Iterate(RootVisitor* visitor);
 
+#ifdef DEBUG
+  bool Contains(Address* location) {
+    return std::find(blocks_.begin(), blocks_.end(), location) != blocks_.end();
+  }
+#endif
+
  private:
   HandleScopeData scope_;
   std::vector<Address*> blocks_;
