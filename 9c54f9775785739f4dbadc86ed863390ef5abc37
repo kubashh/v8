@@ -79,6 +79,30 @@
       "revId": "9c54f9775785739f4dbadc86ed863390ef5abc37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f016178_6e554364",
+        "filename": "src/heap/allocation-observer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-07-24T18:38:28Z",
+      "side": 1,
+      "message": "I guess this depends whether we want to invoke NotifyObject for recalculating next_counter_ as well. E.g. call it after AddAllocationObserver or ResumeAllocationObservers. What do you think?",
+      "parentUuid": "443b7d7b_b5822d58",
+      "range": {
+        "startLine": 52,
+        "startChar": 2,
+        "endLine": 52,
+        "endChar": 3
+      },
+      "revId": "9c54f9775785739f4dbadc86ed863390ef5abc37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
