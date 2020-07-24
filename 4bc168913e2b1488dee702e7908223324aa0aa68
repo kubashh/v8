@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "0c211e2e_fad7ecb3",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-07-24T06:54:44Z",
+      "side": 1,
+      "message": "There are some macro magic here. Remove it will cause the following compilation error:\n\n../../src/diagnostics/objects-debug.cc:251:7: error: incomplete type \u0027v8::internal::JSSegments\u0027 named in nested name specifier\n      TORQUE_INSTANCE_CHECKERS_SINGLE_FULLY_DEFINED(MAKE_TORQUE_CASE)\n      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\ngen/torque-generated/instance-types-tq.h:549:5: note: expanded from macro \u0027TORQUE_INSTANCE_CHECKERS_SINGLE_FULLY_DEFINED\u0027\n  V(JSSegments, JS_SEGMENTS_TYPE) \\\n  ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n../../src/diagnostics/objects-debug.cc:247:5: note: expanded from macro \u0027MAKE_TORQUE_CASE\u0027\n    Name::cast(*this).Name##Verify(isolate); \\\n    ^~~~~~\ngen/torque-generated/class-definitions-tq.h:116:7: note: forward declaration of \u0027v8::internal::JSSegments\u0027\nclass JSSegments;\n      ^\n1 error generated.",
+      "parentUuid": "3338b5c9_da39c9b3",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 40
+      },
+      "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a143a40b_6aec3620",
         "filename": "src/objects/js-segments.cc",
         "patchSetId": 10
@@ -85,6 +109,30 @@
       "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3dc5b32_eb137722",
+        "filename": "src/objects/js-segments.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-07-24T06:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a143a40b_6aec3620",
+      "range": {
+        "startLine": 34,
+        "startChar": 2,
+        "endLine": 34,
+        "endChar": 16
+      },
+      "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +159,30 @@
     },
     {
       "key": {
+        "uuid": "bef1fe92_b7a7941d",
+        "filename": "src/objects/js-segments.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-07-24T06:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab56d69c_7bf9731e",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 39,
+        "endChar": 75
+      },
+      "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf6c46f1_6ad81bcb",
         "filename": "src/objects/js-segments.cc",
         "patchSetId": 10
@@ -131,6 +203,30 @@
       "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a45bcc57_dc258a58",
+        "filename": "src/objects/js-segments.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-07-24T06:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf6c46f1_6ad81bcb",
+      "range": {
+        "startLine": 46,
+        "startChar": 2,
+        "endLine": 46,
+        "endChar": 31
+      },
+      "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +253,30 @@
     },
     {
       "key": {
+        "uuid": "7c975a9a_741e5ad3",
+        "filename": "src/objects/js-segments.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-07-24T06:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1ae30db_99df8118",
+      "range": {
+        "startLine": 121,
+        "startChar": 2,
+        "endLine": 121,
+        "endChar": 10
+      },
+      "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8b34e22_243ceab3",
         "filename": "src/objects/js-segments.cc",
         "patchSetId": 10
@@ -177,6 +297,30 @@
       "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ca3ff95_c12a9199",
+        "filename": "src/objects/js-segments.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-07-24T06:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8b34e22_243ceab3",
+      "range": {
+        "startLine": 139,
+        "startChar": 2,
+        "endLine": 139,
+        "endChar": 7
+      },
+      "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -203,6 +347,30 @@
     },
     {
       "key": {
+        "uuid": "3c31c5fe_28e2164a",
+        "filename": "test/intl/segmenter/segment-grapheme.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-07-24T06:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0caba66_dbe3af60",
+      "range": {
+        "startLine": 35,
+        "startChar": 80,
+        "endLine": 35,
+        "endChar": 81
+      },
+      "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50173e3d_d3de4bef",
         "filename": "test/intl/segmenter/segment-iterator-ownPropertyDescriptor.js",
         "patchSetId": 10
@@ -223,6 +391,30 @@
       "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90311e12_1ecc71cf",
+        "filename": "test/intl/segmenter/segment-iterator-ownPropertyDescriptor.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-07-24T06:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50173e3d_d3de4bef",
+      "range": {
+        "startLine": 77,
+        "startChar": 80,
+        "endLine": 77,
+        "endChar": 83
+      },
+      "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -249,6 +441,30 @@
     },
     {
       "key": {
+        "uuid": "015a7c42_350c7b1f",
+        "filename": "test/intl/segmenter/segment-sentence.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-07-24T06:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04801f5f_c9184f27",
+      "range": {
+        "startLine": 35,
+        "startChar": 80,
+        "endLine": 35,
+        "endChar": 81
+      },
+      "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3471e67e_653db19c",
         "filename": "test/intl/segmenter/segment-word.js",
         "patchSetId": 10
@@ -269,6 +485,30 @@
       "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af50f257_a3344726",
+        "filename": "test/intl/segmenter/segment-word.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-07-24T06:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3471e67e_653db19c",
+      "range": {
+        "startLine": 35,
+        "startChar": 80,
+        "endLine": 35,
+        "endChar": 81
+      },
+      "revId": "4bc168913e2b1488dee702e7908223324aa0aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
