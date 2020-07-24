@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79fba1d3_46dca9dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-24T17:37:26Z",
+      "side": 1,
+      "message": "This CL, together with a Chrome-side change to add the callback, can be used to gate SABs on COOP/COEP settings per Context:\n\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/bindings/core/v8/v8_initializer.cc;drc\u003d9160414b52563d75111fb708b2a4873600cb93f2;l\u003d489",
+      "revId": "863d4f35bf591d0e3307dedb04050396bdbf6cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
