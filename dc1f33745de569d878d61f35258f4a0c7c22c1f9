@@ -33,6 +33,47 @@
       "revId": "dc1f33745de569d878d61f35258f4a0c7c22c1f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0542aef9_be4564b9",
+        "filename": "tools/system-analyzer/event.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-24T09:39:53Z",
+      "side": 1,
+      "message": "+1 on this, let\u0027s just set the in the constructor and only have getters.",
+      "parentUuid": "c7fd0323_5ba759d1",
+      "revId": "dc1f33745de569d878d61f35258f4a0c7c22c1f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "257a3c75_f212bdeb",
+        "filename": "tools/system-analyzer/event.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-24T09:39:53Z",
+      "side": 1,
+      "message": "description won\u0027t work with private fields, since it get\u0027s lazily added by the map-details log event.\n\nMaybe just let it be an abstract method, e.g.\n\n  get description() {\n    throw Error(\"Subclass responsibility\");\n  }",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 29
+      },
+      "revId": "dc1f33745de569d878d61f35258f4a0c7c22c1f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
