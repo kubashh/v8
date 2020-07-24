@@ -254,8 +254,14 @@ SourcePositionTableIterator::SourcePositionTableIterator(
 }
 
 void SourcePositionTableIterator::Advance() {
-  Vector<const byte> bytes =
-      table_.is_null() ? raw_table_ : VectorFromByteArray(*table_);
+  Vector<const byte> bytes;
+  {
+    // TODO(solanes): Why is this AllowHandleDereference needed? table_ should
+    // be a LocalHandle for concurrent inlining and therefore safe to
+    // dereference. We should still be in the same LocalHandleScope.
+    AllowHandleDereference allow_deref;
+    bytes = table_.is_null() ? raw_table_ : VectorFromByteArray(*table_);
+  }
   DCHECK(!done());
   DCHECK(index_ >= 0 && index_ <= bytes.length());
   bool filter_satisfied = false;
