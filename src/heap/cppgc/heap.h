@@ -36,7 +36,10 @@ class V8_EXPORT_PRIVATE Heap final : public HeapBase,
 
   size_t epoch() const final { return epoch_; }
 
+  void ForceFinalizeGarabageColllection(Config::StackState);
+
  private:
+  Config config_;
   GCInvoker gc_invoker_;
   HeapGrowing growing_;
 
