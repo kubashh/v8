@@ -16,6 +16,23 @@
       "revId": "accc231c9ad2fdb0e2ce9396f248b7e184917bd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e8fcb9fe_ae002e9f",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-24T14:42:39Z",
+      "side": 1,
+      "message": "Oh, I wonder if universal SKIP is maybe a bit too drastic? How about starting with adding it here in this section with [PASS, SLOW]? Like that it gets some more time to run in all configurations. The other existing skips could stay.\n\nThat this is a slow test should still be tackled, but there are others, so that\u0027s not a reason to skip it I think.",
+      "revId": "accc231c9ad2fdb0e2ce9396f248b7e184917bd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
