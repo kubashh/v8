@@ -164,6 +164,30 @@
       "revId": "dc1f33745de569d878d61f35258f4a0c7c22c1f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cde5104_5a1414c5",
+        "filename": "tools/system-analyzer/event.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-24T14:24:31Z",
+      "side": 1,
+      "message": "Forcing the subsclass to implement getter for descriptions caused \"Maximum Call Stack Exceeded Error\" I removed description from Event, also IC event do not using it right now. Maybe we can add it in another CL? I am confused about the implementation 😄",
+      "parentUuid": "e7116d8c_174f1c6c",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 29
+      },
+      "revId": "dc1f33745de569d878d61f35258f4a0c7c22c1f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
