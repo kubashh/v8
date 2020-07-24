@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c009d58_015bbc53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-07-24T14:17:55Z",
+      "side": 1,
+      "message": "Hi Michael, PTAL. If you\u0027re not around, I\u0027ll assign the review to a fellow sheriff, no worries.",
+      "revId": "accc231c9ad2fdb0e2ce9396f248b7e184917bd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
