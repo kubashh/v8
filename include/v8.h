@@ -7507,6 +7507,9 @@ typedef Local<String> (*WasmLoadSourceMapCallback)(Isolate* isolate,
 // --- Callback for checking if WebAssembly Simd is enabled ---
 typedef bool (*WasmSimdEnabledCallback)(Local<Context> context);
 
+// --- Callback for checking if SharedArrayBuffers are enabled ---
+typedef bool (*SharedArrayBuffersEnabledCallback)(Local<Context> context);
+
 // --- Garbage Collection Callbacks ---
 
 /**
@@ -9373,6 +9376,9 @@ class V8_EXPORT Isolate {
   void SetWasmLoadSourceMapCallback(WasmLoadSourceMapCallback callback);
 
   void SetWasmSimdEnabledCallback(WasmSimdEnabledCallback callback);
+
+  void SetSharedArrayBuffersEnabledCallback(
+      SharedArrayBuffersEnabledCallback callback);
 
   /**
   * Check if V8 is dead and therefore unusable.  This is the case after
