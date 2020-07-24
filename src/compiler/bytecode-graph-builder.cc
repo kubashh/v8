@@ -995,14 +995,20 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
       source_positions_(source_positions),
       start_position_(shared_info.StartPosition(), inlining_id),
       tick_counter_(tick_counter) {
+  // TODO(solanes): Update this handle creation once we have a way of templating
+  // between a LocalHeap* and an Isolate*
   if (should_disallow_heap_access()) {
-    // With concurrent inlining on, the source position address doesn't change
-    // because it's been copied from the heap.
+    // Even with concurrent inlining on, the source position address might
+    // change because we went into a safepoint and a garbage collection
+    // happened and we need to access the table through a LocalHandle.
+
+    // TODO(solanes): Remove AllowHandleDereference once object() is a
+    // PersistentHandle (i.e once we have a PersistentHandleScope).
+    AllowHandleDereference allow_deref;
     source_position_iterator_ = std::make_unique<SourcePositionTableIterator>(
-        Vector<const byte>(bytecode_array().source_positions_address(),
-                           bytecode_array().source_positions_size()));
+        handle(bytecode_array().object()->SourcePositionTableIfCollected(),
+               broker_->local_heap()));
   } else {
-    // Otherwise, we need to access the table through a handle.
     source_position_iterator_ = std::make_unique<SourcePositionTableIterator>(
         handle(bytecode_array().object()->SourcePositionTableIfCollected(),
                isolate()));
@@ -4347,11 +4353,21 @@ void BuildGraphFromBytecode(JSHeapBroker* broker, Zone* local_zone,
                             int inlining_id, BytecodeGraphBuilderFlags flags,
                             TickCounter* tick_counter) {
   DCHECK(broker->IsSerializedForCompilation(shared_info, feedback_vector));
-  BytecodeGraphBuilder builder(
-      broker, local_zone, broker->target_native_context(), shared_info,
-      feedback_vector, osr_offset, jsgraph, invocation_frequency,
-      source_positions, inlining_id, flags, tick_counter);
-  builder.CreateGraph();
+  if (broker->is_concurrent_inlining()) {
+    DCHECK_NOT_NULL(broker->local_heap());
+    LocalHandleScope local_scope(broker->local_heap());
+    BytecodeGraphBuilder builder(
+        broker, local_zone, broker->target_native_context(), shared_info,
+        feedback_vector, osr_offset, jsgraph, invocation_frequency,
+        source_positions, inlining_id, flags, tick_counter);
+    builder.CreateGraph();
+  } else {
+    BytecodeGraphBuilder builder(
+        broker, local_zone, broker->target_native_context(), shared_info,
+        feedback_vector, osr_offset, jsgraph, invocation_frequency,
+        source_positions, inlining_id, flags, tick_counter);
+    builder.CreateGraph();
+  }
 }
 
 }  // namespace compiler
