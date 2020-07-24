@@ -21,6 +21,7 @@ class TickCounter;
 
 namespace compiler {
 
+class BlockState;
 class SinglePassRegisterAllocator;
 class VirtualRegisterData;
 
@@ -56,6 +57,10 @@ class MidTierRegisterAllocationData final : public RegisterAllocationData {
   const InstructionBlock* GetBlock(const RpoNumber rpo_number);
   const InstructionBlock* GetBlock(int instr_index);
 
+  // Returns a bitvector representing all the blocks that are dominated by the
+  // an output by the instruction at |instr_index|.
+  const BitVector* GetBlocksDominatedBy(int instr_index);
+
   // List of all instruction indexs that require a reference map.
   ZoneVector<int>& reference_map_instructions() {
     return reference_map_instructions_;
@@ -72,6 +77,8 @@ class MidTierRegisterAllocationData final : public RegisterAllocationData {
   // allocation.
   Zone* code_zone() const { return code()->zone(); }
 
+  BlockState& block_state(RpoNumber rpo_number);
+
   InstructionSequence* code() const { return code_; }
   Frame* frame() const { return frame_; }
   const char* debug_name() const { return debug_name_; }
@@ -86,6 +93,7 @@ class MidTierRegisterAllocationData final : public RegisterAllocationData {
   const RegisterConfiguration* const config_;
 
   ZoneVector<VirtualRegisterData> virtual_register_data_;
+  ZoneVector<BlockState> block_state_;
   ZoneVector<int> reference_map_instructions_;
   BitVector spilled_virtual_registers_;
 
@@ -177,6 +185,25 @@ class MidTierSpillSlotAllocator final {
   int position_;
 
   DISALLOW_COPY_AND_ASSIGN(MidTierSpillSlotAllocator);
+};
+
+// Populates reference maps for mid-tier register allocation.
+class MidTierReferenceMapPopulator final {
+ public:
+  explicit MidTierReferenceMapPopulator(MidTierRegisterAllocationData* data);
+
+  // Phase 4: Populate reference maps for spilled references.
+  void PopulateReferenceMaps();
+
+ private:
+  void RecordReferences(const VirtualRegisterData& virtual_register);
+
+  MidTierRegisterAllocationData* data() const { return data_; }
+  InstructionSequence* code() const { return data()->code(); }
+
+  MidTierRegisterAllocationData* data_;
+
+  DISALLOW_COPY_AND_ASSIGN(MidTierReferenceMapPopulator);
 };
 
 }  // namespace compiler
