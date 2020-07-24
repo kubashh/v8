@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e969b5a_6a591b61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-24T09:18:04Z",
+      "side": 1,
+      "message": "CL for generic Event Class. 😊 ",
+      "revId": "dc1f33745de569d878d61f35258f4a0c7c22c1f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
