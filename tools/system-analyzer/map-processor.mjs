@@ -4,6 +4,7 @@
 
 
 // ===========================================================================
+import {Event} from './event.mjs';
 const kChunkHeight = 250;
 const kChunkWidth = 10;
 
@@ -221,13 +222,12 @@ class MapProcessor extends LogReader {
 
 // ===========================================================================
 
-class V8Map {
+class V8Map extends Event {
   constructor(id, time = -1) {
+    super(id, time);
     if (!id) throw 'Invalid ID';
     this.id = id;
-    this.time = time;
     if (!(time > 0)) throw 'Invalid time';
-    this.description = '';
     this.edge = void 0;
     this.children = [];
     this.depth = 0;
