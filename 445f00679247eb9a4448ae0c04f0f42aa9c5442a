@@ -16,6 +16,29 @@
       "revId": "445f00679247eb9a4448ae0c04f0f42aa9c5442a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "608a82dd_738e5c24",
+        "filename": "src/handles/local-handles.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-24T17:33:24Z",
+      "side": 1,
+      "message": "Each block contains kHandleBlockSize handles, so we need to iterate blocks and check that\nblocks_[i] \u003c\u003d location \u0026\u0026 location \u003c blocks_[i] + kHandleBlockSize\n\nI think the test currently works because it creates only one handle.",
+      "range": {
+        "startLine": 27,
+        "startChar": 11,
+        "endLine": 27,
+        "endChar": 62
+      },
+      "revId": "445f00679247eb9a4448ae0c04f0f42aa9c5442a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
