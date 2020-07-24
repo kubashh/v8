@@ -323,48 +323,87 @@ int FeedbackMetadataIterator::entry_size() const {
   return FeedbackMetadata::GetSlotSize(kind());
 }
 
+MaybeObject NexusConfig::GetFeedback(FeedbackVector vector, int index) const {
+  return vector.get(index);
+}
+
+void NexusConfig::SetFeedback(FeedbackVector vector, int index,
+                              MaybeObject feedback,
+                              WriteBarrierMode mode) const {
+  vector.set(index, feedback, mode);
+}
+
 MaybeObject FeedbackNexus::GetFeedback() const {
-  MaybeObject feedback = vector().Get(slot());
+  const int index = vector().GetIndex(slot());
+  MaybeObject feedback = g_->GetFeedback(vector(), index);
   FeedbackVector::AssertNoLegacyTypes(feedback);
   return feedback;
 }
 
-MaybeObject FeedbackNexus::GetFeedbackExtra() const {
-#ifdef DEBUG
-  FeedbackSlotKind kind = vector().GetKind(slot());
-  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind));
-#endif
-  int extra_index = vector().GetIndex(slot()) + 1;
-  return vector().get(extra_index);
+std::pair<MaybeObject, MaybeObject> FeedbackNexus::GetFeedbackPair() const {
+  const int index = vector().GetIndex(slot());
+  auto pair = g_->GetFeedbackPair(vector(), index);
+  FeedbackVector::AssertNoLegacyTypes(pair.first);
+  return pair;
 }
 
 void FeedbackNexus::SetFeedback(Object feedback, WriteBarrierMode mode) {
-  SetFeedback(MaybeObject::FromObject(feedback));
+  const int index = vector().GetIndex(slot());
+  g_->SetFeedback(vector(), index, MaybeObject::FromObject(feedback), mode);
 }
 
 void FeedbackNexus::SetFeedback(MaybeObject feedback, WriteBarrierMode mode) {
   FeedbackVector::AssertNoLegacyTypes(feedback);
-  vector().Set(slot(), feedback, mode);
+  const int index = vector().GetIndex(slot());
+  g_->SetFeedback(vector(), index, feedback, mode);
 }
 
-void FeedbackNexus::SetFeedbackExtra(Object feedback_extra,
-                                     WriteBarrierMode mode) {
-#ifdef DEBUG
-  FeedbackSlotKind kind = vector().GetKind(slot());
-  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind));
-  FeedbackVector::AssertNoLegacyTypes(MaybeObject::FromObject(feedback_extra));
-#endif
-  int index = vector().GetIndex(slot()) + 1;
-  vector().set(index, MaybeObject::FromObject(feedback_extra), mode);
+void FeedbackNexus::SetFeedback(Object feedback, WriteBarrierMode mode,
+                                Object feedback_extra,
+                                WriteBarrierMode mode_extra) {
+  FeedbackVector::AssertNoLegacyTypes(MaybeObject::FromObject(feedback));
+  const int index = vector().GetIndex(slot());
+  g_->SetFeedbackPair(vector(), index, MaybeObject::FromObject(feedback), mode,
+                      MaybeObject::FromObject(feedback_extra), mode_extra);
 }
 
-void FeedbackNexus::SetFeedbackExtra(MaybeObject feedback_extra,
-                                     WriteBarrierMode mode) {
+void FeedbackNexus::SetFeedback(Object feedback, WriteBarrierMode mode,
+                                MaybeObject feedback_extra,
+                                WriteBarrierMode mode_extra) {
+  FeedbackVector::AssertNoLegacyTypes(MaybeObject::FromObject(feedback));
+  const int index = vector().GetIndex(slot());
+  g_->SetFeedbackPair(vector(), index, MaybeObject::FromObject(feedback), mode,
+                      feedback_extra, mode_extra);
+}
+
+void FeedbackNexus::SetFeedback(MaybeObject feedback, WriteBarrierMode mode,
+                                Object feedback_extra,
+                                WriteBarrierMode mode_extra) {
+  FeedbackVector::AssertNoLegacyTypes(feedback);
+  const int index = vector().GetIndex(slot());
+  g_->SetFeedbackPair(vector(), index, feedback, mode,
+                      MaybeObject::FromObject(feedback_extra), mode_extra);
+}
+
+void FeedbackNexus::SetFeedback(MaybeObject feedback, WriteBarrierMode mode,
+                                MaybeObject feedback_extra,
+                                WriteBarrierMode mode_extra) {
+  FeedbackVector::AssertNoLegacyTypes(feedback);
 #ifdef DEBUG
   FeedbackVector::AssertNoLegacyTypes(feedback_extra);
 #endif
-  int index = vector().GetIndex(slot()) + 1;
-  vector().set(index, feedback_extra, mode);
+  const int index = vector().GetIndex(slot());
+  g_->SetFeedbackPair(vector(), index, feedback, mode, feedback_extra,
+                      mode_extra);
+}
+
+bool FeedbackNexus::vector_needs_update() const {
+  DCHECK_LT(1, FeedbackMetadata::GetSlotSize(kind()));
+  // TODO(mvstanton): This is a bizarre request.
+  const int index = vector().GetIndex(slot());
+  std::pair<MaybeObject, MaybeObject> pair =
+      g_->GetFeedbackPair(vector(), index);
+  return pair.second.ToSmi().value() != ELEMENT;
 }
 
 Isolate* FeedbackNexus::GetIsolate() const { return vector().GetIsolate(); }
