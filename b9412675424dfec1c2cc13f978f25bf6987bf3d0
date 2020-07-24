@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "441f81f2_01c7da59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-24T11:48:31Z",
+      "side": 1,
+      "message": "Georg PTAL thanks.\n\nTobias, FYI.",
+      "revId": "b9412675424dfec1c2cc13f978f25bf6987bf3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
