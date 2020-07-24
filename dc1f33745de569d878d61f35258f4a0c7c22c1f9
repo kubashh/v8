@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "eed9741b_3db07abf",
+        "filename": "tools/system-analyzer/event.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-24T10:36:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0542aef9_be4564b9",
+      "revId": "dc1f33745de569d878d61f35258f4a0c7c22c1f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "257a3c75_f212bdeb",
         "filename": "tools/system-analyzer/event.mjs",
         "patchSetId": 2
@@ -65,6 +83,30 @@
       "writtenOn": "2020-07-24T09:39:53Z",
       "side": 1,
       "message": "description won\u0027t work with private fields, since it get\u0027s lazily added by the map-details log event.\n\nMaybe just let it be an abstract method, e.g.\n\n  get description() {\n    throw Error(\"Subclass responsibility\");\n  }",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 29
+      },
+      "revId": "dc1f33745de569d878d61f35258f4a0c7c22c1f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "004033ab_a9a17f60",
+        "filename": "tools/system-analyzer/event.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-07-24T10:36:37Z",
+      "side": 1,
+      "message": "When description is a private property of Event class I got some errors when tried to set outside by log event. Should description still be a private property of event class.",
+      "parentUuid": "257a3c75_f212bdeb",
       "range": {
         "startLine": 27,
         "startChar": 0,
