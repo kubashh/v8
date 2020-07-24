@@ -103,6 +103,30 @@
       "revId": "9c54f9775785739f4dbadc86ed863390ef5abc37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e604f7bf_4aa652b1",
+        "filename": "src/heap/allocation-observer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-24T18:47:01Z",
+      "side": 1,
+      "message": "At that point we don\u0027t have an object to report, right?\n\nSo it seems there should be separate functions to recompute the next_counter_.\n\nWhen we add a new allocation observer, then we need to take into account its bytes_to_next_step:\nnext_counter_ \u003d current_counter_ + std::max(next_counter_ - current_counter_, new_observer-\u003ebytes_to_next_step());\n\nWhen we resume allocation observers then we don\u0027t have to query their bytes_to_next_step at all because we now how many bytes were left until the next_counter_ when we pause the observers.",
+      "parentUuid": "8f016178_6e554364",
+      "range": {
+        "startLine": 52,
+        "startChar": 2,
+        "endLine": 52,
+        "endChar": 3
+      },
+      "revId": "9c54f9775785739f4dbadc86ed863390ef5abc37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
