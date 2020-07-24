@@ -112,6 +112,30 @@
     },
     {
       "key": {
+        "uuid": "10bbca97_1529bef5",
+        "filename": "src/builtins/constructor.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-24T17:24:10Z",
+      "side": 1,
+      "message": "It wasn\u0027t in the CSA version, but it is for CreateShallowArrayLiteral. I\u0027ll change it here to match that, as it seems like calling the runtime is unlikely.",
+      "parentUuid": "849a2513_df2ecf01",
+      "range": {
+        "startLine": 111,
+        "startChar": 22,
+        "endLine": 111,
+        "endChar": 23
+      },
+      "revId": "e1d74adaa92e994b0b5d8e9efdccd7cc192a19d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e86a044_da2fa8a8",
         "filename": "src/builtins/constructor.tq",
         "patchSetId": 12
