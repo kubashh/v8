@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "a5494d8e_0143438d",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-24T20:45:42Z",
+      "side": 1,
+      "message": "I think for the standalone library it would make sense to:\n1) Set the default config according to what the platform provides (e.g. if the platform provides a foreground task runner use incremental, if it supports jobs use concurrent marking, etc.)\n2) Have a single call that does whatever is needed based on the config.\n\nYou will probably say that CollectGarbage is not on the user visible api. That is true but I still think this kind of design makes sense for the library as a single bottleneck for starting garbage collection and a separation of responsibilities (e.g. not have the Heap involved in scheduling incremental tasks).\n\nAs for the return value, I agree that it is not optimal.\nThe reason I added it is because I wanted to avoid having the Heap aware of marking internals, specifically making decisions based on marking type. I would like to keep all the decision encapsulated in Marker.\nWhat I was trying to do is have the return value signify whether or not Heap should finalize GC immediately (which correlates with whether incremental marking is running, but semantically is a bit different).\nI guess that meaning isn\u0027t conveyed well by the code, so I\u0027m happy to explore alternatives.\n\nAnother option I thought of is for StartMarking, in case of atomic marking, to call a finalization method in the Heap. I think it would be similar to the finalization task, but just not as a task.\nIt might require having another virtual method on the marker, but I don\u0027t think that\u0027s too bad.\nwdyt?",
+      "parentUuid": "d5e32bbe_32580d6c",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 36
+      },
+      "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b27b15a5_d307ff95",
         "filename": "src/heap/cppgc/heap.cc",
         "patchSetId": 8
@@ -82,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "edf9a6dd_d5d78109",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-24T20:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b27b15a5_d307ff95",
+      "range": {
+        "startLine": 131,
+        "startChar": 11,
+        "endLine": 131,
+        "endChar": 56
+      },
+      "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1552c79b_557fe7d9",
         "filename": "src/heap/cppgc/marker.cc",
         "patchSetId": 8
@@ -102,6 +150,30 @@
       "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86aa7786_7d37bb75",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-24T20:45:42Z",
+      "side": 1,
+      "message": "I split it into 2 tasks.\n\nI initially wanted to avoid it because I didn\u0027t want to cast HeapBase to Heap. It could work since Marker is always initialized with Heap, but there were no guarantees that wouldn\u0027t break in the future. Then I realized that Marker could simply take Heap and UnifiedHeapMarker could take CppHeap (MarkerBase still takes HeapBase) and then it\u0027s safe to cast.",
+      "parentUuid": "1552c79b_557fe7d9",
+      "range": {
+        "startLine": 130,
+        "startChar": 20,
+        "endLine": 130,
+        "endChar": 65
+      },
+      "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
