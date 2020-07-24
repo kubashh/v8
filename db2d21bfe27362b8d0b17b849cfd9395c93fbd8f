@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "010b5f02_fa7b4951",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-24T22:30:20Z",
+      "side": 1,
+      "message": "Heap (internal or external) is our bottleneck for communicating things like \"do GC\", \"start marking\", \"finalize already running GC\", and so on. This is not interfering with responsibilities of e.g. scheduling a marking task.\n\nHeap definitely has high-level knowledge of phases (e.g. marking, or sweeping) and configurations (incremental vs atomic).\n\nThe default GCs should be covered by our GC invoker (or similar) that knows what kind of GC it can trigger.\n\nI think the V8 API makes a lot of sense in this regard:\n- CollectGarbage() this call will invoke a GC finalization independent of whether marking is running.\n- StartMarking() for just starting GC\n- FinalizeGCIfRunning() (or similar): Finalize a GC that is already running.\n\nWhat I think we should avoid:\n- CollectGarbage() god call that is used for everything\n- CollectGarbage() figuring out on its own what type it should be\n- Calls like StartMarking() that internally already finish marking",
+      "parentUuid": "a5494d8e_0143438d",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 36
+      },
+      "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b27b15a5_d307ff95",
         "filename": "src/heap/cppgc/heap.cc",
         "patchSetId": 8
