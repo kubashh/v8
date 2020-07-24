@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "15868721_a8392b62",
+        "filename": "src/builtins/constructor.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-24T00:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "802bc977_4e6d9634",
+      "revId": "e1d74adaa92e994b0b5d8e9efdccd7cc192a19d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84101f00_389f18f4",
         "filename": "src/builtins/constructor.tq",
         "patchSetId": 12
@@ -50,6 +68,24 @@
       "revId": "e1d74adaa92e994b0b5d8e9efdccd7cc192a19d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a6d0b96_0ade0ac4",
+        "filename": "src/builtins/constructor.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-24T00:17:35Z",
+      "side": 1,
+      "message": "Agreed. Done.",
+      "parentUuid": "84101f00_389f18f4",
+      "revId": "e1d74adaa92e994b0b5d8e9efdccd7cc192a19d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "5bd815e6_6cc3fb37",
+        "filename": "src/builtins/constructor.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-24T00:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e86a044_da2fa8a8",
+      "revId": "e1d74adaa92e994b0b5d8e9efdccd7cc192a19d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d15907c_e033365b",
         "filename": "src/builtins/constructor.tq",
         "patchSetId": 12
@@ -81,6 +135,24 @@
       "writtenOn": "2020-07-23T05:41:24Z",
       "side": 1,
       "message": "In torque we could avoid the gotos:\n\n if (newTarget \u003d\u003d Undefined || newTarget \u003d\u003d target) {\n   ...\n } else {\n   ...\n }",
+      "revId": "e1d74adaa92e994b0b5d8e9efdccd7cc192a19d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbddcaf1_87438520",
+        "filename": "src/builtins/constructor.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-24T00:17:35Z",
+      "side": 1,
+      "message": "Much better, done.",
+      "parentUuid": "6d15907c_e033365b",
       "revId": "e1d74adaa92e994b0b5d8e9efdccd7cc192a19d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -104,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "66923ed6_99983611",
+        "filename": "src/builtins/constructor.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-24T00:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7b7a6af_dbb99123",
+      "revId": "e1d74adaa92e994b0b5d8e9efdccd7cc192a19d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e28fd33_ac10d52e",
         "filename": "src/builtins/constructor.tq",
         "patchSetId": 12
@@ -115,6 +205,24 @@
       "writtenOn": "2020-07-23T05:41:24Z",
       "side": 1,
       "message": "Alternative structure without labels/goto:\n\n let n: Number \u003d 0;\n if (arguments.length \u003e 0) {\n  ...\n }\n ...",
+      "revId": "e1d74adaa92e994b0b5d8e9efdccd7cc192a19d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b8c1bbd_cdf3429f",
+        "filename": "src/builtins/constructor.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-24T00:17:35Z",
+      "side": 1,
+      "message": "Great, done.",
+      "parentUuid": "9e28fd33_ac10d52e",
       "revId": "e1d74adaa92e994b0b5d8e9efdccd7cc192a19d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
