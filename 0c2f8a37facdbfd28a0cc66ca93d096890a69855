@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05ad1e6e_13a79f69",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-07-24T07:13:45Z",
+      "side": 1,
+      "message": "@Liviu: It seems slightly more complicated to make triggered builders experimental. We will need something similar in starlark as well. If the parent builder is experimental, the child builder needs to be removed.",
+      "revId": "0c2f8a37facdbfd28a0cc66ca93d096890a69855",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
