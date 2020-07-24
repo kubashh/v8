@@ -43,6 +43,37 @@ intptr_t AllocationCounter::GetNextInlineAllocationStepSize() {
   return next_step;
 }
 
+void AllocationCounter::NotifyBytes(size_t allocated) {
+  current_counter_ += allocated;
+
+  // This method should never reach the next step. Unfortunately because of
+  // wrapping we can't DCHECK_LT(current_counter_, next_counter_) here instead.
+  DCHECK_GT(NextBytes(), 0);
+}
+
+void AllocationCounter::NotifyObject(Address soon_object, size_t object_size) {
+  if (!IsActive()) {
+    return;
+  }
+
+  size_t bytes_since_last_step = current_counter_ - prev_counter_;
+  DCHECK(!heap_->allocation_step_in_progress());
+  heap_->set_allocation_step_in_progress(true);
+  heap_->CreateFillerObjectAt(soon_object, static_cast<int>(object_size),
+                              ClearRecordedSlots::kNo);
+  intptr_t next_step = 0;
+  for (AllocationObserver* observer : allocation_observers_) {
+    observer->AllocationStep(static_cast<int>(bytes_since_last_step),
+                             soon_object, object_size);
+    next_step = next_step ? Min(next_step, observer->bytes_to_next_step())
+                          : observer->bytes_to_next_step();
+  }
+  heap_->set_allocation_step_in_progress(false);
+
+  prev_counter_ = current_counter_;
+  next_counter_ = current_counter_ + object_size + next_step;
+}
+
 PauseAllocationObserversScope::PauseAllocationObserversScope(Heap* heap)
     : heap_(heap) {
   DCHECK_EQ(heap->gc_state(), Heap::NOT_IN_GC);
