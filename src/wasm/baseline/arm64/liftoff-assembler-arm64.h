@@ -2636,6 +2636,20 @@ void LiftoffAssembler::CallIndirect(const wasm::FunctionSig* sig,
   Call(target);
 }
 
+void LiftoffAssembler::TailCallIndirect(Register target) {
+  DCHECK(target.is_valid());
+#ifdef V8_ENABLE_CONTROL_FLOW_INTEGRITY
+  // The target is a "bti c" instruction, which enforces that the jump
+  // instruction is either a "blr", or a "br" with x16 or x17 as its
+  // destination.
+  UseScratchRegisterScope temps(this);
+  temps.Exclude(x17);
+  Mov(x17, target);
+  target = x17;
+#endif
+  Jump(target);
+}
+
 void LiftoffAssembler::CallRuntimeStub(WasmCode::RuntimeStubId sid) {
   // A direct call to a wasm runtime stub defined in this module.
   // Just encode the stub index. This will be patched at relocation.
