@@ -2629,6 +2629,17 @@ void LiftoffAssembler::CallIndirect(const wasm::FunctionSig* sig,
   Call(target);
 }
 
+void LiftoffAssembler::TailCallIndirect(Register target) {
+  DCHECK(target.is_valid());
+#ifdef V8_ENABLE_CONTROL_FLOW_INTEGRITY
+  UseScratchRegisterScope temps(this);
+  temps.Exclude(x16);
+  Mov(x16, target);
+  target = x16;
+#endif
+  Jump(target);
+}
+
 void LiftoffAssembler::CallRuntimeStub(WasmCode::RuntimeStubId sid) {
   // A direct call to a wasm runtime stub defined in this module.
   // Just encode the stub index. This will be patched at relocation.
