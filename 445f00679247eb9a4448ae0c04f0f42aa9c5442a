@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c48de8d4_d63a28f2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-24T17:34:18Z",
+      "side": 1,
+      "message": "Nit: we usually use [heap]",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 3
+      },
+      "revId": "445f00679247eb9a4448ae0c04f0f42aa9c5442a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c50fb06c_9e031aa9",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
