@@ -22,6 +22,30 @@
       "revId": "959288e5075571f14d517ab76a22b834b20a5551",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5729b2b6_22a13e8d",
+        "filename": "test/common/wasm/wasm-macro-gen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-07-24T16:31:54Z",
+      "side": 0,
+      "message": "Haha yes but I need to be able to handle more complex types here.",
+      "parentUuid": "1a292af5_13b0b85e",
+      "range": {
+        "startLine": 451,
+        "startChar": 38,
+        "endLine": 451,
+        "endChar": 56
+      },
+      "revId": "959288e5075571f14d517ab76a22b834b20a5551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
