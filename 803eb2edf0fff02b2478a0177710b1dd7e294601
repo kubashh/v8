@@ -16,6 +16,91 @@
       "revId": "803eb2edf0fff02b2478a0177710b1dd7e294601",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "843424af_22def9e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-07-24T15:06:46Z",
+      "side": 1,
+      "message": "Nice work. I feel this should work for subtypes of (ref eq) as well.",
+      "revId": "803eb2edf0fff02b2478a0177710b1dd7e294601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "983986df_95a4f201",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5791,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-07-24T15:06:46Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this also work for array and struct types?",
+      "revId": "803eb2edf0fff02b2478a0177710b1dd7e294601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "552f5911_c2faa2be",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5906,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-07-24T15:06:46Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "803eb2edf0fff02b2478a0177710b1dd7e294601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2c35e7f_d3e7a15f",
+        "filename": "src/wasm/wasm-opcodes.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-07-24T15:06:46Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "803eb2edf0fff02b2478a0177710b1dd7e294601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f99aa93f_19b80404",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-07-24T15:06:46Z",
+      "side": 1,
+      "message": "We should add a DefineExportedFunction() helper.",
+      "revId": "803eb2edf0fff02b2478a0177710b1dd7e294601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
