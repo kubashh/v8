@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import {Event} from './event.mjs';
+
 /**
  * Parser for dynamic code optimization state.
  */
@@ -194,12 +196,11 @@ class CustomIcProcessor extends IcProcessor {
   }
 };
 
-class Entry {
+class Entry extends Event {
   constructor(
       type, fn_file, time, line, column, key, oldState, newState, map, reason,
       additional) {
-    this.time = time;
-    this.type = type;
+    super(type, time);
     this.category = 'other';
     if (this.type.indexOf('Store') !== -1) {
       this.category = 'Store';
@@ -219,6 +220,7 @@ class Entry {
     this.reason = reason;
     this.additional = additional;
   }
+
 
   parseMapProperties(parts, offset) {
     let next = parts[++offset];
