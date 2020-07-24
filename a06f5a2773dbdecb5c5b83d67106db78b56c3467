@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94f2f474_a500864c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-24T17:09:02Z",
+      "side": 1,
+      "message": "Looks great, thanks!",
+      "revId": "a06f5a2773dbdecb5c5b83d67106db78b56c3467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "33527708_54bde9a1",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-24T17:09:02Z",
+      "side": 1,
+      "message": "Nit: could we define this in the torque_internal namespace, since normal code is expected to call static_assert instead?",
+      "revId": "a06f5a2773dbdecb5c5b83d67106db78b56c3467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b26ff57f_982e2489",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-07-24T17:09:02Z",
+      "side": 1,
+      "message": "Just a comment: I\u0027m surprised that static_assert in debug mode will also emit a runtime check. I guess there\u0027s nothing wrong with doing so; if the assertion passes statically, then we\u0027d certainly expect it to pass at runtime too.",
+      "revId": "a06f5a2773dbdecb5c5b83d67106db78b56c3467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
