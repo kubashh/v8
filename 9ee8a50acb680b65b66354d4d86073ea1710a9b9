@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21dd7206_fc52163d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-24T17:52:28Z",
+      "side": 1,
+      "message": "+Leszek for OWNERS review of:\n    src/ast/ast.h\n    src/interpreter/interpreter-generator.cc\n",
+      "revId": "9ee8a50acb680b65b66354d4d86073ea1710a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
