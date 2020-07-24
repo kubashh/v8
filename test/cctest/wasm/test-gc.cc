@@ -803,29 +803,76 @@ TEST(I31Casts) {
   tester.CheckHasThrown(kCastStructToI31, 0);
 }
 
-TEST(JsAccessDisallowed) {
+TEST(JsAccess) {
   WasmGCTester tester;
   uint32_t type_index = tester.DefineStruct({F(wasm::kWasmI32, true)});
   ValueType kRefTypes[] = {ref(type_index)};
-  FunctionSig sig_q_v(1, 0, kRefTypes);
+  ValueType kEqRefTypes[] = {kWasmEqRef};
+  ValueType kEqToI[] = {kWasmI32, kWasmEqRef};
+  FunctionSig sig_t_v(1, 0, kRefTypes);
+  FunctionSig sig_q_v(1, 0, kEqRefTypes);
+  FunctionSig sig_i_q(1, 1, kEqToI);
 
-  WasmFunctionBuilder* fun = tester.builder()->AddFunction(&sig_q_v);
+  WasmFunctionBuilder* fun = tester.builder()->AddFunction(&sig_t_v);
   byte code[] = {WASM_STRUCT_NEW_WITH_RTT(type_index, WASM_I32V(42),
                                           WASM_RTT_CANON(type_index)),
                  kExprEnd};
   fun->EmitCode(code, sizeof(code));
-  tester.builder()->AddExport(CStrVector("f"), fun);
+  tester.builder()->AddExport(CStrVector("disallowed"), fun);
+  // Same code as before, just different signature.
+  fun = tester.builder()->AddFunction(&sig_q_v);
+  fun->EmitCode(code, sizeof(code));
+  tester.builder()->AddExport(CStrVector("producer"), fun);
+  // Consume a previously produced struct
+  fun = tester.builder()->AddFunction(&sig_i_q);
+  byte consumer_code[] = {
+      WASM_STRUCT_GET(type_index, 0,
+                      WASM_REF_CAST(kLocalEqRef, type_index, WASM_GET_LOCAL(0),
+                                    WASM_RTT_CANON(type_index))),
+      kExprEnd};
+  fun->EmitCode(consumer_code, sizeof(consumer_code));
+  tester.builder()->AddExport(CStrVector("consumer"), fun);
+
   tester.CompileModule();
-  TryCatch try_catch(reinterpret_cast<v8::Isolate*>(tester.isolate()));
+  Isolate* isolate = tester.isolate();
+  Handle<Object> undefined = isolate->factory()->undefined_value();
+  v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
+  TryCatch try_catch(v8_isolate);
   MaybeHandle<WasmExportedFunction> exported =
-      testing::GetExportedFunction(tester.isolate(), tester.instance(), "f");
+      testing::GetExportedFunction(isolate, tester.instance(), "disallowed");
   CHECK(!exported.is_null());
   CHECK(!try_catch.HasCaught());
-  MaybeHandle<Object> result = Execution::Call(
-      tester.isolate(), exported.ToHandleChecked(),
-      tester.isolate()->factory()->undefined_value(), 0, nullptr);
-  CHECK(result.is_null());
+  MaybeHandle<Object> maybe_result = Execution::Call(
+      isolate, exported.ToHandleChecked(), undefined, 0, nullptr);
+  CHECK(maybe_result.is_null());
   CHECK(try_catch.HasCaught());
+  try_catch.Reset();
+  isolate->clear_pending_exception();
+
+  Handle<WasmExportedFunction> producer =
+      testing::GetExportedFunction(isolate, tester.instance(), "producer")
+          .ToHandleChecked();
+  Handle<WasmExportedFunction> consumer =
+      testing::GetExportedFunction(isolate, tester.instance(), "consumer")
+          .ToHandleChecked();
+  maybe_result = Execution::Call(isolate, producer, undefined, 0, nullptr);
+  {
+    Handle<Object> args[] = {maybe_result.ToHandleChecked()};
+    maybe_result = Execution::Call(isolate, consumer, undefined, 1, args);
+  }
+  Handle<Object> result = maybe_result.ToHandleChecked();
+  CHECK(result->IsSmi());
+  CHECK_EQ(42, Smi::cast(*result).value());
+  // Calling {consumer} with any other object (e.g. the Smi we just got as
+  // {result}) should trap.
+  {
+    Handle<Object> args[] = {result};
+    maybe_result = Execution::Call(isolate, consumer, undefined, 1, args);
+  }
+  CHECK(maybe_result.is_null());
+  CHECK(try_catch.HasCaught());
+  try_catch.Reset();
+  isolate->clear_pending_exception();
 }
 
 }  // namespace test_gc
