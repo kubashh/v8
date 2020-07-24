@@ -140,6 +140,30 @@
       "revId": "dc1f33745de569d878d61f35258f4a0c7c22c1f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7116d8c_174f1c6c",
+        "filename": "tools/system-analyzer/event.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-07-24T11:43:47Z",
+      "side": 1,
+      "message": "To clarify: when you create a Map object you don\u0027t have the description yet. And you cannot set private fields from a subclass (they\u0027re private and not protected). Thus passing in the description to the constructor does not work.",
+      "parentUuid": "5d955388_2253d1a3",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 29
+      },
+      "revId": "dc1f33745de569d878d61f35258f4a0c7c22c1f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
