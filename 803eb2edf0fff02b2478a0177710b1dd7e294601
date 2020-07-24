@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "977da0dc_b471d406",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-07-24T14:34:27Z",
+      "side": 1,
+      "message": "Manos: PTAL.\n\nTobias: FYI, and please give formal +1.",
+      "revId": "803eb2edf0fff02b2478a0177710b1dd7e294601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
