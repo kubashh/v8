@@ -127,6 +127,30 @@
       "revId": "9c54f9775785739f4dbadc86ed863390ef5abc37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "001278db_aaed7988",
+        "filename": "src/heap/allocation-observer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-07-24T19:07:20Z",
+      "side": 1,
+      "message": "Right there is no object to report, the old allocation observer simply reports null in those casse. Agreed, separate functions seem clearer. We could then have DCHECK_NOT_NULL(soon_object) in NotifyObject as well.",
+      "parentUuid": "e604f7bf_4aa652b1",
+      "range": {
+        "startLine": 52,
+        "startChar": 2,
+        "endLine": 52,
+        "endChar": 3
+      },
+      "revId": "9c54f9775785739f4dbadc86ed863390ef5abc37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
