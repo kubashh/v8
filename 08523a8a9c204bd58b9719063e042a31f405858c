@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d03a7f87_0ae878dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-24T12:23:02Z",
+      "side": 1,
+      "message": "PTAL, the error messages of static asserts were even more lacking than those of normal asserts...\nUnfortunately, this can\u0027t be really tested since it fails in Turbofan, but you can try it\nby writing a wrong static_assert() somewhere.",
+      "revId": "08523a8a9c204bd58b9719063e042a31f405858c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
