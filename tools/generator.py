@@ -144,10 +144,12 @@ class StarlarkGenerator:
     builder_name = self.bb_cfg.builder_name(builder)
     header = """v8_branch_coverage_builder( name='%s',
       triggering_policy=%s,
-      triggered_by_gitiles=%s,"""  %  (
+      triggered_by_gitiles=%s,
+      console_info=%s,"""  %  (
       builder_name,
       self.write_scheduler_policy("ci.br.stable", self.bb_cfg.builder_name(builder)),
-      self.sc_cfg.triggerd_by("ci.br.stable", builder_name) != None
+      self.sc_cfg.triggerd_by("ci.br.stable", builder_name) != None,
+      self.ml_cfg.builder_dict.get(("ci", builder_name), None)
     )
     return header + self.common_builder_body(builder, props)
 
@@ -158,11 +160,13 @@ class StarlarkGenerator:
     header = """v8_builder( name='%s',
       bucket='%s',
       triggered_by=%s,
-      triggering_policy=%s,""" % (
+      triggering_policy=%s,
+      console_info=%s,""" % (
         self.bb_cfg.builder_name(builder),
         bk_name,
         self.sc_cfg.triggerd_by(bk_name, builder_name),
         self.write_scheduler_policy(bk_name, self.bb_cfg.builder_name(builder)),
+        self.ml_cfg.builder_dict.get((bk_name, builder_name), None)
       )
     return header + self.common_builder_body(builder, props)
 
@@ -302,5 +306,6 @@ if __name__ == '__main__':
   StarlarkGenerator().generate()
   os.system('lucicfg fmt')
   os.system('lucicfg generate main.star')
-  os.system('lucicfg semanticdiff --output-dir out main.star cr-buildbucket.cfg luci-scheduler.cfg commit-queue.cfg > out/diff.txt')
+  original_files ="cr-buildbucket.cfg luci-scheduler.cfg commit-queue.cfg luci-milo.cfg"
+  os.system('lucicfg semanticdiff --output-dir out main.star %s> out/diff.txt' % original_files)
   os.system('wc -l out/diff.txt')

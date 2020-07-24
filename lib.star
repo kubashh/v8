@@ -90,22 +90,35 @@ def v8_builder(**kv_args):
 
 def v8_basic_builder(defaults, **kv_args):
     cq_properties = kv_args.pop("cq_properties", None)
-    kv_args = fix_args(defaults, **kv_args)
     if cq_properties:
         luci.cq_tryjob_verifier(
             kv_args["name"],
             cq_group = "v8-cq",
             **cq_properties
         )
+    console_info = kv_args.pop("console_info", None)
+    kv_args = fix_args(defaults, **kv_args)
     luci.builder(**kv_args)
 
+branch_console_dict = {
+    ("ci", "main"): "main",
+    ("ci", "ports"): "ports",
+    ("ci.br.beta", "main"): "br.beta",
+    ("ci.br.beta", "ports"): "br.beta.ports",
+    ("ci.br.stable", "main"): "br.stable",
+    ("ci.br.stable", "ports"): "br.stable.ports",
+}
+
 def v8_branch_coverage_builder(**kv_args):
+    console_info = kv_args.pop("console_info", None)
+    original_view = console_info["console_view"]
     for bucket_name in ["ci", "ci.br.beta", "ci.br.stable"]:
         args = dict(kv_args)
+        console_info["console_view"] = branch_console_dict[bucket_name, original_view]
         triggered_by_gitiles = args.pop("triggered_by_gitiles")
         if triggered_by_gitiles:
             args["triggered_by"] = [trigger_dict[bucket_name]]
-        v8_basic_builder(defaults_ci, bucket = bucket_name, **args)
+        v8_basic_builder(defaults_ci, bucket = bucket_name, console_info = console_info, **args)
 
 def v8_try_ng_pair(name, **kv_args):
     triggered_timeout = kv_args.pop("triggered_timeout", None)
