@@ -995,18 +995,11 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
       source_positions_(source_positions),
       start_position_(shared_info.StartPosition(), inlining_id),
       tick_counter_(tick_counter) {
-  if (should_disallow_heap_access()) {
-    // With concurrent inlining on, the source position address doesn't change
-    // because it's been copied from the heap.
-    source_position_iterator_ = std::make_unique<SourcePositionTableIterator>(
-        Vector<const byte>(bytecode_array().source_positions_address(),
-                           bytecode_array().source_positions_size()));
-  } else {
-    // Otherwise, we need to access the table through a handle.
-    source_position_iterator_ = std::make_unique<SourcePositionTableIterator>(
-        handle(bytecode_array().object()->SourcePositionTableIfCollected(),
-               isolate()));
-  }
+  // Even with concurrent inlining on, the source position address might change
+  // because we went into a safepoint and a garbage collection happened. Then,
+  // we need to access the table through a LocalHandle.
+  source_position_iterator_ = std::make_unique<SourcePositionTableIterator>(
+      bytecode_array().source_positions());
 }
 
 Node* BytecodeGraphBuilder::GetFunctionClosure() {

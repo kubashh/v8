@@ -1626,6 +1626,8 @@ class BytecodeArrayData : public FixedArrayBaseData {
     is_serialized_for_compilation_ = true;
   }
 
+  Handle<ByteArray> source_positions() const { return source_positions_; }
+
   const byte* source_positions_address() const {
     return source_positions_->GetDataStartAddress();
   }
@@ -3283,6 +3285,17 @@ void BytecodeArrayRef::SerializeForCompilation() {
   DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
   if (data_->should_access_heap()) return;
   data()->AsBytecodeArray()->SerializeForCompilation(broker());
+}
+
+Handle<ByteArray> BytecodeArrayRef::source_positions() const {
+  if (data_->should_access_heap()) {
+    DCHECK(data_->kind() != ObjectDataKind::kUnserializedReadOnlyHeapObject);
+    AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
+                                                      broker()->mode());
+    return handle(object()->SourcePositionTableIfCollected(),
+                  broker()->isolate());
+  }
+  return data()->AsBytecodeArray()->source_positions();
 }
 
 const byte* BytecodeArrayRef::source_positions_address() const {
