@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9256ae26_ba057562",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-27T08:53:56Z",
+      "side": 1,
+      "message": "lgtm % comments",
+      "revId": "82b8c7cd2e06b89b2f6ac9709d7206d0c6dcd5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48cb419c_51e320b9",
+        "filename": "tools/cppgc/gen_cmake.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-27T08:53:56Z",
+      "side": 1,
+      "message": "nit: Add a comment explaining what each of the fields represents.",
+      "range": {
+        "startLine": 402,
+        "startChar": 19,
+        "endLine": 402,
+        "endChar": 79
+      },
+      "revId": "82b8c7cd2e06b89b2f6ac9709d7206d0c6dcd5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3914c78e_e97000f8",
+        "filename": "tools/cppgc/gen_cmake_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-27T08:53:56Z",
+      "side": 1,
+      "message": "These unittests cover the cmake generation.\nCan we also have a test that tries to build everything with the generated cmake files?\n(It will probably take longer to run than the existing unittests, but since none of these tests are blocking the CQ, I think it\u0027s fine)\n\nAlso, I think we should get a bot to run these tests and build the library using cmake (I think a single arch should suffice, no need for full arch coverage here).",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 25
+      },
+      "revId": "82b8c7cd2e06b89b2f6ac9709d7206d0c6dcd5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
