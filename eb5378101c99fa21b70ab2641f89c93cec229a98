@@ -16,6 +16,40 @@
       "revId": "eb5378101c99fa21b70ab2641f89c93cec229a98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "be74f637_90029e9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-07-27T10:09:21Z",
+      "side": 1,
+      "message": "LGTM!\n\nI am wondering whether (Allow|Disallow)HandleDereference should be renamed (as a separate task of course). DisallowHandleDereference doesn\u0027t really forbid all handle dereferences - we have these exceptions for local/persistent handles now. Maybe e.g. AllowMainThreadHandleDereference describes the way it works a bit better now.",
+      "revId": "eb5378101c99fa21b70ab2641f89c93cec229a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "abfae2df_4c4fc058",
+        "filename": "src/handles/local-handles.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-07-27T10:09:21Z",
+      "side": 1,
+      "message": "For uniformity (and performance) it might be nice to implement this method similar to PersistentHandles where Ulan used std::map to avoid the linear iteration.",
+      "revId": "eb5378101c99fa21b70ab2641f89c93cec229a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
