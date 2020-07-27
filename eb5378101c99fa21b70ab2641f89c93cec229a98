@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "d63bcaae_fa7bab9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-27T10:39:04Z",
+      "side": 1,
+      "message": "This would disappear after the PersistentHandleScope implementation though, right? I don\u0027t know if renaming it now makes sense since it will be removed soon.",
+      "parentUuid": "be74f637_90029e9c",
+      "revId": "eb5378101c99fa21b70ab2641f89c93cec229a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "abfae2df_4c4fc058",
         "filename": "src/handles/local-handles.cc",
         "patchSetId": 7
@@ -64,6 +82,24 @@
       "writtenOn": "2020-07-27T10:09:21Z",
       "side": 1,
       "message": "For uniformity (and performance) it might be nice to implement this method similar to PersistentHandles where Ulan used std::map to avoid the linear iteration.",
+      "revId": "eb5378101c99fa21b70ab2641f89c93cec229a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "039fc7f6_cf859764",
+        "filename": "src/handles/local-handles.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-27T10:39:04Z",
+      "side": 1,
+      "message": "That would need to be part of another CL where there is a refactor. PersistentHandles have std::set\u003cAddress*\u003e ordered_blocks_; which we don\u0027t in LocalHandles.\n\nGiven that this is a DEBUG only method I\u0027d say that it\u0027s okay for now, and would leave it for future cleanup. WDYT?",
+      "parentUuid": "abfae2df_4c4fc058",
       "revId": "eb5378101c99fa21b70ab2641f89c93cec229a98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
