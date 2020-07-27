@@ -16,6 +16,23 @@
       "revId": "224a16c841c933744a9286f811822b8daf5de340",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fa13556_3004615d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-27T07:11:46Z",
+      "side": 1,
+      "message": "PS6 lgtm",
+      "revId": "224a16c841c933744a9286f811822b8daf5de340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
