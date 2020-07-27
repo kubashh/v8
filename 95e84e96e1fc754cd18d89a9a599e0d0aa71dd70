@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "067b511a_ea7e7fe3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2020-07-27T10:44:14Z",
+      "side": 1,
+      "message": "I took a more aggressive approach to fixing type narrowing bugs, and changed the test API to use bytes. I think this should work.",
+      "revId": "95e84e96e1fc754cd18d89a9a599e0d0aa71dd70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
