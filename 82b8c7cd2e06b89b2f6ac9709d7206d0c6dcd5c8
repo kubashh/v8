@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "0436f4ca_2b22b8df",
+        "filename": "tools/cppgc/gen_cmake.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-27T13:09:08Z",
+      "side": 1,
+      "message": "Done (changed to namedtuple).",
+      "parentUuid": "7b3eb523_f1cd9a32",
+      "range": {
+        "startLine": 402,
+        "startChar": 19,
+        "endLine": 402,
+        "endChar": 79
+      },
+      "revId": "82b8c7cd2e06b89b2f6ac9709d7206d0c6dcd5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3914c78e_e97000f8",
         "filename": "tools/cppgc/gen_cmake_test.py",
         "patchSetId": 5
@@ -86,6 +110,30 @@
       "revId": "82b8c7cd2e06b89b2f6ac9709d7206d0c6dcd5c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65873d8d_92188fb0",
+        "filename": "tools/cppgc/gen_cmake_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-27T13:09:08Z",
+      "side": 1,
+      "message": "Done. I agree with having a bot that would run test_cmake.sh (thinking of the default linux bot).",
+      "parentUuid": "3914c78e_e97000f8",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 25
+      },
+      "revId": "82b8c7cd2e06b89b2f6ac9709d7206d0c6dcd5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
