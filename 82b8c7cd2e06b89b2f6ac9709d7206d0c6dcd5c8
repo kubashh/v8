@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "7b3eb523_f1cd9a32",
+        "filename": "tools/cppgc/gen_cmake.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-27T08:59:15Z",
+      "side": 1,
+      "message": "Hm, I was thinking of changing this to namedtuple, but was lazy. Thanks, will try either namedtuple or comment.",
+      "parentUuid": "48cb419c_51e320b9",
+      "range": {
+        "startLine": 402,
+        "startChar": 19,
+        "endLine": 402,
+        "endChar": 79
+      },
+      "revId": "82b8c7cd2e06b89b2f6ac9709d7206d0c6dcd5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3914c78e_e97000f8",
         "filename": "tools/cppgc/gen_cmake_test.py",
         "patchSetId": 5
