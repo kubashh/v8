@@ -617,19 +617,50 @@ class FeedbackMetadataIterator {
   FeedbackSlotKind slot_kind_;
 };
 
+class NexusConfig {
+ public:
+  explicit NexusConfig(Isolate* isolate)
+      : isolate_(isolate), local_heap_(nullptr) {}
+  NexusConfig(Isolate* isolate, LocalHeap* local_heap)
+      : isolate_(isolate), local_heap_(local_heap) {}
+
+  enum Config { MainThread, BackgroundThread };
+
+  Config config() const {
+    return local_heap_ == nullptr ? Config::MainThread
+                                  : Config::BackgroundThread;
+  }
+
+  Isolate* isolate() const { return isolate_; }
+
+  MaybeObjectHandle NewHandle(MaybeObject object) const;
+  template <typename J>
+  Handle<J> NewHandle(J object) const;
+
+  bool can_write() const { return config() == Config::MainThread; }
+
+  inline MaybeObject GetFeedback(FeedbackVector vector, int index) const;
+  inline void SetFeedback(FeedbackVector vector, int index, MaybeObject object,
+                          WriteBarrierMode mode = UPDATE_WRITE_BARRIER) const;
+
+  std::pair<MaybeObject, MaybeObject> GetFeedbackPair(FeedbackVector vector,
+                                                      int index) const;
+  void SetFeedbackPair(FeedbackVector vector, int start_index,
+                       MaybeObject object, WriteBarrierMode mode,
+                       MaybeObject object1, WriteBarrierMode mode1) const;
+
+ private:
+  Isolate* isolate_;
+  LocalHeap* local_heap_;
+};
+
 // A FeedbackNexus is the combination of a FeedbackVector and a slot.
 class V8_EXPORT_PRIVATE FeedbackNexus final {
  public:
-  FeedbackNexus(Handle<FeedbackVector> vector, FeedbackSlot slot)
-      : vector_handle_(vector), slot_(slot) {
-    kind_ =
-        (vector.is_null()) ? FeedbackSlotKind::kInvalid : vector->GetKind(slot);
-  }
-  FeedbackNexus(FeedbackVector vector, FeedbackSlot slot)
-      : vector_(vector), slot_(slot) {
-    kind_ =
-        (vector.is_null()) ? FeedbackSlotKind::kInvalid : vector.GetKind(slot);
-  }
+  FeedbackNexus(Handle<FeedbackVector> vector, FeedbackSlot slot);
+  FeedbackNexus(FeedbackVector vector, FeedbackSlot slot);
+  FeedbackNexus(Handle<FeedbackVector> vector, FeedbackSlot slot,
+                NexusConfig* config);
 
   Handle<FeedbackVector> vector_handle() const {
     DCHECK(vector_.is_null());
@@ -638,6 +669,7 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   FeedbackVector vector() const {
     return vector_handle_.is_null() ? vector_ : *vector_handle_;
   }
+
   FeedbackSlot slot() const { return slot_; }
   FeedbackSlotKind kind() const { return kind_; }
 
@@ -654,10 +686,12 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
 
   // For map-based ICs (load, keyed-load, store, keyed-store).
   Map GetFirstMap() const;
-
   int ExtractMaps(MapHandles* maps) const;
+  using TryUpdateHandler = std::function<MaybeHandle<Map>(Handle<Map>)>;
+  int ExtractMapsAndHandlers(
+      std::vector<MapAndHandler>* maps_and_handlers) const;
   int ExtractMapsAndHandlers(std::vector<MapAndHandler>* maps_and_handlers,
-                             bool try_update_deprecated = false) const;
+                             const TryUpdateHandler& map_handler) const;
   MaybeObjectHandle FindHandlerForMap(Handle<Map> map) const;
 
   bool IsCleared() const {
@@ -674,7 +708,7 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   bool ConfigureMegamorphic(IcCheckType property_type);
 
   inline MaybeObject GetFeedback() const;
-  inline MaybeObject GetFeedbackExtra() const;
+  inline std::pair<MaybeObject, MaybeObject> GetFeedbackPair() const;
 
   inline Isolate* GetIsolate() const;
 
@@ -747,19 +781,29 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   std::vector<int> GetSourcePositions() const;
   std::vector<Handle<String>> GetTypesForSourcePositions(uint32_t pos) const;
 
+  inline bool vector_needs_update() const;
+
+ private:
   inline void SetFeedback(Object feedback,
                           WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
   inline void SetFeedback(MaybeObject feedback,
                           WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
-  inline void SetFeedbackExtra(Object feedback_extra,
-                               WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
-  inline void SetFeedbackExtra(MaybeObject feedback_extra,
-                               WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
+  inline void SetFeedback(Object feedback, WriteBarrierMode mode,
+                          Object feedback_extra,
+                          WriteBarrierMode mode_extra = UPDATE_WRITE_BARRIER);
+  inline void SetFeedback(Object feedback, WriteBarrierMode mode,
+                          MaybeObject feedback_extra,
+                          WriteBarrierMode mode_extra = UPDATE_WRITE_BARRIER);
+  inline void SetFeedback(MaybeObject feedback, WriteBarrierMode mode,
+                          Object feedback_extra,
+                          WriteBarrierMode mode_extra = UPDATE_WRITE_BARRIER);
+  inline void SetFeedback(MaybeObject feedback, WriteBarrierMode mode,
+                          MaybeObject feedback_extra,
+                          WriteBarrierMode mode_extra = UPDATE_WRITE_BARRIER);
 
   // Create an array. The caller must install it in a feedback vector slot.
   Handle<WeakFixedArray> CreateArrayOfSize(int length);
 
- private:
   // The reason for having a vector handle and a raw pointer is that we can and
   // should use handles during IC miss, but not during GC when we clear ICs. If
   // you have a handle to the vector that is better because more operations can
@@ -768,6 +812,9 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   FeedbackVector vector_;
   FeedbackSlot slot_;
   FeedbackSlotKind kind_;
+  mutable MaybeObjectHandle cache_slot1_;
+  mutable MaybeObjectHandle cache_slot2_;
+  NexusConfig* g_;
 };
 
 inline BinaryOperationHint BinaryOperationHintFromFeedback(int type_feedback);
