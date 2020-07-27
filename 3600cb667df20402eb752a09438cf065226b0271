@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a7f0845_890619ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-27T08:26:00Z",
+      "side": 1,
+      "message": "LGTM % comments",
+      "revId": "3600cb667df20402eb752a09438cf065226b0271",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4a4f8d09_205cce22",
+        "filename": "tools/system-analyzer/map-processor.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-27T08:26:00Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we throw *before* calling the super constructor?",
+      "revId": "3600cb667df20402eb752a09438cf065226b0271",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2510acfe_66092612",
+        "filename": "tools/system-analyzer/map-processor.mjs",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-27T08:26:00Z",
+      "side": 1,
+      "message": "nit: I\u0027d move all these outside the constructor like this:\n\n  class V8Map extends Event {\n    edge \u003d void 0;\n    children \u003d [];\n    depth \u003d 0;\n\n    // TODO(zcankara): Change this to private class field.\n    _isDeprecated \u003d false;\n\n    deprecatedTargets \u003d null;\n    leftId\u003d 0;\n    rightId \u003d 0;\n    filePosition \u003d \u0027\u0027;\n   \n    constructor(id, time) {\n      if (time \u003c\u003d 0) throw new Error(\u0027Invalid time\u0027);\n      super(id, time);\n      V8Map.set(id, this);\n    }\n  }\n\nSee: https://v8.dev/features/class-fields.\n\nYou can do the same for the Entry class.",
+      "revId": "3600cb667df20402eb752a09438cf065226b0271",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
