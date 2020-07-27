@@ -1,0 +1,146 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08b46d50_37df7204",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-27T15:51:13Z",
+      "side": 1,
+      "message": "lgtm with nits/suggestions",
+      "revId": "302e2c0b1561127781c80b3cbf2bf1bb3c5af888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de6a670c_4809dcdc",
+        "filename": "src/heap/memory-allocator.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-27T15:51:13Z",
+      "side": 1,
+      "message": "The code above looks like \n  inline void UnregisterSharedMemory(chunk);",
+      "revId": "302e2c0b1561127781c80b3cbf2bf1bb3c5af888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76a25695_59bd6fe0",
+        "filename": "src/heap/memory-allocator.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-27T15:51:13Z",
+      "side": 1,
+      "message": "How about adding \"VirtualMemory::FreeReadOnly() const\" or something?",
+      "revId": "302e2c0b1561127781c80b3cbf2bf1bb3c5af888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adfa8ff8_c20a1e40",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-27T15:51:13Z",
+      "side": 1,
+      "message": "There is a GetPlatformPageAllocator() defined in utils/allocation.h",
+      "range": {
+        "startLine": 52,
+        "startChar": 6,
+        "endLine": 52,
+        "endChar": 50
+      },
+      "revId": "302e2c0b1561127781c80b3cbf2bf1bb3c5af888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e1d34bb_436b95bd",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-27T15:51:13Z",
+      "side": 1,
+      "message": "Suggestion: maybe this whole thing should go into MemoryChunk::GetAreaStart(RO_SPACE, *current_page_) or something.",
+      "revId": "302e2c0b1561127781c80b3cbf2bf1bb3c5af888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11e24b55_4d752ffd",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-27T15:51:13Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "302e2c0b1561127781c80b3cbf2bf1bb3c5af888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96ce32ef_4d56649d",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-27T15:51:13Z",
+      "side": 1,
+      "message": "ptr-compr-inl.h already contains some fallback implementations for 32-bit architectures. Feel free to define the GetIsolateRoot() fallback there.",
+      "revId": "302e2c0b1561127781c80b3cbf2bf1bb3c5af888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "838d0f7f_64d2f265",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-27T15:51:13Z",
+      "side": 1,
+      "message": "I guess the code above is not supposed to be run without pointer compression? Then you can define page_offsets_ as a vector of Tagged_t and just say here\n  Tagged_t compressed_address \u003d CompressedTagged(page-\u003eaddress());\n\n32-bit CompressedTagged() is defined as UNREACHABLE() in ptr-compr-inl.h.",
+      "revId": "302e2c0b1561127781c80b3cbf2bf1bb3c5af888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
