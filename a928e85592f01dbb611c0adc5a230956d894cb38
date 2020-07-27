@@ -16,6 +16,69 @@
       "revId": "a928e85592f01dbb611c0adc5a230956d894cb38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40e706b0_1ab2c150",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-27T14:15:04Z",
+      "side": 1,
+      "message": "Cool, thanks!",
+      "revId": "a928e85592f01dbb611c0adc5a230956d894cb38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "45c88085_376dcefd",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-27T14:15:04Z",
+      "side": 1,
+      "message": "JSObject?",
+      "range": {
+        "startLine": 263,
+        "startChar": 18,
+        "endLine": 263,
+        "endChar": 28
+      },
+      "revId": "a928e85592f01dbb611c0adc5a230956d894cb38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25aa2afb_a4a2bee5",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-07-27T14:15:04Z",
+      "side": 1,
+      "message": "This part can be done using NewJSObject() as defined in js-objects.tq",
+      "range": {
+        "startLine": 265,
+        "startChar": 2,
+        "endLine": 270,
+        "endChar": 61
+      },
+      "revId": "a928e85592f01dbb611c0adc5a230956d894cb38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
