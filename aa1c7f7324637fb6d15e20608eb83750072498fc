@@ -16,6 +16,397 @@
       "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "246b15f7_cb194f3e",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "const NexusConfig*",
+      "range": {
+        "startLine": 623,
+        "startChar": 2,
+        "endLine": 623,
+        "endChar": 14
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ac02e74_49eb4e95",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "const NexusConfig*",
+      "range": {
+        "startLine": 1670,
+        "startChar": 2,
+        "endLine": 1670,
+        "endChar": 14
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1718fa2_b447d93c",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "nit: DCHECK(can_write());",
+      "range": {
+        "startLine": 333,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 2
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0abdad0_5d9a8e2e",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "nit: DCHECK(is_active());\n\nsame below",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 2
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ec47503_cd29ac98",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "nit: AssertNoLegacyTypes is a nop in non-Debug, so the #ifdef DEBUG is not necessary here. This CL didn\u0027t add that, but maybe remove it, because reading the code makes you wonder why feedback is always checked, but feedback_extra only if DEBUG is defined.",
+      "range": {
+        "startLine": 442,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 6
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b41ecc3b_6190005a",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "nit: This is a good place to use a delegating constructor to avoid duplication of the initialization logic:\n\n  FeedbackNexus::FeedbackNexus(Handle\u003cFeedbackVector\u003e vector, FeedbackSlot slot)\n    : FeedbackNexus(*vector, slot) {}",
+      "range": {
+        "startLine": 501,
+        "startChar": 0,
+        "endLine": 505,
+        "endChar": 1
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a8feea6_ffebc65c",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "The other constructors seem to imply the invariant that if vector.is_null() then g_ \u003d\u003d nullptr, but this constructor doesn\u0027t. Is this alright?",
+      "range": {
+        "startLine": 513,
+        "startChar": 0,
+        "endLine": 517,
+        "endChar": 1
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad962ee3_6ef706c6",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "I think you can rewrite this in a simpler way with only a single vector access and a branch less.",
+      "range": {
+        "startLine": 638,
+        "startChar": 0,
+        "endLine": 648,
+        "endChar": 3
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "552e7ea7_d292236b",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "It seems quite common to get only the extra object for a slot. Maybe it\u0027s worth adding a GetFeedbackExtra() method to the Nexus that calls GetFeedbackPair internally. Since you\u0027re doing the caching this should be fine.",
+      "range": {
+        "startLine": 954,
+        "startChar": 22,
+        "endLine": 954,
+        "endChar": 46
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58833f5d_b2b338d3",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "Still not sure about this. If I understand it correctly, the array is already constructed with a length of (receiver_count * 2) and every thread that sees the array after line 1018 will see the full array with many of its elements still not set. Then there is no point in this nop.\n\nWhat we need to make sure is that the array does not become visible to the other thread(s) (in line 1033ff) before all elements have been set. If SetFeedback is guaranteed to prevent reordering with preceding stores (e.g. by writing the fields with release semantics) then we don\u0027t need any synchronization here at all. But if this is not necessarily the case, the thing we want here is an std::atomic_thread_fence(std::memory_order_release) or our v8-own implementation of that.",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1030,
+        "endChar": 50
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46c04eeb_e301f75e",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "Is the compiler writing to the FeedbackVector on the MainThread? Or is the permission to write more defined Compiler vs Interpreter instead of Main vs Background thread?",
+      "range": {
+        "startLine": 640,
+        "startChar": 2,
+        "endLine": 640,
+        "endChar": 67
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9aa8454_1fc5347a",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "const NexusConfig* config",
+      "range": {
+        "startLine": 663,
+        "startChar": 16,
+        "endLine": 663,
+        "endChar": 35
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74d3213a_41b6aa4e",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "Can you please add a short comment when a vector needs update?",
+      "range": {
+        "startLine": 784,
+        "startChar": 2,
+        "endLine": 784,
+        "endChar": 42
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a1bc10a_832cea76",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "I just wondered why MaybeObject is not implicitly constructible from an Object. If we had that, this would be way less verbose because we would need only a single function for those.",
+      "range": {
+        "startLine": 791,
+        "startChar": 2,
+        "endLine": 802,
+        "endChar": 78
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "951e5be0_9b4c9df6",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "nit: base::Optional\u003cMaybeObjectHandle\u003e for slots instead of an additional cleared flag?",
+      "range": {
+        "startLine": 818,
+        "startChar": 0,
+        "endLine": 821,
+        "endChar": 29
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "181a4a60_287948ba",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "const NexusConfig* g_",
+      "range": {
+        "startLine": 832,
+        "startChar": 2,
+        "endLine": 832,
+        "endChar": 17
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e14fc01f_47243ffa",
+        "filename": "src/objects/feedback-vector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-07-27T13:44:19Z",
+      "side": 1,
+      "message": "nit: Maybe use a more descriptive name, e.g. config_?",
+      "range": {
+        "startLine": 832,
+        "startChar": 15,
+        "endLine": 832,
+        "endChar": 17
+      },
+      "revId": "aa1c7f7324637fb6d15e20608eb83750072498fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
