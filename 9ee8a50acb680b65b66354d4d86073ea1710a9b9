@@ -16,6 +16,46 @@
       "revId": "9ee8a50acb680b65b66354d4d86073ea1710a9b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc631049_d7c74ea2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-27T07:35:43Z",
+      "side": 1,
+      "message": "owners +1, small nit for the torque code.",
+      "revId": "9ee8a50acb680b65b66354d4d86073ea1710a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8d37424a_9cdd28cd",
+        "filename": "src/builtins/constructor.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-27T07:35:43Z",
+      "side": 1,
+      "message": "nit: These are called \"Emit\" because they \"emit\" the code for this implementation. This kinda made sense for CSA, but I feel like it makes less sense for Torque, which treats it a bit more like a function call. Maybe we should rename them EmitFoo to Foo (or FooImpl if there\u0027s a name clash)?",
+      "range": {
+        "startLine": 31,
+        "startChar": 43,
+        "endLine": 31,
+        "endChar": 69
+      },
+      "revId": "9ee8a50acb680b65b66354d4d86073ea1710a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
