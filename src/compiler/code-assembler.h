@@ -597,7 +597,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
     Comment(s.str());
   }
 
-  void StaticAssert(TNode<BoolT> value);
+  void StaticAssert(TNode<BoolT> value,
+                    const char* source = "unknown position");
 
   void SetSourcePosition(const char* file, int line);
 
