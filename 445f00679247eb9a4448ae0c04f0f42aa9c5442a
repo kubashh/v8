@@ -134,6 +134,30 @@
       "revId": "445f00679247eb9a4448ae0c04f0f42aa9c5442a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50afee8c_49b576e9",
+        "filename": "src/handles/local-handles.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-27T09:02:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "124d5037_0cab1252",
+      "range": {
+        "startLine": 27,
+        "startChar": 11,
+        "endLine": 27,
+        "endChar": 62
+      },
+      "revId": "445f00679247eb9a4448ae0c04f0f42aa9c5442a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
