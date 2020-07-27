@@ -66,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "340017eb_a0c77780",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T08:18:51Z",
+      "side": 1,
+      "message": "Function removed.",
+      "parentUuid": "09f723a6_c6c37d30",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a904d20_b1c78e94",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 4
@@ -89,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "1cc8ef80_87a1468c",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T08:18:51Z",
+      "side": 1,
+      "message": "Function removed.",
+      "parentUuid": "3a904d20_b1c78e94",
+      "range": {
+        "startLine": 974,
+        "startChar": 32,
+        "endLine": 974,
+        "endChar": 47
+      },
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d10021ff_24c29333",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 4
@@ -103,6 +145,24 @@
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09246e76_300df18f",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T08:18:51Z",
+      "side": 1,
+      "message": "Function removed.",
+      "parentUuid": "d10021ff_24c29333",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -146,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "21237f24_f29e0dfd",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T08:18:51Z",
+      "side": 1,
+      "message": "Function removed.",
+      "parentUuid": "e14c77e6_0411fa64",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfff6d4a_8b0dda54",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 4
@@ -160,6 +238,24 @@
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "048a6868_85f1ebe8",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T08:18:51Z",
+      "side": 1,
+      "message": "Function removed.",
+      "parentUuid": "bfff6d4a_8b0dda54",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -180,6 +276,24 @@
     },
     {
       "key": {
+        "uuid": "fa4a85b1_8340ec3e",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T08:18:51Z",
+      "side": 1,
+      "message": "Function removed.",
+      "parentUuid": "f6a25114_dda23102",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "01cd0117_2995d009",
         "filename": "src/objects/feedback-vector.cc",
         "patchSetId": 4
@@ -197,6 +311,24 @@
     },
     {
       "key": {
+        "uuid": "76178843_e16a3cf3",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T08:18:51Z",
+      "side": 1,
+      "message": "Happily, function removed.",
+      "parentUuid": "01cd0117_2995d009",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f893715f_16e032c4",
         "filename": "test/cctest/test-concurrent-vector.cc",
         "patchSetId": 4
@@ -211,6 +343,24 @@
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8791e2b_ea485d50",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T08:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f893715f_16e032c4",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -237,6 +387,30 @@
     },
     {
       "key": {
+        "uuid": "370ba293_9967850c",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T08:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c23070a_c7498dad",
+      "range": {
+        "startLine": 27,
+        "startChar": 47,
+        "endLine": 27,
+        "endChar": 68
+      },
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2178422_5a7d82da",
         "filename": "test/cctest/test-concurrent-vector.cc",
         "patchSetId": 4
@@ -251,6 +425,24 @@
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27452071_35a4124d",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T08:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2178422_5a7d82da",
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -298,6 +490,30 @@
       "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bed3af07_8aa691fd",
+        "filename": "test/cctest/test-concurrent-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T08:18:51Z",
+      "side": 1,
+      "message": "I\u0027ll remove the Sleeps.",
+      "parentUuid": "94efbd4a_0f1901cf",
+      "range": {
+        "startLine": 47,
+        "startChar": 6,
+        "endLine": 47,
+        "endChar": 61
+      },
+      "revId": "4050ffe1046df68737d540e8e9ca4aee81dd554c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
