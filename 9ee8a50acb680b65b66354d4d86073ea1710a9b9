@@ -56,6 +56,30 @@
       "revId": "9ee8a50acb680b65b66354d4d86073ea1710a9b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cbe7e30_0647d864",
+        "filename": "src/builtins/constructor.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-27T17:24:52Z",
+      "side": 1,
+      "message": "I suppose all of this code is \"emitting\" code, so it\u0027s not really adding any information. I\u0027ve removed the \u0027Emit\u0027 prefix from the builtins-constructor-gen functions, which touches a few more files. Done.",
+      "parentUuid": "8d37424a_9cdd28cd",
+      "range": {
+        "startLine": 31,
+        "startChar": 43,
+        "endLine": 31,
+        "endChar": 69
+      },
+      "revId": "9ee8a50acb680b65b66354d4d86073ea1710a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
