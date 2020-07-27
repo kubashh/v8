@@ -16,6 +16,24 @@
       "revId": "9ac4ef695e0e6839a91fa758b4ca5afed159bc20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2841dbb6_79b01e49",
+        "filename": "tools/cppgc/test_cmake.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-27T13:15:37Z",
+      "side": 1,
+      "message": "(changes source dir \u003d\u003d modifies it)",
+      "parentUuid": "9e112cb9_1a1baae6",
+      "revId": "9ac4ef695e0e6839a91fa758b4ca5afed159bc20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
