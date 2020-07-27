@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94e9688d_7bb3f26f",
+        "filename": "tools/cppgc/gen_cmake.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-27T08:05:25Z",
+      "side": 1,
+      "message": "This thing fetches gtest at a fixed hash.",
+      "revId": "25bc9c7190e8798939711c21979e0a3c4b7f96ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
