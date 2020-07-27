@@ -28,6 +28,17 @@ void LocalHandles::Iterate(RootVisitor* visitor) {
   }
 }
 
+#ifdef DEBUG
+bool LocalHandles::Contains(Address* location) {
+  for (Address* address : blocks_) {
+    if (address <= location && location <= address + kHandleBlockSize) {
+      return true;
+    }
+  }
+  return false;
+}
+#endif
+
 Address* LocalHandles::AddBlock() {
   DCHECK_EQ(scope_.next, scope_.limit);
   Address* block = NewArray<Address>(kHandleBlockSize);
