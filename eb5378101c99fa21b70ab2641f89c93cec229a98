@@ -121,6 +121,24 @@
       "revId": "eb5378101c99fa21b70ab2641f89c93cec229a98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76dfcd9c_11418f8a",
+        "filename": "src/handles/local-handles.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-27T11:01:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2ab1a989_a18e9d43",
+      "revId": "eb5378101c99fa21b70ab2641f89c93cec229a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
