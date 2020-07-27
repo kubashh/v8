@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "a957173a_4661686a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-27T13:51:18Z",
+      "side": 1,
+      "message": "I was going to take a look at it after we skip serialization for the bytecode array itself (which is in another CL https://chromium-review.googlesource.com/c/v8/v8/+/2288865). I don\u0027t think we can do it before then.",
+      "parentUuid": "801b82b9_dfccd08c",
+      "revId": "6c12e1a01eaabf03b155854e6668cdbbb38d5ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d471bf79_8f87c638",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 10
@@ -50,6 +68,24 @@
       "revId": "6c12e1a01eaabf03b155854e6668cdbbb38d5ae6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1857f0b_41cf9de5",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-27T13:51:18Z",
+      "side": 1,
+      "message": "Done. Since it had not comment, I moved it to the other constructors.",
+      "parentUuid": "d471bf79_8f87c638",
+      "revId": "6c12e1a01eaabf03b155854e6668cdbbb38d5ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "bcbd8b0b_c91fda37",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-27T13:51:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0523267f_d8aee725",
+      "revId": "6c12e1a01eaabf03b155854e6668cdbbb38d5ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "189914b6_19cc62ee",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 10
@@ -84,6 +138,24 @@
       "revId": "6c12e1a01eaabf03b155854e6668cdbbb38d5ae6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "965c488e_527dd8a9",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3300,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-27T13:51:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "189914b6_19cc62ee",
+      "revId": "6c12e1a01eaabf03b155854e6668cdbbb38d5ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
