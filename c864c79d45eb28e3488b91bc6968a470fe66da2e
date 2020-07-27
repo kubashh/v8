@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad67fb4b_4400597a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-27T08:45:10Z",
+      "side": 1,
+      "message": "Thanks, almost there",
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c1648ec4_b2f4ad72",
+        "filename": "src/base/platform/condition-variable.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-27T08:45:10Z",
+      "side": 1,
+      "message": "nit: V8_OS_STARBOARD",
+      "range": {
+        "startLine": 192,
+        "startChar": 11,
+        "endLine": 192,
+        "endChar": 22
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55278973_d2f5064e",
+        "filename": "src/base/platform/mutex.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-27T08:45:10Z",
+      "side": 1,
+      "message": "nit: !STARBOARD",
+      "range": {
+        "startLine": 197,
+        "startChar": 11,
+        "endLine": 197,
+        "endChar": 20
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0d1c357_26af303d",
+        "filename": "src/base/platform/mutex.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-27T08:45:10Z",
+      "side": 1,
+      "message": "nit: update",
+      "range": {
+        "startLine": 319,
+        "startChar": 11,
+        "endLine": 319,
+        "endChar": 22
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf50ad1f_aea6b565",
+        "filename": "src/base/platform/mutex.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-27T08:45:10Z",
+      "side": 1,
+      "message": "V8 uses this for concurrent transition array access. Is that being disabled?",
+      "range": {
+        "startLine": 209,
+        "startChar": 5,
+        "endLine": 209,
+        "endChar": 12
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88414d25_ff6a3038",
+        "filename": "src/base/platform/platform-starboard.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-27T08:45:10Z",
+      "side": 1,
+      "message": "Will this crash? V8 is calling this from the GC.",
+      "range": {
+        "startLine": 257,
+        "startChar": 2,
+        "endLine": 257,
+        "endChar": 19
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "354e7177_9d177957",
+        "filename": "src/base/platform/time.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-27T08:45:10Z",
+      "side": 1,
+      "message": "nit: update",
+      "range": {
+        "startLine": 465,
+        "startChar": 11,
+        "endLine": 465,
+        "endChar": 20
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
