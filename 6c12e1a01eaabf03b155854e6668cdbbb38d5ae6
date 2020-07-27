@@ -16,6 +16,74 @@
       "revId": "6c12e1a01eaabf03b155854e6668cdbbb38d5ae6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "801b82b9_dfccd08c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-27T12:44:44Z",
+      "side": 1,
+      "message": "BTW, please take a look at AbstractBytecodeArray to see how close we are to removing that abstraction.",
+      "revId": "6c12e1a01eaabf03b155854e6668cdbbb38d5ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d471bf79_8f87c638",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-27T12:44:44Z",
+      "side": 1,
+      "message": "The handle happens to be a PersistentHandle. But this doesn\u0027t really matter, so let\u0027s just remove the whole comment. In the new world this situation is the norm.",
+      "revId": "6c12e1a01eaabf03b155854e6668cdbbb38d5ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0523267f_d8aee725",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-27T12:44:44Z",
+      "side": 1,
+      "message": "We can delete the other two now.",
+      "revId": "6c12e1a01eaabf03b155854e6668cdbbb38d5ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "189914b6_19cc62ee",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3300,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-07-27T12:44:44Z",
+      "side": 1,
+      "message": "These ain\u0027t needed anymore, see above.",
+      "revId": "6c12e1a01eaabf03b155854e6668cdbbb38d5ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
