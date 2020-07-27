@@ -59,6 +59,23 @@
     },
     {
       "key": {
+        "uuid": "f864b97c_0012e875",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2020-07-27T08:53:38Z",
+      "side": 1,
+      "message": "lgtm. On the API layer we call this resource name rather than embedder name. It may make sense to align these names?",
+      "revId": "1e5cc2e91a08e78131f640977d19e29c52ddefcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "462dccf7_69001a3a",
         "filename": "include/js_protocol.pdl",
         "patchSetId": 1
