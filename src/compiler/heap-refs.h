@@ -723,6 +723,7 @@ class BytecodeArrayRef : public FixedArrayBaseRef {
   Address GetFirstBytecodeAddress() const;
 
   // Source position table.
+  Handle<ByteArray> source_positions() const;
   const byte* source_positions_address() const;
   int source_positions_size() const;
 
