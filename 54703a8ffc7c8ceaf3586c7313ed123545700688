@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c9aa019_245a50cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2020-07-27T00:51:30Z",
+      "side": 1,
+      "message": "Hi folks,\nI\u0027ve addressed 2 major pieces of feedback, though others still remain. Thanks for the patience! Addressed:\n\n* The first version set about re-writing IC state determination and information extraction in a thread-safe way, but this duplicated information. Now, an underlying config object and bottlenecks around the actual read/write of vector slots does this in a way that minimizes change.\n\n* Nico pointed out that we\u0027ll want the JSHeapBroker to be able to create a FeedbackNexus configured to run on the main thread or one configured for the background thread. Before, we\u0027d need to touch code at each Nexus creation point, changing the constructor. Now, the broker can pass the configuration it wants to use (currently it only passes the main thread config).\n\nI\u0027ll write again when I\u0027ve addressed each line item comment, thanks again,\n--Michael\n",
+      "revId": "54703a8ffc7c8ceaf3586c7313ed123545700688",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
