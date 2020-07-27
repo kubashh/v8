@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "de1c56e8_8e2bf3b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-27T08:47:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c48de8d4_d63a28f2",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 3
+      },
+      "revId": "445f00679247eb9a4448ae0c04f0f42aa9c5442a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c50fb06c_9e031aa9",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -53,6 +77,30 @@
       "writtenOn": "2020-07-24T17:33:24Z",
       "side": 1,
       "message": "Each block contains kHandleBlockSize handles, so we need to iterate blocks and check that\nblocks_[i] \u003c\u003d location \u0026\u0026 location \u003c blocks_[i] + kHandleBlockSize\n\nI think the test currently works because it creates only one handle.",
+      "range": {
+        "startLine": 27,
+        "startChar": 11,
+        "endLine": 27,
+        "endChar": 62
+      },
+      "revId": "445f00679247eb9a4448ae0c04f0f42aa9c5442a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb46dea5_21c5d21d",
+        "filename": "src/handles/local-handles.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-27T08:47:12Z",
+      "side": 1,
+      "message": "Done. Do we need to do something special for blocks_.back() like PersistentHandles does? https://source.chromium.org/chromium/chromium/src/+/master:v8/src/handles/persistent-handles.cc;l\u003d54;drc\u003d2b873b94e9a39a2d033a25231039696a1f9e84a8",
+      "parentUuid": "608a82dd_738e5c24",
       "range": {
         "startLine": 27,
         "startChar": 11,
