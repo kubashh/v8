@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "ab048a14_e26025df",
+        "filename": "src/base/once.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-27T14:03:21Z",
+      "side": 1,
+      "message": "Let\u0027s introduce a wrapper (e.g. OS::ThreadYield()) to avoid define overrides.",
+      "range": {
+        "startLine": 15,
+        "startChar": 1,
+        "endLine": 15,
+        "endChar": 33
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c1648ec4_b2f4ad72",
         "filename": "src/base/platform/condition-variable.cc",
         "patchSetId": 5
@@ -99,6 +122,30 @@
       "writtenOn": "2020-07-27T08:45:10Z",
       "side": 1,
       "message": "V8 uses this for concurrent transition array access. Is that being disabled?",
+      "range": {
+        "startLine": 209,
+        "startChar": 5,
+        "endLine": 209,
+        "endChar": 12
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6745f7ea_81bd5973",
+        "filename": "src/base/platform/mutex.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-27T14:03:21Z",
+      "side": 1,
+      "message": "+1, I think we need some implementation of SharedMutex.",
+      "parentUuid": "bf50ad1f_aea6b565",
       "range": {
         "startLine": 209,
         "startChar": 5,
