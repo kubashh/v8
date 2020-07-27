@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e112cb9_1a1baae6",
+        "filename": "tools/cppgc/test_cmake.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-07-27T13:14:49Z",
+      "side": 1,
+      "message": "This is what I\u0027m not sure I like. The test changes the source dir. Often, CI scripts can test against source dir modifications, although I don\u0027t know if this is the case for us.",
+      "revId": "9ac4ef695e0e6839a91fa758b4ca5afed159bc20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
