@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "4326cc46_09fdfed2",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-28T16:08:11Z",
+      "side": 1,
+      "message": "I\u0027m actually leaning in a different direction.\n\nAs I mentioned in my previous reply, I\u0027m aware that none of this is on the api and should not be directly accessed by users. However, for the standalone open-source library I still think it makes sense to encapsulate all marking decisions in the marker and keep the internal api simpler.\n\nHeap has knowledge of the GC phases (marking, sweeping) but it doesn\u0027t really need to know how each phase is implemented (atomic, incremental, concurrent). For the Heap it should suffice to have an api to start GC and to force GC finalization, but everything else can be hidden away. Knowing that marking is incremental or concurrent doesn\u0027t give the Heap anything.\n\nI think that a CollectGarbage \"god\" call would actually be a good way to encapsulate everything and make the heap indifferent to marking/sweeping specifics.\nIn my code, cppgc\u0027s CollectMarking and ForceFinalizeGarabageColllection are equivalent to v8\u0027s StartMarking and FinalizeGCIfRunning respectively. The v8 api seems redundant since CollectGarbage is covered by StartMarking and FinalizeGCIfRunning (based on the descriptions you gave) and I don\u0027t think we need a third call.\nI agree that CollectGarbage should not decide on it\u0027s own what type of marking it should do and when it should finish marking, which is why I suggested either a return value or having Marker call a method of Heap as needed (in both cases Marker is the one that makes the decision).\n(The call to StartMarking that finishes marking if needed is similar to our call to Sweeper::Start that finishes sweeping if sweeping is atomic.)\n\nAs for the configs, whether the default config is determined according to what the  platform provides, or a GC invoker creates a config based on the platform and passes it to CollectGarbage, the bottom line remains the same. Most users of the standalone library won\u0027t care whether marking/sweeping is incremental/concurrent or not (they care in terms of performance, not in terms of understanding what it means). As long as it\u0027s hidden from users I guess it\u0027s fine. If we\u0027re using a GC invoker (which I don\u0027t think we have right now, it sounds different than the heap growing strategy) and that sets the config, than I think we can drop the \"default\" config entirely.",
+      "parentUuid": "010b5f02_fa7b4951",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 36
+      },
+      "revId": "db2d21bfe27362b8d0b17b849cfd9395c93fbd8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b27b15a5_d307ff95",
         "filename": "src/heap/cppgc/heap.cc",
         "patchSetId": 8
