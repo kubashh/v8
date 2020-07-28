@@ -77,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "200f9eae_1fdae96f",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-28T09:23:40Z",
+      "side": 1,
+      "message": "Opps :). Done.",
+      "parentUuid": "5503737e_2c6f0a4a",
+      "range": {
+        "startLine": 28,
+        "startChar": 41,
+        "endLine": 28,
+        "endChar": 44
+      },
+      "revId": "b9412675424dfec1c2cc13f978f25bf6987bf3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f6df564_789034bb",
         "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
         "patchSetId": 6
@@ -91,6 +115,24 @@
       "revId": "b9412675424dfec1c2cc13f978f25bf6987bf3d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfc448d5_bef1c7db",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-28T09:23:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f6df564_789034bb",
+      "revId": "b9412675424dfec1c2cc13f978f25bf6987bf3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +153,24 @@
     },
     {
       "key": {
+        "uuid": "a83fa56c_5ba66fa9",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-28T09:23:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "992f7825_72a3aec6",
+      "revId": "b9412675424dfec1c2cc13f978f25bf6987bf3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "100d27ad_bf5df553",
         "filename": "src/compiler/backend/mid-tier-register-allocator.h",
         "patchSetId": 6
@@ -128,6 +188,24 @@
     },
     {
       "key": {
+        "uuid": "99a39d65_6a9b49a1",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-28T09:23:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "100d27ad_bf5df553",
+      "revId": "b9412675424dfec1c2cc13f978f25bf6987bf3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f308c5b2_95f0fe55",
         "filename": "src/compiler/backend/mid-tier-register-allocator.h",
         "patchSetId": 6
@@ -142,6 +220,24 @@
       "revId": "b9412675424dfec1c2cc13f978f25bf6987bf3d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b97cafb_cd32319b",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-28T09:23:40Z",
+      "side": 1,
+      "message": "Done, also did the same with AllocateSpillSlots, and I think I could do the same with MidTierRegisterAllocator, but will do that later in the CL series to avoid rebase conflicts.",
+      "parentUuid": "f308c5b2_95f0fe55",
+      "revId": "b9412675424dfec1c2cc13f978f25bf6987bf3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
