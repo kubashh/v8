@@ -70,6 +70,30 @@
       "revId": "627b8781a517fa59531ee07db54a16cba89fc3e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e2934c5_fe1867a0",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-07-28T05:00:51Z",
+      "side": 0,
+      "message": "late response: Custom register assignments matter when the builtin in question is either itself an ASM builtin, or when it is called from ASM builtins (or from codegen like DoubleToI).",
+      "parentUuid": "1a4121ee_75d32e1f",
+      "range": {
+        "startLine": 97,
+        "startChar": 34,
+        "endLine": 97,
+        "endChar": 56
+      },
+      "revId": "627b8781a517fa59531ee07db54a16cba89fc3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
