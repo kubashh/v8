@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab0e689_86683391",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-07-28T03:30:36Z",
+      "side": 1,
+      "message": "jakob, I need some help here. Somehow it now does not pass gc_stress and syg have to rollback my landing. I cannot see what went wrong from https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8873567637041639296/+/steps/Check_-_d8/0/logs/segment-iterator-ownPropertyDesc.../0 Could you see the problem? \nIt is failed on the check o icu_break_iterator__value.IsForeign of JSSegments.",
+      "revId": "2d24aaa0ecd29a6041e266ee78164b315c113e2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
