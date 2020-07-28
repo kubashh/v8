@@ -34,6 +34,24 @@
       "revId": "9ac4ef695e0e6839a91fa758b4ca5afed159bc20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1c12d09_2e3cdf7a",
+        "filename": "tools/cppgc/test_cmake.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-28T09:03:44Z",
+      "side": 1,
+      "message": "We would need to test it and see once we set up either CI on github or a bot to run this script.\nFor now I think we can submit it as is.",
+      "parentUuid": "2841dbb6_79b01e49",
+      "revId": "9ac4ef695e0e6839a91fa758b4ca5afed159bc20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
