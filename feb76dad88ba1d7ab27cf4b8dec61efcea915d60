@@ -45,6 +45,30 @@
       "revId": "feb76dad88ba1d7ab27cf4b8dec61efcea915d60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e81e08c4_84dc97c8",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 11019,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-29T23:13:03Z",
+      "side": 1,
+      "message": "I would rather remove TracedReferenceBase::Reset entirely and replace it with a non-atomic TracedGlobal::Reset, but:\n1) I\u0027m not sure we can just do that since it\u0027s on the api.\n2) It\u0027s unclear to me whether replacing the cast in test-embedder-tracing.cc:837 with a cast to either TraceReference or TracedGlobal would be safe/correct.",
+      "parentUuid": "68c6c766_68c34d9f",
+      "range": {
+        "startLine": 11019,
+        "startChar": 25,
+        "endLine": 11019,
+        "endChar": 30
+      },
+      "revId": "feb76dad88ba1d7ab27cf4b8dec61efcea915d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
