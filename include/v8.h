@@ -1064,8 +1064,7 @@ class TracedGlobal : public TracedReferenceBase<T> {
 template <typename T>
 class TracedReference : public TracedReferenceBase<T> {
  public:
-  using TracedReferenceBase<T>::Reset;
-
+  using TracedReferenceBase<T>::IsEmpty;
   /**
    * An empty TracedReference without storage cell.
    */
@@ -1143,6 +1142,13 @@ class TracedReference : public TracedReferenceBase<T> {
    */
   template <class S>
   V8_INLINE TracedReference& operator=(const TracedReference<S>& rhs);
+
+  /**
+   * If non-empty, destroy the underlying storage cell. |IsEmpty| will return
+   * true after this call.
+   */
+  // This method overrides TracedReferenceBase<T>::Reset to use atomic write.
+  V8_INLINE void Reset();
 
   /**
    * If non-empty, destroy the underlying storage cell and create a new one with
@@ -11010,13 +11016,23 @@ TracedGlobal<T>& TracedGlobal<T>::operator=(const TracedGlobal& rhs) {
 }
 
 template <class T>
+void TracedReference<T>::Reset() {
+  if (IsEmpty()) return;
+  V8::DisposeTracedGlobal(reinterpret_cast<internal::Address*>(this->val_));
+  reinterpret_cast<std::atomic<T*>*>(&this->val_)
+      ->store(nullptr, std::memory_order_relaxed);
+}
+
+template <class T>
 template <class S>
 void TracedReference<T>::Reset(Isolate* isolate, const Local<S>& other) {
   static_assert(std::is_base_of<T, S>::value, "type check");
   Reset();
   if (other.IsEmpty()) return;
-  this->val_ = this->New(isolate, other.val_, &this->val_,
-                         TracedReferenceBase<T>::kWithoutDestructor);
+  reinterpret_cast<std::atomic<T*>*>(&this->val_)
+      ->store(this->New(isolate, other.val_, &this->val_,
+                        TracedReferenceBase<T>::kWithoutDestructor),
+              std::memory_order_relaxed);
 }
 
 template <class T>
