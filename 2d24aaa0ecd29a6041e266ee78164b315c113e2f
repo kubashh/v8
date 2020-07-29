@@ -16,6 +16,23 @@
       "revId": "2d24aaa0ecd29a6041e266ee78164b315c113e2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "600c949e_c239ae17",
+        "filename": "src/objects/js-segments.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-07-29T09:55:45Z",
+      "side": 1,
+      "message": "At this point, we allocate a new Foreign object: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/objects/managed.h;l\u003d102;drc\u003d977a73777133c13d83cd5d6179497534db0a98b3;bpv\u003d0;bpt\u003d1\n\nThis causes the GC to run now and at this point we haven\u0027t initialised result-\u003eicu_break_iterator(). result-\u003eicu_break_iterator() is now pointing to Undefined in the uninitialized state causing the CHECK(result-\u003eicu_break_iterator().IsForeign()) to fail.\n\nYou should move the creation of the Managed objects to happen before the creation of the segments object like this:\n\n\n  Handle\u003cManaged\u003cicu::UnicodeString\u003e\u003e unicode_string \u003d\n      Intl::SetTextToBreakIterator(isolate, string, break_iterator);\n  Handle\u003cManaged\u003cicu::BreakIterator\u003e\u003e managed_break_iterator \u003d\n      Managed\u003cicu::BreakIterator\u003e::FromRawPtr(isolate, 0, break_iterator);\n\n\n  // 1. Let internalSlotsList be « [[SegmentsSegmenter]], [[SegmentsString]] ».\n  // 2. Let segments be ! ObjectCreate(%Segments.prototype%, internalSlotsList).\n  Handle\u003cMap\u003e map(isolate-\u003enative_context()-\u003eintl_segments_map(), isolate);\n  Handle\u003cJSObject\u003e result \u003d isolate-\u003efactory()-\u003eNewJSObjectFromMap(map);\n\n  Handle\u003cJSSegments\u003e segments \u003d Handle\u003cJSSegments\u003e::cast(result);\n  segments-\u003eset_flags(0);\n\n  // 3. Set segments.[[SegmentsSegmenter]] to segmenter.\n  segments-\u003eset_icu_break_iterator(*managed_break_iterator);\n  segments-\u003eset_granularity(segmenter-\u003egranularity());\n\n  ...",
+      "revId": "2d24aaa0ecd29a6041e266ee78164b315c113e2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
