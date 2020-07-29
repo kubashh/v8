@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "287ab6e5_56704aba",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-29T23:04:13Z",
+      "side": 1,
+      "message": "Since there are no subclasses of TracedReference, we don\u0027t currently need to worry about other writes bypassing the atomics.\nSince TracedReference is planned to be replaced with JSMember, I don\u0027t think this will become an issue before it is gone.",
+      "range": {
+        "startLine": 1065,
+        "startChar": 6,
+        "endLine": 1065,
+        "endChar": 21
+      },
+      "revId": "feb76dad88ba1d7ab27cf4b8dec61efcea915d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68c6c766_68c34d9f",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 11019,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-29T23:04:13Z",
+      "side": 1,
+      "message": "We can keep TracedGlobal::Reset non-atomic by overriding TracedReferenceBase::Reset here.\nCurrently the only place where TracedReferencfeBase::Reset is called directly is in a single unittest. Anywhere else goes either through TracedGlobal or TracedReference.\nThis means that if we start using TracedReferenceBase::Reset directly, we could get data races.\nAlternatively, we can make TracedReferenceBase::Reset atomic. I wasn\u0027t sure how much we care about TracedGlobal::Reset performance.",
+      "range": {
+        "startLine": 11019,
+        "startChar": 25,
+        "endLine": 11019,
+        "endChar": 30
+      },
+      "revId": "feb76dad88ba1d7ab27cf4b8dec61efcea915d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
