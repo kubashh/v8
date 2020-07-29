@@ -24,6 +24,7 @@
 #include "src/objects/js-number-format-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/property-descriptor.h"
+#include "src/objects/smi.h"
 #include "src/objects/string.h"
 #include "src/strings/string-case.h"
 #include "unicode/basictz.h"
@@ -1275,24 +1276,46 @@ Maybe<Intl::NumberFormatDigitOptions> Intl::SetNumberFormatDigitOptions(
 
     // 15. Else If mnfd is not undefined or mxfd is not undefined, then
     if (!mnfd_obj->IsUndefined(isolate) || !mxfd_obj->IsUndefined(isolate)) {
-      // 15. b. Let mnfd be ? DefaultNumberOption(mnfd, 0, 20, mnfdDefault).
+      Handle<String> mxfd_str = factory->maximumFractionDigits_string();
       Handle<String> mnfd_str = factory->minimumFractionDigits_string();
-      if (!DefaultNumberOption(isolate, mnfd_obj, 0, 20, mnfd_default, mnfd_str)
-               .To(&mnfd)) {
+
+      int specified_mnfd;
+      int specified_mxfd;
+
+      if (!DefaultNumberOption(isolate, mnfd_obj, 0, 20, -1, mnfd_str)
+               .To(&specified_mnfd) ||
+          !DefaultNumberOption(isolate, mxfd_obj, 0, 20, -1, mxfd_str)
+               .To(&specified_mxfd)) {
         return Nothing<NumberFormatDigitOptions>();
       }
 
-      // 15. c. Let mxfdActualDefault be max( mnfd, mxfdDefault ).
-      int mxfd_actual_default = std::max(mnfd, mxfd_default);
+      if (specified_mnfd < 0) {
+        mnfd_obj = factory->undefined_value();
+      } else {
+        mnfd_obj = Handle<Smi>::New(Smi::FromInt(specified_mnfd), isolate);
+      }
+      if (specified_mxfd < 0) {
+        mxfd_obj = factory->undefined_value();
+      } else {
+        mxfd_obj = Handle<Smi>::New(Smi::FromInt(specified_mxfd), isolate);
+        mnfd_default = std::min(mnfd_default, specified_mxfd);
+      }
 
-      // 15. d. Let mxfd be ? DefaultNumberOption(mxfd, mnfd, 20,
-      // mxfdActualDefault).
-      Handle<String> mxfd_str = factory->maximumFractionDigits_string();
-      if (!DefaultNumberOption(isolate, mxfd_obj, mnfd, 20, mxfd_actual_default,
-                               mxfd_str)
+      if (!DefaultNumberOption(isolate, mnfd_obj, 0, 20, mnfd_default, mnfd_str)
+               .To(&mnfd) ||
+          !DefaultNumberOption(isolate, mxfd_obj, 0, 20,
+                               std::max(mxfd_default, mnfd), mxfd_str)
                .To(&mxfd)) {
         return Nothing<NumberFormatDigitOptions>();
       }
+
+      if (mnfd > mxfd) {
+        THROW_NEW_ERROR_RETURN_VALUE(
+            isolate,
+            NewRangeError(MessageTemplate::kPropertyValueOutOfRange, mxfd_str),
+            Nothing<NumberFormatDigitOptions>());
+      }
+
       // 15. e. Set intlObj.[[MinimumFractionDigits]] to mnfd.
       digit_options.minimum_fraction_digits = mnfd;
 
