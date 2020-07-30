@@ -552,6 +552,18 @@ IGNITION_HANDLER(LdaNamedPropertyNoFeedback, InterpreterAssembler) {
   Dispatch();
 }
 
+IGNITION_HANDLER(LdaNamedPropertyFromSuper, InterpreterAssembler) {
+  TNode<Object> receiver = LoadRegisterAtOperandIndex(0);
+  TNode<Object> home_object = LoadRegisterAtOperandIndex(1);
+  TNode<Object> name = LoadConstantPoolEntryAtOperandIndex(2);
+  TNode<Context> context = GetContext();
+
+  TNode<Object> result = CallRuntime(Runtime::kLoadFromSuper, context, receiver,
+                                     home_object, name);
+  SetAccumulator(result);
+  Dispatch();
+}
+
 // KeyedLoadIC <object> <slot>
 //
 // Calls the KeyedLoadIC at FeedBackVector slot <slot> for <object> and the key

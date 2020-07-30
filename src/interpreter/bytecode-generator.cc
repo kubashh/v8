@@ -4715,25 +4715,22 @@ void BytecodeGenerator::VisitPropertyLoadForRegister(Register obj,
 
 void BytecodeGenerator::VisitNamedSuperPropertyLoad(Property* property,
                                                     Register opt_receiver_out) {
+  // FIXME: maybe have home object in the accumulator and make it kReadWrite
   RegisterAllocationScope register_scope(this);
   SuperPropertyReference* super_property =
       property->obj()->AsSuperPropertyReference();
-  RegisterList args = register_allocator()->NewRegisterList(3);
+  auto receiver = register_allocator()->NewRegister();
   BuildThisVariableLoad();
-  builder()->StoreAccumulatorInRegister(args[0]);
-  VisitForRegisterValue(super_property->home_object(), args[1]);
-
+  builder()->StoreAccumulatorInRegister(receiver);
+  auto home_object = register_allocator()->NewRegister();
+  VisitForRegisterValue(super_property->home_object(), home_object);
   builder()->SetExpressionPosition(property);
-  builder()
-      ->LoadLiteral(property->key()->AsLiteral()->AsRawPropertyName())
-      .StoreAccumulatorInRegister(args[2])
-      .CallRuntime(Runtime::kLoadFromSuper, args);
-
+  builder()->LoadNamedPropertyFromSuper(
+      receiver, home_object, property->key()->AsLiteral()->AsRawPropertyName());
   if (opt_receiver_out.is_valid()) {
-    builder()->MoveRegister(args[0], opt_receiver_out);
+    builder()->MoveRegister(receiver, opt_receiver_out);
   }
 }
-
 void BytecodeGenerator::VisitKeyedSuperPropertyLoad(Property* property,
                                                     Register opt_receiver_out) {
   RegisterAllocationScope register_scope(this);
