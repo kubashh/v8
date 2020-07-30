@@ -524,6 +524,16 @@ JSTypeHintLowering::LoweringResult JSTypeHintLowering::ReduceLoadNamedOperation(
   return LoweringResult::NoChange();
 }
 
+JSTypeHintLowering::LoweringResult
+JSTypeHintLowering::ReduceLoadNamedFromSuperOperation(const Operator* op,
+                                                      Node* receiver,
+                                                      Node* home_object,
+                                                      Node* effect,
+                                                      Node* control) const {
+  DCHECK_EQ(IrOpcode::kJSLoadNamedFromSuper, op->opcode());
+  return LoweringResult::NoChange();
+}
+
 JSTypeHintLowering::LoweringResult JSTypeHintLowering::ReduceLoadKeyedOperation(
     const Operator* op, Node* obj, Node* key, Node* effect, Node* control,
     FeedbackSlot slot) const {

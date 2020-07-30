@@ -231,6 +231,8 @@ class BytecodeGraphBuilder {
       FeedbackSlot call_slot);
   JSTypeHintLowering::LoweringResult TryBuildSimplifiedLoadNamed(
       const Operator* op, Node* receiver, FeedbackSlot slot);
+  JSTypeHintLowering::LoweringResult TryBuildSimplifiedLoadNamedFromSuper(
+      const Operator* op, Node* receiver, Node* home_object);
   JSTypeHintLowering::LoweringResult TryBuildSimplifiedLoadKeyed(
       const Operator* op, Node* receiver, Node* key, FeedbackSlot slot);
   JSTypeHintLowering::LoweringResult TryBuildSimplifiedStoreNamed(
@@ -1993,6 +1995,30 @@ void BytecodeGraphBuilder::VisitLdaNamedPropertyNoFeedback() {
                bytecode_iterator().GetConstantForIndexOperand(1, isolate()));
   const Operator* op = javascript()->LoadNamed(name.object(), FeedbackSource());
   Node* node = NewNode(op, object, feedback_vector_node());
+  environment()->BindAccumulator(node, Environment::kAttachFrameState);
+}
+
+void BytecodeGraphBuilder::VisitLdaNamedPropertyFromSuper() {
+  PrepareEagerCheckpoint();
+  Node* receiver =
+      environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
+  Node* home_object =
+      environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(1));
+  NameRef name(broker(),
+               bytecode_iterator().GetConstantForIndexOperand(2, isolate()));
+  const Operator* op = javascript()->LoadNamedFromSuper(name.object());
+
+  JSTypeHintLowering::LoweringResult lowering =
+      TryBuildSimplifiedLoadNamedFromSuper(op, receiver, home_object);
+  if (lowering.IsExit()) return;
+
+  Node* node = nullptr;
+  if (lowering.IsSideEffectFree()) {
+    node = lowering.value();
+  } else {
+    DCHECK(!lowering.Changed());
+    node = NewNode(op, receiver, home_object);
+  }
   environment()->BindAccumulator(node, Environment::kAttachFrameState);
 }
 
@@ -4115,6 +4141,19 @@ BytecodeGraphBuilder::TryBuildSimplifiedLoadNamed(const Operator* op,
   JSTypeHintLowering::LoweringResult early_reduction =
       type_hint_lowering().ReduceLoadNamedOperation(op, receiver, effect,
                                                     control, slot);
+  ApplyEarlyReduction(early_reduction);
+  return early_reduction;
+}
+
+JSTypeHintLowering::LoweringResult
+BytecodeGraphBuilder::TryBuildSimplifiedLoadNamedFromSuper(const Operator* op,
+                                                           Node* receiver,
+                                                           Node* home_object) {
+  Node* effect = environment()->GetEffectDependency();
+  Node* control = environment()->GetControlDependency();
+  JSTypeHintLowering::LoweringResult early_reduction =
+      type_hint_lowering().ReduceLoadNamedFromSuperOperation(
+          op, receiver, home_object, effect, control);
   ApplyEarlyReduction(early_reduction);
   return early_reduction;
 }
