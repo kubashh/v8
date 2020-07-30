@@ -146,6 +146,10 @@ class JSTypeHintLowering {
   LoweringResult ReduceLoadNamedOperation(const Operator* op, Node* obj,
                                           Node* effect, Node* control,
                                           FeedbackSlot slot) const;
+  LoweringResult ReduceLoadNamedFromSuperOperation(const Operator* op,
+                                                   Node* receiver, Node* object,
+                                                   Node* effect,
+                                                   Node* control) const;
   LoweringResult ReduceLoadKeyedOperation(const Operator* op, Node* obj,
                                           Node* key, Node* effect,
                                           Node* control,
