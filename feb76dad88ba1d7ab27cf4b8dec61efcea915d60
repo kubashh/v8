@@ -69,6 +69,30 @@
       "revId": "feb76dad88ba1d7ab27cf4b8dec61efcea915d60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c69e84f_1e08a49a",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 11019,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-07-30T07:10:59Z",
+      "side": 1,
+      "message": "I thought about this again and decided to merge the 2 Reset methods and only have an atomic reset.",
+      "parentUuid": "e81e08c4_84dc97c8",
+      "range": {
+        "startLine": 11019,
+        "startChar": 25,
+        "endLine": 11019,
+        "endChar": 30
+      },
+      "revId": "feb76dad88ba1d7ab27cf4b8dec61efcea915d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
