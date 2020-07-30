@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48625b71_b266e409",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2020-07-30T15:59:02Z",
+      "side": 1,
+      "message": "PTAL\njust to trigger builders",
+      "revId": "89038bdd9a872fe233384bd2a7a644cb9213f38a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
