@@ -393,9 +393,10 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
       // aren't looked up in the prototype chain.
       GotoIf(IsJSTypedArray(CAST(holder)), &return_undefined);
       if (Is64()) {
-        GotoIfNot(UintPtrLessThan(var_intptr_index.value(),
-                                  IntPtrConstant(JSArray::kMaxArrayIndex)),
-                  miss);
+        GotoIfNot(
+            UintPtrLessThanOrEqual(var_intptr_index.value(),
+                                   IntPtrConstant(JSArray::kMaxArrayIndex)),
+            miss);
       } else {
         GotoIf(IntPtrLessThan(var_intptr_index.value(), IntPtrConstant(0)),
                miss);
