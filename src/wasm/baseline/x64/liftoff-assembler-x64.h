@@ -5,9 +5,9 @@
 #ifndef V8_WASM_BASELINE_X64_LIFTOFF_ASSEMBLER_X64_H_
 #define V8_WASM_BASELINE_X64_LIFTOFF_ASSEMBLER_X64_H_
 
-#include "src/wasm/baseline/liftoff-assembler.h"
-
 #include "src/codegen/assembler.h"
+#include "src/wasm/baseline/liftoff-assembler.h"
+#include "src/wasm/simd-shuffle.h"
 
 namespace v8 {
 namespace internal {
@@ -2274,6 +2274,30 @@ void LiftoffAssembler::emit_s8x16_shuffle(LiftoffRegister dst,
                                           LiftoffRegister lhs,
                                           LiftoffRegister rhs,
                                           const uint8_t shuffle[16]) {
+  uint8_t shuffle32x4[4];
+  if (wasm::SimdShuffle::TryMatch32x4Shuffle(shuffle, shuffle32x4)) {
+    // TODO(v8:10696): special case for is_swizzle
+    uint8_t shuffle_mask = wasm::SimdShuffle::PackShuffle4(shuffle32x4);
+    if (wasm::SimdShuffle::TryMatchBlend(shuffle)) {
+      uint8_t blend_mask = wasm::SimdShuffle::PackBlend4(shuffle32x4);
+      if (CpuFeatures::IsSupported(AVX)) {
+        CpuFeatureScope scope(this, AVX);
+        vpblendw(dst.fp(), lhs.fp(), rhs.fp(), blend_mask);
+      } else {
+        if (dst != lhs) {
+          movups(dst.fp(), lhs.fp());
+        }
+        pblendw(dst.fp(), rhs.fp(), blend_mask);
+      }
+    } else {
+      uint8_t blend_mask = wasm::SimdShuffle::PackBlend4(shuffle32x4);
+      Pshufd(kScratchDoubleReg, rhs.fp(), shuffle_mask);
+      Pshufd(dst.fp(), lhs.fp(), shuffle_mask);
+      Pblendw(dst.fp(), kScratchDoubleReg, blend_mask);
+    }
+    return;
+  }
+
   LiftoffRegister tmp_simd =
       GetUnusedRegister(kFpReg, LiftoffRegList::ForRegs(dst, lhs, rhs));
   Movups(kScratchDoubleReg, lhs.fp());
