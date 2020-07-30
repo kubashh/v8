@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f05b6a61_bc2de31a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-30T07:32:45Z",
+      "side": 1,
+      "message": "lgtm\n\nUlan: Can you check whether my naming comments make sense wrt. to other (maybe JS-related) APIs?",
+      "revId": "aa5b097d56ce333b7005daaa1242290312cf4772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "82e1917e_73396b24",
+        "filename": "include/v8.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-30T07:32:45Z",
+      "side": 1,
+      "message": "Let\u0027s use the term \"thread-safe\" here as that can already be found in v8.h. Concurrently is not used on the API so far.",
+      "range": {
+        "startLine": 1161,
+        "startChar": 63,
+        "endLine": 1161,
+        "endChar": 75
+      },
+      "revId": "aa5b097d56ce333b7005daaa1242290312cf4772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "169fe3f7_9e21fbad",
+        "filename": "include/v8.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-30T07:32:45Z",
+      "side": 1,
+      "message": "We don\u0027t have a convention yet for thread-safe code on the API. I\u0027d suggest \"*Safe()\" to avoid hinting towards std::atomics. We could have other *Safe() functions on the API that use locks in the background and atomic could be misleading there.",
+      "range": {
+        "startLine": 1163,
+        "startChar": 7,
+        "endLine": 1163,
+        "endChar": 20
+      },
+      "revId": "aa5b097d56ce333b7005daaa1242290312cf4772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad876175_17b66b2d",
+        "filename": "include/v8.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 10968,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2020-07-30T07:32:45Z",
+      "side": 1,
+      "message": "nit: SetSlotSafe()/GetSlotSafe()",
+      "range": {
+        "startLine": 10968,
+        "startChar": 2,
+        "endLine": 10968,
+        "endChar": 18
+      },
+      "revId": "aa5b097d56ce333b7005daaa1242290312cf4772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
