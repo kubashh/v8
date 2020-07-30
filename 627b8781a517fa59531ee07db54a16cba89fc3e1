@@ -94,6 +94,30 @@
       "revId": "627b8781a517fa59531ee07db54a16cba89fc3e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c16a1d77_2a50ce66",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-07-30T22:15:14Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "1e2934c5_fe1867a0",
+      "range": {
+        "startLine": 97,
+        "startChar": 34,
+        "endLine": 97,
+        "endChar": 56
+      },
+      "revId": "627b8781a517fa59531ee07db54a16cba89fc3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
