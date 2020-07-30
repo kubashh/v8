@@ -61,6 +61,14 @@ transitioning macro ThisNumberValue(implicit context: Context)(
       ToThisValue(receiver, PrimitiveType::kNumber, method));
 }
 
+macro ToCharCode(input: int32): int32 {
+  assert(0 <= input && input <= 36);
+  if (input < 10) {
+    return input + kAsciiZero;
+  }
+  return input - 10 + kAsciiLowerCaseA;
+}
+
 // https://tc39.github.io/ecma262/#sec-number.prototype.tostring
 transitioning javascript builtin NumberPrototypeToString(
     js-implicit context: NativeContext, receiver: JSAny)(...arguments): String {
@@ -88,13 +96,8 @@ transitioning javascript builtin NumberPrototypeToString(
 
   // Fast case where the result is a one character string.
   if (TaggedIsPositiveSmi(x) && x < radixNumber) {
-    let charCode = Convert<int32>(UnsafeCast<Smi>(x));
-    if (charCode < 10) {
-      charCode += kAsciiZero;
-    } else {
-      charCode = charCode - 10 + kAsciiLowerCaseA;
-    }
-    return StringFromSingleCharCode(charCode);
+    return StringFromSingleCharCode(
+        ToCharCode(Convert<int32>(UnsafeCast<Smi>(x))));
   }
 
   if (x == -0) {
@@ -106,6 +109,24 @@ transitioning javascript builtin NumberPrototypeToString(
   } else if (x == MINUS_V8_INFINITY) {
     return MinusInfinityStringConstant();
   }
+
+  if (TaggedIsSmi(x)) {
+    let n: int32 = Convert<int32>(UnsafeCast<Smi>(x));
+    let str: String = kEmptyString;
+    let isNegative: bool = false;
+    if (n < 0) {
+      n = 0 - n;
+      isNegative = true;
+    }
+    const radix: int32 = Convert<int32>(radixNumber);
+    while (n > 0) {
+      const remainder: int32 = n % radix;
+      n = (n - remainder) / radix;
+      str = StringFromSingleCharCode(ToCharCode(remainder)) + str;
+    }
+    return isNegative ? '-' + str : str;
+  }
+
   return runtime::DoubleToStringWithRadix(x, radixNumber);
 }
 
