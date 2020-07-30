@@ -20,18 +20,15 @@ snippet: "
     test();
   })();
 "
-frame size: 6
+frame size: 5
 parameter count: 1
-bytecode array length: 33
+bytecode array length: 25
 bytecodes: [
                 B(Mov), R(closure), R(0),
   /*  104 S> */ B(LdaConstant), U8(0),
   /*  111 E> */ B(LdaKeyedProperty), R(closure), U8(1),
                 B(Star), R(4),
-                B(LdaConstant), U8(1),
-                B(Star), R(5),
-                B(Mov), R(this), R(3),
-  /*  117 E> */ B(CallRuntime), U16(Runtime::kLoadFromSuper), R(3), U8(3),
+  /*  117 E> */ B(LdaNamedPropertyFromSuper), R(this), R(4), U8(1),
                 B(Star), R(1),
   /*  117 E> */ B(CallAnyReceiver), R(1), R(this), U8(1), U8(3),
   /*  126 E> */ B(AddSmi), I8(1), U8(0),
@@ -61,7 +58,7 @@ snippet: "
 "
 frame size: 5
 parameter count: 1
-bytecode array length: 46
+bytecode array length: 38
 bytecodes: [
                 B(Mov), R(closure), R(0),
   /*  130 S> */ B(LdaConstant), U8(0),
@@ -76,10 +73,7 @@ bytecodes: [
   /*  143 S> */ B(LdaConstant), U8(0),
   /*  150 E> */ B(LdaKeyedProperty), R(closure), U8(2),
                 B(Star), R(2),
-                B(LdaConstant), U8(1),
-                B(Star), R(3),
-                B(Mov), R(this), R(1),
-  /*  156 E> */ B(CallRuntime), U16(Runtime::kLoadFromSuper), R(1), U8(3),
+  /*  156 E> */ B(LdaNamedPropertyFromSuper), R(this), R(2), U8(1),
   /*  158 S> */ B(Return),
 ]
 constant pool: [
