@@ -33,6 +33,23 @@
       "revId": "3b5b5cd709c26a9d9f6b4b2d9d63eab541a76159",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3122ea87_5130e6a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-30T13:28:02Z",
+      "side": 1,
+      "message": "Do you want a proper review or just an owners stamp here?",
+      "revId": "3b5b5cd709c26a9d9f6b4b2d9d63eab541a76159",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
