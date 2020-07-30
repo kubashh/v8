@@ -171,6 +171,15 @@ Reduction JSHeapCopyReducer::Reduce(Node* node) {
       }
       break;
     }
+    case IrOpcode::kJSLoadNamedFromSuper: {
+      NamedAccess const& p = NamedAccessOf(node->op());
+      NameRef name(broker(), p.name());
+      if (p.feedback().IsValid()) {
+        broker()->ProcessFeedbackForPropertyAccess(p.feedback(),
+                                                   AccessMode::kLoad, name);
+      }
+      break;
+    }
     case IrOpcode::kJSStoreNamed: {
       NamedAccess const& p = NamedAccessOf(node->op());
       NameRef name(broker(), p.name());
