@@ -85,7 +85,17 @@ class StatsCounter;
     "RegExpMacroAssembler*::CheckStackGuardState()")                           \
   V(re_grow_stack, "NativeRegExpMacroAssembler::GrowStack()")                  \
   V(re_match_for_call_from_js, "IrregexpInterpreter::MatchForCallFromJs")      \
-  V(re_word_character_map, "NativeRegExpMacroAssembler::word_character_map")
+  V(re_word_character_map, "NativeRegExpMacroAssembler::word_character_map")   \
+  EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V)
+
+#ifdef V8_HEAP_SANDBOX
+#define EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V) \
+  V(external_pointer_table_address,                          \
+    "Isolate::external_pointer_table_address("               \
+    ")")
+#else
+#define EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V)
+#endif  // V8_HEAP_SANDBOX
 
 #define EXTERNAL_REFERENCE_LIST(V)                                             \
   V(abort_with_reason, "abort_with_reason")                                    \
@@ -230,7 +240,8 @@ class StatsCounter;
     "atomic_pair_compare_exchange_function")                                   \
   V(js_finalization_registry_remove_cell_from_unregister_token_map,            \
     "JSFinalizationRegistry::RemoveCellFromUnregisterTokenMap")                \
-  EXTERNAL_REFERENCE_LIST_INTL(V)
+  EXTERNAL_REFERENCE_LIST_INTL(V)                                              \
+  EXTERNAL_REFERENCE_LIST_HEAP_SANDBOX(V)
 
 #ifdef V8_INTL_SUPPORT
 #define EXTERNAL_REFERENCE_LIST_INTL(V)                               \
@@ -239,6 +250,14 @@ class StatsCounter;
 #else
 #define EXTERNAL_REFERENCE_LIST_INTL(V)
 #endif  // V8_INTL_SUPPORT
+
+#ifdef V8_HEAP_SANDBOX
+#define EXTERNAL_REFERENCE_LIST_HEAP_SANDBOX(V) \
+  V(external_pointer_table_grow_table_function, \
+    "ExternalPointerTable::GrowTable")
+#else
+#define EXTERNAL_REFERENCE_LIST_HEAP_SANDBOX(V)
+#endif  // V8_HEAP_SANDBOX
 
 // An ExternalReference represents a C++ address used in the generated
 // code. All references to C++ functions and variables must be encapsulated
