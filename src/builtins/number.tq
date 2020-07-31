@@ -61,6 +61,14 @@ transitioning macro ThisNumberValue(implicit context: Context)(
       ToThisValue(receiver, PrimitiveType::kNumber, method));
 }
 
+macro ToCharCode(input: int32): int32 {
+  assert(0 <= input && input <= 36);
+  if (input < 10) {
+    return input + kAsciiZero;
+  }
+  return input - 10 + kAsciiLowerCaseA;
+}
+
 // https://tc39.github.io/ecma262/#sec-number.prototype.tostring
 transitioning javascript builtin NumberPrototypeToString(
     js-implicit context: NativeContext, receiver: JSAny)(...arguments): String {
@@ -86,15 +94,28 @@ transitioning javascript builtin NumberPrototypeToString(
   // 7. Return the String representation of this Number
   //    value using the radix specified by radixNumber.
 
-  // Fast case where the result is a one character string.
-  if (TaggedIsPositiveSmi(x) && x < radixNumber) {
-    let charCode = Convert<int32>(UnsafeCast<Smi>(x));
-    if (charCode < 10) {
-      charCode += kAsciiZero;
-    } else {
-      charCode = charCode - 10 + kAsciiLowerCaseA;
+  if (TaggedIsSmi(x)) {
+    const isNegative: bool = x < 0 ? true : false;
+    let n: int32 = Convert<int32>(UnsafeCast<Smi>(x));
+    // Fast case where the result is a one character string.
+    if (!isNegative && x < radixNumber) {
+      return StringFromSingleCharCode(ToCharCode(n));
     }
-    return StringFromSingleCharCode(charCode);
+
+    // TODO(duongn): pre-size the string.
+    let str: String = kEmptyString;
+    if (isNegative) {
+      if (n == kMinInt32)
+        return runtime::DoubleToStringWithRadix(x, radixNumber);
+      n = 0 - n;
+    }
+    const radix: int32 = Convert<int32>(radixNumber);
+    while (n > 0) {
+      const remainder: int32 = n % radix;
+      n = (n - remainder) / radix;
+      str = StringFromSingleCharCode(ToCharCode(remainder)) + str;
+    }
+    return isNegative ? '-' + str : str;
   }
 
   if (x == -0) {
@@ -106,6 +127,7 @@ transitioning javascript builtin NumberPrototypeToString(
   } else if (x == MINUS_V8_INFINITY) {
     return MinusInfinityStringConstant();
   }
+
   return runtime::DoubleToStringWithRadix(x, radixNumber);
 }
 
