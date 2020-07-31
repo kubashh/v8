@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79a6c0fd_04ec2796",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-31T11:00:20Z",
+      "side": 1,
+      "message": "Georg PTAL at src/codegen\nUlan PTAL at src/handles and src/heap\nRoss PTAL at src/execution (isolate is not needed in the constructor anymore)",
+      "revId": "d9565d64a2f9bcefb8a278be79dba5d1e8962804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5eecc9d6_da5b2348",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4592,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-07-31T11:00:20Z",
+      "side": 1,
+      "message": "FYI I have a follow-up CL to delete this. I split it into two to make it easier to review.",
+      "range": {
+        "startLine": 4592,
+        "startChar": 4,
+        "endLine": 4592,
+        "endChar": 6
+      },
+      "revId": "d9565d64a2f9bcefb8a278be79dba5d1e8962804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
