@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "7df379c2_d377d55d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-07-31T11:16:17Z",
+      "side": 1,
+      "message": "LGTM from my side.",
+      "revId": "d9565d64a2f9bcefb8a278be79dba5d1e8962804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5eecc9d6_da5b2348",
         "filename": "src/heap/heap.cc",
         "patchSetId": 4
