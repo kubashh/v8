@@ -16,6 +16,46 @@
       "revId": "e11c86cc9772d02062cbe083af157f17bf7ba3d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c0ed512b_c522b0f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-31T08:07:59Z",
+      "side": 1,
+      "message": "Very nice! We can possibly make this even faster by pre-calculating the size of the string, allocating it with AllocateSeqOneByteString, and writing the characters with PointerToSeqStringData. But, this is already a big enough improvement to land as-is.",
+      "revId": "e11c86cc9772d02062cbe083af157f17bf7ba3d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "81788d0f_4cda915e",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-31T08:07:59Z",
+      "side": 1,
+      "message": "could you add a TODO to pre-size the string?",
+      "range": {
+        "startLine": 116,
+        "startChar": 22,
+        "endLine": 116,
+        "endChar": 34
+      },
+      "revId": "e11c86cc9772d02062cbe083af157f17bf7ba3d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
