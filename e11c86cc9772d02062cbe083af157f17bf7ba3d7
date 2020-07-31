@@ -36,6 +36,75 @@
     },
     {
       "key": {
+        "uuid": "71c71d9c_464877b1",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-31T08:12:23Z",
+      "side": 1,
+      "message": "this check could go inside the TaggedIsSmi check below, and you can deduplicate the value read and sign check.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 3
+      },
+      "revId": "e11c86cc9772d02062cbe083af157f17bf7ba3d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f191338_3b55a7a0",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-31T08:12:23Z",
+      "side": 1,
+      "message": "These can probably go after the TaggedIsSmi check, I expect Smis to be more common than these funky floats.",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 3
+      },
+      "revId": "e11c86cc9772d02062cbe083af157f17bf7ba3d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1666d42_caaff9ea",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-07-31T08:12:23Z",
+      "side": 1,
+      "message": "this can go inside the n \u003c 0 check",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 80
+      },
+      "revId": "e11c86cc9772d02062cbe083af157f17bf7ba3d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81788d0f_4cda915e",
         "filename": "src/builtins/number.tq",
         "patchSetId": 4
