@@ -179,11 +179,13 @@ class CompilationHandleScope final {
  public:
   explicit CompilationHandleScope(Isolate* isolate,
                                   OptimizedCompilationInfo* info)
-      : deferred_(isolate), info_(info) {}
-  ~CompilationHandleScope() { info_->set_deferred_handles(deferred_.Detach()); }
+      : persistent_(isolate), info_(info) {}
+  ~CompilationHandleScope() {
+    info_->set_persistent_handles(persistent_.Detach());
+  }
 
  private:
-  DeferredHandleScope deferred_;
+  PersistentHandlesScope persistent_;
   OptimizedCompilationInfo* info_;
 };
 
