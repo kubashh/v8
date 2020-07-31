@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf5d9bb0_6081cba0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-07-31T16:31:48Z",
+      "side": 1,
+      "message": "The CL looks good to me.\nLeszek, PTAL @ all, and then we\u0027ll send it to component owners",
+      "revId": "7716b87e471cc866ab2bee5b87a9d9cc5f685a83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
