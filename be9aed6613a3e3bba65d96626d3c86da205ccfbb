@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2049c9b_24ea0ad6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-07-31T18:37:26Z",
+      "side": 1,
+      "message": "Thanks Leszek! Feedback Addressed. PTAL, again 😊",
+      "revId": "be9aed6613a3e3bba65d96626d3c86da205ccfbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
