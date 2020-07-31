@@ -3016,6 +3016,15 @@ void Isolate::CheckIsolateLayout() {
   CHECK_EQ(static_cast<int>(OFFSET_OF(
                Isolate, isolate_data_.external_memory_low_since_mark_compact_)),
            Internals::kExternalMemoryLowSinceMarkCompactOffset);
+
+#ifdef V8_HEAP_SANDBOX
+  CHECK_EQ(static_cast<int>(OFFSET_OF(ExternalPointerTable, buffer_)),
+           Internals::kExternalPointerTableBufferOffset);
+  CHECK_EQ(static_cast<int>(OFFSET_OF(ExternalPointerTable, length_)),
+           Internals::kExternalPointerTableLengthOffset);
+  CHECK_EQ(static_cast<int>(OFFSET_OF(ExternalPointerTable, capacity_)),
+           Internals::kExternalPointerTableCapacityOffset);
+#endif
 }
 
 void Isolate::ClearSerializerData() {
