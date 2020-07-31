@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "e4d45837_47e945ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-31T11:15:57Z",
+      "side": 1,
+      "message": "Heap and handles lgtm with a comment",
+      "revId": "d9565d64a2f9bcefb8a278be79dba5d1e8962804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5eecc9d6_da5b2348",
         "filename": "src/heap/heap.cc",
         "patchSetId": 4

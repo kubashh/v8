@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf4567db_cc3d04aa",
+        "filename": "src/handles/persistent-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-07-31T11:15:57Z",
+      "side": 0,
+      "message": "Let\u0027s keep this as an implication?\nDCHECK_IMPLIES(FLAG_local_heap, isolate-\u003eheap()-\u003esafepoint()-\u003eIsActive())\n\nWe can get the isolate as an additional parameter of Iterate()",
+      "range": {
+        "startLine": 126,
+        "startChar": 2,
+        "endLine": 126,
+        "endChar": 52
+      },
+      "revId": "e2d1278855995ad2d131db33306c04ce5397beec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
