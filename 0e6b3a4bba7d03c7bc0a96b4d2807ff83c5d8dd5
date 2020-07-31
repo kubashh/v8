@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf51e3c5_b62837df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-07-31T12:41:21Z",
+      "side": 1,
+      "message": "I finally have a first version for wasm compilation via jobs working and passing all tests. Andreas and Thibaud, can you take a look and let me know what you think?\nI left some TODOs, in particular:\n- separate Liftoff compilation from TurboFan compilation and assign different priorities, and\n- contribute to compilation while waiting.\n\nI\u0027d prefer to land this CL as it is for now, to see whether it all works in all embedders, and then work on those TODOs in follow-up CLs.",
+      "revId": "0e6b3a4bba7d03c7bc0a96b4d2807ff83c5d8dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
