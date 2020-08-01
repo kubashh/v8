@@ -16,6 +16,23 @@
       "revId": "a6ddfa0c14a1a59566e22fc0a4897c357d08d560",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "022f9f10_4b5ca683",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-01T00:07:57Z",
+      "side": 1,
+      "message": "Oops, cancelling review for now. Turns out the Atomics code assumes that the backing buffer of a TA is already allocated, while it may be lazy. So the current CL is missing a runtime slow path to allocate the buffer in the lazy case, thus all the failing tests.",
+      "revId": "a6ddfa0c14a1a59566e22fc0a4897c357d08d560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
