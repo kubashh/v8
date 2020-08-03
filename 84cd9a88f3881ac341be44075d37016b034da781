@@ -16,6 +16,23 @@
       "revId": "84cd9a88f3881ac341be44075d37016b034da781",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3460c106_e41af1c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-03T14:20:25Z",
+      "side": 1,
+      "message": "LGTM. Looks like ic.cc is already in sync with this behavior.",
+      "revId": "84cd9a88f3881ac341be44075d37016b034da781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
