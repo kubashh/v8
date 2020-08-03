@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "a2d085c8_11d3a0d1",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-03T08:31:38Z",
+      "side": 1,
+      "message": "Note: the below would then have to handle n \u003d\u003d 0 by returning ZeroStringConstant.",
+      "parentUuid": "07104ae4_ccb08d59",
+      "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e6a57e5_d81ccc53",
         "filename": "src/builtins/number.tq",
         "patchSetId": 7
