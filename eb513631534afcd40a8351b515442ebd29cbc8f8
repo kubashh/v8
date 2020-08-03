@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baa822f2_968497f1",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-03T12:56:34Z",
+      "side": 1,
+      "message": "Why not keeping it here for now, since this class is the only user, and moving it out once we see other uses? That will allow us to support only the wasm use cases, and we keep ownership over the implementation.",
+      "parentUuid": "83669a7d_8db6fb6d",
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b4867b64_aa400da3",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 8
@@ -39,6 +57,30 @@
       "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77f1c2c1_ed235aa4",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-03T12:56:34Z",
+      "side": 1,
+      "message": "Sure, why not. Done.",
+      "parentUuid": "b4867b64_aa400da3",
+      "range": {
+        "startLine": 1045,
+        "startChar": 12,
+        "endLine": 1045,
+        "endChar": 16
+      },
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "f8821e8f_39d23248",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-03T12:56:34Z",
+      "side": 1,
+      "message": "memory_order_relaxed guarantees atomic accesses for that memory location, it will just not synchronize with any other memory accesses (i.e. other accesses can freely be moved before or after that atomic access, either by the compiler or by the CPU). I think this is the semantic we want here. It\u0027s also the cheapest atomic access.\n\nJust returning {max_concurrency_} would technically work, but we might spawn some workers (or execute tasks on them) that have nothing to do, i.e. they would just return \"immediately\" (after figuring out that there are no outstanding units), and would mean pure overhead.\nIf it turns out that {GetMaxConcurrency()} must be as fast as possible we might consider that, but in that case I would say the JobHandle implementation is suboptimal. Also, the atomic load with memory_order_relaxed should not produce any measurable overhead.",
+      "parentUuid": "2441cfd3_756cb195",
+      "range": {
+        "startLine": 1443,
+        "startChar": 47,
+        "endLine": 1443,
+        "endChar": 72
+      },
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8927a6ee_e11c1345",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 8
@@ -76,6 +142,30 @@
       "writtenOn": "2020-08-03T10:57:51Z",
       "side": 1,
       "message": "With the jobs API, do you think we can get rid of calls to \"NumberOfWorkerThreads\"?",
+      "range": {
+        "startLine": 2502,
+        "startChar": 53,
+        "endLine": 2502,
+        "endChar": 74
+      },
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8d75946_f8039235",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2502,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-03T12:56:34Z",
+      "side": 1,
+      "message": "I don\u0027t see how. We need to know how many concurrent workers we expect on the compilation job, in order to initialize the task spealing queues correctly.\nAlternatively we might refactor them such that they can grow dynamically, but that\u0027s probably some additional overhead or complexity.\nWe could try doing that in a follow-up. I added a TODO for now.",
+      "parentUuid": "8927a6ee_e11c1345",
       "range": {
         "startLine": 2502,
         "startChar": 53,
