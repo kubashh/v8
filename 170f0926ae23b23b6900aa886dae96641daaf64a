@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "8c1e23f1_e7b08761",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-03T08:08:20Z",
+      "side": 1,
+      "message": "+1, good catch.",
+      "parentUuid": "2c88b450_3028b31d",
+      "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e2ef0663_6ee12397",
         "filename": "src/builtins/number.tq",
         "patchSetId": 7
@@ -47,6 +65,24 @@
       "writtenOn": "2020-08-03T06:51:33Z",
       "side": 1,
       "message": "Suggestion: handle this in the loop below. StringFromSingleCharCode is a fairly big macro.",
+      "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ce8ce57_c53da626",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-03T08:08:20Z",
+      "side": 1,
+      "message": "In the loop below this will prepend to the current string, are you suggesting a check against string \u003d\u003d kEmptyString on each iteration?",
+      "parentUuid": "e2ef0663_6ee12397",
       "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -81,6 +117,24 @@
       "writtenOn": "2020-08-03T06:51:33Z",
       "side": 1,
       "message": "Note this will build a degenerate cons string tree. May be okay but it could impact other parts of the system.",
+      "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34c49904_b8d451db",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-03T08:08:20Z",
+      "side": 1,
+      "message": "Good point, but this is only a risk for low bases, for base 10 the max number of digits in a Smi is 10 (11 with the sign) so we won\u0027t hit minimum cons string size.",
+      "parentUuid": "f95c4b84_f8e0663f",
       "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
