@@ -33,6 +33,24 @@
       "revId": "99e103ee2dcbb3a2c3a3687e741b4cc81fe0dfed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c2716c58_5ada7520",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-08-03T19:57:05Z",
+      "side": 1,
+      "message": "The full debug builder was until recently only FYI. It was stable for a while so we moved it to main console.\n\nIt however suffers from some tests getting way too slow.",
+      "parentUuid": "8927d416_c3dce2b4",
+      "revId": "99e103ee2dcbb3a2c3a3687e741b4cc81fe0dfed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
