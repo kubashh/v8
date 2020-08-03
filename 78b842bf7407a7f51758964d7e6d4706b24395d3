@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "859ab768_4d49890a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-03T20:50:21Z",
+      "side": 1,
+      "message": "More eyes couldn\u0027t hurt. A missed detach check is probably real bad news.",
+      "revId": "78b842bf7407a7f51758964d7e6d4706b24395d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
