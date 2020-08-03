@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "07104ae4_ccb08d59",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-03T08:21:37Z",
+      "side": 1,
+      "message": "I meant, the code here in line 103 is essentially just an unrolled version of the logic in lines 116-120. Imo it\u0027s cleaner (and produces smaller code size) to just use the loop below instead of special-casing for no strong reason.\n\nSo the refactored code could be:\n\n if (isNegative) {\n   ...\n }\n ...",
+      "parentUuid": "3ce8ce57_c53da626",
+      "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e6a57e5_d81ccc53",
         "filename": "src/builtins/number.tq",
         "patchSetId": 7
@@ -138,6 +156,24 @@
       "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72a32fb9_3a7d8ad3",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-03T08:21:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "34c49904_b8d451db",
+      "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
