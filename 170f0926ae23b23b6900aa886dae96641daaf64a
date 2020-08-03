@@ -178,6 +178,24 @@
     },
     {
       "key": {
+        "uuid": "84c821da_db0c768c",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-03T08:44:03Z",
+      "side": 1,
+      "message": "the original had TaggedIsPositiveSmi so probably not.",
+      "parentUuid": "68c230d3_9d001e28",
+      "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e6a57e5_d81ccc53",
         "filename": "src/builtins/number.tq",
         "patchSetId": 7
