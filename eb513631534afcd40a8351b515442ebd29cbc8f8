@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83669a7d_8db6fb6d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-03T10:57:51Z",
+      "side": 1,
+      "message": "Do you think it\u0027s worth to put this into its own header file? It seems like something that could be interesting for others as well, and it\u0027s very generic.",
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4867b64_aa400da3",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-03T10:57:51Z",
+      "side": 1,
+      "message": "Should we use an enum here?",
+      "range": {
+        "startLine": 1045,
+        "startChar": 12,
+        "endLine": 1045,
+        "endChar": 16
+      },
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2441cfd3_756cb195",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-03T10:57:51Z",
+      "side": 1,
+      "message": "Every time you use std::memory_order_relaxed, I\u0027m wondering if it is really worth it, and if it is actually correct. This code here does not seem hot, so I think it\u0027s not worth having memory_order_relaxed.\n\nIn my understanding, std::memory_order_relaxed does not give you any guarantee which version of a value you actually read, or when a written value actually becomes visible to other threads. In that case, why do you read this value in the first place? Can you not just use max_concurrency_, and avoid loading current_concurrency_ in the first place?",
+      "range": {
+        "startLine": 1443,
+        "startChar": 47,
+        "endLine": 1443,
+        "endChar": 72
+      },
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8927a6ee_e11c1345",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2502,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-03T10:57:51Z",
+      "side": 1,
+      "message": "With the jobs API, do you think we can get rid of calls to \"NumberOfWorkerThreads\"?",
+      "range": {
+        "startLine": 2502,
+        "startChar": 53,
+        "endLine": 2502,
+        "endChar": 74
+      },
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
