@@ -1541,6 +1541,21 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   void UnsafeStoreObjectFieldNoWriteBarrier(TNode<HeapObject> object,
                                             int offset, TNode<Object> value);
 
+  void StoreWord8(TNode<IntPtrT> data_pointer, TNode<IntPtrT> offset,
+                  TNode<Uint32T> value) {
+    StoreNoWriteBarrier(MachineRepresentation::kWord8, data_pointer, offset,
+                        value);
+  }
+  TNode<IntPtrT> PointerToSeqStringData(TNode<String> seq_string) {
+    CSA_ASSERT(this,
+               IsSequentialStringInstanceType(LoadInstanceType(seq_string)));
+    STATIC_ASSERT(SeqOneByteString::kHeaderSize ==
+                  SeqTwoByteString::kHeaderSize);
+    return IntPtrAdd(
+        BitcastTaggedToWord(seq_string),
+        IntPtrConstant(SeqOneByteString::kHeaderSize - kHeapObjectTag));
+  }
+
   // Store the Map of an HeapObject.
   void StoreMap(TNode<HeapObject> object, TNode<Map> map);
   void StoreMapNoWriteBarrier(TNode<HeapObject> object,
