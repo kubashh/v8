@@ -2843,7 +2843,16 @@ class LiftoffCompiler {
     LiftoffRegister lhs = __ PopToRegister(LiftoffRegList::ForRegs(rhs));
     LiftoffRegister dst = __ GetUnusedRegister(result_rc, {lhs, rhs}, {});
 
-    __ LiftoffAssembler::emit_s8x16_shuffle(dst, lhs, rhs, imm.value);
+    uint8_t shuffle[kSimd128Size];
+    memcpy(shuffle, imm.value, sizeof(shuffle));
+    bool is_swizzle;
+    bool needs_swap;
+    wasm::SimdShuffle::CanonicalizeShuffle(lhs == rhs, shuffle, &needs_swap,
+                                           &is_swizzle);
+    if (needs_swap) {
+      std::swap(lhs, rhs);
+    }
+    __ LiftoffAssembler::emit_s8x16_shuffle(dst, lhs, rhs, shuffle, is_swizzle);
     __ PushRegister(kWasmS128, dst);
   }
 
