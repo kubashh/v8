@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "322ed3af_ae108639",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-03T08:40:42Z",
+      "side": 1,
+      "message": "Ah, I see what you mean. I agree for this CL, but I think the pre-sizing one would want to reintroduce this special case to make sure to get the cached string.",
+      "parentUuid": "a2d085c8_11d3a0d1",
+      "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e6a57e5_d81ccc53",
         "filename": "src/builtins/number.tq",
         "patchSetId": 7
@@ -153,6 +171,24 @@
       "writtenOn": "2020-08-03T06:51:33Z",
       "side": 1,
       "message": "Would just\n\n n / radix\n\nwork?",
+      "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37a14ef1_987399f6",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-03T08:40:42Z",
+      "side": 1,
+      "message": "Does TF have a divmod operation? That would be ideal.",
+      "parentUuid": "4e6a57e5_d81ccc53",
       "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
