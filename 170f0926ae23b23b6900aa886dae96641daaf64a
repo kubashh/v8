@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "92f3491d_86b1f997",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-03T08:38:08Z",
+      "side": 1,
+      "message": "nit: also here, please a bit more detail. When is the fast path applied, how does it work?",
+      "revId": "170f0926ae23b23b6900aa886dae96641daaf64a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2bf6e022_2b174d23",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
