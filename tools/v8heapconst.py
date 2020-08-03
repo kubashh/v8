@@ -446,33 +446,33 @@ KNOWN_OBJECTS = {
   ("old_space", 0x02a69): "StringSplitCache",
   ("old_space", 0x02e71): "RegExpMultipleCache",
   ("old_space", 0x03279): "BuiltinsConstantsTable",
-  ("old_space", 0x03625): "AsyncFunctionAwaitRejectSharedFun",
-  ("old_space", 0x0364d): "AsyncFunctionAwaitResolveSharedFun",
-  ("old_space", 0x03675): "AsyncGeneratorAwaitRejectSharedFun",
-  ("old_space", 0x0369d): "AsyncGeneratorAwaitResolveSharedFun",
-  ("old_space", 0x036c5): "AsyncGeneratorYieldResolveSharedFun",
-  ("old_space", 0x036ed): "AsyncGeneratorReturnResolveSharedFun",
-  ("old_space", 0x03715): "AsyncGeneratorReturnClosedRejectSharedFun",
-  ("old_space", 0x0373d): "AsyncGeneratorReturnClosedResolveSharedFun",
-  ("old_space", 0x03765): "AsyncIteratorValueUnwrapSharedFun",
-  ("old_space", 0x0378d): "PromiseAllResolveElementSharedFun",
-  ("old_space", 0x037b5): "PromiseAllSettledResolveElementSharedFun",
-  ("old_space", 0x037dd): "PromiseAllSettledRejectElementSharedFun",
-  ("old_space", 0x03805): "PromiseAnyRejectElementSharedFun",
-  ("old_space", 0x0382d): "PromiseCapabilityDefaultRejectSharedFun",
-  ("old_space", 0x03855): "PromiseCapabilityDefaultResolveSharedFun",
-  ("old_space", 0x0387d): "PromiseCatchFinallySharedFun",
-  ("old_space", 0x038a5): "PromiseGetCapabilitiesExecutorSharedFun",
-  ("old_space", 0x038cd): "PromiseThenFinallySharedFun",
-  ("old_space", 0x038f5): "PromiseThrowerFinallySharedFun",
-  ("old_space", 0x0391d): "PromiseValueThunkFinallySharedFun",
-  ("old_space", 0x03945): "ProxyRevokeSharedFun",
+  ("old_space", 0x0768d): "AsyncFunctionAwaitRejectSharedFun",
+  ("old_space", 0x076b5): "AsyncFunctionAwaitResolveSharedFun",
+  ("old_space", 0x076dd): "AsyncGeneratorAwaitRejectSharedFun",
+  ("old_space", 0x07705): "AsyncGeneratorAwaitResolveSharedFun",
+  ("old_space", 0x0772d): "AsyncGeneratorYieldResolveSharedFun",
+  ("old_space", 0x07755): "AsyncGeneratorReturnResolveSharedFun",
+  ("old_space", 0x0777d): "AsyncGeneratorReturnClosedRejectSharedFun",
+  ("old_space", 0x077a5): "AsyncGeneratorReturnClosedResolveSharedFun",
+  ("old_space", 0x077cd): "AsyncIteratorValueUnwrapSharedFun",
+  ("old_space", 0x077f5): "PromiseAllResolveElementSharedFun",
+  ("old_space", 0x0781d): "PromiseAllSettledResolveElementSharedFun",
+  ("old_space", 0x07845): "PromiseAllSettledRejectElementSharedFun",
+  ("old_space", 0x0786d): "PromiseAnyRejectElementSharedFun",
+  ("old_space", 0x07895): "PromiseCapabilityDefaultRejectSharedFun",
+  ("old_space", 0x078bd): "PromiseCapabilityDefaultResolveSharedFun",
+  ("old_space", 0x078e5): "PromiseCatchFinallySharedFun",
+  ("old_space", 0x0790d): "PromiseGetCapabilitiesExecutorSharedFun",
+  ("old_space", 0x07935): "PromiseThenFinallySharedFun",
+  ("old_space", 0x0795d): "PromiseThrowerFinallySharedFun",
+  ("old_space", 0x07985): "PromiseValueThunkFinallySharedFun",
+  ("old_space", 0x079ad): "ProxyRevokeSharedFun",
 }
 
 # Lower 32 bits of first page addresses for various heap spaces.
 HEAP_FIRST_PAGES = {
-  0x08100000: "old_space",
-  0x08140000: "map_space",
+  0x08180000: "old_space",
+  0x081c0000: "map_space",
   0x08040000: "read_only_space",
 }
 
@@ -502,4 +502,4 @@ FRAME_MARKERS = (
   "NATIVE",
 )
 
-# This set of constants is generated from a shipping build.
+# This set of constants is generated from a non-shipping build.
