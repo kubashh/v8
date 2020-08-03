@@ -221,7 +221,11 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
     profiler_data_ = profiler_data;
   }
 
-  std::unique_ptr<PersistentHandles> DetachPersistentHandles() {
+  std::unique_ptr<PersistentHandles> DetachPersistentHandles(Isolate* isolate) {
+    if (!ph_) {
+      DCHECK_NOT_NULL(isolate);
+      ph_ = isolate->NewPersistentHandles();
+    }
     return std::move(ph_);
   }
 
@@ -263,8 +267,6 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
   // OptimizedCompilationInfo allocates.
   Zone* const zone_;
 
-  std::unique_ptr<PersistentHandles> persistent_handles_;
-
   BailoutReason bailout_reason_ = BailoutReason::kNoReason;
 
   InlinedFunctionList inlined_functions_;
@@ -281,6 +283,7 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
 
   TickCounter tick_counter_;
 
+  // TODO(solanes): update this comment.
   // This PersistentHandles container is owned first by
   // OptimizedCompilationInfo, then by JSHeapBroker, then by LocalHeap (when we
   // go to the background thread), then again by JSHeapBroker (right before

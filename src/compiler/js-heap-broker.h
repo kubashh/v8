@@ -222,11 +222,27 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
 
   template <typename T>
   Handle<T> NewPersistentHandle(Handle<T> obj) {
-    return ph_->NewHandle(*obj);
+    if (local_heap_) {
+      return local_heap_->NewPersistentHandle(obj);
+    } else {
+      DCHECK(ph_);
+      return ph_->NewHandle(*obj);
+    }
   }
 
   LocalHeap* local_heap() {
     return local_heap_.has_value() ? &(*local_heap_) : nullptr;
+  }
+
+  void set_persistent_handles(
+      std::unique_ptr<PersistentHandles> persistent_handles) {
+    DCHECK_NULL(ph_);
+    ph_ = std::move(persistent_handles);
+  }
+
+  std::unique_ptr<PersistentHandles> DetachPersistentHandles() {
+    DCHECK_NOT_NULL(ph_);
+    return std::move(ph_);
   }
 
   std::string Trace() const;
