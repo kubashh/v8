@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a0b566b_a151f52a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-08-03T17:44:02Z",
+      "side": 1,
+      "message": "There are some flakes:\nhttps://ci.chromium.org/p/v8/builders/ci/V8%20Linux%20-%20debug/31394\nhttps://ci.chromium.org/p/v8/builders/ci/V8%20Win32%20-%20debug/26574",
+      "revId": "a2ff59bface6a7bc5a17c013b66d9c35493e9e0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
