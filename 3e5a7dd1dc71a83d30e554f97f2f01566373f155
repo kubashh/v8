@@ -50,6 +50,23 @@
       "revId": "3e5a7dd1dc71a83d30e554f97f2f01566373f155",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "87680964_d19b2f88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-08-03T19:33:38Z",
+      "side": 1,
+      "message": "Oh, I see your commit message now. lgtm",
+      "revId": "3e5a7dd1dc71a83d30e554f97f2f01566373f155",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
