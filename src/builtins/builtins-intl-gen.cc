@@ -27,16 +27,6 @@ class IntlBuiltinsAssembler : public CodeStubAssembler {
                         const char* method_name);
 
   TNode<JSArray> AllocateEmptyJSArray(TNode<Context> context);
-
-  TNode<IntPtrT> PointerToSeqStringData(TNode<String> seq_string) {
-    CSA_ASSERT(this,
-               IsSequentialStringInstanceType(LoadInstanceType(seq_string)));
-    STATIC_ASSERT(SeqOneByteString::kHeaderSize ==
-                  SeqTwoByteString::kHeaderSize);
-    return IntPtrAdd(
-        BitcastTaggedToWord(seq_string),
-        IntPtrConstant(SeqOneByteString::kHeaderSize - kHeapObjectTag));
-  }
 };
 
 TF_BUILTIN(StringToLowerCaseIntl, IntlBuiltinsAssembler) {
