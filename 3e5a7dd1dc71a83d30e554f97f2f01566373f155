@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8e6f1b0_0a405e32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-08-03T18:21:02Z",
+      "side": 1,
+      "message": "Jakob for macro-assembler OWNERS.\nBill for everything.\nPtal, thanks!",
+      "revId": "3e5a7dd1dc71a83d30e554f97f2f01566373f155",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
