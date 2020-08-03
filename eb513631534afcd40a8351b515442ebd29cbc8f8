@@ -173,6 +173,30 @@
     },
     {
       "key": {
+        "uuid": "f802e3a6_2353d6ad",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-03T14:29:03Z",
+      "side": 1,
+      "message": "I don\u0027t think that your understanding of relaxed memory ordering is correct. You still get atomicity, just no synchronization with other atomic accesses. I.e. you have a basic atomic counter.\nSee e.g. this description: https://en.cppreference.com/w/cpp/atomic/memory_order#Relaxed_ordering\nGCC also has some nice explanations and code examples: https://gcc.gnu.org/wiki/Atomic/GCCMM/AtomicSync\n\nI agree that we could probably switch to a more restrictive memory ordering (probably even sequential consistency) without measurable regressions, but since we had this discussion before, I think it would be nice to get a common understanding of the different memory orderings that C++ provides.\n\nMaybe you read over that linked articles, and if you still are feeling that relaxed memory ordering might be incorrect, we can revert to sequential consistency (please let me know why you think they might be incorrect in that case).\nI agree that relaxed ordering is more complex to reason about, but I don\u0027t agree that this means that we generally should not use it.",
+      "parentUuid": "3992c5c6_599df278",
+      "range": {
+        "startLine": 1443,
+        "startChar": 47,
+        "endLine": 1443,
+        "endChar": 72
+      },
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8927a6ee_e11c1345",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 8
@@ -232,6 +256,30 @@
       "side": 1,
       "message": "I think one goal of the jobs API was to get rid of this function, because it is just used by users to implement their own scheduler (as we do ;) ). The jobs API should allow users to say that one task should be executed on as many threads as possible.\n\nAnyways, I think the TODO is good enough for now.",
       "parentUuid": "e8d75946_f8039235",
+      "range": {
+        "startLine": 2502,
+        "startChar": 53,
+        "endLine": 2502,
+        "endChar": 74
+      },
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "895ea872_d2b3cf48",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2502,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-03T14:29:03Z",
+      "side": 1,
+      "message": "Ack, it would be nice to get rid of this long-term.",
+      "parentUuid": "96e628cd_be6bc0a6",
       "range": {
         "startLine": 2502,
         "startChar": 53,
