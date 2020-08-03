@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8927d416_c3dce2b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-08-03T19:55:03Z",
+      "side": 1,
+      "message": "Sorry Michael, I\u0027m not familiar with either of the two test cases, will give a LGTM re: the full debug (since we are running these tests on other configs), but will not auto submit.",
+      "revId": "99e103ee2dcbb3a2c3a3687e741b4cc81fe0dfed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
