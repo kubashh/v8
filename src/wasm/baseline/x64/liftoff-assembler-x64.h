@@ -2273,7 +2273,31 @@ void LiftoffAssembler::LoadTransform(LiftoffRegister dst, Register src_addr,
 void LiftoffAssembler::emit_s8x16_shuffle(LiftoffRegister dst,
                                           LiftoffRegister lhs,
                                           LiftoffRegister rhs,
-                                          const uint8_t shuffle[16]) {
+                                          const uint8_t shuffle[16],
+                                          bool is_swizzle) {
+  uint32_t imms[4];
+  int imm_count = 0;
+  if (is_swizzle) {
+    // Shuffles that use just 1 operand are called swizzles, rhs can be ignored.
+    imms[imm_count++] = wasm::SimdShuffle::Pack4Lanes(shuffle);
+    imms[imm_count++] = wasm::SimdShuffle::Pack4Lanes(shuffle + 4);
+    imms[imm_count++] = wasm::SimdShuffle::Pack4Lanes(shuffle + 8);
+    imms[imm_count++] = wasm::SimdShuffle::Pack4Lanes(shuffle + 12);
+    TurboAssembler::Move(kScratchDoubleReg, make_uint64(imms[1], imms[0]));
+    movq(kScratchRegister, make_uint64(imms[3], imms[2]));
+    Pinsrq(kScratchDoubleReg, kScratchRegister, int8_t{1});
+    if (CpuFeatures::IsSupported(AVX)) {
+      CpuFeatureScope scope(this, AVX);
+      vpshufb(dst.fp(), lhs.fp(), kScratchDoubleReg);
+    } else {
+      if (dst != lhs) {
+        movups(dst.fp(), lhs.fp());
+      }
+      pshufb(dst.fp(), kScratchDoubleReg);
+    }
+    return;
+  }
+
   LiftoffRegister tmp_simd =
       GetUnusedRegister(kFpReg, LiftoffRegList::ForRegs(dst, lhs, rhs));
   Movups(kScratchDoubleReg, lhs.fp());
