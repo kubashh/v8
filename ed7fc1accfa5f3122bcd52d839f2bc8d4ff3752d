@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "975f8c04_72601f0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2020-08-03T21:11:40Z",
+      "side": 1,
+      "message": "lgtm\n\n+machenbach FYI",
+      "revId": "ed7fc1accfa5f3122bcd52d839f2bc8d4ff3752d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
