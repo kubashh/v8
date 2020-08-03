@@ -528,6 +528,7 @@ Object FutexEmulation::WaitAsync(Isolate* isolate,
   Handle<JSObject> promise_capability = factory->NewJSPromise();
   FutexWaitListNode* node =
       new FutexWaitListNode(backing_store, addr, promise_capability, isolate);
+  fprintf(stderr, "Created async waiter node %p\n", node);
 
   {
     base::MutexGuard lock_guard(g_mutex.Pointer());
@@ -764,16 +765,21 @@ void FutexEmulation::HandleAsyncWaiterTimeout(FutexWaitListNode* node) {
 
 void FutexEmulation::IsolateDeinit(Isolate* isolate) {
   base::MutexGuard lock_guard(g_mutex.Pointer());
+  fprintf(stderr, "FutexEmulation::IsolateDeinit %p\n", isolate);
 
   FutexWaitListNode* node = g_wait_list.Pointer()->head_;
   while (node) {
+    fprintf(stderr, "Looking at node %p\n", node);
     if (node->isolate_for_async_waiters_ == isolate) {
       // The Isolate is going away; don't bother cleaning up the Promises in the
       // NativeContext. Also we don't need to cancel the timeout task, since it
       // will be cancelled by Isolate::Deinit.
+      fprintf(stderr, "Removing node %p\n", node);
       node->timeout_task_id_ = CancelableTaskManager::kInvalidTaskId;
+      auto next = node->next_;
       g_wait_list.Pointer()->RemoveNode(node);
-      node = DeleteAsyncWaiterNode(node);
+      delete node;
+      node = next;
     } else {
       node = node->next_;
     }

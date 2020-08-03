@@ -3184,6 +3184,7 @@ void Worker::ExecuteInThread() {
   }
   context_.Reset();
   platform::NotifyIsolateShutdown(g_default_platform, isolate_);
+  fprintf(stderr, "worker calling Isolate::Dispose\n");
   isolate_->Dispose();
   isolate_ = nullptr;
 
