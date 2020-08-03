@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "51f744d5_3714f60d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-03T14:10:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "baa822f2_968497f1",
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4867b64_aa400da3",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 8
@@ -131,6 +149,30 @@
     },
     {
       "key": {
+        "uuid": "3992c5c6_599df278",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-03T14:10:54Z",
+      "side": 1,
+      "message": "memory_order_relaxed also means that it is not guaranteed that you will read values written by other threads, or that values written by this thread will be visible to other threads. In essence memory_order_relaxed does not give you anything to reason about anymore about when values become visible for other threads. Would the code here be still correct if values written by another thread pop up at random times?",
+      "parentUuid": "f8821e8f_39d23248",
+      "range": {
+        "startLine": 1443,
+        "startChar": 47,
+        "endLine": 1443,
+        "endChar": 72
+      },
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8927a6ee_e11c1345",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 8
@@ -175,6 +217,30 @@
       "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96e628cd_be6bc0a6",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2502,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-03T14:10:54Z",
+      "side": 1,
+      "message": "I think one goal of the jobs API was to get rid of this function, because it is just used by users to implement their own scheduler (as we do ;) ). The jobs API should allow users to say that one task should be executed on as many threads as possible.\n\nAnyways, I think the TODO is good enough for now.",
+      "parentUuid": "e8d75946_f8039235",
+      "range": {
+        "startLine": 2502,
+        "startChar": 53,
+        "endLine": 2502,
+        "endChar": 74
+      },
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
