@@ -16,6 +16,23 @@
       "revId": "93a61e04fb929c7be659909790391b964a107931",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd038380_296f160a",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-04T15:20:10Z",
+      "side": 1,
+      "message": "checked should be a boolean (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#checked)\ndid you mean to use \"value\" instead?\n\nJust set the default value in html or flip the condition below in switchTheme...",
+      "revId": "93a61e04fb929c7be659909790391b964a107931",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
