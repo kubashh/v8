@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "a25468fb_9b456bdc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-04T08:32:23Z",
+      "side": 1,
+      "message": "Getting there, thanks.",
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c360a5c_7c9bf617",
         "filename": "src/builtins/number.tq",
         "patchSetId": 14
@@ -53,6 +70,23 @@
         "endLine": 69,
         "endChar": 39
       },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8ce83b5_2347c251",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-04T08:32:23Z",
+      "side": 1,
+      "message": "AllocateSeqOneByteString could just return a SeqOneByteString type",
       "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -99,6 +133,64 @@
         "endLine": 134,
         "endChar": 31
       },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc6011d1_835f8d61",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-04T08:32:23Z",
+      "side": 1,
+      "message": "Also could this be literal \u0027-\u0027 instead of 45? If it doesn\u0027t work, 45 is fine by me.",
+      "parentUuid": "c5050e4d_29a69dc8",
+      "range": {
+        "startLine": 134,
+        "startChar": 6,
+        "endLine": 134,
+        "endChar": 31
+      },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a201a82a_45a5c168",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 5817,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-04T08:32:23Z",
+      "side": 1,
+      "message": "final nit, a more efficient way to implement this is\n\n (instance_type \u0026 (kStringRepresentationMask | kStringEncodingMask)) \u003d\u003d (kSeqStringTag | kOneByteStringTag)\n\nThat\u0027s 1 and, 1 equals, instead of 3 ands, 2 equals.",
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "672342bc_eb2d2b56",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 6094,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-04T08:32:23Z",
+      "side": 1,
+      "message": "s/SloppyTNode/TNode/",
       "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
