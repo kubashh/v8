@@ -16,6 +16,8 @@ class App {
   #view;
   constructor(fileReaderId, mapPanelId, timelinePanelId,
       icPanelId, mapTrackId, icTrackId) {
+    $("#checkbox").checked = 'dark';
+    document.documentElement.dataset.theme = $("#checkbox").checked;
     this.#view = {
       logFileReader: $(fileReaderId),
       icPanel: $(icPanelId),
@@ -152,10 +154,17 @@ class App {
     this.fileLoaded = true;
   }
 
+  refreshTimelineTrackView(){
+    this.#view.mapTrack.data = this.#state.mapTimeline;
+    this.#view.icTrack.data = this.#state.icTimeline;
+  }
+
   switchTheme(event) {
-    if(this.fileLoaded) return;
     document.documentElement.dataset.theme =
       event.target.checked ? 'dark' : 'light';
+    if(this.fileLoaded) {
+      this.refreshTimelineTrackView();
+    }
   }
 }
 
