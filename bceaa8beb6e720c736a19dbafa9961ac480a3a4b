@@ -16,6 +16,92 @@
       "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e005533d_7564b662",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-04T08:24:46Z",
+      "side": 1,
+      "message": "This looks really great! Just a few nits from me, I\u0027ll let Jakob do the +1.",
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2c360a5c_7c9bf617",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-04T08:24:46Z",
+      "side": 1,
+      "message": "nit: this could return a char8, with appropriate use of %RawDownCast. This would save us the masking with 0xFF",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 39
+      },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10a0a332_6444eb4d",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-04T08:24:46Z",
+      "side": 1,
+      "message": "it\u0027s technically slightly better to have the decrement after the write to chars (and start with length - 1), to lengthen the data dependency between `cursor` and `strSeq.chars[cursor]`. In practice I expect it won\u0027t make much difference though.",
+      "range": {
+        "startLine": 128,
+        "startChar": 6,
+        "endLine": 128,
+        "endChar": 26
+      },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5050e4d_29a69dc8",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-04T08:24:46Z",
+      "side": 1,
+      "message": "could this just be a char8 constant, to avoid the Convert?",
+      "range": {
+        "startLine": 134,
+        "startChar": 6,
+        "endLine": 134,
+        "endChar": 31
+      },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
