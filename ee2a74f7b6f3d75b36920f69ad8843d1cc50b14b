@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b63e9325_4f80601d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-04T19:57:31Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "ee2a74f7b6f3d75b36920f69ad8843d1cc50b14b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0e5da49c_7187e1dc",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-04T19:57:31Z",
+      "side": 1,
+      "message": "In the version of tc39.es that I currently see, step 2 is \"Let accessIndex be ...\", and \"Let length be ...\" is step 3. I would prefer that we very strictly stick to the spec here, because such details can matter (in this particular case, the newly added detachment check in line 184 is what makes it safe and the order of LoadJSTypedArrayLength and ToIndex doesn\u0027t matter, but I\u0027m paranoid about these things due to prior experience).",
+      "range": {
+        "startLine": 112,
+        "startChar": 5,
+        "endLine": 112,
+        "endChar": 49
+      },
+      "revId": "ee2a74f7b6f3d75b36920f69ad8843d1cc50b14b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "064fe824_9179ef09",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-04T19:57:31Z",
+      "side": 1,
+      "message": "Atomics",
+      "range": {
+        "startLine": 627,
+        "startChar": 19,
+        "endLine": 627,
+        "endChar": 26
+      },
+      "revId": "ee2a74f7b6f3d75b36920f69ad8843d1cc50b14b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "332bec04_6aae954b",
+        "filename": "test/mjsunit/harmony/atomics.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-04T19:57:31Z",
+      "side": 1,
+      "message": "nit: not any more",
+      "range": {
+        "startLine": 61,
+        "startChar": 33,
+        "endLine": 61,
+        "endChar": 39
+      },
+      "revId": "ee2a74f7b6f3d75b36920f69ad8843d1cc50b14b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
