@@ -124,6 +124,30 @@
     },
     {
       "key": {
+        "uuid": "7e8605e1_554ae535",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T09:54:02Z",
+      "side": 1,
+      "message": "never mind, I thought I cannot use %RawDownCast directly 😊",
+      "parentUuid": "70bc0d32_802bfafb",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 39
+      },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8ce83b5_2347c251",
         "filename": "src/builtins/number.tq",
         "patchSetId": 14
@@ -171,6 +195,24 @@
       "side": 1,
       "message": "Is the EmptyString not a sequential one byte string?",
       "parentUuid": "3deb985c_21271811",
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c898e7ea_f0d415cb",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T09:54:02Z",
+      "side": 1,
+      "message": "it goes like EmptyString extends String and SeqOneByteString extends SeqString extends String. For it happens, I think EmptyString needs to extend SeqOneByteString. I tried that and there were a bunch of errors 😕",
+      "parentUuid": "cf0e506b_b41e9daa",
       "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
