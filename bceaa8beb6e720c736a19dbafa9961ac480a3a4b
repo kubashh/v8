@@ -76,6 +76,30 @@
     },
     {
       "key": {
+        "uuid": "4b1c142f_81760cda",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T09:25:06Z",
+      "side": 1,
+      "message": "Would not save us a masking IMO. For this to return char8, we need to convert from int32 to char8 anyway.",
+      "parentUuid": "2c360a5c_7c9bf617",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 39
+      },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e8ce83b5_2347c251",
         "filename": "src/builtins/number.tq",
         "patchSetId": 14
@@ -87,6 +111,24 @@
       "writtenOn": "2020-08-04T08:32:23Z",
       "side": 1,
       "message": "AllocateSeqOneByteString could just return a SeqOneByteString type",
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3deb985c_21271811",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T09:25:06Z",
+      "side": 1,
+      "message": "but AllocateSeqOneByteString could return an EmptyString",
+      "parentUuid": "e8ce83b5_2347c251",
       "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -113,6 +155,30 @@
       "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b28abc7_5d34b1c0",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T09:25:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10a0a332_6444eb4d",
+      "range": {
+        "startLine": 128,
+        "startChar": 6,
+        "endLine": 128,
+        "endChar": 26
+      },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +229,30 @@
     },
     {
       "key": {
+        "uuid": "361c7580_00749075",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T09:25:06Z",
+      "side": 1,
+      "message": "Added convert from constexpr int31 to char8 and it works with 45. Although it cannot accept literal \u0027-\u0027.",
+      "parentUuid": "dc6011d1_835f8d61",
+      "range": {
+        "startLine": 134,
+        "startChar": 6,
+        "endLine": 134,
+        "endChar": 31
+      },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a201a82a_45a5c168",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 14
@@ -180,6 +270,24 @@
     },
     {
       "key": {
+        "uuid": "f0cd54a7_c6e08c23",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 5817,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T09:25:06Z",
+      "side": 1,
+      "message": "thanks for the tips 😎",
+      "parentUuid": "a201a82a_45a5c168",
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "672342bc_eb2d2b56",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 14
@@ -191,6 +299,24 @@
       "writtenOn": "2020-08-04T08:32:23Z",
       "side": 1,
       "message": "s/SloppyTNode/TNode/",
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b99a88e_0d4d4b63",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 6094,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T09:25:06Z",
+      "side": 1,
+      "message": "What do you mean here?",
+      "parentUuid": "672342bc_eb2d2b56",
       "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
