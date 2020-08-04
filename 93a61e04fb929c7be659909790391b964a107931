@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25f87de1_4f585cd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-08-04T15:12:42Z",
+      "side": 1,
+      "message": "CL for fixing the change theme button 😊",
+      "revId": "93a61e04fb929c7be659909790391b964a107931",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
