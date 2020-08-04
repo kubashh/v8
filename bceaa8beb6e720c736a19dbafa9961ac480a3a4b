@@ -148,6 +148,30 @@
     },
     {
       "key": {
+        "uuid": "b9eea0df_b5b6173d",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T10:35:38Z",
+      "side": 1,
+      "message": "Hmm, I\u0027m not sure what went wrong here but csa_verify build is failing\n\n# TypeError: node #2481:Store[kRepWord16, NoWriteBarrier] uses node #2209:Phi[kRepWord8]:kRepWord8 which doesn\u0027t have a kRepWord32 representation.\n\nAny suggestion?",
+      "parentUuid": "7e8605e1_554ae535",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 39
+      },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e8ce83b5_2347c251",
         "filename": "src/builtins/number.tq",
         "patchSetId": 14
@@ -234,6 +258,24 @@
       "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "107d62ff_ff7470b1",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T10:35:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "429d9387_2c091589",
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -440,6 +482,24 @@
       "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "278fea87_425dc9da",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 6094,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T10:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f054bec_0fb15ea3",
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

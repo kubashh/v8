@@ -33,6 +33,24 @@
       "revId": "002efd8b51a37b930a1dc407f390294b2fd6c9c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "795f1504_87b277f2",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 5819,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T10:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afd8dae2_97ba3096",
+      "revId": "002efd8b51a37b930a1dc407f390294b2fd6c9c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
