@@ -33,6 +33,69 @@
       "revId": "f183711a31711cb319f0db2bb249e8d35fc433f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c3a8d5f7_ecdc1ab6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-08-04T15:32:14Z",
+      "side": 1,
+      "message": "LGTM. I don\u0027t have a strong opinion on the relaxed memory discussion, but if we keep the relaxed memory load maybe it\u0027s worth adding a comment to explain that {current_concurrency_} does not affect correctness, or why synchronisation is not needed (the latter is also not obvious to me).",
+      "revId": "f183711a31711cb319f0db2bb249e8d35fc433f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97ed094e_2c73ea33",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-08-04T15:32:14Z",
+      "side": 1,
+      "message": "nit: \"its\"",
+      "range": {
+        "startLine": 495,
+        "startChar": 60,
+        "endLine": 495,
+        "endChar": 64
+      },
+      "revId": "f183711a31711cb319f0db2bb249e8d35fc433f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99da30ae_a3b05666",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2935,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-08-04T15:32:14Z",
+      "side": 1,
+      "message": "The function does not return anything, should this comment say something like \"notifies the compile job if it increased\" instead?",
+      "range": {
+        "startLine": 2934,
+        "startChar": 58,
+        "endLine": 2935,
+        "endChar": 50
+      },
+      "revId": "f183711a31711cb319f0db2bb249e8d35fc433f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
