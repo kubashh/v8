@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "6cbe1564_c197d205",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-04T20:08:19Z",
+      "side": 1,
+      "message": "Understood. This CL uses the step numbers from the rendering of #1908. I\u0027ll hold off landing this until https://github.com/tc39/ecma262/pull/1908 lands.",
+      "parentUuid": "0e5da49c_7187e1dc",
+      "range": {
+        "startLine": 112,
+        "startChar": 5,
+        "endLine": 112,
+        "endChar": 49
+      },
+      "revId": "ee2a74f7b6f3d75b36920f69ad8843d1cc50b14b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "064fe824_9179ef09",
         "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
         "patchSetId": 6
