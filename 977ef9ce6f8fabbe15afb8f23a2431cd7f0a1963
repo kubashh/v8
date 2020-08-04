@@ -69,6 +69,24 @@
       "revId": "977ef9ce6f8fabbe15afb8f23a2431cd7f0a1963",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7128e044_eea8816b",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 9
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-04T07:17:51Z",
+      "side": 1,
+      "message": "Ack continuing discussion in the other comment.",
+      "parentUuid": "232f3ca1_c43cddc4",
+      "revId": "977ef9ce6f8fabbe15afb8f23a2431cd7f0a1963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

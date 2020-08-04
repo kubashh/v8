@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "9ee33233_6c696506",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-04T07:17:51Z",
+      "side": 1,
+      "message": "Let\u0027s figure that out, it seems a better solution than exposing these raw/low-level functions from CSA.",
+      "parentUuid": "85fe823f_2dc36933",
+      "revId": "cc8f9129629248bcd9fff3c3ce66ddc9ba8b7fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "de3e236f_cbf90819",
         "filename": "src/builtins/number.tq",
         "patchSetId": 11
@@ -136,6 +154,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "7ec8d93c_48149f30",
+      "revId": "cc8f9129629248bcd9fff3c3ce66ddc9ba8b7fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61132ef0_634d3860",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-04T07:17:51Z",
+      "side": 1,
+      "message": "Also assert \u003d\u003d 0 in the else case please. Alternatively you could do cursor-- in this branch and just have a single assert \u003d\u003d 0 after.",
+      "parentUuid": "6919354d_a04709d9",
       "revId": "cc8f9129629248bcd9fff3c3ce66ddc9ba8b7fcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
