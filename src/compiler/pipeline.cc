@@ -152,10 +152,10 @@ class PipelineData {
         instruction_zone_(instruction_zone_scope_.zone()),
         codegen_zone_scope_(zone_stats_, kCodegenZoneName),
         codegen_zone_(codegen_zone_scope_.zone()),
-        broker_(new JSHeapBroker(
-            isolate_, info_->zone(), info_->trace_heap_broker(),
-            is_concurrent_inlining, info->native_context_independent(),
-            info->DetachPersistentHandles())),
+        broker_(new JSHeapBroker(isolate_, info_->zone(),
+                                 info_->trace_heap_broker(),
+                                 is_concurrent_inlining,
+                                 info->native_context_independent(), nullptr)),
         register_allocation_zone_scope_(zone_stats_,
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
@@ -769,20 +769,23 @@ class PipelineRunScope {
 // LocalHeapScope encapsulates the liveness of the brokers's LocalHeap.
 class LocalHeapScope {
  public:
-  explicit LocalHeapScope(JSHeapBroker* broker, OptimizedCompilationInfo* info)
-      : broker_(broker), tick_counter_(&info->tick_counter()) {
+  explicit LocalHeapScope(JSHeapBroker* broker, OptimizedCompilationInfo* info,
+                          Isolate* isolate)
+      : broker_(broker), info_(info) {
+    broker_->set_persistent_handles(info_->DetachPersistentHandles(isolate));
     broker_->InitializeLocalHeap();
-    tick_counter_->AttachLocalHeap(broker_->local_heap());
+    info_->tick_counter().AttachLocalHeap(broker_->local_heap());
   }
 
   ~LocalHeapScope() {
-    tick_counter_->DetachLocalHeap();
+    info_->tick_counter().DetachLocalHeap();
     broker_->TearDownLocalHeap();
+    info_->set_persistent_handles(broker_->DetachPersistentHandles());
   }
 
  private:
   JSHeapBroker* broker_;
-  TickCounter* tick_counter_;
+  OptimizedCompilationInfo* info_;
 };
 
 // Scope that unparks the LocalHeap, if:
@@ -1203,14 +1206,14 @@ PipelineCompilationJob::Status PipelineCompilationJob::ExecuteJobImpl(
   // and not during finalization as that might be on a different thread.
   PipelineJobScope scope(&data_, stats);
   {
-    LocalHeapScope local_heap_scope(data_.broker(), data_.info());
+    LocalHeapScope local_heap_scope(data_.broker(), data_.info(),
+                                    data_.isolate());
     if (data_.broker()->is_concurrent_inlining()) {
       if (!pipeline_.CreateGraph()) {
         return AbortOptimization(BailoutReason::kGraphBuildingFailed);
       }
     }
 
-    // We selectively Unpark inside OptimizeGraph*.
     ParkedScope parked_scope(data_.broker()->local_heap());
 
     bool success;
@@ -3039,11 +3042,12 @@ MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
   Linkage linkage(Linkage::ComputeIncoming(data.instruction_zone(), info));
   Deoptimizer::EnsureCodeForDeoptimizationEntries(isolate);
 
+  // TODO(solanes): Update this code path to use PersistentHandles properly.
   pipeline.Serialize();
   {
-    LocalHeapScope local_heap_scope(data.broker(), data.info());
+    info->set_persistent_handles(isolate->NewPersistentHandles());
+    LocalHeapScope local_heap_scope(data.broker(), data.info(), isolate);
     if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
-    // We selectively Unpark inside OptimizeGraph.
     ParkedScope parked_scope(data.broker()->local_heap());
     if (!pipeline.OptimizeGraph(&linkage)) return MaybeHandle<Code>();
   }

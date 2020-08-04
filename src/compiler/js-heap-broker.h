@@ -229,6 +229,17 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
     return local_heap_.has_value() ? &(*local_heap_) : nullptr;
   }
 
+  void set_persistent_handles(
+      std::unique_ptr<PersistentHandles> persistent_handles) {
+    DCHECK_NULL(ph_);
+    ph_ = std::move(persistent_handles);
+  }
+
+  std::unique_ptr<PersistentHandles> DetachPersistentHandles() {
+    DCHECK_NOT_NULL(ph_);
+    return std::move(ph_);
+  }
+
   std::string Trace() const;
   void IncrementTracingIndentation();
   void DecrementTracingIndentation();
