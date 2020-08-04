@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "203a03ce_b4c5119f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-04T08:40:31Z",
+      "side": 1,
+      "message": "Diff between PS1 and PS6 lgtm!",
+      "revId": "9dbdd26ebcb438f254d00c51cc23016e4ed76899",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
