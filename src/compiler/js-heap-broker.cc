@@ -1613,8 +1613,8 @@ class BytecodeArrayData : public FixedArrayBaseData {
       constant_pool_.push_back(broker->GetOrCreateData(constant_pool->get(i)));
     }
 
-    source_positions_ = broker->NewPersistentHandle(
-        bytecode_array->SourcePositionTableIfCollected());
+    source_positions_ = handle(bytecode_array->SourcePositionTableIfCollected(),
+                               broker->isolate());
 
     Handle<ByteArray> handlers(bytecode_array->handler_table(),
                                broker->isolate());
