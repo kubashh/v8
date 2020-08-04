@@ -16,6 +16,23 @@
       "revId": "f183711a31711cb319f0db2bb249e8d35fc433f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2bf0c4a_ae064773",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-04T12:47:23Z",
+      "side": 1,
+      "message": "I disagree with the use of memory_order_relaxed, especially for code that is not performance critical. Reasoning about correctness is just too hard, and when reading the code it\u0027s hard to convince yourself that everything is correct for all possible executions.\n\nIf you insist on using memory_order_relaxed, I will not block it. To some degree this boils down to personal preferences, and this should not block your work.",
+      "revId": "f183711a31711cb319f0db2bb249e8d35fc433f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

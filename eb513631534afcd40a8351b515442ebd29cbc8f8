@@ -197,6 +197,30 @@
     },
     {
       "key": {
+        "uuid": "02d522e6_d874a8a3",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-04T12:47:23Z",
+      "side": 1,
+      "message": "I do think that relaxed ordering can be very tricky and lead to subtle bugs, and that we should not use it when we don\u0027t see a clear performance benefit. In this case, where multiple threads are reading and writing to the same atomic variable, it is very tricky to reason about whether this is correct or not.\n\nAs the linked GCC article says, with memory_order_relaxed you cannot use the happens-before relation on a single thread to reason about correctness. So in essence a memory_order_relaxed memory access has to be correct no matter if it happens before or after surrounding memory accesses. By correct I mean that also all the interactions with other threads is correct. When reading through the code right now it is hard for me to tell if this is the case. In this case it may be fine, because `current_concurrency_` is just an optimization, and no matter what value a thread reads.\n\nIn general I would like to see a proper justification why a memory_order_relaxed access is correct. The reason is that by just reading over the code it is very difficult to reason about the correctness. I know that this is tedious. That\u0027s why memory_order_relaxed is only supposed to be used for performance critical code where such effort is worth it. Without this proper justification I think memory_order_relaxed is just to dangerous to use.",
+      "parentUuid": "f802e3a6_2353d6ad",
+      "range": {
+        "startLine": 1443,
+        "startChar": 47,
+        "endLine": 1443,
+        "endChar": 72
+      },
+      "revId": "eb513631534afcd40a8351b515442ebd29cbc8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8927a6ee_e11c1345",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 8
