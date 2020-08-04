@@ -16,6 +16,23 @@
       "revId": "002efd8b51a37b930a1dc407f390294b2fd6c9c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "afd8dae2_97ba3096",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 5819,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-04T10:16:25Z",
+      "side": 1,
+      "message": "Here and below, just do the or at compile-time, i.e.\n\n kStringRepresentationMask | kStringEncodingMask\n\ninstead of Word32Or.",
+      "revId": "002efd8b51a37b930a1dc407f390294b2fd6c9c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

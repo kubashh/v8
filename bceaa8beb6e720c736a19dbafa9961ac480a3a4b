@@ -219,6 +219,24 @@
     },
     {
       "key": {
+        "uuid": "429d9387_2c091589",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-04T10:16:25Z",
+      "side": 1,
+      "message": "I think it\u0027s okay to cast (unsafe cast or raw cast if needed) in this case. The only thing that matters is the instance type, and that will be a sequential one byte string for the empty string constant afaik. Then AllocateSeqOneByteString can return a SeqOneByteString.",
+      "parentUuid": "c898e7ea_f0d415cb",
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "10a0a332_6444eb4d",
         "filename": "src/builtins/number.tq",
         "patchSetId": 14
@@ -401,6 +419,24 @@
       "side": 1,
       "message": "What do you mean here?",
       "parentUuid": "672342bc_eb2d2b56",
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f054bec_0fb15ea3",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 6094,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-04T10:16:25Z",
+      "side": 1,
+      "message": "I mean, please don\u0027t use SloppyTNode in new code. Use TNode instead.",
+      "parentUuid": "1b99a88e_0d4d4b63",
       "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
