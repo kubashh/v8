@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ea7daa10_ea265a7d",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T06:23:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50bf5561_adb62fba",
+      "revId": "cc8f9129629248bcd9fff3c3ce66ddc9ba8b7fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aff09ae8_aab9bf98",
         "filename": "src/builtins/number.tq",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2020-08-04T05:10:34Z",
       "side": 1,
       "message": "Did you try casting this to SeqOneByteString and using the indexed accessor?",
+      "revId": "cc8f9129629248bcd9fff3c3ce66ddc9ba8b7fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85fe823f_2dc36933",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T06:23:53Z",
+      "side": 1,
+      "message": "I think I can do something like:\n    UnsafeCast\u003cSeqOneByteString\u003e(str).chars[cursor] \u003d value; \nbut value needs to be char8 which I don\u0027t know how to convert or cast to.",
+      "parentUuid": "aff09ae8_aab9bf98",
       "revId": "cc8f9129629248bcd9fff3c3ce66ddc9ba8b7fcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "12766620_f50b4fd2",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T06:23:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de3e236f_cbf90819",
+      "revId": "cc8f9129629248bcd9fff3c3ce66ddc9ba8b7fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ec8d93c_48149f30",
         "filename": "src/builtins/number.tq",
         "patchSetId": 11
@@ -67,6 +121,24 @@
       "revId": "cc8f9129629248bcd9fff3c3ce66ddc9ba8b7fcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6919354d_a04709d9",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-08-04T06:23:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ec8d93c_48149f30",
+      "revId": "cc8f9129629248bcd9fff3c3ce66ddc9ba8b7fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
