@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "5ab03d15_04cbd87c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-04T15:48:17Z",
+      "side": 1,
+      "message": "Thanks for the reviews! I know that this is a tricky CL.\n\nIn the interest of landing this CL soon, I switched to sequentially consistent memory ordering now. Note that this is inconsistent with other atomic counters in the same file now.\nI think we should discuss this (either in the stand-up, or in a code walk-through or something similar), because I am not sure if we all have the same understanding of the terms here (like \"synchronization\").\n\nMaybe as a last word on my reasoning here:\nI usually try to use the cheapest / most lightweight method that does the job, and hence naturally picked relaxed memory ordering, since I only want to have a counter that can atomically be changed. Similar to how I prefer {T*} over {base::Vector\u003cT\u003e} over {std::vector\u003cT\u003e}. There is probably another line of thinking which says to always use the most secure / most general thing, and only go down to more low-level primitives if performance is really needed. I don\u0027t agree with that line of thinking in general.",
+      "revId": "f183711a31711cb319f0db2bb249e8d35fc433f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97ed094e_2c73ea33",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 9
@@ -76,6 +93,30 @@
     },
     {
       "key": {
+        "uuid": "11124d62_7e2ed10c",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-04T15:48:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97ed094e_2c73ea33",
+      "range": {
+        "startLine": 495,
+        "startChar": 60,
+        "endLine": 495,
+        "endChar": 64
+      },
+      "revId": "f183711a31711cb319f0db2bb249e8d35fc433f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99da30ae_a3b05666",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 9
@@ -96,6 +137,30 @@
       "revId": "f183711a31711cb319f0db2bb249e8d35fc433f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d83d1f28_b94a1bbb",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2935,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-04T15:48:17Z",
+      "side": 1,
+      "message": "Oops, yes, this was a separate function before. I merged it into this one, and forgot to remove (or modify) the comment. Done.",
+      "parentUuid": "99da30ae_a3b05666",
+      "range": {
+        "startLine": 2934,
+        "startChar": 58,
+        "endLine": 2935,
+        "endChar": 50
+      },
+      "revId": "f183711a31711cb319f0db2bb249e8d35fc433f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
