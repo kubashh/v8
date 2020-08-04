@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "973a018d_41bd8f25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-04T17:03:56Z",
+      "side": 1,
+      "message": "Sathya, PTAL. Once you are happy I will send it over to Georg for review.\nAn alternate fix for this would be to hold feedback_slot as a strong pointer. This reload is on the slow path after the runtime call, so didn\u0027t want to touch the fast path by adding code to change weak pointer to a strong one. Maybe later, once we have all checks in we can evaluate this again. ",
+      "revId": "8a6e10ab923c13c3c0a7a634c19ddae255727193",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
