@@ -4817,7 +4817,7 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
   base::Optional<NameRef> name =
       static_name.has_value() ? static_name : GetNameFeedback(nexus);
   MaybeObjectHandle handler = TryGetMinimorphicHandler(maps_and_handlers, kind);
-  if (!handler.is_null()) {
+  if (!handler.is_null() && nexus.ic_state() != MONOMORPHIC) {
     return *zone()->New<MinimorphicLoadPropertyAccessFeedback>(
         *name, kind, nexus.ic_state() == MONOMORPHIC, handler.object(),
         HasMigrationTargets(maps));
