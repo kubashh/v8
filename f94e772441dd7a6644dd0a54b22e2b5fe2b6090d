@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e3ed732_d632d4ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-08-04T19:50:46Z",
+      "side": 1,
+      "message": "Tamer FYI. Thanks for the fix!",
+      "revId": "f94e772441dd7a6644dd0a54b22e2b5fe2b6090d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
