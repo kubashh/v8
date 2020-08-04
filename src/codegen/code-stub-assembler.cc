@@ -5811,6 +5811,14 @@ TNode<BoolT> CodeStubAssembler::IsSequentialStringInstanceType(
       Int32Constant(kSeqStringTag));
 }
 
+TNode<BoolT> CodeStubAssembler::IsSeqOneByteStringInstanceType(
+    TNode<Int32T> instance_type) {
+  CSA_ASSERT(this, IsStringInstanceType(instance_type));
+  return UncheckedCast<BoolT>(
+      Word32And(IsSequentialStringInstanceType(instance_type),
+                IsOneByteStringInstanceType(instance_type)));
+}
+
 TNode<BoolT> CodeStubAssembler::IsConsStringInstanceType(
     SloppyTNode<Int32T> instance_type) {
   CSA_ASSERT(this, IsStringInstanceType(instance_type));
@@ -6080,6 +6088,11 @@ TNode<BoolT> CodeStubAssembler::IsNameInstanceType(
 
 TNode<BoolT> CodeStubAssembler::IsString(SloppyTNode<HeapObject> object) {
   return IsStringInstanceType(LoadInstanceType(object));
+}
+
+TNode<BoolT> CodeStubAssembler::IsSeqOneByteString(
+    SloppyTNode<HeapObject> object) {
+  return IsSeqOneByteStringInstanceType(LoadInstanceType(object));
 }
 
 TNode<BoolT> CodeStubAssembler::IsSymbolInstanceType(

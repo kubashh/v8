@@ -149,6 +149,9 @@ Convert<intptr, uint8>(ui: uint8): intptr {
 Convert<uint8, intptr>(i: intptr): uint8 {
   return %RawDownCast<uint8>(Unsigned(TruncateIntPtrToInt32(i)) & 0xFF);
 }
+Convert<char8, int32>(i: int32): char8 {
+  return %RawDownCast<char8>(i & 0xFF);
+}
 Convert<int32, uint8>(i: uint8): int32 {
   return Signed(Convert<uint32>(i));
 }
