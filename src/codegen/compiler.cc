@@ -966,7 +966,8 @@ bool GetOptimizedCodeNow(OptimizedCompilationJob* job, Isolate* isolate) {
   return true;
 }
 
-bool GetOptimizedCodeLater(OptimizedCompilationJob* job, Isolate* isolate) {
+bool GetOptimizedCodeLater(OptimizedCompilationJob* job, Isolate* isolate,
+                           base::Optional<CompilationHandleScope>& scope) {
   OptimizedCompilationInfo* compilation_info = job->compilation_info();
   if (!isolate->optimizing_compile_dispatcher()->IsQueueAvailable()) {
     if (FLAG_trace_concurrent_recompilation) {
@@ -993,6 +994,7 @@ bool GetOptimizedCodeLater(OptimizedCompilationJob* job, Isolate* isolate) {
                "V8.OptimizeConcurrentPrepare");
 
   if (job->PrepareJob(isolate) != CompilationJob::SUCCEEDED) return false;
+  scope.reset();
   isolate->optimizing_compile_dispatcher()->QueueForOptimization(job);
 
   if (FLAG_trace_concurrent_recompilation) {
@@ -1085,6 +1087,10 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
   base::Optional<CompilationHandleScope> compilation;
   if (mode == ConcurrencyMode::kConcurrent) {
     compilation.emplace(isolate, compilation_info);
+  } else {
+    // Otherwise, we are compiling on the main thread and set a dummy persistent
+    // handles container.
+    compilation_info->set_persistent_handles(isolate->NewPersistentHandles());
   }
 
   // All handles below will be canonicalized.
@@ -1094,7 +1100,7 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
   compilation_info->ReopenHandlesInNewHandleScope(isolate);
 
   if (mode == ConcurrencyMode::kConcurrent) {
-    if (GetOptimizedCodeLater(job.get(), isolate)) {
+    if (GetOptimizedCodeLater(job.get(), isolate, compilation)) {
       job.release();  // The background recompile job owns this now.
 
       // Set the optimization marker and return a code object which checks it.
