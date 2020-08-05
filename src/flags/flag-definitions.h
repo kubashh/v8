@@ -387,8 +387,8 @@ DEFINE_BOOL(assert_types, false,
 DEFINE_BOOL(allocation_site_pretenuring, true,
             "pretenure with allocation sites")
 DEFINE_BOOL(page_promotion, true, "promote pages based on utilization")
-DEFINE_BOOL(always_promote_young_mc, true,
-            "always promote young objects during mark-compact")
+DEFINE_BOOL_READONLY(always_promote_young_mc, true,
+                     "always promote young objects during mark-compact")
 DEFINE_INT(page_promotion_threshold, 70,
            "min percentage of live bytes on a page to enable fast evacuation")
 DEFINE_BOOL(trace_pretenuring, false,
@@ -947,20 +947,11 @@ DEFINE_BOOL(write_protect_code_memory, true, "write protect code memory")
 #endif
 DEFINE_BOOL(concurrent_marking, V8_CONCURRENT_MARKING_BOOL,
             "use concurrent marking")
-#ifdef V8_ARRAY_BUFFER_EXTENSION
-#define V8_ARRAY_BUFFER_EXTENSION_BOOL true
-#else
-#define V8_ARRAY_BUFFER_EXTENSION_BOOL false
-#endif
-DEFINE_BOOL_READONLY(array_buffer_extension, V8_ARRAY_BUFFER_EXTENSION_BOOL,
-                     "enable array buffer tracking using extension objects")
-DEFINE_IMPLICATION(array_buffer_extension, always_promote_young_mc)
 DEFINE_BOOL(concurrent_array_buffer_sweeping, true,
             "concurrently sweep array buffers")
 DEFINE_BOOL(concurrent_allocation, false, "concurrently allocate in old space")
 DEFINE_BOOL(local_heaps, false, "allow heap access from background tasks")
 DEFINE_IMPLICATION(concurrent_inlining, local_heaps)
-DEFINE_NEG_NEG_IMPLICATION(array_buffer_extension, local_heaps)
 DEFINE_BOOL(stress_concurrent_allocation, false,
             "start background threads that allocate memory")
 DEFINE_IMPLICATION(stress_concurrent_allocation, concurrent_allocation)
@@ -1003,8 +994,6 @@ DEFINE_GENERIC_IMPLICATION(
 DEFINE_BOOL(track_retaining_path, false,
             "enable support for tracking retaining path")
 DEFINE_DEBUG_BOOL(trace_backing_store, false, "trace backing store events")
-DEFINE_BOOL(concurrent_array_buffer_freeing, true,
-            "free array buffer allocations on a background thread")
 DEFINE_INT(gc_stats, 0, "Used by tracing internally to enable gc statistics")
 DEFINE_IMPLICATION(trace_gc_object_stats, track_gc_object_stats)
 DEFINE_GENERIC_IMPLICATION(
@@ -1424,6 +1413,11 @@ DEFINE_BOOL(trace_regexp_assembler, false,
 DEFINE_BOOL(trace_regexp_parser, false, "trace regexp parsing")
 DEFINE_BOOL(trace_regexp_tier_up, false, "trace regexp tiering up execution")
 
+DEFINE_BOOL(enable_experimental_regexp_engine, false,
+            "enable experimental linear time regexp engine")
+DEFINE_BOOL(trace_experimental_regexp_engine, false,
+            "trace execution of experimental regexp engine")
+
 // Testing flags test/cctest/test-{flags,api,serialization}.cc
 DEFINE_BOOL(testing_bool_flag, true, "testing_bool_flag")
 DEFINE_MAYBE_BOOL(testing_maybe_bool_flag, "testing_maybe_bool_flag")
@@ -1811,7 +1805,6 @@ DEFINE_NEG_IMPLICATION(single_threaded_gc, concurrent_store_buffer)
 #ifdef ENABLE_MINOR_MC
 DEFINE_NEG_IMPLICATION(single_threaded_gc, minor_mc_parallel_marking)
 #endif  // ENABLE_MINOR_MC
-DEFINE_NEG_IMPLICATION(single_threaded_gc, concurrent_array_buffer_freeing)
 DEFINE_NEG_IMPLICATION(single_threaded_gc, concurrent_array_buffer_sweeping)
 
 #undef FLAG
