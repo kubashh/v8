@@ -16,6 +16,46 @@
       "revId": "19bd2ba41118b0b98dfe127105e9d0c778062cf9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "045378d9_03b48598",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-05T10:20:48Z",
+      "side": 1,
+      "message": "persistent",
+      "range": {
+        "startLine": 1075,
+        "startChar": 20,
+        "endLine": 1075,
+        "endChar": 28
+      },
+      "revId": "19bd2ba41118b0b98dfe127105e9d0c778062cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a214751d_1fd00c07",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-05T10:20:48Z",
+      "side": 1,
+      "message": "What is this about?",
+      "revId": "19bd2ba41118b0b98dfe127105e9d0c778062cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

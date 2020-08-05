@@ -22,6 +22,30 @@
       "revId": "75d4b18a77c3aa508aa3b9a77ac3f81fc4e0a0cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7bd8cba3_9bda0697",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-05T10:20:48Z",
+      "side": 0,
+      "message": "I\u0027m fine with the current change, but we should rename the function, e.g. to PrepareJobForCompilationQueue or PrepareJobForConcurrentCompilation/Optimization.",
+      "parentUuid": "c2c4aa1e_9b155a8b",
+      "range": {
+        "startLine": 996,
+        "startChar": 0,
+        "endLine": 996,
+        "endChar": 2
+      },
+      "revId": "75d4b18a77c3aa508aa3b9a77ac3f81fc4e0a0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
