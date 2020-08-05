@@ -33,6 +33,41 @@
       "revId": "8a6e10ab923c13c3c0a7a634c19ddae255727193",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f400d622_32d7a313",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-05T12:11:46Z",
+      "side": 1,
+      "message": "I thought about this, this requires a GC to be triggered when we try to migrate the instance. It isn\u0027t possible to write a mjsunit test for this. I will attempt writing a cctest for it but from what I remember simulating a heap was a bit hard.",
+      "parentUuid": "0098df52_969113bc",
+      "revId": "8a6e10ab923c13c3c0a7a634c19ddae255727193",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "577b2d41_df2360c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-05T12:11:46Z",
+      "side": 1,
+      "message": "Thanks Sathya!\n",
+      "revId": "8a6e10ab923c13c3c0a7a634c19ddae255727193",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
