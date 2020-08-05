@@ -79,16 +79,7 @@ MaybeHandle<HeapObject> ObjectDeserializer::Deserialize(
 
 void ObjectDeserializer::CommitPostProcessedObjects() {
   if (is_main_thread()) {
-    // TODO(crbug.com/v8/10729): Add concurrent string table support.
-    CHECK_LE(new_internalized_strings().size(), kMaxInt);
-    StringTable::EnsureCapacityForDeserialization(
-        isolate(), static_cast<int>(new_internalized_strings().size()));
-    for (Handle<String> string : new_internalized_strings()) {
-      DisallowHeapAllocation no_gc;
-      StringTableInsertionKey key(*string);
-      StringTable::AddKeyNoResize(isolate(),
-                                  isolate()->factory()->string_table(), &key);
-    }
+    CHECK_EQ(new_string_table_strings().size(), 0);
 
     for (Handle<JSArrayBuffer> buffer : new_off_heap_array_buffers()) {
       uint32_t store_index = buffer->GetBackingStoreRefForDeserialization();
@@ -98,7 +89,7 @@ void ObjectDeserializer::CommitPostProcessedObjects() {
       buffer->Setup(shared, bs);
     }
   } else {
-    CHECK_EQ(new_internalized_strings().size(), 0);
+    CHECK_EQ(new_string_table_strings().size(), 0);
     CHECK_EQ(new_off_heap_array_buffers().size(), 0);
   }
 
