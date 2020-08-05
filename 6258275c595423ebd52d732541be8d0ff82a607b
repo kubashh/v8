@@ -51,6 +51,24 @@
       "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f831e0f_f5a8c3b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-05T23:36:59Z",
+      "side": 1,
+      "message": "(Assuming this or a functionally equivalent flag gets passed in when the loaded page has COOP+COEP.)\n\nAs Adam said, in order to keep the feature detection capability, the standard behavior is that the SharedArrayBuffer global property is only present when COOP+COEP are present.\n\nThe presence of the SharedArrayBuffer global property is orthogonal to whether postMessage throws when passed a SAB. Even when COOP+COEP are not present, it is still possible to get at an SAB using WebAssembly.Memory. In that case, passing it to postMessage throws.\n\nDoes that clear it up?",
+      "parentUuid": "98fa137e_79d741b4",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
