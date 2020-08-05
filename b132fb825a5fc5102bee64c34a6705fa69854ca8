@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f060703e_9b463e26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-08-05T20:52:30Z",
+      "side": 1,
+      "message": "I was seeing a strange behavior when I used `vceq(dst, dst, dst)` to set `dst` to all ones. The regress-1112124.js test case would fail, because the output would alternate between -1 and 0.\nI took a look at godbolt to see what is the correct way to set a NEON register to all ones, and it looked like vmov (imm) was the right way. Since the assembler did not yet support vmov (imm), I had to implement it.\n\nBill for everything, Jakob for simulator (OWNERS), and v8-arm-ports to help review the arm simulator, assembler, diasm. Ptal, thanks!",
+      "revId": "b132fb825a5fc5102bee64c34a6705fa69854ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
