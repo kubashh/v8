@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2b78f19_82832773",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-05T14:39:51Z",
+      "side": 1,
+      "message": "Ulan, PTAL overall\nJakob, PTAL snapshot",
+      "revId": "5c47e390adf9a0cd4b7dd645e10e07ee9cb905f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
