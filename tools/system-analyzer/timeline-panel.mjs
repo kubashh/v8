@@ -13,6 +13,9 @@ defineCustomElement('timeline-panel', (templateText) =>
         'mousemove', e => this.handleTimelineIndicatorMove(e));
     this.addEventListener(
       'overviewupdate', e => this.handleOverviewBackgroundUpdate(e));
+    this.addEventListener(
+      'scroll-track', e => this.handleTrackScroll(e));
+
     this.backgroundCanvas = document.createElement('canvas');
     this.isLocked = false;
   }
@@ -44,7 +47,11 @@ defineCustomElement('timeline-panel', (templateText) =>
     return this.$("slot").assignedNodes().filter(
       track => track.nodeType === Node.ELEMENT_NODE);
   }
-
+  handleTrackScroll(event){
+    for (const track of this.timelineTracks) {
+      track.handleTimelineTrackMove(event.detail);
+    }
+  }
   handleTimelineIndicatorMove(event) {
     if (event.buttons == 0) return;
     let timelineTotalWidth = this.timelineCanvas.offsetWidth;
