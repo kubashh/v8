@@ -704,6 +704,11 @@ DEFINE_BOOL(untrusted_code_mitigations, V8_DEFAULT_UNTRUSTED_CODE_MITIGATIONS,
             "Enable mitigations for executing untrusted code")
 #undef V8_DEFAULT_UNTRUSTED_CODE_MITIGATIONS
 
+// Flag to enable features that require site isolation.
+DEFINE_BOOL(cross_site_isolated, false,
+            "enables features that require site isolation (e.g. "
+            "SharedArrayBuffer)")
+
 // Flags for native WebAssembly.
 DEFINE_BOOL(wasm_generic_wrapper, false,
             "use generic js-to-wasm wrapper instead of per-signature wrappers")

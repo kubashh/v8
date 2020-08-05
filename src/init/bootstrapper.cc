@@ -4144,7 +4144,10 @@ void Genesis::InitializeGlobal_harmony_atomics_waitasync() {
 }
 
 void Genesis::InitializeGlobal_harmony_sharedarraybuffer() {
-  if (!FLAG_harmony_sharedarraybuffer) return;
+  // TODO(bbudge) Eventually, we want to unconditionally expose these, only
+  // removing SharedArrayBuffer if there is no site isolation. To get there,
+  // we must first gate PostMessaging SABs in Chrome on site isolation too.
+  if (!FLAG_harmony_sharedarraybuffer && !FLAG_cross_site_isolated) return;
 
   Handle<JSGlobalObject> global(native_context()->global_object(), isolate());
 
