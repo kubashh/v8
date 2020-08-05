@@ -244,6 +244,30 @@
     },
     {
       "key": {
+        "uuid": "5f8477bf_13e3dcb7",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-08-05T11:18:45Z",
+      "side": 1,
+      "message": "Should be fixed with this CL: https://chromium-review.googlesource.com/c/v8/v8/+/2339096",
+      "parentUuid": "dc043c74_2bcb24a1",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 39
+      },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8ce83b5_2347c251",
         "filename": "src/builtins/number.tq",
         "patchSetId": 14
