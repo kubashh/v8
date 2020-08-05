@@ -22,6 +22,30 @@
       "revId": "2bbabf0ed23f579b477305886ef1f328374717c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a34be7e5_36f309b3",
+        "filename": "tools/system-analyzer/timeline-panel.mjs",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-08-05T07:14:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fecc579c_812e032b",
+      "range": {
+        "startLine": 52,
+        "startChar": 12,
+        "endLine": 52,
+        "endChar": 35
+      },
+      "revId": "2bbabf0ed23f579b477305886ef1f328374717c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
