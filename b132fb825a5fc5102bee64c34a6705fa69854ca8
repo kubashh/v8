@@ -16,6 +16,24 @@
       "revId": "b132fb825a5fc5102bee64c34a6705fa69854ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7d9f1b02_ff30ccd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-08-05T21:00:25Z",
+      "side": 1,
+      "message": "It seems like a pretty serious hardware bug if comparing something to itself gives 0. Wouldn\u0027t this mean that our equality operator has a bug too?",
+      "parentUuid": "f060703e_9b463e26",
+      "revId": "b132fb825a5fc5102bee64c34a6705fa69854ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
