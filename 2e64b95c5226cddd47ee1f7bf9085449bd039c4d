@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92e80f16_6af2b01b",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 2475,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-08-05T12:27:38Z",
+      "side": 1,
+      "message": "Let\u0027s call it v8_mac_arm64_rel_ng - the other bot accordingly.",
+      "range": {
+        "startLine": 2475,
+        "startChar": 13,
+        "endLine": 2475,
+        "endChar": 28
+      },
+      "revId": "2e64b95c5226cddd47ee1f7bf9085449bd039c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d98a5ff_4a2292d3",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 2476,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-08-05T12:27:38Z",
+      "side": 1,
+      "message": "Let\u0027s use 15 here.",
+      "range": {
+        "startLine": 2476,
+        "startChar": 29,
+        "endLine": 2476,
+        "endChar": 31
+      },
+      "revId": "2e64b95c5226cddd47ee1f7bf9085449bd039c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
