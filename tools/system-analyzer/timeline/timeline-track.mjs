@@ -14,6 +14,12 @@ defineCustomElement('./timeline/timeline-track', (templateText) =>
     #selectedEntry;
     constructor() {
       super(templateText);
+      this.timeline.addEventListener("scroll", function (e) {
+        let horizontal = e.currentTarget.scrollLeft;
+        this.dispatchEvent(new CustomEvent(
+          'scrolltrack', {bubbles: true, composed: true,
+            detail: horizontal}));
+      });
       this.backgroundCanvas = document.createElement('canvas');
       this.isLocked = false;
     }
@@ -110,8 +116,12 @@ defineCustomElement('./timeline/timeline-track', (templateText) =>
     }
 
     // TODO(zcankara) Emit event and handle data in timeline track
-    handleTimelineIndicatorMove(offset) {
+    timelineIndicatorMove(offset) {
       this.timeline.scrollLeft += offset;
+    }
+
+    setTimelineTrackScroll(offset) {
+      this.timeline.scrollLeft = offset;
     }
 
     asyncSetTimelineChunkBackground(backgroundTodo) {
