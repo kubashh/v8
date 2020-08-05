@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "fbcfc7b3_8e9a99ce",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-05T10:55:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "045378d9_03b48598",
+      "range": {
+        "startLine": 1075,
+        "startChar": 20,
+        "endLine": 1075,
+        "endChar": 28
+      },
+      "revId": "19bd2ba41118b0b98dfe127105e9d0c778062cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a214751d_1fd00c07",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 1
@@ -53,6 +77,24 @@
       "writtenOn": "2020-08-05T10:20:48Z",
       "side": 1,
       "message": "What is this about?",
+      "revId": "19bd2ba41118b0b98dfe127105e9d0c778062cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc5df825_1dc3286d",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-05T10:55:26Z",
+      "side": 1,
+      "message": "If we fail in PrepareJob we do that part of the code (see the end of this method). It is an early return statement.",
+      "parentUuid": "a214751d_1fd00c07",
       "revId": "19bd2ba41118b0b98dfe127105e9d0c778062cf9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
