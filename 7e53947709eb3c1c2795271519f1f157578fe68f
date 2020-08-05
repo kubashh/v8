@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9b5ff02_bbe59118",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-05T11:18:30Z",
+      "side": 1,
+      "message": "I\u0027m thinking how to make this easier to read.\nHow about reintroducing a GetOptimizedCodeLater helper and then writing:\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nif (mode \u003d\u003d ConcurrencyMode::kConcurrent) {\n  if (GetOptimizedCodeLater(... pass job as unique_ptr ...)) {\n    return BUILTIN_CODE(...);\n  }\n} else {\n  if (GetOptimizedCodeNow(...)) {\n    InsertCode...\n    return ...\n  }\n}\n\nif (isolate-\u003ehas_pending_exception()) isolate-\u003eclear_pending_exception();\nreturn {};\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\nGetOptimizedCode* would be responsible for setting up the handle scopes. None of them would be responsible for clearing exception.",
+      "revId": "7e53947709eb3c1c2795271519f1f157578fe68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
