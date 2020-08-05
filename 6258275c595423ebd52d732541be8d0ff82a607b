@@ -16,6 +16,41 @@
       "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98fa137e_79d741b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2020-08-05T23:30:47Z",
+      "side": 1,
+      "message": "In order to maintain feature-detection capability with the existing world (where Chrome on desktop has the SAB constructor but Chrome on Android does not), the plan (and spec) require us to continue that behavior. CCing syg@ for confirmation.",
+      "parentUuid": "f3fcdcd4_e18f6b43",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f431ff5c_8a8f2ba2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2020-08-05T23:30:47Z",
+      "side": 1,
+      "message": "Where else do you intend to check this flag in V8? As-is I don\u0027t understand the motivation for adding a flag which does the same thing as an existing flag.",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
