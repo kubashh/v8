@@ -966,7 +966,8 @@ bool GetOptimizedCodeNow(OptimizedCompilationJob* job, Isolate* isolate) {
   return true;
 }
 
-bool GetOptimizedCodeLater(OptimizedCompilationJob* job, Isolate* isolate) {
+bool PrepareJobForCompilationQueue(OptimizedCompilationJob* job,
+                                   Isolate* isolate) {
   OptimizedCompilationInfo* compilation_info = job->compilation_info();
   if (!isolate->optimizing_compile_dispatcher()->IsQueueAvailable()) {
     if (FLAG_trace_concurrent_recompilation) {
@@ -992,15 +993,7 @@ bool GetOptimizedCodeLater(OptimizedCompilationJob* job, Isolate* isolate) {
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                "V8.OptimizeConcurrentPrepare");
 
-  if (job->PrepareJob(isolate) != CompilationJob::SUCCEEDED) return false;
-  isolate->optimizing_compile_dispatcher()->QueueForOptimization(job);
-
-  if (FLAG_trace_concurrent_recompilation) {
-    PrintF("  ** Queued ");
-    compilation_info->closure()->ShortPrint();
-    PrintF(" for concurrent optimization.\n");
-  }
-  return true;
+  return job->PrepareJob(isolate) == CompilationJob::SUCCEEDED;
 }
 
 MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
@@ -1080,36 +1073,43 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
   OptimizedCompilationInfo* compilation_info = job->compilation_info();
 
   // In case of concurrent recompilation, all handles below this point will be
-  // allocated in a deferred handle scope that is detached and handed off to
+  // allocated in a persistent handle scope that is detached and handed off to
   // the background thread when we return.
-  base::Optional<CompilationHandleScope> compilation;
   if (mode == ConcurrencyMode::kConcurrent) {
-    compilation.emplace(isolate, compilation_info);
-  }
-
-  // All handles below will be canonicalized.
-  CanonicalHandleScope canonical(isolate);
-
-  // Reopen handles in the new CompilationHandleScope.
-  compilation_info->ReopenHandlesInNewHandleScope(isolate);
-
-  if (mode == ConcurrencyMode::kConcurrent) {
-    if (GetOptimizedCodeLater(job.get(), isolate)) {
-      job.release();  // The background recompile job owns this now.
-
-      // Set the optimization marker and return a code object which checks it.
-      if (!IsForNativeContextIndependentCachingOnly(compilation_target)) {
-        // Cached NCI code currently does not use the optimization marker field.
-        function->SetOptimizationMarker(
-            OptimizationMarker::kInOptimizationQueue);
+    {
+      CompilationHandleScope compilation(isolate, compilation_info);
+      CanonicalHandleScope canonical(isolate);
+      compilation_info->ReopenHandlesInNewHandleScope(isolate);
+      if (!PrepareJobForCompilationQueue(job.get(), isolate)) {
+        if (isolate->has_pending_exception())
+          isolate->clear_pending_exception();
+        return {};
       }
-      DCHECK(function->IsInterpreted() ||
-             (!function->is_compiled() && function->shared().IsInterpreted()));
-      DCHECK(function->shared().HasBytecodeArray());
-      return BUILTIN_CODE(isolate, InterpreterEntryTrampoline);
     }
+    isolate->optimizing_compile_dispatcher()->QueueForOptimization(job.get());
+
+    if (FLAG_trace_concurrent_recompilation) {
+      PrintF("  ** Queued ");
+      compilation_info->closure()->ShortPrint();
+      PrintF(" for concurrent optimization.\n");
+    }
+
+    job.release();  // The background recompile job owns this now.
+
+    // Set the optimization marker and return a code object which checks it.
+    if (!IsForNativeContextIndependentCachingOnly(compilation_target)) {
+      // Cached NCI code currently does not use the optimization marker field.
+      function->SetOptimizationMarker(OptimizationMarker::kInOptimizationQueue);
+    }
+    DCHECK(function->IsInterpreted() ||
+           (!function->is_compiled() && function->shared().IsInterpreted()));
+    DCHECK(function->shared().HasBytecodeArray());
+    return BUILTIN_CODE(isolate, InterpreterEntryTrampoline);
   } else {
     DCHECK_EQ(mode, ConcurrencyMode::kNotConcurrent);
+
+    CanonicalHandleScope canonical(isolate);
+    compilation_info->ReopenHandlesInNewHandleScope(isolate);
     if (GetOptimizedCodeNow(job.get(), isolate)) {
       InsertCodeIntoCompilationCache(isolate, compilation_info);
       return compilation_info->code();
