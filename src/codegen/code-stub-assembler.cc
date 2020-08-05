@@ -4821,16 +4821,6 @@ Node* CodeStubAssembler::LoadElementAndPrepareForStore(
   }
 }
 
-Node* CodeStubAssembler::CalculateNewElementsCapacity(Node* old_capacity,
-                                                      ParameterMode mode) {
-  CSA_SLOW_ASSERT(this, MatchesParameterMode(old_capacity, mode));
-  Node* half_old_capacity = WordOrSmiShr(old_capacity, 1, mode);
-  Node* new_capacity = IntPtrOrSmiAdd(half_old_capacity, old_capacity, mode);
-  Node* padding =
-      IntPtrOrSmiConstant(JSObject::kMinAddedElementsCapacity, mode);
-  return IntPtrOrSmiAdd(new_capacity, padding, mode);
-}
-
 TNode<FixedArrayBase> CodeStubAssembler::TryGrowElementsCapacity(
     TNode<HeapObject> object, TNode<FixedArrayBase> elements, ElementsKind kind,
     TNode<Smi> key, Label* bailout) {
@@ -4858,7 +4848,7 @@ TNode<FixedArrayBase> CodeStubAssembler::TryGrowElementsCapacity(
   GotoIf(UintPtrOrSmiGreaterThanOrEqual(key, max_capacity), bailout);
 
   // Calculate the capacity of the new backing store.
-  Node* new_capacity = CalculateNewElementsCapacity(
+  TNode<TIndex> new_capacity = CalculateNewElementsCapacity(
       IntPtrOrSmiAdd(key, IntPtrOrSmiConstant<TIndex>(1)));
 
   ParameterMode mode =
