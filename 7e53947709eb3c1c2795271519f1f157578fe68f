@@ -16,6 +16,24 @@
       "revId": "7e53947709eb3c1c2795271519f1f157578fe68f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb6832b1_8b7810a8",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-05T12:40:04Z",
+      "side": 1,
+      "message": "I don\u0027t think we can do that since, for example, InsertCodeIntoCompilationCache creates handles. With your proposal, this method would be outside of the CanonicalHandleScope.",
+      "parentUuid": "f9b5ff02_bbe59118",
+      "revId": "7e53947709eb3c1c2795271519f1f157578fe68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
