@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3fcdcd4_e18f6b43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-08-05T22:51:18Z",
+      "side": 1,
+      "message": "Something that just occurred to me: if we want to report attempts to create SABs or PostMessage them as errors in the Dev console (as part of migration process), then we shouldn\u0027t remove the SAB function from the global object. Instead, we should check the flags in the constructor to throw the appropriate exception.",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
