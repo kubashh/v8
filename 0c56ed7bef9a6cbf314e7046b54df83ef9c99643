@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc308ccd_72e26f25",
+        "filename": "tools/system-analyzer/timeline-panel.mjs",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-08-05T08:12:07Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we be setting props on the timeline track rather than directly calling methods on it?",
+      "range": {
+        "startLine": 52,
+        "startChar": 12,
+        "endLine": 52,
+        "endChar": 34
+      },
+      "revId": "0c56ed7bef9a6cbf314e7046b54df83ef9c99643",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
