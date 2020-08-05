@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2c4aa1e_9b155a8b",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-05T08:58:02Z",
+      "side": 0,
+      "message": "Alternatively, we can pass the scope as a parameter and close it inside GetOptimizedCodeLater. However, in this way we skip asking for the mode two times (lines 1086 and 1096) and we can clearly define both code paths \u0026 we don\u0027t have to close the scope manually.",
+      "range": {
+        "startLine": 996,
+        "startChar": 0,
+        "endLine": 996,
+        "endChar": 2
+      },
+      "revId": "75d4b18a77c3aa508aa3b9a77ac3f81fc4e0a0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
