@@ -2007,6 +2007,8 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
         Node* new_value_map = __ LoadField(AccessBuilder::ForMap(), value);
 
         // Check if new map matches.
+        feedback_slot = __ LoadField(
+            AccessBuilder::ForFeedbackVectorSlot(feedback.index()), vector);
         CheckMonomorphic(feedback_slot, new_value_map, handler, &done, nullptr,
                          frame_state, feedback.index(), vector);
       }

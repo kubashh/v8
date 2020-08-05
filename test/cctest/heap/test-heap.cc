@@ -1260,6 +1260,61 @@ HEAP_TEST(Regress10560) {
   }
 }
 
+TEST(Regress10774) {
+  i::FLAG_allow_natives_syntax = true;
+#ifdef VERIFY_HEAP
+  i::FLAG_verify_heap = true;
+#endif
+
+  ManualGCScope manual_gc_scope;
+  CcTest::InitializeVM();
+  v8::Isolate* isolate = CcTest::isolate();
+  Isolate* i_isolate = CcTest::i_isolate();
+  Factory* factory = i_isolate->factory();
+  Heap* heap = i_isolate->heap();
+
+  {
+    v8::HandleScope scope(isolate);
+    const char* source =
+        "function f(o) {"
+        "return o.b;"
+        "}"
+        "var o = {a:10, b:20};"
+        "var o1 = {a:10, b:20};"
+        "var o2 = {a:10, b:20};"
+        "%PrepareFunctionForOptimization(f);"
+        "f(o);"
+        "%OptimizeFunctionOnNextCall(f);"
+        "f(o);"
+        "%PrepareFunctionForOptimization(f);"
+        "f(o);"
+        "o1.b = 10.23;"
+        "f(o1);"
+        "f(o);"
+        "f(o);"
+        "%OptimizeFunctionOnNextCall(f);"
+        "f(o);";
+    CompileRun(source);
+
+    Handle<String> foo_name = factory->InternalizeUtf8String("f");
+    Handle<Object> func_value =
+        Object::GetProperty(i_isolate, i_isolate->global_object(), foo_name)
+            .ToHandleChecked();
+    CHECK(func_value->IsJSFunction());
+    Handle<JSFunction> fun = Handle<JSFunction>::cast(func_value);
+
+    Handle<String> obj_name = factory->InternalizeUtf8String("o2");
+    Handle<Object> obj_value =
+        Object::GetProperty(i_isolate, i_isolate->global_object(), obj_name)
+            .ToHandleChecked();
+
+    heap::SimulateFullSpace(heap->new_space());
+
+    Handle<JSObject> global(i_isolate->context().global_object(), i_isolate);
+    Execution::Call(i_isolate, fun, global, 1, &obj_value).ToHandleChecked();
+  }
+}
+
 #ifndef V8_LITE_MODE
 
 TEST(TestOptimizeAfterBytecodeFlushingCandidate) {
