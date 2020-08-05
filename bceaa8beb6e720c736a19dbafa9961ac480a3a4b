@@ -220,6 +220,30 @@
     },
     {
       "key": {
+        "uuid": "dc043c74_2bcb24a1",
+        "filename": "src/builtins/number.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-08-05T08:51:14Z",
+      "side": 1,
+      "message": "The problem is that Torque/CSA picks the wrong representation for the phi node, which should be kRepWord32 instaed of kRepWord8. Smaller word representations should never be used for SSA values, but only for memory operations. I\u0027ll write a fix in a moment.",
+      "parentUuid": "2f2eca97_7e2a655e",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 39
+      },
+      "revId": "bceaa8beb6e720c736a19dbafa9961ac480a3a4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8ce83b5_2347c251",
         "filename": "src/builtins/number.tq",
         "patchSetId": 14
