@@ -34,6 +34,24 @@
       "revId": "b132fb825a5fc5102bee64c34a6705fa69854ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "63609844_4872a638",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-08-05T21:15:25Z",
+      "side": 1,
+      "message": "Oh you know what, this *could* be a simulator bug, I have only ran it on my workstation, I should try this on a phone and see, thanks for raising this up. Will get back to you.",
+      "parentUuid": "7d9f1b02_ff30ccd7",
+      "revId": "b132fb825a5fc5102bee64c34a6705fa69854ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
