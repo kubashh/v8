@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "7ae28a9d_6a53dbf3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-06T08:14:09Z",
+      "side": 1,
+      "message": "thanks for review \u0026 catching the test weirdness :) ",
+      "revId": "7c9c119642ecd27e5114b81b015279a3caa5c442",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b4068c4_23d82b98",
         "filename": "test/mjsunit/harmony/atomics-waitasync-worker-shutdown-before-wait-finished-2-workers.js",
         "patchSetId": 7
@@ -50,6 +67,24 @@
       "revId": "7c9c119642ecd27e5114b81b015279a3caa5c442",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15d11756_88be6817",
+        "filename": "test/mjsunit/harmony/atomics-waitasync-worker-shutdown-before-wait-finished-2-workers.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-06T08:14:09Z",
+      "side": 1,
+      "message": "Oops. What was I thinking?",
+      "parentUuid": "2b4068c4_23d82b98",
+      "revId": "7c9c119642ecd27e5114b81b015279a3caa5c442",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
