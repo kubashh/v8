@@ -16,6 +16,131 @@
       "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "28453d65_e12670d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-06T06:43:53Z",
+      "side": 1,
+      "message": "Looking good, one suggestion for organizing iteration. I\u0027m not strictly opposed to the current approach either though. Wdyt? ",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4c2effd_82790456",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-06T06:43:53Z",
+      "side": 1,
+      "message": ".(",
+      "range": {
+        "startLine": 232,
+        "startChar": 63,
+        "endLine": 232,
+        "endChar": 65
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd380ba8_31bf7123",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-06T06:43:53Z",
+      "side": 1,
+      "message": "nit: remove one nesting with \u0026\u0026",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd2f2b2d_393ecc5c",
+        "filename": "src/snapshot/deserializer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-06T06:43:53Z",
+      "side": 1,
+      "message": "Is this used anywhere?",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1edebec4_24677fb3",
+        "filename": "src/snapshot/startup-deserializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-06T06:43:53Z",
+      "side": 1,
+      "message": "So LookupKey inserts? Interesting :p",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "502a7ca6_40ca84d7",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-06T06:43:53Z",
+      "side": 1,
+      "message": "A possible alternative to explicitly iterating the string table here, would be to override VisitRootPointers, let Heap::IterateWeakRoots do its thing, and look at the Root type. For Root::kStringTable, we could call SerializeStringTable.\n\nThe advantage would be to remove the special casing (of kUnserializable) in heap.cc, and remove the implicit ordering connection between here and deserialization (e.g. currently moving either ST serialization or deserialization would break things; that\u0027s not possible if order is centrally controlled by IterateWeakRoots).",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "792217d8_89b76a42",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-06T06:43:53Z",
+      "side": 1,
+      "message": "q: These are mostly references into RO space, right?",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
