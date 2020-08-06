@@ -4144,16 +4144,31 @@ void Genesis::InitializeGlobal_harmony_atomics_waitasync() {
 }
 
 void Genesis::InitializeGlobal_harmony_sharedarraybuffer() {
-  if (!FLAG_harmony_sharedarraybuffer) return;
-
+#if V8_OS_ANDROID
+  // On Android, add Atomics. Add SharedArrayBuffer with site isolation or the
+  // feature flag.
+  bool shared_array_buffer =
+      FLAG_cross_site_isolated || FLAG_harmony_sharedarraybuffer;
+  bool atomics = true;
+#else
+  // On desktop, add SharedArrayBuffer and Atomics with site isolation or the
+  // feature flag.
+  // TODO(bbudge) Match Android behavior when desktop migration is complete.
+  bool shared_array_buffer =
+      FLAG_cross_site_isolated || FLAG_harmony_sharedarraybuffer;
+  bool atomics = shared_array_buffer;
+#endif
   Handle<JSGlobalObject> global(native_context()->global_object(), isolate());
 
-  JSObject::AddProperty(isolate_, global, "SharedArrayBuffer",
-                        isolate()->shared_array_buffer_fun(), DONT_ENUM);
-
-  JSObject::AddProperty(isolate_, global, "Atomics",
-                        isolate()->atomics_object(), DONT_ENUM);
-  InstallToStringTag(isolate_, isolate()->atomics_object(), "Atomics");
+  if (shared_array_buffer) {
+    JSObject::AddProperty(isolate_, global, "SharedArrayBuffer",
+                          isolate()->shared_array_buffer_fun(), DONT_ENUM);
+  }
+  if (atomics) {
+    JSObject::AddProperty(isolate_, global, "Atomics",
+                          isolate()->atomics_object(), DONT_ENUM);
+    InstallToStringTag(isolate_, isolate()->atomics_object(), "Atomics");
+  }
 }
 
 void Genesis::InitializeGlobal_harmony_weak_refs() {
