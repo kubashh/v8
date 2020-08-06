@@ -369,6 +369,30 @@
     },
     {
       "key": {
+        "uuid": "8abe3815_3de1c29a",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T11:07:11Z",
+      "side": 1,
+      "message": "Oh, subtle. Could you please add a comment so that this doesn\u0027t get \"simplified\" in the future.",
+      "parentUuid": "5f1ccda1_12841612",
+      "range": {
+        "startLine": 214,
+        "startChar": 2,
+        "endLine": 216,
+        "endChar": 32
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8b06a8e_b3c5e731",
         "filename": "src/objects/string-table.cc",
         "patchSetId": 5
