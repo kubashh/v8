@@ -140,6 +140,24 @@
       "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f6a0636_7f505046",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-06T00:57:45Z",
+      "side": 1,
+      "message": "Oh I\u0027m sorry I misunderstood the question, but am also missing context.\n\nIs the migration plan to provide the SharedArrayBuffer property regardless of COOP+COEP for now?\n\nIf so, then yes, a console message sounds good.\n\nIf not (i.e. if we\u0027re going to ship the standardized behavior right now), then I don\u0027t see how the dev console message can be implemented. A property interceptor on the global proxy itself? That seems expensive.",
+      "parentUuid": "c6ac8603_51a91ce2",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
