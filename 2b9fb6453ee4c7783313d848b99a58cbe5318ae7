@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "1f304a98_f4020342",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-08-06T12:04:51Z",
+      "side": 1,
+      "message": "Thanks. I\u0027ll make a second pass, moving this to Object/JSReceiver, which I think will address several comments in one.",
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9acc9ebf_a4c49d5f",
         "filename": "include/v8.h",
         "patchSetId": 1
@@ -76,6 +93,24 @@
       "writtenOn": "2020-08-06T11:42:55Z",
       "side": 1,
       "message": "I think this only makes sense on JSReceiver, otherwise you only create a temporary wrapper object that is never referenced.\n\nMaybe I missed this in the initial proposal, should this also work with Strings?",
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7647d5d0_6fc7cf83",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4771,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-08-06T12:04:51Z",
+      "side": 1,
+      "message": "\u003e Maybe I missed this in the initial proposal, should this also work with Strings?\n\nThat\u0027s up for debate. The TC39 proposal is worded so that it\u0027d also work with strings, so a faithful implementation would have to follow.\n\nOur use case does not require that, though, so maybe we should adapt the proposal accordingly. (I think the proposal aims to be fairly generic.)",
+      "parentUuid": "6f14fb98_1d62c21a",
       "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
