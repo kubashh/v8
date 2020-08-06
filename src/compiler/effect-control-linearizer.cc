@@ -267,6 +267,7 @@ class EffectControlLinearizer {
   Node* TruncateWordToInt32(Node* value);
   Node* BuildIsWeakReferenceTo(Node* maybe_object, Node* value);
   Node* BuildIsStrongReference(Node* value);
+  Node* BuildStrongReferenceTo(Node* value);
   Node* SmiMaxValueConstant();
   Node* SmiShiftBitsConstant();
   void TransitionElementsTo(Node* node, Node* array, ElementsKind from,
@@ -1933,7 +1934,7 @@ void EffectControlLinearizer::CheckMonomorphic(
     Node* feedback, Node* value_map, Node* handler,
     GraphAssemblerLabel<0>* done, GraphAssemblerLabel<0>* map_check_failed,
     Node* frame_state, int slot, Node* vector) {
-  Node* mono_check = BuildIsWeakReferenceTo(feedback, value_map);
+  Node* mono_check = __ TaggedEqual(feedback, value_map);
   if (map_check_failed != nullptr) {
     __ GotoIfNot(mono_check, map_check_failed);
   } else {
@@ -1961,6 +1962,7 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
   Node* vector = __ HeapConstant(feedback.vector);
   Node* feedback_slot = __ LoadField(
       AccessBuilder::ForFeedbackVectorSlot(feedback.index()), vector);
+  Node* strong_feedback = BuildStrongReferenceTo(feedback_slot);
   Node* value_map = __ LoadField(AccessBuilder::ForMap(), value);
   Node* handler = p.handler()->IsSmi()
                       ? __ SmiConstant(Smi::ToInt(*p.handler()))
@@ -1973,7 +1975,7 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
   // case the current state is polymorphic, and if we ever go back to
   // monomorphic start, we will deopt and reoptimize the code.
   if (p.state() == DynamicCheckMapsParameters::kMonomorphic) {
-    CheckMonomorphic(feedback_slot, value_map, handler, &done, &maybe_poly,
+    CheckMonomorphic(strong_feedback, value_map, handler, &done, &maybe_poly,
                      frame_state, feedback.index(), vector);
   } else {
     DCHECK(p.state() == DynamicCheckMapsParameters::kPolymorphic);
@@ -2007,8 +2009,8 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
         Node* new_value_map = __ LoadField(AccessBuilder::ForMap(), value);
 
         // Check if new map matches.
-        CheckMonomorphic(feedback_slot, new_value_map, handler, &done, nullptr,
-                         frame_state, feedback.index(), vector);
+        CheckMonomorphic(strong_feedback, new_value_map, handler, &done,
+                         nullptr, frame_state, feedback.index(), vector);
       }
     } else {
       DeoptimizeReason reason = DeoptimizeReason::kMissingMap;
@@ -6410,6 +6412,17 @@ Node* EffectControlLinearizer::BuildIsStrongReference(Node* value) {
           TruncateWordToInt32(__ BitcastTaggedToWordForTagAndSmiBits(value)),
           __ Int32Constant(kHeapObjectTagMask)),
       __ Int32Constant(kHeapObjectTag));
+}
+
+Node* EffectControlLinearizer::BuildStrongReferenceTo(Node* maybe_object) {
+  if (COMPRESS_POINTERS_BOOL) {
+    return __ Word32And(
+        TruncateWordToInt32(__ BitcastMaybeObjectToWord(maybe_object)),
+        __ Uint32Constant(~static_cast<uint32_t>(kWeakHeapObjectMask)));
+  } else {
+    return __ WordAnd(__ BitcastMaybeObjectToWord(maybe_object),
+                      __ IntPtrConstant(~kWeakHeapObjectMask));
+  }
 }
 
 Node* EffectControlLinearizer::BuildIsWeakReferenceTo(Node* maybe_object,
