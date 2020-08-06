@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cb65165_92eac2f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-06T08:56:35Z",
+      "side": 1,
+      "message": "Refactored the CL. Now the scope is inside the GetOptimizeCode*",
+      "revId": "dffe854ef8588e4b440cedc5ae12d77d995a0041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
