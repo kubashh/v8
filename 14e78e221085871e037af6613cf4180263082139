@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aeb934ad_809427c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2020-08-06T12:13:43Z",
+      "side": 1,
+      "message": "Hi Georg, this is the old implementation with a bunch of new tests. The only differences with the previous review (with the new operators) are that 1 test switched from slow to fast and 2 others - from fast to slow. Otherwise the values produced are correct.",
+      "revId": "14e78e221085871e037af6613cf4180263082139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
