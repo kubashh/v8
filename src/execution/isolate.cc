@@ -4763,6 +4763,27 @@ void Isolate::RemoveCodeMemoryChunk(MemoryChunk* chunk) {
 #endif  // !defined(V8_TARGET_ARCH_ARM)
 }
 
+void Isolate::SetCodeKind(Handle<Object> object) {
+  Handle<Symbol> symbol =
+      SymbolFor(RootIndex::kApiSymbolTable,
+                factory()->InternalizeUtf8String("CodeLike"), false);
+  Handle<JSReceiver> receiver;
+  if (!Object::ToObject(this, object).ToHandle(&receiver)) return;
+  JSReceiver::CreateDataProperty(this, receiver, symbol,
+                                 factory()->true_value(), Just(kDontThrow))
+      .Check();
+}
+
+bool Isolate::IsCodeKind(const Handle<Object>& object) {
+  Handle<Symbol> symbol =
+      SymbolFor(RootIndex::kApiSymbolTable,
+                factory()->InternalizeUtf8String("CodeLike"), false);
+  Handle<JSReceiver> receiver;
+  return object->IsHeapObject() && object->IsJSReceiver() &&
+         Object::ToObject(this, object).ToHandle(&receiver) &&
+         JSReceiver::HasProperty(receiver, symbol).FromMaybe(false);
+}
+
 #undef TRACE_ISOLATE
 
 // static

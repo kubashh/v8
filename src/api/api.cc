@@ -9145,6 +9145,22 @@ void v8::Isolate::LocaleConfigurationChangeNotification() {
 #endif  // V8_INTL_SUPPORT
 }
 
+void v8::Isolate::SetCodeKind(Local<Object> object) {
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
+  //  LOG_API(isolate, Isolate, SetCodeKind);
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
+  i::HandleScope scope(isolate);
+  isolate->SetCodeKind(Utils::OpenHandle(*object));
+}
+
+bool v8::Isolate::IsCodeKind(const Local<Object>& object) {
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
+  //  LOG_API(isolate, Isolate, IsCodeKind);
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
+  i::HandleScope scope(isolate);
+  return isolate->IsCodeKind(Utils::OpenHandle(*object));
+}
+
 // static
 std::unique_ptr<MicrotaskQueue> MicrotaskQueue::New(Isolate* isolate,
                                                     MicrotasksPolicy policy) {

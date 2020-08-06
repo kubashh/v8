@@ -2065,7 +2065,9 @@ std::pair<MaybeHandle<String>, bool> Compiler::ValidateDynamicCompilationSource(
   // allow_code_gen_callback only allows proper strings.
   // (I.e., let allow_code_gen_callback decide, if it has been set.)
   if (isolate->allow_code_gen_callback()) {
-    if (!original_source->IsString()) {
+    bool is_code_kind =
+        original_source->IsString() || isolate->IsCodeKind(original_source);
+    if (!is_code_kind) {
       return {MaybeHandle<String>(), true};
     }
     Handle<String> string_source = Handle<String>::cast(original_source);
@@ -2125,12 +2127,16 @@ MaybeHandle<JSFunction> Compiler::GetFunctionFromValidatedString(
 // static
 MaybeHandle<JSFunction> Compiler::GetFunctionFromString(
     Handle<Context> context, Handle<Object> source,
-    ParseRestriction restriction, int parameters_end_pos) {
+    ParseRestriction restriction, int parameters_end_pos,
+    bool all_were_code_kind) {
   Isolate* const isolate = context->GetIsolate();
   Handle<Context> native_context(context->native_context(), isolate);
-  return GetFunctionFromValidatedString(
-      context, ValidateDynamicCompilationSource(isolate, context, source).first,
-      restriction, parameters_end_pos);
+  MaybeHandle<String> validated_source =
+      all_were_code_kind
+          ? Handle<String>::cast(source)
+          : ValidateDynamicCompilationSource(isolate, context, source).first;
+  return GetFunctionFromValidatedString(context, validated_source, restriction,
+                                        parameters_end_pos);
 }
 
 namespace {

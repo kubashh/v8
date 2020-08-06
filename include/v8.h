@@ -9535,6 +9535,18 @@ class V8_EXPORT Isolate {
    */
   void LocaleConfigurationChangeNotification();
 
+  /**
+   * Support for TC39 "dynamic code brand checks" proposal.
+   *
+   * This API allows to mark (& qeury) objects as "code kind", which causes
+   * them to be treated as code-like (i.e. like Strings) in the context of
+   * eval and function constructor.)
+   *
+   * Reference: https://github.com/tc39/proposal-dynamic-code-brand-checks
+   */
+  void SetCodeKind(Local<Object> object);
+  bool IsCodeKind(const Local<Object>& object);
+
   Isolate() = delete;
   ~Isolate() = delete;
   Isolate(const Isolate&) = delete;
