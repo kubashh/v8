@@ -429,6 +429,8 @@ class Shell : public i::AllStatic {
       const v8::FunctionCallbackInfo<v8::Value>& args);
   static void WorkerGetMessage(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void WorkerTerminate(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void WorkerTerminateAndWait(
+      const v8::FunctionCallbackInfo<v8::Value>& args);
   // The OS object on the global object contains methods for performing
   // operating system calls:
   //
