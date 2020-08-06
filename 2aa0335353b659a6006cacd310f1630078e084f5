@@ -16,6 +16,24 @@
       "revId": "2aa0335353b659a6006cacd310f1630078e084f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa74be2a_906cb920",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4147,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-08-06T21:13:17Z",
+      "side": 1,
+      "message": "OK, I was also concerned about V8_OS_ANDROID here, as there are very few places in V8 where it\u0027s used.",
+      "parentUuid": "259d55ec_1a5bfebf",
+      "revId": "2aa0335353b659a6006cacd310f1630078e084f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
