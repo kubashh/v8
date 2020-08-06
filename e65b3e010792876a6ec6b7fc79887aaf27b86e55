@@ -157,6 +157,30 @@
     },
     {
       "key": {
+        "uuid": "e11f79cc_55e1a50a",
+        "filename": "src/objects/string-set.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-06T11:00:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "974f7364_379cc468",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "843dbb9c_4580f70b",
         "filename": "src/objects/string-table.cc",
         "patchSetId": 5
@@ -321,6 +345,30 @@
     },
     {
       "key": {
+        "uuid": "5f1ccda1_12841612",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-06T11:00:06Z",
+      "side": 1,
+      "message": "Unfortunately not, this creates a tiny data race where data is empty but another thread might want to look it up.",
+      "parentUuid": "9342865b_cf42b18d",
+      "range": {
+        "startLine": 214,
+        "startChar": 2,
+        "endLine": 216,
+        "endChar": 32
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8b06a8e_b3c5e731",
         "filename": "src/objects/string-table.cc",
         "patchSetId": 5
@@ -341,6 +389,30 @@
       "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3a60824_84f882a8",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-06T11:00:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8b06a8e_b3c5e731",
+      "range": {
+        "startLine": 224,
+        "startChar": 1,
+        "endLine": 224,
+        "endChar": 64
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
