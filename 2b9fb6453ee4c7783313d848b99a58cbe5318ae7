@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc704f06_a62190d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-06T11:42:55Z",
+      "side": 1,
+      "message": "Hi, I added some comments, mostly concerning on where to put the methods.\ncheers",
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9acc9ebf_a4c49d5f",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 9549,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-06T11:42:55Z",
+      "side": 1,
+      "message": "These methods should live on the appropriate instanced, in the API and internally.\n\nFrom how our API is structured there should probably be a method on v8::Object.",
+      "range": {
+        "startLine": 9547,
+        "startChar": 0,
+        "endLine": 9549,
+        "endChar": 0
+      },
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fea2443a_fdc22939",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4769,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-06T11:42:55Z",
+      "side": 1,
+      "message": "This should be a private Symbol, see PRIVATE_SYMBOL_LIST_GENERATOR, so you avoid subsequent internalisation overhead.",
+      "range": {
+        "startLine": 4767,
+        "startChar": 0,
+        "endLine": 4769,
+        "endChar": 69
+      },
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f14fb98_1d62c21a",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4771,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-06T11:42:55Z",
+      "side": 1,
+      "message": "I think this only makes sense on JSReceiver, otherwise you only create a temporary wrapper object that is never referenced.\n\nMaybe I missed this in the initial proposal, should this also work with Strings?",
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69ed0226_f8d319a0",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4784,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-06T11:42:55Z",
+      "side": 1,
+      "message": "You can directly return false if it\u0027s not a JSReceiver, and directly cast to a JSReceiver in the other case.",
+      "range": {
+        "startLine": 4782,
+        "startChar": 0,
+        "endLine": 4784,
+        "endChar": 68
+      },
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5dacd2a_b15aa96c",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-06T11:42:55Z",
+      "side": 1,
+      "message": "See comment below. If you can only set the code_kind on JSReceiver then that\u0027s most likely where these two methods should live.\n\nOr have a dispatcher one on v8::internal::Object and the complex one (with the lookup) on JSReceiver",
+      "range": {
+        "startLine": 1557,
+        "startChar": 0,
+        "endLine": 1558,
+        "endChar": 48
+      },
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
