@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "1703cd60_dd2fabe5",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 9549,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-08-06T18:43:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9acc9ebf_a4c49d5f",
+      "range": {
+        "startLine": 9547,
+        "startChar": 0,
+        "endLine": 9549,
+        "endChar": 0
+      },
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fea2443a_fdc22939",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 1
@@ -79,6 +103,30 @@
       "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cc927e5_948c32d4",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4769,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-08-06T18:43:08Z",
+      "side": 1,
+      "message": "Done. (And much nicer, too.)",
+      "parentUuid": "fea2443a_fdc22939",
+      "range": {
+        "startLine": 4767,
+        "startChar": 0,
+        "endLine": 4769,
+        "endChar": 69
+      },
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +165,24 @@
     },
     {
       "key": {
+        "uuid": "4a67038e_8415ea56",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4771,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-08-06T18:43:08Z",
+      "side": 1,
+      "message": "Done. (THe JSReceiver/wrapper bit.)",
+      "parentUuid": "7647d5d0_6fc7cf83",
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69ed0226_f8d319a0",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 1
@@ -140,6 +206,30 @@
     },
     {
       "key": {
+        "uuid": "da7e9f89_87f06636",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4784,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-08-06T18:43:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69ed0226_f8d319a0",
+      "range": {
+        "startLine": 4782,
+        "startChar": 0,
+        "endLine": 4784,
+        "endChar": 68
+      },
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5dacd2a_b15aa96c",
         "filename": "src/execution/isolate.h",
         "patchSetId": 1
@@ -160,6 +250,30 @@
       "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5cf4f7f_86fa3df1",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-08-06T18:43:08Z",
+      "side": 1,
+      "message": "Done. (with i::Object \u003d\u003e JSReceiver dispatcher. The internal call sites make use of this.)",
+      "parentUuid": "c5dacd2a_b15aa96c",
+      "range": {
+        "startLine": 1557,
+        "startChar": 0,
+        "endLine": 1558,
+        "endChar": 48
+      },
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

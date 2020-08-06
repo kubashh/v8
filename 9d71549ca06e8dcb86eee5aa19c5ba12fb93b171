@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23fdf425_44662728",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9150,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-08-06T18:43:08Z",
+      "side": 1,
+      "message": "This is cargo-culted. Do we want this?",
+      "range": {
+        "startLine": 9150,
+        "startChar": 6,
+        "endLine": 9150,
+        "endChar": 46
+      },
+      "revId": "9d71549ca06e8dcb86eee5aa19c5ba12fb93b171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
