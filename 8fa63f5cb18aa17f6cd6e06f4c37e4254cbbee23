@@ -19,6 +19,46 @@
     },
     {
       "key": {
+        "uuid": "9f35782c_efe70dc1",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-06T16:26:38Z",
+      "side": 1,
+      "message": "BuildIsStrongReferenceTo? Analogous to BuildIsWeakReferenceTo.",
+      "range": {
+        "startLine": 270,
+        "startChar": 8,
+        "endLine": 270,
+        "endChar": 30
+      },
+      "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cf40fe5_63652b48",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-06T16:26:38Z",
+      "side": 1,
+      "message": "Actually I was imagining not having the (possibly) weak feedback_slot around at all: check that the feedback is not cleared, make it strong if needed and then use that strong reference throughout the rest of the code.",
+      "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "94b816a7_a0fd6cf7",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
@@ -30,6 +70,23 @@
       "writtenOn": "2020-08-06T15:27:12Z",
       "side": 1,
       "message": "Sathya, This strong_feedback isn\u0027t used when p.state() \u003d\u003d Polymorphic, so shouldn\u0027t impact the code there. For Monomorphic case we were anyway building a strong reference to check against the value map in CheckMonomorphic.So it shouldn\u0027t generate more code. Holding onto strong reference here is cleaner than reloading it later. We can re-evaluate this later if this causes more code.",
+      "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "851a3fb8_94cb9df1",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-06T16:26:38Z",
+      "side": 1,
+      "message": "If the weak reference has been cleared, this operation produces nonsense, doesn\u0027t it?",
       "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
