@@ -194,6 +194,42 @@
       "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "54ea9027_95a1a5ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-08-06T18:54:03Z",
+      "side": 1,
+      "message": "I am working under this assumption.",
+      "parentUuid": "b2dd67ea_c14b4220",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98d5f14a_c7feccaf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-08-06T18:54:03Z",
+      "side": 1,
+      "message": "I uploaded a new patchset which implements the final behavior for Android, with a TODO to change desktop behavior when migration is complete.",
+      "parentUuid": "ff981794_5aae999a",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
