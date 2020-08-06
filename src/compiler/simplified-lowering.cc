@@ -1750,7 +1750,7 @@ class RepresentationSelector {
       // BigInts are handled in a very conservative way to make sure they don't
       // fall into that pit, but future changes may break this here.
       case CTypeInfo::Type::kUint64:
-        return UseInfo::Word64();
+        return UseInfo::CheckedSigned64AsWord64(kIdentifyZeros, feedback);
       case CTypeInfo::Type::kV8Value:
         return UseInfo::AnyTagged();
     }
