@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1eca584_d12d9f1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-08-06T22:10:31Z",
+      "side": 1,
+      "message": "Since the SAB flag is enabled on desktop and disabled in Chrome for Android, and these harmony shipping flags are enabled by default, this CL can be landed without a change in Chrome.\n\nThe only change is that on Android, Atomics will be exposed (but not SAB). That is the desired current state for Android. Then we can land a change in Chrome to enable SAB when we have site isolation.",
+      "revId": "8bafd0a96155f19869471f5b4906a19888378e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
