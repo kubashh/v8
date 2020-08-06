@@ -230,6 +230,24 @@
       "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6cf8d701_49c078ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2020-08-06T19:26:38Z",
+      "side": 1,
+      "message": "Ah, so does this mean that this flag subsumes the previous Context-based callback approach?",
+      "parentUuid": "54ea9027_95a1a5ca",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
