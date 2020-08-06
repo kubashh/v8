@@ -198,6 +198,24 @@
     },
     {
       "key": {
+        "uuid": "f85b4704_a16435c2",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-06T09:05:50Z",
+      "side": 1,
+      "message": "The other problem is that then the RO serializer sees the string table, which causes issues during deserialization because the HashSeed isn\u0027t necessarily initialized yet.",
+      "parentUuid": "9b2a0444_763fd6d8",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "792217d8_89b76a42",
         "filename": "src/snapshot/startup-serializer.cc",
         "patchSetId": 5
