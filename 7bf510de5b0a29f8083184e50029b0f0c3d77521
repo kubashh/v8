@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "cff67956_cf657cb5",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2010,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-06T15:27:12Z",
+      "side": 1,
+      "message": "Done. No longer needed. We hold strong reference to feedback.",
+      "parentUuid": "fb391757_1f2169b7",
+      "revId": "7bf510de5b0a29f8083184e50029b0f0c3d77521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e0aa1e33_c253aad8",
         "filename": "test/cctest/heap/test-heap.cc",
         "patchSetId": 3
@@ -93,6 +111,30 @@
     },
     {
       "key": {
+        "uuid": "8882c222_d355d94e",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-06T15:27:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13569fa0_74809940",
+      "range": {
+        "startLine": 1280,
+        "startChar": 18,
+        "endLine": 1280,
+        "endChar": 27
+      },
+      "revId": "7bf510de5b0a29f8083184e50029b0f0c3d77521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a48b2f78_b1387738",
         "filename": "test/cctest/heap/test-heap.cc",
         "patchSetId": 3
@@ -104,6 +146,24 @@
       "writtenOn": "2020-08-06T10:10:08Z",
       "side": 1,
       "message": "For my understanding, which mark are you talking about here? Where does that happen?",
+      "revId": "7bf510de5b0a29f8083184e50029b0f0c3d77521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75de4d99_0e1fe647",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-06T15:27:12Z",
+      "side": 1,
+      "message": "I changed the comment a bit. o, o1 start of with the same map and when we store o1.b \u003d 10.23 the map get\u0027s deprecated and o1 migrates to a new map. At this call, o still has a deprecated map, so we miss to runtime and the runtime migrates o\u0027s map to a new map (o1\u0027s new map) and marks the new map as migration target. TurboProp (and also TF) generates code to migrate deprecated maps only if they see atleast one map in the feedback which was marked as a migration target.",
+      "parentUuid": "a48b2f78_b1387738",
       "revId": "7bf510de5b0a29f8083184e50029b0f0c3d77521",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

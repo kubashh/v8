@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf026e3d_45ce60c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-06T15:27:12Z",
+      "side": 1,
+      "message": "Thanks Georg! PTAL.\nSathya, PTAL too. I changed the fix a bit after discussing with Georg.",
+      "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "94b816a7_a0fd6cf7",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-06T15:27:12Z",
+      "side": 1,
+      "message": "Sathya, This strong_feedback isn\u0027t used when p.state() \u003d\u003d Polymorphic, so shouldn\u0027t impact the code there. For Monomorphic case we were anyway building a strong reference to check against the value map in CheckMonomorphic.So it shouldn\u0027t generate more code. Holding onto strong reference here is cleaner than reloading it later. We can re-evaluate this later if this causes more code.",
+      "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
