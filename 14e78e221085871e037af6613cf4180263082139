@@ -16,6 +16,23 @@
       "revId": "14e78e221085871e037af6613cf4180263082139",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab4029d_4dcb2952",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-06T12:36:34Z",
+      "side": 1,
+      "message": "If fast API calls now support int64 and uint64 argument types, please update the comment in the header that talks about supported types. Please also mention there that these types have the IDL (unsigned) long long semantics.",
+      "revId": "14e78e221085871e037af6613cf4180263082139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
