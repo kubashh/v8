@@ -69,6 +69,42 @@
       "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6ac8603_51a91ce2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-08-06T00:08:09Z",
+      "side": 1,
+      "message": "I think so. What I meant above is if a page tries to construct a SAB without COOP+COEP, it\u0027s going to get an undefined-is-not-a-function exception, when migration plans might prefer one that gives an informative message in the Dev console.\n\nAgree that detecting SAB in PostMessage in Blink is orthogonal.\n\nFor now we have to leave SAB and Atomics on all pages on desktop, where --harmony-sharedarraybuffer is enabled by default to not change visible behavior.\n\nIt\u0027s tricky to use the new flag without changing existing desktop behavior. Ultimately we will always add Atomics and the SAB function on the global object only if the --cross-origin-isolated flag is set.",
+      "parentUuid": "3f831e0f_f5a8c3b5",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "34a862cf_124335c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-08-06T00:08:09Z",
+      "side": 1,
+      "message": "binji@ suggested adding a new flag in order to maintain the --harmony-sharedarraybuffer flag behavior as it might be confusing if it changed and could even break desktop sites.\n\nHowever, since Android is being newly enabled, we should implement the end-state behavior, and add Atomics unconditionally, and SAB only if the new flag is set.",
+      "parentUuid": "f431ff5c_8a8f2ba2",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
