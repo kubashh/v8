@@ -34,6 +34,24 @@
       "revId": "7e53947709eb3c1c2795271519f1f157578fe68f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "745ff5f1_aacdec04",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-06T06:56:00Z",
+      "side": 1,
+      "message": "That should be fine, these handles don\u0027t need to be canonical.",
+      "parentUuid": "eb6832b1_8b7810a8",
+      "revId": "7e53947709eb3c1c2795271519f1f157578fe68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
