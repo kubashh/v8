@@ -962,12 +962,12 @@ void ResourceConstraints::set_max_semi_space_size_in_kb(size_t limit_in_kb) {
       i::Heap::YoungGenerationSizeFromSemiSpaceSize(limit_in_kb * i::KB));
 }
 
-i::Address* V8::GlobalizeReference(i::Isolate* isolate, i::Address* obj) {
+i::Address* V8::GlobalizeReference(i::Isolate* isolate, i::Address obj) {
   LOG_API(isolate, Persistent, New);
-  i::Handle<i::Object> result = isolate->global_handles()->Create(*obj);
+  i::Handle<i::Object> result = isolate->global_handles()->Create(obj);
 #ifdef VERIFY_HEAP
   if (i::FLAG_verify_heap) {
-    i::Object(*obj).ObjectVerify(isolate);
+    i::Object(obj).ObjectVerify(isolate);
   }
 #endif  // VERIFY_HEAP
   return result.location();

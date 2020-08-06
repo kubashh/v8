@@ -36,7 +36,8 @@ Handle<T> Handle<T>::New(T object, Isolate* isolate) {
 template <typename T>
 template <typename S>
 const Handle<T> Handle<T>::cast(Handle<S> that) {
-  T::cast(*FullObjectSlot(that.location()));
+  //T::cast(*FullObjectSlot(that.location()));
+  T::cast(*that);
   return Handle<T>(that.location_);
 }
 
@@ -161,6 +162,7 @@ Handle<T> HandleScope::CloseAndEscape(Handle<T> handle_value) {
 
 Address* HandleScope::CreateHandle(Isolate* isolate, Address value) {
   DCHECK(AllowHandleAllocation::IsAllowed());
+  if (value & 0x1) return reinterpret_cast<Address*>(value);
   HandleScopeData* data = isolate->handle_scope_data();
   Address* result = data->next;
   if (result == data->limit) {
@@ -178,6 +180,7 @@ Address* HandleScope::CreateHandle(Isolate* isolate, Address value) {
 
 Address* HandleScope::GetHandle(Isolate* isolate, Address value) {
   DCHECK(AllowHandleAllocation::IsAllowed());
+  if (value & 0x1) return reinterpret_cast<Address*>(value);
   HandleScopeData* data = isolate->handle_scope_data();
   CanonicalHandleScope* canonical = data->canonical_scope;
   return canonical ? canonical->Lookup(value) : CreateHandle(isolate, value);
