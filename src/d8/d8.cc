@@ -1809,6 +1809,10 @@ void Shell::WorkerTerminate(const v8::FunctionCallbackInfo<v8::Value>& args) {
   worker->Terminate();
 }
 
+void Shell::Foo(
+    const v8::FunctionCallbackInfo<v8::Value>& args) {
+}
+
 void Shell::QuitOnce(v8::FunctionCallbackInfo<v8::Value>* args) {
   int exit_code = (*args)[0]
                       ->Int32Value(args->GetIsolate()->GetCurrentContext())
@@ -2137,6 +2141,10 @@ Local<ObjectTemplate> Shell::CreateGlobalTemplate(Isolate* isolate) {
   worker_fun_template->PrototypeTemplate()->Set(
       isolate, "terminate",
       FunctionTemplate::New(isolate, WorkerTerminate, Local<Value>(),
+                            worker_signature));
+  worker_fun_template->PrototypeTemplate()->Set(
+      isolate, "foo",
+      FunctionTemplate::New(isolate, Foo, Local<Value>(),
                             worker_signature));
   worker_fun_template->PrototypeTemplate()->Set(
       isolate, "postMessage",
