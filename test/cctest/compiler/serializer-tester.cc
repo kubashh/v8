@@ -44,7 +44,9 @@ SerializerTester::SerializerTester(const char* source)
                    i::OptimizedCompilationInfo::kAllocationFolding |
                    i::OptimizedCompilationInfo::kSplitting |
                    i::OptimizedCompilationInfo::kAnalyzeEnvironmentLiveness;
-  Optimize(function, main_zone(), main_isolate(), flags, &broker_);
+  // Update handle to the corresponding serialized Handle in the broker. This is
+  // equivalent to looking it up in the broker.
+  function = Optimize(function, main_zone(), main_isolate(), flags, &broker_);
   function_ = JSFunctionRef(broker(), function);
 }
 
@@ -77,10 +79,17 @@ void CheckForSerializedInlinee(const char* source, int argc = 0,
       "The return value of the outer function must be a function too");
   Handle<JSFunction> g_func = Handle<JSFunction>::cast(g);
 
-  SharedFunctionInfoRef g_sfi(tester.broker(),
-                              handle(g_func->shared(), tester.isolate()));
-  FeedbackVectorRef g_fv(tester.broker(),
-                         handle(g_func->feedback_vector(), tester.isolate()));
+  // Look up corresponding serialized Handles in the broker. We set
+  // {must_be_found} to true to fail in case it is not found.
+  const bool must_be_found = true;
+  Handle<SharedFunctionInfo> sfi(
+      tester.broker()->FindOrCreateCanonicalPersistentHandle(g_func->shared(),
+                                                             must_be_found));
+  SharedFunctionInfoRef g_sfi(tester.broker(), sfi);
+  Handle<FeedbackVector> fv(
+      tester.broker()->FindOrCreateCanonicalPersistentHandle(
+          g_func->feedback_vector(), must_be_found));
+  FeedbackVectorRef g_fv(tester.broker(), fv);
   CHECK(tester.broker()->IsSerializedForCompilation(g_sfi, g_fv));
 }
 

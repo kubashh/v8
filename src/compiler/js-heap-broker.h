@@ -21,6 +21,7 @@
 #include "src/objects/function-kind.h"
 #include "src/objects/objects.h"
 #include "src/utils/address-map.h"
+#include "src/utils/identity-map.h"
 #include "src/utils/ostreams.h"
 #include "src/zone/zone-containers.h"
 
@@ -229,6 +230,26 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
     return local_heap_.has_value() ? &(*local_heap_) : nullptr;
   }
 
+  void set_persistent_handles(
+      std::unique_ptr<PersistentHandles> persistent_handles) {
+    DCHECK_NULL(ph_);
+    ph_ = std::move(persistent_handles);
+  }
+
+  std::unique_ptr<PersistentHandles> DetachPersistentHandles() {
+    DCHECK_NOT_NULL(ph_);
+    return std::move(ph_);
+  }
+
+  // Copy the identity map over to the JSHeapBroker.
+  // TODO(solanes): Make it so that the CanonicalHandlesMap lives on
+  // JSHeapBroker's zone to avoid copying it over.
+  void set_identity_map(std::unique_ptr<CanonicalHandlesMap> identity_map);
+  // Find the corresponding object in the CanonicalHandlesMap. {must_be_found}
+  // is used in testing and to fail in the case it is not found.
+  Address* FindOrCreateCanonicalPersistentHandle(Object object,
+                                                 bool must_be_found = false);
+
   std::string Trace() const;
   void IncrementTracingIndentation();
   void DecrementTracingIndentation();
@@ -284,6 +305,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   bool const is_native_context_independent_;
   std::unique_ptr<PersistentHandles> ph_;
   base::Optional<LocalHeap> local_heap_;
+  std::unique_ptr<CanonicalHandlesMap> identity_map_;
   unsigned trace_indentation_ = 0;
   PerIsolateCompilerCache* compiler_cache_ = nullptr;
   ZoneUnorderedMap<FeedbackSource, ProcessedFeedback const*,

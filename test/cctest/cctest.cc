@@ -270,6 +270,9 @@ i::Handle<i::JSFunction> Optimize(
       i::compiler::Pipeline::GenerateCodeForTesting(&info, isolate, out_broker)
           .ToHandleChecked();
   info.native_context().AddOptimizedCode(*code);
+  // Since we reopened the function as a PersistentHandle, we need to update
+  // this handle too.
+  function = info.closure();
   function->set_code(*code);
 
   return function;
