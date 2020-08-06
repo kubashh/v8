@@ -1613,8 +1613,8 @@ class BytecodeArrayData : public FixedArrayBaseData {
       constant_pool_.push_back(broker->GetOrCreateData(constant_pool->get(i)));
     }
 
-    source_positions_ = broker->NewPersistentHandle(
-        bytecode_array->SourcePositionTableIfCollected());
+    source_positions_ = handle(bytecode_array->SourcePositionTableIfCollected(),
+                               broker->isolate());
 
     Handle<ByteArray> handlers(bytecode_array->handler_table(),
                                broker->isolate());
@@ -2434,6 +2434,31 @@ JSHeapBroker::JSHeapBroker(
 }
 
 JSHeapBroker::~JSHeapBroker() { DCHECK(!local_heap_); }
+
+void JSHeapBroker::set_identity_map(
+    std::unique_ptr<CanonicalHandlesMap> identity_map) {
+  DCHECK_NULL(identity_map_);
+  identity_map_ = std::make_unique<CanonicalHandlesMap>(
+      isolate_->heap(), ZoneAllocationPolicy(zone()));
+
+  CanonicalHandlesMap::IteratableScope it_scope(identity_map.get());
+  for (auto it = it_scope.begin(); it != it_scope.end(); ++it) {
+    Address* entry = *it.entry();
+    Object key = it.key();
+    identity_map_->Set(key, entry);
+  }
+}
+
+Address* JSHeapBroker::FindOrCreateCanonicalPersistentHandle(
+    Object object, bool must_be_found) {
+  DCHECK(identity_map_);
+  Address** entry = identity_map_->Find(object);
+  DCHECK_IMPLIES(must_be_found, entry != nullptr);
+  if (entry == nullptr) {
+    *entry = NewPersistentHandle(object).location();
+  }
+  return *entry;
+}
 
 std::string JSHeapBroker::Trace() const {
   std::ostringstream oss;
