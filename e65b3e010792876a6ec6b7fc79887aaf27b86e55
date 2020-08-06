@@ -110,6 +110,24 @@
     },
     {
       "key": {
+        "uuid": "69711822_0346b5e7",
+        "filename": "src/snapshot/startup-deserializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-06T08:09:56Z",
+      "side": 1,
+      "message": "Yeah, I considered changing the name but figured this CL was confusing enough :)",
+      "parentUuid": "1edebec4_24677fb3",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "502a7ca6_40ca84d7",
         "filename": "src/snapshot/startup-serializer.cc",
         "patchSetId": 5
@@ -121,6 +139,24 @@
       "writtenOn": "2020-08-06T06:43:53Z",
       "side": 1,
       "message": "A possible alternative to explicitly iterating the string table here, would be to override VisitRootPointers, let Heap::IterateWeakRoots do its thing, and look at the Root type. For Root::kStringTable, we could call SerializeStringTable.\n\nThe advantage would be to remove the special casing (of kUnserializable) in heap.cc, and remove the implicit ordering connection between here and deserialization (e.g. currently moving either ST serialization or deserialization would break things; that\u0027s not possible if order is centrally controlled by IterateWeakRoots).",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19c1c3ca_f688f983",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-06T08:09:56Z",
+      "side": 1,
+      "message": "To be honest, I\u0027m not a big fan of that -- this would rely on overriding VisitRootPointers to, effectively, do something other than visiting those pointers. In particular, if someone were to refactor StringTable::IterateElements to e.g. call VisitRootPointer once per entry (maybe once per string entry?), then a Root-type-based override of VisitRootPointers would write N string tables.\n\nI\u0027m not too concerned with the ordering issue, since we have an ordering issue with almost literally every other part of the serialization (e.g. IterateWeakRoots after strong roots, deferred objects after IterateWeakRoots). Synchronization bytecodes should catch any issues here.",
+      "parentUuid": "502a7ca6_40ca84d7",
       "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -141,6 +177,24 @@
       "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d612976_18c0f764",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-06T08:09:56Z",
+      "side": 1,
+      "message": "Mostly, but not only.",
+      "parentUuid": "792217d8_89b76a42",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
