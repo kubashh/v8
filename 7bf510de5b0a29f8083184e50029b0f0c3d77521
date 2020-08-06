@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "79bc55f3_d82a3730",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-06T13:25:18Z",
+      "side": 1,
+      "message": "I understand this problem better now. I think the right fix is to turn the weak reference into a strong reference. For this we should first check if the reference is cleared.\n",
+      "revId": "7bf510de5b0a29f8083184e50029b0f0c3d77521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb391757_1f2169b7",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 3
