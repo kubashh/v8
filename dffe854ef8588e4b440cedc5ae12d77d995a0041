@@ -16,6 +16,63 @@
       "revId": "dffe854ef8588e4b440cedc5ae12d77d995a0041",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f08ad65b_77467eb1",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-06T09:11:42Z",
+      "side": 1,
+      "message": "Can we move all this stuff out of the scope? Only the PrepareJob needs to be here I think.",
+      "revId": "dffe854ef8588e4b440cedc5ae12d77d995a0041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54b34f3b_bbc3bdc2",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-06T09:11:42Z",
+      "side": 1,
+      "message": "Please pass this as unique_ptr, then we don\u0027t need the job.release().",
+      "range": {
+        "startLine": 1083,
+        "startChar": 30,
+        "endLine": 1083,
+        "endChar": 39
+      },
+      "revId": "dffe854ef8588e4b440cedc5ae12d77d995a0041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed888494_f5e0383d",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-06T09:11:42Z",
+      "side": 1,
+      "message": "How about moving this into GetOptimizedCodeLater too?",
+      "revId": "dffe854ef8588e4b440cedc5ae12d77d995a0041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
