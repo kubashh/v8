@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "de6eb87e_72f10363",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-06T08:58:36Z",
+      "side": 1,
+      "message": "lgtm with comments",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4c2effd_82790456",
         "filename": "src/snapshot/deserializer.cc",
         "patchSetId": 5
@@ -160,6 +177,24 @@
       "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b2a0444_763fd6d8",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-06T08:58:36Z",
+      "side": 1,
+      "message": "fyi we have somewhat similar customization of VisitRootPointers here https://source.chromium.org/chromium/chromium/src/+/master:v8/src/snapshot/roots-serializer.cc;l\u003d45;drc\u003dbce121c7c5fe116d9661f8a1a9d2ec22ecf5b6ee\n\nThe current approach lgtm as well.",
+      "parentUuid": "19c1c3ca_f688f983",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
