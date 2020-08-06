@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39da9bbb_89b6c78a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:19:28Z",
+      "side": 1,
+      "message": "lgtm\n\nLeszek: fyi",
+      "revId": "4584f74fc1ac69f4fd5fb29b89c52662a5afe326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
