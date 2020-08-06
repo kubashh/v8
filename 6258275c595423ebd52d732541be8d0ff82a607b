@@ -158,6 +158,42 @@
       "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff981794_5aae999a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2020-08-06T18:32:41Z",
+      "side": 1,
+      "message": "\u003e Is the migration plan to provide the SharedArrayBuffer property regardless of COOP+COEP for now?\n\nYes, but only on desktop, AIUI. The eventual plan is this: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer/Planned_changes\n\nSummary:\n* SAB is always accessible, but not available on global object unless cross-origin isolated\n* Atomics is always accessible from global object\n* SAB throws on postMessage if not cross-origin isolated",
+      "parentUuid": "7f6a0636_7f505046",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2dd67ea_c14b4220",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2020-08-06T18:32:41Z",
+      "side": 1,
+      "message": "It seems that the capability is per-process, not per-context (the COOP+COEP bit is implemented as a static bool in Blink).",
+      "parentUuid": "fda770d3_59356921",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
