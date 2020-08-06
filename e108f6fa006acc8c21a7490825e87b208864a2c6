@@ -16,6 +16,46 @@
       "revId": "e108f6fa006acc8c21a7490825e87b208864a2c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "51b3a95f_3283360a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T08:31:49Z",
+      "side": 1,
+      "message": "d8 lgtm",
+      "revId": "e108f6fa006acc8c21a7490825e87b208864a2c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c210baa3_b58ab360",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1822,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T08:31:49Z",
+      "side": 1,
+      "message": "Would it make sense to rename WaitForThread to TerminateAndWaitForThread()?",
+      "range": {
+        "startLine": 1822,
+        "startChar": 10,
+        "endLine": 1822,
+        "endChar": 23
+      },
+      "revId": "e108f6fa006acc8c21a7490825e87b208864a2c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
