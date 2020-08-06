@@ -16,6 +16,23 @@
       "revId": "8bafd0a96155f19869471f5b4906a19888378e98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ed7d4cf7_eedc9c89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2020-08-06T22:21:43Z",
+      "side": 1,
+      "message": "lgtm\n\nLong term we might want to move these flags out of the \"harmony\" section, but I don\u0027t see any need to do that for now.",
+      "revId": "8bafd0a96155f19869471f5b4906a19888378e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
