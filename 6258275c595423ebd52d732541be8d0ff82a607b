@@ -248,6 +248,24 @@
       "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84046329_dbc843c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-08-06T20:20:56Z",
+      "side": 1,
+      "message": "Yes, I think so. That means a callback approach would also work, but wouldn\u0027t need the Context parameter (perhaps just Isolate, or nothing).\n\nI also think we could make it work without adding the new flag (--cross-origin-isolated). We could check this bit in RenderProcessImpl and OR it with the feature flag. However, the new flag might be more generally useful, e.g. for whether to generate Spectre mitigations.",
+      "parentUuid": "6cf8d701_49c078ad",
+      "revId": "6258275c595423ebd52d732541be8d0ff82a607b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
