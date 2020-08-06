@@ -53,6 +53,230 @@
     },
     {
       "key": {
+        "uuid": "e1e33d1b_ebb1964e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 1,
+      "message": "lgtm!\n\nI like how simpler the concurrent protocol became.",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "908d8761_b37bf5fe",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 1,
+      "message": "DCHECK(!Heap::InYoungGeneration(heap_object));\n\nThis is an important invariant that allows us to skip string table iteration during Scavenge.",
+      "range": {
+        "startLine": 1071,
+        "startChar": 19,
+        "endLine": 1071,
+        "endChar": 30
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "974f7364_379cc468",
+        "filename": "src/objects/string-set.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 1,
+      "message": "Nit: 2020",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "843dbb9c_4580f70b",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 1,
+      "message": "Nit: full words please",
+      "range": {
+        "startLine": 44,
+        "startChar": 10,
+        "endLine": 44,
+        "endChar": 13
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb6d84dc_6a53afaa",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 1,
+      "message": "Should it be a DCHECK that the capacity cannot be lower that the min capacity?",
+      "range": {
+        "startLine": 52,
+        "startChar": 23,
+        "endLine": 52,
+        "endChar": 24
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79aac8f0_d8320b1a",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 1,
+      "message": "Let\u0027s check the result and call FatalProcessOutOfMemory?\n\nWould it make sense to update GetHeapStatistics to include the memory of all Data tables as part of V8/malloc memory? So that we continue accounting it as a part of V8.",
+      "range": {
+        "startLine": 176,
+        "startChar": 9,
+        "endLine": 176,
+        "endChar": 15
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9342865b_cf42b18d",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 1,
+      "message": "Would the following work?\nnew_data-\u003eprevious_data_ \u003d std::move(data);\ndata \u003d std::move(new_data)",
+      "range": {
+        "startLine": 214,
+        "startChar": 2,
+        "endLine": 216,
+        "endChar": 32
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8b06a8e_b3c5e731",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 1,
+      "message": "How about asserting that here and below?",
+      "range": {
+        "startLine": 224,
+        "startChar": 1,
+        "endLine": 224,
+        "endChar": 64
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0930e1d9_15997b73",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 1,
+      "message": "How about extracting all this into a separate function:\n\nStringTable::Data* data \u003d EnsureCapacity(1);",
+      "range": {
+        "startLine": 437,
+        "startChar": 6,
+        "endLine": 461,
+        "endChar": 7
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4f2bec4_ab02da6d",
+        "filename": "src/objects/string-table.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 1,
+      "message": "Please update the comment to explain the new layout of StringTable.",
+      "range": {
+        "startLine": 43,
+        "startChar": 3,
+        "endLine": 46,
+        "endChar": 63
+      },
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d4c2effd_82790456",
         "filename": "src/snapshot/deserializer.cc",
         "patchSetId": 5
@@ -209,6 +433,24 @@
       "writtenOn": "2020-08-06T09:05:50Z",
       "side": 1,
       "message": "The other problem is that then the RO serializer sees the string table, which causes issues during deserialization because the HashSeed isn\u0027t necessarily initialized yet.",
+      "parentUuid": "9b2a0444_763fd6d8",
+      "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ab6f7bbf_91e15c59",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 1,
+      "message": "If we can afford encoding each string individually as \"internalized string that needs to be inserted into the string table\", then VisitRootPointers would be cleaner.\n\nIf not, then either of the discussed options sgtm.",
       "parentUuid": "9b2a0444_763fd6d8",
       "revId": "e65b3e010792876a6ec6b7fc79887aaf27b86e55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",

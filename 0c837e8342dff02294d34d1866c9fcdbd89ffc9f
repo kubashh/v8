@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd166348_ab6bed32",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1616,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-06T09:53:27Z",
+      "side": 0,
+      "message": "Great to see this go.",
+      "range": {
+        "startLine": 1616,
+        "startChar": 4,
+        "endLine": 1616,
+        "endChar": 42
+      },
+      "revId": "0c837e8342dff02294d34d1866c9fcdbd89ffc9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
