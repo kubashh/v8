@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "259d55ec_1a5bfebf",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4147,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2020-08-06T20:45:26Z",
+      "side": 1,
+      "message": "I appreciate the clarity that this now gives me about the intention behind this change, but this seems like the wrong place in Chrome to make a decision based on the OS.\n\nI don\u0027t think the bootstrapper should know about OSs, or even about \"cross site isolated\", but just about \"what should we be putting on the global object?\"\n\nIf we want separate flags for enabling Atomics vs enabling SABs, then we should add a flag for atomics and set it appropriately in Chromium.",
+      "revId": "2aa0335353b659a6006cacd310f1630078e084f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
