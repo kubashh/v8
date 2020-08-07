@@ -16,6 +16,46 @@
       "revId": "cd88eaa6ffb6961b825826cad1a8a33c6bd9e661",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1025b391_482cfc9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-07T14:07:03Z",
+      "side": 1,
+      "message": "LGTM, very nice! One small nit.",
+      "revId": "cd88eaa6ffb6961b825826cad1a8a33c6bd9e661",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "947316ae_e2dd25e4",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3279,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-07T14:07:03Z",
+      "side": 1,
+      "message": "Can you say \"Change from smi to integer\"? In essence \"SmiUntag\" does not create an int64 but only an int32. This does not matter much here, but the comment should still say something correct.",
+      "range": {
+        "startLine": 3279,
+        "startChar": 24,
+        "endLine": 3279,
+        "endChar": 29
+      },
+      "revId": "cd88eaa6ffb6961b825826cad1a8a33c6bd9e661",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
