@@ -16,6 +16,57 @@
       "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "23ad7478_41b13840",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-07T20:17:15Z",
+      "side": 1,
+      "message": "Generally looks fine, but I\u0027m no expert on the invariants of ArrayBuffers\u0027 backing stores, so some questions first:\n\n- The comments suggest that the backing buffer may be deleted and re-allocated. In that case, wouldn\u0027t we need to re-key location_lists, since they\u0027d be stale?\n\n- If deleted and re-allocated backing stores are always at the same address, how come we need to store waiting_location_ separately?",
+      "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1b38cbbc_7cf186c3",
+        "filename": "src/execution/futex-emulation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-07T20:17:15Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand this comment or the need to store waiting_location_.\n\nThis comment describes an ABA problem with the backing store, but an ABA problem shouldn\u0027t affect the waiting_location_, right?\n\nOr is the problem here that the backing_store might have been deleted between the time when the node was first looked up in location_lists and this point?",
+      "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c77a18a8_7cd545e0",
+        "filename": "src/execution/futex-emulation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-07T20:17:15Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem safe compared to the usual `it \u003d location_lists.erase(it)`.",
+      "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
