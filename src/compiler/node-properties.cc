@@ -351,7 +351,8 @@ base::Optional<MapRef> NodeProperties::GetJSCreateMap(JSHeapBroker* broker,
 // static
 NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
     JSHeapBroker* broker, Node* receiver, Node* effect,
-    ZoneHandleSet<Map>* maps_return) {
+    ZoneHandleSet<Map>* maps_return,
+    std::vector<std::pair<bool, ElementsKind>>* elements_kind) {
   HeapObjectMatcher m(receiver);
   if (m.HasValue()) {
     HeapObjectRef receiver = m.Ref(broker);
@@ -388,6 +389,24 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
         if (IsSame(receiver, object)) {
           *maps_return = CheckMapsParametersOf(effect->op()).maps();
           return result;
+        }
+        break;
+      }
+      case IrOpcode::kDynamicCheckMaps: {
+        Node* const object = GetValueInput(effect, 0);
+        if (IsSame(receiver, object)) {
+          DynamicCheckMapsParameters const& p =
+              DynamicCheckMapsParametersOf(effect->op());
+          if (result == kUnreliableReceiverMaps) return kNoReceiverMaps;
+          if (elements_kind != nullptr) {
+            // TODO(mythria): Choose a different structure here. Currently we
+            // need only one boolean but in future may need more data.
+            std::pair<bool, ElementsKind> pair(
+                (p.elements_kind() != ElementsKind::NO_ELEMENTS),
+                p.elements_kind());
+            elements_kind->push_back(pair);
+          }
+          return kNoReceiverMaps;
         }
         break;
       }

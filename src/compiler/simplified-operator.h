@@ -432,11 +432,17 @@ class DynamicCheckMapsParameters final {
   enum ICState { kMonomorphic, kPolymorphic };
 
   DynamicCheckMapsParameters(CheckMapsFlags flags, Handle<Object> handler,
-                             const FeedbackSource& feedback, ICState state)
-      : flags_(flags), handler_(handler), feedback_(feedback), state_(state) {}
+                             const FeedbackSource& feedback, ICState state,
+                             ElementsKind elements_kind)
+      : flags_(flags),
+        handler_(handler),
+        feedback_(feedback),
+        state_(state),
+        elements_kind_(elements_kind) {}
 
   CheckMapsFlags flags() const { return flags_; }
   Handle<Object> handler() const { return handler_; }
+  ElementsKind elements_kind() const { return elements_kind_; }
   FeedbackSource const& feedback() const { return feedback_; }
   ICState const& state() const { return state_; }
 
@@ -445,6 +451,7 @@ class DynamicCheckMapsParameters final {
   Handle<Object> const handler_;
   FeedbackSource const feedback_;
   ICState const state_;
+  ElementsKind const elements_kind_;
 };
 
 bool operator==(DynamicCheckMapsParameters const&,
@@ -875,10 +882,10 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckInternalizedString();
   const Operator* CheckMaps(CheckMapsFlags, ZoneHandleSet<Map>,
                             const FeedbackSource& = FeedbackSource());
-  const Operator* DynamicCheckMaps(
-      CheckMapsFlags flags, Handle<Object> handler,
-      const FeedbackSource& feedback,
-      DynamicCheckMapsParameters::ICState ic_state);
+  const Operator* DynamicCheckMaps(CheckMapsFlags flags, Handle<Object> handler,
+                                   const FeedbackSource& feedback,
+                                   DynamicCheckMapsParameters::ICState ic_state,
+                                   ElementsKind elements_kind);
   const Operator* CheckNotTaggedHole();
   const Operator* CheckNumber(const FeedbackSource& feedback);
   const Operator* CheckReceiver();
