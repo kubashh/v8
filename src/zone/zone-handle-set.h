@@ -15,26 +15,26 @@ namespace internal {
 template <typename T>
 class ZoneHandleSet final {
  public:
-  ZoneHandleSet() : data_(kEmptyTag) {}
+  ZoneHandleSet() : data_(0) {}
   explicit ZoneHandleSet(Handle<T> handle)
-      : data_(handle.address() | kSingletonTag) {
-    DCHECK(IsAligned(handle.address(), kPointerAlignment));
+      : data_(handle.address()) {
+    //DCHECK(IsAligned(handle.address(), kPointerAlignment));
   }
 
-  bool is_empty() const { return data_ == kEmptyTag; }
+  bool is_empty() const { return data_ == 0; }
 
   size_t size() const {
-    if ((data_ & kTagMask) == kEmptyTag) return 0;
-    if ((data_ & kTagMask) == kSingletonTag) return 1;
+    //if ((data_ & kTagMask) == kEmptyTag) return 0;
+    //if ((data_ & kTagMask) == kSingletonTag) return 1;
     return list()->size();
   }
 
   Handle<T> at(size_t i) const {
-    DCHECK_NE(kEmptyTag, data_ & kTagMask);
-    if ((data_ & kTagMask) == kSingletonTag) {
-      DCHECK_EQ(0u, i);
-      return Handle<T>(singleton());
-    }
+    //DCHECK_NE(kEmptyTag, data_ & kTagMask);
+    //if ((data_ & kTagMask) == kSingletonTag) {
+      //DCHECK_EQ(0u, i);
+      //return Handle<T>(singleton());
+    //}
     return Handle<T>(list()->at(static_cast<int>(i)));
   }
 
@@ -42,6 +42,7 @@ class ZoneHandleSet final {
 
   void insert(Handle<T> handle, Zone* zone) {
     Address* const value = reinterpret_cast<Address*>(handle.address());
+#if 0
     DCHECK(IsAligned(reinterpret_cast<Address>(value), kPointerAlignment));
     if ((data_ & kTagMask) == kEmptyTag) {
       data_ = reinterpret_cast<Address>(value) | kSingletonTag;
@@ -59,6 +60,12 @@ class ZoneHandleSet final {
       data_ = reinterpret_cast<Address>(list) | kListTag;
     } else {
       DCHECK_EQ(kListTag, data_ & kTagMask);
+#endif
+      if (data_ == 0) {
+        List* list = zone->New<List>(zone);
+        list->push_back(value);
+        data_ = reinterpret_cast<Address>(list);
+      }
       List const* const old_list = list();
       for (size_t i = 0; i < old_list->size(); ++i) {
         if (old_list->at(i) == value) return;
@@ -76,23 +83,28 @@ class ZoneHandleSet final {
         new_list->push_back(old_list->at(i));
       }
       DCHECK_EQ(old_list->size() + 1, new_list->size());
-      DCHECK(IsAligned(reinterpret_cast<Address>(new_list), kPointerAlignment));
-      data_ = reinterpret_cast<Address>(new_list) | kListTag;
+      //DCHECK(IsAligned(reinterpret_cast<Address>(new_list), kPointerAlignment));
+      //data_ = reinterpret_cast<Address>(new_list) | kListTag;
+      data_ = reinterpret_cast<Address>(new_list);
+#if 0
     }
+#endif
   }
 
   bool contains(ZoneHandleSet<T> const& other) const {
     if (data_ == other.data_) return true;
-    if (data_ == kEmptyTag) return false;
-    if (other.data_ == kEmptyTag) return true;
-    if ((data_ & kTagMask) == kSingletonTag) return false;
-    DCHECK_EQ(kListTag, data_ & kTagMask);
+    if (data_ == 0) return false;
+    if (other.data_ == 0) return true;
+    //if ((data_ & kTagMask) == kSingletonTag) return false;
+    //DCHECK_EQ(kListTag, data_ & kTagMask);
     List const* cached_list = list();
+#if 0
     if ((other.data_ & kTagMask) == kSingletonTag) {
       return std::find(cached_list->begin(), cached_list->end(),
                        other.singleton()) != cached_list->end();
     }
     DCHECK_EQ(kListTag, other.data_ & kTagMask);
+#endif
     // TODO(bmeurer): Optimize this case.
     for (size_t i = 0; i < other.list()->size(); ++i) {
       if (std::find(cached_list->begin(), cached_list->end(),
@@ -104,12 +116,12 @@ class ZoneHandleSet final {
   }
 
   bool contains(Handle<T> other) const {
-    if (data_ == kEmptyTag) return false;
+    if (data_ == 0) return false;
     Address* other_address = reinterpret_cast<Address*>(other.address());
-    if ((data_ & kTagMask) == kSingletonTag) {
-      return singleton() == other_address;
-    }
-    DCHECK_EQ(kListTag, data_ & kTagMask);
+    //if ((data_ & kTagMask) == kSingletonTag) {
+      //return singleton() == other_address;
+    //}
+    //DCHECK_EQ(kListTag, data_ & kTagMask);
     return std::find(list()->begin(), list()->end(), other_address) !=
            list()->end();
   }
@@ -129,16 +141,13 @@ class ZoneHandleSet final {
   friend bool operator==(ZoneHandleSet<T> const& lhs,
                          ZoneHandleSet<T> const& rhs) {
     if (lhs.data_ == rhs.data_) return true;
-    if ((lhs.data_ & kTagMask) == kListTag &&
-        (rhs.data_ & kTagMask) == kListTag) {
-      List const* const lhs_list = lhs.list();
-      List const* const rhs_list = rhs.list();
-      if (lhs_list->size() == rhs_list->size()) {
-        for (size_t i = 0; i < lhs_list->size(); ++i) {
-          if (lhs_list->at(i) != rhs_list->at(i)) return false;
-        }
-        return true;
+    List const* const lhs_list = lhs.list();
+    List const* const rhs_list = rhs.list();
+    if (lhs_list->size() == rhs_list->size()) {
+      for (size_t i = 0; i < lhs_list->size(); ++i) {
+        if (lhs_list->at(i) != rhs_list->at(i)) return false;
       }
+      return true;
     }
     return false;
   }
@@ -160,23 +169,24 @@ class ZoneHandleSet final {
   using List = ZoneVector<Address*>;
 
   List const* list() const {
-    DCHECK_EQ(kListTag, data_ & kTagMask);
-    return reinterpret_cast<List const*>(data_ - kListTag);
+    //DCHECK_EQ(kListTag, data_ & kTagMask);
+    //return reinterpret_cast<List const*>(data_ - kListTag);
+    return reinterpret_cast<List const*>(data_);
   }
 
-  Address* singleton() const {
-    DCHECK_EQ(kSingletonTag, data_ & kTagMask);
-    return reinterpret_cast<Address*>(data_ - kSingletonTag);
-  }
+  //Address* singleton() const {
+    //DCHECK_EQ(kSingletonTag, data_ & kTagMask);
+    //return reinterpret_cast<Address*>(data_ - kSingletonTag);
+  //}
 
-  enum Tag : Address {
-    kSingletonTag = 0,
-    kEmptyTag = 1,
-    kListTag = 2,
-    kTagMask = 3
-  };
+  //enum Tag : Address {
+    //kSingletonTag = 0,
+    //kEmptyTag = 1,
+    //kListTag = 2,
+    //kTagMask = 3
+  //};
 
-  STATIC_ASSERT(kTagMask < kPointerAlignment);
+  //STATIC_ASSERT(kTagMask < kPointerAlignment);
 
   Address data_;
 };

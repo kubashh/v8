@@ -24,6 +24,7 @@
 #include "src/utils/utils.h"
 #include "torque-generated/exported-class-definitions-tq-inl.h"
 #include "torque-generated/exported-class-definitions-tq.h"
+#include "v8-internal.h"
 
 // Each concrete ElementsAccessor can handle exactly one ElementsKind,
 // several abstract ElementsAccessor classes are used to allow sharing
@@ -2120,10 +2121,10 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
     if (len > JSArray::kMaxCopyElements && dst_index == 0 &&
         isolate->heap()->CanMoveObjectStart(*dst_elms)) {
       // Update all the copies of this backing_store handle.
-      *dst_elms.location() =
+      dst_elms = Handle<BackingStore>(reinterpret_cast<Address*>(
           BackingStore::cast(
               isolate->heap()->LeftTrimFixedArray(*dst_elms, src_index))
-              .ptr();
+              .ptr()));
       receiver->set_elements(*dst_elms);
       // Adjust the hole offset as the array has been shrunk.
       hole_end -= src_index;

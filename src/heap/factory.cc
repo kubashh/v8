@@ -205,7 +205,7 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
         isolate_->builtins_constants_table_builder()->PatchSelfReference(
             self_reference, code);
       }
-      *(self_reference.location()) = code->ptr();
+      self_reference_ = Handle<Object>(reinterpret_cast<Address*>(code->ptr()));
     }
 
     // Likewise, any references to the basic block counters marker need to be

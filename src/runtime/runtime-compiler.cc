@@ -84,7 +84,7 @@ RUNTIME_FUNCTION(Runtime_CompileOptimized_Concurrent) {
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
   CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
-  return CompileOptimized(isolate, function, ConcurrencyMode::kConcurrent);
+  return CompileOptimized(isolate, function, ConcurrencyMode::kNotConcurrent);
 }
 
 RUNTIME_FUNCTION(Runtime_CompileOptimized_NotConcurrent) {
