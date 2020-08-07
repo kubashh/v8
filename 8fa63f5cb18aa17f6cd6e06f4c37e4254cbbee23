@@ -77,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "e70390d2_10b20420",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-07T07:37:11Z",
+      "side": 1,
+      "message": "Right, I missed that.\nHow about encapsulating the feedback acquisition in a helper function, say GetFeedback, that takes a label for the monomorphic case and a label for the polymorphic case, or a C++ function for each. It passes a strong reference (the map or the fixed array) to the corresponding argument.",
+      "parentUuid": "e2ec3159_646a230d",
+      "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "94b816a7_a0fd6cf7",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
