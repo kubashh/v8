@@ -100,6 +100,13 @@ class FutexWaitListNode {
 
   std::weak_ptr<BackingStore> backing_store_;
   size_t wait_addr_ = 0;
+
+  // FutexWaitListNodes are stored in per-location lists. Storing the
+  // wait_location_ separately is needed, since we can't necessarily reconstruct
+  // it, because the BackingStore might get deleted while the FutexWaitListNode
+  // is still alive.
+  int8_t* wait_location_ = nullptr;
+
   // waiting_ and interrupted_ are protected by FutexEmulation::mutex_
   // if this node is currently contained in FutexEmulation::wait_list_
   // or an AtomicsWaitWakeHandle has access to it.
@@ -224,9 +231,6 @@ class FutexEmulation : public AllStatic {
 
   // Remove the node's Promise from the NativeContext's Promise set.
   static void CleanupAsyncWaiterPromise(FutexWaitListNode* node);
-
-  // Deletes |node| and returns the next node of its list.
-  static FutexWaitListNode* DeleteAsyncWaiterNode(FutexWaitListNode* node);
 };
 }  // namespace internal
 }  // namespace v8
