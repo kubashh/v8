@@ -936,6 +936,7 @@ bool GetOptimizedCodeNow(OptimizedCompilationJob* job, Isolate* isolate,
                "V8.OptimizeNonConcurrent");
   CanonicalHandleScope canonical(isolate);
   compilation_info->ReopenHandlesInNewHandleScope(isolate);
+  compilation_info->set_persistent_handles(isolate->NewPersistentHandles());
 
   if (job->PrepareJob(isolate) != CompilationJob::SUCCEEDED ||
       job->ExecuteJob(isolate->counters()->runtime_call_stats()) !=
@@ -1086,7 +1087,8 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
   DCHECK_IMPLIES(!has_script, shared->HasBytecodeArray());
   std::unique_ptr<OptimizedCompilationJob> job(
       compiler::Pipeline::NewCompilationJob(isolate, function, code_kind,
-                                            has_script, osr_offset, osr_frame));
+                                            has_script, osr_offset, osr_frame,
+                                            mode));
   OptimizedCompilationInfo* compilation_info = job->compilation_info();
 
   // Prepare the job and launch cocncurrent compilation, or compile now.
