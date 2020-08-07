@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adb38268_2af08b2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-08-07T10:56:19Z",
+      "side": 1,
+      "message": "Thanks! Some style/readability comments.",
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "042425b9_a649cee0",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3227,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-08-07T10:56:19Z",
+      "side": 1,
+      "message": "Can we keep this before the call, so that it\u0027s easy to see where the corresponding pop is? See related comment below.",
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e40de2bc_eb3f393e",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3243,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-08-07T10:56:19Z",
+      "side": 1,
+      "message": "This does not add any useful information, let\u0027s just use \"rbp\" directly.",
+      "range": {
+        "startLine": 3243,
+        "startChar": 11,
+        "endLine": 3243,
+        "endChar": 25
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "181cb06d_d36c9dab",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-08-07T10:56:19Z",
+      "side": 1,
+      "message": "Can we not reuse the same register for {jump_table_offset} and {function_data} anymore? Why not?",
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c73cfd05_3a95ca92",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3345,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-08-07T10:56:19Z",
+      "side": 1,
+      "message": "The push and pop of the wasm instance looks correct but it is a bit hard to follow, can we just enclose each call between a push and a pop?",
+      "range": {
+        "startLine": 3343,
+        "startChar": 0,
+        "endLine": 3345,
+        "endChar": 0
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a9f2212_86047abf",
+        "filename": "src/wasm/function-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-08-07T10:56:19Z",
+      "side": 1,
+      "message": "Please use camel case, i.e. \"UseGenericWrapper\".",
+      "range": {
+        "startLine": 269,
+        "startChar": 5,
+        "endLine": 269,
+        "endChar": 24
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69fc1188_27aff629",
+        "filename": "src/wasm/function-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-08-07T10:56:19Z",
+      "side": 1,
+      "message": "We could avoid the loop since we already filtered out more than 1 parameters:\n\n  if (sig-\u003eparameters().size() \u003d\u003d 1 \u0026\u0026 sig-\u003eGetParam(0) !\u003d ValueType::kI32) return false;",
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
