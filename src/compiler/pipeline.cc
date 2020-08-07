@@ -152,10 +152,10 @@ class PipelineData {
         instruction_zone_(instruction_zone_scope_.zone()),
         codegen_zone_scope_(zone_stats_, kCodegenZoneName),
         codegen_zone_(codegen_zone_scope_.zone()),
-        broker_(new JSHeapBroker(
-            isolate_, info_->zone(), info_->trace_heap_broker(),
-            is_concurrent_inlining, info->IsNativeContextIndependent(),
-            info->DetachPersistentHandles())),
+        broker_(new JSHeapBroker(isolate_, info_->zone(),
+                                 info_->trace_heap_broker(),
+                                 is_concurrent_inlining,
+                                 info->IsNativeContextIndependent(), nullptr)),
         register_allocation_zone_scope_(zone_stats_,
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
@@ -770,19 +770,21 @@ class PipelineRunScope {
 class LocalHeapScope {
  public:
   explicit LocalHeapScope(JSHeapBroker* broker, OptimizedCompilationInfo* info)
-      : broker_(broker), tick_counter_(&info->tick_counter()) {
+      : broker_(broker), info_(info) {
+    broker_->set_persistent_handles(info_->DetachPersistentHandles());
     broker_->InitializeLocalHeap();
-    tick_counter_->AttachLocalHeap(broker_->local_heap());
+    info_->tick_counter().AttachLocalHeap(broker_->local_heap());
   }
 
   ~LocalHeapScope() {
-    tick_counter_->DetachLocalHeap();
+    info_->tick_counter().DetachLocalHeap();
     broker_->TearDownLocalHeap();
+    // info_->set_persistent_handles(broker_->DetachPersistentHandles());
   }
 
  private:
   JSHeapBroker* broker_;
-  TickCounter* tick_counter_;
+  OptimizedCompilationInfo* info_;
 };
 
 // Scope that unparks the LocalHeap, if:
@@ -3041,13 +3043,31 @@ MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
   Linkage linkage(Linkage::ComputeIncoming(data.instruction_zone(), info));
   Deoptimizer::EnsureCodeForDeoptimizationEntries(isolate);
 
-  pipeline.Serialize();
+  // TODO(solanes): Update this code path to use PersistentHandles properly.
+  if (data.broker()->is_concurrent_inlining()) {
+    PersistentHandlesScope persistent_scope(isolate);
+    CanonicalHandleScope canonical(isolate);
+    info->ReopenHandlesInNewHandleScope(isolate);
+    pipeline.Serialize();
+    info->set_persistent_handles(persistent_scope.Detach());
+    // TODO(solanes): Maybe attach it to the info first? Do the same for the
+    // compiler.cc code path (i.e CompilationHandleScope)
+    data.broker()->set_identity_map(canonical.DetachIdentityMap());
+  } else {
+    pipeline.Serialize();
+    info->set_persistent_handles(isolate->NewPersistentHandles());
+  }
+
   {
-    LocalHeapScope local_heap_scope(data.broker(), data.info());
+    LocalHeapScope local_heap_scope(data.broker(), info);
     if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
     // We selectively Unpark inside OptimizeGraph.
     ParkedScope parked_scope(data.broker()->local_heap());
     if (!pipeline.OptimizeGraph(&linkage)) return MaybeHandle<Code>();
+  }
+
+  if (out_broker == nullptr) {
+    info->set_persistent_handles(data.broker()->DetachPersistentHandles());
   }
   pipeline.AssembleCode(&linkage);
   Handle<Code> code;

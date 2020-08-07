@@ -936,6 +936,7 @@ bool GetOptimizedCodeNow(OptimizedCompilationJob* job, Isolate* isolate,
                "V8.OptimizeNonConcurrent");
   CanonicalHandleScope canonical(isolate);
   compilation_info->ReopenHandlesInNewHandleScope(isolate);
+  compilation_info->set_persistent_handles(isolate->NewPersistentHandles());
 
   if (job->PrepareJob(isolate) != CompilationJob::SUCCEEDED ||
       job->ExecuteJob(isolate->counters()->runtime_call_stats()) !=
