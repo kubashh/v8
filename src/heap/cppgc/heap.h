@@ -16,6 +16,8 @@
 namespace cppgc {
 namespace internal {
 
+class Marker;
+
 class V8_EXPORT_PRIVATE Heap final : public HeapBase,
                                      public cppgc::Heap,
                                      public GarbageCollector {
@@ -32,14 +34,39 @@ class V8_EXPORT_PRIVATE Heap final : public HeapBase,
   HeapBase& AsBase() { return *this; }
   const HeapBase& AsBase() const { return *this; }
 
-  void CollectGarbage(Config config) final;
+  void CollectGarbage(Config) final;
+  void StartIncrementalGarabageColllection(Config);
+  void FinalizeIncrementalGarabageColllectionIfRunning(Config);
 
   size_t epoch() const final { return epoch_; }
 
+  class IncrementalGarbageCollectionFinalizationTask final : public v8::Task {
+   public:
+    explicit IncrementalGarbageCollectionFinalizationTask(Heap*);
+
+   private:
+    using Handle = SingleThreadedHandle;
+
+    static Handle Post(v8::TaskRunner*, Heap*);
+
+    void Run() final;
+
+    Heap* const heap_;
+    // TODO(chromium:1056170): Change to CancelableTask.
+    Handle handle_;
+
+    friend class Marker;
+  };
+
  private:
+  void StartGarbageCollection(Config);
+  void FinalizeGarabageColllection(Config::StackState);
+
+  Config config_;
   GCInvoker gc_invoker_;
   HeapGrowing growing_;
 
+  bool gc_in_progress_ = false;
   size_t epoch_ = 0;
 };
 
