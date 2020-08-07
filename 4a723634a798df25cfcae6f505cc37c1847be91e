@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "1de01564_7820187b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-07T12:15:40Z",
+      "side": 1,
+      "message": "Looks already very good!\n\nI think we have to be careful to always use the SMI-specific functions provided by the macro-assembler.",
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "042425b9_a649cee0",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 3
@@ -59,6 +76,52 @@
     },
     {
       "key": {
+        "uuid": "9dc66b96_23a43cfe",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3251,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-07T12:15:40Z",
+      "side": 1,
+      "message": "I think you can use __ JumpIfNotSmi here.",
+      "range": {
+        "startLine": 3248,
+        "startChar": 0,
+        "endLine": 3251,
+        "endChar": 27
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ffaa3b3_99064eb7",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3256,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-07T12:15:40Z",
+      "side": 1,
+      "message": "Nit: Maybe params_finished or params_done would be better. But please pick whatever you feel is best, we should not have a naming discussion...",
+      "range": {
+        "startLine": 3256,
+        "startChar": 11,
+        "endLine": 3256,
+        "endChar": 19
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "181cb06d_d36c9dab",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 3
@@ -76,6 +139,46 @@
     },
     {
       "key": {
+        "uuid": "b0bb5ff6_85d1c7fd",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3286,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-07T12:15:40Z",
+      "side": 1,
+      "message": "Do you think we can (or even should) use SmiUntag here as well?",
+      "range": {
+        "startLine": 3285,
+        "startChar": 2,
+        "endLine": 3286,
+        "endChar": 51
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e7b15cc_d149cd64",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3333,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-07T12:15:40Z",
+      "side": 1,
+      "message": "Nit: Can you add a comment here, or before the __ Call, that we have to prepare two parameters: the value should go into $rax, and the context should go into $rsi.",
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c73cfd05_3a95ca92",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 3
@@ -87,6 +190,54 @@
       "writtenOn": "2020-08-07T10:56:19Z",
       "side": 1,
       "message": "The push and pop of the wasm instance looks correct but it is a bit hard to follow, can we just enclose each call between a push and a pop?",
+      "range": {
+        "startLine": 3343,
+        "startChar": 0,
+        "endLine": 3345,
+        "endChar": 0
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e7098d9_1f807b84",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3345,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-07T12:15:40Z",
+      "side": 1,
+      "message": "Yes, please put the pushq right before the function call. I saw it here and was wondering if you could not just skip both pop and push here. When you move the pushq to line 3292, don\u0027t forget to also add it in line 3330.",
+      "parentUuid": "c73cfd05_3a95ca92",
+      "range": {
+        "startLine": 3343,
+        "startChar": 0,
+        "endLine": 3345,
+        "endChar": 0
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86e29ef8_5e13e1e5",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3345,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2020-08-07T12:15:40Z",
+      "side": 1,
+      "message": "Yes, please put the pushq right before the function call. I saw it here and was wondering if you could not just skip both pop and push here. When you move the pushq to line 3292, don\u0027t forget to also add it in line 3330.",
+      "parentUuid": "c73cfd05_3a95ca92",
       "range": {
         "startLine": 3343,
         "startChar": 0,
