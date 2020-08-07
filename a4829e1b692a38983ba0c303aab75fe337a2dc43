@@ -39,6 +39,30 @@
       "revId": "a4829e1b692a38983ba0c303aab75fe337a2dc43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d7a4206_4a04862c",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2020-08-07T10:01:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acf946b5_43ba05fe",
+      "range": {
+        "startLine": 255,
+        "startChar": 7,
+        "endLine": 255,
+        "endChar": 26
+      },
+      "revId": "a4829e1b692a38983ba0c303aab75fe337a2dc43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
