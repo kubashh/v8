@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dcd76f3e_7a370a27",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 2480,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-08-07T09:21:02Z",
+      "side": 1,
+      "message": "Let\u0027s also add another properties_j for setting the variable.\n\n    properties_j: \u003c\u003cEND\n    gclient_vars: {\n      \"mac_xcode_version\": \"xcode_12_beta\",\n    }\n    END",
+      "revId": "4a82de21a9ea226d0bc5af2c09d08c4595db6e99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
