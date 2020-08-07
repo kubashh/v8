@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "89a8ae63_82111919",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3227,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-08-07T13:36:05Z",
+      "side": 1,
+      "message": "Yes, sure.",
+      "parentUuid": "042425b9_a649cee0",
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e40de2bc_eb3f393e",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 3
@@ -73,6 +91,30 @@
       "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53fdaadb_a27cedbc",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3243,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-08-07T13:36:05Z",
+      "side": 1,
+      "message": "Ok, sure.",
+      "parentUuid": "e40de2bc_eb3f393e",
+      "range": {
+        "startLine": 3243,
+        "startChar": 11,
+        "endLine": 3243,
+        "endChar": 25
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +141,30 @@
     },
     {
       "key": {
+        "uuid": "a0870f36_bd1014ae",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3251,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-08-07T13:36:05Z",
+      "side": 1,
+      "message": "Nice, yes.",
+      "parentUuid": "9dc66b96_23a43cfe",
+      "range": {
+        "startLine": 3248,
+        "startChar": 0,
+        "endLine": 3251,
+        "endChar": 27
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ffaa3b3_99064eb7",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 3
@@ -122,6 +188,30 @@
     },
     {
       "key": {
+        "uuid": "3da5feef_d47f890b",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3256,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-08-07T13:36:05Z",
+      "side": 1,
+      "message": "Sure, I changed it to params_done.",
+      "parentUuid": "5ffaa3b3_99064eb7",
+      "range": {
+        "startLine": 3256,
+        "startChar": 11,
+        "endLine": 3256,
+        "endChar": 19
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "181cb06d_d36c9dab",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 3
@@ -136,6 +226,24 @@
       "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5854f66_e6345b34",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-08-07T13:36:05Z",
+      "side": 1,
+      "message": "Oh, yes, I can reuse {function_data}.",
+      "parentUuid": "181cb06d_d36c9dab",
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -162,6 +270,30 @@
     },
     {
       "key": {
+        "uuid": "8c6758f4_bd931004",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3286,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-08-07T13:36:05Z",
+      "side": 1,
+      "message": "Yes, makes sense to use it, it does the same thing.",
+      "parentUuid": "b0bb5ff6_85d1c7fd",
+      "range": {
+        "startLine": 3285,
+        "startChar": 2,
+        "endLine": 3286,
+        "endChar": 51
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e7b15cc_d149cd64",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 3
@@ -176,6 +308,24 @@
       "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f91e170_ebe9c787",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3333,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-08-07T13:36:05Z",
+      "side": 1,
+      "message": "Ok, done.",
+      "parentUuid": "7e7b15cc_d149cd64",
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -250,6 +400,30 @@
     },
     {
       "key": {
+        "uuid": "4907258a_da65b15a",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3345,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-08-07T13:36:05Z",
+      "side": 1,
+      "message": "Yes, I did it this way.",
+      "parentUuid": "86e29ef8_5e13e1e5",
+      "range": {
+        "startLine": 3343,
+        "startChar": 0,
+        "endLine": 3345,
+        "endChar": 0
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a9f2212_86047abf",
         "filename": "src/wasm/function-compiler.cc",
         "patchSetId": 3
@@ -273,6 +447,30 @@
     },
     {
       "key": {
+        "uuid": "57c29aa4_90311287",
+        "filename": "src/wasm/function-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-08-07T13:36:05Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "9a9f2212_86047abf",
+      "range": {
+        "startLine": 269,
+        "startChar": 5,
+        "endLine": 269,
+        "endChar": 24
+      },
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69fc1188_27aff629",
         "filename": "src/wasm/function-compiler.cc",
         "patchSetId": 3
@@ -287,6 +485,24 @@
       "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03b92f5c_d99bda0d",
+        "filename": "src/wasm/function-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-08-07T13:36:05Z",
+      "side": 1,
+      "message": "Ok. \nI think I did this just because to \"make it compatible\" for the next n-parameter case.",
+      "parentUuid": "69fc1188_27aff629",
+      "revId": "4a723634a798df25cfcae6f505cc37c1847be91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
