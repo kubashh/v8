@@ -28,7 +28,8 @@ class AllocationSiteContext {
 
  protected:
   void update_current_site(AllocationSite site) {
-    *(current_.location()) = site.ptr();
+    //*(current_.location()) = site.ptr();
+    current_ = Handle<AllocationSite>(reinterpret_cast<Address*>(site.ptr()));
   }
 
   inline void InitializeTraversal(Handle<AllocationSite> site);

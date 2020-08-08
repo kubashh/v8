@@ -19,7 +19,10 @@ TurboAssemblerBase::TurboAssemblerBase(Isolate* isolate,
                                        std::unique_ptr<AssemblerBuffer> buffer)
     : Assembler(options, std::move(buffer)), isolate_(isolate) {
   if (create_code_object == CodeObjectRequired::kYes) {
-    code_object_ = Handle<HeapObject>::New(
+    //code_object_ = Handle<HeapObject>::New(
+        //ReadOnlyRoots(isolate).self_reference_marker(), isolate);
+    // This killed me.
+    code_object_ = Handle<HeapObject>::ForceIndirectNew(
         ReadOnlyRoots(isolate).self_reference_marker(), isolate);
   }
 }

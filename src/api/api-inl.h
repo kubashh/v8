@@ -112,17 +112,23 @@ MAKE_TO_LOCAL(ScriptOrModuleToLocal, Script, ScriptOrModule)
 
 // Implementations of OpenHandle
 
-#define MAKE_OPEN_HANDLE(From, To)                                    \
-  v8::internal::Handle<v8::internal::To> Utils::OpenHandle(           \
-      const v8::From* that, bool allow_empty_handle) {                \
-    DCHECK(allow_empty_handle || that != nullptr);                    \
-    DCHECK(that == nullptr ||                                         \
-           v8::internal::Object(                                      \
-               *reinterpret_cast<const v8::internal::Address*>(that)) \
-               .Is##To());                                            \
-    return v8::internal::Handle<v8::internal::To>(                    \
-        reinterpret_cast<v8::internal::Address*>(                     \
-            const_cast<v8::From*>(that)));                            \
+template <typename T>
+static internal::Address GetTagged(T* address) {
+  auto addr = reinterpret_cast<internal::Address>(address);
+  if (addr & 0x1)
+    return addr;
+  else
+    return *reinterpret_cast<internal::Address*>(addr);
+}
+
+#define MAKE_OPEN_HANDLE(From, To)                                             \
+  v8::internal::Handle<v8::internal::To> Utils::OpenHandle(                    \
+      const v8::From* that, bool allow_empty_handle) {                         \
+    DCHECK(allow_empty_handle || that != nullptr);                             \
+    DCHECK(that == nullptr || v8::internal::Object(GetTagged(that)).Is##To()); \
+    return v8::internal::Handle<v8::internal::To>(                             \
+        reinterpret_cast<v8::internal::Address*>(                              \
+            const_cast<v8::From*>(that)));                                     \
   }
 
 OPEN_HANDLE_LIST(MAKE_OPEN_HANDLE)
