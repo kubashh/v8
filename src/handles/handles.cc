@@ -30,7 +30,7 @@ ASSERT_TRIVIALLY_COPYABLE(MaybeHandle<Object>);
 #ifdef DEBUG
 bool HandleBase::IsDereferenceAllowed() const {
   DCHECK_NOT_NULL(location_);
-  Object object(*location_);
+  Object object(GetTagged());
   if (object.IsSmi()) return true;
   HeapObject heap_object = HeapObject::cast(object);
   if (IsReadOnlyHeapObject(heap_object)) return true;

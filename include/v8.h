@@ -219,6 +219,13 @@ class Local {
 
   V8_INLINE T* operator*() const { return val_; }
 
+  V8_INLINE internal::Address GetTagged() const {
+    if (reinterpret_cast<internal::Address>(val_) & 0x1)
+      return reinterpret_cast<internal::Address>(val_);
+    else
+      return *reinterpret_cast<internal::Address*>(val_);
+  }
+
   /**
    * Checks whether two handles are the same.
    * Returns true if both are empty, or if the objects to which they refer
@@ -235,7 +242,7 @@ class Local {
     internal::Address* b = reinterpret_cast<internal::Address*>(that.val_);
     if (a == nullptr) return b == nullptr;
     if (b == nullptr) return false;
-    return *a == *b;
+    return GetTagged() == that.GetTagged();
   }
 
   template <class S> V8_INLINE bool operator==(
@@ -244,7 +251,7 @@ class Local {
     internal::Address* b = reinterpret_cast<internal::Address*>(that.val_);
     if (a == nullptr) return b == nullptr;
     if (b == nullptr) return false;
-    return *a == *b;
+    return GetTagged() == *b;
   }
 
   /**
@@ -339,7 +346,8 @@ class Local {
   friend class TracedReference;
 
   explicit V8_INLINE Local(T* that) : val_(that) {}
-  V8_INLINE static Local<T> New(Isolate* isolate, T* that);
+  V8_INLINE static Local<T> New(Isolate* isolate, T* interm);
+  V8_INLINE static Local<T> New(Isolate* isolate, internal::Address tagged);
   T* val_;
 };
 
@@ -523,7 +531,7 @@ template <class T> class PersistentBase {
     internal::Address* b = reinterpret_cast<internal::Address*>(that.val_);
     if (a == nullptr) return b == nullptr;
     if (b == nullptr) return false;
-    return *a == *b;
+    return *a == that.GetTagged();
   }
 
   template <class S>
@@ -608,7 +616,8 @@ template <class T> class PersistentBase {
   friend class Object;
 
   explicit V8_INLINE PersistentBase(T* val) : val_(val) {}
-  V8_INLINE static T* New(Isolate* isolate, T* that);
+  V8_INLINE static T* New(Isolate* isolate, Local<T> that);
+  V8_INLINE static T* New(Isolate* isolate, const PersistentBase<T>& that);
 
   T* val_;
 };
@@ -671,7 +680,7 @@ template <class T, class M> class Persistent : public PersistentBase<T> {
    */
   template <class S>
   V8_INLINE Persistent(Isolate* isolate, Local<S> that)
-      : PersistentBase<T>(PersistentBase<T>::New(isolate, *that)) {
+      : PersistentBase<T>(PersistentBase<T>::New(isolate, that)) {
     static_assert(std::is_base_of<T, S>::value, "type check");
   }
   /**
@@ -681,7 +690,7 @@ template <class T, class M> class Persistent : public PersistentBase<T> {
    */
   template <class S, class M2>
   V8_INLINE Persistent(Isolate* isolate, const Persistent<S, M2>& that)
-    : PersistentBase<T>(PersistentBase<T>::New(isolate, *that)) {
+    : PersistentBase<T>(PersistentBase<T>::New(isolate, that)) {
     static_assert(std::is_base_of<T, S>::value, "type check");
   }
   /**
@@ -766,7 +775,7 @@ class Global : public PersistentBase<T> {
    */
   template <class S>
   V8_INLINE Global(Isolate* isolate, Local<S> that)
-      : PersistentBase<T>(PersistentBase<T>::New(isolate, *that)) {
+      : PersistentBase<T>(PersistentBase<T>::New(isolate, that)) {
     static_assert(std::is_base_of<T, S>::value, "type check");
   }
 
@@ -777,7 +786,7 @@ class Global : public PersistentBase<T> {
    */
   template <class S>
   V8_INLINE Global(Isolate* isolate, const PersistentBase<S>& that)
-      : PersistentBase<T>(PersistentBase<T>::New(isolate, that.val_)) {
+      : PersistentBase<T>(PersistentBase<T>::New(isolate, that)) {
     static_assert(std::is_base_of<T, S>::value, "type check");
   }
 
@@ -9794,7 +9803,7 @@ class V8_EXPORT V8 {
   static bool Initialize(int build_config);
 
   static internal::Address* GlobalizeReference(internal::Isolate* isolate,
-                                               internal::Address* handle);
+                                               internal::Address tagged);
   static internal::Address* GlobalizeTracedReference(internal::Isolate* isolate,
                                                      internal::Address* handle,
                                                      internal::Address* slot,
@@ -10744,7 +10753,8 @@ class V8_EXPORT Unwinder {
 
 template <class T>
 Local<T> Local<T>::New(Isolate* isolate, Local<T> that) {
-  return New(isolate, that.val_);
+  if (that.IsEmpty()) return {};
+  return New(isolate, that.GetTagged());
 }
 
 template <class T>
@@ -10758,14 +10768,19 @@ Local<T> Local<T>::New(Isolate* isolate, const TracedReferenceBase<T>& that) {
 }
 
 template <class T>
-Local<T> Local<T>::New(Isolate* isolate, T* that) {
-  if (that == nullptr) return Local<T>();
-  T* that_ptr = that;
+Local<T> Local<T>::New(Isolate* isolate, T* interm) {
+  if (interm == nullptr) return Local<T>();
+  T* that_ptr = interm;
   internal::Address* p = reinterpret_cast<internal::Address*>(that_ptr);
   return Local<T>(reinterpret_cast<T*>(HandleScope::CreateHandle(
       reinterpret_cast<internal::Isolate*>(isolate), *p)));
 }
 
+template <class T>
+Local<T> Local<T>::New(Isolate* isolate, internal::Address tagged) {
+  return Local<T>(reinterpret_cast<T*>(HandleScope::CreateHandle(
+      reinterpret_cast<internal::Isolate*>(isolate), tagged)));
+}
 
 template<class T>
 template<class S>
@@ -10802,14 +10817,20 @@ void* WeakCallbackInfo<T>::GetInternalField(int index) const {
 
 
 template <class T>
-T* PersistentBase<T>::New(Isolate* isolate, T* that) {
-  if (that == nullptr) return nullptr;
-  internal::Address* p = reinterpret_cast<internal::Address*>(that);
+T* PersistentBase<T>::New(Isolate* isolate, const PersistentBase<T>& that) {
+  if (that.IsEmpty()) return nullptr;
+  internal::Address p = *reinterpret_cast<internal::Address*>(that.val_);
   return reinterpret_cast<T*>(
       V8::GlobalizeReference(reinterpret_cast<internal::Isolate*>(isolate),
                              p));
 }
 
+template <class T>
+T* PersistentBase<T>::New(Isolate* isolate, Local<T> that) {
+  if (that.IsEmpty()) return nullptr;
+  return reinterpret_cast<T*>(V8::GlobalizeReference(
+      reinterpret_cast<internal::Isolate*>(isolate), that.GetTagged()));
+}
 
 template <class T, class M>
 template <class S, class M2>
@@ -10845,7 +10866,7 @@ void PersistentBase<T>::Reset(Isolate* isolate, const Local<S>& other) {
   static_assert(std::is_base_of<T, S>::value, "type check");
   Reset();
   if (other.IsEmpty()) return;
-  this->val_ = New(isolate, other.val_);
+  this->val_ = New(isolate, other);
 }
 
 
@@ -10856,7 +10877,7 @@ void PersistentBase<T>::Reset(Isolate* isolate,
   static_assert(std::is_base_of<T, S>::value, "type check");
   Reset();
   if (other.IsEmpty()) return;
-  this->val_ = New(isolate, other.val_);
+  this->val_ = New(isolate, other);
 }
 
 
@@ -11116,7 +11137,8 @@ void ReturnValue<T>::Set(const Local<S> handle) {
   if (V8_UNLIKELY(handle.IsEmpty())) {
     *value_ = GetDefaultValue();
   } else {
-    *value_ = *reinterpret_cast<internal::Address*>(*handle);
+    //*value_ = *reinterpret_cast<internal::Address*>(*handle);
+    *value_ = handle.GetTagged();
   }
 }
 
@@ -11393,7 +11415,11 @@ Local<Value> Object::GetInternalField(int index) {
 #ifndef V8_ENABLE_CHECKS
   typedef internal::Address A;
   typedef internal::Internals I;
-  A obj = *reinterpret_cast<A*>(this);
+  A obj;
+  if (reinterpret_cast<A>(this) & 0x1)
+    obj = reinterpret_cast<A>(this);
+  else
+    obj = *reinterpret_cast<const A*>(this);
   // Fast path: If the object is a plain JSObject, which is the common case, we
   // know where to find the internal fields and can return the value directly.
   auto instance_type = I::GetInstanceType(obj);
@@ -11421,7 +11447,11 @@ void* Object::GetAlignedPointerFromInternalField(int index) {
 #ifndef V8_ENABLE_CHECKS
   typedef internal::Address A;
   typedef internal::Internals I;
-  A obj = *reinterpret_cast<A*>(this);
+  A obj;
+  if (reinterpret_cast<A>(this) & 0x1)
+    obj = reinterpret_cast<A>(this);
+  else
+    obj = *reinterpret_cast<const A*>(this);
   // Fast path: If the object is a plain JSObject, which is the common case, we
   // know where to find the internal fields and can return the value directly.
   auto instance_type = I::GetInstanceType(obj);
@@ -11457,7 +11487,11 @@ Local<String> String::Empty(Isolate* isolate) {
 String::ExternalStringResource* String::GetExternalStringResource() const {
   typedef internal::Address A;
   typedef internal::Internals I;
-  A obj = *reinterpret_cast<const A*>(this);
+  A obj;
+  if (reinterpret_cast<A>(this) & 0x1)
+    obj = reinterpret_cast<A>(this);
+  else
+    obj = *reinterpret_cast<const A*>(this);
 
   ExternalStringResource* result;
   if (I::IsExternalTwoByteString(I::GetInstanceType(obj))) {
@@ -11479,7 +11513,11 @@ String::ExternalStringResourceBase* String::GetExternalStringResourceBase(
     String::Encoding* encoding_out) const {
   typedef internal::Address A;
   typedef internal::Internals I;
-  A obj = *reinterpret_cast<const A*>(this);
+  A obj;
+  if (reinterpret_cast<A>(this) & 0x1)
+    obj = reinterpret_cast<A>(this);
+  else
+    obj = *reinterpret_cast<const A*>(this);
   int type = I::GetInstanceType(obj) & I::kFullStringRepresentationMask;
   *encoding_out = static_cast<Encoding>(type & I::kStringEncodingMask);
   ExternalStringResourceBase* resource;
@@ -11510,7 +11548,11 @@ bool Value::IsUndefined() const {
 bool Value::QuickIsUndefined() const {
   typedef internal::Address A;
   typedef internal::Internals I;
-  A obj = *reinterpret_cast<const A*>(this);
+  A obj;
+  if (reinterpret_cast<A>(this) & 0x1)
+    obj = reinterpret_cast<A>(this);
+  else
+    obj = *reinterpret_cast<const A*>(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   if (I::GetInstanceType(obj) != I::kOddballType) return false;
   return (I::GetOddballKind(obj) == I::kUndefinedOddballKind);
@@ -11528,7 +11570,11 @@ bool Value::IsNull() const {
 bool Value::QuickIsNull() const {
   typedef internal::Address A;
   typedef internal::Internals I;
-  A obj = *reinterpret_cast<const A*>(this);
+  A obj;
+  if (reinterpret_cast<A>(this) & 0x1)
+    obj = reinterpret_cast<A>(this);
+  else
+    obj = *reinterpret_cast<const A*>(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   if (I::GetInstanceType(obj) != I::kOddballType) return false;
   return (I::GetOddballKind(obj) == I::kNullOddballKind);
@@ -11545,7 +11591,11 @@ bool Value::IsNullOrUndefined() const {
 bool Value::QuickIsNullOrUndefined() const {
   typedef internal::Address A;
   typedef internal::Internals I;
-  A obj = *reinterpret_cast<const A*>(this);
+  A obj;
+  if (reinterpret_cast<A>(this) & 0x1)
+    obj = reinterpret_cast<A>(this);
+  else
+    obj = *reinterpret_cast<const A*>(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   if (I::GetInstanceType(obj) != I::kOddballType) return false;
   int kind = I::GetOddballKind(obj);
@@ -11563,7 +11613,11 @@ bool Value::IsString() const {
 bool Value::QuickIsString() const {
   typedef internal::Address A;
   typedef internal::Internals I;
-  A obj = *reinterpret_cast<const A*>(this);
+  A obj;
+  if (reinterpret_cast<A>(this) & 0x1)
+    obj = reinterpret_cast<A>(this);
+  else
+    obj = *reinterpret_cast<const A*>(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   return (I::GetInstanceType(obj) < I::kFirstNonstringType);
 }
@@ -12062,7 +12116,11 @@ void* Context::GetAlignedPointerFromEmbedderData(int index) {
 #ifndef V8_ENABLE_CHECKS
   typedef internal::Address A;
   typedef internal::Internals I;
-  A ctx = *reinterpret_cast<const A*>(this);
+  A ctx;
+  if (reinterpret_cast<A>(this) & 0x1)
+    ctx = reinterpret_cast<A>(this);
+  else
+    ctx = *reinterpret_cast<const A*>(this);
   A embedder_data =
       I::ReadTaggedPointerField(ctx, I::kNativeContextEmbedderDataOffset);
   int value_offset =
