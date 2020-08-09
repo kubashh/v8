@@ -262,13 +262,15 @@ class IncrementalStringBuilder {
   V8_INLINE Handle<String> accumulator() { return accumulator_; }
 
   V8_INLINE void set_accumulator(Handle<String> string) {
-    *accumulator_.location() = string->ptr();
+    //*accumulator_.location() = string->ptr();
+    accumulator_ = Handle<String>(reinterpret_cast<Address*>(string->ptr()));
   }
 
   V8_INLINE Handle<String> current_part() { return current_part_; }
 
   V8_INLINE void set_current_part(Handle<String> string) {
-    *current_part_.location() = string->ptr();
+    //*current_part_.location() = string->ptr();
+    current_part_ = Handle<String>(reinterpret_cast<Address*>(string->ptr()));
   }
 
   // Add the current part to the accumulator.
