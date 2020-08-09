@@ -142,6 +142,7 @@ PersistentHandlesScope::PersistentHandlesScope(Isolate* isolate)
   // Check that we are not in a SealHandleScope.
   DCHECK(data->limit == &impl_->blocks()->back()[kHandleBlockSize]);
   impl_->blocks()->push_back(new_next);
+  isolate->EnterPersistentHandleScope();
 
 #ifdef DEBUG
   prev_level_ = data->level;
@@ -155,6 +156,7 @@ PersistentHandlesScope::PersistentHandlesScope(Isolate* isolate)
 
 PersistentHandlesScope::~PersistentHandlesScope() {
   DCHECK(handles_detached_);
+  impl_->isolate()->ExitPersistentHandleScope();
   impl_->isolate()->handle_scope_data()->level--;
   DCHECK_EQ(impl_->isolate()->handle_scope_data()->level, prev_level_);
 }

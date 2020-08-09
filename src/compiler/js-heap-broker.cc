@@ -2704,7 +2704,7 @@ void JSHeapBroker::InitializeAndStartSerializing(
 
 // clang-format off
 ObjectData* JSHeapBroker::GetOrCreateData(Handle<Object> object) {
-  RefsMap::Entry* entry = refs_->LookupOrInsert(object.address());
+  RefsMap::Entry* entry = refs_->LookupOrInsert(object.GetTagged());
   ObjectData* object_data = entry->value;
 
   if (object_data == nullptr) {
@@ -2730,7 +2730,7 @@ ObjectData* JSHeapBroker::GetOrCreateData(Handle<Object> object) {
     }
     // At this point the entry pointer is not guaranteed to be valid as
     // the refs_ hash hable could be resized by one of the constructors above.
-    DCHECK_EQ(object_data, refs_->Lookup(object.address())->value);
+    DCHECK_EQ(object_data, refs_->Lookup(object.GetTagged())->value);
   }
   return object_data;
 }
@@ -3981,7 +3981,7 @@ ObjectRef::ObjectRef(JSHeapBroker* broker, Handle<Object> object,
       data_ = broker->GetOrCreateData(object);
       break;
     case JSHeapBroker::kDisabled: {
-      RefsMap::Entry* entry = broker->refs_->LookupOrInsert(object.address());
+      RefsMap::Entry* entry = broker->refs_->LookupOrInsert(object.GetTagged());
       ObjectData** storage = &(entry->value);
       if (*storage == nullptr) {
         AllowHandleDereferenceIf allow_handle_dereference(

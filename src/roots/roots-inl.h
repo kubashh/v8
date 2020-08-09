@@ -41,6 +41,9 @@ operator++(RootIndex& index) {  // NOLINT(runtime/references)
 
 bool RootsTable::IsRootHandleLocation(Address* handle_location,
                                       RootIndex* index) const {
+  if (reinterpret_cast<Address>(handle_location) & 0x1)
+    return false;
+
   FullObjectSlot location(handle_location);
   FullObjectSlot first_root(&roots_[0]);
   FullObjectSlot last_root(&roots_[kEntriesCount]);

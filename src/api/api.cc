@@ -962,18 +962,18 @@ void ResourceConstraints::set_max_semi_space_size_in_kb(size_t limit_in_kb) {
       i::Heap::YoungGenerationSizeFromSemiSpaceSize(limit_in_kb * i::KB));
 }
 
-i::Address* V8::GlobalizeReference(i::Isolate* isolate, i::Address* obj) {
+i::Address* V8::GlobalizeReference(i::Isolate* isolate, i::Address obj) {
   LOG_API(isolate, Persistent, New);
-  i::Handle<i::Object> result = isolate->global_handles()->Create(*obj);
+  i::Handle<i::Object> result = isolate->global_handles()->Create(obj);
 #ifdef VERIFY_HEAP
   if (i::FLAG_verify_heap) {
-    i::Object(*obj).ObjectVerify(isolate);
+    i::Object(obj).ObjectVerify(isolate);
   }
 #endif  // VERIFY_HEAP
   return result.location();
 }
 
-i::Address* V8::GlobalizeTracedReference(i::Isolate* isolate, i::Address* obj,
+i::Address* V8::GlobalizeTracedReference(i::Isolate* isolate, i::Address tagged,
                                          internal::Address* slot,
                                          bool has_destructor) {
   LOG_API(isolate, TracedGlobal, New);
@@ -982,10 +982,10 @@ i::Address* V8::GlobalizeTracedReference(i::Isolate* isolate, i::Address* obj,
                   "the address slot must be not null");
 #endif
   i::Handle<i::Object> result =
-      isolate->global_handles()->CreateTraced(*obj, slot, has_destructor);
+      isolate->global_handles()->CreateTraced(tagged, slot, has_destructor);
 #ifdef VERIFY_HEAP
   if (i::FLAG_verify_heap) {
-    i::Object(*obj).ObjectVerify(isolate);
+    i::Object(tagged).ObjectVerify(isolate);
   }
 #endif  // VERIFY_HEAP
   return result.location();
@@ -1146,8 +1146,8 @@ i::Address* HandleScope::CreateHandle(i::Isolate* isolate, i::Address value) {
 
 EscapableHandleScope::EscapableHandleScope(Isolate* v8_isolate) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  escape_slot_ =
-      CreateHandle(isolate, i::ReadOnlyRoots(isolate).the_hole_value().ptr());
+  escape_slot_ = i::HandleScope::ForceCreateHandle(
+      isolate, i::ReadOnlyRoots(isolate).the_hole_value().ptr());
   Initialize(v8_isolate);
 }
 
@@ -1156,10 +1156,14 @@ i::Address* EscapableHandleScope::Escape(i::Address* escape_value) {
   Utils::ApiCheck(i::Object(*escape_slot_).IsTheHole(heap->isolate()),
                   "EscapableHandleScope::Escape", "Escape value set twice");
   if (escape_value == nullptr) {
-    *escape_slot_ = i::ReadOnlyRoots(heap).undefined_value().ptr();
+    escape_slot_ = reinterpret_cast<internal::Address*>(
+        i::ReadOnlyRoots(heap).undefined_value().ptr());
     return nullptr;
   }
-  *escape_slot_ = *escape_value;
+  if (reinterpret_cast<i::Address>(escape_value) & 1)
+    escape_slot_ = escape_value;
+  else
+    *escape_slot_ = *escape_value;
   return escape_slot_;
 }
 
@@ -11190,6 +11194,9 @@ std::unique_ptr<PersistentHandles> HandleScopeImplementer::DetachPersistent(
                    prev_limit == block_limit);
     if (prev_limit == block_limit) break;
     ph->blocks_.push_back(blocks_.back());
+#if DEBUG
+    ph->ordered_blocks_.insert(blocks_.back());
+#endif
     blocks_.pop_back();
   }
 

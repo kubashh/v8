@@ -24,6 +24,7 @@
 #include "src/utils/utils.h"
 #include "torque-generated/exported-class-definitions-tq-inl.h"
 #include "torque-generated/exported-class-definitions-tq.h"
+#include "v8-internal.h"
 
 // Each concrete ElementsAccessor can handle exactly one ElementsKind,
 // several abstract ElementsAccessor classes are used to allow sharing
@@ -2098,16 +2099,16 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
 
   static uint32_t PushImpl(Handle<JSArray> receiver, BuiltinArguments* args,
                            uint32_t push_size) {
-    Handle<FixedArrayBase> backing_store(receiver->elements(),
-                                         receiver->GetIsolate());
+    auto backing_store = Handle<FixedArrayBase>::ForceIndirectNew(
+        receiver->elements(), receiver->GetIsolate());
     return Subclass::AddArguments(receiver, backing_store, args, push_size,
                                   AT_END);
   }
 
   static uint32_t UnshiftImpl(Handle<JSArray> receiver, BuiltinArguments* args,
                               uint32_t unshift_size) {
-    Handle<FixedArrayBase> backing_store(receiver->elements(),
-                                         receiver->GetIsolate());
+    auto backing_store = Handle<FixedArrayBase>::ForceIndirectNew(
+        receiver->elements(), receiver->GetIsolate());
     return Subclass::AddArguments(receiver, backing_store, args, unshift_size,
                                   AT_START);
   }
@@ -2331,7 +2332,8 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
       HandleScope scope(isolate);
       JSObject::EnsureWritableFastElements(receiver);
     }
-    Handle<FixedArrayBase> backing_store(receiver->elements(), isolate);
+    auto backing_store =
+        Handle<FixedArrayBase>::ForceIndirectNew(receiver->elements(), isolate);
     uint32_t length = static_cast<uint32_t>(Smi::ToInt(receiver->length()));
     DCHECK_GT(length, 0);
     int new_length = length - 1;
