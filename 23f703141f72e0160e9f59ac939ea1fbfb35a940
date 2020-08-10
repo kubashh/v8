@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a7f504e_cc972626",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-08-10T11:55:41Z",
+      "side": 1,
+      "message": "Thanks for the review!\nAnd sorry about responding late, we\u0027ve been too busy with release... I should be able to reply faster now.\nI forgot that this CL was made for demo purpose. The branch and the commit messages are both wrong. I\u0027m trying to get a properly hooked commit.\nPlease checkout the comments and see if everything looks right.",
+      "revId": "23f703141f72e0160e9f59ac939ea1fbfb35a940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

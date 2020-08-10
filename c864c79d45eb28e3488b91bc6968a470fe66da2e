@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "5293a077_d944cb48",
+        "filename": "src/base/once.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-08-10T11:55:41Z",
+      "side": 1,
+      "message": "Gotcha, since adding wrappers involve posix/win code changes, let me use a small change dedicated for OS::ThreadYield introduction.\nI\u0027ll add this to the bottom to make it a little cleaner for this change.",
+      "parentUuid": "ab048a14_e26025df",
+      "range": {
+        "startLine": 15,
+        "startChar": 1,
+        "endLine": 15,
+        "endChar": 33
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c1648ec4_b2f4ad72",
         "filename": "src/base/platform/condition-variable.cc",
         "patchSetId": 5
@@ -62,6 +86,30 @@
       "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d5c76d7_54351219",
+        "filename": "src/base/platform/condition-variable.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-08-10T11:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1648ec4_b2f4ad72",
+      "range": {
+        "startLine": 192,
+        "startChar": 11,
+        "endLine": 192,
+        "endChar": 22
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "0e6f1e2f_490736b6",
+        "filename": "src/base/platform/mutex.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-08-10T11:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55278973_d2f5064e",
+      "range": {
+        "startLine": 197,
+        "startChar": 11,
+        "endLine": 197,
+        "endChar": 20
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a0d1c357_26af303d",
         "filename": "src/base/platform/mutex.cc",
         "patchSetId": 5
@@ -108,6 +180,30 @@
       "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89ba075c_27ce733b",
+        "filename": "src/base/platform/mutex.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-08-10T11:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0d1c357_26af303d",
+      "range": {
+        "startLine": 319,
+        "startChar": 11,
+        "endLine": 319,
+        "endChar": 22
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -158,6 +254,30 @@
     },
     {
       "key": {
+        "uuid": "57978e2a_511af210",
+        "filename": "src/base/platform/mutex.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-08-10T11:55:41Z",
+      "side": 1,
+      "message": "Added implementation using starboard::RWLock: https://source.corp.google.com/cobalt/starboard/common/rwlock.h?q\u003dstarboard%20rwlock\u0026sq\u003dpackage:.*\u0026ct\u003dos\n\nOur code base seems to only have one use case of SharedMutex in WAsm: https://source.corp.google.com/search?q\u003dSharedMutex%20file:v8%20%20p:cobalt\u0026sq\u003dpackage:.*",
+      "parentUuid": "6745f7ea_81bd5973",
+      "range": {
+        "startLine": 209,
+        "startChar": 5,
+        "endLine": 209,
+        "endChar": 12
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88414d25_ff6a3038",
         "filename": "src/base/platform/platform-starboard.cc",
         "patchSetId": 5
@@ -169,6 +289,30 @@
       "writtenOn": "2020-07-27T08:45:10Z",
       "side": 1,
       "message": "Will this crash? V8 is calling this from the GC.",
+      "range": {
+        "startLine": 257,
+        "startChar": 2,
+        "endLine": 257,
+        "endChar": 19
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40dedf96_6cb5285e",
+        "filename": "src/base/platform/platform-starboard.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-08-10T11:55:41Z",
+      "side": 1,
+      "message": "No, this will only log a reminding message or become a no-op: https://source.corp.google.com/cobalt/starboard/common/log.h;rcl\u003dcb9b9706450654be904de1c7a75e87b011971c97;l\u003d202",
+      "parentUuid": "88414d25_ff6a3038",
       "range": {
         "startLine": 257,
         "startChar": 2,
@@ -201,6 +345,30 @@
       "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e1db227_f7aece30",
+        "filename": "src/base/platform/time.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-08-10T11:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "354e7177_9d177957",
+      "range": {
+        "startLine": 465,
+        "startChar": 11,
+        "endLine": 465,
+        "endChar": 20
+      },
+      "revId": "c864c79d45eb28e3488b91bc6968a470fe66da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
