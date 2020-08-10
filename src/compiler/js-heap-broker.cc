@@ -70,6 +70,7 @@ enum ObjectDataKind {
   kSmi,
   kSerializedHeapObject,
   kUnserializedHeapObject,
+  kUnserializedSynchronizedHeapObject,
   kUnserializedReadOnlyHeapObject
 };
 
@@ -78,7 +79,8 @@ class AllowHandleAllocationIf {
   explicit AllowHandleAllocationIf(ObjectDataKind kind,
                                    JSHeapBroker::BrokerMode mode) {
     DCHECK_IMPLIES(mode == JSHeapBroker::BrokerMode::kSerialized,
-                   kind == kUnserializedReadOnlyHeapObject);
+                   kind == kUnserializedReadOnlyHeapObject ||
+                       kind == kUnserializedSynchronizedHeapObject);
     if (kind == kUnserializedHeapObject) maybe_allow_handle_.emplace();
   }
 
@@ -89,16 +91,16 @@ class AllowHandleAllocationIf {
 class AllowHandleDereferenceIf {
  public:
   explicit AllowHandleDereferenceIf(ObjectDataKind kind,
-                                    JSHeapBroker::BrokerMode mode) {
+                                    JSHeapBroker::BrokerMode mode)
+      : AllowHandleDereferenceIf(kind) {
     DCHECK_IMPLIES(mode == JSHeapBroker::BrokerMode::kSerialized,
-                   kind == kUnserializedReadOnlyHeapObject);
-    if (kind == kUnserializedHeapObject ||
-        kind == kUnserializedReadOnlyHeapObject)
-      maybe_allow_handle_.emplace();
+                   kind == kUnserializedReadOnlyHeapObject ||
+                       kind == kUnserializedSynchronizedHeapObject);
   }
 
   explicit AllowHandleDereferenceIf(ObjectDataKind kind) {
     if (kind == kUnserializedHeapObject ||
+        kind == kUnserializedSynchronizedHeapObject ||
         kind == kUnserializedReadOnlyHeapObject)
       maybe_allow_handle_.emplace();
   }
@@ -156,17 +158,21 @@ class ObjectData : public ZoneObject {
                   IsReadOnlyHeapObject(*object));
   }
 
-#define DECLARE_IS_AND_AS(Name) \
-  bool Is##Name() const;        \
-  Name##Data* As##Name();
-  HEAP_BROKER_OBJECT_LIST(DECLARE_IS_AND_AS)
-#undef DECLARE_IS_AND_AS
+#define DECLARE_IS(Name) bool Is##Name() const;
+  HEAP_BROKER_OBJECT_LIST(DECLARE_IS)
+  SYNCHRONIZED_OBJECT_LIST(DECLARE_IS)
+#undef DECLARE_IS
+
+#define DECLARE_AS(Name) Name##Data* As##Name();
+  HEAP_BROKER_OBJECT_LIST(DECLARE_AS)
+#undef DECLARE_AS
 
   Handle<Object> object() const { return object_; }
   ObjectDataKind kind() const { return kind_; }
   bool is_smi() const { return kind_ == kSmi; }
   bool should_access_heap() const {
     return kind_ == kUnserializedHeapObject ||
+           kind_ == kUnserializedSynchronizedHeapObject ||
            kind_ == kUnserializedReadOnlyHeapObject;
   }
 
@@ -771,7 +777,7 @@ class NativeContextData : public ContextData {
     return function_maps_;
   }
 
-  ScopeInfoData* scope_info() const {
+  ObjectData* scope_info() const {
     CHECK(serialized_);
     return scope_info_;
   }
@@ -786,7 +792,7 @@ class NativeContextData : public ContextData {
   BROKER_NATIVE_CONTEXT_FIELDS(DECL_MEMBER)
 #undef DECL_MEMBER
   ZoneVector<MapData*> function_maps_;
-  ScopeInfoData* scope_info_ = nullptr;
+  ObjectData* scope_info_ = nullptr;
 };
 
 class NameData : public HeapObjectData {
@@ -1717,45 +1723,6 @@ ObjectData* JSArrayData::GetOwnElement(JSHeapBroker* broker, uint32_t index,
   return result;
 }
 
-class ScopeInfoData : public HeapObjectData {
- public:
-  ScopeInfoData(JSHeapBroker* broker, ObjectData** storage,
-                Handle<ScopeInfo> object);
-
-  int context_length() const { return context_length_; }
-  bool has_outer_scope_info() const { return has_outer_scope_info_; }
-  int flags() const { return flags_; }
-
-  ScopeInfoData* outer_scope_info() const { return outer_scope_info_; }
-  void SerializeScopeInfoChain(JSHeapBroker* broker);
-
- private:
-  int const context_length_;
-  bool const has_outer_scope_info_;
-  int const flags_;
-
-  // Only serialized via SerializeScopeInfoChain.
-  ScopeInfoData* outer_scope_info_;
-};
-
-ScopeInfoData::ScopeInfoData(JSHeapBroker* broker, ObjectData** storage,
-                             Handle<ScopeInfo> object)
-    : HeapObjectData(broker, storage, object),
-      context_length_(object->ContextLength()),
-      has_outer_scope_info_(object->HasOuterScopeInfo()),
-      flags_(object->Flags()),
-      outer_scope_info_(nullptr) {}
-
-void ScopeInfoData::SerializeScopeInfoChain(JSHeapBroker* broker) {
-  if (outer_scope_info_) return;
-  if (!has_outer_scope_info_) return;
-  outer_scope_info_ =
-      broker
-          ->GetOrCreateData(Handle<ScopeInfo>::cast(object())->OuterScopeInfo())
-          ->AsScopeInfo();
-  outer_scope_info_->SerializeScopeInfoChain(broker);
-}
-
 class SharedFunctionInfoData : public HeapObjectData {
  public:
   SharedFunctionInfoData(JSHeapBroker* broker, ObjectData** storage,
@@ -1765,8 +1732,7 @@ class SharedFunctionInfoData : public HeapObjectData {
   int context_header_size() const { return context_header_size_; }
   BytecodeArrayData* GetBytecodeArray() const { return GetBytecodeArray_; }
   void SerializeFunctionTemplateInfo(JSHeapBroker* broker);
-  ScopeInfoData* scope_info() const { return scope_info_; }
-  void SerializeScopeInfoChain(JSHeapBroker* broker);
+  ObjectData* scope_info() const { return scope_info_; }
   FunctionTemplateInfoData* function_template_info() const {
     return function_template_info_;
   }
@@ -1796,7 +1762,7 @@ class SharedFunctionInfoData : public HeapObjectData {
 #undef DECL_MEMBER
   FunctionTemplateInfoData* function_template_info_;
   ZoneMap<int, JSArrayData*> template_objects_;
-  ScopeInfoData* scope_info_;
+  ObjectData* scope_info_;
 };
 
 SharedFunctionInfoData::SharedFunctionInfoData(
@@ -1832,16 +1798,6 @@ void SharedFunctionInfoData::SerializeFunctionTemplateInfo(
               Handle<SharedFunctionInfo>::cast(object())->function_data(),
               broker->isolate()))
           ->AsFunctionTemplateInfo();
-}
-
-void SharedFunctionInfoData::SerializeScopeInfoChain(JSHeapBroker* broker) {
-  if (scope_info_) return;
-  scope_info_ =
-      broker
-          ->GetOrCreateData(
-              Handle<SharedFunctionInfo>::cast(object())->scope_info())
-          ->AsScopeInfo();
-  scope_info_->SerializeScopeInfoChain(broker);
 }
 
 class SourceTextModuleData : public HeapObjectData {
@@ -2065,6 +2021,15 @@ class CodeData : public HeapObjectData {
   }
 HEAP_BROKER_OBJECT_LIST(DEFINE_IS_AND_AS)
 #undef DEFINE_IS_AND_AS
+
+#define DEFINE_IS(Name)                                        \
+  bool ObjectData::Is##Name() const {                          \
+    DCHECK(should_access_heap());                              \
+    AllowHandleDereferenceIf allow_handle_dereference(kind()); \
+    return object()->Is##Name();                               \
+  }
+SYNCHRONIZED_OBJECT_LIST(DEFINE_IS)
+#undef DEFINE_IS
 
 const JSObjectField& JSObjectData::GetInobjectField(int property_index) const {
   CHECK_LT(static_cast<size_t>(property_index), inobject_fields_.size());
@@ -2716,15 +2681,22 @@ ObjectData* JSHeapBroker::GetOrCreateData(Handle<Object> object) {
     } else if (IsReadOnlyHeapObject(*object)) {
       object_data = zone()->New<ObjectData>(this, data_storage, object,
                                             kUnserializedReadOnlyHeapObject);
-#define CREATE_DATA_IF_MATCH(name)                              \
+#define CREATE_DATA_FOR_DIRECT_READ_IF_MATCH(name)                           \
+    } else if (object->Is##name()) {                                         \
+      object_data = zone()->New<ObjectData>(                                 \
+          this, data_storage, object, kUnserializedSynchronizedHeapObject);
+
+      SYNCHRONIZED_OBJECT_LIST(CREATE_DATA_FOR_DIRECT_READ_IF_MATCH)
+#undef CREATE_DATA_FOR_DIRECT_READ_IF_MATCH
+#define CREATE_DATA_FOR_SERIALIZATION_IF_MATCH(name)            \
     } else if (object->Is##name()) {                            \
       CHECK(SerializingAllowed());                              \
       AllowHandleAllocation handle_allocation;                  \
       object_data = zone()->New<name##Data>(this, data_storage, \
                                             Handle<name>::cast(object));
 
-      HEAP_BROKER_OBJECT_LIST(CREATE_DATA_IF_MATCH)
-#undef CREATE_DATA_IF_MATCH
+      HEAP_BROKER_OBJECT_LIST(CREATE_DATA_FOR_SERIALIZATION_IF_MATCH)
+#undef CREATE_DATA_FOR_SERIALIZATION_IF_MATCH
     } else {
       UNREACHABLE();
     }
@@ -2747,6 +2719,7 @@ ObjectData* JSHeapBroker::GetOrCreateData(Object object) {
     return Name##Ref(broker(), data());                           \
   }
 HEAP_BROKER_OBJECT_LIST(DEFINE_IS_AND_AS)
+SYNCHRONIZED_OBJECT_LIST(DEFINE_IS_AND_AS)
 #undef DEFINE_IS_AND_AS
 
 bool ObjectRef::IsSmi() const { return data()->is_smi(); }
@@ -3320,15 +3293,15 @@ Handle<Object> JSHeapBroker::GetRootHandle(Object object) {
   return Handle<Object>(isolate()->root_handle(root_index).location());
 }
 
-#define IF_ACCESS_FROM_HEAP_C(holder, name)                              \
-  if (data_->should_access_heap()) {                                     \
-    CHECK(broker()->mode() == JSHeapBroker::kDisabled ||                 \
-          ReadOnlyHeap::Contains(HeapObject::cast(*object())));          \
-    AllowHandleAllocationIf handle_allocation(data_->kind(),             \
-                                              broker()->mode());         \
-    AllowHandleDereferenceIf allow_handle_dereference(data_->kind(),     \
-                                                      broker()->mode()); \
-    return object()->name();                                             \
+#define IF_ACCESS_FROM_HEAP_C(holder, name)                                 \
+  if (data_->should_access_heap()) {                                        \
+    /*CHECK(broker()->mode() == JSHeapBroker::kDisabled ||               */ \
+    /*ReadOnlyHeap::Contains(HeapObject::cast(*object())));        */       \
+    AllowHandleAllocationIf handle_allocation(data_->kind(),                \
+                                              broker()->mode());            \
+    AllowHandleDereferenceIf allow_handle_dereference(data_->kind(),        \
+                                                      broker()->mode());    \
+    return object()->name();                                                \
   }
 
 #define IF_ACCESS_FROM_HEAP(holder, result, name)                            \
@@ -3678,21 +3651,21 @@ int MapRef::GetInObjectProperties() const {
 
 int ScopeInfoRef::ContextLength() const {
   IF_ACCESS_FROM_HEAP_C(ScopeInfo, ContextLength);
-  return data()->AsScopeInfo()->context_length();
+  UNREACHABLE();
 }
 
 int ScopeInfoRef::Flags() const {
   IF_ACCESS_FROM_HEAP_C(ScopeInfo, Flags);
-  return data()->AsScopeInfo()->flags();
+  UNREACHABLE();
 }
 
-bool ScopeInfoRef::HasContextExtension() const {
+bool ScopeInfoRef::HasContextExtension() const {  // XXX Eliminate flags?
   return ScopeInfo::HasContextExtensionSlotBit::decode(Flags());
 }
 
 bool ScopeInfoRef::HasOuterScopeInfo() const {
   IF_ACCESS_FROM_HEAP_C(ScopeInfo, HasOuterScopeInfo);
-  return data()->AsScopeInfo()->has_outer_scope_info();
+  UNREACHABLE();
 }
 
 ScopeInfoRef ScopeInfoRef::OuterScopeInfo() const {
@@ -3702,15 +3675,10 @@ ScopeInfoRef ScopeInfoRef::OuterScopeInfo() const {
                                                     broker()->mode());
     AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
                                                       broker()->mode());
-    return ScopeInfoRef(
-        broker(), handle(object()->OuterScopeInfo(), broker()->isolate()));
+    return ScopeInfoRef(broker(), handle(object()->OuterScopeInfo(),
+                                         broker()->isolate()));  // XXX
   }
-  return ScopeInfoRef(broker(), data()->AsScopeInfo()->outer_scope_info());
-}
-
-void ScopeInfoRef::SerializeScopeInfoChain() {
-  CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-  data()->AsScopeInfo()->SerializeScopeInfoChain(broker());
+  UNREACHABLE();
 }
 
 bool StringRef::IsExternalString() const {
@@ -4188,6 +4156,7 @@ Handle<Object> ObjectRef::object() const {
 #endif  // DEBUG
 
 HEAP_BROKER_OBJECT_LIST(DEF_OBJECT_GETTER)
+SYNCHRONIZED_OBJECT_LIST(DEF_OBJECT_GETTER)
 #undef DEF_OBJECT_GETTER
 
 JSHeapBroker* ObjectRef::broker() const { return broker_; }
@@ -4253,7 +4222,7 @@ void NativeContextData::Serialize(JSHeapBroker* broker) {
     function_maps_.push_back(broker->GetOrCreateData(context->get(i))->AsMap());
   }
 
-  scope_info_ = broker->GetOrCreateData(context->scope_info())->AsScopeInfo();
+  scope_info_ = broker->GetOrCreateData(context->scope_info());
 }
 
 void JSFunctionRef::Serialize() {
@@ -4321,11 +4290,6 @@ JSArrayRef SharedFunctionInfoRef::GetTemplateObject(
 void SharedFunctionInfoRef::SerializeFunctionTemplateInfo() {
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
   data()->AsSharedFunctionInfo()->SerializeFunctionTemplateInfo(broker());
-}
-
-void SharedFunctionInfoRef::SerializeScopeInfoChain() {
-  CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
-  data()->AsSharedFunctionInfo()->SerializeScopeInfoChain(broker());
 }
 
 base::Optional<FunctionTemplateInfoRef>

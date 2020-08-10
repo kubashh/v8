@@ -811,7 +811,8 @@ class MinidumpReader(object):
 
   def ReadBytes(self, address, size):
     location = self.FindLocation(address)
-    return self.minidump[location:location + size]
+    if (size is not None):
+      return self.minidump[location:location + size]
 
   def _ReadWord(self, location):
     if self.Is64():

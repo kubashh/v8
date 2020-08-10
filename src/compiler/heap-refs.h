@@ -64,7 +64,6 @@ enum class OddballType : uint8_t {
   /* Subtypes of FixedArray */     \
   V(Context)                       \
   V(ObjectBoilerplateDescription)  \
-  V(ScopeInfo)                     \
   V(ScriptContextTable)            \
   /* Subtypes of FixedArrayBase */ \
   V(BytecodeArray)                 \
@@ -100,6 +99,8 @@ enum class OddballType : uint8_t {
   /* Subtypes of Object */         \
   V(HeapObject)
 
+#define SYNCHRONIZED_OBJECT_LIST(V) V(ScopeInfo)
+
 class CompilationDependencies;
 struct FeedbackSource;
 class JSHeapBroker;
@@ -108,6 +109,7 @@ class PerIsolateCompilerCache;
 class PropertyAccessInfo;
 #define FORWARD_DECL(Name) class Name##Ref;
 HEAP_BROKER_OBJECT_LIST(FORWARD_DECL)
+SYNCHRONIZED_OBJECT_LIST(FORWARD_DECL)
 #undef FORWARD_DECL
 
 class V8_EXPORT_PRIVATE ObjectRef {
@@ -128,10 +130,12 @@ class V8_EXPORT_PRIVATE ObjectRef {
 
 #define HEAP_IS_METHOD_DECL(Name) bool Is##Name() const;
   HEAP_BROKER_OBJECT_LIST(HEAP_IS_METHOD_DECL)
+  SYNCHRONIZED_OBJECT_LIST(HEAP_IS_METHOD_DECL)
 #undef HEAP_IS_METHOD_DECL
 
 #define HEAP_AS_METHOD_DECL(Name) Name##Ref As##Name() const;
   HEAP_BROKER_OBJECT_LIST(HEAP_AS_METHOD_DECL)
+  SYNCHRONIZED_OBJECT_LIST(HEAP_AS_METHOD_DECL)
 #undef HEAP_AS_METHOD_DECL
 
   bool IsNullOrUndefined() const;
