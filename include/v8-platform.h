@@ -225,6 +225,15 @@ class JobTask {
    * must not call back any JobHandle methods.
    */
   virtual size_t GetMaxConcurrency() const = 0;
+
+  /*
+   * Meant to replace the version above.
+   * TODO(etiennep): Replace the version above by this once custom embedders are
+   * migrated.
+   */
+  size_t GetMaxConcurrency(size_t worker_count) const {
+    return GetMaxConcurrency();
+  }
 };
 
 /**
