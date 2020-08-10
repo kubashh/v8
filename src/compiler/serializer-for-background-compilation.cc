@@ -183,6 +183,7 @@ namespace compiler {
   V(LdaLookupSlot)                    \
   V(LdaLookupSlotInsideTypeof)        \
   V(LdaNamedProperty)                 \
+  V(LdaNamedPropertyFromSuper)        \
   V(LdaNamedPropertyNoFeedback)       \
   V(LdaNull)                          \
   V(Ldar)                             \
@@ -3245,6 +3246,11 @@ void SerializerForBackgroundCompilation::VisitLdaNamedProperty(
                iterator->GetConstantForIndexOperand(1, broker()->isolate()));
   FeedbackSlot slot = iterator->GetSlotOperand(2);
   ProcessNamedPropertyAccess(receiver, name, slot, AccessMode::kLoad);
+}
+
+void SerializerForBackgroundCompilation::VisitLdaNamedPropertyFromSuper(
+    BytecodeArrayIterator* iterator) {
+  // TODO(marja): process feedback once it's added to the byte code.
 }
 
 // TODO(neis): Do feedback-independent serialization also for *NoFeedback

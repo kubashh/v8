@@ -136,6 +136,8 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
   BytecodeArrayBuilder& LoadNamedPropertyNoFeedback(Register object,
                                                     const AstRawString* name);
 
+  BytecodeArrayBuilder& LoadNamedPropertyFromSuper(Register receiver,
+                                                   const AstRawString* name);
   // Keyed load property. The key should be in the accumulator.
   BytecodeArrayBuilder& LoadKeyedProperty(Register object, int feedback_slot);
 
