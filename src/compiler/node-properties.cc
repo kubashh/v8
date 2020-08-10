@@ -348,10 +348,24 @@ base::Optional<MapRef> NodeProperties::GetJSCreateMap(JSHeapBroker* broker,
   return base::nullopt;
 }
 
+namespace {
+
+void GetElementsKindFromMaps(
+    ZoneHandleSet<Map>* maps,
+    std::vector<std::pair<bool, ElementsKind>>* elements_kind) {
+  for (auto receiver_map : *maps) {
+    MapRef map(broker_, receiver_map);
+    elements_kinds->push_back(std::pair<bool, ElementsKind>(
+        map.supports_fast_array_resize(), map.elements_kind()));
+  }
+}
+}  // namespace
+
 // static
 NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
     JSHeapBroker* broker, Node* receiver, Node* effect,
-    ZoneHandleSet<Map>* maps_return) {
+    ZoneHandleSet<Map>* maps_return,
+    std::vector<std::pair<bool, ElementsKind>>* elements_kind) {
   HeapObjectMatcher m(receiver);
   if (m.HasValue()) {
     HeapObjectRef receiver = m.Ref(broker);
@@ -368,6 +382,7 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
         // The {receiver_map} is only reliable when we install a stability
         // code dependency.
         *maps_return = ZoneHandleSet<Map>(receiver.map().object());
+        GetElementsKindFromMaps(maps_return, elements_kind);
         return kUnreliableReceiverMaps;
       }
     }
@@ -379,6 +394,7 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
         Node* const object = GetValueInput(effect, 0);
         if (IsSame(receiver, object)) {
           *maps_return = MapGuardMapsOf(effect->op());
+          GetElementsKindFromMaps(maps_return, elements_kind);
           return result;
         }
         break;
@@ -387,7 +403,24 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
         Node* const object = GetValueInput(effect, 0);
         if (IsSame(receiver, object)) {
           *maps_return = CheckMapsParametersOf(effect->op()).maps();
+          GetElementsKindFromMaps(maps_return, elements_kind);
           return result;
+        }
+        break;
+      }
+      case IrOpcode::kDynamicCheckMaps: {
+        Node* const object = GetValueInput(effect, 0);
+        if (IsSame(receiver, object)) {
+          DynamicCheckMapsParameters const& p =
+              DynamicCheckMapsParametersOf(effect->op());
+          if (result == kUnreliableReceiverMaps) return kNoReceiverMaps;
+          if (elements_kind != nullptr) {
+            std::pair<bool, ElementsKind> pair(
+                (p.elements_kind() != ElementsKind::NO_ELEMENTS),
+                p.elements_kind());
+            elements_kind->push_back(pair);
+          }
+          return kNoReceiverMaps;
         }
         break;
       }
@@ -396,6 +429,7 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
           base::Optional<MapRef> initial_map = GetJSCreateMap(broker, receiver);
           if (initial_map.has_value()) {
             *maps_return = ZoneHandleSet<Map>(initial_map->object());
+            GetElementsKindFromMaps(maps_return, elements_kind);
             return result;
           }
           // We reached the allocation of the {receiver}.
@@ -410,6 +444,7 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
                                                 .promise_function()
                                                 .initial_map()
                                                 .object());
+          GetElementsKindFromMaps(maps_return, elements_kind);
           return result;
         }
         break;
@@ -425,6 +460,7 @@ NodeProperties::InferReceiverMapsResult NodeProperties::InferReceiverMapsUnsafe(
             HeapObjectMatcher m(value);
             if (m.HasValue()) {
               *maps_return = ZoneHandleSet<Map>(m.Ref(broker).AsMap().object());
+              GetElementsKindFromMaps(maps_return, elements_kind);
               return result;
             }
           }

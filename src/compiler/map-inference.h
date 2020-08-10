@@ -57,6 +57,9 @@ class MapInference {
       std::function<bool(InstanceType)> f);
   V8_WARN_UNUSED_RESULT bool Is(Handle<Map> expected_map);
 
+  V8_WARN_UNUSED_RESULT std::vector<std::pair<bool, ElementsKind>> const&
+  GetElementsKinds();
+
   // These methods provide a guard.
   //
   // Returns true iff maps were already reliable or stability dependencies were
@@ -83,6 +86,7 @@ class MapInference {
   JSHeapBroker* const broker_;
   Node* const object_;
 
+  std::vector<std::pair<bool, ElementsKind>> elements_kinds_;
   MapHandles maps_;
   enum {
     kReliableOrGuarded,

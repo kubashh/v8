@@ -4676,12 +4676,14 @@ bool ElementAccessFeedback::HasOnlyStringMaps(JSHeapBroker* broker) const {
 
 MinimorphicLoadPropertyAccessFeedback::MinimorphicLoadPropertyAccessFeedback(
     NameRef const& name, FeedbackSlotKind slot_kind, bool is_monomorphic,
-    Handle<Object> handler, bool has_migration_target_maps)
+    Handle<Object> handler, bool has_migration_target_maps,
+    ElementsKind elements_kind)
     : ProcessedFeedback(kMinimorphicPropertyAccess, slot_kind),
       name_(name),
       is_monomorphic_(is_monomorphic),
       handler_(handler),
-      has_migration_target_maps_(has_migration_target_maps) {
+      has_migration_target_maps_(has_migration_target_maps),
+      elements_kind_(elements_kind) {
   DCHECK(IsLoadICKind(slot_kind));
 }
 
@@ -4787,6 +4789,19 @@ bool HasMigrationTargets(const MapHandles& maps) {
   }
   return false;
 }
+
+ElementsKind GetElementsKind(Handle<Object> handler) {
+  int int_handler = -1;
+  if (handler->IsSmi()) {
+    int_handler = handler->ToSmi().value();
+  } else {
+    DCHECK(handler->IsDataHandler());
+    DCHECK(DataHandler::cast(*handler).smi_handler().IsSmi());
+    int_handler = DataHandler::cast(*handler).smi_handler().ToSmi().value();
+  }
+  return ToElementsKind(
+      LoadHandler::CompactElementsKindBits::decode((int_handler)));
+}
 }  // namespace
 
 bool JSHeapBroker::CanUseFeedback(const FeedbackNexus& nexus) const {
@@ -4820,7 +4835,7 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
   if (!handler.is_null()) {
     return *zone()->New<MinimorphicLoadPropertyAccessFeedback>(
         *name, kind, nexus.ic_state() == MONOMORPHIC, handler.object(),
-        HasMigrationTargets(maps));
+        HasMigrationTargets(maps), GetElementsKind(handler.object()));
   }
 
   FilterRelevantReceiverMaps(isolate(), &maps);
