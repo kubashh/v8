@@ -893,8 +893,6 @@ void MarkCompactCollector::Prepare() {
     heap_->safepoint()->IterateLocalHeaps(
         [](LocalHeap* local_heap) { local_heap->FreeLinearAllocationArea(); });
   }
-
-  heap()->account_external_memory_concurrently_freed();
 }
 
 void MarkCompactCollector::FinishConcurrentMarking(
@@ -4493,8 +4491,6 @@ void MinorMarkCompactCollector::CollectGarbage() {
     // TODO(ulan): Don't free all as soon as we have an intermediate generation.
     heap()->new_lo_space()->FreeDeadObjects([](HeapObject) { return true; });
   }
-
-  heap()->account_external_memory_concurrently_freed();
 
   SweepArrayBufferExtensions();
 }
