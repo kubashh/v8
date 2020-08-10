@@ -1613,8 +1613,8 @@ class BytecodeArrayData : public FixedArrayBaseData {
       constant_pool_.push_back(broker->GetOrCreateData(constant_pool->get(i)));
     }
 
-    source_positions_ = broker->NewPersistentHandle(
-        bytecode_array->SourcePositionTableIfCollected());
+    source_positions_ = handle(bytecode_array->SourcePositionTableIfCollected(),
+                               broker->isolate());
 
     Handle<ByteArray> handlers(bytecode_array->handler_table(),
                                broker->isolate());
@@ -2434,6 +2434,27 @@ JSHeapBroker::JSHeapBroker(
 }
 
 JSHeapBroker::~JSHeapBroker() { DCHECK(!local_heap_); }
+
+void JSHeapBroker::set_canonical_handles(
+    std::unique_ptr<CanonicalHandlesMap> canonical_handles) {
+  DCHECK_NULL(canonical_handles_);
+  canonical_handles_ = std::make_unique<CanonicalHandlesMap>(
+      isolate_->heap(), ZoneAllocationPolicy(zone()));
+
+  CanonicalHandlesMap::IteratableScope it_scope(canonical_handles.get());
+  for (auto it = it_scope.begin(); it != it_scope.end(); ++it) {
+    Address* entry = *it.entry();
+    Object key = it.key();
+    canonical_handles_->Set(key, entry);
+  }
+}
+
+Address* JSHeapBroker::FindCanonicalPersistentHandleForTesting(Object object) {
+  DCHECK(canonical_handles_);
+  Address** entry = canonical_handles_->Find(object);
+  CHECK_NOT_NULL(entry);
+  return *entry;
+}
 
 std::string JSHeapBroker::Trace() const {
   std::ostringstream oss;

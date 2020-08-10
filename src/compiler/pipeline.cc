@@ -152,10 +152,10 @@ class PipelineData {
         instruction_zone_(instruction_zone_scope_.zone()),
         codegen_zone_scope_(zone_stats_, kCodegenZoneName),
         codegen_zone_(codegen_zone_scope_.zone()),
-        broker_(new JSHeapBroker(
-            isolate_, info_->zone(), info_->trace_heap_broker(),
-            is_concurrent_inlining, info->IsNativeContextIndependent(),
-            info->DetachPersistentHandles())),
+        broker_(new JSHeapBroker(isolate_, info_->zone(),
+                                 info_->trace_heap_broker(),
+                                 is_concurrent_inlining,
+                                 info->IsNativeContextIndependent(), nullptr)),
         register_allocation_zone_scope_(zone_stats_,
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
@@ -771,6 +771,7 @@ class LocalHeapScope {
  public:
   explicit LocalHeapScope(JSHeapBroker* broker, OptimizedCompilationInfo* info)
       : broker_(broker), tick_counter_(&info->tick_counter()) {
+    broker_->set_persistent_handles(info->DetachPersistentHandles());
     broker_->InitializeLocalHeap();
     tick_counter_->AttachLocalHeap(broker_->local_heap());
   }
@@ -3041,14 +3042,30 @@ MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
   Linkage linkage(Linkage::ComputeIncoming(data.instruction_zone(), info));
   Deoptimizer::EnsureCodeForDeoptimizationEntries(isolate);
 
-  pipeline.Serialize();
+  if (data.broker()->is_concurrent_inlining()) {
+    PersistentHandlesScope persistent_scope(isolate);
+    CanonicalHandleScope canonical(isolate);
+    info->ReopenHandlesInNewHandleScope(isolate);
+    pipeline.Serialize();
+    info->set_persistent_handles(persistent_scope.Detach());
+    // TODO(solanes): Attach it to the info first when setting the identity map
+    // does not copy everything over. Do the same for the compiler.cc code path
+    // (i.e CompilationHandleScope).
+    data.broker()->set_canonical_handles(canonical.DetachCanonicalHandles());
+  } else {
+    pipeline.Serialize();
+    // Set a dummy empty PersistentHandles container.
+    info->set_persistent_handles(isolate->NewPersistentHandles());
+  }
+
   {
-    LocalHeapScope local_heap_scope(data.broker(), data.info());
+    LocalHeapScope local_heap_scope(data.broker(), info);
     if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
     // We selectively Unpark inside OptimizeGraph.
     ParkedScope parked_scope(data.broker()->local_heap());
     if (!pipeline.OptimizeGraph(&linkage)) return MaybeHandle<Code>();
   }
+
   pipeline.AssembleCode(&linkage);
   Handle<Code> code;
   if (pipeline.FinalizeCode(out_broker == nullptr).ToHandle(&code) &&
@@ -3501,6 +3518,10 @@ MaybeHandle<Code> PipelineImpl::FinalizeCode(bool retire_broker) {
   PipelineData* data = this->data_;
   data->BeginPhaseKind("V8.TFFinalizeCode");
   if (data->broker() && retire_broker) {
+    // If the broker is not going to be kept alive, pass the PersistentHandles
+    // container back to the OptmizedCompilationInfo.
+    data->info()->set_persistent_handles(
+        data->broker()->DetachPersistentHandles());
     data->broker()->Retire();
   }
   Run<FinalizeCodePhase>();
