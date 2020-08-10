@@ -347,6 +347,7 @@ class ObjectDescriptor {
       AddToDictionaryTemplate(isolate, properties_dictionary_template_, name,
                               value_index, value_kind, value);
     } else {
+      // This is safe since we know that temp_handle_ always contains Smi.
       *temp_handle_.location() = value.ptr();
       AddToDescriptorArrayTemplate(isolate, descriptor_array_template_, name,
                                    value_kind, temp_handle_);

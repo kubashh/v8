@@ -34,9 +34,15 @@ Handle<T> Handle<T>::New(T object, Isolate* isolate) {
 }
 
 template <typename T>
+Handle<T> Handle<T>::ForceIndirectNew(T object, Isolate* isolate) {
+  return Handle(HandleScope::ForceCreateHandle(isolate, object.ptr()));
+}
+
+template <typename T>
 template <typename S>
 const Handle<T> Handle<T>::cast(Handle<S> that) {
-  T::cast(*FullObjectSlot(that.location()));
+  //T::cast(*FullObjectSlot(that.location()));
+  T::cast(*that);
   return Handle<T>(that.location_);
 }
 
@@ -161,6 +167,25 @@ Handle<T> HandleScope::CloseAndEscape(Handle<T> handle_value) {
 
 Address* HandleScope::CreateHandle(Isolate* isolate, Address value) {
   DCHECK(AllowHandleAllocation::IsAllowed());
+  if (value & 0x1 && !isolate->InPersistentHandleScope())
+    return reinterpret_cast<Address*>(value);
+  HandleScopeData* data = isolate->handle_scope_data();
+  Address* result = data->next;
+  if (result == data->limit) {
+    result = Extend(isolate);
+  }
+  // Update the current next field, set the value in the created handle,
+  // and return the result.
+  DCHECK_LT(reinterpret_cast<Address>(result),
+            reinterpret_cast<Address>(data->limit));
+  data->next = reinterpret_cast<Address*>(reinterpret_cast<Address>(result) +
+                                          sizeof(Address));
+  *result = value;
+  return result;
+}
+
+Address* HandleScope::ForceCreateHandle(Isolate* isolate, Address value) {
+  DCHECK(AllowHandleAllocation::IsAllowed());
   HandleScopeData* data = isolate->handle_scope_data();
   Address* result = data->next;
   if (result == data->limit) {
@@ -178,6 +203,8 @@ Address* HandleScope::CreateHandle(Isolate* isolate, Address value) {
 
 Address* HandleScope::GetHandle(Isolate* isolate, Address value) {
   DCHECK(AllowHandleAllocation::IsAllowed());
+  if (value & 0x1 && !isolate->InPersistentHandleScope())
+    return reinterpret_cast<Address*>(value);
   HandleScopeData* data = isolate->handle_scope_data();
   CanonicalHandleScope* canonical = data->canonical_scope;
   return canonical ? canonical->Lookup(value) : CreateHandle(isolate, value);

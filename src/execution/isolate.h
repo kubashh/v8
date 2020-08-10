@@ -1554,6 +1554,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   MaybeLocal<v8::Context> GetContextFromRecorderContextId(
       v8::metrics::Recorder::ContextId id);
 
+  void EnterPersistentHandleScope() { ++in_persistent_handle_scope_; }
+  void ExitPersistentHandleScope() { --in_persistent_handle_scope_; }
+  bool InPersistentHandleScope() const { return in_persistent_handle_scope_; }
+
  private:
   explicit Isolate(std::unique_ptr<IsolateAllocator> isolate_allocator);
   ~Isolate();
@@ -1907,6 +1911,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // predefined set of data as crash keys to be used in postmortem debugging
   // in case of a crash.
   AddCrashKeyCallback add_crash_key_callback_ = nullptr;
+
+  size_t in_persistent_handle_scope_ = 0;
 
   // Delete new/delete operators to ensure that Isolate::New() and
   // Isolate::Delete() are used for Isolate creation and deletion.
