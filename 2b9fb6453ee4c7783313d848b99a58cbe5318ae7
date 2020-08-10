@@ -183,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "417ed923_e720f3d3",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4771,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-10T08:33:46Z",
+      "side": 1,
+      "message": "For Strings we would have to special-case it and use either a bit on the string itself (tricky) or use yet another string instance type (not sure that flies either, since essentially this means 2x instance types for strings) :P\n\nLet\u0027s decide once we have the outcome of TC30 discussions. At least with the minimal API we can somewhat freely change the underlying implementation.",
+      "parentUuid": "4a67038e_8415ea56",
+      "revId": "2b9fb6453ee4c7783313d848b99a58cbe5318ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69ed0226_f8d319a0",
         "filename": "src/execution/isolate.cc",
         "patchSetId": 1
