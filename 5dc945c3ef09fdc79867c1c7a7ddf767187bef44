@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "0d97bd14_b4db1aa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-10T17:23:43Z",
+      "side": 1,
+      "message": "I find the reasoning for storing waiting_location_ as well as re-verifying upon lookup somewhat subtle. marja@ explained it to me, and AIUI:\n\n1. The reason it has to be stored ahead of time instead of reconstructed via backing_store + addr is so that nodes can be removed in the case of e.g. timing out, since the backing store may have died, therefore making the location un-reconstructable.\n\n2. The reason it has to be re-verified is that if the backing store died and another backing store was allocated at the same address, we have no way to distinguish the two locations.\n\nThe root cause for the complexity is that there\u0027s no good way to tell the waiter list a backing store has died and to clean up stale nodes. Since removal is done opportunistically, all code that touch waiter lists must guard against staleness.\n\nSince there\u0027s worse complexity involved in implementing a sweep after a backing store dies and I don\u0027t have a better idea, I\u0027m fine with the current approach.\n\nA comment in the header describing about the possibility of stale nodes would help.",
+      "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b38cbbc_7cf186c3",
         "filename": "src/execution/futex-emulation.cc",
         "patchSetId": 5
@@ -53,6 +70,23 @@
     },
     {
       "key": {
+        "uuid": "06aac170_2759f465",
+        "filename": "src/execution/futex-emulation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-10T17:23:43Z",
+      "side": 1,
+      "message": "Can we assert that backing_store.get() !\u003d node_backing_store.get() implies node_backing_store.get() \u003d\u003d nullptr?",
+      "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c77a18a8_7cd545e0",
         "filename": "src/execution/futex-emulation.cc",
         "patchSetId": 5
@@ -64,6 +98,40 @@
       "writtenOn": "2020-08-07T20:17:15Z",
       "side": 1,
       "message": "This doesn\u0027t seem safe compared to the usual `it \u003d location_lists.erase(it)`.",
+      "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f640846d_35f9e0e0",
+        "filename": "src/execution/futex-emulation.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-10T17:23:43Z",
+      "side": 1,
+      "message": "I think it\u0027d be good for comments to explicitly say that this is backing_store_.get() + wait_addr_ at the time of the node\u0027s creation.",
+      "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49a069b3_9ac21993",
+        "filename": "src/execution/futex-emulation.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-10T17:23:43Z",
+      "side": 1,
+      "message": "Since this might possibly be stale, WDYT about naming this to reflect that? I thought of wait_location_snapshot_, but not clear how clear that is.",
       "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
