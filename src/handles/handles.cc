@@ -137,14 +137,13 @@ CanonicalHandleScope::CanonicalHandleScope(Isolate* isolate)
   prev_canonical_scope_ = handle_scope_data->canonical_scope;
   handle_scope_data->canonical_scope = this;
   root_index_map_ = new RootIndexMap(isolate);
-  identity_map_ = new IdentityMap<Address*, ZoneAllocationPolicy>(
+  identity_map_ = std::make_unique<IdentityMap<Address*, ZoneAllocationPolicy>>(
       isolate->heap(), ZoneAllocationPolicy(&zone_));
   canonical_level_ = handle_scope_data->level;
 }
 
 CanonicalHandleScope::~CanonicalHandleScope() {
   delete root_index_map_;
-  delete identity_map_;
   isolate_->handle_scope_data()->canonical_scope = prev_canonical_scope_;
 }
 
@@ -161,12 +160,18 @@ Address* CanonicalHandleScope::Lookup(Address object) {
       return isolate_->root_handle(root_index).location();
     }
   }
+  DCHECK(identity_map_);
   Address** entry = identity_map_->Get(Object(object));
   if (*entry == nullptr) {
     // Allocate new handle location.
     *entry = HandleScope::CreateHandle(isolate_, object);
   }
   return *entry;
+}
+
+std::unique_ptr<CanonicalHandlesMap>
+CanonicalHandleScope::DetachCanonicalHandles() {
+  return std::move(identity_map_);
 }
 
 }  // namespace internal

@@ -223,6 +223,7 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
   }
 
   std::unique_ptr<PersistentHandles> DetachPersistentHandles() {
+    DCHECK_NOT_NULL(ph_);
     return std::move(ph_);
   }
 
@@ -264,8 +265,6 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
   // OptimizedCompilationInfo allocates.
   Zone* const zone_;
 
-  std::unique_ptr<PersistentHandles> persistent_handles_;
-
   BailoutReason bailout_reason_ = BailoutReason::kNoReason;
 
   InlinedFunctionList inlined_functions_;
@@ -283,12 +282,15 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
   TickCounter tick_counter_;
 
   // This PersistentHandles container is owned first by
-  // OptimizedCompilationInfo, then by JSHeapBroker, then by LocalHeap (when we
-  // go to the background thread), then again by JSHeapBroker (right before
-  // returning to the main thread), which gets destroyed when PipelineData gets
-  // destroyed when e.g. PipelineCompilationJob gets destroyed. Since it is a
-  // member of OptimizedCompilationInfo, we make sure that we have one and only
-  // one per compilation job.
+  // OptimizedCompilationInfo, then by JSHeapBroker, then by the broker's
+  // LocalHeap, then again by JSHeapBroker (when said LocalHeap is destroyed.).
+  // In normal execution it gets destroyed when PipelineData gets destroyed when
+  // e.g. PipelineCompilationJob gets destroyed. Since it is a member of
+  // OptimizedCompilationInfo, we make sure that we have one and only one per
+  // compilation job. There is a special case for GenerateCodeForTesting when
+  // the JSHeapBroker will be retired in that same method. In this case, we need
+  // to re-attach the PersistentHandles container to the
+  // OptimizedCompilationInfo to be able to dereference them.
   std::unique_ptr<PersistentHandles> ph_;
 
   DISALLOW_COPY_AND_ASSIGN(OptimizedCompilationInfo);
