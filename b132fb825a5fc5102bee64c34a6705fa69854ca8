@@ -122,6 +122,23 @@
       "revId": "b132fb825a5fc5102bee64c34a6705fa69854ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c84d36e_ce7d93cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-08-10T16:27:12Z",
+      "side": 1,
+      "message": "Hi Bill, ptal, thanks!",
+      "revId": "b132fb825a5fc5102bee64c34a6705fa69854ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
