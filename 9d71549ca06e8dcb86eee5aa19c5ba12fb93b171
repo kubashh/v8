@@ -22,6 +22,87 @@
       "revId": "9d71549ca06e8dcb86eee5aa19c5ba12fb93b171",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83e53a1f_180ce719",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9150,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-10T08:27:53Z",
+      "side": 1,
+      "message": "hehe, yes we do want to annotate the whole API for runtime-call-stats.",
+      "parentUuid": "23fdf425_44662728",
+      "range": {
+        "startLine": 9150,
+        "startChar": 6,
+        "endLine": 9150,
+        "endChar": 46
+      },
+      "revId": "9d71549ca06e8dcb86eee5aa19c5ba12fb93b171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db884cf1_e9b63492",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9158,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-10T08:27:53Z",
+      "side": 1,
+      "message": "dito here, please enable",
+      "revId": "9d71549ca06e8dcb86eee5aa19c5ba12fb93b171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a30535ef_bc55d51d",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-10T08:27:53Z",
+      "side": 1,
+      "message": "We could probably drop this, since we only set it from the API and setting it is only supported on JSReceiver obejcts.",
+      "range": {
+        "startLine": 1807,
+        "startChar": 0,
+        "endLine": 1810,
+        "endChar": 1
+      },
+      "revId": "9d71549ca06e8dcb86eee5aa19c5ba12fb93b171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb31135f_30200ede",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-10T08:27:53Z",
+      "side": 1,
+      "message": "nit: braces for newline statements",
+      "revId": "9d71549ca06e8dcb86eee5aa19c5ba12fb93b171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
