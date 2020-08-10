@@ -73,6 +73,30 @@
       "revId": "cd88eaa6ffb6961b825826cad1a8a33c6bd9e661",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f81326aa_7879cc6d",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3279,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2020-08-10T08:51:35Z",
+      "side": 1,
+      "message": "Yes, done.",
+      "parentUuid": "947316ae_e2dd25e4",
+      "range": {
+        "startLine": 3279,
+        "startChar": 24,
+        "endLine": 3279,
+        "endChar": 29
+      },
+      "revId": "cd88eaa6ffb6961b825826cad1a8a33c6bd9e661",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
