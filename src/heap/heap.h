@@ -788,10 +788,6 @@ class Heap {
     return minor_mark_compact_collector_;
   }
 
-  ArrayBufferCollector* array_buffer_collector() {
-    return array_buffer_collector_.get();
-  }
-
   ArrayBufferSweeper* array_buffer_sweeper() {
     return array_buffer_sweeper_.get();
   }
@@ -1358,14 +1354,6 @@ class Heap {
   // callback does not fail to keep the memory usage low.
   V8_EXPORT_PRIVATE void* AllocateExternalBackingStore(
       const std::function<void*(size_t)>& allocate, size_t byte_length);
-
-  // ===========================================================================
-  // ArrayBuffer tracking. =====================================================
-  // ===========================================================================
-  void RegisterBackingStore(JSArrayBuffer buffer,
-                            std::shared_ptr<BackingStore> backing_store);
-  std::shared_ptr<BackingStore> UnregisterBackingStore(JSArrayBuffer buffer);
-  std::shared_ptr<BackingStore> LookupBackingStore(JSArrayBuffer buffer);
 
   // ===========================================================================
   // Allocation site tracking. =================================================
@@ -2149,7 +2137,6 @@ class Heap {
   std::unique_ptr<MarkCompactCollector> mark_compact_collector_;
   MinorMarkCompactCollector* minor_mark_compact_collector_ = nullptr;
   std::unique_ptr<ScavengerCollector> scavenger_collector_;
-  std::unique_ptr<ArrayBufferCollector> array_buffer_collector_;
   std::unique_ptr<ArrayBufferSweeper> array_buffer_sweeper_;
 
   std::unique_ptr<MemoryAllocator> memory_allocator_;
