@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "66bad873_2796f3f8",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-10T20:16:54Z",
+      "side": 1,
+      "message": "I renamed this to BuildStrongReference. This builds a strong reference from weak pointer. Maybe I should call this BuildStrongRefFromWeakObjecct to make it explicit. I will do that in the next patch set.",
+      "parentUuid": "9f35782c_efe70dc1",
+      "range": {
+        "startLine": 270,
+        "startChar": 8,
+        "endLine": 270,
+        "endChar": 30
+      },
+      "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6cf40fe5_63652b48",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
@@ -89,6 +113,24 @@
       "side": 1,
       "message": "Right, I missed that.\nHow about encapsulating the feedback acquisition in a helper function, say GetFeedback, that takes a label for the monomorphic case and a label for the polymorphic case, or a C++ function for each. It passes a strong reference (the map or the fixed array) to the corresponding argument.",
       "parentUuid": "e2ec3159_646a230d",
+      "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3a4fb65_994a95b1",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-10T20:16:54Z",
+      "side": 1,
+      "message": "I tried to refactor and implemented something similar. Let me know any suggestions.",
+      "parentUuid": "e70390d2_10b20420",
       "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -144,6 +186,24 @@
       "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beaae0e5_4e26186e",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-10T20:16:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bfb6a09_537a0bc8",
+      "revId": "8fa63f5cb18aa17f6cd6e06f4c37e4254cbbee23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

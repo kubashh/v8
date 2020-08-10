@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b17e52e_b92b6e1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-10T20:16:54Z",
+      "side": 1,
+      "message": "Sorry, it took sometime to come back to this. I tried to refactor it, so feedback is read only in one place and the rest of the code only sees strong pointers. PTAL.",
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
