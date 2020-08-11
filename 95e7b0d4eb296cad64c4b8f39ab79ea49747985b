@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "286ae301_94d933e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-11T11:10:21Z",
+      "side": 1,
+      "message": "drive-by comment: I have had cases where if the information wasn\u0027t all in the last paragraph it wouldn\u0027t trigger what it was supposed to do (in this case adding the CL to the bug). i.e I think you should remove this line so you get:\nBug: v8:9237\nChange-Id: Id28e935294c5068dd6c54e6b860a77d61517fff5",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 0
+      },
+      "revId": "95e7b0d4eb296cad64c4b8f39ab79ea49747985b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0ec56cb_0818604a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 13
