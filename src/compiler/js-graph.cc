@@ -53,19 +53,19 @@ Node* JSGraph::Constant(const ObjectRef& ref) {
   if (ref.IsHeapNumber()) {
     return Constant(ref.AsHeapNumber().value());
   } else if (oddball_type == OddballType::kUndefined) {
-    DCHECK(ref.object().equals(isolate()->factory()->undefined_value()));
+    DCHECK(ref.object().is_identical_to(isolate()->factory()->undefined_value()));
     return UndefinedConstant();
   } else if (oddball_type == OddballType::kNull) {
-    DCHECK(ref.object().equals(isolate()->factory()->null_value()));
+    DCHECK(ref.object().is_identical_to(isolate()->factory()->null_value()));
     return NullConstant();
   } else if (oddball_type == OddballType::kHole) {
-    DCHECK(ref.object().equals(isolate()->factory()->the_hole_value()));
+    DCHECK(ref.object().is_identical_to(isolate()->factory()->the_hole_value()));
     return TheHoleConstant();
   } else if (oddball_type == OddballType::kBoolean) {
-    if (ref.object().equals(isolate()->factory()->true_value())) {
+    if (ref.object().is_identical_to(isolate()->factory()->true_value())) {
       return TrueConstant();
     } else {
-      DCHECK(ref.object().equals(isolate()->factory()->false_value()));
+      DCHECK(ref.object().is_identical_to(isolate()->factory()->false_value()));
       return FalseConstant();
     }
   } else {

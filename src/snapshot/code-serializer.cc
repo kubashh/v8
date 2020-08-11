@@ -90,8 +90,11 @@ ScriptData* CodeSerializer::SerializeSharedFunctionInfo(
     Handle<SharedFunctionInfo> info) {
   DisallowHeapAllocation no_gc;
 
+  Address* loc = info.address() ? reinterpret_cast<Address*>(&info)
+                                : info.location();
+
   VisitRootPointer(Root::kHandleScope, nullptr,
-                   FullObjectSlot(info.location()));
+                   FullObjectSlot(loc));
   SerializeDeferredObjects();
   Pad();
 
