@@ -19,6 +19,40 @@
     },
     {
       "key": {
+        "uuid": "4fc9235c_d5a1fc86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "very cool!",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fcb15f3a_ee688e14",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "... after PrepareJob.",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60fe141d_d8569a5f",
         "filename": "src/codegen/compiler.h",
         "patchSetId": 20
@@ -39,6 +73,63 @@
       "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ecd896d8_fb6f21a2",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "Nit: remove empty line",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68471f33_ad8bbee2",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2452,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "Let\u0027s have a shorter name for such a common operation. How about JSHeapBroker::PersistentHandle.",
+      "range": {
+        "startLine": 2452,
+        "startChar": 23,
+        "endLine": 2452,
+        "endChar": 59
+      },
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9f14c35_5c3bd35d",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2460,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "Nit: DCHECK_NOT_NULL, but the next line will crash anways if its null.",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -65,6 +156,64 @@
     },
     {
       "key": {
+        "uuid": "a5ea3a40_78519103",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "Please do it in this CL or make sure we don\u0027t forget.",
+      "parentUuid": "3c47a134_963ec2eb",
+      "range": {
+        "startLine": 158,
+        "startChar": 69,
+        "endLine": 158,
+        "endChar": 76
+      },
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de5daa1a_d9c23122",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "How about making these private and exposing only a PrepareForHandleAllocation method, or maybe even having the two values be arguments to InitializeLocalHeap.\n\nIt should be impossible or very hard to forget to set the two things, and similarly for setting only one but not the other.",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98e627b8_fdc47648",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f1797ef_edc93cff",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 20
@@ -88,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "7eff826d_72c1b068",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 3054,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "Please add that comment to the file.",
+      "parentUuid": "3f1797ef_edc93cff",
+      "range": {
+        "startLine": 3054,
+        "startChar": 6,
+        "endLine": 3054,
+        "endChar": 62
+      },
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57bf84d4_9a7ac2d0",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 20
@@ -108,6 +281,57 @@
       "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "684b5b24_a85a5ab8",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 3076,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "I can live with some ugliness in the testing pipeline.",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eedcd293_24b34c43",
+        "filename": "src/handles/handles.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "These comments better go into the header, above the constructor.",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5146f00f_cd2db170",
+        "filename": "src/heap/local-heap.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T16:51:46Z",
+      "side": 1,
+      "message": "I know it\u0027s old code, but is this intentionally checked here AND inside EnsurePersistentHandles?",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
