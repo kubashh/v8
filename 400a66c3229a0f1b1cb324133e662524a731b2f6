@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00877a98_9692be43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-11T10:09:07Z",
+      "side": 1,
+      "message": "LGTM with a repeated nit.",
+      "revId": "400a66c3229a0f1b1cb324133e662524a731b2f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a0488af2_15e96bf2",
+        "filename": "test/intl/segmenter/grapheme-containing.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-11T10:09:07Z",
+      "side": 1,
+      "message": "nit: 80col",
+      "range": {
+        "startLine": 9,
+        "startChar": 80,
+        "endLine": 9,
+        "endChar": 82
+      },
+      "revId": "400a66c3229a0f1b1cb324133e662524a731b2f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f74392c_1664f229",
+        "filename": "test/intl/segmenter/grapheme-next-after-containing.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-11T10:09:07Z",
+      "side": 1,
+      "message": "nit: 80col, again below in lines 16, 23, 25",
+      "range": {
+        "startLine": 10,
+        "startChar": 80,
+        "endLine": 10,
+        "endChar": 82
+      },
+      "revId": "400a66c3229a0f1b1cb324133e662524a731b2f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4b26049_0fe4140b",
+        "filename": "test/intl/segmenter/word-containing.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-11T10:09:07Z",
+      "side": 1,
+      "message": "nit: 80col",
+      "range": {
+        "startLine": 9,
+        "startChar": 80,
+        "endLine": 9,
+        "endChar": 82
+      },
+      "revId": "400a66c3229a0f1b1cb324133e662524a731b2f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
