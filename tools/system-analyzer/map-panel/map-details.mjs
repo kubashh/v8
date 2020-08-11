@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import {V8CustomElement, defineCustomElement} from '../helper.mjs';
-import {SelectEvent} from '../events.mjs';
+import {FocusLogEvent} from '../events.mjs';
 
 defineCustomElement('./map-panel/map-details', (templateText) =>
  class MapDetails extends V8CustomElement {
@@ -31,6 +31,6 @@ defineCustomElement('./map-panel/map-details', (templateText) =>
   }
 
   handleClickSourcePositions(){
-    this.dispatchEvent(new SelectEvent(this.selectedMap.filePosition));
+    this.dispatchEvent(new FocusLogEvent(this.selectedMap.filePosition));
   }
 });
