@@ -114,24 +114,6 @@ class JSFunction : public JSFunctionOrBoundFunction {
   bool ActiveTierIsTurbofan() const;
   bool ActiveTierIsNCI() const;
 
-  // Tells whether or not this function is interpreted.
-  //
-  // Note: function->IsInterpreted() does not necessarily return the same value
-  // as function->shared()->IsInterpreted() because the closure might have been
-  // optimized.
-  V8_EXPORT_PRIVATE bool IsInterpreted();
-
-  // Tells whether or not this function holds optimized code.
-  //
-  // Note: Returning false does not necessarily mean that this function hasn't
-  // been optimized, as it may have optimized code on its feedback vector.
-  V8_EXPORT_PRIVATE bool IsOptimized();
-
-  // Tells whether or not this function has optimized code available to it,
-  // either because it is optimized or because it has optimized code in its
-  // feedback vector.
-  bool HasOptimizedCode();
-
   // Tells whether or not this function checks its optimization marker in its
   // feedback vector.
   bool ChecksOptimizationMarker();
