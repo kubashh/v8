@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "90af3da9_80f30a29",
+        "filename": "src/execution/futex-emulation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-11T06:48:02Z",
+      "side": 1,
+      "message": "This was discussed offline.\n\n- There are 2 separate problems: 1) the ABA, which means we need to check the liveness of the buffer here 2) need to store wait_location_ since we can\u0027t reconstruct it later.",
+      "parentUuid": "1b38cbbc_7cf186c3",
+      "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06aac170_2759f465",
         "filename": "src/execution/futex-emulation.cc",
         "patchSetId": 5
@@ -84,6 +102,24 @@
       "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8afdb3d3_e9f120d1",
+        "filename": "src/execution/futex-emulation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-11T06:48:02Z",
+      "side": 1,
+      "message": "Done;\n\nNew structure of the code:\n    if (backing_store.get() \u003d\u003d node_backing_store.get()) {\n      DCHECK_EQ(addr, node-\u003ewait_addr_);\n      ..\n      continue;\n    }\n    DCHECK_EQ(nullptr, node_backing_store.get());\n    if (node-\u003easync_timeout_time_ \u003d\u003d base::TimeTicks()) {\n      ...\n    }\n    if (node-\u003eIsAsync() \u0026\u0026 node-\u003enative_context_.IsEmpty()) {\n      ...\n    }",
+      "parentUuid": "06aac170_2759f465",
+      "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +157,24 @@
     },
     {
       "key": {
+        "uuid": "998b9ec8_4dfc9945",
+        "filename": "src/execution/futex-emulation.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-11T06:48:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f640846d_35f9e0e0",
+      "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49a069b3_9ac21993",
         "filename": "src/execution/futex-emulation.h",
         "patchSetId": 5
@@ -135,6 +189,24 @@
       "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f230fbbe_3db1cfb9",
+        "filename": "src/execution/futex-emulation.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-11T06:48:02Z",
+      "side": 1,
+      "message": "\"Snapshot\" in V8 means something totally different, so IMO that would be even more confusing. I was also trying to wrap my head around what exactly gets stale; the buffer pointer can be stale (cleared weak pointer) but the location is not \"stale\", it\u0027s just a memory location.\n\n-\u003e Couldn\u0027t figure out a better name, left as is.",
+      "parentUuid": "49a069b3_9ac21993",
+      "revId": "5dc945c3ef09fdc79867c1c7a7ddf767187bef44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
