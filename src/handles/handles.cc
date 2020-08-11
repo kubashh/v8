@@ -6,6 +6,7 @@
 
 #include "src/api/api.h"
 #include "src/base/logging.h"
+#include "src/codegen/optimized-compilation-info.h"
 #include "src/handles/maybe-handles.h"
 #include "src/objects/objects-inl.h"
 #include "src/roots/roots-inl.h"
@@ -131,20 +132,33 @@ Address HandleScope::current_limit_address(Isolate* isolate) {
   return reinterpret_cast<Address>(&isolate->handle_scope_data()->limit);
 }
 
-CanonicalHandleScope::CanonicalHandleScope(Isolate* isolate)
-    : isolate_(isolate), zone_(isolate->allocator(), ZONE_NAME) {
+CanonicalHandleScope::CanonicalHandleScope(Isolate* isolate,
+                                           OptimizedCompilationInfo* info)
+    : isolate_(isolate),
+      info_(info),
+      zone_(info ? info->zone() : new Zone(isolate->allocator(), ZONE_NAME)) {
   HandleScopeData* handle_scope_data = isolate_->handle_scope_data();
   prev_canonical_scope_ = handle_scope_data->canonical_scope;
   handle_scope_data->canonical_scope = this;
   root_index_map_ = new RootIndexMap(isolate);
-  identity_map_ = new IdentityMap<Address*, ZoneAllocationPolicy>(
-      isolate->heap(), ZoneAllocationPolicy(&zone_));
+  identity_map_ = std::make_unique<IdentityMap<Address*, ZoneAllocationPolicy>>(
+      isolate->heap(), ZoneAllocationPolicy(zone_));
   canonical_level_ = handle_scope_data->level;
 }
 
 CanonicalHandleScope::~CanonicalHandleScope() {
+  // TODO(solanes): Do we care about the root_index_map_?
   delete root_index_map_;
-  delete identity_map_;
+  // TODO(solanes): explain this.
+  if (info_) {
+    info_->set_canonical_handles(DetachCanonicalHandles());
+  } else {
+    // If we don't have a compilation info, we created the zone manually. To
+    // properly dispose of said zone, we need to first free the identity_map_.
+    // Then we do so manually even when it's a unique_ptr.
+    identity_map_.reset();
+    delete zone_;
+  }
   isolate_->handle_scope_data()->canonical_scope = prev_canonical_scope_;
 }
 
@@ -161,12 +175,18 @@ Address* CanonicalHandleScope::Lookup(Address object) {
       return isolate_->root_handle(root_index).location();
     }
   }
+  DCHECK(identity_map_);
   Address** entry = identity_map_->Get(Object(object));
   if (*entry == nullptr) {
     // Allocate new handle location.
     *entry = HandleScope::CreateHandle(isolate_, object);
   }
   return *entry;
+}
+
+std::unique_ptr<CanonicalHandlesMap>
+CanonicalHandleScope::DetachCanonicalHandles() {
+  return std::move(identity_map_);
 }
 
 }  // namespace internal

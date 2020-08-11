@@ -934,11 +934,23 @@ bool GetOptimizedCodeNow(OptimizedCompilationJob* job, Isolate* isolate,
       isolate, RuntimeCallCounterId::kOptimizeNonConcurrent);
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                "V8.OptimizeNonConcurrent");
-  CanonicalHandleScope canonical(isolate);
-  compilation_info->ReopenHandlesInNewHandleScope(isolate);
 
-  if (job->PrepareJob(isolate) != CompilationJob::SUCCEEDED ||
-      job->ExecuteJob(isolate->counters()->runtime_call_stats()) !=
+  // TODO(solanes): If this is the same as GetOptimizedCodeLater, create a
+  // common function.
+  {
+    // All handles in this scope will be allocated in a persistent handle
+    // scope that is detached and handed off to the background thread before
+    // queuing it.
+    CompilationHandleScope compilation(isolate, compilation_info);
+    CanonicalHandleScope canonical(isolate, compilation_info);
+    compilation_info->ReopenHandlesInNewHandleScope(isolate);
+    if (job->PrepareJob(isolate) != CompilationJob::SUCCEEDED) {
+      CompilerTracer::TraceAbortedJob(isolate, compilation_info);
+      return false;
+    }
+  }
+
+  if (job->ExecuteJob(isolate->counters()->runtime_call_stats()) !=
           CompilationJob::SUCCEEDED ||
       job->FinalizeJob(isolate) != CompilationJob::SUCCEEDED) {
     CompilerTracer::TraceAbortedJob(isolate, compilation_info);
@@ -986,7 +998,7 @@ bool GetOptimizedCodeLater(std::unique_ptr<OptimizedCompilationJob> job,
     // scope that is detached and handed off to the background thread before
     // queuing it.
     CompilationHandleScope compilation(isolate, compilation_info);
-    CanonicalHandleScope canonical(isolate);
+    CanonicalHandleScope canonical(isolate, compilation_info);
     compilation_info->ReopenHandlesInNewHandleScope(isolate);
     if (job->PrepareJob(isolate) != CompilationJob::SUCCEEDED) return false;
   }
