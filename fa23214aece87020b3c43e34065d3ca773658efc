@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59237736_8bf9ba78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-11T14:54:30Z",
+      "side": 1,
+      "message": "Dominik PTAL at src/handles and src/heap\nGeorg PTAL at the rest",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "60fe141d_d8569a5f",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-11T14:54:30Z",
+      "side": 1,
+      "message": "Moved to .h so that GenerateCodeForTesting can use it in pipeline.cc.",
+      "range": {
+        "startLine": 451,
+        "startChar": 0,
+        "endLine": 451,
+        "endChar": 28
+      },
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c47a134_963ec2eb",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-11T14:54:30Z",
+      "side": 1,
+      "message": "Passed as null since it will be patched in later.\nA follow-up CL simplifies the JSHeapBroker constructor.",
+      "range": {
+        "startLine": 158,
+        "startChar": 69,
+        "endLine": 158,
+        "endChar": 76
+      },
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f1797ef_edc93cff",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 3054,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-11T14:54:30Z",
+      "side": 1,
+      "message": "Emulating the proper pipeline, we call CreateGraph on different places depending on is_concurrent_inlining.",
+      "range": {
+        "startLine": 3054,
+        "startChar": 6,
+        "endLine": 3054,
+        "endChar": 62
+      },
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "57bf84d4_9a7ac2d0",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 3069,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-11T14:54:30Z",
+      "side": 1,
+      "message": "This is the border case that I talked in the CL description and in optimized-compilation-info.h where the JSHeapBroker is kept alive.",
+      "range": {
+        "startLine": 3069,
+        "startChar": 1,
+        "endLine": 3069,
+        "endChar": 2
+      },
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

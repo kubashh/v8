@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "543df4e7_c958d458",
+        "filename": "src/heap/local-heap-inl.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-11T14:54:30Z",
+      "side": 0,
+      "message": "Moved to .h",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 1
+      },
+      "revId": "cf325b5ab196b48975a7f71c12818d1784756c9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
