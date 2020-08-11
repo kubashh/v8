@@ -16,6 +16,23 @@
       "revId": "2e97224d26f4d36d74166e2cc4c0b915a0b7413c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bd537c2f_41421fcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-11T11:45:50Z",
+      "side": 1,
+      "message": "Thanks! lgtm on ic/",
+      "revId": "2e97224d26f4d36d74166e2cc4c0b915a0b7413c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
