@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "0ca57752_d77f6ade",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1952,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-11T14:24:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d44858ed_c70d73f3",
+      "range": {
+        "startLine": 1952,
+        "startChar": 28,
+        "endLine": 1952,
+        "endChar": 44
+      },
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f42eb555_badd5dca",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 7
@@ -59,6 +83,24 @@
     },
     {
       "key": {
+        "uuid": "8d0a6098_8a5f717a",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1967,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-11T14:24:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f42eb555_badd5dca",
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f9247d1e_302b53b3",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 7
@@ -73,6 +115,24 @@
       "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "888a6b0e_51dba14d",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2004,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-11T14:24:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9247d1e_302b53b3",
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +159,30 @@
     },
     {
       "key": {
+        "uuid": "66811804_2555aacd",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-11T14:24:27Z",
+      "side": 1,
+      "message": "Done. Yes initially I added migration for polymorphic as well. But realized it isn\u0027t required  because IC doesn\u0027t drop deprecated maps. I updated this to drop nullptr.",
+      "parentUuid": "0e6b0bc9_375380d3",
+      "range": {
+        "startLine": 2044,
+        "startChar": 53,
+        "endLine": 2044,
+        "endChar": 60
+      },
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3ba7f8a_4209436a",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 7
@@ -116,6 +200,24 @@
     },
     {
       "key": {
+        "uuid": "d4640180_9a71af94",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2047,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-11T14:24:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3ba7f8a_4209436a",
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66157c2a_ed900efb",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 7
@@ -130,6 +232,24 @@
       "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e34c6e2a_0c0a041b",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2059,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-11T14:24:27Z",
+      "side": 1,
+      "message": "Ya. I tried but it was a bit too messy. We anyway want to move the monomorphic part to a builtin. Maybe we would move this part too. So I think we can re-evaluate this after.",
+      "parentUuid": "66157c2a_ed900efb",
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
