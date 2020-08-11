@@ -1613,8 +1613,8 @@ class BytecodeArrayData : public FixedArrayBaseData {
       constant_pool_.push_back(broker->GetOrCreateData(constant_pool->get(i)));
     }
 
-    source_positions_ = broker->NewPersistentHandle(
-        bytecode_array->SourcePositionTableIfCollected());
+    source_positions_ = handle(bytecode_array->SourcePositionTableIfCollected(),
+                               broker->isolate());
 
     Handle<ByteArray> handlers(bytecode_array->handler_table(),
                                broker->isolate());
@@ -2434,6 +2434,45 @@ JSHeapBroker::JSHeapBroker(
 }
 
 JSHeapBroker::~JSHeapBroker() { DCHECK(!local_heap_); }
+
+void JSHeapBroker::CopyCanonicalHandlesForTesting(
+    std::unique_ptr<CanonicalHandlesMap> canonical_handles) {
+  DCHECK_NULL(canonical_handles_);
+  canonical_handles_ = std::make_unique<CanonicalHandlesMap>(
+      isolate_->heap(), ZoneAllocationPolicy(zone()));
+
+  CanonicalHandlesMap::IteratableScope it_scope(canonical_handles.get());
+  for (auto it = it_scope.begin(); it != it_scope.end(); ++it) {
+    Address* entry = *it.entry();
+    Object key = it.key();
+    canonical_handles_->Set(key, entry);
+  }
+}
+
+Address* JSHeapBroker::GetOrCreateCanonicalPersistentHandle(Object object) {
+  if (Internals::HasHeapObjectTag(object.ptr())) {
+    RootIndex root_index;
+    if (root_index_map_.Lookup(object.ptr(), &root_index)) {
+      return isolate_->root_handle(root_index).location();
+    }
+  }
+
+  DCHECK(canonical_handles_);
+  Address** entry = canonical_handles_->Get(Object(object));
+  if (*entry == nullptr) {
+    // Allocate new PersistentHandle if one wasn't created before.
+    DCHECK(local_heap_);
+    *entry = local_heap_->NewPersistentHandle(object).location();
+  }
+  return *entry;
+}
+
+Address* JSHeapBroker::FindCanonicalPersistentHandleForTesting(Object object) {
+  DCHECK(canonical_handles_);
+  Address** entry = canonical_handles_->Find(object);
+  CHECK_NOT_NULL(entry);
+  return *entry;
+}
 
 std::string JSHeapBroker::Trace() const {
   std::ostringstream oss;
