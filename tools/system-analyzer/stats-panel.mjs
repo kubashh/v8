@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import {V8CustomElement, defineCustomElement} from './helper.mjs';
-import {SelectionEvent} from './events.mjs';
+import {SelectionLogEvent} from './events.mjs';
 
 defineCustomElement('stats-panel', (templateText) =>
  class StatsPanel extends V8CustomElement {
@@ -89,7 +89,7 @@ defineCustomElement('stats-panel', (templateText) =>
         if (node.maps == undefined) {
           node.maps = this.filterUniqueTransitions(filter);
         }
-        this.dispatchEvent(new SelectionEvent(node.maps));
+        this.dispatchEvent(new SelectionLogEvent(node.maps));
       };
       row.appendChild(this.td(name));
       let count = this.timeline.count(filter);
@@ -114,7 +114,7 @@ defineCustomElement('stats-panel', (templateText) =>
      row.addEventListener(
       'click',
       e => this.dispatchEvent(
-        new SelectionEvent(e.target.parentNode.maps.map(map => map.to))));
+        new SelectionLogEvent(e.target.parentNode.maps.map(map => map.to))));
       row.appendChild(this.td(name));
       row.appendChild(this.td(maps.length));
       tableNode.appendChild(row);
