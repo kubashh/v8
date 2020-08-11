@@ -16,6 +16,114 @@
       "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "28636d7b_a1202ff7",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-11T16:06:27Z",
+      "side": 1,
+      "message": "Don\u0027t use Log here.\n*Event \u003d\u003e DOM Events\n*LogEvents \u003d\u003e stuff coming from parsed v8.log files",
+      "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebf67097_5a0f6584",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-11T16:06:27Z",
+      "side": 1,
+      "message": "If you can, use same named properties across classes and components, this way you can easily interchange them.\n\nshowEntries \u003d\u003e name",
+      "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67875a09_042f5850",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-11T16:06:27Z",
+      "side": 1,
+      "message": "use constant here as well",
+      "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61048b13_7e8c6619",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-11T16:06:27Z",
+      "side": 1,
+      "message": "use name",
+      "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18bff414_f6e48a32",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-11T16:06:27Z",
+      "side": 1,
+      "message": "use constant.",
+      "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a93a1f8f_567e3874",
+        "filename": "tools/system-analyzer/ic-processor.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-11T16:06:27Z",
+      "side": 1,
+      "message": "rename parent class to V8LogEvent",
+      "range": {
+        "startLine": 229,
+        "startChar": 25,
+        "endLine": 229,
+        "endChar": 30
+      },
+      "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
