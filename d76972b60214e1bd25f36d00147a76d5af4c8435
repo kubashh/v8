@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "37d897bc_27d19e82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-11T09:54:29Z",
+      "side": 1,
+      "message": "Is this CL abandoned?",
+      "revId": "d76972b60214e1bd25f36d00147a76d5af4c8435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f74f543a_6a197327",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 2
