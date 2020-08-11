@@ -4,7 +4,7 @@
 import "./stats-panel.mjs";
 import "./map-panel/map-details.mjs";
 import "./map-panel/map-transitions.mjs";
-import {SelectEvent} from './events.mjs';
+import {FocusLogEvent} from './events.mjs';
 import {V8Map} from "./map-processor.mjs";
 import {defineCustomElement, V8CustomElement} from './helper.mjs';
 
@@ -78,7 +78,7 @@ defineCustomElement('map-panel', (templateText) =>
     } else {
       searchBar.className = "failure";
     }
-    this.dispatchEvent(new SelectEvent(selectedMap));
+    this.dispatchEvent(new FocusLogEvent(selectedMap));
   }
 
   set mapEntries(list){

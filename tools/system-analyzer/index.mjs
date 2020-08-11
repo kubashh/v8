@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import CustomIcProcessor from "./ic-processor.mjs";
+import {SelectionLogEvent, FocusLogEvent} from './events.mjs';
 import {Entry} from "./ic-processor.mjs";
 import {State} from './app-model.mjs';
 import {MapProcessor, V8Map} from './map-processor.mjs';
@@ -32,9 +33,9 @@ class App {
     this.#view.logFileReader.addEventListener('fileuploadend',
       e => this.handleDataUpload(e));
     Object.entries(this.#view).forEach(([_, value]) => {
-      value.addEventListener('showentries',
+      value.addEventListener(SelectionLogEvent.showEntries,
         e => this.handleShowEntries(e));
-      value.addEventListener('showentrydetail',
+      value.addEventListener(FocusLogEvent.showEntryDetail,
         e => this.handleShowEntryDetail(e));
     });
     this.#view.icPanel.addEventListener(
