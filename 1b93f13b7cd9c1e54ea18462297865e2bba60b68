@@ -16,6 +16,69 @@
       "revId": "1b93f13b7cd9c1e54ea18462297865e2bba60b68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "759c75c3_b1bf01eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-11T09:06:00Z",
+      "side": 1,
+      "message": "Overall lgtm",
+      "revId": "1b93f13b7cd9c1e54ea18462297865e2bba60b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cfc4d435_f6ad6c91",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1275,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-11T09:06:00Z",
+      "side": 1,
+      "message": "why no !ActiveTierIsIgnition() here?",
+      "range": {
+        "startLine": 1275,
+        "startChar": 6,
+        "endLine": 1275,
+        "endChar": 42
+      },
+      "revId": "1b93f13b7cd9c1e54ea18462297865e2bba60b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cee645a_02544d12",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-11T09:06:00Z",
+      "side": 1,
+      "message": "not your CL, but should we rather check AbstractCode here in case there are multiple activations of the same function in different states on the stack?",
+      "range": {
+        "startLine": 1191,
+        "startChar": 21,
+        "endLine": 1191,
+        "endChar": 56
+      },
+      "revId": "1b93f13b7cd9c1e54ea18462297865e2bba60b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
