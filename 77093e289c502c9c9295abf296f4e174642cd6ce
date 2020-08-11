@@ -16,6 +16,120 @@
       "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d44858ed_c70d73f3",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1952,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T06:57:15Z",
+      "side": 1,
+      "message": "Please use same name as in declaration.",
+      "range": {
+        "startLine": 1952,
+        "startChar": 28,
+        "endLine": 1952,
+        "endChar": 44
+      },
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f42eb555_badd5dca",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1967,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T06:57:15Z",
+      "side": 1,
+      "message": "Please define a BuildIsClearedWeakReference helper for this.",
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9247d1e_302b53b3",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2004,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T06:57:15Z",
+      "side": 1,
+      "message": "It\u0027s more than just monomorphic, how about \"monomorphic_match\" or similar?",
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e6b0bc9_375380d3",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T06:57:15Z",
+      "side": 1,
+      "message": "This argument seems to be always nullptr.",
+      "range": {
+        "startLine": 2044,
+        "startChar": 53,
+        "endLine": 2044,
+        "endChar": 60
+      },
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3ba7f8a_4209436a",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2047,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T06:57:15Z",
+      "side": 1,
+      "message": "Nit: DCHECK_EQ",
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66157c2a_ed900efb",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2059,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T06:57:15Z",
+      "side": 1,
+      "message": "I had hoped that BranchOnICState is the only code loading the first feedback slot. But I can see that it\u0027s ugly to modify that function so it can be reused here.",
+      "revId": "77093e289c502c9c9295abf296f4e174642cd6ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
