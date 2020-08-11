@@ -16,6 +16,23 @@
       "revId": "95e7b0d4eb296cad64c4b8f39ab79ea49747985b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b9845b1_a468adb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-11T10:22:12Z",
+      "side": 1,
+      "message": "Hi Marja, shouldn\u0027t we wait with landing stuff until you have some lgtms in your document?",
+      "revId": "95e7b0d4eb296cad64c4b8f39ab79ea49747985b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
