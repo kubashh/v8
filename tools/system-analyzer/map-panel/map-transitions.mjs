@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import {V8CustomElement, defineCustomElement} from '../helper.mjs';
-import {SelectEvent} from '../events.mjs';
+import {FocusLogEvent} from '../events.mjs';
 
 defineCustomElement('./map-panel/map-transitions', (templateText) =>
  class MapTransitions extends V8CustomElement {
@@ -46,11 +46,11 @@ defineCustomElement('./map-panel/map-transitions', (templateText) =>
     this.currentMap = map;
     this.dispatchEvent(new CustomEvent(
       'mapdetailsupdate', {bubbles: true, composed: true, detail: map}));
-    this.dispatchEvent(new SelectEvent(map));
+    this.dispatchEvent(new FocusLogEvent(map));
   }
 
   dblClickSelectMap(map) {
-    this.dispatchEvent(new SelectEvent(map));
+    this.dispatchEvent(new FocusLogEvent(map));
   }
 
   showMap() {

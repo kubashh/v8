@@ -3,7 +3,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-class SelectionEvent extends CustomEvent {
+class SelectionLogEvent extends CustomEvent {
+  static showEntries = "showentries";
   constructor(entries){
     super('showentries', {bubbles: true, composed: true});
     if(!Array.isArray(entries) || entries.length == 0){
@@ -13,11 +14,12 @@ class SelectionEvent extends CustomEvent {
   }
 }
 
-class SelectEvent extends CustomEvent {
+class FocusLogEvent extends CustomEvent {
+  static showEntryDetail = "showentrydetail";
   constructor(entry){
     super('showentrydetail', {bubbles: true, composed: true});
     this.entry = entry;
   }
 }
 
-export {SelectionEvent, SelectEvent};
+export {SelectionLogEvent, FocusLogEvent};
