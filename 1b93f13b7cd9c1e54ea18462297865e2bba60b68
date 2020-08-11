@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "0b7e581c_2ffd04c9",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1275,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-11T09:26:00Z",
+      "side": 1,
+      "message": "I removed it because imo it doesn\u0027t hurt to print the builtin name unconditionally in case there\u0027s a builtin attached. Even in the case of CompileLazy.",
+      "parentUuid": "cfc4d435_f6ad6c91",
+      "range": {
+        "startLine": 1275,
+        "startChar": 6,
+        "endLine": 1275,
+        "endChar": 42
+      },
+      "revId": "1b93f13b7cd9c1e54ea18462297865e2bba60b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6cee645a_02544d12",
         "filename": "src/execution/frames.cc",
         "patchSetId": 2
@@ -79,6 +103,30 @@
       "revId": "1b93f13b7cd9c1e54ea18462297865e2bba60b68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09e174f2_56fcbc82",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-11T09:26:00Z",
+      "side": 1,
+      "message": "The way it\u0027s currently organized is a bit confusing:\n\nAbstractCode comes from function.abstract_code() which checks ActiveTierIsIgnition which looks at *Available* code. Which is different from the HasAttachedOptimizedCode used here..\n\nSo yes, I agree it makes sense to use AbstractCode as the source of truth, done.\n\nSide-note, I do have the impression that the new terminology is helping to clarify some of these things 🎉",
+      "parentUuid": "6cee645a_02544d12",
+      "range": {
+        "startLine": 1191,
+        "startChar": 21,
+        "endLine": 1191,
+        "endChar": 56
+      },
+      "revId": "1b93f13b7cd9c1e54ea18462297865e2bba60b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
