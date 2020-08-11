@@ -152,10 +152,10 @@ class PipelineData {
         instruction_zone_(instruction_zone_scope_.zone()),
         codegen_zone_scope_(zone_stats_, kCodegenZoneName),
         codegen_zone_(codegen_zone_scope_.zone()),
-        broker_(new JSHeapBroker(
-            isolate_, info_->zone(), info_->trace_heap_broker(),
-            is_concurrent_inlining, info->IsNativeContextIndependent(),
-            info->DetachPersistentHandles())),
+        broker_(new JSHeapBroker(isolate_, info_->zone(),
+                                 info_->trace_heap_broker(),
+                                 is_concurrent_inlining,
+                                 info->IsNativeContextIndependent(), nullptr)),
         register_allocation_zone_scope_(zone_stats_,
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
@@ -770,19 +770,23 @@ class PipelineRunScope {
 class LocalHeapScope {
  public:
   explicit LocalHeapScope(JSHeapBroker* broker, OptimizedCompilationInfo* info)
-      : broker_(broker), tick_counter_(&info->tick_counter()) {
+      : broker_(broker), info_(info) {
+    broker_->set_persistent_handles(info_->DetachPersistentHandles());
+    broker_->set_canonical_handles(info_->DetachCanonicalHandles());
     broker_->InitializeLocalHeap();
-    tick_counter_->AttachLocalHeap(broker_->local_heap());
+    info_->tick_counter().AttachLocalHeap(broker_->local_heap());
   }
 
   ~LocalHeapScope() {
-    tick_counter_->DetachLocalHeap();
+    info_->tick_counter().DetachLocalHeap();
     broker_->TearDownLocalHeap();
+    info_->set_canonical_handles(broker_->DetachCanonicalHandles());
+    info_->set_persistent_handles(broker_->DetachPersistentHandles());
   }
 
  private:
   JSHeapBroker* broker_;
-  TickCounter* tick_counter_;
+  OptimizedCompilationInfo* info_;
 };
 
 // Scope that unparks the LocalHeap, if:
@@ -3041,19 +3045,44 @@ MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
   Linkage linkage(Linkage::ComputeIncoming(data.instruction_zone(), info));
   Deoptimizer::EnsureCodeForDeoptimizationEntries(isolate);
 
-  pipeline.Serialize();
   {
-    LocalHeapScope local_heap_scope(data.broker(), data.info());
-    if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
+    // TOOD(solanes): PersistentHandlesScope here is emulating a
+    // CompilationHandleScope. Update it with a proper CompilationHandleScope.
+    PersistentHandlesScope persistent_scope(isolate);
+    CanonicalHandleScope canonical(isolate, info);
+    info->ReopenHandlesInNewHandleScope(isolate);
+    pipeline.Serialize();
+    info->set_persistent_handles(persistent_scope.Detach());
+    if (!data.broker()->is_concurrent_inlining()) {
+      if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
+    }
+  }
+
+  {
+    LocalHeapScope local_heap_scope(data.broker(), info);
+    if (data.broker()->is_concurrent_inlining()) {
+      if (!pipeline.CreateGraph()) return MaybeHandle<Code>();
+    }
     // We selectively Unpark inside OptimizeGraph.
     ParkedScope parked_scope(data.broker()->local_heap());
     if (!pipeline.OptimizeGraph(&linkage)) return MaybeHandle<Code>();
   }
+
+  const bool will_retire_broker = out_broker == nullptr;
+  if (!will_retire_broker) {
+    // If the broker is going to be kept alive, pass the persistent and the
+    // canonical handles containers back to the JSHeapBroker since it will
+    // outlive the OptimizedCompilationInfo.
+    data.broker()->CopyCanonicalHandlesForTesting(
+        info->DetachCanonicalHandles());
+    data.broker()->set_persistent_handles(info->DetachPersistentHandles());
+  }
+
   pipeline.AssembleCode(&linkage);
   Handle<Code> code;
-  if (pipeline.FinalizeCode(out_broker == nullptr).ToHandle(&code) &&
+  if (pipeline.FinalizeCode(will_retire_broker).ToHandle(&code) &&
       pipeline.CommitDependencies(code)) {
-    if (out_broker != nullptr) *out_broker = data.ReleaseBroker();
+    if (!will_retire_broker) *out_broker = data.ReleaseBroker();
     return code;
   }
   return MaybeHandle<Code>();
@@ -3503,6 +3532,7 @@ MaybeHandle<Code> PipelineImpl::FinalizeCode(bool retire_broker) {
   if (data->broker() && retire_broker) {
     data->broker()->Retire();
   }
+
   Run<FinalizeCodePhase>();
 
   MaybeHandle<Code> maybe_code = data->code();
