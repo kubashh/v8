@@ -22,6 +22,57 @@
       "revId": "53027a59a28ffe89a8478ed813e42b6deb1fc2c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ac6c5a2_f3dc994c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 2468,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-12T14:01:52Z",
+      "side": 1,
+      "message": "Object obj(address);",
+      "revId": "53027a59a28ffe89a8478ed813e42b6deb1fc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ecacce3_4003b582",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-12T14:01:52Z",
+      "side": 1,
+      "message": "Nit: redundant due to next line.",
+      "revId": "53027a59a28ffe89a8478ed813e42b6deb1fc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3246df3_a2d96cd4",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-12T14:01:52Z",
+      "side": 1,
+      "message": "Having this as a separate function doesn\u0027t make things clearer imho. I would inline that in the one place where it\u0027s used.",
+      "revId": "53027a59a28ffe89a8478ed813e42b6deb1fc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
