@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "2d48b8fb_1fa041f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-12T07:20:54Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fcb15f3a_ee688e14",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 20
@@ -295,6 +312,23 @@
       "writtenOn": "2020-08-11T16:51:46Z",
       "side": 1,
       "message": "I can live with some ugliness in the testing pipeline.",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "631f3aa0_98d8b5cc",
+        "filename": "src/handles/handles.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-12T07:20:54Z",
+      "side": 1,
+      "message": "Couldn\u0027t this use CanonicalHandlesMap instead?",
       "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
