@@ -186,7 +186,7 @@ constexpr int kElidedFrameSlots = 0;
 #endif
 
 constexpr int kDoubleSizeLog2 = 3;
-constexpr size_t kMaxWasmCodeMB = 1024;
+constexpr size_t kMaxWasmCodeMB = 2048;
 constexpr size_t kMaxWasmCodeMemory = kMaxWasmCodeMB * MB;
 #if V8_TARGET_ARCH_ARM64
 // ARM64 only supports direct calls within a 128 MB range.
@@ -208,7 +208,7 @@ constexpr size_t kMinExpectedOSPageSize = 64 * KB;  // OS page on PPC Linux
 constexpr size_t kMaximalCodeRangeSize = 128 * MB;
 constexpr size_t kMinExpectedOSPageSize = 4 * KB;  // OS page.
 #else
-constexpr size_t kMaximalCodeRangeSize = 128 * MB;
+constexpr size_t kMaximalCodeRangeSize = 512 * MB;
 constexpr size_t kMinExpectedOSPageSize = 4 * KB;  // OS page.
 #endif
 #if V8_OS_WIN

@@ -16,7 +16,7 @@ TEST_F(PersistentHandlesTest, OrderOfBlocks) {
   Isolate* isolate = i_isolate();
   Heap* heap = isolate->heap();
   HandleScope scope(isolate);
-  handle(ReadOnlyRoots(heap).empty_string(), isolate);
+  handle(Smi(42), isolate);
   HandleScopeData* data = isolate->handle_scope_data();
 
   Address* next;
@@ -84,7 +84,7 @@ TEST_F(PersistentHandlesTest, Iterate) {
 
   size_t handles_in_empty_scope = count_handles(isolate);
 
-  Handle<Object> init(ReadOnlyRoots(heap).empty_string(), isolate);
+  Handle<Object> init(Smi(42), isolate);
   Address* old_limit = data->limit;
   CHECK_EQ(count_handles(isolate), handles_in_empty_scope + 1);
 

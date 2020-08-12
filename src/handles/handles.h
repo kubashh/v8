@@ -50,7 +50,7 @@ class HandleBase {
                 (that.location_ == nullptr || that.IsDereferenceAllowed()));
     if (this->location_ == that.location_) return true;
     if (this->location_ == nullptr || that.location_ == nullptr) return false;
-    return *this->location_ == *that.location_;
+    return this->GetTagged() == that.GetTagged();
   }
 
   V8_INLINE bool is_null() const { return location_ == nullptr; }
@@ -63,6 +63,13 @@ class HandleBase {
   V8_INLINE Address* location() const {
     SLOW_DCHECK(location_ == nullptr || IsDereferenceAllowed());
     return location_;
+  }
+
+  Address GetTagged() const {
+    if (reinterpret_cast<Address>(location_) & 0x1)
+      return reinterpret_cast<Address>(location_);
+    else
+      return *location_;
   }
 
  protected:
@@ -128,6 +135,7 @@ class Handle final : public HandleBase {
 
   // Allocate a new handle for the object, do not canonicalize.
   V8_INLINE static Handle<T> New(T object, Isolate* isolate);
+  V8_INLINE static Handle<T> ForceIndirectNew(T object, Isolate* isolate);
 
   // Constructor for handling automatic up casting.
   // Ex. Handle<JSFunction> can be passed when Handle<Object> is expected.
@@ -142,7 +150,7 @@ class Handle final : public HandleBase {
     // unchecked_cast because we rather trust Handle<T> to contain a T than
     // include all the respective -inl.h headers for SLOW_DCHECKs.
     SLOW_DCHECK(IsDereferenceAllowed());
-    return T::unchecked_cast(Object(*location()));
+    return T::unchecked_cast(Object(GetTagged()));
   }
 
   template <typename S>
@@ -220,6 +228,9 @@ class HandleScope {
 
   // Creates a new handle with the given value.
   V8_INLINE static Address* CreateHandle(Isolate* isolate, Address value);
+
+  // Creates a new handle with the given value.
+  V8_INLINE static Address* ForceCreateHandle(Isolate* isolate, Address value);
 
   // Deallocates any extensions used by the current scope.
   V8_EXPORT_PRIVATE static void DeleteExtensions(Isolate* isolate);
