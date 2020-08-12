@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be0084e2_32dee562",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-08-12T08:37:13Z",
+      "side": 1,
+      "message": "Can you add a description of what changed to what?",
+      "revId": "821bf01323e404842fd4ab0ec64a202a7ab31704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
