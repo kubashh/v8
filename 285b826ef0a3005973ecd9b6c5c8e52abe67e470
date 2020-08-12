@@ -70,6 +70,24 @@
       "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0119cf27_5262ded3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T12:11:27Z",
+      "side": 1,
+      "message": "Ah, I see. I thought Nico wanted to use a method that\u0027s called from both serialization and Execute.\n\nWe can update that to be something like:\nif (local_heap_) {\n  create the handle as it is right now with the identity map\n} else {\n  // here we should be in the proper scope\n  return handle(...)\n}\n\nIf this is something that we should discuss further, I can modify the CL and remove from the broker\u0027s API CanonicalPersistentHandle until we reach a consensus. It shouldn\u0027t block the current CL since we are not using that functionality yet.",
+      "parentUuid": "1d80286e_7d85968f",
+      "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
