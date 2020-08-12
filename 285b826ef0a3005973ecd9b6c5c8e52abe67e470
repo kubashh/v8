@@ -52,6 +52,24 @@
       "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d80286e_7d85968f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-12T11:26:20Z",
+      "side": 1,
+      "message": "Now I\u0027m confused. How does Leszek\u0027s stuff help here?\n\nWe want to be able to use the new broker-\u003eCanonicalPersistenHandle function in phases that may run in the PrepareJob phase. That\u0027s the problem Nico pointed out, I think.",
+      "parentUuid": "737fb814_537a66a5",
+      "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
