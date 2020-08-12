@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd3b4125_36929e90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-08-12T09:08:21Z",
+      "side": 1,
+      "message": "Tried to use it for an actual implementation CL. The fact that GetOrCreateCanonicalPersistentHandle is callable only during Execution phase is too limiting, imho. Many of the heap ref objects (returning handles and/or other refs) are accessed both from the background thread, as well as during serialization, so there needs to be a generic way to construct handles in these ref object methods, which the current implementation does not provide.\n\nnit: Would like to have a GetOrCreateCanonicalPersistentHandle\u003cT\u003e that returns a Handle\u003cT\u003e directly instead of the Address*.",
+      "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
