@@ -106,6 +106,24 @@
       "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8bfd16a8_8ba4d2cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-08-12T13:37:06Z",
+      "side": 1,
+      "message": "Yes, that will help. I just threw\n\ntemplate \u003ctypename T\u003e\nHandle\u003cT\u003e GetOrCreateHandle(T object) {\n  if (!canonical_handles_) {\n    return Handle\u003cT\u003e(object, isolate());\n  }\n  return Handle\u003cT\u003e(GetOrCreateCanonicalPersistentHandle(object));\n}\n\ninto the broker to get my tests running. Something along that functionality should be sufficient to get some direct heap reads going.",
+      "parentUuid": "f1f7db8b_3ec2c143",
+      "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
