@@ -88,6 +88,24 @@
       "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f1f7db8b_3ec2c143",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-12T12:13:41Z",
+      "side": 1,
+      "message": "Something like that change sounds good to me and it would be cool to have it in this CL. Nico, what do you think?",
+      "parentUuid": "0119cf27_5262ded3",
+      "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
