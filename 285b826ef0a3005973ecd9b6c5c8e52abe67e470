@@ -34,6 +34,24 @@
       "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "737fb814_537a66a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T09:49:04Z",
+      "side": 1,
+      "message": "Ack on the first part. Leszek has been working on that in https://chromium-review.googlesource.com/c/v8/v8/+/2315990.\n\nUpdated public methods to return Handle\u003cT\u003e instead of Address*. I kept the version that returns Address* and made it private so that we can keep it in the .cc.",
+      "parentUuid": "bd3b4125_36929e90",
+      "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

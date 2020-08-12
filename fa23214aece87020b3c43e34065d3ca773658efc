@@ -217,6 +217,30 @@
     },
     {
       "key": {
+        "uuid": "72ab824f_a00a8d99",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2452,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T09:49:04Z",
+      "side": 1,
+      "message": "Done. Updated to CanonicalPersistentHandle for the API. I kept the version that returns Address* and made it private so that we can keep it in the .cc, since we made the public ones return Handle\u003cT\u003e",
+      "parentUuid": "e3546755_2489ddc1",
+      "range": {
+        "startLine": 2452,
+        "startChar": 23,
+        "endLine": 2452,
+        "endChar": 59
+      },
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9f14c35_5c3bd35d",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 20
@@ -656,6 +680,24 @@
       "writtenOn": "2020-08-12T09:21:16Z",
       "side": 1,
       "message": "It\u0027s fine, was just wondering.",
+      "parentUuid": "658deefd_6121f11e",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8207bffe_b16ded80",
+        "filename": "src/heap/local-heap.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T09:49:04Z",
+      "side": 1,
+      "message": "Ack. I think keeping it as-is it\u0027s fine.",
       "parentUuid": "658deefd_6121f11e",
       "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
