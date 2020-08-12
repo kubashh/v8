@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "bcbb002c_88dea7f0",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcb15f3a_ee688e14",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60fe141d_d8569a5f",
         "filename": "src/codegen/compiler.h",
         "patchSetId": 20
@@ -110,6 +128,24 @@
     },
     {
       "key": {
+        "uuid": "fceab020_23cdfaef",
+        "filename": "src/codegen/optimized-compilation-info.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecd896d8_fb6f21a2",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68471f33_ad8bbee2",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 20
@@ -121,6 +157,30 @@
       "writtenOn": "2020-08-11T16:51:46Z",
       "side": 1,
       "message": "Let\u0027s have a shorter name for such a common operation. How about JSHeapBroker::PersistentHandle.",
+      "range": {
+        "startLine": 2452,
+        "startChar": 23,
+        "endLine": 2452,
+        "endChar": 59
+      },
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce64049e_f0c4b579",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2452,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "WDYT about CanonicalPersistentHandle? Is that still too big?",
+      "parentUuid": "68471f33_ad8bbee2",
       "range": {
         "startLine": 2452,
         "startChar": 23,
@@ -147,6 +207,24 @@
       "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "554c68dd_797862b1",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2460,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "Ack. Since the next line will crash if it\u0027s null I am removing the DCHECK here and in FindCanonicalPersistentHandleForTesting then.",
+      "parentUuid": "e9f14c35_5c3bd35d",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -197,6 +275,30 @@
     },
     {
       "key": {
+        "uuid": "5c8dea5d_00728dc9",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "I have a CL ready in https://chromium-review.googlesource.com/c/v8/v8/+/2351667. Planning on submitting after this one.",
+      "parentUuid": "a5ea3a40_78519103",
+      "range": {
+        "startLine": 158,
+        "startChar": 69,
+        "endLine": 158,
+        "endChar": 76
+      },
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de5daa1a_d9c23122",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 20
@@ -214,6 +316,24 @@
     },
     {
       "key": {
+        "uuid": "bb4d83ce_3f0b4df3",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "Done, made it part of InitializeLocalHeap.",
+      "parentUuid": "de5daa1a_d9c23122",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98e627b8_fdc47648",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 20
@@ -228,6 +348,24 @@
       "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b8959eb_5ef71a15",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "Done, made it part of TearDownLocalHeap",
+      "parentUuid": "98e627b8_fdc47648",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +416,30 @@
     },
     {
       "key": {
+        "uuid": "d6210146_c14001a6",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 3054,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7eff826d_72c1b068",
+      "range": {
+        "startLine": 3054,
+        "startChar": 6,
+        "endLine": 3054,
+        "endChar": 62
+      },
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57bf84d4_9a7ac2d0",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 20
@@ -318,6 +480,24 @@
     },
     {
       "key": {
+        "uuid": "42972513_0011e7af",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 3076,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "684b5b24_a85a5ab8",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "631f3aa0_98d8b5cc",
         "filename": "src/handles/handles.cc",
         "patchSetId": 20
@@ -332,6 +512,24 @@
       "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fcf6220_0d50c00a",
+        "filename": "src/handles/handles.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "631f3aa0_98d8b5cc",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -352,6 +550,24 @@
     },
     {
       "key": {
+        "uuid": "e70e4099_0a1439f5",
+        "filename": "src/handles/handles.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eedcd293_24b34c43",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5146f00f_cd2db170",
         "filename": "src/heap/local-heap.h",
         "patchSetId": 20
@@ -363,6 +579,24 @@
       "writtenOn": "2020-08-11T16:51:46Z",
       "side": 1,
       "message": "I know it\u0027s old code, but is this intentionally checked here AND inside EnsurePersistentHandles?",
+      "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c7abc99_8498e8a7",
+        "filename": "src/heap/local-heap.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-12T08:57:48Z",
+      "side": 1,
+      "message": "+Dominik since I think he implemented this.",
+      "parentUuid": "5146f00f_cd2db170",
       "revId": "fa23214aece87020b3c43e34065d3ca773658efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
