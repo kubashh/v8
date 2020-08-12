@@ -16,6 +16,24 @@
       "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "88d1715b_61068399",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-12T09:21:16Z",
+      "side": 1,
+      "message": "Could we make that function detect that it doesn\u0027t yet own the handle scope etc. so that it can use the isolate\u0027s handle scope in that case?\nThat would let us use both styles in the code that may run in PrepareJob. Eventually we can migrate everything to using that function, then remove the PersistentHandleScope, make the broker own the handles from the beginning, and remove the special case in that function again.",
+      "parentUuid": "bd3b4125_36929e90",
+      "revId": "285b826ef0a3005973ecd9b6c5c8e52abe67e470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
