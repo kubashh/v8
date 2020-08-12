@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "a2db478f_1af94226",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-08-12T13:17:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28636d7b_a1202ff7",
+      "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ebf67097_5a0f6584",
         "filename": "tools/system-analyzer/events.mjs",
         "patchSetId": 6
@@ -47,6 +65,24 @@
       "writtenOn": "2020-08-11T16:06:27Z",
       "side": 1,
       "message": "If you can, use same named properties across classes and components, this way you can easily interchange them.\n\nshowEntries \u003d\u003e name",
+      "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1b0f0ce_6c6528bb",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-08-12T13:17:14Z",
+      "side": 1,
+      "message": "I saw some use of static getters for declaring static constants. Can I use a static getter instead of named property. In index.mjs it helps me while adding event listener.\n\nhttps://stackoverflow.com/questions/32647215/declaring-static-constants-in-es6-classes",
+      "parentUuid": "ebf67097_5a0f6584",
       "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "47c728e0_92471089",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-08-12T13:17:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "67875a09_042f5850",
+      "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61048b13_7e8c6619",
         "filename": "tools/system-analyzer/events.mjs",
         "patchSetId": 6
@@ -87,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "7dc5f8fc_4b6b8e44",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-08-12T13:17:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "61048b13_7e8c6619",
+      "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18bff414_f6e48a32",
         "filename": "tools/system-analyzer/events.mjs",
         "patchSetId": 6
@@ -101,6 +173,24 @@
       "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc0ece50_c115c0dd",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-08-12T13:17:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "18bff414_f6e48a32",
+      "revId": "07302ba308d5d89033dd083060a9479b6030e0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
