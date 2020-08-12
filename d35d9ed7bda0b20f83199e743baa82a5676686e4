@@ -33,6 +33,57 @@
       "revId": "d35d9ed7bda0b20f83199e743baa82a5676686e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4050e731_7e187572",
+        "filename": "src/compiler/js-heap-copy-reducer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-12T07:58:08Z",
+      "side": 1,
+      "message": "It makes sense to at least register the name with the broker, i.e. do the same as in the following case. This ensures that the broker knows about all objects in the graph.",
+      "revId": "d35d9ed7bda0b20f83199e743baa82a5676686e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc80c70d_46dcccc1",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3266,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-12T07:58:08Z",
+      "side": 1,
+      "message": "See the comment in heap-copy-reducer.cc.",
+      "revId": "d35d9ed7bda0b20f83199e743baa82a5676686e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24df131c_18c82d7a",
+        "filename": "src/interpreter/bytecode-array-builder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-12T07:58:08Z",
+      "side": 1,
+      "message": "Nit: add empty line here.",
+      "revId": "d35d9ed7bda0b20f83199e743baa82a5676686e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
