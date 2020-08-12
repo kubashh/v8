@@ -1079,6 +1079,10 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
           IsNativeContextIndependent(compilation_target)));
   OptimizedCompilationInfo* compilation_info = job->compilation_info();
 
+  // To fix issue with SealHandleScope.
+  HandleScope handle_scope(isolate);
+  handle(Smi(0), isolate);
+
   // In case of concurrent recompilation, all handles below this point will be
   // allocated in a deferred handle scope that is detached and handed off to
   // the background thread when we return.

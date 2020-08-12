@@ -225,6 +225,8 @@ struct HeapObjectMatcherImpl final
 
   bool Is(Handle<HeapObject> const& value) const {
     return this->HasValue() && this->Value().address() == value.address();
+    //return this->HasValue() && !value.is_null() &&
+           //this->Value().GetTagged() == value.GetTagged();
   }
 
   HeapObjectRef Ref(JSHeapBroker* broker) const {
