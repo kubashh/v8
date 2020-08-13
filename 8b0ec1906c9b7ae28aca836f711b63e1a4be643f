@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e63377d_958ff023",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-08-13T05:39:17Z",
+      "side": 1,
+      "message": "I don\u0027t understand the point of these getters? Isn\u0027t it enough to use a static class field here?\n\nclass SelectionEvent extends CustomEvent {\n  static name \u003d \"showentries\";\n  ...\n}",
+      "range": {
+        "startLine": 14,
+        "startChar": 13,
+        "endLine": 14,
+        "endChar": 24
+      },
+      "revId": "8b0ec1906c9b7ae28aca836f711b63e1a4be643f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "248f01a3_2089a8a2",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-08-13T05:39:17Z",
+      "side": 1,
+      "message": "Is this providing any benefit? At the moment some event listeners registrations are done with strings and some are done with these properties. Please be consistent.",
+      "range": {
+        "startLine": 44,
+        "startChar": 29,
+        "endLine": 44,
+        "endChar": 55
+      },
+      "revId": "8b0ec1906c9b7ae28aca836f711b63e1a4be643f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
