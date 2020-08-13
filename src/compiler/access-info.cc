@@ -510,9 +510,12 @@ MinimorphicLoadPropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
   bool is_inobject = LoadHandler::IsInobjectBits::decode(handler);
   bool is_double = LoadHandler::IsDoubleBits::decode(handler);
   int offset = LoadHandler::FieldIndexBits::decode(handler) * kTaggedSize;
-  Representation field_rep =
-      is_double ? Representation::Double() : Representation::Tagged();
-  Type field_type = is_double ? Type::Number() : Type::Any();
+  Representation field_rep = Representation::Tagged();
+  Type field_type = Type::Any();
+  if (is_double && FLAG_unbox_double_fields) {
+    field_rep = Representation::Double();
+    field_type = Type::Number();
+  }
   return MinimorphicLoadPropertyAccessInfo::DataField(offset, is_inobject,
                                                       field_rep, field_type);
 }
