@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5f7e340_0bf38b49",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-13T10:57:45Z",
+      "side": 1,
+      "message": "Interesting to see such a note making it into the spec text :-)\nMakes sense to direct attention towards the pitfalls here.",
+      "range": {
+        "startLine": 184,
+        "startChar": 8,
+        "endLine": 184,
+        "endChar": 61
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b412527c_6f651b04",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-13T10:57:45Z",
+      "side": 1,
+      "message": "Atomics",
+      "range": {
+        "startLine": 658,
+        "startChar": 19,
+        "endLine": 658,
+        "endChar": 26
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "647b3a07_05765393",
+        "filename": "test/mjsunit/harmony/atomics-on-arraybuffer-detach.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-13T10:57:45Z",
+      "side": 1,
+      "message": "nit: 80col",
+      "range": {
+        "startLine": 7,
+        "startChar": 78,
+        "endLine": 7,
+        "endChar": 81
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fc6e6d8_e66dc110",
+        "filename": "test/mjsunit/harmony/atomics-on-arraybuffer-detach.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-13T10:57:45Z",
+      "side": 1,
+      "message": "`indexPoison` is unused; `valuePoison` is always overwritten so doesn\u0027t need to be a parameter either. (The only call site below also doesn\u0027t pass either parameter.)",
+      "range": {
+        "startLine": 14,
+        "startChar": 38,
+        "endLine": 14,
+        "endChar": 49
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e15aa25_0bca5fb5",
+        "filename": "test/mjsunit/harmony/atomics-on-arraybuffer-detach.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-13T10:57:45Z",
+      "side": 1,
+      "message": "IIUC, line 33 detaches the array, so this (and all subsequent lines) operate on already-detached buffers, which I don\u0027t think was the intention of the test? One way to fix it would be:\n\nforEachIntegerTypedArray((arr, indexPoison, valuePoison, zero) \u003d\u003e {\n  assertThrows(() \u003d\u003e Atomics.add(arr, indexPoison, zero), TypeError);\n});\nforEachIntegerTypedArray((arr, indexPoison, valuePoison, zero) \u003d\u003e {\n  assertThrows(() \u003d\u003e Atomics.add(arr, 0, valuePoison), TypeError);\n});\nforEachIntegerTypedArray((arr, indexPoison, valuePoison, zero) \u003d\u003e {\n  // ...Atomics.and...\n});\n// etc.",
+      "range": {
+        "startLine": 34,
+        "startChar": 33,
+        "endLine": 34,
+        "endChar": 36
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d438397e_e1d69db8",
+        "filename": "test/mjsunit/harmony/atomics-on-arraybuffer-detach.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-13T10:57:45Z",
+      "side": 1,
+      "message": "nit: 80col",
+      "range": {
+        "startLine": 39,
+        "startChar": 76,
+        "endLine": 39,
+        "endChar": 87
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45221f8f_f46185c7",
+        "filename": "test/mjsunit/harmony/atomics.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-08-13T10:57:45Z",
+      "side": 1,
+      "message": "nit: not any more",
+      "range": {
+        "startLine": 61,
+        "startChar": 33,
+        "endLine": 61,
+        "endChar": 39
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
