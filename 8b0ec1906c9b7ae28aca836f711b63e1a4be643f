@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a7faf9c_35ed245e",
+        "filename": "tools/system-analyzer/events.mjs",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-08-13T08:35:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e63377d_958ff023",
+      "range": {
+        "startLine": 14,
+        "startChar": 13,
+        "endLine": 14,
+        "endChar": 24
+      },
+      "revId": "8b0ec1906c9b7ae28aca836f711b63e1a4be643f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "248f01a3_2089a8a2",
         "filename": "tools/system-analyzer/index.mjs",
         "patchSetId": 10
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "7a546ddf_9bbe9cb1",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-08-13T08:35:17Z",
+      "side": 1,
+      "message": "Thanks! I thought I had to define a named property... now all clear 😂 I deleted the unnecessary Custom Events from the app and replaced with FocusEvent and SelectionEvents, I think I cleared the use of strings in typeArg field of custom events that I extended from CustomEvents. Feel free to comment if I miss some of them 😊",
+      "parentUuid": "c6c6bb6e_dc82eda7",
+      "range": {
+        "startLine": 44,
+        "startChar": 29,
+        "endLine": 44,
+        "endChar": 55
+      },
+      "revId": "8b0ec1906c9b7ae28aca836f711b63e1a4be643f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92498055_75cafe66",
         "filename": "tools/system-analyzer/index.mjs",
         "patchSetId": 10
@@ -92,6 +140,30 @@
       "revId": "8b0ec1906c9b7ae28aca836f711b63e1a4be643f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a759b28f_63bd77e4",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 10
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1433714
+      },
+      "writtenOn": "2020-08-13T08:35:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92498055_75cafe66",
+      "range": {
+        "startLine": 47,
+        "startChar": 28,
+        "endLine": 47,
+        "endChar": 55
+      },
+      "revId": "8b0ec1906c9b7ae28aca836f711b63e1a4be643f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
