@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "f03e5af7_d960cef6",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-13T21:26:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b412527c_6f651b04",
+      "range": {
+        "startLine": 658,
+        "startChar": 19,
+        "endLine": 658,
+        "endChar": 26
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "647b3a07_05765393",
         "filename": "test/mjsunit/harmony/atomics-on-arraybuffer-detach.js",
         "patchSetId": 8
@@ -68,6 +92,30 @@
       "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3781bc4b_f0af8aa4",
+        "filename": "test/mjsunit/harmony/atomics-on-arraybuffer-detach.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-13T21:26:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "647b3a07_05765393",
+      "range": {
+        "startLine": 7,
+        "startChar": 78,
+        "endLine": 7,
+        "endChar": 81
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "61d6a369_ac619e30",
+        "filename": "test/mjsunit/harmony/atomics-on-arraybuffer-detach.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-13T21:26:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fc6e6d8_e66dc110",
+      "range": {
+        "startLine": 14,
+        "startChar": 38,
+        "endLine": 14,
+        "endChar": 49
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e15aa25_0bca5fb5",
         "filename": "test/mjsunit/harmony/atomics-on-arraybuffer-detach.js",
         "patchSetId": 8
@@ -114,6 +186,30 @@
       "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8abf5a55_9baf064b",
+        "filename": "test/mjsunit/harmony/atomics-on-arraybuffer-detach.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-13T21:26:22Z",
+      "side": 1,
+      "message": "Oh oops, great catch. Will fix.",
+      "parentUuid": "7e15aa25_0bca5fb5",
+      "range": {
+        "startLine": 34,
+        "startChar": 33,
+        "endLine": 34,
+        "endChar": 36
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "55000d45_35a95e1d",
+        "filename": "test/mjsunit/harmony/atomics-on-arraybuffer-detach.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-13T21:26:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d438397e_e1d69db8",
+      "range": {
+        "startLine": 39,
+        "startChar": 76,
+        "endLine": 39,
+        "endChar": 87
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45221f8f_f46185c7",
         "filename": "test/mjsunit/harmony/atomics.js",
         "patchSetId": 8
@@ -160,6 +280,30 @@
       "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e339e57f_1c73c0b4",
+        "filename": "test/mjsunit/harmony/atomics.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-13T21:26:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45221f8f_f46185c7",
+      "range": {
+        "startLine": 61,
+        "startChar": 33,
+        "endLine": 61,
+        "endChar": 39
+      },
+      "revId": "45e9a12575660235b8c596e23aea515e1efd4d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
