@@ -14,14 +14,18 @@ namespace internal {
 
 class Heap;
 class IncrementalMarking;
+class LocalHeap;
 class PagedSpace;
 class NewSpace;
 
 class MarkingBarrier {
  public:
-  MarkingBarrier(Heap*, MarkCompactCollector*, IncrementalMarking*);
+  explicit MarkingBarrier(Heap*);
+  explicit MarkingBarrier(LocalHeap*);
+  ~MarkingBarrier();
   void Activate(bool is_compacting);
   void Deactivate();
+  void Publish();
 
   void Write(HeapObject host, HeapObjectSlot, HeapObject value);
   void Write(Code host, RelocInfo*, HeapObject value);
@@ -30,6 +34,8 @@ class MarkingBarrier {
 
   // Returns true if the slot needs to be recorded.
   inline bool MarkValue(HeapObject host, HeapObject value);
+
+  static void PublishAll(Heap* heap);
 
  private:
   using MarkingState = MarkCompactCollector::MarkingState;
@@ -42,12 +48,14 @@ class MarkingBarrier {
   void Deactivate(PagedSpace*);
   void Deactivate(NewSpace*);
 
-  MarkingState marking_state_;
   Heap* heap_;
   MarkCompactCollector* collector_;
   IncrementalMarking* incremental_marking_;
+  MarkingWorklist::Local worklist_;
+  MarkingState marking_state_;
   bool is_compacting_ = false;
   bool is_activated_ = false;
+  bool is_main_thread_barrier_;
 };
 
 }  // namespace internal
