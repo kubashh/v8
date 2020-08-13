@@ -80,16 +80,24 @@ MaybeHandle<Object> CreateDynamicFunction(Isolate* isolate,
     }
   }
 
+  bool all_are_code_kind = true;
+  for (int i = 0; i < argc; ++i) {
+    if (!Object::IsCodeKind(isolate, args.at(i + 1))) {
+      all_are_code_kind = false;
+      break;
+    }
+  }
+
   // Compile the string in the constructor and not a helper so that errors to
   // come from here.
   Handle<JSFunction> function;
   {
-    ASSIGN_RETURN_ON_EXCEPTION(
-        isolate, function,
-        Compiler::GetFunctionFromString(
-            handle(target->native_context(), isolate), source,
-            ONLY_SINGLE_FUNCTION_LITERAL, parameters_end_pos),
-        Object);
+    ASSIGN_RETURN_ON_EXCEPTION(isolate, function,
+                               Compiler::GetFunctionFromString(
+                                   handle(target->native_context(), isolate),
+                                   source, ONLY_SINGLE_FUNCTION_LITERAL,
+                                   parameters_end_pos, all_are_code_kind),
+                               Object);
     Handle<Object> result;
     ASSIGN_RETURN_ON_EXCEPTION(
         isolate, result,
