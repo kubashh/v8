@@ -2064,6 +2064,11 @@ std::pair<MaybeHandle<String>, bool> Compiler::ValidateDynamicCompilationSource(
   // allow_code_gen_callback only allows proper strings.
   // (I.e., let allow_code_gen_callback decide, if it has been set.)
   if (isolate->allow_code_gen_callback()) {
+    // If we run into this condition, the embedder has marked some objects
+    // with Object::SetCodeKind, but has given us a callback that only accepts
+    // strings. That makes no sense.
+    DCHECK(!i::Object::IsCodeKind(isolate, original_source));
+
     if (!original_source->IsString()) {
       return {MaybeHandle<String>(), true};
     }
@@ -2086,6 +2091,15 @@ std::pair<MaybeHandle<String>, bool> Compiler::ValidateDynamicCompilationSource(
       return {MaybeHandle<String>(), true};
     }
     return {Handle<String>::cast(modified_source), false};
+  }
+
+  if (!context->allow_code_gen_from_strings().IsFalse(isolate) &&
+      i::Object::IsCodeKind(isolate, original_source)) {
+    // Codegen is unconditionally allowed, and we're been given a CodeKind
+    // object. Stringify.
+    MaybeHandle<String> stringified_source =
+        Object::ToString(isolate, original_source);
+    return {stringified_source, stringified_source.is_null()};
   }
 
   // If unconditional codegen was disabled, and no callback defined, we block
@@ -2124,12 +2138,16 @@ MaybeHandle<JSFunction> Compiler::GetFunctionFromValidatedString(
 // static
 MaybeHandle<JSFunction> Compiler::GetFunctionFromString(
     Handle<Context> context, Handle<Object> source,
-    ParseRestriction restriction, int parameters_end_pos) {
+    ParseRestriction restriction, int parameters_end_pos,
+    bool all_were_code_kind) {
   Isolate* const isolate = context->GetIsolate();
   Handle<Context> native_context(context->native_context(), isolate);
-  return GetFunctionFromValidatedString(
-      context, ValidateDynamicCompilationSource(isolate, context, source).first,
-      restriction, parameters_end_pos);
+  MaybeHandle<String> validated_source =
+      all_were_code_kind
+          ? Handle<String>::cast(source)
+          : ValidateDynamicCompilationSource(isolate, context, source).first;
+  return GetFunctionFromValidatedString(context, validated_source, restriction,
+                                        parameters_end_pos);
 }
 
 namespace {

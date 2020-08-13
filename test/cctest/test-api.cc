@@ -28312,3 +28312,39 @@ TEST(TriggerThreadSafeMetricsEvent) {
   CHECK_EQ(recorder->count_, 1);  // Increased.
   CHECK_EQ(recorder->module_count_, 42);
 }
+
+TEST(CodeKind) {
+  LocalContext env;
+  v8::Isolate* isolate = env->GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  v8::Local<ObjectTemplate> templ = v8::ObjectTemplate::New(isolate);
+  templ->Set(isolate, "toString",
+             v8::FunctionTemplate::New(
+                 isolate, [](const v8::FunctionCallbackInfo<v8::Value>& info) {
+                   info.GetReturnValue().Set(v8_str("2+2"));
+                 }));
+
+  // Expected behaviour for normal objects:
+  // - eval returns them as-is
+  // - when pre-stringified, the string gets evaluated (of course)
+  v8::Local<Object> other_kind =
+      templ->NewInstance(env.local()).ToLocalChecked();
+  CHECK(!other_kind->IsCodeKind(isolate));
+  CHECK(env->Global()
+            ->Set(env.local(), v8_str("other_kind"), other_kind)
+            .FromJust());
+  ExpectInt32("eval(\"\" + other_kind)", 4);
+  ExpectObject("eval(other_kind)", other_kind);
+
+  // Expected behaviour for 'code kind': Is always evaluated.
+  v8::Local<Object> code_kind =
+      templ->NewInstance(env.local()).ToLocalChecked();
+  code_kind->SetCodeKind(isolate);
+  CHECK(code_kind->IsCodeKind(isolate));
+  CHECK(env->Global()
+            ->Set(env.local(), v8_str("code_kind"), code_kind)
+            .FromJust());
+  ExpectInt32("eval(\"\" + code_kind)", 4);
+  ExpectInt32("eval(code_kind)", 4);
+}
