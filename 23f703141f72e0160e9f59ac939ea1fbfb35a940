@@ -16,6 +16,23 @@
       "revId": "23f703141f72e0160e9f59ac939ea1fbfb35a940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c4bbecd9_b14e40b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-13T15:14:57Z",
+      "side": 1,
+      "message": "Sorry for the delay. Lgtm from my side. Since Michael is OOO, we don\u0027t have wait for Michael\u0027s review.\n\nIs the CL ready for landing? If so, I can land it for you.",
+      "revId": "23f703141f72e0160e9f59ac939ea1fbfb35a940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
