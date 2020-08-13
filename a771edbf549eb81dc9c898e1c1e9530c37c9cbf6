@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f273173_1abdf00b",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-08-13T22:42:40Z",
+      "side": 1,
+      "message": "Why are we creating new handles here?",
+      "range": {
+        "startLine": 1295,
+        "startChar": 32,
+        "endLine": 1295,
+        "endChar": 35
+      },
+      "revId": "a771edbf549eb81dc9c898e1c1e9530c37c9cbf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "787802b1_bbf635e9",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1300,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2020-08-13T22:42:40Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 1300,
+        "startChar": 32,
+        "endLine": 1300,
+        "endChar": 35
+      },
+      "revId": "a771edbf549eb81dc9c898e1c1e9530c37c9cbf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
