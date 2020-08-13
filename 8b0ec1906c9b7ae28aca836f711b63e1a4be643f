@@ -45,6 +45,53 @@
       "revId": "8b0ec1906c9b7ae28aca836f711b63e1a4be643f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6c6bb6e_dc82eda7",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-13T06:45:46Z",
+      "side": 1,
+      "message": "The idea was to use SelectionEvent.name here, so you only have one place where the event name is defined and you use it consistently.",
+      "parentUuid": "248f01a3_2089a8a2",
+      "range": {
+        "startLine": 44,
+        "startChar": 29,
+        "endLine": 44,
+        "endChar": 55
+      },
+      "revId": "8b0ec1906c9b7ae28aca836f711b63e1a4be643f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92498055_75cafe66",
+        "filename": "tools/system-analyzer/index.mjs",
+        "patchSetId": 10
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-13T06:45:46Z",
+      "side": 1,
+      "message": ".name here as well.",
+      "range": {
+        "startLine": 47,
+        "startChar": 28,
+        "endLine": 47,
+        "endChar": 55
+      },
+      "revId": "8b0ec1906c9b7ae28aca836f711b63e1a4be643f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
