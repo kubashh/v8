@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41eba6b3_29c9e7e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-13T00:55:00Z",
+      "side": 1,
+      "message": "Jakob, the upstream spec PR has landed, and I added a new test testing for corner case detaches. Do you want to look it over one more time?",
+      "revId": "81cd48db51c51d72765e7415ee5c84544ca32fbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
