@@ -3,9 +3,10 @@
 // found in the LICENSE file.
 
 import CustomIcProcessor from "./ic-processor.mjs";
-import { Entry } from "./ic-processor.mjs";
+import { SelectionEvent, FocusEvent } from "./events.mjs";
+import { IcLogEvent } from "./ic-processor.mjs";
 import { State } from "./app-model.mjs";
-import { MapProcessor, V8Map } from "./map-processor.mjs";
+import { MapProcessor, MapLogEvent } from "./map-processor.mjs";
 import { $ } from "./helper.mjs";
 import "./ic-panel.mjs";
 import "./timeline-panel.mjs";
@@ -39,9 +40,11 @@ class App {
     this.#view.logFileReader.addEventListener("fileuploadend", (e) =>
       this.handleDataUpload(e)
     );
-    Object.entries(this.#view).forEach(([_, value]) => {
-      value.addEventListener("showentries", (e) => this.handleShowEntries(e));
-      value.addEventListener("showentrydetail", (e) =>
+    Object.entries(this.#view).forEach(([_, panel]) => {
+      panel.addEventListener(SelectionEvent.name, (e) =>
+        this.handleShowEntries(e)
+      );
+      panel.addEventListener(FocusEvent.name, (e) =>
         this.handleShowEntryDetail(e)
       );
     });
@@ -50,14 +53,17 @@ class App {
     );
   }
   handleShowEntries(e) {
-    if (e.entries[0] instanceof V8Map) {
-      this.#view.mapPanel.mapEntries = e.entries;
+    if (e.entries[0] instanceof MapLogEvent) {
+      this.showMapEntries(e.entries);
     }
   }
+  showMapEntries(entries) {
+    this.#view.mapPanel.mapEntries = entries;
+  }
   handleShowEntryDetail(e) {
-    if (e.entry instanceof V8Map) {
+    if (e.entry instanceof MapLogEvent) {
       this.selectMapLogEvent(e.entry);
-    } else if (e.entry instanceof Entry) {
+    } else if (e.entry instanceof IcLogEvent) {
       this.selectICLogEvent(e.entry);
     } else if (typeof e.entry === "string") {
       this.selectSourcePositionEvent(e.entry);
