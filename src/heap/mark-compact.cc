@@ -1949,6 +1949,12 @@ void MarkCompactCollector::MarkLiveObjects() {
     IncrementalMarking* incremental_marking = heap_->incremental_marking();
     if (was_marked_incrementally_) {
       incremental_marking->Finalize();
+      heap()->marking_barrier()->Deactivate();
+      if (FLAG_local_heaps) {
+        heap()->safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
+          local_heap->marking_barrier()->Deactivate();
+        });
+      }
     } else {
       CHECK(incremental_marking->IsStopped());
     }
@@ -2051,10 +2057,6 @@ void MarkCompactCollector::MarkLiveObjects() {
       heap()->isolate()->global_handles()->IterateWeakRootsForPhantomHandles(
           &IsUnmarkedHeapObject);
     }
-  }
-
-  if (was_marked_incrementally_) {
-    heap()->marking_barrier()->Deactivate();
   }
 
   epoch_++;

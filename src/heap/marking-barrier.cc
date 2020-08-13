@@ -11,16 +11,28 @@
 #include "src/heap/mark-compact-inl.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/marking-barrier-inl.h"
+#include "src/heap/marking-worklist-inl.h"
+#include "src/heap/marking-worklist.h"
 #include "src/objects/js-array-buffer.h"
 
 namespace v8 {
 namespace internal {
 
-MarkingBarrier::MarkingBarrier(Heap* heap, MarkCompactCollector* collector,
-                               IncrementalMarking* incremental_marking)
+MarkingBarrier::MarkingBarrier(Heap* heap)
     : heap_(heap),
-      collector_(collector),
-      incremental_marking_(incremental_marking) {}
+      collector_(heap_->mark_compact_collector()),
+      incremental_marking_(heap_->incremental_marking()),
+      worklist_(collector_->marking_worklists()->shared()),
+      is_main_thread_barrier_(true) {}
+
+MarkingBarrier::MarkingBarrier(LocalHeap* local_heap)
+    : heap_(local_heap->heap()),
+      collector_(heap_->mark_compact_collector()),
+      incremental_marking_(nullptr),
+      worklist_(collector_->marking_worklists()->shared()),
+      is_main_thread_barrier_(false) {}
+
+MarkingBarrier::~MarkingBarrier() {}
 
 void MarkingBarrier::Write(HeapObject host, HeapObjectSlot slot,
                            HeapObject value) {
@@ -32,6 +44,7 @@ void MarkingBarrier::Write(HeapObject host, HeapObjectSlot slot,
 }
 
 void MarkingBarrier::Write(Code host, RelocInfo* reloc_info, HeapObject value) {
+  DCHECK(is_main_thread_barrier_);
   if (MarkValue(host, value)) {
     if (is_compacting_) {
       collector_->RecordRelocSlot(host, reloc_info, value);
@@ -41,6 +54,7 @@ void MarkingBarrier::Write(Code host, RelocInfo* reloc_info, HeapObject value) {
 
 void MarkingBarrier::Write(JSArrayBuffer host,
                            ArrayBufferExtension* extension) {
+  DCHECK(is_main_thread_barrier_);
   if (!V8_CONCURRENT_MARKING_BOOL && marking_state_.IsBlack(host)) {
     // The extension will be marked when the marker visits the host object.
     return;
@@ -50,6 +64,7 @@ void MarkingBarrier::Write(JSArrayBuffer host,
 
 void MarkingBarrier::Write(Map host, DescriptorArray descriptor_array,
                            int number_of_own_descriptors) {
+  DCHECK(is_main_thread_barrier_);
   int16_t raw_marked = descriptor_array.raw_number_of_marked_descriptors();
   if (NumberOfMarkedDescriptors::decode(collector_->epoch(), raw_marked) <
       number_of_own_descriptors) {
@@ -58,44 +73,55 @@ void MarkingBarrier::Write(Map host, DescriptorArray descriptor_array,
   }
 }
 
+void MarkingBarrier::Publish() {
+  if (is_activated_) worklist_.Publish();
+}
+
 void MarkingBarrier::Deactivate(PagedSpace* space) {
+  DCHECK(is_main_thread_barrier_);
   for (Page* p : *space) {
     p->SetOldGenerationPageFlags(false);
   }
 }
 
 void MarkingBarrier::Deactivate(NewSpace* space) {
+  DCHECK(is_main_thread_barrier_);
   for (Page* p : *space) {
     p->SetYoungGenerationPageFlags(false);
   }
 }
 
 void MarkingBarrier::Deactivate() {
-  Deactivate(heap_->old_space());
-  Deactivate(heap_->map_space());
-  Deactivate(heap_->code_space());
-  Deactivate(heap_->new_space());
-  for (LargePage* p : *heap_->new_lo_space()) {
-    p->SetYoungGenerationPageFlags(false);
-    DCHECK(p->IsLargePage());
-  }
-  for (LargePage* p : *heap_->lo_space()) {
-    p->SetOldGenerationPageFlags(false);
-  }
-  for (LargePage* p : *heap_->code_lo_space()) {
-    p->SetOldGenerationPageFlags(false);
-  }
   is_activated_ = false;
   is_compacting_ = false;
+  Publish();
+  if (is_main_thread_barrier_) {
+    Deactivate(heap_->old_space());
+    Deactivate(heap_->map_space());
+    Deactivate(heap_->code_space());
+    Deactivate(heap_->new_space());
+    for (LargePage* p : *heap_->new_lo_space()) {
+      p->SetYoungGenerationPageFlags(false);
+      DCHECK(p->IsLargePage());
+    }
+    for (LargePage* p : *heap_->lo_space()) {
+      p->SetOldGenerationPageFlags(false);
+    }
+    for (LargePage* p : *heap_->code_lo_space()) {
+      p->SetOldGenerationPageFlags(false);
+    }
+  }
 }
 
 void MarkingBarrier::Activate(PagedSpace* space) {
+  DCHECK(is_main_thread_barrier_);
   for (Page* p : *space) {
     p->SetOldGenerationPageFlags(true);
   }
 }
 
 void MarkingBarrier::Activate(NewSpace* space) {
+  DCHECK(is_main_thread_barrier_);
   for (Page* p : *space) {
     p->SetYoungGenerationPageFlags(true);
   }
@@ -105,22 +131,24 @@ void MarkingBarrier::Activate(bool is_compacting) {
   DCHECK(!is_activated_);
   is_compacting_ = is_compacting;
   is_activated_ = true;
-  Activate(heap_->old_space());
-  Activate(heap_->map_space());
-  Activate(heap_->code_space());
-  Activate(heap_->new_space());
+  if (is_main_thread_barrier_) {
+    Activate(heap_->old_space());
+    Activate(heap_->map_space());
+    Activate(heap_->code_space());
+    Activate(heap_->new_space());
 
-  for (LargePage* p : *heap_->new_lo_space()) {
-    p->SetYoungGenerationPageFlags(true);
-    DCHECK(p->IsLargePage());
-  }
+    for (LargePage* p : *heap_->new_lo_space()) {
+      p->SetYoungGenerationPageFlags(true);
+      DCHECK(p->IsLargePage());
+    }
 
-  for (LargePage* p : *heap_->lo_space()) {
-    p->SetOldGenerationPageFlags(true);
-  }
+    for (LargePage* p : *heap_->lo_space()) {
+      p->SetOldGenerationPageFlags(true);
+    }
 
-  for (LargePage* p : *heap_->code_lo_space()) {
-    p->SetOldGenerationPageFlags(true);
+    for (LargePage* p : *heap_->code_lo_space()) {
+      p->SetOldGenerationPageFlags(true);
+    }
   }
 }
 
