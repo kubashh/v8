@@ -241,6 +241,30 @@
     },
     {
       "key": {
+        "uuid": "c63aad49_73a7af7e",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-13T10:41:45Z",
+      "side": 1,
+      "message": "Even if incremental marking runs out of work, it is still in progress because it was not finalized yet. I still think that the name is misleading. Let\u0027s continue the discussion in the comment below.",
+      "parentUuid": "e4a2bd81_526f2b98",
+      "range": {
+        "startLine": 108,
+        "startChar": 24,
+        "endLine": 108,
+        "endChar": 57
+      },
+      "revId": "0f8e1c7acfd02c866248ab8fb03d41bded320dfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "69277139_47d5a7fe",
         "filename": "src/heap/cppgc-js/cpp-heap.cc",
         "patchSetId": 12
@@ -276,6 +300,30 @@
       "side": 1,
       "message": "This is similar to the previous comment.\nIncremental marking reposts a task only if there is more work to do.\nIf incremental marking didn\u0027t post a task, and a unified heap step found that we have more work to do (i.e. because of objects marked by v8) then we need to restart incremental marking by scheduling a new task.\nIt\u0027s the same thing we\u0027re currently doing.",
       "parentUuid": "69277139_47d5a7fe",
+      "range": {
+        "startLine": 148,
+        "startChar": 2,
+        "endLine": 148,
+        "endChar": 23
+      },
+      "revId": "0f8e1c7acfd02c866248ab8fb03d41bded320dfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be23c5ef_3b98f372",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-13T10:41:45Z",
+      "side": 1,
+      "message": "To clarify what I meant with \"doesn\u0027t fit\": CppHeap seems to unnecessarily know the internal details of marking.  A sign that layering is off here is that we have to downcast to UnifiedHeapMarker below.\n\nAnother sign is that the function names and statements are telling a contradicting story:\n1) AdvanceMarkingWithDeadline returns an indication that marking is not done. At this point both CppHeap and the marker know that marking is in progress.\n2) Then CppHeap tells the marker to RestartIncrementalMarkingIfNeeded. Why does CppHeap have to tell the marker to restart marking if it was the marker in the first place that told CppHeap that marking is not done yet :) \n\nOne way to fix it would be to move the management of the task into a separate class (e.g. IncrementalMarkingJob). Then it could be injected into Marker at construction time so that AdvanceMarkingWithDeadline can call a virtual incremental_marking_job_-\u003eScheduleTask().\n\nThis would also fix an issue that RestartIncrementalMarkingIfNeeded is defined only for the unified marker, but not for the standalone marker.",
+      "parentUuid": "e8406d4f_38a1d7a1",
       "range": {
         "startLine": 148,
         "startChar": 2,
@@ -652,6 +700,30 @@
       "side": 1,
       "message": "We can.\nI based this on what oilpan used to have for standalone GCs (https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/platform/heap/thread_state.cc;drc\u003d23f61cb65a94208dc2c4728e895e87d47f64a8b6;bpv\u003d1;bpt\u003d1;l\u003d1220) and what I thought v8 was doing as well (https://source.chromium.org/chromium/chromium/src/+/master:v8/src/heap/incremental-marking-job.cc;drc\u003d23f61cb65a94208dc2c4728e895e87d47f64a8b6;l\u003d50).\nThe downside of finalizing immediately is that we could get overall a longer pause time than finalizing in a task.\nwdyt?",
       "parentUuid": "74681b67_445f562c",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 62
+      },
+      "revId": "0f8e1c7acfd02c866248ab8fb03d41bded320dfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce6a6af5_492b72a9",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-13T10:41:45Z",
+      "side": 1,
+      "message": "V8 finalizes immediately after a step: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/heap/incremental-marking-job.cc;l\u003d83;drc\u003d23f61cb65a94208dc2c4728e895e87d47f64a8b6\n\nI would prefer that because it is more robust even though the atomic pause time may increase. If we don\u0027t finalize immediately, then a mutator that allocates an object between the steps can arbitrarily delay the finalization (until we hit the hard limit). Also keep in mind that while incremental marking is running, the mutator is pay the cost of the marking write-barrier. So finishing earlier is better.",
+      "parentUuid": "a211014c_976b9bd9",
       "range": {
         "startLine": 139,
         "startChar": 4,
