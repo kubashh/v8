@@ -34,6 +34,24 @@
       "revId": "69622212954bebf0794c65f96c65d09774317f2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e1290c5_fe747542",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-14T18:30:44Z",
+      "side": 1,
+      "message": "Does https://chromium-review.googlesource.com/c/v8/v8/+/2357169 fix the issue for you locally? I\u0027ve queued up the MIPS bots on that CL, let\u0027s continue the convo there.",
+      "parentUuid": "a87d7da0_32524ccf",
+      "revId": "69622212954bebf0794c65f96c65d09774317f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
