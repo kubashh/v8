@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "273ef5a6_a10967ab",
+        "filename": "src/compiler/js-heap-copy-reducer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-14T12:04:54Z",
+      "side": 1,
+      "message": "After some debugging, I found out it wouldn\u0027t be strictly needed now (as the generic lowering doesn\u0027t create a NameRef and there\u0027s no native context specialization implemented in this CL), but it makes sense to add anyway to be future proof.",
+      "parentUuid": "5944253a_1de5f17f",
+      "revId": "d35d9ed7bda0b20f83199e743baa82a5676686e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc80c70d_46dcccc1",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 14
