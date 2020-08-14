@@ -61,6 +61,8 @@ TEST(CallCFunction) {
     const TNode<ExternalReference> fun_constant = m.ExternalConstant(
         ExternalReference::Create(reinterpret_cast<Address>(sum10)));
 
+    // FIXME: It is incorrect to use IntPtr here, because sum10 arguments are
+    // int.
     MachineType type_intptr = MachineType::IntPtr();
 
     Node* const result =

@@ -11721,8 +11721,8 @@ TEST(system_msr) {
 
   // All FPCR fields (including fields which may be read-as-zero):
   //  Stride, Len
-  //  IDE, IXE, UFE, OFE, DZE, IOE
-  const uint64_t fpcr_all = fpcr_core | 0x00379F00;
+  //  IDE, IXE, UFE, OFE, DZE, IOE, FZ16
+  const uint64_t fpcr_all = fpcr_core | 0x003F9F00;
 
   SETUP();
 

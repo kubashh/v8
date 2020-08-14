@@ -1884,6 +1884,7 @@ void InstructionSelector::EmitPrepareArguments(
 
   // Poke the arguments into the stack.
   while (slot >= 0) {
+    // FIXME: In the Apple ARM64 ABI parameters should be packed on the stack.
     PushParameter input0 = (*arguments)[slot];
     PushParameter input1 = slot > 0 ? (*arguments)[slot - 1] : PushParameter();
     // Emit a poke-pair if consecutive parameters have the same type.

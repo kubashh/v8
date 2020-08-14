@@ -714,7 +714,13 @@ DEFINE_INT(wasm_num_compilation_tasks, 128,
            "maximum number of parallel compilation tasks for wasm")
 DEFINE_DEBUG_BOOL(trace_wasm_native_heap, false,
                   "trace wasm native heap events")
-DEFINE_BOOL(wasm_write_protect_code_memory, false,
+#if V8_OS_MACOSX && V8_TARGET_ARCH_ARM64
+#define V8_DEFAULT_WASM_WRITE_PROTECT_CODE_MEMORY true
+#else
+#define V8_DEFAULT_WASM_WRITE_PROTECT_CODE_MEMORY false
+#endif
+DEFINE_BOOL(wasm_write_protect_code_memory,
+            V8_DEFAULT_WASM_WRITE_PROTECT_CODE_MEMORY,
             "write protect code memory on the wasm native heap")
 DEFINE_DEBUG_BOOL(trace_wasm_serialization, false,
                   "trace serialization/deserialization")

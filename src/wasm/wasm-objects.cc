@@ -1452,6 +1452,8 @@ void WasmInstanceObject::ImportWasmJSFunctionIntoTable(
     wasm::WasmCompilationResult result = compiler::CompileWasmImportCallWrapper(
         isolate->wasm_engine(), &env, kind, sig, false,
         shared.internal_formal_parameter_count());
+    wasm::NativeModuleModificationScope native_module_modification_scope(
+        native_module);
     std::unique_ptr<wasm::WasmCode> wasm_code = native_module->AddCode(
         result.func_index, result.code_desc, result.frame_slot_count,
         result.tagged_parameter_slots,

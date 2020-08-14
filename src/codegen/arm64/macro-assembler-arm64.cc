@@ -284,17 +284,20 @@ void TurboAssembler::Mov(const Register& rd, const Operand& operand,
   UseScratchRegisterScope temps(this);
   Register dst = (rd.IsSP()) ? temps.AcquireSameSizeAs(rd) : rd;
 
+  if (root_array_available_ && options().isolate_independent_code) {
+    if (operand.ImmediateRMode() == RelocInfo::EXTERNAL_REFERENCE) {
+      Address addr = static_cast<Address>(operand.ImmediateValue());
+      ExternalReference reference = bit_cast<ExternalReference>(addr);
+      IndirectLoadExternalReference(rd, reference);
+      return;
+    }
+  }
   if (operand.NeedsRelocation(this)) {
     // TODO(jgruber,v8:8887): Also consider a root-relative load when generating
     // non-isolate-independent code. In many cases it might be cheaper than
     // embedding the relocatable value.
     if (root_array_available_ && options().isolate_independent_code) {
-      if (operand.ImmediateRMode() == RelocInfo::EXTERNAL_REFERENCE) {
-        Address addr = static_cast<Address>(operand.ImmediateValue());
-        ExternalReference reference = bit_cast<ExternalReference>(addr);
-        IndirectLoadExternalReference(rd, reference);
-        return;
-      } else if (RelocInfo::IsEmbeddedObjectMode(operand.ImmediateRMode())) {
+      if (RelocInfo::IsEmbeddedObjectMode(operand.ImmediateRMode())) {
         Handle<HeapObject> x(
             reinterpret_cast<Address*>(operand.ImmediateValue()));
         // TODO(v8:9706): Fix-it! This load will always uncompress the value
@@ -2973,6 +2976,35 @@ void TurboAssembler::PrintfNoPreserve(const char* format,
 
   int arg_count = kPrintfMaxArgCount;
 
+#if V8_OS_MACOSX && !USE_SIMULATOR
+  CPURegList tmp_list = kCallerSaved;
+  tmp_list.Remove(x0);  // Used to pass the format string.
+  tmp_list.Remove(arg0, arg1, arg2, arg3);
+
+  // Override the MacroAssembler's scratch register list. The lists will be
+  // reset automatically at the end of the UseScratchRegisterScope.
+  UseScratchRegisterScope temps(this);
+  TmpList()->set_list(tmp_list.list());
+
+  VRegister temp_D = temps.AcquireD();
+
+  // https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/Articles/ARM64FunctionCallingConventions.html#//apple_ref/doc/uid/TP40013702-SW1
+  Claim(kPrintfMaxArgCount, 8);
+  int64_t offset = 0;
+  for (unsigned i = 0; i < kPrintfMaxArgCount; i++) {
+    CPURegister arg = args[i];
+    if (arg.IsNone()) {
+      break;
+    }
+    if (arg.IsS()) {
+      fcvt(temp_D, arg.S());
+      arg = temp_D;
+    }
+    // FIXME: Use stp.
+    str(arg, MemOperand(sp, offset, Offset));
+    offset += 8;
+  }
+#else
   // The PCS varargs registers for printf. Note that x0 is used for the printf
   // format string.
   static const CPURegList kPCSVarargs =
@@ -3083,7 +3115,7 @@ void TurboAssembler::PrintfNoPreserve(const char* format,
     }
 #endif
   }
-
+#endif
   // Load the format string into x0, as per the procedure-call standard.
   //
   // To make the code as portable as possible, the format string is encoded
@@ -3105,6 +3137,10 @@ void TurboAssembler::PrintfNoPreserve(const char* format,
   }
 
   CallPrintf(arg_count, pcs);
+
+#if V8_OS_MACOSX && !USE_SIMULATOR
+  Drop(kPrintfMaxArgCount, 8);
+#endif
 }
 
 void TurboAssembler::CallPrintf(int arg_count, const CPURegister* args) {

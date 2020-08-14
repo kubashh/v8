@@ -145,6 +145,8 @@ uint32_t TestingModuleBuilder::AddFunction(const FunctionSig* sig,
         index, {AddBytes(name_vec), static_cast<uint32_t>(name_vec.length())});
   }
   if (interpreter_) {
+    wasm::NativeModuleModificationScope native_modification_scope(
+        native_module_);
     interpreter_->AddFunctionForTesting(&test_module_->functions.back());
   }
   DCHECK_LT(index, kMaxFunctions);  // limited for testing.

@@ -188,42 +188,46 @@ void TestReturnMultipleValues(MachineType type) {
       std::shared_ptr<wasm::NativeModule> module = AllocateNativeModule(
           handles.main_isolate(), code->raw_instruction_size());
       wasm::WasmCodeRefScope wasm_code_ref_scope;
-      byte* code_start =
-          module->AddCodeForTesting(code)->instructions().begin();
+      {
+        wasm::NativeModuleModificationScope native_modification_scope(
+            module.get());
+        byte* code_start =
+            module->AddCodeForTesting(code)->instructions().begin();
 
-      RawMachineAssemblerTester<int32_t> mt(CodeKind::JS_TO_WASM_FUNCTION);
-      const int input_count = 2 + param_count;
-      Node* call_inputs[2 + kMaxParamCount];
-      call_inputs[0] = mt.PointerConstant(code_start);
-      // WasmContext dummy
-      call_inputs[1] = mt.PointerConstant(nullptr);
-      // Special inputs for the test.
-      call_inputs[2] = MakeConstant(&mt, type, a);
-      call_inputs[3] = MakeConstant(&mt, type, b);
-      for (int i = 2; i < param_count; i++) {
-        call_inputs[2 + i] = MakeConstant(&mt, type, i);
-      }
+        RawMachineAssemblerTester<int32_t> mt(CodeKind::JS_TO_WASM_FUNCTION);
+        const int input_count = 2 + param_count;
+        Node* call_inputs[2 + kMaxParamCount];
+        call_inputs[0] = mt.PointerConstant(code_start);
+        // WasmContext dummy
+        call_inputs[1] = mt.PointerConstant(nullptr);
+        // Special inputs for the test.
+        call_inputs[2] = MakeConstant(&mt, type, a);
+        call_inputs[3] = MakeConstant(&mt, type, b);
+        for (int i = 2; i < param_count; i++) {
+          call_inputs[2 + i] = MakeConstant(&mt, type, i);
+        }
 
-      Node* ret_multi = mt.AddNode(mt.common()->Call(desc),
-                                   input_count, call_inputs);
-      Node* ret = MakeConstant(&mt, type, 0);
-      bool sign = false;
-      for (int i = 0; i < count; ++i) {
-        Node* x = (count == 1)
-                      ? ret_multi
-                      : mt.AddNode(mt.common()->Projection(i), ret_multi);
-        ret = sign ? Sub(&mt, type, ret, x) : Add(&mt, type, ret, x);
-        if (i % 4 == 0) sign = !sign;
-      }
-      mt.Return(ToInt32(&mt, type, ret));
+        Node* ret_multi =
+            mt.AddNode(mt.common()->Call(desc), input_count, call_inputs);
+        Node* ret = MakeConstant(&mt, type, 0);
+        bool sign = false;
+        for (int i = 0; i < count; ++i) {
+          Node* x = (count == 1)
+                        ? ret_multi
+                        : mt.AddNode(mt.common()->Projection(i), ret_multi);
+          ret = sign ? Sub(&mt, type, ret, x) : Add(&mt, type, ret, x);
+          if (i % 4 == 0) sign = !sign;
+        }
+        mt.Return(ToInt32(&mt, type, ret));
 #ifdef ENABLE_DISASSEMBLER
-      Handle<Code> code2 = mt.GetCode();
-      if (FLAG_print_code) {
-        StdoutStream os;
-        code2->Disassemble("multi_value_call", os, handles.main_isolate());
-      }
+        Handle<Code> code2 = mt.GetCode();
+        if (FLAG_print_code) {
+          StdoutStream os;
+          code2->Disassemble("multi_value_call", os, handles.main_isolate());
+        }
 #endif
-      CHECK_EQ(expect, mt.Call());
+        CHECK_EQ(expect, mt.Call());
+      }
     }
   }
 }
@@ -278,20 +282,25 @@ void ReturnLastValue(MachineType type) {
     std::shared_ptr<wasm::NativeModule> module = AllocateNativeModule(
         handles.main_isolate(), code->raw_instruction_size());
     wasm::WasmCodeRefScope wasm_code_ref_scope;
-    byte* code_start = module->AddCodeForTesting(code)->instructions().begin();
-
-    // Generate caller.
-    int expect = return_count - 1;
     RawMachineAssemblerTester<int32_t> mt;
-    Node* inputs[] = {mt.PointerConstant(code_start),
-                      // WasmContext dummy
-                      mt.PointerConstant(nullptr)};
+    int expect = return_count - 1;
+    {
+      wasm::NativeModuleModificationScope native_modification_scope(
+          module.get());
+      byte* code_start =
+          module->AddCodeForTesting(code)->instructions().begin();
 
-    Node* call = mt.AddNode(mt.common()->Call(desc), 2, inputs);
+      // Generate caller.
+      Node* inputs[] = {mt.PointerConstant(code_start),
+                        // WasmContext dummy
+                        mt.PointerConstant(nullptr)};
 
-    mt.Return(
-        ToInt32(&mt, type,
-                mt.AddNode(mt.common()->Projection(return_count - 1), call)));
+      Node* call = mt.AddNode(mt.common()->Call(desc), 2, inputs);
+
+      mt.Return(
+          ToInt32(&mt, type,
+                  mt.AddNode(mt.common()->Projection(return_count - 1), call)));
+    }
 
     CHECK_EQ(expect, mt.Call());
   }
@@ -341,27 +350,32 @@ void ReturnSumOfReturns(MachineType type) {
     std::shared_ptr<wasm::NativeModule> module = AllocateNativeModule(
         handles.main_isolate(), code->raw_instruction_size());
     wasm::WasmCodeRefScope wasm_code_ref_scope;
-    byte* code_start = module->AddCodeForTesting(code)->instructions().begin();
-
-    // Generate caller.
     RawMachineAssemblerTester<int32_t> mt;
-    Node* call_inputs[] = {mt.PointerConstant(code_start),
-                           // WasmContext dummy
-                           mt.PointerConstant(nullptr)};
-
-    Node* call = mt.AddNode(mt.common()->Call(desc), 2, call_inputs);
-
     uint32_t expect = 0;
-    Node* result = mt.Int32Constant(0);
+    {
+      wasm::NativeModuleModificationScope native_modification_scope(
+          module.get());
+      byte* code_start =
+          module->AddCodeForTesting(code)->instructions().begin();
 
-    for (int i = 0; i < return_count; ++i) {
-      expect += i;
-      result = mt.Int32Add(
-          result,
-          ToInt32(&mt, type, mt.AddNode(mt.common()->Projection(i), call)));
+      // Generate caller.
+      Node* call_inputs[] = {mt.PointerConstant(code_start),
+                             // WasmContext dummy
+                             mt.PointerConstant(nullptr)};
+
+      Node* call = mt.AddNode(mt.common()->Call(desc), 2, call_inputs);
+
+      Node* result = mt.Int32Constant(0);
+
+      for (int i = 0; i < return_count; ++i) {
+        expect += i;
+        result = mt.Int32Add(
+            result,
+            ToInt32(&mt, type, mt.AddNode(mt.common()->Projection(i), call)));
+      }
+
+      mt.Return(result);
     }
-
-    mt.Return(result);
 
     CHECK_EQ(expect, mt.Call());
   }

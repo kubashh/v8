@@ -123,7 +123,9 @@ v8_enable_backtrace = true
 v8_enable_disassembler = true
 v8_enable_object_print = true
 v8_enable_verify_heap = true
-""".replace("{GOMA}", USE_GOMA).replace("{GOMA_DIR}", str(GOMADIR))
+clang_use_chrome_plugins = false
+""".replace("{GOMA}", USE_GOMA).replace("{GOMA_DIR}", str(GOMADIR)) + "clang_base_path = \"" + subprocess.check_output("dirname $(dirname $(xcrun -sdk macosx -find clang))", shell=True).rstrip() + """\"
+"""
 
 DEBUG_ARGS_TEMPLATE = """\
 is_component_build = true
@@ -136,7 +138,9 @@ v8_enable_backtrace = true
 v8_enable_fast_mksnapshot = true
 v8_enable_slow_dchecks = true
 v8_optimized_debug = false
-""".replace("{GOMA}", USE_GOMA).replace("{GOMA_DIR}", str(GOMADIR))
+clang_use_chrome_plugins = false
+""".replace("{GOMA}", USE_GOMA).replace("{GOMA_DIR}", str(GOMADIR)) + "clang_base_path = \"" + subprocess.check_output("dirname $(dirname $(xcrun -sdk macosx -find clang))", shell=True).rstrip() + """\"
+"""
 
 OPTDEBUG_ARGS_TEMPLATE = """\
 is_component_build = true
@@ -149,7 +153,9 @@ v8_enable_backtrace = true
 v8_enable_fast_mksnapshot = true
 v8_enable_verify_heap = true
 v8_optimized_debug = true
-""".replace("{GOMA}", USE_GOMA).replace("{GOMA_DIR}", str(GOMADIR))
+clang_use_chrome_plugins = false
+""".replace("{GOMA}", USE_GOMA).replace("{GOMA_DIR}", str(GOMADIR)) + "clang_base_path = \"" + subprocess.check_output("dirname $(dirname $(xcrun -sdk macosx -find clang))", shell=True).rstrip() + """\"
+"""
 
 ARGS_TEMPLATES = {
   "release": RELEASE_ARGS_TEMPLATE,
@@ -241,6 +247,7 @@ class Config(object):
   def GetTargetCpu(self):
     if self.arch == "android_arm": return "target_cpu = \"arm\""
     if self.arch == "android_arm64": return "target_cpu = \"arm64\""
+    if self.arch == "arm64": return "target_cpu = \"arm64\""
     cpu = "x86"
     if "64" in self.arch or self.arch == "s390x":
       cpu = "x64"
