@@ -171,6 +171,11 @@ Reduction JSHeapCopyReducer::Reduce(Node* node) {
       }
       break;
     }
+    case IrOpcode::kJSLoadNamedFromSuper: {
+      // TODO(marja, v8:9237): Process feedback once it's added to the byte
+      // code.
+      break;
+    }
     case IrOpcode::kJSStoreNamed: {
       NamedAccess const& p = NamedAccessOf(node->op());
       NameRef name(broker(), p.name());
