@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56167a03_d8316a9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1292588
+      },
+      "writtenOn": "2020-08-14T23:03:31Z",
+      "side": 1,
+      "message": "Removed the local test262 test. ftang@ is working on upstreaming these, but this particular test is not longer valid after this CL.",
+      "revId": "e5c77d6a00a41409e48cca1f800db1dd305ff021",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
