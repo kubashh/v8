@@ -100,7 +100,7 @@ class App {
     this.#view.mapPanel.map = entry;
   }
   selectICLogEvent(entry) {
-    console.log("IC Entry selection");
+    this.#view.icPanel.filteredEntries = [entry];
   }
   selectSourcePositionEvent(sourcePositions) {
     console.log("source positions: ", sourcePositions);
