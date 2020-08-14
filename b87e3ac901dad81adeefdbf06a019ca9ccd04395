@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1e819049_e7670dfa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-14T11:50:46Z",
+      "side": 1,
+      "message": "this is an imprecise description, since the CL doesn\u0027t touch anything with mousemove.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "b87e3ac901dad81adeefdbf06a019ca9ccd04395",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b79789b1_e41cfd4a",
         "filename": "tools/system-analyzer/timeline/timeline-track.mjs",
         "patchSetId": 5
