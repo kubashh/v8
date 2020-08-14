@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d1818d13_8eaf250c",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1292588
+      },
+      "writtenOn": "2020-08-14T22:57:34Z",
+      "side": 1,
+      "message": "It was included by accident, Fixed in the latest patchset,",
+      "parentUuid": "7f273173_1abdf00b",
+      "range": {
+        "startLine": 1295,
+        "startChar": 32,
+        "endLine": 1295,
+        "endChar": 35
+      },
+      "revId": "a771edbf549eb81dc9c898e1c1e9530c37c9cbf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "787802b1_bbf635e9",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "a771edbf549eb81dc9c898e1c1e9530c37c9cbf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b34b67d_15321d42",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1300,
+      "author": {
+        "id": 1292588
+      },
+      "writtenOn": "2020-08-14T22:57:34Z",
+      "side": 1,
+      "message": "Same.",
+      "parentUuid": "787802b1_bbf635e9",
+      "range": {
+        "startLine": 1300,
+        "startChar": 32,
+        "endLine": 1300,
+        "endChar": 35
+      },
+      "revId": "a771edbf549eb81dc9c898e1c1e9530c37c9cbf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
