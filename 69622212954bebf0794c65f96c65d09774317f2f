@@ -52,6 +52,24 @@
       "revId": "69622212954bebf0794c65f96c65d09774317f2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9e61c9b_dec1ec87",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-08-14T19:23:36Z",
+      "side": 1,
+      "message": "Thank you for the fix, yes this solves the issue on PPC64 and S390x.",
+      "parentUuid": "8e1290c5_fe747542",
+      "revId": "69622212954bebf0794c65f96c65d09774317f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
