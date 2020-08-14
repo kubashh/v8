@@ -4149,6 +4149,18 @@ class V8_EXPORT Object : public Value {
 
   V8_INLINE static Object* Cast(Value* obj);
 
+  /**
+   * Support for TC39 "dynamic code brand checks" proposal.
+   *
+   * This API allows to mark (& query) objects as "code kind", which causes
+   * them to be treated as code-like (i.e. like Strings) in the context of
+   * eval and function constructor.
+   *
+   * Reference: https://github.com/tc39/proposal-dynamic-code-brand-checks
+   */
+  void SetCodeKind(Isolate* isolate);
+  bool IsCodeKind(Isolate* isolate);
+
  private:
   Object();
   static void CheckCast(Value* obj);
@@ -7509,7 +7521,8 @@ struct ModifyCodeGenerationFromStringsResult {
  */
 typedef ModifyCodeGenerationFromStringsResult (
     *ModifyCodeGenerationFromStringsCallback)(Local<Context> context,
-                                              Local<Value> source);
+                                              Local<Value> source,
+                                              bool was_code_kind);
 
 // --- WebAssembly compilation callbacks ---
 typedef bool (*ExtensionCallback)(const FunctionCallbackInfo<Value>&);
