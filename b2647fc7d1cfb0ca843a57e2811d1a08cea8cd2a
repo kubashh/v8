@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "753461bb_cdab03a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-14T14:34:59Z",
+      "side": 1,
+      "message": "Yang, Simon: could any of you please stamp the inspector changes as an owner?\n\nPeter has already reviewed them.",
+      "revId": "b2647fc7d1cfb0ca843a57e2811d1a08cea8cd2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
