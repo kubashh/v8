@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "5944253a_1de5f17f",
+        "filename": "src/compiler/js-heap-copy-reducer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-14T09:30:25Z",
+      "side": 1,
+      "message": "I don\u0027t understand what the broker does with the name, but I copy-pasted this:\n\n      NamedAccess const\u0026 p \u003d NamedAccessOf(node-\u003eop());\n      NameRef name(broker(), p.name());\n\nI hope that\u0027s what you meant.\n\nWhat goes wrong if the broker doesn\u0027t know about the name? Is it possible to write a failing test for it?",
+      "parentUuid": "4050e731_7e187572",
+      "revId": "d35d9ed7bda0b20f83199e743baa82a5676686e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc80c70d_46dcccc1",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 14
@@ -70,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "f8f2eaa6_278c10b6",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3266,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-14T09:30:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc80c70d_46dcccc1",
+      "revId": "d35d9ed7bda0b20f83199e743baa82a5676686e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24df131c_18c82d7a",
         "filename": "src/interpreter/bytecode-array-builder.h",
         "patchSetId": 14
@@ -84,6 +120,24 @@
       "revId": "d35d9ed7bda0b20f83199e743baa82a5676686e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aec85577_6cc0d1d1",
+        "filename": "src/interpreter/bytecode-array-builder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-14T09:30:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24df131c_18c82d7a",
+      "revId": "d35d9ed7bda0b20f83199e743baa82a5676686e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
