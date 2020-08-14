@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d332707_4c65eb08",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-08-14T17:31:13Z",
+      "side": 1,
+      "message": "Hello,\n\nOn PPC, S390 (and I assume on MIPS) we are getting this compilation error: \n\nunused variable \u0027array_buffer\u0027\n\nAdding \"USE(array_buffer);\" to the ifdef body below will create a second error:\n\n# Fatal error in ../../src/compiler/raw-machine-assembler.cc, line 863\n# A label has been used but it\u0027s not bound.\n\nWhich I assume is due to the unused \"detached\" label. How would you recommend us fixing this?\n\nThis issue also applies to line \"672\" on this file.",
+      "revId": "69622212954bebf0794c65f96c65d09774317f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
