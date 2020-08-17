@@ -265,6 +265,30 @@
     },
     {
       "key": {
+        "uuid": "ebe27e04_5891572a",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-08-17T11:21:02Z",
+      "side": 1,
+      "message": "Done (Removed)",
+      "parentUuid": "c63aad49_73a7af7e",
+      "range": {
+        "startLine": 108,
+        "startChar": 24,
+        "endLine": 108,
+        "endChar": 57
+      },
+      "revId": "0f8e1c7acfd02c866248ab8fb03d41bded320dfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69277139_47d5a7fe",
         "filename": "src/heap/cppgc-js/cpp-heap.cc",
         "patchSetId": 12
@@ -333,6 +357,30 @@
       "revId": "0f8e1c7acfd02c866248ab8fb03d41bded320dfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d15ac409_b259a8fa",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-08-17T11:21:02Z",
+      "side": 1,
+      "message": "Done\n(See AdvanceMarkingWithDeadline in marker.cc)",
+      "parentUuid": "be23c5ef_3b98f372",
+      "range": {
+        "startLine": 148,
+        "startChar": 2,
+        "endLine": 148,
+        "endChar": 23
+      },
+      "revId": "0f8e1c7acfd02c866248ab8fb03d41bded320dfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -733,6 +781,30 @@
       "revId": "0f8e1c7acfd02c866248ab8fb03d41bded320dfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4a4c8e3_5c7f7d0a",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2020-08-17T11:21:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce6a6af5_492b72a9",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 62
+      },
+      "revId": "0f8e1c7acfd02c866248ab8fb03d41bded320dfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
