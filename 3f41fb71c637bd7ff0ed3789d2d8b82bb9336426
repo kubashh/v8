@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "4d443d6d_f6982f87",
+        "filename": "src/compiler/property-access-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-17T22:21:42Z",
+      "side": 1,
+      "message": "When trying to add a DCHECK here, I realized it isn\u0027t very easy to add it here. We don\u0027t take a dependency on the receiver_map but we add the dependency on field_owner_map (the one which actually holds this field) which could be one of the maps in the transition tree of the receiver_map. We don\u0027t have information about the field_owner_maps here. While it is possible it plumb it through I thought it\u0027s better we add a DCHECK in access-info.cc itself, where we compute the field representation and also take a dependency. \n\nIf you think it\u0027s still better to have it here, I can get the information of field_owner_maps (I just need to change PropertyAccessInfo::Merge to also record field_owner_maps). Let me know what you think.",
+      "parentUuid": "1e268eb3_c09b93dd",
+      "range": {
+        "startLine": 213,
+        "startChar": 5,
+        "endLine": 213,
+        "endChar": 28
+      },
+      "revId": "3f41fb71c637bd7ff0ed3789d2d8b82bb9336426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "19fff0a1_bcc9dccb",
         "filename": "src/compiler/property-access-builder.cc",
         "patchSetId": 4
@@ -62,6 +86,30 @@
       "revId": "3f41fb71c637bd7ff0ed3789d2d8b82bb9336426",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "607424f5_371b36c7",
+        "filename": "src/compiler/property-access-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-17T22:21:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19fff0a1_bcc9dccb",
+      "range": {
+        "startLine": 216,
+        "startChar": 63,
+        "endLine": 216,
+        "endChar": 65
+      },
+      "revId": "3f41fb71c637bd7ff0ed3789d2d8b82bb9336426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

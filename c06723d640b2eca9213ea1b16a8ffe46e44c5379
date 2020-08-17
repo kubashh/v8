@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "262137db_003419da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-17T22:21:42Z",
+      "side": 1,
+      "message": "Thanks Leszek!\nPTAL.",
+      "revId": "c06723d640b2eca9213ea1b16a8ffe46e44c5379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "349a9878_8984cf6b",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-17T22:21:42Z",
+      "side": 1,
+      "message": "I added a DCHECK here instead of the one we discussed. See my comment in property-access-builder.cc",
+      "revId": "c06723d640b2eca9213ea1b16a8ffe46e44c5379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
