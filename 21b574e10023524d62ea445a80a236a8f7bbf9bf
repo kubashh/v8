@@ -16,6 +16,161 @@
       "revId": "21b574e10023524d62ea445a80a236a8f7bbf9bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74f96bc5_59c0a795",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-17T11:17:32Z",
+      "side": 1,
+      "message": "Mostly nits.\n\nAs written inline, I think at this point we want to just add a second, new callback so we can deprecate the old one once we hit stage 4 with the proposal.",
+      "revId": "21b574e10023524d62ea445a80a236a8f7bbf9bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a4fad3cf_c35e7037",
+        "filename": "include/v8.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 7525,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-17T11:17:32Z",
+      "side": 1,
+      "message": "I have to check for a precedence case here. I\u0027m not sure we can change the callback signature without deprecating the old API in some way.\n\nGiven that this is still stage 1, I\u0027d prefer adding a second API with the additional argument.\n\nAn once we get to a clear further stage we can deprecate the old one.",
+      "range": {
+        "startLine": 7525,
+        "startChar": 0,
+        "endLine": 7525,
+        "endChar": 66
+      },
+      "revId": "21b574e10023524d62ea445a80a236a8f7bbf9bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5a720cb_57e907ec",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2150,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-17T11:17:32Z",
+      "side": 1,
+      "message": "nit: The plural seems a bit inconsistent here, since everywhere else it\u0027s singular, despite originating from the same callsite.",
+      "range": {
+        "startLine": 2150,
+        "startChar": 9,
+        "endLine": 2150,
+        "endChar": 27
+      },
+      "revId": "21b574e10023524d62ea445a80a236a8f7bbf9bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0349cf0f_026ac7ab",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-17T11:17:32Z",
+      "side": 1,
+      "message": "nit: not needed anymore",
+      "range": {
+        "startLine": 2152,
+        "startChar": 0,
+        "endLine": 2152,
+        "endChar": 69
+      },
+      "revId": "21b574e10023524d62ea445a80a236a8f7bbf9bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87e34464_dc30af85",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-17T11:17:32Z",
+      "side": 1,
+      "message": "nit: past / present tense here vs. call site.",
+      "range": {
+        "startLine": 149,
+        "startChar": 11,
+        "endLine": 149,
+        "endChar": 29
+      },
+      "revId": "21b574e10023524d62ea445a80a236a8f7bbf9bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29ba7150_c779a45b",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-17T11:17:32Z",
+      "side": 1,
+      "message": "nit: missing braces for newline nested statement",
+      "range": {
+        "startLine": 1810,
+        "startChar": 0,
+        "endLine": 1810,
+        "endChar": 71
+      },
+      "revId": "21b574e10023524d62ea445a80a236a8f7bbf9bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb8892f3_a287cab0",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-17T11:17:32Z",
+      "side": 1,
+      "message": "nit: ditto",
+      "range": {
+        "startLine": 1815,
+        "startChar": 0,
+        "endLine": 1815,
+        "endChar": 77
+      },
+      "revId": "21b574e10023524d62ea445a80a236a8f7bbf9bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
