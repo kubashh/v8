@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "115034ca_ab6e62d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-08-17T09:16:21Z",
+      "side": 1,
+      "message": "Camillo, please take a look. This now has cctest coverage, and conforms more closely to the TC39 proposal.\n\n- I tried to find a way around changing the signature of the ModifyCodeGenerationFromStringsCallback, but couldn\u0027t quite get that to work. Is the changing the API callback signature okay? What steps do I need to follow to get this in?\n- I tried to add tests for use with the deprecated AllowCodeGenerationFromStringsCallback, but that wouldn\u0027t compile (because it\u0027s deprecated). Is it okay to leave that untested?\n\n(Usage in crrev.com/c/2340905)",
+      "revId": "21b574e10023524d62ea445a80a236a8f7bbf9bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
