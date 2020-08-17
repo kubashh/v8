@@ -265,6 +265,7 @@ class EffectControlLinearizer {
   Node* ObjectIsSmi(Node* value);
   Node* LoadFromSeqString(Node* receiver, Node* position, Node* is_one_byte);
   Node* TruncateWordToInt32(Node* value);
+  Node* MakeWeakForComparison(Node* heap_object);
   Node* BuildIsWeakReferenceTo(Node* maybe_object, Node* value);
   Node* BuildIsClearedWeakReference(Node* maybe_object);
   Node* BuildIsStrongReference(Node* value);
@@ -283,7 +284,8 @@ class EffectControlLinearizer {
 
   // Helper functions used in LowerDynamicCheckMaps
   void CheckPolymorphic(Node* feedback, Node* value_map, Node* handler,
-                        GraphAssemblerLabel<0>* done, Node* frame_state);
+                        GraphAssemblerLabel<0>* done, Node* frame_state,
+                        bool use_builtin);
   void ProcessMonomorphic(Node* handler, GraphAssemblerLabel<0>* done,
                           Node* frame_state, int slot, Node* vector);
   void BranchOnICState(int slot_index, Node* vector, Node* value_map,
@@ -1884,47 +1886,116 @@ void EffectControlLinearizer::LowerCheckMaps(Node* node, Node* frame_state) {
 void EffectControlLinearizer::CheckPolymorphic(Node* feedback_slot,
                                                Node* value_map, Node* handler,
                                                GraphAssemblerLabel<0>* done,
-                                               Node* frame_state) {
-  Node* feedback_slot_map =
-      __ LoadField(AccessBuilder::ForMap(), feedback_slot);
-  Node* is_weak_fixed_array_check =
-      __ TaggedEqual(feedback_slot_map, __ WeakFixedArrayMapConstant());
-  __ DeoptimizeIfNot(DeoptimizeReason::kTransitionedToMegamorphicIC,
-                     FeedbackSource(), is_weak_fixed_array_check, frame_state,
-                     IsSafetyCheck::kCriticalSafetyCheck);
-
-  Node* length = ChangeSmiToInt32(
-      __ LoadField(AccessBuilder::ForWeakFixedArrayLength(), feedback_slot));
-  auto loop = __ MakeLoopLabel(MachineRepresentation::kWord32);
-  __ Goto(&loop, __ Int32Constant(0));
-  __ Bind(&loop);
-  {
-    Node* index = loop.PhiAt(0);
-    Node* check = __ Int32LessThan(index, length);
-    __ DeoptimizeIfNot(DeoptimizeKind::kBailout, DeoptimizeReason::kMissingMap,
-                       FeedbackSource(), check, frame_state,
+                                               Node* frame_state,
+                                               bool use_builtin) {
+  if (use_builtin) {
+    Operator::Properties properties = Operator::kNoDeopt | Operator::kNoThrow;
+    Node* result = CallBuiltin(Builtins::kDynamicMapChecks, properties,
+                               feedback_slot, value_map, handler);
+    __ GotoIf(__ WordEqual(result, __ IntPtrConstant(0)), done);
+    __ DeoptimizeIf(DeoptimizeKind::kBailout, DeoptimizeReason::kMissingMap,
+                    FeedbackSource(),
+                    __ WordEqual(result, __ IntPtrConstant(1)), frame_state,
+                    IsSafetyCheck::kCriticalSafetyCheck);
+    __ DeoptimizeIf(DeoptimizeReason::kWrongHandler, FeedbackSource(),
+                    __ WordEqual(result, __ IntPtrConstant(2)), frame_state,
+                    IsSafetyCheck::kCriticalSafetyCheck);
+    __ Unreachable();
+    __ Goto(done);
+  } else {
+    Node* weak_value_map = MakeWeakForComparison(value_map);
+    Node* feedback_slot_map =
+        __ LoadField(AccessBuilder::ForMap(), feedback_slot);
+    Node* is_weak_fixed_array_check =
+        __ TaggedEqual(feedback_slot_map, __ WeakFixedArrayMapConstant());
+    __ DeoptimizeIfNot(DeoptimizeReason::kTransitionedToMegamorphicIC,
+                       FeedbackSource(), is_weak_fixed_array_check, frame_state,
                        IsSafetyCheck::kCriticalSafetyCheck);
 
-    Node* maybe_map = __ LoadElement(AccessBuilder::ForWeakFixedArrayElement(),
-                                     feedback_slot, index);
-    auto continue_loop = __ MakeLabel();
+    Node* length = ChangeSmiToInt32(
+        __ LoadField(AccessBuilder::ForWeakFixedArrayLength(), feedback_slot));
+    auto do_handler_check = __ MakeLabel(MachineRepresentation::kWord32);
 
-    __ GotoIfNot(BuildIsWeakReferenceTo(maybe_map, value_map), &continue_loop);
-    constexpr int kHandlerOffsetInEntry = 1;
-    Node* maybe_handler = __ LoadElement(
-        AccessBuilder::ForWeakFixedArrayElement(), feedback_slot,
-        __ Int32Add(index, __ Int32Constant(kHandlerOffsetInEntry)));
-    Node* handler_check = __ TaggedEqual(maybe_handler, handler);
-    __ DeoptimizeIfNot(DeoptimizeReason::kWrongHandler, FeedbackSource(),
-                       handler_check, frame_state,
-                       IsSafetyCheck::kCriticalSafetyCheck);
+    // TODO(gsathya): What's the best way to assert that we don't use
+    // this operator for any other feedback slot kind?
+    int kEntrySize =
+        FeedbackMetadata::GetSlotSize(FeedbackSlotKind::kLoadProperty);
 
+    ZoneVector<GraphAssemblerLabel<0>*> labels(FLAG_max_minimorphic_map_checks,
+                                               temp_zone());
+    DCHECK_GT(FLAG_max_minimorphic_map_checks, 0);
+
+    // This loop generates a switch based on the length of the array:
+    //
+    // if length == 4: goto labels[3]
+    // if length == 3: goto labels[2]
+    // if length == 2: goto labels[1]
+    // if length == 1: goto labels[0]
+    for (int i = FLAG_max_minimorphic_map_checks - 1; i >= 0; i--) {
+      // Technically, this Label doesn't require a variable, but later
+      // we have a branch to either this Label or the Label that does
+      // the handler check. And the handler check Label requires a
+      // variable to be passed to it.
+      //
+      // A Branch can accept Labels of the same type only, meaning, we
+      // must create a Label with an unused variable here.
+      GraphAssemblerLabel<0>* label = __ MakeLabel(temp_zone());
+      __ GotoIf(__ Word32Equal(length, __ Int32Constant((i + 1) * kEntrySize)),
+                label);
+      labels[i] = label;
+    }
+
+    // We should never have an polymorphic feedback array of size 0.
+    __ Unreachable();
     __ Goto(done);
 
-    __ Bind(&continue_loop);
-    constexpr int kEntrySize = 2;
-    index = __ Int32Add(index, __ Int32Constant(kEntrySize));
-    __ Goto(&loop, index);
+    // This loop generates code like this to do the dynamic map check:
+    //
+    // labels[3]:
+    //   maybe_map = load(feedback_slot, i)
+    //   if weak_value_map == maybe_map goto handler_check
+    //   goto labels[2]
+    // labels[2]:
+    //   maybe_map = load(feedback_slot, i - 1)
+    //   if weak_value_map == maybe_map goto handler_check
+    //   goto labels[1]
+    // labels[1]:
+    //   maybe_map = load(feedback_slot, i - 2)
+    //   if weak_value_map == maybe_map goto handler_check
+    //   goto labels[0]
+    // labels[0]:
+    //   maybe_map = load(feedback_slot, i - 3)
+    //   if weak_value_map == maybe_map goto handler_check
+    //   deoptimize
+    for (int i = FLAG_max_minimorphic_map_checks - 1; i >= 0; i--) {
+      __ Bind(labels[i]);
+      Node* maybe_map = __ LoadField(
+          AccessBuilder::ForWeakFixedArraySlot(i * kEntrySize), feedback_slot);
+      Node* map_check = __ TaggedEqual(maybe_map, weak_value_map);
+
+      static constexpr int kHandlerOffsetInEntry = 1;
+      int handler_index = (i * kEntrySize) + kHandlerOffsetInEntry;
+
+      __ GotoIf(map_check, &do_handler_check, __ Int32Constant(handler_index));
+      if (i > 0) {
+        __ Goto(labels[i - 1]);
+      } else {
+        __ Deoptimize(DeoptimizeKind::kBailout, DeoptimizeReason::kMissingMap,
+                      FeedbackSource(), FrameState(frame_state));
+        __ Unreachable();
+        __ Goto(done);
+      }
+    }
+
+    __ Bind(&do_handler_check);
+    Node* handler_index = do_handler_check.PhiAt(0);
+    Node* maybe_handler =
+        __ LoadElement(AccessBuilder::ForWeakFixedArrayElement(), feedback_slot,
+                       handler_index);
+    __ DeoptimizeIfNot(DeoptimizeReason::kWrongHandler, FeedbackSource(),
+                       __ TaggedEqual(maybe_handler, handler), frame_state,
+                       IsSafetyCheck::kCriticalSafetyCheck);
+    __ Goto(done);
   }
 }
 
@@ -2034,7 +2105,7 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
     // So it is not equired to migrate the instance for polymorphic case.
     // When we change dynamic map checks to check only four maps re-evaluate
     // if this is required.
-    CheckPolymorphic(poly_array, value_map, handler, &done, frame_state);
+    CheckPolymorphic(poly_array, value_map, handler, &done, frame_state, true);
   } else {
     DCHECK_EQ(p.state(), DynamicCheckMapsParameters::kPolymorphic);
     Node* feedback_slot = __ LoadField(
@@ -2047,7 +2118,8 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
     __ DeoptimizeIfNot(DeoptimizeReason::kTransitionedToMonomorphicIC,
                        FeedbackSource(), is_poly_or_megamorphic, frame_state,
                        IsSafetyCheck::kCriticalSafetyCheck);
-    CheckPolymorphic(feedback_slot, value_map, handler, &done, frame_state);
+    CheckPolymorphic(feedback_slot, value_map, handler, &done, frame_state,
+                     false);
   }
   __ Bind(&done);
 }
@@ -6436,6 +6508,13 @@ Node* EffectControlLinearizer::BuildIsStrongReference(Node* value) {
           TruncateWordToInt32(__ BitcastTaggedToWordForTagAndSmiBits(value)),
           __ Int32Constant(kHeapObjectTagMask)),
       __ Int32Constant(kHeapObjectTag));
+}
+
+Node* EffectControlLinearizer::MakeWeakForComparison(Node* heap_object) {
+  // TODO(gsathya): Specialize this for pointer compression.
+  return __ BitcastWordToTagged(
+      __ WordOr(__ BitcastTaggedToWord(heap_object),
+                __ IntPtrConstant(kWeakHeapObjectTag)));
 }
 
 Node* EffectControlLinearizer::BuildStrongReferenceFromWeakReference(
