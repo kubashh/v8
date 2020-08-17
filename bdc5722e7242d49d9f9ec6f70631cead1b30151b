@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "540fff45_315c2865",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-17T17:32:47Z",
+      "side": 1,
+      "message": "PTAL.\n\nAfter landing this, I have the following next steps in mind, in no particular order.\n\n- Switch to canonical persistent handles in more places\n- Remove obsolete Allow scopes\n- Clean up accessor definition macros\n- Remove UnserializedReadOnlyHeapObject data kind\n- Remove UnserializedHeapObject data kind",
+      "revId": "bdc5722e7242d49d9f9ec6f70631cead1b30151b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
