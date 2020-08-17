@@ -16,6 +16,52 @@
       "revId": "3f41fb71c637bd7ff0ed3789d2d8b82bb9336426",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e268eb3_c09b93dd",
+        "filename": "src/compiler/property-access-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-17T07:39:02Z",
+      "side": 1,
+      "message": "as discussed offline, let\u0027s add a DCHECK that dependencies on the field representation are installed in the else branch.",
+      "range": {
+        "startLine": 213,
+        "startChar": 5,
+        "endLine": 213,
+        "endChar": 28
+      },
+      "revId": "3f41fb71c637bd7ff0ed3789d2d8b82bb9336426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19fff0a1_bcc9dccb",
+        "filename": "src/compiler/property-access-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-17T07:39:02Z",
+      "side": 1,
+      "message": "nit: capitalisation",
+      "range": {
+        "startLine": 216,
+        "startChar": 63,
+        "endLine": 216,
+        "endChar": 65
+      },
+      "revId": "3f41fb71c637bd7ff0ed3789d2d8b82bb9336426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
