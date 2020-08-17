@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "38d1dbf9_88248c08",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-08-17T11:30:26Z",
+      "side": 1,
+      "message": "Could you also add [api] here, makes it a bit easier for grepping in the future.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 30
+      },
+      "revId": "21b574e10023524d62ea445a80a236a8f7bbf9bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "115034ca_ab6e62d8",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
