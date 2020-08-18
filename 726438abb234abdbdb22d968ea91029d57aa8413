@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "c667dca7_9eef6cad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-18T12:38:04Z",
+      "side": 1,
+      "message": "LGTM with comment. Thanks!",
+      "revId": "726438abb234abdbdb22d968ea91029d57aa8413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fd47ea2_aece6a39",
         "filename": "src/compiler/heap-refs.h",
         "patchSetId": 6
@@ -84,6 +101,30 @@
     },
     {
       "key": {
+        "uuid": "3c5b2faf_c1c823b1",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-18T12:38:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2057862a_55119b83",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 64
+      },
+      "revId": "726438abb234abdbdb22d968ea91029d57aa8413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af3107c1_3b8197ca",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 6
@@ -119,6 +160,30 @@
       "side": 1,
       "message": "The typer inspects the map/instance type of HeapObject(Ref)s in the graph. These Refs can now be of the new kind so we need to allow dereferencing persistent handles.",
       "parentUuid": "af3107c1_3b8197ca",
+      "range": {
+        "startLine": 1511,
+        "startChar": 4,
+        "endLine": 1511,
+        "endChar": 25
+      },
+      "revId": "726438abb234abdbdb22d968ea91029d57aa8413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a60bd3d_62045793",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-18T12:38:04Z",
+      "side": 1,
+      "message": "Ack.\nCan we add a comment about this similar to https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/pipeline.cc;l\u003d1637;drc\u003d5e82bb633a75e0d76758632c9288e01966294ed8 ?",
+      "parentUuid": "7c366727_c4e5935a",
       "range": {
         "startLine": 1511,
         "startChar": 4,
