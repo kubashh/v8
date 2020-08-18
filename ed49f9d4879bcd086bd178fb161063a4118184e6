@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "572318da_4782d039",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2020-08-18T17:59:23Z",
+      "side": 1,
+      "message": "Generally lgtm, but adding Tamer as someone who I\u0027m sure knows more about GN than me.",
+      "revId": "ed49f9d4879bcd086bd178fb161063a4118184e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85bd9b40_e6ace99b",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2020-08-18T17:59:23Z",
+      "side": 1,
+      "message": "Are this comment and the one below now incorrect?",
+      "range": {
+        "startLine": 372,
+        "startChar": 26,
+        "endLine": 372,
+        "endChar": 73
+      },
+      "revId": "ed49f9d4879bcd086bd178fb161063a4118184e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
