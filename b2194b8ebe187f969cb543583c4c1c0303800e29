@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56588150_09018c1f",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-18T07:34:24Z",
+      "side": 1,
+      "message": "Does TurboProp not take this path? Otherwise I\u0027d expect the DCHECK to fail?",
+      "range": {
+        "startLine": 100,
+        "startChar": 2,
+        "endLine": 100,
+        "endChar": 16
+      },
+      "revId": "b2194b8ebe187f969cb543583c4c1c0303800e29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e456d2e7_ae974ef0",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-18T07:34:24Z",
+      "side": 1,
+      "message": "pass the dependencies by const ref, not by r-value ref -- it\u0027s not valid to move them twice.",
+      "range": {
+        "startLine": 101,
+        "startChar": 52,
+        "endLine": 101,
+        "endChar": 75
+      },
+      "revId": "b2194b8ebe187f969cb543583c4c1c0303800e29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
