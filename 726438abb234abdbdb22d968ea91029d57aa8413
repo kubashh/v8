@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "be7c4902_2b3b4fb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-18T11:42:24Z",
+      "side": 1,
+      "message": "I think so.",
+      "parentUuid": "78c8d335_4ba343c8",
+      "revId": "726438abb234abdbdb22d968ea91029d57aa8413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fd47ea2_aece6a39",
         "filename": "src/compiler/heap-refs.h",
         "patchSetId": 6
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "2057862a_55119b83",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-18T11:42:24Z",
+      "side": 1,
+      "message": "That\u0027s \"git cl format\" magic.",
+      "parentUuid": "9fd47ea2_aece6a39",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 64
+      },
+      "revId": "726438abb234abdbdb22d968ea91029d57aa8413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "af3107c1_3b8197ca",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 6
@@ -53,6 +95,30 @@
       "writtenOn": "2020-08-18T11:07:31Z",
       "side": 1,
       "message": "Why is this needed?",
+      "range": {
+        "startLine": 1511,
+        "startChar": 4,
+        "endLine": 1511,
+        "endChar": 25
+      },
+      "revId": "726438abb234abdbdb22d968ea91029d57aa8413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c366727_c4e5935a",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-18T11:42:24Z",
+      "side": 1,
+      "message": "The typer inspects the map/instance type of HeapObject(Ref)s in the graph. These Refs can now be of the new kind so we need to allow dereferencing persistent handles.",
+      "parentUuid": "af3107c1_3b8197ca",
       "range": {
         "startLine": 1511,
         "startChar": 4,
