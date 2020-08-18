@@ -1073,7 +1073,7 @@ Reduction JSNativeContextSpecialization::ReduceMinimorphicPropertyAccess(
   }
   effect = graph()->NewNode(
       simplified()->DynamicCheckMaps(
-          flags, feedback.handler(), source,
+          flags, feedback.handler(), feedback.map(), source,
           feedback.is_monomorphic()
               ? DynamicCheckMapsParameters::ICState::kMonomorphic
               : DynamicCheckMapsParameters::ICState::kPolymorphic),

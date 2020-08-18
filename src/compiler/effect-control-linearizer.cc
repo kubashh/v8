@@ -1994,7 +1994,12 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
   // case the current state is polymorphic, and if we ever go back to
   // monomorphic start, we will deopt and reoptimize the code.
   if (p.state() == DynamicCheckMapsParameters::kMonomorphic) {
-    auto monomorphic_map_match = __ MakeLabel();
+    Node* map = __ HeapConstant(p.map());
+    Node* check = __ TaggedEqual(value_map, map);
+    __ DeoptimizeIfNot(DeoptimizeReason::kWrongMap, FeedbackSource(), check,
+                       frame_state, IsSafetyCheck::kCriticalSafetyCheck);
+    __ Goto(&done);
+    /*auto monomorphic_map_match = __ MakeLabel();
     auto maybe_poly = __ MakeLabel();
     Node* strong_feedback;
     Node* poly_array;
@@ -2034,7 +2039,7 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
     // So it is not equired to migrate the instance for polymorphic case.
     // When we change dynamic map checks to check only four maps re-evaluate
     // if this is required.
-    CheckPolymorphic(poly_array, value_map, handler, &done, frame_state);
+    CheckPolymorphic(poly_array, value_map, handler, &done, frame_state);*/
   } else {
     DCHECK_EQ(p.state(), DynamicCheckMapsParameters::kPolymorphic);
     Node* feedback_slot = __ LoadField(
