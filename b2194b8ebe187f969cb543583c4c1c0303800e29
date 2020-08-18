@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "32fc2da6_09f9ed2f",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-18T08:40:13Z",
+      "side": 1,
+      "message": "No, TurboProp when using dynamic map checks doesn\u0027t use this path. This is the path it takes: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/access-info.cc;l\u003d133. \n\nMinimorphicPropertyAccessInfo isn\u0027t a subclass of PropertyAccessInfo. We kept it that way because the fundamental assumptions (about having map checks, dependencies etc.,) are different with Minimorphic. So we can\u0027t really pass MinimorphicPropertyAccessInfo in the place of PropertyAccessInfo accidentally.",
+      "parentUuid": "56588150_09018c1f",
+      "range": {
+        "startLine": 100,
+        "startChar": 2,
+        "endLine": 100,
+        "endChar": 16
+      },
+      "revId": "b2194b8ebe187f969cb543583c4c1c0303800e29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e456d2e7_ae974ef0",
         "filename": "src/compiler/access-info.cc",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "b2194b8ebe187f969cb543583c4c1c0303800e29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b131c451_1a3ad9b9",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-08-18T08:40:13Z",
+      "side": 1,
+      "message": "Done. Thanks!",
+      "parentUuid": "e456d2e7_ae974ef0",
+      "range": {
+        "startLine": 101,
+        "startChar": 52,
+        "endLine": 101,
+        "endChar": 75
+      },
+      "revId": "b2194b8ebe187f969cb543583c4c1c0303800e29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
