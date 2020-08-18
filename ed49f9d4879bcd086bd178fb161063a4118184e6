@@ -39,6 +39,30 @@
       "revId": "ed49f9d4879bcd086bd178fb161063a4118184e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4667ad3f_5b388f7f",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1003232
+      },
+      "writtenOn": "2020-08-18T18:14:14Z",
+      "side": 1,
+      "message": "Yeah, sorry, I meant to go back and fix those. Will do so now before landing.",
+      "parentUuid": "85bd9b40_e6ace99b",
+      "range": {
+        "startLine": 372,
+        "startChar": 26,
+        "endLine": 372,
+        "endChar": 73
+      },
+      "revId": "ed49f9d4879bcd086bd178fb161063a4118184e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
