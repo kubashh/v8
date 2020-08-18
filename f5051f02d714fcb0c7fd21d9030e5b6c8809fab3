@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db9cae8b_c1d5deac",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-18T14:32:42Z",
+      "side": 0,
+      "message": "This was dead.",
+      "revId": "f5051f02d714fcb0c7fd21d9030e5b6c8809fab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
