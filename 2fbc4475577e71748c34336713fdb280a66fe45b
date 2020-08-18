@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "6f1f4c23_22841004",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-18T19:04:13Z",
+      "side": 1,
+      "message": "I\u0027ll inline the value instead of assigning it to a variable.",
+      "parentUuid": "472046fb_1937dfb9",
+      "range": {
+        "startLine": 645,
+        "startChar": 21,
+        "endLine": 645,
+        "endChar": 31
+      },
+      "revId": "2fbc4475577e71748c34336713fdb280a66fe45b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3470cca5_1e8585cc",
         "filename": "src/init/bootstrapper.cc",
         "patchSetId": 2
@@ -62,6 +86,30 @@
       "revId": "2fbc4475577e71748c34336713fdb280a66fe45b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b276456b_5f0afc65",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2020-08-18T19:04:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3470cca5_1e8585cc",
+      "range": {
+        "startLine": 647,
+        "startChar": 76,
+        "endLine": 647,
+        "endChar": 80
+      },
+      "revId": "2fbc4475577e71748c34336713fdb280a66fe45b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
