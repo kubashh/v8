@@ -69,6 +69,23 @@
       "revId": "23f703141f72e0160e9f59ac939ea1fbfb35a940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "932182dd_2eac7aba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-08-19T20:44:42Z",
+      "side": 1,
+      "message": "This is on the wrong branch. 7.7-lkgr is a ref and can cause some trouble when setting the tag. Could you merge this to refs/branch-heads/7.7 instead? It\u0027ll get a tag afterwards automatically and 7.7-lkgr will be updated.",
+      "revId": "23f703141f72e0160e9f59ac939ea1fbfb35a940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
