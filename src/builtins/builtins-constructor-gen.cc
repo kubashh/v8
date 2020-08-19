@@ -619,14 +619,25 @@ TNode<HeapObject> ConstructorBuiltinsAssembler::CreateShallowObjectLiteral(
   return copy;
 }
 
-// Used by the CreateEmptyObjectLiteral bytecode and the Object constructor.
-TNode<JSObject> ConstructorBuiltinsAssembler::CreateEmptyObjectLiteral(
-    TNode<Context> context) {
-  TNode<NativeContext> native_context = LoadNativeContext(context);
+TNode<Map> ConstructorBuiltinsAssembler::LoadObjectMap(TNode<Context> context) {
   TNode<JSFunction> object_function =
-      CAST(LoadContextElement(native_context, Context::OBJECT_FUNCTION_INDEX));
+      CAST(LoadContextElement(context, Context::OBJECT_FUNCTION_INDEX));
   TNode<Map> map = LoadObjectField<Map>(
       object_function, JSFunction::kPrototypeOrInitialMapOffset);
+  return map;
+}
+
+TNode<Map> ConstructorBuiltinsAssembler::LoadObjectWithNullProtoMap(
+    TNode<Context> context) {
+  TNode<Map> map = CAST(LoadContextElement(
+      context, Context::SLOW_OBJECT_WITH_NULL_PROTOTYPE_MAP));
+  return map;
+}
+// Used by the CreateEmptyObjectLiteral bytecode and the Object constructor.
+TNode<JSObject> ConstructorBuiltinsAssembler::CreateEmptyObject(
+    TNode<Context> context) {
+  TNode<NativeContext> native_context = LoadNativeContext(context);
+  TNode<Map> map = LoadObjectMap(native_context);
   // Ensure that slack tracking is disabled for the map.
   STATIC_ASSERT(Map::kNoSlackTracking == 0);
   CSA_ASSERT(this, IsClearWord32<Map::Bits3::ConstructionCounterBits>(
@@ -635,6 +646,13 @@ TNode<JSObject> ConstructorBuiltinsAssembler::CreateEmptyObjectLiteral(
   TNode<JSObject> result =
       AllocateJSObjectFromMap(map, empty_fixed_array, empty_fixed_array);
   return result;
+}
+
+TNode<JSObject> ConstructorBuiltinsAssembler::CreateEmptyObjectWithNullProto(
+    TNode<Context> context) {
+  TNode<NativeContext> native_context = LoadNativeContext(context);
+  TNode<Map> map = LoadObjectWithNullProtoMap(native_context);
+  return AllocateJSObjectFromMap(map);
 }
 
 }  // namespace internal

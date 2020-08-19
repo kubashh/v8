@@ -8082,6 +8082,8 @@ void CodeStubAssembler::ForEachEnumerableOwnProperty(
                    &if_name_ok);
           }
           BIND(&if_name_ok);
+        } else {
+          DCHECK_EQ(mode, kPropertyAdditionOrder);
         }
         {
           TVARIABLE(Map, var_map);
@@ -8192,6 +8194,8 @@ void CodeStubAssembler::ForEachEnumerableOwnProperty(
     Goto(&descriptor_array_loop);
 
     BIND(&done);
+  } else {
+    DCHECK_EQ(mode, kPropertyAdditionOrder);
   }
 }
 
