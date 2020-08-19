@@ -16,6 +16,23 @@
       "revId": "8b63477577c223f2e47055cd5e46b89621eb5781",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6195cb2b_1d60ace7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-19T15:45:55Z",
+      "side": 1,
+      "message": "This is not safe because the new functions can trigger GC.\nGC is not allowed in V8HeapExplorer::IterateAndExtractReferences.",
+      "revId": "8b63477577c223f2e47055cd5e46b89621eb5781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
