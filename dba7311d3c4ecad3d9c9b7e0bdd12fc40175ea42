@@ -16,6 +16,23 @@
       "revId": "dba7311d3c4ecad3d9c9b7e0bdd12fc40175ea42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "054e99f2_6920a9d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-08-19T10:08:13Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "dba7311d3c4ecad3d9c9b7e0bdd12fc40175ea42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
