@@ -1230,6 +1230,23 @@ Reduction MachineOperatorReducer::ReduceProjection(size_t index, Node* node) {
       if (m.right().Is(0)) {
         return Replace(index == 0 ? m.left().node() : m.right().node());
       }
+      // (x + K) + K => x + (K + K).
+      if (index == 0 && m.right().HasValue()) {
+        Node* p = m.left().node();
+        if (p->opcode() == IrOpcode::kProjection &&
+            ProjectionIndexOf(p->op()) == 0) {
+          Node* a = p->InputAt(0);
+          if (a->opcode() == IrOpcode::kInt32AddWithOverflow) {
+            Int32BinopMatcher n(a);
+            if (!n.left().HasValue() && n.right().HasValue()) {
+              a->ReplaceInput(0, m.right().node());
+              node->ReplaceInput(0, n.left().node());
+              node->ReplaceInput(1, p);
+              return Changed(node).FollowedBy(ReduceProjection(0, a));
+            }
+          }
+        }
+      }
       break;
     }
     case IrOpcode::kInt32SubWithOverflow: {
