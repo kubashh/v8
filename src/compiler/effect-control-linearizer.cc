@@ -1885,47 +1885,18 @@ void EffectControlLinearizer::CheckPolymorphic(Node* feedback_slot,
                                                Node* value_map, Node* handler,
                                                GraphAssemblerLabel<0>* done,
                                                Node* frame_state) {
-  Node* feedback_slot_map =
-      __ LoadField(AccessBuilder::ForMap(), feedback_slot);
-  Node* is_weak_fixed_array_check =
-      __ TaggedEqual(feedback_slot_map, __ WeakFixedArrayMapConstant());
-  __ DeoptimizeIfNot(DeoptimizeReason::kTransitionedToMegamorphicIC,
-                     FeedbackSource(), is_weak_fixed_array_check, frame_state,
-                     IsSafetyCheck::kCriticalSafetyCheck);
-
-  Node* length = ChangeSmiToInt32(
-      __ LoadField(AccessBuilder::ForWeakFixedArrayLength(), feedback_slot));
-  auto loop = __ MakeLoopLabel(MachineRepresentation::kWord32);
-  __ Goto(&loop, __ Int32Constant(0));
-  __ Bind(&loop);
-  {
-    Node* index = loop.PhiAt(0);
-    Node* check = __ Int32LessThan(index, length);
-    __ DeoptimizeIfNot(DeoptimizeKind::kBailout, DeoptimizeReason::kMissingMap,
-                       FeedbackSource(), check, frame_state,
-                       IsSafetyCheck::kCriticalSafetyCheck);
-
-    Node* maybe_map = __ LoadElement(AccessBuilder::ForWeakFixedArrayElement(),
-                                     feedback_slot, index);
-    auto continue_loop = __ MakeLabel();
-
-    __ GotoIfNot(BuildIsWeakReferenceTo(maybe_map, value_map), &continue_loop);
-    constexpr int kHandlerOffsetInEntry = 1;
-    Node* maybe_handler = __ LoadElement(
-        AccessBuilder::ForWeakFixedArrayElement(), feedback_slot,
-        __ Int32Add(index, __ Int32Constant(kHandlerOffsetInEntry)));
-    Node* handler_check = __ TaggedEqual(maybe_handler, handler);
-    __ DeoptimizeIfNot(DeoptimizeReason::kWrongHandler, FeedbackSource(),
-                       handler_check, frame_state,
-                       IsSafetyCheck::kCriticalSafetyCheck);
-
-    __ Goto(done);
-
-    __ Bind(&continue_loop);
-    constexpr int kEntrySize = 2;
-    index = __ Int32Add(index, __ Int32Constant(kEntrySize));
-    __ Goto(&loop, index);
-  }
+  Operator::Properties properties = Operator::kNoDeopt | Operator::kNoThrow;
+  Node* result = CallBuiltin(Builtins::kDynamicMapChecks, properties,
+                             feedback_slot, value_map, handler);
+  __ GotoIf(__ WordEqual(result, __ IntPtrConstant(0)), done);
+  __ DeoptimizeIf(DeoptimizeKind::kBailout, DeoptimizeReason::kMissingMap,
+                  FeedbackSource(), __ WordEqual(result, __ IntPtrConstant(1)),
+                  frame_state, IsSafetyCheck::kCriticalSafetyCheck);
+  __ DeoptimizeIf(DeoptimizeReason::kWrongHandler, FeedbackSource(),
+                  __ WordEqual(result, __ IntPtrConstant(2)), frame_state,
+                  IsSafetyCheck::kCriticalSafetyCheck);
+  __ Unreachable();
+  __ Goto(done);
 }
 
 void EffectControlLinearizer::ProcessMonomorphic(Node* handler,
