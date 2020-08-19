@@ -1943,8 +1943,11 @@ TNode<T> CodeStubAssembler::LoadArrayElement(TNode<Array> array,
                        IntPtrConstant(0)));
   DCHECK(IsAligned(additional_offset, kTaggedSize));
   int32_t header_size = array_header_size + additional_offset - kHeapObjectTag;
+  //  Print("header_size", SmiConstant(header_size));
+  //  Print("index", SmiTag(index_node));
   TNode<IntPtrT> offset = ElementOffsetFromIndex(index_node, HOLEY_ELEMENTS,
                                                  parameter_mode, header_size);
+  // Print("offset", SmiTag(offset));
   CSA_ASSERT(this, IsOffsetInBounds(offset, LoadArrayLength(array),
                                     array_header_size));
   constexpr MachineType machine_type = MachineTypeOf<T>::value;
@@ -2397,6 +2400,20 @@ TNode<MaybeObject> CodeStubAssembler::LoadWeakFixedArrayElement(
   return LoadArrayElement(object, WeakFixedArray::kHeaderSize, index,
                           additional_offset, INTPTR_PARAMETERS,
                           LoadSensitivity::kSafe);
+}
+
+TNode<MaybeObject> CodeStubAssembler::LoadWeakFixedArrayElement(
+    TNode<WeakFixedArray> object, int index) {
+  CHECK_GE(index, 0);
+  TNode<IntPtrT> offset =
+      IntPtrConstant(WeakFixedArray::OffsetOfElementAt(index));
+  // Print("index", SmiConstant(index));
+  // Print("cpp offset",
+  //       SmiConstant(WeakFixedArray::kObjectsOffset + index * kTaggedSize));
+  // Print("offset", SmiTag(offset));
+  constexpr MachineType machine_type = MachineTypeOf<MaybeObject>::value;
+  return UncheckedCast<MaybeObject>(
+      LoadFromObject(machine_type, object, offset));
 }
 
 TNode<Float64T> CodeStubAssembler::LoadFixedDoubleArrayElement(
@@ -9239,6 +9256,12 @@ TNode<IntPtrT> CodeStubAssembler::ElementOffsetFromIndex(
                            IntPtrConstant(element_size_shift))
                  : WordSar(intptr_index_node,
                            IntPtrConstant(-element_size_shift)));
+  // Print("base_size", SmiConstant(base_size));
+  // Print("element_size_shift", SmiConstant(element_size_shift));
+  // Print("shifted_index", SmiTag(shifted_index));
+  // Print("signed(shifted_index)", SmiTag(Signed(shifted_index)));
+  // Print("add",
+  //       SmiTag(IntPtrAdd(IntPtrConstant(base_size), Signed(shifted_index))));
   return IntPtrAdd(IntPtrConstant(base_size), Signed(shifted_index));
 }
 

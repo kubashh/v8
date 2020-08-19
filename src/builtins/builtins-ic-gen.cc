@@ -2,8 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
+#include "src/codegen/code-stub-assembler.h"
+#include "src/common/globals.h"
 #include "src/ic/accessor-assembler.h"
+#include "src/objects/feedback-vector.h"
 
 namespace v8 {
 namespace internal {
@@ -51,6 +55,8 @@ IC_BUILTIN_PARAM(LoadGlobalICTrampoline, LoadGlobalICTrampoline,
                  NOT_INSIDE_TYPEOF)
 IC_BUILTIN_PARAM(LoadGlobalICInsideTypeofTrampoline, LoadGlobalICTrampoline,
                  INSIDE_TYPEOF)
+
+TF_BUILTIN(DynamicMapChecks, CodeStubAssembler) { Return(IntPtrConstant(1)); }
 
 }  // namespace internal
 }  // namespace v8
