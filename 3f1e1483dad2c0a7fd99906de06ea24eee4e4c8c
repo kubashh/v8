@@ -57,6 +57,30 @@
       "revId": "3f1e1483dad2c0a7fd99906de06ea24eee4e4c8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df4b2364_5f0a3d3e",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-19T10:16:58Z",
+      "side": 1,
+      "message": "I don\u0027t see why that should be needed. SetScopeInfo is called from the main thread only.",
+      "parentUuid": "7fbfdfdc_69b42dab",
+      "range": {
+        "startLine": 354,
+        "startChar": 16,
+        "endLine": 354,
+        "endChar": 34
+      },
+      "revId": "3f1e1483dad2c0a7fd99906de06ea24eee4e4c8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
