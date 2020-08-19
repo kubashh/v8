@@ -138,8 +138,8 @@ TEST(TryProbeStubCache) {
     CodeStubAssembler::TVariable<MaybeObject> var_handler(&m);
     Label if_handler(&m), if_miss(&m);
 
-    m.TryProbeStubCache(&stub_cache, receiver, name, &if_handler, &var_handler,
-                        &if_miss);
+    m.TryProbeStubCache(&stub_cache, receiver, m.LoadReceiverMap(receiver),
+                        name, &if_handler, &var_handler, &if_miss);
     m.BIND(&if_handler);
     m.Branch(m.TaggedEqual(expected_handler, var_handler.value()), &passed,
              &failed);
