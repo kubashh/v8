@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f108fdd9_b2ad54d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1448042
+      },
+      "writtenOn": "2020-08-19T03:26:13Z",
+      "side": 1,
+      "message": "@see https://github.com/nodejs/node/issues/34826\n\nTakeSnapshot sometimes takes too much time for an empty application.\n\nI think this is because when obtaining loactions during Takesnapshot, GetLineNumber / GetColumnNumber will trigger too many `GetPositionInfoSlow` in some cases.\n\nSo could we set script line ends before getting position info to prevent fallback to `GetPositionInfoSlow`?",
+      "revId": "8b63477577c223f2e47055cd5e46b89621eb5781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
