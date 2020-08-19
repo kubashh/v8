@@ -611,8 +611,7 @@ class SetOrCopyDataPropertiesAssembler : public CodeStubAssembler {
         ForEachEnumerableOwnProperty(
             context, source_map, CAST(source), kEnumerationOrder,
             [=](TNode<Name> key, TNode<Object> value) {
-              CallBuiltin(Builtins::kSetPropertyInLiteral, context, target, key,
-                          value);
+              SetPropertyInLiteral(context, CAST(target), key, value);
             },
             if_runtime);
       }
