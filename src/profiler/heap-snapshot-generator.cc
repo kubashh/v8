@@ -572,8 +572,10 @@ void V8HeapExplorer::ExtractLocationForJSFunction(HeapEntry* entry,
   Script script = Script::cast(func.shared().script());
   int scriptId = script.id();
   int start = func.shared().StartPosition();
-  int line = script.GetLineNumber(start);
-  int col = script.GetColumnNumber(start);
+  i::Handle<i::Script> script2(i::Script::cast(script),
+                               func.shared().GetIsolate());
+  int line = script.GetLineNumber(script2, start);
+  int col = script.GetColumnNumber(script2, start);
   snapshot_->AddLocation(entry, scriptId, line, col);
 }
 
