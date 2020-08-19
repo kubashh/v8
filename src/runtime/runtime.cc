@@ -186,6 +186,8 @@ bool Runtime::MayAllocate(FunctionId id) {
   switch (id) {
     case Runtime::kCompleteInobjectSlackTracking:
     case Runtime::kCompleteInobjectSlackTrackingForMap:
+    case Runtime::kDebugPrint:
+    case Runtime::kGlobalPrint:
       return false;
     default:
       return true;
