@@ -33,6 +33,177 @@
       "revId": "d6455c8d5d64c39f5ccb491936f9f904fab4e66c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf251a45_07319279",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-19T19:59:20Z",
+      "side": 1,
+      "message": "lgtm once the comments are addressed",
+      "revId": "d6455c8d5d64c39f5ccb491936f9f904fab4e66c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b6e813f9_f56d8dec",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-19T19:59:20Z",
+      "side": 1,
+      "message": "Please, kSystemPointerSize.",
+      "range": {
+        "startLine": 2126,
+        "startChar": 63,
+        "endLine": 2126,
+        "endChar": 75
+      },
+      "revId": "d6455c8d5d64c39f5ccb491936f9f904fab4e66c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fa042f9_dba82c5c",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-19T19:59:20Z",
+      "side": 1,
+      "message": "You can combine the two instructions above into one:\n  __ add(r4, r4, Operand(r2, LSL, kSystemPointerSizeLog2));",
+      "revId": "d6455c8d5d64c39f5ccb491936f9f904fab4e66c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14222fbf_043dd5b4",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2162,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-19T19:59:20Z",
+      "side": 1,
+      "message": "Here and below: kSystemPointerSizeLog2",
+      "range": {
+        "startLine": 2162,
+        "startChar": 48,
+        "endLine": 2162,
+        "endChar": 64
+      },
+      "revId": "d6455c8d5d64c39f5ccb491936f9f904fab4e66c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "316a1ee3_80703ac6",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2164,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-19T19:59:20Z",
+      "side": 1,
+      "message": "Same comment as for x64 version (forward copying order is known to be more cache friendly).\nr2 and r4 are not used outside of the loop, so you can just use PostIndex-mode as in the loop above.",
+      "revId": "d6455c8d5d64c39f5ccb491936f9f904fab4e66c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "018f9e2e_2d277bb3",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2305,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-19T19:59:20Z",
+      "side": 1,
+      "message": "__ Set(current, 0);",
+      "revId": "d6455c8d5d64c39f5ccb491936f9f904fab4e66c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5b4a8c2_962fc92e",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2327,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-19T19:59:20Z",
+      "side": 1,
+      "message": "Same comment as for x64 version (forward copying order is known to be more cache friendly).",
+      "revId": "d6455c8d5d64c39f5ccb491936f9f904fab4e66c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d474579_4150d24f",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2413,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-19T19:59:20Z",
+      "side": 1,
+      "message": "first",
+      "range": {
+        "startLine": 2413,
+        "startChar": 20,
+        "endLine": 2413,
+        "endChar": 24
+      },
+      "revId": "d6455c8d5d64c39f5ccb491936f9f904fab4e66c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c727b88c_62c4ce33",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2424,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-19T19:59:20Z",
+      "side": 1,
+      "message": "Forward copying order is known to be more cache friendly. Please consider changing the code or adding a todo for assessing this option later:\n// TODO(victorgomes): Consider using forward order as potentially more cache friendly.",
+      "revId": "d6455c8d5d64c39f5ccb491936f9f904fab4e66c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
