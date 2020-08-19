@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f685154f_83e66854",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-19T09:57:45Z",
+      "side": 1,
+      "message": "PTAL at diff between PS7 and PS9.",
+      "revId": "3f1e1483dad2c0a7fd99906de06ea24eee4e4c8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
