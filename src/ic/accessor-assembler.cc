@@ -6,6 +6,7 @@
 
 #include "src/ast/ast.h"
 #include "src/base/optional.h"
+#include "src/builtins/builtins-constructor-gen.h"
 #include "src/codegen/code-factory.h"
 #include "src/ic/handler-configuration.h"
 #include "src/ic/ic.h"
@@ -4064,28 +4065,35 @@ void AccessorAssembler::GenerateCloneObjectIC_Slow() {
   // can be tail called from it. However, the feedback slot and vector are not
   // used.
 
-  TNode<NativeContext> native_context = LoadNativeContext(context);
-  TNode<JSFunction> object_fn =
-      CAST(LoadContextElement(native_context, Context::OBJECT_FUNCTION_INDEX));
-  TNode<Map> initial_map = CAST(
-      LoadObjectField(object_fn, JSFunction::kPrototypeOrInitialMapOffset));
-  CSA_ASSERT(this, IsMap(initial_map));
-
-  TNode<JSObject> result = AllocateJSObjectFromMap(initial_map);
-
+  TVARIABLE(Map, initial_map);
+  TVARIABLE(HeapObject, properties);
   {
-    Label did_set_proto_if_needed(this);
+    Label null_proto(this), allocate(this);
+    TNode<NativeContext> native_context = LoadNativeContext(context);
+
     TNode<BoolT> is_null_proto = SmiNotEqual(
         SmiAnd(flags, SmiConstant(ObjectLiteral::kHasNullPrototype)),
         SmiConstant(Smi::zero()));
-    GotoIfNot(is_null_proto, &did_set_proto_if_needed);
+    GotoIf(is_null_proto, &null_proto);
+    {
+      initial_map =
+          ConstructorBuiltinsAssembler(state()).LoadObjectMap(native_context);
+      properties = EmptyFixedArrayConstant();
+      Goto(&allocate);
+    }
 
-    CallRuntime(Runtime::kInternalSetPrototype, context, result,
-                NullConstant());
-
-    Goto(&did_set_proto_if_needed);
-    BIND(&did_set_proto_if_needed);
+    BIND(&null_proto);
+    {
+      initial_map =
+          ConstructorBuiltinsAssembler(state()).LoadObjectWithNullProtoMap(
+              native_context);
+      properties = AllocateNameDictionary(NameDictionary::kInitialCapacity);
+      Goto(&allocate);
+    }
+    BIND(&allocate);
   }
+  TNode<JSObject> result =
+      AllocateJSObjectFromMap(initial_map.value(), properties.value());
 
   ReturnIf(IsNullOrUndefined(source), result);
   source = ToObject_Inline(context, source);
@@ -4132,7 +4140,6 @@ void AccessorAssembler::GenerateCloneObjectIC() {
   TNode<MaybeObject> feedback =
       TryMonomorphicCase(slot, CAST(maybe_vector), source_map, &if_handler,
                          &var_handler, &try_polymorphic);
-
   BIND(&if_handler);
   {
     Comment("CloneObjectIC_if_handler");
@@ -4206,32 +4213,12 @@ void AccessorAssembler::GenerateCloneObjectIC() {
         },
         1, IndexAdvanceMode::kPost);
 
-    // If mutable HeapNumbers can occur, we need to go through the {object}
-    // again here and properly clone them. We use a second loop here to
-    // ensure that the GC (and heap verifier) always sees properly initialized
-    // objects, i.e. never hits undefined values in double fields.
     if (!FLAG_unbox_double_fields) {
-      BuildFastLoop<IntPtrT>(
-          source_start, source_size,
-          [=](TNode<IntPtrT> field_index) {
-            TNode<IntPtrT> result_offset = IntPtrAdd(
-                TimesTaggedSize(field_index), field_offset_difference);
-            TNode<Object> field = LoadObjectField(object, result_offset);
-            Label if_done(this), if_mutableheapnumber(this, Label::kDeferred);
-            GotoIf(TaggedIsSmi(field), &if_done);
-            Branch(IsHeapNumber(CAST(field)), &if_mutableheapnumber, &if_done);
-            BIND(&if_mutableheapnumber);
-            {
-              TNode<HeapNumber> value = AllocateHeapNumberWithValue(
-                  LoadHeapNumberValue(UncheckedCast<HeapNumber>(field)));
-              StoreObjectField(object, result_offset, value);
-              Goto(&if_done);
-            }
-            BIND(&if_done);
-          },
-          1, IndexAdvanceMode::kPost);
+      TNode<IntPtrT> start_offset = TimesTaggedSize(result_start);
+      TNode<IntPtrT> instance_size = TimesTaggedSize(source_size);
+      ConstructorBuiltinsAssembler(state()).CopyMutableHeapNumbersInObject(
+          object, start_offset, instance_size);
     }
-
     Return(object);
   }
 

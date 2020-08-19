@@ -39,8 +39,7 @@ extern macro ConstructorBuiltinsAssembler::CreateEmptyArrayLiteral(
     FeedbackVector, TaggedIndex, Context): HeapObject;
 extern macro ConstructorBuiltinsAssembler::CreateShallowObjectLiteral(
     FeedbackVector, TaggedIndex): HeapObject labels CallRuntime;
-extern macro ConstructorBuiltinsAssembler::CreateEmptyObjectLiteral(Context):
-    JSObject;
+extern macro ConstructorBuiltinsAssembler::CreateEmptyObject(Context): JSObject;
 
 builtin FastNewFunctionContextEval(implicit context: Context)(
     scopeInfo: ScopeInfo, slots: uint32): Context {
@@ -101,7 +100,7 @@ ObjectConstructor(
     const value = arguments[0];
     if (arguments.length <= 0 || value == Undefined || value == Null) {
       // New object.
-      return CreateEmptyObjectLiteral(context);
+      return CreateEmptyObject(context);
     } else {
       return ToObject(context, value);
     }
@@ -112,7 +111,7 @@ ObjectConstructor(
 }
 
 builtin CreateEmptyLiteralObject(implicit context: Context)(): JSAny {
-  return CreateEmptyObjectLiteral(context);
+  return CreateEmptyObject(context);
 }
 
 // ES #sec-number-constructor

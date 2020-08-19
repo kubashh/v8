@@ -590,28 +590,7 @@ TNode<HeapObject> ConstructorBuiltinsAssembler::CreateShallowObjectLiteral(
           },
           kTaggedSize, IndexAdvanceMode::kPost);
       Comment("Copy mutable HeapNumber values");
-      BuildFastLoop<IntPtrT>(
-          offset.value(), instance_size,
-          [=](TNode<IntPtrT> offset) {
-            TNode<Object> field = LoadObjectField(copy, offset);
-            Label copy_heap_number(this, Label::kDeferred), continue_loop(this);
-            // We only have to clone complex field values.
-            GotoIf(TaggedIsSmi(field), &continue_loop);
-            // TODO(leszeks): Read the field descriptor to decide if this heap
-            // number is mutable or not.
-            Branch(IsHeapNumber(CAST(field)), &copy_heap_number,
-                   &continue_loop);
-            BIND(&copy_heap_number);
-            {
-              TNode<Float64T> double_value = LoadHeapNumberValue(CAST(field));
-              TNode<HeapNumber> heap_number =
-                  AllocateHeapNumberWithValue(double_value);
-              StoreObjectField(copy, offset, heap_number);
-              Goto(&continue_loop);
-            }
-            BIND(&continue_loop);
-          },
-          kTaggedSize, IndexAdvanceMode::kPost);
+      CopyMutableHeapNumbersInObject(copy, offset.value(), instance_size);
       Goto(&done_init);
     }
     BIND(&done_init);
@@ -619,14 +598,57 @@ TNode<HeapObject> ConstructorBuiltinsAssembler::CreateShallowObjectLiteral(
   return copy;
 }
 
-// Used by the CreateEmptyObjectLiteral bytecode and the Object constructor.
-TNode<JSObject> ConstructorBuiltinsAssembler::CreateEmptyObjectLiteral(
-    TNode<Context> context) {
-  TNode<NativeContext> native_context = LoadNativeContext(context);
+void ConstructorBuiltinsAssembler::CopyMutableHeapNumbersInObject(
+    TNode<HeapObject> copy, TNode<IntPtrT> start_offset,
+    TNode<IntPtrT> instance_size) {
+  // If mutable HeapNumbers can occur, we need to go through the {object}
+  // again here and properly clone them. We use a second loop here to
+  // ensure that the GC (and heap verifier) always sees properly initialized
+  // objects, i.e. never hits undefined values in double fields.
+  if (FLAG_unbox_double_fields) return;
+  Comment("Copy mutable HeapNumber values");
+  BuildFastLoop<IntPtrT>(
+      start_offset, instance_size,
+      [=](TNode<IntPtrT> offset) {
+        TNode<Object> field = LoadObjectField(copy, offset);
+        Label copy_heap_number(this, Label::kDeferred), continue_loop(this);
+        // We only have to clone complex field values.
+        GotoIf(TaggedIsSmi(field), &continue_loop);
+        // TODO(leszeks): Read the field descriptor to decide if this heap
+        // number is mutable or not.
+        Branch(IsHeapNumber(CAST(field)), &copy_heap_number, &continue_loop);
+        BIND(&copy_heap_number);
+        {
+          TNode<Float64T> double_value = LoadHeapNumberValue(CAST(field));
+          TNode<HeapNumber> heap_number =
+              AllocateHeapNumberWithValue(double_value);
+          StoreObjectField(copy, offset, heap_number);
+          Goto(&continue_loop);
+        }
+        BIND(&continue_loop);
+      },
+      kTaggedSize, IndexAdvanceMode::kPost);
+}
+
+TNode<Map> ConstructorBuiltinsAssembler::LoadObjectMap(TNode<Context> context) {
   TNode<JSFunction> object_function =
-      CAST(LoadContextElement(native_context, Context::OBJECT_FUNCTION_INDEX));
+      CAST(LoadContextElement(context, Context::OBJECT_FUNCTION_INDEX));
   TNode<Map> map = LoadObjectField<Map>(
       object_function, JSFunction::kPrototypeOrInitialMapOffset);
+  return map;
+}
+
+TNode<Map> ConstructorBuiltinsAssembler::LoadObjectWithNullProtoMap(
+    TNode<Context> context) {
+  TNode<Map> map = CAST(LoadContextElement(
+      context, Context::SLOW_OBJECT_WITH_NULL_PROTOTYPE_MAP));
+  return map;
+}
+// Used by the CreateEmptyObjectLiteral bytecode and the Object constructor.
+TNode<JSObject> ConstructorBuiltinsAssembler::CreateEmptyObject(
+    TNode<Context> context) {
+  TNode<NativeContext> native_context = LoadNativeContext(context);
+  TNode<Map> map = LoadObjectMap(native_context);
   // Ensure that slack tracking is disabled for the map.
   STATIC_ASSERT(Map::kNoSlackTracking == 0);
   CSA_ASSERT(this, IsClearWord32<Map::Bits3::ConstructionCounterBits>(
@@ -635,6 +657,13 @@ TNode<JSObject> ConstructorBuiltinsAssembler::CreateEmptyObjectLiteral(
   TNode<JSObject> result =
       AllocateJSObjectFromMap(map, empty_fixed_array, empty_fixed_array);
   return result;
+}
+
+TNode<JSObject> ConstructorBuiltinsAssembler::CreateEmptyObjectWithNullProto(
+    TNode<Context> context) {
+  TNode<NativeContext> native_context = LoadNativeContext(context);
+  TNode<Map> map = LoadObjectWithNullProtoMap(native_context);
+  return AllocateJSObjectFromMap(map);
 }
 
 }  // namespace internal

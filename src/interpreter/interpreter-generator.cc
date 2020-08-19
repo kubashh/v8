@@ -2411,8 +2411,7 @@ IGNITION_HANDLER(CreateObjectLiteral, InterpreterAssembler) {
 IGNITION_HANDLER(CreateEmptyObjectLiteral, InterpreterAssembler) {
   TNode<Context> context = GetContext();
   ConstructorBuiltinsAssembler constructor_assembler(state());
-  TNode<JSObject> result =
-      constructor_assembler.CreateEmptyObjectLiteral(context);
+  TNode<JSObject> result = constructor_assembler.CreateEmptyObject(context);
   SetAccumulator(result);
   Dispatch();
 }
