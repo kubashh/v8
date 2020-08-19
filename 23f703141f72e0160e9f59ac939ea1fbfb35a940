@@ -103,6 +103,23 @@
       "revId": "23f703141f72e0160e9f59ac939ea1fbfb35a940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f302ccf_5be922b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-08-19T20:48:31Z",
+      "side": 1,
+      "message": "Is this at all meant for 7.7? It looks like this is meant for master branch.",
+      "revId": "23f703141f72e0160e9f59ac939ea1fbfb35a940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
