@@ -16,6 +16,29 @@
       "revId": "3f1e1483dad2c0a7fd99906de06ea24eee4e4c8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7fbfdfdc_69b42dab",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-19T10:05:42Z",
+      "side": 1,
+      "message": "Should this get be synchronized too?",
+      "range": {
+        "startLine": 354,
+        "startChar": 16,
+        "endLine": 354,
+        "endChar": 34
+      },
+      "revId": "3f1e1483dad2c0a7fd99906de06ea24eee4e4c8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
