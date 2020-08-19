@@ -56,8 +56,9 @@ class V8_EXPORT_PRIVATE AccessorAssembler : public CodeStubAssembler {
   void GenerateStoreInArrayLiteralIC();
 
   void TryProbeStubCache(StubCache* stub_cache, TNode<Object> receiver,
-                         TNode<Name> name, Label* if_handler,
-                         TVariable<MaybeObject>* var_handler, Label* if_miss);
+                         TNode<Map> holder_map, TNode<Name> name,
+                         Label* if_handler, TVariable<MaybeObject>* var_handler,
+                         Label* if_miss);
 
   TNode<IntPtrT> StubCachePrimaryOffsetForTesting(TNode<Name> name,
                                                   TNode<Map> map) {
