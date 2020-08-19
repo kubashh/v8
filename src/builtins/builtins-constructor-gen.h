@@ -6,6 +6,7 @@
 #define V8_BUILTINS_BUILTINS_CONSTRUCTOR_GEN_H_
 
 #include "src/codegen/code-stub-assembler.h"
+#include "src/heap/heap.h"
 
 namespace v8 {
 namespace internal {
@@ -37,7 +38,14 @@ class ConstructorBuiltinsAssembler : public CodeStubAssembler {
   TNode<HeapObject> CreateShallowObjectLiteral(
       TNode<FeedbackVector> feedback_vector, TNode<TaggedIndex> slot,
       Label* call_runtime);
-  TNode<JSObject> CreateEmptyObjectLiteral(TNode<Context> context);
+
+  void CopyMutableHeapNumbersInObject(TNode<HeapObject> copy,
+                                      TNode<IntPtrT> start_offset,
+                                      TNode<IntPtrT> instance_size);
+  TNode<Map> LoadObjectMap(TNode<Context> context);
+  TNode<Map> LoadObjectWithNullProtoMap(TNode<Context> context);
+  TNode<JSObject> CreateEmptyObject(TNode<Context> context);
+  TNode<JSObject> CreateEmptyObjectWithNullProto(TNode<Context> context);
 
   TNode<JSObject> FastNewObject(TNode<Context> context,
                                 TNode<JSFunction> target,
