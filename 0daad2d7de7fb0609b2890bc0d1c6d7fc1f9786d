@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba9c9a47_a45345ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-19T17:49:39Z",
+      "side": 1,
+      "message": "ptal. The fix is in https://chromium-review.googlesource.com/c/v8/v8/+/2364509/1..2\n\nWe cannot deactivate the barrier until marking is done, because concurrent marking tasks may still be running. The fix is to publish write-barrier worklists at the start of atomic pause and the deactivate at the end of marking (i.e. keep the old deactivation logic).",
+      "revId": "0daad2d7de7fb0609b2890bc0d1c6d7fc1f9786d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
