@@ -37,7 +37,10 @@ class ConstructorBuiltinsAssembler : public CodeStubAssembler {
   TNode<HeapObject> CreateShallowObjectLiteral(
       TNode<FeedbackVector> feedback_vector, TNode<TaggedIndex> slot,
       Label* call_runtime);
-  TNode<JSObject> CreateEmptyObjectLiteral(TNode<Context> context);
+  TNode<Map> LoadObjectMap(TNode<Context> context);
+  TNode<Map> LoadObjectWithNullProtoMap(TNode<Context> context);
+  TNode<JSObject> CreateEmptyObject(TNode<Context> context);
+  TNode<JSObject> CreateEmptyObjectWithNullProto(TNode<Context> context);
 
   TNode<JSObject> FastNewObject(TNode<Context> context,
                                 TNode<JSFunction> target,

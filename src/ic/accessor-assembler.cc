@@ -6,7 +6,9 @@
 
 #include "src/ast/ast.h"
 #include "src/base/optional.h"
+#include "src/builtins/builtins-constructor-gen.h"
 #include "src/codegen/code-factory.h"
+#include "src/codegen/code-stub-assembler.h"
 #include "src/ic/handler-configuration.h"
 #include "src/ic/ic.h"
 #include "src/ic/keyed-store-generic.h"
@@ -3951,28 +3953,25 @@ void AccessorAssembler::GenerateCloneObjectIC_Slow() {
   // can be tail called from it. However, the feedback slot and vector are not
   // used.
 
-  TNode<NativeContext> native_context = LoadNativeContext(context);
-  TNode<JSFunction> object_fn =
-      CAST(LoadContextElement(native_context, Context::OBJECT_FUNCTION_INDEX));
-  TNode<Map> initial_map = CAST(
-      LoadObjectField(object_fn, JSFunction::kPrototypeOrInitialMapOffset));
-  CSA_ASSERT(this, IsMap(initial_map));
-
-  TNode<JSObject> result = AllocateJSObjectFromMap(initial_map);
-
+  TVARIABLE(Map, initial_map);
   {
-    Label did_set_proto_if_needed(this);
+    Label null_proto(this), allocate(this);
     TNode<BoolT> is_null_proto = SmiNotEqual(
         SmiAnd(flags, SmiConstant(ObjectLiteral::kHasNullPrototype)),
         SmiConstant(Smi::zero()));
-    GotoIfNot(is_null_proto, &did_set_proto_if_needed);
+    GotoIf(is_null_proto, &null_proto);
 
-    CallRuntime(Runtime::kInternalSetPrototype, context, result,
-                NullConstant());
+    initial_map = ConstructorBuiltinsAssembler(state()).LoadObjectMap(context);
+    Goto(&allocate);
 
-    Goto(&did_set_proto_if_needed);
-    BIND(&did_set_proto_if_needed);
+    BIND(&null_proto);
+    initial_map =
+        ConstructorBuiltinsAssembler(state()).LoadObjectWithNullProtoMap(
+            context);
+    Goto(&allocate);
+    BIND(&allocate);
   }
+  TNode<JSObject> result = AllocateJSObjectFromMap(initial_map.value());
 
   ReturnIf(IsNullOrUndefined(source), result);
   source = ToObject_Inline(context, source);

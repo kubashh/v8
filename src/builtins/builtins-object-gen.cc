@@ -4,6 +4,7 @@
 
 #include "src/builtins/builtins-object-gen.h"
 
+#include "src/builtins/builtins-constructor-gen.h"
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
 #include "src/codegen/code-stub-assembler.h"
@@ -1059,26 +1060,20 @@ TF_BUILTIN(ObjectCreate, ObjectBuiltinsAssembler) {
   {
     TVARIABLE(Map, map);
     TVARIABLE(HeapObject, properties);
-    Label non_null_proto(this), instantiate_map(this), good(this);
+    Label non_null_proto(this), instantiate_map(this), null_proto(this);
 
-    Branch(IsNull(prototype), &good, &non_null_proto);
+    Branch(IsNull(prototype), &null_proto, &non_null_proto);
 
-    BIND(&good);
+    BIND(&null_proto);
     {
-      map = CAST(LoadContextElement(
-          context, Context::SLOW_OBJECT_WITH_NULL_PROTOTYPE_MAP));
-      properties = AllocateNameDictionary(NameDictionary::kInitialCapacity);
+      map = ConstructorBuiltinsAssembler(state()).LoadObjectWithNullProtoMap(
+          context);
       Goto(&instantiate_map);
     }
 
     BIND(&non_null_proto);
     {
-      properties = EmptyFixedArrayConstant();
-      TNode<HeapObject> object_function =
-          CAST(LoadContextElement(context, Context::OBJECT_FUNCTION_INDEX));
-      TNode<Map> object_function_map = LoadObjectField<Map>(
-          object_function, JSFunction::kPrototypeOrInitialMapOffset);
-      map = object_function_map;
+      map = ConstructorBuiltinsAssembler(state()).LoadObjectMap(context);
       GotoIf(TaggedEqual(prototype, LoadMapPrototype(map.value())),
              &instantiate_map);
       // Try loading the prototype info.
@@ -1094,16 +1089,15 @@ TF_BUILTIN(ObjectCreate, ObjectBuiltinsAssembler) {
 
     BIND(&instantiate_map);
     {
-      TNode<JSObject> instance =
-          AllocateJSObjectFromMap(map.value(), properties.value());
+      TNode<JSObject> instance = AllocateJSObjectFromMap(map.value());
       args.PopAndReturn(instance);
     }
   }
 
   BIND(&call_runtime);
   {
-    TNode<Object> result =
-        CallRuntime(Runtime::kObjectCreate, context, prototype, properties);
+    TNode<Object> result = CallRuntime(Runtime::kObjectCreate, context,
+                                       prototype, UndefinedConstant());
     args.PopAndReturn(result);
   }
 }
