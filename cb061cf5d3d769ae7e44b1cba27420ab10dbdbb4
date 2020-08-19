@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4cc8c60d_d4bc55ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-08-19T12:50:20Z",
+      "side": 1,
+      "message": "lgtm % nits",
+      "revId": "cb061cf5d3d769ae7e44b1cba27420ab10dbdbb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7469f858_647663e1",
+        "filename": "src/heap/cppgc/heap.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-08-19T12:50:20Z",
+      "side": 1,
+      "message": "nit: seems to be not needed now",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 13
+      },
+      "revId": "cb061cf5d3d769ae7e44b1cba27420ab10dbdbb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7858135_60c72efd",
+        "filename": "src/heap/cppgc/heap.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-08-19T12:50:20Z",
+      "side": 1,
+      "message": "nit: Collection",
+      "range": {
+        "startLine": 38,
+        "startChar": 30,
+        "endLine": 38,
+        "endChar": 41
+      },
+      "revId": "cb061cf5d3d769ae7e44b1cba27420ab10dbdbb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7d5078c_2777edfd",
+        "filename": "src/heap/cppgc/heap.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-08-19T12:50:20Z",
+      "side": 1,
+      "message": "nit: Collection",
+      "range": {
+        "startLine": 39,
+        "startChar": 33,
+        "endLine": 39,
+        "endChar": 45
+      },
+      "revId": "cb061cf5d3d769ae7e44b1cba27420ab10dbdbb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "968daba0_f138177b",
+        "filename": "src/heap/cppgc/heap.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2020-08-19T12:50:20Z",
+      "side": 1,
+      "message": "nit: Collection",
+      "range": {
+        "startLine": 45,
+        "startChar": 22,
+        "endLine": 45,
+        "endChar": 33
+      },
+      "revId": "cb061cf5d3d769ae7e44b1cba27420ab10dbdbb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
