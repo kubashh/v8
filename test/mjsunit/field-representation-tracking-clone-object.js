@@ -18,4 +18,7 @@ foo(o);
 // sure that this is handled properly in the
 // fast-path for CloneObjectIC.
 o.data = 1;
-assertEquals(1, %GetProperty(foo(o), "data"));
+oo = foo(o);
+%DebugPrint(o);
+%DebugPrint(oo);
+assertEquals(1, %GetProperty(oo, "data"));
