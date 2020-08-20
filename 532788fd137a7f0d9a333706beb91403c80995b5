@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "6bf90f6f_3880b832",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-20T16:17:12Z",
+      "side": 1,
+      "message": "Pre-allocating a most-likely necessary entry also simplifies the code that reads/writes through that entry as no branches are required and the access is straight forward.\nI also think that the \"risk of not allocating an entry\" is quite low because of the quite limited number of places where we store external pointers + immediate crash that will follow the attempt to store through a non-initialized entry.",
+      "parentUuid": "62421196_2ac984ab",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 68
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0cd2022c_26e2e395",
         "filename": "/COMMIT_MSG",
         "patchSetId": 18
