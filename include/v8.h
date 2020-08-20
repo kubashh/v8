@@ -7505,7 +7505,7 @@ struct ModifyCodeGenerationFromStringsResult {
 
 /**
  * Callback to check if codegen is allowed from a source object, and convert
- * the source to string if necessary.See  ModifyCodeGenerationFromStrings.
+ * the source to string if necessary. See ModifyCodeGenerationFromStrings.
  */
 typedef ModifyCodeGenerationFromStringsResult (
     *ModifyCodeGenerationFromStringsCallback)(Local<Context> context,
@@ -9387,7 +9387,8 @@ class V8_EXPORT Isolate {
 
   /**
    * Set the callback to invoke to check if code generation from
-   * strings should be allowed.
+   * strings should be allowed. Callback will only be called if
+   * AllowCodeGenerationFromStrings is false.
    */
   V8_DEPRECATED(
       "Use Isolate::SetModifyCodeGenerationFromStringsCallback instead. "
