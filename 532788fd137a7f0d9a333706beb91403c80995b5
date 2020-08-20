@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "59f79ea2_38a714ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1412532
+      },
+      "writtenOn": "2020-08-20T12:06:10Z",
+      "side": 1,
+      "message": "I think one argument in favor of this approach is that it doesn\u0027t suddenly make a fairly cheap operation (writing an external pointer value to an object) expensive (it could trigger reallocation or even GC of the table). The other reason, as ishell@ pointed out, might be that currently, write operations are not expected to trigger something complex like GC, which could cause other trouble.\nIt seems to me that an uninitialized external slot should be quickly caught during testing as it should lead to a crash most of the time, but maybe I\u0027m a bit too naive here :)",
+      "parentUuid": "a0b711fa_1a4856fd",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 68
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0cd2022c_26e2e395",
         "filename": "/COMMIT_MSG",
         "patchSetId": 18
@@ -36,6 +60,30 @@
       "writtenOn": "2020-08-20T07:48:38Z",
       "side": 1,
       "message": "have you run this past the GC team? I would expect a mechanism more similar to external strings, where there\u0027s an external string table that holds weak refs to the external string objects, and which the GC walks to check if the strings are still alive.",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 40
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3072b051_1f9a11df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1412532
+      },
+      "writtenOn": "2020-08-20T12:06:10Z",
+      "side": 1,
+      "message": "Ah this comment is probably wrong, it can\u0027t use object finalizers (because they don\u0027t exist :D). This CL: https://chromium-review.googlesource.com/c/v8/v8/+/2252179/3 implements basic GC support for the table, but it\u0027s more like the ArrayBuffer tracker than the external string table (I think)",
+      "parentUuid": "0cd2022c_26e2e395",
       "range": {
         "startLine": 26,
         "startChar": 1,
