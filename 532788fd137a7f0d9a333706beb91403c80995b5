@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0b711fa_1a4856fd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-20T07:48:38Z",
+      "side": 1,
+      "message": "Having a separate Allocate/Init to the writes seems dangerous, a caller could forget to do the allocation. Allocating in the setter (avoiding reallocation if a field is already allocated) doesn\u0027t seem that big an issue to me, esp. since the table is malloced?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 68
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cd2022c_26e2e395",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-20T07:48:38Z",
+      "side": 1,
+      "message": "have you run this past the GC team? I would expect a mechanism more similar to external strings, where there\u0027s an external string table that holds weak refs to the external string objects, and which the GC walks to check if the strings are still alive.",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 40
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fc49529_67d10865",
+        "filename": "BUILD.gn",
+        "patchSetId": 18
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-20T07:48:38Z",
+      "side": 1,
+      "message": "should this have \u0027\u0026\u0026 v8_enable_pointer_compression\u0027 ?",
+      "range": {
+        "startLine": 312,
+        "startChar": 27,
+        "endLine": 312,
+        "endChar": 50
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f86f23c_199b313e",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-20T07:48:38Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand what this offset is for -- is it a slot within the slot? Should its value actually be \"kApiSystemPointerSize - kApiTaggedSize\"?",
+      "range": {
+        "startLine": 176,
+        "startChar": 19,
+        "endLine": 176,
+        "endChar": 52
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
