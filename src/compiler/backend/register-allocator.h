@@ -818,9 +818,10 @@ class V8_EXPORT_PRIVATE TopLevelLiveRange final : public LiveRange {
   void set_is_non_loop_phi(bool value) {
     bits_ = IsNonLoopPhiField::update(bits_, value);
   }
-  bool SpillAtLoopHeaderNotBeneficial() const {
-    return SpillAtLoopHeaderNotBeneficialField::decode(bits_);
-  }
+
+  bool SpillAtLoopHeaderMayBeBeneficial(
+      const InstructionSequence* sequence, const InstructionBlock* loop_header,
+      const InstructionBlock* alternative) const;
   void set_spilling_at_loop_header_not_beneficial() {
     bits_ = SpillAtLoopHeaderNotBeneficialField::update(bits_, true);
   }
