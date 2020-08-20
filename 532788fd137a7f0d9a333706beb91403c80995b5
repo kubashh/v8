@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "69d1adc5_7caa2a9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1412532
+      },
+      "writtenOn": "2020-08-20T14:17:40Z",
+      "side": 1,
+      "message": "Well in this prototype it is, later on it might be allocated in some other way (e.g. it could grow downwards from the start of the 4GB heap region). But yes, it\u0027s unlikely that it will be allocated through the V8 heap allocator. However regardless of how it is allocated, it could still be the case that an allocation of a new table entry would require a table GC (if some maximum size is reached or something like that) which then probably also requires a \"normal\" GC to figure out which entries are alive, no?",
+      "parentUuid": "1a39c7f3_cf7dc10e",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 68
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0cd2022c_26e2e395",
         "filename": "/COMMIT_MSG",
         "patchSetId": 18
