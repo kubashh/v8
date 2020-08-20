@@ -5,6 +5,7 @@
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
 #include "src/codegen/code-stub-assembler.h"
+#include "src/codegen/tnode.h"
 #include "src/common/globals.h"
 #include "src/ic/accessor-assembler.h"
 #include "src/objects/feedback-vector.h"
@@ -58,7 +59,7 @@ IC_BUILTIN_PARAM(LoadGlobalICInsideTypeofTrampoline, LoadGlobalICTrampoline,
 
 TF_BUILTIN(DynamicMapChecks, CodeStubAssembler) {
   TNode<HeapObject> feedback = CAST(Parameter(Descriptor::kFeedback));
-  TNode<Map> incoming_map = CAST(Parameter(Descriptor::kMap));
+  TNode<HeapObject> incoming_value = CAST(Parameter(Descriptor::kValue));
   TNode<Object> incoming_handler = CAST(Parameter(Descriptor::kHandler));
 
   Label deoptimize(this), bailout(this), done(this);
@@ -72,32 +73,70 @@ TF_BUILTIN(DynamicMapChecks, CodeStubAssembler) {
   TNode<IntPtrT> length = LoadAndUntagWeakFixedArrayLength(polymorphic_array);
   CSA_ASSERT(this, IntPtrLessThanOrEqual(IntPtrConstant(kEntrySize), length));
 
+  TNode<Map> incoming_map = LoadMap(incoming_value);
+
   // TODO(gsathya): Unroll this loop to make it faster.
   //
   // This is a hand-crafted loop that iterates backwards and only compares
   // against zero at the end, since we already know that we will have at least a
   // single entry in the {feedback} array anyways.
-  TVARIABLE(IntPtrT, var_index, IntPtrSub(length, IntPtrConstant(kEntrySize)));
-  Label loop(this, &var_index), loop_next(this);
-  Goto(&loop);
-  BIND(&loop);
+  TVARIABLE(IntPtrT, var_index1, IntPtrSub(length, IntPtrConstant(kEntrySize)));
+  Label loop1(this, &var_index1), loop_next1(this);
+  Label try_migrate(this);
+
+  TVARIABLE(IntPtrT, var_index2, IntPtrSub(length, IntPtrConstant(kEntrySize)));
+  Label loop2(this, &var_index2), loop_next2(this);
+
+  Goto(&loop1);
+  BIND(&loop1);
   {
     TNode<MaybeObject> maybe_cached_map =
-        LoadWeakFixedArrayElement(polymorphic_array, var_index.value());
+        LoadWeakFixedArrayElement(polymorphic_array, var_index1.value());
     CSA_ASSERT(this, IsWeakOrCleared(maybe_cached_map));
-    GotoIfNot(IsWeakReferenceTo(maybe_cached_map, incoming_map), &loop_next);
+    GotoIfNot(IsWeakReferenceTo(maybe_cached_map, incoming_map), &loop_next1);
 
     // Found, now call handler.
     TNode<MaybeObject> handler = LoadWeakFixedArrayElement(
-        polymorphic_array, var_index.value(), kTaggedSize);
-    GotoIfNot(TaggedEqual(handler, incoming_handler), &deoptimize);
-    Goto(&done);
+        polymorphic_array, var_index1.value(), kTaggedSize);
+    GotoIf(TaggedEqual(handler, incoming_handler), &done);
+    Return(IntPtrConstant(2));
 
-    BIND(&loop_next);
-    var_index =
-        Signed(IntPtrSub(var_index.value(), IntPtrConstant(kEntrySize)));
-    Branch(IntPtrGreaterThanOrEqual(var_index.value(), IntPtrConstant(0)),
-           &loop, &bailout);
+    BIND(&loop_next1);
+    var_index1 =
+        Signed(IntPtrSub(var_index1.value(), IntPtrConstant(kEntrySize)));
+    Branch(IntPtrGreaterThanOrEqual(var_index1.value(), IntPtrConstant(0)),
+           &loop1, &try_migrate);
+  }
+
+  BIND(&try_migrate);
+  {
+    // TODO(gsathya): Bailout or deopt here?
+    GotoIfNot(IsDeprecatedMap(incoming_map), &bailout);
+    TNode<Object> result = CallRuntime(Runtime::kTryMigrateInstance,
+                                       NoContextConstant(), incoming_value);
+    GotoIf(TaggedIsSmi(result), &deoptimize);
+    incoming_map = LoadMap(incoming_value);
+    Goto(&loop2);
+  }
+
+  BIND(&loop2);
+  {
+    TNode<MaybeObject> maybe_cached_map =
+        LoadWeakFixedArrayElement(polymorphic_array, var_index2.value());
+    CSA_ASSERT(this, IsWeakOrCleared(maybe_cached_map));
+    GotoIfNot(IsWeakReferenceTo(maybe_cached_map, incoming_map), &loop_next2);
+
+    // Found, now call handler.
+    TNode<MaybeObject> handler = LoadWeakFixedArrayElement(
+        polymorphic_array, var_index2.value(), kTaggedSize);
+    GotoIf(TaggedEqual(handler, incoming_handler), &done);
+    Return(IntPtrConstant(2));
+
+    BIND(&loop_next2);
+    var_index2 =
+        Signed(IntPtrSub(var_index2.value(), IntPtrConstant(kEntrySize)));
+    Branch(IntPtrGreaterThanOrEqual(var_index2.value(), IntPtrConstant(0)),
+           &loop2, &bailout);
   }
 
   BIND(&done);

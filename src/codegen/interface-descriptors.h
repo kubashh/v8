@@ -920,7 +920,7 @@ class TypeofDescriptor : public CallInterfaceDescriptor {
 
 class DynamicMapChecksDescriptor : public CallInterfaceDescriptor {
  public:
-  DEFINE_PARAMETERS(kFeedback, kMap, kHandler)
+  DEFINE_PARAMETERS(kFeedback, kValue, kHandler)
   DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::IntPtr(),         // result
                                     MachineType::TaggedPointer(),  // kFeedback
                                     MachineType::TaggedPointer(),  // kMap
