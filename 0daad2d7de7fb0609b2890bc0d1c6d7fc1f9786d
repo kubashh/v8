@@ -16,6 +16,23 @@
       "revId": "0daad2d7de7fb0609b2890bc0d1c6d7fc1f9786d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f9efc526_4768ab5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-20T06:10:49Z",
+      "side": 1,
+      "message": "It seems there is one more race in the LocalHeap constructor when reading IsCompacting(). Might this race because safepoints aren\u0027t enforced on tip-of-tree?",
+      "revId": "0daad2d7de7fb0609b2890bc0d1c6d7fc1f9786d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
