@@ -137,6 +137,24 @@
       "revId": "23f703141f72e0160e9f59ac939ea1fbfb35a940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a4bce1b6_7f3889f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1319338
+      },
+      "writtenOn": "2020-08-20T02:49:00Z",
+      "side": 1,
+      "message": "Thanks, I wasn\u0027t sure if this CL is going to be submitted as it is. Let\u0027s move to https://chromium-review.googlesource.com/c/v8/v8/+/2346090 which is on the master branch.",
+      "parentUuid": "932182dd_2eac7aba",
+      "revId": "23f703141f72e0160e9f59ac939ea1fbfb35a940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
