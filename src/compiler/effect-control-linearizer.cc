@@ -2017,6 +2017,9 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
     DCHECK_EQ(p.state(), DynamicCheckMapsParameters::kPolymorphic);
     Node* feedback_slot = __ LoadField(
         AccessBuilder::ForFeedbackVectorSlot(feedback.index()), vector);
+    Operator::Properties properties = Operator::kNoDeopt | Operator::kNoThrow;
+    CallBuiltin(Builtins::kDynamicMapChecks, properties, feedback_slot,
+                value_map, handler);
     // If the IC state at code generation time is not monomorphic, we don't
     // handle monomorphic states and just deoptimize if IC transitions to
     // monomorphic. For polymorphic ICs it is not required to migrate deprecated
