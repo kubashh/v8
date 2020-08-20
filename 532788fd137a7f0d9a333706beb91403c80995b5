@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "62421196_2ac984ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-20T14:59:01Z",
+      "side": 1,
+      "message": "I would posit that the whole point of this project is that this table isn\u0027t allocated through the heap allocator! I suppose it could still trigger GC heuristics though.\n\nI personally feel that the \"risk\" of forgetting an allocate is greater than the conceptual simplification of no-allocate-during-set, but I\u0027m happy to defer to other reviewers on this.",
+      "parentUuid": "69d1adc5_7caa2a9f",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 68
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0cd2022c_26e2e395",
         "filename": "/COMMIT_MSG",
         "patchSetId": 18
