@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1a39c7f3_cf7dc10e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-20T13:19:15Z",
+      "side": 1,
+      "message": "The external table is malloced, so allocating/reallocating it won\u0027t trigger any GCs.",
+      "parentUuid": "59f79ea2_38a714ee",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 68
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0cd2022c_26e2e395",
         "filename": "/COMMIT_MSG",
         "patchSetId": 18
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Ah this comment is probably wrong, it can\u0027t use object finalizers (because they don\u0027t exist :D). This CL: https://chromium-review.googlesource.com/c/v8/v8/+/2252179/3 implements basic GC support for the table, but it\u0027s more like the ArrayBuffer tracker than the external string table (I think)",
       "parentUuid": "0cd2022c_26e2e395",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 40
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be8a12ff_164eb7ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-08-20T13:19:15Z",
+      "side": 1,
+      "message": "Ok, this works too -- it might have issues with concurrent heap access but I\u0027ll let the GC team raise them if they\u0027re relevant.",
+      "parentUuid": "3072b051_1f9a11df",
       "range": {
         "startLine": 26,
         "startChar": 1,
