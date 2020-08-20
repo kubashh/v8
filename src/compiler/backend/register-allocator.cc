@@ -837,6 +837,49 @@ int TopLevelLiveRange::debug_virt_reg() const {
 }
 #endif
 
+bool TopLevelLiveRange::SpillAtLoopHeaderMayBeBeneficial(
+    const InstructionSequence* sequence, const InstructionBlock* loop_header,
+    const InstructionBlock* alternative) const {
+  bool spill_at_loop_header_not_beneficial =
+      SpillAtLoopHeaderNotBeneficialField::decode(bits_);
+
+  // If we haven't marked spilling at the loop header to be not-beneficial, then
+  // it's okay to.
+  if (!spill_at_loop_header_not_beneficial) return true;
+
+  // The not-beneficial flag means that at least one predecessor value can't
+  // share the same stack slot. We'd like to avoid stack-to-stack moves at the
+  // end of the loop, so we avoid spilling at the loop header in that case.
+  // However, if we have to spill near the beginning of the loop anyway, then
+  // avoiding the stack-to-stack move doesn't help. In that case, spilling at
+  // the loop header might still be beneficial for some of the predecessors.
+  //
+  // What counts as "at the beginning of the loop"? Obviously it includes the
+  // very first block of the loop, but it's worth doing a small (and strictly
+  // bounded) amount of control-flow analysis here to find out whether the
+  // alternative block is along the only non-deferred path from the loop top.
+  const InstructionBlock* current = loop_header;
+  int steps_remaining = 2;  // Enough to find the block after the stack check.
+  while (true) {
+    if (current == alternative) return true;
+
+    if (steps_remaining <= 0) return false;
+    --steps_remaining;
+
+    const InstructionBlock* only_non_deferred_successor = nullptr;
+    for (RpoNumber successor_id : current->successors()) {
+      const InstructionBlock* successor =
+          sequence->InstructionBlockAt(successor_id);
+      if (!successor->IsDeferred()) {
+        if (only_non_deferred_successor != nullptr) return false;
+        only_non_deferred_successor = successor;
+      }
+    }
+    if (only_non_deferred_successor == nullptr) return false;
+    current = only_non_deferred_successor;
+  }
+}
+
 void TopLevelLiveRange::RecordSpillLocation(Zone* zone, int gap_index,
                                             InstructionOperand* operand) {
   DCHECK(HasNoSpillType());
@@ -3036,7 +3079,8 @@ LifetimePosition RegisterAllocator::FindOptimalSpillingPos(
       // at the define position that is not beneficial to spill.
       if (range->TopLevel()->Start() > loop_start ||
           (range->TopLevel()->Start() == loop_start &&
-           range->TopLevel()->SpillAtLoopHeaderNotBeneficial()))
+           !range->TopLevel()->SpillAtLoopHeaderMayBeBeneficial(
+               code(), loop_header, block)))
         return pos;
 
       LiveRange* live_at_header = range->TopLevel()->GetChildCovers(loop_start);
