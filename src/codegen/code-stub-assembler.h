@@ -3133,7 +3133,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // used for a property store or deletion.
   void CheckForAssociatedProtector(SloppyTNode<Name> name, Label* if_protector);
 
-  TNode<Map> LoadReceiverMap(SloppyTNode<Object> receiver);
+  TNode<Map> LoadLookupStartObjectMap(SloppyTNode<Object> receiver);
 
   // Loads script context from the script context table.
   TNode<Context> LoadScriptContext(TNode<Context> context,

@@ -797,7 +797,7 @@ void RegExpBuiltinsAssembler::BranchIfRegExpResult(const TNode<Context> context,
                                                    Label* if_isunmodified,
                                                    Label* if_ismodified) {
   // Could be a Smi.
-  const TNode<Map> map = LoadReceiverMap(object);
+  const TNode<Map> map = LoadLookupStartObjectMap(object);
 
   const TNode<NativeContext> native_context = LoadNativeContext(context);
   const TNode<Object> initial_regexp_result_map =

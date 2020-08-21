@@ -158,12 +158,14 @@ TNode<Object> HandlerBuiltinsAssembler::EmitKeyedSloppyArguments(
 }
 
 TF_BUILTIN(LoadIC_StringLength, CodeStubAssembler) {
-  TNode<String> string = CAST(Parameter(Descriptor::kReceiver));
+  TNode<String> string =
+      CAST(Parameter(Descriptor::kReceiverAndLookupStartObject));
   Return(LoadStringLengthAsSmi(string));
 }
 
 TF_BUILTIN(LoadIC_StringWrapperLength, CodeStubAssembler) {
-  TNode<JSPrimitiveWrapper> value = CAST(Parameter(Descriptor::kReceiver));
+  TNode<JSPrimitiveWrapper> value =
+      CAST(Parameter(Descriptor::kReceiverAndLookupStartObject));
   TNode<String> string = CAST(LoadJSPrimitiveWrapperValue(value));
   Return(LoadStringLengthAsSmi(string));
 }
@@ -245,7 +247,8 @@ void HandlerBuiltinsAssembler::DispatchForElementsKindTransition(
 void HandlerBuiltinsAssembler::Generate_ElementsTransitionAndStore(
     KeyedAccessStoreMode store_mode) {
   using Descriptor = StoreTransitionDescriptor;
-  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<JSObject> receiver_and_lookup_start_object =
+      CAST(Parameter(Descriptor::kReceiverAndLookupStartObject));
   TNode<Object> key = CAST(Parameter(Descriptor::kName));
   TNode<Object> value = CAST(Parameter(Descriptor::kValue));
   TNode<Map> map = CAST(Parameter(Descriptor::kMap));
@@ -263,18 +266,21 @@ void HandlerBuiltinsAssembler::Generate_ElementsTransitionAndStore(
   } else {
     // TODO(v8:8481): Pass from_kind and to_kind in feedback vector slots.
     DispatchForElementsKindTransition(
-        LoadElementsKind(receiver), LoadMapElementsKind(map),
+        LoadElementsKind(receiver_and_lookup_start_object),
+        LoadMapElementsKind(map),
         [=, &miss](ElementsKind from_kind, ElementsKind to_kind) {
-          TransitionElementsKind(receiver, map, from_kind, to_kind, &miss);
-          EmitElementStore(receiver, key, value, to_kind, store_mode, &miss,
-                           context, nullptr);
+          TransitionElementsKind(receiver_and_lookup_start_object, map,
+                                 from_kind, to_kind, &miss);
+          EmitElementStore(receiver_and_lookup_start_object, key, value,
+                           to_kind, store_mode, &miss, context, nullptr);
         });
     Return(value);
   }
 
   BIND(&miss);
   TailCallRuntime(Runtime::kElementsTransitionAndStoreIC_Miss, context,
-                  receiver, key, value, map, slot, vector);
+                  receiver_and_lookup_start_object, key, value, map, slot,
+                  vector);
 }
 
 TF_BUILTIN(ElementsTransitionAndStore_Standard, HandlerBuiltinsAssembler) {
@@ -377,7 +383,8 @@ void HandlerBuiltinsAssembler::DispatchByElementsKind(
 void HandlerBuiltinsAssembler::Generate_StoreFastElementIC(
     KeyedAccessStoreMode store_mode) {
   using Descriptor = StoreWithVectorDescriptor;
-  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<JSObject> receiver_and_lookup_start_object =
+      CAST(Parameter(Descriptor::kReceiverAndLookupStartObject));
   TNode<Object> key = CAST(Parameter(Descriptor::kName));
   TNode<Object> value = CAST(Parameter(Descriptor::kValue));
   TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
@@ -396,17 +403,19 @@ void HandlerBuiltinsAssembler::Generate_StoreFastElementIC(
   TVARIABLE(Object, maybe_converted_value, value);
   // TODO(v8:8481): Pass elements_kind in feedback vector slots.
   DispatchByElementsKind(
-      LoadElementsKind(receiver),
+      LoadElementsKind(receiver_and_lookup_start_object),
       [=, &miss, &maybe_converted_value](ElementsKind elements_kind) {
-        EmitElementStore(receiver, key, value, elements_kind, store_mode, &miss,
-                         context, &maybe_converted_value);
+        EmitElementStore(receiver_and_lookup_start_object, key, value,
+                         elements_kind, store_mode, &miss, context,
+                         &maybe_converted_value);
       },
       handle_typed_elements_kind);
   Return(value);
 
   BIND(&miss);
   TailCallRuntime(Runtime::kKeyedStoreIC_Miss, context,
-                  maybe_converted_value.value(), slot, vector, receiver, key);
+                  maybe_converted_value.value(), slot, vector,
+                  receiver_and_lookup_start_object, key);
 }
 
 TF_BUILTIN(StoreFastElementIC_Standard, HandlerBuiltinsAssembler) {
@@ -427,21 +436,24 @@ TF_BUILTIN(StoreFastElementIC_NoTransitionHandleCOW, HandlerBuiltinsAssembler) {
 }
 
 TF_BUILTIN(LoadIC_FunctionPrototype, CodeStubAssembler) {
-  TNode<JSFunction> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<JSFunction> receiver_and_lookup_start_object =
+      CAST(Parameter(Descriptor::kReceiverAndLookupStartObject));
   TNode<Name> name = CAST(Parameter(Descriptor::kName));
   TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
   TNode<FeedbackVector> vector = CAST(Parameter(Descriptor::kVector));
   TNode<Context> context = CAST(Parameter(Descriptor::kContext));
 
   Label miss(this, Label::kDeferred);
-  Return(LoadJSFunctionPrototype(receiver, &miss));
+  Return(LoadJSFunctionPrototype(receiver_and_lookup_start_object, &miss));
 
   BIND(&miss);
-  TailCallRuntime(Runtime::kLoadIC_Miss, context, receiver, name, slot, vector);
+  TailCallRuntime(Runtime::kLoadIC_Miss, context,
+                  receiver_and_lookup_start_object, name, slot, vector);
 }
 
 TF_BUILTIN(StoreGlobalIC_Slow, CodeStubAssembler) {
-  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Object> receiver_and_lookup_start_object =
+      CAST(Parameter(Descriptor::kReceiverAndLookupStartObject));
   TNode<Name> name = CAST(Parameter(Descriptor::kName));
   TNode<Object> value = CAST(Parameter(Descriptor::kValue));
   TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
@@ -451,11 +463,12 @@ TF_BUILTIN(StoreGlobalIC_Slow, CodeStubAssembler) {
   // The slow case calls into the runtime to complete the store without causing
   // an IC miss that would otherwise cause a transition to the generic stub.
   TailCallRuntime(Runtime::kStoreGlobalIC_Slow, context, value, slot, vector,
-                  receiver, name);
+                  receiver_and_lookup_start_object, name);
 }
 
 TF_BUILTIN(KeyedLoadIC_SloppyArguments, HandlerBuiltinsAssembler) {
-  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<JSObject> receiver_and_lookup_start_object =
+      CAST(Parameter(Descriptor::kReceiverAndLookupStartObject));
   TNode<Object> key = CAST(Parameter(Descriptor::kName));
   TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
   TNode<HeapObject> vector = CAST(Parameter(Descriptor::kVector));
@@ -463,20 +476,22 @@ TF_BUILTIN(KeyedLoadIC_SloppyArguments, HandlerBuiltinsAssembler) {
 
   Label miss(this);
 
-  TNode<Object> result = LoadKeyedSloppyArguments(receiver, key, &miss);
+  TNode<Object> result =
+      LoadKeyedSloppyArguments(receiver_and_lookup_start_object, key, &miss);
   Return(result);
 
   BIND(&miss);
   {
     Comment("Miss");
-    TailCallRuntime(Runtime::kKeyedLoadIC_Miss, context, receiver, key, slot,
-                    vector);
+    TailCallRuntime(Runtime::kKeyedLoadIC_Miss, context,
+                    receiver_and_lookup_start_object, key, slot, vector);
   }
 }
 
 void HandlerBuiltinsAssembler::Generate_KeyedStoreIC_SloppyArguments() {
   using Descriptor = StoreWithVectorDescriptor;
-  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<JSObject> receiver_and_lookup_start_object =
+      CAST(Parameter(Descriptor::kReceiverAndLookupStartObject));
   TNode<Object> key = CAST(Parameter(Descriptor::kName));
   TNode<Object> value = CAST(Parameter(Descriptor::kValue));
   TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
@@ -485,12 +500,13 @@ void HandlerBuiltinsAssembler::Generate_KeyedStoreIC_SloppyArguments() {
 
   Label miss(this);
 
-  StoreKeyedSloppyArguments(receiver, key, value, &miss);
+  StoreKeyedSloppyArguments(receiver_and_lookup_start_object, key, value,
+                            &miss);
   Return(value);
 
   BIND(&miss);
   TailCallRuntime(Runtime::kKeyedStoreIC_Miss, context, value, slot, vector,
-                  receiver, key);
+                  receiver_and_lookup_start_object, key);
 }
 
 TF_BUILTIN(KeyedStoreIC_SloppyArguments_Standard, HandlerBuiltinsAssembler) {
@@ -513,7 +529,8 @@ TF_BUILTIN(KeyedStoreIC_SloppyArguments_NoTransitionHandleCOW,
 }
 
 TF_BUILTIN(LoadIndexedInterceptorIC, CodeStubAssembler) {
-  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<JSObject> receiver_and_lookup_start_object =
+      CAST(Parameter(Descriptor::kReceiverAndLookupStartObject));
   TNode<Object> key = CAST(Parameter(Descriptor::kName));
   TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
   TNode<HeapObject> vector = CAST(Parameter(Descriptor::kVector));
@@ -522,15 +539,17 @@ TF_BUILTIN(LoadIndexedInterceptorIC, CodeStubAssembler) {
   Label if_keyispositivesmi(this), if_keyisinvalid(this);
   Branch(TaggedIsPositiveSmi(key), &if_keyispositivesmi, &if_keyisinvalid);
   BIND(&if_keyispositivesmi);
-  TailCallRuntime(Runtime::kLoadElementWithInterceptor, context, receiver, key);
+  TailCallRuntime(Runtime::kLoadElementWithInterceptor, context,
+                  receiver_and_lookup_start_object, key);
 
   BIND(&if_keyisinvalid);
-  TailCallRuntime(Runtime::kKeyedLoadIC_Miss, context, receiver, key, slot,
-                  vector);
+  TailCallRuntime(Runtime::kKeyedLoadIC_Miss, context,
+                  receiver_and_lookup_start_object, key, slot, vector);
 }
 
 TF_BUILTIN(KeyedHasIC_SloppyArguments, HandlerBuiltinsAssembler) {
-  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<JSObject> receiver_and_lookup_start_object =
+      CAST(Parameter(Descriptor::kReceiverAndLookupStartObject));
   TNode<Object> key = CAST(Parameter(Descriptor::kName));
   TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
   TNode<HeapObject> vector = CAST(Parameter(Descriptor::kVector));
@@ -538,19 +557,21 @@ TF_BUILTIN(KeyedHasIC_SloppyArguments, HandlerBuiltinsAssembler) {
 
   Label miss(this);
 
-  TNode<Object> result = HasKeyedSloppyArguments(receiver, key, &miss);
+  TNode<Object> result =
+      HasKeyedSloppyArguments(receiver_and_lookup_start_object, key, &miss);
   Return(result);
 
   BIND(&miss);
   {
     Comment("Miss");
-    TailCallRuntime(Runtime::kKeyedHasIC_Miss, context, receiver, key, slot,
-                    vector);
+    TailCallRuntime(Runtime::kKeyedHasIC_Miss, context,
+                    receiver_and_lookup_start_object, key, slot, vector);
   }
 }
 
 TF_BUILTIN(HasIndexedInterceptorIC, CodeStubAssembler) {
-  TNode<JSObject> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<JSObject> receiver_and_lookup_start_object =
+      CAST(Parameter(Descriptor::kReceiverAndLookupStartObject));
   TNode<Object> key = CAST(Parameter(Descriptor::kName));
   TNode<Smi> slot = CAST(Parameter(Descriptor::kSlot));
   TNode<HeapObject> vector = CAST(Parameter(Descriptor::kVector));
@@ -559,11 +580,12 @@ TF_BUILTIN(HasIndexedInterceptorIC, CodeStubAssembler) {
   Label if_keyispositivesmi(this), if_keyisinvalid(this);
   Branch(TaggedIsPositiveSmi(key), &if_keyispositivesmi, &if_keyisinvalid);
   BIND(&if_keyispositivesmi);
-  TailCallRuntime(Runtime::kHasElementWithInterceptor, context, receiver, key);
+  TailCallRuntime(Runtime::kHasElementWithInterceptor, context,
+                  receiver_and_lookup_start_object, key);
 
   BIND(&if_keyisinvalid);
-  TailCallRuntime(Runtime::kKeyedHasIC_Miss, context, receiver, key, slot,
-                  vector);
+  TailCallRuntime(Runtime::kKeyedHasIC_Miss, context,
+                  receiver_and_lookup_start_object, key, slot, vector);
 }
 
 }  // namespace internal

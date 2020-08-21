@@ -9391,7 +9391,8 @@ void CodeStubAssembler::CheckForAssociatedProtector(SloppyTNode<Name> name,
   // Fall through if no case matched.
 }
 
-TNode<Map> CodeStubAssembler::LoadReceiverMap(SloppyTNode<Object> receiver) {
+TNode<Map> CodeStubAssembler::LoadLookupStartObjectMap(
+    SloppyTNode<Object> receiver) {
   return Select<Map>(
       TaggedIsSmi(receiver), [=] { return HeapNumberMapConstant(); },
       [=] { return LoadMap(UncheckedCast<HeapObject>(receiver)); });

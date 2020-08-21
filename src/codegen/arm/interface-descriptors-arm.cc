@@ -46,13 +46,17 @@ void EphemeronKeyBarrierDescriptor::InitializePlatformSpecific(
   data->InitializePlatformSpecific(kParameterCount, default_stub_registers);
 }
 
-const Register LoadDescriptor::ReceiverRegister() { return r1; }
+const Register LoadDescriptor::ReceiverAndLookupStartObjectRegister() {
+  return r1;
+}
 const Register LoadDescriptor::NameRegister() { return r2; }
 const Register LoadDescriptor::SlotRegister() { return r0; }
 
 const Register LoadWithVectorDescriptor::VectorRegister() { return r3; }
 
-const Register StoreDescriptor::ReceiverRegister() { return r1; }
+const Register StoreDescriptor::ReceiverAndLookupStartObjectRegister() {
+  return r1;
+}
 const Register StoreDescriptor::NameRegister() { return r2; }
 const Register StoreDescriptor::ValueRegister() { return r0; }
 const Register StoreDescriptor::SlotRegister() { return r4; }

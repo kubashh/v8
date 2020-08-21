@@ -193,13 +193,15 @@ const Register FastNewObjectDescriptor::NewTargetRegister() {
 
 void LoadDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), NameRegister(), SlotRegister()};
+  Register registers[] = {ReceiverAndLookupStartObjectRegister(),
+                          NameRegister(), SlotRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
 void LoadNoFeedbackDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), NameRegister(), ICKindRegister()};
+  Register registers[] = {ReceiverAndLookupStartObjectRegister(),
+                          NameRegister(), ICKindRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
@@ -239,8 +241,8 @@ void StoreGlobalWithVectorDescriptor::InitializePlatformSpecific(
 
 void StoreDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), NameRegister(), ValueRegister(),
-                          SlotRegister()};
+  Register registers[] = {ReceiverAndLookupStartObjectRegister(),
+                          NameRegister(), ValueRegister(), SlotRegister()};
 
   int len = arraysize(registers) - kStackArgumentsCount;
   data->InitializePlatformSpecific(len, registers);
@@ -249,8 +251,12 @@ void StoreDescriptor::InitializePlatformSpecific(
 void StoreTransitionDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   Register registers[] = {
-      ReceiverRegister(), NameRegister(), MapRegister(),
-      ValueRegister(),    SlotRegister(), VectorRegister(),
+      ReceiverAndLookupStartObjectRegister(),
+      NameRegister(),
+      MapRegister(),
+      ValueRegister(),
+      SlotRegister(),
+      VectorRegister(),
   };
   int len = arraysize(registers) - kStackArgumentsCount;
   data->InitializePlatformSpecific(len, registers);
@@ -294,8 +300,8 @@ void GetIteratorStackParameterDescriptor::InitializePlatformSpecific(
 
 void LoadWithVectorDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), NameRegister(), SlotRegister(),
-                          VectorRegister()};
+  Register registers[] = {ReceiverAndLookupStartObjectRegister(),
+                          NameRegister(), SlotRegister(), VectorRegister()};
   // TODO(jgruber): This DCHECK could be enabled if RegisterBase::ListOf were
   // to allow no_reg entries.
   // DCHECK(!AreAliased(ReceiverRegister(), NameRegister(), SlotRegister(),
@@ -306,8 +312,9 @@ void LoadWithVectorDescriptor::InitializePlatformSpecific(
 
 void StoreWithVectorDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), NameRegister(), ValueRegister(),
-                          SlotRegister(), VectorRegister()};
+  Register registers[] = {ReceiverAndLookupStartObjectRegister(),
+                          NameRegister(), ValueRegister(), SlotRegister(),
+                          VectorRegister()};
   // TODO(jgruber): This DCHECK could be enabled if RegisterBase::ListOf were
   // to allow no_reg entries.
   // DCHECK(!AreAliased(ReceiverRegister(), NameRegister(), kRootRegister));
@@ -316,7 +323,7 @@ void StoreWithVectorDescriptor::InitializePlatformSpecific(
 }
 
 const Register ApiGetterDescriptor::ReceiverRegister() {
-  return LoadDescriptor::ReceiverRegister();
+  return LoadDescriptor::ReceiverAndLookupStartObjectRegister();
 }
 
 void ApiGetterDescriptor::InitializePlatformSpecific(
