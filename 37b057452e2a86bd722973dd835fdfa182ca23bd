@@ -33,6 +33,86 @@
       "revId": "37b057452e2a86bd722973dd835fdfa182ca23bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d80de76_0470e4ec",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-21T05:20:01Z",
+      "side": 1,
+      "message": "...OnMap",
+      "range": {
+        "startLine": 44,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 39
+      },
+      "revId": "37b057452e2a86bd722973dd835fdfa182ca23bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b92acbe5_7bc71116",
+        "filename": "src/compiler/property-access-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-21T05:20:01Z",
+      "side": 1,
+      "message": "(dependencies() \u003d\u003d nullptr) for clarity please.",
+      "revId": "37b057452e2a86bd722973dd835fdfa182ca23bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94379e40_f73f9bca",
+        "filename": "src/compiler/property-access-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-21T05:20:01Z",
+      "side": 1,
+      "message": "representation",
+      "range": {
+        "startLine": 217,
+        "startChar": 33,
+        "endLine": 217,
+        "endChar": 47
+      },
+      "revId": "37b057452e2a86bd722973dd835fdfa182ca23bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e58af13_a4724b5e",
+        "filename": "src/compiler/property-access-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-08-21T05:20:01Z",
+      "side": 1,
+      "message": "Node* map \u003d ...",
+      "revId": "37b057452e2a86bd722973dd835fdfa182ca23bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
