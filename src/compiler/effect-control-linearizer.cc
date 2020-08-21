@@ -2053,65 +2053,16 @@ void EffectControlLinearizer::LowerDynamicCheckMaps(Node* node,
   // case the current state is polymorphic, and if we ever go back to
   // monomorphic start, we will deopt and reoptimize the code.
   if (p.state() == DynamicCheckMapsParameters::kMonomorphic) {
-    auto monomorphic_map_match = __ MakeLabel();
-    auto maybe_poly = __ MakeLabel();
-    auto map_check_failed = __ MakeDeferredLabel();
-    Node* strong_feedback;
-    Node* poly_array;
+    auto call_builtin = __ MakeDeferredLabel();
+    Node* map = __ HeapConstant(p.map());
+    Node* check = __ TaggedEqual(value_map, map);
+    __ Branch(check, &done, &call_builtin);
 
-    if (p.flags() & CheckMapsFlag::kTryMigrateInstance) {
-      BranchOnICState(feedback.index(), vector, value_map, frame_state,
-                      &monomorphic_map_match, &maybe_poly, &map_check_failed,
-                      &strong_feedback, &poly_array);
-
-      __ Bind(&map_check_failed);
-      {
-        MigrateInstanceOrDeopt(value, value_map, frame_state, FeedbackSource(),
-                               DeoptimizeReason::kMissingMap);
-
-        // Check if new map matches.
-        Node* new_value_map = __ LoadField(AccessBuilder::ForMap(), value);
-        Node* mono_check = __ TaggedEqual(strong_feedback, new_value_map);
-        __ DeoptimizeIfNot(DeoptimizeKind::kBailout,
-                           DeoptimizeReason::kMissingMap, FeedbackSource(),
-                           mono_check, frame_state,
-                           IsSafetyCheck::kCriticalSafetyCheck);
-        ProcessMonomorphic(handler, &done, frame_state, feedback.index(),
-                           vector);
-      }
-    } else {
-      BranchOnICState(feedback.index(), vector, value_map, frame_state,
-                      &monomorphic_map_match, &maybe_poly, &map_check_failed,
-                      &strong_feedback, &poly_array);
-
-      __ Bind(&map_check_failed);
-      {
-        Node* bitfield3 =
-            __ LoadField(AccessBuilder::ForMapBitField3(), value_map);
-        Node* is_not_deprecated = __ Word32Equal(
-            __ Word32And(bitfield3,
-                         __ Int32Constant(Map::Bits3::IsDeprecatedBit::kMask)),
-            __ Int32Constant(0));
-        __ DeoptimizeIf(DeoptimizeKind::kBailout, DeoptimizeReason::kMissingMap,
-                        FeedbackSource(), is_not_deprecated, frame_state,
-                        IsSafetyCheck::kCriticalSafetyCheck);
-        __ DeoptimizeIfNot(DeoptimizeReason::kMissingMap, FeedbackSource(),
-                           is_not_deprecated, frame_state,
-                           IsSafetyCheck::kCriticalSafetyCheck);
-        __ Goto(&done);
-      }
-    }
-
-    __ Bind(&monomorphic_map_match);
-    ProcessMonomorphic(handler, &done, frame_state, feedback.index(), vector);
-
-    __ Bind(&maybe_poly);
-    // TODO(mythria): ICs don't drop deprecated maps from feedback vector.
-    // So it is not equired to migrate the instance for polymorphic case.
-    // When we change dynamic map checks to check only four maps re-evaluate
-    // if this is required.
-    CheckPolymorphic(poly_array, value, value_map, handler, &done, frame_state,
-                     true);
+    __ Bind(&call_builtin);
+    Node* feedback_slot = __ LoadField(
+        AccessBuilder::ForFeedbackVectorSlot(feedback.index()), vector);
+    CheckPolymorphic(feedback_slot, value, value_map, handler, &done,
+                     frame_state, true);
   } else {
     DCHECK_EQ(p.state(), DynamicCheckMapsParameters::kPolymorphic);
     Node* feedback_slot = __ LoadField(
