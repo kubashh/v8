@@ -22,6 +22,30 @@
       "revId": "37260b39d6e3464bb652c0fa5708a87e4e865c7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69144446_03c379e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-24T14:35:26Z",
+      "side": 1,
+      "message": "FLAG_local_heaps is still false and only enabled (set to true) with --concurrent-inlining.",
+      "parentUuid": "63a0aa5e_2f583d53",
+      "range": {
+        "startLine": 11,
+        "startChar": 93,
+        "endLine": 12,
+        "endChar": 17
+      },
+      "revId": "37260b39d6e3464bb652c0fa5708a87e4e865c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
