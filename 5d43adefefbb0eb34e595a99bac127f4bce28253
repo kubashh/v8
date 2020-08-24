@@ -1,0 +1,475 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ea952c2_904b3a36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "overall, I think it\u0027s the right direction but we need to go deeper ))",
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "edc23acd_7f99eb5f",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "I\u0027d suggest to keep the api_holder name here, because that\u0027s what we are actually trying to compute.",
+      "range": {
+        "startLine": 216,
+        "startChar": 24,
+        "endLine": 216,
+        "endChar": 43
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de65df2a_27c3e8f5",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2286,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "It seems it\u0027s used here as a lookup_start_object.",
+      "range": {
+        "startLine": 2286,
+        "startChar": 61,
+        "endLine": 2286,
+        "endChar": 69
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a0c2ade_8878bc94",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2288,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "I think this should also be renamed to lookup_start_object_instance_type to avoid confusion.\nOr we could even compute the instance type inside this method.",
+      "range": {
+        "startLine": 2288,
+        "startChar": 57,
+        "endLine": 2288,
+        "endChar": 70
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd41a049_343c2fc0",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2356,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "Similar thing here: lookup_start_object_instance_type.\nThere\u0027s one case where this value is computed far from this code, so unfortunately, we can\u0027t remove this parameter...",
+      "range": {
+        "startLine": 2356,
+        "startChar": 18,
+        "endLine": 2356,
+        "endChar": 31
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "804b3056_4d47a6ca",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2359,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "I think this assert could be even stricter:\n  DCHECK_EQ(lookup_start_object,\n            p-\u003ereceiver_and_lookup_start_object());\n\nOn the other hand, we can drop this assert from here and just use p-\u003ereceiver_and_lookup_start_object() in those places below which require/rely on the receiver and lookup_start_object equality.",
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf3e475c_de41671c",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2425,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "We could also use\n  p-\u003ereceiver_and_lookup_start_object()\nhere to make it clear that this part of the code depends on this property. Because the Miss function doesn\u0027t support the case when receiver !\u003d lookup_start, otherwise we should have passed receiver and lookup_start_object separately.",
+      "range": {
+        "startLine": 2425,
+        "startChar": 64,
+        "endLine": 2425,
+        "endChar": 77
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8037614_5e721f57",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2451,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "if_found_on_lookup_start_object",
+      "range": {
+        "startLine": 2451,
+        "startChar": 8,
+        "endLine": 2451,
+        "endChar": 28
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bbf8b73_1095b294",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "Same here: p-\u003ereceiver_and_lookup_start_object() because CallGetterIfAccessor() uses \"receiver\" parameter both ways - as a receiver and as a lookup_start. Maybe it\u0027s worth renaming the receiver parameter there too.",
+      "range": {
+        "startLine": 2455,
+        "startChar": 43,
+        "endLine": 2455,
+        "endChar": 56
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e77afb5d_892683e3",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2486,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "TryGetOwnProperty() uses CallGetterIfAccessor() inside, so also p-\u003ereceiver_and_lookup_start_object() for the same reasons as above.",
+      "range": {
+        "startLine": 2486,
+        "startChar": 24,
+        "endLine": 2486,
+        "endChar": 66
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7ad7311_784caec4",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2526,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "I thinks this should be lookup_start_object ...",
+      "range": {
+        "startLine": 2526,
+        "startChar": 22,
+        "endLine": 2526,
+        "endChar": 59
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dc1f0ed_10b72945",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2527,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "... and this one p-\u003ereceiver().\nIf we ever fix this method for receiver !\u003d lookup_start, then this code will not require any modifications.",
+      "range": {
+        "startLine": 2527,
+        "startChar": 8,
+        "endLine": 2527,
+        "endChar": 45
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d27a32f_d6693a8d",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2826,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "lookup_start_object",
+      "range": {
+        "startLine": 2826,
+        "startChar": 27,
+        "endLine": 2826,
+        "endChar": 40
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5223d07a_31e00a20",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3154,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "Inside this function it\u0027s a lookup_start_object.",
+      "range": {
+        "startLine": 3154,
+        "startChar": 16,
+        "endLine": 3154,
+        "endChar": 48
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe40bb2a_ada07445",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3155,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "Same here. While we pass LoadICParams to helper methods (and thus allow the helper methods to use the proper receiver value), we can use lookup_start_object.",
+      "range": {
+        "startLine": 3155,
+        "startChar": 9,
+        "endLine": 3155,
+        "endChar": 41
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a46c31b_92609db9",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3173,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "Not sure if we should rename this one to lookup_start_object_instance_type, given that it will be used only one line below... but maybe it\u0027ll be more consistent. WDYT?",
+      "range": {
+        "startLine": 3173,
+        "startChar": 21,
+        "endLine": 3173,
+        "endChar": 34
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6317b4b_291f7942",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3176,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "As an alternative to renaming, we could have put LoadMapInstanceType(lookup_start_object_map) right here. WDYT?\n\nSame comments apply to other similar usages below.",
+      "range": {
+        "startLine": 3176,
+        "startChar": 51,
+        "endLine": 3176,
+        "endChar": 64
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b39635c_3ddc2a6b",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3247,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "Just lookup_start_object.",
+      "range": {
+        "startLine": 3247,
+        "startChar": 16,
+        "endLine": 3247,
+        "endChar": 48
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f6eacf2_e1bd13db",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3248,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 3248,
+        "startChar": 9,
+        "endLine": 3248,
+        "endChar": 41
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a94dda1_f809d33f",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3286,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "p-\u003ereceiver_and_lookup_start_object() to make it clear that this code relies on this property.",
+      "range": {
+        "startLine": 3286,
+        "startChar": 17,
+        "endLine": 3286,
+        "endChar": 49
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98936bec_4b092dfa",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3710,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-24T21:10:35Z",
+      "side": 1,
+      "message": "Not fully sure about this renaming. The LoadIC_Noninlined has only one object parameter - the receiver. So, at this point it\u0027s kind of a receiver_map... I feel like either both should be renamed or neither.\n\nWhat if we move this line down right after the p definition:\n  TNode\u003cMap\u003e lookup_start_object_map \u003d LoadReceiverMap(p-\u003elookup_start_object());\nWDYT?",
+      "range": {
+        "startLine": 3710,
+        "startChar": 13,
+        "endLine": 3710,
+        "endChar": 36
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
