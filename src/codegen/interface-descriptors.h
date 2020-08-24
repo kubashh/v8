@@ -628,13 +628,14 @@ class NoContextDescriptor : public CallInterfaceDescriptor {
 // LoadDescriptor is used by all stubs that implement Load/KeyedLoad ICs.
 class LoadDescriptor : public CallInterfaceDescriptor {
  public:
-  DEFINE_PARAMETERS(kReceiver, kName, kSlot)
-  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
-                         MachineType::AnyTagged(),     // kName
-                         MachineType::TaggedSigned())  // kSlot
+  DEFINE_PARAMETERS(kReceiverAndLookupStartObject, kName, kSlot)
+  DEFINE_PARAMETER_TYPES(
+      MachineType::AnyTagged(),     // kReceiverAndLookupStartObject
+      MachineType::AnyTagged(),     // kName
+      MachineType::TaggedSigned())  // kSlot
   DECLARE_DESCRIPTOR(LoadDescriptor, CallInterfaceDescriptor)
 
-  static const Register ReceiverRegister();
+  static const Register ReceiverAndLookupStartObjectRegister();
   static const Register NameRegister();
   static const Register SlotRegister();
 };
@@ -657,14 +658,15 @@ class LoadGlobalNoFeedbackDescriptor : public CallInterfaceDescriptor {
 
 class LoadNoFeedbackDescriptor : public LoadGlobalNoFeedbackDescriptor {
  public:
-  DEFINE_PARAMETERS(kReceiver, kName, kICKind)
-  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
-                         MachineType::AnyTagged(),     // kName
-                         MachineType::TaggedSigned())  // kICKind
+  DEFINE_PARAMETERS(kReceiverAndLookupStartObject, kName, kICKind)
+  DEFINE_PARAMETER_TYPES(
+      MachineType::AnyTagged(),     // kReceiverAndLookupStartObject
+      MachineType::AnyTagged(),     // kName
+      MachineType::TaggedSigned())  // kICKind
   DECLARE_DESCRIPTOR(LoadNoFeedbackDescriptor, LoadGlobalNoFeedbackDescriptor)
 
-  static const Register ReceiverRegister() {
-    return LoadDescriptor::ReceiverRegister();
+  static const Register ReceiverAndLookupStartObjectRegister() {
+    return LoadDescriptor::ReceiverAndLookupStartObjectRegister();
   }
 
   static const Register NameRegister() {
@@ -694,14 +696,15 @@ class LoadGlobalDescriptor : public CallInterfaceDescriptor {
 
 class StoreDescriptor : public CallInterfaceDescriptor {
  public:
-  DEFINE_PARAMETERS(kReceiver, kName, kValue, kSlot)
-  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
-                         MachineType::AnyTagged(),     // kName
-                         MachineType::AnyTagged(),     // kValue
-                         MachineType::TaggedSigned())  // kSlot
+  DEFINE_PARAMETERS(kReceiverAndLookupStartObject, kName, kValue, kSlot)
+  DEFINE_PARAMETER_TYPES(
+      MachineType::AnyTagged(),     // kReceiverAndLookupStartObject
+      MachineType::AnyTagged(),     // kName
+      MachineType::AnyTagged(),     // kValue
+      MachineType::TaggedSigned())  // kSlot
   DECLARE_DESCRIPTOR(StoreDescriptor, CallInterfaceDescriptor)
 
-  static const Register ReceiverRegister();
+  static const Register ReceiverAndLookupStartObjectRegister();
   static const Register NameRegister();
   static const Register ValueRegister();
   static const Register SlotRegister();
@@ -718,13 +721,15 @@ class StoreDescriptor : public CallInterfaceDescriptor {
 
 class StoreTransitionDescriptor : public StoreDescriptor {
  public:
-  DEFINE_PARAMETERS(kReceiver, kName, kMap, kValue, kSlot, kVector)
-  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
-                         MachineType::AnyTagged(),     // kName
-                         MachineType::AnyTagged(),     // kMap
-                         MachineType::AnyTagged(),     // kValue
-                         MachineType::TaggedSigned(),  // kSlot
-                         MachineType::AnyTagged())     // kVector
+  DEFINE_PARAMETERS(kReceiverAndLookupStartObject, kName, kMap, kValue, kSlot,
+                    kVector)
+  DEFINE_PARAMETER_TYPES(
+      MachineType::AnyTagged(),     // kReceiverAndLookupStartObject
+      MachineType::AnyTagged(),     // kName
+      MachineType::AnyTagged(),     // kMap
+      MachineType::AnyTagged(),     // kValue
+      MachineType::TaggedSigned(),  // kSlot
+      MachineType::AnyTagged())     // kVector
   DECLARE_DESCRIPTOR(StoreTransitionDescriptor, StoreDescriptor)
 
   static const Register MapRegister();
@@ -737,12 +742,14 @@ class StoreTransitionDescriptor : public StoreDescriptor {
 
 class StoreWithVectorDescriptor : public StoreDescriptor {
  public:
-  DEFINE_PARAMETERS(kReceiver, kName, kValue, kSlot, kVector)
-  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
-                         MachineType::AnyTagged(),     // kName
-                         MachineType::AnyTagged(),     // kValue
-                         MachineType::TaggedSigned(),  // kSlot
-                         MachineType::AnyTagged())     // kVector
+  DEFINE_PARAMETERS(kReceiverAndLookupStartObject, kName, kValue, kSlot,
+                    kVector)
+  DEFINE_PARAMETER_TYPES(
+      MachineType::AnyTagged(),     // kReceiverAndLookupStartObject
+      MachineType::AnyTagged(),     // kName
+      MachineType::AnyTagged(),     // kValue
+      MachineType::TaggedSigned(),  // kSlot
+      MachineType::AnyTagged())     // kVector
   DECLARE_DESCRIPTOR(StoreWithVectorDescriptor, StoreDescriptor)
 
   static const Register VectorRegister();
@@ -798,11 +805,12 @@ class LoadWithVectorDescriptor : public LoadDescriptor {
  public:
   // TODO(v8:9497): Revert the Machine type for kSlot to the
   // TaggedSigned once Torque can emit better call descriptors
-  DEFINE_PARAMETERS(kReceiver, kName, kSlot, kVector)
-  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kReceiver
-                         MachineType::AnyTagged(),  // kName
-                         MachineType::AnyTagged(),  // kSlot
-                         MachineType::AnyTagged())  // kVector
+  DEFINE_PARAMETERS(kReceiverAndLookupStartObject, kName, kSlot, kVector)
+  DEFINE_PARAMETER_TYPES(
+      MachineType::AnyTagged(),  // kReceiverAndLookupStartObject
+      MachineType::AnyTagged(),  // kName
+      MachineType::AnyTagged(),  // kSlot
+      MachineType::AnyTagged())  // kVector
   DECLARE_DESCRIPTOR(LoadWithVectorDescriptor, LoadDescriptor)
 
   static const Register VectorRegister();
