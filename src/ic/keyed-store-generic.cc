@@ -1050,7 +1050,8 @@ void KeyedStoreGenericAssembler::SetProperty(TNode<Context> context,
 void KeyedStoreGenericAssembler::StoreIC_NoFeedback() {
   using Descriptor = StoreDescriptor;
 
-  TNode<Object> receiver_maybe_smi = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Object> receiver_and_lookup_start_object_maybe_smi =
+      CAST(Parameter(Descriptor::kReceiver));
   TNode<Object> name = CAST(Parameter(Descriptor::kName));
   TNode<Object> value = CAST(Parameter(Descriptor::kValue));
   TNode<TaggedIndex> slot = CAST(Parameter(Descriptor::kSlot));
@@ -1058,26 +1059,30 @@ void KeyedStoreGenericAssembler::StoreIC_NoFeedback() {
 
   Label miss(this, Label::kDeferred), store_property(this);
 
-  GotoIf(TaggedIsSmi(receiver_maybe_smi), &miss);
+  GotoIf(TaggedIsSmi(receiver_and_lookup_start_object_maybe_smi), &miss);
 
   {
-    TNode<HeapObject> receiver = CAST(receiver_maybe_smi);
-    TNode<Map> receiver_map = LoadMap(receiver);
-    TNode<Uint16T> instance_type = LoadMapInstanceType(receiver_map);
+    TNode<HeapObject> receiver_and_lookup_start_object =
+        CAST(receiver_and_lookup_start_object_maybe_smi);
+    TNode<Map> lookup_start_object_map =
+        LoadMap(receiver_and_lookup_start_object);
+    TNode<Uint16T> instance_type = LoadMapInstanceType(lookup_start_object_map);
     // Receivers requiring non-standard element accesses (interceptors, access
     // checks, strings and string wrappers, proxies) are handled in the runtime.
     GotoIf(IsSpecialReceiverInstanceType(instance_type), &miss);
     {
-      StoreICParameters p(context, receiver, name, value, slot,
-                          UndefinedConstant());
-      EmitGenericPropertyStore(CAST(receiver), receiver_map, &p, &miss);
+      StoreICParameters p(context, receiver_and_lookup_start_object, name,
+                          value, slot, UndefinedConstant());
+      EmitGenericPropertyStore(CAST(receiver_and_lookup_start_object),
+                               lookup_start_object_map, &p, &miss);
     }
   }
 
   BIND(&miss);
   {
     TailCallRuntime(Runtime::kStoreIC_Miss, context, value, slot,
-                    UndefinedConstant(), receiver_maybe_smi, name);
+                    UndefinedConstant(),
+                    receiver_and_lookup_start_object_maybe_smi, name);
   }
 }
 
