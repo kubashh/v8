@@ -46,6 +46,47 @@
       "revId": "37260b39d6e3464bb652c0fa5708a87e4e865c7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0988b833_0fb07053",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-24T14:46:37Z",
+      "side": 1,
+      "message": "nit: can you add that to the description? Something like\n\"since FLAG_local_heaps is only enabled (set to true) with --concurrent-inlining.\"",
+      "parentUuid": "69144446_03c379e1",
+      "range": {
+        "startLine": 11,
+        "startChar": 93,
+        "endLine": 12,
+        "endChar": 17
+      },
+      "revId": "37260b39d6e3464bb652c0fa5708a87e4e865c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b42e5d07_b2dd7038",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-24T14:46:37Z",
+      "side": 1,
+      "message": "LGTM, let\u0027s revert this and I will take a second look at it.",
+      "revId": "37260b39d6e3464bb652c0fa5708a87e4e865c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
