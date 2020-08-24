@@ -65,7 +65,7 @@ TNode<MaybeObject> AccessorAssembler::LoadHandlerDataField(
 
 TNode<MaybeObject> AccessorAssembler::TryMonomorphicCase(
     TNode<TaggedIndex> slot, TNode<FeedbackVector> vector,
-    TNode<Map> receiver_map, Label* if_handler,
+    TNode<Map> lookup_start_object_map, Label* if_handler,
     TVariable<MaybeObject>* var_handler, Label* if_miss) {
   Comment("TryMonomorphicCase");
   DCHECK_EQ(MachineRepresentation::kTagged, var_handler->rep());
@@ -83,7 +83,7 @@ TNode<MaybeObject> AccessorAssembler::TryMonomorphicCase(
 
   // Try to quickly handle the monomorphic case without knowing for sure
   // if we have a weak reference in feedback.
-  GotoIfNot(IsWeakReferenceTo(feedback, receiver_map), if_miss);
+  GotoIfNot(IsWeakReferenceTo(feedback, lookup_start_object_map), if_miss);
 
   TNode<MaybeObject> handler = UncheckedCast<MaybeObject>(
       Load(MachineType::AnyTagged(), vector,
@@ -95,8 +95,8 @@ TNode<MaybeObject> AccessorAssembler::TryMonomorphicCase(
 }
 
 void AccessorAssembler::HandlePolymorphicCase(
-    TNode<Map> receiver_map, TNode<WeakFixedArray> feedback, Label* if_handler,
-    TVariable<MaybeObject>* var_handler, Label* if_miss) {
+    TNode<Map> lookup_start_object_map, TNode<WeakFixedArray> feedback,
+    Label* if_handler, TVariable<MaybeObject>* var_handler, Label* if_miss) {
   Comment("HandlePolymorphicCase");
   DCHECK_EQ(MachineRepresentation::kTagged, var_handler->rep());
 
@@ -118,7 +118,8 @@ void AccessorAssembler::HandlePolymorphicCase(
     TNode<MaybeObject> maybe_cached_map =
         LoadWeakFixedArrayElement(feedback, var_index.value());
     CSA_ASSERT(this, IsWeakOrCleared(maybe_cached_map));
-    GotoIfNot(IsWeakReferenceTo(maybe_cached_map, receiver_map), &loop_next);
+    GotoIfNot(IsWeakReferenceTo(maybe_cached_map, lookup_start_object_map),
+              &loop_next);
 
     // Found, now call handler.
     TNode<MaybeObject> handler =
@@ -140,7 +141,7 @@ void AccessorAssembler::HandleLoadICHandlerCase(
     ElementSupport support_elements, LoadAccessMode access_mode) {
   Comment("have_handler");
 
-  TVARIABLE(Object, var_holder, p->holder());
+  TVARIABLE(Object, var_holder, p->lookup_start_object());
   TVARIABLE(Object, var_smi_handler, handler);
 
   Label if_smi_handler(this, {&var_holder, &var_smi_handler});
@@ -212,7 +213,7 @@ void AccessorAssembler::HandleLoadAccessor(
   TNode<Object> data =
       LoadObjectField(call_handler_info, CallHandlerInfo::kDataOffset);
 
-  TVARIABLE(HeapObject, api_holder, CAST(p->receiver()));
+  TVARIABLE(HeapObject, lookup_start_object, CAST(p->lookup_start_object()));
   Label load(this);
   GotoIf(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kApiGetter)),
          &load);
@@ -222,13 +223,15 @@ void AccessorAssembler::HandleLoadAccessor(
       WordEqual(handler_kind,
                 IntPtrConstant(LoadHandler::kApiGetterHolderIsPrototype)));
 
-  api_holder = LoadMapPrototype(LoadMap(CAST(p->receiver())));
+  lookup_start_object =
+      LoadMapPrototype(LoadMap(CAST(p->lookup_start_object())));
   Goto(&load);
 
   BIND(&load);
   TNode<IntPtrT> argc = IntPtrConstant(0);
   exit_point->Return(CallApiCallback(context, callback, argc, data,
-                                     api_holder.value(), p->receiver()));
+                                     lookup_start_object.value(),
+                                     p->receiver()));
 }
 
 void AccessorAssembler::HandleLoadField(TNode<JSObject> holder,
@@ -1614,9 +1617,8 @@ void AccessorAssembler::HandleStoreICProtoHandler(
     BIND(&if_add_normal);
     {
       // This is a case of "transitioning store" to a dictionary mode object
-      // when the property is still does not exist. The "existing property"
-      // case is covered above by LookupOnReceiver bit handling of the smi
-      // handler.
+      // when the property does not exist. The "existing property" case is
+      // covered above by LookupOnReceiver bit handling of the smi handler.
       Label slow(this);
       TNode<Map> receiver_map = LoadMap(CAST(p->receiver()));
       InvalidateValidityCellIfPrototype(receiver_map);
@@ -2282,7 +2284,7 @@ void AccessorAssembler::InvalidateValidityCellIfPrototype(
 }
 
 void AccessorAssembler::GenericElementLoad(TNode<HeapObject> receiver,
-                                           TNode<Map> receiver_map,
+                                           TNode<Map> lookup_start_object_map,
                                            TNode<Int32T> instance_type,
                                            TNode<IntPtrT> index, Label* slow) {
   Comment("integer index");
@@ -2294,7 +2296,7 @@ void AccessorAssembler::GenericElementLoad(TNode<HeapObject> receiver,
   // Receivers requiring non-standard element accesses (interceptors, access
   // checks, strings and string wrappers, proxies) are handled in the runtime.
   GotoIf(IsCustomElementsReceiverInstanceType(instance_type), &if_custom);
-  TNode<Int32T> elements_kind = LoadMapElementsKind(receiver_map);
+  TNode<Int32T> elements_kind = LoadMapElementsKind(lookup_start_object_map);
   TNode<BoolT> is_jsarray_condition = IsJSArrayInstanceType(instance_type);
   TVARIABLE(Float64T, var_double_value);
   Label rebox_double(this, &var_double_value);
@@ -2329,7 +2331,8 @@ void AccessorAssembler::GenericElementLoad(TNode<HeapObject> receiver,
   BIND(&if_element_hole);
   {
     Comment("found the hole");
-    BranchIfPrototypesHaveNoElements(receiver_map, &return_undefined, slow);
+    BranchIfPrototypesHaveNoElements(lookup_start_object_map, &return_undefined,
+                                     slow);
   }
 
   BIND(&if_custom);
@@ -2348,12 +2351,12 @@ void AccessorAssembler::GenericElementLoad(TNode<HeapObject> receiver,
   Return(UndefinedConstant());
 }
 
-void AccessorAssembler::GenericPropertyLoad(TNode<HeapObject> receiver,
-                                            TNode<Map> receiver_map,
-                                            TNode<Int32T> instance_type,
-                                            const LoadICParameters* p,
-                                            Label* slow,
-                                            UseStubCache use_stub_cache) {
+void AccessorAssembler::GenericPropertyLoad(
+    TNode<HeapObject> lookup_start_object, TNode<Map> lookup_start_object_map,
+    TNode<Int32T> instance_type, const LoadICParameters* p, Label* slow,
+    UseStubCache use_stub_cache) {
+  CSA_ASSERT(this, TaggedEqual(lookup_start_object,
+                               p->receiver_and_lookup_start_object()));
   ExitPoint direct_exit(this);
 
   Comment("key is unique name");
@@ -2368,14 +2371,15 @@ void AccessorAssembler::GenericPropertyLoad(TNode<HeapObject> receiver,
   // checks, strings and string wrappers) are handled in the runtime.
   GotoIf(IsSpecialReceiverInstanceType(instance_type), &special_receiver);
 
-  // Check if the receiver has fast or slow properties.
-  TNode<Uint32T> bitfield3 = LoadMapBitField3(receiver_map);
+  // Check if the lookup_start_object has fast or slow properties.
+  TNode<Uint32T> bitfield3 = LoadMapBitField3(lookup_start_object_map);
   GotoIf(IsSetWord32<Map::Bits3::IsDictionaryMapBit>(bitfield3),
          &if_property_dictionary);
 
-  // Try looking up the property on the receiver; if unsuccessful, look
-  // for a handler in the stub cache.
-  TNode<DescriptorArray> descriptors = LoadMapDescriptors(receiver_map);
+  // Try looking up the property on the lookup_start_object; if unsuccessful,
+  // look for a handler in the stub cache.
+  TNode<DescriptorArray> descriptors =
+      LoadMapDescriptors(lookup_start_object_map);
 
   Label if_descriptor_found(this), try_stub_cache(this);
   TVARIABLE(IntPtrT, var_name_index);
@@ -2386,9 +2390,9 @@ void AccessorAssembler::GenericPropertyLoad(TNode<HeapObject> receiver,
 
   BIND(&if_descriptor_found);
   {
-    LoadPropertyFromFastObject(receiver, receiver_map, descriptors,
-                               var_name_index.value(), &var_details,
-                               &var_value);
+    LoadPropertyFromFastObject(lookup_start_object, lookup_start_object_map,
+                               descriptors, var_name_index.value(),
+                               &var_details, &var_value);
     Goto(&if_found_on_receiver);
   }
 
@@ -2404,7 +2408,7 @@ void AccessorAssembler::GenericPropertyLoad(TNode<HeapObject> receiver,
     Comment("stub cache probe for fast property load");
     TVARIABLE(MaybeObject, var_handler);
     Label found_handler(this, &var_handler), stub_cache_miss(this);
-    TryProbeStubCache(isolate()->load_stub_cache(), receiver, name,
+    TryProbeStubCache(isolate()->load_stub_cache(), lookup_start_object, name,
                       &found_handler, &var_handler, &stub_cache_miss);
     BIND(&found_handler);
     {
@@ -2431,7 +2435,8 @@ void AccessorAssembler::GenericPropertyLoad(TNode<HeapObject> receiver,
 
     TVARIABLE(IntPtrT, var_name_index);
     Label dictionary_found(this, &var_name_index);
-    TNode<NameDictionary> properties = CAST(LoadSlowProperties(CAST(receiver)));
+    TNode<NameDictionary> properties =
+        CAST(LoadSlowProperties(CAST(lookup_start_object)));
     NameDictionaryLookup<NameDictionary>(properties, name, &dictionary_found,
                                          &var_name_index,
                                          &lookup_prototype_chain);
@@ -2445,8 +2450,9 @@ void AccessorAssembler::GenericPropertyLoad(TNode<HeapObject> receiver,
 
   BIND(&if_found_on_receiver);
   {
-    TNode<Object> value = CallGetterIfAccessor(
-        var_value.value(), var_details.value(), p->context(), receiver, slow);
+    TNode<Object> value =
+        CallGetterIfAccessor(var_value.value(), var_details.value(),
+                             p->context(), p->receiver(), slow);
     IncrementCounter(isolate()->counters()->ic_keyed_load_generic_symbol(), 1);
     Return(value);
   }
@@ -2458,7 +2464,7 @@ void AccessorAssembler::GenericPropertyLoad(TNode<HeapObject> receiver,
     Label return_undefined(this), is_private_symbol(this);
     Label loop(this, {&var_holder_map, &var_holder_instance_type});
 
-    var_holder_map = receiver_map;
+    var_holder_map = lookup_start_object_map;
     var_holder_instance_type = instance_type;
     GotoIf(IsPrivateSymbol(name), &is_private_symbol);
 
@@ -2476,9 +2482,10 @@ void AccessorAssembler::GenericPropertyLoad(TNode<HeapObject> receiver,
       var_holder_map = proto_map;
       var_holder_instance_type = proto_instance_type;
       Label next_proto(this), return_value(this, &var_value), goto_slow(this);
-      TryGetOwnProperty(p->context(), receiver, CAST(proto), proto_map,
-                        proto_instance_type, name, &return_value, &var_value,
-                        &next_proto, &goto_slow);
+      TryGetOwnProperty(p->context(),
+                        lookup_start_object /* == p->receiver() */, CAST(proto),
+                        proto_map, proto_instance_type, name, &return_value,
+                        &var_value, &next_proto, &goto_slow);
 
       // This trampoline and the next are required to appease Turbofan's
       // variable merging.
@@ -2516,8 +2523,9 @@ void AccessorAssembler::GenericPropertyLoad(TNode<HeapObject> receiver,
 
     direct_exit.ReturnCallStub(
         Builtins::CallableFor(isolate(), Builtins::kProxyGetProperty),
-        p->context(), receiver /*holder is the same as receiver*/, name,
-        receiver, SmiConstant(OnNonExistent::kReturnUndefined));
+        p->context(), p->receiver_and_lookup_start_object(), name,
+        p->receiver_and_lookup_start_object(),
+        SmiConstant(OnNonExistent::kReturnUndefined));
   }
 }
 
@@ -2605,7 +2613,7 @@ void AccessorAssembler::TryProbeStubCacheTable(
 }
 
 void AccessorAssembler::TryProbeStubCache(StubCache* stub_cache,
-                                          TNode<Object> receiver,
+                                          TNode<Object> lookup_start_object,
                                           TNode<Name> name, Label* if_handler,
                                           TVariable<MaybeObject>* var_handler,
                                           Label* if_miss) {
@@ -2614,15 +2622,17 @@ void AccessorAssembler::TryProbeStubCache(StubCache* stub_cache,
   Counters* counters = isolate()->counters();
   IncrementCounter(counters->megamorphic_stub_cache_probes(), 1);
 
-  // Check that the {receiver} isn't a smi.
-  GotoIf(TaggedIsSmi(receiver), &miss);
+  // Check that the {lookup_start_object} isn't a smi.
+  GotoIf(TaggedIsSmi(lookup_start_object), &miss);
 
-  TNode<Map> receiver_map = LoadMap(CAST(receiver));
+  TNode<Map> lookup_start_object_map = LoadMap(CAST(lookup_start_object));
 
   // Probe the primary table.
-  TNode<IntPtrT> primary_offset = StubCachePrimaryOffset(name, receiver_map);
+  TNode<IntPtrT> primary_offset =
+      StubCachePrimaryOffset(name, lookup_start_object_map);
   TryProbeStubCacheTable(stub_cache, kPrimary, primary_offset, name,
-                         receiver_map, if_handler, var_handler, &try_secondary);
+                         lookup_start_object_map, if_handler, var_handler,
+                         &try_secondary);
 
   BIND(&try_secondary);
   {
@@ -2630,7 +2640,8 @@ void AccessorAssembler::TryProbeStubCache(StubCache* stub_cache,
     TNode<IntPtrT> secondary_offset =
         StubCacheSecondaryOffset(name, primary_offset);
     TryProbeStubCacheTable(stub_cache, kSecondary, secondary_offset, name,
-                           receiver_map, if_handler, var_handler, &miss);
+                           lookup_start_object_map, if_handler, var_handler,
+                           &miss);
   }
 
   BIND(&miss);
@@ -2658,8 +2669,9 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LazyLoadICParameters* p,
 
   GotoIf(IsUndefined(p->vector()), &no_feedback);
 
-  TNode<Map> recv_map = LoadReceiverMap(p->receiver());
-  GotoIf(IsDeprecatedMap(recv_map), &miss);
+  TNode<Map> lookup_start_object_map =
+      LoadReceiverMap(p->receiver_and_lookup_start_object());
+  GotoIf(IsDeprecatedMap(lookup_start_object_map), &miss);
 
   // Inlined fast path.
   {
@@ -2668,9 +2680,9 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LazyLoadICParameters* p,
     TVARIABLE(MaybeObject, var_handler);
     Label try_polymorphic(this), if_handler(this, &var_handler);
 
-    TNode<MaybeObject> feedback =
-        TryMonomorphicCase(p->slot(), CAST(p->vector()), recv_map, &if_handler,
-                           &var_handler, &try_polymorphic);
+    TNode<MaybeObject> feedback = TryMonomorphicCase(
+        p->slot(), CAST(p->vector()), lookup_start_object_map, &if_handler,
+        &var_handler, &try_polymorphic);
 
     BIND(&if_handler);
     HandleLoadICHandlerCase(p, CAST(var_handler.value()), &miss, exit_point);
@@ -2680,8 +2692,8 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LazyLoadICParameters* p,
       TNode<HeapObject> strong_feedback =
           GetHeapObjectIfStrong(feedback, &miss);
       GotoIfNot(IsWeakFixedArrayMap(LoadMap(strong_feedback)), &stub_call);
-      HandlePolymorphicCase(recv_map, CAST(strong_feedback), &if_handler,
-                            &var_handler, &miss);
+      HandlePolymorphicCase(lookup_start_object_map, CAST(strong_feedback),
+                            &if_handler, &var_handler, &miss);
     }
   }
 
@@ -2694,8 +2706,8 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LazyLoadICParameters* p,
         Builtins::CallableFor(isolate(), Builtins::kLoadIC_Noninlined);
     TNode<Code> code_target = HeapConstant(ic.code());
     exit_point->ReturnCallStub(ic.descriptor(), code_target, p->context(),
-                               p->receiver(), p->name(), p->slot(),
-                               p->vector());
+                               p->receiver_and_lookup_start_object(), p->name(),
+                               p->slot(), p->vector());
   }
 
   BIND(&no_feedback);
@@ -2727,12 +2739,13 @@ void AccessorAssembler::LoadIC(const LoadICParameters* p) {
   Label if_handler(this, &var_handler), non_inlined(this, Label::kDeferred),
       try_polymorphic(this), miss(this, Label::kDeferred);
 
-  TNode<Map> receiver_map = LoadReceiverMap(p->receiver());
-  GotoIf(IsDeprecatedMap(receiver_map), &miss);
+  TNode<Map> lookup_start_object_map =
+      LoadReceiverMap(p->receiver_and_lookup_start_object());
+  GotoIf(IsDeprecatedMap(lookup_start_object_map), &miss);
 
   // Check monomorphic case.
   TNode<MaybeObject> feedback =
-      TryMonomorphicCase(p->slot(), CAST(p->vector()), receiver_map,
+      TryMonomorphicCase(p->slot(), CAST(p->vector()), lookup_start_object_map,
                          &if_handler, &var_handler, &try_polymorphic);
   BIND(&if_handler);
   {
@@ -2747,32 +2760,32 @@ void AccessorAssembler::LoadIC(const LoadICParameters* p) {
     // Check polymorphic case.
     Comment("LoadIC_try_polymorphic");
     GotoIfNot(IsWeakFixedArrayMap(LoadMap(strong_feedback)), &non_inlined);
-    HandlePolymorphicCase(receiver_map, CAST(strong_feedback), &if_handler,
-                          &var_handler, &miss);
+    HandlePolymorphicCase(lookup_start_object_map, CAST(strong_feedback),
+                          &if_handler, &var_handler, &miss);
   }
 
   BIND(&non_inlined);
   {
-    LoadIC_Noninlined(p, receiver_map, strong_feedback, &var_handler,
+    LoadIC_Noninlined(p, lookup_start_object_map, strong_feedback, &var_handler,
                       &if_handler, &miss, &direct_exit);
   }
 
   BIND(&miss);
   direct_exit.ReturnCallRuntime(Runtime::kLoadIC_Miss, p->context(),
-                                p->receiver(), p->name(), p->slot(),
-                                p->vector());
+                                p->receiver_and_lookup_start_object(),
+                                p->name(), p->slot(), p->vector());
 }
 
 void AccessorAssembler::LoadIC_Noninlined(const LoadICParameters* p,
-                                          TNode<Map> receiver_map,
+                                          TNode<Map> lookup_start_object_map,
                                           TNode<HeapObject> feedback,
                                           TVariable<MaybeObject>* var_handler,
                                           Label* if_handler, Label* miss,
                                           ExitPoint* exit_point) {
   // Neither deprecated map nor monomorphic. These cases are handled in the
   // bytecode handler.
-  CSA_ASSERT(this, Word32BinaryNot(IsDeprecatedMap(receiver_map)));
-  CSA_ASSERT(this, TaggedNotEqual(receiver_map, feedback));
+  CSA_ASSERT(this, Word32BinaryNot(IsDeprecatedMap(lookup_start_object_map)));
+  CSA_ASSERT(this, TaggedNotEqual(lookup_start_object_map, feedback));
   CSA_ASSERT(this, Word32BinaryNot(IsWeakFixedArrayMap(LoadMap(feedback))));
   DCHECK_EQ(MachineRepresentation::kTagged, var_handler->rep());
 
@@ -2780,7 +2793,7 @@ void AccessorAssembler::LoadIC_Noninlined(const LoadICParameters* p,
     // Check megamorphic case.
     GotoIfNot(TaggedEqual(feedback, MegamorphicSymbolConstant()), miss);
 
-    TryProbeStubCache(isolate()->load_stub_cache(), p->receiver(),
+    TryProbeStubCache(isolate()->load_stub_cache(), p->lookup_start_object(),
                       CAST(p->name()), if_handler, var_handler, miss);
   }
 }
@@ -2788,12 +2801,12 @@ void AccessorAssembler::LoadIC_Noninlined(const LoadICParameters* p,
 void AccessorAssembler::LoadIC_NoFeedback(const LoadICParameters* p,
                                           TNode<Smi> ic_kind) {
   Label miss(this, Label::kDeferred);
-  TNode<Object> receiver = p->receiver();
-  GotoIf(TaggedIsSmi(receiver), &miss);
-  TNode<Map> receiver_map = LoadMap(CAST(receiver));
-  GotoIf(IsDeprecatedMap(receiver_map), &miss);
+  TNode<Object> lookup_start_object = p->receiver_and_lookup_start_object();
+  GotoIf(TaggedIsSmi(lookup_start_object), &miss);
+  TNode<Map> lookup_start_object_map = LoadMap(CAST(lookup_start_object));
+  GotoIf(IsDeprecatedMap(lookup_start_object_map), &miss);
 
-  TNode<Uint16T> instance_type = LoadMapInstanceType(receiver_map);
+  TNode<Uint16T> instance_type = LoadMapInstanceType(lookup_start_object_map);
 
   {
     // Special case for Function.prototype load, because it's very common
@@ -2803,14 +2816,15 @@ void AccessorAssembler::LoadIC_NoFeedback(const LoadICParameters* p,
               &not_function_prototype);
     GotoIfNot(IsPrototypeString(p->name()), &not_function_prototype);
 
-    GotoIfPrototypeRequiresRuntimeLookup(CAST(receiver), receiver_map,
+    GotoIfPrototypeRequiresRuntimeLookup(CAST(lookup_start_object),
+                                         lookup_start_object_map,
                                          &not_function_prototype);
-    Return(LoadJSFunctionPrototype(CAST(receiver), &miss));
+    Return(LoadJSFunctionPrototype(CAST(lookup_start_object), &miss));
     BIND(&not_function_prototype);
   }
 
-  GenericPropertyLoad(CAST(receiver), receiver_map, instance_type, p, &miss,
-                      kDontUseStubCache);
+  GenericPropertyLoad(CAST(p->receiver()), lookup_start_object_map,
+                      instance_type, p, &miss, kDontUseStubCache);
 
   BIND(&miss);
   {
@@ -2923,11 +2937,11 @@ void AccessorAssembler::LoadGlobalIC_TryHandlerCase(
   TNode<NativeContext> native_context = LoadNativeContext(context);
   TNode<JSGlobalProxy> receiver =
       CAST(LoadContextElement(native_context, Context::GLOBAL_PROXY_INDEX));
-  TNode<Object> holder =
+  TNode<Object> global =
       LoadContextElement(native_context, Context::EXTENSION_INDEX);
 
   LazyLoadICParameters p([=] { return context; }, receiver, lazy_name,
-                         [=] { return slot; }, vector, holder);
+                         [=] { return slot; }, vector, global);
 
   HandleLoadICHandlerCase(&p, handler, miss, exit_point, ICMode::kGlobalIC,
                           on_nonexistent);
@@ -3019,14 +3033,15 @@ void AccessorAssembler::KeyedLoadIC(const LoadICParameters* p,
       try_polymorphic_name(this, Label::kDeferred),
       miss(this, Label::kDeferred), generic(this, Label::kDeferred);
 
-  TNode<Map> receiver_map = LoadReceiverMap(p->receiver());
-  GotoIf(IsDeprecatedMap(receiver_map), &miss);
+  TNode<Map> lookup_start_object_map =
+      LoadReceiverMap(p->receiver_and_lookup_start_object());
+  GotoIf(IsDeprecatedMap(lookup_start_object_map), &miss);
 
   GotoIf(IsUndefined(p->vector()), &generic);
 
   // Check monomorphic case.
   TNode<MaybeObject> feedback =
-      TryMonomorphicCase(p->slot(), CAST(p->vector()), receiver_map,
+      TryMonomorphicCase(p->slot(), CAST(p->vector()), lookup_start_object_map,
                          &if_handler, &var_handler, &try_polymorphic);
   BIND(&if_handler);
   {
@@ -3043,8 +3058,8 @@ void AccessorAssembler::KeyedLoadIC(const LoadICParameters* p,
     // Check polymorphic case.
     Comment("KeyedLoadIC_try_polymorphic");
     GotoIfNot(IsWeakFixedArrayMap(LoadMap(strong_feedback)), &try_megamorphic);
-    HandlePolymorphicCase(receiver_map, CAST(strong_feedback), &if_handler,
-                          &var_handler, &miss);
+    HandlePolymorphicCase(lookup_start_object_map, CAST(strong_feedback),
+                          &if_handler, &var_handler, &miss);
   }
 
   BIND(&try_megamorphic);
@@ -3136,9 +3151,10 @@ void AccessorAssembler::KeyedLoadICGeneric(const LoadICParameters* p) {
   TVARIABLE(Object, var_name, p->name());
 
   Label if_runtime(this, Label::kDeferred);
-  TNode<Object> receiver = p->receiver();
-  GotoIf(TaggedIsSmi(receiver), &if_runtime);
-  GotoIf(IsNullOrUndefined(receiver), &if_runtime);
+  TNode<Object> receiver_and_lookup_start_object =
+      p->receiver_and_lookup_start_object();
+  GotoIf(TaggedIsSmi(receiver_and_lookup_start_object), &if_runtime);
+  GotoIf(IsNullOrUndefined(receiver_and_lookup_start_object), &if_runtime);
 
   {
     TVARIABLE(IntPtrT, var_index);
@@ -3152,9 +3168,12 @@ void AccessorAssembler::KeyedLoadICGeneric(const LoadICParameters* p) {
     BIND(&if_unique_name);
     {
       LoadICParameters pp(p, var_unique.value());
-      TNode<Map> receiver_map = LoadMap(CAST(receiver));
-      TNode<Uint16T> instance_type = LoadMapInstanceType(receiver_map);
-      GenericPropertyLoad(CAST(receiver), receiver_map, instance_type, &pp,
+      TNode<Map> lookup_start_object_map =
+          LoadMap(CAST(receiver_and_lookup_start_object));
+      TNode<Uint16T> instance_type =
+          LoadMapInstanceType(lookup_start_object_map);
+      GenericPropertyLoad(CAST(receiver_and_lookup_start_object),
+                          lookup_start_object_map, instance_type, &pp,
                           &if_runtime);
     }
 
@@ -3185,9 +3204,12 @@ void AccessorAssembler::KeyedLoadICGeneric(const LoadICParameters* p) {
           // experiments with this have shown that it causes too much traffic
           // on the stub cache. We may want to re-evaluate that in the future.
           LoadICParameters pp(p, var_unique.value());
-          TNode<Map> receiver_map = LoadMap(CAST(receiver));
-          TNode<Uint16T> instance_type = LoadMapInstanceType(receiver_map);
-          GenericPropertyLoad(CAST(receiver), receiver_map, instance_type, &pp,
+          TNode<Map> lookup_start_object_map =
+              LoadMap(CAST(receiver_and_lookup_start_object));
+          TNode<Uint16T> instance_type =
+              LoadMapInstanceType(lookup_start_object_map);
+          GenericPropertyLoad(CAST(receiver_and_lookup_start_object),
+                              lookup_start_object_map, instance_type, &pp,
                               &if_runtime, kDontUseStubCache);
         }
       } else {
@@ -3197,9 +3219,12 @@ void AccessorAssembler::KeyedLoadICGeneric(const LoadICParameters* p) {
 
     BIND(&if_index);
     {
-      TNode<Map> receiver_map = LoadMap(CAST(receiver));
-      TNode<Uint16T> instance_type = LoadMapInstanceType(receiver_map);
-      GenericElementLoad(CAST(receiver), receiver_map, instance_type,
+      TNode<Map> lookup_start_object_map =
+          LoadMap(CAST(receiver_and_lookup_start_object));
+      TNode<Uint16T> instance_type =
+          LoadMapInstanceType(lookup_start_object_map);
+      GenericElementLoad(CAST(receiver_and_lookup_start_object),
+                         lookup_start_object_map, instance_type,
                          var_index.value(), &if_runtime);
     }
   }
@@ -3219,8 +3244,10 @@ void AccessorAssembler::KeyedLoadICPolymorphicName(const LoadICParameters* p,
   TVARIABLE(MaybeObject, var_handler);
   Label if_handler(this, &var_handler), miss(this, Label::kDeferred);
 
-  TNode<Object> receiver = p->receiver();
-  TNode<Map> receiver_map = LoadReceiverMap(receiver);
+  TNode<Object> receiver_and_lookup_start_object =
+      p->receiver_and_lookup_start_object();
+  TNode<Map> lookup_start_object_map =
+      LoadReceiverMap(receiver_and_lookup_start_object);
   TNode<Name> name = CAST(p->name());
   TNode<FeedbackVector> vector = CAST(p->vector());
   TNode<TaggedIndex> slot = p->slot();
@@ -3229,15 +3256,16 @@ void AccessorAssembler::KeyedLoadICPolymorphicName(const LoadICParameters* p,
   // When we get here, we know that the {name} matches the recorded
   // feedback name in the {vector} and can safely be used for the
   // LoadIC handler logic below.
-  CSA_ASSERT(this, Word32BinaryNot(IsDeprecatedMap(receiver_map)));
+  CSA_ASSERT(this, Word32BinaryNot(IsDeprecatedMap(lookup_start_object_map)));
   CSA_ASSERT(this, TaggedEqual(name, LoadFeedbackVectorSlot(vector, slot)),
              name, vector);
 
-  // Check if we have a matching handler for the {receiver_map}.
+  // Check if we have a matching handler for the {lookup_start_object_map}.
   TNode<MaybeObject> feedback_element =
       LoadFeedbackVectorSlot(vector, slot, kTaggedSize);
   TNode<WeakFixedArray> array = CAST(feedback_element);
-  HandlePolymorphicCase(receiver_map, array, &if_handler, &var_handler, &miss);
+  HandlePolymorphicCase(lookup_start_object_map, array, &if_handler,
+                        &var_handler, &miss);
 
   BIND(&if_handler);
   {
@@ -3252,10 +3280,10 @@ void AccessorAssembler::KeyedLoadICPolymorphicName(const LoadICParameters* p,
   BIND(&miss);
   {
     Comment("KeyedLoadIC_miss");
-    TailCallRuntime(access_mode == LoadAccessMode::kLoad
-                        ? Runtime::kKeyedLoadIC_Miss
-                        : Runtime::kKeyedHasIC_Miss,
-                    context, receiver, name, slot, vector);
+    TailCallRuntime(
+        access_mode == LoadAccessMode::kLoad ? Runtime::kKeyedLoadIC_Miss
+                                             : Runtime::kKeyedHasIC_Miss,
+        context, receiver_and_lookup_start_object, name, slot, vector);
   }
 }
 
@@ -3679,13 +3707,13 @@ void AccessorAssembler::GenerateLoadIC_Noninlined() {
   TVARIABLE(MaybeObject, var_handler);
   Label if_handler(this, &var_handler), miss(this, Label::kDeferred);
 
-  TNode<Map> receiver_map = LoadReceiverMap(receiver);
+  TNode<Map> lookup_start_object_map = LoadReceiverMap(receiver);
   TNode<MaybeObject> feedback_element = LoadFeedbackVectorSlot(vector, slot);
   TNode<HeapObject> feedback = CAST(feedback_element);
 
   LoadICParameters p(context, receiver, name, slot, vector);
-  LoadIC_Noninlined(&p, receiver_map, feedback, &var_handler, &if_handler,
-                    &miss, &direct_exit);
+  LoadIC_Noninlined(&p, lookup_start_object_map, feedback, &var_handler,
+                    &if_handler, &miss, &direct_exit);
 
   BIND(&if_handler);
   {
