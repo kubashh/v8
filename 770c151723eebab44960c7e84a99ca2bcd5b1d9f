@@ -16,6 +16,23 @@
       "revId": "770c151723eebab44960c7e84a99ca2bcd5b1d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dedcd488_85ca7a87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-24T10:14:33Z",
+      "side": 1,
+      "message": "ishell, ptal",
+      "revId": "770c151723eebab44960c7e84a99ca2bcd5b1d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
