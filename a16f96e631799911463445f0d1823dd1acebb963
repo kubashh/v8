@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d2d1a61_20202c0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1418022
+      },
+      "writtenOn": "2020-08-24T20:31:55Z",
+      "side": 1,
+      "message": "Hi guys! Here\u0027s a design doc illustrating the purpose, use-cases and implementation of event-tracing. Any feedback is appreciated!\n\nhttps://docs.google.com/document/d/1xkXj94iExFgLWc_OszTNyNGi523ARaKMWPZTeomhI4U/edit?usp\u003dsharing\n",
+      "revId": "a16f96e631799911463445f0d1823dd1acebb963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
