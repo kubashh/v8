@@ -1437,7 +1437,7 @@ class BackgroundCompileJob : public JobTask {
     }
   }
 
-  size_t GetMaxConcurrency() const override {
+  size_t GetMaxConcurrency(size_t /* worker_count */) const override {
     return std::min(max_concurrency_, current_concurrency_->load());
   }
 
@@ -3020,7 +3020,7 @@ class CompileJSToWasmWrapperJob final : public JobTask {
     }
   }
 
-  size_t GetMaxConcurrency() const override {
+  size_t GetMaxConcurrency(size_t /* worker_count */) const override {
     return std::min(max_concurrency_,
                     outstanding_units_.load(std::memory_order_relaxed));
   }
