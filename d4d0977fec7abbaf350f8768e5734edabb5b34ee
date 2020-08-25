@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc6be64d_6bc300f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2020-08-25T15:22:27Z",
+      "side": 1,
+      "message": "I missed V8PlatformTest; I\u0027ll have to first implement new version of GetMaxConcurrency(worker_count) in gin test (https://chromium-review.googlesource.com/c/chromium/src/+/2375505), and keep old GetMaxConcurrency() around in v8-platform for a little while.",
+      "revId": "d4d0977fec7abbaf350f8768e5734edabb5b34ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
