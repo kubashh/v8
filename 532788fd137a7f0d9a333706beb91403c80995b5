@@ -263,6 +263,30 @@
     },
     {
       "key": {
+        "uuid": "5cacbd40_e775d6ee",
+        "filename": "BUILD.gn",
+        "patchSetId": 18
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-25T16:40:47Z",
+      "side": 1,
+      "message": "This change is temporary here just for testing the CL on the bots. It will not be landed.",
+      "parentUuid": "6fc49529_67d10865",
+      "range": {
+        "startLine": 312,
+        "startChar": 27,
+        "endLine": 312,
+        "endChar": 50
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f86f23c_199b313e",
         "filename": "include/v8-internal.h",
         "patchSetId": 18
@@ -283,6 +307,30 @@
       "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bb51b0f_6bd7d179",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-25T16:40:47Z",
+      "side": 1,
+      "message": "kApiSystemPointerSize \u003d kApiTaggedSize * 2 when sandbox is enabled.\nThe value of this constant actually depends on the endianness: for LE it\u0027ll be kApiTaggedSize, for BE it\u0027ll be 0. The reason is explained below. Since we are developing this prototype only for x64 we don\u0027t bother propagating and using macro values that can be used for endianness detection, so we just define this constant for LE case.\n\nNormally, we write aligned external pointers as Word-size values into embedder data slots. The fact that they are aligned allows this value look like a Smi. When pointer compression is enabled the Word-size value \"looks\" like two \"Tagged\"-size values: the lower 32-bits part looks like Smi but the upper part is actually raw and is not guaranteed to look like a Smi. So, GC skips the raw parts of embedder data slots and looks only at the tagged part.\nIn a sandbox mode we read/write 32-bit external table index value directly from/into the raw part of the embedder data slot.",
+      "parentUuid": "8f86f23c_199b313e",
+      "range": {
+        "startLine": 176,
+        "startChar": 19,
+        "endLine": 176,
+        "endChar": 52
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

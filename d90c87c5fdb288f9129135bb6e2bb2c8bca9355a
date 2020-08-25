@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "7d484a46_08eee380",
+        "filename": "src/common/external-pointer.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-25T16:40:47Z",
+      "side": 1,
+      "message": "No particular reason. We can wrap these functions in a static class.\nLet\u0027s wait for more opinions on this suggestion.",
+      "parentUuid": "646dff79_fcbea664",
+      "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "694a0ae3_c28e9825",
         "filename": "src/objects/js-array-buffer.h",
         "patchSetId": 19
@@ -70,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "ae2f227d_6304629f",
+        "filename": "src/objects/js-array-buffer.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-25T16:40:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "694a0ae3_c28e9825",
+      "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e22043b8_80fa8e80",
         "filename": "src/snapshot/deserializer.cc",
         "patchSetId": 19
@@ -81,6 +117,24 @@
       "writtenOn": "2020-08-25T10:29:52Z",
       "side": 1,
       "message": "So without much background on this CL, I wonder if these AllocateExternal... could/should be merged into the following set_X methods?\n\nOtherwise it\u0027ll be very easy to forget this call in the future.",
+      "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d154772_f70b2181",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-25T16:40:47Z",
+      "side": 1,
+      "message": "The idea was to pre-allocate the entries for \"protected\" values in the external pointer table when the object is allocated, thus on load/store we\u0027ll not have an additional check.\n\nLeszek had similar concerns, see his comment and our answers here: https://chromium-review.googlesource.com/c/v8/v8/+/2235700/comment/a0b711fa_1a4856fd/\n\nTL;DR;: forgetting to allocate an entry will crash on first write attempt, given the limited number of places where we allocate objects with \"protected\" values I believe that the test coverage gives pretty good guarantees that we\u0027ll not skip the initialization.",
+      "parentUuid": "e22043b8_80fa8e80",
       "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -104,6 +158,24 @@
     },
     {
       "key": {
+        "uuid": "68c56e1e_afcc385c",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-25T16:40:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f6ae05e_02710a36",
+      "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08047a2b_1a6d5df5",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 19
@@ -118,6 +190,24 @@
       "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "226dc3d5_a3513b66",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-25T16:40:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08047a2b_1a6d5df5",
+      "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
