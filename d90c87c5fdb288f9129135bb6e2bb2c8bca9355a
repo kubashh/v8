@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31946cd2_4aa2bb25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-25T10:29:52Z",
+      "side": 1,
+      "message": "Had a look through snapshot/, looking good but a few comments/questions below.",
+      "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "646dff79_fcbea664",
+        "filename": "src/common/external-pointer.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-25T10:29:52Z",
+      "side": 1,
+      "message": "q: Is there any reason not to put these in a static-only class? That way it\u0027s immediately clear at use-cases (inside other files/classes) that e.g. InitExternalPointerField is not a class method in *that* class or a locally-defined function in *that* file.",
+      "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "694a0ae3_c28e9825",
+        "filename": "src/objects/js-array-buffer.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-25T10:29:52Z",
+      "side": 1,
+      "message": "What are these? When should they be called? Coming from snapshot/, I\u0027m looking for guidance here, a comment would be nice :)",
+      "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e22043b8_80fa8e80",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-25T10:29:52Z",
+      "side": 1,
+      "message": "So without much background on this CL, I wonder if these AllocateExternal... could/should be merged into the following set_X methods?\n\nOtherwise it\u0027ll be very easy to forget this call in the future.",
+      "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f6ae05e_02710a36",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-25T10:29:52Z",
+      "side": 1,
+      "message": "Is 0 a magic value? Please define a constant for it in js-array-buffer.h, mention it in the method comment, and use the constant here. Also, I\u0027d prefer calling GetBackingStoreRefForDeserialization only once.",
+      "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08047a2b_1a6d5df5",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-25T10:29:52Z",
+      "side": 1,
+      "message": "Please use the constant (see previous comment) here too.",
+      "revId": "d90c87c5fdb288f9129135bb6e2bb2c8bca9355a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
