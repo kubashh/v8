@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b80a700e_2d026177",
+        "filename": "test/cctest/heap/test-mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1366119
+      },
+      "writtenOn": "2020-08-25T23:50:47Z",
+      "side": 1,
+      "message": "This is unsatisfying. I\u0027m happy to take suggestions on better ways to manage this. Unfortunately these tests won\u0027t pass with the current handle approach.",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
