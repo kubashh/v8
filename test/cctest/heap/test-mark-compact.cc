@@ -249,6 +249,44 @@ HEAP_TEST(DoNotEvacuatePinnedPages) {
   }
 }
 
+HEAP_TEST(ObjectStartBitmap) {
+  if (!FLAG_single_generation || !FLAG_conservative_stack_scanning) return;
+
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+
+  CcTest::InitializeVM();
+  Isolate* isolate = CcTest::i_isolate();
+  v8::HandleScope sc(CcTest::isolate());
+
+  Heap* heap = isolate->heap();
+  heap::SealCurrentObjects(heap);
+
+  auto* factory = isolate->factory();
+  Object obj = *factory->NewStringFromStaticChars("hello");
+  Object obj2 = *factory->NewStringFromStaticChars("world");
+  Page* page = Page::FromAddress(obj.ptr());
+
+  CHECK(page->object_start_bitmap()->CheckBit((obj.ptr() - kHeapObjectTag)));
+  CHECK(page->object_start_bitmap()->CheckBit((obj2.ptr() - kHeapObjectTag)));
+
+  Address obj_inner_ptr = obj.ptr() + 2;
+  CHECK(page->object_start_bitmap()->FindBasePtr(obj_inner_ptr) ==
+        obj.ptr() - kHeapObjectTag);
+
+  Address obj2_inner_ptr = obj2.ptr() + 2;
+  CHECK(page->object_start_bitmap()->FindBasePtr(obj2_inner_ptr) ==
+        obj2.ptr() - kHeapObjectTag);
+
+  CcTest::CollectAllGarbage();
+
+  CHECK((obj).IsString());
+  CHECK((obj2).IsString());
+  CHECK(page->object_start_bitmap()->CheckBit(obj.ptr() - kHeapObjectTag));
+  CHECK(page->object_start_bitmap()->CheckBit(obj2.ptr() - kHeapObjectTag));
+
+#endif
+}
+
 // TODO(1600): compaction of map space is temporary removed from GC.
 #if 0
 static Handle<Map> CreateMap(Isolate* isolate) {
