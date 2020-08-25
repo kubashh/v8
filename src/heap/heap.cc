@@ -31,6 +31,7 @@
 #include "src/handles/global-handles.h"
 #include "src/heap/array-buffer-sweeper.h"
 #include "src/heap/barrier.h"
+#include "src/heap/base/stack.h"
 #include "src/heap/code-object-registry.h"
 #include "src/heap/code-stats.h"
 #include "src/heap/combined-heap.h"
@@ -4464,6 +4465,75 @@ class FixStaleLeftTrimmedHandlesVisitor : public RootVisitor {
   Heap* heap_;
 };
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+
+class ConservativeStackVisitor : public ::heap::base::StackVisitor {
+ public:
+  ConservativeStackVisitor(Isolate* isolate, RootVisitor* delegate)
+      : isolate_(isolate), delegate_(delegate) {}
+
+  void VisitPointer(const void* pointer) final {
+    MarkConservativelyIfPointer(pointer);
+  }
+
+ private:
+  bool CheckPage(Address address, MemoryChunk* page) {
+    if (address < page->area_start() || address >= page->area_end())
+      return false;
+
+    auto base_ptr = page->object_start_bitmap()->FindBasePtr(address);
+
+    // At this point, base_ptr *must* refer to the valid object. We check if
+    // |address| resides inside the object or beyond it in unused memory.
+    auto obj = HeapObject::FromAddress(base_ptr);
+    auto obj_end = obj.address() + obj.Size();
+
+    if (address > reinterpret_cast<Address>(obj_end)) {
+      // |address| points to unused memory.
+      return false;
+    }
+
+    base_ptr += kHeapObjectTag;
+
+    page->SetFlag(BasicMemoryChunk::Flag::PINNED);
+    delegate_->VisitRootPointer(
+        Root::kHandleScope, nullptr,
+        FullObjectSlot(reinterpret_cast<Address>(&base_ptr)));
+    return true;
+  }
+
+  void MarkConservativelyIfPointer(const void* pointer) {
+    auto address = reinterpret_cast<Address>(pointer);
+    if (address > isolate_->heap()->old_space()->top() ||
+        address < isolate_->heap()->old_space()->limit()) {
+      return;
+    }
+
+    for (Page* page : *isolate_->heap()->old_space()) {
+      if (!page->object_start_bitmap()->IsClear()) {
+        if (CheckPage(address, page)) {
+          return;
+        }
+      }
+    }
+
+    for (LargePage* page : *isolate_->heap()->lo_space()) {
+      if (address > page->area_start() && address < page->area_end()) {
+        page->SetFlag(BasicMemoryChunk::Flag::PINNED);
+        delegate_->VisitRootPointer(
+            Root::kHandleScope, nullptr,
+            FullObjectSlot(page->GetObject().address() + kHeapObjectTag));
+        return;
+      }
+    }
+  }
+
+  Isolate* isolate_ = nullptr;
+  RootVisitor* delegate_ = nullptr;
+};
+
+#endif
+
 void Heap::IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options) {
   v->VisitRootPointers(Root::kStrongRootList, nullptr,
                        roots_table().strong_roots_begin(),
@@ -4534,8 +4604,16 @@ void Heap::IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options) {
 
     // Iterate over local handles in handle scopes.
     FixStaleLeftTrimmedHandlesVisitor left_trim_visitor(this);
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    // Iterate the native stack.
+    if (!options.contains(SkipRoot::kStack)) {
+      ConservativeStackVisitor stack_visitor(isolate_, v);
+      isolate_->isolate_data()->stack().IteratePointers(&stack_visitor);
+    }
+#else
     isolate_->handle_scope_implementer()->Iterate(&left_trim_visitor);
     isolate_->handle_scope_implementer()->Iterate(v);
+#endif
 
     if (FLAG_local_heaps) {
       safepoint_->Iterate(&left_trim_visitor);

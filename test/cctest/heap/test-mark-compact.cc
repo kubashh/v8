@@ -287,6 +287,71 @@ HEAP_TEST(ObjectStartBitmap) {
 #endif
 }
 
+HEAP_TEST(ConservativeStackScanningNormalPages) {
+  if (!FLAG_single_generation || !FLAG_conservative_stack_scanning) return;
+// TODO(jakehughes): Test can't be enabled until direct handles have landed.
+#if 0
+
+  CcTest::InitializeVM();
+  Isolate* isolate = CcTest::i_isolate();
+  v8::HandleScope sc(CcTest::isolate());
+
+  Heap* heap = isolate->heap();
+  heap::SealCurrentObjects(heap);
+
+  auto* factory = isolate->factory();
+  Handle<Object> s = factory->NewStringFromStaticChars("fisk");
+  Handle<Object> n = factory->NewNumber(1.12344);
+
+  CHECK(!Heap::InYoungGeneration(*s) && !Heap::InYoungGeneration(*n));
+
+  // Check that handles are direct.
+  CHECK(s.address() & 0x1);
+  CHECK(n.address() & 0x1);
+
+  CcTest::CollectAllGarbage();
+
+  CHECK((*s).IsString());
+  CHECK((*n).IsHeapNumber());
+  CHECK(!Page::FromAddress(s.address())->IsPinned() &&
+        !Page::FromAddress(n.address())->IsPinned());
+
+#endif
+}
+
+HEAP_TEST(ConservativeStackScanningLargePages) {
+  if (!FLAG_single_generation || !FLAG_conservative_stack_scanning) return;
+// TODO(jakehughes): Test can't be enabled until direct handles have landed.
+#if 0
+
+  CcTest::InitializeVM();
+  Isolate* isolate = CcTest::i_isolate();
+  v8::HandleScope sc(CcTest::isolate());
+
+  Heap* heap = isolate->heap();
+  heap::SealCurrentObjects(heap);
+
+  auto* factory = isolate->factory();
+  Handle<Object> obj;
+  {
+    constexpr int kLargeSize = kMaxRegularHeapObjectSize + 1;
+    auto str = std::make_unique<char[]>(kLargeSize);
+    for (size_t i = 0; i < kLargeSize - 1; ++i) str[i] = 'a';
+    str[kLargeSize - 1] = '\0';
+    obj = factory->NewStringFromAsciiChecked(str.get(), AllocationType::kOld);
+  }
+
+  CHECK(!Heap::InYoungGeneration(*obj));
+
+  // Check that the handle is direct.
+  CHECK(obj.address() & 0x1);
+
+  CcTest::CollectAllGarbage();
+
+  CHECK((*obj).IsString());
+#endif
+}
+
 // TODO(1600): compaction of map space is temporary removed from GC.
 #if 0
 static Handle<Map> CreateMap(Isolate* isolate) {

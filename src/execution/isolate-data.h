@@ -14,6 +14,10 @@
 #include "src/utils/utils.h"
 #include "testing/gtest/include/gtest/gtest_prod.h"
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+#include "src/heap/base/stack.h"
+#endif
+
 namespace v8 {
 namespace internal {
 
@@ -28,7 +32,12 @@ class Isolate;
 // register.
 class IsolateData final {
  public:
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  explicit IsolateData(Isolate* isolate)
+      : stack_guard_(isolate), stack_(base::Stack::GetStackStart()) {}
+#else
   explicit IsolateData(Isolate* isolate) : stack_guard_(isolate) {}
+#endif
 
   static constexpr intptr_t kIsolateRootBias = kRootRegisterBias;
 
@@ -113,6 +122,10 @@ class IsolateData final {
   Address* builtin_entry_table() { return builtin_entry_table_; }
   Address* builtins() { return builtins_; }
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  ::heap::base::Stack& stack() { return stack_; }
+#endif
+
  private:
   // Static layout definition.
   //
@@ -121,6 +134,28 @@ class IsolateData final {
   // cheaper it is to access them. See also: https://crbug.com/993264.
   // The recommend guideline is to put frequently-accessed fields close to the
   // beginning of IsolateData.
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+#define FIELDS(V)                                                             \
+  V(kEmbedderDataOffset, Internals::kNumIsolateDataSlots* kSystemPointerSize) \
+  V(kFastCCallCallerFPOffset, kSystemPointerSize)                             \
+  V(kFastCCallCallerPCOffset, kSystemPointerSize)                             \
+  V(kStackGuardOffset, StackGuard::kSizeInBytes)                              \
+  V(kRootsTableOffset, RootsTable::kEntriesCount* kSystemPointerSize)         \
+  V(kExternalReferenceTableOffset, ExternalReferenceTable::kSizeInBytes)      \
+  V(kThreadLocalTopOffset, ThreadLocalTop::kSizeInBytes)                      \
+  V(kBuiltinEntryTableOffset, Builtins::builtin_count* kSystemPointerSize)    \
+  V(kBuiltinsTableOffset, Builtins::builtin_count* kSystemPointerSize)        \
+  V(kStackOffset, kSystemPointerSize)                                         \
+  V(kStackIsIterableOffset, kUInt8Size)                                       \
+  /* This padding aligns IsolateData size by 8 bytes. */                      \
+  V(kPaddingOffset,                                                           \
+    8 + RoundUp<8>(static_cast<int>(kPaddingOffset)) - kPaddingOffset)        \
+  /* Total size. */                                                           \
+  V(kSize, 0)
+  DEFINE_FIELD_OFFSET_CONSTANTS(0, FIELDS)
+#undef FIELDS
+
+#else
 #define FIELDS(V)                                                             \
   V(kEmbedderDataOffset, Internals::kNumIsolateDataSlots* kSystemPointerSize) \
   V(kFastCCallCallerFPOffset, kSystemPointerSize)                             \
@@ -137,9 +172,9 @@ class IsolateData final {
     8 + RoundUp<8>(static_cast<int>(kPaddingOffset)) - kPaddingOffset)        \
   /* Total size. */                                                           \
   V(kSize, 0)
-
   DEFINE_FIELD_OFFSET_CONSTANTS(0, FIELDS)
 #undef FIELDS
+#endif
 
   // These fields are accessed through the API, offsets must be kept in sync
   // with v8::internal::Internals (in include/v8-internal.h) constants.
@@ -171,6 +206,10 @@ class IsolateData final {
 
   // The entries in this array are tagged pointers to Code objects.
   Address builtins_[Builtins::builtin_count] = {};
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  ::heap::base::Stack stack_;
+#endif
 
   // Whether the SafeStackFrameIterator can successfully iterate the current
   // stack. Only valid values are 0 or 1.
