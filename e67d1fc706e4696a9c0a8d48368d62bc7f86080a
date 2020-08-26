@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7893d12a_72615b4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2020-08-26T14:31:52Z",
+      "side": 1,
+      "message": "A call like this `wr.deref(a)` used to report `a` as being the receiver, which is false. That happens because the builtin is not adapting the arguments and believe that there is only the receiver in the stack.",
+      "revId": "e67d1fc706e4696a9c0a8d48368d62bc7f86080a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
