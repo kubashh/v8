@@ -406,7 +406,7 @@
     'release_arm': [
       'release_bot', 'arm', 'hard_float'],
     'release_arm64': [
-      'release_bot', 'arm64'],
+      'release_bot', 'arm64', 'asan_without_clang'],
     'release_arm64_hard_float': [
       'release_bot', 'arm64', 'hard_float'],
     'release_android_arm': [
@@ -597,6 +597,11 @@
 
     'asan': {
       'mixins': ['clang', 'v8_enable_test_features'],
+      'gn_args': 'is_asan=true',
+    },
+
+    'asan_without_clang': {
+      'mixins': ['v8_enable_test_features'],
       'gn_args': 'is_asan=true',
     },
 
