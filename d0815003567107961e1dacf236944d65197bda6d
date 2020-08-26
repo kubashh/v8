@@ -16,6 +16,40 @@
       "revId": "d0815003567107961e1dacf236944d65197bda6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4a6f3523_84c41cb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-08-26T14:02:11Z",
+      "side": 1,
+      "message": "Thanks, LGTM, but I\u0027m wondering if this really covers all code logging events.",
+      "revId": "d0815003567107961e1dacf236944d65197bda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84f9484a_3f8c0b78",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2020-08-26T14:02:11Z",
+      "side": 1,
+      "message": "Should this also be added to NativeModule::LogWasmCodes() or is this path covered by this function too? It seems that LogWasmCodes() directly triggers logging without adding to codes_to_log though.",
+      "revId": "d0815003567107961e1dacf236944d65197bda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
