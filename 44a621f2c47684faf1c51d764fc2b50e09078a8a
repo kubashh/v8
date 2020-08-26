@@ -2,6 +2,193 @@
   "comments": [
     {
       "key": {
+        "uuid": "9ba8db2d_77b2138d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "PTAL as well!",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "255f212e_58dbe34f",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "AFAIU with v8::Locker there might be multiple active stacks/threads, we don\u0027t need to support this in this prototype though. It seems the stack starts needs to go into ThreadLocalTop for that.",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d620b94_24c21b6b",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4481,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "Are you sure about \"address \u003e\u003d page-\u003earea_end()\"? Couldn\u0027t there be a pointer to the end of the object that we then miss?",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4926878_59ba76e8",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4491,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "Here we treat obj_end as part of object.",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cce2b5f5_86ae4a8a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4496,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "Manually adding kHeapObjectTag is a bit uncommon, I think you could use obj.ptr() instead to create the FullObjectSlot.",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee4eefe9_f7ab0a70",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4501,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "Doesn\u0027t FullObjectSlot get the address of the slot as argument? What if that address get\u0027s dereferenced?",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3946b480_9c4eaaf8",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4507,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "There should be a filler object between top() and limit(), can we let it just mark that object? Asking because with LocalHeap other threads have LABs as well and we wouldn\u0027t iterate them here either.",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5104517e_22a97184",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4513,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "Couldn\u0027t we let FindBasePtr handle the case of an empty bitmap? It would only need to compare CountLeadingZeros to kBitsInCell. With this solution we would iterate the bitmap for an almost empty page basically twice.",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0839a5f4_b37003b8",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4521,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "Same question about object boundaries as above.",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "558b9969_384b9c8d",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4522,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "Large objects don\u0027t move anyways, why is it pinned here?",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14127c1b_03413841",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4608,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "Isolate::Iterate visits other stuff as well, the conservative scan might have to go there.",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b80a700e_2d026177",
         "filename": "test/cctest/heap/test-mark-compact.cc",
         "patchSetId": 1
@@ -13,6 +200,24 @@
       "writtenOn": "2020-08-25T23:50:47Z",
       "side": 1,
       "message": "This is unsatisfying. I\u0027m happy to take suggestions on better ways to manage this. Unfortunately these tests won\u0027t pass with the current handle approach.",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4560876_232d0767",
+        "filename": "test/cctest/heap/test-mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-08-26T16:21:35Z",
+      "side": 1,
+      "message": "Right, maybe these tests should go into that CL then?",
+      "parentUuid": "b80a700e_2d026177",
       "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
