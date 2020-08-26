@@ -36,6 +36,50 @@
 #include "src/diagnostics/unwinding-info-win64.h"
 #endif  // V8_OS_WIN64
 
+#if defined(V8_OS_MAC) && defined(V8_HOST_ARCH_ARM64)
+// Mac-on-arm64 implies that we have at least MacOS 11.0, so we don't
+// need to check for that.
+
+#include <AvailabilityMacros.h>
+#include <AvailabilityVersions.h>
+
+// As long as we don't compile with the 11.0 SDK, we need to forward-declare
+// the function pthread_jit_write_protect_np. It's guarded by an #if that
+// makes sure that the forward declaration is automatically skipped once we
+// start compiling with the 11.0 SDK.
+#if !defined(MAC_OS_VERSION_11_0)
+extern "C" {
+void pthread_jit_write_protect_np(int write_protect_enabled);
+}
+#endif  // MAC_OS_VERSION_11_0
+
+// TODO(jkummerow): Since pthread_jit_write_protect_np will be available at
+// runtime, but not at linking time (as long as we don't build against the
+// 11.0 SDK), we'll have to manually dlopen it.
+// For reference, this is how Chromium does it:
+// https://source.chromium.org/chromium/chromium/src/+/master:media/gpu/mac/vt_video_decode_accelerator_mac.cc;l=315?q=VTRegisterSupplementalVideoDecoderIfAvailable&ss=chromium
+// Relying on a script generate_stubs.py:
+// https://source.chromium.org/chromium/chromium/src/+/master:tools/generate_stubs/generate_stubs.py
+
+// __builtin_available doesn't work for 11.0 yet; https://crbug.com/1115294
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability-new"
+void SwitchMemoryPermissionsToWritable() {
+  pthread_jit_write_protect_np(0);
+}
+void SwitchMemoryPermissionsToExecutable() {
+  pthread_jit_write_protect_np(1);
+}
+#pragma clang diagnostic pop
+
+#else  // Not Mac-on-arm64.
+
+// Nothing to do, we map code memory with rwx permissions.
+void SwitchMemoryPermissionsToWritable() {}
+void SwitchMemoryPermissionsToExecutable() {}
+
+#endif  // V8_OS_MAC && V8_HOST_ARCH_ARM64
+
 #define TRACE_HEAP(...)                                   \
   do {                                                    \
     if (FLAG_trace_wasm_native_heap) PrintF(__VA_ARGS__); \
@@ -1086,6 +1130,13 @@ WasmCode::Kind GetCodeKind(const WasmCompilationResult& result) {
 }
 
 WasmCode* NativeModule::PublishCodeLocked(std::unique_ptr<WasmCode> code) {
+
+
+
+  // TODO(crbug.com/1117591): Mac/arm support
+
+
+
   // The caller must hold the {allocation_mutex_}, thus we fail to lock it here.
   DCHECK(!allocation_mutex_.TryLock());
 
@@ -1839,6 +1890,14 @@ std::unique_ptr<WasmCode> NativeModule::AddCompiledCode(
 
 std::vector<std::unique_ptr<WasmCode>> NativeModule::AddCompiledCode(
     Vector<WasmCompilationResult> results) {
+
+
+  // TODO(crbug.com/1117591): Mac/arm support
+  // https://developer.apple.com/documentation/apple_silicon/porting_just-in-time_compilers_to_apple_silicon
+  // https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_cs_allow-jit
+
+
+
   DCHECK(!results.empty());
   // First, allocate code space for all the results.
   size_t total_code_space = 0;
