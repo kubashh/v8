@@ -33,6 +33,24 @@
       "revId": "b93213dc39b11406803b855813a07ca416574112",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb9ef27b_b2c9392e",
+        "filename": "src/snapshot/deserializer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-26T09:17:49Z",
+      "side": 1,
+      "message": "Done here and in SerializerAllocator.",
+      "parentUuid": "3aab2746_9284481c",
+      "revId": "b93213dc39b11406803b855813a07ca416574112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
