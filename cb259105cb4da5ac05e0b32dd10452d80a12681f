@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b320a583_c5d2a58c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145459
+      },
+      "writtenOn": "2020-08-26T17:01:54Z",
+      "side": 1,
+      "message": "Sorry if I\u0027m doing this all wrong, I\u0027ve only contributed to V8 once before and that was ages ago so I remember nothing about it. You were listed as the owner of the source files I updated so I\u0027m guessing I should add you as a reviewer? Also, it seems like the style on commit messages is to not go much beyond a paragraph but happy to provide a lot more explanatory information. Finally, I tried I dry run per the instructions on the web but was told that I\u0027m not allowed to do that.",
+      "revId": "cb259105cb4da5ac05e0b32dd10452d80a12681f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
