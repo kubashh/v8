@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d90f500_df9ecd80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-26T06:04:11Z",
+      "side": 1,
+      "message": "snapshot lgtm with final comment",
+      "revId": "b93213dc39b11406803b855813a07ca416574112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aab2746_9284481c",
+        "filename": "src/snapshot/deserializer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-08-26T06:04:11Z",
+      "side": 1,
+      "message": "Please add a STATIC_ASSERT(kNullRefSentinel \u003d\u003d 0) here just to keep a real (\u003d non-comment) connection to the constant. Is there a similar spot in the serializer?",
+      "revId": "b93213dc39b11406803b855813a07ca416574112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
