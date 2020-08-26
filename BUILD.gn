@@ -309,7 +309,7 @@ if (v8_enable_zone_compression == "") {
   v8_enable_zone_compression = false
 }
 if (v8_enable_heap_sandbox == "") {
-  v8_enable_heap_sandbox = false
+  v8_enable_heap_sandbox = v8_current_cpu == "x64"
 }
 if (v8_enable_single_generation == "") {
   v8_enable_single_generation = v8_disable_write_barriers
@@ -376,7 +376,7 @@ v8_toolset_for_shell = "host"
 #
 
 config("internal_config_base") {
- # Only targets in this file and its subdirs can depend on this.
+  # Only targets in this file and its subdirs can depend on this.
   visibility = [ "./*" ]
 
   configs = [ ":v8_tracing_config" ]
@@ -390,6 +390,7 @@ config("internal_config_base") {
 
 config("internal_config") {
   defines = []
+
   # Only targets in this file and its subdirs can depend on this.
   visibility = [ "./*" ]
 
@@ -2451,6 +2452,8 @@ v8_source_set("v8_base_without_compiler") {
     "src/execution/arguments.h",
     "src/execution/execution.cc",
     "src/execution/execution.h",
+    "src/execution/external-pointer-table.cc",
+    "src/execution/external-pointer-table.h",
     "src/execution/frame-constants.h",
     "src/execution/frames-inl.h",
     "src/execution/frames.cc",
