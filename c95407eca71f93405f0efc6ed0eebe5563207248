@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "753e3341_f4d2ed30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-08-27T20:15:49Z",
+      "side": 1,
+      "message": "Test262 is failing in \ndft-currency-mnfd-range-check-mxfd\n\nyou need to change the file test/test262/test262.status to put in \n  # http://crbug/v8/10844\n  \"intl402/NumberFormat/dft-currency-mnfd-range-check-mxfd\": : [FAIL],\nto mark the test is expected to fail for now, until the test262 is rolling into the v8.\nOR just wait for the rolling of that into v8 ",
+      "revId": "c95407eca71f93405f0efc6ed0eebe5563207248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

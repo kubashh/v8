@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57af0107_e74c25e1",
+        "filename": "test/test262/local-tests/test/intl402/NumberFormat/default-currency-maximum-fraction-digits.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-08-27T20:15:49Z",
+      "side": 0,
+      "message": "Please do not delete this test. I will transfer all of them to test262 soon and we can work from there. Please just modify here for now.",
+      "revId": "99ca333b0efba3236954b823101315aefeac51ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
