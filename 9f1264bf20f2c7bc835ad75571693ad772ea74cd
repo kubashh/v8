@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "174f4838_246a3a4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T11:46:16Z",
+      "side": 1,
+      "message": "going to land this now;\n\nChange: I put the feature behind a --super-ic flag; without the flag we don\u0027t generate the new bytecode but generate the runtime call as before.",
+      "revId": "9f1264bf20f2c7bc835ad75571693ad772ea74cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
