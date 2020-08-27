@@ -2778,7 +2778,7 @@ void BundleBuilder::BuildBundles() {
       }
       TRACE("Processing phi for v%d with %d:%d\n", phi->virtual_register(),
             out_range->TopLevel()->vreg(), out_range->relative_id());
-      bool phi_interferes_with_backedge_input = false;
+      bool any_backedge_input_merged = false;
       for (auto input : phi->operands()) {
         LiveRange* input_range = data()->GetOrCreateLiveRangeFor(input);
         TRACE("Input value v%d with range %d:%d\n", input,
@@ -2789,29 +2789,47 @@ void BundleBuilder::BuildBundles() {
           if (out->TryMerge(input_bundle, data()->is_trace_alloc())) {
             TRACE("Merged %d and %d to %d\n", phi->virtual_register(), input,
                   out->id());
-          } else if (input_range->Start() > out_range->Start()) {
-            // We are only interested in values defined after the phi, because
-            // those are values that will go over a back-edge.
-            phi_interferes_with_backedge_input = true;
+            if (input_range->Start() >= out_range->Start()) {
+              // We are only interested in values defined at or after the phi,
+              // because those are values that will go over a back-edge.
+              any_backedge_input_merged = true;
+            }
           }
         } else {
           TRACE("Add\n");
           if (out->TryAddRange(input_range)) {
             TRACE("Added %d and %d to %d\n", phi->virtual_register(), input,
                   out->id());
-          } else if (input_range->Start() > out_range->Start()) {
-            // We are only interested in values defined after the phi, because
-            // those are values that will go over a back-edge.
-            phi_interferes_with_backedge_input = true;
+            if (input_range->Start() >= out_range->Start()) {
+              // We are only interested in values defined at or after the phi,
+              // because those are values that will go over a back-edge.
+              any_backedge_input_merged = true;
+            }
           }
         }
       }
-      // Spilling the phi at the loop header is not beneficial if there is
-      // a back-edge with an input for the phi that interferes with the phi's
-      // value, because in case that input gets spilled it might introduce
-      // a stack-to-stack move at the back-edge.
-      if (phi_interferes_with_backedge_input)
+
+      // Determine whether spilling at the loop header may be beneficial.
+      //
+      // Note that "spilling at the loop header" (here and elsewhere) refers to
+      // marking a value as spilled starting at the loop header. For a phi value
+      // introduced by the loop, this means the predecessor blocks are
+      // responsible for getting the value onto the stack. Thus, "spilling at
+      // loop header" implies NOT inserting a spill instruction at the loop
+      // header.
+      //
+      // If we require predecessor blocks to put the phi value on the stack, and
+      // an input value is spilled to a different stack slot, then we could
+      // introduce a stack-to-stack move on the loop back-edge, which is slow.
+      // However, if we require predecessor blocks to put the phi value in a
+      // register, and the input value was spilled to the same stack slot, then
+      // we could introduce an unnecessary load at the end of the loop followed
+      // by a store at the beginning of the loop, which is even slower. Thus, if
+      // any of the input values have the correct stack slot, then spilling at
+      // the loop header may be beneficial.
+      if (block->IsLoopHeader() && !any_backedge_input_merged) {
         out_range->TopLevel()->set_spilling_at_loop_header_not_beneficial();
+      }
     }
     TRACE("Done block B%d\n", block_id);
   }
