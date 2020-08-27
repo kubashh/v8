@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e66c6a1_e7659881",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-27T11:50:36Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3cc3fefe_be009a82",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 8578,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-27T11:50:36Z",
+      "side": 1,
+      "message": "I think at this point we know it\u0027s a JSObject.",
+      "range": {
+        "startLine": 8578,
+        "startChar": 31,
+        "endLine": 8578,
+        "endChar": 41
+      },
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eca4e67b_62aa7a70",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 8634,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-27T11:50:36Z",
+      "side": 1,
+      "message": "This assert can be removed because TNode\u003cHeapObject\u003e already guarantees that.",
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8470600f_788d49d4",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 8665,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-27T11:50:36Z",
+      "side": 1,
+      "message": "Maybe\n  TNode\u003cJSFunction\u003e function \u003d CAST(holder);\nand use it below.",
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85d03301_b67b5769",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2490,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-27T11:50:36Z",
+      "side": 1,
+      "message": "Since you updated CallGetterIfAccessor(), now TryGetOwnProperty() uses this parameter exactly as receiver, so just p-\u003ereceiver() here.",
+      "range": {
+        "startLine": 2490,
+        "startChar": 32,
+        "endLine": 2490,
+        "endChar": 64
+      },
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c62a840_263cc13c",
+        "filename": "src/ic/accessor-assembler.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-27T11:50:36Z",
+      "side": 1,
+      "message": "Maybe something like\n  ... are required/expected to be the same, i.e. when \"receiver !\u003d lookup_start_object\"\n  case is not supported or not expected by the surrounding code.",
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ceb64a9_5a465a2e",
+        "filename": "src/ic/accessor-assembler.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-08-27T11:50:36Z",
+      "side": 1,
+      "message": "Please add similar comment here.",
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
