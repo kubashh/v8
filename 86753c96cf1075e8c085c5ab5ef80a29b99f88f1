@@ -33,6 +33,23 @@
       "revId": "86753c96cf1075e8c085c5ab5ef80a29b99f88f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "988d7ca2_780f89ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-27T13:42:49Z",
+      "side": 1,
+      "message": "Moving Dan to CC since he is OOO",
+      "revId": "86753c96cf1075e8c085c5ab5ef80a29b99f88f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
