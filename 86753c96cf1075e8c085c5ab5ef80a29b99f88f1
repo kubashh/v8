@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7e016e_35d906c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-08-27T10:10:55Z",
+      "side": 1,
+      "message": "Dan PTAL\nRoss, Mytrhi, Igor FYI this is is the last CL for ParameterMode",
+      "revId": "86753c96cf1075e8c085c5ab5ef80a29b99f88f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
