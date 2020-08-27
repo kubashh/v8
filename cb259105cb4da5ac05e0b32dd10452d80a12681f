@@ -16,6 +16,24 @@
       "revId": "cb259105cb4da5ac05e0b32dd10452d80a12681f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fb583cb2_5e7cddc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-08-27T09:00:35Z",
+      "side": 1,
+      "message": "Thanks for the patch!\n\nI\u0027m a suitable reviewer for this code yes.\n\nPlease add as much detail to the description as you like, that will be really helpful. For the first line you can use your patchset title like \u0027[cpu-profiler] Ensure sampled thread has Isolate lock under Windows\u0027. That sets the title in gerrit too. Then paragraphs after that are for explanation.\n\nIf there\u0027s a relevant bug filed then you can link to that with \u0027Bug: xxxxx\u0027 on it\u0027s own line too.\n\nI can start the trybots for you, I kicked them off. I\u0027ll also add extra ones for TSAN/MSAN as they are good at flushing out subtle bugs in this part of the codebase.",
+      "parentUuid": "b320a583_c5d2a58c",
+      "revId": "cb259105cb4da5ac05e0b32dd10452d80a12681f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
