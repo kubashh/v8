@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "3590c11c_7a3018c9",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edc23acd_7f99eb5f",
+      "range": {
+        "startLine": 216,
+        "startChar": 24,
+        "endLine": 216,
+        "endChar": 43
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de65df2a_27c3e8f5",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 14
@@ -62,6 +86,30 @@
       "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6390e123_228dd8ce",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2286,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de65df2a_27c3e8f5",
+      "range": {
+        "startLine": 2286,
+        "startChar": 61,
+        "endLine": 2286,
+        "endChar": 69
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "1fc638f7_72db1464",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2288,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Changed the name.\n\nTo limit the scope of this CL, I\u0027d like to not change the code (what\u0027s done where), only the names. (Except in cases were we got p-\u003ereceiver() even though we should get p-\u003elookup_start_object(), that has to be fixed for the next CL to work.)",
+      "parentUuid": "3a0c2ade_8878bc94",
+      "range": {
+        "startLine": 2288,
+        "startChar": 57,
+        "endLine": 2288,
+        "endChar": 70
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd41a049_343c2fc0",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 14
@@ -111,6 +183,30 @@
     },
     {
       "key": {
+        "uuid": "fc861718_f06cfad4",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2356,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd41a049_343c2fc0",
+      "range": {
+        "startLine": 2356,
+        "startChar": 18,
+        "endLine": 2356,
+        "endChar": 31
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "804b3056_4d47a6ca",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 14
@@ -125,6 +221,24 @@
       "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ac2b7ca_a8863a85",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2359,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Ah, good point about the DCHECK vs CSA_ASSERT.\n\nThis assert is for asserting that the lookup_start_object param is the same as what\u0027s in the LoadICParameters (I was confused about why we get both in some cases), so it can\u0027t be replaced by just using p-\u003ereceiver_and_lookup_start_object().",
+      "parentUuid": "804b3056_4d47a6ca",
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -151,6 +265,30 @@
     },
     {
       "key": {
+        "uuid": "2549408b_711a5e63",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2425,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf3e475c_de41671c",
+      "range": {
+        "startLine": 2425,
+        "startChar": 64,
+        "endLine": 2425,
+        "endChar": 77
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8037614_5e721f57",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 14
@@ -171,6 +309,30 @@
       "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f6c36b2_eb749823",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2451,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8037614_5e721f57",
+      "range": {
+        "startLine": 2451,
+        "startChar": 8,
+        "endLine": 2451,
+        "endChar": 28
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -197,6 +359,30 @@
     },
     {
       "key": {
+        "uuid": "099f195e_24f826d5",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Added \"holder\" param to CallGetterIfAccessor, as discussed. This stays \"receiver\".",
+      "parentUuid": "3bbf8b73_1095b294",
+      "range": {
+        "startLine": 2455,
+        "startChar": 43,
+        "endLine": 2455,
+        "endChar": 56
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e77afb5d_892683e3",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 14
@@ -208,6 +394,30 @@
       "writtenOn": "2020-08-24T21:10:35Z",
       "side": 1,
       "message": "TryGetOwnProperty() uses CallGetterIfAccessor() inside, so also p-\u003ereceiver_and_lookup_start_object() for the same reasons as above.",
+      "range": {
+        "startLine": 2486,
+        "startChar": 24,
+        "endLine": 2486,
+        "endChar": 66
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "863a3653_73979a28",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2486,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "TryGetOwnProperty already gets the \"object\" parameter, afaics that\u0027s the required \"holder\" to pass to CallGetterIfAccessor. Ptal if what I did is correct :)\n\n(Changed this to receiver_and_lookup_start_object anyway, because the parameter name is \"receiver\" on the other side.)",
+      "parentUuid": "e77afb5d_892683e3",
       "range": {
         "startLine": 2486,
         "startChar": 24,
@@ -243,6 +453,30 @@
     },
     {
       "key": {
+        "uuid": "5e0a048e_33669e8f",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2526,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7ad7311_784caec4",
+      "range": {
+        "startLine": 2526,
+        "startChar": 22,
+        "endLine": 2526,
+        "endChar": 59
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dc1f0ed_10b72945",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 14
@@ -263,6 +497,30 @@
       "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1267ff4_d1bbd923",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2527,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dc1f0ed_10b72945",
+      "range": {
+        "startLine": 2527,
+        "startChar": 8,
+        "endLine": 2527,
+        "endChar": 45
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -289,6 +547,30 @@
     },
     {
       "key": {
+        "uuid": "b785ae14_3ed942c3",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2826,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d27a32f_d6693a8d",
+      "range": {
+        "startLine": 2826,
+        "startChar": 27,
+        "endLine": 2826,
+        "endChar": 40
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5223d07a_31e00a20",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 14
@@ -309,6 +591,30 @@
       "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7988e969_eaaf1085",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3154,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5223d07a_31e00a20",
+      "range": {
+        "startLine": 3154,
+        "startChar": 16,
+        "endLine": 3154,
+        "endChar": 48
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -335,6 +641,30 @@
     },
     {
       "key": {
+        "uuid": "7118f6d4_25409d78",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3155,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe40bb2a_ada07445",
+      "range": {
+        "startLine": 3155,
+        "startChar": 9,
+        "endLine": 3155,
+        "endChar": 41
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a46c31b_92609db9",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 14
@@ -355,6 +685,30 @@
       "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae98898d_0690e915",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3173,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8a46c31b_92609db9",
+      "range": {
+        "startLine": 3173,
+        "startChar": 21,
+        "endLine": 3173,
+        "endChar": 34
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -381,6 +735,30 @@
     },
     {
       "key": {
+        "uuid": "eb3b7808_8c968b81",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3176,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Sg, let\u0027s be a bit lazy here. -\u003e Moved LoadMapInstanceType to avoid the naming problem.",
+      "parentUuid": "e6317b4b_291f7942",
+      "range": {
+        "startLine": 3176,
+        "startChar": 51,
+        "endLine": 3176,
+        "endChar": 64
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b39635c_3ddc2a6b",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 14
@@ -401,6 +779,30 @@
       "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "426f0e5f_b4d50875",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3247,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b39635c_3ddc2a6b",
+      "range": {
+        "startLine": 3247,
+        "startChar": 16,
+        "endLine": 3247,
+        "endChar": 48
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -427,6 +829,30 @@
     },
     {
       "key": {
+        "uuid": "91deda52_ffcdf86e",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3248,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f6eacf2_e1bd13db",
+      "range": {
+        "startLine": 3248,
+        "startChar": 9,
+        "endLine": 3248,
+        "endChar": 41
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a94dda1_f809d33f",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 14
@@ -450,6 +876,30 @@
     },
     {
       "key": {
+        "uuid": "d9776896_97a0416e",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3286,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a94dda1_f809d33f",
+      "range": {
+        "startLine": 3286,
+        "startChar": 17,
+        "endLine": 3286,
+        "endChar": 49
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98936bec_4b092dfa",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 14
@@ -470,6 +920,30 @@
       "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd67f913_1031b7eb",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3710,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "Moved it",
+      "parentUuid": "98936bec_4b092dfa",
+      "range": {
+        "startLine": 3710,
+        "startChar": 13,
+        "endLine": 3710,
+        "endChar": 36
+      },
+      "revId": "5d43adefefbb0eb34e595a99bac127f4bce28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

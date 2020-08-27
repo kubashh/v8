@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "873d9b51_a99bc8d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-27T08:05:56Z",
+      "side": 1,
+      "message": "thanks for looking!\n\ni tried to carefully do only the things you suggested (nothing additional), so that this wouldn\u0027t be so painful to review",
+      "revId": "7e616b5864711efaddbbd8ddf167f78807083247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
