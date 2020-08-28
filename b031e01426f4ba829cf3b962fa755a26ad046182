@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07dd6e03_3765ed0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-08-28T13:02:13Z",
+      "side": 1,
+      "message": "Thanks this approach is looking good, I will just stress-test the tests to make sure they don\u0027t go flaky after we land this. I will have time on Monday I think.",
+      "revId": "b031e01426f4ba829cf3b962fa755a26ad046182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69b5726f_962960ff",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-08-28T13:02:13Z",
+      "side": 1,
+      "message": "So on linux/mac/platforms that use signals, threadId_ will always \u003d\u003d ThreadId::Current() which would be used if we called Locker::IsLocked()?\n\nBut on Windows we suspend the main thread from the cpu-profiler thread, so we need to check if the thread we suspended had the lock (and thus should receive samples). Is that about right?\n\nThis is pretty subtle, would you mind adding a comment explaining?",
+      "range": {
+        "startLine": 38,
+        "startChar": 53,
+        "endLine": 38,
+        "endChar": 62
+      },
+      "revId": "b031e01426f4ba829cf3b962fa755a26ad046182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
