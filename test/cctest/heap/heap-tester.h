@@ -62,7 +62,9 @@
   V(WriteBarrier_MarkingExtension)                          \
   V(WriteBarriersInCopyJSObject)                            \
   V(DoNotEvacuatePinnedPages)                               \
-  V(ObjectStartBitmap)
+  V(ObjectStartBitmap)                                      \
+  V(ConservativeStackScanningNormalPages)                   \
+  V(ConservativeStackScanningLargePages)
 
 #define HEAP_TEST(Name)                                                   \
   CcTest register_test_##Name(v8::internal::heap::HeapTester::Test##Name, \
