@@ -16,6 +16,23 @@
       "revId": "d4d0977fec7abbaf350f8768e5734edabb5b34ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4f408353_74aa2def",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2020-08-28T18:23:53Z",
+      "side": 1,
+      "message": "Still LGTY (with deprecated GetMaxConcurrency)?",
+      "revId": "d4d0977fec7abbaf350f8768e5734edabb5b34ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
