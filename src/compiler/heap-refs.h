@@ -88,7 +88,6 @@ enum class OddballType : uint8_t {
   V(FeedbackVector)                           \
   V(FixedArrayBase)                           \
   V(FunctionTemplateInfo)                     \
-  V(HeapNumber)                               \
   V(JSReceiver)                               \
   V(Map)                                      \
   V(Name)                                     \
@@ -105,7 +104,9 @@ enum class OddballType : uint8_t {
 // They might be serialized when concurrent inlining is on.
 #define HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(V) \
   /* Subtypes of FixedArrayBase */                  \
-  V(FixedDoubleArray)
+  V(FixedDoubleArray)                               \
+  /* Subtypes of HeapObject */                      \
+  V(HeapNumber)
 
 class CompilationDependencies;
 struct FeedbackSource;

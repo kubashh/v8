@@ -696,7 +696,9 @@ class HeapNumberData : public HeapObjectData {
  public:
   HeapNumberData(JSHeapBroker* broker, ObjectData** storage,
                  Handle<HeapNumber> object)
-      : HeapObjectData(broker, storage, object), value_(object->value()) {}
+      : HeapObjectData(broker, storage, object), value_(object->value()) {
+    DCHECK(!FLAG_concurrent_inlining);
+  }
 
   double value() const { return value_; }
 
