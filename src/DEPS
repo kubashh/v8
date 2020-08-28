@@ -28,6 +28,7 @@ include_rules = [
   "+src/heap/read-only-heap-inl.h",
   "+src/heap/read-only-heap.h",
   "+src/heap/safepoint.h",
+  "+src/heap/base/stack.h",
   "-src/inspector",
   "-src/interpreter",
   "+src/interpreter/bytecode-array-accessor.h",
