@@ -107,6 +107,10 @@ Address ObjectStartBitmap::FindBasePtr(Address maybe_inner_ptr) const {
     byte = load(--cell_index);
   }
   const int leading_zeroes = v8::base::bits::CountLeadingZeros(byte);
+  if (leading_zeroes == kBitsPerCell) {
+    return kNullAddress;
+  }
+
   object_start_number =
       (cell_index * kBitsPerCell) + (kBitsPerCell - 1) - leading_zeroes;
   object_offset = object_start_number * kAllocationGranularity;
