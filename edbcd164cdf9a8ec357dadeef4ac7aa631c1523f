@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "00501536_5e75a460",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 8578,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-28T11:10:40Z",
+      "side": 1,
+      "message": "Turns out this is not true (it can also be PropertyCell) also we concluded the union solution is too cumbersome -\u003e keeping as is.",
+      "parentUuid": "3cc3fefe_be009a82",
+      "range": {
+        "startLine": 8578,
+        "startChar": 31,
+        "endLine": 8578,
+        "endChar": 41
+      },
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eca4e67b_62aa7a70",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 17
@@ -59,6 +83,24 @@
     },
     {
       "key": {
+        "uuid": "1a85ad57_7bdd5be4",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 8634,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-28T11:10:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eca4e67b_62aa7a70",
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8470600f_788d49d4",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 17
@@ -73,6 +115,24 @@
       "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c39e3e_1b7e3b41",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 8665,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-28T11:10:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8470600f_788d49d4",
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +159,30 @@
     },
     {
       "key": {
+        "uuid": "77c76088_be9c8967",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2490,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-28T11:10:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85d03301_b67b5769",
+      "range": {
+        "startLine": 2490,
+        "startChar": 32,
+        "endLine": 2490,
+        "endChar": 64
+      },
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c62a840_263cc13c",
         "filename": "src/ic/accessor-assembler.h",
         "patchSetId": 17
@@ -116,6 +200,24 @@
     },
     {
       "key": {
+        "uuid": "227ac5fc_13e5b8ba",
+        "filename": "src/ic/accessor-assembler.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-28T11:10:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c62a840_263cc13c",
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ceb64a9_5a465a2e",
         "filename": "src/ic/accessor-assembler.h",
         "patchSetId": 17
@@ -130,6 +232,24 @@
       "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eff00816_5ef058eb",
+        "filename": "src/ic/accessor-assembler.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2020-08-28T11:10:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ceb64a9_5a465a2e",
+      "revId": "edbcd164cdf9a8ec357dadeef4ac7aa631c1523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
