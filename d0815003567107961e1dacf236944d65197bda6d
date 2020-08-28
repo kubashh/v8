@@ -50,6 +50,24 @@
       "revId": "d0815003567107961e1dacf236944d65197bda6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b937bac_5671f4f9",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-28T11:49:48Z",
+      "side": 1,
+      "message": "Right, that\u0027s another path that can be used to log code. Also added it there now.",
+      "parentUuid": "84f9484a_3f8c0b78",
+      "revId": "d0815003567107961e1dacf236944d65197bda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
