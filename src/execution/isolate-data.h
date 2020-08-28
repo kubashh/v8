@@ -137,7 +137,6 @@ class IsolateData final {
     8 + RoundUp<8>(static_cast<int>(kPaddingOffset)) - kPaddingOffset)        \
   /* Total size. */                                                           \
   V(kSize, 0)
-
   DEFINE_FIELD_OFFSET_CONSTANTS(0, FIELDS)
 #undef FIELDS
 
