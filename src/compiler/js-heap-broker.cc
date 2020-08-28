@@ -1563,6 +1563,7 @@ FixedDoubleArrayData::FixedDoubleArrayData(JSHeapBroker* broker,
     : FixedArrayBaseData(broker, storage, object), contents_(broker->zone()) {}
 
 void FixedDoubleArrayData::SerializeContents(JSHeapBroker* broker) {
+  DCHECK(!FLAG_concurrent_inlining);
   if (serialized_contents_) return;
   serialized_contents_ = true;
 
@@ -2257,7 +2258,8 @@ void JSObjectData::SerializeRecursiveAsBoilerplate(JSHeapBroker* broker,
   } else {
     CHECK(boilerplate->HasDoubleElements());
     CHECK_LE(elements_object->Size(), kMaxRegularHeapObjectSize);
-    elements_->AsFixedDoubleArray()->SerializeContents(broker);
+    if (!FLAG_concurrent_inlining)
+      elements_->AsFixedDoubleArray()->SerializeContents(broker);
   }
 
   // TODO(turbofan): Do we want to support out-of-object properties?
@@ -3223,22 +3225,29 @@ ObjectRef FixedArrayRef::get(int i) const {
 }
 
 bool FixedDoubleArrayRef::is_the_hole(int i) const {
-  if (data_->should_access_heap()) {
+  if (FLAG_concurrent_inlining) {
+    return object()->is_the_hole(i);
+  } else if (data_->should_access_heap()) {
     AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
                                                       broker()->mode());
     return object()->is_the_hole(i);
+  } else {
+    return data()->AsFixedDoubleArray()->Get(i).is_hole_nan();
   }
-  return data()->AsFixedDoubleArray()->Get(i).is_hole_nan();
 }
 
 double FixedDoubleArrayRef::get_scalar(int i) const {
-  if (data_->should_access_heap()) {
+  if (FLAG_concurrent_inlining) {
+    CHECK(!is_the_hole(i));
+    return object()->get_scalar(i);
+  } else if (data_->should_access_heap()) {
     AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
                                                       broker()->mode());
     return object()->get_scalar(i);
+  } else {
+    CHECK(!data()->AsFixedDoubleArray()->Get(i).is_hole_nan());
+    return data()->AsFixedDoubleArray()->Get(i).get_scalar();
   }
-  CHECK(!data()->AsFixedDoubleArray()->Get(i).is_hole_nan());
-  return data()->AsFixedDoubleArray()->Get(i).get_scalar();
 }
 
 uint8_t BytecodeArrayRef::get(int index) const { return object()->get(index); }

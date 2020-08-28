@@ -69,7 +69,6 @@ enum class OddballType : uint8_t {
   /* Subtypes of FixedArrayBase */            \
   V(BytecodeArray)                            \
   V(FixedArray)                               \
-  V(FixedDoubleArray)                         \
   /* Subtypes of Name */                      \
   V(InternalizedString)                       \
   V(String)                                   \
@@ -100,7 +99,13 @@ enum class OddballType : uint8_t {
   /* Subtypes of Object */                    \
   V(HeapObject)
 
-#define HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(V)
+// This list is sorted such that subtypes appear before their supertypes.
+// DO NOT VIOLATE THIS PROPERTY!
+// Classes on this list will not be serialized when concurrent inlining is on.
+// They might be serialized when concurrent inlining is on.
+#define HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(V) \
+  /* Subtypes of FixedArrayBase */                  \
+  V(FixedDoubleArray)
 
 class CompilationDependencies;
 struct FeedbackSource;
