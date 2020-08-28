@@ -28,6 +28,6 @@ load(obj);
 // deoptimizes on a wrong map but retains the code
 assertOptimized(load);
 
-// deoptimizes on the wrong handler.
+// doeptimizes on the wrong handler.
 load(obj);
 assertUnoptimized(load);

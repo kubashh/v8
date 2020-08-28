@@ -2371,6 +2371,20 @@ TNode<MaybeObject> CodeStubAssembler::LoadWeakFixedArrayElement(
                           additional_offset, LoadSensitivity::kSafe);
 }
 
+TNode<MaybeObject> CodeStubAssembler::LoadWeakFixedArrayElement(
+    TNode<WeakFixedArray> object, int index) {
+  CHECK_GE(index, 0);
+  TNode<IntPtrT> offset =
+      IntPtrConstant(WeakFixedArray::OffsetOfElementAt(index));
+  // Print("index", SmiConstant(index));
+  // Print("cpp offset",
+  //       SmiConstant(WeakFixedArray::kObjectsOffset + index * kTaggedSize));
+  // Print("offset", SmiTag(offset));
+  constexpr MachineType machine_type = MachineTypeOf<MaybeObject>::value;
+  return UncheckedCast<MaybeObject>(
+      LoadFromObject(machine_type, object, offset));
+}
+
 TNode<Float64T> CodeStubAssembler::LoadFixedDoubleArrayElement(
     TNode<FixedDoubleArray> object, TNode<IntPtrT> index, Label* if_hole,
     MachineType machine_type) {
@@ -9221,6 +9235,12 @@ TNode<IntPtrT> CodeStubAssembler::ElementOffsetFromIndex(
                            IntPtrConstant(element_size_shift))
                  : WordSar(intptr_index_node,
                            IntPtrConstant(-element_size_shift)));
+  // Print("base_size", SmiConstant(base_size));
+  // Print("element_size_shift", SmiConstant(element_size_shift));
+  // Print("shifted_index", SmiTag(shifted_index));
+  // Print("signed(shifted_index)", SmiTag(Signed(shifted_index)));
+  // Print("add",
+  //       SmiTag(IntPtrAdd(IntPtrConstant(base_size), Signed(shifted_index))));
   return IntPtrAdd(IntPtrConstant(base_size), Signed(shifted_index));
 }
 

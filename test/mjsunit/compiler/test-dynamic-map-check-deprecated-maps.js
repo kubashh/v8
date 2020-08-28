@@ -26,10 +26,9 @@ o1.b = 10.23;
 f(o1);
 assertOptimized(f);
 
-// Deoptimizes and discards code.
 f(o);
 f(o);
-assertUnoptimized(f);
+assertOptimized(f);
 
 // When we reoptimize we should include code for migrating deprecated maps.
 %OptimizeFunctionOnNextCall(f);

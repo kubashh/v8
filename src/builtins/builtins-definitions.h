@@ -228,6 +228,9 @@ namespace internal {
   TFH(KeyedHasIC_SloppyArguments, LoadWithVector)                              \
   TFH(HasIndexedInterceptorIC, LoadWithVector)                                 \
                                                                                \
+  /* IC helpers */                                                             \
+  TFC(DynamicMapChecks, DynamicMapChecks)                                      \
+                                                                               \
   /* Microtask helpers */                                                      \
   TFS(EnqueueMicrotask, kMicrotask)                                            \
   ASM(RunMicrotasksTrampoline, RunMicrotasksEntry)                             \

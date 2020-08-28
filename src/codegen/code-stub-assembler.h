@@ -1329,6 +1329,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                                TNode<IntPtrT> index,
                                                int additional_offset = 0);
 
+  TNode<MaybeObject> LoadWeakFixedArrayElement(TNode<WeakFixedArray> object,
+                                               int index);
+
   // Load an array element from a FixedDoubleArray.
   TNode<Float64T> LoadFixedDoubleArrayElement(
       TNode<FixedDoubleArray> object, TNode<IntPtrT> index,

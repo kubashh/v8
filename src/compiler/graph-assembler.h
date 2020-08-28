@@ -91,6 +91,7 @@ class BasicBlock;
   V(Word64Or)                             \
   V(WordAnd)                              \
   V(WordEqual)                            \
+  V(WordOr)                               \
   V(WordSar)                              \
   V(WordSarShiftOutZeros)                 \
   V(WordShl)                              \
@@ -201,6 +202,13 @@ class V8_EXPORT_PRIVATE GraphAssembler {
     return MakeLabel<sizeof...(Reps)>(reps_array, type);
   }
 
+  template <typename... Reps>
+  GraphAssemblerLabel<sizeof...(Reps)>* MakeLabelFor(
+      Zone* zone, GraphAssemblerLabelType type, Reps... reps) {
+    std::array<MachineRepresentation, sizeof...(Reps)> reps_array = {reps...};
+    return MakeLabel<sizeof...(Reps)>(zone, reps_array, type);
+  }
+
   // As above, but with an std::array of machine representations.
   template <int VarCount>
   GraphAssemblerLabel<VarCount> MakeLabel(
@@ -209,6 +217,20 @@ class V8_EXPORT_PRIVATE GraphAssembler {
     return GraphAssemblerLabel<VarCount>(
         type, NewBasicBlock(type == GraphAssemblerLabelType::kDeferred),
         loop_nesting_level_, reps_array);
+  }
+
+  template <int VarCount>
+  GraphAssemblerLabel<VarCount>* MakeLabel(
+      Zone* zone, std::array<MachineRepresentation, VarCount> reps_array,
+      GraphAssemblerLabelType type) {
+    return zone->New<GraphAssemblerLabel<VarCount>>(
+        type, NewBasicBlock(type == GraphAssemblerLabelType::kDeferred),
+        loop_nesting_level_, reps_array);
+  }
+
+  template <typename... Reps>
+  GraphAssemblerLabel<sizeof...(Reps)>* MakeLabel(Zone* zone, Reps... reps) {
+    return MakeLabelFor(zone, GraphAssemblerLabelType::kNonDeferred, reps...);
   }
 
   // Convenience wrapper for creating non-deferred labels.
@@ -301,13 +323,15 @@ class V8_EXPORT_PRIVATE GraphAssembler {
 
   Node* Word32PoisonOnSpeculation(Node* value);
 
-  Node* DeoptimizeIf(
-      DeoptimizeReason reason, FeedbackSource const& feedback, Node* condition,
-      Node* frame_state,
-      IsSafetyCheck is_safety_check = IsSafetyCheck::kSafetyCheck);
+  Node* Deoptimize(DeoptimizeKind kind, DeoptimizeReason reason,
+                   FeedbackSource const& feedback, FrameState frame_state);
   Node* DeoptimizeIf(
       DeoptimizeKind kind, DeoptimizeReason reason,
       FeedbackSource const& feedback, Node* condition, Node* frame_state,
+      IsSafetyCheck is_safety_check = IsSafetyCheck::kSafetyCheck);
+  Node* DeoptimizeIf(
+      DeoptimizeReason reason, FeedbackSource const& feedback, Node* condition,
+      Node* frame_state,
       IsSafetyCheck is_safety_check = IsSafetyCheck::kSafetyCheck);
   Node* DeoptimizeIfNot(
       DeoptimizeKind kind, DeoptimizeReason reason,

@@ -621,7 +621,28 @@ bool IC::UpdatePolymorphicIC(Handle<Name> name,
       maps_and_handlers.push_back(MapAndHandler(map, handler));
     }
 
-    ConfigureVectorState(name, maps_and_handlers);
+    if (deprecated_maps > 0) {
+      std::vector<MapAndHandler> reordered_maps_and_handlers;
+      std::vector<MapAndHandler> deprecated_maps_and_handlers;
+      int number_of_maps = static_cast<int>(maps_and_handlers.size());
+      for (int i = 0; i < number_of_maps; i++) {
+        MapAndHandler map_and_handler = maps_and_handlers.at(i);
+        Handle<Map> map = map_and_handler.first;
+        if (map->is_deprecated()) {
+          deprecated_maps_and_handlers.push_back(map_and_handler);
+        } else {
+          reordered_maps_and_handlers.push_back(map_and_handler);
+        }
+      }
+
+      reordered_maps_and_handlers.insert(reordered_maps_and_handlers.end(),
+                                         deprecated_maps_and_handlers.begin(),
+                                         deprecated_maps_and_handlers.end());
+      CHECK_EQ(reordered_maps_and_handlers.size(), maps_and_handlers.size());
+      ConfigureVectorState(name, reordered_maps_and_handlers);
+    } else {
+      ConfigureVectorState(name, maps_and_handlers);
+    }
   }
 
   return true;

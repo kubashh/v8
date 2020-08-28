@@ -100,6 +100,7 @@ namespace internal {
   V(WasmFloat64ToNumber)                 \
   V(WasmI32AtomicWait32)                 \
   V(WasmI64AtomicWait32)                 \
+  V(DynamicMapChecks)                    \
   BUILTIN_LIST_TFS(V)                    \
   TORQUE_BUILTIN_LIST_TFC(V)
 
@@ -917,6 +918,19 @@ class TypeofDescriptor : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR(TypeofDescriptor, CallInterfaceDescriptor)
 };
 
+class DynamicMapChecksDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kFeedbackVector, kSlotIndex, kValue, kMap, kHandler)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(
+      MachineType::IntPtr(),         // result
+      MachineType::TaggedPointer(),  // kFeedbackVector,
+      MachineType::IntPtr(),         // kSlotIndex
+      MachineType::TaggedPointer(),  // kValue
+      MachineType::TaggedPointer(),  // kMap
+      MachineType::AnyTagged())      // kHandler
+  DECLARE_DESCRIPTOR(DynamicMapChecksDescriptor, CallInterfaceDescriptor)
+};
+
 class CallTrampolineDescriptor : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS_VARARGS(kFunction, kActualArgumentsCount)
@@ -1171,6 +1185,7 @@ class StringAtDescriptor final : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS(kReceiver, kPosition)
   // TODO(turbofan): Return untagged value here.
+
   DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::TaggedSigned(),  // result 1
                                     MachineType::AnyTagged(),     // kReceiver
                                     MachineType::IntPtr())        // kPosition

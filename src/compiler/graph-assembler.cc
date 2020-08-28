@@ -732,15 +732,10 @@ Node* GraphAssembler::Word32PoisonOnSpeculation(Node* value) {
   return AddNode(graph()->NewNode(machine()->Word32PoisonOnSpeculation(), value,
                                   effect(), control()));
 }
-
-Node* GraphAssembler::DeoptimizeIf(DeoptimizeReason reason,
-                                   FeedbackSource const& feedback,
-                                   Node* condition, Node* frame_state,
-                                   IsSafetyCheck is_safety_check) {
-  return AddNode(
-      graph()->NewNode(common()->DeoptimizeIf(DeoptimizeKind::kEager, reason,
-                                              feedback, is_safety_check),
-                       condition, frame_state, effect(), control()));
+Node* GraphAssembler::Deoptimize(DeoptimizeKind kind, DeoptimizeReason reason,
+                                 FeedbackSource const& feedback,
+                                 FrameState frame_state) {
+  return DeoptimizeIf(kind, reason, feedback, IntPtrConstant(1), frame_state);
 }
 
 Node* GraphAssembler::DeoptimizeIf(DeoptimizeKind kind, DeoptimizeReason reason,
@@ -750,6 +745,14 @@ Node* GraphAssembler::DeoptimizeIf(DeoptimizeKind kind, DeoptimizeReason reason,
   return AddNode(graph()->NewNode(
       common()->DeoptimizeIf(kind, reason, feedback, is_safety_check),
       condition, frame_state, effect(), control()));
+}
+
+Node* GraphAssembler::DeoptimizeIf(DeoptimizeReason reason,
+                                   FeedbackSource const& feedback,
+                                   Node* condition, Node* frame_state,
+                                   IsSafetyCheck is_safety_check) {
+  return DeoptimizeIf(DeoptimizeKind::kEager, reason, feedback, condition,
+                      frame_state, is_safety_check);
 }
 
 Node* GraphAssembler::DeoptimizeIfNot(DeoptimizeKind kind,

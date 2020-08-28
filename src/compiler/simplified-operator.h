@@ -432,17 +432,24 @@ class DynamicCheckMapsParameters final {
   enum ICState { kMonomorphic, kPolymorphic };
 
   DynamicCheckMapsParameters(CheckMapsFlags flags, Handle<Object> handler,
-                             const FeedbackSource& feedback, ICState state)
-      : flags_(flags), handler_(handler), feedback_(feedback), state_(state) {}
+                             Handle<Map> map, const FeedbackSource& feedback,
+                             ICState state)
+      : flags_(flags),
+        handler_(handler),
+        map_(map),
+        feedback_(feedback),
+        state_(state) {}
 
   CheckMapsFlags flags() const { return flags_; }
   Handle<Object> handler() const { return handler_; }
+  Handle<Map> map() const { return map_; }
   FeedbackSource const& feedback() const { return feedback_; }
   ICState const& state() const { return state_; }
 
  private:
   CheckMapsFlags const flags_;
   Handle<Object> const handler_;
+  Handle<Map> const map_;
   FeedbackSource const feedback_;
   ICState const state_;
 };
@@ -876,7 +883,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckMaps(CheckMapsFlags, ZoneHandleSet<Map>,
                             const FeedbackSource& = FeedbackSource());
   const Operator* DynamicCheckMaps(
-      CheckMapsFlags flags, Handle<Object> handler,
+      CheckMapsFlags flags, Handle<Object> handler, Handle<Map> map,
       const FeedbackSource& feedback,
       DynamicCheckMapsParameters::ICState ic_state);
   const Operator* CheckNotTaggedHole();
