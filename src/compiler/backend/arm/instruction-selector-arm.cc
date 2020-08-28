@@ -484,6 +484,9 @@ void VisitPairAtomicBinOp(InstructionSelector* selector, Node* node,
 
 }  // namespace
 
+class InstructionSelector::ArchSpecificState {};
+void InstructionSelector::InitArchSpecificState(size_t node_count) {}
+
 void InstructionSelector::VisitStackSlot(Node* node) {
   StackSlotRepresentation rep = StackSlotRepresentationOf(node->op());
   int slot = frame_->AllocateSpillSlot(rep.size());

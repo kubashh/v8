@@ -72,6 +72,8 @@ InstructionSelector::InstructionSelector(
   if (trace_turbo_ == kEnableTraceTurboJson) {
     instr_origins_.assign(node_count, {-1, 0});
   }
+
+  InitArchSpecificState(node_count);
 }
 
 bool InstructionSelector::SelectInstructions() {

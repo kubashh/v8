@@ -463,6 +463,8 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
  private:
   friend class OperandGenerator;
 
+  void InitArchSpecificState(size_t node_count);
+
   bool UseInstructionScheduling() const {
     return (enable_scheduling_ == kEnableScheduling) &&
            InstructionScheduler::SchedulerSupported();
@@ -702,6 +704,10 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   // arguments (for calls). Later used to apply an offset to stack checks.
   size_t* max_unoptimized_frame_height_;
   size_t* max_pushed_argument_count_;
+
+  // Whatever other data individual architectures need to store.
+  class ArchSpecificState;
+  ArchSpecificState* arch_specific_state_ = nullptr;
 };
 
 }  // namespace compiler

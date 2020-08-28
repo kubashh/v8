@@ -22,7 +22,7 @@ class X64OperandGenerator final : public OperandGenerator {
   explicit X64OperandGenerator(InstructionSelector* selector)
       : OperandGenerator(selector) {}
 
-  bool CanBeImmediate(Node* node) {
+  bool CanBeImmediate(Node* node) const {
     switch (node->opcode()) {
       case IrOpcode::kInt32Constant:
       case IrOpcode::kRelocatableInt32Constant: {
@@ -45,12 +45,14 @@ class X64OperandGenerator final : public OperandGenerator {
     }
   }
 
-  int32_t GetImmediateIntegerValue(Node* node) {
+  int32_t GetImmediateIntegerValue(Node* node) const {
     DCHECK(CanBeImmediate(node));
-    if (node->opcode() == IrOpcode::kInt32Constant) {
+    if (node->opcode() == IrOpcode::kInt32Constant ||
+        node->opcode() == IrOpcode::kRelocatableInt32Constant) {
       return OpParameter<int32_t>(node->op());
     }
-    DCHECK_EQ(IrOpcode::kInt64Constant, node->opcode());
+    DCHECK(node->opcode() == IrOpcode::kInt64Constant ||
+           node->opcode() == IrOpcode::kNumberConstant);
     return static_cast<int32_t>(OpParameter<int64_t>(node->op()));
   }
 
@@ -1297,73 +1299,113 @@ void InstructionSelector::VisitChangeInt32ToInt64(Node* node) {
   }
 }
 
-namespace {
+class InstructionSelector::ArchSpecificState {
+ public:
+  ArchSpecificState(Zone* zone, size_t node_count)
+      : node_states_(node_count, PhiState::kNotYetChecked, zone) {}
 
-bool ZeroExtendsWord32ToWord64(Node* node) {
-  switch (node->opcode()) {
-    case IrOpcode::kWord32And:
-    case IrOpcode::kWord32Or:
-    case IrOpcode::kWord32Xor:
-    case IrOpcode::kWord32Shl:
-    case IrOpcode::kWord32Shr:
-    case IrOpcode::kWord32Sar:
-    case IrOpcode::kWord32Rol:
-    case IrOpcode::kWord32Ror:
-    case IrOpcode::kWord32Equal:
-    case IrOpcode::kInt32Add:
-    case IrOpcode::kInt32Sub:
-    case IrOpcode::kInt32Mul:
-    case IrOpcode::kInt32MulHigh:
-    case IrOpcode::kInt32Div:
-    case IrOpcode::kInt32LessThan:
-    case IrOpcode::kInt32LessThanOrEqual:
-    case IrOpcode::kInt32Mod:
-    case IrOpcode::kUint32Div:
-    case IrOpcode::kUint32LessThan:
-    case IrOpcode::kUint32LessThanOrEqual:
-    case IrOpcode::kUint32Mod:
-    case IrOpcode::kUint32MulHigh:
-    case IrOpcode::kTruncateInt64ToInt32:
-      // These 32-bit operations implicitly zero-extend to 64-bit on x64, so the
-      // zero-extension is a no-op.
-      return true;
-    case IrOpcode::kProjection: {
-      Node* const value = node->InputAt(0);
-      switch (value->opcode()) {
-        case IrOpcode::kInt32AddWithOverflow:
-        case IrOpcode::kInt32SubWithOverflow:
-        case IrOpcode::kInt32MulWithOverflow:
-          return true;
-        default:
-          return false;
+  bool ZeroExtendsWord32ToWord64(const X64OperandGenerator& g, Node* node) {
+    switch (node->opcode()) {
+      case IrOpcode::kWord32And:
+      case IrOpcode::kWord32Or:
+      case IrOpcode::kWord32Xor:
+      case IrOpcode::kWord32Shl:
+      case IrOpcode::kWord32Shr:
+      case IrOpcode::kWord32Sar:
+      case IrOpcode::kWord32Rol:
+      case IrOpcode::kWord32Ror:
+      case IrOpcode::kWord32Equal:
+      case IrOpcode::kInt32Add:
+      case IrOpcode::kInt32Sub:
+      case IrOpcode::kInt32Mul:
+      case IrOpcode::kInt32MulHigh:
+      case IrOpcode::kInt32Div:
+      case IrOpcode::kInt32LessThan:
+      case IrOpcode::kInt32LessThanOrEqual:
+      case IrOpcode::kInt32Mod:
+      case IrOpcode::kUint32Div:
+      case IrOpcode::kUint32LessThan:
+      case IrOpcode::kUint32LessThanOrEqual:
+      case IrOpcode::kUint32Mod:
+      case IrOpcode::kUint32MulHigh:
+      case IrOpcode::kTruncateInt64ToInt32:
+        // These 32-bit operations implicitly zero-extend to 64-bit on x64, so
+        // the zero-extension is a no-op.
+        return true;
+      case IrOpcode::kProjection: {
+        Node* const value = node->InputAt(0);
+        switch (value->opcode()) {
+          case IrOpcode::kInt32AddWithOverflow:
+          case IrOpcode::kInt32SubWithOverflow:
+          case IrOpcode::kInt32MulWithOverflow:
+            return true;
+          default:
+            return false;
+        }
       }
-    }
-    case IrOpcode::kLoad:
-    case IrOpcode::kProtectedLoad:
-    case IrOpcode::kPoisonedLoad: {
-      // The movzxbl/movsxbl/movzxwl/movsxwl/movl operations implicitly
-      // zero-extend to 64-bit on x64, so the zero-extension is a no-op.
-      LoadRepresentation load_rep = LoadRepresentationOf(node->op());
-      switch (load_rep.representation()) {
-        case MachineRepresentation::kWord8:
-        case MachineRepresentation::kWord16:
-        case MachineRepresentation::kWord32:
-          return true;
-        default:
-          return false;
+      case IrOpcode::kLoad:
+      case IrOpcode::kProtectedLoad:
+      case IrOpcode::kPoisonedLoad: {
+        // The movzxbl/movsxbl/movzxwl/movsxwl/movl operations implicitly
+        // zero-extend to 64-bit on x64, so the zero-extension is a no-op.
+        LoadRepresentation load_rep = LoadRepresentationOf(node->op());
+        switch (load_rep.representation()) {
+          case MachineRepresentation::kWord8:
+          case MachineRepresentation::kWord16:
+          case MachineRepresentation::kWord32:
+            return true;
+          default:
+            return false;
+        }
       }
+      case IrOpcode::kPhi: {
+        PhiState current = node_states_[node->id()];
+        if (current != kNotYetChecked) {
+          return current == kUpperBitsGuaranteedZero;
+        }
+
+        // Mark this node to avoid infinite recursion if it is a predecessor of
+        // itself.
+        node_states_[node->id()] = kUpperBitsGuaranteedZero;
+
+        int input_count = node->op()->ValueInputCount();
+        for (int i = 0; i < input_count; ++i) {
+          Node* input = node->InputAt(i);
+          if (!ZeroExtendsWord32ToWord64(g, input)) {
+            node_states_[node->id()] = kNoGuarantee;
+            return false;
+          }
+        }
+
+        return true;
+      }
+      default:
+        if (g.CanBeImmediate(node)) {
+          int32_t immediate = g.GetImmediateIntegerValue(node);
+          return immediate >= 0;
+        }
+        return false;
     }
-    default:
-      return false;
   }
-}
 
-}  // namespace
+ private:
+  enum PhiState : uint8_t {
+    kNotYetChecked,
+    kUpperBitsGuaranteedZero,
+    kNoGuarantee,
+  };
+
+  ZoneVector<PhiState> node_states_;
+};
+
+void InstructionSelector::InitArchSpecificState(size_t node_count) {
+  arch_specific_state_ = zone()->New<ArchSpecificState>(zone(), node_count);
+}
 
 void InstructionSelector::VisitChangeUint32ToUint64(Node* node) {
   X64OperandGenerator g(this);
   Node* value = node->InputAt(0);
-  if (ZeroExtendsWord32ToWord64(value)) {
+  if (arch_specific_state_->ZeroExtendsWord32ToWord64(g, value)) {
     // These 32-bit operations implicitly zero-extend to 64-bit on x64, so the
     // zero-extension is a no-op.
     return EmitIdentity(node);
