@@ -16,6 +16,103 @@
       "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "05a9d707_b6f7112e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-28T15:31:38Z",
+      "side": 1,
+      "message": "Thanks, this looks very helpful. It\u0027s not clear to me though when this printing is actually being called. Or will we have to add this later?",
+      "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d76b727e_bc25bf93",
+        "filename": "src/profiler/profiler-stats.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-28T15:31:38Z",
+      "side": 1,
+      "message": "nit: 2020",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "053b0690_f6f7ceff",
+        "filename": "src/profiler/profiler-stats.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-28T15:31:38Z",
+      "side": 1,
+      "message": "You could also use relaxed memory ordering here, which should be significantly faster on ARM.",
+      "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee20c126_83781c76",
+        "filename": "src/profiler/profiler-stats.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-28T15:31:38Z",
+      "side": 1,
+      "message": "nit: 2020",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87089b55_6483f016",
+        "filename": "src/profiler/profiler-stats.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-08-28T15:31:38Z",
+      "side": 1,
+      "message": "I thought the default constructor leaves the value uninitialized, and you need to call std::atomic_init to actually initialize it?",
+      "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
