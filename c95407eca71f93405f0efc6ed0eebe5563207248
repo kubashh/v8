@@ -16,6 +16,23 @@
       "revId": "c95407eca71f93405f0efc6ed0eebe5563207248",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b65bdc8_a3d6141f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2020-08-28T21:01:28Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/v8/v8/+/2379868 is landed. So if you rebase, the redness should go away.",
+      "revId": "c95407eca71f93405f0efc6ed0eebe5563207248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
