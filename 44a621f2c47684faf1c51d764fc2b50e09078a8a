@@ -36,6 +36,93 @@
     },
     {
       "key": {
+        "uuid": "b4f4591b_1af02395",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-28T10:00:47Z",
+      "side": 1,
+      "message": "+1, ThreadLocalTop seems like a the best option.",
+      "parentUuid": "255f212e_58dbe34f",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00482520_e19c9f58",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-28T10:00:47Z",
+      "side": 1,
+      "message": "These fields are accessed from generated code. That\u0027s why we need this macro that defines field offset.\n\nIt seems that Stack is accessed only from C++, so it should not be defined in IsolateData.\n\nPlease move it to ThreadLocalTop or (as a quick fix) to Isolate.",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 23
+      },
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "051fa068_0f583142",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4470,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-28T10:00:47Z",
+      "side": 1,
+      "message": "Can we get a separate file for conservative stack scanning?",
+      "range": {
+        "startLine": 4470,
+        "startChar": 6,
+        "endLine": 4470,
+        "endChar": 30
+      },
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd6d5ffd_80a0bbb7",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4476,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-28T10:00:47Z",
+      "side": 1,
+      "message": "\"Mark\" is specific to the marking visitor. \"VisitConservativelyIfPointer\" seems more appropriate here.",
+      "range": {
+        "startLine": 4476,
+        "startChar": 4,
+        "endLine": 4476,
+        "endChar": 31
+      },
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d620b94_24c21b6b",
         "filename": "src/heap/heap.cc",
         "patchSetId": 1
@@ -81,6 +168,52 @@
       "writtenOn": "2020-08-26T16:21:35Z",
       "side": 1,
       "message": "Manually adding kHeapObjectTag is a bit uncommon, I think you could use obj.ptr() instead to create the FullObjectSlot.",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2c505eb_10776611",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4498,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-28T10:00:47Z",
+      "side": 1,
+      "message": "Pinning is only required for the marking visitor, other visitors could work without pinning (e.g. a verifying visitor). Pinning for those visitors maybe even incorrect because there is not corresponding code that clears the pin.\n\nThis should move to the delegate_ somehow. Add a TODO?",
+      "range": {
+        "startLine": 4498,
+        "startChar": 4,
+        "endLine": 4498,
+        "endChar": 50
+      },
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39d6fec4_a674070a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4499,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-28T10:00:47Z",
+      "side": 1,
+      "message": "Please add a DCHECK that the delegate_ did not change the value of the slot.",
+      "range": {
+        "startLine": 4499,
+        "startChar": 4,
+        "endLine": 4499,
+        "endChar": 31
+      },
       "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -172,6 +305,29 @@
     },
     {
       "key": {
+        "uuid": "97d9dd86_b363a8f1",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4523,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-28T10:00:47Z",
+      "side": 1,
+      "message": "Please add a DCHECK that the delegate_ did not change the value of the slot.",
+      "range": {
+        "startLine": 4523,
+        "startChar": 8,
+        "endLine": 4523,
+        "endChar": 36
+      },
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14127c1b_03413841",
         "filename": "src/heap/heap.cc",
         "patchSetId": 1
@@ -183,6 +339,24 @@
       "writtenOn": "2020-08-26T16:21:35Z",
       "side": 1,
       "message": "Isolate::Iterate visits other stuff as well, the conservative scan might have to go there.",
+      "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63b190ea_60f9e152",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4608,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-08-28T10:00:47Z",
+      "side": 1,
+      "message": "+1, either Isolate::Iterate or IterateStackRoots.",
+      "parentUuid": "14127c1b_03413841",
       "revId": "44a621f2c47684faf1c51d764fc2b50e09078a8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
