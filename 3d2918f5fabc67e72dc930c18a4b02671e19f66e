@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9d5be9b_e622bebc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-08-28T13:24:51Z",
+      "side": 1,
+      "message": "Hi Clemens, here\u0027s what I had for tracking empty samples in the profiler. It\u0027s not brilliant in that there is one global instance so multiple profilers don\u0027t get their own stats but we aren\u0027t interested in using the stats in those cases so sharing atomics between all profilers is fine for now IMO",
+      "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
