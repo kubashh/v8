@@ -1192,6 +1192,33 @@ void* SealHandleScope::operator new[](size_t) { base::OS::Abort(); }
 void SealHandleScope::operator delete(void*, size_t) { base::OS::Abort(); }
 void SealHandleScope::operator delete[](void*, size_t) { base::OS::Abort(); }
 
+bool Data::IsModule() const { return Utils::OpenHandle(this)->IsModule(); }
+
+bool Data::IsValue() const {
+  i::Handle<i::Object> self = Utils::OpenHandle(this);
+  if (self->IsSymbol()) {
+    return !i::Handle<i::Symbol>::cast(self)->is_private();
+  }
+  return (self->IsPrimitiveHeapObject() && !self->IsTheHole()) ||
+         self->IsSmi() || self->IsJSReceiver();
+}
+
+bool Data::IsPrivate() const {
+  i::Handle<i::Object> self = Utils::OpenHandle(this);
+  if (!self->IsSymbol()) {
+    return false;
+  }
+  return i::Handle<i::Symbol>::cast(self)->is_private();
+}
+
+bool Data::IsObjectTemplate() const {
+  return Utils::OpenHandle(this)->IsObjectTemplateInfo();
+}
+
+bool Data::IsFunctionTemplate() const {
+  return Utils::OpenHandle(this)->IsFunctionTemplateInfo();
+}
+
 void Context::Enter() {
   i::Handle<i::Context> env = Utils::OpenHandle(this);
   i::Isolate* isolate = env->GetIsolate();
@@ -3649,6 +3676,10 @@ void i::Internals::CheckInitializedImpl(v8::Isolate* external_isolate) {
                   "Isolate is not initialized or V8 has died");
 }
 
+void v8::Value::CheckCast(Data* that) {
+  Utils::ApiCheck(that->IsValue(), "v8::Value::Cast", "Data is not a Value");
+}
+
 void External::CheckCast(v8::Value* that) {
   Utils::ApiCheck(that->IsExternal(), "v8::External::Cast",
                   "Value is not an External");
@@ -3692,6 +3723,11 @@ void v8::Private::CheckCast(v8::Data* that) {
   Utils::ApiCheck(
       obj->IsSymbol() && i::Handle<i::Symbol>::cast(obj)->is_private(),
       "v8::Private::Cast", "Value is not a Private");
+}
+
+void v8::Module::CheckCast(v8::Data* that) {
+  i::Handle<i::Object> obj = Utils::OpenHandle(that);
+  Utils::ApiCheck(obj->IsModule(), "v8::Module::Cast", "Value is not a Module");
 }
 
 void v8::Number::CheckCast(v8::Value* that) {
