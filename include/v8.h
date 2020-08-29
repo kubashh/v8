@@ -1318,6 +1318,21 @@ class V8_EXPORT SealHandleScope {
  * The superclass of objects that can reside on V8's heap.
  */
 class V8_EXPORT Data {
+ public:
+  bool IsValue() const;
+
+  bool IsModule() const;
+
+  bool IsPrivate() const;
+
+  bool IsSignature() const;
+
+  bool IsAccessorSignature() const;
+
+  bool IsFunctionTemplate() const;
+
+  bool IsObjectTemplate() const;
+
  private:
   Data();
 };
@@ -1629,6 +1644,11 @@ class V8_EXPORT Module : public Data {
       "the latter will crash with a failed CHECK().")
   void SetSyntheticModuleExport(Local<String> export_name,
                                 Local<Value> export_value);
+
+  V8_INLINE static Module* Cast(Data* data);
+
+ private:
+  static void CheckCast(Data* obj);
 };
 
 /**
@@ -2924,6 +2944,8 @@ class V8_EXPORT Value : public Data {
   bool FullIsUndefined() const;
   bool FullIsNull() const;
   bool FullIsString() const;
+
+  static void CheckCast(Data* that);
 };
 
 
@@ -11576,6 +11598,12 @@ Private* Private::Cast(Data* data) {
   return reinterpret_cast<Private*>(data);
 }
 
+Module* Module::Cast(Data* data) {
+#ifdef V8_ENABLE_CHECKS
+  CheckCast(data);
+#endif
+  return reinterpret_cast<Module*>(data);
+}
 
 Number* Number::Cast(v8::Value* value) {
 #ifdef V8_ENABLE_CHECKS
