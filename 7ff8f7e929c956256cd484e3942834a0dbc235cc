@@ -39,6 +39,30 @@
       "revId": "7ff8f7e929c956256cd484e3942834a0dbc235cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5816f8e2_d53db6ea",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2020-08-31T11:30:34Z",
+      "side": 1,
+      "message": "Done, modified asan config",
+      "parentUuid": "37799068_befbb0d7",
+      "range": {
+        "startLine": 603,
+        "startChar": 9,
+        "endLine": 603,
+        "endChar": 23
+      },
+      "revId": "7ff8f7e929c956256cd484e3942834a0dbc235cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
