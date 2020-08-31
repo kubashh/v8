@@ -62,7 +62,12 @@ InstructionSelector::InstructionSelector(
       trace_turbo_(trace_turbo),
       tick_counter_(tick_counter),
       max_unoptimized_frame_height_(max_unoptimized_frame_height),
-      max_pushed_argument_count_(max_pushed_argument_count) {
+      max_pushed_argument_count_(max_pushed_argument_count)
+#if V8_TARGET_ARCH_64_BIT
+      ,
+      phi_states_(node_count, Upper32BitsState::kNotYetChecked, zone)
+#endif
+{
   DCHECK_EQ(*max_unoptimized_frame_height, 0);  // Caller-initialized.
 
   instructions_.reserve(node_count);
@@ -2562,6 +2567,11 @@ void InstructionSelector::VisitSignExtendWord16ToInt64(Node* node) {
 void InstructionSelector::VisitSignExtendWord32ToInt64(Node* node) {
   UNIMPLEMENTED();
 }
+
+bool InstructionSelector::ZeroExtendsWord32ToWord64IgnorePhis(Node* node) {
+  UNIMPLEMENTED();
+}
+
 #endif  // V8_TARGET_ARCH_32_BIT
 
 // 64 bit targets do not implement the following instructions.
@@ -3124,6 +3134,72 @@ bool InstructionSelector::CanProduceSignalingNaN(Node* node) {
     return false;
   }
   return true;
+}
+
+bool InstructionSelector::ZeroExtendsWord32ToWord64(Node* node) {
+#if V8_TARGET_ARCH_64_BIT
+  // State management for iterative depth-first traversal of phi inputs.
+  enum EntryType {
+    kCall,
+    kReturnTrue,
+    kReturnFalse,
+  };
+  EntryType type = kCall;
+  struct Continuation {
+    Node* phi;
+    int input_index;
+  };
+  ZoneStack<Continuation> call_stack(zone());
+  int input_index = 0;
+
+  while (true) {
+    if (type != kCall) {
+      // Pop a stack frame or return.
+      if (call_stack.empty()) {
+        return type == kReturnTrue;
+      }
+      Continuation cont = call_stack.top();
+      call_stack.pop();
+      node = cont.phi;
+      input_index = cont.input_index;
+    }
+
+    if (node->opcode() == IrOpcode::kPhi) {
+      if (type == kCall) {
+        Upper32BitsState current = phi_states_[node->id()];
+        if (current != Upper32BitsState::kNotYetChecked) {
+          type = current == Upper32BitsState::kUpperBitsGuaranteedZero
+                     ? kReturnTrue
+                     : kReturnFalse;
+          continue;
+        }
+        // Mark this node to avoid infinite recursion if it is a predecessor of
+        // itself.
+        phi_states_[node->id()] = Upper32BitsState::kUpperBitsGuaranteedZero;
+      } else if (type == kReturnFalse) {
+        phi_states_[node->id()] = Upper32BitsState::kNoGuarantee;
+        continue;  // Return false to caller frame.
+      }
+
+      if (input_index == node->op()->ValueInputCount()) {
+        // We've processed all inputs without finding a false.
+        type = kReturnTrue;
+        continue;
+      }
+
+      // Recursively process an input to this phi value.
+      call_stack.push({node, input_index + 1});
+      node = node->InputAt(input_index);
+      input_index = 0;
+      type = kCall;
+      continue;
+    }
+    type =
+        ZeroExtendsWord32ToWord64IgnorePhis(node) ? kReturnTrue : kReturnFalse;
+  }
+#else   // V8_TARGET_ARCH_64_BIT
+  UNIMPLEMENTED();
+#endif  // V8_TARGET_ARCH_64_BIT
 }
 
 namespace {

@@ -47,10 +47,12 @@ class X64OperandGenerator final : public OperandGenerator {
 
   int32_t GetImmediateIntegerValue(Node* node) {
     DCHECK(CanBeImmediate(node));
-    if (node->opcode() == IrOpcode::kInt32Constant) {
+    if (node->opcode() == IrOpcode::kInt32Constant ||
+        node->opcode() == IrOpcode::kRelocatableInt32Constant) {
       return OpParameter<int32_t>(node->op());
     }
-    DCHECK_EQ(IrOpcode::kInt64Constant, node->opcode());
+    DCHECK(node->opcode() == IrOpcode::kInt64Constant ||
+           node->opcode() == IrOpcode::kNumberConstant);
     return static_cast<int32_t>(OpParameter<int64_t>(node->op()));
   }
 
@@ -1297,9 +1299,8 @@ void InstructionSelector::VisitChangeInt32ToInt64(Node* node) {
   }
 }
 
-namespace {
-
-bool ZeroExtendsWord32ToWord64(Node* node) {
+bool InstructionSelector::ZeroExtendsWord32ToWord64IgnorePhis(Node* node) {
+  X64OperandGenerator g(this);
   switch (node->opcode()) {
     case IrOpcode::kWord32And:
     case IrOpcode::kWord32Or:
@@ -1354,11 +1355,16 @@ bool ZeroExtendsWord32ToWord64(Node* node) {
       }
     }
     default:
+      if (g.CanBeImmediate(node)) {
+        // Constants are loaded with movl or movq, or xorl for zero; see
+        // CodeGenerator::AssembleMove. So any non-negative constant that fits
+        // in a 32-bit signed integer is zero-extended to 64 bits.
+        int32_t immediate = g.GetImmediateIntegerValue(node);
+        return immediate >= 0;
+      }
       return false;
   }
 }
-
-}  // namespace
 
 void InstructionSelector::VisitChangeUint32ToUint64(Node* node) {
   X64OperandGenerator g(this);
