@@ -62,7 +62,12 @@ InstructionSelector::InstructionSelector(
       trace_turbo_(trace_turbo),
       tick_counter_(tick_counter),
       max_unoptimized_frame_height_(max_unoptimized_frame_height),
-      max_pushed_argument_count_(max_pushed_argument_count) {
+      max_pushed_argument_count_(max_pushed_argument_count)
+#if V8_TARGET_ARCH_64_BIT
+      ,
+      phi_states_(node_count, Upper32BitsState::kNotYetChecked, zone)
+#endif
+{
   DCHECK_EQ(*max_unoptimized_frame_height, 0);  // Caller-initialized.
 
   instructions_.reserve(node_count);
@@ -2562,6 +2567,11 @@ void InstructionSelector::VisitSignExtendWord16ToInt64(Node* node) {
 void InstructionSelector::VisitSignExtendWord32ToInt64(Node* node) {
   UNIMPLEMENTED();
 }
+
+bool InstructionSelector::ZeroExtendsWord32ToWord64IgnorePhis(Node* node) {
+  UNIMPLEMENTED();
+}
+
 #endif  // V8_TARGET_ARCH_32_BIT
 
 // 64 bit targets do not implement the following instructions.
@@ -3124,6 +3134,35 @@ bool InstructionSelector::CanProduceSignalingNaN(Node* node) {
     return false;
   }
   return true;
+}
+
+bool InstructionSelector::ZeroExtendsWord32ToWord64(Node* node) {
+#if V8_TARGET_ARCH_64_BIT
+  if (node->opcode() == IrOpcode::kPhi) {
+    Upper32BitsState current = phi_states_[node->id()];
+    if (current != Upper32BitsState::kNotYetChecked) {
+      return current == Upper32BitsState::kUpperBitsGuaranteedZero;
+    }
+
+    // Mark this node to avoid infinite recursion if it is a predecessor of
+    // itself.
+    phi_states_[node->id()] = Upper32BitsState::kUpperBitsGuaranteedZero;
+
+    int input_count = node->op()->ValueInputCount();
+    for (int i = 0; i < input_count; ++i) {
+      Node* input = node->InputAt(i);
+      if (!ZeroExtendsWord32ToWord64(input)) {
+        phi_states_[node->id()] = Upper32BitsState::kNoGuarantee;
+        return false;
+      }
+    }
+
+    return true;
+  }
+  return ZeroExtendsWord32ToWord64IgnorePhis(node);
+#else   // V8_TARGET_ARCH_64_BIT
+  UNIMPLEMENTED();
+#endif  // V8_TARGET_ARCH_64_BIT
 }
 
 namespace {
