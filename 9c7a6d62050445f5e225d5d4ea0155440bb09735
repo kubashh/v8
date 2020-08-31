@@ -33,6 +33,40 @@
       "revId": "9c7a6d62050445f5e225d5d4ea0155440bb09735",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a513213_b210d0d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-08-31T12:59:58Z",
+      "side": 1,
+      "message": "\u003e Patch Set 2:\n\u003e \n\u003e (1 comment)\n\u003e \n\u003e This change is ready for review.\n\nThe overall idea looks good to me. Just two comments:\n1. What if there are more inputs that cannot be successfully bundled? Would it be better to enhance the heuristic by checking more than half of the inputs can be bundled like how we implement TryReuseSpillForPhi?\n2. It\u0027s better to handle cases when phi input defined at the same position in a seperate CL. Please see my inline comments for detail.\n\nRegards\nYolanda\n",
+      "revId": "9c7a6d62050445f5e225d5d4ea0155440bb09735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a4ea726a_eff27c64",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2792,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-08-31T12:59:58Z",
+      "side": 1,
+      "message": "I was hestitated to add equal here as it may introduce regression in some cases when there are circles in gap moves. E.g. after register allocation we may have below gap moves:\nxmm3 \u003d xmm7, xmm7 \u003d xmm2, xmm2 \u003d xmm3\nThe current gap resolver in code generator will insert swaps during assembly:\nxmm15 \u003d xmm7, xmm7 \u003d xmm2, xmm2 \u003d xmm15, xmm15 \u003d xmm3, xmm2 \u003d xmm3, xmm3 \u003d xmm15 \n\nWith spilling some phi bundles at loop header, we can mitigate such swaps somehow with better performance. I\u0027m working on a patch to deal with such scenario and would prefer to fix this later.\nMoreover it\u0027s better to submit this in a separate CL since it\u0027s related to a different issue. Did you see any performance impact on this in your case?",
+      "revId": "9c7a6d62050445f5e225d5d4ea0155440bb09735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
