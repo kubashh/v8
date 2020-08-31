@@ -667,6 +667,15 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   void VisitWord64AtomicNarrowBinop(Node* node, ArchOpcode uint8_op,
                                     ArchOpcode uint16_op, ArchOpcode uint32_op);
 
+  bool ZeroExtendsWord32ToWord64(Node* node);
+  bool ZeroExtendsWord32ToWord64IgnorePhis(Node* node);
+
+  enum Upper32BitsState : uint8_t {
+    kNotYetChecked,
+    kUpperBitsGuaranteedZero,
+    kNoGuarantee,
+  };
+
   // ===========================================================================
 
   Zone* const zone_;
@@ -702,6 +711,10 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   // arguments (for calls). Later used to apply an offset to stack checks.
   size_t* max_unoptimized_frame_height_;
   size_t* max_pushed_argument_count_;
+
+#if V8_TARGET_ARCH_64_BIT
+  ZoneVector<Upper32BitsState> phi_states_;
+#endif
 };
 
 }  // namespace compiler
