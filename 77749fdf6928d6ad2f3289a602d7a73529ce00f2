@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81e0e6e9_96ecbb90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-08-31T22:19:28Z",
+      "side": 1,
+      "message": "Hello, could you please take a look at this change? Thanks!",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f38eca9_1dc1ae28",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3141,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-08-31T22:19:28Z",
+      "side": 1,
+      "message": "The recursive implementation in patchset 4 was much more readable, but I assume we\u0027d rather not run the risk of stack overflow when somebody decides to compile an obnoxiously large function. The maximum stack depth in Octane is 72, as a point of reference.",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "569bb28d_3bedee0f",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-08-31T22:19:28Z",
+      "side": 1,
+      "message": "Drive-by fix: I\u0027m not aware of any actual problems caused by this code, but I thought it was strange that this check didn\u0027t match the cases in CanBeImmediate.",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
