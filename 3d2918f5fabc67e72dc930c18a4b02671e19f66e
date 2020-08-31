@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "37d884da_e49e0500",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-08-31T14:14:31Z",
+      "side": 1,
+      "message": "Right now it\u0027s just printed in cpu profiler tests. For diagnosing the wasm issue we need to figure out how we are going to surface the data, then I\u0027ll send a CL",
+      "parentUuid": "05a9d707_b6f7112e",
+      "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d76b727e_bc25bf93",
         "filename": "src/profiler/profiler-stats.cc",
         "patchSetId": 4
@@ -59,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "f43a4ee0_372be526",
+        "filename": "src/profiler/profiler-stats.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-08-31T14:14:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d76b727e_bc25bf93",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "053b0690_f6f7ceff",
         "filename": "src/profiler/profiler-stats.cc",
         "patchSetId": 4
@@ -73,6 +115,24 @@
       "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce1d4c71_3bb589eb",
+        "filename": "src/profiler/profiler-stats.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-08-31T14:14:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "053b0690_f6f7ceff",
+      "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +159,30 @@
     },
     {
       "key": {
+        "uuid": "4b66a990_5e8fa808",
+        "filename": "src/profiler/profiler-stats.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-08-31T14:14:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee20c126_83781c76",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87089b55_6483f016",
         "filename": "src/profiler/profiler-stats.h",
         "patchSetId": 4
@@ -110,6 +194,24 @@
       "writtenOn": "2020-08-28T15:31:38Z",
       "side": 1,
       "message": "I thought the default constructor leaves the value uninitialized, and you need to call std::atomic_init to actually initialize it?",
+      "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06aeb81c_dad258c6",
+        "filename": "src/profiler/profiler-stats.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2020-08-31T14:14:31Z",
+      "side": 1,
+      "message": "I was going off this answer: https://stackoverflow.com/a/24304939/1614398",
+      "parentUuid": "87089b55_6483f016",
       "revId": "3d2918f5fabc67e72dc930c18a4b02671e19f66e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
