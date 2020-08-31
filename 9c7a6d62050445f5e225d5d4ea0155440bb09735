@@ -53,6 +53,41 @@
     },
     {
       "key": {
+        "uuid": "388d805d_60b3b5f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-08-31T15:14:40Z",
+      "side": 1,
+      "message": "\u003e 1. What if there are more inputs that cannot be successfully bundled? Would it be better to enhance the heuristic by checking more than half of the inputs can be bundled like how we implement TryReuseSpillForPhi?\n\nI tried that and saw a much smaller improvement on the Mono interpreter, but I can investigate further and try to figure out which values are providing the benefit I see.",
+      "parentUuid": "6a513213_b210d0d5",
+      "revId": "9c7a6d62050445f5e225d5d4ea0155440bb09735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4086d162_fac074d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-08-31T15:14:40Z",
+      "side": 1,
+      "message": "Thanks for reviewing!",
+      "revId": "9c7a6d62050445f5e225d5d4ea0155440bb09735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4ea726a_eff27c64",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 2
@@ -64,6 +99,24 @@
       "writtenOn": "2020-08-31T12:59:58Z",
       "side": 1,
       "message": "I was hestitated to add equal here as it may introduce regression in some cases when there are circles in gap moves. E.g. after register allocation we may have below gap moves:\nxmm3 \u003d xmm7, xmm7 \u003d xmm2, xmm2 \u003d xmm3\nThe current gap resolver in code generator will insert swaps during assembly:\nxmm15 \u003d xmm7, xmm7 \u003d xmm2, xmm2 \u003d xmm15, xmm15 \u003d xmm3, xmm2 \u003d xmm3, xmm3 \u003d xmm15 \n\nWith spilling some phi bundles at loop header, we can mitigate such swaps somehow with better performance. I\u0027m working on a patch to deal with such scenario and would prefer to fix this later.\nMoreover it\u0027s better to submit this in a separate CL since it\u0027s related to a different issue. Did you see any performance impact on this in your case?",
+      "revId": "9c7a6d62050445f5e225d5d4ea0155440bb09735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14b8cef6_b66073bc",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2792,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-08-31T15:14:40Z",
+      "side": 1,
+      "message": "\u003e Did you see any performance impact on this in your case?\n\nYes, turning the \u003e into \u003e\u003d for is very important for the program I\u0027m testing. The case that inspired this change is a loop-top phi value with 737 inputs: one from before the loop, one new value from within the loop which can\u0027t be bundled, and 735 instances of itself. My primary goal is to avoid setting SpillAtLoopHeaderNotBeneficial for that value.\n\nI\u0027ll split this out into a separate change as you recommend. Thanks.",
+      "parentUuid": "a4ea726a_eff27c64",
       "revId": "9c7a6d62050445f5e225d5d4ea0155440bb09735",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
