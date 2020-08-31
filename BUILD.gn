@@ -376,7 +376,7 @@ v8_toolset_for_shell = "host"
 #
 
 config("internal_config_base") {
- # Only targets in this file and its subdirs can depend on this.
+  # Only targets in this file and its subdirs can depend on this.
   visibility = [ "./*" ]
 
   configs = [ ":v8_tracing_config" ]
@@ -390,6 +390,7 @@ config("internal_config_base") {
 
 config("internal_config") {
   defines = []
+
   # Only targets in this file and its subdirs can depend on this.
   visibility = [ "./*" ]
 
@@ -3052,6 +3053,8 @@ v8_source_set("v8_base_without_compiler") {
     "src/profiler/profile-generator.h",
     "src/profiler/profiler-listener.cc",
     "src/profiler/profiler-listener.h",
+    "src/profiler/profiler-stats.cc",
+    "src/profiler/profiler-stats.h",
     "src/profiler/sampling-heap-profiler.cc",
     "src/profiler/sampling-heap-profiler.h",
     "src/profiler/strings-storage.cc",
