@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d28c5b8e_f047d1b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1341998
+      },
+      "writtenOn": "2020-08-31T18:40:20Z",
+      "side": 1,
+      "message": "I noticed that debugger/side-effect-free-debug-evaluate appeared to be ignored in some runtimes:\n\ndebugger/side-effect-free-debug-evaluate\u0027: [PASS, FAIL]\n\nFor the same reason that the new test was failing in some variants.\n",
+      "revId": "8c58f2b110c1aa61466c1a712db57d24c2948db7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
