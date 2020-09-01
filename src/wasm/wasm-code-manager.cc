@@ -6,6 +6,7 @@
 
 #include <iomanip>
 
+#include "src/base/build_config.h"
 #include "src/base/iterator.h"
 #include "src/base/macros.h"
 #include "src/base/platform/platform.h"
@@ -36,6 +37,44 @@
 #include "src/diagnostics/unwinding-info-win64.h"
 #endif  // V8_OS_WIN64
 
+#if defined(V8_OS_MACOSX) && defined(V8_HOST_ARCH_ARM64)
+// Mac-on-arm64 implies that we have at least MacOS 11.0, so we don't
+// need to check for that.
+
+#include <AvailabilityMacros.h>
+#include <AvailabilityVersions.h>
+
+// As long as we don't compile with the 11.0 SDK, we need to forward-declare
+// the function pthread_jit_write_protect_np. It's guarded by an #if that
+// makes sure that the forward declaration is automatically skipped once we
+// start compiling with the 11.0 SDK.
+#if !defined(MAC_OS_VERSION_11_0)
+extern "C" {
+void pthread_jit_write_protect_np(int write_protect_enabled);
+}
+#endif  // MAC_OS_VERSION_11_0
+
+// __builtin_available doesn't work for 11.0 yet; https://crbug.com/1115294
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability-new"
+void SwitchMemoryPermissionsToWritable() {
+  printf("Setting rw- permissions\n");
+  pthread_jit_write_protect_np(0);
+}
+void SwitchMemoryPermissionsToExecutable() {
+  printf("Setting r-x permissions\n");
+  pthread_jit_write_protect_np(1);
+}
+#pragma clang diagnostic pop
+
+#else  // Not Mac-on-arm64.
+
+// Nothing to do, we map code memory with rwx permissions.
+void SwitchMemoryPermissionsToWritable() {}
+void SwitchMemoryPermissionsToExecutable() {}
+
+#endif  // V8_OS_MACOSX && V8_HOST_ARCH_ARM64
+
 #define TRACE_HEAP(...)                                   \
   do {                                                    \
     if (FLAG_trace_wasm_native_heap) PrintF(__VA_ARGS__); \
@@ -46,6 +85,28 @@ namespace internal {
 namespace wasm {
 
 using trap_handler::ProtectedInstructionData;
+
+namespace {
+thread_local int code_space_write_nesting_level = 0;
+}  // namespace
+
+class CodeSpaceWriteScope {
+ public:
+  // TODO(jkummerow): Background threads could permanently stay in
+  // writable mode; only the main thread has to switch back and forth.
+  CodeSpaceWriteScope() {
+    if (code_space_write_nesting_level == 0) {
+      SwitchMemoryPermissionsToWritable();
+    }
+    code_space_write_nesting_level++;
+  }
+  ~CodeSpaceWriteScope() {
+    code_space_write_nesting_level--;
+    if (code_space_write_nesting_level == 0) {
+      SwitchMemoryPermissionsToExecutable();
+    }
+  }
+};
 
 base::AddressRegion DisjointAllocationPool::Merge(
     base::AddressRegion new_region) {
@@ -734,6 +795,7 @@ void WasmCodeAllocator::FreeCode(Vector<WasmCode* const> codes) {
   // Zap code area and collect freed code regions.
   DisjointAllocationPool freed_regions;
   size_t code_size = 0;
+  CodeSpaceWriteScope write_access;
   for (WasmCode* code : codes) {
     ZapCode(code->instruction_start(), code->instructions().size());
     FlushInstructionCache(code->instruction_start(),
@@ -961,6 +1023,7 @@ void NativeModule::UseLazyStub(uint32_t func_index) {
   if (!lazy_compile_table_) {
     uint32_t num_slots = module_->num_declared_functions;
     WasmCodeRefScope code_ref_scope;
+    CodeSpaceWriteScope write_access;
     base::AddressRegion single_code_space_region;
     {
       base::MutexGuard guard(&allocation_mutex_);
@@ -1022,6 +1085,7 @@ std::unique_ptr<WasmCode> NativeModule::AddCodeWithCodeSpace(
   const int code_comments_offset = desc.code_comments_offset;
   const int instr_size = desc.instr_size;
 
+  CodeSpaceWriteScope write_access;
   memcpy(dst_code_bytes.begin(), desc.buffer,
          static_cast<size_t>(desc.instr_size));
 
@@ -1215,6 +1279,7 @@ WasmCode* NativeModule::CreateEmptyJumpTableInRegion(
   Vector<uint8_t> code_space = code_allocator_.AllocateForCodeInRegion(
       this, jump_table_size, region, allocator_lock);
   DCHECK(!code_space.empty());
+  CodeSpaceWriteScope write_access;
   ZapCode(reinterpret_cast<Address>(code_space.begin()), code_space.size());
   std::unique_ptr<WasmCode> code{
       new WasmCode{this,                  // native_module
@@ -1240,6 +1305,7 @@ void NativeModule::PatchJumpTablesLocked(uint32_t slot_index, Address target) {
   // The caller must hold the {allocation_mutex_}, thus we fail to lock it here.
   DCHECK(!allocation_mutex_.TryLock());
 
+  CodeSpaceWriteScope write_access;
   for (auto& code_space_data : code_space_data_) {
     DCHECK_IMPLIES(code_space_data.jump_table, code_space_data.far_jump_table);
     if (!code_space_data.jump_table) continue;
@@ -1302,6 +1368,7 @@ void NativeModule::AddCodeSpace(
 #endif  // V8_OS_WIN64
 
   WasmCodeRefScope code_ref_scope;
+  CodeSpaceWriteScope write_access;
   WasmCode* jump_table = nullptr;
   WasmCode* far_jump_table = nullptr;
   const uint32_t num_wasm_functions = module_->num_declared_functions;
@@ -1863,6 +1930,7 @@ std::vector<std::unique_ptr<WasmCode>> NativeModule::AddCompiledCode(
   generated_code.reserve(results.size());
 
   // Now copy the generated code into the code space and relocate it.
+  CodeSpaceWriteScope write_access;
   for (auto& result : results) {
     DCHECK_EQ(result.code_desc.buffer, result.instr_buffer.get());
     size_t code_size = RoundUp<kCodeAlignment>(result.code_desc.instr_size);
