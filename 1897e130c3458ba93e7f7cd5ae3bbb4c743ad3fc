@@ -34,6 +34,24 @@
       "revId": "1897e130c3458ba93e7f7cd5ae3bbb4c743ad3fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "838b2cda_a6ccdffb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2020-09-01T12:12:47Z",
+      "side": 1,
+      "message": "Thanks, interesting that this seems to work.\n\nHowever, we still have too many crashes in general to make good use of this ATM I think. In some of the crashes, now the sanitizer itself crashes, not sure if the register content that it shows can help debugging.",
+      "parentUuid": "6711fd2c_692d2ffd",
+      "revId": "1897e130c3458ba93e7f7cd5ae3bbb4c743ad3fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
