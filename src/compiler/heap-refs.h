@@ -100,6 +100,8 @@ enum class OddballType : uint8_t {
   /* Subtypes of Object */                    \
   V(HeapObject)
 
+// Classes on this list will not be serialized when concurrent inlining is on.
+// They might be serialized when concurrent inlining is off.
 #define HEAP_BROKER_NEVER_SERIALIZED_OBJECT_LIST(V)
 
 class CompilationDependencies;
