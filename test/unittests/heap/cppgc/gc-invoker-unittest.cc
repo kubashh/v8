@@ -6,6 +6,7 @@
 
 #include "include/cppgc/platform.h"
 #include "src/heap/cppgc/heap.h"
+#include "test/unittests/heap/cppgc/test-platform.h"
 #include "testing/gmock/include/gmock/gmock-matchers.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -120,6 +121,17 @@ TEST(GCInvokerTest, IncrementalGCIsStarted) {
               GarbageCollector::Config::StackState::kMayContainHeapPointers)));
   invoker_without_support.StartIncrementalGarbageCollection(
       GarbageCollector::Config::ConservativeIncrementalConfig());
+}
+
+TEST(GCInvokerTest, ActualPreciseGCViaPlatform) {
+  testing::TestPlatform platform;
+  MockGarbageCollector gc;
+  GCInvoker invoker(&gc, &platform,
+                    cppgc::Heap::StackSupport::kNoConservativeStackScan);
+  EXPECT_CALL(gc, epoch).WillRepeatedly(::testing::Return(0));
+  EXPECT_CALL(gc, CollectGarbage);
+  invoker.CollectGarbage(GarbageCollector::Config::ConservativeAtomicConfig());
+  platform.WaitAllForegroundTasks();
 }
 
 }  // namespace internal
