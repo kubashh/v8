@@ -1126,7 +1126,8 @@ RUNTIME_FUNCTION(Runtime_IsAsmWasmCode) {
 namespace {
 
 v8::ModifyCodeGenerationFromStringsResult DisallowCodegenFromStringsCallback(
-    v8::Local<v8::Context> context, v8::Local<v8::Value> source) {
+    v8::Local<v8::Context> context, v8::Local<v8::Value> source,
+    bool is_code_kind) {
   return {false, {}};
 }
 
@@ -1142,7 +1143,7 @@ RUNTIME_FUNCTION(Runtime_DisallowCodegenFromStrings) {
   DCHECK_EQ(1, args.length());
   CONVERT_BOOLEAN_ARG_CHECKED(flag, 0);
   v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
-  v8_isolate->SetModifyCodeGenerationFromStringsCallback(
+  v8_isolate->SetModifyCodeGenerationFromStringsCallback2(
       flag ? DisallowCodegenFromStringsCallback : nullptr);
   return ReadOnlyRoots(isolate).undefined_value();
 }
