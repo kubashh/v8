@@ -16,6 +16,23 @@
       "revId": "ca58559a98f6779cf1661c8443935ee8714983f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "44daf653_2e06fa45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-09-01T07:48:55Z",
+      "side": 1,
+      "message": "Hi, Seth\n\nThank you for seperating the CL. I\u0027m copying your comment from the other CL for discussion:\n\"turning the \u003e into \u003e\u003d for is very important for the program I\u0027m testing. The case that inspired this change is a loop-top phi value with 737 inputs: one from before the loop, one new value from within the loop which can\u0027t be bundled, and 735 instances of itself. My primary goal is to avoid setting SpillAtLoopHeaderNotBeneficial for that value.\"\n\nI noticed that this change seems have no direct impact to your scenario where most instances DONT have intersection with phi value. We can have a try anyway to see if it would introduce any performance regressions.\n\nI\u0027m adding Sigurd who was the reviewer of my previous fixes.\n\nRegards\nYolanda",
+      "revId": "ca58559a98f6779cf1661c8443935ee8714983f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
