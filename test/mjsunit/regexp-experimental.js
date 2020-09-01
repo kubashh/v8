@@ -7,7 +7,7 @@
 function Test(regexp, subject, expectedResult, expectedLastIndex) {
   //assertEquals(%RegexpTypeTag(regexp), "EXPERIMENTAL");
   var result = regexp.exec(subject);
-  assertArrayEquals(result, expectedResult);
+  assertArrayEquals(expectedResult, result);
   assertEquals(regexp.lastIndex, expectedLastIndex);
 }
 
@@ -39,6 +39,7 @@ Test(/[💩]/, "f💩", [String.fromCodePoint(0xD83D)], 0);
 
 // Greedy quantifier for 0 or more matches.
 Test(/x*/, "asdfxk", [""], 0);
+Test(/xx*a/, "xxa", ["xxa"], 0);
 Test(/asdf*/, "aasdfffk", ["asdfff"], 0);
 
 // Non-capturing groups and nested operators.
