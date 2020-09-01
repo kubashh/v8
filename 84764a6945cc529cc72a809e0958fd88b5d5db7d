@@ -33,6 +33,64 @@
       "revId": "84764a6945cc529cc72a809e0958fd88b5d5db7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ceff25c7_ca78afc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-01T10:37:44Z",
+      "side": 1,
+      "message": "I think this optimization is kind of unsound when A and B have different sign:\n\nSuppose we lowered Java",
+      "revId": "84764a6945cc529cc72a809e0958fd88b5d5db7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "77f728cf_2e0eef45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-01T10:37:44Z",
+      "side": 1,
+      "message": "I actually think it\u0027s not clear this optimization is sound, since it can change if the node triggers an overflow or not, for example in a computation like MAX_INT + 1 - 1, which would turn into MAX_INT + 0 and no longer overflow. Now depending on how the overflow signal of the original operation was used, this could be a problem. A straightforward way how to avoid this issue would be to require that A and B have the same sign.",
+      "parentUuid": "63e0e24e_227d3990",
+      "revId": "84764a6945cc529cc72a809e0958fd88b5d5db7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "621a53b6_f08ee4cf",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-01T10:37:44Z",
+      "side": 1,
+      "message": "This seems wrong.",
+      "range": {
+        "startLine": 1247,
+        "startChar": 14,
+        "endLine": 1247,
+        "endChar": 32
+      },
+      "revId": "84764a6945cc529cc72a809e0958fd88b5d5db7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
