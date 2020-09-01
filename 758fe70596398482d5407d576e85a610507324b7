@@ -1,0 +1,164 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51da9a91_322d0b61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-01T12:07:02Z",
+      "side": 1,
+      "message": "Thanks for the contribution!\n",
+      "revId": "758fe70596398482d5407d576e85a610507324b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32940be3_13265b91",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-01T12:07:02Z",
+      "side": 1,
+      "message": "For symmetry it would be nice to have those methods on v8::Template as well.",
+      "range": {
+        "startLine": 1337,
+        "startChar": 0,
+        "endLine": 1346,
+        "endChar": 0
+      },
+      "revId": "758fe70596398482d5407d576e85a610507324b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4cee419_cc5f86fb",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-01T12:07:02Z",
+      "side": 1,
+      "message": "Mild performance tweaks:\n\n  i::DisallowHeapAllocation no_gc;\n  i::Object self \u003d * Utils::OpenHandle(this);\n  if (self.IsSmi()) return true;\n  i::HeapObject heap_object \u003d i::HeapObject::cast(object);\n  DCHECK(!heap_object.IsTheHole());\n  return heap_object.IsPrimitiveHeapObject() || heap_object.IsJSReceiver();\n\n\nAfter the initial Smi check you don\u0027t have to check again whether it\u0027s actually a heap object or not. And with the raw pointers, we actually get proper c++ optimizations.\n\nI hope this compiles :)",
+      "revId": "758fe70596398482d5407d576e85a610507324b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22956604_8b407040",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-01T12:07:02Z",
+      "side": 1,
+      "message": "The hole check is not needed, you can turn this into a DCHECK.\n\nWe should never get TheHole here: https://source.chromium.org/chromium/chromium/src/+/master:v8/src/api/api-inl.h;l\u003d51;drc\u003d6e8b402a6231405b753919029c9027404325ea00;bpv\u003d1;bpt\u003d1",
+      "range": {
+        "startLine": 1202,
+        "startChar": 43,
+        "endLine": 1202,
+        "endChar": 61
+      },
+      "revId": "758fe70596398482d5407d576e85a610507324b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20bc66b4_c17a463d",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-01T12:07:02Z",
+      "side": 1,
+      "message": "return Utils::OpenHandle(this)-\u003eIsPrivateSymbol();",
+      "range": {
+        "startLine": 1207,
+        "startChar": 0,
+        "endLine": 1211,
+        "endChar": 56
+      },
+      "revId": "758fe70596398482d5407d576e85a610507324b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a22bd976_e59d8d70",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-01T12:07:02Z",
+      "side": 1,
+      "message": "Please add tests for these two methods as well.",
+      "range": {
+        "startLine": 1213,
+        "startChar": 0,
+        "endLine": 1220,
+        "endChar": 1
+      },
+      "revId": "758fe70596398482d5407d576e85a610507324b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8338704_67a20593",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2271,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-01T12:07:02Z",
+      "side": 1,
+      "message": "Maybe add the Is{Function,Object}Template checks as well for completeness.",
+      "revId": "758fe70596398482d5407d576e85a610507324b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "304072e8_7eba7210",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2291,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-01T12:07:02Z",
+      "side": 1,
+      "message": "Mostly from an internal perspective:\n\n  CHECK(!p-\u003eIsSymbol());",
+      "revId": "758fe70596398482d5407d576e85a610507324b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
