@@ -105,6 +105,24 @@
     },
     {
       "key": {
+        "uuid": "2d34dc52_3cc1ce33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-01T20:54:57Z",
+      "side": 1,
+      "message": "I looked into this some more and found that the smaller improvement with a majority-based heuristic was due to several phi nodes with two backedge inputs: one bundled, one non-bundled. We benefit a lot by spilling those at the loop header. In patchset 3 I\u0027ve implemented a slight variation on your suggestion: if at least half of the inputs can be bundled, then we consider spilling at the loop header to be possibly beneficial.",
+      "parentUuid": "388d805d_60b3b5f7",
+      "revId": "9c7a6d62050445f5e225d5d4ea0155440bb09735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4ea726a_eff27c64",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 2
