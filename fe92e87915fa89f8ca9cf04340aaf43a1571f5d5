@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "701265ad_a2750631",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2070,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-01T18:22:19Z",
+      "side": 1,
+      "message": "Could you call the old code path from here?\nThis way we still have only one contact point in V8 with the two different callbacks.",
+      "range": {
+        "startLine": 2046,
+        "startChar": 0,
+        "endLine": 2070,
+        "endChar": 0
+      },
+      "revId": "fe92e87915fa89f8ca9cf04340aaf43a1571f5d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09893168_d460a1d5",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2142,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-01T18:22:19Z",
+      "side": 1,
+      "message": "Please merge with the old code-path.",
+      "range": {
+        "startLine": 2132,
+        "startChar": 0,
+        "endLine": 2142,
+        "endChar": 3
+      },
+      "revId": "fe92e87915fa89f8ca9cf04340aaf43a1571f5d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a242100_d46a9a81",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-01T18:22:19Z",
+      "side": 1,
+      "message": "nit: \n\n  if (!object-\u003eIsJSReceiver()) return false;\n  return JSReceiver::...;",
+      "range": {
+        "startLine": 1815,
+        "startChar": 0,
+        "endLine": 1815,
+        "endChar": 31
+      },
+      "revId": "fe92e87915fa89f8ca9cf04340aaf43a1571f5d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
