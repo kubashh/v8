@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6c3ae38_8aab69f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-01T19:45:33Z",
+      "side": 1,
+      "message": "Patch set 3 Release mode results:\n- mjsunit and test262 pass without errors.\n- cctest has 20 errors. At first glance, looks like test-specific fixes are needed.\n- unittests have 9 errors. At first glance, looks like a variety of different issues that need investigation.\n- messages is expected to fail because extra `printf` statements are still in the patch. I think inspector-tests are in the same boat?",
+      "revId": "17a012340445978d610baf6de432118b072cd0bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
