@@ -2043,6 +2043,31 @@ bool ModifyCodeGenerationFromStrings(Isolate* isolate, Handle<Context> context,
   return result.codegen_allowed;
 }
 
+// Check whether embedder allows code generation in this context.
+// (via v8::Isolate::SetModifyCodeGenerationFromStringsCallback2)
+bool ModifyCodeGenerationFromStrings2(Isolate* isolate, Handle<Context> context,
+                                      Handle<i::Object>* source,
+                                      bool is_code_kind) {
+  DCHECK(isolate->modify_code_gen_callback2());
+  DCHECK(source);
+
+  // Callback set. Run it, and use the return value as source, or block
+  // execution if it's not set.
+  VMState<EXTERNAL> state(isolate);
+  ModifyCodeGenerationFromStringsCallback2 modify_callback =
+      isolate->modify_code_gen_callback2();
+  RuntimeCallTimerScope timer(
+      isolate, RuntimeCallCounterId::kCodeGenerationFromStringsCallbacks);
+  ModifyCodeGenerationFromStringsResult result = modify_callback(
+      v8::Utils::ToLocal(context), v8::Utils::ToLocal(*source), is_code_kind);
+  if (result.codegen_allowed && !result.modified_source.IsEmpty()) {
+    // Use the new source (which might be the same as the old source).
+    *source =
+        Utils::OpenHandle(*result.modified_source.ToLocalChecked(), false);
+  }
+  return result.codegen_allowed;
+}
+
 // Run Embedder-mandated checks before generating code from a string.
 //
 // Returns a string to be used for compilation, or a flag that an object type
@@ -2060,7 +2085,7 @@ bool ModifyCodeGenerationFromStrings(Isolate* isolate, Handle<Context> context,
 // static
 std::pair<MaybeHandle<String>, bool> Compiler::ValidateDynamicCompilationSource(
     Isolate* isolate, Handle<Context> context,
-    Handle<i::Object> original_source) {
+    Handle<i::Object> original_source, bool is_code_kind) {
   // Check if the context unconditionally allows code gen from strings.
   // allow_code_gen_from_strings can be many things, so we'll always check
   // against the 'false' literal, so that e.g. undefined and 'true' are treated
@@ -2074,6 +2099,11 @@ std::pair<MaybeHandle<String>, bool> Compiler::ValidateDynamicCompilationSource(
   // allow_code_gen_callback only allows proper strings.
   // (I.e., let allow_code_gen_callback decide, if it has been set.)
   if (isolate->allow_code_gen_callback()) {
+    // If we run into this condition, the embedder has marked some objects
+    // with Object::SetCodeKind, but has given us a callback that only accepts
+    // strings. That makes no sense.
+    DCHECK(!i::Object::IsCodeKind(isolate, original_source));
+
     if (!original_source->IsString()) {
       return {MaybeHandle<String>(), true};
     }
@@ -2096,6 +2126,28 @@ std::pair<MaybeHandle<String>, bool> Compiler::ValidateDynamicCompilationSource(
       return {MaybeHandle<String>(), true};
     }
     return {Handle<String>::cast(modified_source), false};
+  }
+  // Exact duplicate of the above, but with callback2. One of these needs to be
+  // removed once the corresponding callback type has been deprecated & removed.
+  if (isolate->modify_code_gen_callback2()) {
+    Handle<i::Object> modified_source = original_source;
+    if (!ModifyCodeGenerationFromStrings2(isolate, context, &modified_source,
+                                          is_code_kind)) {
+      return {MaybeHandle<String>(), false};
+    }
+    if (!modified_source->IsString()) {
+      return {MaybeHandle<String>(), true};
+    }
+    return {Handle<String>::cast(modified_source), false};
+  }
+
+  if (!context->allow_code_gen_from_strings().IsFalse(isolate) &&
+      i::Object::IsCodeKind(isolate, original_source)) {
+    // Codegen is unconditionally allowed, and we're been given a CodeKind
+    // object. Stringify.
+    MaybeHandle<String> stringified_source =
+        Object::ToString(isolate, original_source);
+    return {stringified_source, stringified_source.is_null()};
   }
 
   // If unconditional codegen was disabled, and no callback defined, we block
@@ -2134,12 +2186,13 @@ MaybeHandle<JSFunction> Compiler::GetFunctionFromValidatedString(
 // static
 MaybeHandle<JSFunction> Compiler::GetFunctionFromString(
     Handle<Context> context, Handle<Object> source,
-    ParseRestriction restriction, int parameters_end_pos) {
+    ParseRestriction restriction, int parameters_end_pos, bool is_code_kind) {
   Isolate* const isolate = context->GetIsolate();
-  Handle<Context> native_context(context->native_context(), isolate);
-  return GetFunctionFromValidatedString(
-      context, ValidateDynamicCompilationSource(isolate, context, source).first,
-      restriction, parameters_end_pos);
+  MaybeHandle<String> validated_source =
+      ValidateDynamicCompilationSource(isolate, context, source, is_code_kind)
+          .first;
+  return GetFunctionFromValidatedString(context, validated_source, restriction,
+                                        parameters_end_pos);
 }
 
 namespace {
