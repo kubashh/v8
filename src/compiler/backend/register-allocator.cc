@@ -2759,6 +2759,54 @@ bool LiveRangeBuilder::NextIntervalStartsInDifferentBlocks(
   return block->rpo_number() < next_block->rpo_number();
 }
 
+namespace {
+
+class BackedgeCounter {
+ public:
+  void Count(const LiveRange* input_range, const LiveRange* out_range,
+             bool merged) {
+    // We are only interested in values defined at or after the phi,
+    // because those are values that will go over a back-edge.
+    if (input_range->Start() >= out_range->Start()) {
+      if (merged) {
+        ++merged_backedge_inputs_;
+      } else {
+        ++non_merged_backedge_inputs_;
+      }
+    }
+  }
+
+  // Note that "spilling at loop header" (here and elsewhere) refers to marking
+  // a value as spilled starting at the loop header. For a phi value introduced
+  // by the loop, this means the predecessor blocks are responsible for getting
+  // the value onto the stack. Thus, "spilling at loop header" implies NOT
+  // inserting a spill instruction at the loop header.
+  bool SpillingAtLoopHeaderMayBeBeneficial() const {
+    // If there aren't any back-edge inputs, then this isn't a loop-top phi, so
+    // we needn't worry about conflicts.
+    if (merged_backedge_inputs_ + non_merged_backedge_inputs_ == 0) {
+      return true;
+    }
+
+    // If we require predecessor blocks to put the phi value on the stack, and
+    // an input value is spilled to a different stack slot, then we could
+    // introduce a stack-to-stack move on the loop back-edge, which is slow.
+    // However, if we require predecessor blocks to put the phi value in a
+    // register, and the input value was spilled to the same stack slot, then we
+    // could introduce an unnecessary load at the end of the loop followed by a
+    // store at the beginning of the loop, which is also slow. So we let the
+    // majority decide. If at least half of the backedge input values have the
+    // correct stack slot, then spilling at the loop header may be beneficial.
+    return merged_backedge_inputs_ >= non_merged_backedge_inputs_;
+  }
+
+ private:
+  uint32_t non_merged_backedge_inputs_ = 0;
+  uint32_t merged_backedge_inputs_ = 0;
+};
+
+}  // namespace
+
 void BundleBuilder::BuildBundles() {
   TRACE("Build bundles\n");
   // Process the blocks in reverse order.
@@ -2778,7 +2826,7 @@ void BundleBuilder::BuildBundles() {
       }
       TRACE("Processing phi for v%d with %d:%d\n", phi->virtual_register(),
             out_range->TopLevel()->vreg(), out_range->relative_id());
-      bool phi_interferes_with_backedge_input = false;
+      BackedgeCounter counter;
       for (auto input : phi->operands()) {
         LiveRange* input_range = data()->GetOrCreateLiveRangeFor(input);
         TRACE("Input value v%d with range %d:%d\n", input,
@@ -2786,32 +2834,25 @@ void BundleBuilder::BuildBundles() {
         LiveRangeBundle* input_bundle = input_range->get_bundle();
         if (input_bundle != nullptr) {
           TRACE("Merge\n");
-          if (out->TryMerge(input_bundle, data()->is_trace_alloc())) {
+          bool merged = out->TryMerge(input_bundle, data()->is_trace_alloc());
+          if (merged) {
             TRACE("Merged %d and %d to %d\n", phi->virtual_register(), input,
                   out->id());
-          } else if (input_range->Start() >= out_range->Start()) {
-            // We are only interested in values defined at or after the phi,
-            // because those are values that will go over a back-edge.
-            phi_interferes_with_backedge_input = true;
           }
+          counter.Count(input_range, out_range, merged);
         } else {
           TRACE("Add\n");
-          if (out->TryAddRange(input_range)) {
+          bool added = out->TryAddRange(input_range);
+          if (added) {
             TRACE("Added %d and %d to %d\n", phi->virtual_register(), input,
                   out->id());
-          } else if (input_range->Start() >= out_range->Start()) {
-            // We are only interested in values defined at or after the phi,
-            // because those are values that will go over a back-edge.
-            phi_interferes_with_backedge_input = true;
           }
+          counter.Count(input_range, out_range, added);
         }
       }
-      // Spilling the phi at the loop header is not beneficial if there is
-      // a back-edge with an input for the phi that interferes with the phi's
-      // value, because in case that input gets spilled it might introduce
-      // a stack-to-stack move at the back-edge.
-      if (phi_interferes_with_backedge_input)
+      if (!counter.SpillingAtLoopHeaderMayBeBeneficial()) {
         out_range->TopLevel()->set_spilling_at_loop_header_not_beneficial();
+      }
     }
     TRACE("Done block B%d\n", block_id);
   }
