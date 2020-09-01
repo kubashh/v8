@@ -33,6 +33,29 @@
       "revId": "d4d0977fec7abbaf350f8768e5734edabb5b34ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6419447_84c18699",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-01T15:36:59Z",
+      "side": 1,
+      "message": "There are DEPRECATED and DEPRECATE_SOON macros.\n\nThe former works if there are no usages within V8.\nThe latter works even if there are some usages in V8.",
+      "range": {
+        "startLine": 242,
+        "startChar": 5,
+        "endLine": 242,
+        "endChar": 15
+      },
+      "revId": "d4d0977fec7abbaf350f8768e5734edabb5b34ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
