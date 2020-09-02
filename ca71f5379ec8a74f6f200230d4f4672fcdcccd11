@@ -16,6 +16,52 @@
       "revId": "ca71f5379ec8a74f6f200230d4f4672fcdcccd11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "60d25c9c_74eda6b8",
+        "filename": "src/strings/string-search.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-09-02T13:01:18Z",
+      "side": 1,
+      "message": "this seems really complicated for \"find a value in an N-byte string\" -- what would happen if we just did the for loop for everything? Or even used std::find, e.g. \n\n  const SubjectChar* start \u003d \u0026subject[index];\n  const SubjectChar* end \u003d \u0026subject[max_n];\n  const SubjectChar* p \u003d std::find(start, end, pattern[0]);\n  if (p \u003d\u003d end) return -1;\n  return p - \u0026subject[0];",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 39
+      },
+      "revId": "ca71f5379ec8a74f6f200230d4f4672fcdcccd11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87faadc8_1249e2d6",
+        "filename": "src/strings/string-search.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-09-02T13:01:18Z",
+      "side": 1,
+      "message": "should this be max_n?",
+      "range": {
+        "startLine": 203,
+        "startChar": 31,
+        "endLine": 203,
+        "endChar": 45
+      },
+      "revId": "ca71f5379ec8a74f6f200230d4f4672fcdcccd11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
