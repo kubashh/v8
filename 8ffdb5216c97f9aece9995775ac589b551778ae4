@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5d88940_3c6c52fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-02T17:24:46Z",
+      "side": 1,
+      "message": "Nico PTAL\n\nThere are two follow-up CLs that test the new macros.\n\nRoss, Georg and Michael FYI",
+      "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e530794_155081f0",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-02T17:24:46Z",
+      "side": 1,
+      "message": "Willing to bikeshed the name",
+      "range": {
+        "startLine": 539,
+        "startChar": 12,
+        "endLine": 539,
+        "endChar": 30
+      },
+      "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
