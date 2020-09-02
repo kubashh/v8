@@ -205,6 +205,9 @@ class V8_EXPORT_PRIVATE CallDescriptor final
     kCallBuiltinPointer,     // target is a builtin pointer
   };
 
+  // NOTE: The lowest 10 bits of the Flags field are encoded in InstructionCode
+  // (for use in the code generator). All higher bits are lost.
+  static constexpr int kFlagsBitsEncodedInInstructionCode = 10;
   enum Flag {
     kNoFlags = 0u,
     kNeedsFrameState = 1u << 0,
@@ -225,6 +228,11 @@ class V8_EXPORT_PRIVATE CallDescriptor final
     // The kCallerSavedFPRegisters only matters (and set) when the more general
     // flag for kCallerSavedRegisters above is also set.
     kCallerSavedFPRegisters = 1u << 9,
+
+    // Flags past here are *not* encoded in InstructionCode and are thus not
+    // accessible from the code generator. See also
+    // kFlagsBitsEncodedInInstructionCode.
+
     // AIX has a function descriptor by default but it can be disabled for a
     // certain CFunction call (only used for Kind::kCallAddress).
     kNoFunctionDescriptor = 1u << 10,
@@ -511,22 +519,22 @@ class V8_EXPORT_PRIVATE Linkage : public NON_EXPORTED_BASE(ZoneObject) {
   }
 
   // A special {Parameter} index for JSCalls that represents the new target.
-  static int GetJSCallNewTargetParamIndex(int parameter_count) {
+  static constexpr int GetJSCallNewTargetParamIndex(int parameter_count) {
     return parameter_count + 0;  // Parameter (arity + 0) is special.
   }
 
   // A special {Parameter} index for JSCalls that represents the argument count.
-  static int GetJSCallArgCountParamIndex(int parameter_count) {
+  static constexpr int GetJSCallArgCountParamIndex(int parameter_count) {
     return parameter_count + 1;  // Parameter (arity + 1) is special.
   }
 
   // A special {Parameter} index for JSCalls that represents the context.
-  static int GetJSCallContextParamIndex(int parameter_count) {
+  static constexpr int GetJSCallContextParamIndex(int parameter_count) {
     return parameter_count + 2;  // Parameter (arity + 2) is special.
   }
 
   // A special {Parameter} index for JSCalls that represents the closure.
-  static const int kJSCallClosureParamIndex = -1;
+  static constexpr int kJSCallClosureParamIndex = -1;
 
   // A special {OsrValue} index to indicate the context spill slot.
   static const int kOsrContextSpillSlotIndex = -1;
