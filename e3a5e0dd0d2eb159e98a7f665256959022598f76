@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6de61a3_87ea55e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T08:11:10Z",
+      "side": 1,
+      "message": "fyi, this one will need to be refactored on top of Victor\u0027s CL https://chromium-review.googlesource.com/c/v8/v8/+/2312783.",
+      "revId": "e3a5e0dd0d2eb159e98a7f665256959022598f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
