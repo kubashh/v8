@@ -2732,10 +2732,20 @@ void InstructionSelector::VisitParameter(Node* node) {
 }
 
 namespace {
+
 LinkageLocation ExceptionLocation() {
   return LinkageLocation::ForRegister(kReturnRegister0.code(),
                                       MachineType::IntPtr());
 }
+
+constexpr InstructionCode EncodeCallDescriptorFlags(
+    InstructionCode opcode, CallDescriptor::Flags flags) {
+  // Note: Not all bits of `flags` are preserved.
+  STATIC_ASSERT(CallDescriptor::kFlagsBitsEncodedInInstructionCode ==
+                MiscField::kSize);
+  return opcode | MiscField::encode(flags & MiscField::kMax);
+}
+
 }  // namespace
 
 void InstructionSelector::VisitIfException(Node* node) {
@@ -2858,6 +2868,7 @@ void InstructionSelector::VisitCall(Node* node, BasicBlock* handler) {
 #if ABI_USES_FUNCTION_DESCRIPTORS
       // Highest misc_field bit is used on AIX to indicate if a CFunction call
       // has function descriptor or not.
+      STATIC_ASSERT(MiscField::kSize == kHasFunctionDescriptorBitShift + 1);
       if (!call_descriptor->NoFunctionDescriptor()) {
         misc_field |= 1 << kHasFunctionDescriptorBitShift;
       }
@@ -2866,18 +2877,18 @@ void InstructionSelector::VisitCall(Node* node, BasicBlock* handler) {
       break;
     }
     case CallDescriptor::kCallCodeObject:
-      opcode = kArchCallCodeObject | MiscField::encode(flags);
+      opcode = EncodeCallDescriptorFlags(kArchCallCodeObject, flags);
       break;
     case CallDescriptor::kCallJSFunction:
-      opcode = kArchCallJSFunction | MiscField::encode(flags);
+      opcode = EncodeCallDescriptorFlags(kArchCallJSFunction, flags);
       break;
     case CallDescriptor::kCallWasmCapiFunction:
     case CallDescriptor::kCallWasmFunction:
     case CallDescriptor::kCallWasmImportWrapper:
-      opcode = kArchCallWasmFunction | MiscField::encode(flags);
+      opcode = EncodeCallDescriptorFlags(kArchCallWasmFunction, flags);
       break;
     case CallDescriptor::kCallBuiltinPointer:
-      opcode = kArchCallBuiltinPointer | MiscField::encode(flags);
+      opcode = EncodeCallDescriptorFlags(kArchCallBuiltinPointer, flags);
       break;
   }
 
@@ -2955,7 +2966,7 @@ void InstructionSelector::VisitTailCall(Node* node) {
         return;
     }
   }
-  opcode |= MiscField::encode(call_descriptor->flags());
+  opcode = EncodeCallDescriptorFlags(opcode, call_descriptor->flags());
 
   Emit(kArchPrepareTailCall, g.NoOutput());
 
