@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "124558bd_d476d17c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T08:12:28Z",
+      "side": 1,
+      "message": "PTAL; it\u0027s quite a lot of code for the few use-sites (I\u0027m adding one more in my upcoming CL), but IMO the node format documentation is worth it.",
+      "revId": "acef8daed9df0be15406f190504d64be871f9603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
