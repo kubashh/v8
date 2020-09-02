@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4e3098e_c9657c3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-09-02T11:59:35Z",
+      "side": 1,
+      "message": "ptal. I think I\u0027ve addressed the remaining comments. One question about naming in there; not sure if it matters much.\n\nQuestion on the deprecation:\nI guess eventually the deprecated versions should be removed. Not sure if it helps any, but removal of the deprecated features would look roughly like so:\n- ModifyCodeGenerationFromStringsCallback: crrev.com/c/2390142\n- AllowCodeGenerationFromStringsCallback: crrev.com/c/2390143 \n\n",
+      "revId": "f31ff6adec2bb9a6b0613f4671a01ecabadb4c0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
