@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "98891d5c_fd6b9449",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T06:14:18Z",
+      "side": 1,
+      "message": "Wow.. Out of curiosity where does this pattern occur?",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81e0e6e9_96ecbb90",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
@@ -53,6 +70,40 @@
     },
     {
       "key": {
+        "uuid": "6a0b7619_75ca4bd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T06:14:18Z",
+      "side": 1,
+      "message": "A couple of comments, Tobias ptal as well.",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb9ab9fb_4d614bd3",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3139,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T06:14:18Z",
+      "side": 1,
+      "message": "q: Instead of UNIMPLEMENTED for 32-bit archs, could we actually leave it unimplemented (\u0026 undeclared)?",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f38eca9_1dc1ae28",
         "filename": "src/compiler/backend/instruction-selector.cc",
         "patchSetId": 7
@@ -70,6 +121,58 @@
     },
     {
       "key": {
+        "uuid": "77dda563_465127f7",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3141,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T06:14:18Z",
+      "side": 1,
+      "message": "Would \"the recursive solution + passing a recursion depth + a bailout to a safe value when max depth is exceeded\" be a good compromise between readability and robustness?\n\nThe impl below does read a bit complex, considering what it wants to achieve is actually pretty simple.",
+      "parentUuid": "9f38eca9_1dc1ae28",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ffa534b_7e298344",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3142,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T06:14:18Z",
+      "side": 1,
+      "message": "There\u0027s enough going on in this function for a high-level description to be useful here as a comment.",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8ea2cad_c086dc76",
+        "filename": "src/compiler/backend/instruction-selector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T06:14:18Z",
+      "side": 1,
+      "message": "Short comment how this is used please.",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "569bb28d_3bedee0f",
         "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
         "patchSetId": 7
@@ -84,6 +187,75 @@
       "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd6671bd_36169336",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T06:14:18Z",
+      "side": 1,
+      "message": "I had to look up what kRelocatableInt32Constant (relocatable / constant sound a bit like opposites to me). Apparently it is a mechanism used by wasm in which values are patched in after codegen.\n\nIn that case, I\u0027m not sure it\u0027s valid to turn it into an immediate(?) Don\u0027t know enough about this codepath to be certain.",
+      "parentUuid": "569bb28d_3bedee0f",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2323d34_ea20238a",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T06:14:18Z",
+      "side": 1,
+      "message": "NumberConstant contains a double parameter, and we are casting to int64_t below. Is that the intent?",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78bf9871_f0332fd9",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T06:14:18Z",
+      "side": 1,
+      "message": "q: Why not list opcodes in switch cases as above? Is this a pattern used elsewhere?",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bbd20cf_265941dd",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T06:14:18Z",
+      "side": 1,
+      "message": "nit: inline into the return statement",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
