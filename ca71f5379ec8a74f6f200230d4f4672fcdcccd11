@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "ee3ce0ed_ae93bd99",
+        "filename": "src/strings/string-search.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-02T15:05:27Z",
+      "side": 1,
+      "message": "Probably easier, and fast enough for the 2 byte case.\n\nmemchr is incredibly fast (30% faster than std::find): https://gms.tf/stdfind-and-memchr-optimizations.html#measurements\n\nI\u0027ll quickly measure locally what the diff is.",
+      "parentUuid": "60d25c9c_74eda6b8",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 39
+      },
+      "revId": "ca71f5379ec8a74f6f200230d4f4672fcdcccd11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87faadc8_1249e2d6",
         "filename": "src/strings/string-search.h",
         "patchSetId": 1
@@ -53,6 +77,30 @@
       "writtenOn": "2020-09-02T13:01:18Z",
       "side": 1,
       "message": "should this be max_n?",
+      "range": {
+        "startLine": 203,
+        "startChar": 31,
+        "endLine": 203,
+        "endChar": 45
+      },
+      "revId": "ca71f5379ec8a74f6f200230d4f4672fcdcccd11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c736e35b_6876ad2c",
+        "filename": "src/strings/string-search.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-02T15:05:27Z",
+      "side": 1,
+      "message": "right.",
+      "parentUuid": "87faadc8_1249e2d6",
       "range": {
         "startLine": 203,
         "startChar": 31,
