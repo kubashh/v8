@@ -536,6 +536,10 @@ DEFINE_BOOL(block_concurrent_recompilation, false,
             "block queued jobs until released")
 DEFINE_BOOL(concurrent_inlining, false,
             "run optimizing compiler's inlining phase on a separate thread")
+DEFINE_BOOL(direct_heap_access, false,
+            "access kNeverSerialized objects directly from the heap")
+DEFINE_IMPLICATION(concurrent_inlining, direct_heap_access)
+DEFINE_IMPLICATION(direct_heap_access, local_heaps)
 DEFINE_INT(max_serializer_nesting, 25,
            "maximum levels for nesting child serializers")
 DEFINE_IMPLICATION(future, concurrent_inlining)
