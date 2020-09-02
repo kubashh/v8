@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0684906c_8ed038e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T16:10:30Z",
+      "side": 1,
+      "message": "I haven\u0027t looked at the source code, but here\u0027s a very rough and simplified approximation:\n\n  uint32_t index \u003d 0;\n  if (something) {\n    index \u003d some_storage[some_location];\n  }\n  while (true) {\n    uint16_t opcode \u003d instructions[index];\n    switch (opcode) {\n      case 0:\n        // Handle the op...\n        index +\u003d 2;\n        break;\n      case 1:\n        // Handle the op...\n        index +\u003d 3;\n        break;\n      // etc...\n    }\n  }\n\nPretty much what you\u0027d imagine for a loop-and-switch interpreter. It might start at zero, or it might start at some value fetched from memory, and in the loop we adjust it with simple 32-bit arithmetic.\n\nThe schedule for instructions[index] looks like this:\n\n  2312: ChangeUint32ToUint64(247)\n  265: ProtectedLoad[kRepWord16|kTypeUint32](253, 2312, 263, 261)\n\nI might guess that the ChangeUint32ToUint64 node came from WasmGraphBuilder::BoundsCheckMem, which does:\n\n  index \u003d Uint32ToUintptr(index);\n\nHowever, I must be missing something, because the output of node 2312 is not just used on the next line; it\u0027s used all over. Here\u0027s an example, where we add some offsets to load operand data for the bytecode:\n\n  20051: Int64Add(253, 950)\n  19748: Int64Add(253, 24)\n  1012: ProtectedLoad[kRepWord32|kTypeInt32](19748, 2312, 265, 284)\n  1016: ProtectedLoad[kRepWord16|kTypeUint32](20051, 2312, 1012, 284)\n\nPerhaps there is some code de-duplicating nodes for pure operators, but I can\u0027t immediately see how it works. The end result is that we have equivalent values from nodes 247 and 2312 which are both live for pretty much the whole loop, which is an increase in register pressure and causes an extra spill in the hot part of the function.",
+      "parentUuid": "98891d5c_fd6b9449",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81e0e6e9_96ecbb90",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
@@ -87,6 +105,41 @@
     },
     {
       "key": {
+        "uuid": "52d5d34f_4ae196a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T16:10:30Z",
+      "side": 1,
+      "message": "Thanks, Bill. My impression so far is that this optimization is roughly zero-cost: it makes the instruction scheduler work harder so that the register allocator can do less work. I\u0027m not super familiar with using --runtime-call-stats and I don\u0027t have a great deal of faith in my data, but I collected data from a bunch of Octane runs with and without this change. At the median, the time spent in OptimizeBackgroundSelectInstructions increased about 1% (3 ms), and the time spent in OptimizeBackgroundAllocateGeneralRegisters decreased about 0.5% (also 3 ms).",
+      "parentUuid": "49350d57_d924531d",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0b0a9c2_562c5e7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T16:10:30Z",
+      "side": 1,
+      "message": "Thanks for reviewing!",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb9ab9fb_4d614bd3",
         "filename": "src/compiler/backend/instruction-selector.cc",
         "patchSetId": 7
@@ -98,6 +151,24 @@
       "writtenOn": "2020-09-02T06:14:18Z",
       "side": 1,
       "message": "q: Instead of UNIMPLEMENTED for 32-bit archs, could we actually leave it unimplemented (\u0026 undeclared)?",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb644d25_de068880",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3139,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T16:10:30Z",
+      "side": 1,
+      "message": "Sure, good idea.",
+      "parentUuid": "eb9ab9fb_4d614bd3",
       "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -136,6 +207,24 @@
       "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4806406e_415f269a",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3141,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T16:10:30Z",
+      "side": 1,
+      "message": "I like that idea, thanks.",
+      "parentUuid": "77dda563_465127f7",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -208,6 +297,24 @@
     },
     {
       "key": {
+        "uuid": "c4557446_736ed8fc",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T16:10:30Z",
+      "side": 1,
+      "message": "Good point, I\u0027ll undo that. I incorrectly assumed that GetImmediateIntegerValue was meant to be safe for any node that returns true from CanBeImmediate based on its usage elsewhere in this file.",
+      "parentUuid": "fd6671bd_36169336",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2323d34_ea20238a",
         "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
         "patchSetId": 7
@@ -225,6 +332,24 @@
     },
     {
       "key": {
+        "uuid": "613ad5fc_89b7d5a1",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T16:10:30Z",
+      "side": 1,
+      "message": "Undoing this, thanks.",
+      "parentUuid": "a2323d34_ea20238a",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "78bf9871_f0332fd9",
         "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
         "patchSetId": 7
@@ -236,6 +361,24 @@
       "writtenOn": "2020-09-02T06:14:18Z",
       "side": 1,
       "message": "q: Why not list opcodes in switch cases as above? Is this a pattern used elsewhere?",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5f719a9_2e17cd74",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T16:10:30Z",
+      "side": 1,
+      "message": "I\u0027ll update to include switch cases, thanks.",
+      "parentUuid": "78bf9871_f0332fd9",
       "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
