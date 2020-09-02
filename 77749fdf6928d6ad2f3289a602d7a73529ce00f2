@@ -140,6 +140,24 @@
     },
     {
       "key": {
+        "uuid": "7e6832e9_6fa8aedc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T17:03:31Z",
+      "side": 1,
+      "message": "By the way, I also see in the Octane data that Crypto likes this change; it improves by about 7%.",
+      "parentUuid": "52d5d34f_4ae196a6",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb9ab9fb_4d614bd3",
         "filename": "src/compiler/backend/instruction-selector.cc",
         "patchSetId": 7
@@ -172,6 +190,24 @@
       "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd9a6edd_c9cdedfd",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3139,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T17:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb644d25_de068880",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -228,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "bc946561_8be5f670",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3141,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T17:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4806406e_415f269a",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ffa534b_7e298344",
         "filename": "src/compiler/backend/instruction-selector.cc",
         "patchSetId": 7
@@ -245,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "32d23165_7b280c4c",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3142,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T17:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ffa534b_7e298344",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8ea2cad_c086dc76",
         "filename": "src/compiler/backend/instruction-selector.h",
         "patchSetId": 7
@@ -259,6 +331,24 @@
       "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2816d522_3e5d44de",
+        "filename": "src/compiler/backend/instruction-selector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T17:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8ea2cad_c086dc76",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -315,6 +405,24 @@
     },
     {
       "key": {
+        "uuid": "5457e311_8aa4f92f",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T17:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4557446_736ed8fc",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2323d34_ea20238a",
         "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
         "patchSetId": 7
@@ -347,6 +455,24 @@
       "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3035035_0ac5c8d5",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T17:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "613ad5fc_89b7d5a1",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -385,6 +511,24 @@
     },
     {
       "key": {
+        "uuid": "ba18567d_0cf09b54",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T17:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5f719a9_2e17cd74",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0bbd20cf_265941dd",
         "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
         "patchSetId": 7
@@ -399,6 +543,24 @@
       "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed73dad1_837e6248",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-02T17:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bbd20cf_265941dd",
+      "revId": "77749fdf6928d6ad2f3289a602d7a73529ce00f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
