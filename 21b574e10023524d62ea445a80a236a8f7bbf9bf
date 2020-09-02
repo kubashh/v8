@@ -100,6 +100,24 @@
     },
     {
       "key": {
+        "uuid": "7c7174b1_f183939f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-02T12:19:30Z",
+      "side": 1,
+      "message": "For completion: As mentioned in a separately, it\u0027s ok to not test the old API anymore and simply migrate the tests to the new one.",
+      "parentUuid": "115034ca_ab6e62d8",
+      "revId": "21b574e10023524d62ea445a80a236a8f7bbf9bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4fad3cf_c35e7037",
         "filename": "include/v8.h",
         "patchSetId": 7
