@@ -16,6 +16,23 @@
       "revId": "17a012340445978d610baf6de432118b072cd0bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe6b66f7_e7d13571",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-02T07:39:50Z",
+      "side": 1,
+      "message": "q: what about jitless builds?",
+      "revId": "17a012340445978d610baf6de432118b072cd0bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
