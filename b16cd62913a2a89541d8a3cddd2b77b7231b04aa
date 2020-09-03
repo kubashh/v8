@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae13e8f6_4bb5694b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2020-09-03T22:20:55Z",
+      "side": 1,
+      "message": "lg to get the bots green, but not an owner here. adamk, could you stamp?",
+      "revId": "b16cd62913a2a89541d8a3cddd2b77b7231b04aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e863fa8_70059219",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2565,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2020-09-03T22:20:55Z",
+      "side": 1,
+      "message": "Maybe mask should be an uint32_t instead?",
+      "revId": "b16cd62913a2a89541d8a3cddd2b77b7231b04aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af62ac16_5d84828e",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2572,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2020-09-03T22:20:55Z",
+      "side": 1,
+      "message": "weird that this is int64_t instead of uint64_t, but that\u0027s not for us to change :)",
+      "range": {
+        "startLine": 2572,
+        "startChar": 7,
+        "endLine": 2572,
+        "endChar": 11
+      },
+      "revId": "b16cd62913a2a89541d8a3cddd2b77b7231b04aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
