@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "453894ea_727b668e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-03T11:22:40Z",
+      "side": 1,
+      "message": "We don\u0027t need the forward declare which is what this comment is referencing. We only need it becase we are using the class in the AsXXX method below (DEFINE_AS_DIRECT_ACCESS) which would be removed later on.",
+      "parentUuid": "a7959d92_8de8bc32",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 54
+      },
+      "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6ad70f3_6214fdfb",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 3
@@ -62,6 +86,30 @@
       "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3248ea5c_f29b9f2a",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2739,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-03T11:22:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6ad70f3_6214fdfb",
+      "range": {
+        "startLine": 2730,
+        "startChar": 0,
+        "endLine": 2739,
+        "endChar": 5
+      },
+      "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -112,6 +160,30 @@
     },
     {
       "key": {
+        "uuid": "93dbf6fb_7c6e1e6a",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-03T11:22:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0068f9c4_5b2e7bf0",
+      "range": {
+        "startLine": 539,
+        "startChar": 12,
+        "endLine": 539,
+        "endChar": 30
+      },
+      "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1c72d38_184e5eb9",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 3
@@ -147,6 +219,30 @@
       "side": 1,
       "message": "The way Santiago has this was how I thought we should define it. I think direct_heap_access should be something that can be set independently of local-heaps (but requires local heaps if it is set) since local-heaps will be used by other things (e.g., off-thread bytecode finalization) - so if we need to turn off direct_heap_access due to bugs we can do so without impacting local-heaps, which might be required elsewhere.",
       "parentUuid": "c1c72d38_184e5eb9",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 542,
+        "endChar": 51
+      },
+      "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce4b1e57_e439d6c9",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-03T11:22:40Z",
+      "side": 1,
+      "message": "This also allows us to test direct heap access with concurrent inlining off as today in tip of tree.",
+      "parentUuid": "0602e144_7c890760",
       "range": {
         "startLine": 542,
         "startChar": 0,
