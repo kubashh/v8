@@ -82,6 +82,7 @@ class V8_EXPORT_PRIVATE MachineOperatorReducer final
   }
 
   Reduction ReduceInt32Add(Node* node);
+  Reduction ReduceInt32AddWithOverflow(Node* node);
   Reduction ReduceInt64Add(Node* node);
   Reduction ReduceInt32Sub(Node* node);
   Reduction ReduceInt64Sub(Node* node);

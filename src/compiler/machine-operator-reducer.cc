@@ -330,6 +330,8 @@ Reduction MachineOperatorReducer::Reduce(Node* node) {
     }
     case IrOpcode::kInt32Add:
       return ReduceInt32Add(node);
+    case IrOpcode::kInt32AddWithOverflow:
+      return ReduceInt32AddWithOverflow(node);
     case IrOpcode::kInt64Add:
       return ReduceInt64Add(node);
     case IrOpcode::kInt32Sub:
@@ -934,6 +936,35 @@ Reduction MachineOperatorReducer::ReduceInt32Add(Node* node) {
     }
   }
 
+  return NoChange();
+}
+
+Reduction MachineOperatorReducer::ReduceInt32AddWithOverflow(Node* node) {
+  DCHECK_EQ(IrOpcode::kInt32AddWithOverflow, node->opcode());
+  // (x + a) + b => x + (a + b) where a and b are constants and have the
+  // same sign.
+  Int32BinopMatcher m(node);
+  if (m.right().HasValue()) {
+    Node* projection = m.left().node();
+    if (projection->opcode() == IrOpcode::kProjection &&
+        ProjectionIndexOf(projection->op()) == 0) {
+      Node* add_with_overflow = projection->InputAt(0);
+      if (add_with_overflow->opcode() == IrOpcode::kInt32AddWithOverflow) {
+        Int32BinopMatcher n(add_with_overflow);
+        if (n.right().HasValue() &&
+            (n.right().Value() >= 0) == (m.right().Value() >= 0)) {
+          int32_t val;
+          bool ovf = base::bits::SignedAddOverflow32(n.right().Value(),
+                                                     m.right().Value(), &val);
+          if (!ovf) {
+            node->ReplaceInput(0, n.left().node());
+            node->ReplaceInput(1, Int32Constant(val));
+            return Changed(node);
+          }
+        }
+      }
+    }
+  }
   return NoChange();
 }
 

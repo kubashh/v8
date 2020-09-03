@@ -1834,6 +1834,38 @@ TEST_F(MachineOperatorReducerTest, Int32AddWithOverflowWithConstant) {
   }
 }
 
+TEST_F(MachineOperatorReducerTest,
+       Int32AddWithOverflowWithConsecutiveConstant) {
+  Node* control = graph()->start();
+  Node* p0 = Parameter(0);
+  TRACED_FOREACH(int32_t, x, kInt32Values) {
+    TRACED_FOREACH(int32_t, y, kInt32Values) {
+      int32_t z;
+      bool ovf = base::bits::SignedAddOverflow32(x, y, &z);
+      bool same_sign = (x >= 0) == (y >= 0);
+
+      Node* add1 = graph()->NewNode(machine()->Int32AddWithOverflow(), p0,
+                                    Int32Constant(x), control);
+      Node* projection0_add1 =
+          graph()->NewNode(common()->Projection(0), add1, control);
+      Node* add2 =
+          graph()->NewNode(machine()->Int32AddWithOverflow(), projection0_add1,
+                           Int32Constant(y), control);
+
+      Reduction r = Reduce(add1);
+      ASSERT_FALSE(r.Changed());
+
+      r = Reduce(add2);
+      if (same_sign && !ovf) {
+        ASSERT_TRUE(r.Changed());
+        EXPECT_THAT(r.replacement(),
+                    IsInt32AddWithOverflow(p0, IsInt32Constant(z)));
+      } else {
+        ASSERT_FALSE(r.Changed());
+      }
+    }
+  }
+}
 
 // -----------------------------------------------------------------------------
 // Int32SubWithOverflow
