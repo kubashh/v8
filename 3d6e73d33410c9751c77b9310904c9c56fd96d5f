@@ -97,6 +97,30 @@
       "revId": "3d6e73d33410c9751c77b9310904c9c56fd96d5f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af86d40f_a36ab518",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3148,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-03T18:05:55Z",
+      "side": 1,
+      "message": "I agree, the main reason for the recursion limit is stack overflows, not performance. So as long as it prevents these, it should be fine.",
+      "parentUuid": "175ab066_4e0827c7",
+      "range": {
+        "startLine": 3148,
+        "startChar": 0,
+        "endLine": 3148,
+        "endChar": 37
+      },
+      "revId": "3d6e73d33410c9751c77b9310904c9c56fd96d5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
