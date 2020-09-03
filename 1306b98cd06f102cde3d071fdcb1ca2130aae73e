@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dee3ba74_8d2d940c",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-09-03T19:50:50Z",
+      "side": 1,
+      "message": "nit: optimize",
+      "range": {
+        "startLine": 1100,
+        "startChar": 46,
+        "endLine": 1100,
+        "endChar": 53
+      },
+      "revId": "1306b98cd06f102cde3d071fdcb1ca2130aae73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "019dcb8d_da9d1641",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-09-03T19:50:50Z",
+      "side": 1,
+      "message": "why not declare val as int16_t[] to eliminate one cast?",
+      "range": {
+        "startLine": 1115,
+        "startChar": 0,
+        "endLine": 1115,
+        "endChar": 68
+      },
+      "revId": "1306b98cd06f102cde3d071fdcb1ca2130aae73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
