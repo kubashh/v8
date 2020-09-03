@@ -16,6 +16,46 @@
       "revId": "3d6e73d33410c9751c77b9310904c9c56fd96d5f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef04de1d_2f597030",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-09-03T17:32:55Z",
+      "side": 1,
+      "message": "lgtm with a question about max recursion depth.",
+      "revId": "3d6e73d33410c9751c77b9310904c9c56fd96d5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f4c9220_144462b1",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3148,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-09-03T17:32:55Z",
+      "side": 1,
+      "message": "This seems high. Maybe it\u0027s better to give up sooner, as the cost of zero extending isn\u0027t that much.",
+      "range": {
+        "startLine": 3148,
+        "startChar": 0,
+        "endLine": 3148,
+        "endChar": 37
+      },
+      "revId": "3d6e73d33410c9751c77b9310904c9c56fd96d5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
