@@ -16,6 +16,23 @@
       "revId": "f95bb40cc535e8ca1d5695610952b471e337a5a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8dd05d97_25e4ccba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2020-09-03T11:41:49Z",
+      "side": 1,
+      "message": "Toon: OWNERS\u0027 review for isolate.h and heap-symbols.h, please.\nLeszek: OWNERS\u0027 review for compiler.cc, please.\n\nThanks!\n\nContext:\nTC39 proposal: https://github.com/tc39/proposal-dynamic-code-brand-checks\nIntended usage: https://chromium-review.googlesource.com/c/chromium/src/+/2340905",
+      "revId": "f95bb40cc535e8ca1d5695610952b471e337a5a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
