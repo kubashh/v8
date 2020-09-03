@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17836ff7_9a9ad9d5",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-03T12:17:53Z",
+      "side": 1,
+      "message": "nit: s/over_flow/overflow/",
+      "range": {
+        "startLine": 1241,
+        "startChar": 25,
+        "endLine": 1241,
+        "endChar": 34
+      },
+      "revId": "6db671fe78883ab6886595cf6055ddac53da04d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be7908a2_99e90094",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-03T12:17:53Z",
+      "side": 1,
+      "message": "This modifies the add_with_over_flow node, but we didn\u0027t check that there are no other users. While we did check that we own the value projection, we didn\u0027t check how the overflow bit projection is used. But this approach is scary and probably unsound anyway, since the node is pure and could therefore be subject to global value numbering or potentially other side-tables not covered by OwnedBy(). In short: We should never modify a node to represent a different value. Instead, we should just create a new node for the a+b addition. Then we also don\u0027t even need to check ownership at all.",
+      "range": {
+        "startLine": 1248,
+        "startChar": 14,
+        "endLine": 1248,
+        "endChar": 32
+      },
+      "revId": "6db671fe78883ab6886595cf6055ddac53da04d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92e76bc1_6112d4c1",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-03T12:17:53Z",
+      "side": 1,
+      "message": "We did modify the node, so we should trigger re-visitation of the addition node as well as the projection nodes. But returning Changed() is a bit tricky, because it requires passing in the current node which is the projection node, not the addition node. I think the problem partially stems from this code being in the wrong place: We should change the addition node when reducing the addition node itself, not it\u0027s projection. So I think we should add a new case to MachineOperatorReducer::Reduce for IrOpcode::kInt32AddWithOverflow.",
+      "range": {
+        "startLine": 1249,
+        "startChar": 21,
+        "endLine": 1249,
+        "endChar": 31
+      },
+      "revId": "6db671fe78883ab6886595cf6055ddac53da04d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "186a7049_6b61a7f1",
+        "filename": "test/unittests/compiler/machine-operator-reducer-unittest.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1867,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-03T12:17:53Z",
+      "side": 1,
+      "message": "This test is problematic because it doesn\u0027t actually test that the resulting graph has the right shape, but rather that the add1 node got modified to represent a specific different value (which we shouldn\u0027t do anyway).\nAlso, could you add a testcase that we don\u0027t reduce away something like x + 1 - 1?",
+      "range": {
+        "startLine": 1860,
+        "startChar": 0,
+        "endLine": 1867,
+        "endChar": 55
+      },
+      "revId": "6db671fe78883ab6886595cf6055ddac53da04d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
