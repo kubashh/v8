@@ -19,6 +19,52 @@
     },
     {
       "key": {
+        "uuid": "a7959d92_8de8bc32",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-09-03T11:13:29Z",
+      "side": 1,
+      "message": "nit: Is this comment right? Wouldn\u0027t we keep this list once nothing is serialized anymore, but remove the other list (HEAP_BROKER_SERIALIZED_OBJECT_LIST)?",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 54
+      },
+      "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6ad70f3_6214fdfb",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2739,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-09-03T11:13:29Z",
+      "side": 1,
+      "message": "nit: Indentation.",
+      "range": {
+        "startLine": 2730,
+        "startChar": 0,
+        "endLine": 2739,
+        "endChar": 5
+      },
+      "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3e530794_155081f0",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 3
@@ -59,6 +105,29 @@
         "startChar": 12,
         "endLine": 539,
         "endChar": 30
+      },
+      "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1c72d38_184e5eb9",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-09-03T11:13:29Z",
+      "side": 1,
+      "message": "Is this the way we want to define it? I thought of this more like\n!local_heaps \u003d\u003e !direct_heap_access,\nsuch that you actually never set direct_heap_access manually, but it is set depending on\n--concurrent-inlining and FLAG_local_heaps. Wdyt?",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 542,
+        "endChar": 51
       },
       "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
