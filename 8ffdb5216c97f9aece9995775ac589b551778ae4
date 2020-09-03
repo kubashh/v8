@@ -132,6 +132,30 @@
       "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0602e144_7c890760",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2020-09-03T11:17:25Z",
+      "side": 1,
+      "message": "The way Santiago has this was how I thought we should define it. I think direct_heap_access should be something that can be set independently of local-heaps (but requires local heaps if it is set) since local-heaps will be used by other things (e.g., off-thread bytecode finalization) - so if we need to turn off direct_heap_access due to bugs we can do so without impacting local-heaps, which might be required elsewhere.",
+      "parentUuid": "c1c72d38_184e5eb9",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 542,
+        "endChar": 51
+      },
+      "revId": "8ffdb5216c97f9aece9995775ac589b551778ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
