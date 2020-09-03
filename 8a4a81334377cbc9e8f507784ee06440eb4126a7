@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "ab1dfec3_fc034e6d",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-03T15:57:59Z",
+      "side": 1,
+      "message": "Good idea, thanks.",
+      "parentUuid": "ff4ece4a_131a4f4d",
+      "range": {
+        "startLine": 1778,
+        "startChar": 26,
+        "endLine": 1778,
+        "endChar": 61
+      },
+      "revId": "8a4a81334377cbc9e8f507784ee06440eb4126a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8fcc0f46_3aff0fd0",
         "filename": "src/compiler/backend/instruction-selector.cc",
         "patchSetId": 9
@@ -82,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "51f0dfd2_097d4f1c",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3163,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-03T15:57:59Z",
+      "side": 1,
+      "message": "Added that sentence, thanks.",
+      "parentUuid": "8fcc0f46_3aff0fd0",
+      "range": {
+        "startLine": 3162,
+        "startChar": 4,
+        "endLine": 3163,
+        "endChar": 13
+      },
+      "revId": "8a4a81334377cbc9e8f507784ee06440eb4126a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "612b2814_db35d2e2",
         "filename": "src/compiler/backend/instruction-selector.cc",
         "patchSetId": 9
@@ -102,6 +150,30 @@
       "revId": "8a4a81334377cbc9e8f507784ee06440eb4126a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "230bfdef_2441b252",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3168,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-03T15:57:59Z",
+      "side": 1,
+      "message": "Good point, that looks clearer and doesn\u0027t assume that the value inputs are first in the list.",
+      "parentUuid": "612b2814_db35d2e2",
+      "range": {
+        "startLine": 3168,
+        "startChar": 20,
+        "endLine": 3168,
+        "endChar": 36
+      },
+      "revId": "8a4a81334377cbc9e8f507784ee06440eb4126a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
