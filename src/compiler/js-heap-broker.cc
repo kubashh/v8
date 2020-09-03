@@ -696,7 +696,9 @@ class HeapNumberData : public HeapObjectData {
  public:
   HeapNumberData(JSHeapBroker* broker, ObjectData** storage,
                  Handle<HeapNumber> object)
-      : HeapObjectData(broker, storage, object), value_(object->value()) {}
+      : HeapObjectData(broker, storage, object), value_(object->value()) {
+    DCHECK(!FLAG_turbo_direct_heap_access);
+  }
 
   double value() const { return value_; }
 
@@ -3321,6 +3323,19 @@ Handle<Object> JSHeapBroker::GetRootHandle(Object object) {
   return Handle<Object>(isolate()->root_handle(root_index).location());
 }
 
+// Accessors for direct heap reads when direct heap access is on. If it is off,
+// it does what BIMODAL_ACCESSOR_C would do.
+// TODO(solanes, v8:10866): Remove the direct heap access is off case.
+#define DIRECT_HEAP_ACCESSOR_C(holder, result, name)  \
+  result holder##Ref::name() const {                  \
+    if (FLAG_turbo_direct_heap_access) {              \
+      return object()->name();                        \
+    } else {                                          \
+      IF_ACCESS_FROM_HEAP_C(name);                    \
+      return ObjectRef::data()->As##holder()->name(); \
+    }                                                 \
+  }
+
 #define IF_ACCESS_FROM_HEAP_C(name)                                      \
   if (data_->should_access_heap()) {                                     \
     AllowHandleAllocationIf handle_allocation(data_->kind(),             \
@@ -3391,6 +3406,8 @@ BIMODAL_ACCESSOR(Cell, Object, value)
 BIMODAL_ACCESSOR_C(FeedbackVector, double, invocation_count)
 
 BIMODAL_ACCESSOR(HeapObject, Map, map)
+
+DIRECT_HEAP_ACCESSOR_C(HeapNumber, double, value)
 
 BIMODAL_ACCESSOR(JSArray, Object, length)
 
@@ -3930,11 +3947,6 @@ base::Optional<ObjectRef> JSArrayRef::GetOwnCowElement(
       data()->AsJSArray()->GetOwnElement(broker(), index, policy);
   if (element == nullptr) return base::nullopt;
   return ObjectRef(broker(), element);
-}
-
-double HeapNumberRef::value() const {
-  IF_ACCESS_FROM_HEAP_C(value);
-  return data()->AsHeapNumber()->value();
 }
 
 uint64_t BigIntRef::AsUint64() const {
