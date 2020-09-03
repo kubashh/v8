@@ -1560,9 +1560,12 @@ class FixedDoubleArrayData : public FixedArrayBaseData {
 FixedDoubleArrayData::FixedDoubleArrayData(JSHeapBroker* broker,
                                            ObjectData** storage,
                                            Handle<FixedDoubleArray> object)
-    : FixedArrayBaseData(broker, storage, object), contents_(broker->zone()) {}
+    : FixedArrayBaseData(broker, storage, object), contents_(broker->zone()) {
+  DCHECK(!FLAG_turbo_direct_heap_access);
+}
 
 void FixedDoubleArrayData::SerializeContents(JSHeapBroker* broker) {
+  DCHECK(!FLAG_turbo_direct_heap_access);
   if (serialized_contents_) return;
   serialized_contents_ = true;
 
@@ -2257,7 +2260,8 @@ void JSObjectData::SerializeRecursiveAsBoilerplate(JSHeapBroker* broker,
   } else {
     CHECK(boilerplate->HasDoubleElements());
     CHECK_LE(elements_object->Size(), kMaxRegularHeapObjectSize);
-    elements_->AsFixedDoubleArray()->SerializeContents(broker);
+    if (!FLAG_turbo_direct_heap_access)
+      elements_->AsFixedDoubleArray()->SerializeContents(broker);
   }
 
   // TODO(turbofan): Do we want to support out-of-object properties?
@@ -3223,22 +3227,29 @@ ObjectRef FixedArrayRef::get(int i) const {
 }
 
 bool FixedDoubleArrayRef::is_the_hole(int i) const {
-  if (data_->should_access_heap()) {
+  if (FLAG_turbo_direct_heap_access) {
+    return object()->is_the_hole(i);
+  } else if (data_->should_access_heap()) {
     AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
                                                       broker()->mode());
     return object()->is_the_hole(i);
+  } else {
+    return data()->AsFixedDoubleArray()->Get(i).is_hole_nan();
   }
-  return data()->AsFixedDoubleArray()->Get(i).is_hole_nan();
 }
 
 double FixedDoubleArrayRef::get_scalar(int i) const {
-  if (data_->should_access_heap()) {
+  if (FLAG_turbo_direct_heap_access) {
+    CHECK(!is_the_hole(i));
+    return object()->get_scalar(i);
+  } else if (data_->should_access_heap()) {
     AllowHandleDereferenceIf allow_handle_dereference(data()->kind(),
                                                       broker()->mode());
     return object()->get_scalar(i);
+  } else {
+    CHECK(!data()->AsFixedDoubleArray()->Get(i).is_hole_nan());
+    return data()->AsFixedDoubleArray()->Get(i).get_scalar();
   }
-  CHECK(!data()->AsFixedDoubleArray()->Get(i).is_hole_nan());
-  return data()->AsFixedDoubleArray()->Get(i).get_scalar();
 }
 
 uint8_t BytecodeArrayRef::get(int index) const { return object()->get(index); }
