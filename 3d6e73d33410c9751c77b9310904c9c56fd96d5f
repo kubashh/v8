@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "cfaa97a0_88c041d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-03T17:49:01Z",
+      "side": 1,
+      "message": "Thanks Bill!",
+      "revId": "3d6e73d33410c9751c77b9310904c9c56fd96d5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f4c9220_144462b1",
         "filename": "src/compiler/backend/instruction-selector.cc",
         "patchSetId": 10
@@ -47,6 +64,30 @@
       "writtenOn": "2020-09-03T17:32:55Z",
       "side": 1,
       "message": "This seems high. Maybe it\u0027s better to give up sooner, as the cost of zero extending isn\u0027t that much.",
+      "range": {
+        "startLine": 3148,
+        "startChar": 0,
+        "endLine": 3148,
+        "endChar": 37
+      },
+      "revId": "3d6e73d33410c9751c77b9310904c9c56fd96d5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "175ab066_4e0827c7",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3148,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-03T17:49:01Z",
+      "side": 1,
+      "message": "I\u0027d prefer to keep the higher limit, unless we find evidence of slowdowns. The cost of zero extending is pretty trivial, but the cost of requiring an extra register for the new value can be substantial. There\u0027s already a hard limit on the total extra work required across the whole function, since we cache the results of this computation: we can iterate the inputs of each phi node no more than once. I think that the function-wide limit on total effort is more meaningful than using a low recursion depth here, since recursion could be arbitrarily wide (each phi node can have any number of inputs). Does that seem reasonable?",
+      "parentUuid": "7f4c9220_144462b1",
       "range": {
         "startLine": 3148,
         "startChar": 0,
