@@ -16,6 +16,29 @@
       "revId": "f98e5c507d5902d652539449dbbd371f812f62a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "510e88f1_3b60842b",
+        "filename": "src/compiler/backend/code-generator-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-03T12:45:46Z",
+      "side": 1,
+      "message": "How about:\n\n DCHECK_LT(base::bits::WhichPowerOfTwo(base::bits::RoundDownToPowerOfTwo(static_cast\u003cint\u003e(flag))), CallDescriptor::kFlagsBitsEncodedInInstructionCode);\n\nOr alernatively:\n\n DCHECK_LE(8*sizeof(int) - base::bits::CountLeadingZeros(static_cast\u003cint\u003e(flags)), CallDescriptor::kFlagsBitsEncodedInInstructionCode);\n\nOr we could add something to base::bits to express this even more directly.",
+      "range": {
+        "startLine": 263,
+        "startChar": 2,
+        "endLine": 265,
+        "endChar": 17
+      },
+      "revId": "f98e5c507d5902d652539449dbbd371f812f62a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
