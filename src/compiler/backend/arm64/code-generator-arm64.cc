@@ -2569,10 +2569,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         mask = 0x1F1F1F1F;
         DCHECK(AreConsecutive(src0, src1));
       }
-      int64_t imm1 =
-          make_uint64(i.InputInt32(3) & mask, i.InputInt32(2) & mask);
-      int64_t imm2 =
-          make_uint64(i.InputInt32(5) & mask, i.InputInt32(4) & mask);
+      int64_t imm1 = make_uint64(static_cast<uint32_t>(i.InputInt32(3) & mask),
+                                 static_cast<uint32_t>(i.InputInt32(2) & mask));
+      int64_t imm2 = make_uint64(static_cast<uint32_t>(i.InputInt32(5) & mask),
+                                 static_cast<uint32_t>(i.InputInt32(4) & mask));
       UseScratchRegisterScope scope(tasm());
       VRegister temp = scope.AcquireV(kFormat16B);
       __ Movi(temp, imm2, imm1);
