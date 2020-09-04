@@ -123,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "a2468dc0_d1091b56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-09-04T13:19:11Z",
+      "side": 1,
+      "message": "Thank you for the new implementation. It\u0027s neat to have the new BackedgeCounter class which makes the logic easy to follow. It seems only used by BundleBuilder for now. Can we put it inside BundleBuilder or do you plan to expose it to any other functions?",
+      "parentUuid": "2d34dc52_3cc1ce33",
+      "revId": "9c7a6d62050445f5e225d5d4ea0155440bb09735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4ea726a_eff27c64",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 2
