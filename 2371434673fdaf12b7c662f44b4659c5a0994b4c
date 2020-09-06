@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98b0c209_d9be9809",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-09-06T16:40:43Z",
+      "side": 1,
+      "message": "I see that this is WIP, but LGTM already :) ",
+      "revId": "2371434673fdaf12b7c662f44b4659c5a0994b4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "53900b25_87e27f0f",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-09-06T16:40:43Z",
+      "side": 1,
+      "message": "Please add a little comment saying that the stack could potentially contain live frames, especially if we are paused at a breakpoint.",
+      "revId": "2371434673fdaf12b7c662f44b4659c5a0994b4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
