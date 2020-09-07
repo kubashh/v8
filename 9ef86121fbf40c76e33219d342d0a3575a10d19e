@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5898eb44_425e79d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-07T13:17:53Z",
+      "side": 1,
+      "message": "My performance evaluation showed that memchr still has quite some positive impact.\n\nWDYT, should we go for std::find for the 0-character case?",
+      "revId": "9ef86121fbf40c76e33219d342d0a3575a10d19e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
