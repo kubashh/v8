@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "6079a209_9b30d93b",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-07T08:31:32Z",
+      "side": 1,
+      "message": "Oh, yes, this is an issue. But the original CL was not sound, so we have to solve it in a different way. I can see two possible ways around this:\n- Do the reduction before EffectControlLinearizer, when there are no deopts yet. The nodes are probably a Speculative*Add at this point. This might be easiest if it works.\n- We know that the second deopt happens at least as often as the first one. If both deopts are to the same target, we could merge them using this knowledge.",
+      "parentUuid": "1adbfb96_749b6473",
+      "range": {
+        "startLine": 1248,
+        "startChar": 14,
+        "endLine": 1248,
+        "endChar": 32
+      },
+      "revId": "6db671fe78883ab6886595cf6055ddac53da04d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92e76bc1_6112d4c1",
         "filename": "src/compiler/machine-operator-reducer.cc",
         "patchSetId": 11
