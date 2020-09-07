@@ -34,6 +34,24 @@
       "revId": "9ef86121fbf40c76e33219d342d0a3575a10d19e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0608e29_ab11ec71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-09-07T13:30:29Z",
+      "side": 1,
+      "message": "Actually, current solution lgtm just to fix the issue, we can do further perf work in followups.",
+      "parentUuid": "3ee44c8e_0643e70f",
+      "revId": "9ef86121fbf40c76e33219d342d0a3575a10d19e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
