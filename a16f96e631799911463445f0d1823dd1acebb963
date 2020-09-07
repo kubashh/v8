@@ -16,6 +16,132 @@
       "revId": "a16f96e631799911463445f0d1823dd1acebb963",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b713bb26_6e558816",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-07T17:44:24Z",
+      "side": 1,
+      "message": "Adding some random comments for now, sorry for not interacting earlier.\n\nI\u0027m quite stoked about the goal here, but I think we really need to find a maintainable way to not add another logging system in V8.\n",
+      "revId": "a16f96e631799911463445f0d1823dd1acebb963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "257cc32c_5ab00dde",
+        "filename": "src/tracing/v8-provider.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-07T17:44:24Z",
+      "side": 1,
+      "message": "General design question: Should V8Provider be the platform independent interface?\nIf so, could be provide enough information for both the mac and win trace implementations by using an abstract interface?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 55
+      },
+      "revId": "a16f96e631799911463445f0d1823dd1acebb963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f11886ac_6a43cfdc",
+        "filename": "src/tracing/v8-provider.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-07T17:44:24Z",
+      "side": 1,
+      "message": "I guess this is the code that should move to the mac specific provider / recorder.",
+      "range": {
+        "startLine": 279,
+        "startChar": 0,
+        "endLine": 279,
+        "endChar": 34
+      },
+      "revId": "a16f96e631799911463445f0d1823dd1acebb963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f0743d0_3ffbfd50",
+        "filename": "src/tracing/v8-provider.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-07T17:44:24Z",
+      "side": 1,
+      "message": "Lots of the code here is platform specific and should be moved into a platform specific file.",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 80
+      },
+      "revId": "a16f96e631799911463445f0d1823dd1acebb963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c85959e_439ae645",
+        "filename": "tools/v8js.regions.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-07T17:44:24Z",
+      "side": 1,
+      "message": "This file should most likely move to a subdirectory of /tools.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 38
+      },
+      "revId": "a16f96e631799911463445f0d1823dd1acebb963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "597c1ec1_49c27daf",
+        "filename": "tools/wpr.wprp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2020-09-07T17:44:24Z",
+      "side": 1,
+      "message": "This file should most likely move to a subdirectory of /tools.",
+      "revId": "a16f96e631799911463445f0d1823dd1acebb963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
