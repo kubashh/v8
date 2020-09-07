@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8835fc3_143710cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-07T16:56:19Z",
+      "side": 1,
+      "message": "Georg, PTAL. I added a comment in node-properties.cc. If the comment \nisn\u0027t clear or in general the cl isn\u0027e clear please feel free to ping me. \n\nThanks,\nMythri.",
+      "revId": "204d6dc1f66bfa95dddc76821bd48b0d26c83277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e3e3e75_4eb07117",
+        "filename": "src/compiler/node-properties.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-07T16:56:19Z",
+      "side": 1,
+      "message": "In my understanding, when result is kUnreliableReceiverMaps, it is not safe to use the information from maps directly. We take an additional dependency on the stability of maps if we use information from maps. I am not 100% sure, but I think it isn\u0027t safe to use the information from dynamic map checks without taking such a dependency. With dynamic map checks, we don\u0027t have exact maps and hence in these cases, we just don\u0027t use information about elements kind.",
+      "revId": "204d6dc1f66bfa95dddc76821bd48b0d26c83277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
