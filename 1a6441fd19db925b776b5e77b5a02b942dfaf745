@@ -104,6 +104,30 @@
       "revId": "1a6441fd19db925b776b5e77b5a02b942dfaf745",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85949295_ed69c4b6",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3329,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-07T15:51:51Z",
+      "side": 1,
+      "message": "Sounds good since kNeverSerializedHeapObject should eventually replace the other kinds and we should end up with the same result. Done.",
+      "parentUuid": "48fbf39b_ea4afc8f",
+      "range": {
+        "startLine": 3329,
+        "startChar": 8,
+        "endLine": 3329,
+        "endChar": 30
+      },
+      "revId": "1a6441fd19db925b776b5e77b5a02b942dfaf745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
