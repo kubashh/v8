@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31220ad6_9d731e1c",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-09-07T17:50:28Z",
+      "side": 0,
+      "message": "Oh, only seeing this now. This check should stay, as we don\u0027t iterate the stack of archived threads yet. That\u0027s a rarely used feature, e.g. chrome does not use it at all.",
+      "revId": "beeef0d8f0154cb10442921e47917c79ae65cdb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
