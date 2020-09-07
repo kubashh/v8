@@ -16,6 +16,24 @@
       "revId": "9fff9a73bb50c8c01abca4852bfbe5f2df7b0ea1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "10dd721b_8b21fe87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2020-09-07T22:49:44Z",
+      "side": 1,
+      "message": "Also, if I remove this CHECK, all the tests pass successfully.",
+      "parentUuid": "79a033b7_298e2a87",
+      "revId": "9fff9a73bb50c8c01abca4852bfbe5f2df7b0ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
