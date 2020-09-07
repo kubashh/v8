@@ -80,6 +80,30 @@
       "revId": "1a6441fd19db925b776b5e77b5a02b942dfaf745",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48fbf39b_ea4afc8f",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3329,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-07T15:02:48Z",
+      "side": 1,
+      "message": "I think we can avoid adding this if extend IF_ACCESS_FROM_HEAP_C analogous to how we changed IF_ACCESS_FROM_HEAP and then use BIMODAL_ACCESSOR_C instead of DIRECT_HEAP_ACCESSOR_C.",
+      "parentUuid": "3dfcf0c7_13e53d26",
+      "range": {
+        "startLine": 3329,
+        "startChar": 8,
+        "endLine": 3329,
+        "endChar": 30
+      },
+      "revId": "1a6441fd19db925b776b5e77b5a02b942dfaf745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
