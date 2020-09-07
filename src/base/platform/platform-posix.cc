@@ -151,6 +151,11 @@ int GetFlagsForMemoryPermission(OS::MemoryPermission access,
 #if V8_OS_QNX
     flags |= MAP_LAZY;
 #endif  // V8_OS_QNX
+#if V8_OS_MACOSX && V8_HOST_ARCH_ARM64 && defined(MAP_JIT)
+    // TODO(crbug.com/1117591): This is only needed for code spaces.
+    printf("Adding MAP_JIT flag\n");
+    flags |= MAP_JIT;
+#endif
   }
   return flags;
 }
