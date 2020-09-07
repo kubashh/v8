@@ -18,8 +18,8 @@ namespace compiler {
 MapInference::MapInference(JSHeapBroker* broker, Node* object, Node* effect)
     : broker_(broker), object_(object) {
   ZoneHandleSet<Map> maps;
-  auto result =
-      NodeProperties::InferReceiverMapsUnsafe(broker_, object_, effect, &maps);
+  auto result = NodeProperties::InferReceiverMapsUnsafe(
+      broker_, object_, effect, &maps, &elements_kinds_);
   maps_.insert(maps_.end(), maps.begin(), maps.end());
   maps_state_ = (result == NodeProperties::kUnreliableReceiverMaps)
                     ? kUnreliableDontNeedGuard
@@ -91,6 +91,13 @@ MapHandles const& MapInference::GetMaps() {
   return maps_;
 }
 
+V8_WARN_UNUSED_RESULT std::vector<std::pair<bool, ElementsKind>> const&
+MapInference::GetElementsKinds() {
+  if (!HaveMaps()) return elements_kinds_;
+  SetNeedGuardIfUnreliable();
+  return elements_kinds_;
+}
+
 bool MapInference::Is(Handle<Map> expected_map) {
   if (!HaveMaps()) return false;
   const MapHandles& maps = GetMaps();
@@ -120,7 +127,8 @@ bool MapInference::RelyOnMapsViaStability(
 bool MapInference::RelyOnMapsPreferStability(
     CompilationDependencies* dependencies, JSGraph* jsgraph, Effect* effect,
     Control control, const FeedbackSource& feedback) {
-  CHECK(HaveMaps());
+  CHECK(HaveMaps() || elements_kinds_.size() != 0);
+  if (!HaveMaps()) return false;
   if (Safe()) return false;
   if (RelyOnMapsViaStability(dependencies)) return true;
   CHECK(RelyOnMapsHelper(nullptr, jsgraph, effect, control, feedback));
