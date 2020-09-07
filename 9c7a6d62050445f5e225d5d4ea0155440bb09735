@@ -141,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "72fb7759_236ba9da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2020-09-07T17:15:36Z",
+      "side": 1,
+      "message": "I want to make sure I understand one thing: when we don\u0027t apply the backward spilling heuristic, the stack to stack moves are replaced with a spill/reload pair (spill at the original spill pos, reload at the end of the loop).\nMy understanding is that the stack to stack move is slower on ia32 because we use the stack for scratch space. On x64 we would use a scratch register instead, which would be just as efficient as the spill/reload pair. Yolanda, does that match your understanding of the regressions you addressed in crbug.com/chromium/1063831#c11?\n\n\nSo based on this I think that we should keep the use of SpillAtLoopHeaderNotBeneficial to a minimum since it is only useful on ia32 and might introduce regressions otherwise, as found by Seth. I would prefer landing the first patch set of this change since it is simpler and already addresses the original regressions.\n\nIn general I am wondering if we could solve this during phi resolution instead to target only the inputs that introduce a stack to stack move, e.g. by finding a free temporary register to use as scratch space.",
+      "parentUuid": "a2468dc0_d1091b56",
+      "revId": "9c7a6d62050445f5e225d5d4ea0155440bb09735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4ea726a_eff27c64",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 2
