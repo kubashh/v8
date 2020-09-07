@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79a033b7_298e2a87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2020-09-07T22:47:49Z",
+      "side": 1,
+      "message": "Hello Dominik,\n\nAfter this CL, I found there are some test failures on this CHECK: https://github.com/v8/v8/blob/master/test/cctest/heap/heap-utils.cc#L100\n\nHere is one such failure:\n\n```\nroot@5d4767d87bc5:/workdir/v8/v8# out/ppc64.debug.normal/cctest test-heap/GrowAndShrinkNewSpace --random-seed\u003d-935415332 --nohard-abort --testing-d8-test-runner \n\n\n#\n# Fatal error in ../../test/cctest/heap/heap-utils.cc, line 93\n# Check failed: padding_size \u003c\u003d overall_free_memory || overall_free_memory \u003d\u003d 0.\n#\n#\n#\n#FailureMessage Object: 0x7ffcfb6dca80\n\u003d\u003d\u003d\u003d C stack trace \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\n    /workdir/v8/v8/out/ppc64.debug.normal/libv8_libbase.so(v8::base::debug::StackTrace::StackTrace()+0x21) [0x7f1baf673451]\n    /workdir/v8/v8/out/ppc64.debug.normal/libv8_libplatform.so(+0x5730a) [0x7f1baf5f630a]\n    /workdir/v8/v8/out/ppc64.debug.normal/libv8_libbase.so(V8_Fatal(char const*, int, char const*, ...)+0x26f) [0x7f1baf65acff]\n    out/ppc64.debug.normal/cctest(v8::internal::heap::CreatePadding(v8::internal::Heap*, int, v8::internal::AllocationType, int)+0x1cf) [0x5614a0f935ff]\n    out/ppc64.debug.normal/cctest(v8::internal::heap::FillCurrentPageButNBytes(v8::internal::NewSpace*, int, std::__Cr::vector\u003cv8::internal::Handle\u003cv8::internal::FixedArray\u003e, std::__Cr::allocator\u003cv8::internal::Handle\u003cv8::internal::FixedArray\u003e \u003e \u003e*)+0x1b3) [0x5614a0f93a63]\n    out/ppc64.debug.normal/cctest(v8::internal::heap::FillCurrentPage(v8::internal::NewSpace*, std::__Cr::vector\u003cv8::internal::Handle\u003cv8::internal::FixedArray\u003e, std::__Cr::allocator\u003cv8::internal::Handle\u003cv8::internal::FixedArray\u003e \u003e \u003e*)+0x21) [0x5614a0f938a1]\n    out/ppc64.debug.normal/cctest(v8::internal::heap::SimulateFullSpace(v8::internal::NewSpace*, std::__Cr::vector\u003cv8::internal::Handle\u003cv8::internal::FixedArray\u003e, std::__Cr::allocator\u003cv8::internal::Handle\u003cv8::internal::FixedArray\u003e \u003e \u003e*)+0x1d) [0x5614a0f93b1d]\n    out/ppc64.debug.normal/cctest(+0x152fbf0) [0x5614a0fdebf0]\n    out/ppc64.debug.normal/cctest(CcTest::Run()+0x21c) [0x5614a0d9f89c]\n    out/ppc64.debug.normal/cctest(main+0x43d) [0x5614a0da0ccd]\n    /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xe7) [0x7f1ba9431b97]\n    out/ppc64.debug.normal/cctest(_start+0x2a) [0x5614a0d9f46a]\nAborted (core dumped)\n```\n\nCould you provide any suggestions?\n\nThanks,\nJohn\n",
+      "revId": "9fff9a73bb50c8c01abca4852bfbe5f2df7b0ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
