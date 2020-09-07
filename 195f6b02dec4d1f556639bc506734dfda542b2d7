@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "ca2e2076_7711f2b9",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-07T15:34:20Z",
+      "side": 1,
+      "message": "Let\u0027s do it only in the constructor.",
+      "parentUuid": "20ae832e_c318564c",
+      "range": {
+        "startLine": 1568,
+        "startChar": 2,
+        "endLine": 1568,
+        "endChar": 41
+      },
+      "revId": "195f6b02dec4d1f556639bc506734dfda542b2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "39bd3c23_e0b57e31",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 5
