@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4fbb60f_2d546018",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-07T07:52:09Z",
+      "side": 1,
+      "message": "Nico PTAL\n\nGeorg, Michael FYI this would be the first instance of the data class skipping serialization with the new macros",
+      "revId": "195f6b02dec4d1f556639bc506734dfda542b2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6ab94c2c_794bbf6f",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-07T07:52:09Z",
+      "side": 1,
+      "message": "Moved this macro upwards so it is on top of HEAP_BROKER_SERIALIZED_OBJECT_LIST since it helps to keep in mind the \"subtypes appear before their supertypes\" even inter-list",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 1
+      },
+      "revId": "195f6b02dec4d1f556639bc506734dfda542b2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "20ae832e_c318564c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-07T07:52:09Z",
+      "side": 1,
+      "message": "Is this DCHECK needed? We would have to have a FixedDoubleArrayData object (and would have gone through the constructor which already has a DCHECK)",
+      "range": {
+        "startLine": 1568,
+        "startChar": 2,
+        "endLine": 1568,
+        "endChar": 41
+      },
+      "revId": "195f6b02dec4d1f556639bc506734dfda542b2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39bd3c23_e0b57e31",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3231,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-07T07:52:09Z",
+      "side": 1,
+      "message": "Special cased so we can skip the AllowHandleDereferenceIf scope",
+      "range": {
+        "startLine": 3230,
+        "startChar": 2,
+        "endLine": 3231,
+        "endChar": 36
+      },
+      "revId": "195f6b02dec4d1f556639bc506734dfda542b2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
