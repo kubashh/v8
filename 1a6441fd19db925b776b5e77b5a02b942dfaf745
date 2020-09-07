@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90dfe978_21debe20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-07T07:52:31Z",
+      "side": 1,
+      "message": "Nico PTAL",
+      "revId": "1a6441fd19db925b776b5e77b5a02b942dfaf745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5cbb8cbc_c7c2737e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3329,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-07T07:52:31Z",
+      "side": 1,
+      "message": "Willing to bikeshed this name. I chose it because in the end we will remove the \"else\" case and have a direct access always. Then, I didn\u0027t want to name it DIRECT_ACCESS_OR_BIMODAL (or something like that). However, I concede that at the current time DIRECT_ACCESS_OR_BIMODAL is more representative of the current state.",
+      "range": {
+        "startLine": 3329,
+        "startChar": 8,
+        "endLine": 3329,
+        "endChar": 30
+      },
+      "revId": "1a6441fd19db925b776b5e77b5a02b942dfaf745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

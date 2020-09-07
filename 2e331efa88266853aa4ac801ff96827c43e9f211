@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df83e3ce_4156e3eb",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3938,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-07T07:52:31Z",
+      "side": 0,
+      "message": "This was doing the same what the BIMODAL_ACCESSOR_C macro would do.",
+      "range": {
+        "startLine": 3935,
+        "startChar": 0,
+        "endLine": 3938,
+        "endChar": 1
+      },
+      "revId": "2e331efa88266853aa4ac801ff96827c43e9f211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
