@@ -34,6 +34,24 @@
       "revId": "beeef0d8f0154cb10442921e47917c79ae65cdb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "80da4079_978b4a25",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2020-09-07T20:18:09Z",
+      "side": 0,
+      "message": "Ah, I see. Thanks for checking!",
+      "parentUuid": "1bd3f249_f0fdc336",
+      "revId": "beeef0d8f0154cb10442921e47917c79ae65cdb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
