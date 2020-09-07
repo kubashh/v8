@@ -1076,7 +1076,8 @@ Reduction JSNativeContextSpecialization::ReduceMinimorphicPropertyAccess(
           flags, feedback.handler(), source,
           feedback.is_monomorphic()
               ? DynamicCheckMapsParameters::ICState::kMonomorphic
-              : DynamicCheckMapsParameters::ICState::kPolymorphic),
+              : DynamicCheckMapsParameters::ICState::kPolymorphic,
+          feedback.elements_kind()),
       receiver, effect, control);
   value = access_builder.BuildMinimorphicLoadDataField(
       feedback.name(), access_info, receiver, &effect, &control);
