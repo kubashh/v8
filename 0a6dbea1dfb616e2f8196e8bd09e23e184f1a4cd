@@ -33,6 +33,24 @@
       "revId": "0a6dbea1dfb616e2f8196e8bd09e23e184f1a4cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21ca451e_43067e58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2020-09-08T03:47:51Z",
+      "side": 1,
+      "message": "Hi, may I ask something about the merge process?\n\nAccording to my understanding about v8\u0027s doc, the process should be:\nFile an issue to request a merge, and wait somebody\u0027s approval, then create the merge CL, right? But how long would the approval takes? And do I need to do something else like cc somebody? Or just wait is okay?\n\nThanks!",
+      "parentUuid": "106dec98_4b48e1e7",
+      "revId": "0a6dbea1dfb616e2f8196e8bd09e23e184f1a4cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
