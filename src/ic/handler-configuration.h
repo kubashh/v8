@@ -61,7 +61,7 @@ class LoadHandler final : public DataHandler {
   using LookupOnReceiverBits = DoAccessCheckOnReceiverBits::Next<bool, 1>;
 
   //
-  // Encoding when KindBits contains kForConstants.
+  // Encoding when KindBits contains kAccessor or kNativeDataProperty.
   //
 
   // Index of a value entry in the descriptor array.
@@ -180,6 +180,10 @@ class LoadHandler final : public DataHandler {
 
   // Decodes the KeyedAccessLoadMode from a {handler}.
   static KeyedAccessLoadMode GetKeyedAccessLoadMode(MaybeObject handler);
+
+#if defined(DEBUG) || defined(OBJECT_PRINT)
+  static void PrintHandler(Object handler, std::ostream& os);
+#endif  // defined(DEBUG) || defined(OBJECT_PRINT)
 
   OBJECT_CONSTRUCTORS(LoadHandler, DataHandler);
 };
