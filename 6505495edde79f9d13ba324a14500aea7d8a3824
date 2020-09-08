@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba50bf7d_7166bec2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-08T11:15:26Z",
+      "side": 1,
+      "message": "Thibaud: PTAL.\n\nMichael: Please do an OWNERS review for src/base/platform. The change there is as simple (and targeted) as possible; per the TODO comment in there, we could consider to only set the MAP_JIT flag on memory we\u0027re planning to use for code, but that\u0027s information we don\u0027t currently have when reserving address space, so it\u0027d be a somewhat bigger refactoring.\n\nThe skipped tests require more work, but don\u0027t seem to be critical for production code.",
+      "revId": "6505495edde79f9d13ba324a14500aea7d8a3824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
