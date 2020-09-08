@@ -39,6 +39,30 @@
       "revId": "f98e5c507d5902d652539449dbbd371f812f62a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c47644d_34b5383a",
+        "filename": "src/compiler/backend/code-generator-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-08T05:20:40Z",
+      "side": 1,
+      "message": "Agreed this dcheck wasn\u0027t very nice. I extracted the mask calculation to hopefully improve readability:\n\n +  static constexpr int kInstructionCodeFlagsMask \u003d\n +      ((1 \u003c\u003c CallDescriptor::kFlagsBitsEncodedInInstructionCode) - 1);\n +  DCHECK_EQ(static_cast\u003cint\u003e(flag) \u0026 kInstructionCodeFlagsMask, flag);",
+      "parentUuid": "510e88f1_3b60842b",
+      "range": {
+        "startLine": 263,
+        "startChar": 2,
+        "endLine": 265,
+        "endChar": 17
+      },
+      "revId": "f98e5c507d5902d652539449dbbd371f812f62a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
