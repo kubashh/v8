@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "5a742920_d47b1d20",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-08T10:55:13Z",
+      "side": 1,
+      "message": "I\u0027ll let Nico comment his thoughts but from what I gathered Context needs to be done before FixedArray since context is a subtype of FixedArray, i.e FixedArray requires Context.",
+      "parentUuid": "85838c81_47a4d372",
+      "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8c149ef_c8a443c9",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 7
@@ -90,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "a65dfd52_558f792c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2262,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-08T10:55:13Z",
+      "side": 1,
+      "message": "Sounds good. Done",
+      "parentUuid": "a8c149ef_c8a443c9",
+      "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5fd9215a_220eb337",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 7
@@ -104,6 +140,24 @@
       "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fefd57fd_539d27e1",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3242,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-08T10:55:13Z",
+      "side": 1,
+      "message": "Ack, removed.",
+      "parentUuid": "5fd9215a_220eb337",
+      "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
