@@ -22,6 +22,30 @@
       "revId": "44445a7ce3d40ec8b01c7753513cca2fb13403b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b4b8f318_722a5ff1",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3326,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-08T09:57:07Z",
+      "side": 1,
+      "message": "I\u0027d put that comment into the code.",
+      "parentUuid": "a5c4707b_2e7e19c5",
+      "range": {
+        "startLine": 3326,
+        "startChar": 6,
+        "endLine": 3326,
+        "endChar": 65
+      },
+      "revId": "44445a7ce3d40ec8b01c7753513cca2fb13403b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
