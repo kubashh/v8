@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "5bd37d37_9f2a6ef8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-09-08T11:26:12Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "5a61705ddb854f83a24e8cdc32ee2583a21b6040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "93eb54bf_4d77bccc",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 8
@@ -30,6 +47,29 @@
       "writtenOn": "2020-09-08T11:10:26Z",
       "side": 1,
       "message": "This should check \u003d\u003d ObjectDataKind::kSerializedHeapObject, because only then we have an instance of FixedDoubleArrayData.\n\nI just saw that the As* casts are not as robust as they should be, I\u0027ll make an improvement of that.",
+      "revId": "5a61705ddb854f83a24e8cdc32ee2583a21b6040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93d7df69_b7f35138",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3239,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2020-09-08T11:26:12Z",
+      "side": 1,
+      "message": "Is there no ACCESSOR macro that is usually used for this?",
+      "range": {
+        "startLine": 3229,
+        "startChar": 1,
+        "endLine": 3239,
+        "endChar": 1
+      },
       "revId": "5a61705ddb854f83a24e8cdc32ee2583a21b6040",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
