@@ -1,0 +1,255 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d492c48_7158c242",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "some suggestions",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "afa1be62_102b9290",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "While you are here... it seems we don\u0027t use this parameter anymore, maybe we can just drop it as a drive-by-cleanup.",
+      "range": {
+        "startLine": 31,
+        "startChar": 28,
+        "endLine": 31,
+        "endChar": 55
+      },
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd8247ee_8b371a6c",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "Probably it would be nicer to print this line only once from handler.IsSmi() case of PrintHandler.",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b42abb41_0b974675",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "I think this approach will not work for NON_COMPACT_ELEMENTS_KIND value.",
+      "range": {
+        "startLine": 206,
+        "startChar": 27,
+        "endLine": 206,
+        "endChar": 52
+      },
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4adb5442_383a87d6",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "Maybe just \"in-object\" or \"out-of-object\" depending on this bit.",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "405588f2_037ccda3",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f49b571_08422d3c",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "There are handlers that are weak references, so MaybeObject.",
+      "range": {
+        "startLine": 259,
+        "startChar": 31,
+        "endLine": 259,
+        "endChar": 37
+      },
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "438b7f95_3dfce83f",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "I\u0027d suggest to handle more cases here:\n* code object (for keyed indexed loads), in this case we can print the code object\u0027s builtin id\n* handler can also be a weak (!) PropertyCell (for LoadGlobalIC)\n* another shape of Smi (only for LoadGlobalIC) representing \"lexical variable\" and encoding a pair of context index and slot index values.\n\nMaybe you can add a bool parameter defining whether we should decode the value as a LoadGlobalIC handler. I think it\u0027ll be a rare case but it would be nice to support it here just for completeness.",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92f35e5a_b23a755e",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "It would also be nice to print validity_cell field here (valid/invalid word + short-print object pointer).",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "229d82d9_ce236f5d",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "This is always true, could be just a DCHECK.",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc385a43_72938276",
+        "filename": "src/ic/handler-configuration.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "data1 (holder) or just holder",
+      "range": {
+        "startLine": 270,
+        "startChar": 15,
+        "endLine": 270,
+        "endChar": 20
+      },
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3689e1da_4556b573",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "Everywhere else we just rely on OBJECT_PRINT macro which is enabled by default for debug builds in BUILD.gn.",
+      "range": {
+        "startLine": 184,
+        "startChar": 4,
+        "endLine": 184,
+        "endChar": 21
+      },
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da2534b6_c942237f",
+        "filename": "src/ic/handler-configuration.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2020-09-08T13:56:57Z",
+      "side": 1,
+      "message": "It would be very helpful if you also add a _v8_internal_Print_Object-like entry point and add \na gdb macro for printing Load and LoadGlobal handlers.",
+      "revId": "9e2a57fbe7ffbfb72ad59b7329e2267e80124c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
