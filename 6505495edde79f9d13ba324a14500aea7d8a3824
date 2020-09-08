@@ -33,6 +33,63 @@
       "revId": "6505495edde79f9d13ba324a14500aea7d8a3824",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2424bcda_df3dc0ee",
+        "filename": "src/wasm/code-space-access.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1174099
+      },
+      "writtenOn": "2020-09-08T13:21:44Z",
+      "side": 1,
+      "message": "pthread_jit_write_protect_np isn’t just absent from the headers in earlier SDKs, it’s absent from the library you need to link with. So all this declaration would do would be to turn a compile-time error into a link-time error.\n\nNot to worry, though. You’re inside V8_HOST_ARCH_ARM64 here, and there’s no possibility to build arm64 code for macOS with anything older than the 11.0 SDK, which does have pthread_jit_write_protect_np. Since you only ever attempt to use this function on arm64, your own declaration here is completely unnecessary. We will always be on the right SDK where you need this function, so your own declaration will always be excluded. You can get rid of this block (12–25) entirely.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 45
+      },
+      "revId": "6505495edde79f9d13ba324a14500aea7d8a3824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3e2db3f_0e74def2",
+        "filename": "src/wasm/code-space-access.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1174099
+      },
+      "writtenOn": "2020-09-08T13:21:44Z",
+      "side": 1,
+      "message": "It should work now, but __builtin_available is a little misguided and I actually prefer what you’ve written here.",
+      "revId": "6505495edde79f9d13ba324a14500aea7d8a3824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a354ff9e_c4bf7ddb",
+        "filename": "src/wasm/code-space-access.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1174099
+      },
+      "writtenOn": "2020-09-08T13:21:44Z",
+      "side": 1,
+      "message": "Might want to #if out these implementations and the TLS variable on non-mac-arm64 too.",
+      "revId": "6505495edde79f9d13ba324a14500aea7d8a3824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
