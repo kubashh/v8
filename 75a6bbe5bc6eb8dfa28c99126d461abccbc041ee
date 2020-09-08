@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2baa168b_ae774626",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-08T10:11:44Z",
+      "side": 1,
+      "message": "I\u0027m very confused about this. I actually thought the other way around would be the problematic one but since we keep the *Data classes anyway even that one seems fine.\n\nCould you explain the problem?",
+      "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
