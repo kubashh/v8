@@ -462,6 +462,8 @@ bool NewSpace::Rebalance() {
          from_space_.EnsureCurrentCapacity();
 }
 
+void NewSpace::PrepareForMarkCompact() { MoveOriginalTopForward(); }
+
 void NewSpace::UpdateLinearAllocationArea() {
   AdvanceAllocationObservers();
 
@@ -557,6 +559,10 @@ std::unique_ptr<ObjectIterator> NewSpace::GetObjectIterator(Heap* heap) {
 AllocationResult NewSpace::AllocateRawSlow(int size_in_bytes,
                                            AllocationAlignment alignment,
                                            AllocationOrigin origin) {
+  // Objects between original_top_ and top_ are now all guaranteed to be
+  // properly initialized and ready to be scanned by the concurrent marker.
+  MoveOriginalTopForward();
+
 #ifdef V8_HOST_ARCH_32_BIT
   return alignment != kWordAligned
              ? AllocateRawAligned(size_in_bytes, alignment, origin)

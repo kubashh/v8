@@ -511,7 +511,6 @@ bool MarkCompactCollector::StartCompaction() {
 
 void MarkCompactCollector::StartMarking() {
   if (FLAG_concurrent_marking || FLAG_parallel_marking) {
-    heap_->new_space()->ResetOriginalTop();
     heap_->new_lo_space()->ResetPendingObject();
   }
   std::vector<Address> contexts =
@@ -891,6 +890,8 @@ void MarkCompactCollector::Prepare() {
     }
     StartMarking();
   }
+
+  heap_->new_space()->PrepareForMarkCompact();
 
   PagedSpaceIterator spaces(heap());
   for (PagedSpace* space = spaces.Next(); space != nullptr;
