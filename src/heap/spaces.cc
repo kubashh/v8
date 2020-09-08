@@ -366,6 +366,9 @@ void SpaceWithLinearArea::PauseAllocationObservers() {
 void SpaceWithLinearArea::ResumeAllocationObservers() {
   Space::ResumeAllocationObservers();
   allocation_info_.MoveStartToTop();
+  if (identity() == NEW_SPACE) {
+    heap()->new_space()->MoveOriginalTopForward();
+  }
   UpdateInlineAllocationLimit(0);
 }
 
@@ -375,6 +378,9 @@ void SpaceWithLinearArea::AdvanceAllocationObservers() {
     allocation_counter_.AdvanceAllocationObservers(allocation_info_.top() -
                                                    allocation_info_.start());
     allocation_info_.MoveStartToTop();
+    if (identity() == NEW_SPACE) {
+      heap()->new_space()->MoveOriginalTopForward();
+    }
   }
 }
 
