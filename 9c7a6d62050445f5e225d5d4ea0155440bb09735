@@ -159,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "aa9a7166_894e9473",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2020-09-08T03:13:58Z",
+      "side": 1,
+      "message": "Thanks Thibaud for the insight. When I fixed the bug #1063831 I thought stack-to-stack moves would instroduce push-pop pairs for both ia32 and x64 and did not realize x64 has an extra scratch register. It seems the push-pop pair is only issued in very limited scenario on x64, e.g. the stack-to-stack swap. So I agree to make the SpillAtLoopHeaderNotBeneficial to a minimum as you suggested. Thank you Seth for taking look at my concern and prividing the new patch anyway.",
+      "parentUuid": "72fb7759_236ba9da",
+      "revId": "9c7a6d62050445f5e225d5d4ea0155440bb09735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4ea726a_eff27c64",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 2
