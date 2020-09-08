@@ -331,6 +331,30 @@
       "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b4c92ee7_a6da5afe",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2020-09-08T14:37:12Z",
+      "side": 1,
+      "message": "Ok, can we static assert somewhere that it\u0027s equivalent to something else? It currently only seems to be used in v8.h, so it\u0027s not clear to me how it\u0027s used internally.\n\nWhy is the embedder data slot word-sized instead of tagged-sized in the sandbox mode anyway, if it\u0027s just storing an index value?",
+      "parentUuid": "1bb51b0f_6bd7d179",
+      "range": {
+        "startLine": 176,
+        "startChar": 19,
+        "endLine": 176,
+        "endChar": 52
+      },
+      "revId": "532788fd137a7f0d9a333706beb91403c80995b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
