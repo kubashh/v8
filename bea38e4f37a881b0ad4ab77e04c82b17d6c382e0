@@ -34,6 +34,58 @@
       "revId": "bea38e4f37a881b0ad4ab77e04c82b17d6c382e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bc5c3559_231e7dc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-08T13:55:26Z",
+      "side": 1,
+      "message": "I\u0027m a bit torn here; I don\u0027t think we should port CPP-\u003eTorque in general, at least without having consciously made that decision at team level. But your interleaved-spec-comment style is nicer than the initial impl. So if you like, let\u0027s go ahead with this CL, but let\u0027s not port other CPP builtins.",
+      "parentUuid": "0c9da310_8ea0103a",
+      "revId": "bea38e4f37a881b0ad4ab77e04c82b17d6c382e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2163019b_9f8c68ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-08T13:55:26Z",
+      "side": 1,
+      "message": "lgtm with comment",
+      "revId": "bea38e4f37a881b0ad4ab77e04c82b17d6c382e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6c360f_522a6c51",
+        "filename": "src/builtins/arraybuffer.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-08T13:55:26Z",
+      "side": 1,
+      "message": "If we\u0027re not fixing this, please leave it as TODO(v8:4895).",
+      "revId": "bea38e4f37a881b0ad4ab77e04c82b17d6c382e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
