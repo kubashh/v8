@@ -462,6 +462,8 @@ bool NewSpace::Rebalance() {
          from_space_.EnsureCurrentCapacity();
 }
 
+void NewSpace::PrepareForMarkCompact() { MoveOriginalTopForward(); }
+
 void NewSpace::UpdateLinearAllocationArea() {
   AdvanceAllocationObservers();
 
@@ -550,6 +552,16 @@ bool NewSpace::EnsureAllocation(int size_in_bytes,
   return true;
 }
 
+void NewSpace::PostCollection() {
+  allocation_info_.MoveStartToTop();
+  original_limit_.store(limit(), std::memory_order_relaxed);
+  original_top_.store(top(), std::memory_order_release);
+
+#if DEBUG
+  VerifyTop();
+#endif
+}
+
 std::unique_ptr<ObjectIterator> NewSpace::GetObjectIterator(Heap* heap) {
   return std::unique_ptr<ObjectIterator>(new SemiSpaceObjectIterator(this));
 }
@@ -557,6 +569,10 @@ std::unique_ptr<ObjectIterator> NewSpace::GetObjectIterator(Heap* heap) {
 AllocationResult NewSpace::AllocateRawSlow(int size_in_bytes,
                                            AllocationAlignment alignment,
                                            AllocationOrigin origin) {
+  // Objects between original_top_ and top_ are now all guaranteed to be
+  // properly initialized and ready to be scanned by the concurrent marker.
+  MoveOriginalTopForward();
+
 #ifdef V8_HOST_ARCH_32_BIT
   return alignment != kWordAligned
              ? AllocateRawAligned(size_in_bytes, alignment, origin)
