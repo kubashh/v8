@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "be5382b1_39ca48ad",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2262,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-08T12:33:17Z",
+      "side": 1,
+      "message": "Ack.\nNow that I see it again, on top of the if we have \"elements_-\u003eshould_access_heap()\" and this is the else case. Then we can change it to\nDCHECK(elements_-\u003ekind() \u003d\u003d ObjectDataKind::kSerializedHeapObject)",
+      "parentUuid": "93eb54bf_4d77bccc",
+      "revId": "5a61705ddb854f83a24e8cdc32ee2583a21b6040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "93d7df69_b7f35138",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 8
@@ -73,6 +91,30 @@
       "revId": "5a61705ddb854f83a24e8cdc32ee2583a21b6040",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97109667_8422a33b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3239,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-08T12:33:17Z",
+      "side": 1,
+      "message": "There is a macro but we can\u0027t use it here because on the serializing case we have \"Get(i).is_hole_nan()\" which does not match \"is_the_hole\".",
+      "parentUuid": "93d7df69_b7f35138",
+      "range": {
+        "startLine": 3229,
+        "startChar": 1,
+        "endLine": 3239,
+        "endChar": 1
+      },
+      "revId": "5a61705ddb854f83a24e8cdc32ee2583a21b6040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
