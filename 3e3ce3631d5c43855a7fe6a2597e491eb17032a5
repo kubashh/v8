@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e49bf698_41365c6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2020-09-08T21:12:17Z",
+      "side": 1,
+      "message": "Update: I can no longer measure any speedup with this change, because https://crrev.com/c/2382509 reduced the register pressure in the program I was testing. I\u0027m happy to change this CL back to the way it was in patchset 2 as Thibaud suggested, or I can just abandon it since I no longer have an example program where it is helpful. What would you recommend?",
+      "revId": "3e3ce3631d5c43855a7fe6a2597e491eb17032a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
