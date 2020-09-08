@@ -368,10 +368,15 @@ class V8_EXPORT_PRIVATE NewSpace
     return to_space_.minimum_capacity();
   }
 
-  void ResetOriginalTop() {
-    DCHECK_GE(top(), original_top_);
+  void VerifyTop() {
+    DCHECK_LE(allocation_info_.start(), allocation_info_.top());
+    DCHECK_LE(allocation_info_.top(), allocation_info_.limit());
+
+    DCHECK_LE(original_top_, top());
     DCHECK_LE(top(), original_limit_);
-    original_top_.store(top(), std::memory_order_release);
+
+    DCHECK_EQ(original_top_, allocation_info_.start());
+    DCHECK_EQ(original_limit_, limit());
   }
 
   Address original_top_acquire() {
@@ -457,6 +462,14 @@ class V8_EXPORT_PRIVATE NewSpace
 
   SemiSpace& from_space() { return from_space_; }
   SemiSpace& to_space() { return to_space_; }
+
+  void MoveOriginalTopForward() {
+    DCHECK_GE(top(), original_top_);
+    DCHECK_LE(top(), original_limit_);
+    original_top_.store(top(), std::memory_order_release);
+  }
+
+  void PostCollection();
 
  private:
   // Update linear allocation area to match the current to-space page.
