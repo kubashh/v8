@@ -52,6 +52,58 @@
       "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85838c81_47a4d372",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-08T10:29:43Z",
+      "side": 1,
+      "message": "BTW, Nico, then I don\u0027t see the problem that you mentioned about Context requiring FixedArray direct access.",
+      "parentUuid": "a1e65859_b86de06b",
+      "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c149ef_c8a443c9",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2262,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-08T10:29:43Z",
+      "side": 1,
+      "message": "Please add braces.\n\nI think I\u0027d prefer looking at the {elements_}\u0027s data kind here, what do you think? That makes the code a little less magical.",
+      "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fd9215a_220eb337",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3242,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-08T10:29:43Z",
+      "side": 1,
+      "message": "This is already checked in FixedDoubleArray::get_scalar.",
+      "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
