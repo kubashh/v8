@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f91431bd_62478b5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-08T09:31:41Z",
+      "side": 1,
+      "message": "General q, why are you porting these CPP builtins to Torque? Is there a specific motivation other than \u0027port X to Torque\u0027? Unlike the CSA-\u003eTorque ports, doing CPP ports is not a general recommendation afaik.",
+      "revId": "bea38e4f37a881b0ad4ab77e04c82b17d6c382e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
