@@ -33,6 +33,24 @@
       "revId": "17a012340445978d610baf6de432118b072cd0bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "035b45c7_8d33590a",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-08T11:17:52Z",
+      "side": 1,
+      "message": "Friendly ping (since you may have missed this due to missing email notifications before setting this CL active).",
+      "parentUuid": "fe6b66f7_e7d13571",
+      "revId": "17a012340445978d610baf6de432118b072cd0bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
