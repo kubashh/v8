@@ -34,6 +34,24 @@
       "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1e65859_b86de06b",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-08T10:23:21Z",
+      "side": 1,
+      "message": "I see. That sounds like a limitation of how we define GetOrCreateData. If it turns out that we want to allow a subclass to stay serialized, we could think about a work-around.",
+      "parentUuid": "7be6da09_8a03e2ea",
+      "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
