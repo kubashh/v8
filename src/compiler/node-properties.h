@@ -196,7 +196,9 @@ class V8_EXPORT_PRIVATE NodeProperties final {
   // DO NOT USE InferReceiverMapsUnsafe IN NEW CODE. Use MapInference instead.
   static InferReceiverMapsResult InferReceiverMapsUnsafe(
       JSHeapBroker* broker, Node* receiver, Node* effect,
-      ZoneHandleSet<Map>* maps_return);
+      ZoneHandleSet<Map>* maps_return,
+      std::vector<std::pair<bool, ElementsKind>>* elements_kind_return =
+          nullptr);
 
   // Return the initial map of the new-target if the allocation can be inlined.
   static base::Optional<MapRef> GetJSCreateMap(JSHeapBroker* broker,

@@ -34,6 +34,11 @@ class JSArray : public JSObject {
   static bool HasReadOnlyLength(Handle<JSArray> array);
   static bool WouldChangeReadOnlyLength(Handle<JSArray> array, uint32_t index);
 
+  static bool MapHasReadOnlyLengthDescriptor(Isolate* isolate,
+                                             Handle<Map> jsarray_map);
+  static bool MapSupportsFastArrayIteration(Isolate* isolate, Handle<Map> map);
+  static bool MapSupportsFastArrayResize(Isolate* isolate, Handle<Map> map);
+
   // Initialize the array with the given capacity. The function may
   // fail due to out-of-memory situations, but only if the requested
   // capacity is non-zero.
