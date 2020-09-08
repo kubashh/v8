@@ -368,6 +368,14 @@ class V8_EXPORT_PRIVATE NewSpace
     return to_space_.minimum_capacity();
   }
 
+  void VerifyTop() {
+    DCHECK_LE(allocation_info_.start(), allocation_info_.top());
+    DCHECK_LE(allocation_info_.top(), allocation_info_.limit());
+
+    DCHECK_LE(original_top_, top());
+    DCHECK_LE(top(), original_limit_);
+  }
+
   void ResetOriginalTop() {
     DCHECK_GE(top(), original_top_);
     DCHECK_LE(top(), original_limit_);
