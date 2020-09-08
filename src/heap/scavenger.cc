@@ -417,6 +417,8 @@ void ScavengerCollector::CollectGarbage() {
 
   // Update how much has survived scavenge.
   heap_->IncrementYoungSurvivorsCounter(heap_->SurvivedYoungObjectSize());
+
+  heap_->new_space()->PostCollection();
 }
 
 void ScavengerCollector::IterateStackAndScavenge(
