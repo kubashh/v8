@@ -16,6 +16,24 @@
       "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7be6da09_8a03e2ea",
+        "filename": "src/compiler/heap-refs.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-08T10:16:06Z",
+      "side": 1,
+      "message": "If we do that the supertype would appear before its subtype on GetOrCreateData (https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/js-heap-broker.cc;l\u003d2732;drc\u003dba797ba204e665e3b658144354edac7ecc60fa04).\n\nI made two different comments to signal two different things: A) the importance of the ordering inside the table (i.e intra-table) and B) the importance of the ordering between tables (i.e inter-table).",
+      "parentUuid": "2baa168b_ae774626",
+      "revId": "75a6bbe5bc6eb8dfa28c99126d461abccbc041ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
