@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87c2e6d4_2f39ca68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-08T11:10:26Z",
+      "side": 1,
+      "message": "lgtm with comment",
+      "revId": "5a61705ddb854f83a24e8cdc32ee2583a21b6040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "93eb54bf_4d77bccc",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2262,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-08T11:10:26Z",
+      "side": 1,
+      "message": "This should check \u003d\u003d ObjectDataKind::kSerializedHeapObject, because only then we have an instance of FixedDoubleArrayData.\n\nI just saw that the As* casts are not as robust as they should be, I\u0027ll make an improvement of that.",
+      "revId": "5a61705ddb854f83a24e8cdc32ee2583a21b6040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
