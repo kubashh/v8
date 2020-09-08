@@ -46,6 +46,30 @@
       "revId": "44445a7ce3d40ec8b01c7753513cca2fb13403b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cddb9ce8_9d6963f7",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3326,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2020-09-08T13:16:09Z",
+      "side": 1,
+      "message": "Sure, added.",
+      "parentUuid": "b4b8f318_722a5ff1",
+      "range": {
+        "startLine": 3326,
+        "startChar": 6,
+        "endLine": 3326,
+        "endChar": 65
+      },
+      "revId": "44445a7ce3d40ec8b01c7753513cca2fb13403b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
