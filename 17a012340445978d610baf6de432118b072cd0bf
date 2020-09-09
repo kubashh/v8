@@ -51,6 +51,24 @@
       "revId": "17a012340445978d610baf6de432118b072cd0bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef03a585_02c59aa0",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2020-09-09T19:56:19Z",
+      "side": 1,
+      "message": "Per offline discussion, I\u0027ll add `!defined(V8_OS_IOS)` for now, because we can\u0027t access FLAG_jitless from here, and iOS is the situation where jitless support really matters.\n\nFuture plan: when we address the other TODO by passing around a parameter to address space reservation requests indicating that we\u0027re planning to use that space for code later, then we can use that same mechanism to make sure we only set this parameter when FLAG_jitless \u003d\u003d false. Alternatively, if/when we implement full w^x exclusion everywhere, we won\u0027t need this at all any more.",
+      "parentUuid": "035b45c7_8d33590a",
+      "revId": "17a012340445978d610baf6de432118b072cd0bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
