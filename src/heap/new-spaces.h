@@ -368,10 +368,18 @@ class V8_EXPORT_PRIVATE NewSpace
     return to_space_.minimum_capacity();
   }
 
-  void ResetOriginalTop() {
-    DCHECK_GE(top(), original_top_);
-    DCHECK_LE(top(), original_limit_);
-    original_top_.store(top(), std::memory_order_release);
+  void VerifyTop() {
+    // Ensure validity of LAB: start <= top <= limit
+    DCHECK_LE(allocation_info_.start(), allocation_info_.top());
+    DCHECK_LE(allocation_info_.top(), allocation_info_.limit());
+
+    // Ensure that original_top_ always equals LAB start.
+    DCHECK_EQ(original_top_, allocation_info_.start());
+
+    // Ensure that limit() is <= original_limit_, original_limit_ always needs
+    // to be end of curent to space page.
+    DCHECK_LE(allocation_info_.limit(), original_limit_);
+    DCHECK_EQ(original_limit_, to_space_.page_high());
   }
 
   Address original_top_acquire() {
@@ -379,6 +387,14 @@ class V8_EXPORT_PRIVATE NewSpace
   }
   Address original_limit_relaxed() {
     return original_limit_.load(std::memory_order_relaxed);
+  }
+
+  void UpdateLabLimitForTesting(Address new_limit) {
+    allocation_info_.set_limit(new_limit);
+
+#if DEBUG
+    VerifyTop();
+#endif
   }
 
   // Return the address of the first allocatable address in the active
@@ -457,6 +473,14 @@ class V8_EXPORT_PRIVATE NewSpace
 
   SemiSpace& from_space() { return from_space_; }
   SemiSpace& to_space() { return to_space_; }
+
+  void MoveOriginalTopForward() {
+    DCHECK_GE(top(), original_top_);
+    DCHECK_LE(top(), original_limit_);
+    original_top_.store(top(), std::memory_order_release);
+  }
+
+  void MaybeFreeUnusedLab(LinearAllocationArea info);
 
  private:
   // Update linear allocation area to match the current to-space page.
