@@ -511,7 +511,6 @@ bool MarkCompactCollector::StartCompaction() {
 
 void MarkCompactCollector::StartMarking() {
   if (FLAG_concurrent_marking || FLAG_parallel_marking) {
-    heap_->new_space()->ResetOriginalTop();
     heap_->new_lo_space()->ResetPendingObject();
   }
   std::vector<Address> contexts =
@@ -978,6 +977,8 @@ void MarkCompactCollector::Finish() {
     Deoptimizer::DeoptimizeMarkedCode(isolate());
     have_code_to_deoptimize_ = false;
   }
+
+  heap_->new_space()->PostCollection();
 }
 
 void MarkCompactCollector::SweepArrayBufferExtensions() {
@@ -4545,6 +4546,8 @@ void MinorMarkCompactCollector::CollectGarbage() {
   }
 
   SweepArrayBufferExtensions();
+
+  heap_->new_space()->PostCollection();
 }
 
 void MinorMarkCompactCollector::MakeIterable(

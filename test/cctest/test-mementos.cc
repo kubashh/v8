@@ -81,7 +81,7 @@ TEST(Regress470390) {
 
   // Set the new space limit to be equal to the top.
   Address top = CcTest::i_isolate()->heap()->new_space()->top();
-  *(CcTest::i_isolate()->heap()->new_space()->allocation_limit_address()) = top;
+  CcTest::i_isolate()->heap()->new_space()->UpdateLabLimitForTesting(top);
 
   // Call GC to see if we can handle a poisonous memento right after the
   // current new space top pointer.
