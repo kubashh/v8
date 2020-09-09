@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a60174ce_d81a64fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-09-09T20:27:43Z",
+      "side": 1,
+      "message": "LGTM, can you add a bug to the description, you can use v8:10507 (I\u0027m using it to track scalar lowering improvements https://crbug.com/v8/10507). Thanks!",
+      "revId": "f903264d44fc5b8dd71e9af418a28a004e823694",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
