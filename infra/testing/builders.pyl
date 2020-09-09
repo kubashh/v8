@@ -637,7 +637,6 @@
     },
     'tests': [
       {'name': 'v8testing'},
-      {'name': 'test262'},
     ],
   },
   'v8_mac_arm64_dbg_ng_triggered': {
@@ -647,7 +646,6 @@
     },
     'tests': [
       {'name': 'v8testing'},
-      {'name': 'test262'},
     ],
   },
   'v8_mac_arm64_full_dbg_ng_triggered': {
@@ -657,7 +655,6 @@
     },
     'tests': [
       {'name': 'v8testing'},
-      {'name': 'test262'},
     ],
   },
   ##############################################################################
