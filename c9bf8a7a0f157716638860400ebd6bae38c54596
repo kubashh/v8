@@ -19,6 +19,69 @@
     },
     {
       "key": {
+        "uuid": "b5d87eff_004d87f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-09T14:01:53Z",
+      "side": 1,
+      "message": "lgtm with comments",
+      "revId": "c9bf8a7a0f157716638860400ebd6bae38c54596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25adcf11_9d7cbb62",
+        "filename": "src/heap/incremental-marking-job.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-09T14:01:53Z",
+      "side": 1,
+      "message": "It should be in line 125 before we perform Step()",
+      "range": {
+        "startLine": 129,
+        "startChar": 5,
+        "endLine": 129,
+        "endChar": 51
+      },
+      "revId": "c9bf8a7a0f157716638860400ebd6bae38c54596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f36b6e3b_e00fa254",
+        "filename": "src/heap/new-spaces.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-09T14:01:53Z",
+      "side": 1,
+      "message": "This doesn\u0027t bring us much because the concurrent marker can fetch the old original_limit_ value.\n\nThe important invariant is that objects between original_top_ and original_limit_ may be uninitialized. It holds even if we don\u0027t update original_limit_here.\n\nHow about asserting that original_top \u003c\u003d top \u003c\u003d new_limit \u003c\u003d original_limit here?",
+      "range": {
+        "startLine": 499,
+        "startChar": 2,
+        "endLine": 499,
+        "endChar": 62
+      },
+      "revId": "c9bf8a7a0f157716638860400ebd6bae38c54596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1819373d_9b4d1570",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 15
@@ -30,6 +93,24 @@
       "writtenOn": "2020-09-09T13:34:25Z",
       "side": 1,
       "message": "We could make that method virtual and have different implementations for PagedSpace and NewSpace (NewSpace would also update original_top). That would also allow us to remove NewSpace::MoveOriginalTopForward() as well. Wdyt?",
+      "revId": "c9bf8a7a0f157716638860400ebd6bae38c54596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "681b5708_d69629ad",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-09T14:01:53Z",
+      "side": 1,
+      "message": "Both options sgtm.",
+      "parentUuid": "1819373d_9b4d1570",
       "revId": "c9bf8a7a0f157716638860400ebd6bae38c54596",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
