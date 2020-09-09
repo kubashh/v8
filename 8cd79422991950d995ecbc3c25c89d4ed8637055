@@ -70,6 +70,30 @@
       "revId": "8cd79422991950d995ecbc3c25c89d4ed8637055",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14317226_daa1d532",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-09-09T22:11:29Z",
+      "side": 1,
+      "message": "Yea you\u0027re right, kSimd128ReverseBytes right now only handles lowering to 32x4, could add in support to lower to 64x2 too.\n\nMilad, is there also a test case that you can add? Or is this causing failures on existing test cases when running on BE machines?",
+      "parentUuid": "d9da0f76_45160336",
+      "range": {
+        "startLine": 2035,
+        "startChar": 0,
+        "endLine": 2035,
+        "endChar": 75
+      },
+      "revId": "8cd79422991950d995ecbc3c25c89d4ed8637055",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
