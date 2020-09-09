@@ -46,6 +46,30 @@
       "revId": "8cd79422991950d995ecbc3c25c89d4ed8637055",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9da0f76_45160336",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-09-09T21:42:26Z",
+      "side": 1,
+      "message": "I guess I expected for reversing bytes, i64x2 could be converted here to 2 i64 ReverseBytes, which int64lowering can handle:\nhttps://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/int64-lowering.cc;drc\u003dc0eee179b38d04d02721446a6f7ef4959f0ce885;l\u003d864",
+      "parentUuid": "91597c81_d3f0896b",
+      "range": {
+        "startLine": 2035,
+        "startChar": 0,
+        "endLine": 2035,
+        "endChar": 75
+      },
+      "revId": "8cd79422991950d995ecbc3c25c89d4ed8637055",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
