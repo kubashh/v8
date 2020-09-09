@@ -112,3 +112,18 @@ experiment_builder(
     ],
     use_goma = GOMA.DEFAULT,
 )
+
+experiment_builder(
+    name = "V8 Mac on ARM64 - release",
+    bucket = "ci",
+    triggered_by = ["v8-trigger"],
+    dimensions = {"os": "Mac-11", "cpu": "arm64"},
+    properties = {"build_config": "Release", "mastername": "client.v8"},
+    caches = [
+        swarming.cache(
+            path = "osx_sdk",
+            name = "osx_sdk",
+        ),
+    ],
+    use_goma = GOMA.DEFAULT,
+)
