@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "3c6db840_ccbb84ca",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2020-09-09T18:41:09Z",
+      "side": 1,
+      "message": "PS13 is motivated by your suggestions in the first bullet. I\u0027m sure if it is the right place to do this reduction.",
+      "parentUuid": "6079a209_9b30d93b",
+      "range": {
+        "startLine": 1248,
+        "startChar": 14,
+        "endLine": 1248,
+        "endChar": 32
+      },
+      "revId": "6db671fe78883ab6886595cf6055ddac53da04d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92e76bc1_6112d4c1",
         "filename": "src/compiler/machine-operator-reducer.cc",
         "patchSetId": 11
