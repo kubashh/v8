@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "50bfdd98_d480e15b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2020-09-09T21:20:05Z",
+      "side": 1,
+      "message": "Given that ETW is practically a kitchen sink of functionality I think we need a _lot_ more information about what this actually means. What sort of events are being logged, and how are they being logged, and how can they be recorded (does this integrate with UIforETW? Can it?). Some of the gory details can go in the bug but a big change deserves more explanation in the commit message as well.\n\nGiven that Chromium already emits ETW events (which Microsoft has committed code to) it seems important to understand how this is different.",
+      "revId": "a16f96e631799911463445f0d1823dd1acebb963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8f2547d_a2b6138a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2020-09-09T21:20:05Z",
+      "side": 1,
+      "message": "There should be a Bug: line here, and the bug can then have more information such as links to the design doc.",
+      "revId": "a16f96e631799911463445f0d1823dd1acebb963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8d2d1a61_20202c0a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -30,6 +64,23 @@
       "writtenOn": "2020-09-07T17:44:24Z",
       "side": 1,
       "message": "Adding some random comments for now, sorry for not interacting earlier.\n\nI\u0027m quite stoked about the goal here, but I think we really need to find a maintainable way to not add another logging system in V8.\n",
+      "revId": "a16f96e631799911463445f0d1823dd1acebb963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7cd17f77_8ec1082b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2020-09-09T21:20:05Z",
+      "side": 1,
+      "message": "Merge conflicts and build errors need to be resolved also to make the job of reviewers easier",
       "revId": "a16f96e631799911463445f0d1823dd1acebb963",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
