@@ -124,6 +124,10 @@ void IncrementalMarkingJob::Task::RunInternal() {
   if (!incremental_marking->IsStopped()) {
     StepResult step_result = Step(heap);
     if (!incremental_marking->IsStopped()) {
+      // Objects between LAB start and current top are guaranteed to be
+      // initialized here.
+      heap->new_space()->MarkLabStartInitialized();
+
       const TaskType task_type =
           incremental_marking->finalize_marking_completed() ||
                   step_result != StepResult::kNoImmediateWork
