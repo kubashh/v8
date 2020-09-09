@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9618555_b31a9570",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-09-09T13:34:25Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "c9bf8a7a0f157716638860400ebd6bae38c54596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1819373d_9b4d1570",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2020-09-09T13:34:25Z",
+      "side": 1,
+      "message": "We could make that method virtual and have different implementations for PagedSpace and NewSpace (NewSpace would also update original_top). That would also allow us to remove NewSpace::MoveOriginalTopForward() as well. Wdyt?",
+      "revId": "c9bf8a7a0f157716638860400ebd6bae38c54596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
