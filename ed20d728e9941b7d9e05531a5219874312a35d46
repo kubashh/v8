@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34f0bed5_29f48ab2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-09T14:13:03Z",
+      "side": 1,
+      "message": "I\u0027m fine with the high-level idea of the CL. But I don\u0027t like how the inlineability, a key aspect, is hidden behind the elements kind and how various code deals with mysterious boolean values. I want to think of concrete suggestions but I need more time for that. Maybe you already have ideas.",
+      "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
