@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "422d9948_8be52add",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2020-09-09T15:40:38Z",
+      "side": 1,
+      "message": "Thanks Georg! I will try to modify the code, so it\u0027s more clear on what we want to achieve there tomorrow and upload a new patchset.",
+      "parentUuid": "34f0bed5_29f48ab2",
+      "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "93ffbe8e_135f9ff7",
         "filename": "src/objects/elements-kind.h",
         "patchSetId": 19
