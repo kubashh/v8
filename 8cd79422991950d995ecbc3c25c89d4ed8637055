@@ -22,6 +22,30 @@
       "revId": "8cd79422991950d995ecbc3c25c89d4ed8637055",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91597c81_d3f0896b",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2020-09-09T20:55:43Z",
+      "side": 1,
+      "message": "I think we need this. This changes i64x2 to i32x4, which can happen if e.g. i32x4.neg(i64x2.neg(x)) (for whatever reason).\nThe i64 lowering case takes care when i64x2 is lowered to 2 nodes of i64.",
+      "parentUuid": "78f30848_b8e0dcda",
+      "range": {
+        "startLine": 2035,
+        "startChar": 0,
+        "endLine": 2035,
+        "endChar": 75
+      },
+      "revId": "8cd79422991950d995ecbc3c25c89d4ed8637055",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
