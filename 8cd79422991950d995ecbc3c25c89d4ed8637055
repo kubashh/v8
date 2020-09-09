@@ -118,6 +118,30 @@
       "revId": "8cd79422991950d995ecbc3c25c89d4ed8637055",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96353292_d0ce0cf0",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2020-09-09T23:12:37Z",
+      "side": 1,
+      "message": "OK, it looks like I didn\u0027t understand what this does - it is lowering to i32x4 and reversing bytes per word32 then.",
+      "parentUuid": "0c29c07f_5c323c7e",
+      "range": {
+        "startLine": 2035,
+        "startChar": 0,
+        "endLine": 2035,
+        "endChar": 75
+      },
+      "revId": "8cd79422991950d995ecbc3c25c89d4ed8637055",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
