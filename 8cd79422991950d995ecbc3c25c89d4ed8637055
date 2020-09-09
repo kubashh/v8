@@ -94,6 +94,30 @@
       "revId": "8cd79422991950d995ecbc3c25c89d4ed8637055",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c29c07f_5c323c7e",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2020-09-09T22:28:49Z",
+      "side": 1,
+      "message": "That\u0027s right it only lowers to 32x4 at the moment. kSimd128ReverseBytes is only called on BE machines as WASM is LE enforced. After https://chromium-review.googlesource.com/c/v8/v8/+/2399051 all the lowered F64x2 tests started failing on our BE machines as kSimd128ReverseBytes didn\u0027t know how to handle 64x2 inputs. This CL is enabling that.",
+      "parentUuid": "14317226_daa1d532",
+      "range": {
+        "startLine": 2035,
+        "startChar": 0,
+        "endLine": 2035,
+        "endChar": 75
+      },
+      "revId": "8cd79422991950d995ecbc3c25c89d4ed8637055",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
