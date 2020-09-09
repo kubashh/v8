@@ -16,6 +16,57 @@
       "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "93ffbe8e_135f9ff7",
+        "filename": "src/objects/elements-kind.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-09T14:21:31Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it make sense to use FIRST_FAST_ELEMENTS_KIND and LAST_FAST_ELEMENTS_KIND here?",
+      "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "975b02c9_33e21819",
+        "filename": "src/objects/elements-kind.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-09T14:21:31Z",
+      "side": 1,
+      "message": "I don\u0027t understand the point of CompactElementsKind. It\u0027s not compacter than ElementsKind since they are both uint8_t. It\u0027s merely less precise.\n\nCould you keep using ElementsKind and add checks of IsFastElementsKind in relevant places?",
+      "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afd8b538_3d129c4c",
+        "filename": "src/objects/elements-kind.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2020-09-09T14:21:31Z",
+      "side": 1,
+      "message": "The ToElementsKind function here is odd: it takes a \"compact\" elements kind, which is a fast elements kind or no elements kind or perhaps some other unspecified elements kind, and in the latter case the function claims it\u0027s not an elements kind at all.",
+      "revId": "ed20d728e9941b7d9e05531a5219874312a35d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
