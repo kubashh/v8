@@ -87,6 +87,24 @@
       "revId": "17a012340445978d610baf6de432118b072cd0bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48d32a03_5ae16c03",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1243531
+      },
+      "writtenOn": "2020-09-10T20:23:42Z",
+      "side": 1,
+      "message": "For Cobalt, we have a custom V8_OS_STARBOARD that normally prevents V8_OS_MACOSX or other V8_OS_* macros from being defined. https://cobalt.googlesource.com/cobalt/+/refs/heads/master/src/v8/include/v8config.h#78\n\nHowever, V8_OS_MACOSX is used when building emulator to generate the V8 snapshot for our tvOS build (which is jitless). In our particular case, the #if still fails since V8_HOST_ARCH_ARM64 is not true -- but that will change once arm64 Macs start rolling out.\n\nSo this is a potential issue for our tvOS build in the future.",
+      "parentUuid": "eb8f2c0a_8410baa8",
+      "revId": "17a012340445978d610baf6de432118b072cd0bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
