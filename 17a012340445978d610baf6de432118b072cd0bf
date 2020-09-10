@@ -69,6 +69,24 @@
       "revId": "17a012340445978d610baf6de432118b072cd0bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb8f2c0a_8410baa8",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-10T05:54:10Z",
+      "side": 1,
+      "message": "Just to point out: this may also matter on tvOS, perhaps elsewhere? We should definitely fix this s.t. jitless works out of the box everywhere, but I\u0027m okay with doing it in follow-ups as you describe above (as long as it actually happens :).",
+      "parentUuid": "ef03a585_02c59aa0",
+      "revId": "17a012340445978d610baf6de432118b072cd0bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
