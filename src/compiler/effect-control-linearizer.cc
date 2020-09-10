@@ -407,10 +407,7 @@ void UpdateBlockControl(BasicBlock* block,
   }
 }
 
-void RemoveRenameNode(Node* node) {
-  DCHECK(IrOpcode::kFinishRegion == node->opcode() ||
-         IrOpcode::kBeginRegion == node->opcode() ||
-         IrOpcode::kTypeGuard == node->opcode());
+void RemoveNode(Node* node) {
   // Update the value/context uses to the value input of the finish node and
   // the effect uses to the effect input.
   for (Edge edge : node->use_edges()) {
@@ -424,6 +421,27 @@ void RemoveRenameNode(Node* node) {
     }
   }
   node->Kill();
+}
+
+bool TryRemoveUnusedNodeWithOnlySideEffectEdge(Node* node) {
+  // For the optimization (x + a) + b => x + (a + b), we can remove (x + a) if
+  // there is no use.
+  if (node->opcode() != IrOpcode::kCheckedInt32Add) return false;
+  for (Edge edge : node->use_edges()) {
+    DCHECK(!edge.from()->IsDead());
+    if (!NodeProperties::IsEffectEdge(edge)) {
+      return false;
+    }
+  }
+  RemoveNode(node);
+  return true;
+}
+
+void RemoveRenameNode(Node* node) {
+  DCHECK(IrOpcode::kFinishRegion == node->opcode() ||
+         IrOpcode::kBeginRegion == node->opcode() ||
+         IrOpcode::kTypeGuard == node->opcode());
+  RemoveNode(node);
 }
 
 void TryCloneBranch(Node* node, BasicBlock* block, Zone* temp_zone,
@@ -816,6 +834,10 @@ void EffectControlLinearizer::ProcessNode(Node* node, Node** frame_state) {
   // and control inputs to mark it as dead, but don't process further.
   if (gasm()->effect() == jsgraph()->Dead()) {
     UpdateEffectControlForNode(node);
+    return;
+  }
+
+  if (TryRemoveUnusedNodeWithOnlySideEffectEdge(node)) {
     return;
   }
 
