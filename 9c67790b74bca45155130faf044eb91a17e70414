@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38686227_df14e9bc",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-10T10:37:13Z",
+      "side": 0,
+      "message": "This seems also problematic. Because the Step is called after setting pending_object and publishes it right away.",
+      "range": {
+        "startLine": 1045,
+        "startChar": 6,
+        "endLine": 1045,
+        "endChar": 50
+      },
+      "revId": "9c67790b74bca45155130faf044eb91a17e70414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d3fcb67_b54f5d11",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2020-09-10T10:37:13Z",
+      "side": 0,
+      "message": "This doesn\u0027t hold anymore.",
+      "range": {
+        "startLine": 1046,
+        "startChar": 9,
+        "endLine": 1046,
+        "endChar": 46
+      },
+      "revId": "9c67790b74bca45155130faf044eb91a17e70414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
