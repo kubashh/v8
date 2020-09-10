@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4adeb38_3b4ebb6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-10T10:45:57Z",
+      "side": 1,
+      "message": "Cool, thanks, I like the approach of this CL.\nHowever, there is stil an issue with removing the first addition, see inline comment.",
+      "revId": "caf5e725b6c7a0778404f5fed195b6d8ab509ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "565d2cc7_c43f97ef",
+        "filename": "src/compiler/simplified-operator-reducer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2020-09-10T10:45:57Z",
+      "side": 1,
+      "message": "This doesn\u0027t quite work as intended: If (x+a) has more users, then they will keep using a node that\u0027s no longer on the effect chain. What should happen, possibly separately, is that we realize that (x+a) no longer has any value uses and remove it from the effect chain.\nI\u0027m not aware of a phase that does this (except for SimplifiedLowering, which is too early, and the instruction selector, which is too late).\nI think it would potentially be easy to integrate such an optimization into the scheduler or EffectControlLinearizer. In fact, the EffectControlLinearizer already removes some nodes from the effect chain, like BeginRegion/EndRegion. And that would be still early enough to avoid baking in the deopts.\nIn fact, I once tried to such an optimization, as part of the GraphTrimmer:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/863886 (Reverted due to JIT-time performance regressions)\nhttps://chromium-review.googlesource.com/c/v8/v8/+/880963 (Follow-up performance improvement that never landed)",
+      "range": {
+        "startLine": 241,
+        "startChar": 14,
+        "endLine": 241,
+        "endChar": 79
+      },
+      "revId": "caf5e725b6c7a0778404f5fed195b6d8ab509ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
