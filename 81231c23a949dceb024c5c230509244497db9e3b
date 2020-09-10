@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1625d11_6272752c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2020-09-10T06:18:54Z",
+      "side": 1,
+      "message": "Hi Leszek, this triggers a bunch of stress_snapshot failures: https://ci.chromium.org/p/v8/builders/ci/V8%20Linux64%20-%20debug%20-%20fyi/14398",
+      "revId": "81231c23a949dceb024c5c230509244497db9e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
